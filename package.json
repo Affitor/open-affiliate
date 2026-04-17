@@ -11,7 +11,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "registry:build": "npx tsx scripts/build-registry.ts"
+    "registry:build": "npx tsx scripts/build-registry.ts",
+    "verify": "npx tsx scripts/verify-programs.ts",
+    "verify:changed": "npx tsx scripts/verify-programs.ts --changed"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

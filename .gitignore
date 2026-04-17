@@ -39,6 +39,13 @@ yarn-error.log*
 # omc
 .omc/
 
+# packages
+packages/*/node_modules
+packages/*/dist
+
+# verification
+verification-report.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -63,7 +63,7 @@ agents:
     - "Improving email deliverability with dedicated IPs and sender authentication"
     - "Integrating email into applications via the SendGrid API or SMTP relay"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-02-14"
 updated_at: "2026-04-17"

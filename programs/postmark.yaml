@@ -63,7 +63,7 @@ agents:
     - "Replacing an unreliable SMTP server with a managed transactional email service"
     - "Tracking email open and click rates for onboarding and notification sequences"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"

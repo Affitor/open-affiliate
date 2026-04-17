@@ -24,7 +24,8 @@ payout:
 signup_url: https://resend.com/affiliates
 approval: auto
 approval_time: "instant"
-restrictions: []
+restrictions:
+  - "Program is currently closed or on waitlist as of April 2026"
 
 marketing_materials: false
 api_available: false

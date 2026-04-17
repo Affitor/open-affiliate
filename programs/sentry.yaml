@@ -65,7 +65,7 @@ agents:
     - "Debugging mobile app crashes with full stack traces and device context"
     - "Alerting the team via Slack or PagerDuty when new error types appear in production"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"

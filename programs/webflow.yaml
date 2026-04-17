@@ -64,7 +64,7 @@ agents:
     - "Designing and launching a portfolio or agency website with full design control"
     - "Building client websites with a platform that exports clean, semantic code"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"

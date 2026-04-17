@@ -6,10 +6,10 @@ tags: [links, analytics, url-shortener, open-source, referral-tracking, marketin
 
 commission:
   type: recurring
-  rate: "25%"
+  rate: "30%"
   currency: USD
   duration: "12 months"
-  conditions: "Earn 25% of the referred customer's monthly plan for the first 12 months after their first paid invoice"
+  conditions: "Earn 30% of the referred customer's monthly plan for the first 12 months after their first paid invoice"
 
 cookie_days: 90
 attribution: last-click
@@ -42,7 +42,7 @@ description: >
   QR codes, link expiration, password protection, and a powerful API. Built for teams who
   need Bitly-level features with developer-grade control and a modern UI.
 
-  The affiliate program pays 25% recurring for 12 months on referred paid subscriptions.
+  The affiliate program pays 30% recurring for 12 months on referred paid subscriptions.
   Dub has grown rapidly among developer communities and marketing teams who want a transparent,
   open-source alternative to Bitly with proper analytics and API access.
 
@@ -62,7 +62,7 @@ agents:
     - "Tracking link performance across social media channels with detailed analytics"
     - "Building a custom referral tracking system using the Dub API"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"

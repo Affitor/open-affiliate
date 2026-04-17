@@ -61,7 +61,7 @@ agents:
     - "Scaling a MongoDB app from local development to a managed cloud cluster"
     - "Full-text search across large document collections with Atlas Search"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-02-10"
 updated_at: "2026-04-17"

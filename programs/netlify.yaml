@@ -6,7 +6,7 @@ tags: [hosting, deployment, jamstack, serverless, cdn, frontend]
 
 commission:
   type: recurring
-  rate: "10%"
+  rate: "20%"
   currency: USD
   duration: "12 months"
   conditions: "Applies to referred paid plan subscriptions (Pro and above) for the first 12 months"
@@ -42,7 +42,7 @@ description: >
   deployment from Git, global CDN, serverless functions, form handling, identity, and
   split testing. Used by enterprises and developers worldwide.
 
-  Earn 10% recurring commission for 12 months on referred paid subscriptions. Netlify's
+  Earn 20% recurring commission for 12 months on referred paid subscriptions. Netlify's
   free tier is popular with developers, and Pro and Enterprise upgrades represent strong
   earning opportunities. The platform's strong brand recognition in the JAMstack and
   Next.js ecosystems drives consistent organic referrals.
@@ -62,7 +62,7 @@ agents:
     - "Running serverless backend functions alongside a frontend app"
     - "Handling HTML form submissions without a custom backend"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-02-16"
 updated_at: "2026-04-17"

@@ -26,30 +26,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Validate YAML files
-        run: |
-          npm install -g yaml
-          for file in programs/*.yaml; do
-            echo "Validating $file..."
-            node -e "
-              const fs = require('fs');
-              const { parse } = require('yaml');
-              const content = fs.readFileSync('$file', 'utf8');
-              const data = parse(content);
-              const required = ['name', 'slug', 'url', 'category', 'commission', 'description', 'agents'];
-              const missing = required.filter(f => !data[f]);
-              if (missing.length) {
-                console.error('Missing required fields:', missing.join(', '));
-                process.exit(1);
-              }
-              const filename = '$file'.split('/').pop().replace('.yaml', '');
-              if (data.slug !== filename) {
-                console.error('Slug mismatch: slug=' + data.slug + ' filename=' + filename);
-                process.exit(1);
-              }
-              console.log('  OK');
-            "
-          done
+          cache: npm
+      - run: npm ci
+
+      - name: Validate YAML schema
+        run: npx tsx scripts/build-registry.ts
+
+      - name: Build registry
+        run: npm run registry:build
+
+      - name: Verify program URLs (changed files)
+        if: github.event_name == 'pull_request'
+        run: npm run verify:changed
+
+      - name: Verify all program URLs (weekly)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npm run verify
+        continue-on-error: true
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-report
+          path: verification-report.json
+          if-no-files-found: ignore

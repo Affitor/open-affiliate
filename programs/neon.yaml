@@ -57,7 +57,7 @@ agents:
     - "Teams migrating from managed Postgres (RDS, Cloud SQL) to reduce idle costs"
     - "Next.js and Vercel apps that need a fast, co-located Postgres database"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-02-15"
 updated_at: "2026-04-17"

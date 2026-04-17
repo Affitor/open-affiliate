@@ -61,7 +61,7 @@ agents:
     - "Creating personal notes and a second brain system"
     - "Documenting product specs, engineering RFCs, or company handbooks"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-01-10"
 updated_at: "2026-04-17"
