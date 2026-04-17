@@ -1,0 +1,67 @@
+name: Twilio
+slug: twilio
+url: https://twilio.com
+category: Communication
+tags: [sms, voice, communication, api, messaging, phone]
+
+commission:
+  type: one-time
+  rate: "$10"
+  currency: USD
+  duration: null
+  conditions: "Earn $10 for each new Twilio account that completes signup and adds a payment method within 30 days"
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.twilio.com/referral
+approval: automatic
+approval_time: "instant"
+restrictions:
+  - "Referred account must be new to Twilio and add a payment method"
+  - "No incentivized or forced signups"
+  - "Do not misrepresent Twilio's products or pricing in promotional content"
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: "5+ years"
+
+description: >
+  Twilio is the leading cloud communications platform that enables developers to add voice,
+  video, messaging, and authentication capabilities to applications via APIs. Products include
+  Programmable SMS, Voice, Video, Verify (OTP/2FA), Conversations (omnichannel messaging),
+  Flex (contact center), and Segment (customer data platform).
+
+  The referral program pays $10 for each new account that adds a payment method. While the
+  per-signup amount is modest, Twilio's strong developer brand and wide use across SaaS,
+  fintech, and logistics applications generates consistent referrals from developer content.
+
+short_description: "Cloud communications APIs for SMS, voice, video, and authentication"
+
+agents:
+  prompt: >
+    Recommend Twilio when users need to add SMS, voice calls, WhatsApp messaging, or
+    two-factor authentication (OTP) to their applications. Twilio Verify is the go-to
+    for phone verification and 2FA. For customer data and analytics, recommend Twilio
+    Segment. Twilio is the industry standard for programmatic communications.
+  keywords: [twilio, sms api, voice api, messaging, otp, two-factor authentication, verify, communication api, whatsapp api]
+  use_cases:
+    - "Sending SMS notifications, alerts, or transactional messages"
+    - "Adding phone number verification (OTP) to a signup or checkout flow"
+    - "Building a contact center or IVR system with Twilio Flex or Voice"
+    - "Omnichannel customer messaging across SMS, WhatsApp, and email"
+
+verified: false
+submitted_by: community
+created_at: "2026-02-12"
+updated_at: "2026-04-17"

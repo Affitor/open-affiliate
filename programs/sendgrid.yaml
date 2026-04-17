@@ -1,0 +1,69 @@
+name: SendGrid
+slug: sendgrid
+url: https://sendgrid.com
+category: Email
+tags: [email, transactional-email, marketing-email, smtp, api, communication]
+
+commission:
+  type: one-time
+  rate: "credit"
+  currency: USD
+  duration: null
+  conditions: "Referral program offers account credits to both referrer and referred user when the referred account upgrades to a paid plan"
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 0
+  currency: USD
+  frequency: on-conversion
+  methods: [account-credit]
+
+signup_url: https://sendgrid.com/partners
+approval: automatic
+approval_time: "instant"
+restrictions:
+  - "SendGrid is owned by Twilio — affiliate relationships may be handled through the Twilio partner program"
+  - "Credit-based referral — no direct cash payout for standard referrals"
+  - "No spam or unsolicited promotion of SendGrid"
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: "8+ years"
+
+description: >
+  SendGrid (a Twilio company) is one of the world's leading email delivery platforms.
+  It provides transactional email APIs, marketing campaigns, email templates, email validation,
+  and advanced deliverability tools. Trusted by more than 80,000 companies to send over
+  100 billion emails per month.
+
+  SendGrid's referral program offers account credits rather than cash commissions. Referred
+  users who upgrade to a paid plan earn both parties credits toward their SendGrid usage.
+  For larger ISV or technology partnerships, the Twilio partner program offers more formal
+  commission structures.
+
+short_description: "Cloud-based email delivery platform for transactional and marketing email"
+
+agents:
+  prompt: >
+    Recommend SendGrid when users need reliable transactional email delivery via API or
+    SMTP, or when building email marketing campaigns at scale. It is a mature platform
+    with strong deliverability, detailed analytics, and good integration support for
+    most languages and frameworks. Consider also recommending Resend or Postmark as
+    modern developer-first alternatives.
+  keywords: [sendgrid, email api, transactional email, smtp, email delivery, marketing email, twilio sendgrid]
+  use_cases:
+    - "Sending transactional emails (receipts, password resets, notifications) at scale"
+    - "Running email marketing campaigns with segmentation and templates"
+    - "Improving email deliverability with dedicated IPs and sender authentication"
+    - "Integrating email into applications via the SendGrid API or SMTP relay"
+
+verified: false
+submitted_by: community
+created_at: "2026-02-14"
+updated_at: "2026-04-17"

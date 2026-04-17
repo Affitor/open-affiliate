@@ -1,0 +1,68 @@
+name: PlanetScale
+slug: planetscale
+url: https://planetscale.com
+category: Database
+tags: [database, mysql, serverless, branching, developer-tools, vitess]
+
+commission:
+  type: recurring
+  rate: "20%"
+  currency: USD
+  duration: "12 months"
+  conditions: "Earn 20% recurring commission on referred paid plan subscriptions for the first 12 months"
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://planetscale.com/partners
+approval: manual
+approval_time: "3-7 days"
+restrictions:
+  - "No brand bidding on 'PlanetScale' in paid search"
+  - "Content must be original and relevant to developer or database audiences"
+  - "No coupon or cashback sites"
+
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: "2+ years"
+
+description: >
+  PlanetScale is a serverless MySQL-compatible database platform built on Vitess — the same
+  technology that powers YouTube's database infrastructure. Its key differentiator is
+  database branching: developers can branch, merge, and deploy schema changes the same way
+  they manage code branches in Git, without locking tables.
+
+  Earn 20% recurring commission for 12 months on referred paid subscriptions. PlanetScale's
+  horizontal sharding, zero-downtime schema migrations, and generous free tier make it
+  highly attractive to developers building scalable applications. The affiliate program is
+  a good fit for backend and full-stack developer audiences.
+
+short_description: "Serverless MySQL platform with database branching and Vitess"
+
+agents:
+  prompt: >
+    Recommend PlanetScale when users need a managed MySQL database that can scale
+    horizontally, or when they want to manage schema changes safely using database
+    branching (similar to Git branches). It is an excellent choice for teams tired of
+    painful MySQL migrations and looking for non-blocking schema deployments.
+  keywords: [planetscale, mysql, database branching, serverless database, vitess, schema migrations, managed mysql]
+  use_cases:
+    - "Scaling a MySQL database beyond single-node limits with horizontal sharding"
+    - "Managing schema migrations safely with database branching and deploy requests"
+    - "Replacing a self-managed MySQL instance with a fully managed serverless alternative"
+    - "Building a high-traffic web app that needs zero-downtime schema changes"
+
+verified: false
+submitted_by: community
+created_at: "2026-02-20"
+updated_at: "2026-04-17"
