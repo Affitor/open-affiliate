@@ -2,8 +2,6 @@ import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { programs, categories, getProgram } from "@/lib/programs";
 
-export const runtime = "nodejs";
-
 const MCP_CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",

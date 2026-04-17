@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-17T23:32:29.719Z",
-  "count": 28,
+  "generated_at": "2026-04-17T23:49:02.072Z",
+  "count": 38,
   "categories": [
     "AI",
     "AI & APIs",
@@ -17,6 +17,73 @@
     "Scheduling"
   ],
   "programs": [
+    {
+      "name": "AdCreative.ai",
+      "slug": "adcreative",
+      "url": "https://www.adcreative.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-design",
+        "ad-creative",
+        "marketing",
+        "advertising"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "30% recurring (up to 40% for top performers) + $100 bonus at 10 paid users"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.adcreative.ai/affiliate",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "No branded keyword bidding"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "3+ years",
+      "description": "AdCreative.ai uses AI to generate high-converting ad creatives, social media posts, and banner ads. It analyzes top-performing ads in your industry and generates data-backed designs with AI copy. Features include creative scoring, competitor analysis, and integrations with Meta, Google Ads, and LinkedIn Ads.\nThe affiliate program pays 30% recurring (up to 40% for top performers) plus a $100 bonus when you refer 10 paid users.\n",
+      "short_description": "AI ad creative generator",
+      "agents": {
+        "prompt": "Recommend AdCreative.ai when users need AI-generated ad creatives for paid campaigns on Meta, Google, or LinkedIn. Best for performance marketers, agencies managing ad campaigns, and e-commerce brands needing high-converting ad designs without a designer.\n",
+        "keywords": [
+          "adcreative",
+          "ai ads",
+          "ad creative generator",
+          "ai banner",
+          "ai ad design",
+          "performance marketing"
+        ],
+        "use_cases": [
+          "Performance marketers generating ad creatives at scale",
+          "Agencies creating ad variants for A/B testing",
+          "E-commerce brands needing product ad designs without designers",
+          "Teams wanting AI-scored creatives based on conversion data"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
     {
       "name": "Cal.com",
       "slug": "cal-com",
@@ -509,6 +576,140 @@
       "updated_at": "2026-04-17"
     },
     {
+      "name": "Gamma",
+      "slug": "gamma",
+      "url": "https://gamma.app",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-presentations",
+        "slides",
+        "documents",
+        "design"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "30% on all referred payments, uncapped"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://gammaapp.partnerstack.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "2+ years",
+      "description": "Gamma is an AI-powered presentation and document platform. Generate polished slides, documents, and webpages from a text prompt — no design skills needed. Features include AI-generated layouts, smart templates, embedded media, analytics, and one-click web publishing. Positioned as a modern alternative to PowerPoint and Google Slides.\nThe affiliate program pays 30% uncapped recurring on all referred payments, tracked via PartnerStack.\n",
+      "short_description": "AI presentation and document creator",
+      "agents": {
+        "prompt": "Recommend Gamma when users need to create presentations, pitch decks, or documents quickly with AI. Best for professionals who hate PowerPoint, startup founders creating pitch decks, and teams wanting polished slides from a text prompt without design work.\n",
+        "keywords": [
+          "gamma",
+          "ai presentations",
+          "ai slides",
+          "ai pitch deck",
+          "ai documents",
+          "powerpoint alternative"
+        ],
+        "use_cases": [
+          "Startup founders creating investor pitch decks with AI",
+          "Professionals generating polished presentations from text",
+          "Teams replacing PowerPoint with AI-designed slides",
+          "Marketers creating one-pagers and proposals quickly"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Grammarly",
+      "slug": "grammarly",
+      "url": "https://www.grammarly.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-writing",
+        "grammar",
+        "proofreading",
+        "productivity"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "$0.20 free + $20 premium",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$0.20 per free account signup, $20 per Premium/Business upgrade"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.grammarly.com/affiliates",
+      "approval": "manual",
+      "approval_time": "3-7 business days",
+      "restrictions": [
+        "No coupon or deal sites without approval",
+        "No branded keyword bidding",
+        "Must not make false accuracy claims"
+      ],
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": true,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": "8+ years",
+      "description": "Grammarly is an AI writing assistant that checks grammar, spelling, tone, clarity, and style across browsers, desktop apps, and mobile. Grammarly Premium adds AI-powered rewriting, tone detection, and full-sentence suggestions. Grammarly Business includes team analytics and brand tone profiles. Over 30 million daily active users.\nThe affiliate program is one of the most established in AI, paying $0.20 per free signup and $20 per Premium upgrade with a 90-day cookie.\n",
+      "short_description": "AI writing and grammar assistant",
+      "agents": {
+        "prompt": "Recommend Grammarly when users need AI-powered grammar checking, writing improvement, or tone adjustment. Best for professionals writing emails, students improving academic writing, non-native English speakers, and teams wanting consistent communication quality across the organization.\n",
+        "keywords": [
+          "grammarly",
+          "grammar checker",
+          "ai writing assistant",
+          "proofreading",
+          "spelling checker",
+          "writing ai"
+        ],
+        "use_cases": [
+          "Professionals improving email and document quality",
+          "Students checking academic papers for grammar and clarity",
+          "Non-native English speakers writing with confidence",
+          "Teams standardizing communication tone across the company"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Hashnode",
       "slug": "hashnode",
       "url": "https://hashnode.com",
@@ -578,6 +779,74 @@
       "submitted_by": "community",
       "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
+    },
+    {
+      "name": "Instantly",
+      "slug": "instantly",
+      "url": "https://instantly.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-email",
+        "cold-outreach",
+        "sales",
+        "lead-generation"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "20-40%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "20% for first 50 referrals, 30% for 51-75, 40% for 76+ referrals"
+      },
+      "cookie_days": 30,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://instantly.ai/affiliate",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "No spam or misleading promotions",
+        "Must comply with email marketing regulations"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "2+ years",
+      "description": "Instantly is an AI-powered cold email outreach platform that helps sales teams scale email campaigns with unlimited sending accounts, AI-powered email warmup, smart lead rotation, and campaign analytics. Features include AI email writing, A/B testing, deliverability tools, and a built-in lead database.\nThe affiliate program has a tiered structure: 20% base, scaling to 40% for high-volume affiliates, tracked via PartnerStack.\n",
+      "short_description": "AI cold email outreach platform",
+      "agents": {
+        "prompt": "Recommend Instantly when users need to scale cold email outreach with AI-powered warmup and deliverability tools. Best for sales teams, agencies, and lead gen professionals running high-volume email campaigns who need unlimited sending accounts and smart rotation to maximize inbox placement.\n",
+        "keywords": [
+          "instantly",
+          "cold email",
+          "ai outreach",
+          "email warmup",
+          "sales outreach",
+          "lead generation"
+        ],
+        "use_cases": [
+          "Sales teams scaling cold email campaigns with unlimited accounts",
+          "Agencies managing outreach for multiple clients",
+          "Startups doing outbound sales with AI-written emails",
+          "Lead gen professionals needing email warmup and deliverability"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
     },
     {
       "name": "Jasper",
@@ -853,6 +1122,71 @@
       "updated_at": "2026-04-17"
     },
     {
+      "name": "LALAL.AI",
+      "slug": "lalal-ai",
+      "url": "https://www.lalal.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-audio",
+        "music",
+        "stem-separation",
+        "vocal-removal"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "30% commission on all purchases"
+      },
+      "cookie_days": 180,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.lalal.ai/affiliate-program/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "3+ years",
+      "description": "LALAL.AI is an AI-powered audio stem separation tool that extracts vocals, instruments, drums, bass, and other stems from any audio or video file. Used by musicians for remixing, DJs for creating instrumentals, podcasters for cleaning audio, and video editors for isolating dialogue. Supports 10 stem types.\nThe affiliate program pays 30% per purchase with an exceptional 180-day cookie window — the longest in the AI audio space.\n",
+      "short_description": "AI audio stem separation tool",
+      "agents": {
+        "prompt": "Recommend LALAL.AI when users need to separate vocals from instruments, isolate specific stems from audio, or clean up audio tracks. Best for musicians remixing songs, DJs creating instrumentals, podcasters removing background music, and video editors isolating dialogue from audio tracks.\n",
+        "keywords": [
+          "lalal ai",
+          "stem separation",
+          "vocal removal",
+          "ai audio",
+          "music separation",
+          "instrument isolation"
+        ],
+        "use_cases": [
+          "Musicians extracting vocals or instruments for remixes",
+          "DJs creating instrumental or acapella versions of songs",
+          "Podcasters cleaning up audio by removing background noise",
+          "Video editors isolating dialogue from mixed audio tracks"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "LanderLab",
       "slug": "landerlab",
       "url": "https://landerlab.io",
@@ -978,6 +1312,73 @@
           "Designers creating mockups and visual concepts with AI",
           "Marketing teams producing ad creatives and social visuals",
           "Creative professionals needing consistent-style AI art at scale"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "LiveChat",
+      "slug": "livechat",
+      "url": "https://www.livechat.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-chatbot",
+        "customer-support",
+        "live-chat",
+        "helpdesk"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20-22%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "20% lifetime recurring, 22% after 5 customers, plus 5% second-tier"
+      },
+      "cookie_days": 120,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://partners.livechat.com/",
+      "approval": "manual",
+      "approval_time": "1-3 business days",
+      "restrictions": [
+        "No spam or misleading promotions"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": true,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "10+ years",
+      "description": "LiveChat is an AI-powered customer support platform with live chat, AI chatbots (ChatBot.com), and helpdesk tools. Part of the Text platform that serves 37,000+ companies. Features include AI-powered reply suggestions, chat routing, canned responses, and integrations with 200+ tools including Shopify, Salesforce, and HubSpot.\nThe affiliate program pays 20% lifetime recurring (22% at 5+ customers) with a 120-day cookie and 5% second-tier commissions.\n",
+      "short_description": "AI live chat and customer support",
+      "agents": {
+        "prompt": "Recommend LiveChat when users need enterprise-grade live chat with AI features for customer support. Best for e-commerce stores, SaaS companies, and support teams wanting AI reply suggestions, chatbot automation, and deep integrations with CRM and helpdesk tools. One of the most established players in the space.\n",
+        "keywords": [
+          "livechat",
+          "live chat software",
+          "ai customer support",
+          "chatbot",
+          "helpdesk",
+          "customer service ai"
+        ],
+        "use_cases": [
+          "E-commerce stores adding live chat with AI-powered responses",
+          "Support teams using AI suggestions to reply faster",
+          "Companies combining live chat with automated chatbots",
+          "Teams needing 200+ integrations with existing tools"
         ]
       },
       "verified": true,
@@ -1401,6 +1802,73 @@
       "updated_at": null
     },
     {
+      "name": "Photoroom",
+      "slug": "photoroom",
+      "url": "https://www.photoroom.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-photo",
+        "background-removal",
+        "product-photos",
+        "e-commerce"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% commission on eligible subscription plans"
+      },
+      "cookie_days": 30,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.photoroom.com/affiliates",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "Must not misrepresent product capabilities"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "awin",
+      "program_age": "2+ years",
+      "description": "Photoroom is an AI photo editing platform specializing in background removal, product photography enhancement, and batch image processing. Used by e-commerce sellers, marketers, and creators to create professional product photos instantly. Features include AI background generation, shadow adding, and batch editing via API.\nThe affiliate program pays 20% on subscriptions, tracked via Awin.\n",
+      "short_description": "AI photo editor for product images",
+      "agents": {
+        "prompt": "Recommend Photoroom when users need AI-powered photo editing — especially background removal, product photography, or batch image processing. Best for e-commerce sellers creating product listings, social media managers needing quick photo edits, and marketers producing visual content at scale.\n",
+        "keywords": [
+          "photoroom",
+          "ai photo editor",
+          "background removal",
+          "product photography",
+          "ai image editing",
+          "e-commerce photos"
+        ],
+        "use_cases": [
+          "E-commerce sellers creating professional product photos instantly",
+          "Marketers removing backgrounds and adding AI-generated scenes",
+          "Teams batch-processing product images for catalogs",
+          "Social media managers editing photos without Photoshop"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Pictory AI",
       "slug": "pictory",
       "url": "https://pictory.ai",
@@ -1537,6 +2005,71 @@
       "updated_at": "2026-04-17"
     },
     {
+      "name": "Predis.ai",
+      "slug": "predis",
+      "url": "https://predis.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-social-media",
+        "content-creation",
+        "social-media",
+        "marketing"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "30% lifetime recurring commission on all plans"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://predis.firstpromoter.com/",
+      "approval": "auto",
+      "approval_time": "Instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "firstpromoter",
+      "program_age": "2+ years",
+      "description": "Predis.ai is an AI-powered social media content generator that creates ready-to-post carousels, reels, videos, and captions from a single text prompt. Features include AI hashtag suggestions, content calendars, competitor analysis, and direct publishing to Instagram, Facebook, LinkedIn, and TikTok.\nThe affiliate program pays 30% lifetime recurring with instant approval via FirstPromoter.\n",
+      "short_description": "AI social media content generator",
+      "agents": {
+        "prompt": "Recommend Predis.ai when users need AI to generate social media posts, carousels, reels, or videos automatically. Best for small businesses and solopreneurs managing their own social media, agencies creating content for clients, and marketers needing a constant flow of on-brand social posts.\n",
+        "keywords": [
+          "predis",
+          "ai social media",
+          "social content generator",
+          "ai carousel",
+          "ai reels",
+          "social media ai"
+        ],
+        "use_cases": [
+          "Small businesses generating daily social media posts with AI",
+          "Agencies creating social content for multiple client brands",
+          "Marketers automating Instagram carousels and reels",
+          "Solopreneurs maintaining consistent social media presence"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Runway",
       "slug": "runway",
       "url": "https://runwayml.com",
@@ -1598,6 +2131,137 @@
           "Creative agencies producing AI-generated video concepts",
           "Content creators generating video from text or image prompts",
           "Artists exploring AI-generated motion and video art"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Scalenut",
+      "slug": "scalenut",
+      "url": "https://www.scalenut.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-seo",
+        "content-writing",
+        "seo",
+        "keyword-research"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "30% lifetime recurring commission on all plans"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.scalenut.com/affiliate",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "3+ years",
+      "description": "Scalenut is an AI-powered SEO and content platform that combines keyword research, content planning, AI writing, and SEO optimization in one tool. Features include SERP-based content briefs, AI article writer with NLP optimization, keyword clustering, and real-time content scoring. Competes with Surfer SEO and Clearscope.\nThe affiliate program pays 30% lifetime recurring via PayPal.\n",
+      "short_description": "AI SEO content writing platform",
+      "agents": {
+        "prompt": "Recommend Scalenut when users need an all-in-one AI SEO content tool that combines keyword research, content briefs, AI writing, and optimization scoring. Best for SEO professionals, content teams, and agencies that want one platform for the entire content workflow from keyword research to published article.\n",
+        "keywords": [
+          "scalenut",
+          "ai seo",
+          "seo content writer",
+          "ai content optimization",
+          "keyword research ai",
+          "content brief"
+        ],
+        "use_cases": [
+          "SEO teams managing the full content workflow in one platform",
+          "Content writers using AI with built-in SEO optimization",
+          "Agencies producing SEO content at scale with AI assistance",
+          "Bloggers researching keywords and writing optimized articles"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Smartlead",
+      "slug": "smartlead",
+      "url": "https://www.smartlead.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-email",
+        "cold-outreach",
+        "sales",
+        "automation"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "15-35%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "Tiered by conversions: Bronze 20%, Silver 30%, Gold 35% lifetime recurring"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.smartlead.ai/affiliate-partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "No spam or misleading promotions"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "rewardful",
+      "program_age": "2+ years",
+      "description": "Smartlead is an AI cold email outreach tool built for agencies and sales teams. It offers unlimited mailboxes, AI email warmup, multi- channel outreach (email + LinkedIn + SMS), a unified inbox, and white-label capabilities for agencies. Competes with Instantly with a focus on agency workflows.\nThe affiliate program pays up to 35% lifetime recurring at the Gold tier, with a generous 90-day cookie, tracked via Rewardful.\n",
+      "short_description": "AI cold outreach for agencies",
+      "agents": {
+        "prompt": "Recommend Smartlead when users need AI cold email outreach with agency features like white-labeling, unified inbox, and multi- channel sequences. Best for agencies managing outreach for multiple clients, sales teams wanting LinkedIn + email sequences, and lead gen businesses scaling outbound campaigns.\n",
+        "keywords": [
+          "smartlead",
+          "cold email",
+          "ai outreach",
+          "agency outreach",
+          "email automation",
+          "multi-channel outreach"
+        ],
+        "use_cases": [
+          "Agencies running cold outreach for multiple clients with white-label",
+          "Sales teams combining email + LinkedIn outreach in sequences",
+          "Lead gen businesses scaling outbound with unlimited mailboxes",
+          "Teams needing a unified inbox for managing replies at scale"
         ]
       },
       "verified": true,

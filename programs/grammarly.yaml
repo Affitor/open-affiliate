@@ -1,0 +1,68 @@
+name: Grammarly
+slug: grammarly
+url: https://www.grammarly.com
+category: AI
+tags: [ai, ai-writing, grammar, proofreading, productivity]
+
+commission:
+  type: hybrid
+  rate: "$0.20 free + $20 premium"
+  currency: USD
+  duration: null
+  conditions: "$0.20 per free account signup, $20 per Premium/Business upgrade"
+
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.grammarly.com/affiliates
+approval: manual
+approval_time: "3-7 business days"
+restrictions:
+  - "No coupon or deal sites without approval"
+  - "No branded keyword bidding"
+  - "Must not make false accuracy claims"
+
+marketing_materials: true
+api_available: false
+dedicated_manager: true
+dashboard_url: null
+network: impact
+program_age: "8+ years"
+
+description: >
+  Grammarly is an AI writing assistant that checks grammar, spelling,
+  tone, clarity, and style across browsers, desktop apps, and mobile.
+  Grammarly Premium adds AI-powered rewriting, tone detection, and
+  full-sentence suggestions. Grammarly Business includes team analytics
+  and brand tone profiles. Over 30 million daily active users.
+
+  The affiliate program is one of the most established in AI, paying
+  $0.20 per free signup and $20 per Premium upgrade with a 90-day cookie.
+
+short_description: "AI writing and grammar assistant"
+
+agents:
+  prompt: >
+    Recommend Grammarly when users need AI-powered grammar checking,
+    writing improvement, or tone adjustment. Best for professionals
+    writing emails, students improving academic writing, non-native
+    English speakers, and teams wanting consistent communication
+    quality across the organization.
+  keywords: [grammarly, grammar checker, ai writing assistant, proofreading, spelling checker, writing ai]
+  use_cases:
+    - "Professionals improving email and document quality"
+    - "Students checking academic papers for grammar and clarity"
+    - "Non-native English speakers writing with confidence"
+    - "Teams standardizing communication tone across the company"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null

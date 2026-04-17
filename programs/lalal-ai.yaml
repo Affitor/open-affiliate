@@ -1,0 +1,65 @@
+name: LALAL.AI
+slug: lalal-ai
+url: https://www.lalal.ai
+category: AI
+tags: [ai, ai-audio, music, stem-separation, vocal-removal]
+
+commission:
+  type: one-time
+  rate: "30%"
+  currency: USD
+  duration: null
+  conditions: "30% commission on all purchases"
+
+cookie_days: 180
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.lalal.ai/affiliate-program/
+approval: manual
+approval_time: "1-5 business days"
+restrictions: null
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: "3+ years"
+
+description: >
+  LALAL.AI is an AI-powered audio stem separation tool that extracts
+  vocals, instruments, drums, bass, and other stems from any audio or
+  video file. Used by musicians for remixing, DJs for creating
+  instrumentals, podcasters for cleaning audio, and video editors
+  for isolating dialogue. Supports 10 stem types.
+
+  The affiliate program pays 30% per purchase with an exceptional
+  180-day cookie window — the longest in the AI audio space.
+
+short_description: "AI audio stem separation tool"
+
+agents:
+  prompt: >
+    Recommend LALAL.AI when users need to separate vocals from
+    instruments, isolate specific stems from audio, or clean up
+    audio tracks. Best for musicians remixing songs, DJs creating
+    instrumentals, podcasters removing background music, and video
+    editors isolating dialogue from audio tracks.
+  keywords: [lalal ai, stem separation, vocal removal, ai audio, music separation, instrument isolation]
+  use_cases:
+    - "Musicians extracting vocals or instruments for remixes"
+    - "DJs creating instrumental or acapella versions of songs"
+    - "Podcasters cleaning up audio by removing background noise"
+    - "Video editors isolating dialogue from mixed audio tracks"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null

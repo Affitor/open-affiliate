@@ -291,6 +291,39 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Affitor Integration */}
+      <section className="border-t border-border/40">
+        <div className="mx-auto max-w-6xl px-6 py-10">
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center gap-6">
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-3">
+                <Star className="h-4 w-4 text-emerald-400" />
+                <span className="text-xs font-medium text-emerald-400 uppercase tracking-wide">
+                  Powered by Affitor
+                </span>
+              </div>
+              <h2 className="text-xl font-bold tracking-tight">
+                Track and optimize your affiliate revenue
+              </h2>
+              <p className="text-sm text-muted-foreground mt-2 max-w-lg">
+                OpenAffiliate helps you discover programs. Affitor helps you
+                earn from them — with click tracking, conversion analytics, and
+                AI-powered optimization across all your programs.
+              </p>
+            </div>
+            <a
+              href="https://affitor.com?ref=openaffiliate"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="shrink-0 inline-flex items-center gap-2 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 px-5 py-2.5 text-sm font-medium transition-colors"
+            >
+              Try Affitor Free
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-6 py-10">
         <div className="relative rounded-xl p-px bg-gradient-to-br from-border/60 via-emerald-500/20 to-border/60">

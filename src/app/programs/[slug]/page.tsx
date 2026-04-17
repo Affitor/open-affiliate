@@ -269,6 +269,28 @@ export default async function ProgramPage({
             </div>
           </div>
 
+          {/* Track with Affitor */}
+          <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.03] p-5 flex items-start gap-3">
+            <BarChart2 className="h-5 w-5 text-emerald-400 mt-0.5 shrink-0" />
+            <div>
+              <h3 className="text-sm font-semibold">
+                Track your earnings
+              </h3>
+              <p className="text-xs text-muted-foreground mt-1">
+                Use Affitor to track clicks, conversions, and commissions for {program.name} and all your affiliate programs in one dashboard.
+              </p>
+              <a
+                href={`https://affitor.com/list/${program.slug}?ref=openaffiliate`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-3 text-xs font-medium text-emerald-400 hover:text-emerald-300 transition-colors"
+              >
+                Start tracking with Affitor
+                <ArrowLeft className="h-3 w-3 rotate-180" />
+              </a>
+            </div>
+          </div>
+
           {/* Contribute */}
           <div className="rounded-xl border border-border/40 bg-muted/10 p-5 flex items-start gap-3">
             <GitFork className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
