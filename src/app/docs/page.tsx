@@ -1,27 +1,22 @@
-import { Terminal, Bot, Globe, GitFork } from "lucide-react";
-
 export default function DocsPage() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
+    <div className="mx-auto max-w-3xl px-6 py-10">
       <h1 className="text-2xl font-bold tracking-tight">Documentation</h1>
       <p className="text-sm text-muted-foreground mt-2">
         How to use OpenAffiliate as a developer, agent builder, or contributor.
       </p>
 
-      <div className="mt-10 space-y-12">
+      <div className="mt-8 space-y-10">
         {/* CLI */}
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <Terminal className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">CLI</h2>
-          </div>
+          <h2 className="text-lg font-semibold mb-4">CLI</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Search and manage affiliate programs from your terminal.
           </p>
           <div className="space-y-3">
             {[
               {
-                cmd: "npx openaffiliate search \"email\"",
+                cmd: 'npx openaffiliate search "email"',
                 desc: "Search programs by keyword",
               },
               {
@@ -43,9 +38,11 @@ export default function DocsPage() {
             ].map((item) => (
               <div
                 key={item.cmd}
-                className="rounded-lg bg-muted/50 border border-border/50 px-4 py-3"
+                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3"
               >
-                <code className="text-xs font-mono">{item.cmd}</code>
+                <code className="text-xs font-mono text-emerald-400">
+                  {item.cmd}
+                </code>
                 <p className="text-[11px] text-muted-foreground mt-1">
                   {item.desc}
                 </p>
@@ -56,10 +53,7 @@ export default function DocsPage() {
 
         {/* API */}
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <Globe className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">API</h2>
-          </div>
+          <h2 className="text-lg font-semibold mb-4">API</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Public JSON API. No authentication required.
           </p>
@@ -83,7 +77,7 @@ export default function DocsPage() {
             ].map((item) => (
               <div
                 key={item.path}
-                className="rounded-lg bg-muted/50 border border-border/50 px-4 py-3 flex items-start gap-3"
+                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3 flex items-start gap-3"
               >
                 <span className="text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded mt-0.5">
                   {item.method}
@@ -101,19 +95,16 @@ export default function DocsPage() {
 
         {/* MCP */}
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <Bot className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">MCP Connector</h2>
-          </div>
+          <h2 className="text-lg font-semibold mb-4">MCP Connector</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Connect AI agents to the registry via Model Context Protocol.
           </p>
-          <div className="rounded-lg bg-muted/50 border border-border/50 p-4">
+          <div className="rounded-lg bg-zinc-950 border border-border/50 p-4">
             <p className="text-xs text-muted-foreground mb-2">
               Add to your MCP config:
             </p>
-            <pre className="text-xs font-mono text-muted-foreground leading-relaxed">
-{`{
+            <pre className="text-xs font-mono text-emerald-400/80 leading-relaxed">
+              {`{
   "mcpServers": {
     "openaffiliate": {
       "url": "https://openaffiliate.dev/api/mcp"
@@ -122,20 +113,28 @@ export default function DocsPage() {
 }`}
             </pre>
           </div>
-          <div className="mt-3 space-y-2">
-            <p className="text-xs text-muted-foreground">Available tools:</p>
-            <ul className="text-xs text-muted-foreground space-y-1 list-disc list-inside">
+          <div className="mt-4">
+            <p className="text-xs text-muted-foreground mb-2">
+              Available tools:
+            </p>
+            <ul className="text-xs text-muted-foreground space-y-1.5">
               <li>
-                <code className="bg-muted px-1 rounded">search_programs</code>{" "}
-                - Search by query, category, commission type
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-400">
+                  search_programs
+                </code>{" "}
+                — Search by query, category, commission type
               </li>
               <li>
-                <code className="bg-muted px-1 rounded">get_program</code> -
-                Get full program details including agent instructions
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-400">
+                  get_program
+                </code>{" "}
+                — Get full program details including agent instructions
               </li>
               <li>
-                <code className="bg-muted px-1 rounded">list_categories</code>{" "}
-                - Browse available categories
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-400">
+                  list_categories
+                </code>{" "}
+                — Browse available categories
               </li>
             </ul>
           </div>
@@ -143,10 +142,7 @@ export default function DocsPage() {
 
         {/* Contributing */}
         <section>
-          <div className="flex items-center gap-2 mb-4">
-            <GitFork className="h-5 w-5 text-muted-foreground" />
-            <h2 className="text-lg font-semibold">Contributing</h2>
-          </div>
+          <h2 className="text-lg font-semibold mb-4">Contributing</h2>
           <p className="text-sm text-muted-foreground mb-4">
             OpenAffiliate is open source. Contributions welcome.
           </p>
@@ -158,10 +154,10 @@ export default function DocsPage() {
               <p>
                 Fork{" "}
                 <a
-                  href="https://github.com/openaffiliate/registry"
+                  href="https://github.com/Affitor/open-affiliate"
                   className="text-foreground hover:underline"
                 >
-                  openaffiliate/registry
+                  Affitor/open-affiliate
                 </a>
               </p>
             </div>
@@ -171,7 +167,7 @@ export default function DocsPage() {
               </span>
               <p>
                 Add your program YAML to{" "}
-                <code className="bg-muted px-1 rounded text-xs">
+                <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
                   programs/
                 </code>
               </p>

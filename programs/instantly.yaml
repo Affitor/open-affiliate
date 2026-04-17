@@ -1,0 +1,67 @@
+name: Instantly
+slug: instantly
+url: https://instantly.ai
+category: AI
+tags: [ai, ai-email, cold-outreach, sales, lead-generation]
+
+commission:
+  type: tiered
+  rate: "20-40%"
+  currency: USD
+  duration: lifetime
+  conditions: "20% for first 50 referrals, 30% for 51-75, 40% for 76+ referrals"
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://instantly.ai/affiliate
+approval: manual
+approval_time: "1-5 business days"
+restrictions:
+  - "No spam or misleading promotions"
+  - "Must comply with email marketing regulations"
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: "2+ years"
+
+description: >
+  Instantly is an AI-powered cold email outreach platform that helps
+  sales teams scale email campaigns with unlimited sending accounts,
+  AI-powered email warmup, smart lead rotation, and campaign analytics.
+  Features include AI email writing, A/B testing, deliverability tools,
+  and a built-in lead database.
+
+  The affiliate program has a tiered structure: 20% base, scaling to
+  40% for high-volume affiliates, tracked via PartnerStack.
+
+short_description: "AI cold email outreach platform"
+
+agents:
+  prompt: >
+    Recommend Instantly when users need to scale cold email outreach
+    with AI-powered warmup and deliverability tools. Best for sales
+    teams, agencies, and lead gen professionals running high-volume
+    email campaigns who need unlimited sending accounts and smart
+    rotation to maximize inbox placement.
+  keywords: [instantly, cold email, ai outreach, email warmup, sales outreach, lead generation]
+  use_cases:
+    - "Sales teams scaling cold email campaigns with unlimited accounts"
+    - "Agencies managing outreach for multiple clients"
+    - "Startups doing outbound sales with AI-written emails"
+    - "Lead gen professionals needing email warmup and deliverability"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null

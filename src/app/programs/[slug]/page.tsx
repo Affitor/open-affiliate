@@ -119,11 +119,6 @@ export default async function ProgramPage({
                 </a>
                 <span className="text-border">|</span>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Star className="h-3 w-3" />
-                  {program.stars} stars
-                </div>
-                <span className="text-border">|</span>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
                   {program.createdAt}
                 </div>
@@ -498,7 +493,7 @@ export default async function ProgramPage({
             href={joinUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white px-5 py-3 text-sm font-medium transition-colors w-full"
+            className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
             Join Program
             <ExternalLink className="h-3.5 w-3.5" />

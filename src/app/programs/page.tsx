@@ -2,19 +2,29 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { Search, Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
 import { ProgramLogo } from "@/components/program-logo";
 import { programs, categories, searchPrograms } from "@/lib/programs";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
+
+const SEARCH_SUGGESTIONS = [
+  "email marketing",
+  "database",
+  "design",
+  "AI tools",
+  "hosting",
+  "video",
+  "SEO",
+];
 
 export default function ProgramsPage() {
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(25);
+  const [searchFocused, setSearchFocused] = useState(false);
 
   const filtered = useMemo(
     () => searchPrograms(query, selectedCategory),
@@ -28,7 +38,6 @@ export default function ProgramsPage() {
     currentPage * pageSize
   );
 
-  // Reset to page 1 when filters change
   const handleSearch = (value: string) => {
     setQuery(value);
     setPage(1);
@@ -44,62 +53,88 @@ export default function ProgramsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
-      {/* Header */}
+      {/* Header + Search */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">Programs</h1>
         <p className="text-sm text-muted-foreground mt-1">
           {programs.length} affiliate programs — curated, verified, and
           agent-ready
         </p>
-      </div>
 
-      {/* Search + Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search programs, categories, tags..."
-            className="pl-9 h-10 bg-muted/50 border-border/50 text-sm focus-visible:ring-emerald-500/30 focus-visible:border-emerald-500/40"
+        {/* Search bar — prominent */}
+        <div className="mt-6 relative">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search by name, category, or keyword..."
+            className="w-full h-12 pl-12 pr-4 rounded-xl border border-border/50 bg-muted/30 text-sm focus:outline-none focus:border-border focus:bg-muted/50 transition-colors"
             value={query}
             onChange={(e) => handleSearch(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setTimeout(() => setSearchFocused(false), 200)}
           />
+
+          {/* Keyword suggestions — show when focused and no query */}
+          {searchFocused && !query && (
+            <div className="absolute top-full left-0 right-0 mt-2 rounded-xl border border-border/50 bg-card p-3 z-10">
+              <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide mb-2">
+                Popular searches
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {SEARCH_SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSearch(s);
+                    }}
+                    className="rounded-lg px-3 py-1.5 text-xs bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto pb-1">
+      </div>
+
+      {/* Category filters — horizontal scroll */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-3 mb-4 scrollbar-none">
+        <button
+          onClick={() => {
+            setSelectedCategory("");
+            setPage(1);
+          }}
+          className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+            !selectedCategory
+              ? "bg-foreground text-background"
+              : "bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted"
+          }`}
+        >
+          All
+        </button>
+        {categories.map((cat) => (
           <button
-            onClick={() => {
-              setSelectedCategory("");
-              setPage(1);
-            }}
+            key={cat}
+            onClick={() => handleCategory(cat)}
             className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-              !selectedCategory
-                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                : "bg-muted text-muted-foreground hover:text-foreground"
+              selectedCategory === cat
+                ? "bg-foreground text-background"
+                : "bg-muted/50 text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
           >
-            All
+            {cat}
           </button>
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => handleCategory(cat)}
-              className={`shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                selectedCategory === cat
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                  : "bg-muted text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
       {/* Results count + page size */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs text-muted-foreground">
-          Showing {(currentPage - 1) * pageSize + 1}–
-          {Math.min(currentPage * pageSize, filtered.length)} of{" "}
-          {filtered.length}
+          {filtered.length === programs.length
+            ? `${filtered.length} programs`
+            : `${filtered.length} of ${programs.length} programs`}
         </p>
         <div className="flex items-center gap-1">
           <span className="text-xs text-muted-foreground mr-1">Show</span>
@@ -124,8 +159,16 @@ export default function ProgramsPage() {
         {paginated.length === 0 ? (
           <div className="text-center py-16">
             <p className="text-sm text-muted-foreground">
-              No programs found. Try a different search.
+              No programs found. Try a different search or category.
             </p>
+            {query && (
+              <button
+                onClick={() => handleSearch("")}
+                className="mt-3 text-xs text-muted-foreground hover:text-foreground transition-colors underline"
+              >
+                Clear search
+              </button>
+            )}
           </div>
         ) : (
           paginated.map((program) => (
@@ -171,11 +214,6 @@ export default function ProgramsPage() {
                   {program.cookieDays}d
                 </Badge>
               </div>
-
-              <div className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
-                <Star className="h-3 w-3" />
-                {program.stars}
-              </div>
             </Link>
           ))
         )}
@@ -216,17 +254,15 @@ export default function ProgramsPage() {
 
       {/* CLI hint */}
       <div className="mt-10 rounded-xl border border-border/40 bg-muted/20 p-6">
-        <div>
-          <h3 className="text-sm font-semibold">Search from CLI</h3>
-          <p className="text-xs text-muted-foreground mt-1">
-            Use the CLI to search and filter programs from your terminal or AI
-            agent.
-          </p>
-          <code className="mt-3 block rounded-lg bg-background border border-border/50 px-4 py-2.5 text-xs font-mono text-emerald-400">
-            npx openaffiliate search &quot;database&quot; --min-commission 10
-            --type recurring
-          </code>
-        </div>
+        <h3 className="text-sm font-semibold">Search from CLI</h3>
+        <p className="text-xs text-muted-foreground mt-1">
+          Use the CLI to search and filter programs from your terminal or AI
+          agent.
+        </p>
+        <code className="mt-3 block rounded-lg bg-zinc-950 border border-border/50 px-4 py-2.5 text-xs font-mono text-muted-foreground">
+          npx openaffiliate search &quot;database&quot; --min-commission 10
+          --type recurring
+        </code>
       </div>
     </div>
   );
