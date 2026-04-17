@@ -68,7 +68,7 @@ function Nav() {
         </div>
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com/openaffiliate/registry"
+            href="https://github.com/Affitor/open-affiliate"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -103,7 +103,7 @@ function Footer() {
             </span>
           </div>
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
-            <a href="https://github.com/openaffiliate" className="hover:text-foreground transition-colors">
+            <a href="https://github.com/Affitor/open-affiliate" className="hover:text-foreground transition-colors">
               GitHub
             </a>
             <span className="text-border">|</span>

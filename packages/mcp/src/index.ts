@@ -11,7 +11,7 @@
  *   "mcpServers": {
  *     "openaffiliate": {
  *       "command": "npx",
- *       "args": ["@openaffiliate/mcp"]
+ *       "args": ["openaffiliate-mcp"]
  *     }
  *   }
  * }

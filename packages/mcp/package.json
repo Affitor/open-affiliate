@@ -1,5 +1,5 @@
 {
-  "name": "@openaffiliate/mcp",
+  "name": "openaffiliate-mcp",
   "version": "0.1.0",
   "description": "MCP server for the OpenAffiliate registry",
   "type": "module",

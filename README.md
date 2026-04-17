@@ -2,15 +2,15 @@
 
 The open registry of affiliate programs. Built for developers and AI agents.
 
-[![CI](https://github.com/openaffiliate/registry/actions/workflows/ci.yml/badge.svg)](https://github.com/openaffiliate/registry/actions)
-[![Programs](https://img.shields.io/badge/programs-8-blue)](https://openaffiliate.dev/programs)
+[![CI](https://github.com/Affitor/open-affiliate/actions/workflows/ci.yml/badge.svg)](https://github.com/Affitor/open-affiliate/actions)
+[![Programs](https://img.shields.io/badge/programs-30-blue)](https://openaffiliate.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ## What is this?
 
 OpenAffiliate is a community-driven, open-source registry of affiliate programs. Every program is stored as a YAML file in this repo, making it easy to contribute, review, and integrate.
 
-- **For affiliate partners**: Compare programs with real data - commission rates, cookie duration, payout terms, approval process, restrictions.
+- **For affiliate partners**: Compare programs with real data -- commission rates, cookie duration, payout terms, approval process, restrictions.
 - **For AI agents**: Machine-readable AGENTS.md + MCP connector. Structured context for when to recommend what product.
 - **For SaaS companies**: Free listing in a canonical registry. Exposure to developer partners and AI agents.
 
@@ -38,7 +38,7 @@ npx openaffiliate add supabase
 
 ### MCP (for AI agents)
 
-Add to your MCP config:
+**HTTP endpoint** (Claude.ai, ChatGPT, any MCP client):
 
 ```json
 {
@@ -50,12 +50,25 @@ Add to your MCP config:
 }
 ```
 
+**Stdio transport** (Claude Code, Cursor, local tools):
+
+```json
+{
+  "mcpServers": {
+    "openaffiliate": {
+      "command": "npx",
+      "args": ["openaffiliate-mcp"]
+    }
+  }
+}
+```
+
 Available tools: `search_programs`, `get_program`, `list_categories`
 
 ### API
 
 ```
-GET /api/programs              # List all (supports ?q=, ?category=, ?type=)
+GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?verified=)
 GET /api/programs/[slug]       # Get program details
 GET /api/categories            # List categories with counts
 ```
@@ -65,7 +78,7 @@ GET /api/categories            # List categories with counts
 1. Fork this repo
 2. Create a YAML file in `programs/your-product.yaml`
 3. Open a pull request
-4. CI validates the schema automatically
+4. CI validates the schema and verifies your signup URL automatically
 5. Community reviews and merges
 
 ### Program YAML format
@@ -105,6 +118,7 @@ agents:
   use_cases:
     - "When a user needs X"
 
+verified: false
 submitted_by: "@your-github"
 ```
 
@@ -113,10 +127,29 @@ See [schema/program.schema.json](schema/program.schema.json) for the full specif
 ## Project structure
 
 ```
-openaffiliate/
-  programs/          # YAML program files (contributors add files here)
-  src/               # Website (Next.js 16)
-  .github/           # CI workflows, PR templates
+open-affiliate/
+  programs/            # YAML program files (contributors add here)
+  src/                 # Website (Next.js 16)
+  packages/cli/        # CLI tool (npx openaffiliate)
+  packages/mcp/        # Standalone MCP server (openaffiliate-mcp)
+  scripts/             # Build registry, verify URLs
+  schema/              # JSON Schema for YAML validation
+  .github/             # CI workflows
+```
+
+## Verification
+
+All program signup URLs are automatically verified using `scripts/verify-programs.ts`. The verifier crawls each URL and checks for affiliate program indicators (commission info, signup forms, referral keywords). Programs that pass verification are marked `verified: true`.
+
+```bash
+# Verify all programs
+npm run verify
+
+# Verify a single program
+npx tsx scripts/verify-programs.ts stripe
+
+# Verify only changed files (used in CI)
+npm run verify:changed
 ```
 
 ## License
