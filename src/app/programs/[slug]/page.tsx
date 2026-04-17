@@ -89,15 +89,15 @@ export default async function ProgramPage({
           {/* Header */}
           <div className="flex items-start gap-4">
             <ProgramLogo slug={program.slug} name={program.name} size={56} className="shrink-0 rounded-xl" />
-            <div className="flex-1">
-              <div className="flex items-center gap-2.5">
-                <h1 className="text-2xl font-bold tracking-tight">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
                   {program.name}
                 </h1>
                 {program.verified && (
                   <Badge
                     variant="outline"
-                    className="text-xs border-emerald-500/30 text-emerald-400"
+                    className="text-xs border-emerald-500/30 text-emerald-400 shrink-0"
                   >
                     <Shield className="h-3 w-3 mr-1" />
                     Verified
@@ -107,7 +107,7 @@ export default async function ProgramPage({
               <p className="text-sm text-muted-foreground mt-1">
                 {program.shortDescription}
               </p>
-              <div className="flex items-center gap-3 mt-3">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3">
                 <a
                   href={program.url}
                   target="_blank"
@@ -115,9 +115,9 @@ export default async function ProgramPage({
                   className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <ExternalLink className="h-3 w-3" />
-                  {program.url.replace("https://", "")}
+                  <span className="truncate max-w-[180px] sm:max-w-none">{program.url.replace("https://", "")}</span>
                 </a>
-                <span className="text-border">|</span>
+                <span className="text-border hidden sm:inline">|</span>
                 <div className="flex items-center gap-1 text-xs text-muted-foreground">
                   <Calendar className="h-3 w-3" />
                   {program.createdAt}
@@ -256,14 +256,14 @@ export default async function ProgramPage({
           {/* Install */}
           <div>
             <h2 className="text-base font-semibold mb-3">Quick install</h2>
-            <div className="rounded-lg bg-muted/50 border border-border/50 p-4 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Terminal className="h-4 w-4 text-muted-foreground" />
-                <code className="text-sm font-mono text-emerald-400">
+            <div className="rounded-lg bg-muted/50 border border-border/50 p-4 flex items-center justify-between gap-3 overflow-hidden">
+              <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
+                <Terminal className="h-4 w-4 text-muted-foreground shrink-0" />
+                <code className="text-sm font-mono text-emerald-400 whitespace-nowrap">
                   npx openaffiliate add {program.slug}
                 </code>
               </div>
-              <button className="p-1.5 hover:bg-muted rounded transition-colors">
+              <button className="p-1.5 hover:bg-muted rounded transition-colors shrink-0">
                 <Copy className="h-3.5 w-3.5 text-muted-foreground" />
               </button>
             </div>

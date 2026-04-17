@@ -259,10 +259,11 @@ export default function ProgramsPage() {
           Use the CLI to search and filter programs from your terminal or AI
           agent.
         </p>
-        <code className="mt-3 block rounded-lg bg-zinc-950 border border-border/50 px-4 py-2.5 text-xs font-mono text-muted-foreground">
-          npx openaffiliate search &quot;database&quot; --min-commission 10
-          --type recurring
-        </code>
+        <div className="mt-3 overflow-x-auto rounded-lg bg-zinc-950 border border-border/50">
+          <code className="block px-4 py-2.5 text-xs font-mono text-muted-foreground whitespace-nowrap">
+            npx openaffiliate search &quot;database&quot; --min-commission 10 --type recurring
+          </code>
+        </div>
       </div>
     </div>
   );

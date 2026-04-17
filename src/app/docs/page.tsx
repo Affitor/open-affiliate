@@ -38,9 +38,9 @@ export default function DocsPage() {
             ].map((item) => (
               <div
                 key={item.cmd}
-                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3"
+                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3 overflow-x-auto"
               >
-                <code className="text-xs font-mono text-emerald-400">
+                <code className="text-xs font-mono text-emerald-400 whitespace-nowrap">
                   {item.cmd}
                 </code>
                 <p className="text-[11px] text-muted-foreground mt-1">
@@ -77,13 +77,13 @@ export default function DocsPage() {
             ].map((item) => (
               <div
                 key={item.path}
-                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3 flex items-start gap-3"
+                className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3 flex items-start gap-3 overflow-x-auto"
               >
-                <span className="text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded mt-0.5">
+                <span className="text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded mt-0.5 shrink-0">
                   {item.method}
                 </span>
-                <div>
-                  <code className="text-xs font-mono">{item.path}</code>
+                <div className="min-w-0">
+                  <code className="text-xs font-mono whitespace-nowrap">{item.path}</code>
                   <p className="text-[11px] text-muted-foreground mt-0.5">
                     {item.desc}
                   </p>
@@ -99,7 +99,7 @@ export default function DocsPage() {
           <p className="text-sm text-muted-foreground mb-4">
             Connect AI agents to the registry via Model Context Protocol.
           </p>
-          <div className="rounded-lg bg-zinc-950 border border-border/50 p-4">
+          <div className="rounded-lg bg-zinc-950 border border-border/50 p-4 overflow-x-auto">
             <p className="text-xs text-muted-foreground mb-2">
               Add to your MCP config:
             </p>

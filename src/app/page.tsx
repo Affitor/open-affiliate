@@ -86,7 +86,7 @@ export default function Home() {
                 </Badge>
               </div>
 
-              <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
                 The open registry
                 <br />
                 of{" "}
