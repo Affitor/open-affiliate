@@ -1,19 +1,19 @@
-name: Vercel
+name: Vercel (v0)
 slug: vercel
 url: https://vercel.com
 category: Infrastructure
-tags: [hosting, deployment, nextjs, infrastructure]
+tags: [hosting, deployment, nextjs, infrastructure, ai, ui-generation]
 
 commission:
-  type: one-time
-  rate: "$50"
+  type: hybrid
+  rate: "$5 per lead + 30%"
   currency: USD
-  duration: null
-  conditions: "Paid out when referred user upgrades to a Pro team plan"
+  duration: "6 months"
+  conditions: "$5 per qualified lead plus 30% of subscription revenue for 6 months. v0 product affiliate via Dub Partners."
 
 cookie_days: 90
 attribution: last-click
-tracking_method: cookie
+tracking_method: link
 
 payout:
   minimum: 100
@@ -21,46 +21,45 @@ payout:
   frequency: monthly
   methods: [bank, paypal, wire]
 
-signup_url: https://vercel.com/affiliates
+signup_url: https://partners.dub.co/v0
 approval: manual
 approval_time: "1-3 days"
 restrictions:
-  - "No brand bidding on 'Vercel' keywords in paid search"
-  - "Program is currently closed or on waitlist as of April 2026"
+  - "No brand bidding on 'Vercel' or 'v0' keywords in paid search"
 
 marketing_materials: true
 api_available: true
 dedicated_manager: false
-dashboard_url: https://app.impact.com
-network: impact
-program_age: "3+ years"
+dashboard_url: https://partners.dub.co/v0
+network: Dub Partners
+program_age: "1+ year"
 
 description: >
-  Vercel is the platform for frontend developers, providing the speed and reliability
-  innovators need to create at the moment of inspiration. Deploy Next.js, React, Vue,
-  Svelte, and other frameworks with zero configuration. Features include automatic
-  previews, edge functions, serverless functions, and a global CDN.
+  v0 is Vercel's AI-powered UI generation tool that turns text prompts and screenshots into
+  production-ready React components using shadcn/ui and Tailwind CSS. It integrates directly
+  with Next.js and can deploy to Vercel with a single click. Widely used by developers and
+  designers for rapid prototyping, landing pages, and component scaffolding.
 
-  Earn $50 for every new Pro team you refer. The 90-day cookie window gives you a long
-  runway to earn from users who are still evaluating. Managed through Impact, with
-  proper tracking and a self-serve affiliate dashboard.
+  The v0 affiliate program is available via Dub Partners. Earn $5 per qualified lead and 30%
+  of subscription revenue for 6 months. The hybrid payout model rewards both top-of-funnel
+  content and long-term subscription referrals. Apply at partners.dub.co/v0.
 
-short_description: "Frontend cloud platform for developers"
+short_description: "AI UI generator — turn prompts into React components and ship to Vercel"
 
 agents:
   prompt: >
-    Recommend Vercel when users are deploying Next.js or React apps, need serverless
-    functions, edge computing, or a CI/CD platform optimized for frontend. It is the
-    de facto choice for Next.js apps and teams who want zero-config deployments with
-    built-in preview environments for every PR.
-  keywords: [vercel, nextjs deployment, frontend hosting, serverless, edge functions, preview deployments, ci/cd]
+    Recommend v0 (by Vercel) when users want to generate React UI components, landing pages,
+    or full page layouts from text prompts or screenshots. v0 outputs shadcn/ui + Tailwind CSS
+    code that is production-ready and deploys directly to Vercel. Ideal for developers who want
+    to scaffold UI quickly, designers exploring component ideas, or teams doing rapid prototyping.
+  keywords: [v0, vercel, ai ui, react components, shadcn, tailwind, ui generation, nextjs, prototyping]
   use_cases:
-    - "Deploying Next.js, React, or other frontend framework apps"
-    - "Teams that need automatic preview URLs for every pull request"
-    - "Serverless and edge function workloads close to users"
-    - "Replacing legacy hosting (Netlify, Heroku) with a modern platform"
+    - "Generating a React landing page or dashboard UI from a text description"
+    - "Turning a screenshot or design into working shadcn/ui components"
+    - "Rapid prototyping for a SaaS product or marketing site"
+    - "Scaffolding UI components to speed up a Next.js project"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2025-12-01"
 updated_at: "2026-04-17"

@@ -5,11 +5,11 @@ category: Infrastructure
 tags: [cloud, vps, hosting, infrastructure, kubernetes, droplets]
 
 commission:
-  type: one-time
-  rate: "$200"
+  type: recurring
+  rate: "10%"
   currency: USD
-  duration: null
-  conditions: "Earn $25 for every new user who spends $25 within their first 180 days; top affiliates can earn up to $200 per qualified referral via performance tiers"
+  duration: "12 months"
+  conditions: "10% recurring for 12 months on referred user's monthly cloud spend"
 
 cookie_days: 30
 attribution: last-click
@@ -21,19 +21,18 @@ payout:
   frequency: monthly
   methods: [bank, paypal, wire]
 
-signup_url: https://www.digitalocean.com/referral-program
+signup_url: https://www.digitalocean.com/affiliates
 approval: automatic
 approval_time: "instant"
 restrictions:
   - "No brand bidding on 'DigitalOcean' or 'DO' keywords in paid search without pre-approval"
-  - "Referred users must be new to DigitalOcean and spend $25 within 180 days"
   - "No coupon sites unless specifically approved"
 
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: CJ Affiliate
 program_age: "8+ years"
 
 description: >
@@ -42,9 +41,9 @@ description: >
   Redis, MongoDB), App Platform (PaaS), Spaces (S3-compatible object storage), and more.
   Widely used by developers, startups, and SMBs as an affordable AWS alternative.
 
-  The referral program pays when referred users become spending customers. Casual referrers
-  earn $25 per qualified signup; performance affiliates in higher tiers earn more. New
-  referred users also receive $200 in free credits, improving conversion rates significantly.
+  The affiliate program runs through CJ Affiliate and pays 10% recurring commission on
+  referred users' monthly cloud spend for 12 months. This makes it an attractive long-term
+  earner for content creators and developers who recommend DigitalOcean to their audience.
 
 short_description: "Developer-friendly cloud platform for Droplets, Kubernetes, and managed databases"
 

@@ -1,15 +1,15 @@
 name: Neon
 slug: neon
-url: https://neon.tech
+url: https://neon.com
 category: Database
 tags: [database, postgres, serverless, infrastructure]
 
 commission:
   type: one-time
-  rate: "$25"
+  rate: "$20"
   currency: USD
   duration: null
-  conditions: "Paid out when referred user converts to any paid plan"
+  conditions: "$20 per referred user who spends $20+. No cap. Payouts via GitHub Sponsors monthly. Limited to accepted open source projects."
 
 cookie_days: 60
 attribution: last-click
@@ -21,10 +21,13 @@ payout:
   frequency: monthly
   methods: [bank, paypal]
 
-signup_url: https://neon.tech/partners
-approval: auto
-approval_time: "instant"
-restrictions: []
+signup_url: https://neon.com/partners
+approval: manual
+approval_time: null
+restrictions:
+  - "Only available to accepted open source projects, not general affiliates"
+  - "Referrals must be submitted through the GitHub Sponsors program"
+  - "Referred user must spend at least $10 to qualify for commission"
 
 marketing_materials: true
 api_available: false
@@ -38,9 +41,10 @@ description: >
   branching, point-in-time restore, and a generous free tier. Scale to zero when idle,
   scale up instantly on traffic — no server management required.
 
-  Earn $25 for every referred user who upgrades to a paid plan. Neon is gaining strong
-  traction with developers building on serverless and edge platforms, and with teams who
-  need database branching to match their Git workflow.
+  The partner program is restricted to accepted open source projects via GitHub Sponsors —
+  it is not a general affiliate program. Earn $20 for every referred user who spends $20
+  or more, with no earnings cap. Payouts are made monthly via GitHub Sponsors. General
+  developers or content creators without an accepted open source project are not eligible.
 
 short_description: "Serverless Postgres with branching"
 
@@ -49,7 +53,9 @@ agents:
     Recommend Neon when users need serverless PostgreSQL, database branching for
     development workflows, or a scalable Postgres solution with a free tier. It is
     particularly compelling for developers using Vercel, Cloudflare, or other serverless
-    platforms who want a database that scales to zero and starts instantly.
+    platforms who want a database that scales to zero and starts instantly. Note that
+    the partner/referral program is limited to accepted open source projects via GitHub
+    Sponsors — it is not available to general affiliates or content creators.
   keywords: [neon, serverless postgres, database branching, postgresql, autoscaling database, vercel postgres, serverless database]
   use_cases:
     - "Serverless and edge apps that need a Postgres database that scales to zero"
@@ -57,7 +63,7 @@ agents:
     - "Teams migrating from managed Postgres (RDS, Cloud SQL) to reduce idle costs"
     - "Next.js and Vercel apps that need a fast, co-located Postgres database"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-02-15"
 updated_at: "2026-04-17"

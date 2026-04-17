@@ -6,10 +6,10 @@ tags: [scheduling, calendar, meetings, open-source, booking, productivity]
 
 commission:
   type: recurring
-  rate: "25%"
+  rate: "20%"
   currency: USD
   duration: "12 months"
-  conditions: "Earn 25% of referred customer's monthly subscription for up to 12 months after their first paid invoice"
+  conditions: "20% recurring for 12 months. Referred customers also get 20% off for 12 months."
 
 cookie_days: 60
 attribution: last-click
@@ -21,14 +21,13 @@ payout:
   frequency: monthly
   methods: [bank, paypal]
 
-signup_url: https://cal.com/affiliates
+signup_url: https://cal.com/affiliate-program
 approval: automatic
 approval_time: "instant"
 restrictions:
   - "No brand bidding on 'Cal.com' or 'Calendly alternative' in a misleading way"
   - "Referred accounts must be new Cal.com paid customers"
   - "No incentivized traffic"
-  - "Program is currently closed or on waitlist as of April 2026"
 
 marketing_materials: false
 api_available: true
@@ -43,10 +42,11 @@ description: >
   with features including round-robin scheduling, collective bookings, workflows, routing forms,
   and a powerful API for embedding scheduling into any product. Self-hostable or managed.
 
-  Earn 25% recurring commission on referred paid subscriptions for 12 months. Cal.com's
+  Earn 20% recurring commission on referred paid subscriptions for 12 months. Referred
+  customers also receive 20% off for 12 months, improving conversion rates. Cal.com's
   strong open-source brand and Calendly-alternative positioning make it a compelling
   recommendation for developers and businesses looking for a privacy-first, extensible
-  scheduling tool.
+  scheduling tool. Program terms effective January 2026.
 
 short_description: "Open-source scheduling infrastructure and Calendly alternative"
 
@@ -64,7 +64,7 @@ agents:
     - "Setting up team round-robin scheduling for sales demos or support calls"
     - "Creating a booking page for consulting, coaching, or freelance calls"
 
-verified: false
+verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"

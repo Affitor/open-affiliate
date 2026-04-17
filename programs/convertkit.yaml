@@ -8,8 +8,8 @@ commission:
   type: recurring
   rate: "50%"
   currency: USD
-  duration: "24 months"
-  conditions: "Earn 50% recurring commission for up to 24 months on referred paid accounts. Commission paid monthly as long as the referred account remains active."
+  duration: "12 months"
+  conditions: "50% recurring for first 12 months. Tiered recurring (10-20%) beyond 12 months for high-volume affiliates (10+ referrals/year)."
 
 cookie_days: 90
 attribution: last-click
@@ -43,10 +43,11 @@ description: >
   tagging and segmentation. Kit serves over 600,000 creators and is known for its simplicity
   and creator-first philosophy compared to Mailchimp or ActiveCampaign.
 
-  The affiliate program offers 50% recurring commission for up to 24 months — one of the
-  most generous durations in email marketing. With plans scaling based on subscriber count,
-  successful creators with large lists generate significant recurring affiliate revenue.
-  Kit rebranded from ConvertKit in 2024.
+  The affiliate program offers 50% recurring commission for the first 12 months — one of the
+  most generous rates in email marketing. High-volume affiliates (10+ referrals/year) continue
+  earning 10-20% tiered recurring beyond the initial 12-month window. With plans scaling based
+  on subscriber count, successful creators with large lists generate significant recurring
+  affiliate revenue. Kit rebranded from ConvertKit in 2024.
 
 short_description: "Email marketing platform built for creators and audience builders"
 

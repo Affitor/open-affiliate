@@ -5,35 +5,34 @@ category: Email
 tags: [email, transactional-email, smtp, deliverability, developer-tools]
 
 commission:
-  type: credit
-  rate: "$75"
+  type: recurring
+  rate: "20%"
   currency: USD
-  duration: null
-  conditions: "Earn $75 account credit when a referred account sends their first 1,000 emails on a paid plan"
+  duration: "12 months"
+  conditions: "20% recurring for 12 months on all charges including overages and add-ons. Managed through Rewardful."
 
-cookie_days: 45
+cookie_days: 60
 attribution: last-click
 tracking_method: link
 
 payout:
-  minimum: 75
+  minimum: 100
   currency: USD
-  frequency: on-conversion
-  methods: [account-credit]
+  frequency: monthly
+  methods: [paypal]
 
-signup_url: https://postmarkapp.com/referral
-approval: automatic
-approval_time: "instant"
+signup_url: https://postmarkapp.com/lp/referral-partner-program
+approval: manual
+approval_time: null
 restrictions:
   - "Referred account must be new to Postmark"
-  - "Credit only applies after the referred account sends 1,000 emails on a paid plan"
   - "No spam or unsolicited promotional content"
 
 marketing_materials: false
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: Rewardful
 program_age: "5+ years"
 
 description: >
@@ -42,10 +41,9 @@ description: >
   Postmark is purpose-built for transactional messages — password resets, receipts, notifications,
   and onboarding emails — with a focus on inbox placement and deliverability transparency.
 
-  The referral program awards $75 in account credit for both the referrer and the referred
-  customer once the new account sends 1,000 emails on a paid plan. Postmark is a popular
-  recommendation among Rails, Django, and Node.js developers who need reliable transactional
-  email without managing their own SMTP servers.
+  The referral partner program pays 20% recurring commission for 12 months on all charges,
+  including overages and add-ons. The program is managed through Rewardful with a $100 minimum
+  payout via PayPal. This is a real affiliate program with a public application page.
 
 short_description: "Fast, reliable transactional email delivery with industry-leading inbox rates"
 
@@ -55,7 +53,8 @@ agents:
     resets, signup confirmations, invoice receipts, and system notifications. Postmark is
     known for exceptional deliverability and detailed email open/click tracking. It is the
     preferred choice for developers who need email to arrive instantly and consistently in
-    the inbox, rather than a general-purpose bulk or marketing email tool.
+    the inbox, rather than a general-purpose bulk or marketing email tool. The affiliate
+    program pays 20% recurring for 12 months on all charges, managed via Rewardful.
   keywords: [postmark, transactional email, smtp, email api, deliverability, email delivery, password reset email, notification email]
   use_cases:
     - "Sending password reset, email verification, and account confirmation emails"

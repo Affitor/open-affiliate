@@ -13,7 +13,9 @@
     "lint": "eslint",
     "registry:build": "npx tsx scripts/build-registry.ts",
     "verify": "npx tsx scripts/verify-programs.ts",
-    "verify:changed": "npx tsx scripts/verify-programs.ts --changed"
+    "verify:changed": "npx tsx scripts/verify-programs.ts --changed",
+    "verify:deep": "npx tsx scripts/verify-deep.ts",
+    "verify:deep:unverified": "npx tsx scripts/verify-deep.ts --unverified"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",

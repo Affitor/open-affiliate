@@ -1,0 +1,1217 @@
+{
+  "generated_at": "2026-04-17T22:22:22.018Z",
+  "total": 25,
+  "summary": {
+    "major": 11,
+    "minor": 11,
+    "ok": 1,
+    "critical": 1
+  },
+  "results": [
+    {
+      "slug": "airtable",
+      "name": "Airtable",
+      "yaml_commission": "$10 credit",
+      "yaml_signup_url": null,
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://www.airtable.com/company/partner-agreement",
+          "title": "Airtable Partner Program Agreement - Airtable",
+          "snippet": "This Airtable Partner Program Agreement (&quot; Agreement &quot;) governs participation in Airtable&#x27;s Partner Program. The Agreement is entered into by and between Formagrid Inc dba Airtable (&quot; Airtable &quot;) and the entity agreeing to these terms (&quot; Partner, with Partner and Airtable each, a &quot; party &quot; and collectively, the &quot; parties &quot;), effective as of the date Partner agrees to this ..."
+        },
+        {
+          "url": "https://www.linkjolt.io/saas-affiliate-programs/airtable",
+          "title": "Airtable Affiliate Program 2026: Commission, Cookie &amp; How To Join",
+          "snippet": "Airtable&#x27;s affiliate program pays Percentage of eligible product/service purchases (terms published in agreement) with a 90 days cookie window. See how to join, payout details, and commission structure."
+        },
+        {
+          "url": "https://commissiondex.com/program/airtable/",
+          "title": "Airtable Affiliate Program Review 2026 | Commission, Cookie &amp; Payout ...",
+          "snippet": "Detailed review of the Airtable Affiliate Program affiliate program. 20% recurring for 12 months commission, 60-day cookies, monthly payouts. Compare with alternatives and find the best fit for your audience."
+        },
+        {
+          "url": "https://www.affnext.com/blog/airtable-affiliate-program",
+          "title": "Airtable Affiliate Program - affnext.com",
+          "snippet": "The Airtable Affiliate Program is an opportunity for marketers, bloggers, and content creators to earn commissions by promoting one of the most popular productivity platforms available today. Airtable is widely used by businesses, startups, and teams to organize data, manage projects, and build custom workflows without complex coding."
+        },
+        {
+          "url": "https://market.partnerstack.com/page/airtable",
+          "title": "Partnerstack - Program Directory",
+          "snippet": "The only marketplace supporting Affiliates, Resellers and Referral programs."
+        }
+      ],
+      "real_signup_url": "https://www.airtable.com/company/partner-agreement",
+      "real_commission": "20% recurring",
+      "real_cookie_days": 60,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"$10\" but found \"20% recurring\"",
+        "Cookie days mismatch: YAML says 30 but found 60",
+        "Network: found \"Impact\" (YAML: \"in-house\")"
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "20% recurring",
+        "cookie_days": 60,
+        "network": "Impact"
+      }
+    },
+    {
+      "slug": "cal-com",
+      "name": "Cal.com",
+      "yaml_commission": "25% recurring",
+      "yaml_signup_url": "https://cal.com/affiliates",
+      "yaml_cookie_days": 60,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://cal.com/affiliate-program",
+          "title": "Cal.com Affiliate Program | Earn 20% Recurring Commissions",
+          "snippet": "Join the Cal.com Affiliate Program and earn 20% recurring commissions for a year. Your referrals get 20% off their first year. Promote the most feature-rich scheduling platform trusted by teams and enterprises."
+        },
+        {
+          "url": "https://partners.dub.co/cal",
+          "title": "Cal.com Affiliate Program | Dub",
+          "snippet": "Join the Cal.com affiliate program and earn 20% per sale for 1 year by referring Cal.com to your friends and followers."
+        },
+        {
+          "url": "https://www.adamenfroy.com/best-high-paying-affiliate-programs",
+          "title": "69 BEST Affiliate Programs of 2026 (High Paying for Beginners)",
+          "snippet": "No matter what type of audience you have (or want to build), this post shows you the best high-paying affiliate programs to go for."
+        },
+        {
+          "url": "https://www.flowlu.com/blog/finances/best-affiliate-programs/",
+          "title": "44 Best Affiliate Programs, Networks &amp; Platforms [2026] - Flowlu",
+          "snippet": "Find the top affiliate programs, networks, and platforms for 2026. Compare commission rates and payouts, and join reputable offers for marketers and creators."
+        },
+        {
+          "url": "https://affiliate.watch/",
+          "title": "Best 859 Affiliate Programs 2026 | Reviews &amp; Ratings",
+          "snippet": "Discover and compare 859 verified affiliate programs in 2026. Get detailed reviews, AI ratings, commission details, and exclusive deals. Find your perfect affiliate partnership today!"
+        }
+      ],
+      "real_signup_url": "https://cal.com/affiliate-program",
+      "real_commission": "20% recurring",
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"25%\" but found \"20% recurring\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "20% recurring"
+      }
+    },
+    {
+      "slug": "clerk",
+      "name": "Clerk",
+      "yaml_commission": "30% recurring",
+      "yaml_signup_url": "https://clerk.com/affiliates",
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://clerk.chat/affiliate-program/",
+          "title": "Clerk Chat Affiliate Program: Earn High Commissions on B2B SaaS",
+          "snippet": "What exactly is the Clerk Chat Affiliate Program? Think of it as a partnership! You introduce businesses to Clerk Chat, our AI-powered messaging platform, and we reward you with generous commissions for every successful referral. It&#x27;s a fantastic way to monetize your network while helping businesses improve their customer communication."
+        },
+        {
+          "url": "https://clerk.com/",
+          "title": "Clerk | Authentication and User Management",
+          "snippet": "The easiest way to add authentication and user management to your application. Purpose-built for React, Next.js, Remix, and &quot;The Modern Web&quot;."
+        },
+        {
+          "url": "https://www.shopify.com/blog/best-affiliate-programs",
+          "title": "50 Best Affiliate Programs for Marketers and Creators (2026)",
+          "snippet": "50 Best Affiliate Programs for Marketers and Creators (2026) Looking to boost your income as an affiliate marketer? Discover commission rates, payout details, and cookie windows of the top affiliate programs."
+        },
+        {
+          "url": "https://getlasso.co/niche/legal-affiliate-programs/",
+          "title": "4 Best Legal Affiliate Programs Affiliate Programs - 2026 ... - Lasso",
+          "snippet": "The Legal Affiliate Programs industry is experiencing significant growth, with the legal services market valued at approximately $900 billion in 2022 and projected to reach $1.5 trillion by 2028, translating to a CAGR of around 8.5% during the forecast period (PR Newswire). This presents a vast monetization potential for affiliate marketers willing to dive into the legal niche. This guide ..."
+        },
+        {
+          "url": "https://affiliate.watch/",
+          "title": "Best 859 Affiliate Programs 2026 | Reviews &amp; Ratings",
+          "snippet": "Discover and compare 859 verified affiliate programs in 2026. Get detailed reviews, AI ratings, commission details, and exclusive deals. Find your perfect affiliate partnership today!"
+        }
+      ],
+      "real_signup_url": "https://clerk.chat/affiliate-program/",
+      "real_commission": "10% commission",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"30%\" but found \"10% commission\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"clerk.com\" found=\"clerk.chat\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "10% commission",
+        "network": "Impact",
+        "signup_url": "https://clerk.chat/affiliate-program/"
+      }
+    },
+    {
+      "slug": "cloudflare",
+      "name": "Cloudflare",
+      "yaml_commission": "25% recurring",
+      "yaml_signup_url": "https://www.cloudflare.com/partners/affiliate-program/",
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://commissiondex.com/program/cloudflare/",
+          "title": "Cloudflare Affiliate Program Review 2026 | Commission, Cookie &amp; Payout ...",
+          "snippet": "Detailed review of the Cloudflare Affiliate Program affiliate program. $50-$150 per sale commission, 60-day cookies, monthly payouts. Compare with alternatives and find the best fit for your audience."
+        },
+        {
+          "url": "https://www.cloudflare.com/partners/",
+          "title": "Our Partnerships | Cloudflare",
+          "snippet": "The Cloudflare Partner Network is a global ecosystem of different types of partners, who share our commitment to helping build a better Internet."
+        },
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://www.affiliateprogramdb.com/brands/cloudflare-affiliate-program/",
+          "title": "Cloudflare Affiliate Program - APDB",
+          "snippet": "APDB is an affiliate program directory. Browse our 500+ categories to find a suitable program. Simplify your search with our curated lists of companies."
+        },
+        {
+          "url": "https://www.affiliateroll.com/programs/cloudflare",
+          "title": "Cloudflare Affiliate Program — Commission Rates, Cookie Duration ...",
+          "snippet": "About the Program Cloudflare is a leading web performance and security platform. Their referral program rewards for new business plan signups. With a dominant position in CDN and web security, Cloudflare has strong developer and business appeal."
+        }
+      ],
+      "real_signup_url": "https://commissiondex.com/program/cloudflare/",
+      "real_commission": "25% recurring",
+      "real_cookie_days": 60,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Cookie days mismatch: YAML says 30 but found 60",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"www.cloudflare.com\" found=\"commissiondex.com\""
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "cookie_days": 60,
+        "network": "Impact",
+        "signup_url": "https://commissiondex.com/program/cloudflare/"
+      }
+    },
+    {
+      "slug": "convertkit",
+      "name": "Kit (ConvertKit)",
+      "yaml_commission": "50% recurring",
+      "yaml_signup_url": "https://kit.com/affiliates",
+      "yaml_cookie_days": 90,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://kit.com/affiliate",
+          "title": "Kit Affiliate Program - ConvertKit",
+          "snippet": "Join the Kit affiliate program for 50% commission for 12 months, plus 10-20% recurring revenue beyond 12 months when you earn status."
+        },
+        {
+          "url": "https://getlasso.co/affiliate/convertkit/",
+          "title": "ConvertKit Affiliate Program: Commission &amp; Program Details (2026) - Lasso",
+          "snippet": "ConvertKit at a Glance If you&#x27;re in the software niche and looking to monetize your online presence, the ConvertKit affiliate program is worth considering. It offers a straightforward way to earn commissions by promoting a leading email marketing platform designed specifically for creators."
+        },
+        {
+          "url": "https://affiliateprogramsguru.com/programs/convertkit-affiliate-program/",
+          "title": "ConvertKit Affiliate Program - Affiliate Programs Guru",
+          "snippet": "The company rebranded from ConvertKit to Kit in 2024 while keeping the same product focus: helping creators build and monetize an audience they own. The Kit affiliate program pays 50% commission on referred customers for their first 12 months, making it one of the more competitive first-year payouts in the email SaaS space."
+        },
+        {
+          "url": "https://aeroleads.com/blog/convertkit-affiliate-commission-30-recurring-practical-2026/",
+          "title": "ConvertKit Affiliate Commission 30% Recurring: A Practical Guide for 2026",
+          "snippet": "How the ConvertKit Affiliate Program Actually Works in 2026 ConvertKit (now rebranding as Kit) pays 30% recurring commission for every paying customer you refer, for as long as that customer remains active. The cookie window is 90 days, which is generous compared to most SaaS affiliate programs that run 30-day windows."
+        },
+        {
+          "url": "https://www.theaffiliatestack.net/tools/convertkit",
+          "title": "Kit (ConvertKit) Review &amp; Deal (2026) — Is It Worth It? | The Affiliate ...",
+          "snippet": "Kit (formerly ConvertKit) is the email marketing platform designed specifically for creators and online entrepreneurs. For affiliate marketers, it shines with its visual automation builder, subscriber tagging system, and landing page builder."
+        }
+      ],
+      "real_signup_url": "https://kit.com/affiliate",
+      "real_commission": "50% commission",
+      "real_cookie_days": 90,
+      "real_network": "PartnerStack",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Network: found \"PartnerStack\" (YAML: \"in-house\")"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "network": "PartnerStack"
+      }
+    },
+    {
+      "slug": "digitalocean",
+      "name": "DigitalOcean",
+      "yaml_commission": "$200 one-time",
+      "yaml_signup_url": "https://www.digitalocean.com/referral-program",
+      "yaml_cookie_days": 30,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://www.digitalocean.com/affiliates",
+          "title": "Affiliate Program | DigitalOcean",
+          "snippet": "Earn 10% for every user you refer to DigitalOcean With high-paying commissions and simple terms, DigitalOcean&#x27;s cloud infrastructure affiliate program is designed to benefit all kinds of web businesses."
+        },
+        {
+          "url": "https://try.digitalocean.com/affiliates/",
+          "title": "Earn commission for every user you refer to DigitalOcean",
+          "snippet": "With high-paying commissions and simple terms, DigitalOcean&#x27;s cloud infrastructure affiliate program is designed to benefit all kinds of web businesses."
+        },
+        {
+          "url": "https://www.digitalocean.com/legal/affiliate-program-agreement",
+          "title": "Legal - Affiliate Program Agreement - DigitalOcean",
+          "snippet": "Affiliate Program Agreement PLEASE READ THIS AFFILIATE PROGRAM AGREEMENT CAREFULLY. This is a contract between you (the &quot; Affiliate &quot;) and DigitalOcean, LLC or an applicable DigitalOcean Affiliate (&quot; DigitalOcean &quot;). It describes how we will work together and other aspects of our business relationship. It is a legal document so some of the language is necessarily &quot;legalese&quot; but we ..."
+        },
+        {
+          "url": "https://docs.digitalocean.com/platform/teams/how-to/refer-others/",
+          "title": "How To Participate in DigitalOcean&#x27;s Referral Program",
+          "snippet": "You can earn credit by referring others to DigitalOcean with a team&#x27;s unique referral link. When someone signs up for DigitalOcean using your referral link and adds a valid payment method, they receive an account credit. Once the person you refer spends and pays for $25 of usage, your team recieves $25 in credit."
+        },
+        {
+          "url": "https://www.findaffiliates.online/blogs/hosting-affiliate-programs-2026",
+          "title": "Top Hosting Affiliate Programs 2026: Earn Up to $500 Per Sale",
+          "snippet": "Discover the best hosting affiliate programs for 2026. Compare Bluehost, HostGator, DigitalOcean, Kinsta and more. Earn up to $500 per sale with hosting affiliate programs."
+        }
+      ],
+      "real_signup_url": "https://www.digitalocean.com/affiliates",
+      "real_commission": "10% commission",
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"$200\" but found \"10% commission\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "10% commission"
+      }
+    },
+    {
+      "slug": "dub",
+      "name": "Dub",
+      "yaml_commission": "30% recurring",
+      "yaml_signup_url": "https://dub.co/affiliates",
+      "yaml_cookie_days": 90,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://dub.co/blog/dub-affiliate-program",
+          "title": "Introducing the Dub Affiliate Program | Dub",
+          "snippet": "Powered by Dub Partners Fun fact: our affiliate program is built on Dub Partners - a new product at Dub that lets you build powerful, scalable referral and affiliate programs with 1-click global payouts and white-labeling functionality."
+        },
+        {
+          "url": "https://goldpenguin.org/blog/dub-co-vs-tolt-which-affiliate-program-platform-fits-your-saas-in-2026/",
+          "title": "Dub.co vs Tolt: Which Affiliate Program Platform Fits Your SaaS in 2026 ...",
+          "snippet": "Dub.co vs Tolt isn&#x27;t a battle of features — it&#x27;s a difference in philosophy. This comparison breaks down how each platform views affiliate growth."
+        },
+        {
+          "url": "https://efficient.app/apps/dub-partners",
+          "title": "Dub Partners Review 2026: Pros, Cons, Pricing &amp; Verdict | Efficient App",
+          "snippet": "Read this post around starting an affiliate program to see exactly where Dub Partners fits into the affiliate tracking space when compared to the best affiliate &amp; referral platforms out there. I think you&#x27;ll be quite surprised."
+        },
+        {
+          "url": "https://intercoaching.fr/en/dub-co-or-rewardful-which-should-you-choose-for-your-saas-affiliate-programs-in-2026/",
+          "title": "Dub.co or Rewardful: Which should you choose for your SaaS affiliate ...",
+          "snippet": "Released on Tuesday 10 February 2026 à 9h01 / Revised on Tuesday 10 February 2026 à 9h01 by Edouard · Reading time: 3 minutes show index In the ever-evolving world of SaaS software, affiliate programs play a crucial role in business growth. Two popular options stand out for managing these programs: Dub.co and Rewardful."
+        },
+        {
+          "url": "https://partners.dub.co/",
+          "title": "Login to partners.dub.co",
+          "snippet": "Dub is the modern link attribution platform for short links, conversion tracking, and affiliate programs."
+        }
+      ],
+      "real_signup_url": "https://dub.co/blog/dub-affiliate-program",
+      "real_commission": "30% per sale",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Program appears closed but not marked in restrictions",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Marked verified:true but program is closed"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "network": "Impact",
+        "verified": false
+      }
+    },
+    {
+      "slug": "figma",
+      "name": "Figma",
+      "yaml_commission": "credit one-time",
+      "yaml_signup_url": "https://www.figma.com/referral",
+      "yaml_cookie_days": 30,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://www.linkjolt.io/saas-affiliate-programs/figma",
+          "title": "Figma Affiliate Program: Does It Exist in 2026? - linkjolt.io",
+          "snippet": "Does Figma have an affiliate program? Here&#x27;s the complete 2026 breakdown — and the best alternatives for creators who want to promote similar tools."
+        },
+        {
+          "url": "https://forum.figma.com/ask-the-community-7/figma-affiliate-program-36971",
+          "title": "Figma Affiliate Program | Figma Forum",
+          "snippet": "When will the applications for the Figma affiliate program open again? I saw this program a few days ago, and it was accepting responses, but now it is not."
+        },
+        {
+          "url": "https://affiliateprogramsguru.com/programs/figma/",
+          "title": "Figma Affiliate Program - Affiliate Programs Guru",
+          "snippet": "Figma Affiliate Program Overview The Figma Partner Program pays a 30% commission on the first payment made by each new subscriber you refer to a Professional or Organization plan. The program runs on the Impact network and comes with a 90-day cookie window - well above the typical 30-day standard in the SaaS affiliate space."
+        },
+        {
+          "url": "https://affiliateyoco.com/affiliate-program/figma-affiliate-program",
+          "title": "Figma Affiliate Program 2026 | Details &amp; Promotion Ideas - Affiliate Yoco",
+          "snippet": "The Figma Affiliate Program offers you an opportunity to earn $3 for every qualifying new Figma or FigJam signup, or 30% of a new signup&#x27;s first Professional plan purchase. If a new user upgrades to Figma and FigJam Professional, you can earn up to $54 by referring customers to its collaborative design tool."
+        },
+        {
+          "url": "https://dash.partnerstack.com/application?company=figma&group=betacohortaffiliates",
+          "title": "The Figma affiliate program has concluded - PartnerStack",
+          "snippet": "Thank you for your interest in joining Figma&#x27;s affiliate partner program. Our program has ended as of August 16, 2024 and we will no longer be accepting applications."
+        }
+      ],
+      "real_signup_url": "https://www.linkjolt.io/saas-affiliate-programs/figma",
+      "real_commission": "30% commission",
+      "real_cookie_days": 90,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Program appears closed but not marked in restrictions",
+        "Cookie days mismatch: YAML says 30 but found 90",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"www.figma.com\" found=\"www.linkjolt.io\"",
+        "Marked verified:true but program is closed"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "cookie_days": 90,
+        "network": "Impact",
+        "signup_url": "https://www.linkjolt.io/saas-affiliate-programs/figma",
+        "verified": false
+      }
+    },
+    {
+      "slug": "framer",
+      "name": "Framer",
+      "yaml_commission": "50% recurring",
+      "yaml_signup_url": "https://www.framer.com/partners/",
+      "yaml_cookie_days": 90,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://allaboutframer.com/how-much-can-you-actually-earn-with-framer-in-2026-(real-numbers)",
+          "title": "How Much Can You Actually Earn With Framer in 2026? (Real Numbers)",
+          "snippet": "Here are the five main paths. Client work: building Framer sites for businesses and charging a project fee. Marketplace products: Selling templates, components, plugins, or vector sets on the Framer Marketplace or your own store. Affiliate/creator program: Earning 50% of a referred user&#x27;s Framer subscription for 12 months."
+        },
+        {
+          "url": "https://www.framer.com/creators",
+          "title": "Framer: Get paid to create with Framer",
+          "snippet": "Sell Templates, Components, and Plugins. Make referrals, and onboard clients, all while keeping 100% of your earnings."
+        },
+        {
+          "url": "https://www.framer.com/help/articles/how-affiliate-links-work/",
+          "title": "Framer Help: How affiliate links work",
+          "snippet": "Once you&#x27;re manually approved, publish a template or plugin, or join as a Framer Expert, you become part of the Creator Program. You&#x27;ll see the &quot;Links&quot; tab in your dashboard, where you can find your main affiliate link (your default, permanent URL) and create custom links for different Framer pages or campaigns. There&#x27;s no limit to how many custom links you can create. When you remix ..."
+        },
+        {
+          "url": "https://www.framer.com/legal/affiliates-terms-and-conditions/",
+          "title": "Framer: Affiliates terms and conditions",
+          "snippet": "Framer B.V., (&quot;Framer&quot;) offers this Affiliate program (the &quot;Affiliate Program&quot;) through which an approved third party (the &quot;Affiliate&quot;) may provide marketing services via the links as provided by Framer (the &quot;Links&quot;), which will be placed by the Affiliate on their social media, that can redirect towards the Framer&#x27;s website or such other website as designated by Framer (the ..."
+        },
+        {
+          "url": "https://www.framer.com/help/articles/how-the-creator-program-works/",
+          "title": "Framer Help: How the creator program works",
+          "snippet": "Turn your Framer expertise into income through templates and referrals. Framer&#x27;s Creator Program helps designers, developers, and makers turn creativity into income. By joining, you can share your work, grow your audience, and earn through Marketplace sales or affiliate commissions—all managed through the Links tab in your Creator Dashboard."
+        }
+      ],
+      "real_signup_url": "https://allaboutframer.com/how-much-can-you-actually-earn-with-framer-in-2026-(real-numbers)",
+      "real_commission": "50% commission",
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Signup URL domain mismatch: YAML=\"www.framer.com\" found=\"allaboutframer.com\""
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "signup_url": "https://allaboutframer.com/how-much-can-you-actually-earn-with-framer-in-2026-(real-numbers)"
+      }
+    },
+    {
+      "slug": "hashnode",
+      "name": "Hashnode",
+      "yaml_commission": "$500 one-time",
+      "yaml_signup_url": "https://hashnode.com/headless",
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://hashnode.com/",
+          "title": "Hashnode — Blogging Platform for Builders in Tech",
+          "snippet": "Hashnode is a blogging platform where developers, engineers, and tech leaders write to sharpen ideas, share knowledge, and build their reputation. Start for free."
+        },
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://changenow.io/blog/9-affiliate-programs",
+          "title": "9 Crypto Affiliate Programs That Pay Really Well in 2026",
+          "snippet": "Discover the best Web3 and crypto affiliate programs of 2026 with high commissions | Promote APIs, swaps, and blockchain tools to earn passive income in crypto or fiat"
+        },
+        {
+          "url": "https://getlasso.co/niche/cryptocurrency/",
+          "title": "23 Best Cryptocurrency Affiliate Programs - 2026 Commission Rates - Lasso",
+          "snippet": "The Cryptocurrency industry is experiencing explosive growth, with the market size expected to reach $2.02 billion by 2026, growing at a compound annual growth rate (CAGR) of 12.8% from 2021 to 2026 source. As more individuals and businesses flock to digital currencies, the affiliate marketing landscape within this niche becomes increasingly lucrative."
+        },
+        {
+          "url": "https://www.rockwallet.com/blog/top-22-cryptocurrency-bitcoin-affiliate-programs-in-2026",
+          "title": "Top 22 cryptocurrency &amp; bitcoin affiliate programs in 2026",
+          "snippet": "Top 22 cryptocurrency &amp; bitcoin affiliate programs in 2026 Content creators, bloggers, financial publishers, marketers or those who are simply fascinated by crypto can therefore leverage these programs as they represent an easy way to generate revenue while promoting digital asset adoption."
+        }
+      ],
+      "real_signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+      "real_commission": "40% commission",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Program appears closed but not marked in restrictions",
+        "Commission mismatch: YAML says \"$500\" but found \"40% commission\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"hashnode.com\" found=\"www.affnext.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "40% commission",
+        "network": "Impact",
+        "signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast"
+      }
+    },
+    {
+      "slug": "landerlab",
+      "name": "LanderLab",
+      "yaml_commission": "30% recurring",
+      "yaml_signup_url": "https://landerlab.io/affiliates",
+      "yaml_cookie_days": 60,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://thatmarketingbuddy.com/affiliate-programs/landerlab",
+          "title": "LanderLab Affiliate Program Review 2026: Rates &amp; Details",
+          "snippet": "Complete LanderLab affiliate program review covering commission rates, requirements, and earning potential for marketing content creators in 2026."
+        },
+        {
+          "url": "https://landerlab.io/",
+          "title": "LanderLab - AI Landing Page Builder for Performance Marketing",
+          "snippet": "Build AI-powered landing pages and quiz funnels to capture, qualify, and distribute high-intent leads automatically from one platform."
+        },
+        {
+          "url": "https://www.mobidea.com/academy/landerlab-review/",
+          "title": "LanderLab Review 2026: Pros &amp; Cons - mobidea.com",
+          "snippet": "Explore LanderLab in this review and see how it simplifies creating high-converting landing pages for affiliate marketing."
+        },
+        {
+          "url": "https://affmaven.com/landerlab-review/",
+          "title": "LanderLab Review 2026: Is It the Best Choice for Marketers?",
+          "snippet": "LanderLab is a landing page builder made for affiliate marketers and media buyers who want to create pages that convert. The platform helps make high-performing landing pages without coding skills. Recent data shows pages built with LanderLab load 40% faster than average landing pages, and users report seeing conversion rates improve by up to 25% compared to their old pages."
+        },
+        {
+          "url": "https://codeless.co/landerlab-review/",
+          "title": "LanderLab Review - Landing Page Builder for Affiliates - Codeless",
+          "snippet": "There are thousands of landing page builders on the market, but only a few meet the needs of affiliates and media buyers. LanderLab is well-known among affiliates for its ease of use, especially after redesigning its editor in 2025. It allows you to create high-converting landing pages without […]"
+        }
+      ],
+      "real_signup_url": "https://thatmarketingbuddy.com/affiliate-programs/landerlab",
+      "real_commission": null,
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Signup URL domain mismatch: YAML=\"landerlab.io\" found=\"thatmarketingbuddy.com\""
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "signup_url": "https://thatmarketingbuddy.com/affiliate-programs/landerlab"
+      }
+    },
+    {
+      "slug": "linear",
+      "name": "Linear",
+      "yaml_commission": "20% recurring",
+      "yaml_signup_url": "https://linear.app/affiliates",
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://www.vidau.ai/the-best-affiliate-programs-to-join-and-earn-more-in-2026/",
+          "title": "13 Best Affiliate Programs to Join and Earn More in 2026",
+          "snippet": "13 Best Affiliate Programs to Join and Earn More in 2026 Right now, more creators and side hustlers search for simple ways to earn online. At the center of this shift sits the affiliate programs model, where you promote products and earn commissions from real sales. As a result, you build income without creating your own product or handling ..."
+        },
+        {
+          "url": "https://affiliatu.com/top-10-affiliate-programs-that-pay-the-most-in-2026/",
+          "title": "Top 10 Affiliate Programs That Pay the Most in 2026",
+          "snippet": "Below are the top 10 highest-paying affiliate programs in 2026, from finance to tech and digital tools, each offering competitive payouts and solid conversion rates."
+        },
+        {
+          "url": "https://www.flowlu.com/blog/finances/best-affiliate-programs/",
+          "title": "44 Best Affiliate Programs, Networks &amp; Platforms [2026] - Flowlu",
+          "snippet": "Find the top affiliate programs, networks, and platforms for 2026. Compare commission rates and payouts, and join reputable offers for marketers and creators."
+        },
+        {
+          "url": "https://snov.io/blog/best-affiliate-programs/",
+          "title": "Highest-Paying Affiliate Programs to Join in 2026 (My Honest Review)",
+          "snippet": "Discover 35+ best affiliate programs for SaaS (and not only) that pay the highest commissions in 2026. Compare payouts, niches, and features to boost your income."
+        }
+      ],
+      "real_signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+      "real_commission": "25% recurring",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Program appears closed but not marked in restrictions",
+        "Commission mismatch: YAML says \"20%\" but found \"25% recurring\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"linear.app\" found=\"www.affnext.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "25% recurring",
+        "network": "Impact",
+        "signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast"
+      }
+    },
+    {
+      "slug": "neon",
+      "name": "Neon",
+      "yaml_commission": "$10 one-time",
+      "yaml_signup_url": "https://neon.com/partners",
+      "yaml_cookie_days": 60,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://getlasso.co/affiliate/brite-lite-new-neon/",
+          "title": "Brite Lite New Neon Affiliate Program: Commission &amp; Program Details (2026)",
+          "snippet": "Brite Lite New Neon Affiliate Program Brite Lite New Neon designs and sells custom LED neon signs for home decor, weddings, shops, brands, and event professionals. By Andrew Fiebert • Updated April 09, 2026"
+        },
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://snov.io/blog/best-affiliate-programs/",
+          "title": "Highest-Paying Affiliate Programs to Join in 2026 (My Honest Review)",
+          "snippet": "Discover 35+ best affiliate programs for SaaS (and not only) that pay the highest commissions in 2026. Compare payouts, niches, and features to boost your income."
+        },
+        {
+          "url": "https://www.vidau.ai/the-best-affiliate-programs-to-join-and-earn-more-in-2026/",
+          "title": "13 Best Affiliate Programs to Join and Earn More in 2026",
+          "snippet": "13 Best Affiliate Programs to Join and Earn More in 2026 Right now, more creators and side hustlers search for simple ways to earn online. At the center of this shift sits the affiliate programs model, where you promote products and earn commissions from real sales. As a result, you build income without creating your own product or handling ..."
+        },
+        {
+          "url": "https://bloggerspassion.com/best-affiliate-programs/",
+          "title": "100 Best Affiliate Programs in 2026 (High Pay + Top Picks)",
+          "snippet": "Looking for the best affiliate programs? Check out the 100 high-paying affiliate programs for 2026, including SaaS, fashion, finance, and more."
+        }
+      ],
+      "real_signup_url": "https://getlasso.co/affiliate/brite-lite-new-neon/",
+      "real_commission": null,
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Signup URL domain mismatch: YAML=\"neon.com\" found=\"getlasso.co\""
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "signup_url": "https://getlasso.co/affiliate/brite-lite-new-neon/"
+      }
+    },
+    {
+      "slug": "netlify",
+      "name": "Netlify",
+      "yaml_commission": "20% recurring",
+      "yaml_signup_url": "https://www.netlify.com/partners/",
+      "yaml_cookie_days": 30,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://www.netlify.com/partners/",
+          "title": "Netlify Partners",
+          "snippet": "Join Netlify Partners to earn revenue share by referring and building on Netlify. Up to 20% revshare for agencies, creators, and developers. Apply now."
+        },
+        {
+          "url": "https://www.netlify.com/partners/program-agreement/",
+          "title": "Netlify Partner Program Agreement",
+          "snippet": "This Agreement, together with the Program Policies and any terms set forth in the Partner Portal, constitutes the complete agreement between the Parties regarding the Partner Program and supersedes all prior communications, agreements, and understandings relating to the subject matter hereof, including without limitation any prior Netlify ..."
+        },
+        {
+          "url": "https://directory.partner.io/netlify-com",
+          "title": "Netlify Partner Program 2026 - Partner.io Directory",
+          "snippet": "Netlify empowers over 10 million developers to build and run experiences on the web, including vibe coded, AI-built and AI-enabled. Netlify combines deploys, hosting, background tasks, and agent workflows into a simple, scalable service used by developers, AI builders, agencies, and creators to ship faster and grow with confidence."
+        },
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://snov.io/blog/best-affiliate-programs/",
+          "title": "Highest-Paying Affiliate Programs to Join in 2026 (My Honest Review)",
+          "snippet": "Discover 35+ best affiliate programs for SaaS (and not only) that pay the highest commissions in 2026. Compare payouts, niches, and features to boost your income."
+        }
+      ],
+      "real_signup_url": "https://www.netlify.com/partners/",
+      "real_commission": "20% revenue share",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Network: found \"Impact\" (YAML: \"in-house\")"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "network": "Impact"
+      }
+    },
+    {
+      "slug": "notion",
+      "name": "Notion",
+      "yaml_commission": "$50 + 20% recurring",
+      "yaml_signup_url": "https://www.notion.com/affiliates",
+      "yaml_cookie_days": 180,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://www.notion.com/affiliates",
+          "title": "Join Notion&#x27;s Affiliate Program",
+          "snippet": "The affiliate program is a way for bloggers, writers, community owners, entrepreneurs, influencers, Notion creators, and others to spread the word about Notion and earn financial rewards."
+        },
+        {
+          "url": "https://affiliateprogramsguru.com/programs/notion-affiliate-program/",
+          "title": "Notion Affiliate Program - Affiliate Programs Guru",
+          "snippet": "The Notion affiliate program is a hybrid referral program managed through PartnerStack, offering a combination of a flat activation bounty and a revenue share during the first year of a referred subscription. It targets content creators, educators, newsletter writers, and community leaders in the productivity niche."
+        },
+        {
+          "url": "https://www.youtube.com/watch?v=AhydVEacRN4",
+          "title": "How To Join Affiliate Program And Earn With Notion (Easiest Way) (2026 ...",
+          "snippet": "Learn how to make money online with the Notion Affiliate Program in 2026! In this step-by-step tutorial, we&#x27;ll guide you through the entire affiliate application process, reveal best practices for ..."
+        },
+        {
+          "url": "https://marketwise.co.in/notion/",
+          "title": "Notion Affiliate Program Review 2026: Commission, Features &amp; Earning ...",
+          "snippet": "Uncover the benefits of the Notion Affiliate Program in 2026. Learn about commissions, features, and how to boost your earnings effectively."
+        },
+        {
+          "url": "https://www.linkjolt.io/saas-affiliate-programs/notion",
+          "title": "Notion Affiliate Program 2026: Commission, Cookie &amp; How To Join",
+          "snippet": "Notion&#x27;s affiliate program pays 50% recurring for 12 months with a 180 days cookie window. See how to join, payout details, and commission structure."
+        }
+      ],
+      "real_signup_url": "https://www.notion.com/affiliates",
+      "real_commission": "50% recurring",
+      "real_cookie_days": null,
+      "real_network": "PartnerStack",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [],
+      "severity": "ok",
+      "suggested_fixes": {}
+    },
+    {
+      "slug": "postmark",
+      "name": "Postmark",
+      "yaml_commission": "20% recurring",
+      "yaml_signup_url": "https://postmarkapp.com/lp/referral-partner-program",
+      "yaml_cookie_days": 60,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://postmarkapp.com/support/article/postmark-affiliate-referral-partner-program-faq",
+          "title": "Postmark Affiliate/Referral Partner Program FAQ",
+          "snippet": "What is the partner program? The Postmark Partnership Program is designed to accelerate Postmark&#x27;s growth through a referral model. It incentivizes external partners to promote Postmark, thereby driving new business revenue. Initially, a small group of four to five partners will validate the referral partner concept using a Revenue Share model."
+        },
+        {
+          "url": "https://incentiveinsights.com/usps-postmark-rule-change/",
+          "title": "USPS Postmark Rule Change Impacts Rebate Programs",
+          "snippet": "Understand the usps postmark rule change and its impact on rebate programs and deadlines for mailed submissions starting 2026."
+        },
+        {
+          "url": "https://postmarkapp.com/lp/referral-partner-program",
+          "title": "Postmark Referral Partner Program",
+          "snippet": "Postmark referral partner program Promote Postmark, &quot;the email delivery service that developers actually like,&quot; and earn 20% recurring commissions for every new customer you refer."
+        },
+        {
+          "url": "https://postmarkapp.com/postmark-affiliate-referral-program-agreement",
+          "title": "Postmark Affiliate Referral Partner Agreement | Postmark",
+          "snippet": "The Postmark Affiliate Referral Program Agreement This Postmark Affiliate Referral Program Agreement (this &quot; Agreement &quot;) contains the complete terms and conditions that apply to your participation in the Postmark Affiliate Referral Program for the Postmark web application and/or the Postmark services offered by AC PM (collectively, the ..."
+        },
+        {
+          "url": "https://www.taxpayeradvocate.irs.gov/news/nta-blog/new-u-s-postal-service-rules-could-affect-whether-your-tax-filing-is-considered-on-time/2026/04/",
+          "title": "New USPS Postmark Rules Could Affect if Your Tax Filing Is Considered ...",
+          "snippet": "New USPS rules may delay postmarks and cause late tax filings - even if mailed on time. Learn how to avoid penalties and protect your filing deadline."
+        }
+      ],
+      "real_signup_url": "https://postmarkapp.com/support/article/postmark-affiliate-referral-partner-program-faq",
+      "real_commission": "20% recurring",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Network: found \"Impact\" (YAML: \"Rewardful\")"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "network": "Impact"
+      }
+    },
+    {
+      "slug": "render",
+      "name": "Render",
+      "yaml_commission": "$20 credit",
+      "yaml_signup_url": "https://render.com/i/referral",
+      "yaml_cookie_days": 30,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://commissiondex.com/programs/render/",
+          "title": "Render Affiliate Program Review 2026 | Commission, Cookie &amp; Payout Details",
+          "snippet": "Detailed review of the Render Affiliate Program affiliate program. 10% recurring for 12 months commission, 60-day cookies, monthly payouts. Compare with alternatives and find the best fit for your audience."
+        },
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://www.vidau.ai/the-best-affiliate-programs-to-join-and-earn-more-in-2026/",
+          "title": "13 Best Affiliate Programs to Join and Earn More in 2026",
+          "snippet": "13 Best Affiliate Programs to Join and Earn More in 2026 Right now, more creators and side hustlers search for simple ways to earn online. At the center of this shift sits the affiliate programs model, where you promote products and earn commissions from real sales. As a result, you build income without creating your own product or handling ..."
+        },
+        {
+          "url": "https://www.renderforest.com/partners/affiliates",
+          "title": "Earn Money with Affiliate Marketing Program | Renderforest",
+          "snippet": "Renderforest Affiliate Program Renderforest Affiliate Program is ideal for content creators who want to spread the word about our amazing tools and get commissions for every generated sale through their unique affiliate link."
+        },
+        {
+          "url": "https://www.shopify.com/blog/best-affiliate-programs",
+          "title": "50 Best Affiliate Programs for Marketers and Creators (2026)",
+          "snippet": "50 Best Affiliate Programs for Marketers and Creators (2026) Looking to boost your income as an affiliate marketer? Discover commission rates, payout details, and cookie windows of the top affiliate programs."
+        }
+      ],
+      "real_signup_url": "https://commissiondex.com/programs/render/",
+      "real_commission": "10% recurring",
+      "real_cookie_days": 60,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"$20\" but found \"10% recurring\"",
+        "Cookie days mismatch: YAML says 30 but found 60",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"render.com\" found=\"commissiondex.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "10% recurring",
+        "cookie_days": 60,
+        "network": "Impact",
+        "signup_url": "https://commissiondex.com/programs/render/"
+      }
+    },
+    {
+      "slug": "resend",
+      "name": "Resend",
+      "yaml_commission": "20% recurring",
+      "yaml_signup_url": "https://resend.com/affiliates",
+      "yaml_cookie_days": 30,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+          "title": "The Best Affiliate Programs of 2026: Who&#x27;s Paying the Most and Why ...",
+          "snippet": "Learn the best affiliate programs of 2026: payouts, cookies, trends, and a simple framework to choose, join, and profit—without overwhelm."
+        },
+        {
+          "url": "https://digiexe.com/blog/best-recurring-affiliate-programs/",
+          "title": "30 Best Recurring Affiliate Programs 2026 - DigiExe",
+          "snippet": "Explore the 30 best recurring affiliate programs for 2026. Discover top SaaS, tools, and platforms to build real, long-term passive income."
+        },
+        {
+          "url": "https://getlasso.co/niche/pay-per-click/",
+          "title": "19 Best Pay-Per-Click Affiliate Programs - 2026 Commission Rates - Lasso",
+          "snippet": "How We Picked the Best Pay-Per-Click Affiliate Programs Commission Structure We analyze each program&#x27;s commission structure to evaluate how lucrative the program will be for our readers."
+        },
+        {
+          "url": "https://theaffiliateslist.com/recurring-affiliate-programs/",
+          "title": "28 Best Recurring Affiliate Programs in 2026 (Ultimate List)",
+          "snippet": "Unlock steady commissions with top recurring affiliate programs. Promote popular subscription services and skyrocket your affiliate earnings!"
+        },
+        {
+          "url": "https://snov.io/blog/best-affiliate-programs/",
+          "title": "Highest-Paying Affiliate Programs to Join in 2026 (My Honest Review)",
+          "snippet": "Discover 35+ best affiliate programs for SaaS (and not only) that pay the highest commissions in 2026. Compare payouts, niches, and features to boost your income."
+        }
+      ],
+      "real_signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast",
+      "real_commission": "70% recurring",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Commission mismatch: YAML says \"20%\" but found \"70% recurring\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"resend.com\" found=\"www.affnext.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "70% recurring",
+        "network": "Impact",
+        "signup_url": "https://www.affnext.com/blog/the-best-affiliate-programs-of-2026-who%E2%80%99s-paying-the-most-and-why-affiliates-are-switching-fast"
+      }
+    },
+    {
+      "slug": "stripe",
+      "name": "Stripe",
+      "yaml_commission": "$100 one-time",
+      "yaml_signup_url": "https://stripe.com/partners/affiliate",
+      "yaml_cookie_days": 90,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://refgrow.com/stripe-affiliate-program",
+          "title": "How to Create a Stripe Affiliate Program (Step-by-Step Guide 2026)",
+          "snippet": "Complete guide to building an affiliate program on Stripe. Webhook setup, commission tracking, coupon attribution, and automated payouts — everything you need to know."
+        },
+        {
+          "url": "https://www.linkjolt.io/blog/affiliate-program-for-stripe-users",
+          "title": "Affiliate Program for Stripe Users: A 2026 SaaS Guide",
+          "snippet": "Launch a powerful affiliate program for Stripe users. This guide shows SaaS founders how to plan, build, and scale a program with LinkJolt for massive growth."
+        },
+        {
+          "url": "https://stripe.com/partners/become-a-partner",
+          "title": "Become a Stripe Partner | Stripe Partner Ecosystem",
+          "snippet": "Become a Stripe Partner and access benefits to reach more customers, accelerate growth, and earn more revenue."
+        },
+        {
+          "url": "https://medium.com/@terryhutchins/the-best-affiliate-software-for-stripe-subscriptions-2026-guide-7887e232b3d0",
+          "title": "The Best Affiliate Software for Stripe Subscriptions (2026 Guide)",
+          "snippet": "The Best Affiliate Software for Stripe Subscriptions (2026 Guide) I spent some time this week looking into affiliate software … again. Yes, my life is profoundly fulfilling."
+        },
+        {
+          "url": "https://www.rewardful.com/articles/best-affiliate-software-stripe",
+          "title": "Best Affiliate Software with Stripe Integration in 2026 - Rewardful",
+          "snippet": "Compare the best affiliate software with Stripe integration and Stripe affiliate tracking to choose the right tool for your SaaS affiliate marketing program."
+        }
+      ],
+      "real_signup_url": "https://refgrow.com/stripe-affiliate-program",
+      "real_commission": "20% recurring",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"$100\" but found \"20% recurring\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"stripe.com\" found=\"refgrow.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "20% recurring",
+        "network": "Impact",
+        "signup_url": "https://refgrow.com/stripe-affiliate-program"
+      }
+    },
+    {
+      "slug": "supabase",
+      "name": "Supabase",
+      "yaml_commission": "10% recurring",
+      "yaml_signup_url": "https://supabase.com/partners",
+      "yaml_cookie_days": 60,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://supabase.com/partners",
+          "title": "Partner with Supabase",
+          "snippet": "Partner with Supabase Apply to the Partners program to list your integration in our marketplace and grow your business."
+        },
+        {
+          "url": "https://dev.to/ottoaria/supabase-in-2026-the-complete-developer-guide-to-the-open-source-firebase-alternative-357j",
+          "title": "Supabase in 2026: The Complete Developer Guide to the Open-Source ...",
+          "snippet": "This guide covers everything you need to know about building with Supabase in 2026: auth, real-time, storage, Edge Functions, and the patterns that separate production apps from hobby projects. What Is Supabase? Supabase is an open-source Firebase alternative built on PostgreSQL."
+        },
+        {
+          "url": "https://www.upwork.com/freelance-jobs/apply/Part-Time-Supabase-React-Developer-Affiliate-Financial-Dashboard_~022043891825979313822/",
+          "title": "Part-Time Supabase/React Developer — Affiliate Financial Dashboard ...",
+          "snippet": "We run an e-commerce education company and have a custom-built internal financial dashboard that tracks affiliate performance, revenue, commissions, and payouts across multiple data sources (Impact, Meta Ads). The dashboard is built with React/TypeScript and Supabase (database, auth, RLS policies, edge functions). It&#x27;s already live and functional — we need a reliable developer to maintain it ..."
+        },
+        {
+          "url": "https://medium.com/write-your-world/supabase-in-2026-a5150ce23b0c",
+          "title": "Supabase in 2026. Why So Many Devs Switched (Including… | by Imran ...",
+          "snippet": "A few years ago, Supabase was just another name in the backend-as-a-service crowd. Today, in 2026, it&#x27;s become a go-to choice for developers like me."
+        },
+        {
+          "url": "https://forms.supabase.com/partner",
+          "title": "Partner Request - Supabase",
+          "snippet": "Become a Supabase Partner Optional: link to a short (max 3mins) YouTube video introducing what you do and how you work with Supabase."
+        }
+      ],
+      "real_signup_url": "https://supabase.com/partners",
+      "real_commission": "receive $300",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": false,
+      "program_open": true,
+      "issues": [
+        "No affiliate/referral program found in search results",
+        "Commission mismatch: YAML says \"10%\" but found \"receive $300\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Marked verified:true but no program found"
+      ],
+      "severity": "critical",
+      "suggested_fixes": {
+        "commission.rate": "receive $300",
+        "network": "Impact",
+        "verified": false
+      }
+    },
+    {
+      "slug": "tailwindcss",
+      "name": "Tailwind UI",
+      "yaml_commission": "20% one-time",
+      "yaml_signup_url": "https://tailwindui.com/partners",
+      "yaml_cookie_days": 90,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://www.tailwindapp.com/affiliates",
+          "title": "Tailwind Affiliate Program | Make Money with Tailwind",
+          "snippet": "Join Tailwind&#x27;s affiliate program and make money teaching your community about a tool you love. Earn up to 25% in recurring affiliate commission and partner with us to create sponsored content."
+        },
+        {
+          "url": "https://getlasso.co/affiliate/tailwind/",
+          "title": "Tailwind Affiliate Program: Commission &amp; Program Details (2026) - Lasso",
+          "snippet": "The Tailwind Affiliate Program Details and Commission Rates The Tailwind affiliate program stands out with its competitive commission rates and attractive cookie durations."
+        },
+        {
+          "url": "https://partners.dub.co/tailwindapp",
+          "title": "Tailwind Affiliate Program | Dub",
+          "snippet": "Join the Tailwind affiliate program and earn up to $100 for the first sale by referring Tailwind to your friends and followers."
+        },
+        {
+          "url": "https://www.theaffiliatestack.net/tools/tailwind",
+          "title": "Tailwind Review &amp; Deal (2026) — Is It Worth It? | The Affiliate Stack",
+          "snippet": "Tailwind is the go-to social media scheduling and marketing tool for affiliate marketers who drive traffic through Pinterest and Instagram. It offers smart scheduling that posts at optimal times, a built-in design tool (Tailwind Create) for generating on-brand social media posts in bulk, and Tailwind Communities for expanding your reach. The platform&#x27;s analytics help you understand what ..."
+        },
+        {
+          "url": "https://uppromote.com/affiliate-directory/tailwind/",
+          "title": "Tailwind Affiliate Program Commissions &amp; Payments - UpPromote",
+          "snippet": "The Tailwind Affiliate Program allows individuals and businesses to earn commissions by referring new customers to Tailwind&#x27;s platform. It&#x27;s an excellent opportunity for those with an audience interested in social media marketing, blogging, e-commerce, and content creation."
+        }
+      ],
+      "real_signup_url": "https://www.tailwindapp.com/affiliates",
+      "real_commission": "50% commission",
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Commission mismatch: YAML says \"20%\" but found \"50% commission\"",
+        "Network: found \"Impact\" (YAML: \"in-house\")",
+        "Signup URL domain mismatch: YAML=\"tailwindui.com\" found=\"www.tailwindapp.com\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "50% commission",
+        "network": "Impact",
+        "signup_url": "https://www.tailwindapp.com/affiliates"
+      }
+    },
+    {
+      "slug": "twilio",
+      "name": "Twilio",
+      "yaml_commission": "$10 one-time",
+      "yaml_signup_url": "https://www.twilio.com/referral",
+      "yaml_cookie_days": 30,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://www.twilio.com/en-us/partners/become-a-partner",
+          "title": "Build your business as a Twilio partner",
+          "snippet": "Twilio Build Partner Program: resources for Technology &amp; Consulting partners to build on Twilio and better support growing customer needs."
+        },
+        {
+          "url": "https://askai.glarity.app/search/What-can-you-tell-me-about-the-Twilio-affiliate-program",
+          "title": "What can you tell me about the Twilio affiliate program?",
+          "snippet": "5. **Integration Opportunities**: Twilio also supports integration with referral programs through platforms like Prefinery, which can help partners enhance their marketing efforts and grow their user base [8]. In summary, while Twilio may not offer a conventional affiliate program, its Partner Program provides a structured way for businesses to collaborate and leverage Twilio&#x27;s powerful ..."
+        },
+        {
+          "url": "https://www.twilio.com/en-us/blog/partners/2026-twilio-partner-advisory-board",
+          "title": "Introducing the 2026 Twilio Partner Advisory Board | Twilio",
+          "snippet": "Twilio launches its Partner Advisory Board to shape product strategy with top SI and tech partners across global markets in 2026."
+        },
+        {
+          "url": "https://www.twilio.com/en-us/legal/partner-program-policies",
+          "title": "Partner Program Policies | Twilio",
+          "snippet": "Twilio Partner Connection Program Guide for Consulting and System Integrator Partners Twilio may update the foregoing partner program guides and policies from time to time upon written notice to its existing partners."
+        },
+        {
+          "url": "https://investors.twilio.com/news-releases/news-release-details/twilio-announces-winners-its-2026-excellence-engagement-awards",
+          "title": "Twilio Inc. - Twilio Announces the Winners of Its 2026 Excellence in ...",
+          "snippet": "SAN FRANCISCO -- (BUSINESS WIRE)--Apr. 8, 2026-- Twilio (NYSE: TWLO), the customer engagement platform that drives real-time, personalized experiences for leading brands, today announced the winners of its second annual Excellence in Engagement Awards. This program evaluates organizations across industries including travel, automotive, finance, and entertainment, and honors businesses that are ..."
+        }
+      ],
+      "real_signup_url": "https://www.twilio.com/en-us/partners/become-a-partner",
+      "real_commission": null,
+      "real_cookie_days": null,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Network: found \"Impact\" (YAML: \"in-house\")"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "network": "Impact"
+      }
+    },
+    {
+      "slug": "vercel",
+      "name": "Vercel",
+      "yaml_commission": "$50 one-time",
+      "yaml_signup_url": "https://vercel.com/affiliates",
+      "yaml_cookie_days": 90,
+      "yaml_verified": false,
+      "search_results": [
+        {
+          "url": "https://vercel.com/legal/affiliate-marketing-terms",
+          "title": "Affiliate Marketing Terms - Vercel",
+          "snippet": "These Vercel Affiliate Marketing Terms apply to your participation in any Vercel Affiliate Marketing Program, including the v0 Ambassador Program (each, an &quot;Affiliate Program&quot;)."
+        },
+        {
+          "url": "https://v0ai.dev/affiliate/",
+          "title": "Affiliate Program - v0",
+          "snippet": "V0 Affiliate Program Guide: Earn with Vercel&#x27;s Generative UI The landscape of web development is undergoing a seismic shift, driven by the rapid adoption of artificial intelligence. For developers and content creators alike, the v0 affiliate program represents a unique intersection of cutting-edge technology and economic opportunity."
+        },
+        {
+          "url": "https://partners.dub.co/v0",
+          "title": "v0 Affiliate Program | Dub",
+          "snippet": "Join the v0 affiliate program and earn $5 per lead by referring v0 to your friends and followers."
+        },
+        {
+          "url": "https://vercelv0.app/affiliate/",
+          "title": "Affiliate Program - v0",
+          "snippet": "V0 Affiliate Program: Key Details for Vercel AI Community Members The landscape of web development is shifting rapidly, and at the forefront of this revolution is v0.dev, a Generative UI tool that allows users to create React code simply by describing it."
+        },
+        {
+          "url": "https://v0ambassadorform.vercel.app/",
+          "title": "v0 Ambassador Program | Apply",
+          "snippet": "Apply to Join. We&#x27;re looking for creators excited to build in public and grow the v0 community! Takes less than 3 minutes. Start"
+        }
+      ],
+      "real_signup_url": "https://vercel.com/legal/affiliate-marketing-terms",
+      "real_commission": "10% commission",
+      "real_cookie_days": null,
+      "real_network": null,
+      "program_exists": true,
+      "program_open": false,
+      "issues": [
+        "Commission mismatch: YAML says \"$50\" but found \"10% commission\""
+      ],
+      "severity": "major",
+      "suggested_fixes": {
+        "commission.rate": "10% commission"
+      }
+    },
+    {
+      "slug": "webflow",
+      "name": "Webflow",
+      "yaml_commission": "50% recurring",
+      "yaml_signup_url": "https://webflow.com/affiliates",
+      "yaml_cookie_days": 120,
+      "yaml_verified": true,
+      "search_results": [
+        {
+          "url": "https://webflow.com/solutions/affiliates",
+          "title": "Webflow Affiliate Program | For content creators and influencers",
+          "snippet": "Content creators, educators, and influencers: Join the Webflow Affiliate Program and refer new customers to earn commissions and exciting rewards for your content creation."
+        },
+        {
+          "url": "https://getlasso.co/affiliate/webflow/",
+          "title": "Webflow Affiliate Program: Commission &amp; Program Details (2026) - Lasso",
+          "snippet": "The Webflow affiliate program offers opportunities for enthusiasts to earn while sharing the platform they love. This article dives into the ins and outs of the Webflow affiliate program."
+        },
+        {
+          "url": "https://hostadvice.com/blog/monetization/affiliate-marketing/webflow-affiliate-program-review/",
+          "title": "Webflow Affiliate Program Review (2026): Is It Worth It for Creators?",
+          "snippet": "Thinking of joining the Webflow Affiliate Program? Learn how to apply, promote it effectively, and start earning with clear, scalable commissions."
+        },
+        {
+          "url": "https://affylist.com/products/webflow",
+          "title": "webflow Affiliate Program 2026 - Commission Rates &amp; Review | AffyList",
+          "snippet": "Join the webflow affiliate program. Visual Website Builder with CMS. A visual, code-free platform to design, build, and host responsive websites. Includes a flexible CMS and scalable hosting, with AI-powered optimization to ac... Compare commission rates, cookie duration, and payout details."
+        },
+        {
+          "url": "https://www.linkjolt.io/saas-affiliate-programs/webflow",
+          "title": "Webflow Affiliate Program 2026: Commission, Cookie &amp; How To Join",
+          "snippet": "Webflow&#x27;s affiliate program pays 50% revenue share for 12 months with a 90 days cookie window. See how to join, payout details, and commission structure."
+        }
+      ],
+      "real_signup_url": "https://webflow.com/solutions/affiliates",
+      "real_commission": "50% revenue share",
+      "real_cookie_days": 90,
+      "real_network": "Impact",
+      "program_exists": true,
+      "program_open": true,
+      "issues": [
+        "Cookie days mismatch: YAML says 120 but found 90",
+        "Network: found \"Impact\" (YAML: \"in-house\")"
+      ],
+      "severity": "minor",
+      "suggested_fixes": {
+        "cookie_days": 90,
+        "network": "Impact"
+      }
+    }
+  ]
+}

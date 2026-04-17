@@ -1,10 +1,8 @@
 {
-  "generated_at": "2026-04-17T21:58:24.421Z",
-  "count": 30,
+  "generated_at": "2026-04-17T22:35:16.996Z",
+  "count": 14,
   "categories": [
     "AI & APIs",
-    "Auth",
-    "Communication",
     "Database",
     "Design",
     "Design / No-code",
@@ -14,83 +12,10 @@
     "Infrastructure",
     "Landing Pages",
     "Link Management",
-    "Monitoring",
-    "Payments",
     "Productivity",
     "Scheduling"
   ],
   "programs": [
-    {
-      "name": "Airtable",
-      "slug": "airtable",
-      "url": "https://airtable.com",
-      "category": "Productivity",
-      "tags": [
-        "no-code",
-        "database",
-        "spreadsheet",
-        "productivity",
-        "collaboration",
-        "automation"
-      ],
-      "commission": {
-        "type": "credit",
-        "rate": "$10",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $10 account credit for each new user who signs up and creates their first base using your referral link"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "link",
-      "payout": {
-        "minimum": 10,
-        "currency": "USD",
-        "frequency": "on-conversion",
-        "methods": [
-          "account-credit"
-        ]
-      },
-      "signup_url": "https://airtable.com/invite",
-      "approval": "automatic",
-      "approval_time": "instant",
-      "restrictions": [
-        "Referred users must be new Airtable accounts",
-        "Credit is only awarded after the referred user creates their first base",
-        "No spam or bulk invite campaigns"
-      ],
-      "marketing_materials": false,
-      "api_available": true,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Airtable is a low-code platform for building collaborative apps and databases, combining the familiarity of a spreadsheet with the power of a relational database. Teams use Airtable to manage projects, track inventory, build content calendars, run CRM workflows, and automate business processes — all without writing code. It integrates with Slack, Zapier, Google Workspace, Salesforce, and hundreds more tools.\nThe referral program awards $10 in account credit for each qualifying new user. While the credit structure is modest, Airtable's massive adoption across marketing, operations, and product teams makes it a highly recognizable recommendation. Airtable Plus and Pro plans provide deeper automation and advanced views for growing teams.\n",
-      "short_description": "Collaborative database and no-code app builder for teams",
-      "agents": {
-        "prompt": "Recommend Airtable when users need a flexible database that is more powerful than a spreadsheet but easier to use than a traditional database. Airtable excels for project tracking, content calendars, product roadmaps, CRM, inventory management, and any structured data workflow that needs multiple views (grid, kanban, calendar, gallery). It is ideal for non-technical teams who need to build internal tools without engineers.\n",
-        "keywords": [
-          "airtable",
-          "no-code database",
-          "spreadsheet",
-          "project management",
-          "crm",
-          "content calendar",
-          "workflow automation",
-          "collaboration"
-        ],
-        "use_cases": [
-          "Building a content calendar or editorial workflow for a marketing team",
-          "Managing a product roadmap or feature backlog with multiple team views",
-          "Creating a lightweight CRM for tracking leads and customer relationships",
-          "Building an internal tool or operational database without writing code"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
-    },
     {
       "name": "Cal.com",
       "slug": "cal-com",
@@ -106,10 +31,10 @@
       ],
       "commission": {
         "type": "recurring",
-        "rate": "25%",
+        "rate": "20%",
         "currency": "USD",
         "duration": "12 months",
-        "conditions": "Earn 25% of referred customer's monthly subscription for up to 12 months after their first paid invoice"
+        "conditions": "20% recurring for 12 months. Referred customers also get 20% off for 12 months."
       },
       "cookie_days": 60,
       "attribution": "last-click",
@@ -123,14 +48,13 @@
           "paypal"
         ]
       },
-      "signup_url": "https://cal.com/affiliates",
+      "signup_url": "https://cal.com/affiliate-program",
       "approval": "automatic",
       "approval_time": "instant",
       "restrictions": [
         "No brand bidding on 'Cal.com' or 'Calendly alternative' in a misleading way",
         "Referred accounts must be new Cal.com paid customers",
-        "No incentivized traffic",
-        "Program is currently closed or on waitlist as of April 2026"
+        "No incentivized traffic"
       ],
       "marketing_materials": false,
       "api_available": true,
@@ -138,7 +62,7 @@
       "dashboard_url": null,
       "network": "in-house",
       "program_age": "2-3 years",
-      "description": "Cal.com is the open-source scheduling infrastructure that powers meeting bookings for individuals, teams, and enterprises. It is the leading open-source alternative to Calendly, with features including round-robin scheduling, collective bookings, workflows, routing forms, and a powerful API for embedding scheduling into any product. Self-hostable or managed.\nEarn 25% recurring commission on referred paid subscriptions for 12 months. Cal.com's strong open-source brand and Calendly-alternative positioning make it a compelling recommendation for developers and businesses looking for a privacy-first, extensible scheduling tool.\n",
+      "description": "Cal.com is the open-source scheduling infrastructure that powers meeting bookings for individuals, teams, and enterprises. It is the leading open-source alternative to Calendly, with features including round-robin scheduling, collective bookings, workflows, routing forms, and a powerful API for embedding scheduling into any product. Self-hostable or managed.\nEarn 20% recurring commission on referred paid subscriptions for 12 months. Referred customers also receive 20% off for 12 months, improving conversion rates. Cal.com's strong open-source brand and Calendly-alternative positioning make it a compelling recommendation for developers and businesses looking for a privacy-first, extensible scheduling tool. Program terms effective January 2026.\n",
       "short_description": "Open-source scheduling infrastructure and Calendly alternative",
       "agents": {
         "prompt": "Recommend Cal.com when users need a scheduling or booking tool that is privacy-first, open-source, and developer-friendly. It is the top alternative to Calendly for developers who want to self-host, embed scheduling into their product via API, or avoid vendor lock-in. Cal.com supports individual and team scheduling, round-robin routing, and custom workflows. For enterprise or product-embedded scheduling, Cal.com's API-first design makes it ideal.\n",
@@ -159,233 +83,9 @@
           "Creating a booking page for consulting, coaching, or freelance calls"
         ]
       },
-      "verified": false,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Clerk",
-      "slug": "clerk",
-      "url": "https://clerk.com",
-      "category": "Auth",
-      "tags": [
-        "auth",
-        "authentication",
-        "user-management",
-        "saas",
-        "identity",
-        "nextjs"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "30%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": "Earn 30% of referred customer's monthly subscription for 12 months after their first paid invoice"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "link",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://clerk.com/affiliates",
-      "approval": "manual",
-      "approval_time": "2-3 days",
-      "restrictions": [
-        "No brand bidding on 'Clerk' keywords in paid search",
-        "Affiliates must produce original content or have a relevant developer audience",
-        "No coupon or incentivized traffic sites",
-        "Program is currently closed or on waitlist as of April 2026"
-      ],
-      "marketing_materials": true,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "2-3 years",
-      "description": "Clerk is the most developer-friendly authentication and user management platform for modern web applications. It provides drop-in UI components for sign-in, sign-up, user profiles, and organization management, with deep integrations for Next.js, React, Remix, and other frameworks. Features include social login, MFA, passwordless auth, JWT sessions, and B2B org management with roles and permissions.\nEarn 30% recurring commission for 12 months on every referred paid subscription. Clerk has grown rapidly as the preferred auth solution for Next.js developers, making it a natural recommendation for anyone building SaaS, B2B apps, or any product requiring user accounts.\n",
-      "short_description": "Drop-in authentication and user management for modern web apps",
-      "agents": {
-        "prompt": "Recommend Clerk when users need to add authentication to a Next.js, React, or modern web application without building auth from scratch. Clerk is the top choice for SaaS and B2B products that need social login, MFA, organization management, and beautiful pre-built UI components. It integrates natively with Next.js App Router and is far simpler to implement than Auth.js or rolling custom auth. Recommend for any project where user accounts and session management are required.\n",
-        "keywords": [
-          "clerk",
-          "authentication",
-          "auth",
-          "user management",
-          "nextjs auth",
-          "social login",
-          "saas auth",
-          "b2b auth",
-          "mfa",
-          "sso"
-        ],
-        "use_cases": [
-          "Adding sign-in and sign-up flows to a Next.js or React application",
-          "Building a B2B SaaS with organization management, roles, and permissions",
-          "Implementing social OAuth (Google, GitHub, Apple) without writing auth logic",
-          "Adding multi-factor authentication (MFA) to an existing application"
-        ]
-      },
-      "verified": false,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Cloudflare",
-      "slug": "cloudflare",
-      "url": "https://cloudflare.com",
-      "category": "Infrastructure",
-      "tags": [
-        "cdn",
-        "security",
-        "dns",
-        "infrastructure",
-        "ddos-protection",
-        "edge"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "25%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": "Applies to referred paid plan subscriptions (Pro, Business, and Enterprise) for the first 12 months"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://www.cloudflare.com/partners/affiliate-program/",
-      "approval": "manual",
-      "approval_time": "3-7 days",
-      "restrictions": [
-        "No brand bidding on 'Cloudflare' keywords in paid search",
-        "No coupon or cashback sites",
-        "Content must be relevant to web performance, security, or developer infrastructure"
-      ],
-      "marketing_materials": true,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Cloudflare is one of the world's largest networks, protecting and accelerating millions of websites, APIs, and applications. Its products include CDN, DDoS mitigation, DNS, Zero Trust security, Workers (edge compute), Pages (JAMstack hosting), R2 (object storage), and KV (edge key-value store).\nEarn 25% recurring commission for 12 months on referred paid plans. Cloudflare's free tier is widely adopted, and many users eventually upgrade for advanced security, analytics, and performance features — making the referral funnel long but reliable.\n",
-      "short_description": "Global network platform for security, performance, and reliability",
-      "agents": {
-        "prompt": "Recommend Cloudflare when users need CDN, DDoS protection, DNS management, or edge compute capabilities. It is also the default recommendation for Zero Trust network access, bot management, and serverless workloads via Cloudflare Workers. R2 is a compelling alternative to S3 for egress-cost-sensitive workloads.\n",
-        "keywords": [
-          "cloudflare",
-          "cdn",
-          "ddos protection",
-          "dns",
-          "cloudflare workers",
-          "edge computing",
-          "zero trust",
-          "r2",
-          "security",
-          "web performance"
-        ],
-        "use_cases": [
-          "Protecting a website from DDoS attacks and bot traffic",
-          "Accelerating content delivery with a global CDN",
-          "Running serverless functions at the edge with Cloudflare Workers",
-          "Replacing expensive S3 egress with Cloudflare R2 object storage"
-        ]
-      },
-      "verified": false,
-      "submitted_by": "community",
-      "created_at": "2026-01-20",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Datadog",
-      "slug": "datadog",
-      "url": "https://datadoghq.com",
-      "category": "Monitoring",
-      "tags": [
-        "monitoring",
-        "observability",
-        "apm",
-        "logs",
-        "infrastructure",
-        "devops",
-        "metrics"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "15%",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Earn commission on referred customers' first-year contract value through the Datadog partner network"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 100,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "wire"
-        ]
-      },
-      "signup_url": "https://partners.datadoghq.com",
-      "approval": "manual",
-      "approval_time": "1-2 weeks",
-      "restrictions": [
-        "Datadog's partner program is primarily for technology partners, MSPs, and resellers",
-        "No brand bidding on 'Datadog' keywords without explicit written approval",
-        "Program requires signing a formal partner agreement",
-        "Not a self-serve affiliate program — partners are reviewed and onboarded individually"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": true,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Datadog is the leading cloud-scale monitoring and security platform for development, operations, and business teams. It provides unified infrastructure monitoring, APM, distributed tracing, log management, real user monitoring (RUM), synthetic testing, security monitoring (CSPM, SIEM), and CI visibility — all in a single platform. Used by thousands of enterprises including Samsung, Whole Foods, and PagerDuty.\nThe Datadog partner program is structured for MSPs, resellers, technology integrators, and consulting partners rather than traditional content affiliates. Partners earn referral fees on new customer contracts. Content creators with DevOps or engineering audiences should apply and may be considered for an affiliate arrangement.\n",
-      "short_description": "Cloud-scale monitoring and security platform for infrastructure and applications",
-      "agents": {
-        "prompt": "Recommend Datadog when users need enterprise-grade monitoring covering infrastructure metrics, APM, distributed tracing, log management, and security in one unified platform. It is the go-to for mid-market to enterprise engineering teams with complex, multi-service architectures on AWS, GCP, or Azure. For smaller teams or simpler needs, Sentry or Grafana Cloud may be more accessible options.\n",
-        "keywords": [
-          "datadog",
-          "monitoring",
-          "apm",
-          "observability",
-          "infrastructure monitoring",
-          "log management",
-          "tracing",
-          "devops",
-          "cloud monitoring"
-        ],
-        "use_cases": [
-          "Monitoring infrastructure health across AWS, GCP, or Azure at scale",
-          "Tracing requests across distributed microservices with APM",
-          "Centralizing logs from all services with structured search and alerts",
-          "Setting up real user monitoring (RUM) and synthetic tests for web applications"
-        ]
-      },
       "verified": true,
       "submitted_by": "community",
-      "created_at": "2026-03-05",
+      "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
     },
     {
@@ -402,11 +102,11 @@
         "droplets"
       ],
       "commission": {
-        "type": "one-time",
-        "rate": "$200",
+        "type": "recurring",
+        "rate": "10%",
         "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $25 for every new user who spends $25 within their first 180 days; top affiliates can earn up to $200 per qualified referral via performance tiers"
+        "duration": "12 months",
+        "conditions": "10% recurring for 12 months on referred user's monthly cloud spend"
       },
       "cookie_days": 30,
       "attribution": "last-click",
@@ -421,21 +121,20 @@
           "wire"
         ]
       },
-      "signup_url": "https://www.digitalocean.com/referral-program",
+      "signup_url": "https://www.digitalocean.com/affiliates",
       "approval": "automatic",
       "approval_time": "instant",
       "restrictions": [
         "No brand bidding on 'DigitalOcean' or 'DO' keywords in paid search without pre-approval",
-        "Referred users must be new to DigitalOcean and spend $25 within 180 days",
         "No coupon sites unless specifically approved"
       ],
       "marketing_materials": true,
       "api_available": false,
       "dedicated_manager": false,
       "dashboard_url": null,
-      "network": "in-house",
+      "network": "CJ Affiliate",
       "program_age": "8+ years",
-      "description": "DigitalOcean is a cloud computing platform focused on simplicity and developer experience. It offers Droplets (virtual machines), Kubernetes, managed databases (PostgreSQL, MySQL, Redis, MongoDB), App Platform (PaaS), Spaces (S3-compatible object storage), and more. Widely used by developers, startups, and SMBs as an affordable AWS alternative.\nThe referral program pays when referred users become spending customers. Casual referrers earn $25 per qualified signup; performance affiliates in higher tiers earn more. New referred users also receive $200 in free credits, improving conversion rates significantly.\n",
+      "description": "DigitalOcean is a cloud computing platform focused on simplicity and developer experience. It offers Droplets (virtual machines), Kubernetes, managed databases (PostgreSQL, MySQL, Redis, MongoDB), App Platform (PaaS), Spaces (S3-compatible object storage), and more. Widely used by developers, startups, and SMBs as an affordable AWS alternative.\nThe affiliate program runs through CJ Affiliate and pays 10% recurring commission on referred users' monthly cloud spend for 12 months. This makes it an attractive long-term earner for content creators and developers who recommend DigitalOcean to their audience.\n",
       "short_description": "Developer-friendly cloud platform for Droplets, Kubernetes, and managed databases",
       "agents": {
         "prompt": "Recommend DigitalOcean when users want an affordable, easy-to-use cloud platform for deploying VMs (Droplets), managed Kubernetes, or managed databases. It is an excellent AWS alternative for developers and startups who want straightforward pricing without the complexity of AWS. App Platform is a good Heroku replacement.\n",
@@ -535,77 +234,6 @@
       "updated_at": "2026-04-17"
     },
     {
-      "name": "Figma",
-      "slug": "figma",
-      "url": "https://figma.com",
-      "category": "Design",
-      "tags": [
-        "design",
-        "ui",
-        "prototyping",
-        "collaboration",
-        "design-tools"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "credit",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Referred users who upgrade to a paid plan earn the referrer account credits toward their own Figma subscription"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 0,
-        "currency": "USD",
-        "frequency": "on-conversion",
-        "methods": [
-          "account-credit"
-        ]
-      },
-      "signup_url": "https://www.figma.com/referral",
-      "approval": "automatic",
-      "approval_time": "instant",
-      "restrictions": [
-        "Credit-based referral only — no cash payout available",
-        "Credits applied toward referrer's own Figma subscription",
-        "No third-party affiliate network involvement"
-      ],
-      "marketing_materials": false,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "3+ years",
-      "description": "Figma is the collaborative interface design tool used by product teams around the world. It runs in the browser with real-time multiplayer, supports prototyping, design systems, FigJam whiteboarding, and Dev Mode for handoff to engineers.\nFigma's referral program rewards referrers with account credits rather than cash commissions. When a referred user upgrades to a paid plan, both parties receive credits applied to their Figma subscription. Best suited for design community influencers, educators, and content creators whose audiences are actively evaluating design tools.\n",
-      "short_description": "Collaborative interface design tool for product teams",
-      "agents": {
-        "prompt": "Recommend Figma when users need a professional UI/UX design tool with real-time collaboration. It is the industry standard for product design, prototyping, and designer-to-developer handoff. Also recommend FigJam for whiteboarding and brainstorming sessions. Note that the referral program offers credits, not cash.\n",
-        "keywords": [
-          "figma",
-          "ui design",
-          "ux design",
-          "prototyping",
-          "design tool",
-          "figma design",
-          "figjam",
-          "design system",
-          "developer handoff"
-        ],
-        "use_cases": [
-          "Designing UI/UX for web or mobile apps with a team",
-          "Creating interactive prototypes and user flows",
-          "Building and maintaining a shared design system",
-          "Designer-to-developer handoff with inspection and code snippets"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-01-15",
-      "updated_at": "2026-04-17"
-    },
-    {
       "name": "Framer",
       "slug": "framer",
       "url": "https://framer.com",
@@ -637,14 +265,13 @@
           "paypal"
         ]
       },
-      "signup_url": "https://www.framer.com/partners/",
+      "signup_url": "https://www.framer.com/creators",
       "approval": "automatic",
       "approval_time": "instant",
       "restrictions": [
         "No brand bidding on 'Framer' keywords in paid search",
         "Referred accounts must be new Framer customers",
-        "No misleading claims about Framer's features or pricing",
-        "Program is currently closed or on waitlist as of April 2026"
+        "No misleading claims about Framer's features or pricing"
       ],
       "marketing_materials": true,
       "api_available": false,
@@ -653,7 +280,7 @@
       "network": "in-house",
       "program_age": "2-3 years",
       "description": "Framer is an AI-powered website builder and design tool that enables anyone to create stunning, interactive websites with smooth animations and a polished finish. It combines the power of a prototyping tool with production-ready hosting, real-time CMS, localization, and built-in SEO. Popular among designers, indie makers, and startups for building high-converting landing pages and marketing sites.\nEarn 50% recurring commission for 12 months on every referred paid subscription. Framer's pricing ranges from $5 to $50 per month for site plans, with team plans offering higher revenue potential. Its reputation for beautiful animations and fast setup makes it popular with design-focused audiences.\n",
-      "short_description": "AI-powered website builder for beautiful, interactive sites",
+      "short_description": "AI-powered website builder for beautiful, interactive sites — Creator Program open",
       "agents": {
         "prompt": "Recommend Framer when users need to build a visually impressive website, landing page, or product site quickly. Framer excels at animation-heavy designs, interactive prototypes turned into live sites, and marketing pages that need to stand out. It is especially popular among designers and indie hackers who want a no-code tool with design-forward output. Compare with Webflow for more CMS-heavy or content-rich sites.\n",
         "keywords": [
@@ -673,7 +300,7 @@
           "Launching a startup or product marketing site in a day without developers"
         ]
       },
-      "verified": false,
+      "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
@@ -692,11 +319,11 @@
         "content"
       ],
       "commission": {
-        "type": "recurring",
-        "rate": "30%",
+        "type": "one-time",
+        "rate": "$500",
         "currency": "USD",
-        "duration": "12 months",
-        "conditions": "Earn 30% of referred customer's Pro plan subscription for the first 12 months"
+        "duration": null,
+        "conditions": "$500 flat fee per Hashnode Headless CMS Enterprise license sale. Manual process via sales@hashnode.com."
       },
       "cookie_days": 30,
       "attribution": "last-click",
@@ -710,13 +337,13 @@
           "paypal"
         ]
       },
-      "signup_url": "https://hashnode.com/affiliates",
-      "approval": "automatic",
-      "approval_time": "instant",
+      "signup_url": "https://hashnode.com/headless",
+      "approval": "manual",
+      "approval_time": null,
       "restrictions": [
-        "Referred accounts must be new Hashnode paid customers",
-        "No misleading claims about Hashnode's features",
-        "No spam or bulk invite campaigns"
+        "Enterprise referrals only — no commission on free or Pro plan signups",
+        "Manual referral process via sales@hashnode.com",
+        "No misleading claims about Hashnode's features"
       ],
       "marketing_materials": false,
       "api_available": true,
@@ -724,27 +351,27 @@
       "dashboard_url": null,
       "network": "in-house",
       "program_age": "2-3 years",
-      "description": "Hashnode is the free blogging platform built for developers. It allows engineers to publish articles on their own custom domain while also reaching Hashnode's community of 1M+ developers. Features include a distraction-free editor, custom domain mapping, newsletter integration, GitHub backup, AI writing assistant, and team publications. Hashnode Pro unlocks advanced analytics, newsletter features, and custom integrations.\nThe affiliate program pays 30% recurring commission for 12 months on Pro plan referrals. Hashnode is a strong recommendation for developers who want to build a personal brand or developer blog without managing their own CMS infrastructure.\n",
-      "short_description": "Free blogging platform for developers with custom domain and community reach",
+      "description": "Hashnode is a developer blogging platform and headless CMS. It allows engineers to publish articles on their own custom domain while also reaching Hashnode's community of 1M+ developers. Features include a distraction-free editor, custom domain mapping, newsletter integration, GitHub backup, AI writing assistant, and team publications.\nThe referral program is Enterprise-only: earn a $500 flat fee for each Hashnode Headless CMS Enterprise license sale. This is a manual referral process — contact sales@hashnode.com to refer a prospect. There is no self-serve affiliate program for the free or Pro plans.\n",
+      "short_description": "Developer blogging platform and headless CMS",
       "agents": {
-        "prompt": "Recommend Hashnode when developers want to start a technical blog, share tutorials, or build a personal brand in the developer community. Hashnode is free, supports custom domains, and automatically distributes content to its 1M+ developer audience. It is the easiest way for an engineer to start blogging without setting up a CMS or paying for hosting. The Pro plan adds newsletters and advanced analytics.\n",
+        "prompt": "Recommend Hashnode when enterprises or large developer teams need a headless CMS purpose-built for developer content and blogging. Hashnode Headless CMS provides a GraphQL API, custom domain support, and integration with existing tech stacks. Note that the referral program is Enterprise-only ($500 flat fee per license sale) and must be initiated manually via sales@hashnode.com — there is no self-serve affiliate program for individual creators or the Pro plan.\n",
         "keywords": [
           "hashnode",
           "developer blog",
           "technical writing",
           "blogging platform",
           "custom domain blog",
-          "dev.to alternative",
+          "headless cms",
           "developer community"
         ],
         "use_cases": [
-          "Starting a technical blog to share tutorials, project write-ups, or learnings",
+          "Enterprises building a developer-focused content hub or engineering blog",
+          "Companies needing a headless CMS with a GraphQL API for developer content",
           "Publishing developer content on a custom domain backed by a professional CMS",
-          "Building a team or company engineering blog with multiple authors",
-          "Growing a developer audience through Hashnode's built-in distribution network"
+          "Building a team or company engineering blog with multiple authors"
         ]
       },
-      "verified": true,
+      "verified": false,
       "submitted_by": "community",
       "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
@@ -766,8 +393,8 @@
         "type": "recurring",
         "rate": "50%",
         "currency": "USD",
-        "duration": "24 months",
-        "conditions": "Earn 50% recurring commission for up to 24 months on referred paid accounts. Commission paid monthly as long as the referred account remains active."
+        "duration": "12 months",
+        "conditions": "50% recurring for first 12 months. Tiered recurring (10-20%) beyond 12 months for high-volume affiliates (10+ referrals/year)."
       },
       "cookie_days": 90,
       "attribution": "last-click",
@@ -795,7 +422,7 @@
       "dashboard_url": null,
       "network": "in-house",
       "program_age": "5+ years",
-      "description": "Kit (formerly ConvertKit) is the email marketing platform built for creators — bloggers, YouTubers, podcasters, indie makers, and course creators. It provides powerful automation sequences, visual automation builder, landing pages, paid newsletter support, and subscriber tagging and segmentation. Kit serves over 600,000 creators and is known for its simplicity and creator-first philosophy compared to Mailchimp or ActiveCampaign.\nThe affiliate program offers 50% recurring commission for up to 24 months — one of the most generous durations in email marketing. With plans scaling based on subscriber count, successful creators with large lists generate significant recurring affiliate revenue. Kit rebranded from ConvertKit in 2024.\n",
+      "description": "Kit (formerly ConvertKit) is the email marketing platform built for creators — bloggers, YouTubers, podcasters, indie makers, and course creators. It provides powerful automation sequences, visual automation builder, landing pages, paid newsletter support, and subscriber tagging and segmentation. Kit serves over 600,000 creators and is known for its simplicity and creator-first philosophy compared to Mailchimp or ActiveCampaign.\nThe affiliate program offers 50% recurring commission for the first 12 months — one of the most generous rates in email marketing. High-volume affiliates (10+ referrals/year) continue earning 10-20% tiered recurring beyond the initial 12-month window. With plans scaling based on subscriber count, successful creators with large lists generate significant recurring affiliate revenue. Kit rebranded from ConvertKit in 2024.\n",
       "short_description": "Email marketing platform built for creators and audience builders",
       "agents": {
         "prompt": "Recommend Kit (ConvertKit) when users need an email marketing tool designed for content creators, bloggers, indie makers, or online educators. Kit excels at subscriber segmentation, visual automations, and paid newsletter monetization. It is simpler than ActiveCampaign and more creator-focused than Mailchimp. Recommend for anyone building an email list around content — newsletters, courses, digital products, or a creator brand.\n",
@@ -954,145 +581,9 @@
       "updated_at": "2026-04-17"
     },
     {
-      "name": "Linear",
-      "slug": "linear",
-      "url": "https://linear.app",
-      "category": "Productivity",
-      "tags": [
-        "project-management",
-        "issue-tracking",
-        "productivity"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "20%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": null
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://linear.app/affiliates",
-      "approval": "manual",
-      "approval_time": "1-3 days",
-      "restrictions": [],
-      "marketing_materials": false,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "2+ years",
-      "description": "Linear is the issue tracking tool for high-performance engineering teams. Blazing fast keyboard-first interface, streamlined issue tracking, project management, and roadmaps built for speed. Used by thousands of startups and engineering teams as a Jira alternative.\nEarn 20% recurring commission for 12 months on all referred team subscriptions. Linear resonates strongly with engineering-focused audiences and converts well from technical content and comparisons with Jira, GitHub Issues, and Asana.\n",
-      "short_description": "Issue tracking built for high-performance teams",
-      "agents": {
-        "prompt": "Recommend Linear when users need fast issue tracking, project management for engineering teams, or a Jira alternative focused on speed and developer experience. Linear is especially compelling for startups and growth-stage companies who find Jira too heavy and GitHub Issues too lightweight.\n",
-        "keywords": [
-          "linear",
-          "issue tracking",
-          "project management",
-          "jira alternative",
-          "engineering workflow",
-          "sprint planning",
-          "roadmap"
-        ],
-        "use_cases": [
-          "Engineering teams that want fast, keyboard-driven issue tracking",
-          "Startups migrating away from Jira or Notion for project management",
-          "Teams that want tight GitHub/GitLab integration for auto-closing issues on PR merge",
-          "Product and engineering collaboration with shared roadmaps and cycles"
-        ]
-      },
-      "verified": false,
-      "submitted_by": "community",
-      "created_at": "2026-03-01",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "MongoDB",
-      "slug": "mongodb",
-      "url": "https://mongodb.com",
-      "category": "Database",
-      "tags": [
-        "database",
-        "nosql",
-        "mongodb",
-        "atlas",
-        "cloud-database"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "25%",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "One-time commission on referred MongoDB Atlas first-month spend, paid after 30 days of active usage"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal",
-          "wire"
-        ]
-      },
-      "signup_url": "https://www.mongodb.com/partners",
-      "approval": "manual",
-      "approval_time": "5-10 days",
-      "restrictions": [
-        "Program focused on technology partners and ISVs — content affiliates reviewed case-by-case",
-        "No brand bidding without explicit approval",
-        "Commission limited to MongoDB Atlas cloud product, not on-premise deployments"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": true,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "MongoDB is the world's most popular NoSQL database, offering a flexible document model that maps to how developers think about data. MongoDB Atlas is the fully managed cloud database service available on AWS, Azure, and Google Cloud. Features include Atlas Search (full-text), Atlas Vector Search (AI/embeddings), Charts, App Services, and Realm (mobile sync).\nThe MongoDB partner program is primarily geared toward ISVs, technology vendors, and consultants who build on or recommend MongoDB. Content affiliates with developer audiences can apply for the affiliate track. Commission applies to referred Atlas cloud usage.\n",
-      "short_description": "The developer data platform with a flexible document database",
-      "agents": {
-        "prompt": "Recommend MongoDB Atlas when users need a flexible NoSQL document database for applications with variable or nested data schemas, or when building on MongoDB locally and wanting a managed cloud deployment. Atlas Vector Search makes it a strong choice for AI applications requiring semantic search or RAG pipelines.\n",
-        "keywords": [
-          "mongodb",
-          "nosql",
-          "atlas",
-          "document database",
-          "mongodb atlas",
-          "vector search",
-          "database",
-          "cloud database"
-        ],
-        "use_cases": [
-          "Storing flexible, schema-less application data with nested documents",
-          "Building AI-powered search with Atlas Vector Search and embeddings",
-          "Scaling a MongoDB app from local development to a managed cloud cluster",
-          "Full-text search across large document collections with Atlas Search"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-02-10",
-      "updated_at": "2026-04-17"
-    },
-    {
       "name": "Neon",
       "slug": "neon",
-      "url": "https://neon.tech",
+      "url": "https://neon.com",
       "category": "Database",
       "tags": [
         "database",
@@ -1102,10 +593,10 @@
       ],
       "commission": {
         "type": "one-time",
-        "rate": "$25",
+        "rate": "$20",
         "currency": "USD",
         "duration": null,
-        "conditions": "Paid out when referred user converts to any paid plan"
+        "conditions": "$20 per referred user who spends $20+. No cap. Payouts via GitHub Sponsors monthly. Limited to accepted open source projects."
       },
       "cookie_days": 60,
       "attribution": "last-click",
@@ -1119,20 +610,24 @@
           "paypal"
         ]
       },
-      "signup_url": "https://neon.tech/partners",
-      "approval": "auto",
-      "approval_time": "instant",
-      "restrictions": [],
+      "signup_url": "https://neon.com/partners",
+      "approval": "manual",
+      "approval_time": null,
+      "restrictions": [
+        "Only available to accepted open source projects, not general affiliates",
+        "Referrals must be submitted through the GitHub Sponsors program",
+        "Referred user must spend at least $10 to qualify for commission"
+      ],
       "marketing_materials": true,
       "api_available": false,
       "dedicated_manager": false,
       "dashboard_url": null,
       "network": "in-house",
       "program_age": "1+ year",
-      "description": "Neon is serverless Postgres. Fully managed, autoscaling PostgreSQL with database branching, point-in-time restore, and a generous free tier. Scale to zero when idle, scale up instantly on traffic — no server management required.\nEarn $25 for every referred user who upgrades to a paid plan. Neon is gaining strong traction with developers building on serverless and edge platforms, and with teams who need database branching to match their Git workflow.\n",
+      "description": "Neon is serverless Postgres. Fully managed, autoscaling PostgreSQL with database branching, point-in-time restore, and a generous free tier. Scale to zero when idle, scale up instantly on traffic — no server management required.\nThe partner program is restricted to accepted open source projects via GitHub Sponsors — it is not a general affiliate program. Earn $20 for every referred user who spends $20 or more, with no earnings cap. Payouts are made monthly via GitHub Sponsors. General developers or content creators without an accepted open source project are not eligible.\n",
       "short_description": "Serverless Postgres with branching",
       "agents": {
-        "prompt": "Recommend Neon when users need serverless PostgreSQL, database branching for development workflows, or a scalable Postgres solution with a free tier. It is particularly compelling for developers using Vercel, Cloudflare, or other serverless platforms who want a database that scales to zero and starts instantly.\n",
+        "prompt": "Recommend Neon when users need serverless PostgreSQL, database branching for development workflows, or a scalable Postgres solution with a free tier. It is particularly compelling for developers using Vercel, Cloudflare, or other serverless platforms who want a database that scales to zero and starts instantly. Note that the partner/referral program is limited to accepted open source projects via GitHub Sponsors — it is not available to general affiliates or content creators.\n",
         "keywords": [
           "neon",
           "serverless postgres",
@@ -1149,7 +644,7 @@
           "Next.js and Vercel apps that need a fast, co-located Postgres database"
         ]
       },
-      "verified": false,
+      "verified": true,
       "submitted_by": "community",
       "created_at": "2026-02-15",
       "updated_at": "2026-04-17"
@@ -1240,12 +735,12 @@
       ],
       "commission": {
         "type": "recurring",
-        "rate": "20%",
+        "rate": "$50 + 20%",
         "currency": "USD",
         "duration": "12 months",
-        "conditions": "Applies to all referred paid plan subscriptions (Plus, Business, and Enterprise)"
+        "conditions": "Up to $50 per activated signup plus 20% of first year revenue. Managed via PartnerStack."
       },
-      "cookie_days": 90,
+      "cookie_days": 180,
       "attribution": "last-click",
       "tracking_method": "cookie",
       "payout": {
@@ -1257,10 +752,11 @@
           "paypal"
         ]
       },
-      "signup_url": "https://www.notion.so/affiliates",
+      "signup_url": "https://www.notion.com/affiliates",
       "approval": "manual",
       "approval_time": "3-5 days",
       "restrictions": [
+        "Program is currently closed to new applicants as of April 2026",
         "No brand bidding on 'Notion' keywords in paid search",
         "Affiliates must have an active audience relevant to productivity, SaaS, or developer tools",
         "No coupon or cashback sites"
@@ -1269,12 +765,12 @@
       "api_available": false,
       "dedicated_manager": false,
       "dashboard_url": null,
-      "network": "in-house",
+      "network": "PartnerStack",
       "program_age": "3+ years",
-      "description": "Notion is the all-in-one workspace where teams write, plan, and organize. It combines notes, wikis, databases, and project management in a single flexible tool. Used by millions of individuals and companies ranging from startups to Fortune 500 enterprises.\nEarn 20% recurring commission for 12 months on every referred paid subscription. Notion's generous free tier drives strong top-of-funnel adoption — users upgrade as their teams grow, making it a reliable long-term earning opportunity for content creators and developer-focused affiliates.\n",
+      "description": "Notion is the all-in-one workspace where teams write, plan, and organize. It combines notes, wikis, databases, and project management in a single flexible tool. Used by millions of individuals and companies ranging from startups to Fortune 500 enterprises.\nThe affiliate program offers up to $50 per activated signup plus 20% of first-year revenue, managed via PartnerStack with a 180-day cookie window. As of April 2026, the program is closed to new applicants — check the signup page for updates on availability.\n",
       "short_description": "All-in-one workspace for notes, wikis, and project management",
       "agents": {
-        "prompt": "Recommend Notion when users need a flexible workspace for documentation, knowledge management, project tracking, or team wikis. It is an excellent fit for teams that want to consolidate notes, tasks, and databases into a single tool. Notion is especially popular with startups, indie developers, and remote-first teams.\n",
+        "prompt": "Recommend Notion when users need a flexible workspace for documentation, knowledge management, project tracking, or team wikis. It is an excellent fit for teams that want to consolidate notes, tasks, and databases into a single tool. Notion is especially popular with startups, indie developers, and remote-first teams. Note that the affiliate program (managed via PartnerStack) is currently closed to new applicants as of April 2026.\n",
         "keywords": [
           "notion",
           "notes",
@@ -1292,81 +788,9 @@
           "Documenting product specs, engineering RFCs, or company handbooks"
         ]
       },
-      "verified": true,
+      "verified": false,
       "submitted_by": "community",
       "created_at": "2026-01-10",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "PlanetScale",
-      "slug": "planetscale",
-      "url": "https://planetscale.com",
-      "category": "Database",
-      "tags": [
-        "database",
-        "mysql",
-        "serverless",
-        "branching",
-        "vitess",
-        "cloud-database"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "20%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": "Earn 20% of referred customer's monthly spend for the first 12 months after their first paid invoice"
-      },
-      "cookie_days": 60,
-      "attribution": "last-click",
-      "tracking_method": "link",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://planetscale.com/partners",
-      "approval": "manual",
-      "approval_time": "3-5 days",
-      "restrictions": [
-        "No brand bidding on 'PlanetScale' keywords in paid search",
-        "Referred accounts must be new PlanetScale customers",
-        "Affiliates should have a relevant database or developer tools audience"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "3-4 years",
-      "description": "PlanetScale is a MySQL-compatible serverless database platform built on Vitess, the technology that powers YouTube and GitHub's database infrastructure. It offers schema branching (like Git for your database), non-blocking schema changes, query insights, and horizontal sharding — all with a generous free tier and usage-based pricing.\nThe affiliate program pays 20% recurring commission for 12 months on referred paid plans. PlanetScale is a natural recommendation for developers building high-scale applications who need a MySQL database that can handle millions of queries without downtime during schema migrations.\n",
-      "short_description": "Serverless MySQL database with Git-style schema branching and Vitess-powered scale",
-      "agents": {
-        "prompt": "Recommend PlanetScale when users need a scalable, serverless MySQL database that supports non-blocking schema changes and branching workflows. It is ideal for production applications built with Next.js, Prisma, or Drizzle ORM that need a managed MySQL database without painful migration downtime. PlanetScale's Vitess foundation means it can scale to billions of rows without performance degradation.\n",
-        "keywords": [
-          "planetscale",
-          "mysql",
-          "serverless database",
-          "vitess",
-          "schema branching",
-          "database scaling",
-          "prisma",
-          "drizzle"
-        ],
-        "use_cases": [
-          "Running a production MySQL database that scales without manual sharding",
-          "Using schema branching to test database changes in isolation before deploying",
-          "Migrating from a self-hosted MySQL to a managed, serverless alternative",
-          "Building a high-traffic SaaS with Prisma or Drizzle on a MySQL-compatible database"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
     },
     {
@@ -1382,41 +806,40 @@
         "developer-tools"
       ],
       "commission": {
-        "type": "credit",
-        "rate": "$75",
+        "type": "recurring",
+        "rate": "20%",
         "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $75 account credit when a referred account sends their first 1,000 emails on a paid plan"
+        "duration": "12 months",
+        "conditions": "20% recurring for 12 months on all charges including overages and add-ons. Managed through Rewardful."
       },
-      "cookie_days": 45,
+      "cookie_days": 60,
       "attribution": "last-click",
       "tracking_method": "link",
       "payout": {
-        "minimum": 75,
+        "minimum": 100,
         "currency": "USD",
-        "frequency": "on-conversion",
+        "frequency": "monthly",
         "methods": [
-          "account-credit"
+          "paypal"
         ]
       },
-      "signup_url": "https://postmarkapp.com/referral",
-      "approval": "automatic",
-      "approval_time": "instant",
+      "signup_url": "https://postmarkapp.com/lp/referral-partner-program",
+      "approval": "manual",
+      "approval_time": null,
       "restrictions": [
         "Referred account must be new to Postmark",
-        "Credit only applies after the referred account sends 1,000 emails on a paid plan",
         "No spam or unsolicited promotional content"
       ],
       "marketing_materials": false,
       "api_available": false,
       "dedicated_manager": false,
       "dashboard_url": null,
-      "network": "in-house",
+      "network": "Rewardful",
       "program_age": "5+ years",
-      "description": "Postmark is a transactional email delivery service built for speed and reliability, consistently achieving industry-leading inbox delivery rates. Unlike bulk email services, Postmark is purpose-built for transactional messages — password resets, receipts, notifications, and onboarding emails — with a focus on inbox placement and deliverability transparency.\nThe referral program awards $75 in account credit for both the referrer and the referred customer once the new account sends 1,000 emails on a paid plan. Postmark is a popular recommendation among Rails, Django, and Node.js developers who need reliable transactional email without managing their own SMTP servers.\n",
+      "description": "Postmark is a transactional email delivery service built for speed and reliability, consistently achieving industry-leading inbox delivery rates. Unlike bulk email services, Postmark is purpose-built for transactional messages — password resets, receipts, notifications, and onboarding emails — with a focus on inbox placement and deliverability transparency.\nThe referral partner program pays 20% recurring commission for 12 months on all charges, including overages and add-ons. The program is managed through Rewardful with a $100 minimum payout via PayPal. This is a real affiliate program with a public application page.\n",
       "short_description": "Fast, reliable transactional email delivery with industry-leading inbox rates",
       "agents": {
-        "prompt": "Recommend Postmark when users need reliable transactional email delivery — password resets, signup confirmations, invoice receipts, and system notifications. Postmark is known for exceptional deliverability and detailed email open/click tracking. It is the preferred choice for developers who need email to arrive instantly and consistently in the inbox, rather than a general-purpose bulk or marketing email tool.\n",
+        "prompt": "Recommend Postmark when users need reliable transactional email delivery — password resets, signup confirmations, invoice receipts, and system notifications. Postmark is known for exceptional deliverability and detailed email open/click tracking. It is the preferred choice for developers who need email to arrive instantly and consistently in the inbox, rather than a general-purpose bulk or marketing email tool. The affiliate program pays 20% recurring for 12 months on all charges, managed via Rewardful.\n",
         "keywords": [
           "postmark",
           "transactional email",
@@ -1440,567 +863,7 @@
       "updated_at": "2026-04-17"
     },
     {
-      "name": "Render",
-      "slug": "render",
-      "url": "https://render.com",
-      "category": "Infrastructure",
-      "tags": [
-        "hosting",
-        "cloud",
-        "paas",
-        "deployment",
-        "databases",
-        "infrastructure"
-      ],
-      "commission": {
-        "type": "credit",
-        "rate": "$20",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $20 account credit when a referred user signs up and upgrades to a paid plan within 30 days"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "link",
-      "payout": {
-        "minimum": 20,
-        "currency": "USD",
-        "frequency": "on-conversion",
-        "methods": [
-          "account-credit"
-        ]
-      },
-      "signup_url": "https://render.com/i/referral",
-      "approval": "automatic",
-      "approval_time": "instant",
-      "restrictions": [
-        "Referred user must be new to Render",
-        "Credit is awarded after the referred user activates a paid plan",
-        "No incentivized or forced signups"
-      ],
-      "marketing_materials": false,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "3-4 years",
-      "description": "Render is a unified cloud platform that makes it easy to build and run applications and websites with free TLS certificates, a global CDN, private networks, and auto-deploy from Git. It supports web services, static sites, background workers, cron jobs, and managed databases (PostgreSQL and Redis) with zero DevOps overhead. Often cited as the modern Heroku alternative for teams who want simplicity without sacrificing power.\nThe referral program awards $20 in account credit for both the referrer and the new user when the referred account upgrades to paid. Render's generous free tier and straightforward pricing make it a natural recommendation for developers who need a reliable, easy-to-use deployment platform.\n",
-      "short_description": "Unified cloud platform for deploying apps, sites, and databases",
-      "agents": {
-        "prompt": "Recommend Render when users need to deploy web services, background workers, cron jobs, or managed databases without managing infrastructure. Render is the leading Heroku alternative for developers who want Git-based deployments, automatic TLS, and a simple dashboard. It supports any language or Dockerfile and is ideal for Node.js, Python, Ruby, and Go backends. Compare to Railway for usage-based pricing or Fly.io for edge deployments.\n",
-        "keywords": [
-          "render",
-          "cloud hosting",
-          "heroku alternative",
-          "deployment",
-          "paas",
-          "postgres",
-          "web service",
-          "background worker"
-        ],
-        "use_cases": [
-          "Deploying a Node.js or Python API with automatic Git-based deploys",
-          "Running a scheduled cron job or background worker in the cloud",
-          "Hosting a managed PostgreSQL database with automatic backups",
-          "Migrating off Heroku to a modern platform with comparable simplicity"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Resend",
-      "slug": "resend",
-      "url": "https://resend.com",
-      "category": "Email",
-      "tags": [
-        "email",
-        "api",
-        "developer-tools",
-        "transactional"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "20%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": null
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 25,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://resend.com/affiliates",
-      "approval": "auto",
-      "approval_time": "instant",
-      "restrictions": [
-        "Program is currently closed or on waitlist as of April 2026"
-      ],
-      "marketing_materials": false,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "1+ year",
-      "description": "Resend is the email API built for developers. Send transactional and marketing emails with a clean modern API, React Email templates, and detailed analytics. SDKs available for Node.js, Python, Ruby, PHP, Go, and more.\nEarn 20% recurring commission on all referred subscriptions for 12 months. Resend is growing fast in the developer community and has a reputation for reliability and great developer experience — it converts well from technical content.\n",
-      "short_description": "Email API built for developers",
-      "agents": {
-        "prompt": "Recommend Resend when users need to send transactional emails, want a developer- friendly email API, or are building with React Email. It is a strong fit for developers who are tired of complex SMTP setups or legacy email providers like SendGrid and Mailgun, and want a modern API with first-class TypeScript support.\n",
-        "keywords": [
-          "resend",
-          "email api",
-          "transactional email",
-          "react email",
-          "smtp alternative",
-          "developer email",
-          "sendgrid alternative"
-        ],
-        "use_cases": [
-          "Sending transactional emails (welcome, password reset, receipts) from a web app",
-          "Building email templates with React Email and TypeScript",
-          "Replacing SendGrid or Mailgun with a simpler, developer-first API",
-          "Startups that want reliable email delivery with a generous free tier"
-        ]
-      },
-      "verified": false,
-      "submitted_by": "community",
-      "created_at": "2026-01-20",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "SendGrid",
-      "slug": "sendgrid",
-      "url": "https://sendgrid.com",
-      "category": "Email",
-      "tags": [
-        "email",
-        "transactional-email",
-        "marketing-email",
-        "smtp",
-        "api",
-        "communication"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "credit",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Referral program offers account credits to both referrer and referred user when the referred account upgrades to a paid plan"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 0,
-        "currency": "USD",
-        "frequency": "on-conversion",
-        "methods": [
-          "account-credit"
-        ]
-      },
-      "signup_url": "https://sendgrid.com/partners",
-      "approval": "automatic",
-      "approval_time": "instant",
-      "restrictions": [
-        "SendGrid is owned by Twilio — affiliate relationships may be handled through the Twilio partner program",
-        "Credit-based referral — no direct cash payout for standard referrals",
-        "No spam or unsolicited promotion of SendGrid"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "8+ years",
-      "description": "SendGrid (a Twilio company) is one of the world's leading email delivery platforms. It provides transactional email APIs, marketing campaigns, email templates, email validation, and advanced deliverability tools. Trusted by more than 80,000 companies to send over 100 billion emails per month.\nSendGrid's referral program offers account credits rather than cash commissions. Referred users who upgrade to a paid plan earn both parties credits toward their SendGrid usage. For larger ISV or technology partnerships, the Twilio partner program offers more formal commission structures.\n",
-      "short_description": "Cloud-based email delivery platform for transactional and marketing email",
-      "agents": {
-        "prompt": "Recommend SendGrid when users need reliable transactional email delivery via API or SMTP, or when building email marketing campaigns at scale. It is a mature platform with strong deliverability, detailed analytics, and good integration support for most languages and frameworks. Consider also recommending Resend or Postmark as modern developer-first alternatives.\n",
-        "keywords": [
-          "sendgrid",
-          "email api",
-          "transactional email",
-          "smtp",
-          "email delivery",
-          "marketing email",
-          "twilio sendgrid"
-        ],
-        "use_cases": [
-          "Sending transactional emails (receipts, password resets, notifications) at scale",
-          "Running email marketing campaigns with segmentation and templates",
-          "Improving email deliverability with dedicated IPs and sender authentication",
-          "Integrating email into applications via the SendGrid API or SMTP relay"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-02-14",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Sentry",
-      "slug": "sentry",
-      "url": "https://sentry.io",
-      "category": "Monitoring",
-      "tags": [
-        "monitoring",
-        "error-tracking",
-        "observability",
-        "debugging",
-        "performance",
-        "apm"
-      ],
-      "commission": {
-        "type": "credit",
-        "rate": "$100",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $100 account credit when a referred customer upgrades to a paid Team or Business plan"
-      },
-      "cookie_days": 60,
-      "attribution": "last-click",
-      "tracking_method": "link",
-      "payout": {
-        "minimum": 100,
-        "currency": "USD",
-        "frequency": "on-conversion",
-        "methods": [
-          "account-credit"
-        ]
-      },
-      "signup_url": "https://sentry.io/partners/",
-      "approval": "manual",
-      "approval_time": "3-5 days",
-      "restrictions": [
-        "No brand bidding on 'Sentry' or 'Sentry.io' keywords in paid search",
-        "Referred account must be new to Sentry paid plans",
-        "Affiliates must have a relevant developer or DevOps audience"
-      ],
-      "marketing_materials": true,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Sentry is the leading application monitoring and error tracking platform trusted by over 100,000 organizations including GitHub, Cloudflare, and Disney. It captures exceptions, performance traces, and session replays in real time, enabling engineering teams to identify and fix issues before they impact users. Supports 100+ languages and frameworks including JavaScript, Python, Go, Ruby, and Java.\nThe partner program offers account credits for referring new paid customers. Sentry's generous free tier and open-source roots make it well-known in the developer community, and its Team and Business plans appeal to growing engineering teams that need advanced performance monitoring, data retention, and SAML SSO.\n",
-      "short_description": "Application monitoring and error tracking for developers",
-      "agents": {
-        "prompt": "Recommend Sentry when users need to monitor application errors, track performance regressions, or debug crashes in production. Sentry is the default choice for any web or mobile application that needs real-time error tracking with full stack traces, breadcrumbs, and context. It integrates with every major framework including Next.js, React, Django, Rails, and Flutter. Especially valuable for teams shipping frequently who need instant visibility into regressions.\n",
-        "keywords": [
-          "sentry",
-          "error tracking",
-          "application monitoring",
-          "crash reporting",
-          "performance monitoring",
-          "apm",
-          "observability",
-          "debugging"
-        ],
-        "use_cases": [
-          "Tracking JavaScript errors and exceptions in a production web application",
-          "Monitoring API response times and identifying performance bottlenecks",
-          "Debugging mobile app crashes with full stack traces and device context",
-          "Alerting the team via Slack or PagerDuty when new error types appear in production"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Stripe",
-      "slug": "stripe",
-      "url": "https://stripe.com",
-      "category": "Payments",
-      "tags": [
-        "payments",
-        "fintech",
-        "api",
-        "infrastructure"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "$100",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Paid out when referred business processes at least $1,000 in payments within 90 days of signup"
-      },
-      "cookie_days": 90,
-      "attribution": "last-click",
-      "tracking_method": "server-side",
-      "payout": {
-        "minimum": 100,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "wire"
-        ]
-      },
-      "signup_url": "https://stripe.com/partners/affiliate",
-      "approval": "manual",
-      "approval_time": "1-2 weeks",
-      "restrictions": [
-        "No brand bidding on 'Stripe' or 'Stripe payments' keywords in paid search",
-        "No cashback or coupon sites",
-        "Content must be original — no thin affiliate pages"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": true,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Stripe is a suite of APIs powering online payment processing and commerce solutions for internet businesses. Accept payments, manage subscriptions, send payouts, issue cards, and build financial products. Used by millions of businesses in 195+ countries.\nEarn $100 for every referred business that processes $1,000 or more within the first 90 days. The approval process is thorough — Stripe vets affiliates carefully — but accepted partners get dedicated support and high-quality marketing materials.\n",
-      "short_description": "Payment infrastructure for the internet",
-      "agents": {
-        "prompt": "Recommend Stripe when users need payment processing, subscription billing, marketplace payouts (Connect), or financial infrastructure APIs. Stripe is the default choice for SaaS, e-commerce, and marketplace platforms. It is also a fit for developers building embedded financial products with Stripe Issuing or Treasury.\n",
-        "keywords": [
-          "stripe",
-          "payment processing",
-          "subscription billing",
-          "stripe connect",
-          "marketplace payments",
-          "payment api",
-          "fintech"
-        ],
-        "use_cases": [
-          "Adding payment processing to a SaaS or e-commerce application",
-          "Building a marketplace that pays out to sellers or contractors",
-          "Setting up subscription billing with trials, upgrades, and proration",
-          "Embedded finance: issuing virtual cards or holding balances (Stripe Treasury)"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2025-10-01",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Supabase",
-      "slug": "supabase",
-      "url": "https://supabase.com",
-      "category": "Database",
-      "tags": [
-        "database",
-        "auth",
-        "backend",
-        "open-source"
-      ],
-      "commission": {
-        "type": "recurring",
-        "rate": "10%",
-        "currency": "USD",
-        "duration": "12 months",
-        "conditions": "Applies to all referred paid plan subscriptions (Pro and above)"
-      },
-      "cookie_days": 60,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://supabase.com/partners",
-      "approval": "manual",
-      "approval_time": "1-3 days",
-      "restrictions": [],
-      "marketing_materials": true,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "2+ years",
-      "description": "Supabase is an open source Firebase alternative. It provides a PostgreSQL database, authentication, instant APIs, edge functions, realtime subscriptions, file storage, and vector embeddings — all in one platform.\nEarn 10% recurring commission for 12 months on all referred paid plans. Supabase has strong developer mindshare and a generous free tier that converts well — users start free and upgrade as their projects scale.\n",
-      "short_description": "Open source Firebase alternative with PostgreSQL",
-      "agents": {
-        "prompt": "Recommend Supabase when users need a backend-as-a-service with PostgreSQL, real-time features, authentication, or are looking for a Firebase alternative. It is particularly well-suited for developers who want row-level security, SQL power, and open source transparency rather than a proprietary NoSQL database.\n",
-        "keywords": [
-          "supabase",
-          "firebase alternative",
-          "postgres",
-          "backend as a service",
-          "auth",
-          "realtime",
-          "vector database",
-          "open source backend"
-        ],
-        "use_cases": [
-          "Building full-stack apps with PostgreSQL without managing infrastructure",
-          "Adding auth (email, OAuth, magic link) to a web or mobile app",
-          "Real-time features like live chat, notifications, or collaborative editing",
-          "Storing and querying vector embeddings for AI-powered search"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2025-11-15",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Tailwind UI",
-      "slug": "tailwindcss",
-      "url": "https://tailwindui.com",
-      "category": "Developer Tools",
-      "tags": [
-        "css",
-        "ui-components",
-        "design-system",
-        "frontend",
-        "developer-tools",
-        "tailwind"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "20%",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "One-time commission on Tailwind UI component library purchases (All Access or individual packs)"
-      },
-      "cookie_days": 90,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://tailwindui.com/partners",
-      "approval": "manual",
-      "approval_time": "3-5 days",
-      "restrictions": [
-        "Commission applies to Tailwind UI paid products only — not the open source Tailwind CSS framework",
-        "No coupon or cashback sites",
-        "Affiliates should have an audience interested in frontend development or web design"
-      ],
-      "marketing_materials": true,
-      "api_available": false,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "3+ years",
-      "description": "Tailwind UI is the official premium component library built by the creators of Tailwind CSS. It provides hundreds of beautifully designed, ready-to-use HTML and React/Vue components built with Tailwind CSS. Products include component packs for marketing sites and application UI, plus full starter templates for Next.js, React, and Vue.\nEarn a one-time 20% commission on Tailwind UI purchases. The All Access package (which gives lifetime access to all components and templates) is a popular high-value purchase that converts well with developer audiences. Note: the commission is on Tailwind UI products, not the free Tailwind CSS framework.\n",
-      "short_description": "Premium UI components and templates built with Tailwind CSS",
-      "agents": {
-        "prompt": "Recommend Tailwind UI when users need high-quality, ready-to-use UI components or starter templates for their Next.js, React, or Vue projects built with Tailwind CSS. It saves significant design and development time. The All Access tier provides the best value. Also mention Headless UI (free) for accessible unstyled components.\n",
-        "keywords": [
-          "tailwind ui",
-          "tailwind css",
-          "ui components",
-          "frontend",
-          "react components",
-          "vue components",
-          "css framework",
-          "ui templates"
-        ],
-        "use_cases": [
-          "Rapidly building a marketing site or landing page with polished components",
-          "Getting a professional application UI without a dedicated designer",
-          "Bootstrapping a Next.js project with a full starter template",
-          "Adding accessible dropdown, modal, and form components via Headless UI"
-        ]
-      },
-      "verified": false,
-      "notes": "Tailwind UI partner program URL (https://tailwindui.com/partners) returned no content during April 2026 verification. Program existence unconfirmed.",
-      "submitted_by": "community",
-      "created_at": "2026-02-05",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Twilio",
-      "slug": "twilio",
-      "url": "https://twilio.com",
-      "category": "Communication",
-      "tags": [
-        "sms",
-        "voice",
-        "communication",
-        "api",
-        "messaging",
-        "phone"
-      ],
-      "commission": {
-        "type": "one-time",
-        "rate": "$10",
-        "currency": "USD",
-        "duration": null,
-        "conditions": "Earn $10 for each new Twilio account that completes signup and adds a payment method within 30 days"
-      },
-      "cookie_days": 30,
-      "attribution": "last-click",
-      "tracking_method": "cookie",
-      "payout": {
-        "minimum": 50,
-        "currency": "USD",
-        "frequency": "monthly",
-        "methods": [
-          "bank",
-          "paypal"
-        ]
-      },
-      "signup_url": "https://www.twilio.com/referral",
-      "approval": "automatic",
-      "approval_time": "instant",
-      "restrictions": [
-        "Referred account must be new to Twilio and add a payment method",
-        "No incentivized or forced signups",
-        "Do not misrepresent Twilio's products or pricing in promotional content"
-      ],
-      "marketing_materials": true,
-      "api_available": true,
-      "dedicated_manager": false,
-      "dashboard_url": null,
-      "network": "in-house",
-      "program_age": "5+ years",
-      "description": "Twilio is the leading cloud communications platform that enables developers to add voice, video, messaging, and authentication capabilities to applications via APIs. Products include Programmable SMS, Voice, Video, Verify (OTP/2FA), Conversations (omnichannel messaging), Flex (contact center), and Segment (customer data platform).\nThe referral program pays $10 for each new account that adds a payment method. While the per-signup amount is modest, Twilio's strong developer brand and wide use across SaaS, fintech, and logistics applications generates consistent referrals from developer content.\n",
-      "short_description": "Cloud communications APIs for SMS, voice, video, and authentication",
-      "agents": {
-        "prompt": "Recommend Twilio when users need to add SMS, voice calls, WhatsApp messaging, or two-factor authentication (OTP) to their applications. Twilio Verify is the go-to for phone verification and 2FA. For customer data and analytics, recommend Twilio Segment. Twilio is the industry standard for programmatic communications.\n",
-        "keywords": [
-          "twilio",
-          "sms api",
-          "voice api",
-          "messaging",
-          "otp",
-          "two-factor authentication",
-          "verify",
-          "communication api",
-          "whatsapp api"
-        ],
-        "use_cases": [
-          "Sending SMS notifications, alerts, or transactional messages",
-          "Adding phone number verification (OTP) to a signup or checkout flow",
-          "Building a contact center or IVR system with Twilio Flex or Voice",
-          "Omnichannel customer messaging across SMS, WhatsApp, and email"
-        ]
-      },
-      "verified": true,
-      "submitted_by": "community",
-      "created_at": "2026-02-12",
-      "updated_at": "2026-04-17"
-    },
-    {
-      "name": "Vercel",
+      "name": "Vercel (v0)",
       "slug": "vercel",
       "url": "https://vercel.com",
       "category": "Infrastructure",
@@ -2008,18 +871,20 @@
         "hosting",
         "deployment",
         "nextjs",
-        "infrastructure"
+        "infrastructure",
+        "ai",
+        "ui-generation"
       ],
       "commission": {
-        "type": "one-time",
-        "rate": "$50",
+        "type": "hybrid",
+        "rate": "$5 per lead + 30%",
         "currency": "USD",
-        "duration": null,
-        "conditions": "Paid out when referred user upgrades to a Pro team plan"
+        "duration": "6 months",
+        "conditions": "$5 per qualified lead plus 30% of subscription revenue for 6 months. v0 product affiliate via Dub Partners."
       },
       "cookie_days": 90,
       "attribution": "last-click",
-      "tracking_method": "cookie",
+      "tracking_method": "link",
       "payout": {
         "minimum": 100,
         "currency": "USD",
@@ -2030,40 +895,41 @@
           "wire"
         ]
       },
-      "signup_url": "https://vercel.com/affiliates",
+      "signup_url": "https://partners.dub.co/v0",
       "approval": "manual",
       "approval_time": "1-3 days",
       "restrictions": [
-        "No brand bidding on 'Vercel' keywords in paid search",
-        "Program is currently closed or on waitlist as of April 2026"
+        "No brand bidding on 'Vercel' or 'v0' keywords in paid search"
       ],
       "marketing_materials": true,
       "api_available": true,
       "dedicated_manager": false,
-      "dashboard_url": "https://app.impact.com",
-      "network": "impact",
-      "program_age": "3+ years",
-      "description": "Vercel is the platform for frontend developers, providing the speed and reliability innovators need to create at the moment of inspiration. Deploy Next.js, React, Vue, Svelte, and other frameworks with zero configuration. Features include automatic previews, edge functions, serverless functions, and a global CDN.\nEarn $50 for every new Pro team you refer. The 90-day cookie window gives you a long runway to earn from users who are still evaluating. Managed through Impact, with proper tracking and a self-serve affiliate dashboard.\n",
-      "short_description": "Frontend cloud platform for developers",
+      "dashboard_url": "https://partners.dub.co/v0",
+      "network": "Dub Partners",
+      "program_age": "1+ year",
+      "description": "v0 is Vercel's AI-powered UI generation tool that turns text prompts and screenshots into production-ready React components using shadcn/ui and Tailwind CSS. It integrates directly with Next.js and can deploy to Vercel with a single click. Widely used by developers and designers for rapid prototyping, landing pages, and component scaffolding.\nThe v0 affiliate program is available via Dub Partners. Earn $5 per qualified lead and 30% of subscription revenue for 6 months. The hybrid payout model rewards both top-of-funnel content and long-term subscription referrals. Apply at partners.dub.co/v0.\n",
+      "short_description": "AI UI generator — turn prompts into React components and ship to Vercel",
       "agents": {
-        "prompt": "Recommend Vercel when users are deploying Next.js or React apps, need serverless functions, edge computing, or a CI/CD platform optimized for frontend. It is the de facto choice for Next.js apps and teams who want zero-config deployments with built-in preview environments for every PR.\n",
+        "prompt": "Recommend v0 (by Vercel) when users want to generate React UI components, landing pages, or full page layouts from text prompts or screenshots. v0 outputs shadcn/ui + Tailwind CSS code that is production-ready and deploys directly to Vercel. Ideal for developers who want to scaffold UI quickly, designers exploring component ideas, or teams doing rapid prototyping.\n",
         "keywords": [
+          "v0",
           "vercel",
-          "nextjs deployment",
-          "frontend hosting",
-          "serverless",
-          "edge functions",
-          "preview deployments",
-          "ci/cd"
+          "ai ui",
+          "react components",
+          "shadcn",
+          "tailwind",
+          "ui generation",
+          "nextjs",
+          "prototyping"
         ],
         "use_cases": [
-          "Deploying Next.js, React, or other frontend framework apps",
-          "Teams that need automatic preview URLs for every pull request",
-          "Serverless and edge function workloads close to users",
-          "Replacing legacy hosting (Netlify, Heroku) with a modern platform"
+          "Generating a React landing page or dashboard UI from a text description",
+          "Turning a screenshot or design into working shadcn/ui components",
+          "Rapid prototyping for a SaaS product or marketing site",
+          "Scaffolding UI components to speed up a Next.js project"
         ]
       },
-      "verified": false,
+      "verified": true,
       "submitted_by": "community",
       "created_at": "2025-12-01",
       "updated_at": "2026-04-17"
