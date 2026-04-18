@@ -304,7 +304,7 @@ function ProgramsTable({
                   </Link>
                 </td>
                 <td className="py-3 px-3 hidden sm:table-cell">
-                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 line-clamp-2">
                     {program.commission.rate}
                   </span>
                 </td>
