@@ -20,10 +20,6 @@ export function VoteButton({ slug, initialCount = 0, className }: VoteButtonProp
   }, [initialCount]);
 
   useEffect(() => {
-    setCount(initialCount);
-  }, [initialCount]);
-
-  useEffect(() => {
     fetch(`/api/votes/check?slugs=${slug}`)
       .then((r) => r.json())
       .then((data) => {
@@ -89,11 +85,27 @@ export function useVoteCounts(slugs: string[]) {
 
   useEffect(() => {
     if (slugs.length === 0) return;
-    const key = slugs.sort().join(",");
-    fetch(`/api/votes?slugs=${key}`)
-      .then((r) => r.json())
-      .then((data) => {
-        setCounts(data.counts ?? {});
+
+    const BATCH_SIZE = 50;
+    const batches: string[][] = [];
+    const sorted = [...slugs].sort();
+    for (let i = 0; i < sorted.length; i += BATCH_SIZE) {
+      batches.push(sorted.slice(i, i + BATCH_SIZE));
+    }
+
+    Promise.all(
+      batches.map((batch) =>
+        fetch(`/api/votes?slugs=${batch.join(",")}`)
+          .then((r) => r.json())
+          .then((data) => data.counts ?? {})
+      )
+    )
+      .then((results) => {
+        const merged: Record<string, number> = {};
+        for (const chunk of results) {
+          Object.assign(merged, chunk);
+        }
+        setCounts(merged);
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
