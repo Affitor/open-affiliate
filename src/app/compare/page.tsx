@@ -85,7 +85,8 @@ function ProgramSearch({
         <Search className="h-3.5 w-3.5 text-muted-foreground/50" />
         <input
           type="text"
-          placeholder="Add program..."
+          aria-label="Search programs to compare"
+            placeholder="Add program..."
           className="bg-transparent text-sm outline-none w-full placeholder:text-muted-foreground/40"
           value={query}
           onChange={(e) => setQuery(e.target.value)}

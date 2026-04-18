@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { categories as registryCategories } from "@/lib/programs";
 
 export default function SubmitPage() {
   const [form, setForm] = useState({
@@ -38,32 +39,7 @@ export default function SubmitPage() {
     });
   };
 
-  const categories = [
-    "AI",
-    "AI & APIs",
-    "Business Operations",
-    "Content Management",
-    "Customer Support",
-    "Database",
-    "Design",
-    "Design / No-code",
-    "Developer Tools",
-    "E-Commerce",
-    "Email",
-    "Email Marketing",
-    "Finance",
-    "HR & Recruiting",
-    "Infrastructure",
-    "Landing Pages",
-    "Link Management",
-    "Marketing",
-    "Productivity",
-    "SaaS",
-    "Sales",
-    "Scheduling",
-    "Security",
-    "Social Media",
-  ];
+  const categories = registryCategories;
 
   const generateYaml = () => {
     const keywords = form.keywords
@@ -196,6 +172,7 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
               Category
             </label>
             <select
+              id="category"
               value={form.category}
               onChange={(e) => updateField("category", e.target.value)}
               className="w-full rounded-lg border border-border/50 bg-muted/50 px-3 py-2 text-sm"
@@ -219,6 +196,7 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
                 Type
               </label>
               <select
+                id="commissionType"
                 value={form.commissionType}
                 onChange={(e) => updateField("commissionType", e.target.value)}
                 className="w-full rounded-lg border border-border/50 bg-muted/50 px-3 py-2 text-sm"
@@ -270,6 +248,7 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
                 Payout frequency
               </label>
               <select
+                id="payoutFrequency"
                 value={form.payoutFrequency}
                 onChange={(e) => updateField("payoutFrequency", e.target.value)}
                 className="w-full rounded-lg border border-border/50 bg-muted/50 px-3 py-2 text-sm"

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
@@ -22,6 +23,7 @@ const NAV_LINKS = [
 
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl">
@@ -45,7 +47,8 @@ export function Nav() {
               <Link
                 key={label}
                 href={href}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className={`text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
+                aria-current={pathname === href || (href !== "/" && pathname.startsWith(href)) ? "page" : undefined}
               >
                 {label}
               </Link>
@@ -94,7 +97,7 @@ export function Nav() {
                 key={label}
                 href={href}
                 onClick={() => setMobileOpen(false)}
-                className="py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className={`py-2.5 text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
               >
                 {label}
               </Link>
