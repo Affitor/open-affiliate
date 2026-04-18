@@ -22,26 +22,49 @@ Use this as the operational playbook for any batch import session.
  7. Freshness tracking   ← NEW (post-merge cron)
 ```
 
-### Step 0 — Dedup check (before import)
+### Step 0 — Pre-flight fingerprint + refresh tier
 
-Before creating any YAML, compare the candidate list against `src/lib/registry.json`:
+**Goal:** decide per candidate whether it's worth running the full 8-step pipeline, *before* doing any expensive work.
+
+Run `scripts/pre-check.ts` against your candidate list. It loads `src/lib/registry-index.json` (a lightweight fingerprint of every program — slugs, domains, aliases, freshness) and classifies each candidate into one of 5 tiers.
 
 ```bash
-# Candidate list: candidates.txt (one domain per line)
-python3 -c "
-import json
-existing = {p['url'].rstrip('/').replace('https://','').replace('http://','').lower()
-            for p in json.load(open('src/lib/registry.json'))['programs']}
-existing_slugs = {p['slug'] for p in json.load(open('src/lib/registry.json'))['programs']}
-with open('candidates.txt') as f:
-    for line in f:
-        d = line.strip().lower().rstrip('/')
-        if any(d.endswith(e) or e.endswith(d) for e in existing):
-            print(f'DUPLICATE: {d}')
-"
+# Default: skip anything already in registry
+npm run pre-check candidates.txt
+
+# Monthly refresh: include programs last verified > 30 days ago
+npm run pre-check candidates.txt -- --refresh=stale
+
+# Data-quality sweep: force full re-scan everything
+npm run pre-check candidates.txt -- --refresh=all
+
+# Custom threshold
+npm run pre-check candidates.txt -- --stale-days=60
 ```
 
-**Why:** 89% of current programs come from PartnerStack. Re-syncing without dedup creates mass duplicates.
+**Outputs** (written to cwd or `--out=DIR`):
+
+| File | Meaning |
+|---|---|
+| `new.txt` | Truly new — proceed to Step 1 |
+| `stale.txt` | Exists but `last_verified_at` exceeds threshold — light or full refresh |
+| `skip.txt` | Exists and fresh — log only, do not touch |
+| `flag.txt` | Fuzzy match (Levenshtein < 3) — **human review required** before decision |
+| `pre-check-report.json` | Full per-candidate detail (match type, age, reason) |
+
+**The 5 tiers:**
+
+| Tier | Condition | Action | Cost |
+|---|---|---|---|
+| `NEW` | No match in registry | Full 8-step | ~10-90s |
+| `REFRESH-LIGHT` | Match + `last_verified_at` between `stale-days` and `3 × stale-days` | Re-verify URL, bump `last_verified_at`, update changed fields only | ~3s |
+| `REFRESH-FULL` | Match + `last_verified_at > 3 × stale-days` **or** `--refresh=all` | Re-scan commission/payout, overwrite YAML fully | ~40s |
+| `SKIP` | Match + fresh, refresh=none | Log only | ~0s |
+| `FLAG` | Fuzzy match (name or domain close but not exact) | **Stop, human decides** | — |
+
+**Fuzzy match example:** candidate `chatgpt.com` — no exact match, but `openai.com` is in the index. Levenshtein distance on slugs `chatgpt` vs `openai` is 6 (no flag); but if `aliases: [chatgpt]` is on the openai.yaml, the alias lookup catches it directly. **Always add `aliases` to programs with multiple brand names.**
+
+**Why this matters:** 89% of current programs come from PartnerStack. Re-syncing without pre-check creates mass duplicates and wastes 60-90% of scraping budget.
 
 ### Step 1 — YAML creation
 
@@ -226,11 +249,17 @@ For volumes beyond hand-curation:
 
 ---
 
-## Schema evolution notes
+## Schema (as of Batch 1)
 
-These fields are referenced in this pipeline but may not yet be in `schema/program.schema.json`. Land them before the next large batch:
+Fields relevant to this pipeline (see `schema/program.schema.json` for full definition):
 
-- `source` (string enum) — attribution for refresh cadence
-- `last_verified_at` (ISO date) — freshness
+- `kind` (enum, default `affiliate`) — `affiliate | referral | creator-payout | revenue-share | cashback | partner-network`. Use `partner-network` for programs like Amazon Associates / Shopify Partners that don't fit the traditional affiliate mold but are still valid income sources for creators/partners.
+- `source` (enum) — discovery channel (`partnerstack-api`, `product-hunt`, `yc-directory`, `reditus`, `dub`, `rewardful`, ..., `community`, `manual`, `legacy`). Used by Step 7 to schedule source-level refreshes.
+- `last_verified_at` (ISO date) — freshness marker. Set/bumped by Step 5. Used by Step 0 to compute age.
+- `aliases` (string[]) — alternative brand names. Used by Step 0 fuzzy matcher (e.g. OpenAI → `aliases: [chatgpt, gpt-4, dall-e]`).
+- `category` is now an **enum** (20 allowed values, see Step 4 table). Adding a new category requires a schema change.
+- `network` is now an **enum** (11 allowed values). Same rule.
+
+Still pending / future:
+
 - `completeness_score` (0-100, computed at build) — quality tier UI signal
-- `category` as `enum` (from allowlist) — prevent drift

@@ -44,14 +44,15 @@ signup_url: https://www.raycast.com/blog/affiliate-program
 updated_at: 2026-04-18T19:51:47.799Z
 brand_color: "#FF6363"
 cookie_days: 30
-payout:
-  minimum: null
-  currency: USD
-  frequency: monthly
-  methods: []
 verified_at: 2026-04-18T19:52:02.845Z
 signup_url_type: official
-description: Raycast is a productivity launcher for macOS that helps developers work faster with extensions, AI commands, and workflow automation. Their affiliate program offers 30% recurring commission on all Raycast Pro subscription payments from referred users, who also receive a 10% discount.
-short_description: Earn 30% recurring commission on all Raycast Pro subscription
-  payments from users you refer. Referrals receive a 10% discount.
+short_description: Earn 30% recurring commission on Raycast Pro referrals.
+description: |
+  Raycast is a productivity launcher for macOS built for developers. The
+  affiliate program pays 30% recurring commission on all Raycast Pro
+  subscription payments from users you refer, and referrals receive a 10%
+  discount on signup.
 verified_by: dev-bypass
+last_verified_at: 2026-04-18T19:51:47.799Z
+kind: affiliate
+source: manual

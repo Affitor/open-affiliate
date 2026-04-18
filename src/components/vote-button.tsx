@@ -19,17 +19,6 @@ export function VoteButton({ slug, initialCount = 0, className }: VoteButtonProp
     setCount(initialCount);
   }, [initialCount]);
 
-  // Fetch vote count when no initialCount provided
-  useEffect(() => {
-    if (initialCount > 0) return;
-    fetch(`/api/votes?slugs=${slug}`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.counts?.[slug] != null) setCount(data.counts[slug]);
-      })
-      .catch(() => {});
-  }, [slug, initialCount]);
-
   useEffect(() => {
     fetch(`/api/votes/check?slugs=${slug}`)
       .then((r) => r.json())

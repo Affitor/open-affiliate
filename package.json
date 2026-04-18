@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-registry.ts",
+    "prebuild": "npx tsx scripts/build-registry.ts && npm run build --workspace apps/embed --if-present",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

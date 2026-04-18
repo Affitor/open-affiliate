@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs"
+import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { execSync } from "child_process"
 import { parse } from "yaml"
@@ -138,13 +138,12 @@ function buildRegistry(): void {
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
   console.log(`  Output: src/lib/registry.json`)
 
-  // Rebuild registry-index.json for pre-flight dedup (optional — file may not exist yet)
+  // Rebuild registry-index.json for pre-flight dedup
   try {
-    if (existsSync(INDEX_SCRIPT)) {
-      execSync(`npx tsx ${INDEX_SCRIPT}`, { stdio: "inherit" })
-    }
+    execSync(`npx tsx ${INDEX_SCRIPT}`, { stdio: "inherit" })
   } catch (err) {
-    console.warn(`Index build skipped: ${(err as Error).message}`)
+    console.error(`Index build failed: ${(err as Error).message}`)
+    process.exit(1)
   }
 }
 

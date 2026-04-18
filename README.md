@@ -1,64 +1,65 @@
-<p align="center">
-  <img src="https://openaffiliate.dev/logo.svg" width="80" alt="OpenAffiliate" />
-</p>
+# OpenAffiliate
 
-<h3 align="center">The open registry of affiliate programs.</h3>
+The open registry of affiliate programs. Built for developers and AI agents.
 
-<p align="center">
-  Discover, compare, and integrate affiliate programs.<br/>
-  Built for developers and AI agents. Community-contributed.
-</p>
+[![CI](https://github.com/Affitor/open-affiliate/actions/workflows/ci.yml/badge.svg)](https://github.com/Affitor/open-affiliate/actions)
+[![Programs](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fopenaffiliate.dev%2Fapi%2Fprograms&query=%24.length&label=programs&color=blue)](https://openaffiliate.dev)
+[![npm](https://img.shields.io/npm/v/openaffiliate)](https://www.npmjs.com/package/openaffiliate)
+[![MCP](https://img.shields.io/badge/MCP-server-purple)](https://www.npmjs.com/package/openaffiliate-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-<p align="center">
-  <a href="https://github.com/Affitor/open-affiliate/actions/workflows/ci.yml"><img src="https://github.com/Affitor/open-affiliate/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://openaffiliate.dev"><img src="https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fopenaffiliate.dev%2Fapi%2Fprograms&query=%24.length&label=programs&color=34d399&style=flat" alt="Programs" /></a>
-  <a href="https://www.npmjs.com/package/openaffiliate"><img src="https://img.shields.io/npm/v/openaffiliate?color=34d399&style=flat" alt="npm" /></a>
-  <a href="https://www.npmjs.com/package/openaffiliate-mcp"><img src="https://img.shields.io/badge/MCP-server-8b5cf6?style=flat" alt="MCP" /></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue?style=flat" alt="License" /></a>
-</p>
+![OpenAffiliate Programs](https://openaffiliate.dev/screenshot.png)
 
----
+## What is this?
 
-## What is OpenAffiliate?
+OpenAffiliate is a community-driven, open-source registry of affiliate programs. Every program is stored as a YAML file in this repo, making it easy to contribute, review, and integrate.
 
-OpenAffiliate is a community-driven, open-source registry of affiliate programs. Every program is a YAML file in this repo -- easy to contribute, review, and integrate into any tool.
-
-- **Affiliate partners** -- Compare programs with real data: commission rates, cookie duration, payout terms, approval process
-- **AI agents** -- MCP server + structured `agents:` block. Tell your agent which programs to recommend and when
-- **Developers** -- CLI, SDK, and REST API. Build on top of the registry
-- **SaaS companies** -- Free listing with exposure to developer partners and AI agents
-
-> [!TIP]
-> Visit [openaffiliate.dev](https://openaffiliate.dev) to browse the registry, or add the MCP server to your AI agent in one line.
+- **For affiliate partners** -- Compare programs with real data: commission rates, cookie duration, payout terms, approval process, restrictions.
+- **For AI agents** -- MCP server + structured AGENTS.md data. Tell your agent which programs to recommend and when.
+- **For developers** -- CLI, SDK, and REST API. Build tools on top of the registry.
+- **For SaaS companies** -- Free listing in a canonical registry. Exposure to developer partners and AI agents.
 
 ## Features
 
-- **349+ programs** -- Curated, verified, and agent-ready
-- **[Affiliate Score](docs/affiliate-score.md)** -- Algorithm (0-100) ranking programs by commission, cookie, duration, verification, completeness
-- **Rankings** -- Sort by score, name, commission, or cookie. View by programs, networks, or categories
-- **Community voting** -- Upvote programs you've had success with
-- **Compare** -- Side-by-side comparison of up to 4 programs
-- **MCP server** -- HTTP + stdio for AI agent integration
-- **CLI** -- `npx openaffiliate` with `--json` output
-- **REST API** -- Public JSON API, no auth required
-- **TypeScript SDK** -- Programmatic access
-- **Badge embed** -- `[![](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/stripe)`
-- **Submit form** -- Add programs without touching YAML
-- **Verification** -- Automated signup URL verification via CI
+- **Search and filter** -- Full-text search across 349+ programs. Filter by category, commission type, minimum rate, and verified status.
+- **Rankings** -- [Affiliate Score](docs/affiliate-score.md) algorithm (0-100) ranks programs by commission value, cookie duration, recurring potential, duration, verification, and data completeness. Sort by score, name, commission, or cookie days. View rankings by programs, networks, or categories.
+- **Community voting** -- Upvote programs you've had success with. Votes are stored in Supabase and displayed alongside scores.
+- **Compare** -- Side-by-side comparison of up to 4 programs. Compare commission, cookie, payout, approval, and more.
+- **Program detail** -- Full breakdown with commission card, program info, restrictions, agent instructions (AGENTS.md), and integration snippets.
+- **Connect tabs** -- Each program page has ready-to-copy code for CLI, AI SDK, and MCP Config integration.
+- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/stripe)`
+- **MCP server** -- Model Context Protocol server (HTTP + stdio) for AI agent integration.
+- **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
+- **REST API** -- Public JSON API, no auth required.
+- **SDK** -- TypeScript SDK for programmatic access.
+- **Submit** -- Web form to submit new programs without touching YAML.
+- **Verification** -- Automated signup URL verification via CI.
 
 ## Quick start
+
+### Browse the registry
+
+Visit [openaffiliate.dev](https://openaffiliate.dev) to browse and search programs.
 
 ### CLI
 
 ```bash
+# Search programs
 npx openaffiliate search "email"
+
+# Filter by category and commission
 npx openaffiliate search --category Database --min-commission 10 --type recurring
+
+# Get program details
 npx openaffiliate info stripe
+
+# Add a program to your project
+npx openaffiliate add supabase
 ```
 
 ### MCP (for AI agents)
 
-**HTTP** (Claude.ai, ChatGPT, any MCP client):
+**HTTP endpoint** (Claude.ai, ChatGPT, any MCP client):
 
 ```json
 {
@@ -70,7 +71,7 @@ npx openaffiliate info stripe
 }
 ```
 
-**Stdio** (Claude Code, Cursor, local tools):
+**Stdio transport** (Claude Code, Cursor, local tools):
 
 ```json
 {
@@ -83,7 +84,7 @@ npx openaffiliate info stripe
 }
 ```
 
-Tools: `search_programs` | `get_program` | `list_categories`
+Available tools: `search_programs`, `get_program`, `list_categories`
 
 ### AI SDK
 
@@ -95,10 +96,11 @@ import { anthropic } from "@ai-sdk/anthropic";
 const mcpClient = await createMCPClient({
   transport: { type: "sse", url: "https://openaffiliate.dev/api/mcp" },
 });
+const tools = await mcpClient.tools();
 
 const { text } = await generateText({
   model: anthropic("claude-sonnet-4.6"),
-  tools: await mcpClient.tools(),
+  tools,
   prompt: "Find recurring affiliate programs for databases",
 });
 
@@ -118,7 +120,7 @@ const programs = await searchPrograms("email", { commission_type: "recurring" })
 const stripe = await getProgram("stripe");
 ```
 
-### REST API
+### API
 
 ```
 GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?verified=)
@@ -126,26 +128,60 @@ GET /api/programs/[slug]       # Get program details
 GET /api/categories            # List categories with counts
 ```
 
-## Contributing
-
-We welcome contributions of all kinds. The easiest way to help is adding a program:
+## Contributing a program
 
 1. Fork this repo
-2. Create `programs/your-product.yaml`
+2. Create a YAML file in `programs/your-product.yaml`
 3. Open a pull request
-4. CI validates the schema and verifies your signup URL
+4. CI validates the schema and verifies your signup URL automatically
 5. Community reviews and merges
 
-Or use the [web form](https://openaffiliate.dev/submit) -- it generates the YAML and opens the PR for you.
+### Program YAML format
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full YAML template and guidelines.
+```yaml
+name: Your Product
+slug: your-product
+url: https://yourproduct.com
+category: Developer Tools
+tags: [keyword1, keyword2]
 
-> [!NOTE]
-> You can also [open an issue](https://github.com/Affitor/open-affiliate/issues/new?template=new_program.yml) to request a program be added.
+commission:
+  type: recurring
+  rate: "25%"
+  currency: USD
+  duration: "12 months"
+
+cookie_days: 30
+signup_url: https://yourproduct.com/affiliates
+approval: auto
+approval_time: "instant"
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+description: >
+  What your product does and what the affiliate program offers.
+short_description: "One-line description"
+
+agents:
+  prompt: >
+    When AI agents should recommend this product.
+  keywords: [keyword1, keyword2]
+  use_cases:
+    - "When a user needs X"
+
+verified: false
+submitted_by: "@your-github"
+```
+
+See [schema/program.schema.json](schema/program.schema.json) for the full specification and [openaffiliate.dev/docs](https://openaffiliate.dev/docs) for complete documentation.
 
 ## AGENTS.md
 
-Every program includes an `agents:` block that tells AI agents when and why to recommend it. This is the key differentiator from traditional affiliate directories.
+Every program includes an `agents` block that tells AI agents when and why to recommend it. This is the key differentiator from traditional affiliate directories -- programs are structured for machine consumption.
 
 ```yaml
 agents:
@@ -159,15 +195,7 @@ agents:
     - "Replacing Firebase with an open-source alternative"
 ```
 
-See [AGENTS.md](AGENTS.md) for full integration details.
-
-## Packages
-
-| Package | npm | Description |
-|---|---|---|
-| [openaffiliate](packages/cli) | [![npm](https://img.shields.io/npm/v/openaffiliate)](https://npmjs.com/package/openaffiliate) | CLI with `--json` output for agents |
-| [openaffiliate-mcp](packages/mcp) | [![npm](https://img.shields.io/npm/v/openaffiliate-mcp)](https://npmjs.com/package/openaffiliate-mcp) | MCP server (stdio + HTTP) |
-| [openaffiliate-sdk](packages/sdk) | [![npm](https://img.shields.io/npm/v/openaffiliate-sdk)](https://npmjs.com/package/openaffiliate-sdk) | TypeScript SDK |
+See [AGENTS.md](AGENTS.md) for integration details.
 
 ## Project structure
 
@@ -176,13 +204,40 @@ open-affiliate/
   programs/            # YAML program files (contributors add here)
   src/                 # Website (Next.js 16)
   packages/cli/        # CLI tool (npx openaffiliate)
-  packages/mcp/        # MCP server (openaffiliate-mcp)
+  packages/mcp/        # Standalone MCP server (openaffiliate-mcp)
   packages/sdk/        # TypeScript SDK (openaffiliate-sdk)
-  schema/              # JSON Schema for YAML validation
   scripts/             # Build registry, verify URLs
-  docs/                # Documentation
+  schema/              # JSON Schema for YAML validation
+  .github/             # CI workflows
+```
+
+## Packages
+
+| Package | npm | Description |
+|---|---|---|
+| [openaffiliate](packages/cli) | [![npm](https://img.shields.io/npm/v/openaffiliate)](https://www.npmjs.com/package/openaffiliate) | CLI with `--json` output for agents |
+| [openaffiliate-mcp](packages/mcp) | [![npm](https://img.shields.io/npm/v/openaffiliate-mcp)](https://www.npmjs.com/package/openaffiliate-mcp) | MCP server (stdio + HTTP) |
+| [openaffiliate-sdk](packages/sdk) | [![npm](https://img.shields.io/npm/v/openaffiliate-sdk)](https://www.npmjs.com/package/openaffiliate-sdk) | TypeScript SDK |
+
+## Verification
+
+All program signup URLs are automatically verified using `scripts/verify-programs.ts`. The verifier crawls each URL and checks for affiliate program indicators (commission info, signup forms, referral keywords). Programs that pass verification are marked `verified: true`.
+
+```bash
+# Verify all programs
+npm run verify
+
+# Verify a single program
+npx tsx scripts/verify-programs.ts stripe
+
+# Verify only changed files (used in CI)
+npm run verify:changed
 ```
 
 ## License
 
-Code is [MIT](LICENSE). Program data in `programs/` is [CC-BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+MIT
+
+---
+
+[GitHub](https://github.com/Affitor/open-affiliate)
