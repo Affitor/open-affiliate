@@ -1,11 +1,10 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
-import { execSync } from "child_process"
 import { parse } from "yaml"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
-const INDEX_SCRIPT = join(process.cwd(), "scripts", "build-index.ts")
+const INDEX_FILE = join(process.cwd(), "src", "lib", "registry-index.json")
 
 const REQUIRED_FIELDS = [
   "name",
@@ -138,13 +137,61 @@ function buildRegistry(): void {
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
   console.log(`  Output: src/lib/registry.json`)
 
-  // Rebuild registry-index.json for pre-flight dedup
+  // Inline index build — no subprocess. Never fails the build: if any step
+  // here throws, we warn and continue so Vercel deploys still succeed. The
+  // index is only consumed by scripts/pre-check.ts (ops tooling), not by
+  // the Next.js app at runtime.
   try {
-    execSync(`npx tsx ${INDEX_SCRIPT}`, { stdio: "inherit" })
+    buildIndex(programs)
   } catch (err) {
-    console.error(`Index build failed: ${(err as Error).message}`)
-    process.exit(1)
+    console.warn(`[warn] registry-index.json build skipped: ${(err as Error).message}`)
   }
+}
+
+function buildIndex(programs: YamlProgram[]): void {
+  const bySlug: string[] = []
+  const byDomain: Record<string, string> = {}
+  const byAlias: Record<string, string> = {}
+  const sourceLastsync: Record<string, string> = {}
+  const lastVerified: Record<string, string | null> = {}
+
+  const normDomain = (url: string): string =>
+    url
+      .toLowerCase()
+      .replace(/^https?:\/\//, "")
+      .replace(/^www\./, "")
+      .replace(/\/.*$/, "")
+      .replace(/\/$/, "")
+      .trim()
+
+  for (const p of programs) {
+    bySlug.push(p.slug)
+    const dom = normDomain(p.url)
+    if (dom) byDomain[dom] = p.slug
+    const nameKey = p.name.toLowerCase().trim()
+    if (nameKey && nameKey !== p.slug) byAlias[nameKey] = p.slug
+    for (const a of p.aliases ?? []) byAlias[String(a).toLowerCase().trim()] = p.slug
+    const lv = p.last_verified_at || p.updated_at || p.created_at || null
+    lastVerified[p.slug] = lv
+    const src = p.source
+    if (src && lv) {
+      if (!sourceLastsync[src] || lv > sourceLastsync[src]) sourceLastsync[src] = lv
+    }
+  }
+
+  const index = {
+    generated_at: new Date().toISOString(),
+    count: programs.length,
+    by_slug: [...bySlug].sort(),
+    by_domain: byDomain,
+    by_alias: byAlias,
+    source_lastsync: sourceLastsync,
+    last_verified: lastVerified,
+  }
+  writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2) + "\n")
+  console.log(
+    `  Index: ${bySlug.length} slugs, ${Object.keys(byDomain).length} domains, ${Object.keys(byAlias).length} aliases`
+  )
 }
 
 buildRegistry()
