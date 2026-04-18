@@ -19,14 +19,17 @@ function timeAgo(dateStr: string): string {
   return `${Math.floor(months / 12)}y ago`
 }
 
-const PLATFORM_CONFIG: Record<string, { label: string; color: string; icon: string; viewLabel: string }> = {
-  youtube: { label: "YouTube", color: "text-red-500", icon: "▶", viewLabel: "views" },
-  tiktok: { label: "TikTok", color: "text-foreground", icon: "♪", viewLabel: "plays" },
-  x: { label: "X", color: "text-foreground", icon: "𝕏", viewLabel: "likes" },
+const PLATFORM_CONFIG: Record<string, { label: string; color: string; icon: string; viewLabel: string; hasMedia: boolean }> = {
+  youtube: { label: "YouTube", color: "text-red-500", icon: "▶", viewLabel: "views", hasMedia: true },
+  tiktok: { label: "TikTok", color: "text-foreground", icon: "♪", viewLabel: "plays", hasMedia: true },
+  x: { label: "X", color: "text-foreground", icon: "𝕏", viewLabel: "likes", hasMedia: false },
+  reddit: { label: "Reddit", color: "text-orange-500", icon: "⬆", viewLabel: "upvotes", hasMedia: false },
+  blog: { label: "Blog", color: "text-blue-500", icon: "✎", viewLabel: "", hasMedia: false },
 }
 
-function SocialCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
-  const platform = PLATFORM_CONFIG[item.platform] ?? PLATFORM_CONFIG.x
+/** Video/media card — YouTube, TikTok */
+function MediaCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
+  const platform = PLATFORM_CONFIG[item.platform]
   return (
     <a
       href={item.url}
@@ -34,11 +37,7 @@ function SocialCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
       rel="noopener noreferrer"
       className="group flex gap-3 rounded-lg border border-border/40 bg-card/30 p-3 transition-all hover:border-border hover:bg-card/60 relative"
     >
-      {isTop && (
-        <span className="absolute -top-2 right-2 rounded-full bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[9px] font-medium text-amber-600 dark:text-amber-400">
-          Top
-        </span>
-      )}
+      {isTop && <TopBadge />}
       {item.thumbnail ? (
         <img
           src={item.thumbnail}
@@ -57,13 +56,52 @@ function SocialCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
         </p>
         <div className="flex items-center gap-3 mt-1.5 text-[10px] text-muted-foreground">
           <span>@{item.author}</span>
-          {item.views != null && item.views > 0 && (
-            <span>{formatViews(item.views)} {platform.viewLabel}</span>
+          {(item.views ?? 0) > 0 && (
+            <span>{formatViews(item.views!)} {platform.viewLabel}</span>
           )}
           {item.publishedAt && <span>{timeAgo(item.publishedAt)}</span>}
         </div>
       </div>
     </a>
+  )
+}
+
+/** Text card — X, Reddit, Blog (no thumbnail, compact) */
+function TextCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
+  const platform = PLATFORM_CONFIG[item.platform]
+  const engagement = item.views ?? item.likes ?? 0
+  return (
+    <a
+      href={item.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group block rounded-lg border border-border/40 bg-card/30 p-3 transition-all hover:border-border hover:bg-card/60 relative"
+    >
+      {isTop && <TopBadge />}
+      <p className="text-xs font-medium line-clamp-2 text-foreground/90 group-hover:text-foreground">
+        {item.title}
+      </p>
+      {item.snippet && (
+        <p className="text-[10px] text-muted-foreground/60 line-clamp-1 mt-1">
+          {item.snippet}
+        </p>
+      )}
+      <div className="flex items-center gap-3 mt-1.5 text-[10px] text-muted-foreground">
+        <span>{item.platform === "blog" ? item.author : `@${item.author}`}</span>
+        {engagement > 0 && platform.viewLabel && (
+          <span>{formatViews(engagement)} {platform.viewLabel}</span>
+        )}
+        {item.publishedAt && <span>{timeAgo(item.publishedAt)}</span>}
+      </div>
+    </a>
+  )
+}
+
+function TopBadge() {
+  return (
+    <span className="absolute -top-2 right-2 rounded-full bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[9px] font-medium text-amber-600 dark:text-amber-400">
+      Top
+    </span>
   )
 }
 
@@ -84,6 +122,7 @@ function PlatformSection({ platform, items }: { platform: string; items: SocialI
   if (items.length === 0) return null
   const config = PLATFORM_CONFIG[platform] ?? PLATFORM_CONFIG.x
   const topScore = Math.max(...items.map((i) => i.qualityScore ?? 0))
+  const CardComponent = config.hasMedia ? MediaCard : TextCard
 
   return (
     <div>
@@ -92,9 +131,9 @@ function PlatformSection({ platform, items }: { platform: string; items: SocialI
         <span className="text-xs font-medium text-muted-foreground">{config.label}</span>
         <span className="text-[10px] text-muted-foreground/60">({items.length})</span>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+      <div className={`grid gap-2 ${config.hasMedia ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
         {items.map((item) => (
-          <SocialCard
+          <CardComponent
             key={item.url}
             item={item}
             isTop={(item.qualityScore ?? 0) === topScore && topScore > 0}
@@ -105,7 +144,7 @@ function PlatformSection({ platform, items }: { platform: string; items: SocialI
   )
 }
 
-export function SocialBuzz({ slug }: { slug: string }) {
+export function SocialListen({ slug }: { slug: string }) {
   const [items, setItems] = useState<SocialItem[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -125,7 +164,6 @@ export function SocialBuzz({ slug }: { slug: string }) {
 
   if (!loading && items.length === 0) return null
 
-  // Group items by platform (already sorted by platform from API)
   const grouped = new Map<string, SocialItem[]>()
   for (const item of items) {
     if (!grouped.has(item.platform)) grouped.set(item.platform, [])
@@ -135,7 +173,7 @@ export function SocialBuzz({ slug }: { slug: string }) {
   return (
     <div>
       <div className="flex items-center gap-2 mb-4">
-        <h2 className="text-base font-semibold">Social Buzz</h2>
+        <h2 className="text-base font-semibold">Social Listen</h2>
         <span className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
           Live
         </span>
@@ -144,12 +182,12 @@ export function SocialBuzz({ slug }: { slug: string }) {
         </span>
       </div>
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={i} />)}
         </div>
       ) : (
         <div className="space-y-4">
-          {["youtube", "tiktok", "x"].map((platform) => (
+          {["youtube", "tiktok", "x", "reddit", "blog"].map((platform) => (
             <PlatformSection
               key={platform}
               platform={platform}

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
 import { getProgram } from "@/lib/programs"
 
+export const maxDuration = 55
+
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY ?? ""
 const APIFY_API_KEY = process.env.APIFY_API_KEY ?? ""
 
@@ -14,19 +16,20 @@ const CACHE_HEADERS = {
 }
 
 export interface SocialItem {
-  platform: "youtube" | "tiktok" | "x"
+  platform: "youtube" | "tiktok" | "x" | "reddit" | "blog"
   title: string
   url: string
   thumbnail?: string
   author: string
   views?: number
+  likes?: number
   publishedAt?: string
+  snippet?: string
   qualityScore?: number
 }
 
 // --- Relevance & scoring ---
 
-/** Keywords that signal affiliate-relevant content */
 const RELEVANCE_KEYWORDS = [
   "affiliate", "review", "make money", "earn", "commission", "passive income",
   "tutorial", "how to", "worth it", "honest", "pros and cons", "comparison",
@@ -37,13 +40,12 @@ const RELEVANCE_KEYWORDS = [
 function isRelevant(title: string, programName: string): boolean {
   const t = title.toLowerCase()
   const name = programName.toLowerCase()
-  // Must mention the program name
-  if (!t.includes(name)) return true // from search results, name is implied
-  // Bonus: has affiliate-intent keywords
-  return true // we filter by search query already; strict filtering removes too much
+  // Must mention program name OR have affiliate-intent keywords
+  const mentionsName = t.includes(name)
+  const hasKeyword = RELEVANCE_KEYWORDS.some((kw) => t.includes(kw))
+  return mentionsName || hasKeyword
 }
 
-/** Boost score for content with affiliate-intent keywords */
 function relevanceMultiplier(title: string): number {
   const t = title.toLowerCase()
   let hits = 0
@@ -53,7 +55,7 @@ function relevanceMultiplier(title: string): number {
   if (hits >= 3) return 2.0
   if (hits >= 2) return 1.5
   if (hits >= 1) return 1.2
-  return 0.5 // no affiliate keywords = deprioritize
+  return 0.5
 }
 
 function recencyWeight(dateStr?: string): number {
@@ -70,11 +72,13 @@ function recencyWeight(dateStr?: string): number {
 
 function normalizeViews(views: number, platform: string): number {
   if (platform === "x") return views * 50
+  if (platform === "reddit") return views * 30
   return views
 }
 
 function computeQualityScore(item: SocialItem): number {
-  const normalized = normalizeViews(item.views ?? 0, item.platform)
+  const views = item.views ?? item.likes ?? 0
+  const normalized = normalizeViews(views, item.platform)
   const recency = recencyWeight(item.publishedAt)
   const relevance = relevanceMultiplier(item.title)
   return Math.round(normalized * recency * relevance)
@@ -84,12 +88,13 @@ const MIN_VIEWS: Record<string, number> = {
   youtube: 100,
   tiktok: 200,
   x: 3,
+  reddit: 1,
+  blog: 0,
 }
 
 // --- YouTube via Apify (better data with view counts) ---
 
 async function fetchYouTube(query: string): Promise<SocialItem[]> {
-  // Prefer Apify for view counts; fall back to RapidAPI
   if (APIFY_API_KEY) {
     try {
       return await fetchYouTubeApify(query)
@@ -171,6 +176,7 @@ async function fetchYouTubeRapidAPI(query: string): Promise<SocialItem[]> {
 // --- TikTok via RapidAPI ---
 
 async function fetchTikTok(query: string): Promise<SocialItem[]> {
+  if (!RAPIDAPI_KEY) return []
   const res = await fetch(
     `https://tiktok-api23.p.rapidapi.com/api/search/video?keyword=${encodeURIComponent(query)}&cursor=0&search_id=0`,
     {
@@ -207,6 +213,7 @@ async function fetchTikTok(query: string): Promise<SocialItem[]> {
 // --- X via RapidAPI ---
 
 async function fetchX(query: string): Promise<SocialItem[]> {
+  if (!RAPIDAPI_KEY) return []
   const res = await fetch(
     `https://twitter-api45.p.rapidapi.com/search.php?query=${encodeURIComponent(query)}&search_type=Top`,
     {
@@ -231,10 +238,104 @@ async function fetchX(query: string): Promise<SocialItem[]> {
         title: text.length > 140 ? text.slice(0, 140) + "..." : text,
         url: `https://x.com/${item.screen_name}/status/${item.tweet_id}`,
         author: String(item.screen_name ?? ""),
-        views: Number(item.favorites ?? 0),
+        likes: Number(item.favorites ?? 0),
+        views: item.views ? Number(item.views) : undefined,
         publishedAt: item.created_at ? String(item.created_at) : undefined,
       }
     })
+}
+
+// --- Reddit via Google Search (Apify) ---
+
+async function fetchReddit(query: string): Promise<SocialItem[]> {
+  if (!APIFY_API_KEY) return []
+  try {
+    const res = await fetch(
+      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=25`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `${query} site:reddit.com`,
+          maxResults: 5,
+        }),
+        signal: AbortSignal.timeout(30000),
+      }
+    )
+    if (!res.ok) return []
+    const data = await res.json()
+    if (!Array.isArray(data)) return []
+
+    return data
+      .filter((item: Record<string, unknown>) => {
+        const url = String(item.url ?? "")
+        return url.includes("reddit.com") && !url.includes("/user/")
+      })
+      .slice(0, 4)
+      .map((item: Record<string, unknown>) => {
+        const url = String(item.url ?? "")
+        // Extract subreddit from URL
+        const subMatch = url.match(/reddit\.com\/r\/([^/]+)/)
+        const subreddit = subMatch ? subMatch[1] : ""
+        return {
+          platform: "reddit" as const,
+          title: String(item.title ?? "").replace(/ - Reddit$/, "").replace(/ : r\/\w+/, ""),
+          url,
+          author: subreddit ? `r/${subreddit}` : "reddit",
+          snippet: String(item.snippet ?? "").slice(0, 150),
+        }
+      })
+  } catch {
+    return []
+  }
+}
+
+// --- Blog via Google Search (Apify) ---
+
+async function fetchBlogs(query: string, programDomain: string): Promise<SocialItem[]> {
+  if (!APIFY_API_KEY) return []
+  try {
+    // Exclude social/video platforms and the program's own domain
+    const domain = programDomain.replace("https://", "").replace("http://", "").split("/")[0]
+    const excludes = [
+      "reddit.com", "youtube.com", "tiktok.com", "twitter.com", "x.com",
+      "instagram.com", "facebook.com", "openaffiliate.dev", domain,
+    ].map((d) => `-site:${d}`).join(" ")
+
+    const res = await fetch(
+      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=25`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          query: `${query} ${excludes}`,
+          maxResults: 5,
+        }),
+        signal: AbortSignal.timeout(30000),
+      }
+    )
+    if (!res.ok) return []
+    const data = await res.json()
+    if (!Array.isArray(data)) return []
+
+    return data
+      .slice(0, 4)
+      .map((item: Record<string, unknown>) => {
+        const url = String(item.url ?? "")
+        // Extract domain as "author"
+        const domainMatch = url.match(/https?:\/\/(?:www\.)?([^/]+)/)
+        const blogDomain = domainMatch ? domainMatch[1] : ""
+        return {
+          platform: "blog" as const,
+          title: String(item.title ?? ""),
+          url,
+          author: blogDomain,
+          snippet: String(item.snippet ?? "").slice(0, 150),
+        }
+      })
+  } catch {
+    return []
+  }
 }
 
 // --- Main handler ---
@@ -259,29 +360,46 @@ export async function GET(
 
   // Intent-driven queries per platform
   const ytQuery = `${program.name} affiliate program review`
-  const ttQuery = `${program.name} affiliate make money`
+  const ttQuery = `${program.name} affiliate`
   const xQuery = `"${program.name}" affiliate program`
+  const redditQuery = `${program.name} affiliate program`
+  const blogQuery = `${program.name} affiliate program review`
 
-  const [ytResult, ttResult, xResult] = await Promise.allSettled([
-    fetchYouTube(ytQuery),
-    RAPIDAPI_KEY ? fetchTikTok(ttQuery) : Promise.resolve([]),
-    RAPIDAPI_KEY ? fetchX(xQuery) : Promise.resolve([]),
-  ])
+  // Fetch all platforms in parallel with global timeout
+  const globalTimeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error("global timeout")), 50000)
+  )
 
-  const raw: SocialItem[] = [
-    ...(ytResult.status === "fulfilled" ? ytResult.value : []),
-    ...(ttResult.status === "fulfilled" ? ttResult.value : []),
-    ...(xResult.status === "fulfilled" ? xResult.value : []),
-  ]
+  let results: PromiseSettledResult<SocialItem[]>[]
+  try {
+    results = await Promise.race([
+      Promise.allSettled([
+        fetchYouTube(ytQuery),
+        fetchTikTok(ttQuery),
+        fetchX(xQuery),
+        fetchReddit(redditQuery),
+        fetchBlogs(blogQuery, program.url),
+      ]),
+      globalTimeout,
+    ]) as PromiseSettledResult<SocialItem[]>[]
+  } catch {
+    // Global timeout — collect whatever resolved
+    results = []
+  }
+
+  const raw: SocialItem[] = results.flatMap((r) =>
+    r.status === "fulfilled" ? r.value : []
+  )
 
   // 1. Filter: min quality threshold + relevance
   const filtered = raw.filter((item) => {
     const min = MIN_VIEWS[item.platform] ?? 0
-    if ((item.views ?? 0) < min) return false
+    const engagement = item.views ?? item.likes ?? 0
+    if (engagement < min && item.platform !== "blog" && item.platform !== "reddit") return false
     return isRelevant(item.title, program.name)
   })
 
-  // 2. Score: composite quality (views × recency × relevance)
+  // 2. Score
   const scored = filtered.map((item) => ({
     ...item,
     qualityScore: computeQualityScore(item),
@@ -297,21 +415,27 @@ export async function GET(
     return true
   })
 
-  // 4. Sort by quality, balanced platform mix (max 3 per platform)
+  // 4. Sort by quality, balanced platform mix
   deduped.sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
 
+  const PLATFORM_MAX: Record<string, number> = {
+    youtube: 4, tiktok: 2, x: 2, reddit: 2, blog: 2,
+  }
   const platformCount = new Map<string, number>()
   const balanced: SocialItem[] = []
   for (const item of deduped) {
+    const max = PLATFORM_MAX[item.platform] ?? 2
     const pc = platformCount.get(item.platform) ?? 0
-    if (pc >= 3) continue
+    if (pc >= max) continue
     platformCount.set(item.platform, pc + 1)
     balanced.push(item)
-    if (balanced.length >= 9) break
+    if (balanced.length >= 11) break
   }
 
-  // 5. Final: group by platform order (YouTube > TikTok > X)
-  const platformOrder = { youtube: 0, tiktok: 1, x: 2 }
+  // 5. Final: group by platform order (YouTube > TikTok > X > Reddit > Blog)
+  const platformOrder: Record<string, number> = {
+    youtube: 0, tiktok: 1, x: 2, reddit: 3, blog: 4,
+  }
   balanced.sort((a, b) => {
     const pa = platformOrder[a.platform] ?? 9
     const pb = platformOrder[b.platform] ?? 9

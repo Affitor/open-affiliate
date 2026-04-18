@@ -30,6 +30,7 @@ import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
+import { SocialListen } from "@/components/social-listen";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -284,6 +285,9 @@ export default async function ProgramPage({
               {program.description}
             </div>
           </div>
+
+          {/* Social Listen */}
+          <SocialListen slug={slug} />
 
           {/* How to Join */}
           {(program.signupUrl ?? program.approval ?? program.approvalTime) && (
