@@ -114,6 +114,7 @@ export interface SearchOptions {
   query?: string
   category?: string
   commissionType?: string
+  network?: string
   sort?: SortOption
   verified?: boolean
 }
@@ -143,6 +144,10 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
 
   if (opts.commissionType) {
     results = results.filter((p) => p.commission.type === opts.commissionType)
+  }
+
+  if (opts.network) {
+    results = results.filter((p) => (p.network ?? "In-house") === opts.network)
   }
 
   if (opts.verified) {

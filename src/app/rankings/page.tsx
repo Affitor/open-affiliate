@@ -378,13 +378,14 @@ function NetworksTable() {
             {stats.map((row, i) => (
               <tr
                 key={row.network}
-                className="border-t border-border/20 hover:bg-muted/20 transition-colors"
+                className="border-t border-border/20 hover:bg-muted/20 transition-colors cursor-pointer group"
+                onClick={() => window.location.href = `/programs?network=${encodeURIComponent(row.network)}`}
               >
                 <td className="py-3 px-3 text-center">
                   <RankBadge rank={i + 1} />
                 </td>
                 <td className="py-3 px-3">
-                  <span className="text-sm font-medium">
+                  <span className="text-sm font-medium group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                     {formatNetworkName(row.network)}
                   </span>
                 </td>
@@ -406,6 +407,7 @@ function NetworksTable() {
                 <td className="py-3 px-3 hidden md:table-cell">
                   <Link
                     href={`/programs/${row.topProgram.slug}`}
+                    onClick={(e) => e.stopPropagation()}
                     className="flex items-center gap-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     <ProgramLogo
