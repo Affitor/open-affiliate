@@ -27,6 +27,7 @@ export const docsNav: DocsSidebarGroup[] = [
       { title: "AI SDK", href: "/docs/ai-sdk", description: "Use the Vercel AI SDK to build AI-powered affiliate tools." },
       { title: "TypeScript SDK", href: "/docs/sdk", description: "Typed client for searching and querying programs." },
       { title: "YAML Schema", href: "/docs/yaml-schema", description: "The structure of a program entry in the registry." },
+      { title: "Affiliate Score", href: "/docs/affiliate-score", description: "How the scoring algorithm ranks programs from 0 to 100." },
     ],
   },
   {
