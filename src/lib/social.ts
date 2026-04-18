@@ -85,14 +85,23 @@ const MIN_VIEWS: Record<string, number> = {
 // --- YouTube via Apify ---
 
 async function fetchYouTube(query: string): Promise<SocialItem[]> {
+  // Prefer RapidAPI (free) over Apify ($0.03-0.05/call)
+  if (RAPIDAPI_KEY) {
+    try {
+      const results = await fetchYouTubeRapidAPI(query)
+      if (results.length > 0) return results
+    } catch {
+      // Fall through to Apify
+    }
+  }
   if (APIFY_API_KEY) {
     try {
       return await fetchYouTubeApify(query)
     } catch {
-      // Fall through to RapidAPI
+      return []
     }
   }
-  return fetchYouTubeRapidAPI(query)
+  return []
 }
 
 async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
