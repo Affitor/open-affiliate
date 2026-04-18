@@ -8,6 +8,8 @@ The open registry of affiliate programs. Built for developers and AI agents.
 [![MCP](https://img.shields.io/badge/MCP-server-purple)](https://www.npmjs.com/package/openaffiliate-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+![OpenAffiliate Programs](https://openaffiliate.dev/screenshot.png)
+
 ## What is this?
 
 OpenAffiliate is a community-driven, open-source registry of affiliate programs. Every program is stored as a YAML file in this repo, making it easy to contribute, review, and integrate.
