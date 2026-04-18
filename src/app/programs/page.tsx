@@ -184,6 +184,9 @@ function ProgramsContent() {
   const [selectedType, setSelectedType] = useState(
     searchParams.get("type") ?? ""
   );
+  const [selectedNetwork, setSelectedNetwork] = useState(
+    searchParams.get("network") ?? ""
+  );
   const [sort, setSort] = useState<SortOption>(
     (searchParams.get("sort") as SortOption) ?? "relevance"
   );
@@ -206,18 +209,19 @@ function ProgramsContent() {
   );
 
   const updateFilters = useCallback(
-    (updates: Partial<{ q: string; category: string; type: string; sort: string }>) => {
+    (updates: Partial<{ q: string; category: string; type: string; network: string; sort: string }>) => {
       const next = {
         q: updates.q ?? query,
         category: updates.category ?? selectedCategory,
         type: updates.type ?? selectedType,
+        network: updates.network ?? selectedNetwork,
         sort: updates.sort ?? sort,
       };
       // Don't include defaults in URL
       if (next.sort === "relevance") next.sort = "";
       syncUrl(next);
     },
-    [query, selectedCategory, selectedType, sort, syncUrl]
+    [query, selectedCategory, selectedType, selectedNetwork, sort, syncUrl]
   );
 
   const filtered = useMemo(
@@ -226,9 +230,10 @@ function ProgramsContent() {
         query: query || undefined,
         category: selectedCategory || undefined,
         commissionType: selectedType || undefined,
+        network: selectedNetwork || undefined,
         sort,
       }),
-    [query, selectedCategory, selectedType, sort]
+    [query, selectedCategory, selectedType, selectedNetwork, sort]
   );
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
@@ -262,16 +267,22 @@ function ProgramsContent() {
     setPageSize(size);
     setPage(1);
   };
+  const handleNetwork = (net: string) => {
+    setSelectedNetwork(net);
+    setPage(1);
+    updateFilters({ network: net });
+  };
   const clearAll = () => {
     setQuery("");
     setSelectedCategory("");
     setSelectedType("");
+    setSelectedNetwork("");
     setSort("relevance");
     setPage(1);
     syncUrl({});
   };
 
-  const hasActiveFilters = !!(query || selectedCategory || selectedType);
+  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork);
 
   // Category options with counts
   const categoryOptions = [
@@ -442,6 +453,15 @@ function ProgramsContent() {
                 className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 {COMMISSION_TYPE_LABELS[selectedType] ?? selectedType}
+                <X className="h-3 w-3" />
+              </button>
+            )}
+            {selectedNetwork && (
+              <button
+                onClick={() => handleNetwork("")}
+                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                {selectedNetwork}
                 <X className="h-3 w-3" />
               </button>
             )}
