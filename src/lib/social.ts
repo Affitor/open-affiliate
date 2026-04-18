@@ -328,6 +328,10 @@ async function fetchBlogs(query: string, programDomain: string): Promise<SocialI
 // --- Main exported function ---
 
 async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
+  // Skip during build — fetch on first visit via ISR instead of calling
+  // 2,200+ external APIs during static generation
+  if (process.env.NEXT_PHASE === "phase-production-build") return []
+
   const program = getProgram(slug)
   if (!program) return []
   if (!RAPIDAPI_KEY && !APIFY_API_KEY) return []

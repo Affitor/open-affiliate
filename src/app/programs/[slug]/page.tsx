@@ -111,7 +111,7 @@ export default async function ProgramPage({
   const joinUrl = program.signupUrl ?? program.url;
 
   // Social Listen — server-side fetch with ISR cache
-  const socialItems = await fetchSocialItems(slug)
+  const socialItems = await fetchSocialItems(slug) ?? []
 
   // Affiliate Score
   const score = affiliateScore(program);
@@ -189,7 +189,7 @@ export default async function ProgramPage({
               worstRating: "1",
               ratingCount: categoryPrograms.length,
             },
-            ...(socialItems.length > 0 && {
+            ...(socialItems?.length > 0 && {
               subjectOf: socialItems.slice(0, 6).map((item) => ({
                 "@type": item.platform === "youtube" || item.platform === "tiktok" ? "VideoObject" : "Article",
                 name: item.title,

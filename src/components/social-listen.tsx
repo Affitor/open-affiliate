@@ -127,8 +127,8 @@ function PlatformSection({ platform, items }: { platform: string; items: SocialI
   )
 }
 
-export function SocialListen({ items }: { items: SocialItem[] }) {
-  if (items.length === 0) return null
+export function SocialListen({ items }: { items?: SocialItem[] }) {
+  if (!items || items.length === 0) return null
 
   const grouped = new Map<string, SocialItem[]>()
   for (const item of items) {
