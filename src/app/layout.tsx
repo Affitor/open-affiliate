@@ -76,9 +76,9 @@ function Footer() {
             </p>
             <ul className="space-y-2.5">
               {[
-                { label: "CLI", href: "/docs" },
-                { label: "MCP", href: "/docs" },
-                { label: "API", href: "/docs" },
+                { label: "CLI", href: "/docs/cli" },
+                { label: "MCP", href: "/docs/mcp" },
+                { label: "API", href: "/docs/api" },
                 { label: "GitHub", href: "https://github.com/Affitor/open-affiliate", external: true },
               ].map(({ label, href, external }) => (
                 <li key={label}>
