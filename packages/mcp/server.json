@@ -6,12 +6,12 @@
     "url": "https://github.com/Affitor/open-affiliate",
     "source": "github"
   },
-  "version": "0.2.0",
+  "version": "0.0.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "openaffiliate-mcp",
-      "version": "0.2.0",
+      "version": "0.0.2",
       "transport": {
         "type": "stdio"
       }

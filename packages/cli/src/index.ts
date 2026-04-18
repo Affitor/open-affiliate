@@ -55,7 +55,7 @@ const program = new Command();
 program
   .name("openaffiliate")
   .description("Search and manage affiliate programs from your terminal")
-  .version("0.2.0")
+  .version("0.0.2")
   .option("--json", "Output raw JSON (for agents and scripts)");
 
 program

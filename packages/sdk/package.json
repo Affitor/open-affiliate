@@ -1,6 +1,6 @@
 {
   "name": "openaffiliate-sdk",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "TypeScript SDK for the OpenAffiliate registry. Search, filter, and integrate affiliate programs programmatically.",
   "type": "module",
   "main": "./dist/index.js",

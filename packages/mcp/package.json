@@ -1,6 +1,6 @@
 {
   "name": "openaffiliate-mcp",
-  "version": "0.2.0",
+  "version": "0.0.2",
   "description": "MCP server for the OpenAffiliate registry. Search affiliate programs from Claude, Cursor, or any MCP client.",
   "type": "module",
   "bin": {
@@ -16,7 +16,7 @@
   "mcpName": "io.github.affitor/openaffiliate-mcp",
   "author": "Affitor <team@affitor.com> (https://affitor.com)",
   "scripts": {
-    "build": "tsup src/index.ts --format esm --dts --clean",
+    "build": "tsup src/index.ts --format esm --clean",
     "dev": "tsup src/index.ts --format esm --watch",
     "lint": "tsc --noEmit"
   },

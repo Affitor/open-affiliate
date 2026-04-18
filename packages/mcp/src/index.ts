@@ -41,7 +41,7 @@ async function fetchJSON(path: string) {
 
 const server = new McpServer({
   name: "openaffiliate",
-  version: "0.2.0",
+  version: "0.0.2",
 });
 
 server.tool(

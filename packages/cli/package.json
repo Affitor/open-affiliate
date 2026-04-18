@@ -1,6 +1,6 @@
 {
   "name": "openaffiliate",
-  "version": "0.2.0",
+  "version": "0.0.2",
   "description": "Search and manage affiliate programs from your terminal. Built for developers and AI agents.",
   "type": "module",
   "bin": {
