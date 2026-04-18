@@ -10,6 +10,8 @@ import {
   List,
   X,
   ArrowRight,
+  Search,
+  ShieldCheck,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
@@ -20,6 +22,9 @@ import {
   searchPrograms,
   commissionTypes,
   categoryCounts,
+  networks,
+  networkCounts,
+  affiliateScore,
   type SortOption,
   type Program,
   commissionLabel,
@@ -90,12 +95,11 @@ function ProgramCardGrid({ program }: { program: Program }) {
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
+        <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+          Score: {affiliateScore(program)}
+        </Badge>
         <Badge variant="secondary" className="text-[11px]">
-          {program.commission.rate}
-          {typeof program.commission.rate === "number" ||
-          program.commission.rate.includes("%")
-            ? ""
-            : ""}{" "}
+          {program.commission.rate}{" "}
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
@@ -141,6 +145,9 @@ function ProgramRowList({ program }: { program: Program }) {
       </div>
 
       <div className="hidden sm:flex items-center gap-3 shrink-0">
+        <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+          {affiliateScore(program)}
+        </Badge>
         <Badge variant="secondary" className="text-[11px]">
           {program.commission.rate}{" "}
           {commissionLabel(program.commission)}
@@ -184,6 +191,7 @@ function ProgramsContent() {
   const [sort, setSort] = useState<SortOption>(
     (searchParams.get("sort") as SortOption) ?? "relevance"
   );
+  const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState<number>(25);
   const [view, setView] = usePersistedView();
@@ -225,8 +233,9 @@ function ProgramsContent() {
         commissionType: selectedType || undefined,
         network: selectedNetwork || undefined,
         sort,
+        verified: verifiedOnly || undefined,
       }),
-    [query, selectedCategory, selectedType, selectedNetwork, sort]
+    [query, selectedCategory, selectedType, selectedNetwork, sort, verifiedOnly]
   );
 
   // Debounced search tracking
@@ -282,12 +291,13 @@ function ProgramsContent() {
     setSelectedCategory("");
     setSelectedType("");
     setSelectedNetwork("");
+    setVerifiedOnly(false);
     setSort("relevance");
     setPage(1);
     syncUrl({});
   };
 
-  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork);
+  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork || verifiedOnly);
 
   // Category options with counts
   const categoryOptions = [
@@ -305,6 +315,26 @@ function ProgramsContent() {
     ...commissionTypes.map((t) => ({
       value: t,
       label: COMMISSION_TYPE_LABELS[t] ?? t,
+    })),
+  ];
+
+  // Network options with counts
+  const NETWORK_LABELS: Record<string, string> = {
+    "In-house": "In-house",
+    partnerstack: "PartnerStack",
+    impact: "Impact",
+    rewardful: "Rewardful",
+    "cj-affiliate": "CJ Affiliate",
+    firstpromoter: "FirstPromoter",
+    awin: "Awin",
+    dub: "Dub",
+  };
+  const networkOptions = [
+    { value: "", label: "All Networks" },
+    ...networks.map((n) => ({
+      value: n,
+      label: NETWORK_LABELS[n] ?? n.charAt(0).toUpperCase() + n.slice(1),
+      count: networkCounts[n] ?? 0,
     })),
   ];
 
@@ -337,6 +367,17 @@ function ProgramsContent() {
 
       {/* Filter toolbar */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
+        {/* Search input */}
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Search programs..."
+            className="rounded-lg border border-border/50 bg-card/50 pl-8 pr-3 py-2 text-xs w-44 focus:outline-none focus:border-border transition-colors placeholder:text-muted-foreground/60"
+          />
+        </div>
         <FilterSelect
           label="Category"
           value={selectedCategory}
@@ -350,11 +391,30 @@ function ProgramsContent() {
           options={typeOptions}
         />
         <FilterSelect
+          label="Network"
+          value={selectedNetwork}
+          onChange={handleNetwork}
+          options={networkOptions}
+        />
+        <FilterSelect
           label="Sort"
           value={sort}
           onChange={handleSort}
           options={sortOptions}
         />
+
+        {/* Verified toggle */}
+        <button
+          onClick={() => { setVerifiedOnly(!verifiedOnly); setPage(1); }}
+          className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+            verifiedOnly
+              ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+              : "border-border/50 bg-card/50 text-muted-foreground hover:border-border"
+          }`}
+        >
+          <ShieldCheck className="h-3.5 w-3.5" />
+          Verified
+        </button>
 
         {/* Spacer */}
         <div className="flex-1" />
