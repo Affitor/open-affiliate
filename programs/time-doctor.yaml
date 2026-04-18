@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://www.timedoctor.com/partner/affiliate
+signup_url: https://timedoctor.partnerstack.com/?group=timedoctoraffiliate
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

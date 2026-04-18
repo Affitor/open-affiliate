@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/freshdesk
+signup_url: https://www.freshworks.com/company/affiliate-partner/affiliate-signup/
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

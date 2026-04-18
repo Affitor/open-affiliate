@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/sunsama
+signup_url: https://dash.partnerstack.com/application?company=sunsama&group=ambassadorsaffiliate
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

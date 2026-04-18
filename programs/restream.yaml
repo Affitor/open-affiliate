@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://restream.io/referral-program
+signup_url: https://restream.partnerstack.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

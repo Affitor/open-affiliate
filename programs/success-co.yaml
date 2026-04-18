@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://www.success.co/partner/affiliate
+signup_url: https://success.partnerstack.com/?group=affiliates
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

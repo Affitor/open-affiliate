@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/prevuehr
+signup_url: https://go.prevuehr.com/affiliate-referral
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

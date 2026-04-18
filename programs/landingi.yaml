@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://landingi.com/digital-marketing/affiliate/
+signup_url: https://landingi.com/company/affiliate-program/
 approval: manual
 approval_time: 1-5 business days
 restrictions: null
