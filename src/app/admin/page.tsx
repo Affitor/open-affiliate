@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { connection } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { programs } from "@/lib/programs";
@@ -90,7 +90,7 @@ export default async function AdminPage({
   await connection();
   const { key } = await searchParams;
   if (key !== process.env.ADMIN_SECRET) {
-    redirect("/");
+    notFound();
   }
 
   const now = new Date();
