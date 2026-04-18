@@ -118,7 +118,7 @@ export interface SearchOptions {
   verified?: boolean
 }
 
-function parseCommissionRate(rate: string | number): number {
+export function parseCommissionRate(rate: string | number): number {
   if (typeof rate === "number") return rate
   // Handle ranges like "20-30%" — take the higher value
   const rangeMatch = rate.match(/(\d+)\s*-\s*(\d+)/)
@@ -201,3 +201,64 @@ export const categoryCounts: Record<string, number> = programs.reduce(
   },
   {} as Record<string, number>
 )
+
+export interface NetworkStats {
+  network: string
+  programCount: number
+  avgCommission: number
+  bestCommission: number
+  topProgram: Program
+}
+
+export function getNetworkStats(): NetworkStats[] {
+  const networkMap = new Map<string, Program[]>()
+  for (const p of programs) {
+    const net = p.network ?? "In-house"
+    if (!networkMap.has(net)) networkMap.set(net, [])
+    networkMap.get(net)!.push(p)
+  }
+
+  return Array.from(networkMap.entries())
+    .map(([network, progs]) => {
+      const rates = progs.map((p) => parseCommissionRate(p.commission.rate))
+      const bestIdx = rates.indexOf(Math.max(...rates))
+      return {
+        network,
+        programCount: progs.length,
+        avgCommission: rates.reduce((a, b) => a + b, 0) / rates.length,
+        bestCommission: Math.max(...rates),
+        topProgram: progs[bestIdx],
+      }
+    })
+    .sort((a, b) => b.programCount - a.programCount)
+}
+
+export interface CategoryStats {
+  category: string
+  programCount: number
+  highestCommission: number
+  avgCommission: number
+  topProgram: Program
+}
+
+export function getCategoryStats(): CategoryStats[] {
+  const catMap = new Map<string, Program[]>()
+  for (const p of programs) {
+    if (!catMap.has(p.category)) catMap.set(p.category, [])
+    catMap.get(p.category)!.push(p)
+  }
+
+  return Array.from(catMap.entries())
+    .map(([category, progs]) => {
+      const rates = progs.map((p) => parseCommissionRate(p.commission.rate))
+      const bestIdx = rates.indexOf(Math.max(...rates))
+      return {
+        category,
+        programCount: progs.length,
+        highestCommission: Math.max(...rates),
+        avgCommission: rates.reduce((a, b) => a + b, 0) / rates.length,
+        topProgram: progs[bestIdx],
+      }
+    })
+    .sort((a, b) => b.programCount - a.programCount)
+}
