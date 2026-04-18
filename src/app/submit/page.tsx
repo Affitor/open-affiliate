@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { track } from "@/lib/track";
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/programs";
@@ -115,6 +117,14 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
         Add your affiliate program to the open registry. Fill out the form to
         generate a YAML file, then open a PR.
       </p>
+
+      <Link
+        href="/docs/submit"
+        className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border/40 bg-muted/20 px-4 py-2.5 text-sm text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors"
+      >
+        <BookOpen className="h-3.5 w-3.5" />
+        Read the submission guide — including how to let your AI agent submit for you
+      </Link>
 
       <div className="mt-8 space-y-6">
         {/* Basic Info */}
