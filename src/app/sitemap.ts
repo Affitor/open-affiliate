@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { programs, categories } from "@/lib/programs";
+import { programs, categories, categoryToSlug } from "@/lib/programs";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -13,11 +13,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/docs`, changeFrequency: "monthly", priority: 0.6 },
   ];
 
+  const categoryPages: MetadataRoute.Sitemap = categories.map((c) => ({
+    url: `${BASE_URL}/categories/${categoryToSlug(c)}`,
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
     url: `${BASE_URL}/programs/${p.slug}`,
     changeFrequency: "weekly" as const,
     priority: 0.7,
   }));
 
-  return [...staticPages, ...programPages];
+  return [...staticPages, ...categoryPages, ...programPages];
 }

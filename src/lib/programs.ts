@@ -202,6 +202,14 @@ export const categoryCounts: Record<string, number> = programs.reduce(
   {} as Record<string, number>
 )
 
+export function categoryToSlug(category: string): string {
+  return category.toLowerCase().replace(/\s+/g, "-").replace(/[&]/g, "and").replace(/[^a-z0-9-]/g, "")
+}
+
+export function slugToCategory(slug: string): string | undefined {
+  return categories.find((c) => categoryToSlug(c) === slug)
+}
+
 export interface NetworkStats {
   network: string
   programCount: number
