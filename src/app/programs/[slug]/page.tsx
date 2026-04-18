@@ -481,35 +481,6 @@ export default async function ProgramPage({
             </div>
           )}
 
-          {/* Badge embed */}
-          <div className="rounded-xl border border-border/50 bg-card/50 p-5">
-            <h3 className="text-sm font-semibold mb-3">Badge</h3>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={`/badge/${program.slug}.svg`}
-              alt={`${program.name} on OpenAffiliate`}
-              className="mb-3"
-            />
-            <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-              <code className="text-[10px] font-mono text-muted-foreground truncate">
-                Markdown
-              </code>
-              <CopyButton text={badgeMarkdown} />
-            </div>
-          </div>
-
-          {/* Tags */}
-          <div className="rounded-xl border border-border/50 bg-card/50 p-5">
-            <h3 className="text-sm font-semibold mb-3">Tags</h3>
-            <div className="flex flex-wrap gap-1.5">
-              {program.tags.map((tag) => (
-                <Badge key={tag} variant="outline" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
           {/* Connect card */}
           <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
             <h3 className="text-sm font-semibold flex items-center gap-1.5">
@@ -557,6 +528,29 @@ export default async function ProgramPage({
               </div>
             </div>
           </div>
+
+          {/* Badge embed */}
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5">
+            <h3 className="text-sm font-semibold mb-3">Badge</h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={`/badge/${program.slug}.svg`} alt={`${program.name} on OpenAffiliate`} className="mb-3" />
+            <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+              <code className="text-[10px] font-mono text-muted-foreground truncate">Markdown</code>
+              <CopyButton text={badgeMarkdown} />
+            </div>
+          </div>
+
+          {/* Tags */}
+          {program.tags.length > 0 && (
+            <div className="rounded-xl border border-border/50 bg-card/50 p-5">
+              <h3 className="text-sm font-semibold mb-3">Tags</h3>
+              <div className="flex flex-wrap gap-1.5">
+                {program.tags.map((tag) => (
+                  <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Join button */}
           <a
