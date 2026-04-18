@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { programs, categories, categoryToSlug, networkToSlug } from "@/lib/programs";
+import { docsNav } from "@/app/docs/_config";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -12,8 +13,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/networks`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/compare`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/submit`, changeFrequency: "monthly", priority: 0.5 },
-    { url: `${BASE_URL}/docs`, changeFrequency: "monthly", priority: 0.6 },
   ];
+
+  const docsPages: MetadataRoute.Sitemap = docsNav
+    .flatMap((g) => g.items)
+    .map((item) => ({
+      url: `${BASE_URL}${item.href}`,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
 
   const categoryPages: MetadataRoute.Sitemap = categories.map((c) => ({
     url: `${BASE_URL}/categories/${categoryToSlug(c)}`,
@@ -34,5 +42,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...categoryPages, ...networkPages, ...programPages];
+  return [...staticPages, ...docsPages, ...categoryPages, ...networkPages, ...programPages];
 }

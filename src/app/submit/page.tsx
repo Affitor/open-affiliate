@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { track } from "@/lib/track";
+import Link from "next/link";
+import { BookOpen } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/programs";
