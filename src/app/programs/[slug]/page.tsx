@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import {
@@ -30,6 +31,36 @@ import { programs, getProgram } from "@/lib/programs";
 
 export function generateStaticParams() {
   return programs.map((p) => ({ slug: p.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const program = getProgram(slug);
+  if (!program) return { title: "Program Not Found" };
+
+  const title = `${program.name} Affiliate Program — ${program.commission.rate} ${program.commission.type} | OpenAffiliate`;
+  const description = `${program.shortDescription}. ${program.commission.rate} ${program.commission.type} commission, ${program.cookieDays}-day cookie. Join the ${program.name} affiliate program.`;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `https://openaffiliate.dev/programs/${slug}`,
+      siteName: "OpenAffiliate",
+      type: "website",
+    },
+    twitter: {
+      card: "summary",
+      title: `${program.name} — ${program.commission.rate} ${program.commission.type}`,
+      description,
+    },
+  };
 }
 
 function BoolIcon({ value }: { value?: boolean }) {

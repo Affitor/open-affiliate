@@ -1,3 +1,18 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Documentation — OpenAffiliate",
+  description:
+    "Learn how to use the OpenAffiliate CLI, REST API, and MCP server to search and integrate affiliate programs.",
+  openGraph: {
+    title: "Documentation — OpenAffiliate",
+    description:
+      "CLI, API, and MCP documentation for the open affiliate program registry.",
+    url: "https://openaffiliate.dev/docs",
+    siteName: "OpenAffiliate",
+  },
+};
+
 export default function DocsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">

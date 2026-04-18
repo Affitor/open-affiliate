@@ -18,9 +18,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "OpenAffiliate — The Open Registry of Affiliate Programs",
+  title: {
+    default: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    template: "%s | OpenAffiliate",
+  },
   description:
     "Discover, compare, and integrate affiliate programs. Built for developers and AI agents. Open source, community-driven.",
+  metadataBase: new URL("https://openaffiliate.dev"),
+  openGraph: {
+    title: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    description:
+      "Discover, compare, and integrate affiliate programs. Built for developers and AI agents.",
+    url: "https://openaffiliate.dev",
+    siteName: "OpenAffiliate",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "OpenAffiliate",
+    description:
+      "The open registry of affiliate programs. Built for developers and AI agents.",
+  },
 };
 
 
