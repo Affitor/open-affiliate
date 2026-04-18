@@ -6,7 +6,6 @@ import {
   ExternalLink,
   Clock,
   DollarSign,
-  Terminal,
   Bot,
   GitFork,
   Shield,
@@ -28,6 +27,8 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { CopyButton } from "@/components/copy-button";
 import { VoteButton } from "@/components/vote-button";
+import { ConnectTabs } from "@/components/connect-tabs";
+import { CapabilityCards } from "@/components/capability-cards";
 import { programs, getProgram, parseCommissionRate } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -511,53 +512,25 @@ export default async function ProgramPage({
             </div>
           )}
 
-          {/* Connect card */}
-          <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
-            <h3 className="text-sm font-semibold flex items-center gap-1.5">
-              <Terminal className="h-3.5 w-3.5 text-muted-foreground" />
-              Connect
-            </h3>
+          {/* Capabilities */}
+          <CapabilityCards
+            tools={[
+              { title: "search_programs", description: "Search by keyword, category, commission type" },
+              { title: "get_program", description: "Full details including agent instructions" },
+              { title: "list_categories", description: "All categories with program counts" },
+            ]}
+            resources={[
+              { title: "REST API", description: `GET /api/programs/${program.slug}` },
+              { title: "MCP Server", description: "HTTP and stdio transports" },
+              ...(program.dashboardUrl ? [{ title: "Dashboard", description: program.dashboardUrl }] : []),
+            ]}
+            useCases={
+              program.agentUseCases?.map((uc) => ({ title: uc })) ?? []
+            }
+          />
 
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">CLI</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-emerald-700 dark:text-emerald-400 truncate">
-                  npx openaffiliate info {program.slug}
-                </code>
-                <CopyButton text={`npx openaffiliate info ${program.slug}`} />
-              </div>
-            </div>
-
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (HTTP)</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  openaffiliate.dev/api/mcp
-                </code>
-                <CopyButton text={mcpHttp} />
-              </div>
-            </div>
-
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (stdio)</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  npx openaffiliate-mcp
-                </code>
-                <CopyButton text={mcpStdio} />
-              </div>
-            </div>
-
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">API</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  /api/programs/{program.slug}
-                </code>
-                <CopyButton text={`curl https://openaffiliate.dev/api/programs/${program.slug}`} />
-              </div>
-            </div>
-          </div>
+          {/* Connect — tabbed code snippets */}
+          <ConnectTabs slug={program.slug} mcpHttp={mcpHttp} mcpStdio={mcpStdio} />
 
           {/* Badge embed */}
           <div className="rounded-xl border border-border/50 bg-card/50 p-5">
