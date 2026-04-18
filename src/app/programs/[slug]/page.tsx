@@ -29,7 +29,7 @@ import { CopyButton } from "@/components/copy-button";
 import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
-import { programs, getProgram, parseCommissionRate } from "@/lib/programs";
+import { programs, getProgram, parseCommissionRate, commissionLabel } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
 export function generateStaticParams() {
@@ -229,7 +229,7 @@ export default async function ProgramPage({
         </div>
         <StatBadge
           icon={<DollarSign className="h-3 w-3" />}
-          label={`${program.commission.rate}% ${program.commission.type}`}
+          label={`${program.commission.rate}% ${commissionLabel(program.commission)}`}
         />
         <StatBadge
           icon={<Clock className="h-3 w-3" />}
@@ -404,7 +404,7 @@ export default async function ProgramPage({
             <SidebarRow
               label="Rate"
               icon={<DollarSign className="h-3 w-3" />}
-              value={<>{program.commission.rate}% <span className="text-xs text-muted-foreground font-normal">{program.commission.type}</span></>}
+              value={<>{program.commission.rate}% <span className="text-xs text-muted-foreground font-normal">{commissionLabel(program.commission)}</span></>}
             />
 
             {program.commissionDuration && (

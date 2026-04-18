@@ -10,6 +10,7 @@ import {
   networkToSlug,
   slugToNetwork,
   parseCommissionRate,
+  commissionLabel,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -144,7 +145,7 @@ export default async function NetworkPage({
                     <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{program.commission.rate}</span>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
-                    <Badge variant="secondary" className="text-[10px]">{program.commission.type}</Badge>
+                    <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
                     <span className="text-xs text-muted-foreground">{program.cookieDays}d</span>

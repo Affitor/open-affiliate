@@ -23,6 +23,7 @@ import {
   categoryCounts,
   type SortOption,
   type Program,
+  commissionLabel,
 } from "@/lib/programs";
 import { track } from "@/lib/track";
 
@@ -104,7 +105,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           program.commission.rate.includes("%")
             ? ""
             : ""}{" "}
-          {program.commission.type === "recurring" ? "recurring" : program.commission.type}
+          {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.cookieDays}d cookie
@@ -150,7 +151,7 @@ function ProgramRowList({ program }: { program: Program }) {
       <div className="hidden sm:flex items-center gap-3 shrink-0">
         <Badge variant="secondary" className="text-[11px]">
           {program.commission.rate}{" "}
-          {program.commission.type === "recurring" ? "recurring" : program.commission.type}
+          {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.cookieDays}d

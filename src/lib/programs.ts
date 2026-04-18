@@ -108,6 +108,17 @@ export function getProgram(slug: string): Program | undefined {
   return programs.find((p) => p.slug === slug)
 }
 
+/** Short label for commission type, e.g. "recurring/12mo", "rec/lifetime", "one-time" */
+export function commissionLabel(c: Program["commission"], short = false): string {
+  const type = c.type === "recurring" ? (short ? "rec" : "recurring") : c.type;
+  if (c.type !== "recurring" || !c.duration) return type;
+  const d = String(c.duration).toLowerCase().trim();
+  if (d === "lifetime") return `${type}/lifetime`;
+  const m = d.match(/^(\d+)\s*months?$/);
+  if (m) return `${type}/${m[1]}mo`;
+  return `${type}/${d}`;
+}
+
 export type SortOption = "relevance" | "az" | "za" | "commission_desc" | "newest"
 
 export interface SearchOptions {

@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate } from "@/lib/programs";
+import { programs, categories, parseCommissionRate, commissionLabel } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 function affiliateScore(p: Program): number {
@@ -122,7 +122,7 @@ function RankingsPreview() {
                     {program.commission.rate}
                   </span>
                   <span className="text-[10px] text-muted-foreground ml-1">
-                    {program.commission.type === "recurring" ? "rec" : program.commission.type}
+                    {commissionLabel(program.commission, true)}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 text-center hidden sm:table-cell">

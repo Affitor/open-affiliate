@@ -11,6 +11,7 @@ import {
   categoryToSlug,
   slugToCategory,
   parseCommissionRate,
+  commissionLabel,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -212,7 +213,7 @@ export default async function CategoryPage({
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
                     <Badge variant="secondary" className="text-[10px]">
-                      {program.commission.type}
+                      {commissionLabel(program.commission)}
                     </Badge>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">

@@ -17,6 +17,7 @@ import {
   getNetworkStats,
   getCategoryStats,
   type Program,
+  commissionLabel,
 } from "@/lib/programs";
 
 type Tab = "programs" | "networks" | "categories";
@@ -146,9 +147,7 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
               </Badge>
               <Badge variant="secondary" className="text-[11px]">
                 {program.commission.rate}{" "}
-                {program.commission.type === "recurring"
-                  ? "recurring"
-                  : program.commission.type}
+                {commissionLabel(program.commission)}
               </Badge>
               <Badge variant="outline" className="text-[11px]">
                 {program.cookieDays}d cookie
