@@ -35,6 +35,15 @@ function formatNetworkName(name: string): string {
     .join(" ");
 }
 
+function affiliateScore(p: Program): number {
+  const commRate = parseCommissionRate(p.commission.rate);
+  const commScore = Math.min(commRate / 50, 1) * 50;
+  const cookieScore = Math.min(p.cookieDays / 90, 1) * 20;
+  const recurringScore = p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0;
+  const verifiedScore = p.verified ? 10 : 0;
+  return Math.round(commScore + cookieScore + recurringScore + verifiedScore);
+}
+
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
@@ -151,16 +160,7 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
   );
 }
 
-function affiliateScore(p: Program): number {
-  const commRate = parseCommissionRate(p.commission.rate);
-  const commScore = Math.min(commRate / 50, 1) * 50;
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 20;
-  const recurringScore = p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0;
-  const verifiedScore = p.verified ? 10 : 0;
-  return Math.round(commScore + cookieScore + recurringScore + verifiedScore);
-}
-
-type ColumnSort = "score" | "commission" | "cookie" | "payout" | "category" | "network" | "name";
+type ColumnSort = "score" | "commission" | "cookie" | "category" | "name";
 type SortDir = "asc" | "desc";
 
 function SortHeader({
@@ -233,12 +233,8 @@ function ProgramsTable({
           return (parseCommissionRate(a.commission.rate) - parseCommissionRate(b.commission.rate)) * dir;
         case "cookie":
           return (a.cookieDays - b.cookieDays) * dir;
-        case "payout":
-          return (a.payout.minimum - b.payout.minimum) * dir;
         case "category":
           return a.category.localeCompare(b.category) * dir;
-        case "network":
-          return (a.network ?? "").localeCompare(b.network ?? "") * dir;
         case "name":
           return a.name.localeCompare(b.name) * dir;
         default:
@@ -260,18 +256,13 @@ function ProgramsTable({
               <th className="w-12 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
                 #
               </th>
-              <SortHeader label="Program" column="name" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="text-left min-w-[180px]" />
-              <SortHeader label="Commission" column="commission" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-28 text-left" />
-              <th className="w-24 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Type
-              </th>
+              <SortHeader label="Program" column="name" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="text-left" />
+              <SortHeader label="Commission" column="commission" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-28 text-left hidden sm:table-cell" />
               <SortHeader label="Cookie" column="cookie" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-20 text-center hidden sm:table-cell" />
-              <SortHeader label="Payout" column="payout" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-24 text-left hidden lg:table-cell" />
-              <SortHeader label="Category" column="category" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-32 text-left hidden lg:table-cell" />
-              <SortHeader label="Network" column="network" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-28 text-left hidden md:table-cell" />
+              <SortHeader label="Category" column="category" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-28 text-left hidden md:table-cell" />
               <SortHeader label="Score" column="score" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-16 text-center" />
-              <th className="w-14 py-3 px-2 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Vote
+              <th className="w-16 py-3 px-2 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+                Votes
               </th>
             </tr>
           </thead>
@@ -304,42 +295,31 @@ function ProgramsTable({
                           <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
                         )}
                       </div>
+                      <span className="text-xs text-muted-foreground">
+                        {program.category}
+                        <span className="mx-1 text-border">&middot;</span>
+                        {COMMISSION_TYPE_LABELS[program.commission.type] ?? program.commission.type}
+                      </span>
                     </div>
                   </Link>
                 </td>
-                <td className="py-3 px-3">
+                <td className="py-3 px-3 hidden sm:table-cell">
                   <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
                     {program.commission.rate}
                   </span>
                 </td>
-                <td className="py-3 px-3 hidden sm:table-cell">
-                  <Badge variant="secondary" className="text-[10px]">
-                    {COMMISSION_TYPE_LABELS[program.commission.type] ??
-                      program.commission.type}
-                  </Badge>
-                </td>
                 <td className="py-3 px-3 text-center hidden sm:table-cell">
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-xs text-muted-foreground tabular-nums">
                     {program.cookieDays}d
-                  </span>
-                </td>
-                <td className="py-3 px-3 hidden lg:table-cell">
-                  <span className="text-xs text-muted-foreground">
-                    ${program.payout.minimum}
-                  </span>
-                </td>
-                <td className="py-3 px-3 hidden lg:table-cell">
-                  <span className="text-xs text-muted-foreground">
-                    {program.category}
                   </span>
                 </td>
                 <td className="py-3 px-3 hidden md:table-cell">
                   <span className="text-xs text-muted-foreground">
-                    {formatNetworkName(program.network ?? "In-house")}
+                    {program.category}
                   </span>
                 </td>
                 <td className="py-3 px-3 text-center">
-                  <span className="inline-flex items-center justify-center h-6 w-10 rounded-md bg-emerald-500/10 text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                  <span className="text-sm font-semibold tabular-nums">
                     {affiliateScore(program)}
                   </span>
                 </td>
