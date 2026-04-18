@@ -170,16 +170,22 @@ program
     const p = data as ProgramFull;
 
     const fs = await import("fs");
-    const config = {
-      programs: [
-        {
-          slug: p.slug,
-          name: p.name,
-          url: p.signupUrl || p.url,
-          commission: `${p.commission.rate} ${p.commission.type}`,
-        },
-      ],
+    const entry: Record<string, unknown> = {
+      slug: p.slug,
+      name: p.name,
+      signup_url: p.signupUrl || p.url,
+      url: p.url,
+      commission: {
+        type: p.commission.type,
+        rate: p.commission.rate,
+      },
+      cookie_days: p.cookieDays,
+      category: p.category || undefined,
+      added_at: new Date().toISOString().split("T")[0],
     };
+
+    // Remove undefined values
+    Object.keys(entry).forEach((k) => entry[k] === undefined && delete entry[k]);
 
     const existing = fs.existsSync(".openaffiliate.json")
       ? JSON.parse(fs.readFileSync(".openaffiliate.json", "utf8"))
@@ -190,12 +196,79 @@ program
       return;
     }
 
-    existing.programs.push(config.programs[0]);
+    existing.programs.push(entry);
     fs.writeFileSync(
       ".openaffiliate.json",
       JSON.stringify(existing, null, 2) + "\n"
     );
     console.log(`\n  Added ${p.name} to .openaffiliate.json\n`);
+  });
+
+program
+  .command("remove <slug>")
+  .description("Remove a program from .openaffiliate.json")
+  .action(async (slug: string) => {
+    const fs = await import("fs");
+    if (!fs.existsSync(".openaffiliate.json")) {
+      console.log("\n  No .openaffiliate.json found.\n");
+      return;
+    }
+
+    const existing = JSON.parse(fs.readFileSync(".openaffiliate.json", "utf8"));
+    const before = existing.programs.length;
+    existing.programs = existing.programs.filter(
+      (p: { slug: string }) => p.slug !== slug
+    );
+
+    if (existing.programs.length === before) {
+      console.log(`\n  ${slug} not found in .openaffiliate.json\n`);
+      return;
+    }
+
+    fs.writeFileSync(
+      ".openaffiliate.json",
+      JSON.stringify(existing, null, 2) + "\n"
+    );
+    console.log(`\n  Removed ${slug} from .openaffiliate.json\n`);
+  });
+
+program
+  .command("list")
+  .description("List programs in .openaffiliate.json")
+  .action(async () => {
+    const fs = await import("fs");
+    if (!fs.existsSync(".openaffiliate.json")) {
+      console.log("\n  No .openaffiliate.json found. Run: openaffiliate add <slug>\n");
+      return;
+    }
+
+    const existing = JSON.parse(fs.readFileSync(".openaffiliate.json", "utf8"));
+
+    if (program.opts().json) {
+      console.log(JSON.stringify(existing, null, 2));
+      return;
+    }
+
+    if (!existing.programs?.length) {
+      console.log("\n  No programs in .openaffiliate.json\n");
+      return;
+    }
+
+    const rows = [
+      ["Name", "Commission", "Cookie", "Added"],
+      ...existing.programs.map((p: Record<string, unknown>) => [
+        (p.name as string) || (p.slug as string),
+        p.commission
+          ? typeof p.commission === "string"
+            ? p.commission
+            : `${(p.commission as Record<string, unknown>).rate} ${(p.commission as Record<string, unknown>).type}`
+          : "",
+        p.cookie_days ? `${p.cookie_days}d` : "",
+        (p.added_at as string) || "",
+      ]),
+    ];
+
+    console.log(table(rows, [20, 18, 8, 12]));
   });
 
 program.parse();
