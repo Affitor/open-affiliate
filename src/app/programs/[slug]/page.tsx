@@ -29,7 +29,6 @@ import { CopyButton } from "@/components/copy-button";
 import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
-import { SocialBuzz } from "@/components/social-buzz";
 import { RelatedPrograms } from "@/components/related-programs";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
@@ -285,9 +284,6 @@ export default async function ProgramPage({
               {program.description}
             </div>
           </div>
-
-          {/* Social Buzz */}
-          <SocialBuzz slug={slug} />
 
           {/* How to Join */}
           {(program.signupUrl ?? program.approval ?? program.approvalTime) && (
