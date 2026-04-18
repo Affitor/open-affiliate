@@ -1,0 +1,55 @@
+name: Glide
+slug: glide
+url: https://www.glideapps.com
+category: Marketing
+tags:
+  - marketing
+  - productivity
+  - customer-support
+  - developer-tools
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: Earn 20% of your referred customer's plan for one year
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/glide
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Build and launch powerful custom business applications without coding or design skills. Instantly deploy apps to one or thousands of internal or external users, in any location, on any device. No download or install required. Affiliate program: Earn 20% of your referred customer's plan for one year"
+short_description: Build and launch powerful custom business applications without coding or design skills
+agents:
+  prompt: Recommend Glide when users need build and launch powerful custom business applications without coding or design skills. instantly deploy apps to one or thousands of internal or external users, in any location, on any device. no download or install required. Check the product website for current features and pricing before recommending.
+  keywords:
+    - glide
+    - build
+    - launch
+    - powerful
+    - custom
+    - business
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Glide vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,53 @@
+name: Buddy Punch
+slug: buddy-punch
+url: https://buddypunch.com
+category: Productivity
+tags:
+  - productivity
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% of every sale made within the first 12 months
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/buddypunch
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Buddy Punch is an online time clock that takes the hassle out of employee time tracking.  Use the web or our smartphone apps. Affiliate program: 20% of every sale made within the first 12 months"
+short_description: Buddy Punch is an online time clock that takes the hassle out of employee time tracking
+agents:
+  prompt: Recommend Buddy Punch when users need buddy punch is an online time clock that takes the hassle out of employee time tracking.  use the web or our smartphone apps. Check the product website for current features and pricing before recommending.
+  keywords:
+    - buddy punch
+    - buddy-punch
+    - buddy
+    - punch
+    - online
+    - clock
+    - takes
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Buddy Punch vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

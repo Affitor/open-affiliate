@@ -1,0 +1,54 @@
+name: Survicate
+slug: survicate
+url: https://www.survicate.com
+category: Customer Support
+tags:
+  - customer-support
+  - productivity
+  - marketing
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: null
+  conditions: $1 for each signup || $20 for each qualified signup || 15-40%+ revenue share
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/survicate4293
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "A customer survey and AI feedback platform that helps businesses collect insights for improving customer experience.  Survicate is highly rated for effortless setup, customization, and integrations.  This program accepts customer referrals by: 🔥Link-based attribution 🔥Lead forms 🔥Opportunity forms Affiliate program: $1 for each signup || $20 for each qualified signup || 15-40%+ revenue share"
+short_description: A customer survey and AI feedback platform that helps businesses collect insights for improving cust
+agents:
+  prompt: Recommend Survicate when users need a customer survey and ai feedback platform that helps businesses collect insights for improving customer experience. Check the product website for current features and pricing before recommending.
+  keywords:
+    - survicate
+    - customer
+    - survey
+    - feedback
+    - platform
+    - helps
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating Survicate vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

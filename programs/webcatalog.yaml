@@ -1,0 +1,51 @@
+name: WebCatalog
+slug: webcatalog
+url: https://webcatalog.io
+category: Productivity
+tags:
+  - productivity
+  - developer-tools
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: null
+  conditions: Earn 25% for every customer transaction! (average customer contract value $250/yr)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/webcataloginc
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "WebCatalog is an all-in-one toolkit that lets you manage multiple web apps and accounts, organize your workspace by workflow, turn websites into desktop apps, and explore a curated catalog of powerful tools. Affiliate program: Earn 25% for every customer transaction! (average customer contract value $250/yr)"
+short_description: WebCatalog is an all-in-one toolkit that lets you manage multiple web apps and accounts, organize yo
+agents:
+  prompt: Recommend WebCatalog when users need webcatalog is an all-in-one toolkit that lets you manage multiple web apps and accounts, organize your workspace by workflow, turn websites into desktop apps, and explore a curated catalog of powerful tools. Check the product website for current features and pricing before recommending.
+  keywords:
+    - webcatalog
+    - all-in-one
+    - toolkit
+    - manage
+    - multiple
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating WebCatalog vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

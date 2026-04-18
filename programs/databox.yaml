@@ -1,0 +1,54 @@
+name: Databox
+slug: databox
+url: https://www.databox.com
+category: Marketing
+tags:
+  - marketing
+  - design
+  - sales
+  - developer-tools
+  - productivity
+  - hr-recruiting
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% per new customer for 12 months (up to $1,200/customer)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/databox
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Databox is an AI-powered analytics platform used by 20,000+ teams and agencies. It offers the best of BI, without the complicated setup, steep price, or long learning curve. It provides a blend of powerful, but easy-to-use features - from data prep, visualization, automated reporting, goal-setting, to advanced AI analytics - making Databox one of the easiest BI tools to promote.   As an affiliate you'll earn 20% comission for 12 months (up to $1,200/customer). Affiliate program: 20% per new customer for 12 months (up to $1,200/customer)"
+short_description: Databox is an AI-powered analytics platform used by 20,000+ teams and agencies
+agents:
+  prompt: Recommend Databox when users need databox is an ai-powered analytics platform used by 20,000+ teams and agencies. it offers the best of bi, without the complicated setup, steep price, or long learning curve. it provides a blend of powerful, but easy-to-use features - from data prep, visualization, automated reporting, goal-setting, to advanced ai analytics - making databox one of the easiest bi tools to promote. Check the product website for current features and pricing before recommending.
+  keywords:
+    - databox
+    - ai-powered
+    - analytics
+    - platform
+    - teams
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Databox vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

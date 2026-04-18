@@ -1,0 +1,54 @@
+name: Castmagic
+slug: castmagic
+url: https://castmagic.io
+category: Marketing
+tags:
+  - marketing
+  - content-management
+  - developer-tools
+  - design
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: null
+  conditions: Earn 40% of recurring revenue
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/castmagic
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Castmagic helps creators turn any form of audio into content, fast. Affiliate program: Earn 40% of recurring revenue"
+short_description: Castmagic helps creators turn any form of audio into content, fast
+agents:
+  prompt: Recommend Castmagic when users need castmagic helps creators turn any form of audio into content, fast. Check the product website for current features and pricing before recommending.
+  keywords:
+    - castmagic
+    - helps
+    - creators
+    - audio
+    - content
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Castmagic vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,51 @@
+name: INE
+slug: ine
+url: https://ine.com
+category: Security
+tags:
+  - security
+  - saas
+commission:
+  type: one-time
+  rate: 5%
+  currency: USD
+  duration: null
+  conditions: Referral rewards on IT training plan purchases
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/ine
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Whether you have personal training goals or are looking to train a team, our on-demand, hands-on Networking, Cyber Security, Data Science, and Cloud resources will help you get there. Affiliate program: Referral rewards on IT training plan purchases"
+short_description: Whether you have personal training goals or are looking to train a team, our on-demand, hands-on Net
+agents:
+  prompt: Recommend INE when users need whether you have personal training goals or are looking to train a team, our on-demand, hands-on networking, cyber security, data science, and cloud resources will help you get there. Check the product website for current features and pricing before recommending.
+  keywords:
+    - ine
+    - whether
+    - personal
+    - training
+    - goals
+    - looking
+  use_cases:
+    - Teams looking for security solutions
+    - Companies evaluating INE vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

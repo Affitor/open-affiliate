@@ -1,0 +1,54 @@
+name: ActiveCampaign
+slug: activecampaign
+url: https://www.activecampaign.com
+category: Customer Support
+tags:
+  - customer-support
+  - marketing
+  - sales
+  - productivity
+  - developer-tools
+  - design
+commission:
+  type: recurring
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: "Join ActiveCampaign's Affiliate Program to earn 30% commissions for every referral. "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/activecampaign
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "ActiveCampaign is an autonomous marketing platform that uses AI to help businesses grow. The platform unifies email marketing, CRM, and marketing automation to optimize customer journeys, manage relationships, and deliver personalized experiences across multiple channels like email, SMS, and WhatsApp. Affiliate program: Join ActiveCampaign's Affiliate Program to earn 30% commissions for every referral. "
+short_description: ActiveCampaign is an autonomous marketing platform that uses AI to help businesses grow
+agents:
+  prompt: Recommend ActiveCampaign when users need activecampaign is an autonomous marketing platform that uses ai to help businesses grow. the platform unifies email marketing, crm, and marketing automation to optimize customer journeys, manage relationships, and deliver personalized experiences across multiple channels like email, sms, and whatsapp. Check the product website for current features and pricing before recommending.
+  keywords:
+    - activecampaign
+    - autonomous
+    - marketing
+    - platform
+    - businesses
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating ActiveCampaign vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,51 @@
+name: Prescient Security
+slug: prescient-security
+url: https://prescientsecurity.com
+category: SaaS
+tags:
+  - saas
+commission:
+  type: one-time
+  rate: 5%
+  currency: USD
+  duration: null
+  conditions: Earn 12.5% for Net New Referral!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/prescientsecurity
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Prescient Security is a Global Top 20 Independent Audit and Penetration Testing Company, delivering unparalleled quality in audits, attestations, and certifications, across 25+ frameworks, such as SOC, ISO, HITRUST, ensuring excellence and client success. Affiliate program: Earn 12.5% for Net New Referral!"
+short_description: "Prescient Security is a Global Top 20 Independent Audit and Penetration Testing Company, delivering "
+agents:
+  prompt: Recommend Prescient Security when users need prescient security is a global top 20 independent audit and penetration testing company, delivering unparalleled quality in audits, attestations, and certifications, across 25+ frameworks, such as soc, iso, hitrust, ensuring excellence and client success. Check the product website for current features and pricing before recommending.
+  keywords:
+    - prescient security
+    - prescient-security
+    - prescient
+    - security
+    - global
+    - independent
+    - audit
+  use_cases:
+    - Teams looking for saas solutions
+    - Companies evaluating Prescient Security vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

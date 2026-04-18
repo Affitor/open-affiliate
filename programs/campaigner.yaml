@@ -1,0 +1,51 @@
+name: Campaigner
+slug: campaigner
+url: https://www.campaigner.com
+category: Marketing
+tags:
+  - marketing
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: $10
+  currency: USD
+  duration: null
+  conditions: $10 CPL / $350 CPA
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/campaigner
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Campaigner is Ziff Davis Martech’s extremely powerful email and SMS marketing solution. Campaigner will help businesses personalize their emails, enhance their customer engagement and drive their business more sales. Affiliate program: $10 CPL / $350 CPA"
+short_description: Campaigner is Ziff Davis Martech’s extremely powerful email and SMS marketing solution
+agents:
+  prompt: Recommend Campaigner when users need campaigner is ziff davis martech’s extremely powerful email and sms marketing solution. campaigner will help businesses personalize their emails, enhance their customer engagement and drive their business more sales. Check the product website for current features and pricing before recommending.
+  keywords:
+    - campaigner
+    - davis
+    - martech’s
+    - extremely
+    - powerful
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Campaigner vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

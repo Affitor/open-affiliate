@@ -1,0 +1,51 @@
+name: Connecteam
+slug: connecteam
+url: https://connecteam.com
+category: Productivity
+tags:
+  - productivity
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: $200
+  currency: USD
+  duration: null
+  conditions: Earn $200 for every business that signs up for a monthly plan  Earn $300 for every business that signs up for a yearly plan.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/connecteam
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Connecteam is an all-in-one company app where businesses can communicate, manage, and train their non-desk employees. Easy to use, easy to customize, and easy to scale. Affiliate program: Earn $200 for every business that signs up for a monthly plan  Earn $300 for every business that signs up for a yearly plan."
+short_description: Connecteam is an all-in-one company app where businesses can communicate, manage, and train their no
+agents:
+  prompt: Recommend Connecteam when users need connecteam is an all-in-one company app where businesses can communicate, manage, and train their non-desk employees. Check the product website for current features and pricing before recommending.
+  keywords:
+    - connecteam
+    - all-in-one
+    - company
+    - where
+    - businesses
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Connecteam vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

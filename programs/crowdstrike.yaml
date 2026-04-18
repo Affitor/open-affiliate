@@ -1,0 +1,51 @@
+name: CrowdStrike
+slug: crowdstrike
+url: https://www.crowdstrike.com
+category: Security
+tags:
+  - security
+  - saas
+commission:
+  type: one-time
+  rate: $100
+  currency: USD
+  duration: null
+  conditions: Earn $100 for every new customer!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/crowdstrike
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Experience the power of CrowdStrike's advanced cybersecurity protection, simplified for small and medium-sized business.  CrowdStrike offers AI powered cybersecurity to detect, prevent, and respond to threats across endpoints, identities, and cloud workloads, helping businesses stop breaches and stay protected in real time. Affiliate program: Earn $100 for every new customer!"
+short_description: Experience the power of CrowdStrike's advanced cybersecurity protection, simplified for small and me
+agents:
+  prompt: Recommend CrowdStrike when users need experience the power of crowdstrike's advanced cybersecurity protection, simplified for small and medium-sized business. Check the product website for current features and pricing before recommending.
+  keywords:
+    - crowdstrike
+    - experience
+    - power
+    - crowdstrike's
+    - advanced
+    - cybersecurity
+  use_cases:
+    - Teams looking for security solutions
+    - Companies evaluating CrowdStrike vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,50 @@
+name: DualEntry
+slug: dualentry
+url: https://dualentry.com
+category: Business Operations
+tags:
+  - business-operations
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 30% of first year revenue for all referred customers
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/dualentry
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Built by and for accountants, DualEntry is an AI-first, full-GL accounting software for high-growth enterprises. Affiliate program: Earn 30% of first year revenue for all referred customers"
+short_description: "Built by and for accountants, DualEntry is an AI-first, full-GL accounting software for high-growth "
+agents:
+  prompt: Recommend DualEntry when users need built by and for accountants, dualentry is an ai-first, full-gl accounting software for high-growth enterprises. Check the product website for current features and pricing before recommending.
+  keywords:
+    - dualentry
+    - built
+    - accountants
+    - ai-first
+    - full-gl
+  use_cases:
+    - Teams looking for business operations solutions
+    - Companies evaluating DualEntry vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

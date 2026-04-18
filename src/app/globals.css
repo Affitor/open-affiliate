@@ -49,38 +49,38 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --background: oklch(0.975 0.004 85);
+  --foreground: oklch(0.18 0.01 75);
+  --card: oklch(0.995 0.002 85);
+  --card-foreground: oklch(0.18 0.01 75);
+  --popover: oklch(0.995 0.002 85);
+  --popover-foreground: oklch(0.18 0.01 75);
+  --primary: oklch(0.22 0.01 75);
+  --primary-foreground: oklch(0.98 0.003 85);
+  --secondary: oklch(0.955 0.005 85);
+  --secondary-foreground: oklch(0.22 0.01 75);
+  --muted: oklch(0.955 0.005 85);
+  --muted-foreground: oklch(0.50 0.01 75);
+  --accent: oklch(0.955 0.005 85);
+  --accent-foreground: oklch(0.22 0.01 75);
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --border: oklch(0.90 0.006 85);
+  --input: oklch(0.90 0.006 85);
+  --ring: oklch(0.65 0.01 75);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: oklch(0.97 0.004 85);
+  --sidebar-foreground: oklch(0.18 0.01 75);
+  --sidebar-primary: oklch(0.22 0.01 75);
+  --sidebar-primary-foreground: oklch(0.98 0.003 85);
+  --sidebar-accent: oklch(0.955 0.005 85);
+  --sidebar-accent-foreground: oklch(0.22 0.01 75);
+  --sidebar-border: oklch(0.90 0.006 85);
+  --sidebar-ring: oklch(0.65 0.01 75);
 }
 
 .dark {
@@ -140,7 +140,7 @@
 
 /* Dot grid background */
 .dot-grid {
-  background-image: radial-gradient(circle, oklch(1 0 0 / 4%) 1px, transparent 1px);
+  background-image: radial-gradient(circle, oklch(0.18 0.01 75 / 5%) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 

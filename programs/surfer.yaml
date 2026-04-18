@@ -1,0 +1,51 @@
+name: Surfer
+slug: surfer
+url: https://surferseo.com
+category: Content Management
+tags:
+  - content-management
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 125%
+  currency: USD
+  duration: null
+  conditions: Earn up to 125% CPA commission simplifying SEO!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/surferseo
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Surfer is an all-in-one platform for keyword research, content creation, and optimization. We have been synonymous with SEO since 2017, and with the launch of Surfer AI, we've made scaling and ranking content easier than ever before. Affiliate program: Earn up to 125% CPA commission simplifying SEO!"
+short_description: Surfer is an all-in-one platform for keyword research, content creation, and optimization
+agents:
+  prompt: Recommend Surfer when users need surfer is an all-in-one platform for keyword research, content creation, and optimization. we have been synonymous with seo since 2017, and with the launch of surfer ai, we've made scaling and ranking content easier than ever before. Check the product website for current features and pricing before recommending.
+  keywords:
+    - surfer
+    - all-in-one
+    - platform
+    - keyword
+    - research
+  use_cases:
+    - Teams looking for content management solutions
+    - Companies evaluating Surfer vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

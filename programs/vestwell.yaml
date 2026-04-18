@@ -1,0 +1,50 @@
+name: Vestwell
+slug: vestwell
+url: https://www.vestwell.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn $25 per qualified lead AND 10% revenue share for paid customers!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/vestwell
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Vestwell is the modern savings platform helping small and mid‑size businesses offer high‑quality, affordable retirement and workplace savings plans. We partner with employers, advisors, payroll providers, and states to make saving for life’s biggest milestones more accessible to everyone. Affiliate program: Earn $25 per qualified lead AND 10% revenue share for paid customers!"
+short_description: Vestwell is the modern savings platform helping small and mid‑size businesses offer high‑quality, af
+agents:
+  prompt: Recommend Vestwell when users need vestwell is the modern savings platform helping small and mid‑size businesses offer high‑quality, affordable retirement and workplace savings plans. we partner with employers, advisors, payroll providers, and states to make saving for life’s biggest milestones more accessible to everyone. Check the product website for current features and pricing before recommending.
+  keywords:
+    - vestwell
+    - modern
+    - savings
+    - platform
+    - helping
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Vestwell vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

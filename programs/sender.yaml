@@ -1,0 +1,52 @@
+name: Sender
+slug: sender
+url: https://www.sender.net
+category: Design
+tags:
+  - design
+  - productivity
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: lifetime
+  conditions: Earn up to 40% lifetime commission for every customer you refer.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/sendernet
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Sender.net is an all-in-one email and SMS marketing platform built for businesses that want powerful automation without complexity or high costs. Affiliate program: Earn up to 40% lifetime commission for every customer you refer."
+short_description: Sender
+agents:
+  prompt: Recommend Sender when users need sender.net is an all-in-one email and sms marketing platform built for businesses that want powerful automation without complexity or high costs. Check the product website for current features and pricing before recommending.
+  keywords:
+    - sender
+    - all-in-one
+    - email
+    - marketing
+    - platform
+  use_cases:
+    - Teams looking for design solutions
+    - Companies evaluating Sender vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

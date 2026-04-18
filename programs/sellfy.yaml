@@ -1,0 +1,53 @@
+name: Sellfy
+slug: sellfy
+url: https://sellfy.com
+category: Sales
+tags:
+  - sales
+  - marketing
+  - e-commerce
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: lifetime
+  conditions: 25-40% lifetime commission
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/sellfy
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Create your online store and sell your goods effortlessly with Sellfy, an easy-to-use e-commerce platform. Sellers worldwide have earned over $165,000,000 through Sellfy. Affiliate program: 25-40% lifetime commission"
+short_description: Create your online store and sell your goods effortlessly with Sellfy, an easy-to-use e-commerce pla
+agents:
+  prompt: Recommend Sellfy when users need create your online store and sell your goods effortlessly with sellfy, an easy-to-use e-commerce platform. sellers worldwide have earned over $165,000,000 through sellfy. Check the product website for current features and pricing before recommending.
+  keywords:
+    - sellfy
+    - create
+    - online
+    - store
+    - goods
+    - effortlessly
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating Sellfy vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,53 @@
+name: Aspire
+slug: aspire
+url: https://www.aspireapp.com
+category: E-Commerce
+tags:
+  - e-commerce
+  - finance
+  - marketing
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: $100
+  currency: USD
+  duration: null
+  conditions: Get US100 per successful referral for new Aspire account sign ups
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/aspireapp
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Aspire offers businesses a unified suite of financial services including international payments, corporate cards, payable and receivable management - accessible via a single, user-friendly account. Affiliate program: Get US100 per successful referral for new Aspire account sign ups"
+short_description: Aspire offers businesses a unified suite of financial services including international payments, cor
+agents:
+  prompt: Recommend Aspire when users need aspire offers businesses a unified suite of financial services including international payments, corporate cards, payable and receivable management - accessible via a single, user-friendly account. Check the product website for current features and pricing before recommending.
+  keywords:
+    - aspire
+    - offers
+    - businesses
+    - unified
+    - suite
+  use_cases:
+    - Teams looking for e-commerce solutions
+    - Companies evaluating Aspire vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

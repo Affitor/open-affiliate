@@ -1,0 +1,50 @@
+name: Proof
+slug: proof
+url: https://useproof.com
+category: Agencies
+tags:
+  - agencies
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: 30% of every sale made
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/proof
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Want to boost your website conversions? Proof shows real people taking real actions. Trusted by Oprah, Lottery, Speedo & 20K+ businesses. Affiliate program: 30% of every sale made"
+short_description: Want to boost your website conversions? Proof shows real people taking real actions
+agents:
+  prompt: Recommend Proof when users need want to boost your website conversions? proof shows real people taking real actions. trusted by oprah, lottery, speedo & 20k+ businesses. Check the product website for current features and pricing before recommending.
+  keywords:
+    - proof
+    - boost
+    - website
+    - conversions?
+    - shows
+  use_cases:
+    - Teams looking for agencies solutions
+    - Companies evaluating Proof vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

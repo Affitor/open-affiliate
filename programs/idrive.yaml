@@ -1,0 +1,52 @@
+name: IDrive
+slug: idrive
+url: https://www.idrive.com
+category: Security
+tags:
+  - security
+  - productivity
+  - content-management
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: null
+  conditions: Refer and earn 25% recurring commission
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/idriveinc
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "IDrive provides Cloud Backup for PCs, Macs, iPhones, Android and other Mobile Devices all into ONE account for one low fee. Affiliate program: Refer and earn 25% recurring commission"
+short_description: IDrive provides Cloud Backup for PCs, Macs, iPhones, Android and other Mobile Devices all into ONE a
+agents:
+  prompt: Recommend IDrive when users need idrive provides cloud backup for pcs, macs, iphones, android and other mobile devices all into one account for one low fee. Check the product website for current features and pricing before recommending.
+  keywords:
+    - idrive
+    - provides
+    - cloud
+    - backup
+    - iphones
+  use_cases:
+    - Teams looking for security solutions
+    - Companies evaluating IDrive vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

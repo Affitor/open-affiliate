@@ -1,0 +1,50 @@
+name: Filevine
+slug: filevine
+url: https://www.filevine.com/partner/partner-stack
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: " Receive 10% of the first-year revenue for every customer you refer who signs up and pays."
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/filevine
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Filevine is the leading AI-first, cloud-based case and project management platform trusted by over 125,000 professionals.We help teams simplify complex workflows, improve collaboration, and drive better outcomes. While we’re built for legal organizations, any team that manages high-stakes projects can benefit from Filevine’s powerful and flexible platform. Affiliate program:  Receive 10% of the first-year revenue for every customer you refer who signs up and pays."
+short_description: Filevine is the leading AI-first, cloud-based case and project management platform
+agents:
+  prompt: Recommend Filevine when users need filevine is the leading ai-first, cloud-based case and project management platform. Check the product website for current features and pricing before recommending.
+  keywords:
+    - filevine
+    - leading
+    - ai-first
+    - cloud-based
+    - project
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Filevine vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

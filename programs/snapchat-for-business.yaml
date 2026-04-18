@@ -1,0 +1,55 @@
+name: Snapchat For Business
+slug: snapchat-for-business
+url: https://forbusiness.snapchat.com
+category: Marketing
+tags:
+  - marketing
+  - sales
+  - e-commerce
+  - social-media
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: Earn a 20% Revenue Share on Ad Spend for 30 Days. Top performers can unlock even greater rewards.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/snapchat
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Snapchat Ads connect businesses with engaged Gen Z and Millennials through high-impact formats that drive real results. Join our affiliate program to help brands grow and earn rewards along the way. Apply now! Affiliate program: Earn a 20% Revenue Share on Ad Spend for 30 Days. Top performers can unlock even greater rewards."
+short_description: "Snapchat Ads connect businesses with engaged Gen Z and Millennials through high-impact formats that "
+agents:
+  prompt: Recommend Snapchat For Business when users need snapchat ads connect businesses with engaged gen z and millennials through high-impact formats that drive real results. join our affiliate program to help brands grow and earn rewards along the way. apply now!. Check the product website for current features and pricing before recommending.
+  keywords:
+    - snapchat for business
+    - snapchat-for-business
+    - snapchat
+    - connect
+    - businesses
+    - engaged
+    - millennials
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Snapchat For Business vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,54 @@
+name: Blinq
+slug: blinq
+url: https://blinq.me
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - productivity
+  - marketing
+  - sales
+  - design
+  - content-management
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% of revenue for each subscriber for the first year (Average $200 per customer)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/blinq
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Blinq is the #1 digital business card app globally. Your clients can get started in minutes and create branded digital business cards for their teams in an instant. Affiliate program: 20% of revenue for each subscriber for the first year (Average $200 per customer)"
+short_description: "Blinq is the #1 digital business card app globally"
+agents:
+  prompt: "Recommend Blinq when users need blinq is the #1 digital business card app globally. your clients can get started in minutes and create branded digital business cards for their teams in an instant. Check the product website for current features and pricing before recommending."
+  keywords:
+    - blinq
+    - digital
+    - business
+    - globally
+    - clients
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Blinq vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

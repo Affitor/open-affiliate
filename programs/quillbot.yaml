@@ -1,0 +1,52 @@
+name: QuillBot
+slug: quillbot
+url: https://quillbot.com
+category: Productivity
+tags:
+  - productivity
+  - content-management
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn 10% for monthly plans, 15% for semi-annual plans, and 20% for annual plans
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/quillbot
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "QuillBot taps the potential of AI to help nearly 30 million monthly active users improve their writing skills, enhance their written communications, and deliver a more compelling message. Affiliate program: Earn 10% for monthly plans, 15% for semi-annual plans, and 20% for annual plans"
+short_description: QuillBot taps the potential of AI to help nearly 30 million monthly active users improve their writi
+agents:
+  prompt: Recommend QuillBot when users need quillbot taps the potential of ai to help nearly 30 million monthly active users improve their writing skills, enhance their written communications, and deliver a more compelling message. Check the product website for current features and pricing before recommending.
+  keywords:
+    - quillbot
+    - potential
+    - nearly
+    - million
+    - monthly
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating QuillBot vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

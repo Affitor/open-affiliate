@@ -1,0 +1,52 @@
+name: Navan
+slug: navan
+url: https://navan.com
+category: Productivity
+tags:
+  - productivity
+  - business-operations
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: $1,000
+  currency: USD
+  duration: null
+  conditions: Earn up to $1,000 for every qualified customer!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/navan
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Navan is the one-stop shop for business travel.  Companies and their employees book flights, hotels, and more while saving time and money. Affiliate program: Earn up to $1,000 for every qualified customer!"
+short_description: Navan is the one-stop shop for business travel
+agents:
+  prompt: Recommend Navan when users need navan is the one-stop shop for business travel. Check the product website for current features and pricing before recommending.
+  keywords:
+    - navan
+    - one-stop
+    - business
+    - travel
+    - companies
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Navan vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

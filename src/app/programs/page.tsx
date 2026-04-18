@@ -174,7 +174,7 @@ export default function ProgramsPage() {
                   {program.verified && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] px-1.5 py-0 border-emerald-500/30 text-emerald-400 shrink-0"
+                      className="text-[10px] px-1.5 py-0 border-emerald-600/30 text-emerald-600 shrink-0"
                     >
                       verified
                     </Badge>

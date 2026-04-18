@@ -1,0 +1,50 @@
+name: Playroll
+slug: playroll
+url: http://playroll.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn $1,000+ per EOR referral, recurring monthly revenue share, and access a 10% discount to extend to your clients.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/playroll
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Playroll makes it easy for global companies to hire and pay employees or contractors in 180+ countries. We take care of employment, payroll, compliance, and localized benefits through one platform - helping your clients expand internationally without opening entities. Affiliate program: Earn $1,000+ per EOR referral, recurring monthly revenue share, and access a 10% discount to extend to your clients."
+short_description: Playroll makes it easy for global companies to hire and pay employees or contractors in 180+ countri
+agents:
+  prompt: Recommend Playroll when users need playroll makes it easy for global companies to hire and pay employees or contractors in 180+ countries. we take care of employment, payroll, compliance, and localized benefits through one platform - helping your clients expand internationally without opening entities. Check the product website for current features and pricing before recommending.
+  keywords:
+    - playroll
+    - makes
+    - global
+    - companies
+    - employees
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Playroll vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

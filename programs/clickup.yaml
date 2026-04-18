@@ -1,0 +1,50 @@
+name: ClickUp
+slug: clickup
+url: https://www.clickup.com/lp
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: $25
+  currency: USD
+  duration: null
+  conditions: $25 Signup (T1 countries) | $12.50 Signup (T2 countries) | $5 Signup (T3 countries)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/clickup
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "ClickUp is a versatile project management and productivity platform that centralizes tasks, docs, goals, and communication in one place. It's designed to streamline workflows, improve team collaboration, and boost efficiency across various industries. Affiliate program: $25 Signup (T1 countries) | $12.50 Signup (T2 countries) | $5 Signup (T3 countries)"
+short_description: ClickUp is a versatile project management and productivity platform that centralizes tasks, docs, go
+agents:
+  prompt: Recommend ClickUp when users need clickup is a versatile project management and productivity platform that centralizes tasks, docs, goals, and communication in one place. it's designed to streamline workflows, improve team collaboration, and boost efficiency across various industries. Check the product website for current features and pricing before recommending.
+  keywords:
+    - clickup
+    - versatile
+    - project
+    - management
+    - productivity
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating ClickUp vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

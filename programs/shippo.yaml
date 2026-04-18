@@ -1,0 +1,51 @@
+name: Shippo
+slug: shippo
+url: https://goshippo.com
+category: E-Commerce
+tags:
+  - e-commerce
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: $60
+  currency: USD
+  duration: null
+  conditions: Receive $60 for every new paid Pro plan subscriber
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/shippo
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Shippo simplifies shipping for businesses of all sizes by offering discounted rates, easy label printing, and seamless integrations with major e-commerce platforms.  As a partner you can earn $60 for every new Pro Plan subscriber! Affiliate program: Receive $60 for every new paid Pro plan subscriber"
+short_description: Shippo simplifies shipping for businesses of all sizes by offering discounted rates, easy label prin
+agents:
+  prompt: Recommend Shippo when users need shippo simplifies shipping for businesses of all sizes by offering discounted rates, easy label printing, and seamless integrations with major e-commerce platforms. Check the product website for current features and pricing before recommending.
+  keywords:
+    - shippo
+    - simplifies
+    - shipping
+    - businesses
+    - sizes
+  use_cases:
+    - Teams looking for e-commerce solutions
+    - Companies evaluating Shippo vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

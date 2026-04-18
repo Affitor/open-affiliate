@@ -26,7 +26,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
               {program.verified && (
                 <Badge
                   variant="outline"
-                  className="text-[10px] px-1.5 py-0 border-emerald-500/30 text-emerald-400"
+                  className="text-[10px] px-1.5 py-0 border-emerald-600/30 text-emerald-600"
                 >
                   verified
                 </Badge>
@@ -62,7 +62,7 @@ export default function Home() {
     <div>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.04),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.06),transparent_60%)]" />
         <div className="mx-auto max-w-6xl px-6 py-14 md:py-20 relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left */}
@@ -87,7 +87,7 @@ export default function Home() {
                 The open registry
                 <br />
                 of{" "}
-                <span className="text-emerald-400">affiliate</span>
+                <span className="text-emerald-600">affiliate</span>
                 <br />
                 programs.
               </h1>
@@ -213,7 +213,7 @@ export default function Home() {
               ].map((tool, i, arr) => (
                 <span key={tool.name} className="flex items-center gap-5">
                   <span className="group flex items-center gap-1.5 cursor-default">
-                    <span className="text-[10px] text-muted-foreground/25 group-hover:text-emerald-500/60 transition-colors duration-300 font-mono">
+                    <span className="text-[10px] text-muted-foreground/25 group-hover:text-emerald-600/70 transition-colors duration-300 font-mono">
                       {tool.icon}
                     </span>
                     <span className="text-[11px] text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors duration-300 tracking-wide">
@@ -221,7 +221,7 @@ export default function Home() {
                     </span>
                   </span>
                   {i < arr.length - 1 && (
-                    <span className="text-border/20 text-[10px]">/</span>
+                    <span className="text-border/40 text-[10px]">/</span>
                   )}
                 </span>
               ))}

@@ -1,0 +1,54 @@
+name: Nutshell
+slug: nutshell
+url: https://www.nutshell.com
+category: Customer Support
+tags:
+  - customer-support
+  - marketing
+  - productivity
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: Earn 20%-40% recurring commission for one year on all sales
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/nutshell7477
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "We create powerful, easy-to-use sales, marketing, and engagement software that tells teams what’s next at each stage of the sales cycle. Our CRM software supports sales teams, marketing teams, and small business owners at over 5,000 companies. Affiliate program: Earn 20%-40% recurring commission for one year on all sales"
+short_description: We create powerful, easy-to-use sales, marketing, and engagement software that tells teams what’s ne
+agents:
+  prompt: Recommend Nutshell when users need we create powerful, easy-to-use sales, marketing, and engagement software that tells teams what’s next at each stage of the sales cycle. our crm software supports sales teams, marketing teams, and small business owners at over 5,000 companies. Check the product website for current features and pricing before recommending.
+  keywords:
+    - nutshell
+    - create
+    - powerful
+    - easy-to-use
+    - sales
+    - marketing
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating Nutshell vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

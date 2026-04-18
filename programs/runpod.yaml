@@ -1,0 +1,51 @@
+name: Runpod
+slug: runpod
+url: https://www.runpod.io
+category: Developer Tools
+tags:
+  - developer-tools
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn 10% for 6 months on payments for customers you refer!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/runpod
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Runpod is a cloud platform that empowers small teams to deploy customized full-stack AI apps without managing complex infrastructure. By leveraging high-performance GPU resources on demand, it's easy to launch, train, and optimize AI workloads at scale. Affiliate program: Earn 10% for 6 months on payments for customers you refer!"
+short_description: Runpod is a cloud platform that empowers small teams to deploy customized full-stack AI apps without
+agents:
+  prompt: Recommend Runpod when users need runpod is a cloud platform that empowers small teams to deploy customized full-stack ai apps without managing complex infrastructure. by leveraging high-performance gpu resources on demand, it's easy to launch, train, and optimize ai workloads at scale. Check the product website for current features and pricing before recommending.
+  keywords:
+    - runpod
+    - cloud
+    - platform
+    - empowers
+    - small
+  use_cases:
+    - Teams looking for developer tools solutions
+    - Companies evaluating Runpod vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,54 @@
+name: Pangram Labs
+slug: pangram-labs
+url: https://www.pangram.com
+category: Content Management
+tags:
+  - content-management
+  - productivity
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 30% recurring monthly commissions up to 12 months!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/pangramlabs
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "We are a research-backed AI detection company that helps educators, content creators, and other organizations create AI transparency for their organizations and their customers. Affiliate program: Earn 30% recurring monthly commissions up to 12 months!"
+short_description: We are a research-backed AI detection company that helps educators, content creators, and other orga
+agents:
+  prompt: Recommend Pangram Labs when users need we are a research-backed ai detection company that helps educators, content creators, and other organizations create ai transparency for their organizations and their customers. Check the product website for current features and pricing before recommending.
+  keywords:
+    - pangram labs
+    - pangram-labs
+    - research-backed
+    - detection
+    - company
+    - helps
+    - educators
+  use_cases:
+    - Teams looking for content management solutions
+    - Companies evaluating Pangram Labs vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

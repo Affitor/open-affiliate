@@ -1,0 +1,51 @@
+name: ESGI Software
+slug: esgi-software
+url: http://esgisoftware.com
+category: SaaS
+tags:
+  - saas
+commission:
+  type: one-time
+  rate: $2
+  currency: USD
+  duration: null
+  conditions: Earn $2 for a trial!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/esgisoftware
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "ESGI is an easy-to-use assessment tool that helps educators save time and track student progress in real time. Our affiliate program empowers partners to share ESGI, earn rewards, and support teachers with powerful tools that make a difference. Affiliate program: Earn $2 for a trial!"
+short_description: "ESGI is an easy-to-use assessment tool that helps educators save time and track student progress in "
+agents:
+  prompt: Recommend ESGI Software when users need esgi is an easy-to-use assessment tool that helps educators save time and track student progress in real time. our affiliate program empowers partners to share esgi, earn rewards, and support teachers with powerful tools that make a difference. Check the product website for current features and pricing before recommending.
+  keywords:
+    - esgi software
+    - esgi-software
+    - easy-to-use
+    - assessment
+    - helps
+    - educators
+    - track
+  use_cases:
+    - Teams looking for saas solutions
+    - Companies evaluating ESGI Software vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

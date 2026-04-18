@@ -1,0 +1,53 @@
+name: 8fig
+slug: 8fig
+url: https://www.8fig.co
+category: Sales
+tags:
+  - sales
+  - productivity
+  - e-commerce
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: 10% revenue share
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/8fig
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "8fig is revolutionizing the way eCommerce founders scale their stores with a growth funding platform that aligns continuous and flexible capital and management tools to every stage of the supply chain. Affiliate program: 10% revenue share"
+short_description: 8fig is revolutionizing the way eCommerce founders scale their stores with a growth funding platform
+agents:
+  prompt: Recommend 8fig when users need 8fig is revolutionizing the way ecommerce founders scale their stores with a growth funding platform that aligns continuous and flexible capital and management tools to every stage of the supply chain. Check the product website for current features and pricing before recommending.
+  keywords:
+    - 8fig
+    - revolutionizing
+    - ecommerce
+    - founders
+    - scale
+    - stores
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating 8fig vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

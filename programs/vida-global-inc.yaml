@@ -1,0 +1,55 @@
+name: Vida Global Inc.
+slug: vida-global-inc
+url: https://vida.io
+category: Sales
+tags:
+  - sales
+  - customer-support
+  - marketing
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn 10% of net revenue on new referral for two years!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/vidaglobal
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Vida.io’s AI Phone Agents give small, medium, and large businesses true 24/7 support across calls, SMS, email, and web chat — relaying information, handling scheduling, screening and transferring calls, and conversing naturally in 10 languages. Affiliate program: Earn 10% of net revenue on new referral for two years!"
+short_description: Vida
+agents:
+  prompt: Recommend Vida Global Inc. when users need vida.io’s ai phone agents give small, medium, and large businesses true 24/7 support across calls, sms, email, and web chat — relaying information, handling scheduling, screening and transferring calls, and conversing naturally in 10 languages. Check the product website for current features and pricing before recommending.
+  keywords:
+    - vida global inc.
+    - vida-global-inc
+    - phone
+    - agents
+    - small
+    - medium
+    - large
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating Vida Global Inc. vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

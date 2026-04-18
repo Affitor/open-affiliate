@@ -1,0 +1,53 @@
+name: PitneyShip
+slug: pitneyship
+url: https://www.pitneybowes.com/us
+category: Customer Support
+tags:
+  - customer-support
+  - productivity
+  - e-commerce
+  - saas
+commission:
+  type: one-time
+  rate: $35
+  currency: USD
+  duration: null
+  conditions: "Earn $35 for each new customer account created "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/pitneybowes
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "PitneyShip® simplifies shipping by offering discounted rates from major carriers, easy rate comparisons, and streamlined label printing, tracking, and billing—all in one platform. Save time, cut costs, and manage shipments effortlessly. Affiliate program: Earn $35 for each new customer account created "
+short_description: PitneyShip® simplifies shipping by offering discounted rates from major carriers, easy rate comparis
+agents:
+  prompt: Recommend PitneyShip when users need pitneyship® simplifies shipping by offering discounted rates from major carriers, easy rate comparisons, and streamlined label printing, tracking, and billing—all in one platform. save time, cut costs, and manage shipments effortlessly. Check the product website for current features and pricing before recommending.
+  keywords:
+    - pitneyship
+    - pitneyship®
+    - simplifies
+    - shipping
+    - offering
+    - discounted
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating PitneyShip vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

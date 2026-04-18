@@ -1,0 +1,50 @@
+name: Guesty
+slug: guesty
+url: http://www.guesty.com
+category: SaaS
+tags:
+  - saas
+commission:
+  type: one-time
+  rate: $50
+  currency: USD
+  duration: null
+  conditions: $50 for per Listing
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/guesty
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "With Guesty’s Affiliate Program, you can earn an additional stream of income, with up to 5K per referral Help your network of hospitality pros succeed in growing their businesses with our advanced hospitality operations platform. Affiliate program: $50 for per Listing"
+short_description: With Guesty’s Affiliate Program, you can earn an additional stream of income, with up to 5K per refe
+agents:
+  prompt: Recommend Guesty when users need with guesty’s affiliate program, you can earn an additional stream of income, with up to 5k per referral. Check the product website for current features and pricing before recommending.
+  keywords:
+    - guesty
+    - guesty’s
+    - affiliate
+    - program
+    - additional
+    - stream
+  use_cases:
+    - Teams looking for saas solutions
+    - Companies evaluating Guesty vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

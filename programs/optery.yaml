@@ -1,0 +1,51 @@
+name: Optery
+slug: optery
+url: https://www.optery.com
+category: Security
+tags:
+  - security
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: 30% commission on new customers for first 12 months (~$50 estimated average per customer)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/optery
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Personal data removal for individuals, families and businesses. Affiliate program: 30% commission on new customers for first 12 months (~$50 estimated average per customer)"
+short_description: Personal data removal for individuals, families and businesses
+agents:
+  prompt: Recommend Optery when users need personal data removal for individuals, families and businesses. Check the product website for current features and pricing before recommending.
+  keywords:
+    - optery
+    - personal
+    - removal
+    - individuals
+    - families
+    - businesses
+  use_cases:
+    - Teams looking for security solutions
+    - Companies evaluating Optery vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

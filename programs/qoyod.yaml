@@ -1,0 +1,52 @@
+name: Qoyod
+slug: qoyod
+url: https://www.qoyod.com
+category: Finance
+tags:
+  - finance
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 50%
+  currency: USD
+  duration: null
+  conditions: Earn 50% commission per paid customer (avg transaction $200)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/qoyod
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Don’t let financial complexities hinder your business growth. Qoyod is designed to be your ultimate financial co-pilot, navigating the complexities of your business efficiency. Affiliate program: Earn 50% commission per paid customer (avg transaction $200)"
+short_description: Don’t let financial complexities hinder your business growth
+agents:
+  prompt: Recommend Qoyod when users need don’t let financial complexities hinder your business growth. qoyod is designed to be your ultimate financial co-pilot, navigating the complexities of your business efficiency. Check the product website for current features and pricing before recommending.
+  keywords:
+    - qoyod
+    - don’t
+    - financial
+    - complexities
+    - hinder
+    - business
+  use_cases:
+    - Teams looking for finance solutions
+    - Companies evaluating Qoyod vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

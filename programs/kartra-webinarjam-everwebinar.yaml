@@ -1,0 +1,53 @@
+name: Kartra, WebinarJam & EverWebinar
+slug: kartra-webinarjam-everwebinar
+url: https://kartra.com
+category: Marketing
+tags:
+  - marketing
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: "Earn up to 30% in monthly recurring commissions! "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/genesisdigital
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Kartra's all-in-one platform is built to help creators and entrepreneurs grow their audience, monetize content, and scale with confidence.   WebinarJam & EverWebinar are the most powerful and trusted live and automated webinar platforms worldwide. Affiliate program: Earn up to 30% in monthly recurring commissions! "
+short_description: Kartra's all-in-one platform is built to help creators and entrepreneurs grow their audience, moneti
+agents:
+  prompt: Recommend Kartra, WebinarJam & EverWebinar when users need kartra's all-in-one platform is built to help creators and entrepreneurs grow their audience, monetize content, and scale with confidence. Check the product website for current features and pricing before recommending.
+  keywords:
+    - kartra, webinarjam & everwebinar
+    - kartra-webinarjam-everwebinar
+    - kartra's
+    - all-in-one
+    - platform
+    - built
+    - creators
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Kartra, WebinarJam & EverWebinar vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

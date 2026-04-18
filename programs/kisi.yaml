@@ -1,0 +1,50 @@
+name: Kisi
+slug: kisi
+url: http://www.getkisi.com
+category: SaaS
+tags:
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: "Earn 20% revenue share on all end client business you refer to us. "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/kisi
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Kisi provides a cloud-based access control system that lets organizations manage building entry digitally. Using mobile credentials, keycards, and connected hardware, businesses can control, monitor, and automate who can access their spaces.   It’s built for offices, coworking spaces, and multi-site properties seeking modern security Affiliate program: Earn 20% revenue share on all end client business you refer to us. "
+short_description: Kisi provides a cloud-based access control system that lets organizations manage building entry digi
+agents:
+  prompt: Recommend Kisi when users need kisi provides a cloud-based access control system that lets organizations manage building entry digitally. using mobile credentials, keycards, and connected hardware, businesses can control, monitor, and automate who can access their spaces. Check the product website for current features and pricing before recommending.
+  keywords:
+    - kisi
+    - provides
+    - cloud-based
+    - access
+    - control
+    - system
+  use_cases:
+    - Teams looking for saas solutions
+    - Companies evaluating Kisi vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

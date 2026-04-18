@@ -1,0 +1,54 @@
+name: Aircall Inc.
+slug: aircall-inc
+url: https://www.aircall.io
+category: Sales
+tags:
+  - sales
+  - customer-support
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: $75
+  currency: USD
+  duration: null
+  conditions: "Earn $75 per qualified lead! "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/aircall
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Aircall is the intelligent platform for customer conversations. By unifying conversations, context, and real-time intelligence, Aircall automates routine workflows, lets AI handle repetitive interactions, and provides in-the-moment coaching. Trusted by more than 21,000 companies worldwide—including Pipedrive, Burton, and 1Password—Aircall helps growing businesses exceed customer expectations, increase revenue, strengthen loyalty, and scale operations, all without adding headcount. Affiliate program: Earn $75 per qualified lead! "
+short_description: Aircall is the intelligent platform for customer conversations
+agents:
+  prompt: Recommend Aircall Inc. when users need aircall is the intelligent platform for customer conversations. by unifying conversations, context, and real-time intelligence, aircall automates routine workflows, lets ai handle repetitive interactions, and provides in-the-moment coaching. trusted by more than 21,000 companies worldwide—including pipedrive, burton, and 1password—aircall helps growing businesses exceed customer expectations, increase revenue, strengthen loyalty, and scale operations, all without adding headcount. Check the product website for current features and pricing before recommending.
+  keywords:
+    - aircall inc.
+    - aircall-inc
+    - aircall
+    - intelligent
+    - platform
+    - customer
+    - conversations
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating Aircall Inc. vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

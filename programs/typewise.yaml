@@ -1,0 +1,51 @@
+name: Typewise
+slug: typewise
+url: https://typewise.app
+category: Customer Support
+tags:
+  - customer-support
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: 20% recurring commission (up to $20k / customer)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/typewiseag
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Typewise is an enterprise-grade AI Agent Platform for customer service and sales. It autonomously handles omni-channel customer interactions end-to-end by executing workflows across CRM, ERP, and the entire application stack. Go live in as little as 1 day, backed by rigorous evaluation and testing, enterprise security, admin controls, and analytics. Affiliate program: 20% recurring commission (up to $20k / customer)"
+short_description: Typewise is an enterprise-grade AI Agent Platform for customer service and sales
+agents:
+  prompt: Recommend Typewise when users need typewise is an enterprise-grade ai agent platform for customer service and sales. it autonomously handles omni-channel customer interactions end-to-end by executing workflows across crm, erp, and the entire application stack. go live in as little as 1 day, backed by rigorous evaluation and testing, enterprise security, admin controls, and analytics. Check the product website for current features and pricing before recommending.
+  keywords:
+    - typewise
+    - enterprise-grade
+    - agent
+    - platform
+    - customer
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating Typewise vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

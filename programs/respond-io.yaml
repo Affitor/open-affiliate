@@ -1,0 +1,55 @@
+name: respond.io
+slug: respond-io
+url: https://www.respond.io
+category: Sales
+tags:
+  - sales
+  - productivity
+  - customer-support
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 15%
+  currency: USD
+  duration: lifetime
+  conditions: Earn 15% commission for the customer’s lifetime
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/respondio
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Respond.io: AI-powered messaging software for B2C companies, shared inbox, advanced automation, broadcast and supervisor dashboard analytics. Affiliate program: Earn 15% commission for the customer’s lifetime"
+short_description: Respond
+agents:
+  prompt: "Recommend respond.io when users need respond.io: ai-powered messaging software for b2c companies, shared inbox, advanced automation, broadcast and supervisor dashboard analytics. Check the product website for current features and pricing before recommending."
+  keywords:
+    - respond.io
+    - respond-io
+    - respond
+    - ai-powered
+    - messaging
+    - software
+    - companies
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating respond.io vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,53 @@
+name: Textline
+slug: textline
+url: https://www.textline.com
+category: Sales
+tags:
+  - sales
+  - customer-support
+  - marketing
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: null
+  conditions: Earn up to 25% of the deal value in recurring commissions!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/textline
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Textline is the most secure business text messaging platform for modern customer support, sales, and logistics teams. Textline is HIPAA and SOC2 compliant.  Built for teams, popular features include automations, announcements, MMS, templates, and surveys. Affiliate program: Earn up to 25% of the deal value in recurring commissions!"
+short_description: Textline is the most secure business text messaging platform for modern customer support, sales, and
+agents:
+  prompt: Recommend Textline when users need textline is the most secure business text messaging platform for modern customer support, sales, and logistics teams. textline is hipaa and soc2 compliant. Check the product website for current features and pricing before recommending.
+  keywords:
+    - textline
+    - secure
+    - business
+    - messaging
+    - platform
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating Textline vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

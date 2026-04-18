@@ -1,0 +1,51 @@
+name: Pylon
+slug: pylon
+url: https://usepylon.com
+category: Customer Support
+tags:
+  - customer-support
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 10% of first year contract value on any new annual contracts (average payout of $1000)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/pylon
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Pylon is the all-in-one support platform for B2B companies. With unified context across your customer conversations and AI that automates the busywork, we're built for customer support and success at scale. Affiliate program: Earn 10% of first year contract value on any new annual contracts (average payout of $1000)"
+short_description: Pylon is the all-in-one support platform for B2B companies
+agents:
+  prompt: Recommend Pylon when users need pylon is the all-in-one support platform for b2b companies. with unified context across your customer conversations and ai that automates the busywork, we're built for customer support and success at scale. Check the product website for current features and pricing before recommending.
+  keywords:
+    - pylon
+    - all-in-one
+    - support
+    - platform
+    - companies
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating Pylon vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

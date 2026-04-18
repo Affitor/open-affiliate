@@ -1,0 +1,50 @@
+name: Quadient
+slug: quadient
+url: https://www.quadient.com
+category: Finance
+tags:
+  - finance
+  - saas
+commission:
+  type: one-time
+  rate: $250
+  currency: USD
+  duration: null
+  conditions: Earn $250 for each new lead that turns into an opportunity
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/quadient
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Quadient's leading accounts receivable and accounts payable automation solutions help finance and accounting teams improve productivity, reduce costs and get paid faster - from anywhere. Affiliate program: Earn $250 for each new lead that turns into an opportunity"
+short_description: Quadient's leading accounts receivable and accounts payable automation solutions help finance and ac
+agents:
+  prompt: Recommend Quadient when users need quadient's leading accounts receivable and accounts payable automation solutions help finance and accounting teams improve productivity, reduce costs and get paid faster - from anywhere. Check the product website for current features and pricing before recommending.
+  keywords:
+    - quadient
+    - quadient's
+    - leading
+    - accounts
+    - receivable
+  use_cases:
+    - Teams looking for finance solutions
+    - Companies evaluating Quadient vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

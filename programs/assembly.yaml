@@ -1,0 +1,55 @@
+name: Assembly
+slug: assembly
+url: https://www.assembly.com
+category: Sales
+tags:
+  - sales
+  - design
+  - marketing
+  - productivity
+  - developer-tools
+  - customer-support
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: Earn 20% of your referred customer's subscription revenue for one year, up to $1,200 per customer.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/assembly
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Assembly's product suite gives service business an all-in-one solution for client management, communication, payments, file-sharing, contracts, forms, help desks, and more. Affiliate program: Earn 20% of your referred customer's subscription revenue for one year, up to $1,200 per customer."
+short_description: Assembly's product suite gives service business an all-in-one solution for client management, commun
+agents:
+  prompt: Recommend Assembly when users need assembly's product suite gives service business an all-in-one solution for client management, communication, payments, file-sharing, contracts, forms, help desks, and more. Check the product website for current features and pricing before recommending.
+  keywords:
+    - assembly
+    - assembly's
+    - product
+    - suite
+    - gives
+    - service
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating Assembly vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

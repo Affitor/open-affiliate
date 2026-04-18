@@ -86,7 +86,7 @@ export function Nav() {
         className="h-px w-full"
         style={{
           background:
-            "linear-gradient(90deg, transparent, oklch(1 0 0 / 8%) 20%, oklch(0.7 0.15 160 / 15%) 50%, oklch(1 0 0 / 8%) 80%, transparent)",
+            "linear-gradient(90deg, transparent, oklch(0.18 0.01 75 / 6%) 20%, oklch(0.45 0.15 160 / 20%) 50%, oklch(0.18 0.01 75 / 6%) 80%, transparent)",
         }}
       />
 

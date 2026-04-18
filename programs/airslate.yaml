@@ -1,0 +1,52 @@
+name: airSlate
+slug: airslate
+url: https://www.airslate.com/about
+category: Productivity
+tags:
+  - productivity
+  - content-management
+  - saas
+commission:
+  type: one-time
+  rate: $80
+  currency: USD
+  duration: null
+  conditions: Earn up to $80 per referred customer!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/airslate
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "pdfFiller & signNow are the industry-leading solutions for creating, editing, eSigning, and managing documents & forms online, using any desktop or mobile device, empowering to digitize and automate. Affiliate program: Earn up to $80 per referred customer!"
+short_description: pdfFiller & signNow are the industry-leading solutions for creating, editing, eSigning, and managing
+agents:
+  prompt: Recommend airSlate when users need pdffiller & signnow are the industry-leading solutions for creating, editing, esigning, and managing documents & forms online, using any desktop or mobile device, empowering to digitize and automate. Check the product website for current features and pricing before recommending.
+  keywords:
+    - airslate
+    - pdffiller
+    - signnow
+    - industry-leading
+    - solutions
+    - creating
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating airSlate vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

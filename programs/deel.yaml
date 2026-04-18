@@ -1,0 +1,51 @@
+name: Deel
+slug: deel
+url: https://www.deel.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: $1500
+  currency: USD
+  duration: null
+  conditions: Earn $1500 for every new paying customer
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/deel
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Hire the best talent in 150 countries in minutes, without worrying about compliance, payroll or HR admin. Affiliate program: Earn $1500 for every new paying customer"
+short_description: Hire the best talent in 150 countries in minutes, without worrying about compliance, payroll or HR a
+agents:
+  prompt: Recommend Deel when users need hire the best talent in 150 countries in minutes, without worrying about compliance, payroll or hr admin. Check the product website for current features and pricing before recommending.
+  keywords:
+    - deel
+    - talent
+    - countries
+    - minutes
+    - without
+    - worrying
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Deel vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,53 @@
+name: Wrike
+slug: wrike
+url: https://www.wrike.com
+category: Productivity
+tags:
+  - productivity
+  - design
+  - marketing
+  - content-management
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn 10% of your first sale on ALL customers!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/wrike3742
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Wrike is a collaborative work management solution, helping teams work as one and achieve the best work of their lives!  With 20,000+ clients, Wrike offers a solution for all types of teams. Affiliate program: Earn 10% of your first sale on ALL customers!"
+short_description: Wrike is a collaborative work management solution, helping teams work as one and achieve the best wo
+agents:
+  prompt: Recommend Wrike when users need wrike is a collaborative work management solution, helping teams work as one and achieve the best work of their lives!. Check the product website for current features and pricing before recommending.
+  keywords:
+    - wrike
+    - collaborative
+    - management
+    - solution
+    - helping
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Wrike vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

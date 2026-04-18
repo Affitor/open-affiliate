@@ -1,0 +1,51 @@
+name: BILL
+slug: bill
+url: https://www.bill.com
+category: Finance
+tags:
+  - finance
+  - saas
+commission:
+  type: one-time
+  rate: $250
+  currency: USD
+  duration: null
+  conditions: Earn $250 for each new BILL AP/AR customer | Earn $75-$600 for each new BILL Spend & Expense customer
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/bill
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "BILL is a leading financial operations platform for small and midsize businesses. Our integrated platform helps businesses to more efficiently control their payables, receivables and spend and expense management. Affiliate program: Earn $250 for each new BILL AP/AR customer | Earn $75-$600 for each new BILL Spend & Expense customer"
+short_description: BILL is a leading financial operations platform for small and midsize businesses
+agents:
+  prompt: Recommend BILL when users need bill is a leading financial operations platform for small and midsize businesses. our integrated platform helps businesses to more efficiently control their payables, receivables and spend and expense management. Check the product website for current features and pricing before recommending.
+  keywords:
+    - bill
+    - leading
+    - financial
+    - operations
+    - platform
+    - small
+  use_cases:
+    - Teams looking for finance solutions
+    - Companies evaluating BILL vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

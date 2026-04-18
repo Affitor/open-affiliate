@@ -1,0 +1,53 @@
+name: Iconosquare
+slug: iconosquare
+url: https://www.iconosquare.com
+category: Social Media
+tags:
+  - social-media
+  - marketing
+  - productivity
+  - content-management
+  - saas
+commission:
+  type: one-time
+  rate: 35%
+  currency: USD
+  duration: null
+  conditions: 💸 Earn up to $250 in commissions or up to 35% recurring commissions for each new customer
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/iconosquare
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Iconosquare is a smart solution for effortless Social Media Management trusted by more than 10.000 brands and agencies around the world.  Join our Affiliate Program, earn commissions for every new subscription and progress through three performance tiers! Affiliate program: 💸 Earn up to $250 in commissions or up to 35% recurring commissions for each new customer"
+short_description: Iconosquare is a smart solution for effortless Social Media Management trusted by more than 10
+agents:
+  prompt: Recommend Iconosquare when users need iconosquare is a smart solution for effortless social media management trusted by more than 10.000 brands and agencies around the world. Check the product website for current features and pricing before recommending.
+  keywords:
+    - iconosquare
+    - smart
+    - solution
+    - effortless
+    - social
+  use_cases:
+    - Teams looking for social media solutions
+    - Companies evaluating Iconosquare vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

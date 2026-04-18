@@ -1,0 +1,54 @@
+name: BugHerd
+slug: bugherd
+url: https://bugherd.com
+category: Developer Tools
+tags:
+  - developer-tools
+  - productivity
+  - content-management
+  - design
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: Earn 20% recurring revenue for every new customer you refer to BugHerd.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/bugherd
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "BugHerd is a website feedback and bug tracking tool designed for web development teams, either agency or in-house. It’s easy to give and collect feedback which automatically moves to a Kanban board making it simple to track and manage tasks. Affiliate program: Earn 20% recurring revenue for every new customer you refer to BugHerd."
+short_description: BugHerd is a website feedback and bug tracking tool designed for web development teams, either agenc
+agents:
+  prompt: Recommend BugHerd when users need bugherd is a website feedback and bug tracking tool designed for web development teams, either agency or in-house. it’s easy to give and collect feedback which automatically moves to a kanban board making it simple to track and manage tasks. Check the product website for current features and pricing before recommending.
+  keywords:
+    - bugherd
+    - website
+    - feedback
+    - tracking
+    - designed
+  use_cases:
+    - Teams looking for developer tools solutions
+    - Companies evaluating BugHerd vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

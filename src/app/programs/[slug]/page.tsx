@@ -34,7 +34,7 @@ export function generateStaticParams() {
 
 function BoolIcon({ value }: { value?: boolean }) {
   if (value === true)
-    return <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" />;
+    return <Check className="h-3.5 w-3.5 text-emerald-600 shrink-0" />;
   if (value === false)
     return <X className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" />;
   return <span className="text-xs text-muted-foreground">—</span>;
@@ -54,8 +54,8 @@ export default async function ProgramPage({
   const approvalConfig = {
     auto: {
       label: "Automatic",
-      icon: <Check className="h-3.5 w-3.5 text-emerald-400" />,
-      className: "text-emerald-400",
+      icon: <Check className="h-3.5 w-3.5 text-emerald-600" />,
+      className: "text-emerald-600",
     },
     manual: {
       label: "Manual review",
@@ -97,7 +97,7 @@ export default async function ProgramPage({
                 {program.verified && (
                   <Badge
                     variant="outline"
-                    className="text-xs border-emerald-500/30 text-emerald-400 shrink-0"
+                    className="text-xs border-emerald-600/30 text-emerald-600 shrink-0"
                   >
                     <Shield className="h-3 w-3 mr-1" />
                     Verified
@@ -259,7 +259,7 @@ export default async function ProgramPage({
             <div className="rounded-lg bg-muted/50 border border-border/50 p-4 flex items-center justify-between gap-3 overflow-hidden">
               <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
                 <Terminal className="h-4 w-4 text-muted-foreground shrink-0" />
-                <code className="text-sm font-mono text-emerald-400 whitespace-nowrap">
+                <code className="text-sm font-mono text-emerald-700 whitespace-nowrap">
                   npx openaffiliate add {program.slug}
                 </code>
               </div>

@@ -1,0 +1,51 @@
+name: Todoist
+slug: todoist
+url: https://todoist.com/home
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: null
+  conditions: Earn up to 25% commission!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/doist
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "The task manager to organize work & life. ✅ Trusted by over 20 million people, Todoist is the world's #1 to-do list app. 5* on App Store, Play Store, The Verge, PC Mag, and more. Affiliate program: Earn up to 25% commission!"
+short_description: The task manager to organize work & life
+agents:
+  prompt: Recommend Todoist when users need the task manager to organize work & life. ✅. Check the product website for current features and pricing before recommending.
+  keywords:
+    - todoist
+    - manager
+    - organize
+    - trusted
+    - million
+    - people
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Todoist vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

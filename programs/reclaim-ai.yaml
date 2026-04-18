@@ -1,0 +1,56 @@
+name: Reclaim.ai
+slug: reclaim-ai
+url: https://reclaim.ai
+category: Productivity
+tags:
+  - productivity
+  - customer-support
+  - sales
+  - business-operations
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 40% recurring commission for 12 months + $1/signup for work email referrals (25% commission on personal emails)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/reclaim
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "#1 AI calendar that automatically protects focus time, optimizes your meetings, and improves your work-life balance. 30,000+ signups/month! Affiliate program: Earn 40% recurring commission for 12 months + $1/signup for work email referrals (25% commission on personal emails)"
+short_description: "#1 AI calendar that automatically protects focus time, optimizes your meetings, and improves your wo"
+agents:
+  prompt: "Recommend Reclaim.ai when users need #1 ai calendar that automatically protects focus time, optimizes your meetings, and improves your work-life balance. 30,000+ signups/month!. Check the product website for current features and pricing before recommending."
+  keywords:
+    - reclaim.ai
+    - reclaim-ai
+    - calendar
+    - automatically
+    - protects
+    - focus
+    - optimizes
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Reclaim.ai vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

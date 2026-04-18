@@ -1,0 +1,53 @@
+name: QuickBooks
+slug: quickbooks
+url: https://quickbooks.intuit.com/partners/qbbusinessaffiliates
+category: Sales
+tags:
+  - sales
+  - productivity
+  - business-operations
+  - finance
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: Offer your customer 30% off a new QuickBooks Online or QuickBooks Online Payroll subscriptions for 6 months
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/quickbooks
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "QuickBooks is the world's #1 accounting software for small businesses! Affiliate program: Offer your customer 30% off a new QuickBooks Online or QuickBooks Online Payroll subscriptions for 6 months"
+short_description: "QuickBooks is the world's #1 accounting software for small businesses!"
+agents:
+  prompt: "Recommend QuickBooks when users need quickbooks is the world's #1 accounting software for small businesses!. Check the product website for current features and pricing before recommending."
+  keywords:
+    - quickbooks
+    - world's
+    - accounting
+    - software
+    - small
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating QuickBooks vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

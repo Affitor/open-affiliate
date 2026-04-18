@@ -1,0 +1,50 @@
+name: Moosend
+slug: moosend
+url: https://moosend.com
+category: Marketing
+tags:
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 40%
+  currency: USD
+  duration: null
+  conditions: Earn up to 40% recurring commission for every transaction!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/moosend
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Become a Moosend affiliate! Help businesses by promoting one of the best email marketing and marketing automation tools, and earn for LIFE. Affiliate program: Earn up to 40% recurring commission for every transaction!"
+short_description: Become a Moosend affiliate! Help businesses by promoting one of the best email marketing and marketi
+agents:
+  prompt: Recommend Moosend when users need become a moosend affiliate! help businesses by promoting one of the best email marketing and marketing automation tools, and earn for life. Check the product website for current features and pricing before recommending.
+  keywords:
+    - moosend
+    - become
+    - affiliate!
+    - businesses
+    - promoting
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Moosend vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

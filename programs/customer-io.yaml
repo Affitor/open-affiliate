@@ -1,0 +1,53 @@
+name: Customer.io
+slug: customer-io
+url: https://customer.io
+category: Customer Support
+tags:
+  - customer-support
+  - sales
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 10% on every customer purchase for the first year!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/customerio
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Customer.io is an AI-powered customer engagement platform that helps teams turn first-party data into meaningful, personalized messages at scale.  With Customer.io, teams can create, manage, and send communications across email, SMS, push, in-app, and webhooks—making it easy to build journeys that engage, convert, and grow with their customers. Affiliate program: Earn 10% on every customer purchase for the first year!"
+short_description: Customer
+agents:
+  prompt: Recommend Customer.io when users need customer.io is an ai-powered customer engagement platform that helps teams turn first-party data into meaningful, personalized messages at scale. Check the product website for current features and pricing before recommending.
+  keywords:
+    - customer.io
+    - customer-io
+    - customer
+    - ai-powered
+    - engagement
+    - platform
+  use_cases:
+    - Teams looking for customer support solutions
+    - Companies evaluating Customer.io vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

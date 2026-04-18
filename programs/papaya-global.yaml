@@ -1,0 +1,52 @@
+name: Papaya Global
+slug: papaya-global
+url: https://papayaglobal.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - business-operations
+  - saas
+commission:
+  type: one-time
+  rate: $1,000
+  currency: USD
+  duration: null
+  conditions: "Earn $1,000 for a opportunity created and $2,000 for a closed won. "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/papayaglobal
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Papaya Global unifies global workforce payments on a single platform, giving companies full control of their international payroll & payments. Affiliate program: Earn $1,000 for a opportunity created and $2,000 for a closed won. "
+short_description: "Papaya Global unifies global workforce payments on a single platform, giving companies full control "
+agents:
+  prompt: Recommend Papaya Global when users need papaya global unifies global workforce payments on a single platform, giving companies full control of their international payroll & payments. Check the product website for current features and pricing before recommending.
+  keywords:
+    - papaya global
+    - papaya-global
+    - papaya
+    - global
+    - unifies
+    - workforce
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Papaya Global vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

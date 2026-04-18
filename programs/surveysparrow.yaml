@@ -1,0 +1,52 @@
+name: SurveySparrow
+slug: surveysparrow
+url: https://surveysparrow.com
+category: Productivity
+tags:
+  - productivity
+  - marketing
+  - customer-support
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: lifetime
+  conditions: 25% of every sale, recurring over the lifetime of the customer
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/surveysparrow
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "SurveySparrow lets you create and share highly engaging, mobile-first surveys that offer a chat-like experience. Affiliate program: 25% of every sale, recurring over the lifetime of the customer"
+short_description: SurveySparrow lets you create and share highly engaging, mobile-first surveys that offer a chat-like
+agents:
+  prompt: Recommend SurveySparrow when users need surveysparrow lets you create and share highly engaging, mobile-first surveys that offer a chat-like experience. Check the product website for current features and pricing before recommending.
+  keywords:
+    - surveysparrow
+    - create
+    - share
+    - highly
+    - engaging
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating SurveySparrow vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

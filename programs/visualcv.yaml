@@ -1,0 +1,50 @@
+name: VisualCV
+slug: visualcv
+url: https://visualcv.com
+category: Design
+tags:
+  - design
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: Earn 30% commission on every new sale
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/visualcv
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "VisualCV is an online resume and portfolio building website that has helped over 3 million people make their next career move. Affiliate program: Earn 30% commission on every new sale"
+short_description: VisualCV is an online resume and portfolio building website that has helped over 3 million people ma
+agents:
+  prompt: Recommend VisualCV when users need visualcv is an online resume and portfolio building website that has helped over 3 million people make their next career move. Check the product website for current features and pricing before recommending.
+  keywords:
+    - visualcv
+    - online
+    - resume
+    - portfolio
+    - building
+  use_cases:
+    - Teams looking for design solutions
+    - Companies evaluating VisualCV vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

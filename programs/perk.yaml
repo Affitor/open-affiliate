@@ -1,0 +1,52 @@
+name: Perk
+slug: perk
+url: https://www.perk.com
+category: Productivity
+tags:
+  - productivity
+  - customer-support
+  - saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Scale Your Solution with Perk's 1000+ Business Travel Customers
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/perk
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "All-in-one travel platform that gives you the world’s largest inventory of travel to choose from and comes a built-in risk management solution and the option to save up to 80% on booking cancellations with FlexiPerk. Affiliate program: Scale Your Solution with Perk's 1000+ Business Travel Customers"
+short_description: All-in-one travel platform that gives you the world’s largest inventory of travel to choose from and
+agents:
+  prompt: Recommend Perk when users need all-in-one travel platform that gives you the world’s largest inventory of travel to choose from and comes a built-in risk management solution and the option to save up to 80% on booking cancellations with flexiperk. Check the product website for current features and pricing before recommending.
+  keywords:
+    - perk
+    - all-in-one
+    - travel
+    - platform
+    - gives
+    - world’s
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Perk vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

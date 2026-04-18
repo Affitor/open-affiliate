@@ -1,0 +1,52 @@
+name: Employment Hero
+slug: employment-hero
+url: https://www.employmenthero.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: $200
+  currency: USD
+  duration: null
+  conditions: Earn AUD$200 or £100 for every qualified demo booking that meets our ideal customer profile.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/employmenthero
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Employment Hero is the world’s first EmploymentOS, helping 300,000+ businesses manage hiring, HR, payroll, and more in one platform. For 2M+ users, it’s a work passport to find jobs, manage admin, and grow their careers. Affiliate program: Earn AUD$200 or £100 for every qualified demo booking that meets our ideal customer profile."
+short_description: Employment Hero is the world’s first EmploymentOS, helping 300,000+ businesses manage hiring, HR, pa
+agents:
+  prompt: Recommend Employment Hero when users need employment hero is the world’s first employmentos, helping 300,000+ businesses manage hiring, hr, payroll, and more in one platform. for 2m+ users, it’s a work passport to find jobs, manage admin, and grow their careers. Check the product website for current features and pricing before recommending.
+  keywords:
+    - employment hero
+    - employment-hero
+    - employment
+    - world’s
+    - first
+    - employmentos
+    - helping
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating Employment Hero vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

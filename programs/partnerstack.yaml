@@ -1,0 +1,52 @@
+name: PartnerStack
+slug: partnerstack
+url: https://partnerstack.com
+category: Sales
+tags:
+  - sales
+  - productivity
+  - marketing
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: 10-20% rev share, CPC/CPL for trusted partners
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "PartnerStack helps companies launch scalable and cost-effective acquisition channels through partnerships. Affiliate program: 10-20% rev share, CPC/CPL for trusted partners"
+short_description: PartnerStack helps companies launch scalable and cost-effective acquisition channels through partner
+agents:
+  prompt: Recommend PartnerStack when users need partnerstack helps companies launch scalable and cost-effective acquisition channels through partnerships. Check the product website for current features and pricing before recommending.
+  keywords:
+    - partnerstack
+    - helps
+    - companies
+    - launch
+    - scalable
+  use_cases:
+    - Teams looking for sales solutions
+    - Companies evaluating PartnerStack vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

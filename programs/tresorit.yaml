@@ -1,0 +1,51 @@
+name: Tresorit
+slug: tresorit
+url: https://www.tresorit.com
+category: Productivity
+tags:
+  - productivity
+  - security
+  - saas
+commission:
+  type: one-time
+  rate: 50%
+  currency: USD
+  duration: null
+  conditions: Earn 50% upto $2000 on every successful sale
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/tresorit
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Tresorit lets you securely store & share files in the cloud with end-to-end encryption. Our mission is to protect your privacy & confidential data with cutting-edge, secure productivity tools. Experience unmatched security and peace of mind with Tresorit! Affiliate program: Earn 50% upto $2000 on every successful sale"
+short_description: Tresorit lets you securely store & share files in the cloud with end-to-end encryption
+agents:
+  prompt: Recommend Tresorit when users need tresorit lets you securely store & share files in the cloud with end-to-end encryption. our mission is to protect your privacy & confidential data with cutting-edge, secure productivity tools. experience unmatched security and peace of mind with tresorit!. Check the product website for current features and pricing before recommending.
+  keywords:
+    - tresorit
+    - securely
+    - store
+    - share
+    - files
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Tresorit vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

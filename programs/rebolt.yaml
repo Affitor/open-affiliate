@@ -1,0 +1,50 @@
+name: Rebolt
+slug: rebolt
+url: https://rebolthq.com
+category: Marketing
+tags:
+  - marketing
+  - saas
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% revenue share for the first year
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/rebolt
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Rebolt is the all-in-one marketing platform for home service businesses, offering SEO-optimized websites, social media management, and AI-powered content creation. Affiliate program: 20% revenue share for the first year"
+short_description: Rebolt is the all-in-one marketing platform for home service businesses, offering SEO-optimized webs
+agents:
+  prompt: Recommend Rebolt when users need rebolt is the all-in-one marketing platform for home service businesses, offering seo-optimized websites, social media management, and ai-powered content creation. Check the product website for current features and pricing before recommending.
+  keywords:
+    - rebolt
+    - all-in-one
+    - marketing
+    - platform
+    - service
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Rebolt vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

@@ -1,0 +1,53 @@
+name: Miro - Affiliate
+slug: miro-affiliate
+url: https://www.miro.com
+category: Productivity
+tags:
+  - productivity
+  - design
+  - saas
+commission:
+  type: one-time
+  rate: $60
+  currency: USD
+  duration: null
+  conditions: "Earn up to $60 commission for every new business that signs up to Miro! "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/miroaffiliate
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Introducing the Innovation Workspace of Miro. A single, AI-powered collaboration platform that helps teams move faster from idea to outcome.  More than 90M users and 250,000 companies collaborate in the Innovation Workspace. Affiliate program: Earn up to $60 commission for every new business that signs up to Miro! "
+short_description: Introducing the Innovation Workspace of Miro
+agents:
+  prompt: Recommend Miro - Affiliate when users need introducing the innovation workspace of miro. a single, ai-powered collaboration platform that helps teams move faster from idea to outcome. Check the product website for current features and pricing before recommending.
+  keywords:
+    - miro - affiliate
+    - miro-affiliate
+    - introducing
+    - innovation
+    - workspace
+    - single
+    - ai-powered
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Miro - Affiliate vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

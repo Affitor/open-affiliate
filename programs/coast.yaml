@@ -1,0 +1,51 @@
+name: Coast
+slug: coast
+url: https://coastpay.com
+category: Productivity
+tags:
+  - productivity
+  - finance
+  - saas
+commission:
+  type: one-time
+  rate: $300
+  currency: USD
+  duration: null
+  conditions: Get $300 Per Approved Application
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/coast361
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Coast is a smart fuel card and expense management built on the Visa network. Drivers can fill up anywhere their Visa is accepted and pay for parking, tolls, maintenance, and more. All with granular driver and vehicle controls and reporting. Affiliate program: Get $300 Per Approved Application"
+short_description: Coast is a smart fuel card and expense management built on the Visa network
+agents:
+  prompt: Recommend Coast when users need coast is a smart fuel card and expense management built on the visa network. drivers can fill up anywhere their visa is accepted and pay for parking, tolls, maintenance, and more. all with granular driver and vehicle controls and reporting. Check the product website for current features and pricing before recommending.
+  keywords:
+    - coast
+    - smart
+    - expense
+    - management
+    - built
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Coast vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

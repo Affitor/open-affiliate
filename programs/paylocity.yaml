@@ -1,0 +1,52 @@
+name: Paylocity
+slug: paylocity
+url: https://www.paylocity.com
+category: Productivity
+tags:
+  - productivity
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: $500
+  currency: USD
+  duration: null
+  conditions: Earn up to $500 per qualified lead!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/paylocity
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "HR & payroll technology company driven by innovation and putting the employee first. Because people matter most. And people have always been at the heart of our business. Let's go forward together! Affiliate program: Earn up to $500 per qualified lead!"
+short_description: HR & payroll technology company driven by innovation and putting the employee first
+agents:
+  prompt: Recommend Paylocity when users need hr & payroll technology company driven by innovation and putting the employee first. because people matter most. and people have always been at the heart of our business. let's go forward together!. Check the product website for current features and pricing before recommending.
+  keywords:
+    - paylocity
+    - payroll
+    - technology
+    - company
+    - driven
+    - innovation
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Paylocity vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

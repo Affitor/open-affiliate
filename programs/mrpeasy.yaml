@@ -1,0 +1,53 @@
+name: MRPeasy
+slug: mrpeasy
+url: https://www.mrpeasy.com
+category: E-Commerce
+tags:
+  - e-commerce
+  - business-operations
+  - productivity
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: "20% recurring revenue share for up to 3 years! "
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/mrpeasy
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "MRPeasy is a powerful cloud-based manufacturing ERP/MRP system for small companies (perfect up to 200 employees). The software offers a complete manufacturing ERP solution with robust production planning and inventory management functionalities.  Recognized as the Best Manufacturing Software of 2025 - SoftwareAdvice by Gartner Affiliate program: 20% recurring revenue share for up to 3 years! "
+short_description: MRPeasy is a powerful cloud-based manufacturing ERP/MRP system for small companies (perfect up to 20
+agents:
+  prompt: Recommend MRPeasy when users need mrpeasy is a powerful cloud-based manufacturing erp/mrp system for small companies (perfect up to 200 employees). the software offers a complete manufacturing erp solution with robust production planning and inventory management functionalities. Check the product website for current features and pricing before recommending.
+  keywords:
+    - mrpeasy
+    - powerful
+    - cloud-based
+    - manufacturing
+    - erp/mrp
+  use_cases:
+    - Teams looking for e-commerce solutions
+    - Companies evaluating MRPeasy vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

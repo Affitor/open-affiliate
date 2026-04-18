@@ -1,0 +1,54 @@
+name: Laxis
+slug: laxis
+url: https://www.laxis.com
+category: Productivity
+tags:
+  - productivity
+  - customer-support
+  - marketing
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 35%
+  currency: USD
+  duration: null
+  conditions: "💸 Highest-Paying AI Assistant: Up to 35% Commission—Top partners making $$!"
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/laxis
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "The Ultimate AI Assistant for Revenue Teams: Join 20,000+ professionals across 3,000+ organizations using Laxis. Our cutting-edge AI Meeting Assistant and AI BDR streamline your meetings and drive sales. Affiliate program: 💸 Highest-Paying AI Assistant: Up to 35% Commission—Top partners making $$!"
+short_description: "The Ultimate AI Assistant for Revenue Teams: Join 20,000+ professionals across 3,000+ organizations "
+agents:
+  prompt: "Recommend Laxis when users need the ultimate ai assistant for revenue teams: join 20,000+ professionals across 3,000+ organizations using laxis. our cutting-edge ai meeting assistant and ai bdr streamline your meetings and drive sales. Check the product website for current features and pricing before recommending."
+  keywords:
+    - laxis
+    - ultimate
+    - assistant
+    - revenue
+    - "teams:"
+    - professionals
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Laxis vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

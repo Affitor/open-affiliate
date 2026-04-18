@@ -1,0 +1,50 @@
+name: Toggl
+slug: toggl
+url: http://www.toggl.com
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: recurring
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: Get 30% commission on the first payment from every new customer you refer to Toggl Track.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/toggl
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Toggl Track makes time tracking effortless with one-click timers, powerful reports, and 100+ integrations. Trusted by over 80,000 businesses worldwide. Affiliate program: Get 30% commission on the first payment from every new customer you refer to Toggl Track."
+short_description: Toggl Track makes time tracking effortless with one-click timers, powerful reports, and 100+ integra
+agents:
+  prompt: Recommend Toggl when users need toggl track makes time tracking effortless with one-click timers, powerful reports, and 100+ integrations. trusted by over 80,000 businesses worldwide. Check the product website for current features and pricing before recommending.
+  keywords:
+    - toggl
+    - track
+    - makes
+    - tracking
+    - effortless
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Toggl vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

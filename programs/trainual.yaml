@@ -1,0 +1,52 @@
+name: Trainual
+slug: trainual
+url: https://trainual.com
+category: Productivity
+tags:
+  - productivity
+  - content-management
+  - hr-recruiting
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: "Affiliates: earn 10% commission. Partners: earn 20% commission."
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/trainual
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Trainual is an AI-powered training, learning, and knowledge management software designed to get teams up to speed — and keep them there. By bridging the gap between documentation and execution, Trainual delivers role-specific training, built-in accountability, and progress tracking.  Knowing what to do is one thing — building a team that gets it right, every time, is everything. Affiliate program: Affiliates: earn 10% commission. Partners: earn 20% commission."
+short_description: Trainual is an AI-powered training, learning, and knowledge management software designed to get team
+agents:
+  prompt: Recommend Trainual when users need trainual is an ai-powered training, learning, and knowledge management software designed to get teams up to speed — and keep them there. by bridging the gap between documentation and execution, trainual delivers role-specific training, built-in accountability, and progress tracking. Check the product website for current features and pricing before recommending.
+  keywords:
+    - trainual
+    - ai-powered
+    - training
+    - learning
+    - knowledge
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Trainual vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

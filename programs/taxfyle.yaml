@@ -1,0 +1,51 @@
+name: Taxfyle
+slug: taxfyle
+url: https://www.taxfyle.com
+category: Productivity
+tags:
+  - productivity
+  - finance
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: 12 months
+  conditions: 30% commission for every customer purchase in their first year!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/taxfyle
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Taxfyle is a technology-driven platform connecting people and businesses with licensed tax professionals and bookkeepers for seamless tax prep, filing, advisory, and accounting services. Affiliate program: 30% commission for every customer purchase in their first year!"
+short_description: Taxfyle is a technology-driven platform connecting people and businesses with licensed tax professio
+agents:
+  prompt: Recommend Taxfyle when users need taxfyle is a technology-driven platform connecting people and businesses with licensed tax professionals and bookkeepers for seamless tax prep, filing, advisory, and accounting services. Check the product website for current features and pricing before recommending.
+  keywords:
+    - taxfyle
+    - technology-driven
+    - platform
+    - connecting
+    - people
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Taxfyle vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

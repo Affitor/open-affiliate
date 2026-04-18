@@ -1,0 +1,52 @@
+name: Restream
+slug: restream
+url: https://restream.io
+category: Marketing
+tags:
+  - marketing
+  - content-management
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: 🔴 Up to 30% of all payments — For every new streamer.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/restream
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Restream is a powerful live streaming service that allows you to broadcast live content to multiple streaming channels simultaneously. Affiliate program: 🔴 Up to 30% of all payments — For every new streamer."
+short_description: "Restream is a powerful live streaming service that allows you to broadcast live content to multiple "
+agents:
+  prompt: Recommend Restream when users need restream is a powerful live streaming service that allows you to broadcast live content to multiple streaming channels simultaneously. Check the product website for current features and pricing before recommending.
+  keywords:
+    - restream
+    - powerful
+    - streaming
+    - service
+    - allows
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating Restream vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

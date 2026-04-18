@@ -1,0 +1,54 @@
+name: ThorData
+slug: thordata
+url: https://www.thordata.com/?ls=AP&lk=stack
+category: Content Management
+tags:
+  - content-management
+  - marketing
+  - security
+  - productivity
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 50%
+  currency: USD
+  duration: null
+  conditions: Each customer can receive up to 50% of the revenue, with no upper limit！
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/thordata
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Thordata offers cutting-edge ethical proxy network tailored to meet the unique demands of businesses and individuals. With our 60M+ Residential IP pool and industry-leading features, you gain unmatched access to public data across the globe. Affiliate program: Each customer can receive up to 50% of the revenue, with no upper limit！"
+short_description: Thordata offers cutting-edge ethical proxy network tailored to meet the unique demands of businesses
+agents:
+  prompt: Recommend ThorData when users need thordata offers cutting-edge ethical proxy network tailored to meet the unique demands of businesses and individuals. with our 60m+ residential ip pool and industry-leading features, you gain unmatched access to public data across the globe. Check the product website for current features and pricing before recommending.
+  keywords:
+    - thordata
+    - offers
+    - cutting-edge
+    - ethical
+    - proxy
+  use_cases:
+    - Teams looking for content management solutions
+    - Companies evaluating ThorData vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

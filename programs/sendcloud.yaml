@@ -1,0 +1,53 @@
+name: Sendcloud
+slug: sendcloud
+url: https://www.sendcloud.com
+category: Business Operations
+tags:
+  - business-operations
+  - marketing
+  - sales
+  - e-commerce
+  - customer-support
+  - saas
+commission:
+  type: one-time
+  rate: 100%
+  currency: USD
+  duration: null
+  conditions: Earn 100% on your referrals' first month
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/sendcloud
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Shipping software for e-commerce Affiliate program: Earn 100% on your referrals' first month"
+short_description: Shipping software for e-commerce
+agents:
+  prompt: Recommend Sendcloud when users need shipping software for e-commerce. Check the product website for current features and pricing before recommending.
+  keywords:
+    - sendcloud
+    - shipping
+    - software
+    - e-commerce
+  use_cases:
+    - Teams looking for business operations solutions
+    - Companies evaluating Sendcloud vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

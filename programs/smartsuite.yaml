@@ -1,0 +1,50 @@
+name: SmartSuite
+slug: smartsuite
+url: https://smartsuite.com
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: Earn up to 20% your first year
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/smartsuite
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "One platform for GRC, IT, projects, and business operations.  SmartSuite provides a secure, scalable, AI-powered platform for standardizing workflows across your organization. Unite data, teams, and systems in one governed environment—reducing tool sprawl, improving visibility, and powering end-to-end execution with intelligent automation and enterprise-grade reliability. Affiliate program: Earn up to 20% your first year"
+short_description: One platform for GRC, IT, projects, and business operations
+agents:
+  prompt: Recommend SmartSuite when users need one platform for grc, it, projects, and business operations. Check the product website for current features and pricing before recommending.
+  keywords:
+    - smartsuite
+    - platform
+    - projects
+    - business
+    - operations
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating SmartSuite vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

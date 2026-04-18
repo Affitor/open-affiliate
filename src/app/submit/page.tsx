@@ -381,7 +381,7 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
           <li>
             <Badge
               variant="outline"
-              className="text-[10px] border-emerald-500/30 text-emerald-400"
+              className="text-[10px] border-emerald-600/30 text-emerald-600"
             >
               verified
             </Badge>{" "}

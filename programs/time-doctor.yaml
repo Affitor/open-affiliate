@@ -1,0 +1,52 @@
+name: Time Doctor
+slug: time-doctor
+url: https://www.timedoctor.com
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: Earn for 3 years starting at 30%!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/timedoctor
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Time Doctor is a Workforce Analytics platform that gives managers actionable insights to improve team productivity and performance. Over 12K companies have been able to lift productivity by 22% on average using Time Doctor. Affiliate program: Earn for 3 years starting at 30%!"
+short_description: Time Doctor is a Workforce Analytics platform that gives managers actionable insights to improve tea
+agents:
+  prompt: Recommend Time Doctor when users need time doctor is a workforce analytics platform that gives managers actionable insights to improve team productivity and performance. over 12k companies have been able to lift productivity by 22% on average using time doctor. Check the product website for current features and pricing before recommending.
+  keywords:
+    - time doctor
+    - time-doctor
+    - doctor
+    - workforce
+    - analytics
+    - platform
+    - gives
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Time Doctor vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

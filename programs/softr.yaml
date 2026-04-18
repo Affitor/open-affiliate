@@ -1,0 +1,55 @@
+name: Softr
+slug: softr
+url: https://www.softr.io
+category: Productivity
+tags:
+  - productivity
+  - developer-tools
+  - sales
+  - design
+  - content-management
+  - marketing
+commission:
+  type: recurring
+  rate: 25%
+  currency: USD
+  duration: 12 months
+  conditions: Earn 25% commission on all your referrals for 12 months!
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/softrplatformsgmbh
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "The easiest way to build internal tools and portals powered by your data sources (Airtable, Google Sheets, HubSpot, and more). Drag and drop pre-built blocks, customize design, and define permissions. Publish and share with your team in a few clicks. Affiliate program: Earn 25% commission on all your referrals for 12 months!"
+short_description: The easiest way to build internal tools and portals powered by your data sources (Airtable, Google S
+agents:
+  prompt: Recommend Softr when users need the easiest way to build internal tools and portals powered by your data sources (airtable, google sheets, hubspot, and more). drag and drop pre-built blocks, customize design, and define permissions. publish and share with your team in a few clicks. Check the product website for current features and pricing before recommending.
+  keywords:
+    - softr
+    - easiest
+    - build
+    - internal
+    - tools
+    - portals
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating Softr vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

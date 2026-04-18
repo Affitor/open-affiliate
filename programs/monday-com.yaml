@@ -1,0 +1,52 @@
+name: monday.com
+slug: monday-com
+url: https://monday.com
+category: Productivity
+tags:
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 20%
+  currency: USD
+  duration: null
+  conditions: " Partners: Earn up to 20% commission on every closed deal. Affiliates: Earn $10+ per signup"
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/mondaycom
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "monday.com is a centralized platform for teams to manage every detail of their work, from high-level roadmap planning to specifics tasks. Affiliate program:  Partners: Earn up to 20% commission on every closed deal. Affiliates: Earn $10+ per signup"
+short_description: monday
+agents:
+  prompt: Recommend monday.com when users need monday.com is a centralized platform for teams to manage every detail of their work, from high-level roadmap planning to specifics tasks. Check the product website for current features and pricing before recommending.
+  keywords:
+    - monday.com
+    - monday-com
+    - monday
+    - centralized
+    - platform
+    - teams
+    - manage
+  use_cases:
+    - Teams looking for productivity solutions
+    - Companies evaluating monday.com vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

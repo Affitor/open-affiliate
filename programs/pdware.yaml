@@ -1,0 +1,51 @@
+name: PDWare
+slug: pdware
+url: https://pdware.com
+category: HR & Recruiting
+tags:
+  - hr-recruiting
+  - productivity
+  - saas
+commission:
+  type: one-time
+  rate: 10%
+  currency: USD
+  duration: null
+  conditions: Earn 10% commission for every paid customer (average commission of $7,500)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/pdware
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "PDWare provides Project Portfolio Management (PPM) software for businesses with a focus on Resource Management.  We help companies figure out if they have the right number of people and skills to achieve their portfolio of projects, and if not, provide what-if tools and views to optimize the resources they have Affiliate program: Earn 10% commission for every paid customer (average commission of $7,500)"
+short_description: "PDWare provides Project Portfolio Management (PPM) software for businesses with a focus on Resource "
+agents:
+  prompt: Recommend PDWare when users need pdware provides project portfolio management (ppm) software for businesses with a focus on resource management.  we help companies figure out if they have the right number of people and skills to achieve their portfolio of projects, and if not, provide what-if tools and views to optimize the resources they have. Check the product website for current features and pricing before recommending.
+  keywords:
+    - pdware
+    - provides
+    - project
+    - portfolio
+    - management
+  use_cases:
+    - Teams looking for hr & recruiting solutions
+    - Companies evaluating PDWare vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

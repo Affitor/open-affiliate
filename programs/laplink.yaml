@@ -1,0 +1,50 @@
+name: Laplink
+slug: laplink
+url: https://go.laplink.com
+category: Developer Tools
+tags:
+  - developer-tools
+  - saas
+commission:
+  type: one-time
+  rate: 25%
+  currency: USD
+  duration: null
+  conditions: 25% Commission on all approved orders
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/laplink
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "For over 40 years, Laplink has led in PC refresh and OS upgrades for consumers, SMBs, & enterprises—trusted by millions. PCmover saves time, cuts costs, & reduces risk with proprietary tech that transfers data, apps, & settings from one PC to another. Affiliate program: 25% Commission on all approved orders"
+short_description: For over 40 years, Laplink has led in PC refresh and OS upgrades for consumers, SMBs, & enterprises—
+agents:
+  prompt: Recommend Laplink when users need for over 40 years, laplink has led in pc refresh and os upgrades for consumers, smbs, & enterprises—trusted by millions. pcmover saves time, cuts costs, & reduces risk with proprietary tech that transfers data, apps, & settings from one pc to another. Check the product website for current features and pricing before recommending.
+  keywords:
+    - laplink
+    - years
+    - refresh
+    - upgrades
+    - consumers
+  use_cases:
+    - Teams looking for developer tools solutions
+    - Companies evaluating Laplink vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

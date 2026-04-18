@@ -1,0 +1,53 @@
+name: SMTP.com
+slug: smtp-com
+url: https://www.smtp.com
+category: Marketing
+tags:
+  - marketing
+  - productivity
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: $5
+  currency: USD
+  duration: null
+  conditions: $5 CPL / $100 CPA
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/smtp
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "SMTP.com is Ziff Davis Martech's transactional email and email API service. We are the industry leader in deliverability. Experience SMTP.com for yourself to see why our customers love us. Affiliate program: $5 CPL / $100 CPA"
+short_description: SMTP
+agents:
+  prompt: Recommend SMTP.com when users need smtp.com is ziff davis martech's transactional email and email api service. we are the industry leader in deliverability. experience smtp.com for yourself to see why our customers love us. Check the product website for current features and pricing before recommending.
+  keywords:
+    - smtp.com
+    - smtp-com
+    - davis
+    - martech's
+    - transactional
+    - email
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating SMTP.com vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

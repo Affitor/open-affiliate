@@ -1,0 +1,52 @@
+name: Alidrop
+slug: alidrop
+url: https://alidrop.co
+category: E-Commerce
+tags:
+  - e-commerce
+  - sales
+  - saas
+commission:
+  type: one-time
+  rate: 50%
+  currency: USD
+  duration: null
+  conditions: " Up to 50% for each paid costumer"
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/alidrop
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "Launch your successful AliExpress dropshipping store with AliDrop. Access millions of products, fast shipping, and seamless integration for your e-commerce store. Affiliate program:  Up to 50% for each paid costumer"
+short_description: Launch your successful AliExpress dropshipping store with AliDrop
+agents:
+  prompt: Recommend Alidrop when users need launch your successful aliexpress dropshipping store with alidrop. access millions of products, fast shipping, and seamless integration for your e-commerce store. Check the product website for current features and pricing before recommending.
+  keywords:
+    - alidrop
+    - launch
+    - successful
+    - aliexpress
+    - dropshipping
+    - store
+  use_cases:
+    - Teams looking for e-commerce solutions
+    - Companies evaluating Alidrop vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null

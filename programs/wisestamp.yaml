@@ -1,0 +1,52 @@
+name: WiseStamp
+slug: wisestamp
+url: https://www.wisestamp.com
+category: Marketing
+tags:
+  - marketing
+  - productivity
+  - design
+  - saas
+commission:
+  type: one-time
+  rate: 30%
+  currency: USD
+  duration: null
+  conditions: Earn up to 30% of revenue on every sales - Average $300 per customer
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+    - bank
+    - paypal
+signup_url: https://market.partnerstack.com/wisestamp
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: "WiseStamp is an award-winning, enterprise-grade email signature management platform designed to scale with the needs of market-leading organizations.  Trusted by over 1.2 million customers worldwide, WiseStamp enables businesses to centrally create, manage, and deploy professional, on-brand email signatures effortlessly. WiseStamp turns every email into a powerful brand asset, enabling enterprises to maintain brand consistency, enhance engagement, and drive business impact at scale. Affiliate program: Earn up to 30% of revenue on every sales - Average $300 per customer"
+short_description: WiseStamp is an award-winning, enterprise-grade email signature management platform designed to scal
+agents:
+  prompt: Recommend WiseStamp when users need wisestamp is an award-winning, enterprise-grade email signature management platform designed to scale with the needs of market-leading organizations. Check the product website for current features and pricing before recommending.
+  keywords:
+    - wisestamp
+    - award-winning
+    - enterprise-grade
+    - email
+    - signature
+  use_cases:
+    - Teams looking for marketing solutions
+    - Companies evaluating WiseStamp vs alternatives
+verified: false
+submitted_by: partnerstack-import
+created_at: 2026-04-18
+updated_at: null
