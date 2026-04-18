@@ -30,6 +30,7 @@ import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { programs, getProgram, parseCommissionRate } from "@/lib/programs";
+import { TrackView, TrackLink } from "./track-view";
 
 export function generateStaticParams() {
   return programs.map((p) => ({ slug: p.slug }));
@@ -167,6 +168,8 @@ export default async function ProgramPage({
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
+      <TrackView slug={slug} />
+
       {/* Breadcrumb */}
       <Link
         href="/programs"
@@ -556,15 +559,14 @@ export default async function ProgramPage({
           )}
 
           {/* Join button */}
-          <a
+          <TrackLink
             href={joinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+            slug={slug}
             className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
             Join Program
             <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          </TrackLink>
         </div>
       </div>
     </div>

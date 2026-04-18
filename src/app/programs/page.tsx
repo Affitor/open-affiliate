@@ -24,6 +24,7 @@ import {
   type SortOption,
   type Program,
 } from "@/lib/programs";
+import { track } from "@/lib/track";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
 
@@ -236,6 +237,15 @@ function ProgramsContent() {
     [query, selectedCategory, selectedType, selectedNetwork, sort]
   );
 
+  // Debounced search tracking
+  useEffect(() => {
+    if (!query) return;
+    const timer = setTimeout(() => {
+      track("search", { metadata: { query, resultCount: filtered.length } });
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [query, filtered.length]);
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);
   const paginated = filtered.slice(
@@ -252,11 +262,13 @@ function ProgramsContent() {
     setSelectedCategory(cat);
     setPage(1);
     updateFilters({ category: cat });
+    if (cat) track("filter", { metadata: { filter: "category", value: cat } });
   };
   const handleType = (type: string) => {
     setSelectedType(type);
     setPage(1);
     updateFilters({ type });
+    if (type) track("filter", { metadata: { filter: "type", value: type } });
   };
   const handleSort = (s: string) => {
     setSort(s as SortOption);
@@ -271,6 +283,7 @@ function ProgramsContent() {
     setSelectedNetwork(net);
     setPage(1);
     updateFilters({ network: net });
+    if (net) track("filter", { metadata: { filter: "network", value: net } });
   };
   const clearAll = () => {
     setQuery("");
