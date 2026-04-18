@@ -131,6 +131,9 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
               </div>
             </div>
             <div className="flex items-center gap-2 mt-3 flex-wrap">
+              <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+                Score: {affiliateScore(program)}
+              </Badge>
               <Badge variant="secondary" className="text-[11px]">
                 {program.commission.rate}{" "}
                 {program.commission.type === "recurring"
@@ -140,9 +143,6 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
               <Badge variant="outline" className="text-[11px]">
                 {program.cookieDays}d cookie
               </Badge>
-              <Badge variant="outline" className="text-[11px]">
-                {program.category}
-              </Badge>
             </div>
           </Link>
         );
@@ -151,7 +151,16 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
   );
 }
 
-type ColumnSort = "commission" | "cookie" | "payout" | "category" | "network" | "name";
+function affiliateScore(p: Program): number {
+  const commRate = parseCommissionRate(p.commission.rate);
+  const commScore = Math.min(commRate / 50, 1) * 50;
+  const cookieScore = Math.min(p.cookieDays / 90, 1) * 20;
+  const recurringScore = p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0;
+  const verifiedScore = p.verified ? 10 : 0;
+  return Math.round(commScore + cookieScore + recurringScore + verifiedScore);
+}
+
+type ColumnSort = "score" | "commission" | "cookie" | "payout" | "category" | "network" | "name";
 type SortDir = "asc" | "desc";
 
 function SortHeader({
@@ -198,7 +207,7 @@ function ProgramsTable({
 }: {
   rankedPrograms: Program[];
 }) {
-  const [sortCol, setSortCol] = useState<ColumnSort>("commission");
+  const [sortCol, setSortCol] = useState<ColumnSort>("score");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
 
   const handleSort = useCallback(
@@ -218,6 +227,8 @@ function ProgramsTable({
     const dir = sortDir === "desc" ? -1 : 1;
     list.sort((a, b) => {
       switch (sortCol) {
+        case "score":
+          return (affiliateScore(a) - affiliateScore(b)) * dir;
         case "commission":
           return (parseCommissionRate(a.commission.rate) - parseCommissionRate(b.commission.rate)) * dir;
         case "cookie":
@@ -252,6 +263,7 @@ function ProgramsTable({
               <th className="w-14 py-3 px-2 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
                 Vote
               </th>
+              <SortHeader label="Score" column="score" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-16 text-center" />
               <SortHeader label="Program" column="name" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="text-left min-w-[180px]" />
               <SortHeader label="Commission" column="commission" activeColumn={sortCol} activeDir={sortDir} onSort={handleSort} className="w-28 text-left" />
               <th className="w-24 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
@@ -277,6 +289,11 @@ function ProgramsTable({
                     slug={program.slug}
                     initialCount={counts[program.slug] ?? 0}
                   />
+                </td>
+                <td className="py-3 px-3 text-center">
+                  <span className="inline-flex items-center justify-center h-6 w-10 rounded-md bg-emerald-500/10 text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+                    {affiliateScore(program)}
+                  </span>
                 </td>
                 <td className="py-3 px-3">
                   <Link
@@ -523,11 +540,7 @@ export default function RankingsPage() {
 
   const top3 = useMemo(() => {
     return [...programs]
-      .sort(
-        (a, b) =>
-          parseCommissionRate(b.commission.rate) -
-          parseCommissionRate(a.commission.rate)
-      )
+      .sort((a, b) => affiliateScore(b) - affiliateScore(a))
       .slice(0, 3);
   }, []);
 
@@ -538,11 +551,7 @@ export default function RankingsPage() {
     if (selectedType)
       result = result.filter((p) => p.commission.type === selectedType);
     if (verifiedOnly) result = result.filter((p) => p.verified);
-    result.sort(
-      (a, b) =>
-        parseCommissionRate(b.commission.rate) -
-        parseCommissionRate(a.commission.rate)
-    );
+    result.sort((a, b) => affiliateScore(b) - affiliateScore(a));
     return result;
   }, [selectedCategory, selectedType, verifiedOnly]);
 
@@ -584,7 +593,7 @@ export default function RankingsPage() {
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          {programs.length} programs ranked by commission across{" "}
+          {programs.length} programs ranked by Affiliate Score across{" "}
           {categories.length} categories
         </p>
       </div>
