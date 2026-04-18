@@ -108,13 +108,49 @@ export function getProgram(slug: string): Program | undefined {
   return programs.find((p) => p.slug === slug)
 }
 
-export function searchPrograms(query: string, category?: string): Program[] {
+export type SortOption = "relevance" | "az" | "za" | "commission_desc" | "newest"
+
+export interface SearchOptions {
+  query?: string
+  category?: string
+  commissionType?: string
+  sort?: SortOption
+  verified?: boolean
+}
+
+function parseCommissionRate(rate: string | number): number {
+  if (typeof rate === "number") return rate
+  // Handle ranges like "20-30%" — take the higher value
+  const rangeMatch = rate.match(/(\d+)\s*-\s*(\d+)/)
+  if (rangeMatch) return parseFloat(rangeMatch[2])
+  // Handle "$100" or "100%"
+  const numMatch = rate.match(/[\d.]+/)
+  return numMatch ? parseFloat(numMatch[0]) : 0
+}
+
+export function searchPrograms(query: string, category?: string): Program[]
+export function searchPrograms(options: SearchOptions): Program[]
+export function searchPrograms(queryOrOptions: string | SearchOptions, category?: string): Program[] {
+  const opts: SearchOptions = typeof queryOrOptions === "string"
+    ? { query: queryOrOptions, category }
+    : queryOrOptions
+
   let results = programs
-  if (category) {
-    results = results.filter((p) => p.category === category)
+
+  if (opts.category) {
+    results = results.filter((p) => p.category === opts.category)
   }
-  if (query) {
-    const q = query.toLowerCase()
+
+  if (opts.commissionType) {
+    results = results.filter((p) => p.commission.type === opts.commissionType)
+  }
+
+  if (opts.verified) {
+    results = results.filter((p) => p.verified)
+  }
+
+  if (opts.query) {
+    const q = opts.query.toLowerCase()
     results = results.filter(
       (p) =>
         p.name.toLowerCase().includes(q) ||
@@ -123,5 +159,45 @@ export function searchPrograms(query: string, category?: string): Program[] {
         p.category.toLowerCase().includes(q)
     )
   }
-  return results.sort((a, b) => b.stars - a.stars)
+
+  const sort = opts.sort ?? "relevance"
+  switch (sort) {
+    case "az":
+      results.sort((a, b) => a.name.localeCompare(b.name))
+      break
+    case "za":
+      results.sort((a, b) => b.name.localeCompare(a.name))
+      break
+    case "commission_desc":
+      results.sort((a, b) => parseCommissionRate(b.commission.rate) - parseCommissionRate(a.commission.rate))
+      break
+    case "newest":
+      results.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""))
+      break
+    case "relevance":
+    default:
+      if (opts.query) {
+        const q = opts.query.toLowerCase()
+        results.sort((a, b) => {
+          const aName = a.name.toLowerCase().includes(q) ? 1 : 0
+          const bName = b.name.toLowerCase().includes(q) ? 1 : 0
+          return bName - aName || b.stars - a.stars
+        })
+      } else {
+        results.sort((a, b) => b.stars - a.stars)
+      }
+      break
+  }
+
+  return results
 }
+
+export const commissionTypes = [...new Set(programs.map((p) => p.commission.type))] as string[]
+
+export const categoryCounts: Record<string, number> = programs.reduce(
+  (acc, p) => {
+    acc[p.category] = (acc[p.category] || 0) + 1
+    return acc
+  },
+  {} as Record<string, number>
+)
