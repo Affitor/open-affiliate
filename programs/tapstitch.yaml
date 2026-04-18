@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/tapstitch
+signup_url: https://tapstitch.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

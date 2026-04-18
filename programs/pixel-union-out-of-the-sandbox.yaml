@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/pixelunion
+signup_url: https://outofthesandbox.com/pages/affiliate-program
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

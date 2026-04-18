@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -116,14 +118,7 @@ function Footer() {
               OpenAffiliate. Open source, community-driven.
             </span>
           </div>
-          <a
-            href="https://github.com/Affitor/open-affiliate"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-          >
-            GitHub
-          </a>
+          <ThemeToggle />
         </div>
       </div>
     </footer>
@@ -139,11 +134,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        <Nav />
-        <main className="flex-1 dot-grid">{children}</main>
-        <Footer />
+        <ThemeProvider>
+          <Nav />
+          <main className="flex-1 dot-grid">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

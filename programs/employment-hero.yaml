@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/employmenthero
+signup_url: https://www.employmenthero.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

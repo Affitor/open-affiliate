@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/storylane
+signup_url: https://www.storylane.io
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

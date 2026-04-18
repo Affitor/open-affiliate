@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/easydmarc
+signup_url: https://easydmarc.com#utm_source=affiliate&utm_medium=affiliate&utm_campaign=affiliate&utm_id=affiliate
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

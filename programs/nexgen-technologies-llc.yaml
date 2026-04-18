@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/nexgentechnologiesllc
+signup_url: https://www.nexgenvirtualworkplace.net
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

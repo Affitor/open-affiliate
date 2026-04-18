@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/thordata
+signup_url: https://www.thordata.com/?ls=AP&lk=stack
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

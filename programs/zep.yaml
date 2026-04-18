@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/zep
+signup_url: https://www.zep.de/en
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/trebleai
+signup_url: https://www.treble.ai
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

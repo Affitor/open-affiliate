@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/ruby
+signup_url: https://www.ruby.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

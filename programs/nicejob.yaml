@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/nicejob
+signup_url: https://get.nicejob.com/?utm_source=Partnerstack&utm_medium=NiceJobProfile&utm_campaign=marketplace
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

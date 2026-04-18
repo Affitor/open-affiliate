@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/breezyhr
+signup_url: https://breezy.hr
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

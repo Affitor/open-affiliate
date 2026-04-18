@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/castmagic
+signup_url: https://castmagic.io
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

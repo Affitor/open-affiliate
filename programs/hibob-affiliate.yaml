@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/hibobaffiliate
+signup_url: https://hibob.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

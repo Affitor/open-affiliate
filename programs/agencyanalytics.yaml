@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/agencyanalytics
+signup_url: https://agencyanalytics.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

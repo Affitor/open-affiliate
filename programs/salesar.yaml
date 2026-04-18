@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/salesar
+signup_url: https://salesar.io
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

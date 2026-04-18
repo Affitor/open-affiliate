@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/bokuntripadvisor
+signup_url: https://www.bokun.io
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

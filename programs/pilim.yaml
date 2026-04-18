@@ -24,7 +24,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/pilim
+signup_url: https://pilim.net
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

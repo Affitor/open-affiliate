@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/freshservice
+signup_url: https://www.freshworks.com/freshservice
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

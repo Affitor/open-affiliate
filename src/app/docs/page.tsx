@@ -79,7 +79,7 @@ export default function DocsPage() {
                 key={item.path}
                 className="rounded-lg bg-zinc-950 border border-border/50 px-4 py-3 flex items-start gap-3 overflow-x-auto"
               >
-                <span className="text-[10px] font-mono font-bold bg-emerald-600/10 text-emerald-700 px-1.5 py-0.5 rounded mt-0.5 shrink-0">
+                <span className="text-[10px] font-mono font-bold bg-emerald-600/10 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded mt-0.5 shrink-0">
                   {item.method}
                 </span>
                 <div className="min-w-0">
@@ -119,19 +119,19 @@ export default function DocsPage() {
             </p>
             <ul className="text-xs text-muted-foreground space-y-1.5">
               <li>
-                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700">
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400">
                   search_programs
                 </code>{" "}
                 — Search by query, category, commission type
               </li>
               <li>
-                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700">
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400">
                   get_program
                 </code>{" "}
                 — Get full program details including agent instructions
               </li>
               <li>
-                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700">
+                <code className="bg-muted px-1.5 py-0.5 rounded text-emerald-700 dark:text-emerald-400">
                   list_categories
                 </code>{" "}
                 — Browse available categories

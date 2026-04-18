@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/acceleratedgrowthstudio
+signup_url: https://accelerated.digital
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

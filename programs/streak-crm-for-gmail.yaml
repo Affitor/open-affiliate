@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/streak
+signup_url: https://www.streak.com?utm_source=growsumo&utm_medium=lp&utm_campaign=gs+referral+lp
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

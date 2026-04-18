@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/campaignmonitor
+signup_url: https://www.campaignmonitor.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

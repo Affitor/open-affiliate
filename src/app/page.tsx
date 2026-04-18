@@ -26,7 +26,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
               {program.verified && (
                 <Badge
                   variant="outline"
-                  className="text-[10px] px-1.5 py-0 border-emerald-600/30 text-emerald-600"
+                  className="text-[10px] px-1.5 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
                 >
                   verified
                 </Badge>
@@ -87,7 +87,7 @@ export default function Home() {
                 The open registry
                 <br />
                 of{" "}
-                <span className="text-emerald-600">affiliate</span>
+                <span className="text-emerald-600 dark:text-emerald-400">affiliate</span>
                 <br />
                 programs.
               </h1>
@@ -213,7 +213,7 @@ export default function Home() {
               ].map((tool, i, arr) => (
                 <span key={tool.name} className="flex items-center gap-5">
                   <span className="group flex items-center gap-1.5 cursor-default">
-                    <span className="text-[10px] text-muted-foreground/25 group-hover:text-emerald-600/70 transition-colors duration-300 font-mono">
+                    <span className="text-[10px] text-muted-foreground/25 group-hover:text-emerald-600/70 dark:group-hover:text-emerald-500/60 transition-colors duration-300 font-mono">
                       {tool.icon}
                     </span>
                     <span className="text-[11px] text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors duration-300 tracking-wide">

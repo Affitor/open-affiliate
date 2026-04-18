@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/papayaglobal
+signup_url: https://papayaglobal.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

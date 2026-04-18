@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/thepointco
+signup_url: https://thepointco.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

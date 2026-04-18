@@ -82,13 +82,7 @@ export function Nav() {
       </div>
 
       {/* Subtle gradient bottom line */}
-      <div
-        className="h-px w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, oklch(0.18 0.01 75 / 6%) 20%, oklch(0.45 0.15 160 / 20%) 50%, oklch(0.18 0.01 75 / 6%) 80%, transparent)",
-        }}
-      />
+      <div className="h-px w-full bg-[linear-gradient(90deg,transparent,oklch(0.18_0.01_75/6%)_20%,oklch(0.45_0.15_160/20%)_50%,oklch(0.18_0.01_75/6%)_80%,transparent)] dark:bg-[linear-gradient(90deg,transparent,oklch(0.3_0.01_75/10%)_20%,oklch(0.55_0.15_160/25%)_50%,oklch(0.3_0.01_75/10%)_80%,transparent)]" />
 
       {/* Mobile menu drawer */}
       {mobileOpen && (

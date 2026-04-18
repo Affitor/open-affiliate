@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/confidohealth
+signup_url: https://www.confido.health
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

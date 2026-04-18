@@ -22,7 +22,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/shorby
+signup_url: https://shor.by/about-shor
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

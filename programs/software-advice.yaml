@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/trialco3sxciiukgkw3u7gartner
+signup_url: https://www.softwareadvice.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

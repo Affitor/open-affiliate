@@ -24,7 +24,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/webydo
+signup_url: https://www.webydo.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

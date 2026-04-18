@@ -25,7 +25,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/thinkific6979
+signup_url: https://www.thinkific.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

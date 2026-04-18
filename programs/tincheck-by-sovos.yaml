@@ -24,7 +24,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/sovos
+signup_url: https://promo.sovos.com/joinsovosbrands
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

@@ -134,14 +134,21 @@
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .glow-card:hover {
+  border-color: oklch(0.55 0.15 160 / 40%);
+  box-shadow: 0 0 15px oklch(0.55 0.15 160 / 8%);
+}
+.dark .glow-card:hover {
   border-color: oklch(0.7 0.15 160 / 30%);
   box-shadow: 0 0 20px oklch(0.7 0.15 160 / 6%);
 }
 
 /* Dot grid background */
 .dot-grid {
-  background-image: radial-gradient(circle, oklch(0.18 0.01 75 / 5%) 1px, transparent 1px);
+  background-image: radial-gradient(circle, oklch(0.15 0.01 75 / 6%) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+.dark .dot-grid {
+  background-image: radial-gradient(circle, oklch(1 0 0 / 4%) 1px, transparent 1px);
 }
 
 /* Terminal window styling */

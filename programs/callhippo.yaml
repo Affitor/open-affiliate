@@ -24,7 +24,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/callhippo
+signup_url: https://callhippo.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

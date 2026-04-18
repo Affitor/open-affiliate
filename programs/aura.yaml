@@ -21,7 +21,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/aura
+signup_url: https://goaura.com
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

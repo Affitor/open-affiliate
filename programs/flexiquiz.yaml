@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://market.partnerstack.com/flexiquiz
+signup_url: https://www.flexiquiz.com/quiz-maker
 approval: manual
 approval_time: 1-5 business days
 restrictions: null
