@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
+import { SearchBar } from "@/components/search-bar";
 
 function GitHubIcon({ className }: { className?: string }) {
   return (
@@ -56,8 +57,11 @@ export function Nav() {
           </nav>
         </div>
 
-        {/* Right: GitHub + CLI hint + hamburger */}
+        {/* Right: Search + GitHub + hamburger */}
         <div className="flex items-center gap-3">
+          <div className="hidden md:block w-56 lg:w-64">
+            <SearchBar />
+          </div>
           <a
             href="https://github.com/Affitor/open-affiliate"
             target="_blank"
@@ -67,9 +71,6 @@ export function Nav() {
             <GitHubIcon className="h-4 w-4" />
             <span className="hidden sm:inline">GitHub</span>
           </a>
-          <code className="hidden md:block rounded-md bg-muted px-2.5 py-1 text-xs font-mono text-muted-foreground">
-            npx openaffiliate search
-          </code>
           {/* Mobile hamburger */}
           <button
             onClick={() => setMobileOpen((prev) => !prev)}

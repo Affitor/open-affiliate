@@ -26,6 +26,7 @@ import {
   commissionLabel,
 } from "@/lib/programs";
 import { track } from "@/lib/track";
+import { ImpressionTracker } from "@/components/impression-tracker";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
 
@@ -76,8 +77,9 @@ function ProgramCardGrid({ program }: { program: Program }) {
   return (
     <Link
       href={`/programs/${program.slug}`}
-      className="group flex flex-col gap-3 rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
+      className="group relative flex flex-col gap-3 rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
     >
+      <ImpressionTracker slug={program.slug} />
       <div className="flex items-start gap-3">
         <ProgramLogo slug={program.slug} name={program.name} size={40} />
         <div className="min-w-0 flex-1">
@@ -122,8 +124,9 @@ function ProgramRowList({ program }: { program: Program }) {
   return (
     <Link
       href={`/programs/${program.slug}`}
-      className="glow-card group flex items-center gap-4 rounded-xl border border-border/40 bg-card/30 p-4 transition-all hover:border-border hover:bg-card/60"
+      className="glow-card group relative flex items-center gap-4 rounded-xl border border-border/40 bg-card/30 p-4 transition-all hover:border-border hover:bg-card/60"
     >
+      <ImpressionTracker slug={program.slug} />
       <ProgramLogo
         slug={program.slug}
         name={program.name}
