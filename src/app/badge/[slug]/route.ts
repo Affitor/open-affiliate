@@ -46,7 +46,8 @@ export async function GET(
   _request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = await params
+  const { slug: rawSlug } = await params
+  const slug = rawSlug.replace(/\.svg$/, "")
   const program = programs.find((p) => p.slug === slug)
 
   if (!program) {
