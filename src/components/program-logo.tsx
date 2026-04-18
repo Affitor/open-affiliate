@@ -19,15 +19,18 @@ export function ProgramLogo({
   const localSrc = `/logos/${slug}.png`;
   const initial = name.charAt(0).toUpperCase();
   const [imgError, setImgError] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
     <div
       className={`relative flex items-center justify-center rounded-lg bg-muted text-sm font-bold overflow-hidden ${className}`}
       style={{ width: size, height: size }}
     >
-      <span className="absolute inset-0 flex items-center justify-center select-none">
-        {initial}
-      </span>
+      {(!imgLoaded || imgError) && (
+        <span className="absolute inset-0 flex items-center justify-center select-none">
+          {initial}
+        </span>
+      )}
       {!imgError && (
         <Image
           src={localSrc}
@@ -36,6 +39,7 @@ export function ProgramLogo({
           height={size}
           className="absolute inset-0 object-contain"
           unoptimized
+          onLoad={() => setImgLoaded(true)}
           onError={() => setImgError(true)}
         />
       )}
