@@ -1,0 +1,60 @@
+name: Program PR
+
+on:
+  pull_request:
+    paths:
+      - "programs/**"
+
+jobs:
+  label:
+    name: Label & Comment
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Add label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['new-program']
+            });
+
+      - name: List changed programs
+        id: changed
+        run: |
+          FILES=$(gh pr diff ${{ github.event.pull_request.number }} --name-only | grep '^programs/' || true)
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          echo "$FILES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+          echo "count=$(echo "$FILES" | grep -c . || echo 0)" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+      - name: Post review comment
+        if: steps.changed.outputs.count > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const files = `${{ steps.changed.outputs.files }}`.trim().split('\n').filter(Boolean);
+            const list = files.map(f => `- \`${f}\``).join('\n');
+            const body = `### Program Submission Review\n\n` +
+              `${files.length} program(s) added/modified:\n${list}\n\n` +
+              `**Automated checks:**\n` +
+              `- [ ] YAML schema validation (see CI)\n` +
+              `- [ ] URL verification (see CI)\n` +
+              `- [ ] Commission data accuracy\n` +
+              `- [ ] Agent prompt quality\n\n` +
+              `Thanks for contributing to OpenAffiliate!`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });

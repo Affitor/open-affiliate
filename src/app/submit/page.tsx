@@ -19,6 +19,7 @@ export default function SubmitPage() {
     agentPrompt: "",
     keywords: "",
     tags: "",
+    signupUrl: "",
     submittedBy: "",
   });
   const [copied, setCopied] = useState(false);
@@ -40,18 +41,28 @@ export default function SubmitPage() {
   const categories = [
     "AI",
     "AI & APIs",
+    "Business Operations",
+    "Content Management",
+    "Customer Support",
     "Database",
     "Design",
     "Design / No-code",
     "Developer Tools",
+    "E-Commerce",
     "Email",
     "Email Marketing",
+    "Finance",
+    "HR & Recruiting",
     "Infrastructure",
     "Landing Pages",
     "Link Management",
+    "Marketing",
+    "Productivity",
+    "SaaS",
+    "Sales",
     "Scheduling",
-    "SEO",
-    "Video",
+    "Security",
+    "Social Media",
   ];
 
   const generateYaml = () => {
@@ -84,7 +95,7 @@ short_description: "${form.description.slice(0, 120)}"
 description: |
   ${form.description}
 
-signup_url: https://${form.url.replace(/^https?:\/\//, "")}/affiliate
+signup_url: https://${(form.signupUrl || form.url).replace(/^https?:\/\//, "")}
 approval: manual
 approval_time: 1-3 days
 
@@ -170,6 +181,18 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
 
           <div>
             <label className="text-xs text-muted-foreground mb-1.5 block">
+              Affiliate signup URL
+            </label>
+            <Input
+              placeholder="yourproduct.com/affiliates"
+              value={form.signupUrl}
+              onChange={(e) => updateField("signupUrl", e.target.value)}
+              className="bg-muted/50 border-border/50"
+            />
+          </div>
+
+          <div>
+            <label className="text-xs text-muted-foreground mb-1.5 block">
               Category
             </label>
             <select
@@ -203,6 +226,7 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
                 <option value="recurring">Recurring</option>
                 <option value="one-time">One-time</option>
                 <option value="tiered">Tiered</option>
+                <option value="hybrid">Hybrid</option>
               </select>
             </div>
             <div>
