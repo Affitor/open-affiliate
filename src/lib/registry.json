@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-18T01:56:38.380Z",
+  "generated_at": "2026-04-18T16:42:03.339Z",
   "count": 349,
   "categories": [
     "AI",
@@ -1084,7 +1084,7 @@
       ],
       "commission": {
         "type": "one-time",
-        "rate": "0%",
+        "rate": "20%",
         "currency": "USD",
         "duration": null,
         "conditions": "20.0% for every customer transaction"
@@ -4565,7 +4565,7 @@
       ],
       "commission": {
         "type": "one-time",
-        "rate": "00%",
+        "rate": "30%",
         "currency": "USD",
         "duration": null,
         "conditions": "30.00% of every sale made by each customer"
@@ -8872,9 +8872,9 @@
       ],
       "commission": {
         "type": "one-time",
-        "rate": "0%",
+        "rate": "50%",
         "currency": "USD",
-        "duration": null,
+        "duration": "12 months",
         "conditions": "Affiliates can claim 50.0% commission for up to 1 year!"
       },
       "cookie_days": 30,

@@ -8,9 +8,9 @@ tags:
   - saas
 commission:
   type: one-time
-  rate: 0%
+  rate: 50%
   currency: USD
-  duration: null
+  duration: 12 months
   conditions: Affiliates can claim 50.0% commission for up to 1 year!
 cookie_days: 30
 attribution: last-click

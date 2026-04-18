@@ -7,7 +7,7 @@ tags:
   - saas
 commission:
   type: one-time
-  rate: 00%
+  rate: 30%
   currency: USD
   duration: null
   conditions: 30.00% of every sale made by each customer

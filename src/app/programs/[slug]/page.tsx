@@ -29,7 +29,7 @@ import { CopyButton } from "@/components/copy-button";
 import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
-import { programs, getProgram, parseCommissionRate, commissionLabel } from "@/lib/programs";
+import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
 export function generateStaticParams() {
@@ -108,21 +108,10 @@ export default async function ProgramPage({
   const joinUrl = program.signupUrl ?? program.url;
 
   // Affiliate Score
-  const commRate = parseCommissionRate(program.commission.rate);
-  const score = Math.round(
-    Math.min(commRate / 50, 1) * 50 +
-    Math.min(program.cookieDays / 90, 1) * 20 +
-    (program.commission.type === "recurring" ? 20 : program.commission.type === "tiered" ? 10 : 0) +
-    (program.verified ? 10 : 0)
-  );
+  const score = affiliateScore(program);
   const categoryPrograms = programs.filter((p) => p.category === program.category);
   const categoryAvg = Math.round(
-    categoryPrograms.reduce((sum, p) => {
-      const r = parseCommissionRate(p.commission.rate);
-      return sum + Math.min(r / 50, 1) * 50 + Math.min(p.cookieDays / 90, 1) * 20 +
-        (p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0) +
-        (p.verified ? 10 : 0);
-    }, 0) / categoryPrograms.length
+    categoryPrograms.reduce((sum, p) => sum + affiliateScore(p), 0) / categoryPrograms.length
   );
   const scoreDiff = score - categoryAvg;
 

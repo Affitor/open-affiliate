@@ -22,7 +22,7 @@ OpenAffiliate is a community-driven, open-source registry of affiliate programs.
 ## Features
 
 - **Search and filter** -- Full-text search across 349+ programs. Filter by category, commission type, minimum rate, and verified status.
-- **Rankings** -- Affiliate Score algorithm ranks programs by commission rate, cookie duration, recurring potential, and verification. Sort by score, name, commission, or cookie days. View rankings by programs, networks, or categories.
+- **Rankings** -- [Affiliate Score](docs/affiliate-score.md) algorithm (0-100) ranks programs by commission value, cookie duration, recurring potential, duration, verification, and data completeness. Sort by score, name, commission, or cookie days. View rankings by programs, networks, or categories.
 - **Community voting** -- Upvote programs you've had success with. Votes are stored in Supabase and displayed alongside scores.
 - **Compare** -- Side-by-side comparison of up to 4 programs. Compare commission, cookie, payout, approval, and more.
 - **Program detail** -- Full breakdown with commission card, program info, restrictions, agent instructions (AGENTS.md), and integration snippets.

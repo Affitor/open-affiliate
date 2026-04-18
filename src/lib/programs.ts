@@ -130,14 +130,98 @@ export interface SearchOptions {
   verified?: boolean
 }
 
+/**
+ * Parse commission rate string into a numeric percentage-equivalent.
+ * - "30%" → 30
+ * - "$1,000" → 1000 (flat fee, kept as-is — score handles conversion)
+ * - "20-30%" → 30 (takes higher)
+ * - "$5 per lead + 30%" → 30 (prefers percentage)
+ * - "varies" → 0
+ */
 export function parseCommissionRate(rate: string | number): number {
   if (typeof rate === "number") return rate
+  const s = String(rate).replace(/,/g, "")
   // Handle ranges like "20-30%" — take the higher value
-  const rangeMatch = rate.match(/(\d+)\s*-\s*(\d+)/)
+  const rangeMatch = s.match(/(\d+)\s*[-–]\s*(\d+)\s*%/)
   if (rangeMatch) return parseFloat(rangeMatch[2])
-  // Handle "$100" or "100%"
-  const numMatch = rate.match(/[\d.]+/)
+  // Compound rates: prefer percentage component ("$5 per lead + 30%")
+  const pctMatch = s.match(/([\d.]+)\s*%/)
+  if (pctMatch) return parseFloat(pctMatch[0])
+  // Flat fee: "$100", "$1000"
+  const dollarMatch = s.match(/\$\s*([\d.]+)/)
+  if (dollarMatch) return parseFloat(dollarMatch[1])
+  // Bare number
+  const numMatch = s.match(/[\d.]+/)
   return numMatch ? parseFloat(numMatch[0]) : 0
+}
+
+/** Check if commission rate is a flat fee (dollar amount) vs percentage */
+export function isCommissionFlat(rate: string | number): boolean {
+  if (typeof rate === "number") return false
+  const s = String(rate).replace(/,/g, "")
+  // If it has a percentage sign, it's not flat
+  if (s.includes("%")) return false
+  // If it has a dollar sign, it's flat
+  if (s.includes("$")) return true
+  return false
+}
+
+/**
+ * Affiliate Score (0–100)
+ *
+ * | Component          | Max | Formula                                               |
+ * |--------------------|-----|-------------------------------------------------------|
+ * | Commission value   |  40 | Percentage: min(rate/50,1)×40                         |
+ * |                    |     | Flat fee: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
+ * |                    |     | "varies": 15                                          |
+ * | Cookie duration    |  15 | min(days/90,1) × 15                                  |
+ * | Type + Duration    |  25 | one-time:5, tiered:12, hybrid:15                      |
+ * |                    |     | recurring:18, rec/12mo:21, rec/24mo:23, rec/lifetime:25|
+ * | Verified           |  10 | 10 if verified                                        |
+ * | Completeness       |  10 | +4 description, +3 agent prompt, +3 signup URL        |
+ * | **Total**          | 100 |                                                       |
+ */
+export function affiliateScore(p: Program): number {
+  const raw = parseCommissionRate(p.commission.rate)
+  const isVaries = typeof p.commission.rate === "string" && /varies/i.test(p.commission.rate)
+
+  // Commission value (max 40)
+  let commScore: number
+  if (isVaries) {
+    commScore = 15
+  } else if (isCommissionFlat(p.commission.rate)) {
+    commScore = raw >= 500 ? 40 : raw >= 100 ? 28 : raw >= 50 ? 16 : 8
+  } else {
+    commScore = Math.min(raw / 50, 1) * 40
+  }
+
+  // Cookie duration (max 15)
+  const cookieScore = Math.min(p.cookieDays / 90, 1) * 15
+
+  // Type + Duration (max 25)
+  let typeScore: number
+  if (p.commission.type === "recurring") {
+    const dur = p.commission.duration?.toLowerCase().trim() ?? ""
+    if (dur === "lifetime") typeScore = 25
+    else if (dur.includes("24")) typeScore = 23
+    else if (dur.includes("12")) typeScore = 21
+    else typeScore = 18
+  } else if (p.commission.type === "tiered") {
+    typeScore = 12
+  } else {
+    typeScore = 5
+  }
+
+  // Verified (max 10)
+  const verifiedScore = p.verified ? 10 : 0
+
+  // Completeness (max 10)
+  let completeness = 0
+  if (p.description && p.description.length > 20) completeness += 4
+  if (p.agentPrompt && p.agentPrompt.length > 10) completeness += 3
+  if (p.signupUrl) completeness += 3
+
+  return Math.round(commScore + cookieScore + typeScore + verifiedScore + completeness)
 }
 
 export function searchPrograms(query: string, category?: string): Program[]

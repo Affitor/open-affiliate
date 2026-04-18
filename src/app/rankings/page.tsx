@@ -18,6 +18,7 @@ import {
   getCategoryStats,
   type Program,
   commissionLabel,
+  affiliateScore,
 } from "@/lib/programs";
 
 type Tab = "programs" | "networks" | "categories";
@@ -35,15 +36,6 @@ function formatNetworkName(name: string): string {
     .split(/[-_]/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ");
-}
-
-function affiliateScore(p: Program): number {
-  const commRate = parseCommissionRate(p.commission.rate);
-  const commScore = Math.min(commRate / 50, 1) * 50;
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 20;
-  const recurringScore = p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0;
-  const verifiedScore = p.verified ? 10 : 0;
-  return Math.round(commScore + cookieScore + recurringScore + verifiedScore);
 }
 
 function RankBadge({ rank }: { rank: number }) {

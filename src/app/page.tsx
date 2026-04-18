@@ -11,17 +11,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate, commissionLabel } from "@/lib/programs";
+import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
-
-function affiliateScore(p: Program): number {
-  const commRate = parseCommissionRate(p.commission.rate);
-  const commScore = Math.min(commRate / 50, 1) * 50;
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 20;
-  const recurringScore = p.commission.type === "recurring" ? 20 : p.commission.type === "tiered" ? 10 : 0;
-  const verifiedScore = p.verified ? 10 : 0;
-  return Math.round(commScore + cookieScore + recurringScore + verifiedScore);
-}
 
 function RankingsPreview() {
   const top5 = [...programs]
