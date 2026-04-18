@@ -418,14 +418,8 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
 }
 
 // Cached version — revalidates every 7 days via ISR
-const _cachedFetchSocialItems = unstable_cache(
+export const fetchSocialItems = unstable_cache(
   _fetchSocialItems,
   ["social-listen"],
   { revalidate: 604800 }
 )
-
-// Skip during build — don't pollute ISR cache with empty results
-export async function fetchSocialItems(slug: string): Promise<SocialItem[]> {
-  if (process.env.NEXT_PHASE === "phase-production-build") return []
-  return _cachedFetchSocialItems(slug)
-}

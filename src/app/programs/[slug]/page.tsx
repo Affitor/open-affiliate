@@ -30,8 +30,8 @@ import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
-import { SocialListen } from "@/components/social-listen";
-import { fetchSocialItems } from "@/lib/social";
+import { Suspense } from "react";
+import { SocialListenLoader } from "@/components/social-listen-loader";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -110,9 +110,6 @@ export default async function ProgramPage({
 
   const joinUrl = program.signupUrl ?? program.url;
 
-  // Social Listen — server-side fetch with ISR cache
-  const socialItems = await fetchSocialItems(slug) ?? []
-
   // Affiliate Score
   const score = affiliateScore(program);
   const categoryPrograms = programs.filter((p) => p.category === program.category);
@@ -189,17 +186,6 @@ export default async function ProgramPage({
               worstRating: "1",
               ratingCount: categoryPrograms.length,
             },
-            ...(socialItems?.length > 0 && {
-              subjectOf: socialItems.slice(0, 6).map((item) => ({
-                "@type": item.platform === "youtube" || item.platform === "tiktok" ? "VideoObject" : "Article",
-                name: item.title,
-                url: item.url,
-                author: { "@type": "Person", name: item.author },
-                ...(item.publishedAt && { datePublished: item.publishedAt }),
-                ...(item.thumbnail && { thumbnailUrl: item.thumbnail }),
-                ...(item.views && { interactionStatistic: { "@type": "InteractionCounter", interactionType: "https://schema.org/WatchAction", userInteractionCount: item.views } }),
-              })),
-            }),
           }),
         }}
       />
@@ -301,8 +287,10 @@ export default async function ProgramPage({
             </div>
           </div>
 
-          {/* Social Listen — SSR for SEO, data baked into HTML */}
-          <SocialListen items={socialItems} />
+          {/* Social Listen — dynamic hole via PPR, fetched on first visit */}
+          <Suspense>
+            <SocialListenLoader slug={slug} />
+          </Suspense>
 
           {/* How to Join */}
           {(program.signupUrl ?? program.approval ?? program.approvalTime) && (
