@@ -27,6 +27,7 @@ function Section({ section }: { section: CapabilitySection }) {
     <div className="border-b border-border/30 last:border-b-0">
       <button
         onClick={() => setOpen(!open)}
+        aria-expanded={open}
         className="flex items-center justify-between w-full px-5 py-3.5 text-left hover:bg-muted/20 transition-colors"
       >
         <div className="flex items-center gap-2.5">

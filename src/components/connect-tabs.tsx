@@ -64,7 +64,7 @@ const mcpClient = await createMCPClient({
 const tools = await mcpClient.tools();
 
 const { text } = await generateText({
-  model: anthropic("claude-sonnet-4-20250514"),
+  model: anthropic("claude-sonnet-4.6"),
   tools,
   prompt: "Get details for ${slug}",
 });
@@ -85,21 +85,25 @@ ${mcpStdio}`;
 
   return (
     <div className="rounded-xl border border-border/50 bg-card/50 overflow-hidden">
-      <div className="flex items-center gap-1 p-1.5 border-b border-border/30 bg-muted/20">
-        {tabs.map((tab) => (
-          <button
-            key={tab.value}
-            onClick={() => setActiveTab(tab.value)}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
-              activeTab === tab.value
-                ? "bg-background text-foreground shadow-sm"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            {tab.icon}
-            {tab.label}
-          </button>
-        ))}
+      <div className="px-5 py-3 border-b border-border/30 bg-muted/20">
+        <h3 className="text-sm font-semibold mb-2">Connect</h3>
+        <div className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/30 p-1 w-fit">
+          {tabs.map((tab) => (
+            <button
+              key={tab.value}
+              onClick={() => setActiveTab(tab.value)}
+              aria-pressed={activeTab === tab.value}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                activeTab === tab.value
+                  ? "bg-background text-foreground shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              {tab.icon}
+              {tab.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="relative">
