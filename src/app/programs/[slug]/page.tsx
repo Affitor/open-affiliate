@@ -3,10 +3,8 @@ import Link from "next/link";
 import {
   ArrowLeft,
   ExternalLink,
-  Star,
   Clock,
   DollarSign,
-  Copy,
   Terminal,
   Bot,
   GitFork,
@@ -15,7 +13,6 @@ import {
   Check,
   X,
   Lock,
-
   MousePointer,
   Fingerprint,
   CreditCard,
@@ -23,9 +20,12 @@ import {
   Network,
   Users,
   BarChart2,
+  Zap,
+  Globe,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { CopyButton } from "@/components/copy-button";
 import { programs, getProgram } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -38,6 +38,27 @@ function BoolIcon({ value }: { value?: boolean }) {
   if (value === false)
     return <X className="h-3.5 w-3.5 text-muted-foreground/50 shrink-0" />;
   return <span className="text-xs text-muted-foreground">—</span>;
+}
+
+function StatBadge({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="inline-flex items-center gap-1.5 rounded-md border border-border/50 bg-muted/30 px-2.5 py-1 text-xs text-muted-foreground">
+      {icon}
+      {label}
+    </div>
+  );
+}
+
+function SidebarRow({ label, value, icon }: { label: string; value: React.ReactNode; icon?: React.ReactNode }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className="text-xs text-muted-foreground flex items-center gap-1.5">
+        {icon}
+        {label}
+      </span>
+      <span className="text-sm font-semibold">{value}</span>
+    </div>
+  );
 }
 
 export default async function ProgramPage({
@@ -72,6 +93,25 @@ export default async function ProgramPage({
   const approvalKey = program.approval as keyof typeof approvalConfig | undefined;
   const approvalInfo = approvalKey ? approvalConfig[approvalKey] : null;
 
+  const mcpHttp = `{
+  "mcpServers": {
+    "openaffiliate": {
+      "url": "https://openaffiliate.dev/api/mcp"
+    }
+  }
+}`;
+
+  const mcpStdio = `{
+  "mcpServers": {
+    "openaffiliate": {
+      "command": "npx",
+      "args": ["-y", "openaffiliate-mcp"]
+    }
+  }
+}`;
+
+  const badgeMarkdown = `[![OpenAffiliate](https://openaffiliate.dev/badge/${program.slug}.svg)](https://openaffiliate.dev/programs/${program.slug})`;
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       {/* Breadcrumb */}
@@ -83,50 +123,78 @@ export default async function ProgramPage({
         All Programs
       </Link>
 
+      {/* Header */}
+      <div className="flex items-start gap-4 mb-4">
+        <ProgramLogo slug={program.slug} name={program.name} size={56} className="shrink-0 rounded-xl" />
+        <div className="flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
+              {program.name}
+            </h1>
+            {program.verified && (
+              <Badge
+                variant="outline"
+                className="text-xs border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
+              >
+                <Shield className="h-3 w-3 mr-1" />
+                Verified
+              </Badge>
+            )}
+          </div>
+          <p className="text-sm text-muted-foreground mt-1">
+            {program.shortDescription}
+          </p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
+            <a
+              href={program.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ExternalLink className="h-3 w-3" />
+              <span className="truncate max-w-[180px] sm:max-w-none">{program.url.replace("https://", "")}</span>
+            </a>
+            <span className="text-border hidden sm:inline">|</span>
+            <div className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Calendar className="h-3 w-3" />
+              {program.createdAt}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Stat badges row */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        <StatBadge
+          icon={<DollarSign className="h-3 w-3" />}
+          label={`${program.commission.rate}% ${program.commission.type}`}
+        />
+        <StatBadge
+          icon={<Clock className="h-3 w-3" />}
+          label={`${program.cookieDays}d cookie`}
+        />
+        {program.network && (
+          <StatBadge
+            icon={<Network className="h-3 w-3" />}
+            label={program.network}
+          />
+        )}
+        {approvalInfo && (
+          <StatBadge
+            icon={<Zap className="h-3 w-3" />}
+            label={approvalInfo.label}
+          />
+        )}
+        <StatBadge
+          icon={<Globe className="h-3 w-3" />}
+          label={program.category}
+        />
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main content */}
         <div className="lg:col-span-2 space-y-8">
-          {/* Header */}
-          <div className="flex items-start gap-4">
-            <ProgramLogo slug={program.slug} name={program.name} size={56} className="shrink-0 rounded-xl" />
-            <div className="flex-1 min-w-0">
-              <div className="flex flex-wrap items-center gap-2.5">
-                <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
-                  {program.name}
-                </h1>
-                {program.verified && (
-                  <Badge
-                    variant="outline"
-                    className="text-xs border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
-                  >
-                    <Shield className="h-3 w-3 mr-1" />
-                    Verified
-                  </Badge>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground mt-1">
-                {program.shortDescription}
-              </p>
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-3">
-                <a
-                  href={program.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <ExternalLink className="h-3 w-3" />
-                  <span className="truncate max-w-[180px] sm:max-w-none">{program.url.replace("https://", "")}</span>
-                </a>
-                <span className="text-border hidden sm:inline">|</span>
-                <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                  <Calendar className="h-3 w-3" />
-                  {program.createdAt}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Description */}
+          {/* About */}
           <div>
             <h2 className="text-base font-semibold mb-3">About</h2>
             <div className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
@@ -212,24 +280,13 @@ export default async function ProgramPage({
               </p>
 
               {/* Agent keywords */}
-              {program.agentKeywords && program.agentKeywords.length > 0 ? (
+              {(program.agentKeywords?.length || program.tags.length > 0) && (
                 <div className="mt-4">
                   <p className="text-xs text-muted-foreground mb-2">Keywords:</p>
                   <div className="flex flex-wrap gap-1.5">
-                    {program.agentKeywords.map((kw) => (
+                    {(program.agentKeywords?.length ? program.agentKeywords : program.tags).map((kw) => (
                       <Badge key={kw} variant="secondary" className="text-[11px]">
                         {kw}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <div className="mt-4">
-                  <p className="text-xs text-muted-foreground mb-2">Keywords:</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {program.tags.map((tag) => (
-                      <Badge key={tag} variant="secondary" className="text-[11px]">
-                        {tag}
                       </Badge>
                     ))}
                   </div>
@@ -253,22 +310,6 @@ export default async function ProgramPage({
             </div>
           </div>
 
-          {/* Install */}
-          <div>
-            <h2 className="text-base font-semibold mb-3">Quick install</h2>
-            <div className="rounded-lg bg-muted/50 border border-border/50 p-4 flex items-center justify-between gap-3 overflow-hidden">
-              <div className="flex items-center gap-2 min-w-0 overflow-x-auto">
-                <Terminal className="h-4 w-4 text-muted-foreground shrink-0" />
-                <code className="text-sm font-mono text-emerald-700 dark:text-emerald-400 whitespace-nowrap">
-                  npx openaffiliate add {program.slug}
-                </code>
-              </div>
-              <button className="p-1.5 hover:bg-muted rounded transition-colors shrink-0">
-                <Copy className="h-3.5 w-3.5 text-muted-foreground" />
-              </button>
-            </div>
-          </div>
-
           {/* Contribute */}
           <div className="rounded-xl border border-border/40 bg-muted/10 p-5 flex items-start gap-3">
             <GitFork className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
@@ -279,7 +320,7 @@ export default async function ProgramPage({
               <p className="text-xs text-muted-foreground mt-1">
                 This program is community-maintained. Found outdated info?{" "}
                 <a
-                  href={`https://github.com/openaffiliate/registry/blob/main/programs/${program.slug}.yaml`}
+                  href={`https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`}
                   className="text-foreground hover:underline"
                 >
                   Edit on GitHub
@@ -291,121 +332,131 @@ export default async function ProgramPage({
 
         {/* Sidebar */}
         <div className="space-y-4">
-          {/* Commission card */}
-          <div className="glow-card rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
-            <h3 className="text-sm font-semibold">Commission</h3>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <DollarSign className="h-3 w-3" /> Rate
-                </span>
-                <span className="text-sm font-semibold">
-                  {program.commission.rate}%{" "}
-                  <span className="text-xs text-muted-foreground font-normal">
-                    {program.commission.type}
-                  </span>
-                </span>
+          {/* Join button */}
+          <a
+            href={joinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
+          >
+            Join Program
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+
+          {/* Connect card */}
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
+            <h3 className="text-sm font-semibold flex items-center gap-1.5">
+              <Terminal className="h-3.5 w-3.5 text-muted-foreground" />
+              Connect
+            </h3>
+
+            {/* CLI */}
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">CLI</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-emerald-700 dark:text-emerald-400 truncate">
+                  npx openaffiliate info {program.slug}
+                </code>
+                <CopyButton text={`npx openaffiliate info ${program.slug}`} />
               </div>
-
-              {program.commissionDuration && (
-                <>
-                  <div className="h-px bg-border/50" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                      <Calendar className="h-3 w-3" /> Duration
-                    </span>
-                    <span className="text-sm font-semibold">
-                      {program.commissionDuration}
-                    </span>
-                  </div>
-                </>
-              )}
-
-              {program.commissionConditions && (
-                <p className="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2">
-                  {program.commissionConditions}
-                </p>
-              )}
-
-              <div className="h-px bg-border/50" />
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <Clock className="h-3 w-3" /> Cookie
-                </span>
-                <span className="text-sm font-semibold">
-                  {program.cookieDays} days
-                </span>
-              </div>
-
-              {program.attribution && (
-                <>
-                  <div className="h-px bg-border/50" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                      <MousePointer className="h-3 w-3" /> Attribution
-                    </span>
-                    <span className="text-sm font-semibold capitalize">
-                      {program.attribution}
-                    </span>
-                  </div>
-                </>
-              )}
-
-              {program.trackingMethod && (
-                <>
-                  <div className="h-px bg-border/50" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                      <Fingerprint className="h-3 w-3" /> Tracking
-                    </span>
-                    <span className="text-sm font-semibold capitalize">
-                      {program.trackingMethod}
-                    </span>
-                  </div>
-                </>
-              )}
-
-              <div className="h-px bg-border/50" />
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <DollarSign className="h-3 w-3" /> Min payout
-                </span>
-                <span className="text-sm font-semibold">
-                  ${program.payout.minimum}
-                </span>
-              </div>
-              <div className="h-px bg-border/50" />
-              <div className="flex items-center justify-between">
-                <span className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <Calendar className="h-3 w-3" /> Frequency
-                </span>
-                <span className="text-sm font-semibold capitalize">
-                  {program.payout.frequency}
-                </span>
-              </div>
-
-              {program.payoutMethods && program.payoutMethods.length > 0 && (
-                <>
-                  <div className="h-px bg-border/50" />
-                  <div>
-                    <span className="text-xs text-muted-foreground flex items-center gap-1.5 mb-2">
-                      <CreditCard className="h-3 w-3" /> Payment methods
-                    </span>
-                    <div className="flex flex-wrap gap-1.5">
-                      {program.payoutMethods.map((method) => (
-                        <Badge
-                          key={method}
-                          variant="outline"
-                          className="text-[10px] capitalize"
-                        >
-                          {method}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
             </div>
+
+            {/* MCP HTTP */}
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (HTTP)</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  openaffiliate.dev/api/mcp
+                </code>
+                <CopyButton text={mcpHttp} />
+              </div>
+            </div>
+
+            {/* MCP stdio */}
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (stdio)</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  npx openaffiliate-mcp
+                </code>
+                <CopyButton text={mcpStdio} />
+              </div>
+            </div>
+
+            {/* API */}
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">API</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  /api/programs/{program.slug}
+                </code>
+                <CopyButton text={`curl https://openaffiliate.dev/api/programs/${program.slug}`} />
+              </div>
+            </div>
+          </div>
+
+          {/* Commission card */}
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-3">
+            <h3 className="text-sm font-semibold">Commission</h3>
+
+            <SidebarRow
+              label="Rate"
+              icon={<DollarSign className="h-3 w-3" />}
+              value={<>{program.commission.rate}% <span className="text-xs text-muted-foreground font-normal">{program.commission.type}</span></>}
+            />
+
+            {program.commissionDuration && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Duration" icon={<Calendar className="h-3 w-3" />} value={program.commissionDuration} />
+              </>
+            )}
+
+            {program.commissionConditions && (
+              <p className="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2">
+                {program.commissionConditions}
+              </p>
+            )}
+
+            <div className="h-px bg-border/50" />
+            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={`${program.cookieDays} days`} />
+
+            {program.attribution && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Attribution" icon={<MousePointer className="h-3 w-3" />} value={<span className="capitalize">{program.attribution}</span>} />
+              </>
+            )}
+
+            {program.trackingMethod && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Tracking" icon={<Fingerprint className="h-3 w-3" />} value={<span className="capitalize">{program.trackingMethod}</span>} />
+              </>
+            )}
+
+            <div className="h-px bg-border/50" />
+            <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
+            <div className="h-px bg-border/50" />
+            <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
+
+            {program.payoutMethods && program.payoutMethods.length > 0 && (
+              <>
+                <div className="h-px bg-border/50" />
+                <div>
+                  <span className="text-xs text-muted-foreground flex items-center gap-1.5 mb-2">
+                    <CreditCard className="h-3 w-3" /> Payment methods
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {program.payoutMethods.map((method) => (
+                      <Badge key={method} variant="outline" className="text-[10px] capitalize">
+                        {method}
+                      </Badge>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* Program Info card */}
@@ -414,7 +465,7 @@ export default async function ProgramPage({
             program.marketingMaterials !== undefined ||
             program.apiAvailable !== undefined ||
             program.dedicatedManager !== undefined) && (
-            <div className="glow-card rounded-xl border border-border/50 bg-card/50 p-5">
+            <div className="rounded-xl border border-border/50 bg-card/50 p-5">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-1.5">
                 <Info className="h-3.5 w-3.5 text-muted-foreground" />
                 Program Info
@@ -462,14 +513,25 @@ export default async function ProgramPage({
             </div>
           )}
 
-          {/* Category */}
-          <div className="glow-card rounded-xl border border-border/50 bg-card/50 p-5">
-            <h3 className="text-sm font-semibold mb-3">Category</h3>
-            <Badge variant="secondary">{program.category}</Badge>
+          {/* Badge embed */}
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5">
+            <h3 className="text-sm font-semibold mb-3">Badge</h3>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={`/badge/${program.slug}.svg`}
+              alt={`${program.name} on OpenAffiliate`}
+              className="mb-3"
+            />
+            <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+              <code className="text-[10px] font-mono text-muted-foreground truncate">
+                Markdown
+              </code>
+              <CopyButton text={badgeMarkdown} />
+            </div>
           </div>
 
           {/* Tags */}
-          <div className="glow-card rounded-xl border border-border/50 bg-card/50 p-5">
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5">
             <h3 className="text-sm font-semibold mb-3">Tags</h3>
             <div className="flex flex-wrap gap-1.5">
               {program.tags.map((tag) => (
@@ -479,25 +541,6 @@ export default async function ProgramPage({
               ))}
             </div>
           </div>
-
-          {/* Submitted by */}
-          <div className="glow-card rounded-xl border border-border/50 bg-card/50 p-5">
-            <h3 className="text-sm font-semibold mb-2">Submitted by</h3>
-            <p className="text-xs text-muted-foreground">
-              @{program.submittedBy}
-            </p>
-          </div>
-
-          {/* Join */}
-          <a
-            href={joinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
-          >
-            Join Program
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
         </div>
       </div>
     </div>
