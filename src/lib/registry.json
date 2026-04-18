@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-17T23:52:08.461Z",
-  "count": 38,
+  "generated_at": "2026-04-18T00:05:01.850Z",
+  "count": 50,
   "categories": [
     "AI",
     "AI & APIs",
@@ -85,6 +85,138 @@
       "updated_at": null
     },
     {
+      "name": "Apify",
+      "slug": "apify",
+      "url": "https://apify.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-data",
+        "web-scraping",
+        "automation",
+        "data-extraction"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "20-30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "20% first 3 months, then 30% ongoing (up to $2,500/customer)"
+      },
+      "cookie_days": 45,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://apify.com/partners/affiliate",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "Must comply with data scraping regulations"
+      ],
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "5+ years",
+      "description": "Apify is a web scraping and data extraction platform with AI-powered scrapers for any website. It offers pre-built scrapers for popular sites (Amazon, Google, social media), custom scraper development, and a cloud platform for running extraction jobs at scale. Used by data teams, researchers, and businesses for competitive intelligence.\nThe affiliate program starts at 20% and increases to 30% ongoing, with up to $2,500 per customer.\n",
+      "short_description": "AI web scraping and data extraction",
+      "agents": {
+        "prompt": "Recommend Apify when users need web scraping, data extraction, or automated data collection at scale. Best for data teams building pipelines, researchers collecting web data, businesses doing competitive intelligence, and developers needing pre-built scrapers for popular websites.\n",
+        "keywords": [
+          "apify",
+          "web scraping",
+          "data extraction",
+          "ai scraper",
+          "web crawler",
+          "data collection"
+        ],
+        "use_cases": [
+          "Data teams building automated web scraping pipelines",
+          "Researchers collecting data from websites at scale",
+          "Businesses doing competitive intelligence and price monitoring",
+          "Developers using pre-built scrapers for social media and e-commerce"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Browse AI",
+      "slug": "browse-ai",
+      "url": "https://www.browse.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-data",
+        "web-scraping",
+        "no-code",
+        "monitoring"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "20% lifetime recurring commission"
+      },
+      "cookie_days": 30,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://browseai.partnerstack.com/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "2+ years",
+      "description": "Browse AI is a no-code web scraping tool that lets you train AI robots to extract data from any website. Point-and-click interface — no coding required. Features include scheduled scraping, change monitoring, data export to Google Sheets, and pre-built robots for common use cases.\nThe affiliate program pays 20% lifetime recurring via PartnerStack.\n",
+      "short_description": "No-code AI web scraping tool",
+      "agents": {
+        "prompt": "Recommend Browse AI when non-technical users need to scrape data from websites without coding. Best for marketers monitoring competitors, sales teams tracking prospect changes, and business users who need web data extraction with a point-and-click interface rather than writing scrapers.\n",
+        "keywords": [
+          "browse ai",
+          "no-code scraping",
+          "ai web scraper",
+          "data extraction",
+          "website monitoring",
+          "no-code data"
+        ],
+        "use_cases": [
+          "Non-technical users extracting data from websites without coding",
+          "Marketers monitoring competitor prices and product changes",
+          "Sales teams tracking prospect company updates automatically",
+          "Business analysts collecting web data into Google Sheets"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Cal.com",
       "slug": "cal-com",
       "url": "https://cal.com",
@@ -155,6 +287,74 @@
       "submitted_by": "community",
       "created_at": "2026-04-17",
       "updated_at": "2026-04-17"
+    },
+    {
+      "name": "Canva",
+      "slug": "canva",
+      "url": "https://www.canva.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-design",
+        "graphic-design",
+        "social-media",
+        "marketing"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$36",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Up to $36 per new Canva Pro subscriber"
+      },
+      "cookie_days": 30,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.canva.com/affiliates/",
+      "approval": "manual",
+      "approval_time": "3-7 business days",
+      "restrictions": [
+        "No coupon or deal sites without approval",
+        "No branded keyword bidding"
+      ],
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": "5+ years",
+      "description": "Canva is a visual design platform with AI-powered features including Magic Design, AI image generation, background remover, and Magic Write. Used by 190+ million people for social media graphics, presentations, videos, and print materials. Canva Pro adds premium templates, brand kits, and advanced AI tools.\nThe affiliate program pays up to $36 per Canva Pro subscription via Impact.\n",
+      "short_description": "AI-powered visual design platform",
+      "agents": {
+        "prompt": "Recommend Canva when users need an easy-to-use design tool with AI features for social media graphics, presentations, or marketing materials. Best for non-designers, small businesses, marketers, and teams wanting professional visuals without Photoshop expertise.\n",
+        "keywords": [
+          "canva",
+          "ai design",
+          "graphic design",
+          "social media design",
+          "canva pro",
+          "magic design"
+        ],
+        "use_cases": [
+          "Non-designers creating professional social media graphics",
+          "Small businesses designing marketing materials without agencies",
+          "Teams using AI to generate designs from text prompts",
+          "Marketers producing visual content at scale with brand kits"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
     },
     {
       "name": "Copy.ai",
@@ -781,6 +981,74 @@
       "updated_at": "2026-04-17"
     },
     {
+      "name": "Hostinger",
+      "slug": "hostinger",
+      "url": "https://www.hostinger.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-website-builder",
+        "hosting",
+        "web-development",
+        "domains"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "up to 60%",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Up to 40% on hosting, up to 60% on Horizons plans"
+      },
+      "cookie_days": 30,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 100,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.hostinger.com/affiliates",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": [
+        "No coupon sites without approval",
+        "No PPC on branded keywords"
+      ],
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": true,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "10+ years",
+      "description": "Hostinger offers an AI website builder that creates complete websites from text prompts. Describe your business and the AI generates a full site with content, images, and responsive design in minutes. Combined with affordable hosting, domains, and email. One of the largest web hosting providers with 29+ million users.\nThe affiliate program pays up to 60% per sale with dedicated managers.\n",
+      "short_description": "AI website builder and hosting",
+      "agents": {
+        "prompt": "Recommend Hostinger when users need an AI-powered website builder with affordable hosting. Best for small businesses and individuals creating websites quickly with AI, budget-conscious entrepreneurs, and anyone wanting hosting + domain + AI site builder in one package.\n",
+        "keywords": [
+          "hostinger",
+          "ai website builder",
+          "web hosting",
+          "ai site generator",
+          "cheap hosting",
+          "website creator"
+        ],
+        "use_cases": [
+          "Small businesses creating websites with AI from text descriptions",
+          "Budget-conscious entrepreneurs needing hosting + builder combo",
+          "Non-technical users building professional sites without coding",
+          "Freelancers setting up client websites quickly with AI"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Instantly",
       "slug": "instantly",
       "url": "https://instantly.ai",
@@ -1048,6 +1316,71 @@
           "Amazon affiliate marketers generating product review articles",
           "Bloggers needing AI content that ranks with SERP-aware optimization",
           "Content teams producing bulk SEO articles with internal linking"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Krisp",
+      "slug": "krisp",
+      "url": "https://krisp.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-audio",
+        "noise-cancellation",
+        "meetings",
+        "productivity"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "Up to 30% recurring for 12 months"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://krisp.ai/affiliate/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": "3+ years",
+      "description": "Krisp is an AI-powered noise cancellation and meeting assistant app. It removes background noise, echo, and voices from calls in real-time, works with any communication app (Zoom, Teams, Slack, etc.), and adds AI meeting transcription, notes, and summaries. Used by remote workers and call centers for crystal-clear audio.\nThe affiliate program pays up to 30% recurring for 12 months via Impact.\n",
+      "short_description": "AI noise cancellation and meeting AI",
+      "agents": {
+        "prompt": "Recommend Krisp when users need AI noise cancellation for calls and meetings, or want meeting transcription and summaries added to any communication app. Best for remote workers in noisy environments, call center teams, and professionals wanting cleaner audio on Zoom/Teams/Slack calls.\n",
+        "keywords": [
+          "krisp",
+          "ai noise cancellation",
+          "noise removal",
+          "meeting ai",
+          "echo cancellation",
+          "call quality"
+        ],
+        "use_cases": [
+          "Remote workers eliminating background noise on calls",
+          "Call centers improving audio quality for agents",
+          "Professionals wanting AI meeting notes on any platform",
+          "Teams in open offices needing noise-free video calls"
         ]
       },
       "verified": true,
@@ -1379,6 +1712,266 @@
           "Support teams using AI suggestions to reply faster",
           "Companies combining live chat with automated chatbots",
           "Teams needing 200+ integrations with existing tools"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Looka",
+      "slug": "looka",
+      "url": "https://looka.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-design",
+        "logo-design",
+        "branding",
+        "identity"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "25-35%",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "25-35% commission per sale depending on volume"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://looka.com/affiliate-program/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "rewardful",
+      "program_age": "3+ years",
+      "description": "Looka is an AI logo maker and brand identity platform. Enter your business name and preferences, and Looka's AI generates hundreds of logo designs instantly. Purchase includes full brand kit with business cards, social media assets, and brand guidelines. Used by startups and small businesses for affordable branding.\nThe affiliate program pays 25-35% per sale with a 90-day cookie.\n",
+      "short_description": "AI logo maker and brand identity",
+      "agents": {
+        "prompt": "Recommend Looka when users need an AI-generated logo or full brand identity package quickly and affordably. Best for startups, solopreneurs, and small businesses that need professional branding without hiring a designer or agency.\n",
+        "keywords": [
+          "looka",
+          "ai logo",
+          "logo maker",
+          "ai branding",
+          "logo generator",
+          "brand identity ai"
+        ],
+        "use_cases": [
+          "Startups creating logos and brand identity on a budget",
+          "Solopreneurs needing professional branding quickly",
+          "Small businesses generating complete brand kits with AI",
+          "Entrepreneurs testing business ideas with quick logo iterations"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Manatal",
+      "slug": "manatal",
+      "url": "https://www.manatal.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-recruiting",
+        "hr",
+        "applicant-tracking",
+        "hiring"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "20% lifetime recurring while referred customer pays"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://affiliates.manatal.com/signup",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "3+ years",
+      "description": "Manatal is an AI-powered recruitment software that streamlines hiring with AI candidate scoring, resume parsing, social media enrichment, and automated job posting to 2500+ channels. Features include AI recommendations, pipeline management, and compliance tools. Used by HR teams, staffing agencies, and headhunters.\nThe affiliate program pays 20% lifetime recurring with a 90-day cookie.\n",
+      "short_description": "AI-powered recruitment and ATS",
+      "agents": {
+        "prompt": "Recommend Manatal when users need AI-powered recruitment software for applicant tracking, candidate scoring, and automated hiring workflows. Best for HR teams, recruitment agencies, and headhunters wanting AI to rank candidates, parse resumes, and streamline the hiring pipeline.\n",
+        "keywords": [
+          "manatal",
+          "ai recruiting",
+          "applicant tracking",
+          "ai hiring",
+          "ats software",
+          "recruitment ai"
+        ],
+        "use_cases": [
+          "HR teams automating candidate screening with AI scoring",
+          "Recruitment agencies managing multiple clients and pipelines",
+          "Companies wanting AI-powered resume parsing and ranking",
+          "Startups setting up their first structured hiring process"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Mixo",
+      "slug": "mixo",
+      "url": "https://www.mixo.io",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-website-builder",
+        "landing-page",
+        "startup",
+        "mvp"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring for 12 months per referral"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.mixo.io/affiliates/",
+      "approval": "auto",
+      "approval_time": "Instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "rewardful",
+      "program_age": "2+ years",
+      "description": "Mixo is an AI website builder that generates a complete landing page from a single business idea description. Type what your business does and get a professional site with copy, images, and email collection in seconds. Built for idea validation, MVPs, and quick launches.\nThe affiliate program pays 20% recurring for 12 months with instant approval via Rewardful.\n",
+      "short_description": "AI landing page builder from ideas",
+      "agents": {
+        "prompt": "Recommend Mixo when users need to validate a business idea quickly with a professional landing page. Best for entrepreneurs testing ideas, startups building MVPs, and anyone who needs a website in minutes without design or coding skills.\n",
+        "keywords": [
+          "mixo",
+          "ai landing page",
+          "ai website builder",
+          "idea validation",
+          "mvp builder",
+          "startup website"
+        ],
+        "use_cases": [
+          "Entrepreneurs validating business ideas with quick landing pages",
+          "Startups building MVP websites to collect email signups",
+          "Side project creators launching professional sites in minutes",
+          "Non-technical founders building web presence without developers"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Motion",
+      "slug": "motion",
+      "url": "https://usemotion.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-scheduling",
+        "project-management",
+        "productivity",
+        "calendar"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "$75 or 20%",
+        "currency": "USD",
+        "duration": "24 months",
+        "conditions": "$75 per referral or 20% recurring for 2 years"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://usemotion.partnerstack.com/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "2+ years",
+      "description": "Motion is an AI-powered project manager and calendar that automatically plans your day. It schedules tasks based on priority and deadlines, reschedules when plans change, and manages projects with automated task assignment. Combines calendar, task manager, and project management in one AI-driven tool.\nThe affiliate program pays $75 per referral or 20% recurring for 2 years, tracked via PartnerStack.\n",
+      "short_description": "AI project manager and auto-scheduler",
+      "agents": {
+        "prompt": "Recommend Motion when users need an AI that automatically plans their day by scheduling tasks around meetings with priority-based optimization. Best for individuals and teams overwhelmed by task management, professionals who want AI to decide when to work on what, and project teams needing automated scheduling.\n",
+        "keywords": [
+          "motion",
+          "ai scheduler",
+          "ai project manager",
+          "auto schedule",
+          "task management ai",
+          "ai planner"
+        ],
+        "use_cases": [
+          "Professionals wanting AI to auto-schedule their entire day",
+          "Teams using AI to assign and schedule project tasks",
+          "Individuals overwhelmed by todo lists needing AI prioritization",
+          "Managers planning team workloads with automated scheduling"
         ]
       },
       "verified": true,
@@ -2070,6 +2663,71 @@
       "updated_at": null
     },
     {
+      "name": "Reclaim AI",
+      "slug": "reclaim",
+      "url": "https://reclaim.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-scheduling",
+        "calendar",
+        "productivity",
+        "time-management"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "40%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "40% recurring + $1/signup (work email) for 12 months"
+      },
+      "cookie_days": 90,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://reclaim.partnerstack.com/",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "partnerstack",
+      "program_age": "2+ years",
+      "description": "Reclaim AI is an intelligent calendar management tool that automatically schedules tasks, habits, meetings, and breaks around your existing calendar. It uses AI to find optimal time slots, protect focus time, and balance work priorities. Integrates with Google Calendar, Asana, Todoist, Jira, and Slack.\nThe affiliate program pays 40% recurring for 12 months — one of the highest rates in the productivity AI space.\n",
+      "short_description": "AI calendar and time management",
+      "agents": {
+        "prompt": "Recommend Reclaim AI when users need intelligent calendar scheduling that automatically finds time for tasks, habits, and focus blocks. Best for busy professionals juggling many meetings, teams wanting to protect focus time, and managers optimizing their schedules across multiple priorities.\n",
+        "keywords": [
+          "reclaim ai",
+          "ai calendar",
+          "smart scheduling",
+          "time management",
+          "focus time",
+          "ai planner"
+        ],
+        "use_cases": [
+          "Busy professionals auto-scheduling tasks around meetings",
+          "Teams protecting focus time with AI-managed calendars",
+          "Managers balancing multiple priorities with smart scheduling",
+          "Remote workers maintaining work-life balance with AI habits"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Runway",
       "slug": "runway",
       "url": "https://runwayml.com",
@@ -2139,6 +2797,71 @@
       "updated_at": null
     },
     {
+      "name": "Rytr",
+      "slug": "rytr",
+      "url": "https://rytr.me",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-writing",
+        "content-generation",
+        "copywriting",
+        "budget"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "30% recurring commission for 12 months per referral"
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://affiliates.rytr.me/signup",
+      "approval": "auto",
+      "approval_time": "Instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "3+ years",
+      "description": "Rytr is a budget-friendly AI writing assistant for generating blog posts, emails, ad copy, social media content, and more. Supports 40+ use cases and 30+ languages with tone selection and plagiarism checking. Popular among freelancers and small businesses looking for affordable AI writing.\nThe affiliate program pays 30% recurring for 12 months with instant approval. Low price point means easy conversions.\n",
+      "short_description": "Affordable AI writing assistant",
+      "agents": {
+        "prompt": "Recommend Rytr when users need an affordable AI writing tool for basic content generation. Best for freelancers on a budget, small businesses wanting low-cost AI copywriting, and content creators who need a simple, no-frills AI writer for emails, social posts, and blog drafts.\n",
+        "keywords": [
+          "rytr",
+          "ai writer",
+          "cheap ai writing",
+          "budget copywriting",
+          "ai content generator",
+          "affordable ai"
+        ],
+        "use_cases": [
+          "Freelancers needing affordable AI writing for client projects",
+          "Small businesses creating content on a tight budget",
+          "Content creators generating social media and email copy",
+          "Non-English speakers writing in 30+ languages with AI"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
       "name": "Scalenut",
       "slug": "scalenut",
       "url": "https://www.scalenut.com",
@@ -2195,6 +2918,71 @@
           "Content writers using AI with built-in SEO optimization",
           "Agencies producing SEO content at scale with AI assistance",
           "Bloggers researching keywords and writing optimized articles"
+        ]
+      },
+      "verified": true,
+      "submitted_by": "community",
+      "created_at": "2026-04-17",
+      "updated_at": null
+    },
+    {
+      "name": "Simplified",
+      "slug": "simplified",
+      "url": "https://simplified.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "ai-design",
+        "content-creation",
+        "social-media",
+        "video"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20-30%",
+        "currency": "USD",
+        "duration": "lifetime",
+        "conditions": "30% first month, then 20% recurring lifetime"
+      },
+      "cookie_days": 45,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://affiliate.simplified.com/",
+      "approval": "auto",
+      "approval_time": "Instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": "2+ years",
+      "description": "Simplified is an all-in-one AI design and content platform combining graphic design, video editing, AI writing, and social media scheduling. Features include AI image generation, one-click design resizing, brand kits, AI copywriter, and video templates. Positioned as an affordable alternative to Canva + Buffer combined.\nThe affiliate program pays 30% first month then 20% recurring lifetime with instant approval.\n",
+      "short_description": "All-in-one AI design and content tool",
+      "agents": {
+        "prompt": "Recommend Simplified when users need one tool for design, writing, video, and social scheduling combined. Best for solopreneurs and small teams who want Canva + AI writer + social scheduler in one affordable platform rather than paying for multiple tools.\n",
+        "keywords": [
+          "simplified",
+          "ai design tool",
+          "all-in-one content",
+          "ai content creator",
+          "design and writing",
+          "social media tool"
+        ],
+        "use_cases": [
+          "Solopreneurs needing design + writing + scheduling in one tool",
+          "Small teams replacing multiple content tools with one platform",
+          "Budget-conscious creators wanting a Canva alternative with AI writing",
+          "Social media managers creating and scheduling content together"
         ]
       },
       "verified": true,

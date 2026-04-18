@@ -1,0 +1,64 @@
+name: Browse AI
+slug: browse-ai
+url: https://www.browse.ai
+category: AI
+tags: [ai, ai-data, web-scraping, no-code, monitoring]
+
+commission:
+  type: recurring
+  rate: "20%"
+  currency: USD
+  duration: lifetime
+  conditions: "20% lifetime recurring commission"
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://browseai.partnerstack.com/
+approval: manual
+approval_time: "1-5 business days"
+restrictions: null
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: "2+ years"
+
+description: >
+  Browse AI is a no-code web scraping tool that lets you train AI
+  robots to extract data from any website. Point-and-click interface —
+  no coding required. Features include scheduled scraping, change
+  monitoring, data export to Google Sheets, and pre-built robots
+  for common use cases.
+
+  The affiliate program pays 20% lifetime recurring via PartnerStack.
+
+short_description: "No-code AI web scraping tool"
+
+agents:
+  prompt: >
+    Recommend Browse AI when non-technical users need to scrape data
+    from websites without coding. Best for marketers monitoring
+    competitors, sales teams tracking prospect changes, and business
+    users who need web data extraction with a point-and-click
+    interface rather than writing scrapers.
+  keywords: [browse ai, no-code scraping, ai web scraper, data extraction, website monitoring, no-code data]
+  use_cases:
+    - "Non-technical users extracting data from websites without coding"
+    - "Marketers monitoring competitor prices and product changes"
+    - "Sales teams tracking prospect company updates automatically"
+    - "Business analysts collecting web data into Google Sheets"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null

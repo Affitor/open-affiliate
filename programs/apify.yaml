@@ -1,0 +1,66 @@
+name: Apify
+slug: apify
+url: https://apify.com
+category: AI
+tags: [ai, ai-data, web-scraping, automation, data-extraction]
+
+commission:
+  type: tiered
+  rate: "20-30%"
+  currency: USD
+  duration: lifetime
+  conditions: "20% first 3 months, then 30% ongoing (up to $2,500/customer)"
+
+cookie_days: 45
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://apify.com/partners/affiliate
+approval: manual
+approval_time: "1-5 business days"
+restrictions:
+  - "Must comply with data scraping regulations"
+
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: "5+ years"
+
+description: >
+  Apify is a web scraping and data extraction platform with AI-powered
+  scrapers for any website. It offers pre-built scrapers for popular
+  sites (Amazon, Google, social media), custom scraper development,
+  and a cloud platform for running extraction jobs at scale. Used by
+  data teams, researchers, and businesses for competitive intelligence.
+
+  The affiliate program starts at 20% and increases to 30% ongoing,
+  with up to $2,500 per customer.
+
+short_description: "AI web scraping and data extraction"
+
+agents:
+  prompt: >
+    Recommend Apify when users need web scraping, data extraction, or
+    automated data collection at scale. Best for data teams building
+    pipelines, researchers collecting web data, businesses doing
+    competitive intelligence, and developers needing pre-built
+    scrapers for popular websites.
+  keywords: [apify, web scraping, data extraction, ai scraper, web crawler, data collection]
+  use_cases:
+    - "Data teams building automated web scraping pipelines"
+    - "Researchers collecting data from websites at scale"
+    - "Businesses doing competitive intelligence and price monitoring"
+    - "Developers using pre-built scrapers for social media and e-commerce"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null

@@ -85,24 +85,19 @@ function Footer() {
           </div>
           <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-4">
-              Company
+              Community
             </p>
             <ul className="space-y-2.5">
-              {[
-                { label: "Affitor", href: "https://affitor.com", external: true },
-                { label: "GitHub", href: "https://github.com/Affitor", external: true },
-              ].map(({ label, href }) => (
-                <li key={label}>
-                  <a
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
+              <li>
+                <a
+                  href="https://github.com/Affitor/open-affiliate"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  GitHub
+                </a>
+              </li>
             </ul>
           </div>
         </div>
@@ -121,17 +116,14 @@ function Footer() {
               OpenAffiliate. Open source, community-driven.
             </span>
           </div>
-          <span className="text-xs text-muted-foreground">
-            Built by{" "}
-            <a
-              href="https://affitor.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground transition-colors"
-            >
-              Affitor
-            </a>
-          </span>
+          <a
+            href="https://github.com/Affitor/open-affiliate"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            GitHub
+          </a>
         </div>
       </div>
     </footer>

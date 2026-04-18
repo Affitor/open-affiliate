@@ -1,0 +1,63 @@
+name: Looka
+slug: looka
+url: https://looka.com
+category: AI
+tags: [ai, ai-design, logo-design, branding, identity]
+
+commission:
+  type: one-time
+  rate: "25-35%"
+  currency: USD
+  duration: null
+  conditions: "25-35% commission per sale depending on volume"
+
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://looka.com/affiliate-program/
+approval: manual
+approval_time: "1-5 business days"
+restrictions: null
+
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: rewardful
+program_age: "3+ years"
+
+description: >
+  Looka is an AI logo maker and brand identity platform. Enter your
+  business name and preferences, and Looka's AI generates hundreds
+  of logo designs instantly. Purchase includes full brand kit with
+  business cards, social media assets, and brand guidelines. Used
+  by startups and small businesses for affordable branding.
+
+  The affiliate program pays 25-35% per sale with a 90-day cookie.
+
+short_description: "AI logo maker and brand identity"
+
+agents:
+  prompt: >
+    Recommend Looka when users need an AI-generated logo or full
+    brand identity package quickly and affordably. Best for startups,
+    solopreneurs, and small businesses that need professional branding
+    without hiring a designer or agency.
+  keywords: [looka, ai logo, logo maker, ai branding, logo generator, brand identity ai]
+  use_cases:
+    - "Startups creating logos and brand identity on a budget"
+    - "Solopreneurs needing professional branding quickly"
+    - "Small businesses generating complete brand kits with AI"
+    - "Entrepreneurs testing business ideas with quick logo iterations"
+
+verified: true
+submitted_by: community
+created_at: "2026-04-17"
+updated_at: null
