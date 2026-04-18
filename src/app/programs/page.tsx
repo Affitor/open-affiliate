@@ -598,20 +598,6 @@ function ProgramsContent() {
         </div>
       </div>
 
-      {/* CLI hint */}
-      <div className="mt-10 rounded-xl border border-border/40 bg-muted/20 p-6">
-        <h3 className="text-sm font-semibold">Search from CLI</h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Use the CLI to search and filter programs from your terminal or AI
-          agent.
-        </p>
-        <div className="mt-3 overflow-x-auto rounded-lg bg-muted/60 dark:bg-zinc-950 border border-border/50">
-          <code className="block px-4 py-2.5 text-xs font-mono text-muted-foreground whitespace-nowrap">
-            npx openaffiliate search &quot;database&quot; --min-commission 10
-            --type recurring
-          </code>
-        </div>
-      </div>
     </div>
   );
 }
