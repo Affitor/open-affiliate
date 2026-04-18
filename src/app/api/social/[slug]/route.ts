@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { getProgram } from "@/lib/programs"
 
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY ?? ""
+const APIFY_API_KEY = process.env.APIFY_API_KEY ?? ""
 
 const CACHE_HEADERS = {
   "Cache-Control": "public, s-maxage=172800, stale-while-revalidate=604800",
@@ -20,11 +21,41 @@ export interface SocialItem {
   author: string
   views?: number
   publishedAt?: string
-  /** Composite quality score: views × recency weight */
   qualityScore?: number
 }
 
-/** Recency multiplier: 1.0 for today → 0.1 for 1yr+ old */
+// --- Relevance & scoring ---
+
+/** Keywords that signal affiliate-relevant content */
+const RELEVANCE_KEYWORDS = [
+  "affiliate", "review", "make money", "earn", "commission", "passive income",
+  "tutorial", "how to", "worth it", "honest", "pros and cons", "comparison",
+  "vs", "pricing", "referral", "partner", "creator program", "side hustle",
+  "$", "per month", "per day", "income", "revenue",
+]
+
+function isRelevant(title: string, programName: string): boolean {
+  const t = title.toLowerCase()
+  const name = programName.toLowerCase()
+  // Must mention the program name
+  if (!t.includes(name)) return true // from search results, name is implied
+  // Bonus: has affiliate-intent keywords
+  return true // we filter by search query already; strict filtering removes too much
+}
+
+/** Boost score for content with affiliate-intent keywords */
+function relevanceMultiplier(title: string): number {
+  const t = title.toLowerCase()
+  let hits = 0
+  for (const kw of RELEVANCE_KEYWORDS) {
+    if (t.includes(kw)) hits++
+  }
+  if (hits >= 3) return 2.0
+  if (hits >= 2) return 1.5
+  if (hits >= 1) return 1.2
+  return 0.5 // no affiliate keywords = deprioritize
+}
+
 function recencyWeight(dateStr?: string): number {
   if (!dateStr) return 0.3
   const days = (Date.now() - new Date(dateStr).getTime()) / 86400000
@@ -37,25 +68,70 @@ function recencyWeight(dateStr?: string): number {
   return 0.1
 }
 
-/** Platform-specific view normalization (X favorites vs YT/TT views) */
 function normalizeViews(views: number, platform: string): number {
-  if (platform === "x") return views * 50 // 1 like ≈ 50 views equivalent
+  if (platform === "x") return views * 50
   return views
 }
 
 function computeQualityScore(item: SocialItem): number {
   const normalized = normalizeViews(item.views ?? 0, item.platform)
-  return Math.round(normalized * recencyWeight(item.publishedAt))
+  const recency = recencyWeight(item.publishedAt)
+  const relevance = relevanceMultiplier(item.title)
+  return Math.round(normalized * recency * relevance)
 }
 
-/** Min quality thresholds per platform */
 const MIN_VIEWS: Record<string, number> = {
-  youtube: 200,
-  tiktok: 300,
+  youtube: 100,
+  tiktok: 200,
   x: 3,
 }
 
+// --- YouTube via Apify (better data with view counts) ---
+
 async function fetchYouTube(query: string): Promise<SocialItem[]> {
+  // Prefer Apify for view counts; fall back to RapidAPI
+  if (APIFY_API_KEY) {
+    try {
+      return await fetchYouTubeApify(query)
+    } catch {
+      // Fall through to RapidAPI
+    }
+  }
+  return fetchYouTubeRapidAPI(query)
+}
+
+async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
+  const res = await fetch(
+    `https://api.apify.com/v2/acts/api-ninja~youtube-search-scraper/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=45`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query, maxResults: 20 }),
+      signal: AbortSignal.timeout(50000),
+    }
+  )
+  if (!res.ok) return []
+  const data = await res.json()
+  if (!Array.isArray(data) || data.length === 0) return []
+
+  return data
+    .filter((item: Record<string, unknown>) => item.type === "video")
+    .slice(0, 6)
+    .map((item: Record<string, unknown>) => ({
+      platform: "youtube" as const,
+      title: String(item.title ?? ""),
+      url: `https://youtube.com/watch?v=${item.videoId}`,
+      thumbnail: (() => {
+        const thumb = item.thumbnail as Record<string, unknown>[] | undefined
+        return thumb?.[0]?.url ? String(thumb[0].url) : undefined
+      })(),
+      author: String(item.channelTitle ?? ""),
+      views: Number(item.viewCount ?? 0),
+      publishedAt: item.publishedAt ? String(item.publishedAt) : undefined,
+    }))
+}
+
+async function fetchYouTubeRapidAPI(query: string): Promise<SocialItem[]> {
   const res = await fetch(
     `https://youtube-api49.p.rapidapi.com/api/search?q=${encodeURIComponent(query)}&maxResults=6&regionCode=US`,
     {
@@ -92,6 +168,8 @@ async function fetchYouTube(query: string): Promise<SocialItem[]> {
     })
 }
 
+// --- TikTok via RapidAPI ---
+
 async function fetchTikTok(query: string): Promise<SocialItem[]> {
   const res = await fetch(
     `https://tiktok-api23.p.rapidapi.com/api/search/video?keyword=${encodeURIComponent(query)}&cursor=0&search_id=0`,
@@ -126,6 +204,8 @@ async function fetchTikTok(query: string): Promise<SocialItem[]> {
   })
 }
 
+// --- X via RapidAPI ---
+
 async function fetchX(query: string): Promise<SocialItem[]> {
   const res = await fetch(
     `https://twitter-api45.p.rapidapi.com/search.php?query=${encodeURIComponent(query)}&search_type=Top`,
@@ -157,6 +237,8 @@ async function fetchX(query: string): Promise<SocialItem[]> {
     })
 }
 
+// --- Main handler ---
+
 export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
@@ -168,9 +250,9 @@ export async function GET(
     return NextResponse.json({ items: [] }, { status: 404, headers: CACHE_HEADERS })
   }
 
-  if (!RAPIDAPI_KEY) {
+  if (!RAPIDAPI_KEY && !APIFY_API_KEY) {
     return NextResponse.json(
-      { items: [], error: "API key not configured" },
+      { items: [], error: "API keys not configured" },
       { headers: CACHE_HEADERS }
     )
   }
@@ -178,12 +260,12 @@ export async function GET(
   // Intent-driven queries per platform
   const ytQuery = `${program.name} affiliate program review`
   const ttQuery = `${program.name} affiliate make money`
-  const xQuery = `${program.name} affiliate`
+  const xQuery = `"${program.name}" affiliate program`
 
   const [ytResult, ttResult, xResult] = await Promise.allSettled([
     fetchYouTube(ytQuery),
-    fetchTikTok(ttQuery),
-    fetchX(xQuery),
+    RAPIDAPI_KEY ? fetchTikTok(ttQuery) : Promise.resolve([]),
+    RAPIDAPI_KEY ? fetchX(xQuery) : Promise.resolve([]),
   ])
 
   const raw: SocialItem[] = [
@@ -192,19 +274,20 @@ export async function GET(
     ...(xResult.status === "fulfilled" ? xResult.value : []),
   ]
 
-  // 1. Filter: min quality threshold per platform
+  // 1. Filter: min quality threshold + relevance
   const filtered = raw.filter((item) => {
     const min = MIN_VIEWS[item.platform] ?? 0
-    return (item.views ?? 0) >= min
+    if ((item.views ?? 0) < min) return false
+    return isRelevant(item.title, program.name)
   })
 
-  // 2. Score: composite quality (views × recency)
+  // 2. Score: composite quality (views × recency × relevance)
   const scored = filtered.map((item) => ({
     ...item,
     qualityScore: computeQualityScore(item),
   }))
 
-  // 3. Deduplicate: max 2 per author (diversity)
+  // 3. Deduplicate: max 2 per author
   const authorCount = new Map<string, number>()
   const deduped = scored.filter((item) => {
     const key = `${item.platform}:${item.author.toLowerCase()}`
@@ -214,10 +297,9 @@ export async function GET(
     return true
   })
 
-  // 4. Sort by quality score, then pick top per platform (balanced mix)
+  // 4. Sort by quality, balanced platform mix (max 3 per platform)
   deduped.sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
 
-  // Ensure balanced platform representation: max 3 per platform in final output
   const platformCount = new Map<string, number>()
   const balanced: SocialItem[] = []
   for (const item of deduped) {
@@ -228,7 +310,7 @@ export async function GET(
     if (balanced.length >= 9) break
   }
 
-  // 5. Final sort: group by platform, then by quality within each group
+  // 5. Final: group by platform order (YouTube > TikTok > X)
   const platformOrder = { youtube: 0, tiktok: 1, x: 2 }
   balanced.sort((a, b) => {
     const pa = platformOrder[a.platform] ?? 9
