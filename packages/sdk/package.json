@@ -1,0 +1,34 @@
+{
+  "name": "openaffiliate-sdk",
+  "version": "0.0.1",
+  "description": "TypeScript SDK for the OpenAffiliate registry. Search, filter, and integrate affiliate programs programmatically.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Affitor/open-affiliate",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://openaffiliate.dev",
+  "author": "Affitor <team@affitor.com> (https://affitor.com)",
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "lint": "tsc --noEmit"
+  },
+  "keywords": ["openaffiliate", "affiliate", "sdk", "ai-agent", "affiliate-marketing", "mcp"],
+  "license": "MIT",
+  "devDependencies": {
+    "tsup": "^8.5.0",
+    "typescript": "^5.8.0",
+    "@types/node": "^22.0.0"
+  }
+}

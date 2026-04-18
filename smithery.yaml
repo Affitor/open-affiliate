@@ -1,0 +1,21 @@
+# Smithery configuration: https://smithery.ai/docs/config#smitheryyaml
+# OpenAffiliate MCP Server — search affiliate programs from any MCP client
+
+startCommand:
+  type: stdio
+
+configSchema:
+  type: object
+  properties:
+    apiBase:
+      type: string
+      description: "API base URL (default: https://openaffiliate.dev)"
+
+commandFunction: |-
+  (config) => ({
+    command: 'npx',
+    args: ['-y', 'openaffiliate-mcp'],
+    env: {
+      OPENAFFILIATE_API: config.apiBase || 'https://openaffiliate.dev'
+    }
+  })

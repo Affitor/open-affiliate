@@ -1,17 +1,25 @@
 {
   "name": "openaffiliate",
-  "version": "0.1.0",
-  "description": "Search and manage affiliate programs from your terminal",
+  "version": "0.0.2",
+  "description": "Search and manage affiliate programs from your terminal. Built for developers and AI agents.",
   "type": "module",
   "bin": {
     "openaffiliate": "./dist/index.js"
   },
+  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Affitor/open-affiliate",
+    "directory": "packages/cli"
+  },
+  "homepage": "https://openaffiliate.dev",
+  "author": "Affitor <team@affitor.com> (https://affitor.com)",
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts --format esm --watch",
     "lint": "tsc --noEmit"
   },
-  "keywords": ["affiliate", "cli", "openaffiliate", "agent", "mcp"],
+  "keywords": ["affiliate", "cli", "openaffiliate", "agent", "mcp", "affiliate-marketing", "ai-agent"],
   "license": "MIT",
   "dependencies": {
     "commander": "^13.1.0"

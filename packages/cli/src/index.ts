@@ -55,7 +55,8 @@ const program = new Command();
 program
   .name("openaffiliate")
   .description("Search and manage affiliate programs from your terminal")
-  .version("0.1.0");
+  .version("0.0.2")
+  .option("--json", "Output raw JSON (for agents and scripts)");
 
 program
   .command("search [query]")
@@ -78,6 +79,11 @@ program
       programs = programs.filter(
         (p) => p.commission.rate >= opts.minCommission
       );
+    }
+
+    if (program.opts().json) {
+      console.log(JSON.stringify(programs, null, 2));
+      return;
     }
 
     if (programs.length === 0) {
@@ -107,6 +113,11 @@ program
     const data = await fetchJSON(`/api/programs/${slug}`);
     const p = data as ProgramFull;
 
+    if (program.opts().json) {
+      console.log(JSON.stringify(p, null, 2));
+      return;
+    }
+
     console.log(`
   ${p.name}${p.verified ? " ✓" : ""}
   ${p.shortDescription}
@@ -135,6 +146,12 @@ program
   .description("List all program categories")
   .action(async () => {
     const data = await fetchJSON("/api/categories");
+
+    if (program.opts().json) {
+      console.log(JSON.stringify(data.categories, null, 2));
+      return;
+    }
+
     const rows = [
       ["Category", "Programs"],
       ...data.categories.map((c: { name: string; count: number }) => [
