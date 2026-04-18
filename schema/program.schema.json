@@ -14,14 +14,78 @@
       "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
       "description": "URL-safe identifier, must match the filename"
     },
+    "aliases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai)"
+    },
     "url": {
       "type": "string",
       "format": "uri",
       "description": "Product website URL"
     },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "affiliate",
+        "referral",
+        "creator-payout",
+        "revenue-share",
+        "cashback",
+        "partner-network"
+      ],
+      "default": "affiliate",
+      "description": "Type of income program. affiliate=traditional commission; referral=in-app refer-a-friend; creator-payout=platform payouts (YouTube Partner, Twitch); revenue-share=rev-share (Substack, Beehiiv); cashback=consumer cashback; partner-network=large marketplace partner programs (Amazon Associates, Shopify Partners)"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "partnerstack-api",
+        "cj-api",
+        "impact-api",
+        "awin-api",
+        "reditus",
+        "dub",
+        "rewardful",
+        "tolt",
+        "firstpromoter",
+        "lemonsqueezy",
+        "product-hunt",
+        "yc-directory",
+        "hacker-news",
+        "theresanaiforthat",
+        "futuretools",
+        "community",
+        "manual",
+        "legacy"
+      ],
+      "description": "Discovery channel this program was sourced from. Used for refresh cadence and attribution."
+    },
     "category": {
       "type": "string",
-      "description": "Primary category"
+      "enum": [
+        "AI",
+        "Analytics",
+        "Business Operations",
+        "Communication",
+        "Content Management",
+        "CRM",
+        "Customer Support",
+        "Design",
+        "Developer Tools",
+        "E-Commerce",
+        "Email Marketing",
+        "Finance",
+        "HR & Recruiting",
+        "Infrastructure",
+        "Marketing",
+        "Productivity",
+        "SaaS",
+        "Sales",
+        "Security",
+        "Social Media"
+      ],
+      "description": "Primary category (must be from allowlist)"
     },
     "tags": {
       "type": "array",
@@ -133,7 +197,21 @@
     },
     "network": {
       "type": ["string", "null"],
-      "description": "Affiliate network (impact, partnerstack, shareasale, in-house)"
+      "enum": [
+        "partnerstack",
+        "impact",
+        "rewardful",
+        "awin",
+        "cj-affiliate",
+        "dub",
+        "firstpromoter",
+        "tolt",
+        "lemonsqueezy",
+        "tapfiliate",
+        "in-house",
+        null
+      ],
+      "description": "Affiliate network (lowercase, hyphenated; null if unknown)"
     },
     "program_age": {
       "type": ["string", "null"],
@@ -181,6 +259,11 @@
     "updated_at": {
       "type": ["string", "null"],
       "format": "date"
+    },
+    "last_verified_at": {
+      "type": ["string", "null"],
+      "format": "date",
+      "description": "ISO date of last URL + data verification. Used for freshness / refresh cadence decisions."
     }
   },
   "additionalProperties": false

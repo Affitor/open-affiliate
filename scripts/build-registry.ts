@@ -1,9 +1,11 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
+import { execSync } from "child_process"
 import { parse } from "yaml"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
+const INDEX_SCRIPT = join(process.cwd(), "scripts", "build-index.ts")
 
 const REQUIRED_FIELDS = [
   "name",
@@ -16,10 +18,21 @@ const REQUIRED_FIELDS = [
   "agents",
 ]
 
+type ProgramKind =
+  | "affiliate"
+  | "referral"
+  | "creator-payout"
+  | "revenue-share"
+  | "cashback"
+  | "partner-network"
+
 interface YamlProgram {
   name: string
   slug: string
+  aliases?: string[]
   url: string
+  kind?: ProgramKind
+  source?: string
   category: string
   tags?: string[]
   commission: {
@@ -59,6 +72,7 @@ interface YamlProgram {
   submitted_by?: string
   created_at?: string
   updated_at?: string
+  last_verified_at?: string | null
 }
 
 function validateProgram(data: Record<string, unknown>, filename: string): void {
@@ -123,6 +137,14 @@ function buildRegistry(): void {
   console.log(`  ${programs.length} programs loaded`)
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
   console.log(`  Output: src/lib/registry.json`)
+
+  // Rebuild registry-index.json for pre-flight dedup
+  try {
+    execSync(`npx tsx ${INDEX_SCRIPT}`, { stdio: "inherit" })
+  } catch (err) {
+    console.error(`Index build failed: ${(err as Error).message}`)
+    process.exit(1)
+  }
 }
 
 buildRegistry()

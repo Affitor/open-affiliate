@@ -61,3 +61,6 @@ verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null
+last_verified_at: "2026-04-17"
+kind: affiliate
+source: community

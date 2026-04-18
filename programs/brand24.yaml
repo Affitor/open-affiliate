@@ -52,3 +52,6 @@ verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
 updated_at: 2026-04-18
+last_verified_at: 2026-04-18
+kind: affiliate
+source: partnerstack-api

@@ -14,6 +14,8 @@
     "start": "next start",
     "lint": "eslint",
     "registry:build": "npx tsx scripts/build-registry.ts",
+    "registry:index": "npx tsx scripts/build-index.ts",
+    "pre-check": "npx tsx scripts/pre-check.ts",
     "verify": "npx tsx scripts/verify-programs.ts",
     "verify:changed": "npx tsx scripts/verify-programs.ts --changed",
     "verify:deep": "npx tsx scripts/verify-deep.ts",

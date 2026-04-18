@@ -62,3 +62,6 @@ verified: true
 submitted_by: affitor
 created_at: "2026-02-01"
 updated_at: "2026-04-17"
+last_verified_at: "2026-04-17"
+kind: affiliate
+source: manual

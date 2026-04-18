@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-18T18:34:58.102Z",
+  "generated_at": "2026-04-18T20:38:34.908Z",
   "count": 349,
   "categories": [
     "AI",
@@ -78,7 +78,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "8am™",
@@ -139,7 +142,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "8fig",
@@ -201,7 +207,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ABC Trainerize",
@@ -265,7 +274,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ActiveCampaign",
@@ -328,7 +340,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Activepieces",
@@ -388,7 +403,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "AdCreative.ai",
@@ -455,7 +473,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "ADP",
@@ -517,7 +538,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Adwisely",
@@ -580,7 +604,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "AI InteleKt Inc.",
@@ -640,7 +667,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Airia",
@@ -699,7 +729,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "AiSDR, Inc.",
@@ -762,7 +795,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "AISQ",
@@ -826,7 +862,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Alidrop",
@@ -887,7 +926,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Alvys Inc.",
@@ -948,7 +990,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Amplemarket",
@@ -1010,7 +1055,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Amplitude",
@@ -1071,7 +1119,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Angels Partners",
@@ -1132,7 +1183,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Apify",
@@ -1199,7 +1253,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Aplos, Raisely & Keela",
@@ -1260,7 +1317,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Apps 365",
@@ -1323,7 +1383,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Aspire",
@@ -1385,7 +1448,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Assembly",
@@ -1449,7 +1515,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Atria",
@@ -1510,7 +1579,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Aura",
@@ -1570,7 +1642,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Auware by Buyist",
@@ -1635,7 +1710,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "AWeber Communications",
@@ -1699,7 +1777,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Bar Codes Talk",
@@ -1760,7 +1841,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Beautiful.ai",
@@ -1824,7 +1908,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Beefree (Email & Landing Page Builder)",
@@ -1887,7 +1974,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "BidX",
@@ -1948,7 +2038,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "BILL",
@@ -2008,7 +2101,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Bitdefender",
@@ -2068,7 +2164,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Bitwire",
@@ -2129,7 +2228,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Blinq",
@@ -2192,7 +2294,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Bokun, a Tripadvisor company",
@@ -2255,7 +2360,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Boulevard",
@@ -2315,7 +2423,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Bouncer",
@@ -2377,7 +2488,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Brand24",
@@ -2440,7 +2554,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Breezy HR",
@@ -2501,7 +2618,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Brevo",
@@ -2562,7 +2682,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Brevo PushOwl",
@@ -2625,7 +2748,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Browse AI",
@@ -2690,7 +2816,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Buddy Punch",
@@ -2752,7 +2881,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "BugHerd",
@@ -2815,7 +2947,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Cal.com",
@@ -2887,7 +3022,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "CallHippo",
@@ -2949,7 +3087,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Callvu",
@@ -3012,7 +3153,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Campaign Monitor by Marigold",
@@ -3077,7 +3221,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Campaigner",
@@ -3137,7 +3284,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Canva",
@@ -3205,7 +3355,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Canvas® Score by Roya.com",
@@ -3268,7 +3421,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Capsule and Transpond",
@@ -3332,7 +3488,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Carepatron",
@@ -3393,7 +3552,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Castmagic",
@@ -3456,7 +3618,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Catalister",
@@ -3517,7 +3682,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Cerri.com",
@@ -3577,7 +3745,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ClickUp",
@@ -3636,7 +3807,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Close",
@@ -3697,7 +3871,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Closely",
@@ -3757,7 +3934,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "CloudTalk",
@@ -3817,7 +3997,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Coast",
@@ -3877,7 +4060,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Coffee and Contracts",
@@ -3941,7 +4127,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Cognism",
@@ -4000,7 +4189,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "CometChat",
@@ -4061,7 +4253,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Compliancely",
@@ -4119,7 +4314,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Connecteam",
@@ -4179,7 +4377,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Conversion Wax",
@@ -4241,7 +4442,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Copla",
@@ -4300,7 +4504,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Copy.ai",
@@ -4368,7 +4575,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "CoRecruit (formerly Quil)",
@@ -4429,7 +4639,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "CrankWheel",
@@ -4491,7 +4704,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Crazy Egg",
@@ -4552,7 +4768,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Credit Repair Cloud",
@@ -4613,7 +4832,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "CrowdStrike",
@@ -4673,7 +4895,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Customer.io",
@@ -4735,7 +4960,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "CustomGPT",
@@ -4802,7 +5030,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Databox",
@@ -4865,7 +5096,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "DataHawk",
@@ -4925,7 +5159,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Demodesk",
@@ -4987,7 +5224,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Descript",
@@ -5054,7 +5294,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Dext",
@@ -5118,7 +5361,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Diginius",
@@ -5178,7 +5424,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "DigitalOcean",
@@ -5251,7 +5500,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-01-25",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Distance",
@@ -5311,7 +5563,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "doola",
@@ -5373,7 +5628,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Drip",
@@ -5433,7 +5691,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "DropGenius",
@@ -5494,7 +5755,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "DualEntry",
@@ -5553,7 +5817,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Dub",
@@ -5625,7 +5892,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "EasyDMARC",
@@ -5684,7 +5954,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Emergent",
@@ -5747,7 +6020,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Employment Hero",
@@ -5808,7 +6084,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Emporia Research",
@@ -5870,7 +6149,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Envoy",
@@ -5931,7 +6213,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ESET North America",
@@ -5993,7 +6278,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ESGI Software",
@@ -6053,7 +6341,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Evolve",
@@ -6112,7 +6403,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ExpertSender S.A.",
@@ -6173,7 +6467,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Fastmail",
@@ -6234,7 +6531,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Filevine",
@@ -6293,7 +6593,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Finale Inventory",
@@ -6356,7 +6659,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Flatpay",
@@ -6416,7 +6722,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "FlexiQuiz",
@@ -6477,7 +6786,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Flippa.com",
@@ -6538,7 +6850,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Flocksy",
@@ -6600,7 +6915,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Flowith",
@@ -6659,7 +6977,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "folk",
@@ -6721,7 +7042,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Format",
@@ -6781,7 +7105,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Framer",
@@ -6853,7 +7180,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Freshdesk by Freshworks",
@@ -6914,7 +7244,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Freshservice by Freshworks",
@@ -6976,7 +7309,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Gamma",
@@ -7041,7 +7377,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "GetResponse",
@@ -7102,7 +7441,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Getscreen.me",
@@ -7165,7 +7507,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Grammarly",
@@ -7234,7 +7579,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Gravity",
@@ -7298,7 +7646,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Guardian HR",
@@ -7361,7 +7712,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Guesty",
@@ -7420,7 +7774,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hashnode",
@@ -7491,7 +7848,10 @@
       "verified": false,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Healthie",
@@ -7550,7 +7910,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hector",
@@ -7609,7 +7972,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hello Bar & Subscribers",
@@ -7671,7 +8037,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Help Scout",
@@ -7733,7 +8102,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "HiBob",
@@ -7791,7 +8163,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hive",
@@ -7850,7 +8225,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hopp for Business",
@@ -7913,7 +8291,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Hostinger",
@@ -7981,7 +8362,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Housecall Pro",
@@ -8045,7 +8429,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Houzz Pro",
@@ -8107,7 +8494,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Iconosquare",
@@ -8169,7 +8559,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "iContact",
@@ -8230,7 +8623,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "IDrive",
@@ -8291,7 +8687,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Ignition",
@@ -8351,7 +8750,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "InboxAlly",
@@ -8412,7 +8814,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "INE",
@@ -8472,7 +8877,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Influencer Hero",
@@ -8535,7 +8943,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Instantly",
@@ -8603,7 +9014,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Instapage",
@@ -8664,7 +9078,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Interakt by Jio Haptik",
@@ -8729,7 +9146,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Jane",
@@ -8790,7 +9210,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Jasper",
@@ -8858,7 +9281,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Jibble",
@@ -8919,7 +9345,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Jubilee",
@@ -8979,7 +9408,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Kartra, WebinarJam & EverWebinar",
@@ -9041,7 +9473,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Kaspr",
@@ -9103,7 +9538,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Katana Cloud Inventory",
@@ -9166,7 +9604,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Keap",
@@ -9229,7 +9670,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Keeper Security",
@@ -9291,7 +9735,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Kinetic Innovative Staffing",
@@ -9356,7 +9803,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Kit (ConvertKit)",
@@ -9429,7 +9879,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Kixie",
@@ -9488,7 +9941,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Koala AI",
@@ -9554,7 +10010,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Krisp",
@@ -9619,7 +10078,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Kyma API",
@@ -9685,7 +10147,10 @@
       "verified": true,
       "submitted_by": "affitor",
       "created_at": "2026-02-01",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "manual"
     },
     {
       "name": "LALAL.AI",
@@ -9750,7 +10215,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Landbot",
@@ -9812,7 +10280,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "LanderLab",
@@ -9877,7 +10348,10 @@
       "verified": true,
       "submitted_by": "affitor",
       "created_at": "2026-01-15",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "manual"
     },
     {
       "name": "Landingi",
@@ -9939,7 +10413,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Laplink",
@@ -9998,7 +10475,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Later",
@@ -10060,7 +10540,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Leadpages",
@@ -10121,7 +10604,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "LearnWorlds - Top User-rated  Online Course Platform & LMS",
@@ -10185,7 +10671,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "lemlist",
@@ -10245,7 +10734,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Leonardo AI",
@@ -10313,7 +10805,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "LettrLabs",
@@ -10371,7 +10866,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Lindy",
@@ -10434,7 +10932,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "LiveChat",
@@ -10501,7 +11002,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Livestorm",
@@ -10563,7 +11067,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Logome.ai",
@@ -10625,7 +11132,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Looka",
@@ -10690,7 +11200,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Lusha",
@@ -10752,7 +11265,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Manatal",
@@ -10817,7 +11333,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Marketing 360®",
@@ -10880,7 +11399,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Mixo",
@@ -10945,7 +11467,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Moosend",
@@ -11004,7 +11529,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Motion",
@@ -11069,7 +11597,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Motive",
@@ -11128,7 +11659,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "MRPeasy",
@@ -11190,7 +11724,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Murf AI",
@@ -11257,7 +11794,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Navan",
@@ -11318,7 +11858,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Neon",
@@ -11387,7 +11930,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-02-15",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Netlify",
@@ -11459,7 +12005,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-02-16",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "NexGen Technologies LLC",
@@ -11521,7 +12070,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Nextiva",
@@ -11581,7 +12133,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "NiceJob",
@@ -11644,7 +12199,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Ninja Promo",
@@ -11707,7 +12265,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Niural AI",
@@ -11768,7 +12329,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Nixtla Inc.",
@@ -11831,7 +12395,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Notion",
@@ -11903,7 +12470,10 @@
       "verified": false,
       "submitted_by": "community",
       "created_at": "2026-01-10",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Notta",
@@ -11970,7 +12540,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Nutshell",
@@ -12033,7 +12606,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Office Timeline",
@@ -12098,7 +12674,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "OmniSEO",
@@ -12158,7 +12737,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Optery",
@@ -12218,7 +12800,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Outgrow",
@@ -12280,7 +12865,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Owner",
@@ -12342,7 +12930,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Ownr",
@@ -12405,7 +12996,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Pagecloud",
@@ -12468,7 +13062,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Pangram Labs",
@@ -12531,7 +13128,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Papaya Global",
@@ -12592,7 +13192,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Parim Workforce Software",
@@ -12655,7 +13258,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "PartnerCentric",
@@ -12715,7 +13321,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "PartnerStack",
@@ -12776,7 +13385,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Passpack",
@@ -12839,7 +13451,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "PDWare",
@@ -12899,7 +13514,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Perk",
@@ -12960,7 +13578,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Perplexity AI",
@@ -13028,7 +13649,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Photoroom",
@@ -13095,7 +13719,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Pictory AI",
@@ -13162,7 +13789,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Pinecone",
@@ -13221,7 +13851,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Pipedrive",
@@ -13280,7 +13913,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "PitneyShip",
@@ -13342,7 +13978,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Pixel Union & Out of the Sandbox",
@@ -13403,7 +14042,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Playroll",
@@ -13462,7 +14104,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Plesk",
@@ -13524,7 +14169,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Postmark",
@@ -13593,7 +14241,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Postscript",
@@ -13653,7 +14304,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "POWR, Inc.",
@@ -13715,7 +14369,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Practice Better",
@@ -13776,7 +14433,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Predis.ai",
@@ -13841,7 +14501,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Prescient Security",
@@ -13901,7 +14564,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Prevue HR",
@@ -13962,7 +14628,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Prezi",
@@ -14022,7 +14691,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Printify",
@@ -14084,7 +14756,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Process Street",
@@ -14145,7 +14820,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Proof",
@@ -14204,7 +14882,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Proton",
@@ -14264,7 +14945,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Pylon",
@@ -14324,7 +15008,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Qoyod",
@@ -14385,7 +15072,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Quadient",
@@ -14444,7 +15134,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Quartile",
@@ -14506,7 +15199,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "QuickBooks",
@@ -14568,7 +15264,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "QuillBot",
@@ -14629,7 +15328,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "R.E. Cost Seg",
@@ -14691,7 +15393,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Rank Prompt",
@@ -14752,7 +15457,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Readymode",
@@ -14814,7 +15522,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Reclaim AI",
@@ -14879,7 +15590,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "respond.io",
@@ -14943,7 +15657,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Restream",
@@ -15004,7 +15721,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Rokt Aftersell",
@@ -15067,7 +15787,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Ruby",
@@ -15128,7 +15851,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Runpod",
@@ -15188,7 +15914,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Runway",
@@ -15257,7 +15986,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Runway Health",
@@ -15318,7 +16050,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Rytr",
@@ -15383,7 +16118,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "SalesAR",
@@ -15443,7 +16181,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Salesflare",
@@ -15503,7 +16244,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SalesRabbit",
@@ -15563,7 +16307,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SaneBox",
@@ -15626,7 +16373,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Scalenut",
@@ -15690,7 +16440,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Seamless",
@@ -15750,7 +16503,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Sellfy",
@@ -15812,7 +16568,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Sender",
@@ -15873,7 +16632,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ServiceM8",
@@ -15936,7 +16698,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shade",
@@ -15997,7 +16762,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shiftie",
@@ -16056,7 +16824,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ShipBob",
@@ -16116,7 +16887,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shippo",
@@ -16176,7 +16950,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shoeboxed",
@@ -16237,7 +17014,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shopmonkey",
@@ -16295,7 +17075,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Shor affiliate program",
@@ -16357,7 +17140,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SimplePractice",
@@ -16416,7 +17202,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SimpleTexting",
@@ -16476,7 +17265,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Simplified",
@@ -16541,7 +17333,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Smartlead",
@@ -16608,7 +17403,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Smartli",
@@ -16669,7 +17467,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SmartSuite",
@@ -16728,7 +17529,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SMTP.com",
@@ -16790,7 +17594,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SMTP2GO",
@@ -16849,7 +17656,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Snapchat For Business",
@@ -16913,7 +17723,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SocialBee",
@@ -16976,7 +17789,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Softr",
@@ -17040,7 +17856,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "soona",
@@ -17101,7 +17920,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Soul Link",
@@ -17162,7 +17984,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Spocket",
@@ -17221,7 +18046,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SPS Revenue Recovery",
@@ -17286,7 +18114,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Stamped",
@@ -17346,7 +18177,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Streak - CRM for Gmail",
@@ -17407,7 +18241,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Subbly",
@@ -17466,7 +18303,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Success.co",
@@ -17527,7 +18367,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Sunsama",
@@ -17587,7 +18430,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SureCam",
@@ -17648,7 +18494,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Surfer SEO",
@@ -17716,7 +18565,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "SurveyMonkey",
@@ -17777,7 +18629,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "SurveySparrow",
@@ -17838,7 +18693,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Survicate",
@@ -17901,7 +18759,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Switcher Studio",
@@ -17966,7 +18827,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Synder",
@@ -18025,7 +18889,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tax1099",
@@ -18084,7 +18951,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "TaxCycle",
@@ -18144,7 +19014,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Taxfyle",
@@ -18204,7 +19077,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Techinline",
@@ -18265,7 +19141,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Teikametrics",
@@ -18325,7 +19204,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tellent",
@@ -18385,7 +19267,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Ten Speed",
@@ -18448,7 +19333,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tenable",
@@ -18507,7 +19395,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Textline",
@@ -18569,7 +19460,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "The Go Game",
@@ -18630,7 +19524,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ThorData",
@@ -18693,7 +19590,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ThreatDown",
@@ -18752,7 +19652,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Thryv",
@@ -18815,7 +19718,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tidio",
@@ -18875,7 +19781,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tie (previously Revenue Roll)",
@@ -18937,7 +19846,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Time Doctor",
@@ -18998,7 +19910,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Todoist",
@@ -19058,7 +19973,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Toggl",
@@ -19117,7 +20035,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Token Metrics Inc.",
@@ -19180,7 +20101,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Top Echelon Software",
@@ -19242,7 +20166,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tradify",
@@ -19304,7 +20231,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Trainual",
@@ -19365,7 +20295,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Travel Code",
@@ -19428,7 +20361,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Treble.ai",
@@ -19491,7 +20427,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tresl, Inc.",
@@ -19553,7 +20492,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Tresorit",
@@ -19613,7 +20555,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "TRUCKSTOP",
@@ -19673,7 +20618,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Unbounce",
@@ -19737,7 +20685,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Uniqode",
@@ -19801,7 +20752,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Unitel Voice",
@@ -19862,7 +20816,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "VektorOS",
@@ -19921,7 +20878,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Velory",
@@ -19980,7 +20940,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Vercel (v0)",
@@ -20052,7 +21015,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2025-12-01",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Vestwell",
@@ -20111,7 +21077,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Vida Global Inc.",
@@ -20175,7 +21144,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Vista Social",
@@ -20238,7 +21210,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "VisualCV",
@@ -20297,7 +21272,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Voye Global",
@@ -20359,7 +21337,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "VWO",
@@ -20422,7 +21403,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Waalaxy",
@@ -20482,7 +21466,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Wati.io",
@@ -20545,7 +21532,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "WebCatalog",
@@ -20605,7 +21595,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Webflow",
@@ -20677,7 +21670,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Whale",
@@ -20739,7 +21735,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "WhatConverts",
@@ -20798,7 +21797,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Wing Assistant",
@@ -20861,7 +21863,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "WiseStamp",
@@ -20922,7 +21927,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Wistia",
@@ -20984,7 +21992,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Workleap Technologies Inc.",
@@ -21045,7 +22056,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "WorkWise Compliance",
@@ -21106,7 +22120,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Wrike",
@@ -21168,7 +22185,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Writesonic",
@@ -21235,7 +22255,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Xero",
@@ -21295,7 +22318,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Zebracat",
@@ -21360,7 +22386,10 @@
       "verified": true,
       "submitted_by": "community",
       "created_at": "2026-04-17",
-      "updated_at": null
+      "updated_at": null,
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Zeffy",
@@ -21423,7 +22452,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Zendesk",
@@ -21485,7 +22517,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Zenzap",
@@ -21546,7 +22581,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ZEP",
@@ -21608,7 +22646,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-17"
+      "updated_at": "2026-04-17",
+      "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "Zonka Feedback",
@@ -21671,7 +22712,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     },
     {
       "name": "ZoomInfo",
@@ -21731,7 +22775,10 @@
       "verified": false,
       "submitted_by": "partnerstack-import",
       "created_at": "2026-04-18",
-      "updated_at": "2026-04-18"
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "partnerstack-api"
     }
   ]
 }

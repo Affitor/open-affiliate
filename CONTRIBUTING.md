@@ -22,8 +22,11 @@ Thanks for contributing! OpenAffiliate is a community-driven registry of affilia
 ```yaml
 name: "Your Product"
 slug: your-product
+aliases: [alt-brand-name]   # optional — helps dedup/fuzzy match
 url: https://yourproduct.com
-category: Developer Tools
+kind: affiliate             # affiliate | referral | creator-payout | revenue-share | cashback | partner-network
+source: manual              # where this listing came from (see schema for enum)
+category: Developer Tools   # must be one of the 20 enum values
 tags: [keyword1, keyword2]
 
 commission:
@@ -34,14 +37,16 @@ commission:
 
 cookie_days: 30
 signup_url: https://yourproduct.com/affiliates
-approval: auto # auto | manual
+approval: auto # auto | manual | invite-only
 approval_time: "instant"
 
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: monthly  # weekly | monthly | net-30 | net-60
   methods: [bank, paypal]
+
+network: in-house           # partnerstack | impact | rewardful | ... | in-house (optional)
 
 short_description: "One-line description of the product"
 description: |
@@ -56,7 +61,15 @@ agents:
 verified: false
 submitted_by: "@your-github"
 created_at: "2026-01-01"
+last_verified_at: "2026-01-01"  # ISO date, bumped by verify step
 ```
+
+### Field notes
+
+- **`kind`** (default `affiliate`): use `partner-network` for Amazon Associates / Shopify Partners style; `creator-payout` for YouTube Partner / Twitch Partner; `revenue-share` for Substack/Beehiiv; `referral` for in-app refer-a-friend credits; `cashback` for consumer cashback like Rakuten.
+- **`source`**: the discovery channel. Used for refresh cadence. See `schema/program.schema.json` for the full enum.
+- **`aliases`**: list alternative names (e.g., `aliases: [chatgpt, gpt-4]` on openai.yaml). Helps the pre-check step dedupe candidates that arrive under a different brand name.
+- **`last_verified_at`**: ISO date. The verify step bumps this on success. Used by pre-check to decide refresh tier.
 
 See [schema/program.schema.json](schema/program.schema.json) for all fields.
 
