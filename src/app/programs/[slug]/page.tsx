@@ -363,69 +363,6 @@ export default async function ProgramPage({
 
         {/* Sidebar */}
         <div className="space-y-4">
-          {/* Join button */}
-          <a
-            href={joinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
-          >
-            Join Program
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-
-          {/* Connect card */}
-          <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
-            <h3 className="text-sm font-semibold flex items-center gap-1.5">
-              <Terminal className="h-3.5 w-3.5 text-muted-foreground" />
-              Connect
-            </h3>
-
-            {/* CLI */}
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">CLI</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-emerald-700 dark:text-emerald-400 truncate">
-                  npx openaffiliate info {program.slug}
-                </code>
-                <CopyButton text={`npx openaffiliate info ${program.slug}`} />
-              </div>
-            </div>
-
-            {/* MCP HTTP */}
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (HTTP)</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  openaffiliate.dev/api/mcp
-                </code>
-                <CopyButton text={mcpHttp} />
-              </div>
-            </div>
-
-            {/* MCP stdio */}
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (stdio)</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  npx openaffiliate-mcp
-                </code>
-                <CopyButton text={mcpStdio} />
-              </div>
-            </div>
-
-            {/* API */}
-            <div>
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">API</p>
-              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
-                <code className="text-xs font-mono text-muted-foreground truncate">
-                  /api/programs/{program.slug}
-                </code>
-                <CopyButton text={`curl https://openaffiliate.dev/api/programs/${program.slug}`} />
-              </div>
-            </div>
-          </div>
-
           {/* Commission card */}
           <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-3">
             <h3 className="text-sm font-semibold">Commission</h3>
@@ -572,6 +509,65 @@ export default async function ProgramPage({
               ))}
             </div>
           </div>
+
+          {/* Connect card */}
+          <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-4">
+            <h3 className="text-sm font-semibold flex items-center gap-1.5">
+              <Terminal className="h-3.5 w-3.5 text-muted-foreground" />
+              Connect
+            </h3>
+
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">CLI</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-emerald-700 dark:text-emerald-400 truncate">
+                  npx openaffiliate info {program.slug}
+                </code>
+                <CopyButton text={`npx openaffiliate info ${program.slug}`} />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (HTTP)</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  openaffiliate.dev/api/mcp
+                </code>
+                <CopyButton text={mcpHttp} />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">MCP (stdio)</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  npx openaffiliate-mcp
+                </code>
+                <CopyButton text={mcpStdio} />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wide mb-1.5">API</p>
+              <div className="rounded-lg bg-muted/50 border border-border/50 px-3 py-2 flex items-center justify-between gap-2">
+                <code className="text-xs font-mono text-muted-foreground truncate">
+                  /api/programs/{program.slug}
+                </code>
+                <CopyButton text={`curl https://openaffiliate.dev/api/programs/${program.slug}`} />
+              </div>
+            </div>
+          </div>
+
+          {/* Join button */}
+          <a
+            href={joinUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
+          >
+            Join Program
+            <ExternalLink className="h-3.5 w-3.5" />
+          </a>
         </div>
       </div>
     </div>
