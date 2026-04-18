@@ -1,12 +1,9 @@
 {
-  "generated_at": "2026-04-18T00:32:26.400Z",
+  "generated_at": "2026-04-18T00:40:19.880Z",
   "count": 458,
   "categories": [
     "AI",
     "AI & APIs",
-    "Agencies",
-    "Artificial Intelligence",
-    "B2B Marketplaces",
     "Business Operations",
     "Content Management",
     "Customer Support",
@@ -19,7 +16,6 @@
     "Email Marketing",
     "Finance",
     "HR & Recruiting",
-    "HR Software",
     "Infrastructure",
     "Landing Pages",
     "Link Management",
@@ -29,9 +25,7 @@
     "Sales",
     "Scheduling",
     "Security",
-    "Shopify integrated",
-    "Social Media",
-    "Vertical Industry Software"
+    "Social Media"
   ],
   "programs": [
     {
@@ -1339,7 +1333,7 @@
       "name": "Alvys Inc.",
       "slug": "alvys-inc",
       "url": "https://alvys.com",
-      "category": "Vertical Industry Software",
+      "category": "SaaS",
       "tags": [
         "vertical-industry-software",
         "saas"
@@ -1523,7 +1517,7 @@
       "name": "Angels Partners",
       "slug": "angels-partners",
       "url": "https://angelspartners.com",
-      "category": "B2B Marketplaces",
+      "category": "SaaS",
       "tags": [
         "b2b-marketplaces",
         "saas"
@@ -8598,7 +8592,7 @@
       "name": "Flowith",
       "slug": "flowith",
       "url": "https://flowith.io",
-      "category": "Artificial Intelligence",
+      "category": "AI",
       "tags": [
         "artificial-intelligence",
         "saas"
@@ -10464,7 +10458,7 @@
       "name": "HiBob Affiliate",
       "slug": "hibob-affiliate",
       "url": "https://hibob.com",
-      "category": "HR Software",
+      "category": "HR & Recruiting",
       "tags": [
         "hr-software",
         "saas"
@@ -17369,7 +17363,7 @@
       "name": "Pinecone",
       "slug": "pinecone",
       "url": "http://www.pinecone.io",
-      "category": "Shopify integrated",
+      "category": "E-Commerce",
       "tags": [
         "shopify-integrated",
         "saas"
@@ -18352,7 +18346,7 @@
       "name": "Proof",
       "slug": "proof",
       "url": "https://useproof.com",
-      "category": "Agencies",
+      "category": "Marketing",
       "tags": [
         "agencies",
         "saas"
@@ -21008,7 +21002,7 @@
       "name": "Shiftie",
       "slug": "shiftie",
       "url": "https://shiftie.co",
-      "category": "HR Software",
+      "category": "HR & Recruiting",
       "tags": [
         "hr-software",
         "saas"
@@ -27722,7 +27716,7 @@
       "name": "WorkWise Compliance",
       "slug": "workwise-compliance",
       "url": "https://workwisecompliance.com",
-      "category": "B2B Marketplaces",
+      "category": "SaaS",
       "tags": [
         "b2b-marketplaces",
         "saas"

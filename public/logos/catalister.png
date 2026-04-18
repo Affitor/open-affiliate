@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://storage.googleapis.com/catalister-logo/logo_icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Catalister - AI Product Research & Listing Expert</title>
+    
+    <!-- PromoteKit Referral Tracking -->
+    <script async src="https://cdn.promotekit.com/promotekit.js" data-promotekit="1daba81d-a4b7-4465-bb01-fb54e74b4f81"></script>
+
+    <!-- FirstPromoter Affiliate Tracking -->
+    <script>(function(w){w.fpr=w.fpr||function(){w.fpr.q = w.fpr.q||[];w.fpr.q[arguments[0]=='set'?'unshift':'push'](arguments);};})(window);
+    fpr("init", {cid:"hjkcw63l"}); 
+    fpr("click");
+    </script>
+    <script src="https://cdn.firstpromoter.com/fpr.js" async></script>
+    
+    <!-- Microsoft Clarity -->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "ukguprj7al");
+    </script>
+    
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WZ3XQRJL');</script>
+    <!-- End Google Tag Manager -->
+    <script type="module" crossorigin src="/assets/index-D07ewTwN.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-CmZU4VjT.css">
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WZ3XQRJL"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    
+    <div id="root"></div>
+  </body>
+</html>

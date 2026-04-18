@@ -1,0 +1,2866 @@
+<!DOCTYPE HTML>
+
+	
+
+	
+	
+	
+	
+	
+	
+		<html lang="en" class="as-published-mode" prefix="og: http://ogp.me/ns#">
+			<head>
+	
+
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta charset="utf-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+		
+    <meta name="content-page-ref" content="1UrzVHZug4NYN2-cmYQ69qw98hNRd0o0yKJj4f2s0A2ea5ZaX8-IOpNLzMD6rCA9"/>
+<script defer="defer" type="text/javascript" src="/.rum/@adobe/helix-rum-js@%5E2/dist/micro.js"></script>
+<link rel="stylesheet" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site.lc-2012303a8cd4de2ee89a15433d0e5c68-lc.min.css" type="text/css">
+<script src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site.lc-cf1492c355277727f02dd8dfc1605591-lc.min.js"></script>
+
+
+
+		
+		<!-- Page Last Modified: 2026-04-15T12:45:31Z -->
+		
+		
+		
+
+		<meta http-equiv="keywords" content="ecommerce shipping solutions, financial services, smart shipping solutions"/>
+
+		
+		
+
+		<title>Pitney Bowes US | Ecommerce, Shipping, Mailing, Financial Services</title>
+		<meta name="description" content="Simplify your ecommerce operations with Pitney Bowes smart shipping solutions. Save time and costs today. Discover more."/>
+
+		
+		
+		
+		
+		
+		
+		<meta content="1.0" name="searchScoreAdjustment"/>
+
+		
+		<meta itemprop="name" content="Ecommerce Shipping Solutions | Pitney Bowes - Smart &amp; Efficient"/>
+		<meta itemprop="description" content="Simplify your ecommerce operations with Pitney Bowes smart shipping solutions. Save time and costs today. Discover more."/>
+		
+
+		
+		<meta property="og:title" content="Ecommerce Shipping Solutions | Pitney Bowes - Smart &amp; Efficient"/>
+		<meta property="og:url" content="https://www.pitneybowes.com/us"/>
+		<meta property="og:site_name" content="Pitney Bowes"/>
+		
+		<meta property="og:type" content="website"/>
+		
+		<meta property="og:description" content="Simplify your ecommerce operations with Pitney Bowes smart shipping solutions. Save time and costs today. Discover more."/>
+		<meta property="og:locale" content="en_US"/>
+		
+
+		
+		<meta name="twitter:card" content="summary"/>
+		<meta name="twitter:site" content="@pitneybowes"/>
+		<meta name="twitter:title" content="Ecommerce Shipping Solutions | Pitney Bowes - Smart &amp; Efficient"/>
+		
+		<meta name="twitter:description" content="Simplify your ecommerce operations with Pitney Bowes smart shipping solutions. Save time and costs today. Discover more."/>
+		
+		<meta name="twitter:url" content="https://www.pitneybowes.com/us"/>
+
+		
+		
+		
+		
+		
+
+		<link rel="canonical" href="https://www.pitneybowes.com/us"/>
+		
+
+		
+	<script async type="text/javascript">
+		var DDO = {};
+		switch ("us") {
+			case "germany":
+				DDO.getBootstrap = "DE";
+				break;
+			default:
+				DDO.getBootstrap = "us";
+		}
+
+		var pageUrl = "";
+		var pageRef = "";
+		var siteDomain = "";
+		var brand = "";
+		DDO.flowPath = "pbu home page template";
+		DDO.specVersion = "1.5";
+
+		pageUrl = window.location.href;
+		pageRef = document.referrer;
+		siteDomain = window.document.domain;
+
+		DDO.prodURL = window.location.href;
+		DDO.globalRSID = "pitneybowesprodglobalrollup";
+		DDO.devRSID = "pitneybowesdtmtest";
+
+		switch ("us") {
+			case "us":
+				DDO.prodRSID = "pitneybowesprodusa";
+				break;
+			case "ca":
+				DDO.prodRSID = "pitneybowesprodcan";
+				break;
+			case "australia":
+				DDO.prodRSID = "pitneybowesprodau";
+				break;
+			case "germany":
+				DDO.prodRSID = "pitneybowesprodde";
+				break;
+			case "latam":
+				DDO.prodRSID = "pitneybowesprodlatin";
+				break;
+			case "pacific":
+				DDO.prodRSID = "pitneybowesprodpacific";
+				break;
+			default:
+				DDO.prodRSID = "pitneybowesprodus";
+		}
+		DDO.brandData = {
+			"brandName": brand
+		},
+			DDO.pageData = {
+				"pageName": "pb|us|home-page|home",
+				"pageURL": pageUrl,
+				"pageRef": pageRef,
+				"pageSiteSection": "pitneyhomeboweshomeushome|homeecommerce,homeshipping,homemailing,homefinancialhomeservices",
+				"pageType": "pbu-home-page",
+				"pageHier": "en|home"
+			},
+			DDO.siteData = {
+				"siteDomain": siteDomain,
+				"siteCountry": "us",
+				"siteRegion": "unknown",
+				"siteLanguage": "en",
+				"siteFormat": ""
+			},
+			DDO.userData = {
+				"userStatus": "unknown",
+				"userCompanyID": "unknown",
+				"userID": "unknown",
+				"userType": "unknown"
+			},
+			DDO.globalData = {
+				"globalHier": "pb|us|home-page|home"
+			}
+
+		if ( false ) {
+			DDO.formData = {
+				"formID": ""
+			}
+		}
+
+
+		if ( false ) {
+			DDO.productDetail = {
+				"productSKU": "home",
+				"productName": "home"
+			}
+		}
+
+		if ( false ) {
+			DDO.productDetail = {
+				"productCatType": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.contentData = {
+				"contentType": "",
+				"contentGroup": "",
+				"businessUnit": "",
+				"ArticleNumber": "",
+				"KnowledgeArticleID": "",
+				"KnowledgeArticleVersionID": "",
+				"ArticleType": "",
+				"ArticleRecordType": "",
+				"ArticleLanguage": "",
+				"ArticleContainsVideo": "",
+				"ArticleDataCategories": "",
+				"ArticleTopicCategories": "",
+				"ArticleLastPubDate": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.campaignData = {
+				"campaignName": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.themeData = {
+				"themeName": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.supportType = {
+				"articleName": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.chatData = {
+				"ContactOptionName": "",
+				"SFDC_ID": ""
+			}
+		}
+
+		if ( false ) {
+			DDO.campaignCID = {
+				"campaignCID": ""
+			}
+		}
+	</script>
+
+	<!-- Adobe DTM Header !-->
+	
+	<script src="//assets.adobedtm.com/launch-EN81edb7894311467a83324e16dd5b24b6.min.js" async></script>
+	<!-- Adobe DTM Header !-->
+
+
+		
+	<!-- Google Tag Manager -->
+	<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KFHLLSZ');</script>
+	<!-- End Google Tag Manager -->
+
+
+
+
+		
+		
+
+		<link rel="icon" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/favicon/favicon.svg" type="image/svg+xml"/>
+		<link rel="icon" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/favicon/favicon_32.png" sizes="32x32" type="image/png"/>
+		<link rel="apple-touch-icon" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/favicon/apple-touch-icon.png"/>
+
+		
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_Md.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_Rg.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_Lt.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_LtIt.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_RgIt.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_MdIt.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_Bd.woff2" as="font" type="font/woff2" crossorigin/>
+		
+		<link rel="preload" href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-scaffold/resources/fonts/PrecisionSans_V1.030/Webfonts/WOFF2/PrecisionSans_W_BdIt.woff2" as="font" type="font/woff2" crossorigin/>
+		
+
+		
+	<script>
+		// Define dataLayer and the gtag function.
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+
+		// Set default consent values using gtag.
+		gtag('consent', 'default', {
+			ad_storage: "denied",
+			analytics_storage: "denied",
+			functionality_storage: "denied",
+			personalization_storage: "denied",
+			security_storage: "denied",
+			ad_user_data: "denied",
+			ad_personalization: "denied",
+			'wait_for_update': 500
+		});
+	</script>
+
+
+		
+
+
+
+	
+</head>
+
+
+			
+	<!-- Google Tag Manager (noscript) -->
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KFHLLSZ" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	<!-- End Google Tag Manager (noscript) -->
+
+
+			
+	
+
+	<body class="us content-modules " data-template-name="pbu-home-page">
+		
+    
+
+
+		
+		
+			
+
+
+
+	<div class="pbxfpage xfpage page basicpage">
+
+    
+
+
+
+<div class="xf-content-height">
+    <div class="root responsivegrid">
+
+
+<div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
+    
+    <div class="pbu-header-v5 aem-GridColumn aem-GridColumn--default--12">
+
+
+
+<header class="global-header global-header--new global-header--v5" id="pageTop" data-version="v5">
+	<a href="#main-content" class="global-header__skip-link">Skip to main content</a>
+
+	
+	<nav class="ancillary-nav" id="ancillary-nav" aria-label="Ancillary navigation">
+		<div class="ancillary-nav__wrap">
+			<ul class="ancillary-nav__list">
+				
+				<li class="ancillary-nav__list__item">
+					<a href="#" class="ancillary-nav__list__link ancillary-nav__list__link--search js-megamenu-trigger" data-menutarget="menu--search" title="Search"><svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_search"></use></svg></a>
+				</li>
+
+				
+				
+
+				
+				<li class="ancillary-nav__list__item">
+					<a href="/us/support.html" class="ancillary-nav__list__link" title="Support">Support</a>
+				</li>
+
+				
+				<li class="ancillary-nav__list__item ancillary-nav__list__item--shop">
+					<a href="https://www.pitneybowes.us/shop/home/en-us/storeus" title="Visit Store" class="ancillary-nav__list__link ancillary-nav__list__link--button">Supplies</a>
+				</li>
+
+				
+				
+
+				
+				<li class="ancillary-nav__list__item">
+					<a href="https://www.pitneybowes.us/shop/OrderCalculate?calculationUsageId=-1&updatePrices=1&catalogId=13475&errorViewName=OrderItemCheckoutView&orderId=.&langId=-1&storeId=15636&URL=OrderItemCheckoutView" title="Shopping Cart" class="ancillary-nav__list__link ancillary-nav__list__link--cart">
+						<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_cart_single"></use></svg>
+					</a>
+				</li>
+				
+				
+				
+					<li class="ancillary-nav__list__item ancillary-nav__list__item--auth">
+						<a href="https://account.pitneybowes.com/signin/logon.go?request_locale=en_US#/account/login" class="ancillary-nav__list__link">Sign In</a>
+					</li>
+				
+
+				
+				<li class="ancillary-nav__list__item">
+					<a href="/us/region-select.html" class="us ancillary-nav__list__link" title="Choose a region">
+						<span class="ancillary-nav__list__link__textonly">United States</span>
+						<span class="ancillary-nav__list__link__flag icn flag sm"></span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+	
+	<div class="primary-nav" id="primary-nav">
+		<nav class="primary-nav__wrap">
+			
+			
+				
+				
+
+				
+				
+					
+				
+
+				<a class="primary-nav__logo" href="/us" title="Home Page" aria-label="Return To Homepage"><img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/logo-color.svg" alt="pitney bowes logo" class="primary-nav__logo__img"/></a>
+			
+
+			
+
+			<ul class="primary-nav__list" aria-label="Primary navigation">
+				
+				
+					<li class="primary-nav__list__item">
+						<a href="/us" class="primary-nav__list__link js-megamenu-trigger" data-menutarget="menu--0" aria-expanded="false">
+							<span class="primary-nav__list__link__text" id="primaryNavMenu0">
+								Products
+							</span>
+
+							<span class="primary-nav__list__link__indicator">
+								<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_down"></use></svg>
+							</span>
+						</a>
+					</li>
+				
+					<li class="primary-nav__list__item">
+						<a href="/us" class="primary-nav__list__link js-megamenu-trigger" data-menutarget="menu--1" aria-expanded="false">
+							<span class="primary-nav__list__link__text" id="primaryNavMenu1">
+								Solutions
+							</span>
+
+							<span class="primary-nav__list__link__indicator">
+								<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_down"></use></svg>
+							</span>
+						</a>
+					</li>
+				
+					<li class="primary-nav__list__item">
+						<a href="/us" class="primary-nav__list__link js-megamenu-trigger" data-menutarget="menu--2" aria-expanded="false">
+							<span class="primary-nav__list__link__text" id="primaryNavMenu2">
+								Integrations
+							</span>
+
+							<span class="primary-nav__list__link__indicator">
+								<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_down"></use></svg>
+							</span>
+						</a>
+					</li>
+				
+					<li class="primary-nav__list__item">
+						<a href="/us" class="primary-nav__list__link js-megamenu-trigger" data-menutarget="menu--3" aria-expanded="false">
+							<span class="primary-nav__list__link__text" id="primaryNavMenu3">
+								Resources
+							</span>
+
+							<span class="primary-nav__list__link__indicator">
+								<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_down"></use></svg>
+							</span>
+						</a>
+					</li>
+				
+					<li class="primary-nav__list__item">
+						<a href="/us" class="primary-nav__list__link js-megamenu-trigger" data-menutarget="menu--4" aria-expanded="false">
+							<span class="primary-nav__list__link__text" id="primaryNavMenu4">
+								Why Pitney Bowes
+							</span>
+
+							<span class="primary-nav__list__link__indicator">
+								<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_down"></use></svg>
+							</span>
+						</a>
+					</li>
+				
+			</ul>
+			
+		</nav>
+
+	</div>
+
+	<div class="mega-menu">
+		
+			<div>
+				<nav id="menu--0" class="mega-menu__cat mega-menu__cat--new bg-color-ui-gray" aria-hidden="true">
+					
+					
+						<div class="mega-menu__cat-wrap grid-container-12 maxwidth setgutters m-i-auto">
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Software
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/enterprise-shipping-360.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink mega-menu__cardlink--featured">
+															
+															<span class="mega-menu__cardlink-headline">What is the Shipping 360 platform?</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/shipping-software.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Shipping software</span>
+															
+																<span class="mega-menu__cardlink-description">Simplifying multicarrier shipping</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/ecommerce-fulfillment-software.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Ecommerce fulfillment software</span>
+															
+																<span class="mega-menu__cardlink-description">Streamline order management and cut shipping costs</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/apis.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Shipping APIs</span>
+															
+																<span class="mega-menu__cardlink-description">Seamlessly integrate shipping into your platform</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/mailroom-software/pitneytrack.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Mailroom management software</span>
+															
+																<span class="mega-menu__cardlink-description">Easily track inbound packages</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-white">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Hardware
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/postage-meters.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Postage meters</span>
+															
+																<span class="mega-menu__cardlink-description">Simplify mailing and postage</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/shipping-label-printer.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Shipping label printer</span>
+															
+																<span class="mega-menu__cardlink-description">3-in-1 shipping solution with a built-in scale</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/parcel-lockers.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Smart lockers</span>
+															
+																<span class="mega-menu__cardlink-description">Secure, convenient package and asset delivery</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/self-service-mailing-shipping-kiosk.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Self-service kiosk</span>
+															
+																<span class="mega-menu__cardlink-description">Quick, simple shipping and mailing</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/mailroom-equipment.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Mailroom equipment</span>
+															
+																<span class="mega-menu__cardlink-description">Automate mailroom prep and processing tasks</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Services
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/presort-mail.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Presort mail services</span>
+															
+																<span class="mega-menu__cardlink-description">High-volume mail processing</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/financial-services.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Financing</span>
+															
+																<span class="mega-menu__cardlink-description">Flexible business financing</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/mailroom-software/mailstream-on-demand.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Print to mail</span>
+															
+																<span class="mega-menu__cardlink-description">Print and mailing outsourcing service</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+						</div>
+					
+					
+					
+					
+					
+				</nav>
+			</div>
+		
+			<div>
+				<nav id="menu--1" class="mega-menu__cat mega-menu__cat--new bg-color-ui-gray" aria-hidden="true">
+					
+					
+						<div class="mega-menu__cat-wrap grid-container-12 maxwidth setgutters m-i-auto">
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-half bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											By industry
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/government.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-government.svg" alt="government icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Government</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/finance.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-finance.svg" alt="finance icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Financial services</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/healthcare.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-healthcare.svg" alt="healthcare icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Healthcare</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/higher-education.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-higher-ed.svg" alt="higher-ed icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Higher education</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/legal.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-legal.svg" alt="legal icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Legal</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="https://www.pitneybowes.com/us/industries/pharmacy.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-pharmacies.svg" alt="pharmacies icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Pharmacy</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/retail.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-retail.svg" alt="retail icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Retail &amp; ecommerce</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/industries/small-business-shipping.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-small-business.svg" alt="small-business icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Small business</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-half bg-color-white">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											By use case
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/certified-mail.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-certified-mail.svg" alt="certified-mail icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Digital certified mail</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/order-management.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-order-management2.svg" alt="order-management2 icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Order management</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/multicarrier-management.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-multicarrier.svg" alt="multicarrier icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Multicarrier management</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/shipping-data-analytics.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-shipping-data-analytics.svg" alt="shipping-data-analytics icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Shipping analytics &amp; insights</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/package-tracking.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-parcel-tracking.svg" alt="parcel-tracking icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Package tracking</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/solutions/international-shipping.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-international-shipping.svg" alt="international-shipping icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">International shipping</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+						</div>
+					
+					
+					
+					
+					
+				</nav>
+			</div>
+		
+			<div>
+				<nav id="menu--2" class="mega-menu__cat mega-menu__cat--new bg-color-ui-gray" aria-hidden="true">
+					
+					
+						<div class="mega-menu__cat-wrap grid-container-12 maxwidth setgutters m-i-auto">
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										<a href="/us/partners/integrations.html" class="mega-menu__subcat__head__link">
+											Integrations
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/partners/integrations.html#carriers" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Carriers</span>
+															
+																<span class="mega-menu__cardlink-description">Connect with major shipping and delivery providers</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/partners/integrations.html#marketplaces" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Marketplaces</span>
+															
+																<span class="mega-menu__cardlink-description">Integrate with leading e-commerce platforms</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/partners/integrations.html#verticals" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Verticals</span>
+															
+																<span class="mega-menu__cardlink-description">Solutions tailored for specific industries</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+						</div>
+					
+					
+					
+					
+					
+				</nav>
+			</div>
+		
+			<div>
+				<nav id="menu--3" class="mega-menu__cat mega-menu__cat--new bg-color-ui-gray" aria-hidden="true">
+					
+					
+						<div class="mega-menu__cat-wrap grid-container-12 maxwidth setgutters m-i-auto">
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Community &amp; Events
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/newsroom.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-news.svg" alt="news icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Newsroom</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/podcasts.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-podcasts.svg" alt="podcasts icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Podcasts</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/webinars.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-webinars.svg" alt="webinars icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Webinars</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+										
+
+										<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+											
+												Tools
+											</a>
+										</h2>
+										<div class="mega-menu__subcat">
+											<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+												
+													<li class="mega-menu__subcat__list__item grid-child-full">
+														<a href="/us/enterprise-shipping-360/demo-center.html" class="mega-menu__subcat__list__item__link">
+															<span class="mega-menu__cardlink ">
+																
+																	<span class="mega-menu__cardlink-icon">
+																		<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-demos.svg" alt="demos icon"/>
+																	</span>
+																
+																<span class="mega-menu__cardlink-headline">Demos</span>
+																
+															</span>
+														</a>
+													</li>
+												
+													<li class="mega-menu__subcat__list__item grid-child-full">
+														<a href="/us/presort-mail/presort-savings-calculator.html" class="mega-menu__subcat__list__item__link">
+															<span class="mega-menu__cardlink ">
+																
+																	<span class="mega-menu__cardlink-icon">
+																		<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-calculator.svg" alt="calculator icon"/>
+																	</span>
+																
+																<span class="mega-menu__cardlink-headline">Presort savings calculator</span>
+																
+															</span>
+														</a>
+													</li>
+												
+											</ul>
+										</div>
+									
+
+								</div>
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-white">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Education
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/blog.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-blogs.svg" alt="blogs icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Blogs</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/carriers.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-carriers.svg" alt="carriers icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Carriers</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/case-studies.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-case-studies.svg" alt="case-studies icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Case studies</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/postal-information.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-rate-change.svg" alt="rate-change icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Rate change</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/enterprise-shipping-360/trust-center.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-security.svg" alt="security icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Trust center</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-half">
+													<a href="/us/your-product-update-hub.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-document-support.svg" alt="document-support icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Product update hub</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Support
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/support.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+																<span class="mega-menu__cardlink-icon">
+																	<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/navicons/navicon-blue-support.svg" alt="support icon"/>
+																</span>
+															
+															<span class="mega-menu__cardlink-headline">Web support</span>
+															
+																<span class="mega-menu__cardlink-description">Find answers, product guides and help for all your Pitney Bowes services</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+						</div>
+					
+					
+					
+					
+					
+				</nav>
+			</div>
+		
+			<div>
+				<nav id="menu--4" class="mega-menu__cat mega-menu__cat--new bg-color-ui-gray" aria-hidden="true">
+					
+					
+						<div class="mega-menu__cat-wrap grid-container-12 maxwidth setgutters m-i-auto">
+							
+								
+								
+								
+
+								<div class="mega-menu__cat__column grid-child-onethird bg-color-gray">
+
+									<h2 class="mega-menu__cat__column__heading grid-child-full m-i-sm">
+										
+											Company info
+										</a>
+									</h2>
+									<div class="mega-menu__subcat">
+										<ul class="mega-menu__subcat__list grid-container-12 grid-gap-sm" role="list">
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/our-company.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">About us</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="https://www.investorrelations.pitneybowes.com" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Investor relations</span>
+															
+														</span>
+													</a>
+												</li>
+											
+												<li class="mega-menu__subcat__list__item grid-child-full">
+													<a href="/us/our-company/our-customers.html" class="mega-menu__subcat__list__item__link">
+														<span class="mega-menu__cardlink ">
+															
+															<span class="mega-menu__cardlink-headline">Our customers</span>
+															
+														</span>
+													</a>
+												</li>
+											
+										</ul>
+									</div>
+
+									
+									
+
+								</div>
+							
+						</div>
+					
+					
+					
+					
+					
+				</nav>
+			</div>
+		
+		<nav id="menu--search" class="mega-menu__cat mega-menu__cat--search" aria-hidden="true">
+			<div class="mega-menu__form" role="search" aria-label="Site search">
+				<div id="global-search-box" class="sitesearch-menu">
+					<div class="sitesearch-menu__top">
+						<form action="/us/search-results.html" method="get" class="sitesearch-menu__form">
+							<input class="sitesearch-menu__form__input" id="sitesearch-menu-form-input" autocomplete="on" inputmode="search" aria-autocomplete="list" aria-label="Search pitneybowes.com" placeholder="Please enter a keyword to search…" type="search" name="q"/>
+							<button class="sitesearch-menu__form__reset" id="sitesearch-menu-form-reset" type="reset" disabled tabindex="-1"><span class="visually-hidden">Clear search input</span>&#x2715;</button>
+							<button class="sitesearch-menu__form__submit" type="submit">Search</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</nav>
+	</div>
+</header>
+
+<nav class="return-to-top" id="returnToTop" aria-label="Back to Top">
+	<a href="#pageTop" class="return-to-top__link">
+		<span class="return-to-top__icon">
+			<svg><use xlink:href="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/header-sprite.svg#svg_caret_up"></use></svg>
+		</span>
+		<span class="return-to-top__text return-to-top__text--desktop">Back to Top</span>
+		<span class="return-to-top__text return-to-top__text--mobile">Top</span>
+	</a>
+</nav>
+
+
+
+<div class="mobile-header" aria-hidden="true">
+	<div class="mobile-header__wrap">
+		
+		
+		
+		
+		
+			
+		
+		<a class="mobile-header__logo-link" href="/us" title="Home Page">
+			<img src="/etc.clientlibs/pitneybowes/clientlibs/clientlib-site/resources/images/SVG/logo-color.svg" alt="Home Page" class="mobile-header__logo-img"/>
+		</a>
+		<button class="mobile-header__searchbutton js-megamenu-trigger" aria-expanded="false" aria-controls="search-box-id" aria-label="Search" data-menutarget="menu--search" tabindex="-1">
+			<span class="svg-icon__search"></span>
+		</button>
+		<button id="mobileHeaderButton" class="mobile-header__menubutton js-menubutton" aria-expanded="false" aria-controls="mobileHeaderMenu" aria-label="Main menu" tabindex="-1">
+			<span aria-hidden="true" class="svg-icon__menu mobile-header__menubutton__menu"></span>
+			<span aria-hidden="true" class="svg-icon__closex mobile-header__menubutton__close"></span>
+		</button>
+	</div>
+	<nav id="mobileHeaderMenu" class="mobile-header__menu" aria-describedby="mobileHeaderButton" aria-expanded="false" hidden="true">
+		<ul class="mobile-header__menu-list">
+			
+				
+					<li class="mobile-header__menu-listitem">
+						<span class="mobile-header__menu-listitem__text">Products</span>
+						
+							<ul class="mobile-header__submenu">
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Software</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/enterprise-shipping-360.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">What is the Shipping 360 platform?</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/shipping-software.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Shipping software</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/ecommerce-fulfillment-software.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Ecommerce fulfillment software</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/apis.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Shipping APIs</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/mailroom-software/pitneytrack.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Mailroom management software</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Hardware</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/postage-meters.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Postage meters</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/shipping-label-printer.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Shipping label printer</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/parcel-lockers.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Smart lockers</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/self-service-mailing-shipping-kiosk.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Self-service kiosk</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/mailroom-equipment.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Mailroom equipment</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Services</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/presort-mail.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Presort mail services</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/financial-services.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Financing</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/mailroom-software/mailstream-on-demand.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Print to mail</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+							</ul>
+						
+					</li>
+				
+					<li class="mobile-header__menu-listitem">
+						<span class="mobile-header__menu-listitem__text">Solutions</span>
+						
+							<ul class="mobile-header__submenu">
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">By industry</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/government.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Government</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/finance.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Financial services</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/healthcare.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Healthcare</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/higher-education.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Higher education</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/legal.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Legal</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="https://www.pitneybowes.com/us/industries/pharmacy.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Pharmacy</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/retail.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Retail &amp; ecommerce</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/industries/small-business-shipping.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Small business</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">By use case</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/certified-mail.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Digital certified mail</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/order-management.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Order management</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/multicarrier-management.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Multicarrier management</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/shipping-data-analytics.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Shipping analytics &amp; insights</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/package-tracking.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Package tracking</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/solutions/international-shipping.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">International shipping</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+							</ul>
+						
+					</li>
+				
+					<li class="mobile-header__menu-listitem">
+						<span class="mobile-header__menu-listitem__text">Integrations</span>
+						
+							<ul class="mobile-header__submenu">
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										<a href="/us/partners/integrations.html" class="mobile-header__submenu-listitemlink">Integrations</a>
+										
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/partners/integrations.html#carriers" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Carriers</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/partners/integrations.html#marketplaces" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Marketplaces</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/partners/integrations.html#verticals" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Verticals</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+							</ul>
+						
+					</li>
+				
+					<li class="mobile-header__menu-listitem">
+						<span class="mobile-header__menu-listitem__text">Resources</span>
+						
+							<ul class="mobile-header__submenu">
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Community &amp; Events</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/newsroom.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Newsroom</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/podcasts.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Podcasts</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/webinars.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Webinars</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Education</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/blog.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Blogs</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/carriers.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Carriers</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/case-studies.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Case studies</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/postal-information.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Rate change</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/enterprise-shipping-360/trust-center.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Trust center</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/your-product-update-hub.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Product update hub</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Support</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/support.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Web support</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+							</ul>
+						
+					</li>
+				
+					<li class="mobile-header__menu-listitem">
+						<span class="mobile-header__menu-listitem__text">Why Pitney Bowes</span>
+						
+							<ul class="mobile-header__submenu">
+								
+									<li class="mobile-header__submenu-listitem mobile-header__submenu-listitem--hasnav">
+										
+										<span class="mobile-header__submenu-listitemhead">Company info</span>
+										<button class="mobile-header__submenu-listitemarrow js-submenubutton" tabindex="-1" aria-expanded="false">
+											<span class="visually-hidden">Expand menu</span>
+										</button>
+										
+											<nav class="mobile-header__thirdmenu js-submenu" hidden="true">
+												<ul class="mobile-header__thirdmenu__list">
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/our-company.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">About us</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="https://www.investorrelations.pitneybowes.com" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Investor relations</a>
+														</li>
+													
+														<li class="mobile-header__thirdmenu__list-item">
+															<a href="/us/our-company/our-customers.html" class="us mobile-header__thirdmenu__list-item-link" tabindex="-1">Our customers</a>
+														</li>
+													
+												</ul>
+											</nav>
+										
+									</li>
+								
+							</ul>
+						
+					</li>
+				
+			
+			<li class="mobile-header__menu-listitem mobile-header__menu-listitem--secondary"><!-- shop -->
+				<a href="https://www.pitneybowes.us/shop/home/en-us/storeus.html" class="mobile-header__menu-listitemlink">
+					<span aria-hidden="true" class="svg-icon__sm-supplies"></span>Supplies</a>
+			</li>
+			<li class="mobile-header__menu-listitem mobile-header__menu-listitem--secondary"><!-- support -->
+				<a href="/us/support.html" class="mobile-header__menu-listitemlink">
+					<span aria-hidden="true" class="svg-icon__sm-support"></span>Get Support </a>
+			</li>
+			<li class="mobile-header__menu-listitem mobile-header__menu-listitem--secondary"><!-- myaccount -->
+				<a href="https://account.pitneybowes.com/signin/logon.html?request_locale=en_US#/account/login" class="mobile-header__menu-listitemlink">
+					<span aria-hidden="true" class="svg-icon__sm-signin"></span>Sign in </a>
+			</li>
+			<!--
+				supportLink: /us/support.html
+				mobileLinkText: Get Support
+				supportFlagText: 
+				supportLinkText: Support
+			-->
+			
+			<li class="mobile-header__menu-listitem mobile-header__menu-listitem--secondary">
+				<a href="/us/region-select.html" class="mobile-header__menu-listitemlink us">
+					<span aria-hidden="true" class="icn flag"></span>Change Country </a>
+			</li>
+		</ul>
+	</nav>
+</div>
+
+</div>
+
+    
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+		
+
+		
+		<main class="main-content" id="main-content">
+			
+
+
+<div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
+    
+    <div class="container responsivegrid aem-GridColumn aem-GridColumn--default--12">
+
+    
+    
+    
+    <div id="container-4250bc5790" class="cmp-container">
+        
+        <div class="container responsivegrid">
+
+    
+    
+    
+    <div id="container-33f1bbe4a8" class="cmp-container">
+        
+        <div class="pbr-benefits-module">
+	
+	
+		
+			<section class="benefits benefits--full-bg benefits--no-gap benefits--text-light benefits--vertical-center benefits--larger-copy  ">
+				<div class="benefits__wrap">
+
+					
+
+					
+						<div class="benefits__figure">
+							<picture class="benefits__figure__picture">
+								
+									
+										
+	
+	
+	
+		<source srcset="/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-2880x1018b.jpg/jcr:content/renditions/dmr-1878-homepage-hero-2880x1018b.2880.webp 2880w,
+					/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-2880x1018b.jpg/jcr:content/renditions/dmr-1878-homepage-hero-2880x1018b.1440.webp 1440w,
+					/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-2880x1018b.jpg/jcr:content/renditions/dmr-1878-homepage-hero-2880x1018b.1024.webp 1024w" media="(min-width: 901px)" sizes="100vw"/>
+		<source srcset="/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-900x500.jpg/jcr:content/renditions/dmr-1878-homepage-hero-900x500.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-900x500.jpg/jcr:content/renditions/dmr-1878-homepage-hero-900x500.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-900x500.jpg/jcr:content/renditions/dmr-1878-homepage-hero-900x500.400.webp 400w"/>
+		<img src="/content/dam/pitneybowes/us/en/homepage/dmr-1878-homepage-hero-2880x1018b.jpg/_jcr_content/renditions/dmr-1878-homepage-hero-2880x1018b.1024.webp" alt="Shipping Software dashboard" class="benefits__figure__picture__image"/>
+	
+	
+
+									
+								
+
+								</picture>
+						</div>
+					
+
+					
+						<div class="benefits__copy">
+
+							
+								<h1 class="benefits__copy__headline">Shipping software, only smarter.</h1>
+							
+							
+								<div class="benefits__copy__body"><p>Pitney Bowes offers industry-leading ecommerce shipping solutions that streamline operations and enhance customer satisfaction. Our multicarrier software enables businesses to compare rates, print labels, and save on postage effortlessly.</p>
+</div>
+							
+
+							
+								<span class="benefits__copy__cta">
+									
+										<a href="https://www.pitneybowes.com/us/shipping-software.html?cm_sp=benefits_image_homepage_default1_01052026" class="benefits__copy__cta__link button button--secondary" aria-label="Office shipping">Office shipping</a>
+									
+										<a href="https://www.pitneybowes.com/us/ecommerce-fulfillment-software.html?cm_sp=benefits_image_homepage_default2_01052026" class="benefits__copy__cta__link button " aria-label="Ecommerce shipping">Ecommerce shipping</a>
+									
+								</span>
+							
+
+						</div>
+					
+				</div>
+		
+
+		</section>
+	
+
+
+
+</div>
+<div class="pbr-features-module">
+
+	
+	
+		
+			
+
+				<div class="features features--dark-text features--no-gap features--full-width">
+					<div class="features__wrap">
+
+						<div class="features__intro">
+							<h1 class="features__intro__headline">
+								<span class="gradient-text gradient-text--grad2">Helping businesses of all sizes and industries with shipping and mailing</span></h1>
+						</div>
+
+						<div class="features__items">
+
+							<!-- Column 1 -->
+							<div class="features__block">
+
+								
+									<a href="/us/shipping-software.html?cm_sp=categorylink_link_homepage_default1_03052025" class="features__block__wrap">
+										
+	
+		<div class="features__block__figure">
+			
+				
+					<img src="/content/dam/pitneybowes/us/en/icon-small-business.svg" loading="lazy" alt="small business icon" class="features__block__figure__icon"/>
+				
+				
+			
+
+			
+		</div>
+	
+
+	
+
+	
+		<div class="features__block__body">Small Business</div>
+	
+
+									</a>
+								
+
+								
+							</div>
+
+
+							<!-- Column 2 -->
+							<div class="features__block">
+
+								
+									<a href="/us/ecommerce-fulfillment-software.html?cm_sp=categorylink_link_homepage_default2_03052025" class="features__block__wrap">
+										
+	
+		<div class="features__block__figure">
+			
+				
+				
+					<img src="/content/dam/pitneybowes/us/en/icon-ecommerce.svg" loading="lazy" alt="" class="features__block__figure__icon"/>
+				
+			
+
+			
+		</div>
+	
+
+	
+
+	
+		<div class="features__block__body">Ecommerce</div>
+	
+
+									</a>
+								
+
+								
+							</div>
+
+							
+								<!-- Column 3 -->
+								<div class="features__block">
+
+									
+										<a href="/us/enterprise-shipping-360.html?cm_sp=categorylink_link_homepage_default3_03052025" class="features__block__wrap">
+											
+	
+		<div class="features__block__figure">
+			
+				
+					<img src="/content/dam/pitneybowes/us/en/icon-enterprise.svg" loading="lazy" alt="enterprise icon" class="features__block__figure__icon"/>
+				
+				
+			
+
+			
+		</div>
+	
+
+	
+
+	
+		<div class="features__block__body">Enterprise</div>
+	
+
+										</a>
+									
+
+									
+								</div>
+							
+
+
+							
+								<!-- Column 4 -->
+								<div class="features__block">
+
+									
+										<a href="/us/industries/government.html?cm_sp=categorylink_link_homepage_default4_03052025" class="features__block__wrap">
+											
+	
+		<div class="features__block__figure">
+			
+
+			
+				
+				
+					<img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/shipping-360/government.png/_jcr_content/renditions/government.125.webp" loading="lazy" srcset="/content/dam/pitneybowes/us/en/shipping-and-mailing/shipping-360/government.png/jcr:content/renditions/government.125.webp 125w, /content/dam/pitneybowes/us/en/shipping-and-mailing/shipping-360/government.png/jcr:content/renditions/government.250.webp 250w" alt="government icon" class="features__block__figure__icon"/>
+				
+				
+			
+		</div>
+	
+
+	
+
+	
+		<div class="features__block__body">Government</div>
+	
+
+										</a>
+									
+
+									
+								</div>
+							
+
+							
+
+
+						</div>
+					</div>
+				</div>
+
+			
+		
+	
+
+</div>
+<div class="pbr-benefits-module">
+	
+	
+		
+			<section class="benefits benefits--text-right  ">
+				<div class="benefits__wrap">
+
+					
+
+					
+						<div class="benefits__figure">
+							<picture class="benefits__figure__picture">
+								
+
+								
+									
+										
+	
+	
+	
+		<source media="(min-width: 901px)" srcset="/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x500.jpg/jcr:content/renditions/benefits-sendtech-900x500.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x500.jpg/jcr:content/renditions/benefits-sendtech-900x500.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x500.jpg/jcr:content/renditions/benefits-sendtech-900x500.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x500.jpg/jcr:content/renditions/benefits-sendtech-900x500.400.webp 400w" sizes="(min-width: 901px) and (max-width: 1274px) calc((100vw - 90px)/2),
+						(min-width: 1275px) 593px"/>
+		<source srcset="/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x324.jpg/jcr:content/renditions/benefits-sendtech-900x324.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x324.jpg/jcr:content/renditions/benefits-sendtech-900x324.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x324.jpg/jcr:content/renditions/benefits-sendtech-900x324.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x324.jpg/jcr:content/renditions/benefits-sendtech-900x324.400.webp 400w" sizes="calc(100vw - 30px)"/>
+		<img src="/content/dam/pitneybowes/us/en/homepage/benefits-sendtech-900x500.jpg/_jcr_content/renditions/benefits-sendtech-900x500.600.webp" loading="lazy" alt="man in a warehouse looking at Pitneyship dashboard on his computer screen" class="benefits__figure__picture__image"/>
+	
+	
+
+									
+							</picture>
+						</div>
+					
+
+					
+						<div class="benefits__copy">
+
+							
+								<div class="benefits__copy__headline">Shipping Software</div>
+							
+							
+								<div class="benefits__copy__body"><p>Make smarter shipping decisions with multicarrier software that allows you to effortlessly compare rates, print shipping labels or postage, and save from wherever you’re sending.</p>
+</div>
+							
+
+							
+								<span class="benefits__copy__cta">
+									
+										<a href="/us/shipping-software.html?cm_sp=benefits_image_homepage_default1_06232025" class="benefits__copy__cta__link button " aria-label="Start shipping with PitneyShip">Start shipping</a>
+									
+										<a href="/us/shipping-software/pitneyship-pro.html?cm_sp=benefits_image_homepage_default1_cta2_06232025" class="benefits__copy__cta__link button " aria-label="Enterprise shipping">Enterprise shipping</a>
+									
+								</span>
+							
+
+						</div>
+					
+				</div>
+		
+
+		</section>
+	
+
+
+
+</div>
+<div class="pbr-benefits-module">
+	
+	
+		
+			<section class="benefits  ">
+				<div class="benefits__wrap">
+
+					
+
+					
+						<div class="benefits__figure">
+							<picture class="benefits__figure__picture">
+								
+
+								
+									
+										
+	
+	
+	
+		<source media="(min-width: 901px)" srcset="/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x500.jpg/jcr:content/renditions/benefits-postage-meters-900x500.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x500.jpg/jcr:content/renditions/benefits-postage-meters-900x500.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x500.jpg/jcr:content/renditions/benefits-postage-meters-900x500.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x500.jpg/jcr:content/renditions/benefits-postage-meters-900x500.400.webp 400w" sizes="(min-width: 901px) and (max-width: 1274px) calc((100vw - 90px)/2),
+						(min-width: 1275px) 593px"/>
+		<source srcset="/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x324.jpg/jcr:content/renditions/benefits-postage-meters-900x324.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x324.jpg/jcr:content/renditions/benefits-postage-meters-900x324.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x324.jpg/jcr:content/renditions/benefits-postage-meters-900x324.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x324.jpg/jcr:content/renditions/benefits-postage-meters-900x324.400.webp 400w" sizes="calc(100vw - 30px)"/>
+		<img src="/content/dam/pitneybowes/us/en/homepage/benefits-postage-meters-900x500.jpg/_jcr_content/renditions/benefits-postage-meters-900x500.600.webp" loading="lazy" alt="a finger touching the screen on a Pitney Bowes postage meter" class="benefits__figure__picture__image"/>
+	
+	
+
+									
+							</picture>
+						</div>
+					
+
+					
+						<div class="benefits__copy">
+
+							
+								<div class="benefits__copy__headline">Mailing Technology</div>
+							
+							
+								<div class="benefits__copy__body"><p>Easily send letters, large envelopes, and packages directly from your office or mail center, all while getting automatic postage savings.</p>
+</div>
+							
+
+							
+								<span class="benefits__copy__cta">
+									
+										<a href="/us/postage-meters.html?cm_sp=benefits_image_homepage_default3_06232025" class="benefits__copy__cta__link button " aria-label="Review options">Review options</a>
+									
+								</span>
+							
+
+						</div>
+					
+				</div>
+		
+
+		</section>
+	
+
+
+
+</div>
+<div class="pbr-benefits-module">
+	
+	
+		
+			<section class="benefits benefits--text-right  ">
+				<div class="benefits__wrap">
+
+					
+
+					
+						<div class="benefits__figure">
+							<picture class="benefits__figure__picture">
+								
+
+								
+									
+										
+	
+	
+	
+		<source media="(min-width: 901px)" srcset="/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x500.jpg/jcr:content/renditions/benefits-presort-900x500.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x500.jpg/jcr:content/renditions/benefits-presort-900x500.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x500.jpg/jcr:content/renditions/benefits-presort-900x500.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x500.jpg/jcr:content/renditions/benefits-presort-900x500.400.webp 400w" sizes="(min-width: 901px) and (max-width: 1274px) calc((100vw - 90px)/2),
+						(min-width: 1275px) 593px"/>
+		<source srcset="/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x324.jpg/jcr:content/renditions/benefits-presort-900x324.1440.webp 1440w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x324.jpg/jcr:content/renditions/benefits-presort-900x324.900.webp 900w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x324.jpg/jcr:content/renditions/benefits-presort-900x324.600.webp 600w,
+						/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x324.jpg/jcr:content/renditions/benefits-presort-900x324.400.webp 400w" sizes="calc(100vw - 30px)"/>
+		<img src="/content/dam/pitneybowes/us/en/homepage/benefits-presort-900x500.jpg/_jcr_content/renditions/benefits-presort-900x500.600.webp" loading="lazy" alt="Pitney Bowes employees in working in a Presort facility" class="benefits__figure__picture__image"/>
+	
+	
+
+									
+							</picture>
+						</div>
+					
+
+					
+						<div class="benefits__copy">
+
+							
+								<div class="benefits__copy__headline">Mailing Services</div>
+							
+							
+								<div class="benefits__copy__body"><p>Discover deeper discounts and extend your reach with our nationwide network of 30&#43; Presort Services operating centers.</p>
+</div>
+							
+
+							
+								<span class="benefits__copy__cta">
+									
+										<a href="/us/presort-mail.html?cm_sp=benefits_image_homepage_default4_06232025" class="benefits__copy__cta__link button " aria-label="Learn more about Pitney Bowes Mailing Services">Learn more</a>
+									
+								</span>
+							
+
+						</div>
+					
+				</div>
+		
+
+		</section>
+	
+
+
+
+</div>
+<div class="pbu-client-logos">
+
+
+
+
+
+	<section class="client-logos    ">
+		<div class="client-logos__inner">
+		<div class="client-logos__intro">
+			<div class="client-logos__intro-eyebrow"></div>
+			<div class="client-logos__intro-headline">We make shipping and mailing easier for industry leading brands.</div>
+			<div class="client-logos__intro-description"></div>
+		</div>
+		
+			
+				<div class="client-logos__list" aria-hidden="true">
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/new-york-islanders-logo.png" alt="New York Islanders" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/ubs-arena-logo.png" alt="UBS Arena" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/wwe-championship-logo-v2.png" alt="WWE  Championship Logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/boston-medical-center-logo.png" alt="Boston Medical Center logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/mastercard-logo.png" alt="Mastercard logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/1200px-ebay-logo.png" alt="ebay logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/accenture.png" alt="Accenture logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				
+					
+					
+					
+					
+					<span class="client-logos__list-item">
+						
+						
+							<span class="client-logos__list-img-wrap"><img src="/content/dam/pitneybowes/us/en/shipping-and-mailing/client-logo/wake-forest-university-logo-new.png" alt="Wake Forest logo" class="client-logos__list-img"/></span>
+						
+					</span>
+					
+				</div>
+			
+		
+	</section>
+</div>
+<div class="pbr-cards-module">
+
+
+
+	
+	
+		
+
+			<section class="cards cards--3-col cards--logo-cards cards--no-gap cards--centered-headline">
+				<div class="cards__wrap">
+					
+						<div class="cards__intro">
+							
+							
+								<div class="cards__intro__headline">Learn more about us</div>
+							
+							
+						</div>
+					
+
+					<div class="cards__items">
+
+						
+						
+							<a href="https://www.investorrelations.pitneybowes.com/?cm_sp=cards_image_homepage_default1_06012024" title="Pitney Bowes Investor Relations" class="cards__item">
+								
+									
+
+	<div class="cards__item__wrap">
+		<div class="cards__item__figure"> 
+	   		
+				
+					<img src="/content/dam/pitneybowes/us/en/our-company/corporate-responsibility/images/21-mktc-02332-our-company-pbu-featured-content-icons-03.svg" loading="lazy" alt="handshake icon" class="cards__item__figure__image"/>
+				
+				
+			
+
+			
+
+			
+
+			
+		</div>
+
+		
+			<div class="cards__item__copy">
+				
+					<div class="cards__item__copy__headline">Investor Relations</div>
+				
+				
+					<div class="cards__item__copy__body">Gain a perspective of our
+organization, including the
+strides we’re making as an
+industry leader.</div>
+				
+			</div>
+		
+
+		
+			
+
+			
+		
+
+	</div><!--cards__item__wrap-->
+
+
+								
+							</a>
+							
+						
+
+
+						
+						
+							<a href="/us/newsroom.html?cm_sp=cards_image_homepage_default2_06012024" title="Pitney Bowes newsroom" class="cards__item">
+								
+									
+
+	<div class="cards__item__wrap">
+		<div class="cards__item__figure"> 
+	   		
+				
+					<img src="/content/dam/pitneybowes/us/en/our-company/corporate-responsibility/images/21-mktc-02332-our-company-pbu-featured-content-icons-02.svg" loading="lazy" alt="newspaper icon" class="cards__item__figure__image"/>
+				
+				
+			
+
+			
+
+			
+
+			
+		</div>
+
+		
+			<div class="cards__item__copy">
+				
+					<div class="cards__item__copy__headline">Newsroom</div>
+				
+				
+					<div class="cards__item__copy__body">Stay up-to-date with our latest developments by delving into our press releases and featured articles.</div>
+				
+			</div>
+		
+
+		
+			
+
+			
+		
+
+	</div><!--cards__item__wrap-->
+
+
+								
+							</a>
+							
+						
+
+
+						
+
+							
+							
+								<a href="/us/careers.html?cm_sp=cards_image_homepage_default3_08112025" title="Careers at Pitney Bowes" class="cards__item">
+									
+										
+
+	<div class="cards__item__wrap">
+		<div class="cards__item__figure"> 
+	   		
+				
+					<img src="/content/dam/pitneybowes/us/en/our-company/corporate-responsibility/images/21-mktc-02332-our-company-pbu-featured-content-icons-04.svg" loading="lazy" alt="person moving upward on a set of stairs" class="cards__item__figure__image"/>
+				
+				
+			
+
+			
+
+			
+
+			
+		</div>
+
+		
+			<div class="cards__item__copy">
+				
+					<div class="cards__item__copy__headline">Careers</div>
+				
+				
+					<div class="cards__item__copy__body">Become a part of a diverse, global team recognized by publications in America, AsiaPac and India as a top workplace.</div>
+				
+			</div>
+		
+
+		
+			
+
+			
+		
+
+	</div><!--cards__item__wrap-->
+
+
+									
+								</a>
+								
+							
+						
+
+						
+
+					</div>
+
+					
+
+				</div>
+			</section>
+
+		
+	
+
+</div>
+
+        
+    </div>
+
+</div>
+
+        
+    </div>
+
+</div>
+
+    
+</div>
+
+		</main>
+
+		
+		
+			
+
+
+
+	<div class="pbxfpage xfpage page basicpage">
+
+    
+
+
+
+<div class="xf-content-height">
+    <div class="root responsivegrid">
+
+
+<div class="aem-Grid aem-Grid--12 aem-Grid--default--12 ">
+    
+    <div class="pbu-footer-v5 aem-GridColumn aem-GridColumn--default--12">
+
+
+
+
+
+
+<div class="footer" role="contentinfo" aria-label="footer">
+	<div class="footer__main">
+		<div class="footer__main__wrap">
+
+			
+			
+				<nav class="footer__linkgroup" aria-labelledby="footerGroup1">
+					<div class="footer__linkgroup__head" id="footerGroup1">
+						About Pitney Bowes
+					</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="/us/our-company.html" class="footer__linkgroup__link" target="" title="Our Company" role="listitem" data-clicktracker="footerClick">
+								Our Company
+							</a>
+						
+							<a href="/us/newsroom.html" class="footer__linkgroup__link" target="" title="Newsroom" role="listitem" data-clicktracker="footerClick">
+								Newsroom
+							</a>
+						
+							<a href="/us/support/contact-us.html" class="footer__linkgroup__link" target="" title="Contact Us" role="listitem" data-clicktracker="footerClick">
+								Contact Us
+							</a>
+						
+							<a href="https://www.investorrelations.pitneybowes.com" class="footer__linkgroup__link" target="" title="Investor Relations" role="listitem" data-clicktracker="footerClick">
+								Investor Relations
+							</a>
+						
+							<a href="/us/our-company/esg.html" class="footer__linkgroup__link" target="" title="Corporate Responsibility" role="listitem" data-clicktracker="footerClick">
+								Corporate Responsibility
+							</a>
+						
+							<a href="/us/careers.html" class="footer__linkgroup__link" target="" title="Careers" role="listitem" data-clicktracker="footerClick">
+								Careers
+							</a>
+						
+							<a href="/us/supplier-information.html" class="footer__linkgroup__link" target="" title="Supplier Information" role="listitem" data-clicktracker="footerClick">
+								Supplier Information
+							</a>
+						
+					</div>
+				</nav>
+			
+				<nav class="footer__linkgroup" aria-labelledby="footerGroup2">
+					<div class="footer__linkgroup__head" id="footerGroup2">
+						Shop
+					</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="https://www.pitneybowes.us/shop/postage-meter-ink-supplies/shop-by-product/postage-meter-ink/en-us/storeus?cm_sp=buysupplies_footer_ink_supplies_by_meter" class="footer__linkgroup__link" target="" title="Ink  &amp; Supplies by Meter" role="listitem" data-clicktracker="footerClick">
+								Ink  &amp; Supplies by Meter
+							</a>
+						
+							<a href="https://www.pitneybowes.us/shop/ink-and-supplies/shipping-and-packing-supplies/shipping-and-packing-supplies/en-us/storeus?cm_sp=buysupplies_footer_mailingsupplies" class="footer__linkgroup__link" target="" title="Mailing Supplies" role="listitem" data-clicktracker="footerClick">
+								Mailing Supplies
+							</a>
+						
+							<a href="https://account.pitneybowes.com/signin/youraccount.go?rememberMe=false&request_locale=en_US#/order-history?cm_sp=buysupplies_footer_orderhistory" class="footer__linkgroup__link" target="" title="Order History" role="listitem" data-clicktracker="footerClick">
+								Order History
+							</a>
+						
+							<a href="/us/support/returns/supplies-return-instructions.html" class="footer__linkgroup__link" target="" title="Returns" role="listitem" data-clicktracker="footerClick">
+								Returns
+							</a>
+						
+					</div>
+				</nav>
+			
+				<nav class="footer__linkgroup" aria-labelledby="footerGroup3">
+					<div class="footer__linkgroup__head" id="footerGroup3">
+						Your Account
+					</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="https://account.pitneybowes.com/signin/samlAuthn?redirect=https%3A%2F%2Fsso.pitneybowes.com%2Fapp%2Fpitneybowes_samlpbyouraccountmigrated_1%2Fexk164tvc3kbAxV2h1t8%2Fsso%2Fsaml&RelayState=https%3A%2F%2Faccount.pitneybowes.com%2Fsignin%2FssoRedirect.jsp%3Fredirect%3D%252Fsignin%252Fyouraccount.go%253Fcm_sp%3Dglobal_footer_bills_summary%2526rememberMe%253Dfalse%2526request_locale%253Den_US%2523%252Ffinancial-bills%252Fsummary%2F" class="footer__linkgroup__link" target="" title="View &amp; Pay Bills" role="listitem" data-clicktracker="footerClick">
+								View &amp; Pay Bills
+							</a>
+						
+							<a href="https://account.pitneybowes.com/signin/samlAuthn?redirect=https%3A%2F%2Fsso.pitneybowes.com%2Fapp%2Fpitneybowes_samlpbyouraccountmigrated_1%2Fexk164tvc3kbAxV2h1t8%2Fsso%2Fsaml&RelayState=https%3A%2F%2Faccount.pitneybowes.com%2Fsignin%2Fyouraccount.go%3FrememberMe%3Dfalse%26request_locale%3Den_US#/order-history" class="footer__linkgroup__link" target="" title="View Order History" role="listitem" data-clicktracker="footerClick">
+								View Order History
+							</a>
+						
+							<a href="/us/support/article/000053054/what-is-valuemax.html" class="footer__linkgroup__link" target="" title="ValueMAX" role="listitem" data-clicktracker="footerClick">
+								ValueMAX
+							</a>
+						
+							<a href="/us/support/account-support.html" class="footer__linkgroup__link" target="" title="Your Account Support" role="listitem" data-clicktracker="footerClick">
+								Your Account Support
+							</a>
+						
+							<a href="/us/support/article/000050198/how-to-view-and-redeem-your-loyalty-rewards-point-balance.html" class="footer__linkgroup__link" target="" title="Rewards" role="listitem" data-clicktracker="footerClick">
+								Rewards
+							</a>
+						
+							<a href="https://account.pitneybowes.com/signin/logon.go?request_locale=en_US#/account/login" class="footer__linkgroup__link" target="" title="Sign in to your account" role="listitem" data-clicktracker="footerClick">
+								Sign in to your account
+							</a>
+						
+					</div>
+				</nav>
+			
+				<nav class="footer__linkgroup" aria-labelledby="footerGroup4">
+					<div class="footer__linkgroup__head" id="footerGroup4">
+						Product Support
+					</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="/us/postal-information.html" class="footer__linkgroup__link" target="" title="Postal Rate Change" role="listitem" data-clicktracker="footerClick">
+								Postal Rate Change
+							</a>
+						
+							<a href="/us/envelope-messages.html" class="footer__linkgroup__link" target="" title="Envelope Messaging" role="listitem" data-clicktracker="footerClick">
+								Envelope Messaging
+							</a>
+						
+							<a href="/us/support.html" class="footer__linkgroup__link" target="" title="Product Support" role="listitem" data-clicktracker="footerClick">
+								Product Support
+							</a>
+						
+							<a href="/us/support/connection/data-center-connection-types.html" class="footer__linkgroup__link" target="" title="Connectivity Support" role="listitem" data-clicktracker="footerClick">
+								Connectivity Support
+							</a>
+						
+							<a href="https://status.pitneybowes.com/" class="footer__linkgroup__link" target="" title="System Status" role="listitem" data-clicktracker="footerClick">
+								System Status
+							</a>
+						
+					</div>
+				</nav>
+			
+				<nav class="footer__linkgroup" aria-labelledby="footerGroup5">
+					<div class="footer__linkgroup__head" id="footerGroup5">
+						Partner Program
+					</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="/us/partner-locator-ms.html" class="footer__linkgroup__link" target="" title="Partner Locator" role="listitem" data-clicktracker="footerClick">
+								Partner Locator
+							</a>
+						
+							<a href="/us/apis.html" class="footer__linkgroup__link" target="" title="Shipping APIs" role="listitem" data-clicktracker="footerClick">
+								Shipping APIs
+							</a>
+						
+							<a href="/us/campaign/joinaffiliate.html" class="footer__linkgroup__link" target="" title="Affiliates" role="listitem" data-clicktracker="footerClick">
+								Affiliates
+							</a>
+						
+					</div>
+				</nav>
+			
+
+			<nav class="footer__linkgroup footer__linkgroup--social" aria-labelledby="flg7">
+
+				
+				<div>
+					<a href="/us" title="Return To Homepage" class="svg-logo">
+						<svg viewBox="0 0 1021.93 389.55" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a1" x1="841.29" y1="34.25" x2="988.19" y2="181.15" gradientUnits="userSpaceOnUse"><stop offset=".2" stop-color="#c869a8"/><stop offset=".5" stop-color="#6e7ebb"/><stop offset=".8" stop-color="#00bcf1"/></linearGradient><path id="b1" d="M6.71 209.36h778.41v174.47H6.71z"/></defs><g style="display:inline"><g style="display:inline"><g><path d="M914.74 3.82c-57.36 0-103.88 46.51-103.88 103.88s46.52 103.88 103.88 103.88c57.36 0 103.87-46.51 103.87-103.88S972.11 3.82 914.74 3.82zm0 202.23c-54.29 0-98.33-44.03-98.33-98.35 0-54.32 44.03-98.33 98.33-98.33s98.34 44.03 98.34 98.33-44.03 98.35-98.34 98.35zm-34.45-177a3 3 0 0 0-1.18.27 86.1 86.1 0 0 0-50.44 78.37c0 47.46 38.62 86.07 86.06 86.07 47.44 0 86.08-38.61 86.08-86.07 0-47.46-38.61-86.06-86.08-86.06-.72 0-1.42 0-2.13.02-1.7 0-2.75 1.25-2.75 3.25s1.05 3.25 2.74 3.25c.62-.01 1.28-.03 2.14-.03 43.88 0 79.58 35.71 79.58 79.57 0 43.86-35.7 79.58-79.58 79.58-43.88 0-79.57-35.67-79.57-79.58a79.79 79.79 0 0 1 46.68-72.47c1.53-.71 1.95-2.28 1.14-4.1-.63-1.34-1.56-2.08-2.7-2.08zm-1.02 21.17c-.64 0-1.26.2-1.87.6a67.87 67.87 0 0 0-30.71 56.88 67.9 67.9 0 0 0 30.72 56.9c.6.39 1.23.6 1.86.6 1.19 0 2.34-.75 3.25-2.1 1.35-2.04 1.13-4.01-.52-5.2l-.12-.06a59.85 59.85 0 0 1-27.08-50.14 59.8 59.8 0 0 1 27.08-50.11 3.24 3.24 0 0 0 1.5-2.28 4.6 4.6 0 0 0-.86-2.99c-.9-1.35-2.05-2.1-3.25-2.1zm34.02 117.39c-.93 0-1.74.33-2.34.9-.71.71-1.08 1.82-1.08 3.18 0 2.49 1.32 4.04 3.43 4.04.49.02.96.02 1.44.02 37.51 0 68.02-30.52 68.02-68.04a68.09 68.09 0 0 0-68.02-68.02c-.5-.01-.96 0-1.44.01-2.12 0-3.43 1.56-3.43 4.07 0 2.51 1.32 4.04 3.43 4.04l1.44-.03a60 60 0 0 1 59.92 59.92 60 60 0 0 1-59.92 59.92l-1.44-.01zm-38.71-88.75c1.56-2.1 4.05-2.27 6.49-.45 2.46 1.82 3.01 4.25 1.44 6.35a39 39 0 0 0-7.33 23.1 38.86 38.86 0 0 0 7.33 23.1c1.56 2.1 1.01 4.52-1.44 6.35-2.47 1.81-4.94 1.65-6.5-.44a48.54 48.54 0 0 1-9.29-29.01 48.45 48.45 0 0 1 9.3-28.99z" style="fill:url(#a1)"/><path d="M914.91 135.53c-3.18 0-5.05-2.34-5.05-5.97s1.87-5.95 5.05-5.95c8.96-.67 15.76-7.57 15.76-15.93 0-8.79-7.57-15.95-16.9-15.95-4.63 0-8.42 1.17-11.21 3.5v74.06c0 3.58-2.44 5.3-5.92 5.3s-5.94-1.74-5.94-5.3V96.26c0-.18-.06-4.58.05-5.39.23-1.88 1.91-3.87 4.84-5.7 5.1-3.22 13.13-5.3 19.19-5.3a27.8 27.8 0 0 1 27.85 27.83 27.46 27.46 0 0 1-27.71 27.82zm0 21.69c-3.18 0-5.05-2.34-5.05-5.97s1.87-5.94 5.05-5.94a37.53 37.53 0 0 0 37.3-37.6c0-20.74-17.36-37.63-37.18-37.63-9.78 0-9.73 1.5-17.31 3.51-4.01 1.17-7.03-1.63-7.03-5.29V24.05c0-3.13 2.28-5.06 5.94-5.06 3.66 0 5.92 1.94 5.92 5.06v35.83a49.4 49.4 0 0 1 57.74 28.68c13.67 32.22-9.85 68.55-45.39 68.67z" style="fill:#3e53a4"/></g><path d="M723.43 141.79c4.53 3.22 12.19 5.21 20.2 5.21 16.65 0 26.6-8.57 26.6-22.42 0-10.95-5.76-16.54-21.31-21.73-10.35-3.35-14.7-6.59-14.7-11.62 0-6.43 5.49-9.66 13.46-9.66 7.16 0 14.01 1.81 20.18 5.6V77.5c-4.07-3.09-12.62-5.33-19.91-5.33-15.39 0-24.79 7.14-24.79 19.34 0 9.38 5.48 15.97 18.66 20.31 12.6 4.06 17.36 6.75 17.36 13.59 0 7.42-5.89 12.05-15.54 12.05-7.72 0-15.84-2.24-20.2-5.47v9.8zm-63.03-38.94c1.26-13.02 8.24-21.14 20.73-21.14s19.18 7.01 19.6 21.14zm49.71 29.56c-5.64 2.81-14.58 4.75-23.25 4.75-17.39 0-26.2-8.24-26.92-24.92h51.56c.14-1.95.42-5.88.42-7.42 0-20.17-10.23-32.64-29.96-32.64-22.16 0-33.34 16.26-33.34 37.54 0 23.97 12.6 37.29 36.85 37.29 9.63 0 18.88-1.7 24.63-5.05v-9.54zm-87.45 12.89 20.63-71.43h-11.08l-14.85 56.16-16.53-56.16h-12.32l-16.37 56.84-14.72-56.84h-12.05l20.59 71.43h11.63l17.1-56.74 16.39 56.74h11.59zm-116.08-8.14c-14.27 0-22.26-10.91-22.26-27.44S492.31 82 506.58 82c14.27 0 22.28 10.92 22.28 27.45s-8.14 27.71-22.28 27.71zm0 9.84c22.7 0 34.04-16.56 34.04-37.42 0-20.86-9.8-37.41-34.04-37.41-22.68 0-34.04 16.55-34.04 37.41 0 20.86 9.83 37.42 34.04 37.42zm-97.59-61.22c5.03-2.66 10.22-3.79 16.93-3.79 15.41 0 24.25 10.22 24.25 25.35 0 19.19-10.52 29.82-28.88 29.82-5.03 0-8.51-.54-12.3-1.94zm-11.22 57.4a71.43 71.43 0 0 0 22.54 3.82c25.92 0 41.6-14.44 41.6-39.81 0-21.85-13.43-35.02-34.88-35.02a44.5 44.5 0 0 0-18.04 3.65V40.11h-11.22zm-69.84 38.39 13.59-36.26 28.42-71.43h-12.31l-21.7 58.4-21.31-58.4h-12.73l28.43 71.43-13.73 36.26zm-83.78-78.72c1.26-13.02 8.27-21.14 20.74-21.14 12.47 0 19.18 7.01 19.6 21.14h-40.35zm49.73 29.56c-5.6 2.81-14.56 4.75-23.25 4.75-17.37 0-26.2-8.24-26.89-24.92h51.56c.12-1.95.39-5.88.39-7.42 0-20.17-10.2-32.64-29.94-32.64-22.14 0-33.34 16.26-33.34 37.54 0 23.97 12.58 37.29 36.84 37.29 9.67 0 18.91-1.7 24.65-5.05v-9.54zm-73.53 12.89V98.52c0-20.18-12.18-26.35-27.74-26.35-10.5 0-22.96 2.69-32.06 6.04v67.09h11.2V85.49c4.63-1.82 11.9-3.22 18.2-3.22 13.02 0 19.19 4.48 19.19 20.16v42.87h11.2zm-70.58-9.81a42.55 42.55 0 0 1-12.62 1.82c-4.91 0-8.84-1.41-8.84-10.66v-43.4h18.79v-9.38h-18.79V56.22h-11.05v17.65h-11.9v9.38h11.9v45.53c0 12.86 6.72 18.22 17.23 18.22 5.88 0 10.91-.84 15.28-2.52zM87.64 60.42a7.24 7.24 0 0 0 7.27-7.29 7.36 7.36 0 0 0-7.27-7.43 7.5 7.5 0 0 0-7.44 7.43 7.28 7.28 0 0 0 7.44 7.29zm5.45 13.45h-11.2v71.43h11.2zM15.32 86.48c4.76-3.1 10.22-4.49 16.94-4.49 15.4 0 24.22 10.22 24.22 25.35 0 19.19-10.49 29.82-28.98 29.82-5.04 0-8.54-.54-12.18-1.94V86.48Zm0 95.09v-36.13c3.64.99 7.56 1.56 11.62 1.56 25.49 0 41.32-14.44 41.32-39.81 0-21.7-13.58-35.02-34.87-35.02-10.09 0-20.57 3.08-29.27 10.37v99.02h11.2z" style="fill:#4e4e4e"/></g></g><text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:64px;font-family:&quot;Precision Sans&quot;;-inkscape-font-specification:&quot;Precision Sans&quot;;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#b1);display:inline;fill:#4e4e4e;fill-opacity:1" transform="translate(-4.71 25.5)"><tspan x="6.71" y="268.18"><tspan style="font-weight:300;">The technology behind</tspan></tspan><tspan x="6.71" y="348.18"><tspan style="font-weight:300;">every important delivery.</tspan></tspan></text></svg>
+					</a>
+				</div>
+
+				
+				<div>
+					<div class="footer__linkgroup__head" id="flg7">Follow Us</div>
+
+					<div class="footer__linkgroup__list" role="list">
+						
+							<a href="https://www.facebook.com/PitneyBowes" class="footer__linkgroup__link svg-icon__facebook" role="listitem" title="Follow us on Facebook"><span class="visually-hidden">Facebook</span>
+							</a>
+						
+							<a href="https://www.linkedin.com/company/pitney-bowes" class="footer__linkgroup__link svg-icon__linkedin" role="listitem" title="Follow us on LinkedIn"><span class="visually-hidden">Linkedin</span>
+							</a>
+						
+							<a href="https://twitter.com/PitneyBowes" class="footer__linkgroup__link svg-icon__twitter" role="listitem" title="Follow us on Twitter"><span class="visually-hidden">Twitter</span>
+							</a>
+						
+							<a href="https://www.youtube.com/user/PitneyBowesInc" class="footer__linkgroup__link svg-icon__youtube" role="listitem" title="Subscribe to our YouTube channel"><span class="visually-hidden">Youtube</span>
+							</a>
+						
+							<a href="https://www.instagram.com/pitneybowes?utm_medium=copy_link" class="footer__linkgroup__link svg-icon__instagram" role="listitem" title="Follow us on Instagram"><span class="visually-hidden">Instagram</span>
+							</a>
+						
+					</div>
+				</div>
+
+			</nav>
+
+		</div>
+	</div>
+	
+	<div class="footer__bottom">
+		<div class="footer__bottom__wrap">
+			<a href="/us" title="Return To Homepage" class="svg-logo">
+				<svg viewBox="0 0 1021.93 389.55" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a2" x1="841.29" y1="34.25" x2="988.19" y2="181.15" gradientUnits="userSpaceOnUse"><stop offset=".2" stop-color="#c869a8"></stop><stop offset=".5" stop-color="#6e7ebb"></stop><stop offset=".8" stop-color="#00bcf1"></stop></linearGradient><path id="b2" d="M6.71 209.36h778.41v174.47H6.71z"></path></defs><g style="display:inline"><g style="display:inline"><g><path d="M914.74 3.82c-57.36 0-103.88 46.51-103.88 103.88s46.52 103.88 103.88 103.88c57.36 0 103.87-46.51 103.87-103.88S972.11 3.82 914.74 3.82zm0 202.23c-54.29 0-98.33-44.03-98.33-98.35 0-54.32 44.03-98.33 98.33-98.33s98.34 44.03 98.34 98.33-44.03 98.35-98.34 98.35zm-34.45-177a3 3 0 0 0-1.18.27 86.1 86.1 0 0 0-50.44 78.37c0 47.46 38.62 86.07 86.06 86.07 47.44 0 86.08-38.61 86.08-86.07 0-47.46-38.61-86.06-86.08-86.06-.72 0-1.42 0-2.13.02-1.7 0-2.75 1.25-2.75 3.25s1.05 3.25 2.74 3.25c.62-.01 1.28-.03 2.14-.03 43.88 0 79.58 35.71 79.58 79.57 0 43.86-35.7 79.58-79.58 79.58-43.88 0-79.57-35.67-79.57-79.58a79.79 79.79 0 0 1 46.68-72.47c1.53-.71 1.95-2.28 1.14-4.1-.63-1.34-1.56-2.08-2.7-2.08zm-1.02 21.17c-.64 0-1.26.2-1.87.6a67.87 67.87 0 0 0-30.71 56.88 67.9 67.9 0 0 0 30.72 56.9c.6.39 1.23.6 1.86.6 1.19 0 2.34-.75 3.25-2.1 1.35-2.04 1.13-4.01-.52-5.2l-.12-.06a59.85 59.85 0 0 1-27.08-50.14 59.8 59.8 0 0 1 27.08-50.11 3.24 3.24 0 0 0 1.5-2.28 4.6 4.6 0 0 0-.86-2.99c-.9-1.35-2.05-2.1-3.25-2.1zm34.02 117.39c-.93 0-1.74.33-2.34.9-.71.71-1.08 1.82-1.08 3.18 0 2.49 1.32 4.04 3.43 4.04.49.02.96.02 1.44.02 37.51 0 68.02-30.52 68.02-68.04a68.09 68.09 0 0 0-68.02-68.02c-.5-.01-.96 0-1.44.01-2.12 0-3.43 1.56-3.43 4.07 0 2.51 1.32 4.04 3.43 4.04l1.44-.03a60 60 0 0 1 59.92 59.92 60 60 0 0 1-59.92 59.92l-1.44-.01zm-38.71-88.75c1.56-2.1 4.05-2.27 6.49-.45 2.46 1.82 3.01 4.25 1.44 6.35a39 39 0 0 0-7.33 23.1 38.86 38.86 0 0 0 7.33 23.1c1.56 2.1 1.01 4.52-1.44 6.35-2.47 1.81-4.94 1.65-6.5-.44a48.54 48.54 0 0 1-9.29-29.01 48.45 48.45 0 0 1 9.3-28.99z" style="fill:url(#a2)"></path><path d="M914.91 135.53c-3.18 0-5.05-2.34-5.05-5.97s1.87-5.95 5.05-5.95c8.96-.67 15.76-7.57 15.76-15.93 0-8.79-7.57-15.95-16.9-15.95-4.63 0-8.42 1.17-11.21 3.5v74.06c0 3.58-2.44 5.3-5.92 5.3s-5.94-1.74-5.94-5.3V96.26c0-.18-.06-4.58.05-5.39.23-1.88 1.91-3.87 4.84-5.7 5.1-3.22 13.13-5.3 19.19-5.3a27.8 27.8 0 0 1 27.85 27.83 27.46 27.46 0 0 1-27.71 27.82zm0 21.69c-3.18 0-5.05-2.34-5.05-5.97s1.87-5.94 5.05-5.94a37.53 37.53 0 0 0 37.3-37.6c0-20.74-17.36-37.63-37.18-37.63-9.78 0-9.73 1.5-17.31 3.51-4.01 1.17-7.03-1.63-7.03-5.29V24.05c0-3.13 2.28-5.06 5.94-5.06 3.66 0 5.92 1.94 5.92 5.06v35.83a49.4 49.4 0 0 1 57.74 28.68c13.67 32.22-9.85 68.55-45.39 68.67z" style="fill:#3e53a4"></path></g><path d="M723.43 141.79c4.53 3.22 12.19 5.21 20.2 5.21 16.65 0 26.6-8.57 26.6-22.42 0-10.95-5.76-16.54-21.31-21.73-10.35-3.35-14.7-6.59-14.7-11.62 0-6.43 5.49-9.66 13.46-9.66 7.16 0 14.01 1.81 20.18 5.6V77.5c-4.07-3.09-12.62-5.33-19.91-5.33-15.39 0-24.79 7.14-24.79 19.34 0 9.38 5.48 15.97 18.66 20.31 12.6 4.06 17.36 6.75 17.36 13.59 0 7.42-5.89 12.05-15.54 12.05-7.72 0-15.84-2.24-20.2-5.47v9.8zm-63.03-38.94c1.26-13.02 8.24-21.14 20.73-21.14s19.18 7.01 19.6 21.14zm49.71 29.56c-5.64 2.81-14.58 4.75-23.25 4.75-17.39 0-26.2-8.24-26.92-24.92h51.56c.14-1.95.42-5.88.42-7.42 0-20.17-10.23-32.64-29.96-32.64-22.16 0-33.34 16.26-33.34 37.54 0 23.97 12.6 37.29 36.85 37.29 9.63 0 18.88-1.7 24.63-5.05v-9.54zm-87.45 12.89 20.63-71.43h-11.08l-14.85 56.16-16.53-56.16h-12.32l-16.37 56.84-14.72-56.84h-12.05l20.59 71.43h11.63l17.1-56.74 16.39 56.74h11.59zm-116.08-8.14c-14.27 0-22.26-10.91-22.26-27.44S492.31 82 506.58 82c14.27 0 22.28 10.92 22.28 27.45s-8.14 27.71-22.28 27.71zm0 9.84c22.7 0 34.04-16.56 34.04-37.42 0-20.86-9.8-37.41-34.04-37.41-22.68 0-34.04 16.55-34.04 37.41 0 20.86 9.83 37.42 34.04 37.42zm-97.59-61.22c5.03-2.66 10.22-3.79 16.93-3.79 15.41 0 24.25 10.22 24.25 25.35 0 19.19-10.52 29.82-28.88 29.82-5.03 0-8.51-.54-12.3-1.94zm-11.22 57.4a71.43 71.43 0 0 0 22.54 3.82c25.92 0 41.6-14.44 41.6-39.81 0-21.85-13.43-35.02-34.88-35.02a44.5 44.5 0 0 0-18.04 3.65V40.11h-11.22zm-69.84 38.39 13.59-36.26 28.42-71.43h-12.31l-21.7 58.4-21.31-58.4h-12.73l28.43 71.43-13.73 36.26zm-83.78-78.72c1.26-13.02 8.27-21.14 20.74-21.14 12.47 0 19.18 7.01 19.6 21.14h-40.35zm49.73 29.56c-5.6 2.81-14.56 4.75-23.25 4.75-17.37 0-26.2-8.24-26.89-24.92h51.56c.12-1.95.39-5.88.39-7.42 0-20.17-10.2-32.64-29.94-32.64-22.14 0-33.34 16.26-33.34 37.54 0 23.97 12.58 37.29 36.84 37.29 9.67 0 18.91-1.7 24.65-5.05v-9.54zm-73.53 12.89V98.52c0-20.18-12.18-26.35-27.74-26.35-10.5 0-22.96 2.69-32.06 6.04v67.09h11.2V85.49c4.63-1.82 11.9-3.22 18.2-3.22 13.02 0 19.19 4.48 19.19 20.16v42.87h11.2zm-70.58-9.81a42.55 42.55 0 0 1-12.62 1.82c-4.91 0-8.84-1.41-8.84-10.66v-43.4h18.79v-9.38h-18.79V56.22h-11.05v17.65h-11.9v9.38h11.9v45.53c0 12.86 6.72 18.22 17.23 18.22 5.88 0 10.91-.84 15.28-2.52zM87.64 60.42a7.24 7.24 0 0 0 7.27-7.29 7.36 7.36 0 0 0-7.27-7.43 7.5 7.5 0 0 0-7.44 7.43 7.28 7.28 0 0 0 7.44 7.29zm5.45 13.45h-11.2v71.43h11.2zM15.32 86.48c4.76-3.1 10.22-4.49 16.94-4.49 15.4 0 24.22 10.22 24.22 25.35 0 19.19-10.49 29.82-28.98 29.82-5.04 0-8.54-.54-12.18-1.94V86.48Zm0 95.09v-36.13c3.64.99 7.56 1.56 11.62 1.56 25.49 0 41.32-14.44 41.32-39.81 0-21.7-13.58-35.02-34.87-35.02-10.09 0-20.57 3.08-29.27 10.37v99.02h11.2z" style="fill:#4e4e4e"></path></g></g><text xml:space="preserve" style="font-style:normal;font-variant:normal;font-weight:400;font-stretch:normal;font-size:64px;font-family:&quot;Precision Sans&quot;;-inkscape-font-specification:&quot;Precision Sans&quot;;text-align:start;writing-mode:lr-tb;direction:ltr;white-space:pre;shape-inside:url(#b2);display:inline;fill:#4e4e4e;fill-opacity:1" transform="translate(-4.71 25.5)"><tspan x="6.71" y="268.18"><tspan style="font-weight:300;">The technology behind</tspan></tspan><tspan x="6.71" y="348.18"><tspan style="font-weight:300;">every important delivery.</tspan></tspan></text></svg>
+			</a>
+
+			<div class="footer__bottom__list" role="list">
+				
+					<a href="/us/legal.html" class="footer__bottom__list__link" role="listitem">Legal</a>
+				
+					<a href="/us/legal/privacy-statement.html" class="footer__bottom__list__link" role="listitem">Privacy</a>
+				
+					<a href="https://web.pitneybowes.com/dns/dns-form" class="footer__bottom__list__link" role="listitem">Do Not Sell or Share My Personal Information</a>
+				
+					<a href="/us/legal/privacy-statement/cookie-policy.html" class="footer__bottom__list__link" role="listitem">Cookie policy</a>
+				
+			</div>
+			
+			
+			<span class="footer__bottom__copyright">©1996-2026 Pitney Bowes Inc. All rights reserved.</span>
+		</div>
+	</div>
+	
+</div>
+</div>
+
+    
+</div>
+</div>
+
+</div>
+</div>
+
+
+
+		
+
+	</body>
+
+
+		</html>
+	
+
