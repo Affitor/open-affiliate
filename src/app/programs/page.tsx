@@ -221,9 +221,10 @@ function ProgramsContent() {
         if (value) url.set(key, value);
       }
       const qs = url.toString();
-      router.replace(`/programs${qs ? `?${qs}` : ""}`, { scroll: false });
+      const path = `/programs${qs ? `?${qs}` : ""}`;
+      window.history.replaceState(null, "", path);
     },
-    [router]
+    []
   );
 
   const updateFilters = useCallback(
