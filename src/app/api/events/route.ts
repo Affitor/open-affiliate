@@ -14,7 +14,16 @@ function hashIp(ip: string): string {
     .slice(0, 16);
 }
 
-const ALLOWED_TYPES = ["search", "program_view", "outbound_click", "filter"];
+const ALLOWED_TYPES = [
+  "page_view",
+  "search",
+  "program_view",
+  "outbound_click",
+  "filter",
+  "category_view",
+  "network_view",
+  "compare",
+];
 
 // POST /api/events — track an event
 export async function POST(req: NextRequest) {
@@ -34,6 +43,7 @@ export async function POST(req: NextRequest) {
 
   const ipHash = hashIp(ip);
   const referrer = req.headers.get("referer") ?? null;
+  const country = req.headers.get("x-vercel-ip-country") ?? null;
 
   await supabase.from("events").insert({
     type: body.type,
@@ -41,6 +51,10 @@ export async function POST(req: NextRequest) {
     metadata: body.metadata ?? {},
     ip_hash: ipHash,
     referrer,
+    country,
+    device: body.device ?? null,
+    path: body.path ?? null,
+    session_id: body.session_id ?? null,
   });
 
   return NextResponse.json({ ok: true });

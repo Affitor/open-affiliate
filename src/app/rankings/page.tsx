@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Trophy, Medal, Award, ArrowUpDown, ArrowUp, ArrowDown, CheckCircle2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { FilterSelect } from "@/components/filter-select";
 import { VoteButton, useVoteCounts } from "@/components/vote-button";
+import { track } from "@/lib/track";
 import {
   programs,
   categories,
@@ -519,6 +520,8 @@ export default function RankingsPage() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [verifiedOnly, setVerifiedOnly] = useState(false);
+
+  useEffect(() => { track("page_view"); }, []);
 
   const top3 = useMemo(() => {
     return [...programs]

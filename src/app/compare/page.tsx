@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, Suspense, useEffect } from "react";
+import { track } from "@/lib/track";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -133,6 +134,8 @@ const POPULAR_COMPARISONS = [
 function CompareContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
+
+  useEffect(() => { track("page_view"); }, []);
 
   const initialSlugs = (searchParams.get("p") ?? "")
     .split(",")

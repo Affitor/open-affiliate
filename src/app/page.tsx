@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TrackPageView } from "@/components/track-page-view";
 import {
   ArrowRight,
   Terminal,
@@ -197,6 +198,7 @@ export default function Home() {
 
   return (
     <div>
+      <TrackPageView />
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.06),transparent_60%)]" />

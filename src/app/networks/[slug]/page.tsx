@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { TrackPageView } from "@/components/track-page-view";
 import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
@@ -57,6 +58,7 @@ export default async function NetworkPage({
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
+      <TrackPageView type="network_view" slug={slug} metadata={{ network }} />
       <Link
         href="/networks"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"

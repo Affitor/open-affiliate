@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { TrackPageView } from "@/components/track-page-view";
 import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
@@ -16,6 +17,7 @@ export default function NetworksPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
+      <TrackPageView />
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
           <Network className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { TrackPageView } from "@/components/track-page-view";
 import { CopyButton } from "@/components/copy-button";
 
 export const metadata: Metadata = {
@@ -63,6 +64,7 @@ function SectionNav() {
 export default function DocsPage() {
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
+      <TrackPageView />
       <h1 className="text-2xl font-bold tracking-tight">Documentation</h1>
       <p className="text-sm text-muted-foreground mt-2 mb-8">
         How to use OpenAffiliate as a developer, agent builder, or contributor.
