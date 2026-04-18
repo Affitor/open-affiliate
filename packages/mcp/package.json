@@ -1,20 +1,30 @@
 {
   "name": "openaffiliate-mcp",
-  "version": "0.1.0",
-  "description": "MCP server for the OpenAffiliate registry",
+  "version": "0.2.0",
+  "description": "MCP server for the OpenAffiliate registry. Search affiliate programs from Claude, Cursor, or any MCP client.",
   "type": "module",
   "bin": {
     "openaffiliate-mcp": "./dist/index.js"
   },
+  "files": ["dist"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Affitor/open-affiliate",
+    "directory": "packages/mcp"
+  },
+  "homepage": "https://openaffiliate.dev",
+  "mcpName": "io.github.affitor/openaffiliate-mcp",
+  "author": "Affitor <team@affitor.com> (https://affitor.com)",
   "scripts": {
     "build": "tsup src/index.ts --format esm --dts --clean",
     "dev": "tsup src/index.ts --format esm --watch",
     "lint": "tsc --noEmit"
   },
-  "keywords": ["mcp", "affiliate", "openaffiliate", "ai-agent"],
+  "keywords": ["mcp", "mcp-server", "affiliate", "openaffiliate", "ai-agent", "model-context-protocol", "affiliate-marketing"],
   "license": "MIT",
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.26.0"
+    "@modelcontextprotocol/sdk": "^1.26.0",
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "tsup": "^8.5.0",
