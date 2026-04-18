@@ -29,6 +29,7 @@ import { CopyButton } from "@/components/copy-button";
 import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
+import { RelatedPrograms } from "@/components/related-programs";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -158,6 +159,34 @@ export default async function ProgramPage({
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <TrackView slug={slug} />
+
+      {/* JSON-LD */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Product",
+            name: `${program.name} Affiliate Program`,
+            description: program.shortDescription,
+            url: `https://openaffiliate.dev/programs/${program.slug}`,
+            brand: { "@type": "Brand", name: program.name },
+            offers: {
+              "@type": "Offer",
+              category: "Affiliate Program",
+              description: `${program.commission.rate} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
+            },
+            aggregateRating: {
+              "@type": "AggregateRating",
+              ratingValue: Math.min(score / 20, 5).toFixed(1),
+              bestRating: "5",
+              worstRating: "1",
+              ratingCount: categoryPrograms.length,
+            },
+          }),
+        }}
+      />
 
       {/* Breadcrumb */}
       <Link
@@ -363,6 +392,9 @@ export default async function ProgramPage({
               )}
             </div>
           </div>
+
+          {/* Related Programs */}
+          <RelatedPrograms current={program} />
 
           {/* Contribute */}
           <div className="rounded-xl border border-border/40 bg-muted/10 p-5 flex items-start gap-3">

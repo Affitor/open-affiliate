@@ -281,10 +281,10 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
         results.sort((a, b) => {
           const aName = a.name.toLowerCase().includes(q) ? 1 : 0
           const bName = b.name.toLowerCase().includes(q) ? 1 : 0
-          return bName - aName || b.stars - a.stars
+          return bName - aName || affiliateScore(b) - affiliateScore(a)
         })
       } else {
-        results.sort((a, b) => b.stars - a.stars)
+        results.sort((a, b) => affiliateScore(b) - affiliateScore(a))
       }
       break
   }
@@ -297,6 +297,17 @@ export const commissionTypes = [...new Set(programs.map((p) => p.commission.type
 export const categoryCounts: Record<string, number> = programs.reduce(
   (acc, p) => {
     acc[p.category] = (acc[p.category] || 0) + 1
+    return acc
+  },
+  {} as Record<string, number>
+)
+
+export const networks = [...new Set(programs.map((p) => p.network ?? "In-house"))].sort() as string[]
+
+export const networkCounts: Record<string, number> = programs.reduce(
+  (acc, p) => {
+    const net = p.network ?? "In-house"
+    acc[net] = (acc[net] || 0) + 1
     return acc
   },
   {} as Record<string, number>
