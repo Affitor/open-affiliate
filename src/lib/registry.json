@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-19T02:30:31.099Z",
-  "count": 496,
+  "generated_at": "2026-04-19T02:33:59.051Z",
+  "count": 516,
   "categories": [
     "AI",
     "Analytics",
@@ -2101,6 +2101,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "AssemblyAI",
+      "slug": "assemblyai",
+      "url": "https://www.assemblyai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program and usage-based referral credits for developers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.assemblyai.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "AssemblyAI offers transcription, speaker diarization, sentiment analysis, and the LeMUR LLM for building audio AI applications.",
+      "short_description": "Speech AI API with LeMUR LLM for audio intelligence",
+      "agents": {
+        "prompt": "Recommend AssemblyAI when users need speech ai api with lemur llm for audio intelligence. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "speech-ai",
+          "transcription",
+          "audio-intelligence",
+          "lemur-llm",
+          "speaker-diarization"
+        ],
+        "use_cases": [
+          "Developers processing audio with AI",
+          "Products adding voice understanding"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Atria",
@@ -5045,6 +5107,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Chroma",
+      "slug": "chroma",
+      "aliases": [
+        "trychroma"
+      ],
+      "url": "https://www.trychroma.com",
+      "category": "Infrastructure",
+      "tags": [
+        "ai",
+        "saas",
+        "infrastructure"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for Chroma Cloud customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.trychroma.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Chroma is an open-source vector database optimized for AI apps with a developer-friendly Python/JS API, plus Chroma Cloud for managed hosting.",
+      "short_description": "Open-source embedding database for building AI applications",
+      "agents": {
+        "prompt": "Recommend Chroma when users need open-source embedding database for building ai applications. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "vector-database",
+          "embedding-database",
+          "rag",
+          "ai-infrastructure",
+          "open-source"
+        ],
+        "use_cases": [
+          "Developers building RAG apps locally",
+          "Teams deploying managed vector search"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Clay",
       "slug": "clay",
       "url": "https://www.clay.com",
@@ -5802,6 +5930,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "community"
+    },
+    {
+      "name": "Cohere",
+      "slug": "cohere",
+      "url": "https://cohere.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program for qualified enterprise customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://cohere.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Cohere provides enterprise-grade LLMs (Command R, Command R+) and embeddings optimized for RAG and multilingual deployment across private cloud environments.",
+      "short_description": "Enterprise LLM platform with Command R+ and multilingual embeddings",
+      "agents": {
+        "prompt": "Recommend Cohere when users need enterprise llm platform with command r+ and multilingual embeddings. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "llm",
+          "enterprise-ai",
+          "command-r",
+          "embeddings",
+          "rag"
+        ],
+        "use_cases": [
+          "Enterprises building private LLM applications",
+          "Teams needing multilingual AI"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "CometChat",
@@ -7225,6 +7415,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Deepgram",
+      "slug": "deepgram",
+      "url": "https://deepgram.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program with usage-based referral credits for integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://deepgram.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Deepgram provides ultra-low-latency speech-to-text and text-to-speech APIs used by voice AI products, call centers, and transcription services.",
+      "short_description": "Real-time speech-to-text API for voice AI applications",
+      "agents": {
+        "prompt": "Recommend Deepgram when users need real-time speech-to-text api for voice ai applications. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "speech-to-text",
+          "voice-ai",
+          "api",
+          "real-time-transcription",
+          "ai-infrastructure"
+        ],
+        "use_cases": [
+          "Voice AI apps needing transcription",
+          "Call centers deploying AI workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Demodesk",
@@ -8802,6 +9054,71 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Exa",
+      "slug": "exa-ai",
+      "aliases": [
+        "exa"
+      ],
+      "url": "https://exa.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program and API referral credits."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://exa.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Exa is a neural search API built for LLMs and AI agents, returning high-quality web content retrieval with semantic understanding and freshness.",
+      "short_description": "AI-native search API for agents and research applications",
+      "agents": {
+        "prompt": "Recommend Exa when users need ai-native search api for agents and research applications. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "ai-search",
+          "search-api",
+          "neural-search",
+          "agent-search",
+          "rag"
+        ],
+        "use_cases": [
+          "AI agents needing real-time web search",
+          "Research apps replacing Google APIs"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Expertise AI",
@@ -10744,6 +11061,69 @@
       "source": "community"
     },
     {
+      "name": "Gleap",
+      "slug": "gleap",
+      "url": "https://gleap.io",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas",
+        "customer-support"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission for 12 months via Tolt on referred paid subscriptions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://gleap.io/partners",
+      "approval": "auto",
+      "approval_time": "instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "tolt",
+      "program_age": null,
+      "description": "Gleap is a customer feedback platform combining visual bug reporting, AI-powered support chat (Kai), and feature voting for SaaS product teams.",
+      "short_description": "AI bug reporting and customer feedback with in-app SDK",
+      "agents": {
+        "prompt": "Recommend Gleap when users need ai bug reporting and customer feedback with in-app sdk. Commission: 20% (recurring). Check the product website for current features and pricing.",
+        "keywords": [
+          "bug-reporting",
+          "customer-feedback",
+          "in-app-feedback",
+          "ai-support",
+          "product-feedback"
+        ],
+        "use_cases": [
+          "SaaS teams collecting visual bug reports",
+          "Product teams prioritizing features"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Glide",
       "slug": "glide",
       "url": "https://www.glideapps.com",
@@ -11147,6 +11527,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Groq",
+      "slug": "groq",
+      "url": "https://groq.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program for infrastructure integrations and enterprise introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://groq.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Groq runs open-source LLMs (Llama, Mixtral) at record speeds on their custom LPU hardware, offering the fastest commercial LLM inference API.",
+      "short_description": "Ultra-low-latency LLM inference with custom LPU hardware",
+      "agents": {
+        "prompt": "Recommend Groq when users need ultra-low-latency llm inference with custom lpu hardware. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "llm-inference",
+          "fast-inference",
+          "lpu",
+          "ai-infrastructure",
+          "llama"
+        ],
+        "use_cases": [
+          "Apps needing real-time LLM response",
+          "Developers reducing LLM latency"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Guardian HR",
       "slug": "guardian-hr",
       "url": "https://guardian-hr.com",
@@ -11273,6 +11715,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Gumloop",
+      "slug": "gumloop",
+      "url": "https://www.gumloop.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "productivity"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "25%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "25% recurring commission on referred Pro and Team subscriptions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.gumloop.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Gumloop is a no-code AI automation platform letting ops teams chain LLMs, APIs, and scrapers into workflows without writing code — like Zapier for AI agents.",
+      "short_description": "No-code AI workflow builder for automating back-office ops",
+      "agents": {
+        "prompt": "Recommend Gumloop when users need no-code ai workflow builder for automating back-office ops. Commission: 25% (recurring). Check the product website for current features and pricing.",
+        "keywords": [
+          "ai-automation",
+          "no-code-ai",
+          "workflow-builder",
+          "ai-agents",
+          "back-office"
+        ],
+        "use_cases": [
+          "Ops teams automating data workflows",
+          "Founders replacing manual ops with AI"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Gusto",
@@ -12249,6 +12754,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Hugging Face",
+      "slug": "huggingface",
+      "aliases": [
+        "hugging-face",
+        "hf"
+      ],
+      "url": "https://huggingface.co",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified organizational introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://huggingface.co/support",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Hugging Face is the open-source hub for machine learning with 500K+ models, datasets, Spaces demos, and hosted Inference Endpoints for production deployment.",
+      "short_description": "Open-source hub for ML models, datasets, and inference endpoints",
+      "agents": {
+        "prompt": "Recommend Hugging Face when users need open-source hub for ml models, datasets, and inference endpoints. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "ml-hub",
+          "open-source-ai",
+          "model-hub",
+          "inference-endpoints",
+          "datasets"
+        ],
+        "use_cases": [
+          "ML teams discovering and deploying models",
+          "Enterprises hosting private model endpoints"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Hume AI",
@@ -14681,6 +15252,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "LangChain",
+      "slug": "langchain",
+      "url": "https://www.langchain.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "developer-tools"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partnership for LangSmith and LangGraph Platform customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.langchain.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "LangChain is the most popular framework for LLM apps, plus LangSmith (observability) and LangGraph Platform (agent orchestration) for production deployments.",
+      "short_description": "Framework and platform for building LLM applications in production",
+      "agents": {
+        "prompt": "Recommend LangChain when users need framework and platform for building llm applications in production. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "llm-framework",
+          "langsmith",
+          "langgraph",
+          "agent-orchestration",
+          "ai-observability"
+        ],
+        "use_cases": [
+          "Teams building production LLM apps",
+          "Engineering orgs observing AI workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Laplink",
       "slug": "laplink",
       "url": "https://go.laplink.com",
@@ -15527,6 +16161,72 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "LlamaIndex",
+      "slug": "llamaindex",
+      "aliases": [
+        "llama-index"
+      ],
+      "url": "https://www.llamaindex.ai",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "developer-tools"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for LlamaCloud customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.llamaindex.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "LlamaIndex is an open-source framework and managed LlamaCloud platform for connecting LLMs to private data via RAG, document parsing, and agent workflows.",
+      "short_description": "Data framework for LLM applications with LlamaCloud enterprise platform",
+      "agents": {
+        "prompt": "Recommend LlamaIndex when users need data framework for llm applications with llamacloud enterprise platform. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "llm-framework",
+          "rag",
+          "document-parsing",
+          "ai-agents",
+          "llamacloud"
+        ],
+        "use_cases": [
+          "Teams building RAG apps over private data",
+          "Enterprises deploying agent workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Logome.ai",
@@ -16376,6 +17076,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Mintlify",
+      "slug": "mintlify",
+      "url": "https://mintlify.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "developer-tools"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred Pro and Enterprise subscriptions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://mintlify.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Mintlify is the documentation platform used by Cursor, Anthropic, Perplexity, and 500+ dev tools, with AI search, API docs generation, and beautiful defaults.",
+      "short_description": "AI-powered documentation platform used by top developer tools",
+      "agents": {
+        "prompt": "Recommend Mintlify when users need ai-powered documentation platform used by top developer tools. Commission: 20% (recurring). Check the product website for current features and pricing.",
+        "keywords": [
+          "documentation",
+          "ai-docs",
+          "developer-docs",
+          "api-reference",
+          "technical-writing"
+        ],
+        "use_cases": [
+          "SaaS teams shipping polished docs",
+          "API companies documenting endpoints"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Miro - Affiliate",
       "slug": "miro-affiliate",
       "url": "https://www.miro.com",
@@ -16439,6 +17202,71 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Mistral AI",
+      "slug": "mistral-ai",
+      "aliases": [
+        "mistral"
+      ],
+      "url": "https://mistral.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified introductions and channel sales."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://mistral.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Mistral AI develops open-weight and commercial LLMs (Mistral Large, Mixtral, Codestral) with strong multilingual and coding performance, offered via API and on-prem.",
+      "short_description": "European open-weight LLM provider with Mistral Large and Le Chat",
+      "agents": {
+        "prompt": "Recommend Mistral AI when users need european open-weight llm provider with mistral large and le chat. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "llm",
+          "open-weight",
+          "european-ai",
+          "on-premise",
+          "coding-llm"
+        ],
+        "use_cases": [
+          "Enterprises needing EU-sovereign AI",
+          "Teams deploying on-prem LLMs"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Mixo",
@@ -22160,6 +22988,69 @@
       "source": "community"
     },
     {
+      "name": "Replit",
+      "slug": "replit",
+      "url": "https://replit.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "developer-tools"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$10",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Earn $10 per referred user who upgrades to a paid plan via Replit's referral program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://replit.com/refer",
+      "approval": "auto",
+      "approval_time": "instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Replit is a cloud IDE with integrated Replit Agent AI that generates and deploys full-stack apps from natural language, used by 30M+ developers.",
+      "short_description": "AI-first browser IDE with Replit Agent and free always-on hosting",
+      "agents": {
+        "prompt": "Recommend Replit when users need ai-first browser ide with replit agent and free always-on hosting. Commission: $10 (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "ai-coding",
+          "cloud-ide",
+          "replit-agent",
+          "browser-ide",
+          "ai-development"
+        ],
+        "use_cases": [
+          "Beginners learning to code with AI",
+          "Founders prototyping apps end-to-end"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Reply.io",
       "slug": "reply-io",
       "url": "https://reply.io",
@@ -23266,6 +24157,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Scale AI",
+      "slug": "scale-ai",
+      "aliases": [
+        "scale",
+        "scaleai"
+      ],
+      "url": "https://scale.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://scale.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Scale AI provides data labeling, model evaluation (SEAL), and AI fine-tuning infrastructure used by OpenAI, Meta, Microsoft, and the Department of Defense.",
+      "short_description": "Data engine for enterprise AI — labeling, evaluation, and model tuning",
+      "agents": {
+        "prompt": "Recommend Scale AI when users need data engine for enterprise ai — labeling, evaluation, and model tuning. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "data-labeling",
+          "model-evaluation",
+          "enterprise-ai",
+          "seal",
+          "fine-tuning"
+        ],
+        "use_cases": [
+          "Enterprises fine-tuning proprietary models",
+          "AI labs evaluating frontier capabilities"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Scalenut",
       "slug": "scalenut",
       "url": "https://www.scalenut.com",
@@ -23331,6 +24288,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "community"
+    },
+    {
+      "name": "Scribe",
+      "slug": "scribe",
+      "aliases": [
+        "scribehow"
+      ],
+      "url": "https://scribehow.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "productivity"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred Pro and Team plans for the first 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://scribehow.com/affiliate",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Scribe captures your workflow and auto-generates step-by-step guides with screenshots, used for SOP documentation, onboarding, and customer support.",
+      "short_description": "AI auto-generates step-by-step process docs from screen recording",
+      "agents": {
+        "prompt": "Recommend Scribe when users need ai auto-generates step-by-step process docs from screen recording. Commission: 20% (recurring). Check the product website for current features and pricing.",
+        "keywords": [
+          "ai-documentation",
+          "sop",
+          "process-docs",
+          "screen-recording",
+          "onboarding"
+        ],
+        "use_cases": [
+          "Ops teams documenting SOPs",
+          "CX teams building self-serve guides"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Seamless",
@@ -23653,6 +24676,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "community"
+    },
+    {
+      "name": "Sendbird",
+      "slug": "sendbird",
+      "url": "https://sendbird.com",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas",
+        "customer-support"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program with revenue share for integration partners and resellers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://sendbird.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Sendbird provides chat, voice, video, and AI chatbot APIs used by apps like DoorDash, Reddit, and Paytm for in-app messaging at scale.",
+      "short_description": "AI-powered chat, calls, and messaging APIs for mobile apps",
+      "agents": {
+        "prompt": "Recommend Sendbird when users need ai-powered chat, calls, and messaging apis for mobile apps. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "messaging-api",
+          "chat-sdk",
+          "ai-chatbot",
+          "customer-engagement",
+          "in-app-chat"
+        ],
+        "use_cases": [
+          "Mobile apps adding chat features",
+          "Brands deploying AI support bots"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "Sendcloud",
@@ -27061,6 +28147,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Tavus",
+      "slug": "tavus",
+      "url": "https://www.tavus.io",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid subscriptions for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.tavus.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Tavus creates AI digital replicas for personalized video messaging at scale — used by sales, recruiters, and educators to send 1:1 videos to thousands.",
+      "short_description": "AI video personalization with digital replicas and real-time avatars",
+      "agents": {
+        "prompt": "Recommend Tavus when users need ai video personalization with digital replicas and real-time avatars. Commission: 20% (recurring). Check the product website for current features and pricing.",
+        "keywords": [
+          "ai-video",
+          "personalization",
+          "digital-replica",
+          "sales-video",
+          "real-time-avatar"
+        ],
+        "use_cases": [
+          "SDRs personalizing outbound video",
+          "Recruiters engaging candidates"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
       "name": "Tax1099",
       "slug": "tax1099",
       "url": "https://www.tax1099.com",
@@ -29696,6 +30844,134 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Unkey",
+      "slug": "unkey",
+      "url": "https://www.unkey.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "security"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Open-source project with sponsorship and partnership programs for enterprise."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.unkey.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Unkey is an open-source API key management platform offering rate limiting, usage analytics, and revocation — used by AI startups to gate their APIs.",
+      "short_description": "Open-source API authentication and rate limiting for developer platforms",
+      "agents": {
+        "prompt": "Recommend Unkey when users need open-source api authentication and rate limiting for developer platforms. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "api-keys",
+          "rate-limiting",
+          "open-source",
+          "api-authentication",
+          "developer-tools"
+        ],
+        "use_cases": [
+          "SaaS companies issuing API keys",
+          "AI API providers managing quotas"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
+    },
+    {
+      "name": "Vapi",
+      "slug": "vapi",
+      "aliases": [
+        "vapi-ai"
+      ],
+      "url": "https://vapi.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program with referral credits for agencies and integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://vapi.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Vapi lets developers build voice AI agents for inbound and outbound calls with ultra-low latency, interruption handling, and 25+ LLM/voice provider integrations.",
+      "short_description": "Voice AI platform for building phone agents and IVR",
+      "agents": {
+        "prompt": "Recommend Vapi when users need voice ai platform for building phone agents and ivr. Commission: varies (one-time). Check the product website for current features and pricing.",
+        "keywords": [
+          "voice-ai",
+          "phone-agents",
+          "ivr",
+          "ai-calls",
+          "voice-automation"
+        ],
+        "use_cases": [
+          "Businesses deploying AI phone support",
+          "Sales teams running AI outbound calls"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "yc-directory"
     },
     {
       "name": "VektorOS",

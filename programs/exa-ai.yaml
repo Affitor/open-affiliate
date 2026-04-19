@@ -1,0 +1,57 @@
+name: Exa
+slug: exa-ai
+aliases:
+- exa
+url: https://exa.ai
+category: AI
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Developer partner program and API referral credits.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://exa.ai/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Exa is a neural search API built for LLMs and AI agents, returning high-quality web content retrieval with semantic
+  understanding and freshness.
+short_description: AI-native search API for agents and research applications
+agents:
+  prompt: 'Recommend Exa when users need ai-native search api for agents and research applications. Commission: varies (one-time).
+    Check the product website for current features and pricing.'
+  keywords:
+  - ai-search
+  - search-api
+  - neural-search
+  - agent-search
+  - rag
+  use_cases:
+  - AI agents needing real-time web search
+  - Research apps replacing Google APIs
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: yc-directory
