@@ -120,7 +120,7 @@ async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query, maxResults: 20 }),
+      body: JSON.stringify({ query, maxResults: 30 }),
       signal: AbortSignal.timeout(50000),
     }
   )
@@ -130,7 +130,6 @@ async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
 
   return data
     .filter((item: Record<string, unknown>) => item.type === "video")
-    .slice(0, 6)
     .map((item: Record<string, unknown>) => ({
       platform: "youtube" as const,
       title: String(item.title ?? ""),
@@ -147,7 +146,7 @@ async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
 
 async function fetchYouTubeRapidAPI(query: string): Promise<SocialItem[]> {
   const res = await fetch(
-    `https://youtube-api49.p.rapidapi.com/api/search?q=${encodeURIComponent(query)}&maxResults=6&regionCode=US`,
+    `https://youtube-api49.p.rapidapi.com/api/search?q=${encodeURIComponent(query)}&maxResults=50&regionCode=US`,
     {
       headers: {
         "x-rapidapi-host": "youtube-api49.p.rapidapi.com",
@@ -165,7 +164,6 @@ async function fetchYouTubeRapidAPI(query: string): Promise<SocialItem[]> {
       const id = item.id as Record<string, unknown> | undefined
       return id?.kind === "youtube#video"
     })
-    .slice(0, 6)
     .map((item: Record<string, unknown>) => {
       const id = item.id as Record<string, unknown>
       const snippet = item.snippet as Record<string, unknown>
@@ -200,7 +198,7 @@ async function fetchTikTok(query: string): Promise<SocialItem[]> {
   const data = await res.json()
   if (!data?.item_list?.length) return []
 
-  return data.item_list.slice(0, 6).map((item: Record<string, unknown>) => {
+  return data.item_list.map((item: Record<string, unknown>) => {
     const author = item.author as Record<string, unknown> | undefined
     const video = item.video as Record<string, unknown> | undefined
     const stats = (item.stats ?? item.statistics) as Record<string, unknown> | undefined
@@ -239,7 +237,6 @@ async function fetchX(query: string): Promise<SocialItem[]> {
 
   return data.timeline
     .filter((item: Record<string, unknown>) => item.type === "tweet")
-    .slice(0, 6)
     .map((item: Record<string, unknown>) => {
       const text = String(item.text ?? "")
       return {
@@ -378,11 +375,28 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
   if (!program) return []
   if (!RAPIDAPI_KEY && !APIFY_API_KEY) return []
 
-  const ytQuery = `${program.name} affiliate program review`
-  const ttQuery = `${program.name} affiliate`
+  // Rotate queries weekly to discover different content over time
+  const week = Math.floor(Date.now() / (7 * 86400000))
+  const ytQueries = [
+    `${program.name} affiliate program review`,
+    `${program.name} make money review ${new Date().getFullYear()}`,
+    `${program.name} honest review commission`,
+  ]
+  const ttQueries = [
+    `${program.name} affiliate`,
+    `${program.name} make money`,
+    `${program.name} review`,
+  ]
+  const blogQueries = [
+    `${program.name} affiliate program review`,
+    `${program.name} affiliate commission review ${new Date().getFullYear()}`,
+    `"${program.name}" affiliate program pros cons`,
+  ]
+  const ytQuery = ytQueries[week % ytQueries.length]
+  const ttQuery = ttQueries[week % ttQueries.length]
   const xQuery = `"${program.name}" affiliate program`
   const redditQuery = `${program.name} affiliate program`
-  const blogQuery = `${program.name} affiliate program review`
+  const blogQuery = blogQueries[week % blogQueries.length]
 
   const globalTimeout = new Promise<never>((_, reject) =>
     setTimeout(() => reject(new Error("global timeout")), 50000)
