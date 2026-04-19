@@ -56,6 +56,7 @@ function Footer() {
               {[
                 { label: "Programs", href: "/programs" },
                 { label: "Categories", href: "/categories" },
+                { label: "Content Lab", href: "/lab" },
                 { label: "Submit", href: "/submit" },
                 { label: "Docs", href: "/docs" },
                 { label: "Changelog", href: "/changelog" },

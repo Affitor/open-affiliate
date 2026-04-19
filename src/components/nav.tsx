@@ -18,6 +18,7 @@ function GitHubIcon({ className }: { className?: string }) {
 const NAV_LINKS = [
   { label: "Programs", href: "/programs" },
   { label: "Rankings", href: "/rankings" },
+  { label: "Content Lab", href: "/lab" },
   { label: "Submit", href: "/submit" },
   { label: "Docs", href: "/docs" },
 ];
