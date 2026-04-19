@@ -69,7 +69,8 @@ export function SearchBar() {
   }, [query]);
 
   useEffect(() => {
-    setOpen(results.length > 0 || (query.trim().length >= 2 && results.length === 0));
+    const shouldOpen = results.length > 0 || (query.trim().length >= 2 && results.length === 0);
+    requestAnimationFrame(() => setOpen(shouldOpen));
   }, [results, query]);
 
   const handleSubmit = (e: React.FormEvent) => {

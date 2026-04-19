@@ -224,7 +224,7 @@ function analyzeContent(html: string, url?: string): Omit<VerifyResult, "slug" |
   const urlBoost =
     urlLower.includes("affiliate") || urlLower.includes("referral") ? 3 : 0;
 
-  let score =
+  const score =
     affiliate_keywords.length * 2 -
     non_affiliate_keywords.length * 3 +
     (has_signup_form ? 3 : 0) +

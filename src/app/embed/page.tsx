@@ -59,11 +59,11 @@ export default function EmbedPage(): JSX.Element {
           hint="Web component with Shadow DOM — no CSS conflicts, no framework lock-in. ~3kb gzipped."
         >
           <Live>
-            {/* @ts-expect-error — custom element */}
+            {/* @ts-expect-error — custom element not in JSX intrinsic elements */}
             <openaffiliate-badge program="stripe"></openaffiliate-badge>
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error — custom element not in JSX intrinsic elements */}
             <openaffiliate-badge program="stripe" variant="card"></openaffiliate-badge>
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error — custom element not in JSX intrinsic elements */}
             <openaffiliate-badge program="stripe" variant="card" theme="dark"></openaffiliate-badge>
           </Live>
           <Snippet lang="html">
@@ -79,7 +79,7 @@ export default function EmbedPage(): JSX.Element {
           hint="Drop-in list for partners pages, comparison sites, newsletters. Filter by category, type, or verified status."
         >
           <Live>
-            {/* @ts-expect-error */}
+            {/* @ts-expect-error — custom element not in JSX intrinsic elements */}
             <openaffiliate-list category="Developer Tools" limit={6} columns={3}></openaffiliate-list>
           </Live>
           <Snippet lang="html">

@@ -66,12 +66,12 @@ export async function GET(
   })
 }
 
-async function loadProgram(slug: string): Promise<Record<string, any> | null> {
+async function loadProgram(slug: string): Promise<Record<string, unknown> | null> {
   try {
     const programsDir =
       process.env.PROGRAMS_DIR ?? join(process.cwd(), "programs")
     const raw = await readFile(join(programsDir, `${slug}.yaml`), "utf8")
-    return parseYaml(raw) as Record<string, any>
+    return parseYaml(raw) as Record<string, unknown>
   } catch {
     return null
   }
@@ -81,7 +81,7 @@ async function loadProgram(slug: string): Promise<Record<string, any> | null> {
 
 interface RenderArgs {
   slug: string
-  program: Record<string, any>
+  program: Record<string, unknown>
   score: ReturnType<typeof computeScoreV1>
   variant: Variant
   theme: Theme
@@ -143,7 +143,7 @@ function isHex(s: string): boolean {
  *   2. Clearbit logo by domain (free, decent coverage)
  *   3. null → render monogram fallback
  */
-function resolveLogoUrl(program: Record<string, any>): string | null {
+function resolveLogoUrl(program: Record<string, unknown>): string | null {
   if (typeof program.logo_url === "string" && program.logo_url.startsWith("http")) return program.logo_url
   if (typeof program.url === "string") {
     try {
@@ -417,7 +417,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
 </svg>`
 }
 
-function formatCommission(commission: any): string | null {
+function formatCommission(commission: Record<string, unknown> | null | undefined): string | null {
   if (!commission?.rate) return null
   const rate = String(commission.rate).trim()
   const type = commission.type

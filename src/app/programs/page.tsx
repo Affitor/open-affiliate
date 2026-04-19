@@ -10,6 +10,7 @@ import {
   List,
   X,
   ArrowRight,
+  Search,
   ShieldCheck,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -55,7 +56,9 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
 
   useEffect(() => {
     const stored = localStorage.getItem("oa-view") as ViewMode | null;
-    if (stored === "grid" || stored === "list") setViewState(stored);
+    if (stored === "grid" || stored === "list") {
+      requestAnimationFrame(() => setViewState(stored));
+    }
   }, []);
 
   const setView = useCallback((v: ViewMode) => {
@@ -64,21 +67,6 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
   }, []);
 
   return [view, setView];
-}
-
-function isNew(createdAt: string): boolean {
-  if (!createdAt) return false;
-  const created = new Date(createdAt).getTime();
-  if (isNaN(created)) return false;
-  return Date.now() - created < 14 * 86400000;
-}
-
-function NewBadge() {
-  return (
-    <Badge className="text-[10px] px-1.5 py-0 bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/30">
-      New
-    </Badge>
-  );
 }
 
 function ProgramCardGrid({ program }: { program: Program }) {
@@ -93,7 +81,6 @@ function ProgramCardGrid({ program }: { program: Program }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold truncate">{program.name}</h3>
-            {isNew(program.createdAt) && <NewBadge />}
             {program.verified && (
               <Badge
                 variant="outline"
@@ -145,7 +132,6 @@ function ProgramRowList({ program }: { program: Program }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold truncate">{program.name}</h3>
-          {isNew(program.createdAt) && <NewBadge />}
           {program.verified && (
             <Badge
               variant="outline"
@@ -220,10 +206,9 @@ function ProgramsContent() {
         if (value) url.set(key, value);
       }
       const qs = url.toString();
-      const path = `/programs${qs ? `?${qs}` : ""}`;
-      window.history.replaceState(null, "", path);
+      router.replace(`/programs${qs ? `?${qs}` : ""}`, { scroll: false });
     },
-    []
+    [router]
   );
 
   const updateFilters = useCallback(
@@ -337,7 +322,7 @@ function ProgramsContent() {
 
   // Network options with counts
   const NETWORK_LABELS: Record<string, string> = {
-    "in-house": "In-house",
+    "In-house": "In-house",
     partnerstack: "PartnerStack",
     impact: "Impact",
     rewardful: "Rewardful",
@@ -384,6 +369,17 @@ function ProgramsContent() {
 
       {/* Filter toolbar */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
+        {/* Search input */}
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder="Search programs..."
+            className="rounded-lg border border-border/50 bg-card/50 pl-8 pr-3 py-2 text-xs w-44 focus:outline-none focus:border-border transition-colors placeholder:text-muted-foreground/60"
+          />
+        </div>
         <FilterSelect
           label="Category"
           value={selectedCategory}

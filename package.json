@@ -16,8 +16,6 @@
     "pre-check": "npx tsx scripts/pre-check.ts",
     "verify": "npx tsx scripts/verify-programs.ts",
     "verify:changed": "npx tsx scripts/verify-programs.ts --changed",
-    "enrich": "npx tsx scripts/enrich-program.ts",
-    "enrich:changed": "npx tsx scripts/enrich-program.ts --changed",
     "verify:deep": "npx tsx scripts/verify-deep.ts",
     "verify:deep:unverified": "npx tsx scripts/verify-deep.ts --unverified",
     "sync:public": "npx tsx scripts/sync-to-public.ts",

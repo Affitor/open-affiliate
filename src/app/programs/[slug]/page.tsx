@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -30,7 +31,6 @@ import { VoteButton } from "@/components/vote-button";
 import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
-import { Suspense } from "react";
 import { SocialListenLoader } from "@/components/social-listen-loader";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
@@ -287,8 +287,8 @@ export default async function ProgramPage({
             </div>
           </div>
 
-          {/* Social Listen — dynamic hole via PPR, fetched on first visit */}
-          <Suspense>
+          {/* Social Listen */}
+          <Suspense fallback={<div className="animate-pulse h-48 rounded-xl bg-muted/30" />}>
             <SocialListenLoader slug={slug} />
           </Suspense>
 

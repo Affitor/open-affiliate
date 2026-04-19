@@ -16,7 +16,7 @@ export function VoteButton({ slug, initialCount = 0, className }: VoteButtonProp
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setCount(initialCount);
+    requestAnimationFrame(() => setCount(initialCount));
   }, [initialCount]);
 
   useEffect(() => {

@@ -33,7 +33,7 @@ export const VideoScene: React.FC<VideoSceneProps> = ({
   // Ken Burns transforms
   let scale = 1;
   let translateX = 0;
-  let translateY = 0;
+  const translateY = 0;
 
   if (ken === "zoomSlow") {
     scale = interpolate(frame, [0, durationInFrames], [1.0, 1.025], {

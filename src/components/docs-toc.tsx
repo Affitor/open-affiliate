@@ -22,8 +22,10 @@ export function DocsToc() {
       text: el.textContent?.trim() ?? "",
       level: el.tagName === "H3" ? 3 : 2,
     }));
-    setHeadings(items);
-    setActiveId(items[0]?.id ?? "");
+    requestAnimationFrame(() => {
+      setHeadings(items);
+      setActiveId(items[0]?.id ?? "");
+    });
 
     observerRef.current?.disconnect();
     const observer = new IntersectionObserver(
