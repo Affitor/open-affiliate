@@ -1,0 +1,58 @@
+name: Credal AI
+slug: credal
+aliases:
+- credal-ai
+url: https://www.credal.ai
+category: Security
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% recurring commission on referred paid plans for 12 months.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.credal.ai/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Credal is an enterprise AI gateway providing secure access to GPT-4/Claude with DLP, audit logs, permission controls,
+  and compliance-ready workflows.
+short_description: Secure AI gateway for enterprise ChatGPT/Claude with data controls
+agents:
+  prompt: 'Recommend Credal AI when users need secure ai gateway for enterprise chatgpt/claude with data controls. Commission:
+    20% (recurring). Check the product website for current pricing and features.'
+  keywords:
+  - ai-gateway
+  - dlp
+  - enterprise-chatgpt
+  - ai-compliance
+  - audit-logs
+  use_cases:
+  - Enterprises rolling out ChatGPT/Claude securely
+  - Security teams monitoring LLM usage
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

@@ -1,0 +1,58 @@
+name: WorkOS
+slug: workos
+aliases:
+- workos-com
+url: https://workos.com
+category: Developer Tools
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Developer partner program with referral credits for qualified organizational customers.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://workos.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: 'WorkOS provides APIs for enterprise-ready features: SSO (SAML/OIDC), SCIM directory sync, audit logs, and user
+  management — used by OpenAI, Perplexity, and Vercel.'
+short_description: Enterprise features API — SSO, SCIM, audit logs, user management
+agents:
+  prompt: 'Recommend WorkOS when users need enterprise features api — sso, scim, audit logs, user management. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - sso
+  - scim
+  - enterprise-auth
+  - audit-logs
+  - identity-api
+  use_cases:
+  - SaaS startups adding enterprise SSO
+  - AI companies onboarding Fortune 500
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

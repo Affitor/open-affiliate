@@ -1,0 +1,56 @@
+name: Coda
+slug: coda
+url: https://coda.io
+category: Productivity
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% recurring commission on referred paid plans via Impact.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://coda.io/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: impact
+program_age: null
+description: Coda is an all-in-one doc platform combining documents, spreadsheets, databases, and AI — used by Figma, Pinterest,
+  and Uber for operating teams.
+short_description: All-in-one doc platform combining Docs, Sheets, databases, and AI
+agents:
+  prompt: 'Recommend Coda when users need all-in-one doc platform combining docs, sheets, databases, and ai. Commission: 20%
+    (recurring). Check the product website for current pricing and features.'
+  keywords:
+  - document-platform
+  - ai-docs
+  - spreadsheet
+  - database
+  - collaboration
+  use_cases:
+  - Ops teams replacing Notion+Sheets
+  - Teams building lightweight internal tools
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

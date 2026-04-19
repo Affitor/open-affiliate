@@ -1,0 +1,58 @@
+name: Typeface
+slug: typeface
+aliases:
+- typeface-ai
+url: https://www.typeface.ai
+category: AI
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for content marketing consultancies.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.typeface.ai
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Typeface provides enterprise GenAI for brand-governed content creation with workflow automation, integrations
+  with Adobe, and brand voice consistency.
+short_description: Enterprise generative AI for brand-governed marketing content
+agents:
+  prompt: 'Recommend Typeface when users need enterprise generative ai for brand-governed marketing content. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - enterprise-genai
+  - brand-governance
+  - content-creation
+  - adobe-integration
+  - marketing-ai
+  use_cases:
+  - Enterprise marketing scaling content
+  - Brands needing voice consistency
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

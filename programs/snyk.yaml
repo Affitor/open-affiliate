@@ -1,0 +1,56 @@
+name: Snyk
+slug: snyk
+url: https://snyk.io
+category: Security
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Developer partner program and enterprise referral rewards.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://snyk.io/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Snyk is a developer-first security platform with AI-powered SAST (DeepCode AI), open-source dependency scanning,
+  container, and IaC security — used by 3,000+ enterprises.
+short_description: Developer security platform with AI-powered code and open-source scanning
+agents:
+  prompt: 'Recommend Snyk when users need developer security platform with ai-powered code and open-source scanning. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - developer-security
+  - sast
+  - sca
+  - container-security
+  - iac-security
+  use_cases:
+  - Engineering teams securing code
+  - DevSecOps shifting security left
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

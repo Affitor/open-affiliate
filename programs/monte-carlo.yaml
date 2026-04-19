@@ -1,0 +1,59 @@
+name: Monte Carlo
+slug: monte-carlo
+aliases:
+- montecarlo
+- monte-carlo-data
+url: https://www.montecarlodata.com
+category: Analytics
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for data consultancies and system integrators.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.montecarlodata.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Monte Carlo is the data observability leader with automated data quality monitoring, lineage, and AI pipeline
+  monitoring for enterprise data teams.
+short_description: Data + AI observability platform with automated data quality monitoring
+agents:
+  prompt: 'Recommend Monte Carlo when users need data + ai observability platform with automated data quality monitoring.
+    Commission: varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - data-observability
+  - data-quality
+  - ai-pipeline
+  - lineage
+  - data-reliability
+  use_cases:
+  - Data teams preventing pipeline breakage
+  - ML teams monitoring training data
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

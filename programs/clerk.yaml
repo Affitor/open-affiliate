@@ -1,0 +1,56 @@
+name: Clerk
+slug: clerk
+url: https://clerk.com
+category: Developer Tools
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Developer partner program and referral credits for Next.js integrations.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://clerk.com
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Clerk provides drop-in user management with beautiful UI components, passwordless auth, MFA, and organizations
+  — purpose-built for React/Next.js apps.
+short_description: User management and authentication for React and Next.js apps
+agents:
+  prompt: 'Recommend Clerk when users need user management and authentication for react and next.js apps. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - authentication
+  - user-management
+  - nextjs
+  - react
+  - passwordless
+  use_cases:
+  - Next.js apps shipping auth fast
+  - React teams adding enterprise features
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

@@ -1,0 +1,56 @@
+name: HiddenLayer
+slug: hiddenlayer
+url: https://hiddenlayer.com
+category: Security
+tags:
+- ai
+- saas
+- enterprise
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for MSSP and consultancy partners.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://hiddenlayer.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: HiddenLayer provides AI detection and response (AIDR) platform that secures ML models against adversarial attacks,
+  data poisoning, and IP theft.
+short_description: AI detection and response platform for protecting machine learning
+agents:
+  prompt: 'Recommend HiddenLayer when users need ai detection and response platform for protecting machine learning. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - ai-security
+  - ml-security
+  - aidr
+  - adversarial-attacks
+  - model-protection
+  use_cases:
+  - Enterprises protecting ML IP
+  - Security teams deploying AI defense
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

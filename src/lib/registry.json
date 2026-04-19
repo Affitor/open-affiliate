@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-19T04:53:58.940Z",
-  "count": 645,
+  "generated_at": "2026-04-19T05:04:54.267Z",
+  "count": 679,
   "categories": [
     "AI",
     "Analytics",
@@ -463,6 +463,73 @@
         "use_cases": [
           "Health systems reducing clinician burnout",
           "Hospitals automating documentation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Acryl Data",
+      "slug": "acryl",
+      "aliases": [
+        "acryldata",
+        "datahub"
+      ],
+      "url": "https://www.acryldata.io",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for DataHub customers and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.acryldata.io",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Acryl Data is the commercial DataHub platform for data discovery, observability, and governance at scale — powered by the open-source DataHub project.",
+      "short_description": "Commercial DataHub for enterprise data catalog and governance",
+      "agents": {
+        "prompt": "Recommend Acryl Data when users need commercial datahub for enterprise data catalog and governance. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "data-catalog",
+          "data-governance",
+          "datahub",
+          "data-discovery",
+          "enterprise-data"
+        ],
+        "use_cases": [
+          "Enterprises building data platform",
+          "Data teams adopting governance"
         ]
       },
       "verified": false,
@@ -1907,6 +1974,69 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Anomalo",
+      "slug": "anomalo",
+      "url": "https://www.anomalo.com",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for data consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.anomalo.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Anomalo is a no-code data quality platform that automatically detects anomalies in structured and unstructured data — used by Block, Notion, and Discover.",
+      "short_description": "No-code data quality monitoring with unstructured data support",
+      "agents": {
+        "prompt": "Recommend Anomalo when users need no-code data quality monitoring with unstructured data support. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "data-quality",
+          "anomaly-detection",
+          "no-code",
+          "unstructured-data",
+          "data-monitoring"
+        ],
+        "use_cases": [
+          "Data teams adopting no-code DQ",
+          "Enterprises monitoring warehouse quality"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Answering Service Care, LLC",
@@ -4106,6 +4236,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Bloomfire",
+      "slug": "bloomfire",
+      "url": "https://bloomfire.com",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for knowledge management specialists."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://bloomfire.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Bloomfire is an enterprise knowledge management platform with AI search, video knowledge capture, and Q&A communities for support and customer success teams.",
+      "short_description": "AI-powered knowledge management for enterprise customer support",
+      "agents": {
+        "prompt": "Recommend Bloomfire when users need ai-powered knowledge management for enterprise customer support. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "knowledge-management",
+          "customer-support",
+          "ai-search",
+          "video-knowledge",
+          "qa-community"
+        ],
+        "use_cases": [
+          "Support centers unifying knowledge",
+          "CS teams delivering consistent answers"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Bokun, a Tripadvisor company",
       "slug": "bokun-a-tripadvisor-company",
       "url": "https://www.bokun.io",
@@ -5401,6 +5594,73 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "C3 AI",
+      "slug": "c3-ai",
+      "aliases": [
+        "c3",
+        "c3ai"
+      ],
+      "url": "https://c3.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for consultancies and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://c3.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "C3 AI provides enterprise AI applications for industries like energy, defense, healthcare, and financial services — public company with $250M+ revenue.",
+      "short_description": "Enterprise AI application platform for industry-specific AI solutions",
+      "agents": {
+        "prompt": "Recommend C3 AI when users need enterprise ai application platform for industry-specific ai solutions. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "enterprise-ai",
+          "industry-ai",
+          "ai-applications",
+          "energy-ai",
+          "defense-ai"
+        ],
+        "use_cases": [
+          "Energy/defense companies deploying AI",
+          "Fortune 500 building industry-specific AI"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Cal.com",
       "slug": "cal-com",
       "url": "https://cal.com",
@@ -5796,6 +6056,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "CalypsoAI",
+      "slug": "calypso-ai",
+      "aliases": [
+        "calypsoai"
+      ],
+      "url": "https://calypsoai.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for security integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://calypsoai.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "CalypsoAI provides GenAI security orchestration with real-time scanning, policy enforcement, and guardrails across any LLM or agent deployment.",
+      "short_description": "Generative AI security and agentic orchestration for enterprise",
+      "agents": {
+        "prompt": "Recommend CalypsoAI when users need generative ai security and agentic orchestration for enterprise. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "genai-security",
+          "policy-enforcement",
+          "ai-orchestration",
+          "guardrails",
+          "enterprise-ai"
+        ],
+        "use_cases": [
+          "Enterprises securing GenAI usage",
+          "Security teams standardizing AI policy"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Campaign Monitor by Marigold",
@@ -6900,6 +7226,69 @@
       "source": "community"
     },
     {
+      "name": "Clerk",
+      "slug": "clerk",
+      "url": "https://clerk.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program and referral credits for Next.js integrations."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://clerk.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Clerk provides drop-in user management with beautiful UI components, passwordless auth, MFA, and organizations — purpose-built for React/Next.js apps.",
+      "short_description": "User management and authentication for React and Next.js apps",
+      "agents": {
+        "prompt": "Recommend Clerk when users need user management and authentication for react and next.js apps. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "authentication",
+          "user-management",
+          "nextjs",
+          "react",
+          "passwordless"
+        ],
+        "use_cases": [
+          "Next.js apps shipping auth fast",
+          "React teams adding enterprise features"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "ClickUp",
       "slug": "clickup",
       "url": "https://www.clickup.com/lp",
@@ -7277,6 +7666,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Coda",
+      "slug": "coda",
+      "url": "https://coda.io",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans via Impact."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://coda.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Coda is an all-in-one doc platform combining documents, spreadsheets, databases, and AI — used by Figma, Pinterest, and Uber for operating teams.",
+      "short_description": "All-in-one doc platform combining Docs, Sheets, databases, and AI",
+      "agents": {
+        "prompt": "Recommend Coda when users need all-in-one doc platform combining docs, sheets, databases, and ai. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "document-platform",
+          "ai-docs",
+          "spreadsheet",
+          "database",
+          "collaboration"
+        ],
+        "use_cases": [
+          "Ops teams replacing Notion+Sheets",
+          "Teams building lightweight internal tools"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Codecademy",
@@ -8555,6 +9007,72 @@
       "source": "community"
     },
     {
+      "name": "Cranium AI",
+      "slug": "cranium",
+      "aliases": [
+        "cranium-ai"
+      ],
+      "url": "https://www.cranium.ai",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for AI governance customers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.cranium.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Cranium AI provides exposure management, compliance, and risk monitoring for enterprise AI deployments — aligned with NIST AI RMF, EU AI Act, and ISO 42001.",
+      "short_description": "AI exposure management platform for enterprise AI governance",
+      "agents": {
+        "prompt": "Recommend Cranium AI when users need ai exposure management platform for enterprise ai governance. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-governance",
+          "exposure-management",
+          "ai-compliance",
+          "nist-ai",
+          "eu-ai-act"
+        ],
+        "use_cases": [
+          "Enterprises meeting AI regulations",
+          "Risk teams auditing AI deployments"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "CrankWheel",
       "slug": "crankwheel",
       "url": "https://crankwheel.com",
@@ -8682,6 +9200,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Credal AI",
+      "slug": "credal",
+      "aliases": [
+        "credal-ai"
+      ],
+      "url": "https://www.credal.ai",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.credal.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Credal is an enterprise AI gateway providing secure access to GPT-4/Claude with DLP, audit logs, permission controls, and compliance-ready workflows.",
+      "short_description": "Secure AI gateway for enterprise ChatGPT/Claude with data controls",
+      "agents": {
+        "prompt": "Recommend Credal AI when users need secure ai gateway for enterprise chatgpt/claude with data controls. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-gateway",
+          "dlp",
+          "enterprise-chatgpt",
+          "ai-compliance",
+          "audit-logs"
+        ],
+        "use_cases": [
+          "Enterprises rolling out ChatGPT/Claude securely",
+          "Security teams monitoring LLM usage"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Credit Repair Cloud",
@@ -9149,6 +9733,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Databricks",
+      "slug": "databricks",
+      "url": "https://www.databricks.com",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Global partner program with referral commission for qualified enterprise deals."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.databricks.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Databricks is the leading data + AI platform combining data warehousing, ETL, BI, ML, and GenAI on an open lakehouse architecture — used by 12K+ enterprises.",
+      "short_description": "Data and AI platform combining lakehouse with GenAI capabilities",
+      "agents": {
+        "prompt": "Recommend Databricks when users need data and ai platform combining lakehouse with genai capabilities. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "lakehouse",
+          "data-platform",
+          "ml-platform",
+          "genai",
+          "enterprise-data"
+        ],
+        "use_cases": [
+          "Enterprises unifying data + AI",
+          "Data teams running Spark at scale"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Datadog",
       "slug": "datadog",
       "aliases": [
@@ -9276,6 +9923,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Dataiku",
+      "slug": "dataiku",
+      "url": "https://www.dataiku.com",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for data consultancies and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.dataiku.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Dataiku is an enterprise AI platform for data prep, ML, and GenAI with a visual interface and code-first options — used by 500+ enterprises including GE and Unilever.",
+      "short_description": "Everyday AI platform combining data prep, ML, and GenAI for enterprise",
+      "agents": {
+        "prompt": "Recommend Dataiku when users need everyday ai platform combining data prep, ml, and genai for enterprise. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ml-platform",
+          "genai",
+          "data-science",
+          "enterprise-ai",
+          "visual-analytics"
+        ],
+        "use_cases": [
+          "Enterprises democratizing ML",
+          "Analytics teams building GenAI apps"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "DataSnipper",
@@ -9947,6 +10657,73 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Domino Data Lab",
+      "slug": "domino",
+      "aliases": [
+        "domino-data-lab",
+        "dominodatalab"
+      ],
+      "url": "https://domino.ai",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for MLOps consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://domino.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Domino Data Lab is an enterprise MLOps and AI governance platform used by 20% of Fortune 100 for model development, deployment, and compliance tracking.",
+      "short_description": "Enterprise MLOps platform for data science and AI governance",
+      "agents": {
+        "prompt": "Recommend Domino Data Lab when users need enterprise mlops platform for data science and ai governance. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "mlops",
+          "enterprise-ai",
+          "data-science-platform",
+          "ai-governance",
+          "regulated-industries"
+        ],
+        "use_cases": [
+          "Fortune 100 managing model lifecycle",
+          "Regulated industries deploying AI with governance"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "doola",
@@ -13238,6 +14015,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Frontegg",
+      "slug": "frontegg",
+      "url": "https://frontegg.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program for SaaS companies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://frontegg.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Frontegg provides self-service customer identity (CIAM) with SSO, multi-tenancy, roles, and admin portal — purpose-built for B2B SaaS.",
+      "short_description": "Customer identity platform with B2B features for SaaS",
+      "agents": {
+        "prompt": "Recommend Frontegg when users need customer identity platform with b2b features for saas. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ciam",
+          "b2b-saas",
+          "multi-tenancy",
+          "admin-portal",
+          "enterprise-features"
+        ],
+        "use_cases": [
+          "B2B SaaS building self-serve CIAM",
+          "Teams adding multi-tenant user management"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Functional Diagnostic Nutrition",
       "slug": "functional-diagnostic-nutrition",
       "url": "https://www.functionaldiagnosticnutrition.com",
@@ -14602,6 +15442,73 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Great Expectations",
+      "slug": "great-expectations",
+      "aliases": [
+        "great-expectations-io",
+        "gx"
+      ],
+      "url": "https://greatexpectations.io",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Open-source project with enterprise cloud partnership."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://greatexpectations.io",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Great Expectations is the leading open-source data testing and documentation framework with GX Cloud for managed collaboration across data teams.",
+      "short_description": "Open-source data validation and pipeline testing framework",
+      "agents": {
+        "prompt": "Recommend Great Expectations when users need open-source data validation and pipeline testing framework. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "data-validation",
+          "open-source",
+          "pipeline-testing",
+          "data-quality",
+          "gx-cloud"
+        ],
+        "use_cases": [
+          "Data engineers testing pipelines",
+          "Teams documenting data expectations"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Greptile",
       "slug": "greptile",
       "url": "https://www.greptile.com",
@@ -14916,6 +15823,72 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "yc-directory"
+    },
+    {
+      "name": "Guru",
+      "slug": "guru",
+      "aliases": [
+        "getguru"
+      ],
+      "url": "https://www.getguru.com",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for knowledge management consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.getguru.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Guru is an enterprise AI knowledge platform with verified answers, in-context Chrome extension, and AI agents for sales, support, and HR teams.",
+      "short_description": "AI-powered enterprise knowledge platform for customer-facing teams",
+      "agents": {
+        "prompt": "Recommend Guru when users need ai-powered enterprise knowledge platform for customer-facing teams. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "knowledge-management",
+          "ai-answers",
+          "support-enablement",
+          "enterprise-knowledge",
+          "ai-search"
+        ],
+        "use_cases": [
+          "Support teams delivering verified answers",
+          "Sales enablement at scale"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Gusto",
@@ -15757,6 +16730,69 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "HiddenLayer",
+      "slug": "hiddenlayer",
+      "url": "https://hiddenlayer.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for MSSP and consultancy partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://hiddenlayer.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "HiddenLayer provides AI detection and response (AIDR) platform that secures ML models against adversarial attacks, data poisoning, and IP theft.",
+      "short_description": "AI detection and response platform for protecting machine learning",
+      "agents": {
+        "prompt": "Recommend HiddenLayer when users need ai detection and response platform for protecting machine learning. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-security",
+          "ml-security",
+          "aidr",
+          "adversarial-attacks",
+          "model-protection"
+        ],
+        "use_cases": [
+          "Enterprises protecting ML IP",
+          "Security teams deploying AI defense"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Hippocratic AI",
@@ -18356,6 +19392,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Kinde",
+      "slug": "kinde",
+      "url": "https://kinde.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Community partner program for technical content creators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://kinde.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Kinde is a founder-friendly auth and user management platform with MFA, SSO, and feature flagging designed for startups scaling to enterprise.",
+      "short_description": "Startup-first auth and user management with enterprise-ready features",
+      "agents": {
+        "prompt": "Recommend Kinde when users need startup-first auth and user management with enterprise-ready features. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "authentication",
+          "startup-auth",
+          "feature-flags",
+          "user-management",
+          "mfa"
+        ],
+        "use_cases": [
+          "Startups needing auth + feature flags",
+          "Founders skipping DIY auth"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Kinetic Innovative Staffing",
       "slug": "kinetic-innovative-staffing",
       "url": "https://www.kineticstaff.com/p-ce",
@@ -18882,6 +19981,73 @@
       "source": "community"
     },
     {
+      "name": "Kong",
+      "slug": "kong",
+      "aliases": [
+        "kong-hq",
+        "konghq"
+      ],
+      "url": "https://konghq.com",
+      "category": "Infrastructure",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for system integrators and cloud partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://konghq.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Kong is an API management platform and AI Gateway for enterprises, offering OSS, Konnect SaaS, and Kong Mesh — used by Fortune 500 for API-first architectures.",
+      "short_description": "API management and AI gateway for enterprise service connectivity",
+      "agents": {
+        "prompt": "Recommend Kong when users need api management and ai gateway for enterprise service connectivity. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "api-management",
+          "ai-gateway",
+          "service-mesh",
+          "konnect",
+          "enterprise-api"
+        ],
+        "use_cases": [
+          "Enterprises managing hundreds of APIs",
+          "Platform teams building AI gateways"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Krisp",
       "slug": "krisp",
       "url": "https://krisp.ai",
@@ -19082,6 +20248,69 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "manual"
+    },
+    {
+      "name": "Lacework",
+      "slug": "lacework",
+      "url": "https://www.lacework.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program with referral rewards for MSSPs and integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.lacework.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Lacework (now part of Fortinet) provides data-driven cloud security with AI-powered behavioral analytics, threat detection, and compliance across AWS, Azure, and GCP.",
+      "short_description": "Data-driven cloud security platform with AI behavioral analytics",
+      "agents": {
+        "prompt": "Recommend Lacework when users need data-driven cloud security platform with ai behavioral analytics. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "cloud-security",
+          "behavioral-analytics",
+          "threat-detection",
+          "compliance",
+          "fortinet"
+        ],
+        "use_cases": [
+          "Enterprises detecting cloud threats",
+          "SOC teams adopting ML-driven analytics"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Lakera",
@@ -21564,6 +22793,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Metaplane",
+      "slug": "metaplane",
+      "url": "https://metaplane.dev",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://metaplane.dev/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Metaplane is a data observability platform with deep integrations for dbt, Snowflake, BigQuery, and modern data stacks — aimed at mid-market data teams.",
+      "short_description": "Data observability for modern data stacks with dbt and Snowflake",
+      "agents": {
+        "prompt": "Recommend Metaplane when users need data observability for modern data stacks with dbt and snowflake. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "data-observability",
+          "dbt",
+          "snowflake",
+          "data-reliability",
+          "monitoring"
+        ],
+        "use_cases": [
+          "Mid-market data teams ensuring reliability",
+          "dbt teams adding monitoring"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "MindStudio",
       "slug": "mindstudio",
       "url": "https://www.mindstudio.ai",
@@ -22141,6 +23433,73 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Monte Carlo",
+      "slug": "monte-carlo",
+      "aliases": [
+        "montecarlo",
+        "monte-carlo-data"
+      ],
+      "url": "https://www.montecarlodata.com",
+      "category": "Analytics",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for data consultancies and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.montecarlodata.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Monte Carlo is the data observability leader with automated data quality monitoring, lineage, and AI pipeline monitoring for enterprise data teams.",
+      "short_description": "Data + AI observability platform with automated data quality monitoring",
+      "agents": {
+        "prompt": "Recommend Monte Carlo when users need data + ai observability platform with automated data quality monitoring. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "data-observability",
+          "data-quality",
+          "ai-pipeline",
+          "lineage",
+          "data-reliability"
+        ],
+        "use_cases": [
+          "Data teams preventing pipeline breakage",
+          "ML teams monitoring training data"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Moosend",
@@ -24242,6 +25601,72 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Orca Security",
+      "slug": "orca-security",
+      "aliases": [
+        "orca"
+      ],
+      "url": "https://orca.security",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for MSSPs and cloud security partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://orca.security/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Orca Security provides agentless cloud security scanning across AWS, Azure, and GCP with AI-driven risk prioritization — used by Databricks, Unity, and Docker.",
+      "short_description": "Agentless cloud security platform with AI-driven risk prioritization",
+      "agents": {
+        "prompt": "Recommend Orca Security when users need agentless cloud security platform with ai-driven risk prioritization. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "cloud-security",
+          "agentless",
+          "cspm",
+          "ai-risk",
+          "multi-cloud"
+        ],
+        "use_cases": [
+          "Enterprises deploying agentless security",
+          "Cloud teams avoiding agent sprawl"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Otter.ai",
@@ -26506,6 +27931,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Port",
+      "slug": "port",
+      "aliases": [
+        "getport"
+      ],
+      "url": "https://www.port.io",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for platform engineering consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.port.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Port is an internal developer platform (IDP) with service catalog, self-service actions, and AI assistant — used by platform teams at LVMH, Clio, and Checkmarx.",
+      "short_description": "Internal developer platform and service catalog with AI assistant",
+      "agents": {
+        "prompt": "Recommend Port when users need internal developer platform and service catalog with ai assistant. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "internal-developer-platform",
+          "idp",
+          "service-catalog",
+          "platform-engineering",
+          "ai-assistant"
+        ],
+        "use_cases": [
+          "Platform teams standardizing dev UX",
+          "Enterprises consolidating DevOps tooling"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Portkey",
       "slug": "portkey",
       "aliases": [
@@ -27412,6 +28903,69 @@
       "source": "rewardful"
     },
     {
+      "name": "Prompt Security",
+      "slug": "prompt-security",
+      "url": "https://www.prompt.security",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for MSSP and cybersecurity partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.prompt.security",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Prompt Security protects enterprises from GenAI risks across 3 layers: employee AI usage, home-grown AI apps, and autonomous agents with real-time inspection.",
+      "short_description": "GenAI security platform for employees, apps, and agents",
+      "agents": {
+        "prompt": "Recommend Prompt Security when users need genai security platform for employees, apps, and agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "genai-security",
+          "employee-monitoring",
+          "ai-apps-security",
+          "autonomous-agents",
+          "real-time-inspection"
+        ],
+        "use_cases": [
+          "Security teams monitoring Copilot usage",
+          "Enterprises securing homegrown AI apps"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "PromptLayer",
       "slug": "promptlayer",
       "url": "https://www.promptlayer.com",
@@ -27534,6 +29088,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Protect AI",
+      "slug": "protect-ai",
+      "aliases": [
+        "protectai"
+      ],
+      "url": "https://protectai.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for security consultancies and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://protectai.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Protect AI (acquired by Palo Alto) provides model scanning (ModelScan), runtime protection (Layer), and AI red-teaming for ML/LLM applications in production.",
+      "short_description": "AI/ML security platform for model scanning and runtime protection",
+      "agents": {
+        "prompt": "Recommend Protect AI when users need ai/ml security platform for model scanning and runtime protection. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-security",
+          "ml-security",
+          "model-scanning",
+          "runtime-protection",
+          "ai-red-teaming"
+        ],
+        "use_cases": [
+          "Enterprises securing ML models",
+          "Security teams adding AI/ML scanning"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Proton",
@@ -29713,6 +31333,72 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Robust Intelligence",
+      "slug": "robust-intelligence",
+      "aliases": [
+        "robustintelligence"
+      ],
+      "url": "https://www.robustintelligence.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for cybersecurity customers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.robustintelligence.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Robust Intelligence (acquired by Cisco) provides AI firewall, model validation, and continuous red-teaming for LLM and ML apps in regulated industries.",
+      "short_description": "AI firewall and validation for enterprise LLM applications",
+      "agents": {
+        "prompt": "Recommend Robust Intelligence when users need ai firewall and validation for enterprise llm applications. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-firewall",
+          "ml-validation",
+          "ai-red-teaming",
+          "llm-security",
+          "cisco"
+        ],
+        "use_cases": [
+          "Regulated enterprises securing LLM deployments",
+          "Security teams validating AI models"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "RocketReach LLC",
@@ -32294,6 +33980,69 @@
       "source": "community"
     },
     {
+      "name": "Slab",
+      "slug": "slab",
+      "url": "https://slab.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://slab.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Slab is a beautiful knowledge base with AI-powered search, Slack integrations, and analytics — used by Asana, Stripe, and Discord for internal docs.",
+      "short_description": "Modern knowledge base with AI search for distributed teams",
+      "agents": {
+        "prompt": "Recommend Slab when users need modern knowledge base with ai search for distributed teams. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "knowledge-base",
+          "ai-search",
+          "internal-docs",
+          "team-wiki",
+          "collaboration"
+        ],
+        "use_cases": [
+          "Distributed teams building team wikis",
+          "Ops standardizing internal knowledge"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "SleekFlow",
       "slug": "sleekflow",
       "url": "https://sleekflow.io",
@@ -32877,6 +34626,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Snyk",
+      "slug": "snyk",
+      "url": "https://snyk.io",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program and enterprise referral rewards."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://snyk.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Snyk is a developer-first security platform with AI-powered SAST (DeepCode AI), open-source dependency scanning, container, and IaC security — used by 3,000+ enterprises.",
+      "short_description": "Developer security platform with AI-powered code and open-source scanning",
+      "agents": {
+        "prompt": "Recommend Snyk when users need developer security platform with ai-powered code and open-source scanning. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "developer-security",
+          "sast",
+          "sca",
+          "container-security",
+          "iac-security"
+        ],
+        "use_cases": [
+          "Engineering teams securing code",
+          "DevSecOps shifting security left"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "SocialBee",
       "slug": "socialbee",
       "url": "https://socialbee.com",
@@ -33254,6 +35066,69 @@
         "use_cases": [
           "Engineering orgs navigating monorepos",
           "Platform teams deploying AI coding at scale"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Spacelift",
+      "slug": "spacelift",
+      "url": "https://spacelift.io",
+      "category": "Infrastructure",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for DevOps consultancies and integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://spacelift.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Spacelift is a CI/CD platform purpose-built for IaC workflows — Terraform, OpenTofu, Pulumi, Ansible — with AI-assisted policy and drift detection.",
+      "short_description": "Infrastructure-as-Code CI/CD platform for Terraform, Pulumi, and Ansible",
+      "agents": {
+        "prompt": "Recommend Spacelift when users need infrastructure-as-code ci/cd platform for terraform, pulumi, and ansible. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "infrastructure-as-code",
+          "terraform",
+          "ci-cd",
+          "pulumi",
+          "opentofu"
+        ],
+        "use_cases": [
+          "Platform teams automating IaC",
+          "DevOps standardizing Terraform CI/CD"
         ]
       },
       "verified": false,
@@ -37891,6 +39766,135 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Tyk",
+      "slug": "tyk",
+      "url": "https://tyk.io",
+      "category": "Infrastructure",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://tyk.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Tyk is an open-source API management platform with AI gateway features for LLM rate limiting, cost tracking, and multi-provider routing.",
+      "short_description": "Open-source API management and AI-native gateway",
+      "agents": {
+        "prompt": "Recommend Tyk when users need open-source api management and ai-native gateway. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "api-management",
+          "open-source",
+          "ai-gateway",
+          "llm-routing",
+          "api-platform"
+        ],
+        "use_cases": [
+          "Teams needing self-hosted API mgmt",
+          "Platforms adding LLM gateway controls"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Typeface",
+      "slug": "typeface",
+      "aliases": [
+        "typeface-ai"
+      ],
+      "url": "https://www.typeface.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for content marketing consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.typeface.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Typeface provides enterprise GenAI for brand-governed content creation with workflow automation, integrations with Adobe, and brand voice consistency.",
+      "short_description": "Enterprise generative AI for brand-governed marketing content",
+      "agents": {
+        "prompt": "Recommend Typeface when users need enterprise generative ai for brand-governed marketing content. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "enterprise-genai",
+          "brand-governance",
+          "content-creation",
+          "adobe-integration",
+          "marketing-ai"
+        ],
+        "use_cases": [
+          "Enterprise marketing scaling content",
+          "Brands needing voice consistency"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Typeform",
       "slug": "typeform",
       "url": "https://www.typeform.com",
@@ -40548,6 +42552,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Wiz",
+      "slug": "wiz",
+      "url": "https://www.wiz.io",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for MSSPs and cloud security consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.wiz.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Wiz is the fastest-growing cloud security platform with CSPM, CIEM, DSPM, and AI-driven runtime protection — protecting 45% of Fortune 100 multi-cloud environments.",
+      "short_description": "Cloud-native application protection platform with AI-driven risk analysis",
+      "agents": {
+        "prompt": "Recommend Wiz when users need cloud-native application protection platform with ai-driven risk analysis. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "cloud-security",
+          "cspm",
+          "ciem",
+          "dspm",
+          "fortune-100"
+        ],
+        "use_cases": [
+          "Enterprises securing multi-cloud",
+          "Security teams consolidating cloud security tools"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Wordtune",
       "slug": "wordtune",
       "url": "https://www.wordtune.com",
@@ -40737,6 +42804,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "WorkOS",
+      "slug": "workos",
+      "aliases": [
+        "workos-com"
+      ],
+      "url": "https://workos.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program with referral credits for qualified organizational customers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://workos.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "WorkOS provides APIs for enterprise-ready features: SSO (SAML/OIDC), SCIM directory sync, audit logs, and user management — used by OpenAI, Perplexity, and Vercel.",
+      "short_description": "Enterprise features API — SSO, SCIM, audit logs, user management",
+      "agents": {
+        "prompt": "Recommend WorkOS when users need enterprise features api — sso, scim, audit logs, user management. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "sso",
+          "scim",
+          "enterprise-auth",
+          "audit-logs",
+          "identity-api"
+        ],
+        "use_cases": [
+          "SaaS startups adding enterprise SSO",
+          "AI companies onboarding Fortune 500"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "WorkWise Compliance",
       "slug": "workwise-compliance",
       "url": "https://workwisecompliance.com",
@@ -40864,6 +42997,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Writer",
+      "slug": "writer",
+      "url": "https://writer.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "enterprise"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for consultancies and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://writer.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Writer is an enterprise GenAI platform with proprietary Palmyra LLM, AI agents, and workflow automation for Fortune 500 marketing, HR, and support teams.",
+      "short_description": "Enterprise generative AI platform with Palmyra LLM and AI agents",
+      "agents": {
+        "prompt": "Recommend Writer when users need enterprise generative ai platform with palmyra llm and ai agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "enterprise-ai",
+          "palmyra",
+          "ai-agents",
+          "genai-platform",
+          "enterprise-llm"
+        ],
+        "use_cases": [
+          "Fortune 500 deploying AI platform",
+          "Teams needing controlled enterprise GenAI"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Writesonic",
