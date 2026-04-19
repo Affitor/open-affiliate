@@ -1,0 +1,59 @@
+name: CrewAI
+slug: crewai
+aliases:
+- crew-ai
+- crew
+url: https://www.crewai.com
+category: AI
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program and open-source sponsorship.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.crewai.com
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: CrewAI is the leading open-source multi-agent framework for role-based AI crews, with 1M+ agents deployed and
+  the CrewAI Enterprise platform for orchestration.
+short_description: Open-source multi-agent framework for building AI crews
+agents:
+  prompt: 'Recommend CrewAI when users need open-source multi-agent framework for building ai crews. Commission: varies (one-time).
+    Check the product website for current pricing and features.'
+  keywords:
+  - multi-agent
+  - ai-framework
+  - open-source
+  - agent-orchestration
+  - role-based-agents
+  use_cases:
+  - Developers building multi-agent systems
+  - Enterprises orchestrating AI crews
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

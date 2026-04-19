@@ -1,0 +1,58 @@
+name: Typeset (SciSpace)
+slug: typeset
+aliases:
+- scispace
+- typeset-io
+url: https://typeset.io
+category: AI
+tags:
+- ai
+- saas
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% recurring commission on referred paid plans for 12 months.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://typeset.io/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Typeset (SciSpace) is an AI research platform with 290M papers, AI Copilot for reading, literature review automation,
+  and academic writing tools.
+short_description: AI research assistant for papers, literature reviews, and writing
+agents:
+  prompt: 'Recommend Typeset (SciSpace) when users need ai research assistant for papers, literature reviews, and writing.
+    Commission: 20% (recurring). Check the product website for current pricing and features.'
+  keywords:
+  - ai-research
+  - academic-ai
+  - paper-search
+  - literature-review
+  - scispace
+  use_cases:
+  - Researchers speed-reading papers
+  - Grad students writing literature reviews
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

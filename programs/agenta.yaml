@@ -1,0 +1,58 @@
+name: Agenta
+slug: agenta
+aliases:
+- agenta-ai
+url: https://agenta.ai
+category: Developer Tools
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Open-source community and enterprise partnership program.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://agenta.ai
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Agenta is an open-source LLM dev platform combining prompt management, evaluations, deployment, and observability
+  — a Langfuse/LangSmith alternative.
+short_description: Open-source LLM app development platform with eval and prompt management
+agents:
+  prompt: 'Recommend Agenta when users need open-source llm app development platform with eval and prompt management. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - llm-ops
+  - open-source
+  - prompt-management
+  - evaluation
+  - llm-development
+  use_cases:
+  - Teams wanting self-hosted LLM ops
+  - Devs prototyping LLM apps with evals
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

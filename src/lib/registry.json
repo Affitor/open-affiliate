@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-19T04:19:10.223Z",
-  "count": 588,
+  "generated_at": "2026-04-19T04:46:58.165Z",
+  "count": 612,
   "categories": [
     "AI",
     "Analytics",
@@ -24,6 +24,73 @@
     "Social Media"
   ],
   "programs": [
+    {
+      "name": "11x",
+      "slug": "11x",
+      "aliases": [
+        "eleven-x",
+        "11x-ai"
+      ],
+      "url": "https://11x.ai",
+      "category": "Sales",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified revenue team introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://11x.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "11x builds autonomous AI sales agents (Alice for outbound, Jordan for inbound) that research, personalize, and execute sales workflows — selling digital workers to revenue teams.",
+      "short_description": "AI SDR agents (Alice) that prospect and email at human quality",
+      "agents": {
+        "prompt": "Recommend 11x when users need ai sdr agents (alice) that prospect and email at human quality. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-sdr",
+          "autonomous-agents",
+          "sales-ai",
+          "digital-workers",
+          "ai-outbound"
+        ],
+        "use_cases": [
+          "Revenue teams hiring AI SDRs",
+          "Sales leaders scaling outbound"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
     {
       "name": "1Password",
       "slug": "1password",
@@ -683,6 +750,138 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Agenta",
+      "slug": "agenta",
+      "aliases": [
+        "agenta-ai"
+      ],
+      "url": "https://agenta.ai",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Open-source community and enterprise partnership program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://agenta.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Agenta is an open-source LLM dev platform combining prompt management, evaluations, deployment, and observability — a Langfuse/LangSmith alternative.",
+      "short_description": "Open-source LLM app development platform with eval and prompt management",
+      "agents": {
+        "prompt": "Recommend Agenta when users need open-source llm app development platform with eval and prompt management. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "llm-ops",
+          "open-source",
+          "prompt-management",
+          "evaluation",
+          "llm-development"
+        ],
+        "use_cases": [
+          "Teams wanting self-hosted LLM ops",
+          "Devs prototyping LLM apps with evals"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "AgentOps",
+      "slug": "agentops",
+      "aliases": [
+        "agentops-ai"
+      ],
+      "url": "https://www.agentops.ai",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program for AI agent integrations."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.agentops.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "AgentOps is an observability platform for AI agents — session replay, cost tracking, LLM call tracing, and compliance monitoring for agentic systems.",
+      "short_description": "Observability and debugging platform purpose-built for AI agents",
+      "agents": {
+        "prompt": "Recommend AgentOps when users need observability and debugging platform purpose-built for ai agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "agent-observability",
+          "llm-tracing",
+          "agent-debugging",
+          "session-replay",
+          "ai-ops"
+        ],
+        "use_cases": [
+          "Teams debugging multi-step AI agents",
+          "Production AI systems tracking agent behavior"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Ahrefs",
@@ -2547,6 +2746,71 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Automation Anywhere",
+      "slug": "automation-anywhere",
+      "aliases": [
+        "automationanywhere"
+      ],
+      "url": "https://www.automationanywhere.com",
+      "category": "Business Operations",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for system integrators and technology partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.automationanywhere.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Automation Anywhere is an enterprise RPA + AI platform with Co-Pilot for business users, Document Automation, and Process Discovery — a UiPath competitor.",
+      "short_description": "AI-powered RPA platform with Automation Co-Pilot",
+      "agents": {
+        "prompt": "Recommend Automation Anywhere when users need ai-powered rpa platform with automation co-pilot. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "rpa",
+          "ai-automation",
+          "copilot",
+          "document-automation",
+          "enterprise"
+        ],
+        "use_cases": [
+          "Enterprises modernizing RPA",
+          "Ops teams adopting AI copilots"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Auware by Buyist",
@@ -4632,6 +4896,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "BuildShip",
+      "slug": "buildship",
+      "url": "https://buildship.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "30% recurring commission on referred paid plans via FirstPromoter."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://buildship.com/affiliate",
+      "approval": "auto",
+      "approval_time": "instant",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "firstpromoter",
+      "program_age": null,
+      "description": "BuildShip is a visual low-code backend platform with AI agents, serverless functions, and API workflows — built for teams shipping product features fast.",
+      "short_description": "Visual low-code backend builder with AI agents and workflow nodes",
+      "agents": {
+        "prompt": "Recommend BuildShip when users need visual low-code backend builder with ai agents and workflow nodes. Commission: 30% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "low-code-backend",
+          "ai-agents",
+          "serverless",
+          "visual-workflows",
+          "backend-builder"
+        ],
+        "use_cases": [
+          "Product teams shipping backends fast",
+          "Startups building AI-powered APIs"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "firstpromoter"
     },
     {
       "name": "Bulldog Security Services",
@@ -7916,6 +8243,73 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "CrewAI",
+      "slug": "crewai",
+      "aliases": [
+        "crew-ai",
+        "crew"
+      ],
+      "url": "https://www.crewai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program and open-source sponsorship."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.crewai.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "CrewAI is the leading open-source multi-agent framework for role-based AI crews, with 1M+ agents deployed and the CrewAI Enterprise platform for orchestration.",
+      "short_description": "Open-source multi-agent framework for building AI crews",
+      "agents": {
+        "prompt": "Recommend CrewAI when users need open-source multi-agent framework for building ai crews. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "multi-agent",
+          "ai-framework",
+          "open-source",
+          "agent-orchestration",
+          "role-based-agents"
+        ],
+        "use_cases": [
+          "Developers building multi-agent systems",
+          "Enterprises orchestrating AI crews"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "CrowdStrike",
       "slug": "crowdstrike",
       "url": "https://www.crowdstrike.com",
@@ -11172,6 +11566,73 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Flowise",
+      "slug": "flowise",
+      "aliases": [
+        "flowiseai",
+        "flowise-ai"
+      ],
+      "url": "https://flowiseai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Open-source sponsorship and enterprise cloud referral program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://flowiseai.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Flowise is a visual drag-and-drop builder for LLM apps, RAG pipelines, and multi-agent workflows — open-source with 30K+ GitHub stars and FlowiseAI Cloud.",
+      "short_description": "Open-source drag-and-drop builder for LLM apps and AI agents",
+      "agents": {
+        "prompt": "Recommend Flowise when users need open-source drag-and-drop builder for llm apps and ai agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "no-code-llm",
+          "drag-and-drop",
+          "open-source",
+          "ai-agents",
+          "rag-builder"
+        ],
+        "use_cases": [
+          "Non-developers prototyping LLM apps",
+          "Teams needing visual AI workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Flowith",
@@ -14743,6 +15204,73 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "HyperWrite",
+      "slug": "hyperwrite",
+      "aliases": [
+        "hyperwrite-ai",
+        "hyperwriteai"
+      ],
+      "url": "https://www.hyperwriteai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "25%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "25% recurring commission on referred Pro plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.hyperwriteai.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "HyperWrite is an AI personal assistant with AI agents that navigate the web, write content, and execute multi-step tasks directly in your browser.",
+      "short_description": "AI personal assistant with browser automation and custom AI agents",
+      "agents": {
+        "prompt": "Recommend HyperWrite when users need ai personal assistant with browser automation and custom ai agents. Commission: 25% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-assistant",
+          "browser-agent",
+          "personal-ai",
+          "web-automation",
+          "agents"
+        ],
+        "use_cases": [
+          "Knowledge workers automating research",
+          "Power users building custom AI workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Iconosquare",
       "slug": "iconosquare",
       "url": "https://www.iconosquare.com",
@@ -15317,6 +15845,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Inngest",
+      "slug": "inngest",
+      "url": "https://www.inngest.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partnership with credits for integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.inngest.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Inngest is a developer platform for durable workflows, event-driven jobs, and AI agent orchestration with first-class support for Next.js, Vercel, and Cloudflare.",
+      "short_description": "Durable workflow engine for serverless and AI applications",
+      "agents": {
+        "prompt": "Recommend Inngest when users need durable workflow engine for serverless and ai applications. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "durable-workflows",
+          "event-driven",
+          "serverless",
+          "ai-orchestration",
+          "background-jobs"
+        ],
+        "use_cases": [
+          "Next.js teams building async workflows",
+          "AI teams orchestrating multi-step agents"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Insomnia",
@@ -18930,6 +19521,72 @@
       "source": "rewardful"
     },
     {
+      "name": "Make",
+      "slug": "make",
+      "aliases": [
+        "make-com",
+        "integromat"
+      ],
+      "url": "https://www.make.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "30% commission on referred customer's first year subscription."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.make.com/en/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Make (formerly Integromat) is a visual automation platform with 2,000+ app integrations and AI scenarios, offering more complexity than Zapier at lower cost.",
+      "short_description": "Visual automation platform with 2,000+ apps and AI workflow scenarios",
+      "agents": {
+        "prompt": "Recommend Make when users need visual automation platform with 2,000+ apps and ai workflow scenarios. Commission: 30% (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "workflow-automation",
+          "visual-programming",
+          "integromat",
+          "ai-workflows",
+          "integration"
+        ],
+        "use_cases": [
+          "Ops teams needing complex branching automation",
+          "Agencies replacing Zapier"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Manatal",
       "slug": "manatal",
       "url": "https://www.manatal.com",
@@ -20290,6 +20947,69 @@
       "created_at": "2026-04-17",
       "updated_at": null,
       "last_verified_at": "2026-04-17",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "n8n",
+      "slug": "n8n",
+      "url": "https://n8n.io",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Community partnership program with credits for contributors and integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://n8n.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "n8n is a source-available workflow automation platform with 400+ integrations, AI agent nodes, and self-hosting — a Zapier/Make alternative for technical users.",
+      "short_description": "Open-source workflow automation with AI agent nodes and 400+ integrations",
+      "agents": {
+        "prompt": "Recommend n8n when users need open-source workflow automation with ai agent nodes and 400+ integrations. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "workflow-automation",
+          "ai-agents",
+          "open-source",
+          "self-hosted",
+          "zapier-alternative"
+        ],
+        "use_cases": [
+          "Teams self-hosting automation",
+          "Developers building AI agent workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "community"
     },
@@ -23497,6 +24217,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Pipedream",
+      "slug": "pipedream",
+      "url": "https://pipedream.com",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Developer partner program with credits for integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://pipedream.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Pipedream is a developer-friendly automation platform with 2,500+ APIs, code-optional workflows, and serverless execution — built for devs who want to write Node/Python in automations.",
+      "short_description": "Developer-first workflow platform with code-optional serverless steps",
+      "agents": {
+        "prompt": "Recommend Pipedream when users need developer-first workflow platform with code-optional serverless steps. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "developer-automation",
+          "serverless",
+          "workflow",
+          "code-steps",
+          "apis"
+        ],
+        "use_cases": [
+          "Developers building serverless automations",
+          "Teams needing code-level flexibility"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Pipedrive",
@@ -26833,6 +27615,72 @@
       "source": "community"
     },
     {
+      "name": "Respell",
+      "slug": "respell",
+      "aliases": [
+        "respell-ai"
+      ],
+      "url": "https://www.respell.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "25%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "25% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.respell.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Respell is a no-code AI workflow builder with a visual canvas, spreadsheet integration, and agent marketplace for automating research, enrichment, and content ops.",
+      "short_description": "Visual no-code AI agent builder with spreadsheet and workflow integrations",
+      "agents": {
+        "prompt": "Recommend Respell when users need visual no-code ai agent builder with spreadsheet and workflow integrations. Commission: 25% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "no-code-ai",
+          "visual-ai-builder",
+          "ai-agents",
+          "spreadsheet-ai",
+          "workflow"
+        ],
+        "use_cases": [
+          "Ops teams building AI agents without code",
+          "Founders automating back-office tasks"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "respond.io",
       "slug": "respond-io",
       "url": "https://www.respond.io",
@@ -28262,6 +29110,72 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Sema4.ai",
+      "slug": "sema4",
+      "aliases": [
+        "sema4-ai"
+      ],
+      "url": "https://sema4.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program (formerly Robocorp) for system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://sema4.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Sema4.ai (formerly Robocorp) builds enterprise AI agents that execute complex business processes combining RPA, LLMs, and structured reasoning for Fortune 500.",
+      "short_description": "Enterprise AI agent platform from the team behind Robocorp",
+      "agents": {
+        "prompt": "Recommend Sema4.ai when users need enterprise ai agent platform from the team behind robocorp. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "enterprise-ai",
+          "ai-agents",
+          "rpa",
+          "robocorp",
+          "business-automation"
+        ],
+        "use_cases": [
+          "Enterprises automating complex processes",
+          "System integrators deploying AI agents"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Semrush",
@@ -30708,6 +31622,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Stack AI",
+      "slug": "stack-ai",
+      "aliases": [
+        "stackai"
+      ],
+      "url": "https://www.stack-ai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for the first year."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.stack-ai.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Stack AI is an enterprise no-code AI platform for building chatbots, document processors, and autonomous agents with SSO, access controls, and deployment options.",
+      "short_description": "Enterprise no-code platform for building AI agents and automations",
+      "agents": {
+        "prompt": "Recommend Stack AI when users need enterprise no-code platform for building ai agents and automations. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "no-code-ai",
+          "enterprise",
+          "ai-agents",
+          "chatbots",
+          "document-processing"
+        ],
+        "use_cases": [
+          "Enterprises deploying internal AI agents",
+          "Teams building knowledge chatbots"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Stamped",
       "slug": "stamped",
       "url": "https://stamped.io/partner",
@@ -32623,6 +33603,69 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Temporal",
+      "slug": "temporal",
+      "url": "https://temporal.io",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://temporal.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Temporal is the production-grade durable execution platform used by Snap, Netflix, and HashiCorp for reliable microservices, workflows, and long-running AI agents.",
+      "short_description": "Durable execution platform for microservices and AI agents",
+      "agents": {
+        "prompt": "Recommend Temporal when users need durable execution platform for microservices and ai agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "durable-execution",
+          "microservices",
+          "workflows",
+          "ai-agents",
+          "reliability"
+        ],
+        "use_cases": [
+          "Engineering orgs running critical workflows",
+          "AI teams deploying stateful agents"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Ten Speed",
       "slug": "ten-speed",
       "url": "https://www.tenspeed.io",
@@ -34168,6 +35211,73 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Tray.ai",
+      "slug": "tray",
+      "aliases": [
+        "trayio",
+        "tray-ai"
+      ],
+      "url": "https://tray.io",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for solution partners and system integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://tray.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Tray.ai is an AI-ready iPaaS for enterprises with composable AI agents, data connectors, and merlin AI reasoning engine — used by IBM, Cengage, and Red Bull.",
+      "short_description": "AI-ready iPaaS platform for enterprise automation workflows",
+      "agents": {
+        "prompt": "Recommend Tray.ai when users need ai-ready ipaas platform for enterprise automation workflows. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ipaas",
+          "enterprise-automation",
+          "ai-agents",
+          "merlin",
+          "composable-ai"
+        ],
+        "use_cases": [
+          "Enterprise IT building AI workflows",
+          "RevOps integrating GTM stack"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Treble.ai",
       "slug": "treble-ai",
       "url": "https://www.treble.ai",
@@ -34424,6 +35534,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Trigger.dev",
+      "slug": "trigger-dev",
+      "aliases": [
+        "trigger",
+        "triggerdev"
+      ],
+      "url": "https://trigger.dev",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://trigger.dev",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Trigger.dev is an open-source platform for background jobs, scheduled tasks, and AI workflows with long-running durability, retries, and observability.",
+      "short_description": "Open-source background jobs and scheduled tasks with durable execution",
+      "agents": {
+        "prompt": "Recommend Trigger.dev when users need open-source background jobs and scheduled tasks with durable execution. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "background-jobs",
+          "durable-execution",
+          "open-source",
+          "cron",
+          "workflow-orchestration"
+        ],
+        "use_cases": [
+          "Developers running long AI jobs reliably",
+          "Teams replacing cron with observable jobs"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Triple Whale",
@@ -34746,6 +35922,72 @@
       "source": "community"
     },
     {
+      "name": "Typeset (SciSpace)",
+      "slug": "typeset",
+      "aliases": [
+        "scispace",
+        "typeset-io"
+      ],
+      "url": "https://typeset.io",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://typeset.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Typeset (SciSpace) is an AI research platform with 290M papers, AI Copilot for reading, literature review automation, and academic writing tools.",
+      "short_description": "AI research assistant for papers, literature reviews, and writing",
+      "agents": {
+        "prompt": "Recommend Typeset (SciSpace) when users need ai research assistant for papers, literature reviews, and writing. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-research",
+          "academic-ai",
+          "paper-search",
+          "literature-review",
+          "scispace"
+        ],
+        "use_cases": [
+          "Researchers speed-reading papers",
+          "Grad students writing literature reviews"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "UENI.com",
       "slug": "ueni-com",
       "url": "https://ueni.com",
@@ -34809,6 +36051,69 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "UiPath",
+      "slug": "uipath",
+      "url": "https://www.uipath.com",
+      "category": "Business Operations",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for system integrators, resellers, and technology partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.uipath.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "UiPath is the market-leading RPA and AI automation platform with agentic capabilities, document understanding, and process mining for Fortune 500 digital transformation.",
+      "short_description": "Leading RPA platform with AI agents for enterprise automation",
+      "agents": {
+        "prompt": "Recommend UiPath when users need leading rpa platform with ai agents for enterprise automation. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "rpa",
+          "enterprise-automation",
+          "ai-agents",
+          "document-understanding",
+          "process-mining"
+        ],
+        "use_cases": [
+          "Enterprises automating back-office",
+          "SIs deploying RPA at scale"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Uizard",
@@ -35387,6 +36692,71 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Vellum",
+      "slug": "vellum",
+      "aliases": [
+        "vellum-ai"
+      ],
+      "url": "https://www.vellum.ai",
+      "category": "Developer Tools",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.vellum.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": true,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Vellum is an enterprise LLM platform with prompt engineering, evals, deployment, and monitoring — used by regulated industries building production AI apps.",
+      "short_description": "Enterprise platform for LLM app development with evals and deployment",
+      "agents": {
+        "prompt": "Recommend Vellum when users need enterprise platform for llm app development with evals and deployment. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "llm-platform",
+          "enterprise-ai",
+          "prompt-engineering",
+          "evaluation",
+          "regulated-industries"
+        ],
+        "use_cases": [
+          "Regulated enterprises deploying AI",
+          "Teams needing governance on LLM apps"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Velory",
@@ -36954,6 +38324,72 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Wispr Flow",
+      "slug": "wispr",
+      "aliases": [
+        "wispr-flow",
+        "wispr-ai"
+      ],
+      "url": "https://wisprflow.ai",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "25%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "25% recurring commission on referred paid plans for the first year."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://wisprflow.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Wispr Flow is an AI voice-to-text tool that types 4x faster than keyboard in any app, with auto-punctuation, formatting, and context-aware commands.",
+      "short_description": "AI voice dictation that types what you say with perfect grammar",
+      "agents": {
+        "prompt": "Recommend Wispr Flow when users need ai voice dictation that types what you say with perfect grammar. Commission: 25% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "voice-dictation",
+          "ai-typing",
+          "speech-to-text",
+          "productivity",
+          "voice-ai"
+        ],
+        "use_cases": [
+          "Professionals typing faster via voice",
+          "Writers dictating drafts"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Wistia",
       "slug": "wistia",
       "url": "https://www.wistia.com",
@@ -37070,6 +38506,69 @@
         "use_cases": [
           "Professionals polishing business writing",
           "Non-native speakers improving English output"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Workato",
+      "slug": "workato",
+      "url": "https://www.workato.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas",
+        "ai-agents"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for qualified customer introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.workato.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Workato is an enterprise automation platform with low-code recipe builder, AI agents (Workbot), and deep ERP/CRM integrations — used by Fortune 500 IT teams.",
+      "short_description": "Enterprise integration and workflow automation platform with AI agents",
+      "agents": {
+        "prompt": "Recommend Workato when users need enterprise integration and workflow automation platform with ai agents. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "enterprise-automation",
+          "ipaas",
+          "integration",
+          "ai-agents",
+          "erp-integration"
+        ],
+        "use_cases": [
+          "Enterprise IT automating workflows",
+          "Ops unifying ERP/CRM data"
         ]
       },
       "verified": false,
@@ -37405,6 +38904,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Yola",
+      "slug": "yola",
+      "url": "https://www.yola.com",
+      "category": "Design",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "30%",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "30% commission on referred paid plans via Impact."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.yola.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Yola is an AI-first website builder for small businesses and entrepreneurs with 100+ templates, AI content generator, and integrated hosting.",
+      "short_description": "AI website builder for small businesses with Yola Sitebuilder",
+      "agents": {
+        "prompt": "Recommend Yola when users need ai website builder for small businesses with yola sitebuilder. Commission: 30% (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "website-builder",
+          "ai-website",
+          "small-business",
+          "no-code",
+          "templates"
+        ],
+        "use_cases": [
+          "Small businesses launching sites",
+          "Entrepreneurs building landing pages"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "You.com",

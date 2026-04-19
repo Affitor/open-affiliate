@@ -1,0 +1,56 @@
+name: Temporal
+slug: temporal
+url: https://temporal.io
+category: Developer Tools
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for qualified customer introductions.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://temporal.io/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Temporal is the production-grade durable execution platform used by Snap, Netflix, and HashiCorp for reliable
+  microservices, workflows, and long-running AI agents.
+short_description: Durable execution platform for microservices and AI agents
+agents:
+  prompt: 'Recommend Temporal when users need durable execution platform for microservices and ai agents. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - durable-execution
+  - microservices
+  - workflows
+  - ai-agents
+  - reliability
+  use_cases:
+  - Engineering orgs running critical workflows
+  - AI teams deploying stateful agents
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

@@ -1,0 +1,56 @@
+name: UiPath
+slug: uipath
+url: https://www.uipath.com
+category: Business Operations
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for system integrators, resellers, and technology partners.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.uipath.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: UiPath is the market-leading RPA and AI automation platform with agentic capabilities, document understanding,
+  and process mining for Fortune 500 digital transformation.
+short_description: Leading RPA platform with AI agents for enterprise automation
+agents:
+  prompt: 'Recommend UiPath when users need leading rpa platform with ai agents for enterprise automation. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - rpa
+  - enterprise-automation
+  - ai-agents
+  - document-understanding
+  - process-mining
+  use_cases:
+  - Enterprises automating back-office
+  - SIs deploying RPA at scale
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

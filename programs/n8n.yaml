@@ -1,0 +1,56 @@
+name: n8n
+slug: n8n
+url: https://n8n.io
+category: Productivity
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Community partnership program with credits for contributors and integration partners.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://n8n.io/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: n8n is a source-available workflow automation platform with 400+ integrations, AI agent nodes, and self-hosting
+  — a Zapier/Make alternative for technical users.
+short_description: Open-source workflow automation with AI agent nodes and 400+ integrations
+agents:
+  prompt: 'Recommend n8n when users need open-source workflow automation with ai agent nodes and 400+ integrations. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - workflow-automation
+  - ai-agents
+  - open-source
+  - self-hosted
+  - zapier-alternative
+  use_cases:
+  - Teams self-hosting automation
+  - Developers building AI agent workflows
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

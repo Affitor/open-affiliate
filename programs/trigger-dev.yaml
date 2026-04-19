@@ -1,0 +1,58 @@
+name: Trigger.dev
+slug: trigger-dev
+aliases:
+- trigger
+- triggerdev
+url: https://trigger.dev
+category: Developer Tools
+tags:
+- ai
+- saas
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% recurring commission on referred paid plans for 12 months.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://trigger.dev
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Trigger.dev is an open-source platform for background jobs, scheduled tasks, and AI workflows with long-running
+  durability, retries, and observability.
+short_description: Open-source background jobs and scheduled tasks with durable execution
+agents:
+  prompt: 'Recommend Trigger.dev when users need open-source background jobs and scheduled tasks with durable execution. Commission:
+    20% (recurring). Check the product website for current pricing and features.'
+  keywords:
+  - background-jobs
+  - durable-execution
+  - open-source
+  - cron
+  - workflow-orchestration
+  use_cases:
+  - Developers running long AI jobs reliably
+  - Teams replacing cron with observable jobs
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

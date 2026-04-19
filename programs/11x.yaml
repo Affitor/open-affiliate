@@ -1,0 +1,59 @@
+name: 11x
+slug: 11x
+aliases:
+- eleven-x
+- 11x-ai
+url: https://11x.ai
+category: Sales
+tags:
+- ai
+- saas
+- ai-agents
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for qualified revenue team introductions.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://11x.ai
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: 11x builds autonomous AI sales agents (Alice for outbound, Jordan for inbound) that research, personalize, and
+  execute sales workflows — selling digital workers to revenue teams.
+short_description: AI SDR agents (Alice) that prospect and email at human quality
+agents:
+  prompt: 'Recommend 11x when users need ai sdr agents (alice) that prospect and email at human quality. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - ai-sdr
+  - autonomous-agents
+  - sales-ai
+  - digital-workers
+  - ai-outbound
+  use_cases:
+  - Revenue teams hiring AI SDRs
+  - Sales leaders scaling outbound
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community
