@@ -1,8 +1,18 @@
 import { unstable_cache } from "next/cache"
+import { createClient } from "@supabase/supabase-js"
 import { getProgram } from "@/lib/programs"
 
 const RAPIDAPI_KEY = process.env.RAPIDAPI_KEY ?? ""
 const APIFY_API_KEY = process.env.APIFY_API_KEY ?? ""
+
+// Supabase client for persisting raw social data
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL ?? ""
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY ?? ""
+const canPersist = Boolean(supabaseUrl && supabaseKey)
+
+function getSupabase() {
+  return createClient(supabaseUrl, supabaseKey)
+}
 
 export interface SocialItem {
   platform: "youtube" | "tiktok" | "x" | "reddit" | "blog"
@@ -334,6 +344,33 @@ async function fetchBlogs(query: string, programDomain: string): Promise<SocialI
   }
 }
 
+// --- Persist raw data to Supabase (fire-and-forget) ---
+
+async function persistSocialItems(slug: string, items: SocialItem[]): Promise<void> {
+  if (!canPersist || items.length === 0) return
+  try {
+    const rows = items.map((item) => ({
+      program_slug: slug,
+      platform: item.platform,
+      title: item.title.slice(0, 500),
+      url: item.url,
+      thumbnail: item.thumbnail ?? null,
+      author: item.author,
+      views: item.views ?? 0,
+      likes: item.likes ?? 0,
+      snippet: item.snippet?.slice(0, 500) ?? null,
+      quality_score: item.qualityScore ?? computeQualityScore(item),
+      published_at: item.publishedAt ?? null,
+    }))
+    // Upsert by URL — updates views/likes/score on re-fetch
+    await getSupabase()
+      .from("social_items")
+      .upsert(rows, { onConflict: "url", ignoreDuplicates: false })
+  } catch {
+    // Non-critical — don't break the page if DB is down
+  }
+}
+
 // --- Main exported function ---
 
 async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
@@ -371,23 +408,26 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     r.status === "fulfilled" ? r.value : []
   )
 
-  // 1. Filter
-  const filtered = raw.filter((item) => {
+  // Score ALL raw items for storage
+  const allScored = raw.map((item) => ({
+    ...item,
+    qualityScore: computeQualityScore(item),
+  }))
+
+  // Persist ALL raw data to Supabase (fire-and-forget, non-blocking)
+  persistSocialItems(slug, allScored).catch(() => {})
+
+  // 1. Filter for display
+  const filtered = allScored.filter((item) => {
     const min = MIN_VIEWS[item.platform] ?? 0
     const engagement = item.views ?? item.likes ?? 0
     if (engagement < min && item.platform !== "blog" && item.platform !== "reddit") return false
     return isRelevant(item.title, program.name)
   })
 
-  // 2. Score
-  const scored = filtered.map((item) => ({
-    ...item,
-    qualityScore: computeQualityScore(item),
-  }))
-
-  // 3. Deduplicate: max 2 per author
+  // 2. Deduplicate: max 2 per author
   const authorCount = new Map<string, number>()
-  const deduped = scored.filter((item) => {
+  const deduped = filtered.filter((item) => {
     const key = `${item.platform}:${item.author.toLowerCase()}`
     const count = authorCount.get(key) ?? 0
     if (count >= 2) return false
@@ -395,7 +435,7 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     return true
   })
 
-  // 4. Sort by quality, balanced platform mix
+  // 3. Sort by quality, balanced platform mix
   deduped.sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
 
   const PLATFORM_MAX: Record<string, number> = {
@@ -412,7 +452,7 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     if (balanced.length >= 11) break
   }
 
-  // 5. Sort by platform order
+  // 4. Sort by platform order
   const platformOrder: Record<string, number> = {
     youtube: 0, tiktok: 1, x: 2, reddit: 3, blog: 4,
   }
