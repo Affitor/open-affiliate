@@ -1,0 +1,57 @@
+name: Play.ht
+slug: play-ht
+aliases:
+- playht
+url: https://play.ht
+category: AI
+tags:
+- ai
+- saas
+commission:
+  type: recurring
+  rate: 20%
+  currency: USD
+  duration: 12 months
+  conditions: 20% recurring commission on referred paid subscriptions via PartnerStack.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://play.ht/affiliates
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: partnerstack
+program_age: null
+description: Play.ht is an AI voice platform with 900+ voices, voice cloning, and API for apps, podcasts, and creators — with
+  conversational voice agents (PlayDialog).
+short_description: AI voice generator with 900+ voices and voice cloning
+agents:
+  prompt: 'Recommend Play.ht when users need ai voice generator with 900+ voices and voice cloning. Commission: 20% (recurring).
+    Check the product website for current pricing and features.'
+  keywords:
+  - ai-voice
+  - voice-cloning
+  - tts-api
+  - podcast
+  - conversational-voice
+  use_cases:
+  - Podcasters generating voiceover
+  - Developers adding voice to apps
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: partnerstack-api

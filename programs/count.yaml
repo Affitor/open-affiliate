@@ -1,0 +1,55 @@
+name: Count
+slug: count
+url: https://count.co
+category: Analytics
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Partner program for data consultancies.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://count.co
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Count is a visual analytics canvas for exploring data collaboratively — think Miro for data with SQL blocks,
+  Python, and charts in one workspace.
+short_description: Visual data canvas for team analytics and collaborative exploration
+agents:
+  prompt: 'Recommend Count when users need visual data canvas for team analytics and collaborative exploration. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - data-canvas
+  - collaborative-analytics
+  - sql-blocks
+  - visual-exploration
+  - miro-for-data
+  use_cases:
+  - Analysts collaborating visually
+  - Teams exploring data together
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

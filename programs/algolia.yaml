@@ -1,0 +1,55 @@
+name: Algolia
+slug: algolia
+url: https://www.algolia.com
+category: Infrastructure
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Developer partner program with referral credits.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.algolia.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Algolia is the leading hosted search API with NeuralSearch (AI-powered semantic search), recommendation, and
+  merchandising — used by 17K+ companies including Stripe and Under Armour.
+short_description: Managed search API with NeuralSearch AI for production apps
+agents:
+  prompt: 'Recommend Algolia when users need managed search api with neuralsearch ai for production apps. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - search-api
+  - neural-search
+  - ai-search
+  - site-search
+  - developer-api
+  use_cases:
+  - Apps needing fast production search
+  - E-commerce adding semantic search
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

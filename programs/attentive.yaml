@@ -1,0 +1,55 @@
+name: Attentive
+slug: attentive
+url: https://www.attentive.com
+category: Marketing
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise partner program for e-commerce agencies.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.attentive.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Attentive is the leading AI-powered SMS marketing platform with personalization, segmentation, and campaign automation
+  — used by 8,000+ brands.
+short_description: AI-powered SMS marketing platform for retail and D2C brands
+agents:
+  prompt: 'Recommend Attentive when users need ai-powered sms marketing platform for retail and d2c brands. Commission: varies
+    (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - sms-marketing
+  - ai-personalization
+  - retail-marketing
+  - d2c
+  - customer-engagement
+  use_cases:
+  - D2C brands driving revenue via SMS
+  - Retailers scaling mobile engagement
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

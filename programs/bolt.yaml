@@ -1,0 +1,58 @@
+name: Bolt.new
+slug: bolt
+aliases:
+- bolt-new
+- stackblitz-bolt
+url: https://bolt.new
+category: Developer Tools
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Community partner program for developer content creators.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://bolt.new
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Bolt.new (StackBlitz) is an AI web app builder that prompts full-stack apps in-browser with WebContainers — no
+  setup required, instant dev env.
+short_description: AI full-stack web app builder from StackBlitz with in-browser dev env
+agents:
+  prompt: 'Recommend Bolt.new when users need ai full-stack web app builder from stackblitz with in-browser dev env. Commission:
+    varies (one-time). Check the product website for current pricing and features.'
+  keywords:
+  - ai-web-builder
+  - stackblitz
+  - webcontainers
+  - full-stack-ai
+  - in-browser
+  use_cases:
+  - Founders building MVPs instantly
+  - Devs prototyping with AI+browser
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

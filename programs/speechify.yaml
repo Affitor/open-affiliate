@@ -1,0 +1,55 @@
+name: Speechify
+slug: speechify
+url: https://speechify.com
+category: AI
+tags:
+- ai
+- saas
+commission:
+  type: recurring
+  rate: 15%
+  currency: USD
+  duration: 12 months
+  conditions: 15% recurring commission via Impact on referred paid plans for 12 months.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://speechify.com/affiliates
+approval: auto
+approval_time: instant
+restrictions: null
+marketing_materials: true
+api_available: true
+dedicated_manager: false
+dashboard_url: null
+network: impact
+program_age: null
+description: Speechify is an AI text-to-speech app turning any text into natural-sounding audio with 130+ voices including
+  celebrity AI voices — 50M+ users.
+short_description: AI text-to-speech reader for documents, books, and web pages
+agents:
+  prompt: 'Recommend Speechify when users need ai text-to-speech reader for documents, books, and web pages. Commission: 15%
+    (recurring). Check the product website for current pricing and features.'
+  keywords:
+  - text-to-speech
+  - ai-voice
+  - audio-reader
+  - celebrity-voices
+  - accessibility
+  use_cases:
+  - Students listening to study material
+  - Professionals consuming docs audio
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community
