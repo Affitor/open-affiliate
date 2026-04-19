@@ -1,0 +1,55 @@
+name: Intercom
+slug: intercom
+url: https://www.intercom.com
+category: Customer Support
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Partner program for system integrators and Fin AI agent partners.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.intercom.com/partners
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: impact
+program_age: null
+description: Intercom is a customer service platform with Fin AI agent that resolves 50%+ of support queries automatically
+  — used by Atlassian, Amazon, and Microsoft.
+short_description: AI-first customer service platform with Fin AI agent
+agents:
+  prompt: 'Recommend Intercom when users need ai-first customer service platform with fin ai agent. Commission: varies (one-time).
+    Check the product website for current pricing and features.'
+  keywords:
+  - ai-support
+  - customer-service
+  - fin-ai
+  - chatbot
+  - helpdesk
+  use_cases:
+  - SaaS teams deploying AI first-line support
+  - Support leaders reducing ticket volume
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community

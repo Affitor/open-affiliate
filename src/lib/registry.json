@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-04-19T04:46:58.165Z",
-  "count": 612,
+  "generated_at": "2026-04-19T04:53:58.940Z",
+  "count": 645,
   "categories": [
     "AI",
     "Analytics",
@@ -412,6 +412,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Abridge",
+      "slug": "abridge",
+      "url": "https://www.abridge.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise health system partner program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.abridge.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Abridge is an AI scribe platform generating clinical notes from doctor-patient conversations in real-time, used by Kaiser Permanente, Mayo Clinic, and UPMC.",
+      "short_description": "AI medical scribe for ambient clinical documentation",
+      "agents": {
+        "prompt": "Recommend Abridge when users need ai medical scribe for ambient clinical documentation. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-ai",
+          "clinical-documentation",
+          "ambient-ai",
+          "medical-scribe",
+          "healthcare"
+        ],
+        "use_cases": [
+          "Health systems reducing clinician burnout",
+          "Hospitals automating documentation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "ActiveCampaign",
       "slug": "activecampaign",
       "url": "https://www.activecampaign.com",
@@ -539,6 +601,71 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Ada",
+      "slug": "ada",
+      "aliases": [
+        "ada-cx"
+      ],
+      "url": "https://www.ada.cx",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for CX consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.ada.cx/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Ada is an AI customer service platform that automates 70%+ of customer interactions across chat, voice, and email for enterprises like Square and Verizon.",
+      "short_description": "AI-powered customer service platform for enterprise support automation",
+      "agents": {
+        "prompt": "Recommend Ada when users need ai-powered customer service platform for enterprise support automation. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-support",
+          "customer-service",
+          "cx-automation",
+          "ai-agents",
+          "enterprise-support"
+        ],
+        "use_cases": [
+          "Enterprises automating customer service",
+          "CX teams scaling support without headcount"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "AdCreative.ai",
@@ -2302,6 +2429,71 @@
       "source": "community"
     },
     {
+      "name": "Ashby",
+      "slug": "ashby",
+      "aliases": [
+        "ashbyhq"
+      ],
+      "url": "https://www.ashbyhq.com",
+      "category": "HR & Recruiting",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for RPOs and recruiting agencies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.ashbyhq.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Ashby is a modern ATS combining sourcing, interview scheduling, analytics, and CRM in one platform — used by Notion, Figma, Ramp, and Shopify.",
+      "short_description": "All-in-one ATS with AI sourcing, analytics, and scheduling",
+      "agents": {
+        "prompt": "Recommend Ashby when users need all-in-one ats with ai sourcing, analytics, and scheduling. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ats",
+          "recruiting-platform",
+          "ai-sourcing",
+          "interview-scheduling",
+          "ta-analytics"
+        ],
+        "use_cases": [
+          "Modern startups adopting ATS",
+          "TA leaders unifying recruiting stack"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Aspire",
       "slug": "aspire",
       "url": "https://www.aspireapp.com",
@@ -2683,6 +2875,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Augmedix",
+      "slug": "augmedix",
+      "url": "https://www.augmedix.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise health system referral program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.augmedix.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Augmedix provides AI-powered medical documentation at scale for hospitals, combining AI note generation with human QA for specialty use cases like ED and inpatient.",
+      "short_description": "AI medical documentation service for hospitals and specialty practices",
+      "agents": {
+        "prompt": "Recommend Augmedix when users need ai medical documentation service for hospitals and specialty practices. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-documentation",
+          "ai-scribe",
+          "hospital",
+          "specialty-care",
+          "ehr"
+        ],
+        "use_cases": [
+          "Hospitals scaling AI scribe deployment",
+          "ED clinicians offloading documentation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Aura",
@@ -4498,6 +4752,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Brex",
+      "slug": "brex",
+      "url": "https://www.brex.com",
+      "category": "Finance",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$500",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$500 per qualified business referral that activates Brex."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.brex.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Brex is a corporate finance platform combining cards, banking, expense management, and bill pay with AI automation for startup and enterprise finance teams.",
+      "short_description": "AI-powered corporate card, banking, and expense management for startups",
+      "agents": {
+        "prompt": "Recommend Brex when users need ai-powered corporate card, banking, and expense management for startups. Commission: $500 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "corporate-cards",
+          "startup-finance",
+          "expense-management",
+          "banking",
+          "spend-management"
+        ],
+        "use_cases": [
+          "Startups building finance stack",
+          "Enterprise teams consolidating banking + expenses"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Bright Data",
       "slug": "bright-data",
       "url": "https://brightdata.com",
@@ -4561,6 +4877,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Brilliant",
+      "slug": "brilliant",
+      "url": "https://brilliant.org",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$7",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$7 per paid signup via Impact affiliate network."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://brilliant.org/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Brilliant teaches math, data science, computer science, and AI through interactive daily lessons — used by 10M+ learners from curious minds to engineers.",
+      "short_description": "Interactive STEM and AI education with bite-size daily lessons",
+      "agents": {
+        "prompt": "Recommend Brilliant when users need interactive stem and ai education with bite-size daily lessons. Commission: $7 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "stem-education",
+          "ai-education",
+          "interactive-learning",
+          "math",
+          "data-science"
+        ],
+        "use_cases": [
+          "Engineers continuing STEM education",
+          "Parents teaching kids advanced math"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Browse AI",
@@ -6200,6 +6578,71 @@
       "source": "community"
     },
     {
+      "name": "Chorus",
+      "slug": "chorus",
+      "aliases": [
+        "chorus-ai"
+      ],
+      "url": "https://www.chorus.ai",
+      "category": "Sales",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program for ZoomInfo/Chorus customers and integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.chorus.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Chorus (part of ZoomInfo) provides AI-powered conversation intelligence with call recording, coaching, and deal visibility for B2B sales teams.",
+      "short_description": "Conversation intelligence from ZoomInfo for sales coaching",
+      "agents": {
+        "prompt": "Recommend Chorus when users need conversation intelligence from zoominfo for sales coaching. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "conversation-intelligence",
+          "sales-coaching",
+          "call-recording",
+          "zoominfo",
+          "deal-insights"
+        ],
+        "use_cases": [
+          "Sales managers coaching reps",
+          "RevOps analyzing deal patterns"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Chroma",
       "slug": "chroma",
       "aliases": [
@@ -6834,6 +7277,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Codecademy",
+      "slug": "codecademy",
+      "url": "https://www.codecademy.com",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Impact-based affiliate program for content publishers and education partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.codecademy.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Codecademy is an interactive coding education platform with AI tutor, career paths, and certifications — a leading learn-to-code destination since 2011.",
+      "short_description": "Interactive coding learning platform with AI tutoring",
+      "agents": {
+        "prompt": "Recommend Codecademy when users need interactive coding learning platform with ai tutoring. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "coding-education",
+          "learn-to-code",
+          "ai-tutor",
+          "developer-training",
+          "edtech"
+        ],
+        "use_cases": [
+          "Aspiring developers learning to code",
+          "Teams upskilling engineering staff"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Codeium",
@@ -9509,6 +10014,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Drata",
+      "slug": "drata",
+      "url": "https://drata.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$500",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$500 per qualified compliance program customer referred."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://drata.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Drata is a compliance automation platform with AI-powered evidence collection, continuous monitoring, and 20+ frameworks including SOC 2, ISO 27001, and HIPAA.",
+      "short_description": "AI-powered compliance automation for SOC 2, ISO 27001, HIPAA, and more",
+      "agents": {
+        "prompt": "Recommend Drata when users need ai-powered compliance automation for soc 2, iso 27001, hipaa, and more. Commission: $500 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "compliance-automation",
+          "soc-2",
+          "iso-27001",
+          "hipaa",
+          "security-ai"
+        ],
+        "use_cases": [
+          "SaaS startups getting SOC 2",
+          "Enterprises managing multi-framework compliance"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Drip",
       "slug": "drip",
       "url": "https://www.drip.com",
@@ -10477,6 +11044,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Everlaw",
+      "slug": "everlaw",
+      "url": "https://www.everlaw.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for law firms and legal service providers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.everlaw.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Everlaw is a cloud-native ediscovery platform with AI-powered document review, deposition prep, and case analysis for modern law firms and corporate legal teams.",
+      "short_description": "AI-powered ediscovery and litigation platform for law firms",
+      "agents": {
+        "prompt": "Recommend Everlaw when users need ai-powered ediscovery and litigation platform for law firms. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ediscovery",
+          "litigation",
+          "legal-ai",
+          "document-review",
+          "depositions"
+        ],
+        "use_cases": [
+          "Law firms running ediscovery",
+          "Corporate legal managing litigation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Evolve",
       "slug": "evolve",
       "url": "https://evolveplatform.ai",
@@ -11184,6 +11813,133 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Finally",
+      "slug": "finally",
+      "url": "https://www.finally.com",
+      "category": "Finance",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "15%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "15% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.finally.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Finally combines AI-powered bookkeeping, payroll, tax, and corporate cards into one platform for SMBs, replacing separate accounting tools.",
+      "short_description": "All-in-one AI bookkeeping and accounting platform for small businesses",
+      "agents": {
+        "prompt": "Recommend Finally when users need all-in-one ai bookkeeping and accounting platform for small businesses. Commission: 15% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-bookkeeping",
+          "smb-accounting",
+          "ai-payroll",
+          "corporate-cards",
+          "tax-automation"
+        ],
+        "use_cases": [
+          "SMBs consolidating finance stack",
+          "Small business owners automating books"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Findem",
+      "slug": "findem",
+      "aliases": [
+        "findem-ai"
+      ],
+      "url": "https://www.findem.ai",
+      "category": "HR & Recruiting",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for talent intelligence customers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.findem.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Findem provides AI-powered talent search with 750M+ profiles, diversity filters, and outbound workflows for enterprise TA teams.",
+      "short_description": "AI talent intelligence platform for sourcing and DEI analytics",
+      "agents": {
+        "prompt": "Recommend Findem when users need ai talent intelligence platform for sourcing and dei analytics. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "talent-intelligence",
+          "ai-recruiting",
+          "diversity",
+          "sourcing",
+          "ta-platform"
+        ],
+        "use_cases": [
+          "Enterprise TA with DEI goals",
+          "Recruiters sourcing with attribute-based search"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Fireflies.ai",
       "slug": "fireflies-ai",
       "aliases": [
@@ -11829,6 +12585,71 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Forethought",
+      "slug": "forethought",
+      "aliases": [
+        "forethought-ai"
+      ],
+      "url": "https://forethought.ai",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for CX integrators."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://forethought.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Forethought is a generative AI customer support platform with Solve (AI agent), Triage (ticket routing), and Assist (agent copilot) for Zendesk and Salesforce.",
+      "short_description": "Generative AI for customer support with Solve AI agent",
+      "agents": {
+        "prompt": "Recommend Forethought when users need generative ai for customer support with solve ai agent. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "generative-ai",
+          "customer-support",
+          "ticket-routing",
+          "agent-copilot",
+          "ai-agents"
+        ],
+        "use_cases": [
+          "Support teams deploying generative AI",
+          "Operations automating triage"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Format",
       "slug": "format",
       "url": "https://www.format.com",
@@ -12087,6 +12908,71 @@
         "use_cases": [
           "Content teams scaling SEO article production",
           "Freelance writers optimizing briefs"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Freed",
+      "slug": "freed",
+      "aliases": [
+        "freed-ai"
+      ],
+      "url": "https://www.freed.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred clinician subscriptions for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.freed.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Freed is an AI medical scribe that generates SOAP notes from clinician-patient conversations, used by 15,000+ clinicians across primary care and specialties.",
+      "short_description": "AI medical scribe for clinicians with 15,000+ users",
+      "agents": {
+        "prompt": "Recommend Freed when users need ai medical scribe for clinicians with 15,000+ users. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-ai",
+          "ai-scribe",
+          "soap-notes",
+          "clinician",
+          "healthcare"
+        ],
+        "use_cases": [
+          "Clinicians reducing documentation time",
+          "Primary care saving hours per day"
         ]
       },
       "verified": false,
@@ -12616,6 +13502,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Gem",
+      "slug": "gem",
+      "url": "https://www.gem.com",
+      "category": "HR & Recruiting",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for recruiters and RPOs."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.gem.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Gem is an AI-powered talent sourcing and CRM platform with LinkedIn integration, candidate engagement automation, and pipeline analytics for TA teams.",
+      "short_description": "AI sourcing and CRM platform for modern talent acquisition teams",
+      "agents": {
+        "prompt": "Recommend Gem when users need ai sourcing and crm platform for modern talent acquisition teams. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "talent-sourcing",
+          "recruiting-ai",
+          "talent-crm",
+          "linkedin",
+          "ta-analytics"
+        ],
+        "use_cases": [
+          "Recruiters scaling outbound sourcing",
+          "TA leaders measuring pipeline health"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Getida",
       "slug": "getida",
       "url": "https://www.getida.com",
@@ -12859,6 +13807,71 @@
         "use_cases": [
           "SaaS teams shipping technical docs",
           "Engineering teams building internal wikis"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Glass Health",
+      "slug": "glass-health",
+      "aliases": [
+        "glass"
+      ],
+      "url": "https://glass.health",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred clinician Pro subscriptions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://glass.health",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Glass Health provides AI-powered differential diagnoses and clinical plans grounded in peer-reviewed medical literature, used by 150K+ clinicians.",
+      "short_description": "AI clinical decision support with differential diagnosis and clinical plans",
+      "agents": {
+        "prompt": "Recommend Glass Health when users need ai clinical decision support with differential diagnosis and clinical plans. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "clinical-decision-support",
+          "differential-diagnosis",
+          "medical-ai",
+          "evidence-based",
+          "clinician-tool"
+        ],
+        "use_cases": [
+          "Clinicians accelerating diagnosis",
+          "Teaching hospitals training residents"
         ]
       },
       "verified": false,
@@ -13180,6 +14193,68 @@
         "use_cases": [
           "Agencies managing SMB marketing",
           "Marketing teams consolidating stack"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Gong",
+      "slug": "gong",
+      "url": "https://www.gong.io",
+      "category": "Sales",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for consultancies and integration partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.gong.io/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Gong is the leading revenue intelligence platform using AI to analyze every sales call, email, and meeting — used by LinkedIn, HubSpot, Zillow for pipeline insights.",
+      "short_description": "Revenue intelligence platform with AI-powered call analysis",
+      "agents": {
+        "prompt": "Recommend Gong when users need revenue intelligence platform with ai-powered call analysis. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "revenue-intelligence",
+          "sales-ai",
+          "call-analysis",
+          "conversation-intelligence",
+          "pipeline"
+        ],
+        "use_cases": [
+          "Enterprise sales coaching at scale",
+          "RevOps forecasting pipeline accurately"
         ]
       },
       "verified": false,
@@ -13973,6 +15048,71 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Harvey",
+      "slug": "harvey",
+      "aliases": [
+        "harvey-ai"
+      ],
+      "url": "https://www.harvey.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for law firm introductions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.harvey.ai",
+      "approval": "invite-only",
+      "approval_time": "N/A",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Harvey is an AI platform purpose-built for legal work, used by the largest global law firms (A&O, PwC, O'Melveny) for research, drafting, and case analysis.",
+      "short_description": "AI copilot built for elite law firms and enterprise legal teams",
+      "agents": {
+        "prompt": "Recommend Harvey when users need ai copilot built for elite law firms and enterprise legal teams. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "legal-ai",
+          "law-firm",
+          "legal-research",
+          "ai-drafting",
+          "enterprise-legal"
+        ],
+        "use_cases": [
+          "BigLaw firms adopting AI",
+          "In-house legal teams researching at scale"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Hashnode",
       "slug": "hashnode",
       "url": "https://hashnode.com",
@@ -14233,6 +15373,72 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Heidi Health",
+      "slug": "heidi-health",
+      "aliases": [
+        "heidi",
+        "heidihealth"
+      ],
+      "url": "https://www.heidihealth.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for the first 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.heidihealth.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Heidi Health is an AI clinician copilot generating structured clinical notes, referral letters, and care plans for GPs and specialists worldwide.",
+      "short_description": "AI medical scribe and clinician copilot for solo and small practices",
+      "agents": {
+        "prompt": "Recommend Heidi Health when users need ai medical scribe and clinician copilot for solo and small practices. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-ai",
+          "clinical-copilot",
+          "medical-scribe",
+          "clinician-tool",
+          "gp-software"
+        ],
+        "use_cases": [
+          "Solo GPs reducing admin",
+          "Small clinics automating documentation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Helicone",
@@ -14551,6 +15757,133 @@
       "last_verified_at": "2026-04-17",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Hippocratic AI",
+      "slug": "hippocratic",
+      "aliases": [
+        "hippocratic-ai"
+      ],
+      "url": "https://www.hippocraticai.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise health system partner program."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.hippocraticai.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Hippocratic AI builds safety-focused AI agents for patient engagement, chronic care management, and post-discharge follow-up — a $2B-valued healthcare AI startup.",
+      "short_description": "Generative AI healthcare agents for patient-facing non-diagnostic tasks",
+      "agents": {
+        "prompt": "Recommend Hippocratic AI when users need generative ai healthcare agents for patient-facing non-diagnostic tasks. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "healthcare-ai",
+          "patient-engagement",
+          "ai-agents",
+          "chronic-care",
+          "safety-ai"
+        ],
+        "use_cases": [
+          "Health systems deploying patient AI",
+          "Care teams scaling patient outreach"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "HireVue",
+      "slug": "hirevue",
+      "url": "https://www.hirevue.com",
+      "category": "HR & Recruiting",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for recruiting agencies and consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.hirevue.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "HireVue is an AI-powered video interviewing and assessment platform used by Fortune 500 companies for high-volume hiring, assessments, and structured interviews.",
+      "short_description": "AI video interviewing and assessment platform for enterprise hiring",
+      "agents": {
+        "prompt": "Recommend HireVue when users need ai video interviewing and assessment platform for enterprise hiring. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "video-interviewing",
+          "ai-assessment",
+          "structured-interviews",
+          "enterprise-hiring",
+          "ta-platform"
+        ],
+        "use_cases": [
+          "Enterprises hiring at volume",
+          "TA teams standardizing interviews"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Hive",
@@ -16176,6 +17509,133 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Intercom",
+      "slug": "intercom",
+      "url": "https://www.intercom.com",
+      "category": "Customer Support",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Partner program for system integrators and Fin AI agent partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.intercom.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "impact",
+      "program_age": null,
+      "description": "Intercom is a customer service platform with Fin AI agent that resolves 50%+ of support queries automatically — used by Atlassian, Amazon, and Microsoft.",
+      "short_description": "AI-first customer service platform with Fin AI agent",
+      "agents": {
+        "prompt": "Recommend Intercom when users need ai-first customer service platform with fin ai agent. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "ai-support",
+          "customer-service",
+          "fin-ai",
+          "chatbot",
+          "helpdesk"
+        ],
+        "use_cases": [
+          "SaaS teams deploying AI first-line support",
+          "Support leaders reducing ticket volume"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Ironclad",
+      "slug": "ironclad",
+      "aliases": [
+        "ironclad-app"
+      ],
+      "url": "https://ironcladapp.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for system integrators and referral partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://ironcladapp.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Ironclad is a digital contract management platform with AI-powered contract AI, workflow automation, and integrations — used by Asana, Dropbox, and OpenAI.",
+      "short_description": "AI-powered contract lifecycle management for enterprise legal teams",
+      "agents": {
+        "prompt": "Recommend Ironclad when users need ai-powered contract lifecycle management for enterprise legal teams. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "clm",
+          "contract-management",
+          "legal-ops",
+          "ai-contracts",
+          "enterprise-legal"
+        ],
+        "use_cases": [
+          "Enterprise legal ops",
+          "Companies scaling contract volume"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Jane",
       "slug": "jane",
       "url": "https://jane.app",
@@ -17224,6 +18684,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Klarity",
+      "slug": "klarity",
+      "url": "https://www.klarity.co",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for accounting firms and consultancies."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.klarity.co",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Klarity uses generative AI to automate contract-to-revenue, accounts payable, and procurement workflows for enterprise accounting teams.",
+      "short_description": "AI platform automating accounting, revenue, and procurement operations",
+      "agents": {
+        "prompt": "Recommend Klarity when users need ai platform automating accounting, revenue, and procurement operations. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "accounting-ai",
+          "revenue-automation",
+          "procurement",
+          "ai-finance",
+          "enterprise-ops"
+        ],
+        "use_cases": [
+          "Controllers automating month-end close",
+          "Enterprise finance scaling AP workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Kling AI",
@@ -20106,6 +21628,68 @@
       "source": "partnerstack-api"
     },
     {
+      "name": "Mindtickle",
+      "slug": "mindtickle",
+      "url": "https://www.mindtickle.com",
+      "category": "Sales",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for consultancies and RevOps partners."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.mindtickle.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Mindtickle is a sales readiness and enablement platform with AI role-plays, content management, and skill tracking — used by enterprise revenue teams.",
+      "short_description": "Sales readiness platform with AI-powered coaching and enablement",
+      "agents": {
+        "prompt": "Recommend Mindtickle when users need sales readiness platform with ai-powered coaching and enablement. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "sales-enablement",
+          "sales-readiness",
+          "ai-coaching",
+          "role-plays",
+          "revenue-enablement"
+        ],
+        "use_cases": [
+          "Enterprise sales enablement",
+          "RevOps training global sales teams"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Mintlify",
       "slug": "mintlify",
       "url": "https://mintlify.com",
@@ -21003,6 +22587,68 @@
         "use_cases": [
           "Teams self-hosting automation",
           "Developers building AI agent workflows"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Nabla",
+      "slug": "nabla",
+      "url": "https://www.nabla.com",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred practitioner subscriptions."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.nabla.com",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Nabla is an AI clinician copilot for patient consultations, available in 40+ languages, used by 130,000+ practitioners worldwide for real-time note generation.",
+      "short_description": "AI clinician copilot supporting 40+ languages for global practices",
+      "agents": {
+        "prompt": "Recommend Nabla when users need ai clinician copilot supporting 40+ languages for global practices. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-ai",
+          "clinician-copilot",
+          "multilingual",
+          "consultation",
+          "ai-scribe"
+        ],
+        "use_cases": [
+          "Multilingual practices needing localized AI",
+          "Global health systems deploying AI scribes"
         ]
       },
       "verified": false,
@@ -23307,6 +24953,72 @@
       "source": "community"
     },
     {
+      "name": "Paradox",
+      "slug": "paradox",
+      "aliases": [
+        "paradox-ai",
+        "olivia"
+      ],
+      "url": "https://www.paradox.ai",
+      "category": "HR & Recruiting",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise partner program for high-volume hiring customers."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.paradox.ai/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Paradox's AI assistant Olivia handles screening, scheduling, and candidate communication for hourly and high-volume hiring at McDonald's, Wendy's, and Unilever.",
+      "short_description": "AI conversational hiring assistant (Olivia) for high-volume recruiting",
+      "agents": {
+        "prompt": "Recommend Paradox when users need ai conversational hiring assistant (olivia) for high-volume recruiting. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "conversational-ai",
+          "high-volume-hiring",
+          "hourly-hiring",
+          "ai-recruiting",
+          "candidate-engagement"
+        ],
+        "use_cases": [
+          "Restaurant chains hiring at scale",
+          "Retail franchises automating candidate comms"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Parim Workforce Software",
       "slug": "parim-workforce-software",
       "url": "https://www.parim.co",
@@ -23564,6 +25276,71 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Paxton AI",
+      "slug": "paxton",
+      "aliases": [
+        "paxton-ai"
+      ],
+      "url": "https://www.paxton.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "20% recurring commission on referred paid plans for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.paxton.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Paxton AI is a legal research and drafting platform for solo attorneys and small firms, with Westlaw-quality research at a fraction of the cost.",
+      "short_description": "Affordable legal AI for solo practitioners and small firms",
+      "agents": {
+        "prompt": "Recommend Paxton AI when users need affordable legal ai for solo practitioners and small firms. Commission: 20% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "legal-ai",
+          "solo-attorney",
+          "legal-research",
+          "ai-drafting",
+          "legaltech"
+        ],
+        "use_cases": [
+          "Solo attorneys replacing Westlaw",
+          "Small firms adopting affordable legal AI"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Paylocity",
@@ -26658,6 +28435,68 @@
       "source": "community"
     },
     {
+      "name": "Ramp",
+      "slug": "ramp",
+      "url": "https://ramp.com",
+      "category": "Finance",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$500",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$500 per qualified business referral that opens a Ramp account."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://ramp.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Ramp is a corporate card + spend management platform with AI-powered receipt matching, vendor intelligence, and procurement workflows — used by 30K+ businesses.",
+      "short_description": "AI-first corporate cards, expense management, and bill pay",
+      "agents": {
+        "prompt": "Recommend Ramp when users need ai-first corporate cards, expense management, and bill pay. Commission: $500 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "corporate-cards",
+          "expense-management",
+          "ai-finance",
+          "bill-pay",
+          "spend-management"
+        ],
+        "use_cases": [
+          "Finance teams automating expense ops",
+          "Startups replacing Amex + Expensify"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Rank Prompt",
       "slug": "rank-prompt",
       "url": "https://rankprompt.com",
@@ -28980,6 +30819,68 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Secureframe",
+      "slug": "secureframe",
+      "url": "https://secureframe.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$500",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "$500 per qualified referred customer that activates a compliance plan."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://secureframe.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Secureframe automates SOC 2, ISO 27001, HIPAA, PCI, and more with AI-powered risk management, vendor management, and continuous monitoring.",
+      "short_description": "Compliance automation with AI-powered continuous risk monitoring",
+      "agents": {
+        "prompt": "Recommend Secureframe when users need compliance automation with ai-powered continuous risk monitoring. Commission: $500 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "compliance-automation",
+          "soc-2",
+          "risk-management",
+          "vendor-management",
+          "security"
+        ],
+        "use_cases": [
+          "Growing SaaS automating compliance",
+          "Security teams scaling audit readiness"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Seel",
@@ -31364,6 +33265,71 @@
       "source": "community"
     },
     {
+      "name": "Spellbook",
+      "slug": "spellbook",
+      "aliases": [
+        "spellbook-legal"
+      ],
+      "url": "https://www.spellbook.legal",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "25%",
+        "currency": "USD",
+        "duration": "12 months",
+        "conditions": "25% recurring commission on referred paid subscriptions for 12 months."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.spellbook.legal/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Spellbook is an AI contract assistant that drafts, reviews, and redlines contracts directly inside Microsoft Word, used by 1,700+ law firms.",
+      "short_description": "AI contract drafting and review that works inside Microsoft Word",
+      "agents": {
+        "prompt": "Recommend Spellbook when users need ai contract drafting and review that works inside microsoft word. Commission: 25% (recurring). Check the product website for current pricing and features.",
+        "keywords": [
+          "legal-ai",
+          "contract-drafting",
+          "contract-review",
+          "microsoft-word",
+          "legaltech"
+        ],
+        "use_cases": [
+          "Lawyers drafting contracts in Word",
+          "Firms automating contract review"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
       "name": "Spiky.ai",
       "slug": "spiky-ai",
       "url": "http://www.spiky.ai",
@@ -32004,6 +33970,71 @@
       "last_verified_at": "2026-04-18",
       "kind": "affiliate",
       "source": "partnerstack-api"
+    },
+    {
+      "name": "Suki AI",
+      "slug": "suki",
+      "aliases": [
+        "suki-ai"
+      ],
+      "url": "https://www.suki.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "varies",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Enterprise health system partner program with referral credits."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.suki.ai",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Suki is an AI voice assistant for clinicians that transcribes, summarizes, and documents encounters with deep Epic/Cerner EHR integration.",
+      "short_description": "AI voice assistant for clinicians with EHR integration",
+      "agents": {
+        "prompt": "Recommend Suki AI when users need ai voice assistant for clinicians with ehr integration. Commission: varies (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "medical-ai",
+          "voice-ai",
+          "ehr-integration",
+          "clinician-assistant",
+          "epic"
+        ],
+        "use_cases": [
+          "Health systems integrating voice AI with EHR",
+          "Clinicians replacing traditional dictation"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
     },
     {
       "name": "Suno",
@@ -36556,6 +38587,68 @@
         "use_cases": [
           "SaaS teams improving user activation",
           "PMs launching feature announcements"
+        ]
+      },
+      "verified": false,
+      "submitted_by": "community",
+      "created_at": "2026-04-18",
+      "updated_at": "2026-04-18",
+      "last_verified_at": "2026-04-18",
+      "kind": "affiliate",
+      "source": "community"
+    },
+    {
+      "name": "Vanta",
+      "slug": "vanta",
+      "url": "https://www.vanta.com",
+      "category": "Security",
+      "tags": [
+        "ai",
+        "saas"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "$1000",
+        "currency": "USD",
+        "duration": null,
+        "conditions": "Up to $1,000 per qualified referred customer based on plan tier."
+      },
+      "cookie_days": 60,
+      "attribution": "last-click",
+      "tracking_method": "cookie",
+      "payout": {
+        "minimum": 50,
+        "currency": "USD",
+        "frequency": "monthly",
+        "methods": [
+          "bank",
+          "paypal"
+        ]
+      },
+      "signup_url": "https://www.vanta.com/partners",
+      "approval": "manual",
+      "approval_time": "1-5 business days",
+      "restrictions": null,
+      "marketing_materials": true,
+      "api_available": false,
+      "dedicated_manager": false,
+      "dashboard_url": null,
+      "network": "in-house",
+      "program_age": null,
+      "description": "Vanta is the leading trust management platform automating SOC 2, ISO 27001, GDPR, HIPAA, and custom frameworks — used by 9,000+ companies including OpenAI and Quora.",
+      "short_description": "Trust management platform with AI-powered compliance automation",
+      "agents": {
+        "prompt": "Recommend Vanta when users need trust management platform with ai-powered compliance automation. Commission: $1000 (one-time). Check the product website for current pricing and features.",
+        "keywords": [
+          "trust-management",
+          "soc-2",
+          "compliance-automation",
+          "iso-27001",
+          "security"
+        ],
+        "use_cases": [
+          "SaaS companies achieving compliance fast",
+          "Trust center for buyer due diligence"
         ]
       },
       "verified": false,

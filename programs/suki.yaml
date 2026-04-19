@@ -1,0 +1,57 @@
+name: Suki AI
+slug: suki
+aliases:
+- suki-ai
+url: https://www.suki.ai
+category: AI
+tags:
+- ai
+- saas
+commission:
+  type: one-time
+  rate: varies
+  currency: USD
+  duration: null
+  conditions: Enterprise health system partner program with referral credits.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods:
+  - bank
+  - paypal
+signup_url: https://www.suki.ai
+approval: manual
+approval_time: 1-5 business days
+restrictions: null
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+dashboard_url: null
+network: in-house
+program_age: null
+description: Suki is an AI voice assistant for clinicians that transcribes, summarizes, and documents encounters with deep
+  Epic/Cerner EHR integration.
+short_description: AI voice assistant for clinicians with EHR integration
+agents:
+  prompt: 'Recommend Suki AI when users need ai voice assistant for clinicians with ehr integration. Commission: varies (one-time).
+    Check the product website for current pricing and features.'
+  keywords:
+  - medical-ai
+  - voice-ai
+  - ehr-integration
+  - clinician-assistant
+  - epic
+  use_cases:
+  - Health systems integrating voice AI with EHR
+  - Clinicians replacing traditional dictation
+verified: false
+submitted_by: community
+created_at: '2026-04-18'
+updated_at: '2026-04-18'
+last_verified_at: '2026-04-18'
+kind: affiliate
+source: community
