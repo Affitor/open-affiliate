@@ -24,7 +24,7 @@ const PLATFORM_CONFIG: Record<string, { label: string; color: string; icon: stri
 }
 
 /** Video/media card — YouTube, TikTok */
-function MediaCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
+function MediaCard({ item }: { item: SocialItem }) {
   const platform = PLATFORM_CONFIG[item.platform]
   return (
     <a
@@ -33,7 +33,7 @@ function MediaCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
       rel="noopener noreferrer"
       className="group flex gap-3 rounded-lg border border-border/40 bg-card/30 p-3 transition-all hover:border-border hover:bg-card/60 relative"
     >
-      {isTop && <TopBadge />}
+      {item.siftScore != null && item.siftScore >= 5 && <SiftBadge score={item.siftScore} tag={item.siftTag} />}
       {item.thumbnail ? (
         <img
           src={item.thumbnail}
@@ -63,7 +63,7 @@ function MediaCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
 }
 
 /** Text card — X, Reddit, Blog (no thumbnail, compact) */
-function TextCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
+function TextCard({ item }: { item: SocialItem }) {
   const platform = PLATFORM_CONFIG[item.platform]
   const engagement = item.views ?? item.likes ?? 0
   return (
@@ -73,7 +73,7 @@ function TextCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
       rel="noopener noreferrer"
       className="group block rounded-lg border border-border/40 bg-card/30 p-3 transition-all hover:border-border hover:bg-card/60 relative"
     >
-      {isTop && <TopBadge />}
+      {item.siftScore != null && item.siftScore >= 5 && <SiftBadge score={item.siftScore} tag={item.siftTag} />}
       <p className="text-xs font-medium line-clamp-2 text-foreground/90 group-hover:text-foreground">
         {item.title}
       </p>
@@ -93,10 +93,16 @@ function TextCard({ item, isTop }: { item: SocialItem; isTop: boolean }) {
   )
 }
 
-function TopBadge() {
+function SiftBadge({ score, tag }: { score: number; tag?: string | null }) {
+  const color = score >= 7
+    ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
+    : score >= 5
+      ? "bg-amber-500/15 border-amber-500/30 text-amber-600 dark:text-amber-400"
+      : "bg-muted border-border text-muted-foreground"
+  const label = tag ? tag.replace(/_/g, " ") : `${score}/10`
   return (
-    <span className="absolute -top-2 right-2 rounded-full bg-amber-500/15 border border-amber-500/30 px-1.5 py-0.5 text-[9px] font-medium text-amber-600 dark:text-amber-400">
-      Top
+    <span className={`absolute -top-2 right-2 rounded-full border px-1.5 py-0.5 text-[9px] font-medium ${color}`}>
+      {label}
     </span>
   )
 }
@@ -104,7 +110,6 @@ function TopBadge() {
 function PlatformSection({ platform, items }: { platform: string; items: SocialItem[] }) {
   if (items.length === 0) return null
   const config = PLATFORM_CONFIG[platform] ?? PLATFORM_CONFIG.x
-  const topScore = Math.max(...items.map((i) => i.qualityScore ?? 0))
   const CardComponent = config.hasMedia ? MediaCard : TextCard
 
   return (
@@ -116,11 +121,7 @@ function PlatformSection({ platform, items }: { platform: string; items: SocialI
       </div>
       <div className={`grid gap-2 ${config.hasMedia ? "grid-cols-1 sm:grid-cols-2" : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"}`}>
         {items.map((item) => (
-          <CardComponent
-            key={item.url}
-            item={item}
-            isTop={(item.qualityScore ?? 0) === topScore && topScore > 0}
-          />
+          <CardComponent key={item.url} item={item} />
         ))}
       </div>
     </div>
@@ -144,7 +145,7 @@ export function SocialListen({ items }: { items?: SocialItem[] }) {
           Live
         </span>
         <span className="text-[10px] text-muted-foreground ml-auto">
-          Sorted by engagement × recency
+          Sorted by SIFT relevance score
         </span>
       </div>
       <div className="space-y-4">

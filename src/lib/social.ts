@@ -25,6 +25,8 @@ export interface SocialItem {
   publishedAt?: string
   snippet?: string
   qualityScore?: number
+  siftScore?: number | null
+  siftTag?: string | null
 }
 
 // --- Relevance & scoring ---
@@ -368,6 +370,28 @@ async function persistSocialItems(slug: string, items: SocialItem[]): Promise<vo
   }
 }
 
+// --- SIFT score enrichment ---
+
+async function enrichWithSiftScores(slug: string, items: SocialItem[]): Promise<SocialItem[]> {
+  if (!canPersist || items.length === 0) return items
+  try {
+    const { data } = await getSupabase()
+      .from("social_items")
+      .select("url, sift_score, sift_tag")
+      .eq("program_slug", slug)
+      .not("sift_score", "is", null)
+    if (!data || data.length === 0) return items
+    const scoreMap = new Map(data.map((r: { url: string; sift_score: number; sift_tag: string }) => [r.url, r]))
+    return items.map((item) => {
+      const scored = scoreMap.get(item.url)
+      if (!scored) return item
+      return { ...item, siftScore: scored.sift_score, siftTag: scored.sift_tag }
+    })
+  } catch {
+    return items
+  }
+}
+
 // --- Main exported function ---
 
 async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
@@ -431,8 +455,12 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
   // Persist ALL raw data to Supabase (fire-and-forget, non-blocking)
   persistSocialItems(slug, allScored).catch(() => {})
 
-  // 1. Filter for display
-  const filtered = allScored.filter((item) => {
+  // Enrich with SIFT scores from DB (items scored by the SIFT pipeline)
+  const enriched = await enrichWithSiftScores(slug, allScored)
+
+  // 1. Filter: remove SIFT junk (score 0-2) if scored, otherwise use relevance check
+  const filtered = enriched.filter((item) => {
+    if (item.siftScore != null && item.siftScore <= 2) return false
     const min = MIN_VIEWS[item.platform] ?? 0
     const engagement = item.views ?? item.likes ?? 0
     if (engagement < min && item.platform !== "blog" && item.platform !== "reddit") return false
@@ -449,8 +477,13 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     return true
   })
 
-  // 3. Sort by quality, balanced platform mix
-  deduped.sort((a, b) => (b.qualityScore ?? 0) - (a.qualityScore ?? 0))
+  // 3. Sort by SIFT score (if available), then quality score. Balanced platform mix.
+  deduped.sort((a, b) => {
+    const sa = a.siftScore ?? -1
+    const sb = b.siftScore ?? -1
+    if (sa !== sb) return sb - sa
+    return (b.qualityScore ?? 0) - (a.qualityScore ?? 0)
+  })
 
   const PLATFORM_MAX: Record<string, number> = {
     youtube: 4, tiktok: 2, x: 2, reddit: 2, blog: 2,
@@ -466,7 +499,7 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     if (balanced.length >= 11) break
   }
 
-  // 4. Sort by platform order
+  // 4. Sort by platform order, then SIFT score within platform
   const platformOrder: Record<string, number> = {
     youtube: 0, tiktok: 1, x: 2, reddit: 3, blog: 4,
   }
@@ -474,6 +507,9 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
     const pa = platformOrder[a.platform] ?? 9
     const pb = platformOrder[b.platform] ?? 9
     if (pa !== pb) return pa - pb
+    const sa = a.siftScore ?? -1
+    const sb = b.siftScore ?? -1
+    if (sa !== sb) return sb - sa
     return (b.qualityScore ?? 0) - (a.qualityScore ?? 0)
   })
 

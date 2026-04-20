@@ -33,9 +33,9 @@ export const docsNav: DocsSidebarGroup[] = [
   {
     label: "Guides",
     items: [
-      { title: "Content Lab", href: "/docs/content-lab", description: "Generate affiliate content with AI from real program data." },
       { title: "Submit a Program", href: "/docs/submit", description: "Add your affiliate program to the open registry." },
       { title: "What is Open Source?", href: "/docs/open-source", description: "Why the registry is open and what that means for you." },
+      { title: "Content Scoring (SIFT)", href: "/docs/sift-scoring", description: "How AI scores social content relevance from 0 to 10." },
       { title: "Contributing", href: "/docs/contributing", description: "How to contribute programs, fixes, and features." },
     ],
   },
