@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import {
   Program,
   Platform,
@@ -198,37 +197,7 @@ export default function ContentLab() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* Header */}
-      <header className="border-b border-white/10 px-6 py-4">
-        <div className="max-w-6xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center font-bold text-sm">
-              OA
-            </div>
-            <span className="font-semibold text-lg">Content Lab</span>
-            <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-              v2
-            </span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link
-              href="/"
-              className="text-sm text-white/50 hover:text-white/80 transition"
-            >
-              Registry
-            </Link>
-            <a
-              href="https://openaffiliate.dev/lab"
-              className="text-sm text-white/50 hover:text-white/80 transition"
-            >
-              Lab v1
-            </a>
-          </div>
-        </div>
-      </header>
-
-      <main className="max-w-6xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-6 py-8">
         {/* Steps */}
         <div className="flex items-center gap-2 mb-8">
           {["Program", "Pipeline", "Generate", "Output"].map((s, i) => (
@@ -862,38 +831,30 @@ export default function ContentLab() {
             )}
           </div>
         )}
-      </main>
 
-      {/* Footer */}
-      <footer className="border-t border-white/10 px-6 py-6 mt-16">
-        <div className="max-w-6xl mx-auto flex flex-col gap-3">
-          <div className="flex items-center justify-between text-xs text-white/30">
-            <span>
-              AI by{" "}
-              <a
-                href="https://kymaapi.com"
-                target="_blank"
-                className="text-[#fcbb00]/60 hover:text-[#fcbb00]"
-              >
-                Kyma API
-              </a>{" "}
-              · Data by{" "}
-              <a
-                href="https://openaffiliate.dev"
-                target="_blank"
-                className="text-emerald-400/60 hover:text-emerald-400"
-              >
-                OpenAffiliate
-              </a>
-            </span>
-            <span>
-              {remaining !== null
-                ? `${remaining} generations remaining today`
-                : "Free — 30 generations/day"}
-            </span>
-          </div>
+        {/* Kyma + usage info */}
+        <div className="mt-12 flex items-center justify-between text-xs text-white/30">
+          <span>
+            AI by{" "}
+            <a
+              href="https://kymaapi.com"
+              target="_blank"
+              className="text-[#fcbb00]/60 hover:text-[#fcbb00]"
+            >
+              Kyma API
+            </a>{" "}
+            · {remaining !== null
+              ? `${remaining} generations remaining today`
+              : "Free — 30 generations/day"}
+          </span>
+          <a
+            href="https://kymaapi.com/signup"
+            target="_blank"
+            className="text-[#fcbb00]/40 hover:text-[#fcbb00]/70 transition"
+          >
+            Get free API credits →
+          </a>
         </div>
-      </footer>
     </div>
   );
 }
