@@ -30,12 +30,23 @@ export default function SiftScoringPage() {
             Reddit threads, and blog posts, then assigns a relevance score
             from 0 to 10.
           </p>
-          <p className="text-base text-muted-foreground leading-relaxed">
+          <p className="text-base text-muted-foreground leading-relaxed mb-6">
             The goal is to surface real reviews and affiliate-driven content
             while filtering out name collisions, spam, and unrelated posts.
             Instead of manually sifting through hundreds of results, affiliates
             can immediately focus on content that actually matters.
           </p>
+          <div className="rounded-2xl border border-border/50 overflow-hidden">
+            <img
+              src="/docs/sift-explore-verified.png"
+              alt="Explore page showing Verified (7+) content filtered by SIFT score"
+              className="w-full"
+              loading="lazy"
+            />
+            <p className="text-xs text-muted-foreground/60 px-4 py-2 bg-muted/20">
+              The Explore page with Verified (7+) filter — only confirmed reviews, tutorials, and affiliate content
+            </p>
+          </div>
         </section>
 
         {/* How It Works */}
@@ -129,6 +140,17 @@ export default function SiftScoringPage() {
             The Explore page lets you filter content by SIFT score threshold.
             Each tier is designed for a different use case:
           </p>
+          <div className="rounded-2xl border border-border/50 overflow-hidden mb-6">
+            <img
+              src="/docs/sift-explore-all.png"
+              alt="Explore page showing All Content with SIFT scores and tags visible"
+              className="w-full"
+              loading="lazy"
+            />
+            <p className="text-xs text-muted-foreground/60 px-4 py-2 bg-muted/20">
+              All Content view — each item shows its SIFT score and tag. Use the dropdown to filter by quality tier.
+            </p>
+          </div>
           <div className="overflow-x-auto rounded-2xl border border-border/50">
             <table className="w-full text-sm">
               <thead>
