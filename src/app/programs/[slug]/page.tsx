@@ -35,8 +35,14 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
+export const revalidate = 86400;
+export const dynamicParams = true;
+
 export function generateStaticParams() {
-  return programs.map((p) => ({ slug: p.slug }));
+  const top = [...programs]
+    .sort((a, b) => affiliateScore(b) - affiliateScore(a))
+    .slice(0, 50);
+  return top.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({

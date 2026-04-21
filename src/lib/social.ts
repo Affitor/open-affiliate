@@ -392,12 +392,55 @@ async function enrichWithSiftScores(slug: string, items: SocialItem[]): Promise<
   }
 }
 
+// --- Supabase-first read: skip Apify if we already have fresh rows ---
+
+const FRESH_WINDOW_MS = 7 * 86400000
+
+async function loadFreshFromSupabase(slug: string): Promise<SocialItem[] | null> {
+  if (!canPersist) return null
+  try {
+    const since = new Date(Date.now() - FRESH_WINDOW_MS).toISOString()
+    const { data, error } = await getSupabase()
+      .from("social_items")
+      .select("platform, title, url, thumbnail, author, views, likes, snippet, quality_score, sift_score, sift_tag, published_at, fetched_at")
+      .eq("program_slug", slug)
+      .gte("fetched_at", since)
+      .order("fetched_at", { ascending: false })
+      .limit(500)
+    if (error || !data || data.length === 0) return null
+    return data.map((row: Record<string, unknown>) => ({
+      platform: row.platform as SocialItem["platform"],
+      title: String(row.title ?? ""),
+      url: String(row.url ?? ""),
+      thumbnail: row.thumbnail ? String(row.thumbnail) : undefined,
+      author: String(row.author ?? ""),
+      views: row.views != null ? Number(row.views) : undefined,
+      likes: row.likes != null ? Number(row.likes) : undefined,
+      snippet: row.snippet ? String(row.snippet) : undefined,
+      publishedAt: row.published_at ? String(row.published_at) : undefined,
+      qualityScore: row.quality_score != null ? Number(row.quality_score) : undefined,
+      siftScore: row.sift_score != null ? Number(row.sift_score) : null,
+      siftTag: row.sift_tag ? String(row.sift_tag) : null,
+    }))
+  } catch {
+    return null
+  }
+}
+
 // --- Main exported function ---
 
 async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
   const program = getProgram(slug)
   if (!program) return []
   if (!RAPIDAPI_KEY && !APIFY_API_KEY) return []
+
+  // Supabase-first: if we have rows fetched in the last 7 days, skip all API calls.
+  // This is the real cost gate — unstable_cache is per-region and lost on every
+  // build/deploy, so the DB is the only durable cache.
+  const cached = await loadFreshFromSupabase(slug)
+  if (cached) {
+    return rankAndBalance(cached, program.name)
+  }
 
   // Rotate queries weekly to discover different content over time
   const week = Math.floor(Date.now() / (7 * 86400000))
@@ -458,13 +501,17 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
   // Enrich with SIFT scores from DB (items scored by the SIFT pipeline)
   const enriched = await enrichWithSiftScores(slug, allScored)
 
+  return rankAndBalance(enriched, program.name)
+}
+
+function rankAndBalance(items: SocialItem[], programName: string): SocialItem[] {
   // 1. Filter: remove SIFT junk (score 0-2) if scored, otherwise use relevance check
-  const filtered = enriched.filter((item) => {
+  const filtered = items.filter((item) => {
     if (item.siftScore != null && item.siftScore <= 2) return false
     const min = MIN_VIEWS[item.platform] ?? 0
     const engagement = item.views ?? item.likes ?? 0
     if (engagement < min && item.platform !== "blog" && item.platform !== "reddit") return false
-    return isRelevant(item.title, program.name)
+    return isRelevant(item.title, programName)
   })
 
   // 2. Deduplicate: max 2 per author
