@@ -3,10 +3,12 @@ slug: buypromptpack
 url: https://www.buypromptpack.com
 category: AI
 verified: false
+kind: affiliate
+source: community
 
 commission:
   type: one-time
-  rate: 30
+  rate: "30%"
   currency: USD
 cookie_days: 30
 
@@ -31,6 +33,12 @@ agents:
     fit for creators, small business owners, Etsy sellers, freelancers, job
     seekers, marketers, and professionals who want faster AI outputs without
     building prompts from scratch.
+  use_cases:
+    - "Small business owners who need ready-made ChatGPT prompts for planning, offers, emails, customer support, and operations."
+    - "Creators who want prompts for hooks, captions, content calendars, repurposing, and newsletter ideas."
+    - "Ecommerce sellers who need prompts for Etsy, Shopify, Amazon, TikTok Shop, product listings, launches, and customer replies."
+    - "Job seekers and professionals who want resume, interview, career planning, hiring, and productivity prompts."
+    - "Marketers, freelancers, and founders who want one-time purchase prompt libraries instead of building prompts from scratch."
   keywords: ["buy prompt pack", "chatgpt prompts", "ai prompt pack", "prompt library", "productivity prompts", "business prompts", "content prompts", "ecommerce prompts", "job seeker prompts"]
 
 tags: ["ai", "prompts", "productivity", "digital-products", "business", "creator-tools"]
