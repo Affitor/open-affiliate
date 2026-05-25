@@ -11,6 +11,22 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/embed.js": ["./apps/embed/dist/**"],
   },
+  // PostHog reverse proxy: serve analytics from our own domain via /_ph so
+  // ad-blockers don't strip it. instrumentation-client.ts sets api_host:"/_ph".
+  // US Cloud splits static assets onto us-assets.i.posthog.com.
+  skipTrailingSlashRedirect: true,
+  async rewrites() {
+    return [
+      {
+        source: "/_ph/static/:path*",
+        destination: "https://us-assets.i.posthog.com/static/:path*",
+      },
+      {
+        source: "/_ph/:path*",
+        destination: "https://us.i.posthog.com/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

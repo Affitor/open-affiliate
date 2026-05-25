@@ -1,3 +1,5 @@
+import posthog from "posthog-js";
+
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
   let sid = sessionStorage.getItem("oa-sid");
@@ -35,6 +37,21 @@ export function track(
     ...data?.metadata,
     ...(Object.keys(utm).length > 0 ? { utm } : {}),
   };
+
+  // Mirror high-signal events into PostHog so they power funnels (e.g.
+  // search -> program_view -> outbound_click) and correlate with session
+  // replays. $pageview is captured by posthog-js itself, so skip page_view
+  // here to avoid double-counting.
+  if (type !== "page_view") {
+    try {
+      posthog.capture(type, {
+        ...(data?.slug ? { slug: data.slug } : {}),
+        ...metadata,
+      });
+    } catch {
+      /* analytics must never break the UX */
+    }
+  }
 
   fetch("/api/events", {
     method: "POST",
