@@ -17,12 +17,19 @@ if (key && typeof window !== "undefined") {
     posthog.init(key, {
       api_host: "/_ph",
       ui_host: "https://us.posthog.com",
-      // Modern defaults: history-change $pageview capture (works with the
-      // App Router), autocapture, and web vitals — no manual page tracking.
+      // Modern defaults give us autocapture, web vitals, and session replay.
       defaults: "2026-01-30",
       // No login on this site, so only spend person profiles on identified
       // users (we have none today). Keeps us comfortably on the free tier.
       person_profiles: "identified_only",
+      // defaults:'2026-01-30' resolves capture_pageview to 'history_change',
+      // which misses the initial page load — so landing-and-leaving visitors
+      // produced zero $pageview events and Web analytics stayed empty. Capture
+      // pageviews manually instead (see components/posthog-pageview.tsx), which
+      // fires on initial load + every route change. Disable the built-in one
+      // to avoid double-counting on client navigations.
+      capture_pageview: false,
+      capture_pageleave: true,
     });
   } catch {
     // Instrumentation must never break the app (Next.js 16 guidance).

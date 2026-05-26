@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { PostHogPageView } from "@/components/posthog-pageview";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
 import "./globals.css";
@@ -165,6 +166,7 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        <PostHogPageView />
         <ThemeProvider>
           <Nav />
           <main className="flex-1 dot-grid">{children}</main>
