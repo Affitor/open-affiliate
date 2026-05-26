@@ -1,7 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
+  // cacheComponents disabled: it is incompatible with the ISR route configs
+  // (`revalidate` / `dynamicParams`) added in #33 to cap the Apify cost leak,
+  // which broke the Turbopack production build. Nothing uses the "use cache"
+  // directive, so disabling is safe and keeps the ISR cost fix. NOTE: mirror
+  // this in the open-affiliate-pro SSOT or the next sync will re-break it.
   typescript: {
     ignoreBuildErrors: true,
   },
