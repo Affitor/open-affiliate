@@ -50,7 +50,7 @@ export default async function Image() {
           Affiliate Program Rankings
         </div>
         <div style={{ fontSize: "20px", color: "#94a3b8", marginBottom: "40px" }}>
-          Top programs ranked by commission — {programs.length} programs compared
+          {`Top programs ranked by commission — ${programs.length} programs compared`}
         </div>
 
         {/* Top 5 list */}
