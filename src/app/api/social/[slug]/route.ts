@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from "next/server"
 import { fetchSocialItems } from "@/lib/social"
-
-export { type SocialItem } from "@/lib/social"
+import { getProgram } from "@/lib/programs"
 
 export const maxDuration = 55
 
 const CACHE_HEADERS = {
-  "Cache-Control": "public, s-maxage=604800, stale-while-revalidate=2592000",
+  "Cache-Control": "public, s-maxage=604800, stale-while-revalidate=604800",
   "CDN-Cache-Control": "public, s-maxage=604800",
   "Vercel-CDN-Cache-Control": "public, s-maxage=604800",
   "Access-Control-Allow-Origin": "*",
@@ -19,6 +18,12 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
+  const program = getProgram(slug)
+
+  if (!program) {
+    return NextResponse.json({ items: [] }, { status: 404, headers: CACHE_HEADERS })
+  }
+
   const items = await fetchSocialItems(slug)
 
   return NextResponse.json(

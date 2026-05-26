@@ -75,6 +75,15 @@ async function ExploreContent({
         </p>
       </div>
 
+      <div className="mb-4 flex justify-end">
+        <a
+          href="/explore/stats"
+          className="rounded-lg border border-border/50 px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground hover:border-border transition-colors"
+        >
+          Content Insights
+        </a>
+      </div>
+
       <Suspense fallback={null}>
         <ExploreFilters
           categories={data.categories}

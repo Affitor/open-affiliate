@@ -184,6 +184,13 @@
   color: oklch(0.7 0.15 160);
 }
 
+/* Indeterminate progress bar animation for Content Lab */
+@keyframes indeterminate {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0%); }
+  100% { transform: translateX(100%); }
+}
+
 /* Gradient border effect */
 .gradient-border {
   position: relative;
