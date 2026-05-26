@@ -43,9 +43,12 @@ export default async function Image() {
           </span>
         </div>
 
-        {/* Title */}
+        {/* Title — Satori requires display:flex when an element has >1 child
+            (here: text + colored <span> + text). flexWrap keeps it readable. */}
         <div
           style={{
+            display: "flex",
+            flexWrap: "wrap",
             fontSize: "56px",
             fontWeight: 800,
             color: "white",
@@ -53,8 +56,9 @@ export default async function Image() {
             marginBottom: "20px",
           }}
         >
-          The open registry of{" "}
-          <span style={{ color: "#34d399" }}>affiliate</span> programs.
+          <span>The open registry of&nbsp;</span>
+          <span style={{ color: "#34d399" }}>&nbsp;affiliate&nbsp;</span>
+          <span>&nbsp;programs.</span>
         </div>
 
         {/* Subtitle */}
