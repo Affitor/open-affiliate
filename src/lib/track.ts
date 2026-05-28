@@ -1,4 +1,4 @@
-import posthog from "posthog-js";
+import { posthog } from "@/lib/posthog";
 
 function getSessionId(): string {
   if (typeof window === "undefined") return "";
