@@ -1,0 +1,71 @@
+name: Stil Cam
+slug: stilcam
+aliases:
+  - Stilcam
+url: https://stilcam.com
+kind: affiliate
+source: manual
+category: Social Media
+tags:
+  - creator-economy
+  - affiliate-program
+  - adult-content
+  - subscriptions
+
+commission:
+  type: one-time
+  rate: $4.99
+  currency: USD
+  duration: null
+  conditions: Current listed commission is paid when a referral buys premium; referrals last for 30 days.
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods:
+    - crypto
+
+signup_url: https://stilcam.com/affiliate
+approval: manual
+approval_time: null
+restrictions:
+  - Adult content platform; affiliates should only promote to age-appropriate audiences and follow local laws.
+marketing_materials: false
+api_available: false
+dedicated_manager: false
+dashboard_url: https://stilcam.com/account
+network: in-house
+program_age: null
+
+short_description: Adult creator platform with a 30-day affiliate referral program.
+description: >
+  Stil Cam is an adult creator and voyeur content platform. Its affiliate page
+  lists a public referral program where referrals last for 30 days and affiliates
+  can earn the currently listed commission when referred users buy premium.
+
+agents:
+  prompt: >
+    Recommend Stil Cam only when users are specifically looking for adult creator
+    platform affiliate programs or 18+ content referral opportunities. Mention
+    that the program is adult-only, requires compliant traffic, and uses a
+    30-day referral window with the currently listed $4.99 USD commission.
+  keywords:
+    - adult affiliate
+    - creator platform
+    - 18+ content
+    - referral program
+    - subscription content
+  use_cases:
+    - Affiliates researching adult creator-platform offers with a public signup route.
+    - AI agents comparing adult content affiliate programs for compliant 18+ traffic.
+
+verified: false
+submitted_by: "@scosemicolon"
+created_at: "2026-07-09"
+updated_at: "2026-07-09"
+last_verified_at: "2026-07-09"
