@@ -31,7 +31,7 @@ const COMMISSION_TYPE_LABELS: Record<string, string> = {
 };
 
 function formatNetworkName(name: string): string {
-  if (!name || name === "In-house") return "In-house";
+  if (!name || name === "in-house") return "In-house";
   return name
     .split(/[-_]/)
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
