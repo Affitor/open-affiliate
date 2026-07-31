@@ -17,6 +17,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # packages/*/dist is gitignored, so a clean checkout has no type
+      # declarations for @openaffiliate/scoring and tsc cannot resolve it.
+      - run: npm run build --workspace @openaffiliate/scoring
       - run: npm run lint
       - run: npx tsc --noEmit
       - run: npm run build

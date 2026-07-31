@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAffiliate — Dual-Audience Onboarding Plan</title>
+<script>
+  (function () {
+    const s = localStorage.getItem('theme');
+    document.documentElement.classList.toggle('dark', s ? s === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches);
+  })();
+</script>
+<style>
+  :root{
+    --bg:#FAF9F5; --surface:#fff; --surface2:#F0EEE6; --ink:#141413; --body:#3D3D3A; --muted:#87867F;
+    --line:#D9D7CD; --line2:#ECEAE2;
+    --clay:#C45A3B; --clay-bg:#FBEEE9; --clay-line:#E9C7BC;
+    --olive:#5E7A41; --olive-bg:#EEF3E7; --olive-line:#CFE0BC;
+    --gold:#A9802F; --gold-bg:#FAF2E0; --gold-line:#ECD9Ae;
+    --blue:#3F6F8C; --blue-bg:#E9F1F6; --blue-line:#C3DCE8;
+    --serif:ui-serif,Georgia,"Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  html.dark{
+    --bg:#141413; --surface:#1E1E1C; --surface2:#27272400; --ink:#FAF9F5; --body:#CFCDC4; --muted:#8C8B82;
+    --line:#34332F; --line2:#2A2A27;
+    --clay:#E08A6C; --clay-bg:#2A1d18; --clay-line:#4a3127;
+    --olive:#9DB87A; --olive-bg:#1d2417; --olive-line:#33401f;
+    --gold:#D6B36A; --gold-bg:#27210f; --gold-line:#43391c;
+    --blue:#80A9C4; --blue-bg:#16242c; --blue-line:#264049;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--body);font-family:var(--sans);font-size:14px;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 26px 80px}
+  code,.mono{font-family:var(--mono);font-size:.85em}
+  /* header */
+  header{border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:5}
+  .hin{max-width:1180px;margin:0 auto;padding:16px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  h1{font-family:var(--serif);font-weight:500;font-size:21px;color:var(--ink);letter-spacing:-.01em}
+  .hin .sub{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+  .sp{flex:1}
+  #tt{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:transparent;color:var(--muted);cursor:pointer}
+  #tt:hover{color:var(--ink);border-color:var(--muted)}
+  section{padding:34px 0 4px}
+  h2{font-family:var(--serif);font-weight:500;font-size:18px;color:var(--ink);margin-bottom:3px;letter-spacing:-.01em}
+  .lead{color:var(--muted);font-size:13px;margin-bottom:18px;max-width:780px}
+  .kch{display:inline-block;font-family:var(--mono);font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:5px;vertical-align:middle}
+  .p0{background:var(--clay-bg);color:var(--clay);border:1px solid var(--clay-line)}
+  .p1{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-line)}
+  .p2{background:var(--blue-bg);color:var(--blue);border:1px solid var(--blue-line)}
+  .ok{background:var(--olive-bg);color:var(--olive);border:1px solid var(--olive-line)}
+
+  /* matrix */
+  .matrix{display:grid;grid-template-columns:120px 1fr 1fr;gap:10px;align-items:stretch}
+  .mh{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);display:flex;align-items:center;justify-content:center;text-align:center;padding:6px}
+  .rl{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);display:flex;align-items:center;writing-mode:horizontal-tb;padding:8px;background:var(--surface2);border:1px solid var(--line2);border-radius:10px;justify-content:center;text-align:center}
+  .cell{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 15px}
+  .cell h3{font-size:14px;color:var(--ink);font-weight:650;margin-bottom:2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .cell .who{font-size:12px;color:var(--muted);margin-bottom:9px}
+  .cell ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .cell li{font-size:12.5px;padding-left:14px;position:relative}
+  .cell li::before{content:"→";position:absolute;left:0;color:var(--muted)}
+  .cell.gap{border-color:var(--clay-line);background:var(--clay-bg)}
+  .cell.has{border-color:var(--olive-line)}
+  .bulk{grid-column:2 / 4;background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:13px 15px}
+  .bulk h3{font-size:14px;color:var(--ink);font-weight:650;display:flex;gap:8px;align-items:center}
+  .bulk p{font-size:12.5px;color:var(--body);margin-top:4px}
+
+  /* flow cards */
+  .flows{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+  .flow{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .flow.full{grid-column:1 / 3}
+  .flow .ft{display:flex;align-items:center;gap:9px;margin-bottom:3px;flex-wrap:wrap}
+  .flow .ft b{font-size:14px;color:var(--ink);font-weight:650}
+  .flow .ft .tag{font-family:var(--mono);font-size:10px;color:var(--muted)}
+  .flow ol{margin:8px 0 0 18px;display:flex;flex-direction:column;gap:4px}
+  .flow li{font-size:12.5px}
+  .flow .note{margin-top:9px;font-size:11.5px;color:var(--muted);border-top:1px solid var(--line2);padding-top:7px}
+  .flow code{background:var(--surface2);padding:1px 5px;border-radius:4px;color:var(--clay)}
+
+  /* arch */
+  .arch{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 18px 8px;overflow-x:auto}
+  .arch pre{font-family:var(--mono);font-size:11.5px;line-height:1.5;color:var(--body);white-space:pre;min-width:640px}
+  .arch .key{color:var(--clay);font-weight:700}
+  .keystone{margin-top:12px;font-size:12.5px;background:var(--clay-bg);border:1px solid var(--clay-line);border-radius:9px;padding:10px 13px}
+  .keystone b{color:var(--clay)}
+
+  /* tiers + roadmap */
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px 16px}
+  .panel h3{font-size:13.5px;color:var(--ink);font-weight:650;margin-bottom:9px}
+  .tier{display:flex;gap:10px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--line2);font-size:12.5px}
+  .tier:last-child{border:none}
+  .tier .b{width:9px;height:9px;border-radius:50%;margin-top:5px;flex:none}
+  table{width:100%;border-collapse:collapse;font-size:12.5px}
+  td{padding:8px 6px;border-bottom:1px solid var(--line2);vertical-align:top}
+  tr:last-child td{border:none}
+  .ph{font-family:var(--mono);font-weight:700;white-space:nowrap}
+  .insight{background:var(--ink);color:var(--bg);border-radius:14px;padding:22px 24px;margin-top:8px}
+  .insight b{color:var(--gold)}
+  .insight p{font-size:14px;line-height:1.6}
+  footer{margin-top:40px;border-top:1px solid var(--line);padding-top:18px;color:var(--muted);font-size:11.5px}
+  @media(max-width:820px){.flows,.cols{grid-template-columns:1fr}.flow.full,.bulk{grid-column:auto}.matrix{grid-template-columns:1fr}.rl{display:none}}
+</style>
+</head>
+<body>
+<header><div class="hin">
+  <div><h1>OpenAffiliate — Dual-Audience Onboarding</h1>
+  <div class="sub">2 axes · 5 cells · today there is only 1 path (GitHub PR)</div></div>
+  <div class="sp"></div>
+  <button id="tt">Theme</button>
+</div></header>
+
+<div class="wrap">
+
+<!-- MATRIX -->
+<section>
+  <h2>The reframe — who we're serving</h2>
+  <p class="lead">Stop thinking "one apply page." Two axes: <b>list a program (supply)</b> vs <b>find &amp; get a link (demand)</b>, crossed with <b>technical</b> vs <b>non-technical</b> — plus <b>networks</b> (bulk). The two red cells are missing today and are the whole point of this plan.</p>
+  <div class="matrix">
+    <div></div>
+    <div class="mh">Supply · list a program</div>
+    <div class="mh">Demand · find &amp; get a link</div>
+
+    <div class="rl">Technical<br>(GitHub / CLI / MCP)</div>
+    <div class="cell has">
+      <h3>A · Founder / Developer <span class="kch ok">works · enhance</span></h3>
+      <div class="who">YC / indie / VC-backed. Lives in GitHub &amp; CLI.</div>
+      <ul><li>GitHub PR already fine — keep as fast lane</li><li>Add <code>npx openaffiliate submit</code> (auto-draft YAML from URL)</li><li>MCP <code>submit_program</code> tool</li><li>Claim + owner dashboard (status, rank, clicks)</li></ul>
+    </div>
+    <div class="cell has">
+      <h3>D-agent · Dev / AI agent <span class="kch p2">P2</span></h3>
+      <div class="who">Builders &amp; agents consuming the registry.</div>
+      <ul><li>Read tools exist (search / get)</li><li>Add write tools: <code>get_link</code> / <code>apply</code></li><li>SDK link-gen for agent workflows</li></ul>
+    </div>
+
+    <div class="rl">Non-technical<br>(web form / no-code)</div>
+    <div class="cell gap">
+      <h3>B · Growth / Marketing / BizDev <span class="kch p0">GAP #1 · P0</span></h3>
+      <div class="who">Owns the program as a <i>channel</i>, not a codebase. Won't fork a repo.</div>
+      <ul><li>True no-code wizard at <code>/list</code></li><li>Form posts to a server — <b>never sees GitHub</b></li><li>Email magic-link ownership</li><li>"Claim your existing listing"</li></ul>
+    </div>
+    <div class="cell gap">
+      <h3>D-creator · Affiliate partner <span class="kch p0">GAP #2 · P0</span></h3>
+      <div class="who">Creator / blogger / newsletter. Wants a working link today.</div>
+      <ul><li>"Get my link" replaces the outbound bounce</li><li>Affitor handoff → instant tracked link</li><li>Saved / applied tracker</li><li>Stripe-verified payout trust</li></ul>
+    </div>
+
+    <div class="bulk">
+      <h3>C · Affiliate network <span class="kch p1">bulk · P1</span></h3>
+      <p>Spans the supply column, orthogonal to tech level. Authenticated <b>CSV/JSON/API bulk import</b> → normalize → dedupe-by-domain → <b>one batched PR</b> (no per-program form) → maintainer review gate (no wholesale auto-merge) + network attribution.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CURRENT GAP -->
+<section>
+  <h2>Why it's broken today</h2>
+  <p class="lead">Verified in code: the registry is read-rich but <b>write-poor and demand-poor</b>.</p>
+  <div class="flows">
+    <div class="flow"><div class="ft"><b>One real write path = a GitHub PR</b></div>
+      <div class="note">Even <code>/submit</code> ("no GitHub needed") just builds YAML in the browser and opens GitHub's new-file editor — still needs a GitHub account + fork/branch/commit/PR literacy. A marketer hits a wall; conversion ≈ 0.</div></div>
+    <div class="flow"><div class="ft"><b>No backend for programs</b></div>
+      <div class="note">755 static YAML → <code>programs.json</code> at build. Supabase exists but only for votes/analytics — no <code>programs</code>/<code>users</code>/<code>applications</code>, no auth, no claim.</div></div>
+    <div class="flow"><div class="ft"><b>Demand side doesn't exist</b></div>
+      <div class="note">A program page's only action is an outbound <code>Apply</code> → the brand's external signup. OpenAffiliate mints no link, captures no partner, sees no conversion.</div></div>
+    <div class="flow"><div class="ft"><b>CI has a hole</b></div>
+      <div class="note"><code>pr-programs.yml</code> validates + verifies + auto-merges, but calls <code>scripts/enrich-program.ts</code> which <b>doesn't exist</b> (<code>|| true</code> no-op). Dedup/logo/enrich silently skipped.</div></div>
+  </div>
+</section>
+
+<!-- FLOWS -->
+<section>
+  <h2>The five flows (concrete)</h2>
+  <p class="lead">Two front-ends, one source of truth. Developers keep PRs; everyone else gets a form / CTA that lands the same YAML behind the scenes.</p>
+  <div class="flows">
+    <div class="flow"><div class="ft"><b>B · No-code "List your program"</b><span class="kch p0">P0</span></div>
+      <ol><li>Paste product URL → AI auto-drafts the listing</li><li>Review/edit in a friendly form (<b>no YAML shown</b>)</li><li>Email magic-link (no GitHub, no password)</li><li>"Submit for review" → <code>submissions</code> table → status page</li><li>Clean → bot opens PR → CI auto-merges → live in minutes</li><li>Email: "claim &amp; verify for the Verified badge"</li></ol>
+      <div class="note">Makes the "no GitHub needed" promise finally true.</div></div>
+
+    <div class="flow"><div class="ft"><b>D-creator · "Get my link"</b><span class="kch p0">P0</span></div>
+      <ol><li>On <code>/programs/{slug}</code>, CTA branches on <code>powered_by</code></li><li><code>affitor</code> → "Get your affiliate link" → instant tracked link + dashboard + payouts</li><li>External → "Apply" → <code>signup_url</code> (+utm) + "Save to my list"</li><li>Trust: Verified badge, real terms, "Verified by Stripe"</li></ol>
+      <div class="note">Turns the phone book into a marketplace.</div></div>
+
+    <div class="flow"><div class="ft"><b>A · Founder / Developer</b><span class="kch ok">enhance</span></div>
+      <ol><li>GitHub PR fast-lane stays</li><li><code>npx openaffiliate submit</code> auto-drafts + opens PR</li><li>MCP <code>submit_program</code></li><li>Claim + owner dashboard; upsell → run on Affitor</li></ol></div>
+
+    <div class="flow"><div class="ft"><b>C · Network bulk import</b><span class="kch p1">P1</span></div>
+      <ol><li>Network gets an API key / partner account</li><li>Upload CSV/JSON mapped to schema</li><li><code>import-bulk.ts</code> → dedupe-by-domain → one batch PR</li><li>Maintainer reviews batch (no auto-merge &gt; N files)</li></ol></div>
+
+    <div class="flow full"><div class="ft"><b>E · AI agent (both sides)</b><span class="kch p2">P2</span></div>
+      <ol><li>Read tools exist. Add write tools — <code>submit_program</code>, <code>claim_program</code>, <code>get_link</code> — to MCP + CLI + SDK, all proxying the same server intake.</li><li>One canonical pipeline for dev, non-tech human, and agent alike. Makes the AGENTS.md claim true.</li></ol></div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section>
+  <h2>Architecture — keep the open YAML ethos</h2>
+  <p class="lead"><b>Invariant:</b> YAML-in-Git stays the single source of truth. The DB is added <b>only as a staging buffer for un-published state</b> (pending submissions, claim tokens, bulk batches). If the DB vanished, the public registry / API / agents keep working.</p>
+  <div class="arch"><pre>   Developer ─ direct PR ───────────────────────────────────┐
+   Non-tech  ─ POST /api/submit ─┐                           │
+   AI agent  ─ submit_program ───┤                           │
+   Network   ─ import-bulk CLI ──┤                           │
+                                 ▼                           │
+                <span class="key">Supabase STAGING</span> (already wired)            │
+                submissions │ claims   (pending only)        │
+                validate · enrich(shared) · dedup ·          │
+                spam-score · DNS/email claim-verify          │
+                                 │ auto-approve OR /admin     │
+                                 ▼                           │
+                <span class="key">GitHub App bot</span> opens / updates PR ──────────┤
+                                                             ▼
+                <span class="key">GIT = SOURCE OF TRUTH</span>  (programs/*.yaml)
+                                 │ existing pr-programs.yml (dedup·verify·auto-merge)
+                                 ▼
+                build-registry.ts → programs.json   (unchanged)
+                                 ▼
+        Web · REST API · MCP · CLI/SDK · AGENTS.md
+                                 │  /programs/{slug} CTA
+                 powered_by:affitor? ─ yes → affitor.com/p/{slug}  (tracked link)
+                                     └ no  → signup_url (+utm)</pre></div>
+  <div class="keystone"><b>Keystone (do first):</b> write the missing <code>scripts/lib/enrich.ts</code> and import it from <b>both</b> CI and <code>/api/submit</code> so the web path and the PR path enrich/validate identically. Reuse the proven <code>/api/votes</code> + <code>/api/events</code> service-role + IP-hash + honeypot pattern. The whole demand boundary is <b>one additive field</b> — <code>powered_by: affitor</code> — so the open registry never becomes a walled garden.</div>
+</section>
+
+<!-- TRUST + ROADMAP -->
+<section>
+  <h2>Trust model &amp; roadmap</h2>
+  <div class="cols">
+    <div class="panel">
+      <h3>Trust tiers (volume vs curation)</h3>
+      <div class="tier"><span class="b" style="background:var(--muted)"></span><div><b>Community</b> — self-served / auto-discovered, <code>verified:false</code>. Frictionless single submit.</div></div>
+      <div class="tier"><span class="b" style="background:var(--gold)"></span><div><b>Claimed</b> — owner verified via DNS TXT (authoritative) or email-on-domain (fallback) → editable, <code>verified:true</code>.</div></div>
+      <div class="tier"><span class="b" style="background:var(--olive)"></span><div><b>Stripe-verified</b> — Affitor-run, real money flows. "Verified by Stripe" — the payout-credibility anchor.</div></div>
+      <div class="tier"><span class="b" style="background:var(--clay)"></span><div><b>Rules:</b> single submit frictionless; <b>bulk gated by review</b>; precedence owner &gt; network &gt; community. Listing <b>free forever</b> — money only on the Affitor engine.</div></div>
+    </div>
+    <div class="panel">
+      <h3>Roadmap</h3>
+      <table>
+        <tr><td class="ph p0">P0</td><td><b>enrich.ts</b> · <code>/api/submit</code> + submissions table + /admin + bot-PR · no-code <code>/list</code> · demand CTA branch → <b>unlocks B + D-creator</b></td></tr>
+        <tr><td class="ph p1">P1</td><td>Claim/verify (DNS TXT + email) + magic-link identity · agent write tools · owner dashboard → ownership + Verified pipeline</td></tr>
+        <tr><td class="ph p2">P2</td><td>Bulk network import · Affitor flywheel (claim → run on Affitor) · native partner accounts → <b>unlocks C</b> + monetization</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- INSIGHT -->
+<section>
+  <div class="insight"><p>The <b>discovery</b> layer is mature for all four personas; the <b>transaction</b> layer is missing. Both gaps converge on <b>two primitives — a no-code server intake (form → bot PR) and email magic-link identity.</b> Ship those two and B, C, and D unlock together, with Affitor as the monetized engine the technical and trust-sensitive personas graduate into. Discover (open) → claim (own) → run on Affitor (engine).</p></div>
+</section>
+
+<footer>Plan: <code>docs/onboarding-dual-audience-plan.md</code> · grounded in a code audit of <code>open-affiliate</code> (755 YAML, static, GitHub-PR-only) · 2026-06-14</footer>
+</div>
+<script>
+  document.getElementById('tt').onclick=()=>{const d=!document.documentElement.classList.contains('dark');document.documentElement.classList.toggle('dark',d);localStorage.setItem('theme',d?'dark':'light')};
+</script>
+</body>
+</html>
