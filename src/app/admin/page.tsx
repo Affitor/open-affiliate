@@ -1,7 +1,9 @@
 import { connection } from "next/server";
+import { cookies } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { programs } from "@/lib/programs";
 import TrafficChart, { type TrafficPoint } from "./TrafficChart";
+import { adminCookieValue, safeEqual } from "@/lib/admin-auth";
 
 export const metadata = { title: "Command Center", robots: "noindex" };
 
@@ -107,8 +109,27 @@ const FLAG: Record<string, string> = {
 
 // ── Data fetching ────────────────────────────────────────
 
-async function getEvents(since: string) {
-  const all: Record<string, unknown>[] = [];
+/**
+ * A row of the `events` table, narrowed to the columns this page reads.
+ * Supabase's `select("*")` hands back untyped rows; without this every field
+ * arrives as `unknown` and the whole page only compiled because the private
+ * repo had `typescript.ignoreBuildErrors` on.
+ */
+type EventRow = {
+  created_at: string;
+  type?: string | null;
+  slug?: string | null;
+  country?: string | null;
+  referrer?: string | null;
+  path?: string | null;
+  session_id?: string | null;
+  ip_hash?: string | null;
+  device?: string | null;
+  metadata?: Record<string, unknown> | null;
+};
+
+async function getEvents(since: string): Promise<EventRow[]> {
+  const all: EventRow[] = [];
   let offset = 0;
   const PAGE = 1000;
   while (true) {
@@ -118,7 +139,7 @@ async function getEvents(since: string) {
       .gte("created_at", since)
       .order("created_at", { ascending: false })
       .range(offset, offset + PAGE - 1);
-    const rows = data ?? [];
+    const rows = (data ?? []) as EventRow[];
     all.push(...rows);
     if (rows.length < PAGE) break;
     offset += PAGE;
@@ -144,20 +165,50 @@ async function getVoteCount() {
 
 // ── Page ────────────────────────────────────────────────
 
+function LoginGate({ error }: { error: boolean }) {
+  return (
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
+      <div className="w-full max-w-sm rounded-xl border border-border/40 bg-card/30 p-8">
+        <h1 className="text-xl font-bold tracking-tight text-center">Command Center</h1>
+        <p className="text-sm text-muted-foreground mt-1 mb-6 text-center">
+          Enter the admin key to continue.
+        </p>
+        <form method="POST" action="/api/admin/login" className="grid gap-3">
+          <input
+            type="password"
+            name="key"
+            placeholder="Admin key"
+            autoFocus
+            className="h-11 w-full rounded-lg border border-border/60 bg-background px-4 text-sm outline-none focus:border-emerald-500/50"
+          />
+          {error && (
+            <p className="text-center text-xs text-red-400">Wrong key — try again.</p>
+          )}
+          <button
+            type="submit"
+            className="h-11 w-full rounded-lg bg-foreground text-background text-sm font-medium"
+          >
+            Open
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 export default async function AdminPage({
   searchParams,
 }: {
-  searchParams: Promise<{ key?: string }>;
+  searchParams: Promise<{ error?: string }>;
 }) {
   await connection();
-  const { key } = await searchParams;
-  if (key !== process.env.ADMIN_SECRET) {
-    return (
-      <div className="min-h-screen flex items-center justify-center text-sm text-muted-foreground">
-        Not found
-      </div>
-    );
-  }
+  const sp = await searchParams;
+  const secret = process.env.ADMIN_SECRET;
+  const cookie = (await cookies()).get("oa_admin")?.value;
+  const authed =
+    !!secret && !!cookie && safeEqual(cookie, adminCookieValue(secret));
+
+  if (!authed) return <LoginGate error={sp.error === "1"} />;
 
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
@@ -357,8 +408,6 @@ export default async function AdminPage({
   const clTopFormulas = Array.from(clFormulaMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 8);
   const clTopPrograms = Array.from(clProgramMap.entries()).sort((a, b) => b[1] - a[1]).slice(0, 10);
   const clTopLangs = Array.from(clLangMap.entries()).sort((a, b) => b[1] - a[1]);
-
-  const adminKey = `?key=${key}`;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
