@@ -74,3 +74,14 @@ remotion/public/*.mp3
 remotion/node_modules
 remotion/out
 reports/
+
+# Machine-readable surface — generated into public/ by scripts/generate-md.ts
+# during prebuild. Not committed: 791 files that would need pruning when a
+# program is retired and a CI check to prove they are current. Generating them
+# every build makes both problems impossible.
+/public/llms.txt
+/public/llms-full.txt
+/public/programs.md
+/public/programs/
+/public/categories/
+/public/networks/

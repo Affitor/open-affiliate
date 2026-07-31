@@ -34,6 +34,9 @@ export async function generateMetadata({
   return {
     title,
     description,
+    alternates: {
+      types: { "text/markdown": `https://openaffiliate.dev/networks/${slug}.md` },
+    },
     openGraph: { title, description, url: `https://openaffiliate.dev/networks/${slug}`, siteName: "OpenAffiliate" },
   };
 }

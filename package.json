@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-registry.ts && (npm run build --workspace @openaffiliate/scoring --if-present || true)",
+    "prebuild": "npx tsx scripts/build-registry.ts && npx tsx scripts/generate-md.ts && (npm run build --workspace @openaffiliate/scoring --if-present || true)",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -20,7 +20,8 @@
     "verify:deep:unverified": "npx tsx scripts/verify-deep.ts --unverified",
     "sync:public": "npx tsx scripts/sync-to-public.ts",
     "sync:public:dry": "npx tsx scripts/sync-to-public.ts --dry-run",
-    "backfill:social": "npx tsx scripts/backfill-social.ts"
+    "backfill:social": "npx tsx scripts/backfill-social.ts",
+    "md:build": "npx tsx scripts/generate-md.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
