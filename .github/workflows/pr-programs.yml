@@ -14,11 +14,14 @@ jobs:
     name: Validate, Enrich & Review
     runs-on: ubuntu-latest
     steps:
+      # No `ref:` on purpose. github.head_ref is the branch name in the
+      # contributor's fork, which does not exist in this repo, so checkout
+      # failed on the first step of every fork PR. The default for a
+      # pull_request event is refs/pull/N/merge, which is what we want to
+      # validate anyway.
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/setup-node@v4
         with:
@@ -118,9 +121,15 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       # ── Step 5: Commit enrichment changes back to PR ──
+      # Same-repo branches only. A pull_request event from a fork gets a
+      # read-only token no matter what `permissions:` says, so this push
+      # cannot succeed there — it would just fail the run and hide the
+      # validation result, which is the part contributors actually need.
       - name: Commit enrichments
         id: commit
-        if: steps.changed.outputs.count > 0
+        if: >-
+          steps.changed.outputs.count > 0 &&
+          github.event.pull_request.head.repo.full_name == github.repository
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -277,15 +286,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # ── Step 9: Rebuild registry after merge ──
-      - name: Rebuild registry
-        if: steps.review.outputs.can_auto_merge == 'true'
-        run: |
-          npx tsx scripts/build-registry.ts
-          git add src/lib/registry.json src/lib/registry-index.json
-          if ! git diff --cached --quiet; then
-            git commit -m "chore: rebuild registry
-
-          Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-            git push
-          fi
+      # Registry rebuild used to live here, gated on can_auto_merge. That is
+      # why the committed registry drifts: a PR merged by hand never ran it.
+      # It now lives in rebuild-registry.yml, which fires on push to main and
+      # so cannot be skipped by how a PR happens to land.
