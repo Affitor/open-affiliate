@@ -1,5 +1,5 @@
 {
-  "name": "open-affiliate-pro",
+  "name": "open-affiliate",
   "version": "0.1.0",
   "private": true,
   "workspaces": [
@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-registry.ts && (npm run build --workspace @openaffiliate/scoring --if-present || true) && (npm run build --workspace apps/embed --if-present || true)",
+    "prebuild": "npx tsx scripts/build-registry.ts && (npm run build --workspace @openaffiliate/scoring --if-present || true)",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -19,7 +19,8 @@
     "verify:deep": "npx tsx scripts/verify-deep.ts",
     "verify:deep:unverified": "npx tsx scripts/verify-deep.ts --unverified",
     "sync:public": "npx tsx scripts/sync-to-public.ts",
-    "sync:public:dry": "npx tsx scripts/sync-to-public.ts --dry-run"
+    "sync:public:dry": "npx tsx scripts/sync-to-public.ts --dry-run",
+    "backfill:social": "npx tsx scripts/backfill-social.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
@@ -32,6 +33,7 @@
     "next": "16.2.4",
     "next-themes": "^0.4.6",
     "openai": "^6.34.0",
+    "posthog-js": "^1.376.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "recharts": "^3.8.1",
