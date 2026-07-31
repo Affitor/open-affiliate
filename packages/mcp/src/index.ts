@@ -44,20 +44,23 @@ const server = new McpServer({
   version: "0.0.3",
 });
 
-server.tool(
+server.registerTool(
   "search_programs",
-  "Search affiliate programs by keyword, category, or commission type",
   {
-    query: z.string().optional().describe("Search keyword"),
-    category: z.string().optional().describe("Filter by category"),
-    commission_type: z
-      .enum(["recurring", "one-time", "tiered"])
-      .optional()
-      .describe("Filter by commission type"),
-    verified_only: z
-      .boolean()
-      .optional()
-      .describe("Only return verified programs"),
+    description:
+      "Search affiliate programs by keyword, category, or commission type",
+    inputSchema: {
+      query: z.string().optional().describe("Search keyword"),
+      category: z.string().optional().describe("Filter by category"),
+      commission_type: z
+        .enum(["recurring", "one-time", "tiered"])
+        .optional()
+        .describe("Filter by commission type"),
+      verified_only: z
+        .boolean()
+        .optional()
+        .describe("Only return verified programs"),
+    },
   },
   async ({ query, category, commission_type, verified_only }) => {
     const params = new URLSearchParams();
@@ -78,11 +81,14 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "get_program",
-  "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
   {
-    slug: z.string().describe("Program slug (e.g. 'stripe', 'vercel')"),
+    description:
+      "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
+    inputSchema: {
+      slug: z.string().describe("Program slug (e.g. 'stripe', 'vercel')"),
+    },
   },
   async ({ slug }) => {
     const data = await fetchJSON(`/api/programs/${slug}`);
@@ -97,10 +103,13 @@ server.tool(
   }
 );
 
-server.tool(
+server.registerTool(
   "list_categories",
-  "List all affiliate program categories with the number of programs in each",
-  {},
+  {
+    description:
+      "List all affiliate program categories with the number of programs in each",
+    inputSchema: {},
+  },
   async () => {
     const data = await fetchJSON("/api/categories");
     return {
