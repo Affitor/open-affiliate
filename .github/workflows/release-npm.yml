@@ -1,0 +1,52 @@
+name: Release npm packages
+
+# Publishes the public-facing packages (cli, sdk, mcp) from the pro SSOT on
+# every git tag matching v*. Keeps npm keys inside the private repo.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "Package to publish (cli | sdk | mcp | all)"
+        required: false
+        default: "all"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    strategy:
+      matrix:
+        package: [cli, sdk, mcp]
+    steps:
+      - name: Skip when dispatch targets single package
+        if: ${{ inputs.package != '' && inputs.package != 'all' && inputs.package != matrix.package }}
+        run: echo "skipping ${{ matrix.package }}" && exit 0
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build package
+        working-directory: packages/${{ matrix.package }}
+        run: npm run build
+
+      - name: Publish
+        working-directory: packages/${{ matrix.package }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --access public --provenance

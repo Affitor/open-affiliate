@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>List Your Affiliate Program — OpenAffiliate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ── Design tokens (dark, matching openaffiliate.dev globals.css) ── */
+  :root {
+    --bg:         #1a1a18;        /* oklch(0.13 0.005 75) */
+    --bg2:        #1f1f1d;        /* card */
+    --bg3:        #252523;        /* secondary / muted */
+    --fg:         #fafaf9;        /* oklch(0.985 0 0) */
+    --fg-muted:   #b5b4b0;        /* oklch(0.708 0 0) */
+    --fg-dim:     #6b6b67;
+    --border:     rgba(255,255,255,0.10);
+    --border-hi:  rgba(255,255,255,0.18);
+    --input-bg:   rgba(255,255,255,0.07);
+    --radius:     0.625rem;
+    --radius-lg:  0.875rem;
+    --radius-xl:  1.1rem;
+    --radius-2xl: 1.375rem;
+    --green:      oklch(0.7 0.15 160);       /* accent emerald */
+    --green-dim:  oklch(0.55 0.14 160 / 20%);
+    --green-border: oklch(0.6 0.14 160 / 35%);
+    --font: 'Geist', ui-sans-serif, system-ui, sans-serif;
+    --mono: 'Geist Mono', ui-monospace, monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font);
+    line-height: 1.55;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── Dot-grid bg matching .dot-grid ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 24px 24px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Nav ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(26,26,24,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--fg);
+  }
+  .logo-mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: #10b981;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .logo-mark svg { width: 13px; height: 13px; fill: white; }
+  .logo-name {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+  }
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 13px;
+    color: var(--fg-muted);
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: var(--radius);
+    transition: color 0.15s, background 0.15s;
+  }
+  .nav-links a:hover { color: var(--fg); background: rgba(255,255,255,0.06); }
+  .nav-spacer { flex: 1; }
+  .nav-cta {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: var(--font);
+    color: var(--bg);
+    background: var(--fg);
+    border: none;
+    border-radius: var(--radius);
+    padding: 6px 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+
+  /* ── Main container ── */
+  main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 56px 24px 80px;
+  }
+
+  .page-wrap {
+    width: 100%;
+    max-width: 620px;
+  }
+
+  /* ── Dev escape hatch ── */
+  .dev-escape {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px 10px;
+    margin-bottom: 36px;
+    transition: color 0.15s, border-color 0.15s;
+    font-family: var(--mono);
+  }
+  .dev-escape:hover { color: var(--fg-muted); border-color: var(--border-hi); }
+  .dev-escape svg { width: 12px; height: 12px; opacity: 0.6; }
+
+  /* ── Hero header ── */
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    border-radius: 100px;
+    padding: 4px 12px 4px 8px;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: oklch(0.78 0.13 160);
+    margin-bottom: 20px;
+  }
+  .hero-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: oklch(0.7 0.15 160);
+    flex-shrink: 0;
+    box-shadow: 0 0 6px oklch(0.7 0.15 160 / 60%);
+  }
+
+  h1 {
+    font-size: clamp(26px, 4vw, 36px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.12;
+    color: var(--fg);
+    margin-bottom: 12px;
+  }
+  .hero-sub {
+    font-size: 15px;
+    color: var(--fg-muted);
+    line-height: 1.5;
+    margin-bottom: 32px;
+    max-width: 460px;
+  }
+
+  /* ── Trust strip ── */
+  .trust-strip {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+    font-size: 12px;
+    color: var(--fg-dim);
+  }
+  .trust-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 10px;
+    border-right: 1px solid var(--border);
+  }
+  .trust-item:first-child { padding-left: 0; }
+  .trust-item:last-child { border-right: none; }
+  .trust-icon { width: 13px; height: 13px; opacity: 0.6; }
+
+  /* ── Card ── */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-2xl);
+    padding: 28px;
+    transition: border-color 0.2s;
+  }
+
+  /* ── Step 1: URL hero input ── */
+  .url-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: var(--input-bg);
+    border: 1.5px solid var(--border-hi);
+    border-radius: var(--radius-xl);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    padding: 4px 4px 4px 0;
+  }
+  .url-input-wrap:focus-within {
+    border-color: oklch(0.7 0.15 160 / 50%);
+    box-shadow: 0 0 0 3px oklch(0.7 0.15 160 / 8%);
+  }
+  .url-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 15px;
+    padding: 12px 16px;
+    min-width: 0;
+  }
+  .url-input::placeholder { color: var(--fg-dim); }
+  .autofill-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--fg);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 13.5px;
+    font-weight: 600;
+    border: none;
+    border-radius: calc(var(--radius-xl) - 6px);
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    white-space: nowrap;
+  }
+  .autofill-btn:hover { opacity: 0.88; }
+  .autofill-btn:active { transform: scale(0.98); }
+  .autofill-btn svg { width: 15px; height: 15px; }
+
+  /* Spark icon animation */
+  .spark-icon {
+    display: inline-block;
+    transition: transform 0.3s;
+  }
+  .autofill-btn:hover .spark-icon { transform: rotate(15deg) scale(1.15); }
+
+  /* ── Loading state ── */
+  .loading-bar-wrap {
+    height: 2px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 16px;
+    display: none;
+  }
+  .loading-bar-wrap.active { display: block; }
+  .loading-bar {
+    height: 100%;
+    background: linear-gradient(90deg, transparent, oklch(0.7 0.15 160), transparent);
+    border-radius: 2px;
+    animation: shimmer 1.4s infinite;
+    width: 50%;
+  }
+  @keyframes shimmer {
+    0% { transform: translateX(-200%); }
+    100% { transform: translateX(400%); }
+  }
+  .loading-label {
+    margin-top: 10px;
+    font-size: 12.5px;
+    color: var(--fg-dim);
+    display: none;
+    align-items: center;
+    gap: 6px;
+  }
+  .loading-label.active { display: flex; }
+  .loading-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: oklch(0.7 0.15 160);
+    animation: pulse 1.2s infinite;
+  }
+  @keyframes pulse { 0%,100% { opacity:0.3; } 50% { opacity:1; } }
+
+  /* ── Auto-fill reveal panel ── */
+  #form-panel {
+    display: none;
+    margin-top: 24px;
+    animation: slideDown 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  #form-panel.visible { display: block; }
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .pre-fill-notice {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    border-radius: var(--radius-lg);
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: oklch(0.75 0.12 160);
+    margin-bottom: 20px;
+  }
+  .pre-fill-notice svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  /* ── Form fields ── */
+  .form-section { margin-bottom: 4px; }
+
+  .field-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 520px) {
+    .field-group { grid-template-columns: 1fr; }
+  }
+
+  .field { margin-bottom: 14px; }
+  .field-label {
+    display: block;
+    font-size: 12px;
+    color: var(--fg-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: var(--fg-dim);
+    margin-top: 4px;
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--fg);
+    font-family: var(--font);
+    font-size: 13.5px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    appearance: none;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: rgba(255,255,255,0.3);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+  }
+  .field input.filled,
+  .field select.filled {
+    border-color: oklch(0.6 0.14 160 / 30%);
+    background: oklch(0.55 0.14 160 / 8%);
+  }
+  .field textarea { resize: none; line-height: 1.5; }
+  .field select option { background: #1f1f1d; color: var(--fg); }
+
+  /* Earn field with selector inline */
+  .earn-row {
+    display: flex;
+    gap: 8px;
+  }
+  .earn-row input { flex: 1; }
+  .earn-row select {
+    flex: 0 0 auto;
+    width: auto;
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23b5b4b0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    padding-right: 28px;
+  }
+
+  /* ── Divider ── */
+  .field-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+  }
+
+  /* ── Advanced disclosure ── */
+  .advanced-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: var(--fg-dim);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px 12px;
+    cursor: pointer;
+    font-family: var(--font);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    margin-bottom: 0;
+  }
+  .advanced-toggle:hover {
+    color: var(--fg-muted);
+    border-color: var(--border-hi);
+    background: rgba(255,255,255,0.04);
+  }
+  .advanced-toggle svg {
+    width: 13px;
+    height: 13px;
+    transition: transform 0.2s;
+  }
+  .advanced-toggle.open svg { transform: rotate(90deg); }
+
+  #advanced-fields {
+    display: none;
+    margin-top: 16px;
+    animation: slideDown 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  #advanced-fields.open { display: block; }
+
+  /* ── Email + identity section ── */
+  .identity-section {
+    background: rgba(255,255,255,0.025);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 18px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+  .identity-label-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .identity-label-row svg { width: 14px; height: 14px; color: var(--fg-muted); }
+  .identity-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fg);
+  }
+  .identity-sub {
+    font-size: 12px;
+    color: var(--fg-dim);
+    margin-top: 2px;
+  }
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .checkbox-row input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: oklch(0.7 0.15 160);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .checkbox-row label {
+    font-size: 12.5px;
+    color: var(--fg-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+  .badge-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: oklch(0.62 0.16 230);
+    background: oklch(0.62 0.16 230 / 12%);
+    border: 1px solid oklch(0.62 0.16 230 / 25%);
+    border-radius: 4px;
+    padding: 1px 5px;
+    vertical-align: middle;
+    margin-left: 3px;
+  }
+
+  /* ── Submit button ── */
+  .submit-btn {
+    width: 100%;
+    background: var(--fg);
+    color: var(--bg);
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 700;
+    border: none;
+    border-radius: var(--radius-xl);
+    padding: 14px 24px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    letter-spacing: -0.01em;
+  }
+  .submit-btn:hover { opacity: 0.88; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn svg { width: 16px; height: 16px; }
+
+  .submit-note {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--fg-dim);
+    margin-top: 10px;
+  }
+
+  /* ── Success state ── */
+  #success-panel {
+    display: none;
+    text-align: center;
+    animation: slideDown 0.4s cubic-bezier(0.16,1,0.3,1);
+  }
+  #success-panel.visible { display: block; }
+
+  .success-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--green-dim);
+    border: 1px solid var(--green-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .success-icon-wrap svg { width: 28px; height: 28px; }
+
+  .success-h {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    margin-bottom: 10px;
+  }
+  .success-sub {
+    font-size: 14px;
+    color: var(--fg-muted);
+    line-height: 1.55;
+    max-width: 400px;
+    margin: 0 auto 32px;
+  }
+  .success-sub strong { color: var(--fg); font-weight: 600; }
+
+  .what-next {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 20px 22px;
+    text-align: left;
+    margin-bottom: 24px;
+  }
+  .what-next-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fg-dim);
+    margin-bottom: 14px;
+  }
+  .next-steps { list-style: none; }
+  .next-steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13.5px;
+    color: var(--fg-muted);
+    line-height: 1.45;
+  }
+  .next-steps li:last-child { border-bottom: none; padding-bottom: 0; }
+  .step-number {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--fg-muted);
+    margin-top: 0px;
+  }
+  .step-text strong { color: var(--fg); }
+
+  .back-link {
+    font-size: 13px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.15s;
+  }
+  .back-link:hover { color: var(--fg-muted); }
+
+  /* ── Footer ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 24px;
+    text-align: center;
+  }
+  footer .footer-inner {
+    max-width: 620px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  footer a {
+    font-size: 12px;
+    color: var(--fg-dim);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  footer a:hover { color: var(--fg-muted); }
+  footer .sep { color: var(--border); }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    main { padding: 36px 16px 64px; }
+    .card { padding: 20px; }
+    .url-input { font-size: 14px; }
+    .autofill-btn { font-size: 12.5px; padding: 9px 14px; }
+    h1 { font-size: 26px; }
+    .trust-strip { gap: 4px; }
+    .trust-item { padding: 2px 8px; font-size: 11px; }
+  }
+
+  /* ── Demo button (for mockup state toggle) ── */
+  .demo-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 100;
+    display: flex;
+    gap: 8px;
+  }
+  .demo-btn {
+    font-size: 11px;
+    font-family: var(--mono);
+    background: #252523;
+    color: var(--fg-muted);
+    border: 1px solid var(--border-hi);
+    border-radius: var(--radius);
+    padding: 6px 11px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .demo-btn:hover { background: #2f2f2c; color: var(--fg); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="8" cy="8" r="3" fill="white"/>
+          <path d="M8 2 L8 5 M8 11 L8 14 M2 8 L5 8 M11 8 L14 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="logo-name">OpenAffiliate</span>
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="/programs">Programs</a></li>
+        <li><a href="/categories">Categories</a></li>
+        <li><a href="/rankings">Rankings</a></li>
+      </ul>
+    </nav>
+    <div class="nav-spacer"></div>
+    <a href="/programs" class="nav-cta">Browse Programs</a>
+  </div>
+</nav>
+
+<!-- Main -->
+<main>
+  <div class="page-wrap">
+
+    <!-- Developer escape hatch -->
+    <a href="https://github.com/Affitor/open-affiliate" class="dev-escape">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+      Developer? List via GitHub
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <!-- ── SUBMIT FLOW ── -->
+    <div id="submit-flow">
+
+      <!-- Hero header -->
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        750+ programs listed · Free forever
+      </div>
+
+      <h1>List your affiliate program.</h1>
+      <p class="hero-sub">Paste your affiliates page URL. We'll read it and fill in the details for you — takes about 30 seconds.</p>
+
+      <!-- Trust strip -->
+      <div class="trust-strip">
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Free forever
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          750+ programs
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          Usually live in minutes
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+          Discovered by AI agents
+        </span>
+      </div>
+
+      <!-- Card -->
+      <div class="card">
+
+        <!-- Step 1: URL input -->
+        <div id="url-step">
+          <div class="field-label" style="margin-bottom: 10px; font-size: 13px; color: var(--fg-muted);">
+            Your affiliate program page URL
+          </div>
+          <div class="url-input-wrap">
+            <input
+              id="url-input"
+              class="url-input"
+              type="url"
+              placeholder="e.g. yourproduct.com/affiliates"
+              value=""
+              autocomplete="off"
+              spellcheck="false"
+            >
+            <button class="autofill-btn" onclick="doAutofill()">
+              <span class="spark-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              </span>
+              Auto-fill with AI
+            </button>
+          </div>
+
+          <!-- Loading bar -->
+          <div class="loading-bar-wrap" id="loading-bar-wrap">
+            <div class="loading-bar"></div>
+          </div>
+          <div class="loading-label" id="loading-label">
+            <span class="loading-dot"></span>
+            Reading your affiliates page...
+          </div>
+        </div>
+
+        <!-- Step 2: Pre-filled form panel (appears after auto-fill) -->
+        <div id="form-panel">
+
+          <!-- Pre-fill success notice -->
+          <div class="pre-fill-notice">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="oklch(0.7 0.15 160)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+            We pre-filled what we found. Review and adjust anything that looks off.
+          </div>
+
+          <!-- 6 essentials -->
+          <div class="form-section">
+
+            <div class="field">
+              <label class="field-label">Program name</label>
+              <input type="text" class="filled" value="Notion" id="f-name">
+            </div>
+
+            <div class="field-group">
+              <div class="field">
+                <label class="field-label">Your website</label>
+                <input type="url" class="filled" value="notion.so" id="f-url">
+              </div>
+              <div class="field">
+                <label class="field-label">Category</label>
+                <select class="filled" id="f-category">
+                  <option>Productivity</option>
+                  <option>Developer Tools</option>
+                  <option>Email Marketing</option>
+                  <option>CRM &amp; Sales</option>
+                  <option>Design</option>
+                  <option>Analytics</option>
+                  <option>E-commerce</option>
+                  <option>Finance</option>
+                  <option>Security</option>
+                  <option>AI &amp; Machine Learning</option>
+                  <option>Project Management</option>
+                  <option>Communication</option>
+                  <option>HR &amp; Recruiting</option>
+                  <option>Data &amp; BI</option>
+                  <option>Video &amp; Media</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">What do affiliates earn?</label>
+              <div class="earn-row">
+                <input type="text" class="filled" value="50" id="f-earn-amount" placeholder="e.g. 25">
+                <select class="filled" id="f-earn-type">
+                  <option value="pct-recurring">% of revenue, recurring</option>
+                  <option value="pct-onetime">% of first sale, one-time</option>
+                  <option value="flat">Flat $ per referral</option>
+                </select>
+              </div>
+              <p class="field-hint">e.g. "25% of revenue, recurring" or "$50 flat per signup"</p>
+            </div>
+
+            <div class="field">
+              <label class="field-label">How long is a referral tracked?</label>
+              <div class="earn-row">
+                <input type="number" class="filled" value="90" id="f-cookie" min="1" max="730" style="max-width: 100px;">
+                <span style="font-size:13.5px; color: var(--fg-muted); display:flex; align-items:center; padding: 0 4px;">days</span>
+                <span style="font-size:12px; color:var(--fg-dim); display:flex; align-items:center; flex:1;">After someone clicks your link, this is how long you get credit for their signup.</span>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">One-line pitch <span style="color:var(--fg-dim); font-weight:400;">(shown on your listing)</span></label>
+              <input type="text" class="filled" value="The connected workspace for notes, docs, and projects." id="f-pitch" maxlength="120">
+              <p class="field-hint" id="pitch-count">56 / 120 characters</p>
+            </div>
+
+          </div><!-- /form-section -->
+
+          <hr class="field-divider">
+
+          <!-- Advanced / optional -->
+          <button class="advanced-toggle" id="advanced-toggle-btn" onclick="toggleAdvanced()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+            Add more details (optional)
+          </button>
+          <div id="advanced-fields">
+            <div class="field-group">
+              <div class="field">
+                <label class="field-label">Minimum payout</label>
+                <input type="text" value="$50" id="f-min-payout" placeholder="e.g. $50">
+                <p class="field-hint">The minimum balance needed before affiliates get paid.</p>
+              </div>
+              <div class="field">
+                <label class="field-label">How often are affiliates paid?</label>
+                <select id="f-payout-freq">
+                  <option>Monthly</option>
+                  <option>Every 2 weeks</option>
+                  <option>Net 30 (30 days after the month closes)</option>
+                  <option>Net 60</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label">Affiliate signup link <span style="color:var(--fg-dim); font-weight:400;">(where affiliates apply)</span></label>
+              <input type="url" value="notion.so/affiliates" id="f-signup-url" placeholder="yourproduct.com/affiliates">
+            </div>
+            <div class="field">
+              <label class="field-label">Any restrictions or requirements? <span style="color:var(--fg-dim); font-weight:400;">(optional)</span></label>
+              <textarea rows="2" id="f-restrictions" placeholder="e.g. US &amp; EU only · Must have 1k+ followers · No paid search"></textarea>
+            </div>
+          </div>
+
+          <!-- Identity / email -->
+          <div class="identity-section">
+            <div class="identity-label-row">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 12 19.79 19.79 0 0 1 1.93 3.47 2 2 0 0 1 3.9 1.27h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 8a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 14.9z"/></svg>
+              <div>
+                <div class="identity-title">Where should we send your listing link?</div>
+                <div class="identity-sub">We'll email you a magic link so you can edit or claim your listing later. No password needed.</div>
+              </div>
+            </div>
+            <div class="field" style="margin-bottom: 0;">
+              <input type="email" id="f-email" placeholder="you@yourcompany.com" style="font-size:14px;">
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="works-here" checked>
+              <label for="works-here">
+                I work at this company
+                <span class="badge-inline">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  Verified badge later
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit -->
+          <button class="submit-btn" onclick="doSubmit()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/><path d="M22 2 11 13"/></svg>
+            Submit for review
+          </button>
+          <p class="submit-note">Usually live within a few minutes. We review every submission.</p>
+
+        </div><!-- /form-panel -->
+      </div><!-- /card -->
+
+    </div><!-- /submit-flow -->
+
+    <!-- ── SUCCESS STATE ── -->
+    <div id="success-panel">
+      <div class="card" style="padding: 40px 28px;">
+
+        <div class="success-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="oklch(0.7 0.15 160)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="28" height="28"><path d="M20 6 9 17l-5-5"/></svg>
+        </div>
+
+        <div class="success-h">You're in the queue.</div>
+        <p class="success-sub">
+          <strong>Notion</strong> has been submitted. Check your email — we'll send you a link to track your listing and make edits.
+        </p>
+
+        <div class="what-next">
+          <div class="what-next-title">What happens next</div>
+          <ul class="next-steps">
+            <li>
+              <span class="step-number">1</span>
+              <span class="step-text"><strong>Auto-review</strong> — our bot checks the basics (commission ≥ 1%, working URL, no duplicates). Usually takes under a minute.</span>
+            </li>
+            <li>
+              <span class="step-number">2</span>
+              <span class="step-text"><strong>Goes live</strong> — once approved, your program appears on OpenAffiliate and gets indexed by AI agents and discovery tools.</span>
+            </li>
+            <li>
+              <span class="step-number">3</span>
+              <span class="step-text"><strong>Claim your listing</strong> — click the link in your email to verify you own this program and unlock the <span class="badge-inline" style="font-size:10px;">Verified</span> badge.</span>
+            </li>
+          </ul>
+        </div>
+
+        <a href="/programs" class="back-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="m15 18-6-6 6-6"/></svg>
+          Browse all programs
+        </a>
+
+      </div>
+    </div><!-- /success-panel -->
+
+  </div>
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <a href="/programs">Browse programs</a>
+    <span class="sep">·</span>
+    <a href="/docs">Docs</a>
+    <span class="sep">·</span>
+    <a href="https://github.com/Affitor/open-affiliate">GitHub</a>
+    <span class="sep">·</span>
+    <a href="/feedback">Feedback</a>
+    <span class="sep">·</span>
+    <a href="https://github.com/Affitor/open-affiliate" style="font-family: var(--mono); font-size: 11px; color: var(--fg-dim);">Developer? List via GitHub →</a>
+  </div>
+</footer>
+
+<!-- Mockup state controls -->
+<div class="demo-controls">
+  <button class="demo-btn" onclick="showForm()">Show form</button>
+  <button class="demo-btn" onclick="showSuccess()">Show success</button>
+  <button class="demo-btn" onclick="resetAll()">Reset</button>
+</div>
+
+<script>
+  // ── State ──
+  const DEMO_PREFILL = {
+    name: 'Notion',
+    url: 'notion.so',
+    category: 'Productivity',
+    earnAmount: '50',
+    earnType: 'pct-recurring',
+    cookie: '90',
+    pitch: 'The connected workspace for notes, docs, and projects.'
+  };
+
+  // ── Pitch character counter ──
+  const pitchInput = document.getElementById('f-pitch');
+  const pitchCount = document.getElementById('pitch-count');
+  if (pitchInput && pitchCount) {
+    pitchInput.addEventListener('input', () => {
+      pitchCount.textContent = `${pitchInput.value.length} / 120 characters`;
+    });
+  }
+
+  // ── Auto-fill simulation ──
+  function doAutofill() {
+    const url = document.getElementById('url-input').value.trim();
+    if (!url) {
+      document.getElementById('url-input').focus();
+      document.getElementById('url-input').style.borderColor = 'oklch(0.7 0.2 30 / 60%)';
+      setTimeout(() => { document.getElementById('url-input').style.borderColor = ''; }, 1500);
+      return;
+    }
+    // Show loading
+    document.getElementById('loading-bar-wrap').classList.add('active');
+    document.getElementById('loading-label').classList.add('active');
+    document.querySelector('.autofill-btn').disabled = true;
+    document.querySelector('.autofill-btn').style.opacity = '0.5';
+
+    setTimeout(() => {
+      document.getElementById('loading-bar-wrap').classList.remove('active');
+      document.getElementById('loading-label').classList.remove('active');
+      document.querySelector('.autofill-btn').disabled = false;
+      document.querySelector('.autofill-btn').style.opacity = '';
+      showForm();
+    }, 1800);
+  }
+
+  function showForm() {
+    document.getElementById('form-panel').classList.add('visible');
+    // Scroll to the form panel smoothly
+    setTimeout(() => {
+      document.getElementById('form-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 50);
+  }
+
+  // ── Advanced toggle ──
+  function toggleAdvanced() {
+    const btn = document.getElementById('advanced-toggle-btn');
+    const panel = document.getElementById('advanced-fields');
+    btn.classList.toggle('open');
+    panel.classList.toggle('open');
+  }
+
+  // ── Submit ──
+  function doSubmit() {
+    const email = document.getElementById('f-email').value.trim();
+    if (!email || !email.includes('@')) {
+      document.getElementById('f-email').focus();
+      document.getElementById('f-email').style.borderColor = 'oklch(0.7 0.2 30 / 60%)';
+      setTimeout(() => { document.getElementById('f-email').style.borderColor = ''; }, 1500);
+      return;
+    }
+    showSuccess();
+  }
+
+  function showSuccess() {
+    document.getElementById('submit-flow').style.display = 'none';
+    document.getElementById('success-panel').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetAll() {
+    document.getElementById('submit-flow').style.display = 'block';
+    document.getElementById('success-panel').classList.remove('visible');
+    document.getElementById('form-panel').classList.remove('visible');
+    document.getElementById('advanced-fields').classList.remove('open');
+    document.getElementById('advanced-toggle-btn').classList.remove('open');
+    document.getElementById('loading-bar-wrap').classList.remove('active');
+    document.getElementById('loading-label').classList.remove('active');
+    document.querySelector('.autofill-btn').disabled = false;
+    document.querySelector('.autofill-btn').style.opacity = '';
+    document.getElementById('url-input').value = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ── Enter key on URL input ──
+  document.getElementById('url-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doAutofill();
+  });
+</script>
+
+</body>
+</html>

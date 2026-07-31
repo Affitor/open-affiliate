@@ -156,7 +156,7 @@ export async function fetchExploreData(
 
   if (error) {
     console.error("Explore query error:", error)
-    return { items: [], total: 0, page, pageSize, platforms: [], programs: [] }
+    return { items: [], total: 0, page, pageSize, platforms: [], categories: [] }
   }
 
   // Get categories for filter dropdown

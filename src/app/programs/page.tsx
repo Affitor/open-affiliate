@@ -322,7 +322,7 @@ function ProgramsContent() {
 
   // Network options with counts
   const NETWORK_LABELS: Record<string, string> = {
-    "In-house": "In-house",
+    "in-house": "In-house",
     partnerstack: "PartnerStack",
     impact: "Impact",
     rewardful: "Rewardful",

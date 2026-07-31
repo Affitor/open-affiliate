@@ -6,7 +6,9 @@
   "bin": {
     "openaffiliate-mcp": "./dist/index.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Affitor/open-affiliate",
@@ -20,11 +22,19 @@
     "dev": "tsup src/index.ts --format esm --watch",
     "lint": "tsc --noEmit"
   },
-  "keywords": ["mcp", "mcp-server", "affiliate", "openaffiliate", "ai-agent", "model-context-protocol", "affiliate-marketing"],
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "affiliate",
+    "openaffiliate",
+    "ai-agent",
+    "model-context-protocol",
+    "affiliate-marketing"
+  ],
   "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.26.0",
-    "zod": "^3.24.0"
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "tsup": "^8.5.0",

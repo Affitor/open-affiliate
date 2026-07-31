@@ -1,7 +1,22 @@
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { parse as parseYaml } from "yaml"
-import { computeScoreV1 } from "@openaffiliate/scoring"
+import { computeScoreV1, type ScoreInput } from "@openaffiliate/scoring"
+
+/**
+ * The subset of a program YAML this route reads. `ScoreInput` already
+ * describes everything the score needs; the rest is presentation only.
+ * Typing it beats `Record<string, unknown>`, which made every field
+ * `unknown` and produced eight type errors downstream.
+ */
+type ProgramYaml = ScoreInput & {
+  name?: string
+  url?: string
+  logo_url?: string
+  brand_color?: string
+}
+
+type Commission = NonNullable<ScoreInput["commission"]>
 
 /**
  * GET /api/badge/[slug].svg
@@ -66,12 +81,12 @@ export async function GET(
   })
 }
 
-async function loadProgram(slug: string): Promise<Record<string, unknown> | null> {
+async function loadProgram(slug: string): Promise<ProgramYaml | null> {
   try {
     const programsDir =
       process.env.PROGRAMS_DIR ?? join(process.cwd(), "programs")
     const raw = await readFile(join(programsDir, `${slug}.yaml`), "utf8")
-    return parseYaml(raw) as Record<string, unknown>
+    return parseYaml(raw) as ProgramYaml
   } catch {
     return null
   }
@@ -81,7 +96,7 @@ async function loadProgram(slug: string): Promise<Record<string, unknown> | null
 
 interface RenderArgs {
   slug: string
-  program: Record<string, unknown>
+  program: ProgramYaml
   score: ReturnType<typeof computeScoreV1>
   variant: Variant
   theme: Theme
@@ -143,7 +158,7 @@ function isHex(s: string): boolean {
  *   2. Clearbit logo by domain (free, decent coverage)
  *   3. null → render monogram fallback
  */
-function resolveLogoUrl(program: Record<string, unknown>): string | null {
+function resolveLogoUrl(program: ProgramYaml): string | null {
   if (typeof program.logo_url === "string" && program.logo_url.startsWith("http")) return program.logo_url
   if (typeof program.url === "string") {
     try {
@@ -417,7 +432,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
 </svg>`
 }
 
-function formatCommission(commission: Record<string, unknown> | null | undefined): string | null {
+function formatCommission(commission: Commission | null | undefined): string | null {
   if (!commission?.rate) return null
   const rate = String(commission.rate).trim()
   const type = commission.type
