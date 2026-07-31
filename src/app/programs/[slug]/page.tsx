@@ -61,6 +61,15 @@ export async function generateMetadata({
   return {
     title,
     description,
+    // Points a machine reader at the markdown twin of this page, which carries
+    // the agents: guidance in a form it can lift directly. Preferred over
+    // putting .md URLs in the sitemap: those are alternate representations of
+    // a page, not separate pages to index.
+    alternates: {
+      types: {
+        "text/markdown": `https://openaffiliate.dev/programs/${slug}.md`,
+      },
+    },
     openGraph: {
       title,
       description,
