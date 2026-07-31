@@ -1,5 +1,17 @@
 import registryData from "./registry.json"
 
+/**
+ * Fallback network for programs whose YAML omits `network`.
+ *
+ * Must stay lowercase: the schema documents network values as
+ * "lowercase, hyphenated" and its enum carries "in-house", so 291 programs
+ * already store that literal string. Using "In-house" here instead produced
+ * two distinct buckets — "in-house" (291) and "In-house" (4) — that both
+ * slugify to /networks/in-house, so the networks index rendered the same
+ * network as two separate cards pointing at one page.
+ */
+export const IN_HOUSE = "in-house"
+
 export interface Program {
   slug: string
   name: string
@@ -264,7 +276,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
   }
 
   if (opts.network) {
-    results = results.filter((p) => (p.network ?? "In-house") === opts.network)
+    results = results.filter((p) => (p.network ?? IN_HOUSE) === opts.network)
   }
 
   if (opts.verified) {
@@ -359,11 +371,11 @@ export const categoryCounts: Record<string, number> = programs.reduce(
   {} as Record<string, number>
 )
 
-export const networks = [...new Set(programs.map((p) => p.network ?? "In-house"))].sort() as string[]
+export const networks = [...new Set(programs.map((p) => p.network ?? IN_HOUSE))].sort() as string[]
 
 export const networkCounts: Record<string, number> = programs.reduce(
   (acc, p) => {
-    const net = p.network ?? "In-house"
+    const net = p.network ?? IN_HOUSE
     acc[net] = (acc[net] || 0) + 1
     return acc
   },
@@ -383,7 +395,7 @@ export function networkToSlug(network: string): string {
 }
 
 export function slugToNetwork(slug: string): string | undefined {
-  const networks = [...new Set(programs.map((p) => p.network ?? "In-house"))]
+  const networks = [...new Set(programs.map((p) => p.network ?? IN_HOUSE))]
   return networks.find((n) => networkToSlug(n) === slug)
 }
 
@@ -417,7 +429,7 @@ function rankScore(rate: string | number): number {
 export function getNetworkStats(): NetworkStats[] {
   const networkMap = new Map<string, Program[]>()
   for (const p of programs) {
-    const net = p.network ?? "In-house"
+    const net = p.network ?? IN_HOUSE
     if (!networkMap.has(net)) networkMap.set(net, [])
     networkMap.get(net)!.push(p)
   }

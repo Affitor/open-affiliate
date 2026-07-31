@@ -32,7 +32,7 @@ import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
-import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
+import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE } from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -513,7 +513,7 @@ export default async function ProgramPage({
                       <Network className="h-3 w-3" /> Network
                     </span>
                     <span className="text-xs font-medium">
-                      {program.network ?? "In-house"}
+                      {program.network ?? IN_HOUSE}
                     </span>
                   </div>
                 )}
