@@ -2,10 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "crypto";
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+}
 
 function hashIp(ip: string): string {
   return createHash("sha256").update(ip + "openaffiliate-salt").digest("hex").slice(0, 16);
@@ -13,6 +15,7 @@ function hashIp(ip: string): string {
 
 // GET /api/votes?slugs=vercel,stripe,notion
 export async function GET(req: NextRequest) {
+  const supabase = getSupabase();
   const slugsParam = req.nextUrl.searchParams.get("slugs");
 
   if (slugsParam) {
@@ -60,6 +63,7 @@ export async function GET(req: NextRequest) {
 
 // POST /api/votes { slug: "vercel" }
 export async function POST(req: NextRequest) {
+  const supabase = getSupabase();
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
     ?? req.headers.get("x-real-ip")
     ?? "unknown";
@@ -99,6 +103,7 @@ export async function POST(req: NextRequest) {
 
 // DELETE /api/votes { slug: "vercel" }
 export async function DELETE(req: NextRequest) {
+  const supabase = getSupabase();
   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
     ?? req.headers.get("x-real-ip")
     ?? "unknown";
