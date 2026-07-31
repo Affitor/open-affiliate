@@ -208,8 +208,18 @@ open-affiliate/
   packages/sdk/        # TypeScript SDK (openaffiliate-sdk)
   scripts/             # Build registry, verify URLs
   schema/              # JSON Schema for YAML validation
+  packages/scoring/    # Affiliate Score v1 — the public formula
   .github/             # CI workflows
 ```
+
+This repository is the source of truth. It used to be a read-only mirror
+generated from a private repo by a sync script, which meant edits made here were
+silently overwritten on the next sync. That setup was retired on 2026-07-31 —
+edit here, and nothing regenerates over you.
+
+Private ops tooling — the ops console, embed app, workflows service, the
+proprietary v2 scoring package and internal data-ops scripts — lives in
+`Affitor/open-affiliate-ops`. Nothing in this repo depends on it.
 
 ## Packages
 
