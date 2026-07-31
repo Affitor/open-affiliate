@@ -1,0 +1,54 @@
+name: Rebuild registry
+
+# src/lib/registry.json and registry-index.json are build artifacts that are
+# committed to the repo. Keep them honest: whenever programs/ changes on main,
+# regenerate and commit them.
+#
+# This used to be a step inside pr-programs.yml gated on `can_auto_merge`, so a
+# PR merged by hand silently skipped it. That is how the committed registry came
+# to claim 750 programs while programs/ held 755 — invisible on the site, since
+# `prebuild` regenerates at build time, but wrong for anyone reading the file.
+#
+# No loop risk: this only triggers on programs/**, and the commit it pushes
+# touches only src/lib/registry*.json. Pushes made with GITHUB_TOKEN do not
+# trigger workflows anyway.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "programs/**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    name: Rebuild registry
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Rebuild
+        run: npx tsx scripts/build-registry.ts
+
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/lib/registry.json src/lib/registry-index.json
+          if git diff --cached --quiet; then
+            echo "registry already up to date"
+          else
+            git commit -m "chore: rebuild registry
+
+          Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
+            git push
+          fi
