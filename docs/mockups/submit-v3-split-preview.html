@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your Program — OpenAffiliate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Design tokens (dark mode) ─────────────────────────────────────── */
+    :root {
+      --bg:            #1a1a18;          /* oklch(0.13 0.005 75) approx */
+      --bg-card:       #1f1f1d;          /* oklch(0.17 0.005 75) approx */
+      --bg-muted:      #252523;          /* oklch(0.22 0.005 75) approx */
+      --fg:            #fafafa;          /* oklch(0.985 0 0) */
+      --fg-muted:      #a3a3a3;          /* oklch(0.708 0 0) */
+      --fg-subtle:     #737373;
+      --border:        rgba(255,255,255,0.10);
+      --border-soft:   rgba(255,255,255,0.06);
+      --input-bg:      rgba(255,255,255,0.08);
+      --input-border:  rgba(255,255,255,0.12);
+      --radius:        0.625rem;
+      --radius-lg:     0.875rem;
+      --radius-xl:     1.125rem;
+      --accent:        #34d399;          /* emerald-400 */
+      --accent-dim:    rgba(52,211,153,0.12);
+      --accent-border: rgba(52,211,153,0.28);
+      --accent-dark:   #059669;
+      --blue:          #60a5fa;
+      --blue-dim:      rgba(96,165,250,0.12);
+      --font: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'Geist Mono', ui-monospace, monospace;
+    }
+
+    html { color-scheme: dark; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Dot grid background */
+    .dot-grid {
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* ── Nav ───────────────────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--border-soft);
+      background: rgba(26,26,24,0.85);
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--fg);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -0.01em;
+    }
+    .nav-logo-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background: linear-gradient(135deg, var(--accent) 0%, #10b981 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11px;
+      color: #0a1a12;
+      flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .nav-link {
+      font-size: 13px;
+      color: var(--fg-muted);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 6px;
+      transition: color 0.15s, background 0.15s;
+    }
+    .nav-link:hover { color: var(--fg); background: var(--bg-muted); }
+    .nav-link.active { color: var(--fg); background: var(--bg-muted); }
+    .nav-right { display: flex; align-items: center; gap: 8px; }
+    .btn-sm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all 0.15s;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: var(--bg-muted);
+      color: var(--fg-muted);
+    }
+    .btn-sm:hover { color: var(--fg); border-color: rgba(255,255,255,0.18); }
+
+    /* ── Page shell ────────────────────────────────────────────────────── */
+    main { flex: 1; padding-bottom: 80px; }
+
+    /* ── Page header ───────────────────────────────────────────────────── */
+    .page-header {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px 28px;
+    }
+    .dev-escape {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11.5px;
+      color: var(--fg-subtle);
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-soft);
+      background: var(--bg-muted);
+      margin-bottom: 20px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .dev-escape:hover { color: var(--fg-muted); border-color: var(--border); }
+    .dev-escape svg { opacity: 0.5; }
+
+    .page-title {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--fg-muted);
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    /* ── Trust strip ───────────────────────────────────────────────────── */
+    .trust-strip {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--fg-subtle);
+    }
+    .trust-item svg { color: var(--accent); flex-shrink: 0; }
+    .trust-sep { color: var(--border); }
+
+    /* ── Two-column layout ──────────────────────────────────────────────── */
+    .split-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 900px) {
+      .split-layout { grid-template-columns: 1fr; }
+      .preview-col { display: none; }
+    }
+
+    /* ── Form column ────────────────────────────────────────────────────── */
+    .form-col { display: flex; flex-direction: column; gap: 16px; }
+
+    /* ── Magic URL step ─────────────────────────────────────────────────── */
+    .magic-card {
+      background: var(--bg-card);
+      border: 1px solid var(--accent-border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+    .magic-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 40% at 100% 0%, rgba(52,211,153,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .magic-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+    .magic-label .step-num {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    .magic-heading {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+    .magic-subhead {
+      font-size: 13px;
+      color: var(--fg-muted);
+      margin-bottom: 14px;
+    }
+    .url-row {
+      display: flex;
+      gap: 8px;
+    }
+    .url-row input {
+      flex: 1;
+    }
+    .fetch-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: #0a1a12;
+      border: none;
+      cursor: pointer;
+      white-space: nowrap;
+      height: 38px;
+      transition: background 0.15s, opacity 0.15s;
+      flex-shrink: 0;
+    }
+    .fetch-btn:hover { background: #6ee7b7; }
+    .fetch-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* Fetching state */
+    .fetch-status {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      margin-top: 10px;
+    }
+    .fetch-status.visible { display: flex; }
+    .fetch-status.success { color: var(--accent); }
+    .spinner {
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(255,255,255,0.15);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Form section card ──────────────────────────────────────────────── */
+    .form-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+    }
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px 20px 14px;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .section-step {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+    }
+    .section-step.active {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+    .form-section-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* ── Form fields ────────────────────────────────────────────────────── */
+    .field-group {
+      display: grid;
+      gap: 12px;
+    }
+    .field-group.cols-2 { grid-template-columns: 1fr 1fr; }
+    .field-group.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width: 600px) {
+      .field-group.cols-2 { grid-template-columns: 1fr; }
+      .field-group.cols-3 { grid-template-columns: 1fr; }
+    }
+
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--fg-muted);
+      letter-spacing: 0.01em;
+    }
+    label .hint {
+      font-weight: 400;
+      color: var(--fg-subtle);
+      margin-left: 4px;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="number"],
+    select,
+    textarea {
+      font-family: var(--font);
+      font-size: 13.5px;
+      color: var(--fg);
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      width: 100%;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    input::placeholder, textarea::placeholder { color: var(--fg-subtle); }
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(52,211,153,0.4);
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.08);
+      background: rgba(255,255,255,0.07);
+    }
+    textarea { resize: none; }
+
+    /* Select arrow */
+    .select-wrap { position: relative; }
+    .select-wrap select { padding-right: 32px; cursor: pointer; }
+    .select-wrap::after {
+      content: '';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 5px solid var(--fg-subtle);
+      pointer-events: none;
+    }
+    select option { background: #1f1f1d; color: var(--fg); }
+
+    /* Inline prefix/suffix */
+    .input-prefix {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius);
+      background: var(--input-bg);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input-prefix:focus-within {
+      border-color: rgba(52,211,153,0.4);
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.08);
+    }
+    .input-prefix .prefix-text {
+      padding: 8px 10px 8px 12px;
+      font-size: 13px;
+      color: var(--fg-subtle);
+      border-right: 1px solid var(--border-soft);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .input-prefix input {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      flex: 1;
+      box-shadow: none;
+    }
+    .input-prefix input:focus {
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    /* Suffix for % */
+    .input-suffix {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--input-border);
+      border-radius: var(--radius);
+      background: var(--input-bg);
+      overflow: hidden;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+    .input-suffix:focus-within {
+      border-color: rgba(52,211,153,0.4);
+      box-shadow: 0 0 0 3px rgba(52,211,153,0.08);
+    }
+    .input-suffix input {
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      flex: 1;
+      min-width: 0;
+      box-shadow: none;
+    }
+    .input-suffix input:focus {
+      border-color: transparent;
+      box-shadow: none;
+    }
+    .input-suffix .suffix-text {
+      padding: 8px 12px 8px 8px;
+      font-size: 13px;
+      color: var(--fg-subtle);
+      border-left: 1px solid var(--border-soft);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Commission type pills */
+    .type-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .type-pill {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 12px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .type-pill:hover { border-color: rgba(255,255,255,0.2); color: var(--fg); }
+    .type-pill.selected {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+
+    /* ── Advanced toggle ────────────────────────────────────────────────── */
+    .advanced-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12.5px;
+      color: var(--fg-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      padding: 10px 20px;
+      border-top: 1px solid var(--border-soft);
+      width: 100%;
+      text-align: left;
+      transition: color 0.15s;
+    }
+    .advanced-toggle:hover { color: var(--fg); }
+    .advanced-toggle svg { transition: transform 0.2s; }
+    .advanced-toggle.open svg { transform: rotate(180deg); }
+    .advanced-body {
+      display: none;
+      padding: 16px 20px 20px;
+      border-top: 1px solid var(--border-soft);
+      flex-direction: column;
+      gap: 14px;
+    }
+    .advanced-body.open { display: flex; }
+
+    /* ── Identity section ───────────────────────────────────────────────── */
+    .identity-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .identity-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .identity-head svg { color: var(--accent); }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 15px;
+      height: 15px;
+      min-width: 15px;
+      margin-top: 1px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      border-radius: 4px;
+      cursor: pointer;
+      accent-color: var(--accent);
+    }
+    .checkbox-label {
+      font-size: 13px;
+      color: var(--fg-muted);
+      line-height: 1.5;
+    }
+    .checkbox-label strong { color: var(--fg); }
+
+    /* ── Submit row ─────────────────────────────────────────────────────── */
+    .submit-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: var(--radius-lg);
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s, transform 0.1s;
+      letter-spacing: -0.01em;
+    }
+    .btn-primary:hover { background: rgba(250,250,250,0.9); }
+    .btn-primary:active { transform: scale(0.99); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .submit-note {
+      font-size: 11.5px;
+      color: var(--fg-subtle);
+      text-align: center;
+      line-height: 1.6;
+    }
+    .submit-note a { color: var(--fg-muted); text-decoration: underline; text-decoration-color: rgba(255,255,255,0.15); }
+
+    /* ── Preview column ─────────────────────────────────────────────────── */
+    .preview-col {
+      position: sticky;
+      top: 72px;
+    }
+    .preview-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .preview-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg-subtle);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .preview-label::before, .preview-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border-soft);
+    }
+
+    /* Live indicator */
+    .live-dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      color: var(--accent);
+      font-weight: 500;
+    }
+    .live-dot::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(52,211,153,0.4);
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(52,211,153,0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(52,211,153,0); }
+      100% { box-shadow: 0 0 0 0 rgba(52,211,153,0); }
+    }
+
+    /* Program card preview */
+    .program-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 18px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .program-card.has-content {
+      border-color: rgba(52,211,153,0.15);
+      box-shadow: 0 0 20px rgba(52,211,153,0.04);
+    }
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .card-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--fg-subtle);
+      flex-shrink: 0;
+      overflow: hidden;
+      transition: background 0.2s, color 0.2s;
+    }
+    .card-logo.filled {
+      background: linear-gradient(135deg, #1a3a2a 0%, #0d2118 100%);
+      color: var(--accent);
+      border-color: rgba(52,211,153,0.15);
+    }
+    .card-meta { flex: 1; min-width: 0; }
+    .card-name {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--fg);
+      margin-bottom: 2px;
+      transition: all 0.15s;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .card-name.empty { color: var(--fg-subtle); font-weight: 400; font-style: italic; }
+    .card-category {
+      font-size: 11px;
+      color: var(--fg-subtle);
+    }
+    .card-badges {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 20px;
+      line-height: 1;
+    }
+    .badge-commission {
+      background: rgba(52,211,153,0.12);
+      color: var(--accent);
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+    .badge-cookie {
+      background: rgba(255,255,255,0.06);
+      color: var(--fg-muted);
+      border: 1px solid var(--border);
+    }
+    .badge-type {
+      background: rgba(255,255,255,0.06);
+      color: var(--fg-muted);
+      border: 1px solid var(--border);
+    }
+    .badge-verified {
+      background: rgba(52,211,153,0.1);
+      color: var(--accent);
+      border: 1px solid rgba(52,211,153,0.2);
+    }
+    .card-description {
+      font-size: 12.5px;
+      color: var(--fg-muted);
+      line-height: 1.55;
+      margin-bottom: 14px;
+      min-height: 36px;
+    }
+    .card-description.empty { color: var(--fg-subtle); font-style: italic; }
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .card-cta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .card-score {
+      font-size: 11px;
+      color: var(--fg-subtle);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Preview context labels */
+    .preview-ctx {
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 14px 16px;
+      font-size: 12px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+    }
+    .preview-ctx strong { color: var(--fg); font-weight: 600; }
+    .preview-ctx ul {
+      list-style: none;
+      margin-top: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .preview-ctx ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+    .preview-ctx ul li::before {
+      content: '↳';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-size: 11px;
+      margin-top: 1px;
+    }
+
+    /* ── Success state ──────────────────────────────────────────────────── */
+    #success-state { display: none; }
+    #success-state.visible { display: block; }
+    #form-state.hidden { display: none !important; }
+
+    .success-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+      text-align: center;
+    }
+    .success-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .success-icon svg { color: var(--accent); }
+    .success-title {
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .success-subtitle {
+      font-size: 15px;
+      color: var(--fg-muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .success-email-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: 40px;
+      padding: 8px 16px;
+      font-size: 13px;
+      color: var(--fg);
+      margin-bottom: 36px;
+    }
+    .success-email-badge svg { color: var(--accent); }
+
+    .what-next {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .what-next-title {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--fg-subtle);
+      margin-bottom: 16px;
+    }
+    .next-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .next-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-soft);
+    }
+    .next-step:last-child { border-bottom: none; }
+    .next-step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      flex-shrink: 0;
+    }
+    .next-step.done .next-step-num {
+      background: var(--accent-dim);
+      border-color: var(--accent-border);
+      color: var(--accent);
+    }
+    .next-step-body { flex: 1; }
+    .next-step-title {
+      font-size: 13.5px;
+      font-weight: 600;
+      margin-bottom: 3px;
+    }
+    .next-step-desc {
+      font-size: 12.5px;
+      color: var(--fg-muted);
+      line-height: 1.5;
+    }
+    .verified-badge-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      border-radius: 20px;
+      padding: 2px 8px;
+      margin-left: 4px;
+    }
+
+    .success-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--bg-muted);
+      color: var(--fg-muted);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn-outline:hover { color: var(--fg); border-color: rgba(255,255,255,0.2); }
+
+    /* ── Footer ─────────────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border-soft);
+      padding: 32px 24px;
+    }
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--fg-muted);
+    }
+    .footer-links {
+      display: flex;
+      gap: 16px;
+    }
+    .footer-link {
+      font-size: 12px;
+      color: var(--fg-subtle);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-link:hover { color: var(--fg-muted); }
+
+    /* ── Animations ─────────────────────────────────────────────────────── */
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-in {
+      animation: fadeSlideUp 0.4s ease forwards;
+    }
+
+    /* Filled field glow */
+    input.filled, select.filled, textarea.filled {
+      border-color: rgba(52,211,153,0.2);
+    }
+
+    /* Responsive nav */
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .page-title { font-size: 22px; }
+    }
+  </style>
+</head>
+<body class="dot-grid">
+
+<!-- ── Nav ──────────────────────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <div class="nav-logo-icon">OA</div>
+      OpenAffiliate
+    </a>
+    <div class="nav-links">
+      <a href="/programs" class="nav-link">Programs</a>
+      <a href="/categories" class="nav-link">Categories</a>
+      <a href="/rankings" class="nav-link">Rankings</a>
+      <a href="/docs" class="nav-link">Docs</a>
+      <a href="/submit" class="nav-link active">Submit</a>
+    </div>
+    <div class="nav-right">
+      <a href="/api" class="btn-sm">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        API
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Main ──────────────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- ─ Form state ──────────────────────────────────────────────────────── -->
+  <div id="form-state">
+
+    <!-- Page header -->
+    <div class="page-header animate-in">
+      <a href="https://github.com/Affitor/open-affiliate" target="_blank" class="dev-escape">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.73.08-.73 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Developer? List via GitHub
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M7 7h10v10"/></svg>
+      </a>
+
+      <h1 class="page-title">List your affiliate program</h1>
+      <p class="page-subtitle">Reach 750+ affiliates and AI agents that recommend products to SaaS buyers every day. Takes about 3 minutes.</p>
+
+      <div class="trust-strip">
+        <span class="trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Free forever
+        </span>
+        <span class="trust-sep">·</span>
+        <span class="trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          750+ programs listed
+        </span>
+        <span class="trust-sep">·</span>
+        <span class="trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          Discovered by AI agents
+        </span>
+        <span class="trust-sep">·</span>
+        <span class="trust-item">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Verified-by-Stripe option
+        </span>
+      </div>
+    </div>
+
+    <!-- Split layout -->
+    <div class="split-layout">
+
+      <!-- ─ Form column ──────────────────────────────────────────────────── -->
+      <div class="form-col">
+
+        <!-- Step 1: Magic URL -->
+        <div class="magic-card animate-in">
+          <div class="magic-label">
+            <span class="step-num">1</span>
+            Start here
+          </div>
+          <div class="magic-heading">Paste your affiliate program URL</div>
+          <div class="magic-subhead">We'll read your page and fill in the details automatically.</div>
+          <div class="url-row">
+            <div class="input-prefix" style="flex:1">
+              <span class="prefix-text">https://</span>
+              <input type="text" id="program-url" placeholder="yourcompany.com/affiliates" oninput="onUrlInput()" />
+            </div>
+            <button class="fetch-btn" id="fetch-btn" onclick="simulateFetch()" disabled>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Auto-fill
+            </button>
+          </div>
+          <div class="fetch-status" id="fetch-status">
+            <div class="spinner"></div>
+            Reading your page...
+          </div>
+          <div class="fetch-status success" id="fetch-success" style="display:none">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Found your program — form filled in below. Review and adjust anything.
+          </div>
+        </div>
+
+        <!-- Step 2: Program basics -->
+        <div class="form-section animate-in" style="animation-delay:0.05s">
+          <div class="form-section-header">
+            <span class="section-step active">2</span>
+            <span class="form-section-title">About your program</span>
+          </div>
+          <div class="form-section-body">
+            <div class="field">
+              <label for="name">Program name <span class="hint">Your product name, e.g. "Acme Analytics"</span></label>
+              <input type="text" id="name" placeholder="Acme Analytics" oninput="updatePreview()" />
+            </div>
+            <div class="field-group cols-2">
+              <div class="field">
+                <label for="website">Website</label>
+                <div class="input-prefix">
+                  <span class="prefix-text">https://</span>
+                  <input type="text" id="website" placeholder="acme.com" oninput="updatePreview()" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="signup-url">Affiliate signup page</label>
+                <div class="input-prefix">
+                  <span class="prefix-text">https://</span>
+                  <input type="text" id="signup-url" placeholder="acme.com/affiliates" />
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="category">Category</label>
+              <div class="select-wrap">
+                <select id="category" onchange="updatePreview()">
+                  <option value="">Select a category…</option>
+                  <option>AI / Machine Learning</option>
+                  <option>Analytics</option>
+                  <option>Communication</option>
+                  <option>CRM / Sales</option>
+                  <option>Customer Success</option>
+                  <option>Design Tools</option>
+                  <option>Developer Tools</option>
+                  <option>E-commerce</option>
+                  <option>Education / Learning</option>
+                  <option>Finance / Fintech</option>
+                  <option>HR / Recruiting</option>
+                  <option>Infrastructure / DevOps</option>
+                  <option>Legal / Compliance</option>
+                  <option>Marketing / SEO</option>
+                  <option>Payments</option>
+                  <option>Productivity</option>
+                  <option>Project Management</option>
+                  <option>Security</option>
+                  <option>Support / Helpdesk</option>
+                  <option>Video / Webinars</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="pitch">One-line pitch <span class="hint">What does your product do? (shown to affiliates)</span></label>
+              <input type="text" id="pitch" placeholder="The analytics platform that makes data teams 10x faster." maxlength="120" oninput="updatePreview()" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Commission -->
+        <div class="form-section animate-in" style="animation-delay:0.1s">
+          <div class="form-section-header">
+            <span class="section-step active">3</span>
+            <span class="form-section-title">What do affiliates earn?</span>
+          </div>
+          <div class="form-section-body">
+            <div class="field">
+              <label>Commission type</label>
+              <div class="type-pills">
+                <button class="type-pill selected" onclick="selectType(this, 'Recurring')" id="pill-recurring">Recurring %</button>
+                <button class="type-pill" onclick="selectType(this, 'One-time')" id="pill-onetime">One-time %</button>
+                <button class="type-pill" onclick="selectType(this, 'Flat fee')" id="pill-flat">Flat fee ($)</button>
+                <button class="type-pill" onclick="selectType(this, 'Tiered')" id="pill-tiered">Tiered</button>
+              </div>
+            </div>
+            <div class="field-group cols-2">
+              <div class="field">
+                <label for="commission-rate">Commission rate</label>
+                <div class="input-suffix">
+                  <input type="text" id="commission-rate" placeholder="25" oninput="updatePreview()" />
+                  <span class="suffix-text">%</span>
+                </div>
+              </div>
+              <div class="field">
+                <label for="cookie-window">
+                  How long is a referral tracked?
+                  <span class="hint">cookie window</span>
+                </label>
+                <div class="select-wrap">
+                  <select id="cookie-window" onchange="updatePreview()">
+                    <option value="14">14 days</option>
+                    <option value="30" selected>30 days</option>
+                    <option value="60">60 days</option>
+                    <option value="90">90 days</option>
+                    <option value="180">6 months</option>
+                    <option value="365">1 year</option>
+                    <option value="0">Lifetime</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Advanced toggle -->
+          <button class="advanced-toggle" id="advanced-toggle" onclick="toggleAdvanced()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            Add more details
+            <span style="color:var(--fg-subtle);font-size:11px;margin-left:2px">(payout method, approval, restrictions)</span>
+          </button>
+          <div class="advanced-body" id="advanced-body">
+            <div class="field-group cols-2">
+              <div class="field">
+                <label for="payout-min">Minimum payout</label>
+                <div class="input-prefix">
+                  <span class="prefix-text">$</span>
+                  <input type="number" id="payout-min" placeholder="50" min="0" />
+                </div>
+              </div>
+              <div class="field">
+                <label for="payout-freq">Paid out</label>
+                <div class="select-wrap">
+                  <select id="payout-freq">
+                    <option>Monthly</option>
+                    <option>Every 2 weeks</option>
+                    <option>Net-30</option>
+                    <option>Net-60</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field-group cols-2">
+              <div class="field">
+                <label for="payout-method">Paid via</label>
+                <div class="select-wrap">
+                  <select id="payout-method">
+                    <option>PayPal</option>
+                    <option>Bank transfer</option>
+                    <option>Stripe</option>
+                    <option>Check</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label for="approval">Application review</label>
+                <div class="select-wrap">
+                  <select id="approval">
+                    <option>Manual (1–3 days)</option>
+                    <option>Auto-approved</option>
+                    <option>Invite only</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label for="restrictions">Any restrictions? <span class="hint">optional — e.g. "No coupon sites"</span></label>
+              <input type="text" id="restrictions" placeholder="e.g. No coupon sites, no paid search on brand terms" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Identity -->
+        <div class="identity-section animate-in" style="animation-delay:0.15s">
+          <div class="identity-head">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Your email (so you can edit your listing later)
+          </div>
+          <div class="field">
+            <label for="email">Work email</label>
+            <input type="email" id="email" placeholder="you@yourcompany.com" />
+          </div>
+          <label class="checkbox-row">
+            <input type="checkbox" id="works-here" />
+            <span class="checkbox-label">
+              <strong>I work at this company</strong> — lets us add a
+              <span class="verified-badge-inline">
+                <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+              badge later
+            </span>
+          </label>
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-row animate-in" style="animation-delay:0.2s">
+          <button class="btn-primary" onclick="showSuccess()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Submit for review
+          </button>
+          <p class="submit-note">
+            Free forever. No account needed. We'll email you a link to edit your listing.
+            <br />By submitting you agree to our <a href="/terms">terms</a>. Review usually takes a few minutes.
+          </p>
+        </div>
+
+      </div><!-- /form-col -->
+
+      <!-- ─ Preview column ─────────────────────────────────────────────── -->
+      <div class="preview-col">
+        <div class="preview-wrapper">
+
+          <div class="preview-label">
+            <span class="live-dot">Live preview</span>
+          </div>
+
+          <!-- Program card -->
+          <div class="program-card" id="preview-card">
+            <div class="card-top">
+              <div class="card-logo" id="prev-logo">?</div>
+              <div class="card-meta">
+                <div class="card-name empty" id="prev-name">Your program name</div>
+                <div class="card-category" id="prev-category">Category · openaffiliate.dev</div>
+              </div>
+            </div>
+            <div class="card-badges" id="prev-badges">
+              <span class="badge badge-commission" id="prev-commission">— commission</span>
+              <span class="badge badge-cookie" id="prev-cookie">30 day cookie</span>
+              <span class="badge badge-type" id="prev-type">Recurring</span>
+            </div>
+            <div class="card-description empty" id="prev-description">
+              Your one-line pitch will appear here — what makes affiliates want to promote you?
+            </div>
+            <div class="card-footer">
+              <span class="card-cta">
+                Apply to program
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+              <span class="card-score">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Score pending
+              </span>
+            </div>
+          </div>
+
+          <!-- Context box -->
+          <div class="preview-ctx">
+            <strong>This is exactly what affiliates and AI agents will see</strong> in the directory.
+            <ul>
+              <li>Affiliates browse by commission rate and category</li>
+              <li>AI agents use your listing to recommend your product to buyers</li>
+              <li>Verified programs get a blue checkmark and rank higher</li>
+            </ul>
+          </div>
+
+          <!-- API context (subtle) -->
+          <div style="background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.05);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:11px;color:var(--fg-subtle);">
+            <div style="color:var(--fg-subtle);margin-bottom:6px;font-family:var(--font);font-size:10px;text-transform:uppercase;letter-spacing:0.06em">Also discoverable via API</div>
+            <span style="color:#4ade80">GET</span> <span style="color:rgba(255,255,255,0.4)">/api/programs/</span><span id="prev-slug-api" style="color:rgba(255,255,255,0.6)">your-program</span>
+          </div>
+
+        </div>
+      </div><!-- /preview-col -->
+
+    </div><!-- /split-layout -->
+  </div><!-- /form-state -->
+
+  <!-- ─ Success state ──────────────────────────────────────────────────── -->
+  <div id="success-state">
+    <div class="page-header" style="text-align:center;padding-top:60px">
+      <!-- intentionally empty, content below -->
+    </div>
+    <div class="success-wrap animate-in">
+
+      <div class="success-icon">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+
+      <h1 class="success-title">Submitted — you're in the queue</h1>
+      <p class="success-subtitle">
+        We review every submission manually. Most programs go live within a few minutes during business hours.
+      </p>
+
+      <div class="success-email-badge">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Check your email for an edit link
+      </div>
+
+      <div class="what-next">
+        <div class="what-next-title">What happens next</div>
+        <div class="next-steps">
+          <div class="next-step done">
+            <div class="next-step-num">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <div class="next-step-body">
+              <div class="next-step-title">Submitted</div>
+              <div class="next-step-desc">Your program details are in our review queue. Done!</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num">2</div>
+            <div class="next-step-body">
+              <div class="next-step-title">Quick review</div>
+              <div class="next-step-desc">We check that commission details are accurate and the signup URL works. Usually done in minutes.</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num">3</div>
+            <div class="next-step-body">
+              <div class="next-step-title">Live in the directory</div>
+              <div class="next-step-desc">Your program appears in search results, category pages, and the API. Affiliates and AI agents can discover it immediately.</div>
+            </div>
+          </div>
+          <div class="next-step">
+            <div class="next-step-num">4</div>
+            <div class="next-step-body">
+              <div class="next-step-title">Claim &amp; verify for the
+                <span class="verified-badge-inline">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  Verified
+                </span>
+                badge
+              </div>
+              <div class="next-step-desc">We'll email you a link. Connect your Stripe account to confirm real payouts — verified programs rank higher and convert more affiliates.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="success-actions">
+        <a href="/programs" class="btn-outline">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Browse programs
+        </a>
+        <a href="/submit" class="btn-outline" onclick="resetForm(event)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Submit another program
+        </a>
+      </div>
+
+    </div>
+  </div><!-- /success-state -->
+
+</main>
+
+<!-- ── Footer ──────────────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <div class="nav-logo-icon" style="width:18px;height:18px;font-size:10px">OA</div>
+      OpenAffiliate — open source, community-driven
+    </div>
+    <div class="footer-links">
+      <a href="/programs" class="footer-link">Programs</a>
+      <a href="/docs" class="footer-link">Docs</a>
+      <a href="https://github.com/Affitor/open-affiliate" class="footer-link">GitHub</a>
+      <a href="/feedback" class="footer-link">Feedback</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ── State ───────────────────────────────────────────────────────────── */
+  var commissionType = 'Recurring';
+  var fetchTimeout = null;
+
+  /* ── URL input → enable Auto-fill ───────────────────────────────────── */
+  function onUrlInput() {
+    var url = document.getElementById('program-url').value.trim();
+    document.getElementById('fetch-btn').disabled = url.length < 5;
+    // Mirror to website field
+    document.getElementById('website').value = url.replace(/\/affiliates?.*$/, '');
+    updatePreview();
+  }
+
+  /* ── Simulate fetch & autofill ──────────────────────────────────────── */
+  function simulateFetch() {
+    var status = document.getElementById('fetch-status');
+    var success = document.getElementById('fetch-success');
+    var btn = document.getElementById('fetch-btn');
+
+    status.style.display = 'flex';
+    success.style.display = 'none';
+    btn.disabled = true;
+    btn.innerHTML = '<div class="spinner" style="border-top-color:#0a1a12"></div> Reading…';
+
+    clearTimeout(fetchTimeout);
+    fetchTimeout = setTimeout(function() {
+      status.style.display = 'none';
+
+      // Pre-fill with demo data
+      document.getElementById('name').value = 'Acme Analytics';
+      document.getElementById('website').value = 'acme.com';
+      document.getElementById('signup-url').value = 'acme.com/affiliates';
+      document.getElementById('pitch').value = 'The analytics platform that makes data teams 10× faster.';
+      document.getElementById('commission-rate').value = '30';
+      document.getElementById('cookie-window').value = '60';
+
+      var catSel = document.getElementById('category');
+      for (var i = 0; i < catSel.options.length; i++) {
+        if (catSel.options[i].text === 'Analytics') {
+          catSel.selectedIndex = i;
+          break;
+        }
+      }
+
+      success.style.display = 'flex';
+      btn.disabled = false;
+      btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Done';
+
+      updatePreview();
+    }, 1600);
+  }
+
+  /* ── Commission type pills ──────────────────────────────────────────── */
+  function selectType(btn, type) {
+    commissionType = type;
+    document.querySelectorAll('.type-pill').forEach(function(p) { p.classList.remove('selected'); });
+    btn.classList.add('selected');
+
+    // Update suffix label
+    var suffix = document.querySelector('.input-suffix .suffix-text');
+    if (suffix) {
+      suffix.textContent = type === 'Flat fee ($)' ? '$' : '%';
+    }
+
+    updatePreview();
+  }
+
+  /* ── Advanced toggle ────────────────────────────────────────────────── */
+  function toggleAdvanced() {
+    var toggle = document.getElementById('advanced-toggle');
+    var body = document.getElementById('advanced-body');
+    toggle.classList.toggle('open');
+    body.classList.toggle('open');
+  }
+
+  /* ── Live preview update ────────────────────────────────────────────── */
+  function updatePreview() {
+    var name = document.getElementById('name').value.trim();
+    var category = document.getElementById('category').value;
+    var pitch = document.getElementById('pitch').value.trim();
+    var rate = document.getElementById('commission-rate').value.trim();
+    var cookie = document.getElementById('cookie-window').value;
+
+    // Name
+    var nameEl = document.getElementById('prev-name');
+    if (name) {
+      nameEl.textContent = name;
+      nameEl.classList.remove('empty');
+    } else {
+      nameEl.textContent = 'Your program name';
+      nameEl.classList.add('empty');
+    }
+
+    // Logo initials
+    var logoEl = document.getElementById('prev-logo');
+    if (name) {
+      var words = name.split(' ');
+      var initials = words.length >= 2
+        ? (words[0][0] + words[1][0]).toUpperCase()
+        : name.slice(0, 2).toUpperCase();
+      logoEl.textContent = initials;
+      logoEl.classList.add('filled');
+    } else {
+      logoEl.textContent = '?';
+      logoEl.classList.remove('filled');
+    }
+
+    // Category
+    var catEl = document.getElementById('prev-category');
+    catEl.textContent = (category || 'Category') + ' · openaffiliate.dev';
+
+    // Description
+    var descEl = document.getElementById('prev-description');
+    if (pitch) {
+      descEl.textContent = pitch;
+      descEl.classList.remove('empty');
+    } else {
+      descEl.textContent = 'Your one-line pitch will appear here — what makes affiliates want to promote you?';
+      descEl.classList.add('empty');
+    }
+
+    // Commission badge
+    var commBadge = document.getElementById('prev-commission');
+    var suffix = commissionType === 'Flat fee ($)' ? '' : '%';
+    var prefix = commissionType === 'Flat fee ($)' ? '$' : '';
+    commBadge.textContent = rate ? prefix + rate + suffix + ' commission' : '— commission';
+
+    // Cookie badge
+    var cookieEl = document.getElementById('prev-cookie');
+    var cookieMap = {'0':'Lifetime cookie','14':'14d cookie','30':'30d cookie','60':'60d cookie','90':'90d cookie','180':'6mo cookie','365':'1yr cookie'};
+    cookieEl.textContent = cookieMap[cookie] || cookie + 'd cookie';
+
+    // Type badge
+    document.getElementById('prev-type').textContent = commissionType;
+
+    // Card glow
+    var card = document.getElementById('preview-card');
+    if (name || pitch || rate) {
+      card.classList.add('has-content');
+    } else {
+      card.classList.remove('has-content');
+    }
+
+    // API slug
+    var slug = name
+      ? name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+      : 'your-program';
+    document.getElementById('prev-slug-api').textContent = slug;
+  }
+
+  /* ── Show success ───────────────────────────────────────────────────── */
+  function showSuccess() {
+    document.getElementById('form-state').classList.add('hidden');
+    var s = document.getElementById('success-state');
+    s.style.display = 'block';
+    s.classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function resetForm(e) {
+    e.preventDefault();
+    document.getElementById('form-state').classList.remove('hidden');
+    document.getElementById('success-state').style.display = 'none';
+    document.getElementById('success-state').classList.remove('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
