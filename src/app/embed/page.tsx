@@ -1,4 +1,5 @@
 import Script from "next/script"
+import type { JSX } from "react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
