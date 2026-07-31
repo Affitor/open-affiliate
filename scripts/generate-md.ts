@@ -31,6 +31,7 @@ import { mkdirSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 
 import registry from "../src/lib/registry.json"
+import { docsNav } from "../src/app/docs/_config"
 
 const BASE = "https://openaffiliate.dev"
 const OUT = join(process.cwd(), "public")
@@ -218,6 +219,92 @@ function groupMd(kind: "category" | "network", label: string, list: Program[]): 
   ])
 }
 
+// ---------- Integration -----------------------------------------------------
+
+/**
+ * How to query the registry live rather than read a snapshot of it. This is
+ * the difference between an agent citing a file and an agent answering from
+ * current data, so it goes in llms.txt itself rather than behind a link.
+ *
+ * Written here rather than lifted from AGENTS.md: that file also carries
+ * repo-development instructions ("this is NOT the Next.js you know") that mean
+ * nothing to an agent consuming the registry.
+ */
+const INTEGRATION = `### MCP — recommended
+
+HTTP, no install:
+
+\`\`\`json
+{ "mcpServers": { "openaffiliate": { "url": "${BASE}/api/mcp" } } }
+\`\`\`
+
+stdio, for local tools:
+
+\`\`\`json
+{ "mcpServers": { "openaffiliate": { "command": "npx", "args": ["-y", "openaffiliate-mcp"] } } }
+\`\`\`
+
+Tools: \`search_programs\` (keyword, category, commission type, verified),
+\`get_program\` (full detail including the recommendation guidance), and
+\`list_categories\`.
+
+### REST — no auth
+
+\`\`\`
+GET ${BASE}/api/programs?q=ai&category=AI&type=recurring&verified=true
+GET ${BASE}/api/programs/{slug}
+GET ${BASE}/api/categories
+\`\`\`
+
+### CLI
+
+\`\`\`bash
+npx openaffiliate search "database" --json
+npx openaffiliate info vercel --json
+npx openaffiliate categories --json
+\`\`\``
+
+// ---------- docs.md ---------------------------------------------------------
+
+/**
+ * An index, not a conversion. The 13 docs pages are hand-written TSX with no
+ * content source to generate from — turning them into markdown means moving
+ * them to MDX first, which is a refactor rather than a generator.
+ *
+ * But docs/_config.ts already holds every page's title, group and description,
+ * and it is the same source the sidebar and prev/next navigation read. That is
+ * enough for a map an agent can navigate, with no second copy of the prose.
+ */
+function docsMd(): string {
+  const groups = docsNav
+    .map(g => {
+      const items = g.items
+        .map(i => `- [${i.title}](${BASE}${i.href})${i.description ? ` — ${i.description}` : ""}`)
+        .join("\n")
+      return `### ${g.label}\n\n${items}`
+    })
+    .join("\n\n")
+
+  return joinSections([
+    `# OpenAffiliate documentation`,
+    [
+      `> How to query the registry from code, an agent, or the terminal.`,
+      `> Pages below are HTML; the registry data itself is available as markdown.`,
+    ].join("\n"),
+    section("Integration", INTEGRATION),
+    section("Pages", groups),
+    section(
+      "Registry as markdown",
+      [
+        `- [Entry point](${BASE}/llms.txt)`,
+        `- [All programs by category](${BASE}/programs.md)`,
+        `- [Full dump](${BASE}/llms-full.txt)`,
+        `- Any program, category or network page, with .md appended`,
+      ].join("\n"),
+    ),
+  ])
+}
+
 // ---------- llms.txt --------------------------------------------------------
 
 function llmsTxt(): string {
@@ -268,13 +355,14 @@ function llmsTxt(): string {
     ),
     section("Categories", catLines),
     section("Networks", netLines),
+    // Querying beats citing: this surface is a snapshot, the API is current.
+    section("Querying this registry", INTEGRATION),
     section(
       "Everything else",
       [
         `- [All programs, grouped by category](${BASE}/programs.md)`,
         `- [Full dump, every program in one file](${BASE}/llms-full.txt)`,
-        `- [JSON API](${BASE}/api/programs) — no auth required`,
-        `- [MCP server](${BASE}/api/mcp) — search_programs, get_program, list_categories`,
+        `- [Documentation index](${BASE}/docs.md)`,
       ].join("\n"),
     ),
     section(
@@ -362,6 +450,7 @@ function main(): void {
   write("llms.txt", llmsTxt())
   write("llms-full.txt", llmsFullTxt())
   write("programs.md", programsIndexMd())
+  write("docs.md", docsMd())
 
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))
