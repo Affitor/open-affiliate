@@ -1,0 +1,1687 @@
+<!doctype html>
+<html lang="en" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>List Your Affiliate Program — OpenAffiliate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── Design tokens (dark mode, exact match globals.css oklch values) ── */
+:root {
+  --bg:           #1a1a18;        /* oklch(0.13 0.005 75) */
+  --bg2:          #1f1f1d;        /* oklch(0.17 0.005 75) card */
+  --bg3:          #252523;        /* oklch(0.22 0.005 75) muted */
+  --fg:           #fafaf9;        /* oklch(0.985 0 0) */
+  --fg-muted:     #b5b4b0;        /* oklch(0.708 0 0) */
+  --fg-dim:       #6b6b67;
+  --border:       rgba(255,255,255,0.10);
+  --border-hi:    rgba(255,255,255,0.18);
+  --input-bg:     rgba(255,255,255,0.07);
+  --radius:       0.625rem;
+  --radius-lg:    0.875rem;
+  --radius-xl:    1.1rem;
+  --radius-2xl:   1.375rem;
+  --green:        oklch(0.7 0.15 160);
+  --green-dim:    oklch(0.55 0.14 160 / 20%);
+  --green-border: oklch(0.6 0.14 160 / 35%);
+  --green-hex:    #34d399;
+  --font: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --mono: 'Geist Mono', ui-monospace, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font);
+  line-height: 1.55;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Dot-grid bg */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Nav ── */
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(26,26,24,0.88);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--fg);
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: #10b981;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.logo-mark svg { width: 13px; height: 13px; fill: white; }
+.logo-name { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.nav-links { display: flex; gap: 2px; list-style: none; }
+.nav-links a {
+  font-size: 13px;
+  color: var(--fg-muted);
+  text-decoration: none;
+  padding: 4px 10px;
+  border-radius: var(--radius);
+  transition: color 0.15s, background 0.15s;
+}
+.nav-links a:hover { color: var(--fg); background: rgba(255,255,255,0.06); }
+.nav-spacer { flex: 1; }
+.nav-cta {
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: var(--bg);
+  background: var(--fg);
+  border: none;
+  border-radius: var(--radius);
+  padding: 6px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── Main layout ── */
+main {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+}
+
+/* ── Page header band ── */
+.page-header {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 44px 24px 24px;
+}
+
+/* Dev escape hatch */
+.dev-escape {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--fg-dim);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 5px 10px;
+  margin-bottom: 28px;
+  transition: color 0.15s, border-color 0.15s;
+  font-family: var(--mono);
+}
+.dev-escape:hover { color: var(--fg-muted); border-color: var(--border-hi); }
+.dev-escape svg { width: 12px; height: 12px; opacity: 0.5; }
+
+/* Hero badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  border-radius: 100px;
+  padding: 4px 12px 4px 8px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: oklch(0.78 0.13 160);
+  margin-bottom: 14px;
+}
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px oklch(0.7 0.15 160 / 60%);
+}
+
+h1 {
+  font-size: clamp(24px, 3.5vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  margin-bottom: 10px;
+}
+.hero-sub {
+  font-size: 15px;
+  color: var(--fg-muted);
+  line-height: 1.5;
+  margin-bottom: 20px;
+  max-width: 520px;
+}
+
+/* Trust strip */
+.trust-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0;
+  font-size: 12px;
+  color: var(--fg-dim);
+}
+.trust-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border-right: 1px solid var(--border);
+}
+.trust-item:first-child { padding-left: 0; }
+.trust-item:last-child { border-right: none; }
+.trust-icon { width: 13px; height: 13px; opacity: 0.55; }
+
+/* ── Split layout ── */
+.split-layout {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 28px;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .split-layout { grid-template-columns: 1fr; }
+  .preview-col { order: -1; }
+}
+@media (max-width: 640px) {
+  .preview-col { display: none; }
+  .preview-mobile-toggle-row { display: flex !important; }
+}
+
+/* ── Form column ── */
+.form-col { display: flex; flex-direction: column; gap: 0; }
+
+/* ── Card ── */
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-2xl);
+  padding: 24px 28px;
+  transition: border-color 0.2s;
+}
+
+/* ── URL hero input (v1 style) ── */
+.url-block-label {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.url-block-label .ai-spark {
+  width: 14px;
+  height: 14px;
+  color: var(--green);
+}
+.url-input-wrap {
+  display: flex;
+  align-items: center;
+  background: var(--input-bg);
+  border: 1.5px solid var(--border-hi);
+  border-radius: var(--radius-xl);
+  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 4px 4px 4px 0;
+}
+.url-input-wrap:focus-within {
+  border-color: oklch(0.7 0.15 160 / 50%);
+  box-shadow: 0 0 0 3px oklch(0.7 0.15 160 / 8%);
+}
+.url-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 15px;
+  padding: 12px 16px;
+  min-width: 0;
+}
+.url-input::placeholder { color: var(--fg-dim); }
+.autofill-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font);
+  font-size: 13.5px;
+  font-weight: 600;
+  border: none;
+  border-radius: calc(var(--radius-xl) - 6px);
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  white-space: nowrap;
+}
+.autofill-btn:hover { opacity: 0.88; }
+.autofill-btn:active { transform: scale(0.98); }
+.autofill-btn svg { width: 15px; height: 15px; }
+.spark-icon { display: inline-block; transition: transform 0.3s; }
+.autofill-btn:hover .spark-icon { transform: rotate(15deg) scale(1.15); }
+
+/* Loading bar */
+.loading-bar-wrap {
+  height: 2px;
+  background: rgba(255,255,255,0.06);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: 14px;
+  display: none;
+}
+.loading-bar-wrap.active { display: block; }
+.loading-bar {
+  height: 100%;
+  background: linear-gradient(90deg, transparent, var(--green), transparent);
+  border-radius: 2px;
+  animation: shimmer 1.4s infinite;
+  width: 50%;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-200%); }
+  100% { transform: translateX(400%); }
+}
+.loading-label {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--fg-dim);
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.loading-label.active { display: flex; }
+.loading-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: ldot 1.2s infinite;
+}
+@keyframes ldot { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+/* ── Form panel (revealed after autofill) ── */
+#form-panel {
+  display: none;
+  animation: slideDown 0.35s cubic-bezier(0.16,1,0.3,1);
+}
+#form-panel.visible { display: block; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pre-fill notice */
+.pre-fill-notice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius-lg);
+  padding: 10px 14px;
+  font-size: 12.5px;
+  color: oklch(0.75 0.12 160);
+  margin: 18px 0 20px;
+}
+.pre-fill-notice svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* ── Section heading ── */
+.section-heading {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--fg-dim);
+  margin-bottom: 14px;
+  margin-top: 24px;
+}
+.section-heading:first-of-type { margin-top: 4px; }
+
+/* ── Field ── */
+.field { margin-bottom: 14px; }
+.field-label {
+  display: block;
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+.field-label .opt { color: var(--fg-dim); font-weight: 400; }
+.field-hint { font-size: 11px; color: var(--fg-dim); margin-top: 4px; line-height: 1.5; }
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13.5px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.04);
+}
+.field input.filled, .field select.filled {
+  border-color: oklch(0.6 0.14 160 / 30%);
+  background: oklch(0.55 0.14 160 / 8%);
+}
+.field textarea { resize: none; line-height: 1.5; }
+.field select option { background: #1f1f1d; color: var(--fg); }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+
+/* Divider */
+.field-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 20px 0;
+}
+
+/* ── Commission type pills ── */
+.pill-group {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.pill {
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.pill:hover { border-color: var(--border-hi); color: var(--fg); }
+.pill.selected {
+  background: var(--green-dim);
+  border-color: var(--green-border);
+  color: oklch(0.78 0.13 160);
+}
+
+/* Earn row: amount + commission type pills */
+.earn-amount-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.earn-amount-row input {
+  width: 100px;
+  flex-shrink: 0;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13.5px;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.earn-amount-row input.filled {
+  border-color: oklch(0.6 0.14 160 / 30%);
+  background: oklch(0.55 0.14 160 / 8%);
+}
+.earn-amount-row input:focus { border-color: rgba(255,255,255,0.3); }
+.earn-amount-row .earn-suffix {
+  font-size: 13px;
+  color: var(--fg-muted);
+  white-space: nowrap;
+}
+
+/* ── Cookie window pills ── */
+.cookie-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.cookie-pill {
+  font-family: var(--font);
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.cookie-pill:hover { border-color: var(--border-hi); color: var(--fg); }
+.cookie-pill.selected {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.28);
+  color: var(--fg);
+}
+.cookie-custom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  display: none;
+}
+.cookie-custom-row.visible { display: flex; }
+.cookie-custom-row input {
+  width: 90px;
+  background: var(--input-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  color: var(--fg);
+  font-family: var(--font);
+  font-size: 13.5px;
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.cookie-custom-row input:focus { border-color: rgba(255,255,255,0.3); }
+.cookie-custom-row span { font-size: 13px; color: var(--fg-muted); }
+
+/* ── Advanced disclosure ── */
+.advanced-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--fg-dim);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  cursor: pointer;
+  font-family: var(--font);
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.advanced-toggle:hover {
+  color: var(--fg-muted);
+  border-color: var(--border-hi);
+  background: rgba(255,255,255,0.04);
+}
+.advanced-toggle svg { width: 13px; height: 13px; transition: transform 0.2s; }
+.advanced-toggle.open svg { transform: rotate(90deg); }
+#advanced-fields { display: none; margin-top: 16px; animation: slideDown 0.25s cubic-bezier(0.16,1,0.3,1); }
+#advanced-fields.open { display: block; }
+
+/* ── Identity section ── */
+.identity-section {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px 20px;
+  margin-top: 4px;
+  margin-bottom: 18px;
+}
+.identity-title { font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 3px; }
+.identity-sub { font-size: 12px; color: var(--fg-dim); margin-bottom: 14px; }
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
+.checkbox-row input[type="checkbox"] {
+  width: 15px;
+  height: 15px;
+  accent-color: var(--green);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.checkbox-row label { font-size: 12.5px; color: var(--fg-muted); cursor: pointer; }
+.badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: oklch(0.62 0.16 230);
+  background: oklch(0.62 0.16 230 / 12%);
+  border: 1px solid oklch(0.62 0.16 230 / 25%);
+  border-radius: 4px;
+  padding: 1px 5px;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+/* ── Submit button ── */
+.submit-btn {
+  width: 100%;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  border-radius: var(--radius-xl);
+  padding: 14px 24px;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: -0.01em;
+}
+.submit-btn:hover { opacity: 0.88; }
+.submit-btn:active { transform: scale(0.99); }
+.submit-note {
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--fg-dim);
+  margin-top: 10px;
+  line-height: 1.5;
+}
+
+/* ── Preview column ── */
+.preview-col {
+  position: sticky;
+  top: 68px;
+}
+.preview-wrapper { display: flex; flex-direction: column; gap: 12px; }
+
+.preview-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--fg-dim);
+}
+.preview-label-row::before, .preview-label-row::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.live-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--green);
+  font-weight: 500;
+}
+.live-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: ldpulse 2s infinite;
+}
+@keyframes ldpulse {
+  0% { box-shadow: 0 0 0 0 oklch(0.7 0.15 160 / 40%); }
+  70% { box-shadow: 0 0 0 6px oklch(0.7 0.15 160 / 0%); }
+  100% { box-shadow: 0 0 0 0 oklch(0.7 0.15 160 / 0%); }
+}
+
+/* Program listing card (preview) */
+.program-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 18px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.program-card.has-content {
+  border-color: oklch(0.7 0.15 160 / 18%);
+  box-shadow: 0 0 20px oklch(0.7 0.15 160 / 5%);
+}
+.card-top { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 11px; }
+.card-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--fg-dim);
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: background 0.2s, color 0.2s;
+}
+.card-logo.filled {
+  background: linear-gradient(135deg, #0d2a1c 0%, #081811 100%);
+  color: var(--green);
+  border-color: oklch(0.7 0.15 160 / 18%);
+}
+.card-meta { flex: 1; min-width: 0; }
+.card-name {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: all 0.15s;
+}
+.card-name.empty { color: var(--fg-dim); font-weight: 400; font-style: italic; }
+.card-category { font-size: 11px; color: var(--fg-dim); }
+
+.card-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px; }
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 100px;
+  line-height: 1;
+}
+.badge-commission { background: oklch(0.7 0.15 160 / 12%); color: oklch(0.78 0.13 160); border: 1px solid oklch(0.7 0.15 160 / 22%); }
+.badge-cookie { background: rgba(255,255,255,0.06); color: var(--fg-muted); border: 1px solid var(--border); }
+.badge-type { background: rgba(255,255,255,0.06); color: var(--fg-muted); border: 1px solid var(--border); }
+.badge-verified-stripe {
+  background: oklch(0.65 0.18 250 / 14%);
+  color: oklch(0.72 0.15 250);
+  border: 1px solid oklch(0.65 0.18 250 / 28%);
+}
+
+.card-description {
+  font-size: 12.5px;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  margin-bottom: 13px;
+  min-height: 36px;
+}
+.card-description.empty { color: var(--fg-dim); font-style: italic; }
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.card-cta {
+  font-size: 12px;
+  font-weight: 600;
+  color: oklch(0.78 0.13 160);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.card-score {
+  font-size: 11px;
+  color: var(--fg-dim);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Preview caption */
+.preview-caption {
+  font-size: 11.5px;
+  color: var(--fg-dim);
+  line-height: 1.55;
+  padding: 12px 14px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+.preview-caption strong { color: var(--fg-muted); }
+.preview-caption ul { list-style: none; margin-top: 7px; display: flex; flex-direction: column; gap: 4px; }
+.preview-caption ul li { display: flex; gap: 6px; }
+.preview-caption ul li::before { content: '↳'; color: oklch(0.78 0.13 160); flex-shrink: 0; font-size: 11px; margin-top: 1px; }
+
+/* Mobile preview toggle */
+.preview-mobile-toggle-row {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.preview-mobile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  font-family: var(--font);
+  color: oklch(0.78 0.13 160);
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.preview-mobile-btn:hover { opacity: 0.8; }
+.mobile-preview-card {
+  display: none;
+  margin-bottom: 16px;
+  animation: slideDown 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.mobile-preview-card.visible { display: block; }
+
+/* ── Success state ── */
+#success-panel { display: none; }
+#success-panel.visible { display: block; animation: slideDown 0.4s cubic-bezier(0.16,1,0.3,1); }
+
+.success-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  text-align: center;
+}
+.success-icon-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: var(--green-dim);
+  border: 1px solid var(--green-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  animation: pulse-success 2.5s ease infinite;
+}
+@keyframes pulse-success {
+  0%,100% { box-shadow: 0 0 0 0 oklch(0.7 0.15 160 / 0%); }
+  50% { box-shadow: 0 0 0 10px oklch(0.7 0.15 160 / 0%); }
+}
+.success-h { font-size: 26px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 10px; }
+.success-sub {
+  font-size: 14px;
+  color: var(--fg-muted);
+  line-height: 1.55;
+  max-width: 400px;
+  margin: 0 auto 28px;
+}
+.success-sub strong { color: var(--fg); }
+
+.success-email-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 40px;
+  padding: 8px 16px;
+  font-size: 13px;
+  color: var(--fg-muted);
+  margin-bottom: 32px;
+}
+.success-email-badge svg { color: oklch(0.78 0.13 160); }
+
+.what-next {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 22px 24px;
+  text-align: left;
+  margin-bottom: 24px;
+}
+.what-next-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--fg-dim);
+  margin-bottom: 16px;
+}
+.next-steps { list-style: none; }
+.next-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.next-steps li:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fg-muted);
+}
+.step-num.done {
+  background: var(--green-dim);
+  border-color: var(--green-border);
+  color: oklch(0.78 0.13 160);
+}
+.step-body { flex: 1; }
+.step-title { font-size: 13.5px; font-weight: 600; margin-bottom: 3px; color: var(--fg); }
+.step-desc { font-size: 12.5px; color: var(--fg-muted); line-height: 1.5; }
+
+/* Stripe verify badge (inline) */
+.stripe-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  background: oklch(0.65 0.18 250 / 12%);
+  color: oklch(0.72 0.15 250);
+  border: 1px solid oklch(0.65 0.18 250 / 25%);
+  border-radius: 100px;
+  padding: 2px 8px;
+  vertical-align: middle;
+  margin-left: 3px;
+}
+.stripe-badge-inline svg { width: 9px; height: 9px; }
+
+.success-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--fg-muted);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.btn-outline:hover { color: var(--fg); border-color: var(--border-hi); }
+
+/* ── Footer ── */
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  text-align: center;
+}
+footer .footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-left { font-size: 12px; color: var(--fg-dim); display: flex; align-items: center; gap: 8px; }
+.footer-links { display: flex; gap: 16px; flex-wrap: wrap; }
+footer a { font-size: 12px; color: var(--fg-dim); text-decoration: none; transition: color 0.15s; }
+footer a:hover { color: var(--fg-muted); }
+
+/* ── Demo controls ── */
+.demo-controls {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.demo-controls-label { font-size: 10px; font-family: var(--mono); color: var(--fg-dim); text-align: right; }
+.demo-btns { display: flex; gap: 6px; }
+.demo-btn {
+  font-size: 11px;
+  font-family: var(--mono);
+  background: var(--bg3);
+  color: var(--fg-muted);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--radius);
+  padding: 6px 11px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.demo-btn:hover { background: rgba(255,255,255,0.08); color: var(--fg); }
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+  .page-header { padding: 28px 16px 16px; }
+  .split-layout { padding: 0 16px 64px; }
+  .card { padding: 18px 20px; }
+  h1 { font-size: 24px; }
+  .trust-item { font-size: 11px; padding: 2px 8px; }
+  .autofill-btn { font-size: 12.5px; padding: 9px 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3" fill="white"/><path d="M8 2 L8 5 M8 11 L8 14 M2 8 L5 8 M11 8 L14 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <span class="logo-name">OpenAffiliate</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/programs">Programs</a></li>
+      <li><a href="/categories">Categories</a></li>
+      <li><a href="/rankings">Rankings</a></li>
+    </ul>
+    <div class="nav-spacer"></div>
+    <a href="/programs" class="nav-cta">Browse Programs</a>
+  </div>
+</nav>
+
+<!-- Main -->
+<main>
+
+  <!-- ── FORM STATE ── -->
+  <div id="form-state">
+
+    <!-- Page header -->
+    <div class="page-header">
+
+      <!-- Dev escape -->
+      <a href="https://github.com/Affitor/open-affiliate" class="dev-escape">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.38.6.11.82-.26.82-.58v-2.16c-3.34.72-4.04-1.61-4.04-1.61-.54-1.38-1.33-1.75-1.33-1.75-1.08-.74.08-.73.08-.73 1.2.09 1.83 1.23 1.83 1.23 1.07 1.83 2.8 1.3 3.49 1 .1-.78.42-1.3.76-1.6-2.67-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 0 1 3-.4c1.02 0 2.04.14 3 .4 2.28-1.55 3.29-1.23 3.29-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.63-5.48 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.83.58C20.57 21.8 24 17.3 24 12c0-6.63-5.37-12-12-12z"/></svg>
+        Developer? List via GitHub
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      </a>
+
+      <div class="hero-badge">
+        <span class="hero-badge-dot"></span>
+        750+ programs listed · Free forever
+      </div>
+
+      <h1>List your affiliate program.</h1>
+      <p class="hero-sub">Paste your affiliates page URL. We'll read it and fill in the details for you — takes about 30 seconds.</p>
+
+      <!-- Trust strip -->
+      <div class="trust-strip">
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Free forever
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          750+ programs
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+          Discovered by AI agents
+        </span>
+        <span class="trust-item">
+          <svg class="trust-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          Verified-by-Stripe option
+        </span>
+      </div>
+
+    </div><!-- /page-header -->
+
+    <!-- Split layout -->
+    <div class="split-layout">
+
+      <!-- ── Form column ── -->
+      <div class="form-col">
+
+        <!-- Mobile preview toggle (only shows <640px) -->
+        <div class="preview-mobile-toggle-row">
+          <button class="preview-mobile-btn" onclick="toggleMobilePreview()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Preview listing
+          </button>
+          <span style="font-size:11px;color:var(--fg-dim)">See how it looks in the directory</span>
+        </div>
+
+        <!-- Mobile preview (hidden by default) -->
+        <div class="mobile-preview-card" id="mobile-preview-card">
+          <div id="mobile-preview-card-inner"></div>
+        </div>
+
+        <!-- URL hero card -->
+        <div class="card" style="margin-bottom: 1px; border-bottom-left-radius: 6px; border-bottom-right-radius: 6px;">
+
+          <div class="url-block-label">
+            <svg class="ai-spark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+            Your affiliate program page URL
+          </div>
+
+          <div class="url-input-wrap">
+            <input
+              id="url-input"
+              class="url-input"
+              type="url"
+              placeholder="e.g. yourproduct.com/affiliates"
+              autocomplete="off"
+              spellcheck="false"
+              aria-label="Affiliate program URL"
+            >
+            <button class="autofill-btn" onclick="doAutofill()" aria-label="Auto-fill with AI">
+              <span class="spark-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              </span>
+              Auto-fill with AI
+            </button>
+          </div>
+
+          <div class="loading-bar-wrap" id="loading-bar-wrap"><div class="loading-bar"></div></div>
+          <div class="loading-label" id="loading-label"><span class="loading-dot"></span> Reading your affiliates page...</div>
+
+          <!-- ── Form panel (slides in after autofill) ── -->
+          <div id="form-panel">
+
+            <div class="pre-fill-notice">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="oklch(0.7 0.15 160)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3z"/></svg>
+              We pre-filled what we found. Review and adjust anything that looks off.
+            </div>
+
+            <!-- Basics -->
+            <div class="field">
+              <label class="field-label">Program name</label>
+              <input type="text" class="filled" value="Notion" id="f-name" oninput="updatePreview()" aria-label="Program name">
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label class="field-label">Your website</label>
+                <input type="url" class="filled" value="notion.so" id="f-url" aria-label="Website">
+              </div>
+              <div class="field">
+                <label class="field-label">Category</label>
+                <select class="filled" id="f-category" onchange="updatePreview()" aria-label="Category">
+                  <option>Productivity</option>
+                  <option>Developer Tools</option>
+                  <option>Email Marketing</option>
+                  <option>CRM &amp; Sales</option>
+                  <option>Design</option>
+                  <option>Analytics</option>
+                  <option>E-commerce</option>
+                  <option>Finance</option>
+                  <option>Security</option>
+                  <option>AI &amp; Machine Learning</option>
+                  <option>Project Management</option>
+                  <option>Communication</option>
+                  <option>HR &amp; Recruiting</option>
+                  <option>Data &amp; BI</option>
+                  <option>Video &amp; Media</option>
+                  <option>Other</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label">One-line pitch <span class="opt">(shown on your listing)</span></label>
+              <input type="text" class="filled" value="The connected workspace for notes, docs, and projects." id="f-pitch" maxlength="120" oninput="updatePreview(); updatePitchCount();" aria-label="One-line pitch">
+              <p class="field-hint" id="pitch-count">56 / 120 characters</p>
+            </div>
+
+            <!-- Commission -->
+            <div class="section-heading">What do affiliates earn?</div>
+
+            <div class="field">
+              <label class="field-label">Commission type</label>
+              <div class="pill-group" role="group" aria-label="Commission type">
+                <button class="pill selected" onclick="selectCommType(this, 'recurring')" data-type="recurring" aria-pressed="true">% of every renewal</button>
+                <button class="pill" onclick="selectCommType(this, 'onetime')" data-type="onetime" aria-pressed="false">% of first sale</button>
+                <button class="pill" onclick="selectCommType(this, 'flat')" data-type="flat" aria-pressed="false">Fixed $ per sale</button>
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field-label" id="earn-label">Commission rate</label>
+              <div class="earn-amount-row">
+                <input type="text" class="filled" value="50" id="f-earn-amount" placeholder="e.g. 25" oninput="updatePreview()" aria-label="Commission amount">
+                <span class="earn-suffix" id="earn-suffix">% per renewal</span>
+              </div>
+              <p class="field-hint">e.g. "25% recurring" or "$50 per signup"</p>
+            </div>
+
+            <!-- Cookie window pills -->
+            <div class="field">
+              <label class="field-label">How long is a referral tracked?</label>
+              <div class="cookie-pills" role="group" aria-label="Cookie window">
+                <button class="cookie-pill" onclick="selectCookie(this, '7')" aria-pressed="false">7 days</button>
+                <button class="cookie-pill" onclick="selectCookie(this, '30')" aria-pressed="false">30 days</button>
+                <button class="cookie-pill" onclick="selectCookie(this, '60')" aria-pressed="false">60 days</button>
+                <button class="cookie-pill selected" onclick="selectCookie(this, '90')" aria-pressed="true">90 days</button>
+                <button class="cookie-pill" onclick="selectCookie(this, 'lifetime')" aria-pressed="false">Lifetime</button>
+                <button class="cookie-pill" onclick="selectCookie(this, 'custom')" aria-pressed="false">Custom</button>
+              </div>
+              <div class="cookie-custom-row" id="cookie-custom-row">
+                <input type="number" id="f-cookie-custom" value="" min="1" max="730" placeholder="e.g. 45" oninput="updatePreview()" aria-label="Custom cookie days">
+                <span>days</span>
+              </div>
+              <input type="hidden" id="f-cookie" value="90">
+              <p class="field-hint">After someone clicks your link, this is how long you get credit for their signup.</p>
+            </div>
+
+            <hr class="field-divider">
+
+            <!-- Optional details -->
+            <button class="advanced-toggle" id="advanced-toggle-btn" onclick="toggleAdvanced()" aria-expanded="false" aria-controls="advanced-fields">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              Add more details <span style="color:var(--fg-dim);font-size:11px;">(optional)</span>
+            </button>
+            <div id="advanced-fields">
+              <div class="field-row" style="margin-top:0">
+                <div class="field">
+                  <label class="field-label">Minimum payout</label>
+                  <input type="text" value="$50" id="f-min-payout" placeholder="e.g. $50" aria-label="Minimum payout">
+                  <p class="field-hint">Minimum balance before affiliates get paid.</p>
+                </div>
+                <div class="field">
+                  <label class="field-label">Paid out</label>
+                  <select id="f-payout-freq" aria-label="Payout frequency">
+                    <option>Monthly</option>
+                    <option>Every 2 weeks</option>
+                    <option>Net 30</option>
+                    <option>Net 60</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field">
+                <label class="field-label">Affiliate signup link <span class="opt">(where they apply)</span></label>
+                <input type="url" value="notion.so/affiliates" id="f-signup-url" placeholder="yourproduct.com/affiliates" aria-label="Affiliate signup link">
+              </div>
+              <div class="field">
+                <label class="field-label">Any restrictions or requirements? <span class="opt">(optional)</span></label>
+                <textarea rows="2" id="f-restrictions" placeholder="e.g. US &amp; EU only · Must have 1k+ followers · No paid search" aria-label="Restrictions"></textarea>
+              </div>
+            </div>
+
+            <!-- Identity / email -->
+            <div class="identity-section">
+              <div class="identity-title">Where should we send your listing link?</div>
+              <div class="identity-sub">We'll email you a magic link to edit or claim your listing later. No password needed.</div>
+              <div class="field" style="margin-bottom: 0;">
+                <input type="email" id="f-email" placeholder="you@yourcompany.com" style="font-size:14px;" aria-label="Email address">
+              </div>
+              <div class="checkbox-row">
+                <input type="checkbox" id="works-here" checked aria-label="I work at this company">
+                <label for="works-here">
+                  I work at this company
+                  <span class="badge-inline">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                    Verified badge later
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <button class="submit-btn" onclick="doSubmit()">
+              <svg width="17" height="17" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4 20-7z"/><path d="M22 2 11 13"/></svg>
+              Submit for review
+            </button>
+            <p class="submit-note">Free forever. Usually live in minutes. We review every submission.</p>
+
+          </div><!-- /form-panel -->
+
+        </div><!-- /card -->
+
+      </div><!-- /form-col -->
+
+      <!-- ── Preview column ── -->
+      <div class="preview-col" aria-label="Live listing preview">
+        <div class="preview-wrapper">
+
+          <div class="preview-label-row">
+            <span class="live-dot">Live preview</span>
+          </div>
+
+          <!-- Program card preview -->
+          <div class="program-card" id="preview-card">
+            <div class="card-top">
+              <div class="card-logo" id="prev-logo">?</div>
+              <div class="card-meta">
+                <div class="card-name" id="prev-name">Notion</div>
+                <div class="card-category" id="prev-category">Productivity · openaffiliate.dev</div>
+              </div>
+            </div>
+            <div class="card-badges">
+              <span class="badge badge-commission" id="prev-commission">50% commission</span>
+              <span class="badge badge-cookie" id="prev-cookie">90d cookie</span>
+              <span class="badge badge-type" id="prev-type">Recurring</span>
+            </div>
+            <div class="card-description" id="prev-description">The connected workspace for notes, docs, and projects.</div>
+            <div class="card-footer">
+              <span class="card-cta">
+                Apply to program
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </span>
+              <span class="card-score">
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                Score pending
+              </span>
+            </div>
+          </div>
+
+          <!-- Caption -->
+          <div class="preview-caption">
+            <strong>This is what affiliates and AI agents will see</strong> in the directory.
+            <ul>
+              <li>Affiliates browse by commission and category</li>
+              <li>AI agents use this to recommend your product to buyers</li>
+              <li>Verified programs rank higher and convert more</li>
+            </ul>
+          </div>
+
+        </div>
+      </div><!-- /preview-col -->
+
+    </div><!-- /split-layout -->
+
+  </div><!-- /form-state -->
+
+  <!-- ── SUCCESS STATE ── -->
+  <div id="success-panel">
+    <div class="success-wrap">
+
+      <div class="success-icon-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="oklch(0.7 0.15 160)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="30" height="30"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+
+      <div class="success-h">You're in the queue.</div>
+      <p class="success-sub">
+        <strong id="success-name">Notion</strong> has been submitted. Check your email — we'll send you a link to track your listing and make edits.
+      </p>
+
+      <div class="success-email-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Check your email for an edit link
+      </div>
+
+      <div class="what-next">
+        <div class="what-next-title">What happens next</div>
+        <ul class="next-steps">
+          <li>
+            <span class="step-num done">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            </span>
+            <div class="step-body">
+              <div class="step-title">Submitted</div>
+              <div class="step-desc">Your program is in the review queue. Done!</div>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <div class="step-body">
+              <div class="step-title">Quick review</div>
+              <div class="step-desc">Our bot checks the basics — commission &ge; 1%, working URL, no duplicates. Usually under a minute.</div>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <div class="step-body">
+              <div class="step-title">Goes live</div>
+              <div class="step-desc">Your program appears in the OpenAffiliate directory and gets indexed by AI agents and discovery tools.</div>
+            </div>
+          </li>
+          <li>
+            <span class="step-num">4</span>
+            <div class="step-body">
+              <div class="step-title">Claim your listing &amp; get
+                <span class="stripe-badge-inline">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                  Verified by Stripe
+                </span>
+              </div>
+              <div class="step-desc">Click the link in your email, then connect your Stripe account to confirm real payouts. Verified programs rank higher and convert more affiliates — it's the trust signal that matters.</div>
+            </div>
+          </li>
+        </ul>
+      </div>
+
+      <div class="success-actions">
+        <a href="/programs" class="btn-outline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Browse programs
+        </a>
+        <button class="btn-outline" onclick="resetAll()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Submit another program
+        </button>
+      </div>
+
+    </div>
+  </div><!-- /success-panel -->
+
+</main>
+
+<!-- Footer -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="logo-mark" style="width:18px;height:18px;border-radius:4px;">
+        <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.5" fill="white"/><path d="M8 2.5 L8 5 M8 11 L8 13.5 M2.5 8 L5 8 M11 8 L13.5 8" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      OpenAffiliate — open source, community-driven
+    </div>
+    <div class="footer-links">
+      <a href="/programs">Programs</a>
+      <a href="/docs">Docs</a>
+      <a href="https://github.com/Affitor/open-affiliate">GitHub</a>
+      <a href="/feedback">Feedback</a>
+      <a href="https://github.com/Affitor/open-affiliate" style="font-family:var(--mono);font-size:11px;color:var(--fg-dim)">Developer? List via GitHub →</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Demo controls -->
+<div class="demo-controls">
+  <div class="demo-controls-label">mockup demo controls</div>
+  <div class="demo-btns">
+    <button class="demo-btn" onclick="demoShowForm()">show form</button>
+    <button class="demo-btn" onclick="demoShowSuccess()">show success</button>
+    <button class="demo-btn" onclick="resetAll()">reset</button>
+  </div>
+</div>
+
+<script>
+/* ── State ── */
+var commType = 'recurring';
+var cookieValue = '90';
+var mobilePreviewOpen = false;
+
+/* ── Enter on URL input ── */
+document.getElementById('url-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') doAutofill();
+});
+
+/* ── Pitch count ── */
+function updatePitchCount() {
+  var v = document.getElementById('f-pitch').value.length;
+  document.getElementById('pitch-count').textContent = v + ' / 120 characters';
+}
+
+/* ── Auto-fill simulation ── */
+function doAutofill() {
+  var url = document.getElementById('url-input').value.trim();
+  if (!url) {
+    var inp = document.getElementById('url-input');
+    inp.focus();
+    inp.parentElement.style.borderColor = 'oklch(0.7 0.2 30 / 60%)';
+    setTimeout(function() { inp.parentElement.style.borderColor = ''; }, 1500);
+    return;
+  }
+  document.getElementById('loading-bar-wrap').classList.add('active');
+  document.getElementById('loading-label').classList.add('active');
+  var btn = document.querySelector('.autofill-btn');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+
+  setTimeout(function() {
+    document.getElementById('loading-bar-wrap').classList.remove('active');
+    document.getElementById('loading-label').classList.remove('active');
+    btn.disabled = false;
+    btn.style.opacity = '';
+    demoShowForm();
+  }, 1800);
+}
+
+function demoShowForm() {
+  document.getElementById('form-panel').classList.add('visible');
+  updatePreview();
+  setTimeout(function() {
+    document.getElementById('form-panel').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 60);
+}
+
+/* ── Commission type pills ── */
+function selectCommType(el, type) {
+  commType = type;
+  document.querySelectorAll('.pill-group .pill').forEach(function(p) {
+    p.classList.remove('selected');
+    p.setAttribute('aria-pressed', 'false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-pressed', 'true');
+
+  var suffix = document.getElementById('earn-suffix');
+  if (type === 'recurring') suffix.textContent = '% per renewal';
+  else if (type === 'onetime') suffix.textContent = '% of first sale';
+  else suffix.textContent = 'USD per sale';
+
+  updatePreview();
+}
+
+/* ── Cookie window pills ── */
+function selectCookie(el, val) {
+  cookieValue = val;
+  document.querySelectorAll('.cookie-pill').forEach(function(p) {
+    p.classList.remove('selected');
+    p.setAttribute('aria-pressed', 'false');
+  });
+  el.classList.add('selected');
+  el.setAttribute('aria-pressed', 'true');
+
+  var customRow = document.getElementById('cookie-custom-row');
+  if (val === 'custom') {
+    customRow.classList.add('visible');
+    document.getElementById('f-cookie').value = document.getElementById('f-cookie-custom').value || '';
+  } else {
+    customRow.classList.remove('visible');
+    document.getElementById('f-cookie').value = val;
+  }
+  updatePreview();
+}
+
+document.getElementById('f-cookie-custom').addEventListener('input', function() {
+  document.getElementById('f-cookie').value = this.value;
+  updatePreview();
+});
+
+/* ── Advanced toggle ── */
+function toggleAdvanced() {
+  var btn = document.getElementById('advanced-toggle-btn');
+  var panel = document.getElementById('advanced-fields');
+  var open = panel.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+
+/* ── Live preview update ── */
+function updatePreview() {
+  var name = document.getElementById('f-name').value.trim();
+  var category = document.getElementById('f-category').value;
+  var pitch = document.getElementById('f-pitch').value.trim();
+  var earnAmt = document.getElementById('f-earn-amount').value.trim();
+  var cookie = document.getElementById('f-cookie').value;
+
+  /* Name */
+  var nameEl = document.getElementById('prev-name');
+  nameEl.textContent = name || 'Your program name';
+  nameEl.classList.toggle('empty', !name);
+
+  /* Logo initials */
+  var logoEl = document.getElementById('prev-logo');
+  if (name) {
+    var words = name.trim().split(/\s+/);
+    var initials = words.length >= 2
+      ? (words[0][0] + words[1][0]).toUpperCase()
+      : name.slice(0, 2).toUpperCase();
+    logoEl.textContent = initials;
+    logoEl.classList.add('filled');
+  } else {
+    logoEl.textContent = '?';
+    logoEl.classList.remove('filled');
+  }
+
+  /* Category */
+  document.getElementById('prev-category').textContent = (category || 'Category') + ' · openaffiliate.dev';
+
+  /* Description */
+  var descEl = document.getElementById('prev-description');
+  descEl.textContent = pitch || 'Your one-line pitch will appear here — what makes affiliates want to promote you?';
+  descEl.classList.toggle('empty', !pitch);
+
+  /* Commission badge */
+  var commBadge = document.getElementById('prev-commission');
+  var typeLabel = commType === 'recurring' ? 'Recurring' : commType === 'onetime' ? 'One-time' : 'Flat fee';
+  if (earnAmt) {
+    var prefix = commType === 'flat' ? '$' : '';
+    var suffix = commType === 'flat' ? '' : '%';
+    commBadge.textContent = prefix + earnAmt + suffix + ' commission';
+  } else {
+    commBadge.textContent = '— commission';
+  }
+  document.getElementById('prev-type').textContent = typeLabel;
+
+  /* Cookie badge */
+  var cookieBadge = document.getElementById('prev-cookie');
+  var cookieMap = { '7': '7d cookie', '30': '30d cookie', '60': '60d cookie', '90': '90d cookie', 'lifetime': 'Lifetime cookie' };
+  if (cookie === 'lifetime') cookieBadge.textContent = 'Lifetime cookie';
+  else if (cookie && cookieMap[cookie]) cookieBadge.textContent = cookieMap[cookie];
+  else if (cookie) cookieBadge.textContent = cookie + 'd cookie';
+  else cookieBadge.textContent = '— cookie';
+
+  /* Card glow */
+  document.getElementById('preview-card').classList.toggle('has-content', !!(name || pitch || earnAmt));
+
+  /* Update success state name */
+  document.getElementById('success-name').textContent = name || 'Your program';
+
+  /* Sync mobile preview if open */
+  if (mobilePreviewOpen) renderMobilePreview();
+}
+
+/* ── Mobile preview ── */
+function toggleMobilePreview() {
+  mobilePreviewOpen = !mobilePreviewOpen;
+  var el = document.getElementById('mobile-preview-card');
+  if (mobilePreviewOpen) {
+    renderMobilePreview();
+    el.classList.add('visible');
+  } else {
+    el.classList.remove('visible');
+  }
+}
+
+function renderMobilePreview() {
+  var inner = document.getElementById('mobile-preview-card-inner');
+  inner.innerHTML = document.getElementById('preview-card').parentElement.innerHTML;
+  // Clone just the card
+  inner.innerHTML = '';
+  var clone = document.getElementById('preview-card').cloneNode(true);
+  clone.id = '';
+  inner.appendChild(clone);
+}
+
+/* ── Submit ── */
+function doSubmit() {
+  var email = document.getElementById('f-email').value.trim();
+  if (!email || !email.includes('@')) {
+    var inp = document.getElementById('f-email');
+    inp.focus();
+    inp.style.borderColor = 'oklch(0.7 0.2 30 / 60%)';
+    setTimeout(function() { inp.style.borderColor = ''; }, 1500);
+    return;
+  }
+  demoShowSuccess();
+}
+
+function demoShowSuccess() {
+  updatePreview();
+  document.getElementById('form-state').style.display = 'none';
+  var sp = document.getElementById('success-panel');
+  sp.classList.add('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Reset ── */
+function resetAll() {
+  document.getElementById('form-state').style.display = '';
+  var sp = document.getElementById('success-panel');
+  sp.classList.remove('visible');
+  document.getElementById('form-panel').classList.remove('visible');
+  document.getElementById('advanced-fields').classList.remove('open');
+  document.getElementById('advanced-toggle-btn').classList.remove('open');
+  document.getElementById('advanced-toggle-btn').setAttribute('aria-expanded', 'false');
+  document.getElementById('loading-bar-wrap').classList.remove('active');
+  document.getElementById('loading-label').classList.remove('active');
+  document.querySelector('.autofill-btn').disabled = false;
+  document.querySelector('.autofill-btn').style.opacity = '';
+  document.getElementById('url-input').value = '';
+  mobilePreviewOpen = false;
+  document.getElementById('mobile-preview-card').classList.remove('visible');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ── Init preview with demo data ── */
+updatePreview();
+</script>
+
+</body>
+</html>
