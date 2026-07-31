@@ -79,8 +79,11 @@ export function VoteButton({ slug, initialCount = 0, className }: VoteButtonProp
 }
 
 // Hook for batch-loading vote counts
-export function useVoteCounts(slugs: string[]) {
-  const [counts, setCounts] = useState<Record<string, number>>({});
+export function useVoteCounts(
+  slugs: string[],
+  initialCounts: Record<string, number> = {}
+) {
+  const [counts, setCounts] = useState<Record<string, number>>(initialCounts);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {

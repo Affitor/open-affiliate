@@ -142,7 +142,7 @@ export async function POST(req: Request) {
             programs: (programs ?? [request.program]).map((p: Program) => p.slug).filter(Boolean),
             programCount: (programs ?? [request.program]).length,
           },
-        }).then(() => {}).catch(() => {});
+        }).then(() => {}, () => {});
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : "Generation failed";
         console.error(`[content-lab] Stream error: ${message}`);

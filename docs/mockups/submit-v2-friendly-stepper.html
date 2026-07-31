@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>List Your Program — OpenAffiliate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Design tokens (dark mode, matches globals.css) ─── */
+    :root {
+      --bg:            #131312;
+      --bg-card:       #1c1c1a;
+      --bg-muted:      #232320;
+      --bg-input:      rgba(255,255,255,0.07);
+      --bg-input-focus:rgba(255,255,255,0.10);
+      --border:        rgba(255,255,255,0.10);
+      --border-focus:  rgba(255,255,255,0.28);
+      --fg:            rgba(255,255,255,0.96);
+      --fg-muted:      rgba(255,255,255,0.50);
+      --fg-subtle:     rgba(255,255,255,0.30);
+      --accent:        #30d48a;   /* emerald-ish, the glow-card accent */
+      --accent-dim:    rgba(48,212,138,0.12);
+      --accent-border: rgba(48,212,138,0.30);
+      --radius-sm:     6px;
+      --radius:        10px;
+      --radius-lg:     14px;
+      --radius-xl:     18px;
+      --shadow-card:   0 1px 3px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
+      --shadow-btn:    0 1px 3px rgba(0,0,0,0.6);
+      --font:          'Geist', ui-sans-serif, system-ui, sans-serif;
+      --font-mono:     'Geist Mono', ui-monospace, monospace;
+      --step-done:     #30d48a;
+      --step-active:   #fff;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { font-family: var(--font); background: var(--bg); color: var(--fg); -webkit-font-smoothing: antialiased; }
+    body { min-height: 100vh; display: flex; flex-direction: column; }
+
+    /* ─── Dot-grid background ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* ─── Nav ─── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      background: rgba(19,19,18,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      height: 56px; padding: 0 24px;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-icon {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: #0a0a0a; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08);
+    }
+    .nav-logo-icon svg { width: 16px; height: 16px; }
+    .nav-logo-text { font-size: 14px; font-weight: 600; color: var(--fg); letter-spacing: -0.02em; }
+    .nav-links { display: flex; gap: 24px; align-items: center; }
+    .nav-links a {
+      font-size: 13px; color: var(--fg-muted); text-decoration: none;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--fg); }
+    .nav-links a.active { color: var(--fg); font-weight: 500; }
+    .nav-gh {
+      font-size: 13px; color: var(--fg-muted); text-decoration: none;
+      display: flex; align-items: center; gap: 6px; transition: color 0.15s;
+    }
+    .nav-gh:hover { color: var(--fg); }
+    .nav-gh svg { width: 16px; height: 16px; }
+
+    /* ─── Trust strip ─── */
+    .trust-strip {
+      background: rgba(48,212,138,0.06);
+      border-bottom: 1px solid rgba(48,212,138,0.12);
+      padding: 9px 24px;
+      display: flex; align-items: center; justify-content: center; gap: 0;
+      flex-wrap: wrap;
+    }
+    .trust-strip span {
+      font-size: 12px; color: rgba(48,212,138,0.85); white-space: nowrap;
+    }
+    .trust-sep {
+      font-size: 12px; color: rgba(48,212,138,0.30); margin: 0 12px;
+    }
+
+    /* ─── Page container ─── */
+    main { position: relative; z-index: 1; flex: 1; }
+    .page-wrap {
+      max-width: 640px; margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    /* ─── Dev escape hatch ─── */
+    .dev-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--fg-subtle); text-decoration: none;
+      border: 1px solid var(--border); border-radius: var(--radius-sm);
+      padding: 5px 10px; transition: color 0.15s, border-color 0.15s;
+      margin-bottom: 32px;
+    }
+    .dev-link:hover { color: var(--fg-muted); border-color: rgba(255,255,255,0.18); }
+    .dev-link svg { width: 12px; height: 12px; }
+
+    /* ─── Header ─── */
+    .page-header { margin-bottom: 36px; }
+    .page-header h1 {
+      font-size: 26px; font-weight: 700; letter-spacing: -0.03em;
+      color: var(--fg); line-height: 1.2;
+    }
+    .page-header p {
+      margin-top: 8px; font-size: 15px; color: var(--fg-muted); line-height: 1.6;
+    }
+
+    /* ─── Progress stepper ─── */
+    .stepper {
+      display: flex; align-items: center; gap: 0;
+      margin-bottom: 36px;
+    }
+    .step-item {
+      display: flex; flex-direction: column; align-items: center; position: relative; flex: 1;
+    }
+    .step-item:not(:last-child)::after {
+      content: '';
+      position: absolute; top: 14px; left: calc(50% + 18px);
+      right: calc(-50% + 18px);
+      height: 1px;
+      background: var(--border);
+      transition: background 0.3s;
+    }
+    .step-item.done:not(:last-child)::after {
+      background: linear-gradient(90deg, var(--step-done), rgba(48,212,138,0.3));
+    }
+    .step-circle {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600;
+      background: var(--bg-muted); border: 1.5px solid var(--border);
+      color: var(--fg-muted);
+      transition: all 0.25s ease;
+      position: relative; z-index: 1;
+    }
+    .step-item.active .step-circle {
+      background: var(--fg); border-color: var(--fg); color: var(--bg);
+    }
+    .step-item.done .step-circle {
+      background: var(--accent); border-color: var(--accent); color: #000;
+    }
+    .step-label {
+      margin-top: 7px; font-size: 11px; font-weight: 500;
+      color: var(--fg-subtle); text-align: center; letter-spacing: 0.01em;
+      transition: color 0.2s;
+    }
+    .step-item.active .step-label { color: var(--fg-muted); }
+    .step-item.done .step-label { color: var(--accent); }
+
+    /* ─── Step panel ─── */
+    .step-panel {
+      display: none; animation: fadeUp 0.28s ease;
+    }
+    .step-panel.visible { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Section card ─── */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-xl);
+      padding: 28px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
+    }
+
+    /* ─── Step heading ─── */
+    .step-heading {
+      font-size: 17px; font-weight: 700; color: var(--fg);
+      letter-spacing: -0.02em; margin-bottom: 4px;
+    }
+    .step-sub {
+      font-size: 13px; color: var(--fg-muted); margin-bottom: 24px; line-height: 1.5;
+    }
+
+    /* ─── Magic URL fetch block ─── */
+    .fetch-block {
+      background: linear-gradient(135deg, rgba(48,212,138,0.07) 0%, rgba(48,212,138,0.02) 100%);
+      border: 1.5px solid rgba(48,212,138,0.22);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .fetch-label {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .fetch-label svg { width: 13px; height: 13px; }
+    .fetch-row {
+      display: flex; gap: 8px; align-items: stretch;
+    }
+    .fetch-input {
+      flex: 1;
+      background: rgba(255,255,255,0.06);
+      border: 1.5px solid rgba(48,212,138,0.20);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 14px; font-family: var(--font); color: var(--fg);
+      outline: none; transition: border-color 0.15s, background 0.15s;
+    }
+    .fetch-input::placeholder { color: rgba(255,255,255,0.25); }
+    .fetch-input:focus { border-color: var(--accent); background: rgba(48,212,138,0.06); }
+    .btn-fetch {
+      background: var(--accent); color: #000;
+      border: none; border-radius: var(--radius-sm);
+      padding: 10px 18px; font-size: 13px; font-weight: 600;
+      font-family: var(--font); cursor: pointer; white-space: nowrap;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .btn-fetch:hover { opacity: 0.90; }
+    .btn-fetch:active { transform: scale(0.97); }
+    .btn-fetch svg { width: 14px; height: 14px; }
+    .fetch-hint {
+      font-size: 11.5px; color: rgba(48,212,138,0.55); margin-top: 8px;
+    }
+
+    /* ─── Autofill preview chip ─── */
+    .autofill-chip {
+      display: none;
+      margin-top: 12px;
+      background: rgba(48,212,138,0.08);
+      border: 1px solid rgba(48,212,138,0.20);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      font-size: 12.5px; color: rgba(48,212,138,0.85);
+      display: none; align-items: center; gap: 8px;
+    }
+    .autofill-chip.visible { display: flex; animation: fadeUp 0.22s ease; }
+    .autofill-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ─── Fieldset ─── */
+    .field { margin-bottom: 18px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label {
+      display: block; font-size: 12px; font-weight: 500;
+      color: var(--fg-muted); margin-bottom: 7px; letter-spacing: 0.01em;
+    }
+    .field label .required { color: var(--fg-subtle); margin-left: 3px; }
+    .field input, .field select, .field textarea {
+      width: 100%; background: var(--bg-input);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 10px 13px;
+      font-size: 14px; font-family: var(--font); color: var(--fg);
+      outline: none; transition: border-color 0.15s, background 0.15s;
+      appearance: none; -webkit-appearance: none;
+    }
+    .field input::placeholder, .field textarea::placeholder { color: var(--fg-subtle); }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--border-focus);
+      background: var(--bg-input-focus);
+    }
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.35)' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 13px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    .field select option { background: #1c1c1a; color: var(--fg); }
+    .field textarea { resize: none; line-height: 1.6; }
+    .field-hint {
+      margin-top: 6px; font-size: 11.5px; color: var(--fg-subtle); line-height: 1.5;
+    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
+
+    /* ─── Commission row ─── */
+    .commission-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .commission-grid { grid-template-columns: 1fr; } }
+
+    .input-with-suffix { position: relative; }
+    .input-with-suffix input { padding-right: 42px; }
+    .input-suffix {
+      position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+      font-size: 13px; color: var(--fg-subtle); pointer-events: none;
+    }
+
+    /* ─── Cookie window slider ─── */
+    .cookie-picker { display: flex; flex-direction: column; gap: 8px; }
+    .cookie-options { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cookie-opt {
+      padding: 7px 13px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: transparent; color: var(--fg-muted);
+      font-size: 13px; font-family: var(--font); cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cookie-opt:hover { border-color: rgba(255,255,255,0.22); color: var(--fg); }
+    .cookie-opt.selected {
+      border-color: var(--fg); background: rgba(255,255,255,0.06);
+      color: var(--fg); font-weight: 500;
+    }
+    .cookie-custom { display: flex; align-items: center; gap: 8px; }
+    .cookie-custom input {
+      width: 90px; background: var(--bg-input); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 8px 12px;
+      font-size: 13px; font-family: var(--font); color: var(--fg); outline: none;
+      transition: border-color 0.15s;
+    }
+    .cookie-custom input:focus { border-color: var(--border-focus); }
+    .cookie-custom span { font-size: 13px; color: var(--fg-muted); }
+
+    /* ─── Advanced details accordion ─── */
+    .accordion-toggle {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--fg-muted);
+      cursor: pointer; user-select: none;
+      padding: 10px 0; border: none; background: none;
+      font-family: var(--font); transition: color 0.15s; width: 100%;
+    }
+    .accordion-toggle:hover { color: var(--fg); }
+    .accordion-toggle svg { width: 14px; height: 14px; transition: transform 0.2s; flex-shrink: 0; }
+    .accordion-toggle.open svg { transform: rotate(180deg); }
+    .accordion-body {
+      display: none; padding-top: 4px;
+    }
+    .accordion-body.open { display: block; animation: fadeUp 0.2s ease; }
+    .accordion-divider {
+      height: 1px; background: var(--border); margin: 4px 0 16px;
+    }
+
+    /* ─── Email magic-link card ─── */
+    .email-hero {
+      text-align: center; padding: 8px 0 20px;
+    }
+    .email-hero .icon-ring {
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: var(--bg-muted);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 16px; color: var(--fg-muted);
+    }
+    .email-hero .icon-ring svg { width: 24px; height: 24px; }
+    .email-hero h3 {
+      font-size: 16px; font-weight: 700; letter-spacing: -0.02em;
+      margin-bottom: 6px;
+    }
+    .email-hero p {
+      font-size: 13px; color: var(--fg-muted); line-height: 1.55;
+    }
+
+    /* ─── Checkbox ─── */
+    .checkbox-row {
+      display: flex; align-items: flex-start; gap: 11px;
+      margin-top: 14px; cursor: pointer;
+    }
+    .checkbox-row input[type="checkbox"] {
+      width: 16px; height: 16px; flex-shrink: 0;
+      accent-color: var(--accent); margin-top: 2px; cursor: pointer;
+    }
+    .checkbox-row span {
+      font-size: 13px; color: var(--fg-muted); line-height: 1.5; cursor: pointer;
+    }
+    .checkbox-row span strong { color: var(--fg); font-weight: 500; }
+
+    /* ─── Review summary ─── */
+    .review-summary {
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      margin-top: 20px;
+    }
+    .review-summary h4 {
+      font-size: 11px; font-weight: 600; color: var(--fg-subtle);
+      text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+    }
+    .review-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 12px; padding: 6px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .review-row:last-child { border-bottom: none; }
+    .review-key { font-size: 12px; color: var(--fg-muted); flex-shrink: 0; }
+    .review-val {
+      font-size: 13px; color: var(--fg); font-weight: 500;
+      text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    /* ─── Navigation buttons ─── */
+    .btn-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 24px; gap: 12px;
+    }
+    .btn-back {
+      background: transparent; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 11px 20px; font-size: 14px; font-weight: 500;
+      font-family: var(--font); color: var(--fg-muted); cursor: pointer;
+      transition: border-color 0.15s, color 0.15s;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .btn-back:hover { border-color: rgba(255,255,255,0.22); color: var(--fg); }
+    .btn-back svg { width: 15px; height: 15px; }
+    .btn-next {
+      background: var(--fg); color: var(--bg);
+      border: none; border-radius: var(--radius-sm);
+      padding: 11px 24px; font-size: 14px; font-weight: 600;
+      font-family: var(--font); cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: var(--shadow-btn);
+    }
+    .btn-next:hover { opacity: 0.90; }
+    .btn-next:active { transform: scale(0.97); }
+    .btn-next svg { width: 15px; height: 15px; }
+    .btn-submit {
+      background: var(--accent); color: #000;
+      border: none; border-radius: var(--radius-sm);
+      padding: 13px 28px; font-size: 14px; font-weight: 700;
+      font-family: var(--font); cursor: pointer;
+      transition: opacity 0.15s, transform 0.1s, box-shadow 0.2s;
+      display: flex; align-items: center; gap: 8px;
+      box-shadow: 0 0 20px rgba(48,212,138,0.25);
+    }
+    .btn-submit:hover { opacity: 0.92; box-shadow: 0 0 28px rgba(48,212,138,0.35); }
+    .btn-submit:active { transform: scale(0.97); }
+    .btn-submit svg { width: 15px; height: 15px; }
+
+    /* ─── Loading spinner (inside btn-fetch when fetching) ─── */
+    .spinner {
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,0.25); border-top-color: #000;
+      border-radius: 50%; animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── Success state ─── */
+    #success-state { display: none; }
+    #success-state.visible { display: block; animation: fadeUp 0.35s ease; }
+
+    .success-card {
+      text-align: center; padding: 48px 32px 40px;
+    }
+    .success-icon-wrap {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(48,212,138,0.12);
+      border: 2px solid rgba(48,212,138,0.30);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+      animation: pulse-green 2s ease infinite;
+    }
+    .success-icon-wrap svg { width: 32px; height: 32px; color: var(--accent); }
+    @keyframes pulse-green {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(48,212,138,0.20); }
+      50%       { box-shadow: 0 0 0 12px rgba(48,212,138,0); }
+    }
+    .success-card h2 {
+      font-size: 24px; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--fg); margin-bottom: 10px;
+    }
+    .success-card .lead {
+      font-size: 15px; color: var(--fg-muted); line-height: 1.6;
+      max-width: 440px; margin: 0 auto 32px;
+    }
+    .success-card .lead strong { color: var(--fg); font-weight: 500; }
+
+    .next-steps {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+      text-align: left; margin-bottom: 32px;
+    }
+    @media (max-width: 540px) { .next-steps { grid-template-columns: 1fr; } }
+
+    .next-step-item {
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+    }
+    .next-step-num {
+      font-size: 11px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px;
+    }
+    .next-step-title {
+      font-size: 13px; font-weight: 600; color: var(--fg); margin-bottom: 4px;
+    }
+    .next-step-desc {
+      font-size: 11.5px; color: var(--fg-muted); line-height: 1.5;
+    }
+
+    .verify-callout {
+      background: rgba(48,212,138,0.06);
+      border: 1px solid rgba(48,212,138,0.18);
+      border-radius: var(--radius-lg);
+      padding: 16px 20px;
+      display: flex; align-items: flex-start; gap: 12px;
+      text-align: left;
+    }
+    .verify-callout svg { width: 16px; height: 16px; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .verify-callout p {
+      font-size: 12.5px; color: var(--fg-muted); line-height: 1.55;
+    }
+    .verify-callout p strong { color: var(--accent); font-weight: 600; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--fg-subtle); text-decoration: none;
+      margin-top: 24px; transition: color 0.15s; cursor: pointer;
+      background: none; border: none; font-family: var(--font);
+    }
+    .back-link:hover { color: var(--fg-muted); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    /* ─── Badge ─── */
+    .badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 3px 9px; border-radius: 99px;
+      font-size: 11px; font-weight: 600;
+    }
+    .badge-green {
+      background: rgba(48,212,138,0.12);
+      border: 1px solid rgba(48,212,138,0.28);
+      color: var(--accent);
+    }
+    .badge-green svg { width: 10px; height: 10px; }
+
+    /* ─── Footer ─── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+      text-align: center;
+    }
+    footer p {
+      font-size: 12px; color: var(--fg-subtle);
+    }
+    footer a {
+      color: var(--fg-subtle); text-decoration: none; transition: color 0.15s;
+    }
+    footer a:hover { color: var(--fg-muted); }
+
+    /* ─── Util ─── */
+    .sr-only {
+      position: absolute; width: 1px; height: 1px;
+      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+    }
+    @media (max-width: 640px) {
+      .page-wrap { padding: 32px 18px 60px; }
+      .card { padding: 22px 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── Nav ─── -->
+<nav aria-label="Site navigation">
+  <div class="nav-inner">
+    <a class="nav-logo" href="/">
+      <div class="nav-logo-icon" aria-hidden="true">
+        <svg width="104" height="104" viewBox="0 0 104 104" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="104" height="104" rx="19.5" fill="#0a0a0a"/>
+          <path d="M31.8914 92H14L41.2613 13H62.7773L90 92H72.1086L52.3278 31.0527H51.7108L31.8914 92ZM30.7732 60.9478H73.034V73.9858H30.7732V60.9478Z" fill="white"/>
+        </svg>
+      </div>
+      <span class="nav-logo-text">OpenAffiliate</span>
+    </a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="/programs">Programs</a>
+      <a href="/explore">Explore</a>
+      <a href="/rankings">Rankings</a>
+      <a href="/submit" class="active" aria-current="page">Submit</a>
+      <a href="/docs">Docs</a>
+    </nav>
+    <a class="nav-gh" href="https://github.com/Affitor/open-affiliate" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      <span>GitHub</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ─── Trust strip ─── -->
+<div class="trust-strip" role="note" aria-label="Platform highlights">
+  <span>Free forever</span>
+  <span class="trust-sep">·</span>
+  <span>750+ programs listed</span>
+  <span class="trust-sep">·</span>
+  <span>Discovered by AI agents</span>
+  <span class="trust-sep">·</span>
+  <span>Verified-by-Stripe option</span>
+</div>
+
+<!-- ─── Main ─── -->
+<main>
+<div class="page-wrap">
+
+  <!-- Dev escape hatch -->
+  <a class="dev-link" href="https://github.com/Affitor/open-affiliate" target="_blank" rel="noopener noreferrer" title="For developers who prefer the YAML + PR flow">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+    Developer? List via GitHub
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+  </a>
+
+  <!-- Form flow -->
+  <div id="form-flow">
+    <!-- Header -->
+    <div class="page-header">
+      <h1>List your affiliate program</h1>
+      <p>Takes about 2 minutes. No technical knowledge required — we handle everything behind the scenes.</p>
+    </div>
+
+    <!-- Stepper -->
+    <div class="stepper" role="list" aria-label="Steps">
+      <div class="step-item active" id="step-indicator-1" role="listitem">
+        <div class="step-circle" aria-label="Step 1">1</div>
+        <div class="step-label">Your product</div>
+      </div>
+      <div class="step-item" id="step-indicator-2" role="listitem">
+        <div class="step-circle" aria-label="Step 2">2</div>
+        <div class="step-label">Affiliate terms</div>
+      </div>
+      <div class="step-item" id="step-indicator-3" role="listitem">
+        <div class="step-circle" aria-label="Step 3">3</div>
+        <div class="step-label">Almost done</div>
+      </div>
+    </div>
+
+    <!-- ─── STEP 1: Your product ─── -->
+    <div class="step-panel visible" id="step-1">
+      <div class="card">
+        <h2 class="step-heading">Let's start with your product</h2>
+        <p class="step-sub">Paste your affiliate program page and we'll fill in most of this for you.</p>
+
+        <!-- Magic URL fetch -->
+        <div class="fetch-block" role="region" aria-label="Auto-fill from URL">
+          <div class="fetch-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            Auto-fill from your website
+          </div>
+          <div class="fetch-row">
+            <input
+              class="fetch-input"
+              id="fetch-url"
+              type="url"
+              placeholder="yourproduct.com/affiliates"
+              aria-label="Your affiliate program URL"
+              autocomplete="url"
+            />
+            <button class="btn-fetch" id="btn-fetch" onclick="doFetch()">
+              <svg id="fetch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              <span id="fetch-btn-label">Fetch &amp; auto-fill</span>
+            </button>
+          </div>
+          <p class="fetch-hint">We scan your public page and prefill the form instantly.</p>
+          <div class="autofill-chip" id="autofill-chip" role="status" aria-live="polite">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+            Filled in 8 fields from your page — check them below and adjust anything.
+          </div>
+        </div>
+
+        <!-- Fields -->
+        <div class="field">
+          <label for="prog-name">Program name <span class="required" aria-label="required">*</span></label>
+          <input id="prog-name" type="text" placeholder="e.g. Lemon Squeezy" autocomplete="organization" aria-required="true" />
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="prog-website">Website <span class="required" aria-label="required">*</span></label>
+            <input id="prog-website" type="url" placeholder="lemonsqueezy.com" autocomplete="url" aria-required="true" />
+          </div>
+          <div class="field">
+            <label for="prog-signup">Affiliate sign-up page</label>
+            <input id="prog-signup" type="url" placeholder="lemonsqueezy.com/affiliates" autocomplete="url" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="prog-category">What category fits best? <span class="required" aria-label="required">*</span></label>
+          <select id="prog-category" aria-required="true">
+            <option value="">Choose a category...</option>
+            <option>Developer Tools</option>
+            <option>E-commerce &amp; Payments</option>
+            <option>Marketing &amp; Growth</option>
+            <option>Email &amp; Communication</option>
+            <option>Analytics &amp; Data</option>
+            <option>Design &amp; Creative</option>
+            <option>Productivity &amp; Workspace</option>
+            <option>AI &amp; Automation</option>
+            <option>Sales &amp; CRM</option>
+            <option>HR &amp; Recruiting</option>
+            <option>Finance &amp; Accounting</option>
+            <option>Security &amp; Compliance</option>
+            <option>Infrastructure &amp; DevOps</option>
+            <option>Video &amp; Podcasting</option>
+            <option>Education &amp; Learning</option>
+            <option>Other SaaS</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="prog-pitch">One-line pitch — what problem does your product solve? <span class="required" aria-label="required">*</span></label>
+          <input id="prog-pitch" type="text" placeholder="e.g. The easiest way for creators to sell digital products" maxlength="120" aria-required="true" />
+          <p class="field-hint">Keep it to 1 sentence. This is what potential affiliates see first.</p>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <span></span>
+        <button class="btn-next" onclick="goToStep(2)" aria-label="Continue to affiliate terms">
+          Looks good, next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── STEP 2: Affiliate terms ─── -->
+    <div class="step-panel" id="step-2">
+      <div class="card">
+        <h2 class="step-heading">What do affiliates earn?</h2>
+        <p class="step-sub">These are the terms your affiliates will see. Plain and simple — no jargon.</p>
+
+        <!-- Commission -->
+        <div class="field">
+          <label>How do affiliates get paid? <span class="required" aria-label="required">*</span></label>
+          <div class="cookie-options" role="group" aria-label="Commission type">
+            <button class="cookie-opt selected" onclick="selectCommType(this, 'recurring')" type="button">% of every renewal</button>
+            <button class="cookie-opt" onclick="selectCommType(this, 'one-time')" type="button">% of first sale only</button>
+            <button class="cookie-opt" onclick="selectCommType(this, 'flat')" type="button">Fixed $ per sale</button>
+          </div>
+          <input type="hidden" id="comm-type" value="recurring" />
+        </div>
+
+        <div class="commission-grid">
+          <div class="field">
+            <label for="comm-rate">Affiliate earns <span class="required" aria-label="required">*</span></label>
+            <div class="input-with-suffix">
+              <input id="comm-rate" type="number" min="1" max="100" placeholder="30" aria-required="true" />
+              <span class="input-suffix" id="comm-suffix">%</span>
+            </div>
+            <p class="field-hint">e.g. 30% means they earn $30 on a $100 sale.</p>
+          </div>
+          <div class="field">
+            <label for="prog-trial">Free trial or money-back period</label>
+            <div class="input-with-suffix">
+              <input id="prog-trial" type="number" min="0" placeholder="14" />
+              <span class="input-suffix">days</span>
+            </div>
+            <p class="field-hint">Leave blank if none.</p>
+          </div>
+        </div>
+
+        <!-- Cookie window -->
+        <div class="field">
+          <label>How long is a referral tracked? <span class="required" aria-label="required">*</span></label>
+          <div class="cookie-picker">
+            <div class="cookie-options" role="group" aria-label="Referral tracking window">
+              <button class="cookie-opt" onclick="selectCookie(this, 7)" type="button">7 days</button>
+              <button class="cookie-opt" onclick="selectCookie(this, 30)" type="button">30 days</button>
+              <button class="cookie-opt selected" onclick="selectCookie(this, 60)" type="button">60 days</button>
+              <button class="cookie-opt" onclick="selectCookie(this, 90)" type="button">90 days</button>
+              <button class="cookie-opt" onclick="selectCookie(this, 0)" type="button">Lifetime</button>
+            </div>
+            <div class="cookie-custom" id="cookie-custom" style="display:none;">
+              <input type="number" id="cookie-custom-val" placeholder="45" min="1" max="365" aria-label="Custom cookie days" />
+              <span>days</span>
+            </div>
+          </div>
+          <input type="hidden" id="cookie-days" value="60" />
+          <p class="field-hint" style="margin-top:8px;">If someone clicks an affiliate's link today, they get credit if that person buys within this window.</p>
+        </div>
+
+        <!-- Advanced accordion -->
+        <div style="margin-top: 8px; border-top: 1px solid var(--border); padding-top: 4px;">
+          <button
+            class="accordion-toggle"
+            id="adv-toggle"
+            onclick="toggleAdvanced()"
+            type="button"
+            aria-expanded="false"
+            aria-controls="advanced-fields"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            Add more details (optional) — payout method, minimum, restrictions
+          </button>
+          <div class="accordion-body" id="advanced-fields" role="region" aria-label="Optional details">
+            <div class="accordion-divider"></div>
+
+            <div class="commission-grid">
+              <div class="field">
+                <label for="payout-min">Minimum payout amount</label>
+                <div class="input-with-suffix">
+                  <input id="payout-min" type="number" min="0" placeholder="50" />
+                  <span class="input-suffix">USD</span>
+                </div>
+                <p class="field-hint">The minimum balance before we send a payment.</p>
+              </div>
+              <div class="field">
+                <label for="payout-freq">How often are affiliates paid?</label>
+                <select id="payout-freq">
+                  <option value="monthly">Monthly</option>
+                  <option value="bi-weekly">Every two weeks</option>
+                  <option value="net-30">Net 30</option>
+                  <option value="net-60">Net 60</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="payout-method">How are affiliates paid?</label>
+              <select id="payout-method">
+                <option value="">Choose...</option>
+                <option>PayPal</option>
+                <option>Stripe</option>
+                <option>Bank transfer (ACH / SEPA)</option>
+                <option>Wise</option>
+                <option>Store credit</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="restrictions">Any restrictions? <span style="font-weight:400;color:var(--fg-subtle)">(optional)</span></label>
+              <textarea id="restrictions" rows="2" placeholder="e.g. Open to US/EU only, no coupon sites, no paid ads on brand name"></textarea>
+              <p class="field-hint">Leave blank if there are none. Affiliates appreciate knowing upfront.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(1)" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </button>
+        <button class="btn-next" onclick="goToStep(3)" aria-label="Continue to final step">
+          Almost done
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─── STEP 3: Almost done ─── -->
+    <div class="step-panel" id="step-3">
+      <div class="card">
+        <!-- Email magic-link -->
+        <div class="email-hero" role="region" aria-label="Email verification">
+          <div class="icon-ring" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          </div>
+          <h3>One last thing — your email</h3>
+          <p>We'll send you a magic link so you can edit your listing, respond to the review, and claim your <span class="badge badge-green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>Verified</span> badge later. No password needed.</p>
+        </div>
+
+        <div class="field">
+          <label for="sub-email">Your work email <span class="required" aria-label="required">*</span></label>
+          <input id="sub-email" type="email" placeholder="you@yourcompany.com" autocomplete="email" aria-required="true" />
+          <p class="field-hint">We only use this to send your edit link and listing status. No marketing.</p>
+        </div>
+
+        <label class="checkbox-row">
+          <input type="checkbox" id="works-here" />
+          <span>I work at this company — <strong>request a Verified badge</strong> once my listing is live.</span>
+        </label>
+
+        <!-- Review summary -->
+        <div class="review-summary" role="region" aria-label="Submission summary">
+          <h4>Your submission at a glance</h4>
+          <div class="review-row">
+            <span class="review-key">Program</span>
+            <span class="review-val" id="rv-name">Lemon Squeezy</span>
+          </div>
+          <div class="review-row">
+            <span class="review-key">Website</span>
+            <span class="review-val" id="rv-website">lemonsqueezy.com</span>
+          </div>
+          <div class="review-row">
+            <span class="review-key">Category</span>
+            <span class="review-val" id="rv-category">E-commerce &amp; Payments</span>
+          </div>
+          <div class="review-row">
+            <span class="review-key">Affiliates earn</span>
+            <span class="review-val" id="rv-commission">30% of every renewal</span>
+          </div>
+          <div class="review-row">
+            <span class="review-key">Referral window</span>
+            <span class="review-val" id="rv-cookie">60 days</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-back" onclick="goToStep(2)" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+          Back
+        </button>
+        <button class="btn-submit" onclick="submitForm()" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          Submit listing
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SUCCESS STATE ─── -->
+  <div id="success-state" role="alert" aria-live="polite">
+    <div class="card success-card">
+      <div class="success-icon-wrap" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h2>Submitted!</h2>
+      <p class="lead">
+        We're reviewing <strong id="success-name">Lemon Squeezy</strong>. It's usually live within minutes — often within the hour.
+        <br /><br />
+        Check your inbox at <strong id="success-email">you@yourcompany.com</strong> — we'll send a magic link to edit or claim your listing.
+      </p>
+
+      <div class="next-steps" aria-label="What happens next">
+        <div class="next-step-item">
+          <div class="next-step-num">Step 1</div>
+          <div class="next-step-title">We review</div>
+          <div class="next-step-desc">A quick check that everything looks accurate. Usually under an hour.</div>
+        </div>
+        <div class="next-step-item">
+          <div class="next-step-num">Step 2</div>
+          <div class="next-step-title">Goes live</div>
+          <div class="next-step-desc">Your program appears in search, AI agent queries, and the registry.</div>
+        </div>
+        <div class="next-step-item">
+          <div class="next-step-num">Step 3</div>
+          <div class="next-step-title">Claim &amp; verify</div>
+          <div class="next-step-desc">Use your email link to edit details and unlock the Verified badge.</div>
+        </div>
+      </div>
+
+      <div class="verify-callout">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>
+        <p>
+          The <strong>Verified badge</strong> signals to affiliates that your program is actively managed — it appears prominently in search results and increases sign-up rates. You can claim it from your listing once it's live.
+        </p>
+      </div>
+
+      <button class="back-link" onclick="resetForm()" aria-label="Submit another program">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Submit another program
+      </button>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<!-- ─── Footer ─── -->
+<footer>
+  <p>
+    OpenAffiliate — open source, community-driven.
+    &nbsp;·&nbsp;
+    <a href="/docs">Docs</a>
+    &nbsp;·&nbsp;
+    <a href="https://github.com/Affitor/open-affiliate" target="_blank" rel="noopener noreferrer">GitHub</a>
+    &nbsp;·&nbsp;
+    <a href="/feedback">Feedback</a>
+  </p>
+</footer>
+
+<script>
+  /* ─── State ─── */
+  let currentStep = 1;
+  let cookieVal = 60;
+  let commType = 'recurring';
+
+  /* ─── Step navigation ─── */
+  function goToStep(n) {
+    document.getElementById('step-' + currentStep).classList.remove('visible');
+    document.getElementById('step-indicator-' + currentStep).classList.remove('active');
+    if (n > currentStep) {
+      document.getElementById('step-indicator-' + currentStep).classList.add('done');
+      document.getElementById('step-indicator-' + currentStep).querySelector('.step-circle').innerHTML =
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="width:12px;height:12px" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+    } else {
+      document.getElementById('step-indicator-' + (currentStep)).classList.remove('done');
+      document.getElementById('step-indicator-' + (currentStep)).querySelector('.step-circle').textContent = currentStep;
+    }
+    currentStep = n;
+    document.getElementById('step-' + n).classList.add('visible');
+    document.getElementById('step-indicator-' + n).classList.add('active');
+    if (n === 3) { buildSummary(); }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ─── Build summary for step 3 ─── */
+  function buildSummary() {
+    var name = document.getElementById('prog-name').value || 'Your program';
+    var website = document.getElementById('prog-website').value || '—';
+    var category = document.getElementById('prog-category').value || '—';
+    var rate = document.getElementById('comm-rate').value;
+    var suffix = document.getElementById('comm-suffix').textContent;
+    var typeLabels = { recurring: 'of every renewal', 'one-time': 'of first sale only', flat: 'per sale' };
+    var commLabel = rate ? (rate + suffix + ' ' + (typeLabels[commType] || '')) : '—';
+    var cookieLabel = cookieVal === 0 ? 'Lifetime' : cookieVal + ' days';
+
+    document.getElementById('rv-name').textContent = name;
+    document.getElementById('rv-website').textContent = website.replace(/^https?:\/\//, '');
+    document.getElementById('rv-category').textContent = category;
+    document.getElementById('rv-commission').textContent = commLabel;
+    document.getElementById('rv-cookie').textContent = cookieLabel;
+  }
+
+  /* ─── Cookie selector ─── */
+  function selectCookie(btn, val) {
+    document.querySelectorAll('.cookie-picker .cookie-opt').forEach(function(b) {
+      b.classList.remove('selected');
+    });
+    btn.classList.add('selected');
+    cookieVal = val;
+    document.getElementById('cookie-days').value = val;
+    var custom = document.getElementById('cookie-custom');
+    if (val === -1) {
+      custom.style.display = 'flex';
+      document.getElementById('cookie-custom-val').focus();
+    } else {
+      custom.style.display = 'none';
+    }
+  }
+
+  /* ─── Commission type selector ─── */
+  function selectCommType(btn, type) {
+    document.querySelectorAll('.field .cookie-options .cookie-opt').forEach(function(b) {
+      b.classList.remove('selected');
+    });
+    btn.classList.add('selected');
+    commType = type;
+    document.getElementById('comm-type').value = type;
+    var suffix = document.getElementById('comm-suffix');
+    if (type === 'flat') { suffix.textContent = 'USD'; }
+    else { suffix.textContent = '%'; }
+  }
+
+  /* ─── Advanced accordion ─── */
+  function toggleAdvanced() {
+    var toggle = document.getElementById('adv-toggle');
+    var body = document.getElementById('advanced-fields');
+    var isOpen = body.classList.contains('open');
+    toggle.classList.toggle('open', !isOpen);
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    body.classList.toggle('open', !isOpen);
+  }
+
+  /* ─── Magic auto-fill (simulated) ─── */
+  function doFetch() {
+    var urlVal = document.getElementById('fetch-url').value.trim();
+    if (!urlVal) {
+      document.getElementById('fetch-url').focus();
+      return;
+    }
+    var btn = document.getElementById('btn-fetch');
+    var icon = document.getElementById('fetch-icon');
+    var label = document.getElementById('fetch-btn-label');
+
+    // Show loading state
+    btn.disabled = true;
+    icon.outerHTML = '<div class="spinner" id="fetch-icon" aria-hidden="true"></div>';
+    label.textContent = 'Fetching...';
+
+    // Simulate network delay + auto-fill
+    setTimeout(function() {
+      // Restore button
+      document.getElementById('fetch-icon').outerHTML =
+        '<svg id="fetch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+      document.getElementById('fetch-btn-label').textContent = 'Re-fetch';
+      btn.disabled = false;
+
+      // Simulate prefill based on URL
+      var clean = urlVal.replace(/^https?:\/\//, '').split('/')[0];
+      var demo = getDemoData(clean);
+      document.getElementById('prog-name').value = demo.name;
+      document.getElementById('prog-website').value = demo.website;
+      document.getElementById('prog-signup').value = demo.signup;
+      document.getElementById('prog-pitch').value = demo.pitch;
+      // Category
+      var catSelect = document.getElementById('prog-category');
+      for (var i = 0; i < catSelect.options.length; i++) {
+        if (catSelect.options[i].value === demo.category) {
+          catSelect.value = demo.category;
+          break;
+        }
+      }
+
+      // Show chip
+      var chip = document.getElementById('autofill-chip');
+      chip.classList.add('visible');
+    }, 1500);
+  }
+
+  function getDemoData(domain) {
+    // Demo data for mockup
+    return {
+      name: 'Lemon Squeezy',
+      website: 'lemonsqueezy.com',
+      signup: 'lemonsqueezy.com/affiliates',
+      category: 'E-commerce & Payments',
+      pitch: 'The easiest way for creators and SaaS founders to sell digital products and subscriptions'
+    };
+  }
+
+  /* ─── Submit ─── */
+  function submitForm() {
+    var email = document.getElementById('sub-email').value.trim();
+    if (!email) {
+      document.getElementById('sub-email').focus();
+      return;
+    }
+    var name = document.getElementById('prog-name').value || 'Your program';
+    document.getElementById('success-name').textContent = name;
+    document.getElementById('success-email').textContent = email;
+    document.getElementById('form-flow').style.display = 'none';
+    document.getElementById('success-state').classList.add('visible');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  /* ─── Reset (submit another) ─── */
+  function resetForm() {
+    document.getElementById('success-state').classList.remove('visible');
+    document.getElementById('form-flow').style.display = 'block';
+    // Reset steps
+    for (var i = 1; i <= 3; i++) {
+      var ind = document.getElementById('step-indicator-' + i);
+      ind.classList.remove('active', 'done');
+      ind.querySelector('.step-circle').textContent = i;
+    }
+    currentStep = 1;
+    document.getElementById('step-1').classList.add('visible');
+    document.getElementById('step-2').classList.remove('visible');
+    document.getElementById('step-3').classList.remove('visible');
+    document.getElementById('step-indicator-1').classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
