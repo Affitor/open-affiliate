@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ExternalLink, Play, FileText, MessageCircle } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
+import { ExploreThumbnail } from "@/components/explore-thumbnail";
 import type { ExploreItem } from "@/lib/social-explore";
 
 function formatNumber(n: number): string {
@@ -90,18 +91,10 @@ export function ExploreTable({ items }: ExploreTableProps) {
                     rel="noopener noreferrer"
                     className="shrink-0 hidden sm:block"
                   >
-                    {item.thumbnail ? (
-                      <img
-                        src={item.thumbnail}
-                        alt=""
-                        className="h-16 w-28 rounded-lg object-cover bg-muted"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="h-16 w-28 rounded-lg bg-muted/50 flex items-center justify-center">
-                        <PlatformBadge platform={item.platform} />
-                      </div>
-                    )}
+                    <ExploreThumbnail
+                      src={item.thumbnail}
+                      placeholder={<PlatformBadge platform={item.platform} />}
+                    />
                   </a>
                   <div className="min-w-0 flex-1">
                     <a

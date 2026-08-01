@@ -15,9 +15,11 @@ function GitHubIcon({ className }: { className?: string }) {
   );
 }
 
+// Explore is intentionally absent. The page still works at /explore and is
+// linked from content that points at it, but it is not promoted in the nav
+// until its thumbnails and load time are good enough to send people to.
 const NAV_LINKS = [
   { label: "Programs", href: "/programs" },
-  { label: "Explore", href: "/explore" },
   { label: "Rankings", href: "/rankings" },
   { label: "Submit", href: "/submit" },
   { label: "Docs", href: "/docs" },
