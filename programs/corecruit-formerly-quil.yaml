@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $100
+  mode: flat
+  value: 100
   currency: USD
   duration: null
   conditions: Earn $100 for every successful CoRecruit referral!

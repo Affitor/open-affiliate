@@ -7,6 +7,8 @@ tags: [email-marketing, newsletter, creators, automation, email, audience-buildi
 commission:
   type: recurring
   rate: "50%"
+  mode: percentage
+  value: 50
   currency: USD
   duration: "12 months"
   conditions: "50% recurring for first 12 months. Tiered recurring (10-20%) beyond 12 months for high-volume affiliates (10+ referrals/year)."

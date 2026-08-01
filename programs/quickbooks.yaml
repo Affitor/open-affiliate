@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: Offer your customer 30% off a new QuickBooks Online or QuickBooks Online Payroll subscriptions for 6 months

@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Earn 16-25% recurring commission

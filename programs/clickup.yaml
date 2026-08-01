@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $25
+  mode: flat
+  value: 25
   currency: USD
   duration: null
   conditions: $25 Signup (T1 countries) | $12.50 Signup (T2 countries) | $5 Signup (T3 countries)

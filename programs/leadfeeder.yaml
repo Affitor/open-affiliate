@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $100
+  mode: flat
+  value: 100
   currency: USD
   duration: null
   conditions: $100 commission after 2 monthly payments

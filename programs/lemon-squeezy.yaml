@@ -10,6 +10,8 @@ tags:
 commission:
   type: recurring
   rate: 12.5%
+  mode: percentage
+  value: 12.5
   currency: USD
   duration: 12 months
   conditions: 12.5% recurring commission on net transaction fees of referred merchants for 12 months.

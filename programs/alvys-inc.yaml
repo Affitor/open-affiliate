@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $300
+  mode: flat
+  value: 300
   currency: USD
   duration: null
   conditions: Earn up to $300 For Every Paid Customer!

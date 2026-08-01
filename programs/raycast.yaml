@@ -32,6 +32,8 @@ logo_url: https://cdn.brandfetch.io/idxxHV50Mm/w/800/h/309/theme/light/logo.png?
 verified: true
 commission:
   rate: 30%
+  mode: percentage
+  value: 30
   type: recurring
   currency: null
   duration: null

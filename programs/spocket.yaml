@@ -8,6 +8,8 @@ tags:
 commission:
   type: recurring
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: lifetime
   conditions: Lifetime earnings up to 40%. Become a Spocket affiliate!

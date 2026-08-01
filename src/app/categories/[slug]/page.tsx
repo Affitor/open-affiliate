@@ -11,7 +11,7 @@ import {
   categoryToSlug,
   slugToCategory,
   parseCommissionRate,
-  commissionLabel,
+  commissionLabel,  commissionDisplay
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -63,11 +63,11 @@ export default async function CategoryPage({
 
   const catPrograms = [...programs.filter((p) => p.category === category)].sort(
     (a, b) =>
-      parseCommissionRate(b.commission.rate) -
-      parseCommissionRate(a.commission.rate)
+      parseCommissionRate(b.commission) -
+      parseCommissionRate(a.commission)
   );
 
-  const rates = catPrograms.map((p) => parseCommissionRate(p.commission.rate));
+  const rates = catPrograms.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
   const avgCookie =
@@ -217,7 +217,7 @@ export default async function CategoryPage({
                   </td>
                   <td className="py-3 px-3">
                     <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                      {program.commission.rate}
+                      {commissionDisplay(program.commission)}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">

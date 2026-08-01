@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 40%
+  mode: percentage
+  value: 40
   currency: null
   duration: null
   conditions: null

@@ -15,6 +15,8 @@ tags:
 commission:
   type: one-time
   rate: $4.99
+  mode: flat
+  value: 4.99
   currency: USD
   duration: null
   conditions: Current listed commission is paid when a referral buys premium; referrals last for 30 days.

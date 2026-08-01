@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $200
+  mode: flat
+  value: 200
   currency: USD
   duration: null
   conditions: $200 per qualified business that opens a Mercury account.

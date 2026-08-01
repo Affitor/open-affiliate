@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: 12 months
   conditions: "Get 20% for any closed business you refer to Callvu for the first year of the customer! "

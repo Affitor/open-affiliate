@@ -231,7 +231,7 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
       const catProgramsFull = programs.filter((p) => p.category === category)
       const pctRates = catProgramsFull
         .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission.rate))
+        .map((p) => parseCommissionRate(p.commission))
       const avgComm = pctRates.length ? Math.round(pctRates.reduce((a, b) => a + b, 0) / pctRates.length) : 0
 
       return {

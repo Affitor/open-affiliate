@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { programs, parseCommissionRate } from "@/lib/programs";
+import { programs, parseCommissionRate , commissionDisplay} from "@/lib/programs";
 
 export const alt = "Affiliate Program Rankings — OpenAffiliate";
 export const size = { width: 1200, height: 630 };
@@ -7,7 +7,7 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const top5 = [...programs]
-    .sort((a, b) => parseCommissionRate(b.commission.rate) - parseCommissionRate(a.commission.rate))
+    .sort((a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission))
     .slice(0, 5);
 
   const medals = ["#f59e0b", "#9ca3af", "#f97316", "#64748b", "#64748b"];
@@ -106,7 +106,7 @@ export default async function Image() {
 
               {/* Commission */}
               <span style={{ fontSize: "22px", fontWeight: 700, color: "#34d399" }}>
-                {program.commission.rate}
+                {commissionDisplay(program.commission)}
               </span>
 
               {/* Type */}

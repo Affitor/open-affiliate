@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $1000
+  mode: flat
+  value: 1000
   currency: USD
   duration: null
   conditions: Up to $1,000 per qualified referred customer based on plan tier.

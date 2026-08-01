@@ -7,6 +7,8 @@ tags: [ai, ai-audio, noise-cancellation, meetings, productivity]
 commission:
   type: recurring
   rate: "30%"
+  mode: percentage
+  value: 30
   currency: USD
   duration: "12 months"
   conditions: "Up to 30% recurring for 12 months"

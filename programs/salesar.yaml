@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: Earn 30% commission for every paid customer (ACV $3,500 USD)

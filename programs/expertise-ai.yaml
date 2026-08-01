@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $250
+  mode: flat
+  value: 250
   currency: USD
   duration: null
   conditions: $250 for every HubSpot qualified lead that attends a demo with our team.

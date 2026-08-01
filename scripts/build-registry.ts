@@ -8,6 +8,18 @@ const INDEX_FILE = join(process.cwd(), "src", "lib", "registry-index.json")
 const LOGOS_DIR = join(process.cwd(), "public", "logos")
 const LOGO_MAP_FILE = join(process.cwd(), "src", "lib", "logo-files.json")
 
+/**
+ * Slugs allowed to keep a placeholder signup_url, frozen when the rule landed.
+ * See the check in validateProgram.
+ */
+const SIGNUP_URL_DEBT = new Set<string>(
+  (
+    JSON.parse(
+      readFileSync(join(process.cwd(), "schema", "signup-url-debt.json"), "utf8")
+    ) as { slugs: string[] }
+  ).slugs
+)
+
 const REQUIRED_FIELDS = [
   "name",
   "slug",
@@ -88,6 +100,53 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     throw new Error(
       `Slug mismatch in ${filename}: expected "${expectedSlug}", got "${data.slug}"`
     )
+  }
+
+  const commission = data.commission as Record<string, unknown> | undefined
+  if (commission) {
+    const MODES = ["percentage", "flat", "tiered", "hybrid", "unknown"]
+    if (!MODES.includes(String(commission.mode))) {
+      throw new Error(
+        `${filename}: commission.mode must be one of ${MODES.join(", ")} — got "${commission.mode}". ` +
+          `Use "unknown" when no figure has been published rather than leaving it out.`
+      )
+    }
+    if (commission.mode !== "unknown" && commission.value == null) {
+      throw new Error(
+        `${filename}: commission.mode is "${commission.mode}" but value is null. ` +
+          `Either give the number a reader compares on, or set mode to unknown.`
+      )
+    }
+  }
+
+  // 208 programs reached the registry with a signup_url that was just the
+  // homepage, most of them byte-identical to `url`. The field looked complete
+  // and told a reader nothing.
+  //
+  // A ratchet rather than a flag day: those 208 are frozen in
+  // schema/signup-url-debt.json so the build still passes, and anything new
+  // fails. The list can shrink, never grow. Fixing a link means deleting a
+  // slug from it.
+  const signup = typeof data.signup_url === "string" ? data.signup_url.trim() : ""
+  if (signup && !SIGNUP_URL_DEBT.has(String(data.slug))) {
+    const site = typeof data.url === "string" ? data.url.trim() : ""
+    const strip = (u: string) => u.replace(/\/+$/, "")
+    if (strip(signup) === strip(site)) {
+      throw new Error(
+        `${filename}: signup_url is identical to url. Link to the affiliate or partner page, not the website.`
+      )
+    }
+    try {
+      const path = new URL(signup).pathname
+      if (path === "" || path === "/") {
+        throw new Error(
+          `${filename}: signup_url points at the bare homepage. Link to the affiliate or partner page.`
+        )
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.includes("bare homepage")) throw err
+      throw new Error(`${filename}: signup_url is not a valid URL — "${signup}"`)
+    }
   }
 }
 

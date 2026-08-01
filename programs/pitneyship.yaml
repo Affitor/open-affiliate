@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: $35
+  mode: flat
+  value: 35
   currency: USD
   duration: null
   conditions: "Earn $35 for each new customer account created "

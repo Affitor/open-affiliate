@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 8%
+  mode: percentage
+  value: 8
   currency: USD
   duration: 12 months
   conditions: Earn $300 per qualified lead and 8% of all revenue in the first 12 months (typical ACV $100k+).

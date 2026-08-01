@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: lifetime
   conditions: Earn 20% of ongoing customer purchases

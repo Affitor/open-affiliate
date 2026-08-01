@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $20
+  mode: flat
+  value: 20
   currency: USD
   duration: null
   conditions: CPL - US/UK/AUS/NL - $20 - CAP

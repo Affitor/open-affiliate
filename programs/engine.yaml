@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 1%
+  mode: percentage
+  value: 1
   currency: USD
   duration: null
   conditions: Earn 1% Revenue Share on Group Bookings for the first 6 months of Customer Purchases

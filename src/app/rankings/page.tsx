@@ -28,7 +28,7 @@ import {
   getNetworkStats,
   type Program,
   commissionLabel,
-  affiliateScore,
+  affiliateScore,  commissionDisplay
 } from "@/lib/programs";
 
 type Tab = "programs" | "networks" | "categories";
@@ -188,7 +188,7 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
             </div>
             <div className="flex items-center gap-2 mt-3 flex-wrap">
               <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-                {program.commission.rate}{" "}
+                {commissionDisplay(program.commission)}{" "}
                 {commissionLabel(program.commission)}
               </Badge>
             </div>
@@ -287,8 +287,8 @@ function ProgramsTable({
       switch (sortCol) {
         case "commission":
           return (
-            parseCommissionRate(a.program.commission.rate) -
-            parseCommissionRate(b.program.commission.rate)
+            parseCommissionRate(a.program.commission) -
+            parseCommissionRate(b.program.commission)
           ) * dir;
         case "verified":
           return (a.verifiedContent - b.verifiedContent) * dir;
@@ -423,7 +423,7 @@ function ProgramsTable({
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
                     <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 line-clamp-2">
-                      {p.commission.rate}
+                      {commissionDisplay(p.commission)}
                     </span>
                   </td>
                   <td className="py-3 px-3 text-center">

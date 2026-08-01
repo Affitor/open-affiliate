@@ -14,6 +14,8 @@ tags:
 commission:
   type: tiered
   rate: "50% on the USD 49 workflow triage; 30% default on the USD 2,500 AI readiness diagnostic"
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: Eligible sales tracked through the affiliate's unique Whop referral link; current prices and rates may change

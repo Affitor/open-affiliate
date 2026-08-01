@@ -32,6 +32,28 @@ interface ProgramFull extends ProgramSummary {
   payout: { minimum: number; frequency: string };
 }
 
+
+/**
+ * The CLI had the same defect the website did: a literal "%" appended to
+ * whatever the rate string held, so a flat $36 program printed "$36%" and a
+ * program with no published figure printed "varies%".
+ */
+function commissionText(c: { mode?: string; value?: number | null; rate: unknown }): string {
+  switch (c.mode) {
+    case "percentage":
+      return c.value != null ? `${c.value}%` : "Not published"
+    case "flat":
+      return c.value != null ? `$${c.value.toLocaleString()}` : "Not published"
+    case "tiered":
+    case "hybrid":
+      return String(c.rate)
+    case "unknown":
+      return "Not published"
+    default:
+      return String(c.rate)
+  }
+}
+
 async function fetchJSON(path: string) {
   const res = await fetch(`${API_BASE}${path}`);
   if (!res.ok) throw new Error(`API error: ${res.status}`);
@@ -123,7 +145,7 @@ program
   ${p.shortDescription}
   ${"─".repeat(50)}
 
-  Commission:  ${p.commission.rate}% ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
+  Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
   Cookie:      ${p.cookieDays} days
   Payout:      $${p.payout.minimum} min / ${p.payout.frequency}
   ${p.payoutMethods ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}

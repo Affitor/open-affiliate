@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore } from "@/lib/programs";
+import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 function RankingsPreview() {
@@ -110,7 +110,7 @@ function RankingsPreview() {
                 </td>
                 <td className="py-2.5 px-3 hidden sm:table-cell">
                   <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                    {program.commission.rate}
+                    {commissionDisplay(program.commission)}
                   </span>
                   <span className="text-[10px] text-muted-foreground ml-1">
                     {commissionLabel(program.commission, true)}
@@ -170,7 +170,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
 
       <div className="flex items-center gap-2 flex-wrap">
         <Badge variant="secondary" className="text-[11px]">
-          {typeof program.commission.rate === "number" ? `${program.commission.rate}%` : program.commission.rate}{" "}
+          {commissionDisplay(program.commission)}{" "}
           {program.commission.type}
         </Badge>
         <Badge variant="outline" className="text-[11px]">

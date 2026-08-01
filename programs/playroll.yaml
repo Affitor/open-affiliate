@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Earn $1,000+ per EOR referral, recurring monthly revenue share, and access a 10% discount to extend to your clients.

@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $2
+  mode: flat
+  value: 2
   currency: USD
   duration: null
   conditions: Earn $2,500 for every company you refer that becomes a paying client. Every customer you refer gets an automatic

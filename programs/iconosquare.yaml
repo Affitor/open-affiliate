@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 35%
+  mode: percentage
+  value: 35
   currency: USD
   duration: null
   conditions: 💸 Earn up to $250 in commissions or up to 35% recurring commissions for each new customer

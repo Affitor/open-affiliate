@@ -7,6 +7,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: 5% of monthly revenue

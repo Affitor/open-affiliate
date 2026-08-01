@@ -10,6 +10,8 @@ tags: [mobile-app, couples, relationships, creators, recurring-commission, tiere
 commission:
   type: tiered
   rate: "25-50%"
+  mode: tiered
+  value: 50
   currency: USD
   duration: "Qualifying renewals"
   conditions: "Referral slots 1-100 earn 25%, 101-499 earn 35%, and 500+ earn 50%; calculated from verified store proceeds after applicable fees, taxes, refunds, and chargebacks. Subscriber must remain paid for 8 full days."

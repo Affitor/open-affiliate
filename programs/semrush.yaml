@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: lifetime
   conditions: Earn up to $200 per subscription signup + 40% lifetime recurring on all new referrals via BeRush.

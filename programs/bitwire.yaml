@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: 5% revenue share on your own purchases, indefinitely

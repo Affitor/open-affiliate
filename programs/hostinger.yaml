@@ -7,6 +7,8 @@ tags: [ai, ai-website-builder, hosting, web-development, domains]
 commission:
   type: one-time
   rate: "up to 60%"
+  mode: percentage
+  value: 60
   currency: USD
   duration: null
   conditions: "Up to 40% on hosting, up to 60% on Horizons plans"

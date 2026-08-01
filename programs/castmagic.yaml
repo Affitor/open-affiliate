@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: null
   conditions: Earn 40% of recurring revenue

@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: Earn 20% commission for an entire year on every referral (ACV $525 USD/month)

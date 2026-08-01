@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 35%
+  mode: percentage
+  value: 35
   currency: USD
   duration: null
   conditions: Earn 35% on every customer transaction! (Average 20 user account can earn up to nearly $400)

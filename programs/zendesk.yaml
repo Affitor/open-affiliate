@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 15%
+  mode: percentage
+  value: 15
   currency: USD
   duration: 12 months
   conditions: Earn 15% of commission for the first year!

@@ -41,6 +41,8 @@ const OUT = join(process.cwd(), "public")
 type Commission = {
   type?: string | null
   rate?: string | number | null
+  mode?: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
+  value?: number | null
   currency?: string | null
   duration?: string | null
   conditions?: string | null
@@ -87,8 +89,24 @@ const IN_HOUSE = "in-house"
 
 // ---------- Formatting ------------------------------------------------------
 
+/**
+ * Reads the typed shape rather than the raw string. An agent citing this
+ * surface should never be handed the word "varies" in a commission slot —
+ * "Not published" says the same thing without looking like a value.
+ */
 function rate(c: Commission): string {
-  if (c.rate === null || c.rate === undefined || c.rate === "") return "unknown"
+  switch (c.mode) {
+    case "percentage":
+      return c.value != null ? `${c.value}%` : "Not published"
+    case "flat":
+      return c.value != null ? `$${c.value.toLocaleString()}` : "Not published"
+    case "tiered":
+    case "hybrid":
+      return String(c.rate)
+    case "unknown":
+      return "Not published"
+  }
+  if (c.rate === null || c.rate === undefined || c.rate === "") return "Not published"
   return typeof c.rate === "number" ? `${c.rate}%` : String(c.rate)
 }
 

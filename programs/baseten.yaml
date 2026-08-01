@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: varies
+  mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: Developer partnership with usage-based referral credits.

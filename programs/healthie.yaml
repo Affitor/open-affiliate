@@ -7,6 +7,8 @@ tags:
 commission:
   type: one-time
   rate: $150
+  mode: flat
+  value: 150
   currency: USD
   duration: null
   conditions: "Earn $150 for each new eligible paid account on Healthie! Bonus commissions available through challenges and tier structure. "

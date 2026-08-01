@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { ProgramLogo } from "@/components/program-logo"
-import { programs, affiliateScore, commissionLabel, type Program } from "@/lib/programs"
+import { programs, affiliateScore, commissionLabel, type Program, commissionDisplay} from "@/lib/programs"
 
 function getRelatedPrograms(current: Program, limit = 4): Program[] {
   const candidates = programs.filter((p) => p.slug !== current.slug)
@@ -43,7 +43,7 @@ export function RelatedPrograms({ current }: { current: Program }) {
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-xs text-muted-foreground">
-                    {p.commission.rate} {commissionLabel(p.commission, true)}
+                    {commissionDisplay(p.commission)} {commissionLabel(p.commission, true)}
                   </span>
                   <Badge
                     variant="outline"

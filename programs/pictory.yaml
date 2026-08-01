@@ -7,6 +7,8 @@ tags: [ai, ai-video, video-creation, text-to-video, social-media]
 commission:
   type: tiered
   rate: "20-50%"
+  mode: tiered
+  value: 50
   currency: USD
   duration: lifetime
   conditions: "20% base, scaling to 50% at 500+ referred customers"

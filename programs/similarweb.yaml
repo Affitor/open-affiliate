@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: Earn 50% commission, with a 30-day delay, on all customer transactions within their first year!

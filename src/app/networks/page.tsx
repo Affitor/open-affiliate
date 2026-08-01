@@ -4,7 +4,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getNetworkStats, networkToSlug } from "@/lib/programs";
+import { getNetworkStats, networkToSlug, commissionDisplay} from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "Affiliate Networks",
@@ -73,7 +73,7 @@ export default function NetworksPage() {
                 size={20}
               />
               <span className="text-xs text-muted-foreground truncate">
-                Top: {net.topProgram.name} ({net.topProgram.commission.rate})
+                Top: {net.topProgram.name} ({commissionDisplay(net.topProgram.commission)})
               </span>
             </div>
           </Link>

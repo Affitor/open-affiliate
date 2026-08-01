@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: 12 months
   conditions: " Earn 40% on the first year of a customer's annual subscription; 15% of a customer's annual subscription after the first year; 30% on the first year of a customer's monthly subscription"

@@ -20,7 +20,17 @@ export interface Program {
   category: string
   commission: {
     type: "recurring" | "one-time" | "tiered"
+    /** Exactly what the source said. Kept verbatim; read mode and value. */
     rate: string | number
+    /**
+     * How to read `value`. `unknown` means no figure was ever published —
+     * 198 of 760 programs. Rendering the raw string in those cases put the
+     * word "varies" into a number column, and worse: two pages appended a
+     * literal "%" to it, so a flat $36 program shipped as "$36%".
+     */
+    mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
+    /** Percent, or currency amount when flat. Null when mode is unknown. */
+    value: number | null
     currency: string
     duration?: string | null
     conditions?: string | null
@@ -75,6 +85,11 @@ function mapYamlToProgram(yaml: any): Program {
     commission: {
       type: yaml.commission.type as "recurring" | "one-time" | "tiered",
       rate: yaml.commission.rate,
+      // Defaults cover a program authored before the migration or by hand.
+      // Falling back to unknown is right: a missing mode means nobody has
+      // said how to read the figure, which is exactly what unknown means.
+      mode: yaml.commission.mode ?? "unknown",
+      value: yaml.commission.value ?? null,
       currency: yaml.commission.currency,
       duration: yaml.commission.duration ?? null,
       conditions: yaml.commission.conditions ?? null,
@@ -156,7 +171,16 @@ export interface SearchOptions {
  * - "$5 per lead + 30%" → 30 (prefers percentage)
  * - "varies" → 0
  */
-export function parseCommissionRate(rate: string | number): number {
+export function parseCommissionRate(
+  rate: string | number | Program["commission"]
+): number {
+  // Prefer the typed value. The regexes below are what the registry used
+  // before commission was typed, and they had to guess: "175" could be
+  // percent or dollars, "varies" parsed to 0 and sorted like a real zero.
+  // They stay for any caller still passing a raw string.
+  if (rate && typeof rate === "object") {
+    return rate.value ?? 0
+  }
   if (typeof rate === "number") return rate
   const s = String(rate).replace(/,/g, "")
   // Handle ranges like "20-30%" — take the higher value
@@ -174,6 +198,35 @@ export function parseCommissionRate(rate: string | number): number {
 }
 
 /** Check if commission rate is a flat fee (dollar amount) vs percentage */
+/**
+ * How a commission should be written for a reader.
+ *
+ * Every call site used to interpolate `commission.rate` directly, which is how
+ * "varies" ended up in commission columns and how two pages shipped "$36%" by
+ * appending a percent sign to a flat amount. One helper, one set of rules.
+ */
+export function commissionDisplay(c: Program["commission"]): string {
+  switch (c.mode) {
+    case "percentage":
+      return c.value !== null ? `${c.value}%` : "Not published"
+    case "flat":
+      return c.value !== null ? `$${c.value.toLocaleString()}` : "Not published"
+    case "tiered":
+    case "hybrid":
+      // A band or a two-part deal — the raw string carries nuance a single
+      // number would throw away ("$5 per lead + 30%").
+      return String(c.rate)
+    case "unknown":
+    default:
+      return "Not published"
+  }
+}
+
+/** True when there is no figure to compare on. */
+export function commissionUnknown(c: Program["commission"]): boolean {
+  return c.mode === "unknown" || c.value === null
+}
+
 export function isCommissionFlat(rate: string | number): boolean {
   if (typeof rate === "number") return false
   const s = String(rate).replace(/,/g, "")
@@ -216,7 +269,7 @@ export function formatCommissionDisplay(value: number, flat: boolean): string {
  * | **Total**          | 100 |                                                       |
  */
 export function affiliateScore(p: Program): number {
-  const raw = parseCommissionRate(p.commission.rate)
+  const raw = parseCommissionRate(p.commission)
   const isVaries = typeof p.commission.rate === "string" && /varies/i.test(p.commission.rate)
 
   // Commission value (max 40)
@@ -303,7 +356,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
       results.sort((a, b) => b.name.localeCompare(a.name))
       break
     case "commission_desc":
-      results.sort((a, b) => parseCommissionRate(b.commission.rate) - parseCommissionRate(a.commission.rate))
+      results.sort((a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission))
       break
     case "newest":
       // Many existing programs share a backfill date of 2026-04-18. To give
@@ -444,7 +497,7 @@ export function getNetworkStats(): NetworkStats[] {
       // a conservative 0 for avg and use bestCommissionDisplay for UI.
       const pctRates = progs
         .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission.rate))
+        .map((p) => parseCommissionRate(p.commission))
       return {
         network,
         programCount: progs.length,
@@ -453,7 +506,7 @@ export function getNetworkStats(): NetworkStats[] {
           : 0,
         bestCommission: pctRates.length ? Math.max(...pctRates) : 0,
         bestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission.rate),
+          parseCommissionRate(topProgram.commission),
           isCommissionFlat(topProgram.commission.rate)
         ),
         topProgram,
@@ -485,7 +538,7 @@ export function getCategoryStats(): CategoryStats[] {
       const topProgram = progs[bestIdx]
       const pctRates = progs
         .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission.rate))
+        .map((p) => parseCommissionRate(p.commission))
       return {
         category,
         programCount: progs.length,
@@ -494,7 +547,7 @@ export function getCategoryStats(): CategoryStats[] {
           ? pctRates.reduce((a, b) => a + b, 0) / pctRates.length
           : 0,
         highestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission.rate),
+          parseCommissionRate(topProgram.commission),
           isCommissionFlat(topProgram.commission.rate)
         ),
         topProgram,

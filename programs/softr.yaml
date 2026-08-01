@@ -12,6 +12,8 @@ tags:
 commission:
   type: recurring
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: 12 months
   conditions: Earn 25% commission on all your referrals for 12 months!
