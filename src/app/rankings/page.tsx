@@ -254,6 +254,9 @@ interface MergedProgram {
   topPlatform: string;
 }
 
+/** Rows rendered before the reader asks for the rest. */
+const DEFAULT_VISIBLE = 50;
+
 function ProgramsTable({
   items,
   contentLoaded,
@@ -263,6 +266,7 @@ function ProgramsTable({
 }) {
   const [sortCol, setSortCol] = useState<ColumnSort>("verified");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
+  const [showAll, setShowAll] = useState(false);
 
   const handleSort = useCallback(
     (col: ColumnSort) => {
@@ -300,6 +304,18 @@ function ProgramsTable({
     });
     return list;
   }, [items, sortCol, sortDir]);
+
+  // The table rendered all 760 rows at once, so every sort click re-rendered
+  // 760 rows each carrying a ProgramLogo with its own state. That put INP at
+  // P90 590ms, past the 500ms "poor" line, across 73 samples. Sorting itself
+  // is cheap — rendering is what cost.
+  //
+  // A 760-row leaderboard is not scannable anyway. Showing the first 50 cuts
+  // the render 15x and leaves the full list one click away.
+  const visible = useMemo(
+    () => (showAll ? sorted : sorted.slice(0, DEFAULT_VISIBLE)),
+    [sorted, showAll]
+  );
 
   return (
     <div className="rounded-xl border border-border/40 overflow-hidden">
@@ -365,7 +381,7 @@ function ProgramsTable({
             </tr>
           </thead>
           <tbody>
-            {sorted.map((item, i) => {
+            {visible.map((item, i) => {
               const p = item.program;
               const hasContent = item.totalContent > 0;
               return (
@@ -478,9 +494,21 @@ function ProgramsTable({
           </p>
         </div>
       )}
+      {sorted.length > DEFAULT_VISIBLE && (
+        <div className="border-t border-border/20 px-4 py-4 text-center">
+          <button
+            onClick={() => setShowAll((prev) => !prev)}
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            {showAll
+              ? `Show top ${DEFAULT_VISIBLE}`
+              : `Show all ${sorted.length} programs`}
+          </button>
+        </div>
+      )}
       <div className="px-4 py-3 border-t border-border/20 flex items-center justify-between">
         <span className="text-[10px] text-muted-foreground/60">
-          {sorted.length} programs
+          showing {visible.length} of {sorted.length} programs
         </span>
         <Link
           href="/explore"
