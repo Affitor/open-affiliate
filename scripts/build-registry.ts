@@ -5,6 +5,8 @@ import { parse } from "yaml"
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
 const INDEX_FILE = join(process.cwd(), "src", "lib", "registry-index.json")
+const LOGOS_DIR = join(process.cwd(), "public", "logos")
+const LOGO_MAP_FILE = join(process.cwd(), "src", "lib", "logo-files.json")
 
 const REQUIRED_FIELDS = [
   "name",
@@ -192,6 +194,44 @@ function buildIndex(programs: YamlProgram[]): void {
   console.log(
     `  Index: ${bySlug.length} slugs, ${Object.keys(byDomain).length} domains, ${Object.keys(byAlias).length} aliases`
   )
+
+  buildLogoMap()
+}
+
+/**
+ * Map slug -> logo filename, for every logo that is not a plain .png.
+ *
+ * ProgramLogo used to hardcode `/logos/${slug}.png`. 48 programs store their
+ * logo as .jpg, .webp or .svg, so those requests 404 and the component fell
+ * back to rendering the first letter of the name — the brand mark never
+ * appeared, on every page that lists them.
+ *
+ * Reading the directory rather than hardcoding an extension list means a logo
+ * saved in some future format works without touching the component.
+ */
+function buildLogoMap(): void {
+  const overrides: Record<string, string> = {}
+  let png = 0
+
+  for (const file of readdirSync(LOGOS_DIR)) {
+    const dot = file.lastIndexOf(".")
+    if (dot <= 0) continue
+    const slug = file.slice(0, dot)
+    if (file.endsWith(".png")) {
+      png++
+      continue
+    }
+    // A slug with both foo.png and foo.jpg keeps the .png the component
+    // already asks for; only record it when there is no .png to fall back on.
+    overrides[slug] = file
+  }
+
+  for (const slug of Object.keys(overrides)) {
+    if (readdirSync(LOGOS_DIR).includes(`${slug}.png`)) delete overrides[slug]
+  }
+
+  writeFileSync(LOGO_MAP_FILE, JSON.stringify(overrides, null, 2) + "\n")
+  console.log(`  Logos: ${png} .png, ${Object.keys(overrides).length} needing an override`)
 }
 
 buildRegistry()
