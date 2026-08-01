@@ -91,9 +91,14 @@ export async function fetchExploreData(
   const offset = (page - 1) * pageSize
 
   // Build query
+  // "estimated" asks Postgres for the planner's row estimate instead of
+  // scanning the table. social_items holds ~148k rows, and an exact count
+  // meant a full scan on every page load — the single biggest cost on this
+  // page. The number is only ever rendered as "N results", where being off
+  // by a rounding error costs nothing.
   let query = supabase
     .from("social_items")
-    .select("*", { count: "exact" })
+    .select("*", { count: "estimated" })
 
   // Platform filter
   if (filters.platform && filters.platform !== "all") {
@@ -173,9 +178,26 @@ export async function fetchExploreData(
   }
 }
 
+/**
+ * Five more counts on top of the main query, one per platform. They were
+ * exact, so each was its own full scan of a ~148k-row table, and nothing
+ * cached them — six scans per page load, which is why /explore took ~5s cold.
+ *
+ * Estimated counts plus a short in-process cache. These feed the platform
+ * tabs, where the number is a rough sense of scale, not a figure anyone
+ * reconciles.
+ */
+let _platformCounts: { at: number; value: Record<string, number> } | null = null
+const PLATFORM_COUNT_TTL_MS = 10 * 60 * 1000
+
 export async function fetchPlatformCounts(): Promise<
   Record<string, number>
 > {
+  const now = Date.now()
+  if (_platformCounts && now - _platformCounts.at < PLATFORM_COUNT_TTL_MS) {
+    return _platformCounts.value
+  }
+
   const supabase = getSupabase()
   const platforms = ["youtube", "tiktok", "x", "reddit", "blog"]
   const counts: Record<string, number> = {}
@@ -184,11 +206,12 @@ export async function fetchPlatformCounts(): Promise<
     platforms.map(async (p) => {
       const { count } = await supabase
         .from("social_items")
-        .select("id", { count: "exact", head: true })
+        .select("id", { count: "estimated", head: true })
         .eq("platform", p)
       counts[p] = count ?? 0
     })
   )
 
+  _platformCounts = { at: now, value: counts }
   return counts
 }
