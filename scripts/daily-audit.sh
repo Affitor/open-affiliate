@@ -73,7 +73,7 @@ fi
 # the next one starts on top of it. macOS ships no timeout(1) and coreutils is
 # not a safe assumption, so this is a plain watchdog: run in the background,
 # kill it if it overruns.
-MAX_SECONDS=3
+MAX_SECONDS=1800
 
 claude -p "$(cat "$PROMPT_FILE")" >> "$LOG" 2>&1 &
 CLAUDE_PID=$!
