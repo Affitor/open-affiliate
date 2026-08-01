@@ -6,7 +6,7 @@ import { fetchSiftInsights } from "@/lib/sift-stats"
 import { SiftInsightsView } from "@/components/sift-charts"
 
 export const metadata: Metadata = {
-  title: "Content Insights — OpenAffiliate",
+  title: "Content Insights",
   description:
     "Find affiliate opportunities: high-commission programs with low content competition, best platforms and formats, category performance.",
 }

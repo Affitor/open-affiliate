@@ -28,7 +28,9 @@ export async function generateMetadata({
   if (!network) return { title: "Network Not Found" };
 
   const netPrograms = programs.filter((p) => (p.network ?? "in-house") === network);
-  const title = `${network} Affiliate Programs — ${netPrograms.length} Programs | OpenAffiliate`;
+  // No brand suffix: the root layout's title template appends
+  // " | OpenAffiliate". openGraph.title is not templated, so it adds its own.
+  const title = `${network} Affiliate Programs — ${netPrograms.length} Programs`;
   const description = `Browse ${netPrograms.length} affiliate programs on the ${network} network. Compare commissions, cookie duration, and payout terms.`;
 
   return {
@@ -38,7 +40,9 @@ export async function generateMetadata({
       canonical: `/networks/${slug}`,
       types: { "text/markdown": `https://openaffiliate.dev/networks/${slug}.md` },
     },
-    openGraph: { title, description, url: `https://openaffiliate.dev/networks/${slug}`, siteName: "OpenAffiliate" },
+    // images: nested metadata is replaced, not merged, so declaring openGraph
+    // here drops the root opengraph-image and these pages shared with no preview.
+    openGraph: { title: `${title} | OpenAffiliate`, description, url: `https://openaffiliate.dev/networks/${slug}`, siteName: "OpenAffiliate", images: ["/opengraph-image"] },
   };
 }
 

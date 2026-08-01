@@ -7,7 +7,7 @@ import { ProgramLogo } from "@/components/program-logo";
 import { getNetworkStats, networkToSlug } from "@/lib/programs";
 
 export const metadata: Metadata = {
-  title: "Affiliate Networks — OpenAffiliate",
+  title: "Affiliate Networks",
   description:
     "Compare affiliate networks by program count, average commission, and top programs. PartnerStack, Impact, ShareASale, and more.",
 };
