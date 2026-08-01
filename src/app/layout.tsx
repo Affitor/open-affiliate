@@ -239,6 +239,19 @@ export default function RootLayout({
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD) }}
         />
+        {/* Ahrefs Web Analytics. Cookieless, no personal data, ~2 KB, and it is
+            what makes this site's traffic visible inside Ahrefs Webmaster Tools
+            beside the free Site Explorer and Site Audit — which are the reason
+            the project exists there at all.
+
+            It sits beside PostHog rather than replacing it: PostHog answers
+            "what did this visitor do", Ahrefs answers "which query brought
+            them", and only the second one feeds the SEO tooling. */}
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="Z7iDTGBIIlg6x+cTvI8gMA"
+          async
+        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <PostHogProvider>
