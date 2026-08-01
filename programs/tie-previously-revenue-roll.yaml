@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: Earn 20%+ Of Recurring Revenue - Average Of $5K Per Referral

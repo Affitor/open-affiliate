@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Earn 25% commission on every transaction + an extra $800 on your first 10 sales!

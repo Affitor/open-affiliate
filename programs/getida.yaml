@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $350
+  mode: flat
+  value: 350
   currency: USD
   duration: null
   conditions: $350 Reward Per Sign Up

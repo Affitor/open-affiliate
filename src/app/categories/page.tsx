@@ -4,7 +4,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getCategoryStats, categoryToSlug } from "@/lib/programs";
+import { getCategoryStats, categoryToSlug, commissionDisplay} from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Categories",
@@ -70,7 +70,7 @@ export default function CategoriesPage() {
                 size={20}
               />
               <span className="text-xs text-muted-foreground truncate">
-                Top: {cat.topProgram.name} ({cat.topProgram.commission.rate})
+                Top: {cat.topProgram.name} ({commissionDisplay(cat.topProgram.commission)})
               </span>
             </div>
           </Link>

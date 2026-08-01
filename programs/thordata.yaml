@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: Each customer can receive up to 50% of the revenue, with no upper limit！

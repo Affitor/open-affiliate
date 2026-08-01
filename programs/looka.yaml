@@ -7,6 +7,8 @@ tags: [ai, ai-design, logo-design, branding, identity]
 commission:
   type: one-time
   rate: "25-35%"
+  mode: tiered
+  value: 35
   currency: USD
   duration: null
   conditions: "25-35% commission per sale depending on volume"

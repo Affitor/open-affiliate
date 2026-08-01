@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: 12 months
   conditions: Earn 50% commission for the first year of every new customer! (plans start at $89/mo)

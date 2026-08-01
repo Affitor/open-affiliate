@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $250
+  mode: flat
+  value: 250
   currency: USD
   duration: null
   conditions: Earn up to $250 for every new customer

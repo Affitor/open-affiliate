@@ -51,7 +51,7 @@ export async function GET() {
     const topTag = Array.from(data.tags.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "none"
     const topPlatform = Array.from(data.platforms.entries()).sort((a, b) => b[1] - a[1])[0]?.[0] ?? "unknown"
     const score = program ? affiliateScore(program) : 0
-    const commRate = program ? parseCommissionRate(program.commission.rate) : 0
+    const commRate = program ? parseCommissionRate(program.commission) : 0
     const flat = program ? isCommissionFlat(program.commission.rate) : false
 
     return {

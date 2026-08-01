@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Earn up to $200 per lead or up to 25% referral commission, plus a $150 activation bonus and performance-based rewards

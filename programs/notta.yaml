@@ -7,6 +7,8 @@ tags: [ai, ai-transcription, meeting-notes, speech-to-text, productivity]
 commission:
   type: recurring
   rate: "30%"
+  mode: percentage
+  value: 30
   currency: USD
   duration: lifetime
   conditions: "30% recurring commission per new paying customer"

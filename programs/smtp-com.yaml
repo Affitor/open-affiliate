@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: $5
+  mode: flat
+  value: 5
   currency: USD
   duration: null
   conditions: $5 CPL / $100 CPA

@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: Earn a 20% Revenue Share on Ad Spend for 30 Days. Top performers can unlock even greater rewards.

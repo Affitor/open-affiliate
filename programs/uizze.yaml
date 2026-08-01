@@ -10,6 +10,8 @@ tags: [ui-design, ui-reference, ios, web, ai-coding-agents]
 commission:
   type: one-time
   rate: "50%"
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: "50% of each referred buyer's first paid order only. Commission is not recurring; it is held for 30 days and paid manually."

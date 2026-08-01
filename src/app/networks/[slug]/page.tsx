@@ -10,7 +10,7 @@ import {
   networkToSlug,
   slugToNetwork,
   parseCommissionRate,
-  commissionLabel,
+  commissionLabel,  commissionDisplay
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -56,10 +56,10 @@ export default async function NetworkPage({
   if (!network) notFound();
 
   const netPrograms = [...programs.filter((p) => (p.network ?? "in-house") === network)].sort(
-    (a, b) => parseCommissionRate(b.commission.rate) - parseCommissionRate(a.commission.rate)
+    (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
   );
 
-  const rates = netPrograms.map((p) => parseCommissionRate(p.commission.rate));
+  const rates = netPrograms.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
   const avgCookie = netPrograms.length > 0 ? netPrograms.reduce((s, p) => s + p.cookieDays, 0) / netPrograms.length : 0;
@@ -150,7 +150,7 @@ export default async function NetworkPage({
                     </Link>
                   </td>
                   <td className="py-3 px-3">
-                    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{program.commission.rate}</span>
+                    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{commissionDisplay(program.commission)}</span>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
                     <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>

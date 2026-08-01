@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $2,100
+  mode: flat
+  value: 2100
   currency: USD
   duration: null
   conditions: Earn up to $2,100 per referral with Flocksy!

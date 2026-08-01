@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: 12 months
   conditions: Earn 30% of first year revenue for all referred customers

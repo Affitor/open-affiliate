@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Join our affiliate program and earn 25% commission on every customer subscription for their first 12 months

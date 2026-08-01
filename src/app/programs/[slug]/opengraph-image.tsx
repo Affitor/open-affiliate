@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { programs, getProgram } from "@/lib/programs";
+import { programs, getProgram , commissionDisplay} from "@/lib/programs";
 
 export const alt = "OpenAffiliate — Affiliate Program Details";
 export const size = { width: 1200, height: 630 };
@@ -122,7 +122,7 @@ export default async function Image({
         <div style={{ display: "flex", gap: "48px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "#34d399" }}>
-              {program.commission.rate}
+              {commissionDisplay(program.commission)}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
               {program.commission.type} commission

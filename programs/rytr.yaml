@@ -7,6 +7,8 @@ tags: [ai, ai-writing, content-generation, copywriting, budget]
 commission:
   type: recurring
   rate: "30%"
+  mode: percentage
+  value: 30
   currency: USD
   duration: "12 months"
   conditions: "30% recurring commission for 12 months per referral"

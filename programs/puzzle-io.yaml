@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: $0.00
+  mode: flat
+  value: 0
   currency: USD
   duration: null
   conditions: $0.00 for every paid customer

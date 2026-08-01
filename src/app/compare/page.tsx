@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, getProgram, type Program } from "@/lib/programs";
+import { programs, getProgram, type Program, commissionDisplay} from "@/lib/programs";
 import { CopyButton } from "@/components/copy-button";
 
 const MAX_COMPARE = 4;
@@ -113,7 +113,7 @@ function ProgramSearch({
                   {p.name}
                 </span>
                 <span className="text-[11px] text-muted-foreground">
-                  {p.commission.rate} {p.commission.type} · {p.category}
+                  {commissionDisplay(p.commission)} {p.commission.type} · {p.category}
                 </span>
               </div>
               <Plus className="h-3.5 w-3.5 text-muted-foreground/40" />
@@ -309,7 +309,7 @@ function CompareContent() {
                         className="py-3 px-4 text-center"
                       >
                         <span className="text-base font-semibold text-emerald-600 dark:text-emerald-400">
-                          {p.commission.rate}
+                          {commissionDisplay(p.commission)}
                         </span>
                       </td>
                     ))}

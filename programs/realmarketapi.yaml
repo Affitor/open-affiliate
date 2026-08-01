@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Recurring commission for active subscriptions.

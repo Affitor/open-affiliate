@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 15%
+  mode: percentage
+  value: 15
   currency: USD
   duration: null
   conditions: 15% of total revenue

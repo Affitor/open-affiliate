@@ -1,4 +1,4 @@
-import { programs } from "@/lib/programs"
+import { programs, commissionDisplay} from "@/lib/programs"
 
 const BADGE_HEIGHT = 20
 const FONT = 'font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"'
@@ -61,9 +61,10 @@ export async function GET(
     })
   }
 
-  const rate = typeof program.commission.rate === "string"
-    ? program.commission.rate
-    : `${program.commission.rate}%`
+  // Was: a string passed through verbatim, a number given a "%". That put
+  // "varies" on a badge people embed in their README, and appended a percent
+  // sign to flat amounts.
+  const rate = commissionDisplay(program.commission)
   const value = `${rate} ${program.commission.type}`
 
   const color = program.verified ? "#3b82f6" : "#6b7280"

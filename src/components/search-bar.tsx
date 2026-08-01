@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, commissionLabel } from "@/lib/programs";
+import { programs, commissionLabel, commissionDisplay} from "@/lib/programs";
 
 export function SearchBar() {
   const router = useRouter();
@@ -121,7 +121,7 @@ export function SearchBar() {
               <div className="min-w-0 flex-1">
                 <span className="text-sm font-medium">{p.name}</span>
                 <p className="text-xs text-muted-foreground truncate">
-                  {p.commission.rate} {commissionLabel(p.commission)} · {p.category}
+                  {commissionDisplay(p.commission)} {commissionLabel(p.commission)} · {p.category}
                 </p>
               </div>
             </Link>

@@ -10,6 +10,8 @@ tags:
 commission:
   type: recurring
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: 12 months
   conditions: 30% recurring commission on referred Business and Enterprise plans for 12 months.

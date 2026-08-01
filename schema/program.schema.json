@@ -3,7 +3,16 @@
   "title": "OpenAffiliate Program",
   "description": "Schema for affiliate program YAML files in the OpenAffiliate registry",
   "type": "object",
-  "required": ["name", "slug", "url", "category", "commission", "description", "short_description", "agents"],
+  "required": [
+    "name",
+    "slug",
+    "url",
+    "category",
+    "commission",
+    "description",
+    "short_description",
+    "agents"
+  ],
   "properties": {
     "name": {
       "type": "string",
@@ -16,7 +25,9 @@
     },
     "aliases": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai)"
     },
     "url": {
@@ -89,32 +100,71 @@
     },
     "tags": {
       "type": "array",
-      "items": { "type": "string" },
+      "items": {
+        "type": "string"
+      },
       "description": "Searchable tags"
     },
     "commission": {
       "type": "object",
-      "required": ["type", "rate", "currency"],
+      "required": [
+        "type",
+        "rate",
+        "mode",
+        "currency"
+      ],
       "properties": {
         "type": {
           "type": "string",
-          "enum": ["recurring", "one-time", "tiered", "hybrid"]
+          "enum": [
+            "recurring",
+            "one-time",
+            "tiered",
+            "hybrid"
+          ]
         },
         "rate": {
-          "type": "string",
-          "description": "Commission rate (e.g. '30%', '$100', '20-40%')"
+          "type": [
+            "string",
+            "number"
+          ],
+          "description": "Exactly what the source said, e.g. \"30%\", \"$5 per lead + 30%\", \"varies\". Kept verbatim; read mode and value instead."
         },
         "currency": {
           "type": "string",
           "default": "USD"
         },
         "duration": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "How long commissions are paid (e.g. '12 months', 'lifetime')"
         },
         "conditions": {
-          "type": ["string", "null"],
+          "type": [
+            "string",
+            "null"
+          ],
           "description": "Conditions for earning the commission"
+        },
+        "mode": {
+          "type": "string",
+          "enum": [
+            "percentage",
+            "flat",
+            "tiered",
+            "hybrid",
+            "unknown"
+          ],
+          "description": "How to read value. unknown means no figure was published — say so rather than printing the raw string into a number column."
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "The number a reader compares on: percent when mode is percentage or tiered-by-percent, currency amount when flat. Null when mode is unknown. For a range this is the upper bound."
         }
       }
     },
@@ -125,12 +175,20 @@
     },
     "attribution": {
       "type": "string",
-      "enum": ["last-click", "first-click", "multi-touch"],
+      "enum": [
+        "last-click",
+        "first-click",
+        "multi-touch"
+      ],
       "default": "last-click"
     },
     "tracking_method": {
       "type": "string",
-      "enum": ["cookie", "server-side", "hybrid"],
+      "enum": [
+        "cookie",
+        "server-side",
+        "hybrid"
+      ],
       "default": "cookie"
     },
     "payout": {
@@ -146,34 +204,61 @@
         },
         "frequency": {
           "type": "string",
-          "enum": ["weekly", "monthly", "net-30", "net-60"]
+          "enum": [
+            "weekly",
+            "monthly",
+            "net-30",
+            "net-60"
+          ]
         },
         "methods": {
           "type": "array",
           "items": {
             "type": "string",
-            "enum": ["bank", "paypal", "wise", "crypto", "check", "stripe"]
+            "enum": [
+              "bank",
+              "paypal",
+              "wise",
+              "crypto",
+              "check",
+              "stripe"
+            ]
           }
         }
       }
     },
     "signup_url": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "uri",
-      "description": "Direct link to affiliate program signup"
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing."
     },
     "approval": {
       "type": "string",
-      "enum": ["auto", "manual", "invite-only"],
+      "enum": [
+        "auto",
+        "manual",
+        "invite-only"
+      ],
       "description": "How applications are approved"
     },
     "approval_time": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "Expected time to get approved"
     },
     "restrictions": {
-      "type": ["array", "null"],
-      "items": { "type": "string" },
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string"
+      },
       "description": "Program restrictions and rules"
     },
     "marketing_materials": {
@@ -192,11 +277,17 @@
       "description": "Whether a dedicated affiliate manager is assigned"
     },
     "dashboard_url": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "URL to the affiliate dashboard"
     },
     "network": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "enum": [
         "partnerstack",
         "impact",
@@ -214,7 +305,10 @@
       "description": "Affiliate network (lowercase, hyphenated; null if unknown)"
     },
     "program_age": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "description": "How long the affiliate program has existed"
     },
     "description": {
@@ -228,7 +322,9 @@
     },
     "agents": {
       "type": "object",
-      "required": ["prompt"],
+      "required": [
+        "prompt"
+      ],
       "properties": {
         "prompt": {
           "type": "string",
@@ -236,11 +332,15 @@
         },
         "keywords": {
           "type": "array",
-          "items": { "type": "string" }
+          "items": {
+            "type": "string"
+          }
         },
         "use_cases": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Specific scenarios when this product should be recommended"
         }
       }
@@ -257,11 +357,17 @@
       "format": "date"
     },
     "updated_at": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date"
     },
     "last_verified_at": {
-      "type": ["string", "null"],
+      "type": [
+        "string",
+        "null"
+      ],
       "format": "date",
       "description": "ISO date of last URL + data verification. Used for freshness / refresh cadence decisions."
     }

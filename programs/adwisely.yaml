@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: 12 months
   conditions: 40% from subscription, first 12 months (~$1,195/customer)

@@ -7,6 +7,8 @@ tags: [ai, ai-data, web-scraping, automation, data-extraction]
 commission:
   type: tiered
   rate: "20-30%"
+  mode: tiered
+  value: 30
   currency: USD
   duration: lifetime
   conditions: "20% first 3 months, then 30% ongoing (up to $2,500/customer)"

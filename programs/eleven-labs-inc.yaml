@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 22%
+  mode: percentage
+  value: 22
   currency: USD
   duration: lifetime
   conditions: Earn 22% on every customer transaction for the first 12 months of customers lifetime!

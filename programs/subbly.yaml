@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: Earn 30% on all recurring revenues + $100 for every 5th converted trial

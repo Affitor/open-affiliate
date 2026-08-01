@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: 12 months
   conditions: Earn 10% for every order you bring in for the first year of the customer and earn $60 for every qualified lead

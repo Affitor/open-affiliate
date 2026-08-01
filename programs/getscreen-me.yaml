@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: Earn 30% per sale by promoting our solution! Join Our Partner Network!

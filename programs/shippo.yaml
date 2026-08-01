@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $60
+  mode: flat
+  value: 60
   currency: USD
   duration: null
   conditions: Receive $60 for every new paid Pro plan subscriber

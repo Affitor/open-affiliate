@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: Accelerate your earnings with Tenable! 5% Commission & $4,500 AOV

@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: "Get rewarded for every referral that closes, with earnings based on customer size: $100 for Core, $300 for Pro and Pro+, and 10% commission for Enterprise."

@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: '100'
+  mode: unknown
+  value: null
   currency: GBP
   duration: null
   conditions: £100 for each new website package bought in the UK

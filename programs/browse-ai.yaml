@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 22%
+  mode: percentage
+  value: 22
   currency: null
   duration: Lifetime
   conditions: null

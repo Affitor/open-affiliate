@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: 12 months
   conditions: Earn 25% revenue share for the first 12 months of every sale made

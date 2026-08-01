@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 60%
+  mode: percentage
+  value: 60
   currency: USD
   duration: lifetime
   conditions: 60% lifetime recurring commission via FirstPromoter on referred paid plans.

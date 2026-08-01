@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Referral partners earn $150 for each qualified referral AND 10% rev share on the first-year subscription value for referrals. Affiliate partners earn $150 for every qualified lead.

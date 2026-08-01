@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: Earn 20% revenue share for new subscribers for 6 months

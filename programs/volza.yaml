@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 21%
+  mode: percentage
+  value: 21
   currency: USD
   duration: null
   conditions: Earn 21% for every customer!

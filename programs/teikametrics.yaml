@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: 12 months
   conditions: Earn 25% of First Year Subscription Revenue for each successful referral

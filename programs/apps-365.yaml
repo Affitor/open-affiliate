@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Earn commissions by referring qualified opportunities for Apps365. Our Microsoft 365-native applications help organizations automate HR, IT, and workplace operations. Submit qualified leads and earn commissions on every successful sale while helping customers extend the value of their Microsoft 365 investment.

@@ -27,7 +27,7 @@ import {
   affiliateScore,
   type SortOption,
   type Program,
-  commissionLabel,
+  commissionLabel,  commissionDisplay
 } from "@/lib/programs";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
@@ -101,7 +101,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           Score: {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-[11px]">
-          {program.commission.rate}{" "}
+          {commissionDisplay(program.commission)}{" "}
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
@@ -151,7 +151,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-[11px]">
-          {program.commission.rate}{" "}
+          {commissionDisplay(program.commission)}{" "}
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">

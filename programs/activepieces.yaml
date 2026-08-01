@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $17
+  mode: flat
+  value: 17
   currency: USD
   duration: null
   conditions: Earn up to $17.5k/yr per enterprise customer, paid for up to 3 years

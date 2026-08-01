@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $320
+  mode: flat
+  value: 320
   currency: USD
   duration: null
   conditions: Earn up to $320 for every qualified lead you refer. Start earning today!

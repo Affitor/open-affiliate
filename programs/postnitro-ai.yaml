@@ -8,6 +8,8 @@ source: community
 commission:
   type: recurring
   rate: 20
+  mode: percentage
+  value: 20
   currency: USD
 cookie_days: 30
 payout:

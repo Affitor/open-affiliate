@@ -7,6 +7,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: As a Platinum Tier Partner, you’ll earn a 25% revenue share on all end client business you refer to us. That

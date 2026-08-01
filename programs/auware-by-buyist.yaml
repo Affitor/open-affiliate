@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 35%
+  mode: percentage
+  value: 35
   currency: USD
   duration: null
   conditions: Earn 35% rev share on new subs thru 6/30; 30% thereafter. (Avg ACV ≈ $2.4K/yr)

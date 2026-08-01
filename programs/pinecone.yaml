@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: 12 months
   conditions: Earn 10% for the customer's first year!

@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: 🤑 Earn up to 30% recurring commission on all sales! Average Partner earns $2,300 in 90 days.

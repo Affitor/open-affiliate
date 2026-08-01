@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 15%
+  mode: percentage
+  value: 15
   currency: USD
   duration: null
   conditions: Earn 15% for the life of the customer

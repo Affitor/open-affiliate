@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $1
+  mode: flat
+  value: 1
   currency: USD
   duration: null
   conditions: GMV $1-50 million = 3% of total ARR

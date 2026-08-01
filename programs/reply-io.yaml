@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 1%
+  mode: percentage
+  value: 1
   currency: USD
   duration: null
   conditions: Earn 1% of each sale made by a referral (for 12 months)

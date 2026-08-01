@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: Earn 20% of your referred customer's subscription revenue for one year, up to $1,200 per customer.

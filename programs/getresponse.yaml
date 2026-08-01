@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 60%
+  mode: percentage
+  value: 60
   currency: USD
   duration: 12 months
   conditions: Earn 40-60% recurring commission for 12 months

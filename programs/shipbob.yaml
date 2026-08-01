@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $850
+  mode: flat
+  value: 850
   currency: USD
   duration: null
   conditions: Earn $850 for every opportunity you bring in

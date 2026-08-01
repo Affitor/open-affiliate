@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 28%
+  mode: percentage
+  value: 28
   currency: USD
   duration: null
   conditions: 28%

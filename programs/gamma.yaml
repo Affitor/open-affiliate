@@ -7,6 +7,8 @@ tags: [ai, ai-presentations, slides, documents, design]
 commission:
   type: recurring
   rate: "30%"
+  mode: percentage
+  value: 30
   currency: USD
   duration: lifetime
   conditions: "30% on all referred payments, uncapped"

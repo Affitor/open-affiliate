@@ -53,9 +53,14 @@ jobs:
           echo "$ALL_FILES" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          NEW_COUNT=$(echo "$NEW_FILES" | grep -c . || echo 0)
-          MOD_COUNT=$(echo "$MOD_FILES" | grep -c . || echo 0)
-          ALL_COUNT=$(echo "$ALL_FILES" | grep -c . || echo 0)
+          # `grep -c .` already prints 0 when it matches nothing, then exits 1.
+          # The old `|| echo 0` printed a second 0, so the variable became
+          # "0\n0" and every [ -gt ] below failed with "integer expression
+          # expected". Swallow the exit code instead of adding output.
+          NEW_COUNT=$(echo "$NEW_FILES" | grep -c . || true)
+          MOD_COUNT=$(echo "$MOD_FILES" | grep -c . || true)
+          ALL_COUNT=$(echo "$ALL_FILES" | grep -c . || true)
+          NEW_COUNT=${NEW_COUNT:-0}; MOD_COUNT=${MOD_COUNT:-0}; ALL_COUNT=${ALL_COUNT:-0}
           echo "new_count=$NEW_COUNT" >> $GITHUB_OUTPUT
           echo "mod_count=$MOD_COUNT" >> $GITHUB_OUTPUT
           echo "count=$ALL_COUNT" >> $GITHUB_OUTPUT
@@ -69,7 +74,12 @@ jobs:
             echo "pr_type=mixed" >> $GITHUB_OUTPUT
           fi
 
-          SLUGS=$(echo "$ALL_FILES" | sed 's|programs/||;s|\.yaml||' | tr '\n' ', ' | sed 's/,$//')
+          # A bulk change touches every program file. 760 slugs on one line
+          # overflows the step output and takes the whole job down with it,
+          # which is how a registry-wide migration turned this red while both
+          # validation jobs passed. Cap it; the full list is in the diff.
+          SLUGS=$(echo "$ALL_FILES" | sed 's|programs/||;s|\.yaml||' | head -40 | tr '\n' ', ' | sed 's/,$//')
+          if [ "$ALL_COUNT" -gt 40 ]; then SLUGS="$SLUGS … and $((ALL_COUNT - 40)) more"; fi
           echo "slugs=$SLUGS" >> $GITHUB_OUTPUT
 
       # ── Step 1b: Build registry index from main (for dedup check on new files) ──

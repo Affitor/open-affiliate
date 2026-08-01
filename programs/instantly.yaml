@@ -7,6 +7,8 @@ tags: [ai, ai-email, cold-outreach, sales, lead-generation]
 commission:
   type: tiered
   rate: "20-40%"
+  mode: tiered
+  value: 40
   currency: USD
   duration: lifetime
   conditions: "20% for first 50 referrals, 30% for 51-75, 40% for 76+ referrals"

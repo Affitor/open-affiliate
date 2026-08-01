@@ -8,6 +8,8 @@ tags:
 commission:
   type: recurring
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: 12 months
   conditions: Earn 25% recurring commission for 12 months on all referred Creator and Business plan subscriptions.

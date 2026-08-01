@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $400
+  mode: flat
+  value: 400
   currency: USD
   duration: null
   conditions: Earn $400 for each new business you refer when they subscribe to a Core/Boost/Unlimited Annual Plan.

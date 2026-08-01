@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: lifetime
   conditions: 25-40% lifetime commission
