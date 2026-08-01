@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 
+import logoFiles from "@/lib/logo-files.json";
+
 interface ProgramLogoProps {
   slug: string;
   name: string;
@@ -16,7 +18,11 @@ export function ProgramLogo({
   size = 40,
   className = "",
 }: ProgramLogoProps) {
-  const localSrc = `/logos/${slug}.png`;
+  // Most logos are <slug>.png. 48 are .jpg, .webp or .svg — hardcoding .png
+  // meant those 404'd and rendered as a bare initial instead of the brand
+  // mark. The map is generated from the logos directory by build-registry.
+  const file = (logoFiles as Record<string, string>)[slug] ?? `${slug}.png`;
+  const localSrc = `/logos/${file}`;
   const initial = name.charAt(0).toUpperCase();
   const [imgError, setImgError] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
