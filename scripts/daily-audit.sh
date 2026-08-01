@@ -34,7 +34,19 @@ if [ -n "$(git status --porcelain)" ]; then
   echo "[$(date +%H:%M:%S)] working tree dirty, skipping run" >> "$LOG"
   exit 0
 fi
-git checkout --quiet main && git pull --quiet --ff-only
+# Abort rather than continue on a stale or diverged tree. The && chain used
+# to let a failed pull fall through to the run, which would have audited
+# yesterday's code and reported it as today's. Diverged local main is not
+# hypothetical: this script checks out main itself, so a commit made while it
+# was running can land there by accident.
+if ! git checkout --quiet main; then
+  echo "[$(date +%H:%M:%S)] cannot checkout main, skipping run" >> "$LOG"
+  exit 1
+fi
+if ! git pull --quiet --ff-only; then
+  echo "[$(date +%H:%M:%S)] main has diverged from origin, skipping run" >> "$LOG"
+  exit 1
+fi
 
 {
   echo ""
