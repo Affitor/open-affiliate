@@ -65,7 +65,11 @@ export async function generateMetadata({
     // the agents: guidance in a form it can lift directly. Preferred over
     // putting .md URLs in the sitemap: those are alternate representations of
     // a page, not separate pages to index.
+    // canonical must be repeated here: setting `alternates` at all replaces
+    // the inherited object from the root layout, so declaring only `types`
+    // silently dropped the canonical tag from every program page.
     alternates: {
+      canonical: `/programs/${slug}`,
       types: {
         "text/markdown": `https://openaffiliate.dev/programs/${slug}.md`,
       },
@@ -189,6 +193,15 @@ export default async function ProgramPage({
             description: program.shortDescription,
             url: `https://openaffiliate.dev/programs/${program.slug}`,
             brand: { "@type": "Brand", name: program.name },
+            // Provenance. AI platforms weight recency and discount pages they
+            // cannot date, and they cite anonymous content less. These say who
+            // published the entry and when it was last checked — the same
+            // dates the page and the .md twin already show a reader.
+            ...(program.createdAt ? { datePublished: program.createdAt } : {}),
+            ...(program.lastVerifiedAt
+              ? { dateModified: program.lastVerifiedAt }
+              : {}),
+            publisher: { "@id": "https://openaffiliate.dev/#organization" },
             offers: {
               "@type": "Offer",
               category: "Affiliate Program",

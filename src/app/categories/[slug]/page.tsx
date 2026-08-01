@@ -35,6 +35,7 @@ export async function generateMetadata({
     title,
     description,
     alternates: {
+      canonical: `/categories/${slug}`,
       types: { "text/markdown": `https://openaffiliate.dev/categories/${slug}.md` },
     },
     openGraph: {
