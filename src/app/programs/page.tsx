@@ -167,9 +167,43 @@ function ProgramRowList({ program }: { program: Program }) {
   );
 }
 
+// ProgramsContent reads useSearchParams, so the whole subtree bails out of
+// prerendering. Without a fallback the served HTML had an empty <main>, which
+// left the 430px footer sitting near the top of the viewport until the client
+// filled the list in and shoved it down — 0.53 CLS. The skeleton mirrors the
+// real layout and is a viewport tall, so the footer starts below the fold and
+// the swap shifts nothing that is on screen.
+function ProgramsSkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-10 min-h-dvh">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold tracking-tight">Programs</h1>
+        <div className="mt-2 h-4 w-72 animate-pulse rounded bg-muted/30" />
+      </div>
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {[176, 96, 136, 96, 72, 96].map((w, i) => (
+          <div
+            key={i}
+            className="h-9 animate-pulse rounded-lg bg-muted/30"
+            style={{ width: w }}
+          />
+        ))}
+      </div>
+      <div className="space-y-2">
+        {Array.from({ length: 12 }, (_, i) => (
+          <div
+            key={i}
+            className="h-16 animate-pulse rounded-lg bg-muted/30"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ProgramsPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<ProgramsSkeleton />}>
       <ProgramsContent />
     </Suspense>
   );
