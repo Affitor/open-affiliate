@@ -28,7 +28,9 @@ export async function generateMetadata({
   if (!category) return { title: "Category Not Found" };
 
   const catPrograms = programs.filter((p) => p.category === category);
-  const title = `${category} Affiliate Programs — ${catPrograms.length} Programs | OpenAffiliate`;
+  // No brand suffix: the root layout's title template appends
+  // " | OpenAffiliate". openGraph.title is not templated, so it adds its own.
+  const title = `${category} Affiliate Programs — ${catPrograms.length} Programs`;
   const description = `Compare ${catPrograms.length} ${category.toLowerCase()} affiliate programs. Find the highest-paying commissions, cookie durations, and payout terms.`;
 
   return {
@@ -39,10 +41,13 @@ export async function generateMetadata({
       types: { "text/markdown": `https://openaffiliate.dev/categories/${slug}.md` },
     },
     openGraph: {
-      title,
+      title: `${title} | OpenAffiliate`,
       description,
       url: `https://openaffiliate.dev/categories/${slug}`,
       siteName: "OpenAffiliate",
+      // Nested metadata is replaced, not merged, so declaring openGraph here
+      // drops the root opengraph-image and these pages shared with no preview.
+      images: ["/opengraph-image"],
     },
   };
 }
