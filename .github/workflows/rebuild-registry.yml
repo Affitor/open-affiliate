@@ -36,6 +36,15 @@ jobs:
 
       - run: npm ci
 
+      # Adding a program YAML already produces the HTML page, the .md twin, the
+      # sitemap entry, the JSON-LD, the API record and the category and network
+      # listings. The logo was the one thing that did not appear on its own, so
+      # a new program showed a grey tile with a letter while everything around
+      # it had a brand mark. Never fails the run: a program with no logo falls
+      # back to its initial, which is fine.
+      - name: Fetch missing logos
+        run: npx tsx scripts/fetch-logos.ts || true
+
       - name: Rebuild
         run: npx tsx scripts/build-registry.ts
 
@@ -43,7 +52,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/lib/registry.json src/lib/registry-index.json
+          git add src/lib/registry.json src/lib/registry-index.json src/lib/logo-files.json public/logos
           if git diff --cached --quiet; then
             echo "registry already up to date"
           else
