@@ -6,7 +6,7 @@ import { ExploreFilters } from "@/components/explore-filters";
 import { ExploreTable } from "@/components/explore-table";
 
 export const metadata: Metadata = {
-  title: "Explore Affiliate Content — OpenAffiliate",
+  title: "Explore Affiliate Content",
   description:
     "Discover top-performing affiliate content across YouTube, TikTok, Reddit, and blogs. Find successful patterns to replicate.",
 };

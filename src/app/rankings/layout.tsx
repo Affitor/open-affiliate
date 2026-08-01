@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Affiliate Program Rankings — Highest Paying Programs | OpenAffiliate",
+  title: "Affiliate Program Rankings — Highest Paying Programs",
   description:
     "Compare the highest-paying affiliate programs ranked by commission rate. Browse rankings by program, network, or category.",
   openGraph: {
