@@ -86,3 +86,4 @@ reports/
 /public/programs/
 /public/categories/
 /public/networks/
+*.bak
