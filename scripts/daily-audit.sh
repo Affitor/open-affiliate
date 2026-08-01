@@ -47,6 +47,20 @@ git checkout --quiet main && git pull --quiet --ff-only
 # bash 3.2, which mis-parses a quoted heredoc inside $( ) when the body
 # contains an apostrophe. Keeping it separate also lets the loop revise its
 # own brief without editing this launcher.
-claude -p "$(cat "$REPO/scripts/daily-audit-prompt.md")" >> "$LOG" 2>&1
+PROMPT_FILE="$REPO/scripts/daily-audit-prompt.md"
+
+# Fail loudly. Without this the first real run exited 0 while claude rejected
+# an empty prompt, which would have looked like a clean no-findings day every
+# day until someone read the log.
+if [ ! -f "$PROMPT_FILE" ]; then
+  echo "[$(date +%H:%M:%S)] FATAL: prompt file missing at $PROMPT_FILE" >> "$LOG"
+  exit 1
+fi
+
+claude -p "$(cat "$PROMPT_FILE")" >> "$LOG" 2>&1
+CLAUDE_EXIT=$?
+if [ "$CLAUDE_EXIT" -ne 0 ]; then
+  echo "[$(date +%H:%M:%S)] run failed, claude exited $CLAUDE_EXIT" >> "$LOG"
+fi
 
 echo "run end $(date '+%H:%M:%S')" >> "$LOG"
