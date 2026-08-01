@@ -26,10 +26,13 @@ function ExploreShell() {
           Discover top-performing content across platforms. Find patterns that work.
         </p>
       </div>
-      <div className="animate-pulse space-y-4">
+      {/* A viewport tall on purpose: the loaded table is far taller than the
+          old h-64 placeholder, so the swap used to drag the footer down from
+          mid-screen — 0.29 CLS. Reserving the fold keeps the footer off it. */}
+      <div className="animate-pulse space-y-4 min-h-dvh">
         <div className="h-10 rounded-lg bg-muted/30" />
         <div className="h-10 rounded-lg bg-muted/30" />
-        <div className="h-64 rounded-lg bg-muted/30" />
+        <div className="h-96 rounded-lg bg-muted/30" />
       </div>
     </main>
   );
