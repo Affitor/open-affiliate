@@ -65,7 +65,9 @@ function Footer() {
               {[
                 { label: "Programs", href: "/programs" },
                 { label: "Categories", href: "/categories" },
-                { label: "Content Lab", href: "/lab" },
+                // The page is /content-lab. /lab has been a 404 in the footer
+                // of every page on the site.
+                { label: "Content Lab", href: "/content-lab" },
                 { label: "Submit", href: "/submit" },
                 { label: "Docs", href: "/docs" },
                 { label: "Changelog", href: "/changelog" },

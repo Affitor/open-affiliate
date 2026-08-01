@@ -72,7 +72,22 @@ export async function GET() {
     }
   })
 
+  // This route pages through every scored row in social_items — tens of
+  // sequential round-trips — and aggregates in JS, so a cold compute takes
+  // 20-30 seconds. The old window was s-maxage=3600 with only 600s of stale
+  // grace, which is fine for a busy site and wrong for this one: go 70 minutes
+  // without a visitor and the next one waits half a minute for /rankings.
+  //
+  // A week of stale grace means the first request after expiry gets yesterday's
+  // aggregate instantly while the refresh happens behind it. Nobody waits after
+  // the very first compute. These are content-volume rollups — a day out of
+  // date changes nothing anyone reads.
+  //
+  // The durable fix is aggregating in Postgres instead of pulling every row
+  // into JS. That needs a view or an RPC, which is a migration, not a header.
   return NextResponse.json(items, {
-    headers: { "Cache-Control": "s-maxage=3600, stale-while-revalidate=600" },
+    headers: {
+      "Cache-Control": "s-maxage=3600, stale-while-revalidate=604800",
+    },
   })
 }
