@@ -443,6 +443,69 @@ export function slugToCategory(slug: string): string | undefined {
   return categories.find((c) => categoryToSlug(c) === slug)
 }
 
+/**
+ * Marketplaces publish a directory you browse and apply through. Affiliate
+ * software has none — the brand runs its own program on someone else's
+ * infrastructure, so the only way in is through the brand.
+ *
+ * The distinction was invisible before: /networks/dub and
+ * /networks/partnerstack looked like the same kind of page, and a reader
+ * arriving at the first one had no way to learn there is nothing to browse.
+ */
+export type NetworkKind = "marketplace" | "software" | "direct"
+
+export const NETWORK_KIND: Record<string, NetworkKind> = {
+  partnerstack: "marketplace",
+  impact: "marketplace",
+  awin: "marketplace",
+  "cj-affiliate": "marketplace",
+  rewardful: "software",
+  firstpromoter: "software",
+  tolt: "software",
+  dub: "software",
+  tapfiliate: "software",
+  lemonsqueezy: "software",
+  "in-house": "direct",
+}
+
+export function networkKind(network: string): NetworkKind {
+  return NETWORK_KIND[network] ?? "software"
+}
+
+/**
+ * Display name for a network. Stored values are lowercase slugs, which read
+ * as a typo mid-sentence — "dub is affiliate software" rather than "Dub is".
+ * CSS capitalize cannot help inside a generated string.
+ */
+export function networkName(network: string): string {
+  const SPECIAL: Record<string, string> = {
+    partnerstack: "PartnerStack",
+    firstpromoter: "FirstPromoter",
+    "cj-affiliate": "CJ Affiliate",
+    lemonsqueezy: "Lemon Squeezy",
+    "in-house": "In-house",
+  }
+  if (SPECIAL[network]) return SPECIAL[network]
+  return network
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ")
+}
+
+/** One sentence explaining how a reader actually joins programs here. */
+export function networkHowToJoin(network: string): string {
+  const name = networkName(network)
+  switch (networkKind(network)) {
+    case "marketplace":
+      return `${name} runs a marketplace: you apply once, then request access to individual programs from inside it.`
+    case "direct":
+      return "These brands run their own programs — you sign up with each one directly, on their site."
+    case "software":
+    default:
+      return `${name} is affiliate software rather than a marketplace. Brands run their own programs on it, so there is no directory to browse — you join through the brand.`
+  }
+}
+
 export function networkToSlug(network: string): string {
   return network.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "")
 }
