@@ -10,7 +10,12 @@ import {
   networkToSlug,
   slugToNetwork,
   parseCommissionRate,
-  commissionLabel,  commissionDisplay
+  commissionLabel,
+  commissionDisplay,
+  commissionUnknown,
+  networkKind,
+  networkHowToJoin,
+  networkName,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -59,15 +64,56 @@ export default async function NetworkPage({
     (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
   );
 
-  const rates = netPrograms.map((p) => parseCommissionRate(p.commission));
+  // Only programs with a published figure feed the averages. Averaging an
+  // unknown as zero is how a network of mostly-unpublished programs ends up
+  // advertising a 4% average it never earned.
+  const priced = netPrograms.filter((p) => !commissionUnknown(p.commission));
+  const rates = priced.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
   const avgCookie = netPrograms.length > 0 ? netPrograms.reduce((s, p) => s + p.cookieDays, 0) / netPrograms.length : 0;
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
+  const verifiedCount = netPrograms.filter((p) => p.verified).length;
+  const kind = networkKind(network);
+  const topProgram = netPrograms[0];
+
+  const answer =
+    kind === "direct"
+      ? `${netPrograms.length} programs run directly by the brand, with no network in between. ${verifiedCount} are verified.`
+      : `${netPrograms.length} affiliate ${netPrograms.length === 1 ? "program" : "programs"} on ${networkName(network)}, across ${categoryCount} ${categoryCount === 1 ? "category" : "categories"}. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <TrackPageView type="network_view" slug={slug} metadata={{ network }} />
+
+      {/* Slot 7 — the machine block. Program pages have carried this since
+          launch; category and network pages never did, so an assistant had
+          nothing structured to cite them from. */}
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: `${network} affiliate programs`,
+            description: answer,
+            url: `https://openaffiliate.dev/networks/${slug}`,
+            isPartOf: { "@id": "https://openaffiliate.dev/#website" },
+            publisher: { "@id": "https://openaffiliate.dev/#organization" },
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: netPrograms.length,
+              itemListElement: netPrograms.slice(0, 20).map((p, i) => ({
+                "@type": "ListItem",
+                position: i + 1,
+                url: `https://openaffiliate.dev/programs/${p.slug}`,
+                name: p.name,
+              })),
+            },
+          }),
+        }}
+      />
       <Link
         href="/networks"
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -77,9 +123,15 @@ export default async function NetworkPage({
       </Link>
 
       <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight capitalize">{network}</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          {netPrograms.length} affiliate programs across {categoryCount} categories
+        <div className="flex items-center gap-2.5 flex-wrap">
+          <h1 className="text-2xl font-bold tracking-tight capitalize">{network}</h1>
+          <Badge variant="outline" className="text-[10px] text-muted-foreground">
+            {kind === "direct" ? "in-house" : kind}
+          </Badge>
+        </div>
+        {/* Slot 2 — the one sentence a reader or an engine would quote. */}
+        <p className="mt-3 max-w-2xl border-l-2 border-emerald-500/40 pl-3 text-sm">
+          {answer}
         </p>
       </div>
 
@@ -96,14 +148,14 @@ export default async function NetworkPage({
             <DollarSign className="h-3 w-3" />
             <span className="text-[10px] uppercase tracking-wide">Highest</span>
           </div>
-          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{highestRate}%</p>
+          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{priced.length ? (priced[0].commission.mode === "flat" ? `$${priced[0].commission.value}` : `${priced[0].commission.value}%`) : "—"}</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
             <DollarSign className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wide">Average</span>
+            <span className="text-[10px] uppercase tracking-wide">Verified</span>
           </div>
-          <p className="text-2xl font-bold">{avgRate.toFixed(0)}%</p>
+          <p className="text-2xl font-bold">{verifiedCount}</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
@@ -150,7 +202,7 @@ export default async function NetworkPage({
                     </Link>
                   </td>
                   <td className="py-3 px-3">
-                    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">{commissionDisplay(program.commission)}</span>
+                    <span className={`text-sm font-semibold ${commissionUnknown(program.commission) ? "text-muted-foreground font-normal italic" : "text-emerald-600 dark:text-emerald-400"}`}>{commissionDisplay(program.commission)}</span>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
                     <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
@@ -169,6 +221,53 @@ export default async function NetworkPage({
             </tbody>
           </table>
         </div>
+      </div>
+
+      {/* Slot 4 — the questions a reader actually arrives with, answered in
+          the first sentence. Generated from the registry so they cannot go
+          stale, which is the trade against hand-written copy. */}
+      <div className="mt-10 grid gap-6 md:grid-cols-2">
+        <div>
+          <h2 className="text-base font-semibold">How do you join a program here?</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground max-w-prose">
+            {networkHowToJoin(network)}
+          </p>
+        </div>
+        {topProgram && (
+          <div>
+            <h2 className="text-base font-semibold">Which pays the most?</h2>
+            <p className="mt-1.5 text-sm text-muted-foreground max-w-prose">
+              {topProgram.name}, at {commissionDisplay(topProgram.commission)}{" "}
+              {commissionLabel(topProgram.commission)}
+              {topProgram.verified
+                ? " — verified by OpenAffiliate."
+                : " — community-submitted and unconfirmed."}
+            </p>
+          </div>
+        )}
+        {netPrograms.length > priced.length && (
+          <div>
+            <h2 className="text-base font-semibold">Why do some rows say “Not published”?</h2>
+            <p className="mt-1.5 text-sm text-muted-foreground max-w-prose">
+              {netPrograms.length - priced.length} of {netPrograms.length}{" "}
+              {netPrograms.length === 1 ? "program" : "programs"} here
+              never published a commission figure. Rather than print a guess, the
+              registry records that no figure exists — and the averages above are
+              taken from the {priced.length} that did publish one.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Slot 6 — what is actually confirmed. A page that does not say this is
+          claiming more than it knows. */}
+      <div className="mt-8 flex items-center gap-2 text-xs text-muted-foreground">
+        <span
+          className={`h-1.5 w-1.5 rounded-full ${verifiedCount > 0 ? "bg-emerald-500" : "bg-amber-500"}`}
+        />
+        {verifiedCount} of {netPrograms.length} verified by OpenAffiliate
+        {verifiedCount < netPrograms.length &&
+          " — the rest are community-submitted and unconfirmed"}
       </div>
 
       <div className="mt-8 flex flex-col sm:flex-row gap-3">
