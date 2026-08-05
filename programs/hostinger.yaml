@@ -7,7 +7,7 @@ tags: [ai, ai-website-builder, hosting, web-development, domains]
 commission:
   type: one-time
   rate: "up to 60%"
-  mode: percentage
+  mode: tiered
   value: 60
   currency: USD
   duration: null
