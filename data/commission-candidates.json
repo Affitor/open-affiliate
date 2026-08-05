@@ -1,0 +1,328 @@
+{
+  "note": "Machine-extracted commission candidates. Never a source of truth: a candidate only reaches a program YAML after a human or an independent check confirms it. Conflicts against verified data are staleness alarms, not corrections.",
+  "candidates": [
+    {
+      "slug": "algolia",
+      "status": "promoted",
+      "note": "Filled a previously unknown commission. Page states: up to 15% on the referral's first year.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "program_kind": "affiliate",
+        "commission_text": "You are eligible to earn up to 15% on your converted referral’s first year with Algolia.",
+        "commission_percent": 15,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://algolia.com/partners",
+        "https://algolia.com/developers/integrations",
+        "https://algolia.com/careers"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "customgpt",
+      "status": "promoted",
+      "note": "Verified entry said 50%; the live page says 15-20% recurring for 2 years. Corrected.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Refer your friends, followers, and clients to CustomGPT.ai using your referral link and earn up to 20% commission on all sales for the first 2 years.\n\nEarn recurring revenue share for every customer you refer and graduate to the next tier to access more rewards.\n\n15-20% Recurring Commission\n\nUnlock the full potential of your content with up to 20% monthly recurring commission for two years and a 30-60 day cookie window.\n\nEarn up to 20% commission rate on all subscriptions you refer for 2 years.\n\nFor every customer who signs-up for CustomGPT service via your referral, you will earn up to 20% of their plan fees for the first 2 years of their subscribing to the CustomGPT service.",
+        "commission_percent": 20,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": "2 years",
+        "cookie_days": 30
+      },
+      "evidence_urls": [
+        "https://customgpt.ai/partners",
+        "https://customgpt.ai/about-us",
+        "https://customgpt.ai/customers"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "descript",
+      "status": "promoted",
+      "note": "Verified entry said 15%; the live page says $25 flat per subscriber. Corrected.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Earn a $25 commission for each new Descript subscriber that you refer.",
+        "commission_percent": null,
+        "commission_flat_usd": 25,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://www.descript.com/affiliate",
+        "https://www.descript.com/careers",
+        "https://www.descript.com/customers"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "canva",
+      "status": "conflict-unresolved",
+      "note": "Extraction reports the affiliate program is closed (Canvassador only, applications closed). Cloudflare blocks independent confirmation, so the registry entry is untouched pending a human look.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "You can only get Canva affiliate benefits through the Canvassador Program.\n\nThe Canvassador Program is managed separately and is currently closed for applications. To learn more about the program, visit the Canva Community page and check back for the latest updates.\n\nThe Canvassador Program is a community-based ambassador program. If you’re an individual content creator who wants to be a Canva affiliate, you must first become a Canvassador.",
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://www.canva.com/affiliates",
+        "https://www.canva.com/learn/the-ultimate-guide-to-font-pairing",
+        "https://www.canva.com/learn"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "hostinger",
+      "status": "compatible",
+      "note": "Registry says up to 60%; page says starts at 40% and grows. Not contradictory, no change.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Every eligible sale made earns you a commission. It starts at 40% and grows depending on sales volume.",
+        "commission_percent": 40,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://www.hostinger.com/affiliates",
+        "https://www.hostinger.com/blog?redirect_back_url=https%3A%2F%2Fwww.hostinger.com%2Faffiliates",
+        "https://www.hostinger.com/tutorials/learning-lab?redirect_back_url=https%3A%2F%2Fwww.hostinger.com%2Faffiliates"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "vercel",
+      "status": "no-public-terms",
+      "note": "Dub portal keeps terms behind login; factCheck correctly returned null.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Join thousands of others who have earned over $10,000,000 on Dub partnering with world-class companies.",
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://partners.dub.co/v0",
+        "https://partners.dub.co/"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "bolt",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://bolt.new/affiliate",
+        "https://bolt.new/"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "codeium",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://codeium.com/about",
+        "https://codeium.com/partnerships",
+        "https://codeium.com/security"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "chroma",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://trychroma.com/affiliates",
+        "https://trychroma.com/",
+        "https://trychroma.com/dpa"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "acryl",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://acryldata.io/affiliates",
+        "https://acryldata.io/datahub-careers",
+        "https://acryldata.io/learn/context-management"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "15five",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://15five.com/partners",
+        "https://www.15five.com/about/careers",
+        "https://www.15five.com/partners/technology-partners/integration-partners"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "ashby",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://ashbyhq.com/partners",
+        "https://ashbyhq.com/careers",
+        "https://ashbyhq.com/integrations"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "arize",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://arize.com/partners",
+        "https://arize.com/docs/ax/machine-learning/machine-learning/integrations-ml/airflow-retrain",
+        "https://arize.com/docs/ax/integrations/llm-providers/mistralai/mistralai-tracing"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "assemblyai",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "none",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://assemblyai.com/partners",
+        "https://www.assemblyai.com/blog/the-top-free-speech-to-text-apis-and-open-source-engines",
+        "https://www.assemblyai.com/docs/integrations/zapier"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "cohere",
+      "status": "no-affiliate-program",
+      "note": "Extractor found no affiliate program at the probed page. Spot-checked bolt (SPA soft-404) and codeium (redirects to a 404) by hand — both true negatives.",
+      "extracted": {
+        "has_affiliate_program": false,
+        "program_kind": "integration-partner",
+        "commission_text": null,
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://cohere.com/partners",
+        "https://cohere.com/careers",
+        "https://cohere.com/developers"
+      ],
+      "extracted_at": "2026-08-05",
+      "method": "context.dev extract, factCheck on"
+    }
+  ]
+}
