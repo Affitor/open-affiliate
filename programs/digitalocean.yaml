@@ -11,12 +11,12 @@ tags:
 - saas
 commission:
   type: recurring
-  rate: 50%
+  rate: 10%
   mode: percentage
-  value: 50
+  value: 10
   currency: null
-  duration: null
-  conditions: null
+  duration: 12 months
+  conditions: 10% of the referred customer's monthly spend, each month for one year.
   recurring_period: null
 cookie_days: 0
 attribution: last-click
@@ -75,7 +75,7 @@ verified: true
 submitted_by: community
 created_at: 2026-01-25
 updated_at: 2026-04-17
-last_verified_at: 2026-04-17
+last_verified_at: 2026-08-06
 kind: affiliate
 source: community
 logo_url: https://logo.clearbit.com/digitalocean.com

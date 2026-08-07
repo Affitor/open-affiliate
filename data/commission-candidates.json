@@ -323,6 +323,192 @@
       ],
       "extracted_at": "2026-08-05",
       "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "digitalocean",
+      "status": "promoted",
+      "note": "Verified entry said 50%; page states 10% each month for one year. Corrected — the largest single error found so far, on a prominently ranked program.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Whenever you refer a new paying user to DigitalOcean, you'll receive 10% commission each month, for an entire year, on their monthly spend.",
+        "commission_percent": 10,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": "1 year",
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://www.digitalocean.com/affiliates",
+        "https://www.digitalocean.com/careers",
+        "https://www.digitalocean.com/customers"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "convertkit",
+      "status": "confirmed-current",
+      "note": "50% first 12 months confirmed; page adds a 10-20% indefinite tail by tier that the registry summarises away.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Join the Kit affiliate program for **50% commission for 12 months**, plus 10-20% recurring revenue beyond 12 months when you earn **Bronze**, **Silver**, or **Gold** status.\n\nFor every paid customer you refer, we’ll give you half of what they pay us in their first year.\n\n**50%** for the first 12 months of every referred customer\n\nRecurring commission for each referred paying customer:\n\n- - (None for base tier)\n- **+10%** indefinitely after every referred customer's first 12 months\n- **+15%** indefinitely after every referred customer's first 12 months\n- **+20%** indefinitely after every referred customer's first 12 months\n\nRecurring commissions apply to referred customers, made on or after January 1st, 2024, who stay with Kit beyond 12 months. Affiliate referrals made using paid methods such as pay-per-click ads do not count toward the number of paid accounts accumulated for status levels.",
+        "commission_percent": 50,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": "indefinitely after first 12 months",
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://kit.com/affiliate",
+        "https://kit.com/resources/blog/category/case-study",
+        "https://kit.com/careers"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "surfer-seo",
+      "status": "confirmed-current",
+      "note": "Multi-tier CPA (75/100/125%) matches the registry's tiered summary. Extractor returned null numerics because no single figure exists — correct behaviour.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Commission on Monthly subs (from user’s first payment): Tier 1 - Starter (0 - 10): 75% CPA; Tier 2- Silver (11 - 50): 100% CPA; Tier 3 - Gold (51 +): 125% CPA. Commission on Yearly subs (from user’s first payment): Tier 1 - Starter: 15% of yearly subscription; Tier 2- Silver: 20% of yearly subscription; Tier 3 - Gold: 25% of yearly subscription.",
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://surferseo.com/affiliate-program",
+        "https://surferseo.com/category/blogging",
+        "https://surferseo.com/blog/ecommerce-seo-content-case-study"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "cal-com",
+      "status": "confirmed-current",
+      "note": "20% recurring 12 months, exact match.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "For every client your refer, you'll get 20% commission for 12 months, while they enjoy 20% off for 12 months.",
+        "commission_percent": 20,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": "12 months",
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://cal.com/affiliate-program",
+        "https://cal.com/jobs",
+        "https://cal.com/features/recurring-events"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "krisp",
+      "status": "confirmed-current",
+      "note": "30% recurring 12 months, exact match.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Earn up to 30% commission for the first 12 months of every customer you refer to Krisp.",
+        "commission_percent": 30,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": "12 months",
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://krisp.ai/affiliate-program",
+        "https://krisp.ai/about-us",
+        "https://krisp.ai/careers"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "apify",
+      "status": "confirmed-current",
+      "note": "Page says 30% recurring; registry range 20-30% covers it.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Get 20% commission on every customer you refer during their first three months, then 30% after that.",
+        "commission_percent": 30,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://apify.com/partners/affiliate",
+        "https://apify.com/jobs",
+        "https://apify.com/success-stories"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "instantly",
+      "status": "confirmed-current",
+      "note": "Page says 40% recurring; registry range 20-40% covers it.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Become an Instantly affiliate and earn up to 40% recurring commission every month\n\nYou can earn up to 40% recurring commission for every new referral.\n\nWith our tiered commission structure, the amount you earn depends on the total number of referrals you bring in. Here’s how the tiers work:\n\nSilver Partners: : Earn 20% commission\n\nGold Partners: (50+ referrals): Earn 30% commission on referrals starting from the 51st\n\nPlatinum Partners: (75+ referrals): Earn 40% commission on referrals starting from the 76th\n\nFor example, as a Platinum Partner, with just one referral on the HypeGrowth Plan ($97/month), you will earn $38.80 per month per eligible referral. As a Gold Partner, you would earn $29.10 per month per eligible referral, and as a Silver Partner, you would earn $19.40 per month per referral.\n\nFor Agencies & High-Ticket Partners (VIP)\n\nEarn more by referring or selling high-ticket clients.\n\nReferral Partner\n\n- Refer high-ticket clients\n\n- Instantly handles sales & fulfillment\n\n- Earn between 20–40% recurring + 10% on VIP referrals (up to 12 months)\n\nWhat is VIP Referral?\n\n- Earn between 20–40% recurring + 10% on VIP referrals (up to 12 months)",
+        "commission_percent": 40,
+        "commission_flat_usd": null,
+        "recurring": true,
+        "recurring_duration": null,
+        "cookie_days": null
+      },
+      "evidence_urls": [
+        "https://instantly.ai/affiliate",
+        "https://instantly.ai/careers",
+        "https://instantly.ai/reviews"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "grammarly",
+      "status": "unverifiable-from-page",
+      "note": "Page advertises the program but publishes no figure. Registry's 30% can be neither confirmed nor denied from public pages; left untouched.",
+      "extracted": {
+        "has_affiliate_program": true,
+        "commission_text": "Our unique affiliate commission structure gives you the chance to earn in two ways, with even higher payouts for top performers.",
+        "commission_percent": null,
+        "commission_flat_usd": null,
+        "recurring": null,
+        "recurring_duration": null,
+        "cookie_days": 90
+      },
+      "evidence_urls": [
+        "https://www.grammarly.com/affiliates",
+        "https://www.grammarly.com/business/events-resources",
+        "https://www.grammarly.com/edu/events-resources"
+      ],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "jasper",
+      "status": "conflict-unresolved",
+      "note": "Every known affiliate path redirects to the homepage — the program page is gone. Registry says 25%; nothing public to check it against. Needs a human look.",
+      "extracted": null,
+      "evidence_urls": [],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
+    },
+    {
+      "slug": "copy-ai",
+      "status": "conflict-unresolved",
+      "note": "copy.ai/affiliate redirects to the homepage; no alternate path found. Registry says 45%. Needs a human look.",
+      "extracted": null,
+      "evidence_urls": [],
+      "extracted_at": "2026-08-06",
+      "method": "context.dev extract, factCheck on"
     }
   ]
 }
