@@ -16,27 +16,8 @@ commission:
   currency: USD
   duration: lifetime
   conditions: Paid while the referred customer's subscription remains active.
-cookie_days: 30
-attribution: last-click
-tracking_method: cookie
-payout:
-  minimum: 10
-  currency: USD
-  frequency: net-30
-  methods:
-    - bank
-    - paypal
-    - crypto
 signup_url: https://whop.com/blossomhost/
-approval: auto
-approval_time: instant
 restrictions: null
-marketing_materials: false
-api_available: false
-dedicated_manager: false
-dashboard_url: null
-network: whop
-program_age: null
 description: >
   Blossom Host provides KVM VPS, ISP-IP VPS, and bare metal with dedicated
   public IPv4 addresses. The affiliate program pays 30% recurring commission.
