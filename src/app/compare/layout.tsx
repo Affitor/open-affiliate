@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   description:
     "Compare affiliate programs side-by-side. Commission rates, cookie duration, payout terms, and features at a glance.",
   openGraph: {
-    title: "Compare Affiliate Programs — OpenAffiliate",
+    title: "Compare Affiliate Programs: OpenAffiliate",
     description:
       "Side-by-side comparison of affiliate programs. Find the best fit for your audience.",
     url: "https://openaffiliate.dev/compare",

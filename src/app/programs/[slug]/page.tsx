@@ -86,7 +86,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary",
-      title: `${program.name} — ${commissionDisplay(program.commission)} ${program.commission.type}`,
+      title: `${program.name}: ${commissionDisplay(program.commission)} ${program.commission.type}`,
       description,
     },
   };

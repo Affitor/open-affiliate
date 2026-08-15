@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     canonical: "./",
   },
   openGraph: {
-    title: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    title: "OpenAffiliate: The Open Registry of Affiliate Programs",
     description:
       "Discover, compare, and integrate affiliate programs. Built for developers and AI agents.",
     url: "https://openaffiliate.dev",

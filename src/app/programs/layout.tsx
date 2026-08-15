@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Search and filter " + programs.length + "+ affiliate programs by category, commission type, and more. Curated, verified, and agent-ready.",
   openGraph: {
     // openGraph.title is not templated, so it keeps the brand.
-    title: "Browse Affiliate Programs — OpenAffiliate",
+    title: "Browse Affiliate Programs: OpenAffiliate",
     description:
       "Search and filter " + programs.length + "+ affiliate programs by category, commission type, and more.",
     url: "https://openaffiliate.dev/programs",
