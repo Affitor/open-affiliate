@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { programs, parseCommissionRate , commissionDisplay} from "@/lib/programs";
 
-export const alt = "Affiliate Program Rankings — OpenAffiliate";
+export const alt = "Affiliate Program Rankings: OpenAffiliate";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
