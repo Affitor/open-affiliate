@@ -22,8 +22,6 @@ commission:
   duration: "6 months"
   conditions: "30% commission on the referred user's first order, followed by 20% on every purchase for the next 6 months."
 
-cookie_days: 60
-
 payout:
   minimum: 50
   currency: USD
