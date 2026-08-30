@@ -30,6 +30,13 @@ export interface Payout {
   methods?: string[];
 }
 
+export interface Eligibility {
+  countriesAllowed?: string[];
+  countriesExcluded?: string[];
+  promotionRestrictions?: string[];
+  taxFormsRequired?: string[];
+}
+
 export interface Program {
   slug: string;
   name: string;
@@ -49,6 +56,7 @@ export interface Program {
   approval?: string;
   approvalTime?: string;
   restrictions?: string[];
+  eligibility?: Eligibility;
   attribution?: string;
   trackingMethod?: string;
   network?: string | null;

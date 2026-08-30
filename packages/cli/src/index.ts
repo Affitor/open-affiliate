@@ -4,6 +4,13 @@ import { Command } from "commander";
 
 const API_BASE = process.env.OPENAFFILIATE_API || "https://openaffiliate.dev";
 
+interface Eligibility {
+  countriesAllowed?: string[];
+  countriesExcluded?: string[];
+  promotionRestrictions?: string[];
+  taxFormsRequired?: string[];
+}
+
 interface ProgramSummary {
   slug: string;
   name: string;
@@ -25,6 +32,7 @@ interface ProgramFull extends ProgramSummary {
   approval?: string;
   approvalTime?: string;
   restrictions?: string[];
+  eligibility?: Eligibility;
   commissionDuration?: string;
   payoutMethods?: string[];
   network?: string;
@@ -156,6 +164,7 @@ program
 
   Tags: ${p.tags.join(", ")}
   ${p.restrictions?.length ? `\n  Restrictions:\n${p.restrictions.map((r) => `    • ${r}`).join("\n")}` : ""}
+  ${p.eligibility ? `\n  Eligibility:${p.eligibility.countriesAllowed?.length ? `\n    Countries allowed: ${p.eligibility.countriesAllowed.join(", ")}` : ""}${p.eligibility.countriesExcluded?.length ? `\n    Countries excluded: ${p.eligibility.countriesExcluded.join(", ")}` : ""}${p.eligibility.promotionRestrictions?.length ? `\n    Promotion restrictions:\n${p.eligibility.promotionRestrictions.map((r) => `      • ${r}`).join("\n")}` : ""}${p.eligibility.taxFormsRequired?.length ? `\n    Tax forms required: ${p.eligibility.taxFormsRequired.join(", ")}` : ""}` : ""}
 
   AGENTS.md:
   ${p.agentPrompt}
