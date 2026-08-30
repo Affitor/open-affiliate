@@ -85,7 +85,7 @@ server.registerTool(
   "get_program",
   {
     description:
-      "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
+      "Get full details of an affiliate program including agent instructions, commission terms, geographic eligibility, restrictions, and signup info",
     inputSchema: {
       slug: z.string().describe("Program slug (e.g. 'stripe', 'vercel')"),
     },
