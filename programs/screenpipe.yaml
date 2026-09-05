@@ -16,19 +16,11 @@ commission:
   duration: "first paid transaction only"
   conditions: "Eligible paid referrals earn 25% of the first paid subscription transaction; Free signups earn no commission and renewals are non-commissionable."
 
-cookie_days: 90
-attribution: last-click
-tracking_method: cookie
-
 signup_url: https://partners.dub.co/screenpipe/apply
 approval: manual
 restrictions:
   - "No misleading coupon, discount, lifetime-deal, or recurring-commission claims"
-  - "Affiliates must clearly disclose the affiliate relationship"
 
-marketing_materials: false
-api_available: false
-dedicated_manager: false
 dashboard_url: https://partners.dub.co/programs/screenpipe
 network: dub
 
