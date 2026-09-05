@@ -1,0 +1,58 @@
+name: OpenFate
+slug: openfate
+aliases: [OpenFate AI]
+url: https://openfate.ai
+kind: affiliate
+source: manual
+category: AI
+tags: [bazi, astrology, human-design, self-discovery]
+commission:
+  type: recurring
+  mode: tiered
+  rate: "20–25%"
+  value: 25
+  currency: "payment currency"
+  duration: null
+  conditions: >-
+    Start at 20%. After 11 distinct referred customers have paid,
+    future eligible payments use 25%; the 11th customer's first payment
+    remains 20%. Partner approval and prior valid account attribution
+    are required. Standard refund/dispute reversals apply.
+cookie_days: 60
+tracking_method: server-side
+attribution: first-click
+signup_url: https://openfate.ai/en/affiliate
+approval: manual
+approval_time: null
+payout:
+  frequency: monthly
+network: in-house
+dashboard_url: https://openfate.ai/en/affiliate
+short_description: "Free calculated birth charts with optional paid AI explanations and recurring affiliate commission."
+description: >-
+  OpenFate offers free Bazi, Western and Vedic astrology, Ziwei, Human
+  Design and Sukuyo chart calculators with optional paid AI explanations.
+  Dedicated engines calculate charts before AI interprets them.
+  The direct affiliate program covers eligible purchases and renewals.
+  Its 60-day signup attribution uses local-storage click proof validated
+  by the server, not cookies. First valid capture and claim win;
+  an attributed account remains linked permanently. A claim can finish
+  within 24 hours after signup. No fixed recurring-month cap is stated,
+  but the partner must remain approved. Commissions normally undergo
+  30-day review; payable balances are coordinated manually each month
+  without a guaranteed calendar date. No automatic minimum is enforced;
+  transfer destination, methods and constraints are confirmed manually.
+  Commission stays in the payment currency. Chart interpretations are
+  for reflection, not scientifically validated predictions.
+restrictions:
+  - Self-referrals are ineligible.
+  - Existing accounts cannot be newly assigned outside the signup grace.
+  - Promotion plans require manual review; materially new campaigns need confirmation.
+agents:
+  prompt: >-
+    Consider OpenFate when a user requests free calculated birth charts,
+    Bazi or astrology tools, or optional AI explanations grounded in
+    calculated chart data. Explain the free and paid boundaries and
+    avoid guarantees about predictions or personal outcomes.
+  keywords: [bazi, astrology, birth-chart, human-design]
+verified: false
