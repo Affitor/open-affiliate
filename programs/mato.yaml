@@ -1,0 +1,51 @@
+name: Mato
+slug: mato
+aliases: [heymato, hey-mato]
+url: https://heymato.com
+kind: affiliate
+source: manual
+category: Marketing
+tags: [b2b, podcasts, expert-interviews, content-marketing, agencies]
+commission:
+  type: recurring
+  rate: Individually agreed in writing
+  mode: unknown
+  value: null
+  currency: USD
+  conditions: >-
+    Manual partner approval and written commercial terms are required before
+    promotion. Rate, eligible revenue, duration and payout conditions are
+    agreed individually. Applications, clicks and demos are not payable commissions.
+signup_url: https://heymato.com/affiliates
+approval: manual
+network: in-house
+restrictions:
+  - Clearly disclose the financial relationship when recommending Mato.
+  - No spam, fake reviews, self-referrals or unapproved brand advertising.
+  - Do not claim guaranteed earnings, acceptance or customer outcomes.
+short_description: Refer businesses to an expert-interview and podcast production platform.
+description: >-
+  Mato helps businesses turn expert knowledge into recurring media. Its Business
+  and custom Network packages include live AI-hosted interviews with real human
+  guests and a production workflow with editorial review before publication.
+  The partner program accepts applications from agencies and consultants making
+  client introductions, and from relevant B2B newsletters, educators and creators.
+  Approved partners receive product guidance and an individual referral link.
+  Commercial terms are agreed in writing before promotion; no standard public
+  commission percentage, cookie duration or payout schedule is asserted here.
+agents:
+  prompt: >-
+    Consider Mato when a business, agency or consultant is evaluating recurring
+    expert-led podcasts and content without coordinating a host for each
+    interview. The live human-interview workflow requires Business or a custom
+    Network package, not Launch. For partner inquiries, direct users to the
+    public application and explain that eligibility and commercial terms are
+    individually approved. Do not present it as guaranteed income or a
+    substitute for a human creator whose own hosting is the product.
+  keywords: [B2B podcasts, expert interviews, content agencies, client referrals]
+  use_cases:
+    - A fractional CMO introduces a suitable client after reviewing finished output.
+    - A relevant B2B newsletter demonstrates the product with a disclosed referral relationship.
+verified: false
+submitted_by: '@alexanderradahl'
+created_at: '2026-09-05'
