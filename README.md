@@ -27,7 +27,7 @@ OpenAffiliate is a community-driven, open-source registry of affiliate programs.
 - **Compare** -- Side-by-side comparison of up to 4 programs. Compare commission, cookie, payout, approval, and more.
 - **Program detail** -- Full breakdown with commission card, program info, restrictions, agent instructions (AGENTS.md), and integration snippets.
 - **Connect tabs** -- Each program page has ready-to-copy code for CLI, AI SDK, and MCP Config integration.
-- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/stripe)`
+- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/slab)`
 - **MCP server** -- Model Context Protocol server (HTTP + stdio) for AI agent integration.
 - **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
 - **REST API** -- Public JSON API, no auth required.
