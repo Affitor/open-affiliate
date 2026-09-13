@@ -133,7 +133,7 @@ GET /api/categories            # List categories with counts
 
 Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program in the registry. Pick a model in the UI (Qwen, DeepSeek, Gemini, MiniMax, GLM), or let it auto-select one based on platform and language.
 
-**Runs on [Kyma API](https://kymaapi.com?utm_source=open-affiliate).** Kyma streams the generation: `POST https://kymaapi.com/v1/chat/completions`. The free tier is capped at 30 generations per day; bring your own Kyma key for more.
+**Runs on [Kyma API](https://kymaapi.com?utm_source=open-affiliate).** Kyma streams the generation: `POST https://kymaapi.com/v1/chat/completions`. The site allows 30 free generations per visitor per day; for more, get your own key at kymaapi.com and call the same endpoint.
 
 ## Contributing a program
 
