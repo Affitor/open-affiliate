@@ -34,6 +34,7 @@ OpenAffiliate is a community-driven, open-source registry of affiliate programs.
 - **SDK** -- TypeScript SDK for programmatic access.
 - **Submit** -- Web form to submit new programs without touching YAML.
 - **Verification** -- Automated signup URL verification via CI.
+- **Content Lab** -- Generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program, picking the AI model in the UI. Runs on Kyma API.
 
 ## Quick start
 
@@ -127,6 +128,12 @@ GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?ve
 GET /api/programs/[slug]       # Get program details
 GET /api/categories            # List categories with counts
 ```
+
+### Content Lab
+
+Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program in the registry. Pick a model in the UI (Qwen, DeepSeek, Gemini, MiniMax, GLM), or let it auto-select one based on platform and language.
+
+**Runs on [Kyma API](https://kymaapi.com?utm_source=open-affiliate).** Kyma streams the generation: `POST https://kymaapi.com/v1/chat/completions`. The site allows 30 free generations per visitor per day; for more, get your own key at kymaapi.com and call the same endpoint.
 
 ## Contributing a program
 
