@@ -18,6 +18,7 @@
     "verify:changed": "npx tsx scripts/verify-programs.ts --changed",
     "verify:deep": "npx tsx scripts/verify-deep.ts",
     "verify:deep:unverified": "npx tsx scripts/verify-deep.ts --unverified",
+    "verify:client-registry": "npx tsx scripts/verify-client-registry.ts",
     "sync:public": "npx tsx scripts/sync-to-public.ts",
     "sync:public:dry": "npx tsx scripts/sync-to-public.ts --dry-run",
     "backfill:social": "npx tsx scripts/backfill-social.ts",

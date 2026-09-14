@@ -23,6 +23,7 @@ jobs:
       - run: npm run lint
       - run: npx tsc --noEmit
       - run: npm run build
+      - run: npm run verify:client-registry
 
   validate-programs:
     name: Validate Programs

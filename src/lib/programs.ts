@@ -161,6 +161,7 @@ export interface SearchOptions {
   network?: string
   sort?: SortOption
   verified?: boolean
+  includeDescription?: boolean
 }
 
 /**
@@ -343,7 +344,8 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
         p.name.toLowerCase().includes(q) ||
         p.shortDescription.toLowerCase().includes(q) ||
         p.tags.some((t) => t.includes(q)) ||
-        p.category.toLowerCase().includes(q)
+        p.category.toLowerCase().includes(q) ||
+        (opts.includeDescription && p.description.toLowerCase().includes(q))
     )
   }
 
