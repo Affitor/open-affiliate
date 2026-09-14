@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { parseDocument } = require("yaml")
+
 const MAX_PROGRAM_FILES = 3
 const MAX_ADDITIONS_PER_FILE = 150
 const MAX_TOTAL_ADDITIONS = 300
 const MAX_FILE_BYTES = 20_000
+const FETCH_TIMEOUT_MS = 10_000
 
 const PROGRAM_PATH = /^programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.yaml$/
 const BLOCKING_LABELS = new Set([
@@ -9,6 +13,109 @@ const BLOCKING_LABELS = new Set([
   "needs-human-review",
   "security",
 ])
+
+function parseProgramYaml(content, filename, reasons) {
+  let document
+  try {
+    document = parseDocument(content, {
+      strict: true,
+      uniqueKeys: true,
+    })
+  } catch {
+    reasons.push(`invalid YAML: ${filename}`)
+    return undefined
+  }
+
+  if (document.errors.length > 0) {
+    reasons.push(`invalid or duplicate YAML keys: ${filename}`)
+    return undefined
+  }
+
+  let program
+  try {
+    program = document.toJS({ maxAliasCount: 0 })
+  } catch {
+    reasons.push(`invalid or aliased YAML: ${filename}`)
+    return undefined
+  }
+
+  if (
+    !program ||
+    typeof program !== "object" ||
+    Array.isArray(program)
+  ) {
+    reasons.push(`program YAML must be a mapping: ${filename}`)
+    return undefined
+  }
+
+  return program
+}
+
+function isHttpsUrl(value) {
+  if (typeof value !== "string") return false
+  try {
+    const url = new URL(value)
+    return (
+      url.protocol === "https:" &&
+      url.username === "" &&
+      url.password === ""
+    )
+  } catch {
+    return false
+  }
+}
+
+async function fetchProgramContent(
+  rawUrl,
+  {
+    fetchImpl = globalThis.fetch,
+    maxBytes = MAX_FILE_BYTES,
+    timeoutMs = FETCH_TIMEOUT_MS,
+  } = {}
+) {
+  const controller = new AbortController()
+  const timeout = setTimeout(() => {
+    controller.abort(
+      new DOMException(`timed out after ${timeoutMs}ms`, "TimeoutError")
+    )
+  }, timeoutMs)
+
+  try {
+    const response = await fetchImpl(rawUrl, {
+      headers: { Accept: "text/plain" },
+      signal: controller.signal,
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
+
+    const contentLength = Number(response.headers.get("content-length"))
+    if (Number.isFinite(contentLength) && contentLength > maxBytes) {
+      throw new Error(`response exceeds ${maxBytes} bytes`)
+    }
+    if (!response.body) {
+      throw new Error("response has no body")
+    }
+
+    const reader = response.body.getReader()
+    const chunks = []
+    let totalBytes = 0
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > maxBytes) {
+        await reader.cancel()
+        throw new Error(`response exceeds ${maxBytes} bytes`)
+      }
+      chunks.push(Buffer.from(value))
+    }
+
+    return Buffer.concat(chunks, totalBytes).toString("utf8")
+  } finally {
+    clearTimeout(timeout)
+  }
+}
 
 function evaluateAutoMergePolicy({ pullRequest, files }) {
   const reasons = []
@@ -68,14 +175,24 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
     }
     if (Buffer.byteLength(content, "utf8") > MAX_FILE_BYTES) {
       reasons.push(`is larger than ${MAX_FILE_BYTES} bytes: ${file.filename}`)
+      continue
     }
-    if (!/^verified:\s*false(?:\s+#.*)?$/m.test(content)) {
-      reasons.push(`must explicitly set verified: false: ${file.filename}`)
+    const program = parseProgramYaml(content, file.filename, reasons)
+    if (!program) continue
+
+    const expectedSlug = file.filename
+      .slice("programs/".length)
+      .replace(/\.yaml$/, "")
+    if (program.slug !== expectedSlug) {
+      reasons.push(`slug must match filename: ${file.filename}`)
     }
-    if (!/^url:\s*https:\/\//m.test(content)) {
+    if (program.verified !== false) {
+      reasons.push(`verified must be the boolean false: ${file.filename}`)
+    }
+    if (!isHttpsUrl(program.url)) {
       reasons.push(`must use an HTTPS product URL: ${file.filename}`)
     }
-    if (!/^signup_url:\s*https:\/\//m.test(content)) {
+    if (!isHttpsUrl(program.signup_url)) {
       reasons.push(`must use an HTTPS signup URL: ${file.filename}`)
     }
     if (/<\/?script\b/i.test(content)) {
@@ -92,10 +209,12 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
 
 module.exports = {
   BLOCKING_LABELS,
+  FETCH_TIMEOUT_MS,
   MAX_ADDITIONS_PER_FILE,
   MAX_FILE_BYTES,
   MAX_PROGRAM_FILES,
   MAX_TOTAL_ADDITIONS,
   PROGRAM_PATH,
   evaluateAutoMergePolicy,
+  fetchProgramContent,
 }

@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const test = require("node:test")
 const assert = require("node:assert/strict")
-const { evaluateAutoMergePolicy } = require("./auto-merge-policy.cjs")
+const {
+  evaluateAutoMergePolicy,
+  fetchProgramContent,
+} = require("./auto-merge-policy.cjs")
 
 const validContent = `name: Example
 slug: example
@@ -106,4 +109,84 @@ test("blocks unsafe trust, URL, and markup content", () => {
       false
     )
   }
+})
+
+test("parses YAML and rejects duplicate or non-boolean verification", () => {
+  for (const content of [
+    `${validContent}verified: true\n`,
+    validContent.replace("verified: false", 'verified: "false"'),
+    validContent.replace("name: Example", "name: ["),
+  ]) {
+    const result = evaluate({
+      files: [
+        {
+          filename: "programs/example.yaml",
+          status: "added",
+          additions: 7,
+          deletions: 0,
+          content,
+        },
+      ],
+    })
+    assert.equal(result.eligible, false)
+  }
+})
+
+test("requires the parsed slug to match the filename", () => {
+  const result = evaluate({
+    files: [
+      {
+        filename: "programs/not-example.yaml",
+        status: "added",
+        additions: 5,
+        deletions: 0,
+        content: validContent,
+      },
+    ],
+  })
+  assert.equal(result.eligible, false)
+  assert.match(result.reasons.join("\n"), /slug must match filename/)
+})
+
+test("fetches program content within byte and time limits", async () => {
+  const content = await fetchProgramContent("https://example.com/raw", {
+    fetchImpl: async () => new Response(validContent),
+    maxBytes: Buffer.byteLength(validContent),
+    timeoutMs: 100,
+  })
+  assert.equal(content, validContent)
+
+  await assert.rejects(
+    fetchProgramContent("https://example.com/raw", {
+      fetchImpl: async () =>
+        new Response("small", {
+          headers: { "content-length": "100" },
+        }),
+      maxBytes: 10,
+      timeoutMs: 100,
+    }),
+    /exceeds 10 bytes/
+  )
+
+  await assert.rejects(
+    fetchProgramContent("https://example.com/raw", {
+      fetchImpl: async () => new Response("eleven-byte"),
+      maxBytes: 10,
+      timeoutMs: 100,
+    }),
+    /exceeds 10 bytes/
+  )
+
+  await assert.rejects(
+    fetchProgramContent("https://example.com/raw", {
+      fetchImpl: (_url, { signal }) =>
+        new Promise((_resolve, reject) => {
+          signal.addEventListener("abort", () => reject(signal.reason), {
+            once: true,
+          })
+        }),
+      timeoutMs: 5,
+    }),
+    { name: "TimeoutError" }
+  )
 })

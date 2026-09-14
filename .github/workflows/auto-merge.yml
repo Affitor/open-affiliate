@@ -28,6 +28,18 @@ jobs:
           ref: ${{ github.event.pull_request.base.sha }}
           persist-credentials: false
 
+      - name: Set up policy runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .github/scripts/package-lock.json
+
+      # Installs only the pinned YAML parser. The package and lockfile come
+      # from the trusted base commit; lifecycle scripts are disabled.
+      - name: Install policy parser
+        run: npm ci --ignore-scripts --prefix .github/scripts
+
       - name: Classify pull request
         uses: actions/github-script@v7
         env:
@@ -37,6 +49,7 @@ jobs:
             const {
               PROGRAM_PATH,
               evaluateAutoMergePolicy,
+              fetchProgramContent,
             } = require('./.github/scripts/auto-merge-policy.cjs')
 
             const owner = context.repo.owner
@@ -61,8 +74,7 @@ jobs:
             for (const file of files) {
               if (!PROGRAM_PATH.test(file.filename)) continue
               try {
-                const response = await fetch(file.raw_url)
-                if (response.ok) file.content = await response.text()
+                file.content = await fetchProgramContent(file.raw_url)
               } catch (error) {
                 core.warning(`Could not read ${file.filename}: ${error.message}`)
               }
