@@ -32,6 +32,12 @@ export function initPostHog(): void {
     capture_pageview: false,
     capture_pageleave: true,
     autocapture: true,
+    // Preserve the interaction target and phase breakdown for slow INP
+    // samples. Restrict attribution to INP/LCP: CLS attribution retains
+    // detached DOM nodes and is unsafe for a long-lived App Router session.
+    capture_performance: {
+      web_vitals_attribution: ["INP", "LCP"],
+    },
     persistence: "localStorage+cookie",
     // No login on this site — don't spend person profiles on anonymous users.
     person_profiles: "identified_only",
