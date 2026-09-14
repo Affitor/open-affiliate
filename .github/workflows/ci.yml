@@ -25,6 +25,7 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run build
       - run: npm run verify:client-registry
+      - run: npm run verify:machine-surfaces
 
   validate-programs:
     name: Validate Programs
