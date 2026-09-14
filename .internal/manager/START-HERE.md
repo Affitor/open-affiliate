@@ -7,6 +7,9 @@ Ticket đang làm: W37-756 — tốc độ tải trang
 ## Trạng thái
 
 - Branch: `perf/w37-756-web-vitals`
+- PR: https://github.com/Affitor/open-affiliate/pull/104
+- Commit đã test: `d252dc6`
+- Đang chờ reviewer độc lập do `cos-board` cử; CI và Vercel preview đang chạy.
 - Production chưa được đổi; merge/deploy `main` cần Sơn.
 - Baseline 30 ngày:
   `.internal/perf/web-vitals-openaffiliate.dev-2026-09-14.{json,md}`
