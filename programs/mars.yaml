@@ -1,0 +1,31 @@
+name: "ma.rs identity"
+slug: mars-identity
+url: https://ma.rs
+category: Marketing
+verified: false
+
+commission:
+  type: recurring
+  rate: 50
+  currency: USD
+cookie_days: 60
+
+payout:
+  minimum: 50
+  frequency: monthly
+
+short_description: "ma.rs sells premium @ma.rs identities for founders, creators, and teams. If your audience cares about naming, personal b"
+description: |
+  ma.rs sells premium @ma.rs identities for founders, creators, and teams. If your audience cares about naming, personal brand, or internet status signals, this is an easy offer to recommend.
+
+signup_url: https://ma.rs/affiliates
+approval: manual
+approval_time: 1-3 days
+
+agents:
+  prompt: "premium email alias and handles, profile links, linktree"
+  keywords: ["email", "id", "alias", "mars", "profile", "handle"]
+
+tags: []
+submitted_by: "martian"
+created_at: "2026-06-03"
