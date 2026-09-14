@@ -260,13 +260,20 @@ const DEFAULT_VISIBLE = 50;
 function ProgramsTable({
   items,
   contentLoaded,
+  filterKey,
 }: {
   items: MergedProgram[];
   contentLoaded: boolean;
+  filterKey: string;
 }) {
   const [sortCol, setSortCol] = useState<ColumnSort>("verified");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [page, setPage] = useState(0);
+  const [pagination, setPagination] = useState({ filterKey, page: 0 });
+  const page = pagination.filterKey === filterKey ? pagination.page : 0;
+  const setPage = useCallback(
+    (nextPage: number) => setPagination({ filterKey, page: nextPage }),
+    [filterKey]
+  );
 
   const handleSort = useCallback(
     (col: ColumnSort) => {
@@ -278,7 +285,7 @@ function ProgramsTable({
         setSortDir(col === "name" ? "asc" : "desc");
       }
     },
-    [sortCol]
+    [sortCol, setPage]
   );
 
   const sorted = useMemo(() => {
@@ -981,7 +988,7 @@ export default function RankingsPage() {
       {/* Table content */}
       {activeTab === "programs" && (
         <ProgramsTable
-          key={[
+          filterKey={JSON.stringify([
             searchQuery,
             selectedCategory,
             selectedType,
@@ -989,7 +996,7 @@ export default function RankingsPage() {
             selectedFormat,
             verifiedOnly,
             hasContentOnly,
-          ].join("|")}
+          ])}
           items={filteredPrograms}
           contentLoaded={contentLoaded}
         />
