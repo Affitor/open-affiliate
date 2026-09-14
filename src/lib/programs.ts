@@ -50,6 +50,7 @@ export interface Program {
   agentPrompt: string
   submittedBy: string
   createdAt: string
+  updatedAt?: string
   // Extended fields from YAML
   signupUrl?: string
   approval?: string
@@ -109,6 +110,7 @@ function mapYamlToProgram(yaml: any): Program {
     agentPrompt: yaml.agents?.prompt?.trim() ?? "",
     submittedBy: yaml.submitted_by ?? "community",
     createdAt: yaml.created_at ?? "",
+    updatedAt: yaml.updated_at ?? undefined,
     // Extended fields
     signupUrl: yaml.signup_url,
     approval: yaml.approval,
