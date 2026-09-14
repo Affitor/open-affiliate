@@ -981,6 +981,15 @@ export default function RankingsPage() {
       {/* Table content */}
       {activeTab === "programs" && (
         <ProgramsTable
+          key={[
+            searchQuery,
+            selectedCategory,
+            selectedType,
+            selectedPlatform,
+            selectedFormat,
+            verifiedOnly,
+            hasContentOnly,
+          ].join("|")}
           items={filteredPrograms}
           contentLoaded={contentLoaded}
         />

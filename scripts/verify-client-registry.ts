@@ -43,6 +43,43 @@ for (const fullProgram of fullPrograms) {
   const clientProgram = clientBySlug.get(fullProgram.slug)
   if (!clientProgram) fail(`missing ${fullProgram.slug}`)
 
+  const expectedProjection = {
+    slug: fullProgram.slug,
+    name: fullProgram.name,
+    category: fullProgram.category,
+    tags: fullProgram.tags,
+    commission: {
+      type: fullProgram.commission.type,
+      rate: fullProgram.commission.rate,
+      mode: fullProgram.commission.mode,
+      value: fullProgram.commission.value,
+      currency: fullProgram.commission.currency,
+      duration: fullProgram.commission.duration ?? undefined,
+    },
+    cookieDays: fullProgram.cookieDays,
+    shortDescription: fullProgram.shortDescription,
+    verified: fullProgram.verified,
+    network: fullProgram.network ?? null,
+    createdAt: fullProgram.createdAt,
+    source: fullProgram.source,
+    descriptionAvailable: fullProgram.description.length > 20,
+    agentPromptAvailable: fullProgram.agentPrompt.length > 10,
+    signupAvailable: Boolean(fullProgram.signupUrl),
+  }
+  const normalizedClientProgram = {
+    ...clientProgram,
+    commission: {
+      ...clientProgram.commission,
+      duration: clientProgram.commission.duration ?? undefined,
+    },
+  }
+
+  if (
+    JSON.stringify(normalizedClientProgram) !== JSON.stringify(expectedProjection)
+  ) {
+    fail(`${fullProgram.slug} projection differs from the full registry`)
+  }
+
   const checks: Array<[string, unknown, unknown]> = [
     ["name", clientProgram.name, fullProgram.name],
     ["category", clientProgram.category, fullProgram.category],

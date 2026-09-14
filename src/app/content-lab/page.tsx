@@ -86,7 +86,7 @@ export default function ContentLab() {
     const timer = window.setTimeout(async () => {
       try {
         const response = await fetch(
-          `/api/programs?q=${encodeURIComponent(query)}&limit=20`,
+          `/api/programs?q=${encodeURIComponent(query)}&limit=20&include_description=true`,
           { signal: controller.signal }
         );
         if (!response.ok) throw new Error(`Search failed: ${response.status}`);
