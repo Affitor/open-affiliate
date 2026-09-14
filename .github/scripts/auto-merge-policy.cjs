@@ -73,37 +73,48 @@ async function fetchProgramContent(
     timeoutMs = FETCH_TIMEOUT_MS,
   } = {}
 ) {
-  const response = await fetchImpl(rawUrl, {
-    headers: { Accept: "text/plain" },
-    signal: AbortSignal.timeout(timeoutMs),
-  })
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}`)
-  }
+  const controller = new AbortController()
+  const timeout = setTimeout(() => {
+    controller.abort(
+      new DOMException(`timed out after ${timeoutMs}ms`, "TimeoutError")
+    )
+  }, timeoutMs)
 
-  const contentLength = Number(response.headers.get("content-length"))
-  if (Number.isFinite(contentLength) && contentLength > maxBytes) {
-    throw new Error(`response exceeds ${maxBytes} bytes`)
-  }
-  if (!response.body) {
-    throw new Error("response has no body")
-  }
+  try {
+    const response = await fetchImpl(rawUrl, {
+      headers: { Accept: "text/plain" },
+      signal: controller.signal,
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`)
+    }
 
-  const reader = response.body.getReader()
-  const chunks = []
-  let totalBytes = 0
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-    totalBytes += value.byteLength
-    if (totalBytes > maxBytes) {
-      await reader.cancel()
+    const contentLength = Number(response.headers.get("content-length"))
+    if (Number.isFinite(contentLength) && contentLength > maxBytes) {
       throw new Error(`response exceeds ${maxBytes} bytes`)
     }
-    chunks.push(Buffer.from(value))
-  }
+    if (!response.body) {
+      throw new Error("response has no body")
+    }
 
-  return Buffer.concat(chunks, totalBytes).toString("utf8")
+    const reader = response.body.getReader()
+    const chunks = []
+    let totalBytes = 0
+    while (true) {
+      const { done, value } = await reader.read()
+      if (done) break
+      totalBytes += value.byteLength
+      if (totalBytes > maxBytes) {
+        await reader.cancel()
+        throw new Error(`response exceeds ${maxBytes} bytes`)
+      }
+      chunks.push(Buffer.from(value))
+    }
+
+    return Buffer.concat(chunks, totalBytes).toString("utf8")
+  } finally {
+    clearTimeout(timeout)
+  }
 }
 
 function evaluateAutoMergePolicy({ pullRequest, files }) {
