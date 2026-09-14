@@ -21,6 +21,7 @@ jobs:
       # declarations for @openaffiliate/scoring and tsc cannot resolve it.
       - run: npm run build --workspace @openaffiliate/scoring
       - run: npm run lint
+      - run: node --test .github/scripts/auto-merge-policy.test.cjs
       - run: npx tsc --noEmit
       - run: npm run build
       - run: npm run verify:client-registry
