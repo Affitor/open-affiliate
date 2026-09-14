@@ -68,6 +68,12 @@ interface YamlProgram {
   approval?: string
   approval_time?: string
   restrictions?: string[]
+  eligibility?: {
+    countries_allowed?: string[]
+    countries_excluded?: string[]
+    promotion_restrictions?: string[]
+    tax_forms_required?: string[]
+  }
   marketing_materials?: boolean
   api_available?: boolean
   dedicated_manager?: boolean

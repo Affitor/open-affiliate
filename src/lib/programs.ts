@@ -12,6 +12,13 @@ import registryData from "./registry.json"
  */
 export const IN_HOUSE = "in-house"
 
+export interface Eligibility {
+  countriesAllowed?: string[]
+  countriesExcluded?: string[]
+  promotionRestrictions?: string[]
+  taxFormsRequired?: string[]
+}
+
 export interface Program {
   slug: string
   name: string
@@ -55,6 +62,7 @@ export interface Program {
   approval?: string
   approvalTime?: string
   restrictions?: string[]
+  eligibility?: Eligibility
   commissionDuration?: string | null
   commissionConditions?: string | null
   attribution?: string
@@ -114,6 +122,14 @@ function mapYamlToProgram(yaml: any): Program {
     approval: yaml.approval,
     approvalTime: yaml.approval_time,
     restrictions: yaml.restrictions ?? [],
+    eligibility: yaml.eligibility
+      ? {
+          countriesAllowed: yaml.eligibility.countries_allowed ?? [],
+          countriesExcluded: yaml.eligibility.countries_excluded ?? [],
+          promotionRestrictions: yaml.eligibility.promotion_restrictions ?? [],
+          taxFormsRequired: yaml.eligibility.tax_forms_required ?? [],
+        }
+      : undefined,
     commissionDuration: yaml.commission.duration ?? null,
     commissionConditions: yaml.commission.conditions ?? null,
     attribution: yaml.attribution,

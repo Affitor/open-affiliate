@@ -261,6 +261,52 @@
       },
       "description": "Program restrictions and rules"
     },
+    "eligibility": {
+      "type": "object",
+      "description": "Geographic and jurisdictional eligibility for affiliates and promotion",
+      "properties": {
+        "countries_allowed": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "const": "global"
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Z]{2}$"
+              }
+            ]
+          },
+          "uniqueItems": true,
+          "description": "Allowed countries as ISO 3166-1 alpha-2 codes, or 'global'"
+        },
+        "countries_excluded": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z]{2}$"
+          },
+          "uniqueItems": true,
+          "description": "Excluded or sanctioned countries as ISO 3166-1 alpha-2 codes"
+        },
+        "promotion_restrictions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Jurisdictional or marketing restrictions"
+        },
+        "tax_forms_required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Tax forms required (for example, W-8BEN or W-9)"
+        }
+      },
+      "additionalProperties": false
+    },
     "marketing_materials": {
       "type": "boolean",
       "default": false,
