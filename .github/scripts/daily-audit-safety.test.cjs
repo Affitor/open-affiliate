@@ -23,6 +23,11 @@ test("daily audit launcher enforces shadow mode", () => {
   assert.match(shellScript, /only shadow mode is allowed/i)
   assert.match(shellScript, /Never merge, never push to main/i)
   assert.match(shellScript, /no ~\/kyma-api\/\.env/i)
+  assert.doesNotMatch(
+    shellScript,
+    /outcome 4/i,
+    "preamble must not reference obsolete outcome numbering"
+  )
 })
 
 test("prompt and spec forbid unattended merge and personal keys", () => {

@@ -87,7 +87,7 @@ MAX_SECONDS=1800
 SHADOW_PREAMBLE="SHADOW MODE (mandatory, enforced by daily-audit.sh):
 - Measure and open PRs only. Never merge, never push to main, never enable auto-merge.
 - Never read credentials outside this repo (no ~/kyma-api/.env or other personal key files).
-- End every run in outcome 1, 3, or 4 from docs/internal-loop-spec.md — never outcome 2.
+- Follow docs/internal-loop-spec.md shadow outcomes only; never merge — open a PR and leave it for human review.
 
 "
 
