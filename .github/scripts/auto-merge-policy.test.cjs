@@ -11,6 +11,11 @@ slug: example
 url: https://example.com
 signup_url: https://example.com/affiliate
 verified: false
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  currency: USD
 `
 
 function evaluate(overrides = {}) {
@@ -130,6 +135,23 @@ test("parses YAML and rejects duplicate or non-boolean verification", () => {
     })
     assert.equal(result.eligible, false)
   }
+})
+
+test("blocks YAML that omits commission.mode required by the schema", () => {
+  const content = validContent.replace("  mode: percentage\n", "")
+  const result = evaluate({
+    files: [
+      {
+        filename: "programs/example.yaml",
+        status: "added",
+        additions: 8,
+        deletions: 0,
+        content,
+      },
+    ],
+  })
+  assert.equal(result.eligible, false)
+  assert.match(result.reasons.join("\n"), /commission\.mode/)
 })
 
 test("requires the parsed slug to match the filename", () => {

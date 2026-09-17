@@ -1,13 +1,13 @@
 # Daily optimisation loop — spec
 
-> Status: v1, 2026-08-01. Runs unattended. Son reviews outcomes after the fact,
-> not before each run.
+> Status: v1.1, 2026-09-16 (W37-980). Runs unattended in **shadow mode** only.
+> Son reviews outcomes after the fact, not before each run.
 
 ## What it is
 
 A cron job that wakes once a day, measures the site against sources it can
 actually read, and — only when it finds something real — opens a pull request
-and decides for itself whether to merge it.
+for human review. Unattended runs never merge.
 
 ## Why it exists
 
@@ -21,7 +21,6 @@ day catches that class of thing without anyone having to look.
 
 | Source | What it answers | Access |
 |---|---|---|
-| PostHog | Web vitals per page, rageclicks, event volume, funnel drop-off | Personal API key in `~/kyma-api/.env` |
 | The live site | Status codes, response times, canonical tags, JSON-LD, broken assets | curl |
 | The rendered `<head>` | Title template collisions, missing `og:image`, missing canonical | curl + the built site on a local port |
 | The repo | Type errors, lint, build, registry drift | local |
@@ -59,20 +58,22 @@ plan" on the current subscription.
 
 ## The decision it makes
 
-Each run ends in exactly one of four outcomes, and the reasoning is written to
-the log either way:
+Each shadow run ends in exactly one of three outcomes, and the reasoning is
+written to the log either way:
 
 1. **Nothing found** — log the measurements and exit. This is the expected
    outcome most days, and a run that finds nothing is a success, not a failure.
-2. **Found, fixed, merged** — the fix is small, verified, and low-risk: a broken
-   asset, a stale artifact, a missing tag. CI green, merge.
-3. **Found, fixed, left open** — the fix touches product behaviour, copy, or
-   anything a person should look at. PR opened and left for Son.
-4. **Found, not fixed** — the issue is real but the fix needs a decision the
+2. **Found, fixed, left open** — open a PR with the fix and leave it for human
+   review. This is the only permitted outcome when a fix is made.
+3. **Found, not fixed** — the issue is real but the fix needs a decision the
    loop should not make alone. Logged with the evidence, no PR.
+
+Outcome "found, fixed, merged" is **disabled** for unattended runs (W37-980).
 
 ## What it must never do
 
+- Merge anything. Unattended runs are shadow-only; humans merge after review.
+- Read personal API keys or credential files outside this repository.
 - Merge anything with red CI. No exceptions, including "the failure looks
   unrelated".
 - Merge a change to pricing, commission data, or any program's published terms.
