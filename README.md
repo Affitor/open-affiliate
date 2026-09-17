@@ -27,13 +27,14 @@ OpenAffiliate is a community-driven, open-source registry of affiliate programs.
 - **Compare** -- Side-by-side comparison of up to 4 programs. Compare commission, cookie, payout, approval, and more.
 - **Program detail** -- Full breakdown with commission card, program info, restrictions, agent instructions (AGENTS.md), and integration snippets.
 - **Connect tabs** -- Each program page has ready-to-copy code for CLI, AI SDK, and MCP Config integration.
-- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/stripe)`
+- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/slab)`
 - **MCP server** -- Model Context Protocol server (HTTP + stdio) for AI agent integration.
 - **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
 - **REST API** -- Public JSON API, no auth required.
 - **SDK** -- TypeScript SDK for programmatic access.
 - **Submit** -- Web form to submit new programs without touching YAML.
 - **Verification** -- Automated signup URL verification via CI.
+- **Content Lab** -- Generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program, picking the AI model in the UI. Runs on Kyma API.
 
 ## Quick start
 
@@ -127,6 +128,12 @@ GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?ve
 GET /api/programs/[slug]       # Get program details
 GET /api/categories            # List categories with counts
 ```
+
+### Content Lab
+
+Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program in the registry. Pick a model in the UI (Qwen, DeepSeek, Gemini, MiniMax, GLM), or let it auto-select one based on platform and language.
+
+**Runs on [Kyma API](https://kymaapi.com?utm_source=open-affiliate).** Kyma streams the generation: `POST https://kymaapi.com/v1/chat/completions`. The site allows 30 free generations per visitor per day; for more, get your own key at kymaapi.com and call the same endpoint.
 
 ## Contributing a program
 

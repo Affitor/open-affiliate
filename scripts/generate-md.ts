@@ -74,8 +74,14 @@ type Program = {
   agents?: { prompt?: string | null; keywords?: string[] | null; use_cases?: string[] | null } | null
 }
 
-const programs = (registry as { programs: Program[] }).programs
-const categories = (registry as { categories: string[] }).categories
+const registryData = registry as {
+  generated_at: string
+  programs: Program[]
+  categories: string[]
+}
+const programs = registryData.programs
+const categories = registryData.categories
+const generatedAt = registryData.generated_at
 
 // ---------- Slugs — must match src/lib/programs.ts exactly -------------------
 
@@ -366,6 +372,13 @@ function llmsTxt(): string {
       `signup URL rather than this registry for anything a reader will act on.`,
     ].join("\n"),
     section(
+      "Freshness",
+      [
+        `This snapshot was generated ${generatedAt}.`,
+        `Use the API or MCP tools below when you need the latest deployed data.`,
+      ].join("\n"),
+    ),
+    section(
       "Verified programs",
       verified.length
         ? verified.map(row).join("\n")
@@ -375,6 +388,16 @@ function llmsTxt(): string {
     section("Networks", netLines),
     // Querying beats citing: this surface is a snapshot, the API is current.
     section("Querying this registry", INTEGRATION),
+    section(
+      "Primary pages",
+      [
+        `- [Browse programs](${BASE}/programs): Search and filter the registry.`,
+        `- [Rankings](${BASE}/rankings): Compare programs, categories, and networks.`,
+        `- [Compare](${BASE}/compare): Compare up to four programs side by side.`,
+        `- [About and data policy](${BASE}/about): Publisher identity, verification policy, and contact.`,
+        `- [Sitemap](${BASE}/sitemap.xml): Canonical index of HTML pages.`,
+      ].join("\n"),
+    ),
     section(
       "Everything else",
       [
