@@ -19,10 +19,9 @@ export function ProgramLogo({
   // meant those 404'd and rendered as a bare initial instead of the brand
   // mark. The map is generated from the logos directory by build-registry.
   //
-  // This is a server component on purpose. Two useState hooks used to turn
-  // every logo into a client island; /categories rendered ~20 of them, and
-  // each program page rendered 1 + related. The letter fallback is CSS
-  // underneath the image so a 404 still shows an initial without JS.
+  // Server component: a client wrapper around every logo used to put ~20
+  // islands on /categories and more on each program page. Letter fallback
+  // sits under the image so a missing file still shows an initial, no JS.
   const file = (logoFiles as Record<string, string>)[slug] ?? `${slug}.png`;
   const localSrc = `/logos/${file}`;
   const initial = name.charAt(0).toUpperCase();

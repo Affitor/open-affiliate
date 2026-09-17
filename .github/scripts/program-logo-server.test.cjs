@@ -19,7 +19,7 @@ const contentLab = fs.readFileSync(
 
 test("ProgramLogo is not a client island", () => {
   assert.doesNotMatch(logo, /['"]use client['"]/)
-  assert.doesNotMatch(logo, /useState/)
+  assert.doesNotMatch(logo, /useState\(/)
   assert.match(logo, /from "next\/image"/)
 })
 
