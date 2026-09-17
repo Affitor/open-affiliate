@@ -10,9 +10,9 @@ tags:
 - knowledge-management
 commission:
   type: recurring
-  rate: 50%
-  mode: percentage
-  value: 50
+  rate: 15-20%
+  mode: tiered
+  value: 20
   currency: null
   duration: null
   conditions: null
@@ -69,7 +69,7 @@ verified: true
 submitted_by: community
 created_at: 2026-04-17
 updated_at: null
-last_verified_at: 2026-04-17
+last_verified_at: 2026-08-05
 kind: affiliate
 source: community
 logo_url: https://logo.clearbit.com/customgpt.ai

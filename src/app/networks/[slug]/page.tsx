@@ -5,6 +5,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { serializeJsonLd } from "@/lib/json-ld";
 import {
   programs,
   networkToSlug,
@@ -93,7 +94,7 @@ export default async function NetworkPage({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "CollectionPage",
             name: `${network} affiliate programs`,

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Add your affiliate program to the OpenAffiliate registry. Generate a YAML file and submit via GitHub PR.",
   openGraph: {
     // openGraph.title is not templated, so it keeps the brand.
-    title: "Submit an Affiliate Program — OpenAffiliate",
+    title: "Submit an Affiliate Program: OpenAffiliate",
     description:
       "Add your affiliate program to the open registry. Community-reviewed, AI agent-ready.",
     url: "https://openaffiliate.dev/submit",

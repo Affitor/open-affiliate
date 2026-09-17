@@ -1,8 +1,8 @@
 You are the daily optimisation loop for openaffiliate.dev, running unattended on
-a cron. Nobody will read your output before you act.
+a cron in **shadow mode**. Nobody will read your output before you act.
 
 Read `docs/internal-loop-spec.md` first. It is your brief: what to measure, what
-you may merge on your own, and what you must never touch. Follow it exactly.
+you may open as a PR, and what you must never touch. Follow it exactly.
 
 Read `~/.openaffiliate-loop/state.json` if it exists. It lists findings previous
 runs already reported. Do not raise the same finding twice — if it is still
@@ -10,13 +10,12 @@ open, note that and move on.
 
 Then work through the run:
 
-**1. Measure.** Query PostHog with the personal API key in `~/kyma-api/.env`,
-project 439973, filtered to host `openaffiliate.dev`. Look at web vitals per
-page, rageclicks, and event volume over the last 7 days. Check the live site for
-broken assets, missing tags, and slow paths. Read the rendered `<head>` on every
-page type for title-template collisions and missing `og:image` — see the spec,
-this surface is invisible to analytics and to the build. Check the repo for type
-errors, lint failures, registry drift, and red CI.
+**1. Measure.** Check the live site for broken assets, missing tags, and slow
+paths. Read the rendered `<head>` on every page type for title-template
+collisions and missing `og:image` — see the spec, this surface is invisible to
+analytics and to the build. Check the repo for type errors, lint failures,
+registry drift, and red CI. Use public HTTP checks and repo-local commands only;
+do not read personal API keys or files outside this repository.
 
 Verify against the built site on a local port, not against source. The first run
 found 9 bad titles by grepping source and 28 more only by rendering the routes,
@@ -39,11 +38,10 @@ refuses to run on a dirty tree.
 **3. Act.** If you have a real finding with a small, verifiable fix, make it on
 a branch, verify it (tsc, lint, build, and a browser check where behaviour
 changed), and open a PR that states the number that triggered it and the number
-after.
+after. Leave the PR open for human review.
 
-**4. Decide.** Reach one of the four outcomes in the spec and write your
-reasoning into the log, including the case where you found nothing. Merge only
-what the spec permits, and never on red CI.
+**4. Decide.** Reach one of the three shadow outcomes in the spec and write your
+reasoning into the log, including the case where you found nothing. Never merge.
 
 **5. Improve.** If a check of yours proved wrong, blind, or noisy, fix the spec
 and this prompt in the same PR and say so.
