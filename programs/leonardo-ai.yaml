@@ -7,6 +7,8 @@ tags: [ai, ai-image, image-generation, design, creative]
 commission:
   type: one-time
   rate: "60% of first month"
+  mode: percentage
+  value: 60
   currency: USD
   duration: null
   conditions: "60% of the first month's payment per new customer"

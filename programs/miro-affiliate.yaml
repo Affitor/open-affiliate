@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: '4'
+  mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: 'GEO Tier 4: ROW - Corporate email submission'

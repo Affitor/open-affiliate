@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: "Up to 20% recurring commission for every paid referral "

@@ -69,6 +69,12 @@ const handler = createMcpHandler(
           shortDescription: p.shortDescription,
           commission: {
             type: p.commission.type,
+            // mode and value are what an agent should read. rate is the raw
+            // string the source wrote and needs parsing; mode "unknown" says
+            // outright that no figure was published, which is a better answer
+            // than handing back the word "varies".
+            mode: p.commission.mode,
+            value: p.commission.value,
             rate: p.commission.rate,
             currency: p.commission.currency,
           },

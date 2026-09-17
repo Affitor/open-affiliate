@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $1
+  mode: flat
+  value: 1
   currency: USD
   duration: null
   conditions: Earn $1,000 on the 12 month Payment Plan for the FDN Program.

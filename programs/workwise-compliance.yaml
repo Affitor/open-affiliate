@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Refer and earn 25% of initial order and 10% renewal revenue.  Resell with 50% profit share!

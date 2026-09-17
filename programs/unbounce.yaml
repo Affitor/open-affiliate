@@ -12,6 +12,8 @@ tags:
 commission:
   type: recurring
   rate: 35%
+  mode: percentage
+  value: 35
   currency: USD
   duration: 12 months
   conditions: Earn up to 35% commissions on all customer transactions in the first year!

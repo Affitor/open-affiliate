@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: 10% earned on first two sales per customer

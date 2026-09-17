@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: lifetime
   conditions: Earn 20% commission for the customers lifetime with Signable!

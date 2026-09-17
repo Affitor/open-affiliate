@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: 30% commission on first subscription payment of referred customers.

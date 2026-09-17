@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: 12 months
   conditions: Affiliates can claim 50.0% commission for up to 1 year!

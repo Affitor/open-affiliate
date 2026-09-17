@@ -6,6 +6,7 @@ import { Nav } from "@/components/nav";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { serializeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,8 +27,16 @@ export const metadata: Metadata = {
   description:
     "Discover, compare, and integrate affiliate programs. Built for developers and AI agents. Open source, community-driven.",
   metadataBase: new URL("https://openaffiliate.dev"),
+  // Self-referencing canonical on every page. Without it, the same listing
+  // reachable at /programs and /programs?page=1 splits its ranking and
+  // citation signals across both. "./" resolves against metadataBase per
+  // route, so each page canonicalises to itself; pages that need something
+  // else override alternates.canonical themselves.
+  alternates: {
+    canonical: "./",
+  },
   openGraph: {
-    title: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    title: "OpenAffiliate: The Open Registry of Affiliate Programs",
     description:
       "Discover, compare, and integrate affiliate programs. Built for developers and AI agents.",
     url: "https://openaffiliate.dev",
@@ -57,7 +66,9 @@ function Footer() {
               {[
                 { label: "Programs", href: "/programs" },
                 { label: "Categories", href: "/categories" },
-                { label: "Content Lab", href: "/lab" },
+                // The page is /content-lab. /lab has been a 404 in the footer
+                // of every page on the site.
+                { label: "Content Lab", href: "/content-lab" },
                 { label: "Submit", href: "/submit" },
                 { label: "Docs", href: "/docs" },
                 { label: "Changelog", href: "/changelog" },
@@ -129,6 +140,16 @@ function Footer() {
                   Feedback
                 </Link>
               </li>
+              {/* An About page reachable from every page is what turns an
+                  anonymous domain into an identifiable publisher. */}
+              <li>
+                <Link
+                  href="/about"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  About &amp; Contact
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -154,6 +175,54 @@ function Footer() {
   );
 }
 
+/**
+ * Site-wide entity markup.
+ *
+ * AI engines resolve a brand through schema before they will cite it as a
+ * source. Without an Organization node there was nothing tying openaffiliate.dev
+ * to a name, a logo, or the GitHub and npm identities that prove it is real —
+ * the site scored 33/100 on structured data and 50/100 on trust.
+ *
+ * sameAs is the part that does the work: it links this domain to identities an
+ * engine can already verify independently.
+ */
+const SITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://openaffiliate.dev/#organization",
+      name: "OpenAffiliate",
+      url: "https://openaffiliate.dev",
+      logo: "https://openaffiliate.dev/logo.svg",
+      description:
+        "The open registry of affiliate programs. Community-maintained, MIT licensed, built for developers and AI agents.",
+      sameAs: [
+        "https://github.com/Affitor/open-affiliate",
+        "https://www.npmjs.com/package/openaffiliate",
+        "https://www.npmjs.com/package/openaffiliate-mcp",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://openaffiliate.dev/#website",
+      url: "https://openaffiliate.dev",
+      name: "OpenAffiliate",
+      publisher: { "@id": "https://openaffiliate.dev/#organization" },
+      inLanguage: "en",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: {
+          "@type": "EntryPoint",
+          urlTemplate:
+            "https://openaffiliate.dev/programs?q={search_term_string}",
+        },
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -165,6 +234,14 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="describedby" href="/llms.txt" type="text/plain" />
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(SITE_JSON_LD) }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <PostHogProvider>
           <ThemeProvider>

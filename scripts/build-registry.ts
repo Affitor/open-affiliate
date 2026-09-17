@@ -4,7 +4,22 @@ import { parse } from "yaml"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
+const CLIENT_OUTPUT_FILE = join(process.cwd(), "src", "lib", "client-registry.json")
 const INDEX_FILE = join(process.cwd(), "src", "lib", "registry-index.json")
+const LOGOS_DIR = join(process.cwd(), "public", "logos")
+const LOGO_MAP_FILE = join(process.cwd(), "src", "lib", "logo-files.json")
+
+/**
+ * Slugs allowed to keep a placeholder signup_url, frozen when the rule landed.
+ * See the check in validateProgram.
+ */
+const SIGNUP_URL_DEBT = new Set<string>(
+  (
+    JSON.parse(
+      readFileSync(join(process.cwd(), "schema", "signup-url-debt.json"), "utf8")
+    ) as { slugs: string[] }
+  ).slugs
+)
 
 const REQUIRED_FIELDS = [
   "name",
@@ -37,6 +52,8 @@ interface YamlProgram {
   commission: {
     type: string
     rate: string | number
+    mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
+    value: number | null
     currency: string
     duration?: string | null
     conditions?: string | null
@@ -87,6 +104,53 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
       `Slug mismatch in ${filename}: expected "${expectedSlug}", got "${data.slug}"`
     )
   }
+
+  const commission = data.commission as Record<string, unknown> | undefined
+  if (commission) {
+    const MODES = ["percentage", "flat", "tiered", "hybrid", "unknown"]
+    if (!MODES.includes(String(commission.mode))) {
+      throw new Error(
+        `${filename}: commission.mode must be one of ${MODES.join(", ")} — got "${commission.mode}". ` +
+          `Use "unknown" when no figure has been published rather than leaving it out.`
+      )
+    }
+    if (commission.mode !== "unknown" && commission.value == null) {
+      throw new Error(
+        `${filename}: commission.mode is "${commission.mode}" but value is null. ` +
+          `Either give the number a reader compares on, or set mode to unknown.`
+      )
+    }
+  }
+
+  // 208 programs reached the registry with a signup_url that was just the
+  // homepage, most of them byte-identical to `url`. The field looked complete
+  // and told a reader nothing.
+  //
+  // A ratchet rather than a flag day: those 208 are frozen in
+  // schema/signup-url-debt.json so the build still passes, and anything new
+  // fails. The list can shrink, never grow. Fixing a link means deleting a
+  // slug from it.
+  const signup = typeof data.signup_url === "string" ? data.signup_url.trim() : ""
+  if (signup && !SIGNUP_URL_DEBT.has(String(data.slug))) {
+    const site = typeof data.url === "string" ? data.url.trim() : ""
+    const strip = (u: string) => u.replace(/\/+$/, "")
+    if (strip(signup) === strip(site)) {
+      throw new Error(
+        `${filename}: signup_url is identical to url. Link to the affiliate or partner page, not the website.`
+      )
+    }
+    try {
+      const path = new URL(signup).pathname
+      if (path === "" || path === "/") {
+        throw new Error(
+          `${filename}: signup_url points at the bare homepage. Link to the affiliate or partner page.`
+        )
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message.includes("bare homepage")) throw err
+      throw new Error(`${filename}: signup_url is not a valid URL — "${signup}"`)
+    }
+  }
 }
 
 function buildRegistry(): void {
@@ -132,10 +196,50 @@ function buildRegistry(): void {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
 
+  // Client-side catalog pages need filtering and comparison fields, not the
+  // long descriptions, agent prompts, restrictions, or use cases in the full
+  // registry. Importing registry.json from a Client Component previously put
+  // a 1.3 MB parsed JSON chunk on every route through the global search bar.
+  // Keep a deliberately small projection for the three catalog UIs.
+  const clientRegistry = {
+    generated_at: registry.generated_at,
+    count: programs.length,
+    categories,
+    programs: programs.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      category: p.category,
+      tags: p.tags ?? [],
+      commission: {
+        type: p.commission.type,
+        rate: p.commission.rate,
+        mode: p.commission.mode,
+        value: p.commission.value,
+        currency: p.commission.currency,
+        duration: p.commission.duration,
+      },
+      cookieDays: p.cookie_days,
+      shortDescription: p.short_description,
+      verified: p.verified ?? false,
+      network: p.network ?? null,
+      createdAt: p.created_at ?? "",
+      source: p.source,
+      descriptionAvailable: p.description.length > 20,
+      agentPromptAvailable: p.agents.prompt.length > 10,
+      signupAvailable: Boolean(p.signup_url),
+    })),
+  }
+
+  writeFileSync(
+    CLIENT_OUTPUT_FILE,
+    JSON.stringify(clientRegistry, null, 2) + "\n"
+  )
+
   console.log(`Registry built successfully:`)
   console.log(`  ${programs.length} programs loaded`)
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
   console.log(`  Output: src/lib/registry.json`)
+  console.log(`  Client output: src/lib/client-registry.json`)
 
   // Inline index build — no subprocess. Never fails the build: if any step
   // here throws, we warn and continue so Vercel deploys still succeed. The
@@ -192,6 +296,44 @@ function buildIndex(programs: YamlProgram[]): void {
   console.log(
     `  Index: ${bySlug.length} slugs, ${Object.keys(byDomain).length} domains, ${Object.keys(byAlias).length} aliases`
   )
+
+  buildLogoMap()
+}
+
+/**
+ * Map slug -> logo filename, for every logo that is not a plain .png.
+ *
+ * ProgramLogo used to hardcode `/logos/${slug}.png`. 48 programs store their
+ * logo as .jpg, .webp or .svg, so those requests 404 and the component fell
+ * back to rendering the first letter of the name — the brand mark never
+ * appeared, on every page that lists them.
+ *
+ * Reading the directory rather than hardcoding an extension list means a logo
+ * saved in some future format works without touching the component.
+ */
+function buildLogoMap(): void {
+  const overrides: Record<string, string> = {}
+  let png = 0
+
+  for (const file of readdirSync(LOGOS_DIR)) {
+    const dot = file.lastIndexOf(".")
+    if (dot <= 0) continue
+    const slug = file.slice(0, dot)
+    if (file.endsWith(".png")) {
+      png++
+      continue
+    }
+    // A slug with both foo.png and foo.jpg keeps the .png the component
+    // already asks for; only record it when there is no .png to fall back on.
+    overrides[slug] = file
+  }
+
+  for (const slug of Object.keys(overrides)) {
+    if (readdirSync(LOGOS_DIR).includes(`${slug}.png`)) delete overrides[slug]
+  }
+
+  writeFileSync(LOGO_MAP_FILE, JSON.stringify(overrides, null, 2) + "\n")
+  console.log(`  Logos: ${png} .png, ${Object.keys(overrides).length} needing an override`)
 }
 
 buildRegistry()

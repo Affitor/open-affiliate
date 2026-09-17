@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: Earn 50% commission per paid customer (avg transaction $200)

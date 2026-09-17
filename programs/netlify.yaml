@@ -7,6 +7,8 @@ tags: [hosting, deployment, jamstack, serverless, cdn, frontend]
 commission:
   type: recurring
   rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "12 months"
   conditions: "Applies to referred paid plan subscriptions (Pro and above) for the first 12 months"

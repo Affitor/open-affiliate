@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: Referral rewards on IT training plan purchases

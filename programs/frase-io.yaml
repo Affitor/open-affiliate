@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: lifetime
   conditions: 30% lifetime recurring commission on all referred paid subscriptions via FirstPromoter.

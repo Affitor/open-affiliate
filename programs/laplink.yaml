@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: 25% Commission on all approved orders

@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: Earn 5% of revenue on your customer's orders for the first 6 months

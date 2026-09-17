@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: lifetime
   conditions: "Agency Partners: Earn up to 30% for the lifetime value of the client.  Affiliates: Earn 15% for the lifetime value of the client."

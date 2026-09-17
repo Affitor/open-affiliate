@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: "Affiliates: up to 30% + $50 first sale. Agencies: 25% rev‑share (up to 3 yrs) + bounties."

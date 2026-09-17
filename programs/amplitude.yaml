@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 7%
+  mode: percentage
+  value: 7
   currency: USD
   duration: null
   conditions: Adneto -- 7% Revenue Share from Plus Sub Revenue from Visa Offer

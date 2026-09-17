@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: 12 months
   conditions: Earn 5% commission on each sale your referrals make for 12 months. Average $3000 per customer.

@@ -8,6 +8,8 @@ tags:
 commission:
   type: recurring
   rate: 15%
+  mode: percentage
+  value: 15
   currency: USD
   duration: 12 months
   conditions: 15% recurring commission via Impact on referred paid plans for 12 months.

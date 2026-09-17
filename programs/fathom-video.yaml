@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: 12 months
   conditions: 25% recurring commission on all referred paid plans for the first 12 months.

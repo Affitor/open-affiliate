@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: lifetime
   conditions: Earn 10% lifetime recurring commission — that's up to $9,000 upfront per annual client

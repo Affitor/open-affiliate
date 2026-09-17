@@ -8,6 +8,8 @@ tags:
 commission:
   type: recurring
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: 12 months
   conditions: Earn 50% commission on new subscriptions!

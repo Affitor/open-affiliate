@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 0%
+  mode: percentage
+  value: 0
   currency: USD
   duration: null
   conditions: 0%

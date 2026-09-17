@@ -4,12 +4,20 @@ import { TrackPageView } from "@/components/track-page-view";
 import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getCategoryStats, categoryToSlug } from "@/lib/programs";
+import { getCategoryStats, categoryToSlug, commissionDisplay} from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Categories",
   description:
     "Browse affiliate programs by category. Compare commission rates across AI, SaaS, E-Commerce, Developer Tools, and 20+ more categories.",
+  openGraph: {
+    title: "Affiliate Program Categories: OpenAffiliate",
+    description:
+      "Browse affiliate programs by category and compare commissions, cookies, and verified terms.",
+    url: "https://openaffiliate.dev/categories",
+    siteName: "OpenAffiliate",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function CategoriesPage() {
@@ -70,7 +78,7 @@ export default function CategoriesPage() {
                 size={20}
               />
               <span className="text-xs text-muted-foreground truncate">
-                Top: {cat.topProgram.name} ({cat.topProgram.commission.rate})
+                Top: {cat.topProgram.name} ({commissionDisplay(cat.topProgram.commission)})
               </span>
             </div>
           </Link>

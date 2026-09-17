@@ -7,6 +7,8 @@ tags: [hosting, deployment, nextjs, infrastructure, ai, ui-generation]
 commission:
   type: hybrid
   rate: "$5 per lead + 30%"
+  mode: hybrid
+  value: 30
   currency: USD
   duration: "6 months"
   conditions: "$5 per qualified lead plus 30% of subscription revenue for 6 months. v0 product affiliate via Dub Partners."

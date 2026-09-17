@@ -7,6 +7,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: Earn 12.5% for Net New Referral!

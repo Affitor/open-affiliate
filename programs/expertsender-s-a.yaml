@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: 12 months
   conditions: Earn up to $300 for a lead and 30% of for the first 12 months of the customers subscription!

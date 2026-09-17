@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: $150
+  mode: flat
+  value: 150
   currency: USD
   duration: 12 months
   conditions: $150 per month for each referred annual plus plan subscription

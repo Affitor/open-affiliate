@@ -32,7 +32,8 @@ import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
-import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE } from "@/lib/programs";
+import { serializeJsonLd } from "@/lib/json-ld";
+import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, commissionUnknown} from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -54,13 +55,29 @@ export async function generateMetadata({
   const program = getProgram(slug);
   if (!program) return { title: "Program Not Found" };
 
-  const rate = typeof program.commission.rate === "number" ? `${program.commission.rate}%` : program.commission.rate;
-  const title = `${program.name} Affiliate Program — ${rate} ${program.commission.type} | OpenAffiliate`;
+  // "11x Affiliate Program — Not published one-time" reads like a defect.
+  // When there is no figure, say the commission type and leave it there.
+  const rate = commissionDisplay(program.commission);
+  const rateForTitle = commissionUnknown(program.commission) ? "" : `${rate} `;
+  const title = `${program.name} Affiliate Program — ${rateForTitle}${program.commission.type} | OpenAffiliate`;
   const description = `${program.shortDescription}. ${rate} ${program.commission.type} commission, ${program.cookieDays}-day cookie. Join the ${program.name} affiliate program.`;
 
   return {
     title,
     description,
+    // Points a machine reader at the markdown twin of this page, which carries
+    // the agents: guidance in a form it can lift directly. Preferred over
+    // putting .md URLs in the sitemap: those are alternate representations of
+    // a page, not separate pages to index.
+    // canonical must be repeated here: setting `alternates` at all replaces
+    // the inherited object from the root layout, so declaring only `types`
+    // silently dropped the canonical tag from every program page.
+    alternates: {
+      canonical: `/programs/${slug}`,
+      types: {
+        "text/markdown": `https://openaffiliate.dev/programs/${slug}.md`,
+      },
+    },
     openGraph: {
       title,
       description,
@@ -70,7 +87,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary",
-      title: `${program.name} — ${program.commission.rate} ${program.commission.type}`,
+      title: `${program.name}: ${commissionDisplay(program.commission)} ${program.commission.type}`,
       description,
     },
   };
@@ -173,24 +190,26 @@ export default async function ProgramPage({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "Product",
             name: `${program.name} Affiliate Program`,
             description: program.shortDescription,
             url: `https://openaffiliate.dev/programs/${program.slug}`,
             brand: { "@type": "Brand", name: program.name },
+            // Provenance. AI platforms weight recency and discount pages they
+            // cannot date, and they cite anonymous content less. These say who
+            // published the entry and when it was last checked — the same
+            // dates the page and the .md twin already show a reader.
+            ...(program.createdAt ? { datePublished: program.createdAt } : {}),
+            ...(program.lastVerifiedAt
+              ? { dateModified: program.lastVerifiedAt }
+              : {}),
+            publisher: { "@id": "https://openaffiliate.dev/#organization" },
             offers: {
               "@type": "Offer",
               category: "Affiliate Program",
-              description: `${program.commission.rate} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
-            },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: Math.min(score / 20, 5).toFixed(1),
-              bestRating: "5",
-              worstRating: "1",
-              ratingCount: categoryPrograms.length,
+              description: `${commissionDisplay(program.commission)} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
             },
           }),
         }}
@@ -255,7 +274,7 @@ export default async function ProgramPage({
         </div>
         <StatBadge
           icon={<DollarSign className="h-3 w-3" />}
-          label={`${program.commission.rate}% ${commissionLabel(program.commission)}`}
+          label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}`}
         />
         <StatBadge
           icon={<Clock className="h-3 w-3" />}
@@ -438,7 +457,7 @@ export default async function ProgramPage({
             <SidebarRow
               label="Rate"
               icon={<DollarSign className="h-3 w-3" />}
-              value={<>{program.commission.rate}% <span className="text-xs text-muted-foreground font-normal">{commissionLabel(program.commission)}</span></>}
+              value={<>{commissionDisplay(program.commission)} <span className="text-xs text-muted-foreground font-normal">{commissionLabel(program.commission)}</span></>}
             />
 
             {program.commissionDuration && (

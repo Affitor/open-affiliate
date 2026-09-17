@@ -7,6 +7,8 @@ tags:
 commission:
   type: one-time
   rate: 4%
+  mode: percentage
+  value: 4
   currency: USD
   duration: null
   conditions: Earn 4% for 18 months

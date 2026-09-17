@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: $300
+  mode: flat
+  value: 300
   currency: USD
   duration: null
   conditions: Earn $300 USD for every successful AISQ Meteor referral.

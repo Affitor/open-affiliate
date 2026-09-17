@@ -7,6 +7,8 @@ tags: [ai, ai-scheduling, project-management, productivity, calendar]
 commission:
   type: hybrid
   rate: "$75 or 20%"
+  mode: hybrid
+  value: 20
   currency: USD
   duration: "24 months"
   conditions: "$75 per referral or 20% recurring for 2 years"

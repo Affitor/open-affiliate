@@ -7,6 +7,8 @@ tags: [email, transactional-email, smtp, deliverability, developer-tools]
 commission:
   type: recurring
   rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "12 months"
   conditions: "20% recurring for 12 months on all charges including overages and add-ons. Managed through Rewardful."

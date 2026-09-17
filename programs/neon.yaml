@@ -7,6 +7,8 @@ tags: [database, postgres, serverless, infrastructure]
 commission:
   type: one-time
   rate: "$20"
+  mode: flat
+  value: 20
   currency: USD
   duration: null
   conditions: "$20 per referred user who spends $20+. No cap. Payouts via GitHub Sponsors monthly. Limited to accepted open source projects."

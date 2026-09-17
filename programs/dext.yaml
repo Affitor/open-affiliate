@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: ✨ Earn 50% - 70% on the first 6 months' subscription revenue (£70-£500 per referral)!

@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: '10'
+  mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: 10 Referral in the last month, earn 10% commission

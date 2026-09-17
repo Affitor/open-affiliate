@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 80%
+  mode: percentage
+  value: 80
   currency: USD
   duration: 12 months
   conditions: Get 80% on the first 12 months for every referred subscriber.

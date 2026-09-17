@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Earn 10% in Year 1 Annual Contract Value (ACV) **Our Average ACV is ~$20K**

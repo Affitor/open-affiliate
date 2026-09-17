@@ -7,6 +7,8 @@ tags: [ai, ai-website-builder, landing-page, startup, mvp]
 commission:
   type: recurring
   rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "12 months"
   conditions: "20% recurring for 12 months per referral"

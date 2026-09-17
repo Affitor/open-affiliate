@@ -9,6 +9,8 @@ tags:
 commission:
   type: recurring
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: lifetime
   conditions: 10% Revenue Share - for the lifetime of the customer

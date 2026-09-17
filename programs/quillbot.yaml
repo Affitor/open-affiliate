@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Earn 10% for monthly plans, 15% for semi-annual plans, and 20% for annual plans

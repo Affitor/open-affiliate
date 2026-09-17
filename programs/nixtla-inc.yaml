@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: 12 months
   conditions: Earn up to 20% revenue share for the first year of customer purchases. Average 50k customer spend.

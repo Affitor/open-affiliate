@@ -7,6 +7,8 @@ tags: [ai, ai-email, cold-outreach, sales, automation]
 commission:
   type: tiered
   rate: "15-35%"
+  mode: tiered
+  value: 35
   currency: USD
   duration: lifetime
   conditions: "Tiered by conversions: Bronze 20%, Silver 30%, Gold 35% lifetime recurring"

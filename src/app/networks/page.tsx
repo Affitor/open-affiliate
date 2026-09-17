@@ -4,12 +4,20 @@ import { TrackPageView } from "@/components/track-page-view";
 import { Network } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getNetworkStats, networkToSlug } from "@/lib/programs";
+import { getNetworkStats, networkToSlug, commissionDisplay} from "@/lib/programs";
 
 export const metadata: Metadata = {
-  title: "Affiliate Networks — OpenAffiliate",
+  title: "Affiliate Networks",
   description:
     "Compare affiliate networks by program count, average commission, and top programs. PartnerStack, Impact, ShareASale, and more.",
+  openGraph: {
+    title: "Affiliate Networks: OpenAffiliate",
+    description:
+      "Compare affiliate networks by program count, commission, and verified programs.",
+    url: "https://openaffiliate.dev/networks",
+    siteName: "OpenAffiliate",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function NetworksPage() {
@@ -73,7 +81,7 @@ export default function NetworksPage() {
                 size={20}
               />
               <span className="text-xs text-muted-foreground truncate">
-                Top: {net.topProgram.name} ({net.topProgram.commission.rate})
+                Top: {net.topProgram.name} ({commissionDisplay(net.topProgram.commission)})
               </span>
             </div>
           </Link>

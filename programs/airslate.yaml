@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $1000
+  mode: flat
+  value: 1000
   currency: USD
   duration: null
   conditions: Earn $1000 per referred customer!

@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $100
+  mode: flat
+  value: 100
   currency: AUD
   duration: null
   conditions: Earn $100 for each new customer you bring in (customer revenue must total at least $30)

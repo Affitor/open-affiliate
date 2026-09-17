@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: lifetime
   conditions: 25% of every sale, recurring over the lifetime of the customer

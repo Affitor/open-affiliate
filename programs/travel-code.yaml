@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: $100
+  mode: flat
+  value: 100
   currency: USD
   duration: null
   conditions: Earn $100 for every new client who buys any subscription | $5,000 bonus when your referral hits $300K in travel spend

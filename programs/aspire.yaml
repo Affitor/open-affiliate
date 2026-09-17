@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $100
+  mode: flat
+  value: 100
   currency: USD
   duration: null
   conditions: Get US100 per successful referral for new Aspire account sign ups

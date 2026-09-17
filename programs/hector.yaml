@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: 12 months
   conditions: Earn 5% commission on all paid customers for the first 12 months (ACV $1,000-$3,500+)

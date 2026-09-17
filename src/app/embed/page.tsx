@@ -3,7 +3,7 @@ import type { JSX } from "react"
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Embed — OpenAffiliate",
+  title: "Embed",
   description:
     "Embed live OpenAffiliate data on your site. SVG badges for READMEs, interactive web components for partner pages. Free for public use, premium tiers unlock advanced features.",
 }

@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 25%
+  mode: percentage
+  value: 25
   currency: USD
   duration: null
   conditions: Earn 25%-45% of revenue for first 12 months of a new customer

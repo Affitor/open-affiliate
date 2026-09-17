@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $250
+  mode: flat
+  value: 250
   currency: USD
   duration: null
   conditions: Earn $250 on every referral that signs on with us

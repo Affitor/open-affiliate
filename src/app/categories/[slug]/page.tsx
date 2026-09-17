@@ -5,13 +5,14 @@ import { TrackPageView } from "@/components/track-page-view";
 import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { serializeJsonLd } from "@/lib/json-ld";
 import {
   programs,
   categories,
   categoryToSlug,
   slugToCategory,
   parseCommissionRate,
-  commissionLabel,
+  commissionLabel,  commissionDisplay
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -28,17 +29,26 @@ export async function generateMetadata({
   if (!category) return { title: "Category Not Found" };
 
   const catPrograms = programs.filter((p) => p.category === category);
-  const title = `${category} Affiliate Programs — ${catPrograms.length} Programs | OpenAffiliate`;
+  // No brand suffix: the root layout's title template appends
+  // " | OpenAffiliate". openGraph.title is not templated, so it adds its own.
+  const title = `${category} Affiliate Programs — ${catPrograms.length} Programs`;
   const description = `Compare ${catPrograms.length} ${category.toLowerCase()} affiliate programs. Find the highest-paying commissions, cookie durations, and payout terms.`;
 
   return {
     title,
     description,
+    alternates: {
+      canonical: `/categories/${slug}`,
+      types: { "text/markdown": `https://openaffiliate.dev/categories/${slug}.md` },
+    },
     openGraph: {
-      title,
+      title: `${title} | OpenAffiliate`,
       description,
       url: `https://openaffiliate.dev/categories/${slug}`,
       siteName: "OpenAffiliate",
+      // Nested metadata is replaced, not merged, so declaring openGraph here
+      // drops the root opengraph-image and these pages shared with no preview.
+      images: ["/opengraph-image"],
     },
   };
 }
@@ -54,11 +64,11 @@ export default async function CategoryPage({
 
   const catPrograms = [...programs.filter((p) => p.category === category)].sort(
     (a, b) =>
-      parseCommissionRate(b.commission.rate) -
-      parseCommissionRate(a.commission.rate)
+      parseCommissionRate(b.commission) -
+      parseCommissionRate(a.commission)
   );
 
-  const rates = catPrograms.map((p) => parseCommissionRate(p.commission.rate));
+  const rates = catPrograms.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
   const avgCookie =
@@ -68,10 +78,37 @@ export default async function CategoryPage({
   const recurringCount = catPrograms.filter(
     (p) => p.commission.type === "recurring"
   ).length;
+  const verifiedCount = catPrograms.filter((p) => p.verified).length;
+  const answer = `${catPrograms.length} ${category} affiliate programs, including ${recurringCount} recurring and ${verifiedCount} verified entries.`;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <TrackPageView type="category_view" slug={slug} metadata={{ category }} />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            name: `${category} affiliate programs`,
+            description: answer,
+            url: `https://openaffiliate.dev/categories/${slug}`,
+            isPartOf: { "@id": "https://openaffiliate.dev/#website" },
+            publisher: { "@id": "https://openaffiliate.dev/#organization" },
+            mainEntity: {
+              "@type": "ItemList",
+              numberOfItems: catPrograms.length,
+              itemListElement: catPrograms.slice(0, 20).map((program, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url: `https://openaffiliate.dev/programs/${program.slug}`,
+                name: program.name,
+              })),
+            },
+          }),
+        }}
+      />
       {/* Breadcrumb */}
       <Link
         href="/categories"
@@ -85,7 +122,7 @@ export default async function CategoryPage({
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{category}</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          {catPrograms.length} affiliate programs ranked by commission
+          {answer}
         </p>
       </div>
 
@@ -208,7 +245,7 @@ export default async function CategoryPage({
                   </td>
                   <td className="py-3 px-3">
                     <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                      {program.commission.rate}
+                      {commissionDisplay(program.commission)}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">

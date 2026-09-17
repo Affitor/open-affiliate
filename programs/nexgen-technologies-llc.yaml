@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 15%
+  mode: percentage
+  value: 15
   currency: USD
   duration: null
   conditions: Earn commission (1-15%) in our affiliate, referral and agent programs

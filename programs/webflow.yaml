@@ -7,6 +7,8 @@ tags: [no-code, website-builder, cms, design, hosting, visual-development]
 commission:
   type: recurring
   rate: "50%"
+  mode: percentage
+  value: 50
   currency: USD
   duration: "12 months"
   conditions: "Earn 50% of the referred customer's subscription revenue for the first 12 months of their paid plan"

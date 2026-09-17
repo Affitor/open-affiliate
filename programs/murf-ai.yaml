@@ -7,6 +7,8 @@ tags: [ai, ai-voice, voiceover, text-to-speech, video]
 commission:
   type: recurring
   rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "24 months"
   conditions: "20% recurring commission for 24 months per referral"

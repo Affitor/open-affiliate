@@ -8,6 +8,8 @@ tags:
 commission:
   type: recurring
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: 12 months
   conditions: Get 30% commission on the first payment from every new customer you refer to Toggl Track.

@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: 12 months
   conditions: Earn up to 30% recurring commission for the first 12 months of each paying customer you refer

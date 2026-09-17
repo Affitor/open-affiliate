@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: 35%
+  mode: percentage
+  value: 35
   currency: USD
   duration: null
   conditions: Earn upto 35% commission for each new customer you bring in

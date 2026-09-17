@@ -27,8 +27,8 @@ import {
   affiliateScore,
   type SortOption,
   type Program,
-  commissionLabel,
-} from "@/lib/programs";
+  commissionLabel,  commissionDisplay
+} from "@/lib/client-programs";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
 
@@ -101,7 +101,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           Score: {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-[11px]">
-          {program.commission.rate}{" "}
+          {commissionDisplay(program.commission)}{" "}
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
@@ -151,7 +151,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-[11px]">
-          {program.commission.rate}{" "}
+          {commissionDisplay(program.commission)}{" "}
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
@@ -167,9 +167,43 @@ function ProgramRowList({ program }: { program: Program }) {
   );
 }
 
+// ProgramsContent reads useSearchParams, so the whole subtree bails out of
+// prerendering. Without a fallback the served HTML had an empty <main>, which
+// left the 430px footer sitting near the top of the viewport until the client
+// filled the list in and shoved it down — 0.53 CLS. The skeleton mirrors the
+// real layout and is a viewport tall, so the footer starts below the fold and
+// the swap shifts nothing that is on screen.
+function ProgramsSkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl px-6 py-10 min-h-dvh">
+      <div className="mb-8">
+        <h1 className="text-2xl font-bold tracking-tight">Programs</h1>
+        <div className="mt-2 h-4 w-72 animate-pulse rounded bg-muted/30" />
+      </div>
+      <div className="mb-4 flex flex-wrap items-center gap-2">
+        {[176, 96, 136, 96, 72, 96].map((w, i) => (
+          <div
+            key={i}
+            className="h-9 animate-pulse rounded-lg bg-muted/30"
+            style={{ width: w }}
+          />
+        ))}
+      </div>
+      <div className="space-y-2">
+        {Array.from({ length: 12 }, (_, i) => (
+          <div
+            key={i}
+            className="h-16 animate-pulse rounded-lg bg-muted/30"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function ProgramsPage() {
   return (
-    <Suspense>
+    <Suspense fallback={<ProgramsSkeleton />}>
       <ProgramsContent />
     </Suspense>
   );
@@ -194,9 +228,21 @@ function ProgramsContent() {
     (searchParams.get("sort") as SortOption) ?? "relevance"
   );
   const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState<number>(25);
   const [view, setView] = usePersistedView();
+
+  // Pagination lives in the URL, not in React state.
+  //
+  // It used to be useState, so the URL never changed as you paged through.
+  // Open a program from page 3, press back, and you landed on page 1 having
+  // lost your place — with 760 programs over 31 pages that happens on every
+  // single visit that goes past the first page. It showed up in analytics as
+  // rageclicks on the pagination controls: 48 of the 70 recorded across the
+  // whole site, all on this page.
+  const page = Math.max(1, Number(searchParams.get("page")) || 1);
+  const sizeParam = Number(searchParams.get("size"));
+  const pageSize = PAGE_SIZE_OPTIONS.includes(sizeParam as (typeof PAGE_SIZE_OPTIONS)[number])
+    ? sizeParam
+    : 25;
 
   // Sync state to URL
   const syncUrl = useCallback(
@@ -211,6 +257,34 @@ function ProgramsContent() {
     [router]
   );
 
+  /**
+   * Same names and call signatures as the useState setters they replace, so
+   * every existing call site keeps working — they now write the URL instead.
+   * Filters are read from current state so paging never drops them.
+   */
+  const filterParams = useCallback(
+    () => ({
+      q: query,
+      category: selectedCategory,
+      type: selectedType,
+      network: selectedNetwork,
+      sort: sort === "relevance" ? "" : sort,
+      size: pageSize === 25 ? "" : String(pageSize),
+    }),
+    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize]
+  );
+
+  const setPage = useCallback(
+    (p: number) => syncUrl({ ...filterParams(), page: p <= 1 ? "" : String(p) }),
+    [syncUrl, filterParams]
+  );
+
+  const setPageSize = useCallback(
+    (size: number) =>
+      syncUrl({ ...filterParams(), size: size === 25 ? "" : String(size), page: "" }),
+    [syncUrl, filterParams]
+  );
+
   const updateFilters = useCallback(
     (updates: Partial<{ q: string; category: string; type: string; network: string; sort: string }>) => {
       const next = {
@@ -219,12 +293,15 @@ function ProgramsContent() {
         type: updates.type ?? selectedType,
         network: updates.network ?? selectedNetwork,
         sort: updates.sort ?? sort,
+        // Keep the reader's page-size choice; drop page, since a changed
+        // filter makes the old page number meaningless.
+        size: pageSize === 25 ? "" : String(pageSize),
       };
       // Don't include defaults in URL
       if (next.sort === "relevance") next.sort = "";
       syncUrl(next);
     },
-    [query, selectedCategory, selectedType, selectedNetwork, sort, syncUrl]
+    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize, syncUrl]
   );
 
   const filtered = useMemo(
@@ -258,33 +335,27 @@ function ProgramsContent() {
 
   const handleSearch = (value: string) => {
     setQuery(value);
-    setPage(1);
     updateFilters({ q: value });
   };
   const handleCategory = (cat: string) => {
     setSelectedCategory(cat);
-    setPage(1);
     updateFilters({ category: cat });
     if (cat) track("filter", { metadata: { filter: "category", value: cat } });
   };
   const handleType = (type: string) => {
     setSelectedType(type);
-    setPage(1);
     updateFilters({ type });
     if (type) track("filter", { metadata: { filter: "type", value: type } });
   };
   const handleSort = (s: string) => {
     setSort(s as SortOption);
-    setPage(1);
     updateFilters({ sort: s });
   };
-  const handlePageSize = (size: number) => {
-    setPageSize(size);
-    setPage(1);
-  };
+  // setPageSize already resets the page. Calling setPage(1) after it would
+  // rebuild the query string from the pre-change pageSize and undo the choice.
+  const handlePageSize = (size: number) => setPageSize(size);
   const handleNetwork = (net: string) => {
     setSelectedNetwork(net);
-    setPage(1);
     updateFilters({ network: net });
     if (net) track("filter", { metadata: { filter: "network", value: net } });
   };
@@ -295,7 +366,6 @@ function ProgramsContent() {
     setSelectedNetwork("");
     setVerifiedOnly(false);
     setSort("relevance");
-    setPage(1);
     syncUrl({});
   };
 

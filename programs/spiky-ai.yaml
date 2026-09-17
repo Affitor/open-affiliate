@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 10%
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
   conditions: Earn 10% on every customer purchase for the first year!

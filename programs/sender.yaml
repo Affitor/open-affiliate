@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: lifetime
   conditions: Earn up to 40% lifetime commission for every customer you refer.

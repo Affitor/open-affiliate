@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $50
+  mode: flat
+  value: 50
   currency: USD
   duration: null
   conditions: $50 CPL

@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $135
+  mode: flat
+  value: 135
   currency: USD
   duration: null
   conditions: Earn up to $135 per qualified lead!

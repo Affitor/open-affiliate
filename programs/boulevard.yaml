@@ -9,6 +9,8 @@ tags:
 commission:
   type: recurring
   rate: $750
+  mode: flat
+  value: 750
   currency: USD
   duration: 12 months
   conditions: $750 per demo + $750 per paying customer

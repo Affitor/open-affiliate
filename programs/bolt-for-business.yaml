@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: '175'
+  mode: unknown
+  value: null
   currency: EUR
   duration: null
   conditions: Earn €175 for every new company that uses Bolt Business

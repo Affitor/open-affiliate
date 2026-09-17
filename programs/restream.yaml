@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: 🔴 Up to 30% of all payments — For every new streamer.

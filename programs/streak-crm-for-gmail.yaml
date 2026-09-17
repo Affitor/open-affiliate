@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $60
+  mode: flat
+  value: 60
   currency: USD
   duration: null
   conditions: $60 USD for every new paid account

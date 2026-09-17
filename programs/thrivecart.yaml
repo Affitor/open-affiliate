@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 50%
+  mode: percentage
+  value: 50
   currency: USD
   duration: null
   conditions: 50% commission on referred lifetime-deal purchases via FirstPromoter.

@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $55
+  mode: flat
+  value: 55
   currency: USD
   duration: null
   conditions: Earn $55 per Lite plan!

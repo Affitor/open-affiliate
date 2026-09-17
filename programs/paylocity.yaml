@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $375
+  mode: flat
+  value: 375
   currency: USD
   duration: null
   conditions: Earn $375 per submitted lead

@@ -7,6 +7,8 @@ tags: [productivity, notes, wiki, project-management, collaboration]
 commission:
   type: recurring
   rate: "$50 + 20%"
+  mode: hybrid
+  value: 20
   currency: USD
   duration: "12 months"
   conditions: "Up to $50 per activated signup plus 20% of first year revenue. Managed via PartnerStack."

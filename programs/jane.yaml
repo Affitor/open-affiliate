@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $120
+  mode: flat
+  value: 120
   currency: USD
   duration: null
   conditions: Earn $120 USD commission for every new clinic you refer

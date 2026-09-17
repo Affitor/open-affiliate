@@ -11,6 +11,8 @@ tags:
 commission:
   type: recurring
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: 12 months
   conditions: Standard Plan Yearly at 20%

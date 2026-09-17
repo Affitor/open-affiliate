@@ -7,6 +7,8 @@ tags: [ai, ai-seo, content-optimization, seo, writing]
 commission:
   type: tiered
   rate: "75-125% CPA + 25% annual"
+  mode: tiered
+  value: 125
   currency: USD
   duration: lifetime
   conditions: "75% CPA at base tier, up to 125% CPA + 25% recurring on annual plans for top affiliates"
@@ -66,6 +68,6 @@ verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null
-last_verified_at: "2026-04-17"
+last_verified_at: "2026-08-06"
 kind: affiliate
 source: community

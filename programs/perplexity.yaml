@@ -7,6 +7,8 @@ tags: [ai, ai-search, research, question-answering, knowledge]
 commission:
   type: one-time
   rate: "$15-20"
+  mode: tiered
+  value: 20
   currency: USD
   duration: null
   conditions: "$15-20 per referral who subscribes to Perplexity Pro"

@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 30%
+  mode: percentage
+  value: 30
   currency: USD
   duration: null
   conditions: "Earn up to $43 per referral promoting Beautiful.ai -- 30% commission on Pro plans ($144/year), 15% on Teams plans ($480/user/year). First-year payout on annual, first-month on monthly. "

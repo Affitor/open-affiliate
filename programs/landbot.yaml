@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: 💸 Earn 20% of every sale (recurring for 2 years)!

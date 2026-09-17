@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: 40%
+  mode: percentage
+  value: 40
   currency: USD
   duration: null
   conditions: $1 for each signup || $20 for each qualified signup || 15-40%+ revenue share

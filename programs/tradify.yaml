@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $450
+  mode: flat
+  value: 450
   currency: USD
   duration: null
   conditions: Join the new Tradify Partner Program Today! £150 / $450 NZD / $200 USD / $300 AUD per successful Referral!

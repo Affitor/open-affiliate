@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: 12 months
   conditions: Earn up to $1,197.00 annually.  20% revenue share for new subscribers for the first year.

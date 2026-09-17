@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: $300
+  mode: flat
+  value: 300
   currency: USD
   duration: null
   conditions: Get $300 Per Approved Application

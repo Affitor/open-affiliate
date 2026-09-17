@@ -7,6 +7,8 @@ tags: [scheduling, calendar, meetings, open-source, booking, productivity]
 commission:
   type: recurring
   rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "12 months"
   conditions: "20% recurring for 12 months. Referred customers also get 20% off for 12 months."
@@ -68,6 +70,6 @@ verified: true
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+last_verified_at: "2026-08-06"
 kind: affiliate
 source: community

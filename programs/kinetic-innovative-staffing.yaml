@@ -12,6 +12,8 @@ tags:
 commission:
   type: one-time
   rate: $500
+  mode: flat
+  value: 500
   currency: USD
   duration: null
   conditions: Earn $500 for your first referred client hire, $50 for every completed demo call, and $100 in recurring monthly commissions per client.

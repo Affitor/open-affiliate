@@ -11,6 +11,8 @@ tags:
 commission:
   type: one-time
   rate: $5
+  mode: flat
+  value: 5
   currency: USD
   duration: null
   conditions: Earn $5 per click

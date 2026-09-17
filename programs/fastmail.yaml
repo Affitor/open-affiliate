@@ -9,6 +9,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: 12 months
   conditions: It's email, just better! Earn 20% of all sales for up to 2 years and a 10% discount for your customers for the first 12 months.

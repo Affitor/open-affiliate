@@ -9,6 +9,8 @@ tags:
 commission:
   type: recurring
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: 12 months
   conditions: Earn 5% of first year contract value paid quarterly

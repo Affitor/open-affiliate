@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: 5%
+  mode: percentage
+  value: 5
   currency: USD
   duration: null
   conditions: "Modern HR for modern business. HiBob's intuitive, beautiful HR platform drives productivity, engagement, and performance for modern, mid-sized, multinational companies that put their people first. "

@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Changelog — OpenAffiliate",
+  title: "Changelog",
   description: "What's new in OpenAffiliate. New features, improvements, and fixes.",
 };
 

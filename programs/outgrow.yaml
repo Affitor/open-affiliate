@@ -10,6 +10,8 @@ tags:
 commission:
   type: one-time
   rate: 20%
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: 20% Commission on sale, 10% Recurring Commission for Active Partners

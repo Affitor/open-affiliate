@@ -7,6 +7,8 @@ tags: [blogging, developer-blog, writing, publishing, community, content]
 commission:
   type: one-time
   rate: "$500"
+  mode: flat
+  value: 500
   currency: USD
   duration: null
   conditions: "$500 flat fee per Hashnode Headless CMS Enterprise license sale. Manual process via sales@hashnode.com."

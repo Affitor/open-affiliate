@@ -8,6 +8,8 @@ tags:
 commission:
   type: one-time
   rate: $250
+  mode: flat
+  value: 250
   currency: USD
   duration: null
   conditions: Earn $250 for each new BILL AP/AR customer | Earn $75-$600 for each new BILL Spend & Expense customer
