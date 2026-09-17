@@ -21,16 +21,18 @@ test("ProgramLogo is not a client island", () => {
   assert.doesNotMatch(logo, /['"]use client['"]/)
   assert.doesNotMatch(logo, /useState\(/)
   assert.match(logo, /from "next\/image"/)
+  assert.match(logo, /\{file \? \(/)
 })
 
 test("categories page still uses ProgramLogo", () => {
   assert.match(categories, /ProgramLogo/)
 })
 
-test("content-lab Generate yields a frame before fetch", () => {
-  assert.match(contentLab, /requestAnimationFrame/)
+test("content-lab Generate paints then double-rAF before fetch", () => {
+  assert.match(contentLab, /flushSync/)
   const gen = contentLab.indexOf("async function handleGenerate")
   const fetchAt = contentLab.indexOf('fetch("/api/content-lab"')
-  const rafAt = contentLab.indexOf("requestAnimationFrame")
-  assert.ok(gen >= 0 && rafAt > gen && fetchAt > rafAt)
+  const firstRaf = contentLab.indexOf("requestAnimationFrame", gen)
+  const secondRaf = contentLab.indexOf("requestAnimationFrame", firstRaf + 1)
+  assert.ok(gen >= 0 && firstRaf > gen && secondRaf > firstRaf && fetchAt > secondRaf)
 })

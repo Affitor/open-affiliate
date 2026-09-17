@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { flushSync } from "react-dom";
 import {
   Program,
   Platform,
@@ -144,21 +145,24 @@ export default function ContentLab() {
 
   async function handleGenerate() {
     if (selectedPrograms.length === 0) return;
-    setIsGenerating(true);
-    setOutput("");
-    setUsedModel("");
-    setReasoning("");
-    setShowThinking(false);
-    setGenPhase("connecting");
-    setElapsedMs(0);
-    setTokenCount(0);
-    setStep(3);
+    flushSync(() => {
+      setIsGenerating(true);
+      setOutput("");
+      setUsedModel("");
+      setReasoning("");
+      setShowThinking(false);
+      setGenPhase("connecting");
+      setElapsedMs(0);
+      setTokenCount(0);
+      setStep(3);
+    });
 
-    // Let the loading shell paint before the POST. Without a frame yield,
-    // INP on Generate includes the time-to-first-byte of /api/content-lab
-    // (RUM P90 on this route was 2.79s over 30 days).
+    // Two rAFs = after the loading shell has painted. One rAF still runs
+    // before paint, so INP would include the POST setup.
     await new Promise<void>((resolve) => {
-      requestAnimationFrame(() => resolve());
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
     });
 
     // Start elapsed timer

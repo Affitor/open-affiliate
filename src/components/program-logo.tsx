@@ -22,8 +22,7 @@ export function ProgramLogo({
   // Server component: a client wrapper around every logo used to put ~20
   // islands on /categories and more on each program page. Letter fallback
   // sits under the image so a missing file still shows an initial, no JS.
-  const file = (logoFiles as Record<string, string>)[slug] ?? `${slug}.png`;
-  const localSrc = `/logos/${file}`;
+  const file = (logoFiles as Record<string, string>)[slug];
   const initial = name.charAt(0).toUpperCase();
 
   return (
@@ -37,14 +36,16 @@ export function ProgramLogo({
       >
         {initial}
       </span>
-      <Image
-        src={localSrc}
-        alt={`${name} logo`}
-        width={size}
-        height={size}
-        className="relative z-10 h-full w-full object-contain bg-background"
-        unoptimized
-      />
+      {file ? (
+        <Image
+          src={`/logos/${file}`}
+          alt={`${name} logo`}
+          width={size}
+          height={size}
+          className="relative z-10 h-full w-full object-contain bg-background"
+          unoptimized
+        />
+      ) : null}
     </div>
   );
 }
