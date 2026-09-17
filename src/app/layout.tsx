@@ -6,6 +6,7 @@ import { Nav } from "@/components/nav";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { serializeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -234,10 +235,11 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="describedby" href="/llms.txt" type="text/plain" />
         <script
           type="application/ld+json"
           suppressHydrationWarning
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_JSON_LD) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(SITE_JSON_LD) }}
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
