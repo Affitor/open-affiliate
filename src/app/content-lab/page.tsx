@@ -13,14 +13,44 @@ import {
   TONES,
   MODELS,
 } from "@/lib/content-lab-types";
-import { searchPrograms } from "@/lib/content-lab-programs";
 
 const MAX_PROGRAMS = 5;
+
+interface ApiProgram {
+  name: string;
+  slug: string;
+  url: string;
+  category: string;
+  description: string;
+  cookieDays: number;
+  commission: {
+    type: string;
+    rate: string | number;
+    duration?: string | null;
+  };
+}
+
+function toContentLabProgram(program: ApiProgram): Program {
+  const duration = program.commission.duration
+    ? ` (${program.commission.duration})`
+    : "";
+  return {
+    name: program.name,
+    slug: program.slug,
+    url: program.url,
+    category: program.category,
+    description: program.description,
+    cookie_days: program.cookieDays,
+    commission: `${program.commission.rate} ${program.commission.type}${duration}`,
+  };
+}
 
 export default function ContentLab() {
   const [step, setStep] = useState(0);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPrograms, setSelectedPrograms] = useState<Program[]>([]);
+  const [suggestions, setSuggestions] = useState<Program[]>([]);
+  const [suggestionsReady, setSuggestionsReady] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [platform, setPlatform] = useState<Platform>("linkedin");
   const [language, setLanguage] = useState<Language>("en");
@@ -46,13 +76,42 @@ export default function ContentLab() {
   const searchRef = useRef<HTMLDivElement>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Synchronous local search — no debounce needed
-  const suggestions =
-    searchQuery.length >= 1
-      ? searchPrograms(searchQuery)
-          .filter((p) => !selectedPrograms.some((s) => s.slug === p.slug))
-          .slice(0, 8)
-      : [];
+  // Keep the full registry off this route's hydration path. The API is cached
+  // at the edge and returns only the small result set the picker can display.
+  useEffect(() => {
+    const query = searchQuery.trim();
+    if (!query) return;
+
+    const controller = new AbortController();
+    const timer = window.setTimeout(async () => {
+      try {
+        const response = await fetch(
+          `/api/programs?q=${encodeURIComponent(query)}&limit=20&include_description=true`,
+          { signal: controller.signal }
+        );
+        if (!response.ok) throw new Error(`Search failed: ${response.status}`);
+        const data = (await response.json()) as { programs?: ApiProgram[] };
+        const selected = new Set(selectedPrograms.map((program) => program.slug));
+        setSuggestions(
+          (data.programs ?? [])
+            .filter((program) => !selected.has(program.slug))
+            .slice(0, 8)
+            .map(toContentLabProgram)
+        );
+        setSuggestionsReady(true);
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          setSuggestions([]);
+          setSuggestionsReady(true);
+        }
+      }
+    }, 120);
+
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [searchQuery, selectedPrograms]);
 
   // Auto-scroll output while streaming
   useEffect(() => {
@@ -242,7 +301,10 @@ export default function ContentLab() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => {
-                  setSearchQuery(e.target.value);
+                  const value = e.target.value;
+                  setSearchQuery(value);
+                  setSuggestionsReady(false);
+                  if (!value.trim()) setSuggestions([]);
                   setShowSuggestions(true);
                 }}
                 onFocus={() => searchQuery.length >= 1 && setShowSuggestions(true)}
@@ -284,7 +346,7 @@ export default function ContentLab() {
               )}
 
               {/* No results hint */}
-              {showSuggestions && searchQuery.length >= 1 && suggestions.length === 0 && (
+              {showSuggestions && suggestionsReady && searchQuery.length >= 1 && suggestions.length === 0 && (
                 <div className="absolute z-50 top-full left-0 right-0 mt-1 rounded-xl border border-white/10 bg-[#141414] p-4 text-sm text-white/40 text-center">
                   No programs found for &ldquo;{searchQuery}&rdquo;
                 </div>

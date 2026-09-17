@@ -19,8 +19,7 @@ import { createClient } from "@supabase/supabase-js"
 
 export const maxDuration = 300 // 5 min max for Vercel Functions
 
-const KYMA_API_KEY =
-  process.env.KYMA_API_KEY ?? "kyma-0dafc40be79a8fbd2ef3cec68d6e6520e23ae73e437915c2"
+const KYMA_API_KEY = process.env.KYMA_API_KEY
 const KYMA_BASE_URL = "https://kymaapi.com/v1"
 const MODEL = "qwen-3-32b"
 const BATCH_SIZE = 50
@@ -160,6 +159,10 @@ export async function GET(request: Request) {
   const cronSecret = process.env.CRON_SECRET
   if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  }
+
+  if (!KYMA_API_KEY) {
+    return NextResponse.json({ error: "KYMA_API_KEY is not set" }, { status: 500 })
   }
 
   const supabase = createClient(
