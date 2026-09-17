@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { serializeJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "Compare Affiliate Programs",
@@ -21,5 +22,31 @@ export default function CompareLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return children;
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            name: "Compare Affiliate Programs",
+            description: metadata.description,
+            url: "https://openaffiliate.dev/compare",
+            isPartOf: { "@id": "https://openaffiliate.dev/#website" },
+            publisher: { "@id": "https://openaffiliate.dev/#organization" },
+            mainEntity: {
+              "@type": "WebApplication",
+              name: "OpenAffiliate comparison tool",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              url: "https://openaffiliate.dev/compare",
+            },
+          }),
+        }}
+      />
+      {children}
+    </>
+  );
 }
