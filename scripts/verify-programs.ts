@@ -16,7 +16,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROGRAMS_DIR = join(__dirname, "..", "programs");
@@ -134,14 +134,28 @@ function loadAllPrograms(): ProgramYaml[] {
 
 function getChangedFiles(): string[] {
   try {
-    const diff = execSync("git diff --name-only HEAD -- programs/", {
+    const baseRef = process.env.GITHUB_BASE_REF;
+    const diffArgs = baseRef
+      ? [
+          "diff",
+          "--name-only",
+          "--diff-filter=AMR",
+          `origin/${baseRef}...HEAD`,
+          "--",
+          "programs/",
+        ]
+      : ["diff", "--name-only", "--diff-filter=AMR", "HEAD", "--", "programs/"];
+    const diff = execFileSync("git", diffArgs, {
       encoding: "utf8",
       cwd: join(__dirname, ".."),
     }).trim();
-    const untracked = execSync(
-      "git ls-files --others --exclude-standard -- programs/",
-      { encoding: "utf8", cwd: join(__dirname, "..") }
-    ).trim();
+    const untracked = baseRef
+      ? ""
+      : execFileSync(
+          "git",
+          ["ls-files", "--others", "--exclude-standard", "--", "programs/"],
+          { encoding: "utf8", cwd: join(__dirname, "..") }
+        ).trim();
     const all = [diff, untracked]
       .filter(Boolean)
       .join("\n")

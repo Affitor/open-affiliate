@@ -6,7 +6,7 @@ import { BookOpen } from "lucide-react";
 import { track } from "@/lib/track";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { categories as registryCategories } from "@/lib/programs";
+import { categories as registryCategories } from "@/lib/client-programs";
 
 export default function SubmitPage() {
   useEffect(() => { track("page_view"); }, []);

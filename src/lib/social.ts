@@ -118,10 +118,10 @@ async function fetchYouTube(query: string): Promise<SocialItem[]> {
 
 async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
   const res = await fetch(
-    `https://api.apify.com/v2/acts/api-ninja~youtube-search-scraper/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=45`,
+    `https://api.apify.com/v2/acts/api-ninja~youtube-search-scraper/run-sync-get-dataset-items?timeout=45`,
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${APIFY_API_KEY}` },
       body: JSON.stringify({ query, maxResults: 30 }),
       signal: AbortSignal.timeout(50000),
     }
@@ -259,10 +259,10 @@ async function fetchReddit(query: string): Promise<SocialItem[]> {
   if (!APIFY_API_KEY) return []
   try {
     const res = await fetch(
-      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=25`,
+      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?timeout=25`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${APIFY_API_KEY}` },
         body: JSON.stringify({
           query: `${query} site:reddit.com`,
           maxResults: 5,
@@ -309,10 +309,10 @@ async function fetchBlogs(query: string, programDomain: string): Promise<SocialI
     ].map((d) => `-site:${d}`).join(" ")
 
     const res = await fetch(
-      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?token=${APIFY_API_KEY}&timeout=25`,
+      `https://api.apify.com/v2/acts/igolaizola~google-search-scraper-ppe/run-sync-get-dataset-items?timeout=25`,
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${APIFY_API_KEY}` },
         body: JSON.stringify({
           query: `${query} ${excludes}`,
           maxResults: 5,

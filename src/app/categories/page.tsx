@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   title: "Affiliate Program Categories",
   description:
     "Browse affiliate programs by category. Compare commission rates across AI, SaaS, E-Commerce, Developer Tools, and 20+ more categories.",
+  openGraph: {
+    title: "Affiliate Program Categories: OpenAffiliate",
+    description:
+      "Browse affiliate programs by category and compare commissions, cookies, and verified terms.",
+    url: "https://openaffiliate.dev/categories",
+    siteName: "OpenAffiliate",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function CategoriesPage() {
