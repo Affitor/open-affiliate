@@ -22,6 +22,8 @@ export function GET(request: NextRequest) {
   const category = searchParams.get("category") ?? undefined
   const type = searchParams.get("type") ?? undefined
   const verified = searchParams.get("verified")
+  const includeDescription =
+    searchParams.get("include_description") === "true"
   const sortParam = searchParams.get("sort") ?? "relevance"
   const sort = VALID_SORTS.has(sortParam) ? (sortParam as SortOption) : "relevance"
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "0") || 0, 500)
@@ -33,6 +35,7 @@ export function GET(request: NextRequest) {
     commissionType: type,
     sort,
     verified: verified === "true" ? true : undefined,
+    includeDescription,
   })
 
   const total = results.length
