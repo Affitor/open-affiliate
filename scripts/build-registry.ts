@@ -4,6 +4,7 @@ import { parse } from "yaml"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
+const CLIENT_OUTPUT_FILE = join(process.cwd(), "src", "lib", "client-registry.json")
 const INDEX_FILE = join(process.cwd(), "src", "lib", "registry-index.json")
 const LOGOS_DIR = join(process.cwd(), "public", "logos")
 const LOGO_MAP_FILE = join(process.cwd(), "src", "lib", "logo-files.json")
@@ -51,6 +52,8 @@ interface YamlProgram {
   commission: {
     type: string
     rate: string | number
+    mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
+    value: number | null
     currency: string
     duration?: string | null
     conditions?: string | null
@@ -193,10 +196,50 @@ function buildRegistry(): void {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
 
+  // Client-side catalog pages need filtering and comparison fields, not the
+  // long descriptions, agent prompts, restrictions, or use cases in the full
+  // registry. Importing registry.json from a Client Component previously put
+  // a 1.3 MB parsed JSON chunk on every route through the global search bar.
+  // Keep a deliberately small projection for the three catalog UIs.
+  const clientRegistry = {
+    generated_at: registry.generated_at,
+    count: programs.length,
+    categories,
+    programs: programs.map((p) => ({
+      slug: p.slug,
+      name: p.name,
+      category: p.category,
+      tags: p.tags ?? [],
+      commission: {
+        type: p.commission.type,
+        rate: p.commission.rate,
+        mode: p.commission.mode,
+        value: p.commission.value,
+        currency: p.commission.currency,
+        duration: p.commission.duration,
+      },
+      cookieDays: p.cookie_days,
+      shortDescription: p.short_description,
+      verified: p.verified ?? false,
+      network: p.network ?? null,
+      createdAt: p.created_at ?? "",
+      source: p.source,
+      descriptionAvailable: p.description.length > 20,
+      agentPromptAvailable: p.agents.prompt.length > 10,
+      signupAvailable: Boolean(p.signup_url),
+    })),
+  }
+
+  writeFileSync(
+    CLIENT_OUTPUT_FILE,
+    JSON.stringify(clientRegistry, null, 2) + "\n"
+  )
+
   console.log(`Registry built successfully:`)
   console.log(`  ${programs.length} programs loaded`)
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
   console.log(`  Output: src/lib/registry.json`)
+  console.log(`  Client output: src/lib/client-registry.json`)
 
   // Inline index build — no subprocess. Never fails the build: if any step
   // here throws, we warn and continue so Vercel deploys still succeed. The
