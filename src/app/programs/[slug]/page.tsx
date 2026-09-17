@@ -32,6 +32,7 @@ import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
+import { serializeJsonLd } from "@/lib/json-ld";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, commissionUnknown} from "@/lib/programs";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -189,7 +190,7 @@ export default async function ProgramPage({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
+          __html: serializeJsonLd({
             "@context": "https://schema.org",
             "@type": "Product",
             name: `${program.name} Affiliate Program`,
@@ -209,13 +210,6 @@ export default async function ProgramPage({
               "@type": "Offer",
               category: "Affiliate Program",
               description: `${commissionDisplay(program.commission)} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
-            },
-            aggregateRating: {
-              "@type": "AggregateRating",
-              ratingValue: Math.min(score / 20, 5).toFixed(1),
-              bestRating: "5",
-              worstRating: "1",
-              ratingCount: categoryPrograms.length,
             },
           }),
         }}
