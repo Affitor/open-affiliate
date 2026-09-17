@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
 
 import logoFiles from "@/lib/logo-files.json";
@@ -21,34 +18,34 @@ export function ProgramLogo({
   // Most logos are <slug>.png. 48 are .jpg, .webp or .svg — hardcoding .png
   // meant those 404'd and rendered as a bare initial instead of the brand
   // mark. The map is generated from the logos directory by build-registry.
+  //
+  // This is a server component on purpose. Two useState hooks used to turn
+  // every logo into a client island; /categories rendered ~20 of them, and
+  // each program page rendered 1 + related. The letter fallback is CSS
+  // underneath the image so a 404 still shows an initial without JS.
   const file = (logoFiles as Record<string, string>)[slug] ?? `${slug}.png`;
   const localSrc = `/logos/${file}`;
   const initial = name.charAt(0).toUpperCase();
-  const [imgError, setImgError] = useState(false);
-  const [imgLoaded, setImgLoaded] = useState(false);
 
   return (
     <div
-      className={`relative flex items-center justify-center rounded-lg text-sm font-bold overflow-hidden ${imgLoaded && !imgError ? "" : "bg-muted"} ${className}`}
+      className={`relative flex items-center justify-center rounded-lg text-sm font-bold overflow-hidden bg-muted ${className}`}
       style={{ width: size, height: size }}
     >
-      {(!imgLoaded || imgError) && (
-        <span className="absolute inset-0 flex items-center justify-center select-none">
-          {initial}
-        </span>
-      )}
-      {!imgError && (
-        <Image
-          src={localSrc}
-          alt={`${name} logo`}
-          width={size}
-          height={size}
-          className="absolute inset-0 object-contain"
-          unoptimized
-          onLoad={() => setImgLoaded(true)}
-          onError={() => setImgError(true)}
-        />
-      )}
+      <span
+        className="absolute inset-0 flex items-center justify-center select-none"
+        aria-hidden
+      >
+        {initial}
+      </span>
+      <Image
+        src={localSrc}
+        alt={`${name} logo`}
+        width={size}
+        height={size}
+        className="relative z-10 h-full w-full object-contain bg-background"
+        unoptimized
+      />
     </div>
   );
 }

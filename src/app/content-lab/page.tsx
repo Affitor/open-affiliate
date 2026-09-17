@@ -154,6 +154,13 @@ export default function ContentLab() {
     setTokenCount(0);
     setStep(3);
 
+    // Let the loading shell paint before the POST. Without a frame yield,
+    // INP on Generate includes the time-to-first-byte of /api/content-lab
+    // (RUM P90 on this route was 2.79s over 30 days).
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => resolve());
+    });
+
     // Start elapsed timer
     const startTime = Date.now();
     if (timerRef.current) clearInterval(timerRef.current);
