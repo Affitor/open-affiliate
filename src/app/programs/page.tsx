@@ -28,7 +28,7 @@ import {
   type SortOption,
   type Program,
   commissionLabel,  commissionDisplay
-} from "@/lib/programs";
+} from "@/lib/client-programs";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
 
