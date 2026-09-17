@@ -1,0 +1,230 @@
+name: Auto-merge Policy
+
+# This workflow runs in shadow mode until the repository variable
+# AUTO_MERGE_ENABLED is exactly "true". It never checks out or executes pull
+# request code: pull_request_target has a write-capable token for fork PRs, so
+# only the trusted base commit is checked out.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+concurrency:
+  group: auto-merge-policy-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  evaluate:
+    name: Evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted policy
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+
+      - name: Set up policy runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .github/scripts/package-lock.json
+
+      # Installs only the pinned YAML parser. The package and lockfile come
+      # from the trusted base commit; lifecycle scripts are disabled.
+      - name: Install policy parser
+        run: npm ci --ignore-scripts --prefix .github/scripts
+
+      - name: Classify pull request
+        uses: actions/github-script@v7
+        env:
+          AUTO_MERGE_ENABLED: ${{ vars.AUTO_MERGE_ENABLED || 'false' }}
+        with:
+          script: |
+            const {
+              PROGRAM_PATH,
+              evaluateAutoMergePolicy,
+              fetchProgramContent,
+            } = require('./.github/scripts/auto-merge-policy.cjs')
+
+            const owner = context.repo.owner
+            const repo = context.repo.repo
+            const pullRequest = context.payload.pull_request
+            const pullNumber = pullRequest.number
+            const live = process.env.AUTO_MERGE_ENABLED === 'true'
+            const marker = '<!-- openaffiliate-auto-merge-policy -->'
+            const candidateLabel = 'automerge:candidate'
+            const blockedLabel = 'automerge:blocked'
+            const existingLabels = new Set(
+              pullRequest.labels.map((label) => label.name)
+            )
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner,
+              repo,
+              pull_number: pullNumber,
+              per_page: 100,
+            })
+
+            for (const file of files) {
+              if (!PROGRAM_PATH.test(file.filename)) continue
+              try {
+                file.content = await fetchProgramContent(file.raw_url)
+              } catch (error) {
+                core.warning(`Could not read ${file.filename}: ${error.message}`)
+              }
+            }
+
+            const result = evaluateAutoMergePolicy({
+              pullRequest,
+              files,
+            })
+
+            const labelDefinitions = [
+              [candidateLabel, '1f883d', 'Machine policy allows native auto-merge after required checks'],
+              [blockedLabel, 'd73a4a', 'Machine policy requires human review'],
+              ['do-not-merge', 'b60205', 'Emergency stop: never auto-merge this pull request'],
+            ]
+            for (const [name, color, description] of labelDefinitions) {
+              try {
+                await github.rest.issues.getLabel({ owner, repo, name })
+              } catch (error) {
+                if (error.status !== 404) throw error
+                await github.rest.issues.createLabel({
+                  owner,
+                  repo,
+                  name,
+                  color,
+                  description,
+                })
+              }
+            }
+
+            const addLabel = async (name) => {
+              if (existingLabels.has(name)) return
+              await github.rest.issues.addLabels({
+                owner,
+                repo,
+                issue_number: pullNumber,
+                labels: [name],
+              })
+            }
+            const removeLabel = async (name) => {
+              if (!existingLabels.has(name)) return
+              await github.rest.issues.removeLabel({
+                owner,
+                repo,
+                issue_number: pullNumber,
+                name,
+              })
+            }
+
+            let action
+            if (result.eligible) {
+              await addLabel(candidateLabel)
+              await removeLabel(blockedLabel)
+              action = live
+                ? 'Native squash auto-merge requested; GitHub still waits for every required branch check.'
+                : 'Shadow only: this pull request would enter native squash auto-merge after required checks.'
+
+              if (live) {
+                try {
+                  await github.graphql(
+                    `mutation EnableAutoMerge(
+                      $pullRequestId: ID!,
+                      $headOid: GitObjectID!
+                    ) {
+                      enablePullRequestAutoMerge(input: {
+                        pullRequestId: $pullRequestId,
+                        mergeMethod: SQUASH,
+                        expectedHeadOid: $headOid
+                      }) {
+                        pullRequest { number }
+                      }
+                    }`,
+                    {
+                      pullRequestId: pullRequest.node_id,
+                      headOid: pullRequest.head.sha,
+                    }
+                  )
+                } catch (error) {
+                  core.setFailed(
+                    `Could not enable native auto-merge: ${error.message}`
+                  )
+                  action = `Native auto-merge was not enabled: ${error.message}`
+                }
+              }
+            } else {
+              await addLabel(blockedLabel)
+              await removeLabel(candidateLabel)
+              action = 'Human review is required; auto-merge was not requested.'
+
+              if (existingLabels.has(candidateLabel) && pullRequest.auto_merge) {
+                await github.graphql(
+                  `mutation DisableAutoMerge($pullRequestId: ID!) {
+                    disablePullRequestAutoMerge(input: {
+                      pullRequestId: $pullRequestId
+                    }) {
+                      pullRequest { number }
+                    }
+                  }`,
+                  { pullRequestId: pullRequest.node_id }
+                )
+                action += ' A previous auto-merge request was disabled.'
+              }
+            }
+
+            const details = result.eligible
+              ? [
+                  `- additive change only under \`programs/*.yaml\``,
+                  `- ${result.programCount} program file(s), within size limits`,
+                  `- each entry uses HTTPS URLs and explicitly sets \`verified: false\``,
+                  `- no emergency-stop label`,
+                ].join('\n')
+              : result.reasons.map((reason) => `- ${reason}`).join('\n')
+
+            const mode = live ? 'LIVE' : 'SHADOW'
+            const body = `${marker}
+            ### Auto-merge policy — ${mode}
+
+            ${result.eligible ? '✅ Candidate' : '⛔ Blocked'}
+
+            ${details}
+
+            ${action}
+
+            > The workflow never executes pull-request code with its write token
+            > and never falls back to a direct merge.`
+
+            const comments = await github.paginate(
+              github.rest.issues.listComments,
+              {
+                owner,
+                repo,
+                issue_number: pullNumber,
+                per_page: 100,
+              }
+            )
+            const previous = comments.find((comment) =>
+              comment.body?.includes(marker)
+            )
+            if (previous) {
+              await github.rest.issues.updateComment({
+                owner,
+                repo,
+                comment_id: previous.id,
+                body,
+              })
+            } else {
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: pullNumber,
+                body,
+              })
+            }
