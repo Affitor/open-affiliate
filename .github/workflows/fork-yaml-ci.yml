@@ -1,0 +1,116 @@
+name: Fork YAML CI
+
+# First-time fork contributors sit in Actions "action_required", so the
+# required checks named Validate / Validate Programs never start. Native
+# auto-merge then waits forever. Vercel also fails on forks (authorize Git)
+# but is not a required check — the red 0/1 in the list is that Vercel
+# status, not schema validation.
+#
+# pull_request_target runs with the base workflow (no approval gate) and
+# never checks out or executes pull-request code. YAML is copied as data
+# onto a trusted tree, then the trusted registry builder validates it.
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: fork-yaml-ci-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  validate-programs:
+    name: Validate Programs
+    if: github.event.pull_request.head.repo.fork
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out trusted base
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Overlay YAML from the pull request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs')
+            const path = require('path')
+            const PROGRAM_PATH = /^programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.yaml$/
+            const pullNumber = context.payload.pull_request.number
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pullNumber,
+              per_page: 100,
+            })
+            const yamlFiles = files.filter((file) => PROGRAM_PATH.test(file.filename))
+            const foreign = files.filter((file) => !PROGRAM_PATH.test(file.filename))
+            if (foreign.length > 0) {
+              core.setFailed(
+                `Fork PR touches non-program paths: ${foreign.map((f) => f.filename).join(', ')}. ` +
+                  'Code changes need a maintainer-approved CI run.'
+              )
+              return
+            }
+            if (yamlFiles.length === 0) {
+              core.setFailed('Fork PR has no programs/*.yaml files to validate.')
+              return
+            }
+            for (const file of yamlFiles) {
+              if (file.status !== 'added') {
+                core.setFailed(`${file.filename} is ${file.status}, not newly added.`)
+                return
+              }
+              const response = await fetch(file.raw_url, {
+                headers: { Accept: 'text/plain' },
+              })
+              if (!response.ok) {
+                core.setFailed(`could not read ${file.filename}: HTTP ${response.status}`)
+                return
+              }
+              const content = await response.text()
+              const dest = path.join(process.cwd(), file.filename)
+              fs.mkdirSync(path.dirname(dest), { recursive: true })
+              fs.writeFileSync(dest, content)
+              core.info(`wrote ${file.filename} (${content.length} bytes)`)
+            }
+
+      - name: Validate YAML schema
+        run: npx tsx scripts/build-registry.ts
+
+  validate:
+    name: Validate
+    if: github.event.pull_request.head.repo.fork
+    runs-on: ubuntu-latest
+    steps:
+      - name: YAML-only forks leave the app tree unchanged
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const PROGRAM_PATH = /^programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.yaml$/
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            })
+            const foreign = files.filter((file) => !PROGRAM_PATH.test(file.filename))
+            if (foreign.length > 0) {
+              core.setFailed(
+                `Fork PR touches non-program paths: ${foreign.map((f) => f.filename).join(', ')}. ` +
+                  'Required app CI stays on maintainer-approved pull_request runs.'
+              )
+              return
+            }
+            core.info('YAML-only fork PR; app Validate of base is unchanged.')

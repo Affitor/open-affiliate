@@ -1,0 +1,8 @@
+{
+  "name": "openaffiliate-auto-merge-policy",
+  "private": true,
+  "version": "1.0.0",
+  "dependencies": {
+    "yaml": "2.8.3"
+  }
+}

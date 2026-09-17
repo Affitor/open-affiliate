@@ -10,6 +10,14 @@ export const metadata: Metadata = {
   title: "Affiliate Networks",
   description:
     "Compare affiliate networks by program count, average commission, and top programs. PartnerStack, Impact, ShareASale, and more.",
+  openGraph: {
+    title: "Affiliate Networks: OpenAffiliate",
+    description:
+      "Compare affiliate networks by program count, commission, and verified programs.",
+    url: "https://openaffiliate.dev/networks",
+    siteName: "OpenAffiliate",
+    images: ["/opengraph-image"],
+  },
 };
 
 export default function NetworksPage() {

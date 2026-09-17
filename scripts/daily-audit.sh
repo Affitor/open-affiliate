@@ -3,13 +3,14 @@
 # Daily optimisation loop for openaffiliate.dev.
 #
 # Wakes once a day, measures the site, and opens a PR only when it finds
-# something real. Decides for itself whether to merge. The brief it works from
+# something real. Shadow mode: never merges unattended. The brief it works from
 # is docs/internal-loop-spec.md — edit that to change what the loop does, not
 # this file, which only sets up the run.
 #
 # Install:  crontab -e  →  17 9 * * * /Users/sonpiaz/open-affiliate/scripts/daily-audit.sh
 # Logs:     ~/.openaffiliate-loop/<date>.log
 # Disable:  touch ~/.openaffiliate-loop/PAUSED
+# Mode:     shadow only (W37-980) — measure + open PRs, never merge or use personal keys.
 
 set -uo pipefail
 
@@ -24,6 +25,14 @@ if [ -f "$LOOP_HOME/PAUSED" ]; then
   echo "[$(date +%H:%M:%S)] paused, skipping" >> "$LOG"
   exit 0
 fi
+
+# Unattended runs stay in shadow mode: no merge authority, no personal credentials.
+OA_LOOP_MODE="${OA_LOOP_MODE:-shadow}"
+if [ "$OA_LOOP_MODE" != "shadow" ]; then
+  echo "[$(date +%H:%M:%S)] FATAL: only shadow mode is allowed (OA_LOOP_MODE=$OA_LOOP_MODE)" >> "$LOG"
+  exit 1
+fi
+export OA_LOOP_MODE
 
 cd "$REPO" || { echo "repo not found at $REPO" >> "$LOG"; exit 1; }
 
@@ -75,7 +84,14 @@ fi
 # kill it if it overruns.
 MAX_SECONDS=1800
 
-claude -p "$(cat "$PROMPT_FILE")" >> "$LOG" 2>&1 &
+SHADOW_PREAMBLE="SHADOW MODE (mandatory, enforced by daily-audit.sh):
+- Measure and open PRs only. Never merge, never push to main, never enable auto-merge.
+- Never read credentials outside this repo (no ~/kyma-api/.env or other personal key files).
+- Follow docs/internal-loop-spec.md shadow outcomes only; never merge — open a PR and leave it for human review.
+
+"
+
+claude -p "${SHADOW_PREAMBLE}$(cat "$PROMPT_FILE")" >> "$LOG" 2>&1 &
 CLAUDE_PID=$!
 
 ( sleep "$MAX_SECONDS"; kill -0 "$CLAUDE_PID" 2>/dev/null && {

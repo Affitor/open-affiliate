@@ -29,7 +29,7 @@ import {
   type Program,
   commissionLabel,
   affiliateScore,  commissionDisplay
-} from "@/lib/programs";
+} from "@/lib/client-programs";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -260,16 +260,24 @@ const DEFAULT_VISIBLE = 50;
 function ProgramsTable({
   items,
   contentLoaded,
+  filterKey,
 }: {
   items: MergedProgram[];
   contentLoaded: boolean;
+  filterKey: string;
 }) {
   const [sortCol, setSortCol] = useState<ColumnSort>("verified");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [showAll, setShowAll] = useState(false);
+  const [pagination, setPagination] = useState({ filterKey, page: 0 });
+  const page = pagination.filterKey === filterKey ? pagination.page : 0;
+  const setPage = useCallback(
+    (nextPage: number) => setPagination({ filterKey, page: nextPage }),
+    [filterKey]
+  );
 
   const handleSort = useCallback(
     (col: ColumnSort) => {
+      setPage(0);
       if (sortCol === col) {
         setSortDir((d) => (d === "desc" ? "asc" : "desc"));
       } else {
@@ -277,7 +285,7 @@ function ProgramsTable({
         setSortDir(col === "name" ? "asc" : "desc");
       }
     },
-    [sortCol]
+    [sortCol, setPage]
   );
 
   const sorted = useMemo(() => {
@@ -305,16 +313,18 @@ function ProgramsTable({
     return list;
   }, [items, sortCol, sortDir]);
 
-  // The table rendered all 760 rows at once, so every sort click re-rendered
-  // 760 rows each carrying a ProgramLogo with its own state. That put INP at
-  // P90 590ms, past the 500ms "poor" line, across 73 samples. Sorting itself
-  // is cheap — rendering is what cost.
-  //
-  // A 760-row leaderboard is not scannable anyway. Showing the first 50 cuts
-  // the render 15x and leaves the full list one click away.
+  // Keep every interaction bounded to 50 rows. The old "Show all" button
+  // brought all 760 stateful logo rows back in one render, preserving the
+  // exact long task that the original 50-row optimization was meant to remove.
+  const pageCount = Math.max(1, Math.ceil(sorted.length / DEFAULT_VISIBLE));
+  const activePage = Math.min(page, pageCount - 1);
   const visible = useMemo(
-    () => (showAll ? sorted : sorted.slice(0, DEFAULT_VISIBLE)),
-    [sorted, showAll]
+    () =>
+      sorted.slice(
+        activePage * DEFAULT_VISIBLE,
+        (activePage + 1) * DEFAULT_VISIBLE
+      ),
+    [sorted, activePage]
   );
 
   return (
@@ -390,7 +400,7 @@ function ProgramsTable({
                   className="border-t border-border/20 hover:bg-muted/20 transition-colors group"
                 >
                   <td className="py-3 px-3 text-center">
-                    <RankBadge rank={i + 1} />
+                    <RankBadge rank={activePage * DEFAULT_VISIBLE + i + 1} />
                   </td>
                   <td className="py-3 px-3">
                     <Link
@@ -495,20 +505,32 @@ function ProgramsTable({
         </div>
       )}
       {sorted.length > DEFAULT_VISIBLE && (
-        <div className="border-t border-border/20 px-4 py-4 text-center">
+        <div className="border-t border-border/20 px-4 py-3 flex items-center justify-center gap-4">
           <button
-            onClick={() => setShowAll((prev) => !prev)}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            onClick={() => setPage(Math.max(0, activePage - 1))}
+            disabled={activePage === 0}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30"
           >
-            {showAll
-              ? `Show top ${DEFAULT_VISIBLE}`
-              : `Show all ${sorted.length} programs`}
+            Previous
+          </button>
+          <span className="text-xs text-muted-foreground tabular-nums">
+            Page {activePage + 1} of {pageCount}
+          </span>
+          <button
+            onClick={() =>
+              setPage(Math.min(pageCount - 1, activePage + 1))
+            }
+            disabled={activePage === pageCount - 1}
+            className="text-xs text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30"
+          >
+            Next
           </button>
         </div>
       )}
       <div className="px-4 py-3 border-t border-border/20 flex items-center justify-between">
         <span className="text-[10px] text-muted-foreground/60">
-          showing {visible.length} of {sorted.length} programs
+          showing {sorted.length === 0 ? 0 : activePage * DEFAULT_VISIBLE + 1}-
+          {activePage * DEFAULT_VISIBLE + visible.length} of {sorted.length} programs
         </span>
         <Link
           href="/explore"
@@ -966,6 +988,15 @@ export default function RankingsPage() {
       {/* Table content */}
       {activeTab === "programs" && (
         <ProgramsTable
+          filterKey={JSON.stringify([
+            searchQuery,
+            selectedCategory,
+            selectedType,
+            selectedPlatform,
+            selectedFormat,
+            verifiedOnly,
+            hasContentOnly,
+          ])}
           items={filteredPrograms}
           contentLoaded={contentLoaded}
         />
