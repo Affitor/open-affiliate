@@ -15,7 +15,7 @@ commission:
 
 cookie_days: 60
 network: firstpromoter
-signup_url: https://flypombo.firstpromoter.com
+signup_url: https://flypombo.com/affiliates
 restrictions:
   - "Spam, fraud, bidding on Pombo's brand terms in search ads, and cloaked or misleading referral links void the referral."
 
