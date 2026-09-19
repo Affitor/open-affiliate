@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { flushSync } from "react-dom";
 import {
   Program,
   Platform,
@@ -144,15 +145,25 @@ export default function ContentLab() {
 
   async function handleGenerate() {
     if (selectedPrograms.length === 0) return;
-    setIsGenerating(true);
-    setOutput("");
-    setUsedModel("");
-    setReasoning("");
-    setShowThinking(false);
-    setGenPhase("connecting");
-    setElapsedMs(0);
-    setTokenCount(0);
-    setStep(3);
+    flushSync(() => {
+      setIsGenerating(true);
+      setOutput("");
+      setUsedModel("");
+      setReasoning("");
+      setShowThinking(false);
+      setGenPhase("connecting");
+      setElapsedMs(0);
+      setTokenCount(0);
+      setStep(3);
+    });
+
+    // Two rAFs = after the loading shell has painted. One rAF still runs
+    // before paint, so INP would include the POST setup.
+    await new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => resolve());
+      });
+    });
 
     // Start elapsed timer
     const startTime = Date.now();
