@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-14T17:34:02.986Z",
-  "count": 760,
+  "generated_at": "2026-09-17T03:15:08.693Z",
+  "count": 761,
   "categories": [
     "AI",
     "Analytics",
@@ -2531,6 +2531,36 @@
       "network": "in-house",
       "createdAt": "2026-04-17",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "browseract",
+      "name": "BrowserAct",
+      "category": "SaaS",
+      "tags": [
+        "web scraping",
+        "data extraction",
+        "browser automation",
+        "AI automation",
+        "SaaS",
+        "AI agents",
+        "no-code"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "30% on the first order, then 20% on purchases for the next 6 months",
+        "mode": "hybrid",
+        "value": 30,
+        "currency": "USD",
+        "duration": "6 months"
+      },
+      "shortDescription": "AI web scraping and browser automation platform for reusable data extraction agents.",
+      "verified": false,
+      "network": "firstpromoter",
+      "createdAt": "2026-08-18",
+      "source": "firstpromoter",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
