@@ -1,5 +1,5 @@
 name: "Kalyvox.ai"
-slug: kalyvox-ai
+slug: kalyvox
 url: https://kalyvox.ai/
 category: AI
 verified: false
@@ -7,7 +7,10 @@ verified: false
 commission:
   type: recurring
   rate: 20
+  mode: percentage
+  value: 20
   currency: USD
+  duration: "12 months"
 cookie_days: 60
 
 payout:
