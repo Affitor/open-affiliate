@@ -8,19 +8,19 @@ commission:
   type: recurring
   rate: 20
   currency: USD
-cookie_days: 90
+cookie_days: 60
 
 payout:
   minimum: 50
   frequency: monthly
 
-short_description: "Kalyvox is an AI phone receptionist built for small businesses that cannot afford to miss calls or opportunities. It ans"
+short_description: "Kalyvox is an AI phone receptionist for small businesses, answering calls 24/7, capturing leads, and booking appointments."
 description: |
   Kalyvox is an AI phone receptionist built for small businesses that cannot afford to miss calls or opportunities. It answers calls 24/7, filters and routes callers, captures leads, books appointments through calendar sync, sends instant SMS alerts for urgent calls, and connects with Zapier to automate follow-up workflows.
 
-The platform is self-service, available in English and French, and supports the US, Canada, France, and 10 additional European countries.
+  The platform is self-service, available in English and French, and supports the US, Canada, France, and 10 additional European countries.
 
-Affiliates earn 20% recurring commission for 12 months on plans priced at $95 and $195 per month.
+  Affiliates earn 20% recurring commission for 12 months on plans priced at $95 and $195 per month.
 
 signup_url: https://kalyvox.ai/en/partner-program
 approval: manual
