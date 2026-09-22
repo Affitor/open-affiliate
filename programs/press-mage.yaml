@@ -7,6 +7,7 @@ verified: false
 commission:
   type: recurring
   rate: 20
+  mode: percentage
   currency: USD
 cookie_days: 60
 
