@@ -225,6 +225,14 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
     if (/<\/?script\b/i.test(content)) {
       reasons.push(`contains an HTML script tag: ${file.filename}`)
     }
+    // PR 92 shipped restrictions as one sentence. generate-md.ts calls
+    // restrictions.map and the production build died. A list is required.
+    if (
+      program.restrictions != null &&
+      !Array.isArray(program.restrictions)
+    ) {
+      reasons.push(`restrictions must be a list: ${file.filename}`)
+    }
   }
 
   return {
@@ -232,6 +240,23 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
     reasons: [...new Set(reasons)],
     programCount: files.filter((file) => PROGRAM_PATH.test(file.filename)).length,
   }
+}
+
+function labelNames(labels) {
+  return new Set(
+    (labels ?? []).map((label) =>
+      typeof label === "string" ? label : label.name
+    )
+  )
+}
+
+// Native auto-merge stays off until a person adds `reviewed` for this head.
+// Eligible YAML without that label is still a candidate. `do-not-merge` never arms.
+function shouldArmAutoMerge({ eligible, labels, live }) {
+  if (!live || !eligible) return false
+  const names = labelNames(labels)
+  if (names.has("do-not-merge")) return false
+  return names.has("reviewed")
 }
 
 module.exports = {
@@ -244,4 +269,5 @@ module.exports = {
   PROGRAM_PATH,
   evaluateAutoMergePolicy,
   fetchProgramContent,
+  shouldArmAutoMerge,
 }
