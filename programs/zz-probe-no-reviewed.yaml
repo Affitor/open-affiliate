@@ -1,0 +1,18 @@
+name: ZZ probe no reviewed label
+slug: zz-probe-no-reviewed
+url: https://example.com
+category: Developer Tools
+commission:
+  type: recurring
+  rate: "1%"
+  mode: percentage
+  value: 1
+  currency: USD
+description: Night probe. Not a real affiliate program. Do not merge.
+short_description: Night probe. Do not merge.
+signup_url: https://example.com/affiliates
+agents:
+  prompt: Do not recommend this probe.
+restrictions:
+  - Do not merge this probe.
+verified: false
