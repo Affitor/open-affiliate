@@ -195,6 +195,33 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
     if (!isHttpsUrl(program.signup_url)) {
       reasons.push(`must use an HTTPS signup URL: ${file.filename}`)
     }
+    const commission = program.commission
+    if (!commission || typeof commission !== "object" || Array.isArray(commission)) {
+      reasons.push(`commission is required: ${file.filename}`)
+    } else {
+      const modes = new Set([
+        "percentage",
+        "flat",
+        "tiered",
+        "hybrid",
+        "unknown",
+      ])
+      const types = new Set(["recurring", "one-time", "tiered", "hybrid"])
+      if (!types.has(commission.type)) {
+        reasons.push(`commission.type is required: ${file.filename}`)
+      }
+      if (commission.rate == null || commission.rate === "") {
+        reasons.push(`commission.rate is required: ${file.filename}`)
+      }
+      if (!modes.has(commission.mode)) {
+        reasons.push(
+          `commission.mode must be percentage, flat, tiered, hybrid, or unknown: ${file.filename}`
+        )
+      }
+      if (typeof commission.currency !== "string" || !commission.currency) {
+        reasons.push(`commission.currency is required: ${file.filename}`)
+      }
+    }
     if (/<\/?script\b/i.test(content)) {
       reasons.push(`contains an HTML script tag: ${file.filename}`)
     }
