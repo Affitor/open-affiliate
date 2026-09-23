@@ -9,9 +9,11 @@ name: Rebuild registry
 # to claim 750 programs while programs/ held 755 — invisible on the site, since
 # `prebuild` regenerates at build time, but wrong for anyone reading the file.
 #
-# No loop risk: this only triggers on programs/**, and the commit it pushes
-# touches only src/lib/registry*.json. Pushes made with GITHUB_TOKEN do not
-# trigger workflows anyway.
+# main is protected (pull request plus required checks), so a direct push
+# from this job is rejected and the run goes red. Push the generated
+# files to bot/rebuild-registry and open or update one pull request.
+# That branch is not main, and this workflow only listens to programs/**
+# on main, so the bot push does not schedule another rebuild.
 
 on:
   push:
@@ -20,8 +22,13 @@ on:
       - "programs/**"
   workflow_dispatch:
 
+concurrency:
+  group: rebuild-registry
+  cancel-in-progress: true
+
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   rebuild:
@@ -48,16 +55,32 @@ jobs:
       - name: Rebuild
         run: npx tsx scripts/build-registry.ts
 
-      - name: Commit if changed
+      - name: Open a pull request if changed
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add src/lib/registry.json src/lib/client-registry.json src/lib/registry-index.json src/lib/logo-files.json public/logos
           if git diff --cached --quiet; then
             echo "registry already up to date"
-          else
-            git commit -m "chore: rebuild registry
+            exit 0
+          fi
+          git commit -m "chore: rebuild registry
 
           Co-Authored-By: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>"
-            git push
+          git fetch origin bot/rebuild-registry || true
+          if git rev-parse --verify --quiet refs/remotes/origin/bot/rebuild-registry >/dev/null; then
+            git push --force-with-lease=refs/heads/bot/rebuild-registry:refs/remotes/origin/bot/rebuild-registry \
+              origin HEAD:bot/rebuild-registry
+          else
+            git push origin HEAD:bot/rebuild-registry
+          fi
+          existing="$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head bot/rebuild-registry --state open --json number --jq '.[0].number')"
+          if [ -z "$existing" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head bot/rebuild-registry \
+              --title "chore: rebuild registry" \
+              --body "Generated from programs/ on main. Registry JSON only. Merge when CI is green."
+          else
+            echo "updated pull request #$existing"
           fi
