@@ -89,6 +89,12 @@ jobs:
       - name: Validate YAML schema
         run: npx tsx scripts/build-registry.ts
 
+      # generate-md reads the registry this job just wrote. A restrictions
+      # sentence (PR 92) fails the step above; this step still runs the
+      # production prebuild path for every other shape generate-md assumes.
+      - name: Generate markdown surface
+        run: npx tsx scripts/generate-md.ts
+
   validate:
     name: Validate
     if: github.event.pull_request.head.repo.fork
