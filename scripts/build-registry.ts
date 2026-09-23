@@ -301,39 +301,27 @@ function buildIndex(programs: YamlProgram[]): void {
 }
 
 /**
- * Map slug -> logo filename, for every logo that is not a plain .png.
+ * Map slug -> logo filename for every file in public/logos.
  *
- * ProgramLogo used to hardcode `/logos/${slug}.png`. 48 programs store their
- * logo as .jpg, .webp or .svg, so those requests 404 and the component fell
- * back to rendering the first letter of the name — the brand mark never
- * appeared, on every page that lists them.
- *
- * Reading the directory rather than hardcoding an extension list means a logo
- * saved in some future format works without touching the component.
+ * ProgramLogo only emits <Image> when the slug is in this map, so a YAML-only
+ * program with no logo shows the letter fallback instead of a 404 <img>.
+ * Prefer .png when both a png and another extension exist.
  */
 function buildLogoMap(): void {
-  const overrides: Record<string, string> = {}
+  const map: Record<string, string> = {}
   let png = 0
 
   for (const file of readdirSync(LOGOS_DIR)) {
     const dot = file.lastIndexOf(".")
     if (dot <= 0) continue
     const slug = file.slice(0, dot)
-    if (file.endsWith(".png")) {
-      png++
-      continue
-    }
-    // A slug with both foo.png and foo.jpg keeps the .png the component
-    // already asks for; only record it when there is no .png to fall back on.
-    overrides[slug] = file
+    const isPng = file.endsWith(".png")
+    if (isPng) png++
+    if (!map[slug] || isPng) map[slug] = file
   }
 
-  for (const slug of Object.keys(overrides)) {
-    if (readdirSync(LOGOS_DIR).includes(`${slug}.png`)) delete overrides[slug]
-  }
-
-  writeFileSync(LOGO_MAP_FILE, JSON.stringify(overrides, null, 2) + "\n")
-  console.log(`  Logos: ${png} .png, ${Object.keys(overrides).length} needing an override`)
+  writeFileSync(LOGO_MAP_FILE, JSON.stringify(map, null, 2) + "\n")
+  console.log(`  Logos: ${png} .png, ${Object.keys(map).length} mapped`)
 }
 
 buildRegistry()
