@@ -30,7 +30,8 @@ payout:
 signup_url: https://partners.oakhampton.ai/register
 approval: auto
 approval_time: instant
-restrictions: No self-referrals, related-party purchases, trademark bidding, cookie stuffing, incentive traffic or purchased lists.
+restrictions:
+  - "No self-referrals, related-party purchases, trademark bidding, cookie stuffing, incentive traffic or purchased lists."
 marketing_materials: true
 api_available: false
 dedicated_manager: false

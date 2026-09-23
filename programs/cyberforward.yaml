@@ -29,7 +29,8 @@ payout:
 signup_url: https://partners.cyberforward.us/register
 approval: auto
 approval_time: instant
-restrictions: No self-referrals, trademark bidding, cookie stuffing, incentive traffic or purchased lists; FTC disclosure required.
+restrictions:
+  - "No self-referrals, trademark bidding, cookie stuffing, incentive traffic or purchased lists; FTC disclosure required."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
