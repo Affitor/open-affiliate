@@ -13,6 +13,7 @@ test("rebuild registry does not push to protected main", () => {
   assert.doesNotMatch(workflow, /^ {12}git push\s*$/m)
   assert.match(workflow, /bot\/rebuild-registry/)
   assert.match(workflow, /gh pr create/)
+  assert.match(workflow, /Actions cannot open the pull request/)
   assert.match(workflow, /pull-requests: write/)
   assert.match(workflow, /concurrency:/)
 })

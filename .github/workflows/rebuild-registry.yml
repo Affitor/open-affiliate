@@ -78,9 +78,14 @@ jobs:
           fi
           existing="$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --head bot/rebuild-registry --state open --json number --jq '.[0].number')"
           if [ -z "$existing" ]; then
-            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head bot/rebuild-registry \
+            # The Affitor org forbids Actions from creating pull requests.
+            # The branch push above is the update. Do not fail the run for that.
+            if ! gh pr create --repo "$GITHUB_REPOSITORY" --base main --head bot/rebuild-registry \
               --title "chore: rebuild registry" \
-              --body "Generated from programs/ on main. Registry JSON only. Merge when CI is green."
+              --body "Generated from programs/ on main. Registry JSON only. Merge when CI is green."; then
+              echo "bot/rebuild-registry is updated. Actions cannot open the pull request under org policy."
+              echo "https://github.com/${GITHUB_REPOSITORY}/compare/main...bot/rebuild-registry?expand=1"
+            fi
           else
             echo "updated pull request #$existing"
           fi
