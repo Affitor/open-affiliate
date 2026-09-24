@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-14T17:34:02.986Z",
-  "count": 760,
+  "generated_at": "2026-09-24T17:03:49.758Z",
+  "count": 778,
   "categories": [
     "AI",
     "Analytics",
@@ -1145,6 +1145,34 @@
       "signupAvailable": true
     },
     {
+      "slug": "appqr",
+      "name": "appqr.io",
+      "category": "Developer Tools",
+      "tags": [
+        "mobile-apps",
+        "app-store-links",
+        "qr-codes",
+        "app-marketing"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "mode": "percentage",
+        "value": 30,
+        "currency": "USD",
+        "duration": "12 months"
+      },
+      "cookieDays": 60,
+      "shortDescription": "Smart App Store redirect links and customizable QR codes for mobile teams",
+      "verified": false,
+      "network": null,
+      "createdAt": "2026-08-31",
+      "source": "manual",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "apps-365",
       "name": "Apps 365",
       "category": "Content Management",
@@ -2065,6 +2093,34 @@
       "network": "in-house",
       "createdAt": "2026-04-18",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "blossom-host",
+      "name": "Blossom Host",
+      "category": "Infrastructure",
+      "tags": [
+        "vps",
+        "hosting",
+        "dedicated-ipv4",
+        "isp-ip",
+        "bare-metal"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "mode": "percentage",
+        "value": 30,
+        "currency": "USD",
+        "duration": "lifetime"
+      },
+      "shortDescription": "VPS and bare metal with dedicated public IPv4 addresses",
+      "verified": false,
+      "network": null,
+      "createdAt": "2026-08-10",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -4520,6 +4576,35 @@
       "signupAvailable": true
     },
     {
+      "slug": "csv-safecheck",
+      "name": "CSV SafeCheck",
+      "category": "E-Commerce",
+      "tags": [
+        "shopify",
+        "csv-validation",
+        "data-quality",
+        "local-first",
+        "privacy"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "10%",
+        "mode": "percentage",
+        "value": 10,
+        "currency": "USD",
+        "duration": null
+      },
+      "cookieDays": 7,
+      "shortDescription": "Private, browser-local preflight for Shopify product CSV import blockers",
+      "verified": false,
+      "network": "lemonsqueezy",
+      "createdAt": "2026-09-01",
+      "source": "lemonsqueezy",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "culture-amp",
       "name": "Culture Amp",
       "category": "HR & Recruiting",
@@ -4625,6 +4710,34 @@
       "network": "in-house",
       "createdAt": "2026-04-17",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "cyberforward",
+      "name": "CyberForward",
+      "category": "Business Operations",
+      "tags": [
+        "logistics",
+        "freight",
+        "supply-chain",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "mode": "percentage",
+        "value": 20,
+        "currency": "USD",
+        "duration": "12 months"
+      },
+      "cookieDays": 90,
+      "shortDescription": "Freight operating system for freight forwarders and brokers, with a 20% affiliate programme",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-07",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -5231,6 +5344,36 @@
       "network": "partnerstack",
       "createdAt": "2026-04-18",
       "source": "partnerstack-api",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "dotmoose",
+      "name": "DotMoose",
+      "category": "Infrastructure",
+      "tags": [
+        "web-hosting",
+        "vps",
+        "backup-storage",
+        "object-storage",
+        "managed-hosting",
+        "canada"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "mode": "percentage",
+        "value": 20,
+        "currency": "CAD",
+        "duration": "lifetime of qualifying active service revenue"
+      },
+      "cookieDays": 90,
+      "shortDescription": "Canadian hosting and infrastructure with 20% recurring affiliate commission",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-01",
+      "source": "community",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -9876,6 +10019,35 @@
       "signupAvailable": true
     },
     {
+      "slug": "lazy-ads",
+      "name": "Lazy Ads",
+      "category": "Marketing",
+      "tags": [
+        "AI",
+        "marketing",
+        "advertising",
+        "SaaS",
+        "affiliate",
+        "media buyer"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": 25,
+        "mode": "percentage",
+        "value": 25,
+        "currency": "USD",
+        "duration": "12 months"
+      },
+      "cookieDays": 90,
+      "shortDescription": "Lazy Ads is an AI media buyer on flat SaaS pricing across nine ad networks. Affiliates earn 25% of eligible paid subscri",
+      "verified": false,
+      "network": null,
+      "createdAt": "2026-09-15",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "leadfeeder",
       "name": "Leadfeeder",
       "category": "Analytics",
@@ -10171,6 +10343,34 @@
       "network": "in-house",
       "createdAt": "2026-04-18",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "live-tennis-api",
+      "name": "Live Tennis API",
+      "category": "Developer Tools",
+      "tags": [
+        "api",
+        "sports-data",
+        "tennis",
+        "developer-tools"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "51%",
+        "mode": "percentage",
+        "value": 51,
+        "currency": "USD",
+        "duration": "lifetime of the subscription"
+      },
+      "cookieDays": 30,
+      "shortDescription": "Real-time tennis data API — 51% recurring commission for the life of each subscription",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-08-03",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -10696,6 +10896,33 @@
       "network": null,
       "createdAt": "2026-05-21",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "mato",
+      "name": "Mato",
+      "category": "Marketing",
+      "tags": [
+        "b2b",
+        "podcasts",
+        "expert-interviews",
+        "content-marketing",
+        "agencies"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "Individually agreed in writing",
+        "mode": "unknown",
+        "value": null,
+        "currency": "USD"
+      },
+      "shortDescription": "Refer businesses to an expert-interview and podcast production platform.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-05",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -11909,6 +12136,35 @@
       "signupAvailable": true
     },
     {
+      "slug": "oakhampton-operations-twin",
+      "name": "Oakhampton Operations Twin",
+      "category": "Business Operations",
+      "tags": [
+        "digital-twin",
+        "simulation",
+        "supply-chain",
+        "warehouse",
+        "operations"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "20%",
+        "mode": "percentage",
+        "value": 20,
+        "currency": "AUD",
+        "duration": "12 months"
+      },
+      "cookieDays": 30,
+      "shortDescription": "Operational digital twin to test a site decision before you spend, with a 20% partner programme",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-07",
+      "source": "manual",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "octo-ai",
       "name": "OctoAI",
       "category": "AI",
@@ -12067,6 +12323,35 @@
       "network": "partnerstack",
       "createdAt": "2026-04-18",
       "source": "partnerstack-api",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "openfate",
+      "name": "OpenFate",
+      "category": "AI",
+      "tags": [
+        "AI",
+        "SaaS",
+        "affiliate",
+        "recurring commission",
+        "astrology"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "20% to 25%",
+        "mode": "tiered",
+        "value": 25,
+        "currency": "USD",
+        "duration": "while partner status is approved"
+      },
+      "cookieDays": 60,
+      "shortDescription": "20% to 25% recurring commission with 60-day attribution.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-10",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -12841,6 +13126,36 @@
       "signupAvailable": true
     },
     {
+      "slug": "picturesque-ai",
+      "name": "Picturesque AI",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "image-generation",
+        "video-generation",
+        "music-generation",
+        "creative-studio",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "mode": "percentage",
+        "value": 30,
+        "currency": "USD",
+        "duration": "lifetime"
+      },
+      "cookieDays": 180,
+      "shortDescription": "All-in-one AI creative studio with 100+ image, video, and audio models",
+      "verified": false,
+      "network": "creem",
+      "createdAt": "2026-08-22",
+      "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "pika",
       "name": "Pika",
       "category": "AI",
@@ -13213,6 +13528,36 @@
       "signupAvailable": true
     },
     {
+      "slug": "pombo",
+      "name": "Pombo",
+      "category": "Email Marketing",
+      "tags": [
+        "email-marketing",
+        "ai",
+        "cold-email",
+        "saas",
+        "email-automation",
+        "sequences"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "mode": "percentage",
+        "value": 30,
+        "currency": "USD",
+        "duration": "6 months"
+      },
+      "cookieDays": 60,
+      "shortDescription": "AI-native email marketing platform with AI brand-voice copywriting",
+      "verified": false,
+      "network": "firstpromoter",
+      "createdAt": "2026-09-18",
+      "source": "manual",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "port",
       "name": "Port",
       "category": "Developer Tools",
@@ -13408,6 +13753,36 @@
       "signupAvailable": true
     },
     {
+      "slug": "power-cm-partners",
+      "name": "Power CM Partners",
+      "category": "Productivity",
+      "tags": [
+        "software",
+        "productivity",
+        "business-tools",
+        "creators",
+        "consultants",
+        "ai"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "25% of eligible net subscription payments; 20% of eligible single purchases",
+        "mode": "percentage",
+        "value": 25,
+        "currency": "USD",
+        "duration": "12 calendar months from the first actual subscription payment; product exceptions apply"
+      },
+      "cookieDays": 30,
+      "shortDescription": "Free affiliate workspace for recommending productivity, AI and business software.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-11",
+      "source": "manual",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "powr-inc",
       "name": "POWR, Inc.",
       "category": "Marketing",
@@ -13598,6 +13973,35 @@
       "signupAvailable": true
     },
     {
+      "slug": "prismbay-clean",
+      "name": "PrismBay Clean",
+      "category": "E-Commerce",
+      "tags": [
+        "e-commerce",
+        "home",
+        "cleaning",
+        "retail",
+        "physical-products"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "10%",
+        "mode": "percentage",
+        "value": 10,
+        "currency": "USD",
+        "duration": null
+      },
+      "cookieDays": 30,
+      "shortDescription": "Performance partner program for practical home and cleaning products.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "",
+      "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "process-street",
       "name": "Process Street",
       "category": "Productivity",
@@ -13751,6 +14155,35 @@
       "network": "in-house",
       "createdAt": "2026-04-18",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "protoface",
+      "name": "Protoface",
+      "category": "AI",
+      "tags": [
+        "generative-ai",
+        "ai-video",
+        "video-generation",
+        "realtime-avatars",
+        "managed-inference",
+        "creator-tools"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "100% first payment + 25% recurring",
+        "mode": "hybrid",
+        "value": 25,
+        "currency": "USD",
+        "duration": "12 months"
+      },
+      "shortDescription": "Generative media APIs and unlimited AI video plans",
+      "verified": false,
+      "network": "firstpromoter",
+      "createdAt": "2026-08-30",
+      "source": "firstpromoter",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -14521,6 +14954,36 @@
       "network": "in-house",
       "createdAt": "2026-04-18",
       "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "relentless-nature",
+      "name": "Relentless Nature",
+      "category": "Productivity",
+      "tags": [
+        "education",
+        "self-mastery",
+        "personal-development",
+        "digital-products",
+        "courses",
+        "workbooks",
+        "journals"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "15%-50% tiered",
+        "mode": "tiered",
+        "value": 50,
+        "currency": "USD"
+      },
+      "cookieDays": 30,
+      "shortDescription": "Self-mastery courses, workbooks, journals, and growth tools with up to 50% commission.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-08-11",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
@@ -15338,6 +15801,36 @@
       "verified": false,
       "network": "in-house",
       "createdAt": "2026-04-18",
+      "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "screenpipe",
+      "name": "Screenpipe",
+      "category": "Productivity",
+      "tags": [
+        "ai",
+        "local-first",
+        "desktop",
+        "context",
+        "productivity",
+        "automation",
+        "privacy"
+      ],
+      "commission": {
+        "type": "one-time",
+        "rate": "25% of the first paid transaction",
+        "mode": "percentage",
+        "value": 25,
+        "currency": "USD",
+        "duration": "first paid transaction only"
+      },
+      "shortDescription": "Local-first desktop context layer for AI agents and knowledge workflows",
+      "verified": false,
+      "network": "dub",
+      "createdAt": "2026-09-04",
       "source": "community",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
@@ -20415,6 +20908,36 @@
       "network": "partnerstack",
       "createdAt": "2026-04-18",
       "source": "partnerstack-api",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "xestando",
+      "name": "Xestando",
+      "category": "Finance",
+      "tags": [
+        "saas",
+        "spain",
+        "united-states",
+        "invoicing",
+        "verifactu",
+        "affiliate"
+      ],
+      "commission": {
+        "type": "tiered",
+        "rate": "50/30/20",
+        "mode": "tiered",
+        "value": 50,
+        "currency": "EUR",
+        "duration": "3 years (year 4+ 0% for collaborators)"
+      },
+      "cookieDays": 0,
+      "shortDescription": "SME suite for Spain and the US. Collaborator 50/30/20 on net fee.",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-17",
+      "source": "manual",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
       "signupAvailable": true
