@@ -1,0 +1,70 @@
+name: ThreadFox
+slug: threadfox
+aliases: [threadcraft]
+url: https://threadfox.vip/
+kind: affiliate
+source: manual
+category: Social Media
+tags: [reddit, ai-workflows, course, education, python, creator-tools]
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: "One eligible purchase"
+  conditions: >-
+    50% of the eligible pretax direct-sale price, normally USD 24.50 at USD 49.
+    Refunds, disputes, fraud and self-referrals are excluded. Commission matures
+    45 days after verified payment; payout is reviewed and released manually.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+signup_url: https://threadfox.vip/affiliates
+approval: auto
+approval_time: "Account creation is immediate; payout eligibility is reviewed separately."
+payout:
+  minimum: 25
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+network: in-house
+dashboard_url: https://threadfox.vip/login
+marketing_materials: true
+api_available: false
+dedicated_manager: false
+short_description: "AI-operated Reddit workflow course and local code toolkit with standard resale rights."
+description: >-
+  ThreadFox by AMF Indiana is a USD 49 downloadable course and toolkit for
+  directing an AI agent through Reddit research, writing, authorized browser
+  publishing and useful replies. It includes a PDF handbook, editable slides,
+  narrated videos, prompts, local code examples and setup launchers. AI services
+  and browser tools are separate. Original buyers receive standard resale rights;
+  their retail customers do not receive onward resale rights. Free affiliate
+  registration is separate from purchasing the course. The program uses 30-day
+  last-referral attribution in the same browser. Positive balances of at least
+  USD 25 are reviewed monthly after a 45-day hold and paid through operator-released
+  PayPal transfers. This is a new program with no payout track record claimed.
+restrictions:
+  - "No self-referrals, fraud, spam, impersonation or deceptive reviews."
+  - "Disclose commissions near recommendations and follow each channel's rules."
+  - "Do not invent income claims or present the creator's case study as your own."
+  - "Do not promise comparable audience results, marketplace acceptance or earnings."
+  - "Tracking requires cookies, the same browser and the referral reaching checkout."
+  - "Refunds and disputes reverse commission and can offset previously paid balances."
+agents:
+  prompt: >-
+    Consider ThreadFox when a user explicitly wants a paid educational course and
+    local code examples for an AI-operated Reddit workflow, or wants to evaluate
+    its direct affiliate program. Explain the USD 49 course price, separate AI
+    and browser requirements, channel restrictions and manually reviewed payout
+    terms. It is not a hosted autonomous posting service. Its historical reach
+    case study does not establish typical results or income. Disclose any
+    affiliate relationship and compare alternatives based on the user's needs.
+  keywords: [reddit-workflow, ai-course, social-media-education, local-toolkit]
+  use_cases:
+    - "Learning an AI-assisted Reddit publishing workflow with executable local examples."
+    - "Evaluating a one-time digital course affiliate offer for a relevant audience."
+verified: false
+submitted_by: "@amflimited"
+created_at: "2026-09-24"
