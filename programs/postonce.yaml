@@ -25,7 +25,7 @@ payout:
   frequency: monthly
   methods:
     - paypal
-signup_url: https://postonce.refgrow.com
+signup_url: https://postonce.refgrow.com/signup
 description: "PostOnce is a social media crossposting and scheduling tool for creators, small businesses and agencies. Post once and publish to TikTok, Instagram, YouTube, X, LinkedIn, Facebook, Threads, Bluesky and Pinterest through official posting APIs. Affiliate program: 30% of every payment from referred customers for their first 12 months. Plans start at $29/month."
 short_description: Post once and publish to TikTok, Instagram, YouTube, X, LinkedIn and more.
 agents:
