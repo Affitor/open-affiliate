@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-14T17:34:02.986Z",
-  "count": 760,
+  "generated_at": "2026-09-21T08:43:17.790Z",
+  "count": 762,
   "categories": [
     "AI",
     "Analytics",
@@ -8914,6 +8914,36 @@
       "signupAvailable": true
     },
     {
+      "slug": "kalyvox",
+      "name": "Kalyvox.ai",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "saas",
+        "voice-ai",
+        "small-business",
+        "productivity",
+        "automation",
+        "lead-generation"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": 20,
+        "mode": "percentage",
+        "value": 20,
+        "currency": "USD",
+        "duration": "12 months"
+      },
+      "cookieDays": 60,
+      "shortDescription": "Kalyvox is an AI phone receptionist for small businesses, answering calls 24/7, capturing leads, and booking appointments.",
+      "verified": false,
+      "network": null,
+      "createdAt": "2026-08-04",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
       "slug": "kartra-webinarjam-everwebinar",
       "name": "Kartra, WebinarJam & EverWebinar",
       "category": "Marketing",
@@ -12835,6 +12865,36 @@
       "verified": true,
       "network": "in-house",
       "createdAt": "2026-04-17",
+      "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "picturesque-ai",
+      "name": "Picturesque AI",
+      "category": "AI",
+      "tags": [
+        "ai",
+        "image-generation",
+        "video-generation",
+        "music-generation",
+        "creative-studio",
+        "saas"
+      ],
+      "commission": {
+        "type": "recurring",
+        "rate": "30%",
+        "mode": "percentage",
+        "value": 30,
+        "currency": "USD",
+        "duration": "lifetime"
+      },
+      "cookieDays": 180,
+      "shortDescription": "All-in-one AI creative studio with 100+ image, video, and audio models",
+      "verified": false,
+      "network": "creem",
+      "createdAt": "2026-08-22",
       "source": "community",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
