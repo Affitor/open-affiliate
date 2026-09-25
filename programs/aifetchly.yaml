@@ -8,6 +8,7 @@ commission:
   type: recurring
   rate: 20
   currency: USD
+  mode: tiered
 cookie_days: 90
 
 payout:
