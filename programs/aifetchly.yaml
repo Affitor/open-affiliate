@@ -9,6 +9,7 @@ commission:
   rate: 20
   currency: USD
   mode: tiered
+  value: 20
 cookie_days: 90
 
 payout:
