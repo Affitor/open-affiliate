@@ -7,11 +7,14 @@ verified: false
 commission:
   type: one-time
   rate: 40
+  mode: percentage
+  value: 40
   currency: USD
 cookie_days: 30
 
 payout:
   minimum: 10
+  currency: USD
   frequency: monthly
 
 short_description: "Fusebox emails solo OpenAI API developers at 50%, 80%, and 100% of a monthly spend ceiling they set - so a retry loop or"
