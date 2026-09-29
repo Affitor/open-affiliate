@@ -7,11 +7,14 @@ verified: false
 commission:
   type: one-time
   rate: 30
+  mode: percentage
+  value: 30
   currency: USD
 cookie_days: 30
 
 payout:
   minimum: 10
+  currency: USD
   frequency: monthly
 
 short_description: "ClaudeGuard is a $9.99 one-time Windows diagnostic tool for Claude Desktop's Code Integrity/MSIX crash bug (the vk_swift"
