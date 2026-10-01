@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" stroke="#e11d7e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Head -->
+  <circle cx="26" cy="12" r="4" fill="none"/>
+
+  <!-- Eye -->
+  <circle cx="27.5" cy="11" r="0.8" fill="#e11d7e" stroke="none"/>
+
+  <!-- Beak -->
+  <polyline points="30,12 33,11.5 30,13.5"/>
+
+  <!-- Neck into body -->
+  <path d="M23,15 Q18,20 16,26" fill="none"/>
+  <path d="M28,15 Q26,20 24,26" fill="none"/>
+
+  <!-- Body bottom -->
+  <line x1="16" y1="26" x2="24" y2="26"/>
+
+  <!-- Wing (swept lines) -->
+  <polyline points="22,16 14,12 4,8" fill="none"/>
+  <polyline points="22,18 12,15 3,12" fill="none"/>
+  <polyline points="21,20 11,18 4,16" fill="none"/>
+
+  <!-- Tail feathers -->
+  <line x1="16" y1="26" x2="10" y2="28"/>
+  <line x1="16" y1="26" x2="8" y2="26"/>
+  <line x1="16" y1="26" x2="9" y2="24"/>
+
+  <!-- Feet -->
+  <polyline points="19,26 18,31 16,32"/>
+  <line x1="18" y1="31" x2="20" y2="32"/>
+  <polyline points="22,26 21,31 19,32"/>
+  <line x1="21" y1="31" x2="23" y2="32"/>
+</svg>
