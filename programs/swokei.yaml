@@ -42,7 +42,7 @@ dedicated_manager: false
 dashboard_url: null
 network: in-house
 program_age: null
-short_description: Swokei is an outreach tool that analyses websites and turns flaws in design, layout, speed, SEO and mobile into personalised cold emails
+short_description: Swokei analyses a website and turns its design, speed, SEO and mobile flaws into a cold email.
 description: |
   Swokei is an outreach tool for web agencies and freelancers. It analyses a
   prospect's website — design, layout, speed, SEO, mobile — and turns what it finds
