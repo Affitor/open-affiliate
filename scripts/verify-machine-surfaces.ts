@@ -54,6 +54,22 @@ for (const program of programs) {
     fail(`missing Markdown twin for ${program.slug}`);
   }
 }
+if (Buffer.byteLength(llms) > 10240) {
+  fail(`llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is 10240`);
+}
+for (const file of ["index.md", "programs.md", "rankings.md", "changelog.md"]) {
+  const text = requireText(file);
+  if (!text.startsWith("# ")) fail(`${file} must start with an H1`);
+}
+if (!requireText("index.md").includes(`${BASE_URL}/llms.txt`)) {
+  fail("index.md does not point at llms.txt");
+}
+if (!requireText("rankings.md").includes(`${BASE_URL}/programs/`)) {
+  fail("rankings.md does not link program pages");
+}
+if (!requireText("changelog.md").includes("April 18, 2026")) {
+  fail("changelog.md is missing the latest entry");
+}
 
 const sitemapEntries = sitemap();
 const sitemapUrls = sitemapEntries.map((entry) => entry.url);
