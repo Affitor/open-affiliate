@@ -6,7 +6,9 @@ verified: false
 
 commission:
   type: one-time
-  rate: 20
+  rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
 cookie_days: 60
 
@@ -14,7 +16,7 @@ payout:
   minimum: 50
   frequency: monthly
 
-short_description: "Tone Caliper is a desktop photo editor for Windows and macOS built around an interactive color wheel. Photographers can "
+short_description: "Desktop photo editor built around an interactive color wheel for precise color grading."
 description: |
   Tone Caliper is a desktop photo editor for Windows and macOS built around an interactive color wheel. Photographers can visualize the colors in an image and directly adjust hue, chroma, and lightness, alongside RAW editing, masks, curves, film grain, LUT support, and photo organization tools. The Tone Caliper affiliate program pays 20% commission on referred purchases, with a 60-day attribution window. Payouts are made monthly with a $50 minimum payout.
 
