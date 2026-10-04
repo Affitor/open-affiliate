@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     url: "https://openaffiliate.dev/rankings",
     siteName: "OpenAffiliate",
   },
+  alternates: {
+    canonical: "/rankings",
+    types: {
+      "text/markdown": "https://openaffiliate.dev/rankings.md",
+    },
+  },
 };
 
 export default function RankingsLayout({

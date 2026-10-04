@@ -27,7 +27,10 @@ export function TrackLink({
       target="_blank"
       rel="noopener noreferrer"
       className={className}
-      onClick={() => track("outbound_click", { slug })}
+      onClick={() => {
+        track("outbound_click", { slug })
+        track("cta_oa_program", { slug })
+      }}
     >
       {children}
     </a>
