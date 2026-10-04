@@ -22,3 +22,10 @@ test("required check job names match branch protection", () => {
   assert.match(workflow, /name: Validate Programs/)
   assert.match(workflow, /name: Validate\n/)
 })
+
+test("fork YAML CI runs generate-md after the registry build", () => {
+  const build = workflow.indexOf("npx tsx scripts/build-registry.ts")
+  const markdown = workflow.indexOf("npx tsx scripts/generate-md.ts")
+  assert.ok(build > 0)
+  assert.ok(markdown > build)
+})

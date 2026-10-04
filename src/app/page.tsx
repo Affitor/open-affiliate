@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
 import {
@@ -13,6 +14,15 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
 import type { Program } from "@/lib/programs";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+    types: {
+      "text/markdown": "https://openaffiliate.dev/index.md",
+    },
+  },
+};
 
 function RankingsPreview() {
   const top5 = [...programs]
