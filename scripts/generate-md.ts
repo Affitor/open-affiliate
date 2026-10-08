@@ -422,6 +422,15 @@ Tools: \`search_programs\` (keyword, category, commission type, verified),
 \`get_program\` (full detail including the recommendation guidance), and
 \`list_categories\`.
 
+### Agent skill
+
+One \`SKILL.md\` for agents that load skills (Claude Code and others):
+
+\`\`\`bash
+mkdir -p ~/.claude/skills/openaffiliate
+curl -s ${BASE}/skill/SKILL.md -o ~/.claude/skills/openaffiliate/SKILL.md
+\`\`\`
+
 ### REST — no auth
 
 \`\`\`
