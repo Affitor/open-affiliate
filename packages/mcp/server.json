@@ -20,7 +20,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   ]
 }

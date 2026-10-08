@@ -22,18 +22,31 @@ export default function MCPPage() {
             HTTP transport (recommended)
           </h2>
           <p className="text-base text-muted-foreground mb-3">
-            For Claude.ai, ChatGPT, and remote MCP clients:
+            Hosted at <code className="text-xs">https://openaffiliate.dev/mcp</code>.
+            Public, read-only, no API key. One line in Claude Code:
+          </p>
+          <CodeBlock
+            label="terminal"
+            code={`claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp`}
+          />
+          <p className="text-base text-muted-foreground mt-3 mb-3">
+            For Claude.ai, ChatGPT, and any other remote MCP client, the same
+            endpoint as config:
           </p>
           <CodeBlock
             label="mcp config"
             code={`{
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }`}
           />
+          <p className="text-xs text-muted-foreground mt-3">
+            <code>/api/mcp</code> serves the same tools and keeps working — it
+            is the path earlier clients were given.
+          </p>
         </section>
 
         <section>
@@ -79,6 +92,23 @@ export default function MCPPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section>
+          <h2 id="markdown" className="text-lg font-semibold mb-2">
+            Markdown, without MCP
+          </h2>
+          <p className="text-base text-muted-foreground mb-3">
+            Append <code className="text-xs">.md</code> to any program,
+            category or network URL for a clean markdown version an agent can
+            fetch and cite directly:
+          </p>
+          <CodeBlock
+            label="terminal"
+            code={`curl https://openaffiliate.dev/programs/vercel.md
+curl https://openaffiliate.dev/categories/ai.md
+curl https://openaffiliate.dev/llms.txt`}
+          />
         </section>
       </div>
 

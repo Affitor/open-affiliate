@@ -167,7 +167,7 @@ export default async function ProgramPage({
   const mcpHttp = `{
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }`;

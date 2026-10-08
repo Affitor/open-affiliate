@@ -266,8 +266,8 @@ const INTEGRATION = `### MCP — recommended
 
 HTTP, no install:
 
-\`\`\`json
-{ "mcpServers": { "openaffiliate": { "url": "${BASE}/api/mcp" } } }
+\`\`\`bash
+claude mcp add --transport http openaffiliate ${BASE}/mcp
 \`\`\`
 
 stdio, for local tools:
