@@ -31,7 +31,7 @@ export default function MCPPage() {
           />
           <p className="text-base text-muted-foreground mt-3 mb-3">
             Claude (web and desktop): Settings → Connectors → Add custom
-            connector, and paste the URL. Cursor, Windsurf, ChatGPT and other
+            connector, and paste the URL. Cursor, Windsurf and other
             clients that take a JSON config:
           </p>
           <CodeBlock

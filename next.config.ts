@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   // /for-agents is the conventional entry point other sites use; the MCP docs page covers it.
   async redirects() {
-    return [{ source: "/for-agents", destination: "/docs/mcp", permanent: true }];
+    return ["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false }));
   },
   async rewrites() {
     return [
