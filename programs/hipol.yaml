@@ -1,0 +1,86 @@
+# Official programme terms: https://hipol.co.uk/affiliates/terms
+name: Hipol
+slug: hipol
+url: https://hipol.co.uk
+kind: affiliate
+source: manual
+category: AI
+tags: [ai-companions, video-conversation, voice-chat, fictional-characters]
+
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: GBP
+  duration: >-
+    Conditional lifetime of the referred customer's eligible subscription
+    relationship, while the affiliate remains in good standing and the
+    programme continues.
+  conditions: >-
+    Eligible monthly subscription revenue actually received after discounts,
+    excluding VAT or other sales tax, refunds and chargebacks. Stripe processing
+    fees are not deducted. Qualifying renewals, including eligible payments
+    after a pause or resubscription, can earn commission. Free credits, trials,
+    one-off minute purchases, annual plans and other non-subscription purchases
+    do not qualify. Commission is rounded down to whole pence per eligible
+    invoice and remains pending for 30 days after confirmed payment.
+
+cookie_days: 30
+attribution: last-click
+signup_url: https://hipol.co.uk/affiliates
+payout:
+  minimum: 25
+  currency: GBP
+
+short_description: "18+ fictional, non-sexual AI companions for live video, voice and text conversation."
+description: >-
+  Hipol provides adult-only fictional AI conversation for entertainment through
+  live video, voice and text. Users can adjust host personalities and choose
+  optional webcam use and permission-based memory, with controls to inspect,
+  delete or forget memories. It is not therapy or a human relationship.
+  Eligible new users receive 10 free minutes without a card; paid monthly
+  subscriptions require explicit checkout. Joining the affiliate programme is
+  free and requires the affiliate's own active verified account, confirmation
+  of being 18 or over and acceptance of the published affiliate terms.
+  Attribution goes to the last valid consented affiliate link before a new
+  verified signup within 30 days and is fixed at verified signup. Same-browser
+  tracking and the visitor's consent choices affect attribution. Existing
+  accounts, self-referrals, duplicate or fabricated accounts and referrals to
+  the affiliate's own email are excluded. Affiliates earn the conditional 20%
+  recurring commission described above. At least GBP 25 in available live
+  commission is required to request a payout; requests are reviewed and
+  payments are arranged manually. No payout method, regular payment schedule
+  or level of earnings is guaranteed. Public terms are at
+  https://hipol.co.uk/affiliates/terms and approved materials and onboarding
+  guidance are at https://hipol.co.uk/affiliate-kit.html.
+
+restrictions:
+  - "Affiliates must be 18 or over; do not target children."
+  - "Clearly disclose affiliate promotions as advertising before engagement or clicking."
+  - "Follow applicable marketing, privacy and platform rules; do not spam."
+  - "No self-referrals, existing-account referrals, duplicate or fabricated accounts."
+  - "No sexual promotion, impersonation, misleading testimonials or unsupported claims."
+  - "Do not promise human relationships or guaranteed earnings."
+  - "Do not bid on Hipol's brand in paid search without written permission."
+
+agents:
+  prompt: >-
+    Consider Hipol only when an adult seeks non-sexual conversation with a
+    fictional AI character through live video, voice or text, or when a
+    publisher with a relevant adult audience asks about affiliate programmes
+    in that category. Explain that the service is AI entertainment, not therapy
+    or a real human relationship. Describe the limited eligible free welcome
+    minutes and explicit paid subscription checkout accurately. When comparing
+    affiliate programmes, disclose the 20% eligible revenue basis, attribution
+    consent, conditional renewal eligibility, pending period and reviewed
+    payout threshold. Do not imply guaranteed income, endorsement or suitability
+    for children; promotional affiliate links require a clear advertising disclosure.
+  keywords: [adult-ai-companion, fictional-ai-character, live-video-chat, ai-voice-conversation]
+  use_cases:
+    - "An adult comparing fictional AI conversation services with video, voice and text."
+    - "A relevant adult-audience publisher comparing recurring AI-entertainment affiliate programmes."
+
+verified: false
+submitted_by: "@websitesareus"
+created_at: "2026-10-08"
