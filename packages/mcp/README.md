@@ -12,7 +12,7 @@ Add to your MCP config (Claude.ai, ChatGPT, any MCP client):
 {
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }

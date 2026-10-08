@@ -264,11 +264,14 @@ function groupMd(kind: "category" | "network", label: string, list: Program[]): 
  */
 const INTEGRATION = `### MCP — recommended
 
-HTTP, no install:
+Hosted HTTP, no install, no key:
 
-\`\`\`json
-{ "mcpServers": { "openaffiliate": { "url": "${BASE}/api/mcp" } } }
+\`\`\`bash
+claude mcp add --transport http openaffiliate ${BASE}/mcp
 \`\`\`
+
+Any other client: \`{ "mcpServers": { "openaffiliate": { "url": "${BASE}/mcp" } } }\`.
+\`${BASE}/api/mcp\` is the same server under its older path.
 
 stdio, for local tools:
 
