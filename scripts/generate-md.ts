@@ -42,6 +42,22 @@ import {
 } from "../src/lib/programs"
 
 const BASE = "https://openaffiliate.dev"
+
+/**
+ * How many verified programs llms.txt shows inline.
+ *
+ * It used to show all of them. That made the size of a fetch-once index grow
+ * with the registry: at 49 verified the list was 4947 bytes, 48% of the file,
+ * ~101 bytes a row, and the file sat 4 bytes under its CI byte cap. The next
+ * program to be verified would have failed the build — measured, by toggling
+ * one: 10316 bytes against a cap of 10240.
+ *
+ * A sample plus a link to the full list makes the index's size independent of
+ * how many programs get verified, which is the actual fix. The number is
+ * small on purpose: llms.txt exists to tell an agent what this registry is and
+ * how to query it, and the full data belongs behind a link it can follow.
+ */
+const VERIFIED_SAMPLE = 12
 const OUT = join(process.cwd(), "public")
 
 // ---------- Types -----------------------------------------------------------
@@ -341,6 +357,52 @@ function docsMd(): string {
 
 // ---------- llms.txt --------------------------------------------------------
 
+function verifiedByScore(): Program[] {
+  const score = new Map(sitePrograms.map(p => [p.slug, affiliateScore(p)]))
+  return programs
+    .filter(p => p.verified)
+    .sort(
+      (a, b) =>
+        (score.get(b.slug) ?? 0) - (score.get(a.slug) ?? 0) ||
+        a.name.localeCompare(b.name),
+    )
+}
+
+/**
+ * Every verified program, uncapped. This is where the list llms.txt used to
+ * inline now lives, so the index can stay a fixed size while the data grows.
+ */
+function verifiedMd(): string {
+  const verified = verifiedByScore()
+  return joinSections([
+    `# Verified affiliate programs`,
+    [
+      `> The ${verified.length} programs OpenAffiliate has checked against the`,
+      `> program's own page, highest Affiliate Score first. The other`,
+      `> ${programs.length - verified.length} in the registry are community-submitted`,
+      `> and unconfirmed.`,
+    ].join("\n"),
+    section(
+      "What verified means",
+      [
+        `The commission rate, cookie window and payout terms below were read from`,
+        `the program's own page on the date each entry states. Everything still`,
+        `changes without notice, so cite the program's signup URL for anything a`,
+        `reader will act on.`,
+      ].join("\n"),
+    ),
+    section("Programs", verified.map(row).join("\n")),
+    section(
+      "Elsewhere",
+      [
+        `- [Short index](${BASE}/llms.txt)`,
+        `- [All ${programs.length} programs, grouped by category](${BASE}/programs.md)`,
+        `- [Every program in full](${BASE}/llms-full.txt)`,
+      ].join("\n"),
+    ),
+  ])
+}
+
 function llmsTxt(): string {
   const verified = programs.filter(p => p.verified)
   const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
@@ -391,7 +453,13 @@ function llmsTxt(): string {
     section(
       "Verified programs",
       verified.length
-        ? verified.map(row).join("\n")
+        ? [
+            verified.length > VERIFIED_SAMPLE
+              ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
+              : `All ${verified.length} verified. Also at ${BASE}/verified.md`,
+            ``,
+            verifiedByScore().slice(0, VERIFIED_SAMPLE).map(row).join("\n"),
+          ].join("\n")
         : "None yet.",
     ),
     section("Categories", catLines),
@@ -431,7 +499,8 @@ function llmsFullTxt(): string {
     `# OpenAffiliate — full registry`,
     [
       `> Every one of the ${programs.length} programs, in full. Generated from the same`,
-      `> registry the website reads. For the short version see ${BASE}/llms.txt.`,
+      `> registry the website reads. For the short version see ${BASE}/llms.txt,`,
+      `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
     [
       `${programs.filter(p => p.verified).length} programs are verified by OpenAffiliate.`,
@@ -495,6 +564,7 @@ function indexMd(): string {
         `- [Entry point](${BASE}/llms.txt)`,
         `- [Full registry](${BASE}/llms-full.txt)`,
         `- [All programs](${BASE}/programs.md)`,
+        `- [Verified programs](${BASE}/verified.md)`,
         `- [Rankings](${BASE}/rankings.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [One program](${BASE}/programs/vercel.md)`,
@@ -576,6 +646,7 @@ function main(): void {
   }
 
   write("llms.txt", llmsTxt())
+  write("verified.md", verifiedMd())
   write("llms-full.txt", llmsFullTxt())
   write("programs.md", programsIndexMd())
   write("docs.md", docsMd())

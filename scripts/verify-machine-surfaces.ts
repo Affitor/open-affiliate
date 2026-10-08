@@ -54,8 +54,72 @@ for (const program of programs) {
     fail(`missing Markdown twin for ${program.slug}`);
   }
 }
-if (Buffer.byteLength(llms) > 10240) {
-  fail(`llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is 10240`);
+/**
+ * llms.txt is fetched once and read whole, so it has a size budget.
+ *
+ * The budget only means something if the file's size does not grow with the
+ * registry. It used to: every verified program was listed inline, ~101 bytes a
+ * row, and at 49 verified the file sat 4 bytes under this number. That is not
+ * a budget, it is a tripwire — the next program to be verified would have
+ * failed this check with nothing in the code to explain why.
+ *
+ * So the number stayed and the file shrank: the index now shows a bounded
+ * sample and links verified.md for the rest. The two checks below are what
+ * keep it that way. If this cap is ever approached again, move content out to
+ * a linked surface rather than raising it, because the point is a file an
+ * agent reads in full.
+ */
+const LLMS_MAX_BYTES = 10240;
+if (Buffer.byteLength(llms) > LLMS_MAX_BYTES) {
+  fail(
+    `llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is ${LLMS_MAX_BYTES}. ` +
+      `Move content to a linked surface instead of raising the cap.`
+  );
+}
+
+/**
+ * The index must stay bounded, and must say so truthfully.
+ *
+ * Rather than duplicate the generator's sample size here — two constants drift
+ * — this reads the claim llms.txt makes about itself and checks the file
+ * against it. A reintroduced full listing fails both halves: the stated count
+ * would exceed the ceiling, and an unstated one has no claim to match.
+ */
+const LLMS_MAX_INLINE_PROGRAMS = 20;
+const verifiedSection = llms.split(/^## /m).find((part) => part.startsWith("Verified programs"));
+if (!verifiedSection) fail("llms.txt has no 'Verified programs' section");
+const claim = verifiedSection.match(/^(?:Highest-scoring (\d+) of \d+|All (\d+)) verified/m);
+if (!claim) {
+  fail(
+    "llms.txt's verified section does not state how many programs it lists; " +
+      "it must, so this check can hold it to that number"
+  );
+}
+const claimed = Number(claim[1] ?? claim[2]);
+const inlined = (verifiedSection.match(/^- \[/gm) ?? []).length;
+if (inlined !== claimed) {
+  fail(`llms.txt says it lists ${claimed} verified programs but lists ${inlined}`);
+}
+if (claimed > LLMS_MAX_INLINE_PROGRAMS) {
+  fail(
+    `llms.txt inlines ${claimed} programs; the ceiling is ${LLMS_MAX_INLINE_PROGRAMS}. ` +
+      `The index's size must not grow with the registry — link verified.md instead.`
+  );
+}
+
+/**
+ * And the data the index stopped carrying has to be somewhere complete:
+ * a bounded index is only acceptable because verified.md holds all of it.
+ */
+const verifiedPage = requireText("verified.md");
+if (!verifiedPage.startsWith("# ")) fail("verified.md must start with an H1");
+for (const program of programs.filter((p) => p.verified)) {
+  if (!verifiedPage.includes(`/programs/${program.slug}.md`)) {
+    fail(`verified.md is missing verified program ${program.slug}`);
+  }
+}
+if (!llms.includes(`${BASE_URL}/verified.md`)) {
+  fail("llms.txt does not link verified.md, where the full verified list now lives");
 }
 for (const file of ["index.md", "programs.md", "rankings.md", "changelog.md"]) {
   const text = requireText(file);
