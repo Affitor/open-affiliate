@@ -50,6 +50,7 @@ jobs:
               PROGRAM_PATH,
               evaluateAutoMergePolicy,
               fetchProgramContent,
+              shouldArmAutoMerge,
             } = require('./.github/scripts/auto-merge-policy.cjs')
 
             const owner = context.repo.owner
@@ -85,10 +86,12 @@ jobs:
               files,
             })
 
+            const reviewedLabel = 'reviewed'
             const labelDefinitions = [
-              [candidateLabel, '1f883d', 'Machine policy allows native auto-merge after required checks'],
+              [candidateLabel, '1f883d', 'Machine policy allows native auto-merge after the reviewed label and required checks'],
               [blockedLabel, 'd73a4a', 'Machine policy requires human review'],
               ['do-not-merge', 'b60205', 'Emergency stop: never auto-merge this pull request'],
+              [reviewedLabel, '1d76db', 'Holder reviewed this head; native auto-merge may arm'],
             ]
             for (const [name, color, description] of labelDefinitions) {
               try {
@@ -124,15 +127,30 @@ jobs:
               })
             }
 
+            const disableAutoMerge = async () => {
+              await github.graphql(
+                `mutation DisableAutoMerge($pullRequestId: ID!) {
+                  disablePullRequestAutoMerge(input: {
+                    pullRequestId: $pullRequestId
+                  }) {
+                    pullRequest { number }
+                  }
+                }`,
+                { pullRequestId: pullRequest.node_id }
+              )
+            }
+
             let action
             if (result.eligible) {
               await addLabel(candidateLabel)
               await removeLabel(blockedLabel)
-              action = live
-                ? 'Native squash auto-merge requested; GitHub still waits for every required branch check.'
-                : 'Shadow only: this pull request would enter native squash auto-merge after required checks.'
-
-              if (live) {
+              const arm = shouldArmAutoMerge({
+                eligible: true,
+                labels: pullRequest.labels,
+                live,
+              })
+              if (arm) {
+                action = 'Native squash auto-merge requested; GitHub still waits for every required branch check.'
                 try {
                   await github.graphql(
                     `mutation EnableAutoMerge(
@@ -158,23 +176,22 @@ jobs:
                   )
                   action = `Native auto-merge was not enabled: ${error.message}`
                 }
+              } else if (live) {
+                action = 'Candidate. Native auto-merge waits for the reviewed label on this head.'
+                if (pullRequest.auto_merge) {
+                  await disableAutoMerge()
+                  action += ' A previous auto-merge request was disabled.'
+                }
+              } else {
+                action = 'Shadow only: this pull request would enter native squash auto-merge after the reviewed label and required checks.'
               }
             } else {
               await addLabel(blockedLabel)
               await removeLabel(candidateLabel)
               action = 'Human review is required; auto-merge was not requested.'
 
-              if (existingLabels.has(candidateLabel) && pullRequest.auto_merge) {
-                await github.graphql(
-                  `mutation DisableAutoMerge($pullRequestId: ID!) {
-                    disablePullRequestAutoMerge(input: {
-                      pullRequestId: $pullRequestId
-                    }) {
-                      pullRequest { number }
-                    }
-                  }`,
-                  { pullRequestId: pullRequest.node_id }
-                )
+              if (pullRequest.auto_merge) {
+                await disableAutoMerge()
                 action += ' A previous auto-merge request was disabled.'
               }
             }

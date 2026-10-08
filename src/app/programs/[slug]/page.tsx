@@ -34,6 +34,7 @@ import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, commissionUnknown} from "@/lib/programs";
+import { applyEarnLabel } from "@/lib/apply-cta";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -132,6 +133,7 @@ export default async function ProgramPage({
   if (!program) notFound();
 
   const joinUrl = program.signupUrl ?? program.url;
+  const applyCta = applyEarnLabel(program.commission);
 
   // Affiliate Score
   const score = affiliateScore(program);
@@ -165,7 +167,7 @@ export default async function ProgramPage({
   const mcpHttp = `{
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }`;
@@ -323,15 +325,14 @@ export default async function ProgramPage({
               <h2 className="text-base font-semibold mb-3">How to Join</h2>
               <div className="rounded-xl border border-border/50 bg-card/30 p-5 space-y-4">
                 {program.signupUrl && (
-                  <a
+                  <TrackLink
                     href={program.signupUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    slug={slug}
                     className="inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
                   >
-                    Apply to program
+                    {applyCta}
                     <ExternalLink className="h-3.5 w-3.5" />
-                  </a>
+                  </TrackLink>
                 )}
                 <div className="flex flex-wrap gap-6">
                   {approvalInfo && (
@@ -617,7 +618,7 @@ export default async function ProgramPage({
             slug={slug}
             className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
-            Join Program
+            {applyCta}
             <ExternalLink className="h-3.5 w-3.5" />
           </TrackLink>
         </div>

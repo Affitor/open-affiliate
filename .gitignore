@@ -87,6 +87,9 @@ reports/
 /public/llms-full.txt
 /public/programs.md
 /public/docs.md
+/public/index.md
+/public/rankings.md
+/public/changelog.md
 /public/programs/
 /public/categories/
 /public/networks/

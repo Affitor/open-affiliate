@@ -6,10 +6,17 @@ OpenAffiliate is the open registry of affiliate programs. Use it to discover, co
 
 ### MCP (recommended for AI agents)
 
-**HTTP** — add to your MCP config:
-```json
-{ "mcpServers": { "openaffiliate": { "url": "https://openaffiliate.dev/api/mcp" } } }
+**HTTP** — hosted, public, read-only, no API key. One line:
+```bash
+claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
 ```
+
+Or the same endpoint as config:
+```json
+{ "mcpServers": { "openaffiliate": { "url": "https://openaffiliate.dev/mcp" } } }
+```
+
+`https://openaffiliate.dev/api/mcp` serves the same tools and keeps working.
 
 **stdio** — for local tools:
 ```json
@@ -20,6 +27,17 @@ OpenAffiliate is the open registry of affiliate programs. Use it to discover, co
 - `search_programs` — search by keyword, category, commission type, verified status
 - `get_program` — get full details including agent instructions, restrictions, signup URL
 - `list_categories` — list all categories with program counts
+
+### Markdown pages
+
+Append `.md` to any program, category or network URL for a clean markdown
+version to fetch and cite — no MCP client needed:
+
+```bash
+curl https://openaffiliate.dev/programs/vercel.md
+curl https://openaffiliate.dev/categories/ai.md
+curl https://openaffiliate.dev/llms.txt
+```
 
 ### CLI
 
@@ -58,7 +76,11 @@ Programs are YAML files with these key fields:
 - `verified`: boolean — community-verified accuracy
 
 <!-- BEGIN:nextjs-agent-rules -->
+
 # This is NOT the Next.js you know
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
 <!-- END:nextjs-agent-rules -->

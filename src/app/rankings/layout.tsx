@@ -13,6 +13,12 @@ export const metadata: Metadata = {
     url: "https://openaffiliate.dev/rankings",
     siteName: "OpenAffiliate",
   },
+  alternates: {
+    canonical: "/rankings",
+    types: {
+      "text/markdown": "https://openaffiliate.dev/rankings.md",
+    },
+  },
 };
 
 export default function RankingsLayout({
@@ -26,6 +32,12 @@ export default function RankingsLayout({
 
   return (
     <>
+      <link
+        rel="preload"
+        href="/api/sift-rankings"
+        as="fetch"
+        crossOrigin="anonymous"
+      />
       <script
         type="application/ld+json"
         suppressHydrationWarning

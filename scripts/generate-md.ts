@@ -32,6 +32,14 @@ import { dirname, join } from "node:path"
 
 import registry from "../src/lib/registry.json"
 import { docsNav } from "../src/app/docs/_config"
+import { changelog } from "../src/lib/changelog"
+import {
+  programs as sitePrograms,
+  affiliateScore,
+  commissionDisplay,
+  getCategoryStats,
+  getNetworkStats,
+} from "../src/lib/programs"
 
 const BASE = "https://openaffiliate.dev"
 const OUT = join(process.cwd(), "public")
@@ -258,8 +266,8 @@ const INTEGRATION = `### MCP — recommended
 
 HTTP, no install:
 
-\`\`\`json
-{ "mcpServers": { "openaffiliate": { "url": "${BASE}/api/mcp" } } }
+\`\`\`bash
+claude mcp add --transport http openaffiliate ${BASE}/mcp
 \`\`\`
 
 stdio, for local tools:
@@ -322,6 +330,8 @@ function docsMd(): string {
       [
         `- [Entry point](${BASE}/llms.txt)`,
         `- [All programs by category](${BASE}/programs.md)`,
+        `- [Rankings by Affiliate Score](${BASE}/rankings.md)`,
+        `- [Changelog](${BASE}/changelog.md)`,
         `- [Full dump](${BASE}/llms-full.txt)`,
         `- Any program, category or network page, with .md appended`,
       ].join("\n"),
@@ -365,7 +375,7 @@ function llmsTxt(): string {
       `${verified.length} of ${programs.length} programs (${((verified.length / programs.length) * 100).toFixed(1)}%)`,
       `have been verified by OpenAffiliate. The rest are community-submitted and`,
       `unconfirmed: the commission rate, cookie window and payout terms come from`,
-      `the submitter and have not been checked against the program's own page.`,
+      `the submitter and have not been checked against the program page.`,
       ``,
       `Every program file states its own status and verification date at the top.`,
       `Prefer verified entries when accuracy matters, and cite the program's`,
@@ -392,7 +402,7 @@ function llmsTxt(): string {
       "Primary pages",
       [
         `- [Browse programs](${BASE}/programs): Search and filter the registry.`,
-        `- [Rankings](${BASE}/rankings): Compare programs, categories, and networks.`,
+        `- [Rankings](${BASE}/rankings.md): Compare programs, categories, and networks.`,
         `- [Compare](${BASE}/compare): Compare up to four programs side by side.`,
         `- [About and data policy](${BASE}/about): Publisher identity, verification policy, and contact.`,
         `- [Sitemap](${BASE}/sitemap.xml): Canonical index of HTML pages.`,
@@ -470,6 +480,83 @@ function programsIndexMd(): string {
   ])
 }
 
+// ---------- Pages that were HTML-only ---------------------------------------
+
+function indexMd(): string {
+  return joinSections([
+    `# OpenAffiliate`,
+    [
+      `> The open registry of affiliate programs. ${programs.length} programs.`,
+      `> Built for developers and AI agents.`,
+    ].join("\n"),
+    section(
+      "Read this as an agent",
+      [
+        `- [Entry point](${BASE}/llms.txt)`,
+        `- [Full registry](${BASE}/llms-full.txt)`,
+        `- [All programs](${BASE}/programs.md)`,
+        `- [Rankings](${BASE}/rankings.md)`,
+        `- [Changelog](${BASE}/changelog.md)`,
+        `- [One program](${BASE}/programs/vercel.md)`,
+        `- HTML home: ${BASE}/`,
+      ].join("\n"),
+    ),
+  ])
+}
+
+function rankingsMd(): string {
+  const ranked = [...sitePrograms].sort(
+    (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
+  )
+  const programLines = ranked
+    .map((p, i) => {
+      const mark = p.verified ? "" : " (unverified)"
+      return `${i + 1}. [${p.name}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${commissionDisplay(p.commission)} ${p.commission.type}${mark}`
+    })
+    .join("\n")
+  const networkLines = getNetworkStats()
+    .map(n => `- [${n.network}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${n.bestCommissionDisplay}, top [${n.topProgram.name}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .join("\n")
+  const categoryLines = getCategoryStats()
+    .map(c => `- [${c.category}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${c.highestCommissionDisplay}, top [${c.topProgram.name}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .join("\n")
+
+  return joinSections([
+    `# Affiliate program rankings`,
+    [
+      `> ${ranked.length} programs ordered by Affiliate Score, the same score as`,
+      `> the podium on ${BASE}/rankings and the homepage preview.`,
+      `> The interactive table can also sort by verified content, commission,`,
+      `> or cookie length. Those orders depend on live filters, so they are not`,
+      `> copied here.`,
+    ].join("\n"),
+    section("Programs", programLines),
+    section("Networks", networkLines),
+    section("Categories", categoryLines),
+    section("Links", `HTML: ${BASE}/rankings`),
+  ])
+}
+
+const CHANGELOG_TAG: Record<string, string> = {
+  new: "New",
+  improved: "Improved",
+  fixed: "Fixed",
+}
+
+function changelogMd(): string {
+  const entries = changelog.map(entry => {
+    const items = entry.items
+      .map(item => `- ${CHANGELOG_TAG[item.tag] ?? item.tag}: ${item.text}`)
+      .join("\n")
+    return `## ${entry.date} — ${entry.title}\n\n${items}`
+  })
+  return joinSections([
+    `# Changelog`,
+    `> What's new in OpenAffiliate. Same entries as ${BASE}/changelog.`,
+    entries.join("\n\n"),
+  ])
+}
+
 // ---------- Write -----------------------------------------------------------
 
 let written = 0
@@ -492,6 +579,9 @@ function main(): void {
   write("llms-full.txt", llmsFullTxt())
   write("programs.md", programsIndexMd())
   write("docs.md", docsMd())
+  write("index.md", indexMd())
+  write("rankings.md", rankingsMd())
+  write("changelog.md", changelogMd())
 
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))
