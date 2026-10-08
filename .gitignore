@@ -85,11 +85,10 @@ reports/
 # every build makes both problems impossible.
 /public/llms.txt
 /public/llms-full.txt
-/public/programs.md
-/public/docs.md
-/public/index.md
-/public/rankings.md
-/public/changelog.md
+# Every .md at the root of public/ is written by that script — listing them one
+# by one meant each new surface had to be remembered here, and verified.md was
+# not, so it showed up as an untracked file in a review.
+/public/*.md
 /public/programs/
 /public/categories/
 /public/networks/

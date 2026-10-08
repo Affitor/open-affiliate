@@ -42,6 +42,53 @@ import {
 } from "../src/lib/programs"
 
 const BASE = "https://openaffiliate.dev"
+
+/**
+ * How many verified programs llms.txt shows inline.
+ *
+ * It used to show all of them. That made the size of a fetch-once index grow
+ * with the registry: at 49 verified the list was 4947 bytes, 48% of the file,
+ * ~101 bytes a row, and the file sat 4 bytes under its CI byte cap. The next
+ * program to be verified would have failed the build — measured, by toggling
+ * one: 10316 bytes against a cap of 10240.
+ *
+ * Twelve is an editorial choice, not a derivation: about as many rows as a
+ * reader takes in before deciding whether to follow the link. Nothing computes
+ * it, and saying so is more useful than inventing a formula.
+ *
+ * Ties at the boundary are broken alphabetically, which matters more than the
+ * number does: ranks 10-15 currently all score 79, so three tied programs are
+ * shown and three are not, decided by name alone. The section says
+ * "highest-scoring", so that is worth knowing — being listed here is free
+ * promotion, and the cut is partly arbitrary.
+ */
+const VERIFIED_SAMPLE = 12
+
+/**
+ * Longest name and longest commission text rendered inline in llms.txt.
+ *
+ * A fixed row count is not a fixed byte count. Reviewers proved it three ways,
+ * each with a schema-valid registry: `name` at 5000 characters put the index at
+ * 11619 bytes, `commission.duration` at 5000 gave 11618, and a tiered
+ * `commission.rate` at 5000 gave 11603 — all with twelve rows, all failing the
+ * cap. None of the three has a maxLength in the schema.
+ *
+ * Capping only the name was the version of this that did not work: it bounded
+ * one of three terms while the comment claimed the row was bounded. Both
+ * free-text fields are capped here now.
+ *
+ * These are byte budgets, not character counts — the cap they serve is in
+ * bytes, and a code-unit clamp admitted three times its number in CJK.
+ *
+ * The slug is bounded too, though not by the schema, which gives it a charset
+ * and no maxLength: build-registry refuses a slug that is not its own filename,
+ * so the filesystem's 255-byte limit caps it. Worst case across the sample
+ * lands under the byte cap and above the 85% warning. Longest today is 53.
+ *
+ * verified.md is uncapped and prints everything in full.
+ */
+const INLINE_NAME_MAX = 60
+const INLINE_TERMS_MAX = 80 // bytes, both
 const OUT = join(process.cwd(), "public")
 
 // ---------- Types -----------------------------------------------------------
@@ -185,7 +232,7 @@ function joinSections(parts: (string | null)[]): string {
 
 function programMd(p: Program): string {
   const facts = [
-    `Commission: ${commissionLine(p.commission)}`,
+    `Commission: ${mdEscape(commissionLine(p.commission))}`,
     p.commission.conditions ? `Commission conditions: ${p.commission.conditions}` : null,
     p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${p.cookie_days} days` : null,
     payoutLine(p) ? `Payout: ${payoutLine(p)}` : null,
@@ -205,7 +252,7 @@ function programMd(p: Program): string {
   ].filter(Boolean).join("\n")
 
   return joinSections([
-    `# ${p.name} affiliate program`,
+    `# ${mdEscape(p.name)} affiliate program`,
     p.short_description ? `> ${p.short_description}` : null,
     statusBlock(p),
     section("Terms", facts),
@@ -223,7 +270,102 @@ function programMd(p: Program): string {
 function row(p: Program): string {
   const mark = p.verified ? "" : " (unverified)"
   const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
-  return `- [${p.name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}${mark}`
+  return `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${mark}`
+}
+
+/** As `row`, but with both free-text fields capped. See INLINE_NAME_MAX. */
+function indexRow(p: Program): string {
+  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  const terms = mdEscape(`${commissionLine(p.commission)}${cookie}`)
+  return `- [${clamp(mdEscape(p.name), INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
+}
+
+/**
+ * Escape contributor text before it becomes Markdown.
+ *
+ * Program names, commission rates and durations come from YAML a contributor
+ * wrote, and they were interpolated straight into every generated surface. A
+ * reviewer took that through the real pipeline: `commission.duration` set to
+ * `[Extra](/programs/11x.md)` — valid against the schema, short enough to
+ * survive the length cap — produced
+ *
+ *   - [Framer](…/programs/framer.md) — 50% recurring for [Extra](/programs/11x.md), 90d cookie
+ *
+ * which is a second link in a row that is supposed to hold one, and the
+ * verifier counted the row as one program. Emphasis, code spans and raw HTML
+ * had the same opening. This closes the class rather than the instance: with
+ * the literals escaped, contributor text can only ever render as text.
+ *
+ * `&`, `<` and `>` become entities because backslash does not escape them in
+ * Markdown; everything else takes a backslash, which CommonMark strips on
+ * render, so `Framer [US]` still reads as `Framer [US]`.
+ */
+function mdEscape(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    // Only what can open structure mid-line: a code span, emphasis, or a link.
+    // Not `-`, `+`, `#` or `1.`, which are list and heading markers and only
+    // mean anything at the start of a line — this text is always interpolated
+    // after "- [" or after "— ", so it never starts one. Escaping them anyway
+    // turned "10% one-time" into "10% one\\-time" across every surface, which
+    // is noise in a file meant to be read.
+    .replace(/([\\`*_[\]])/g, "\\$1")
+}
+
+/**
+ * Truncate to a byte budget, never mid-character.
+ *
+ * The first version counted `String.length`, which is UTF-16 code units, while
+ * the thing it exists to protect is a byte cap. A reviewer measured the gap:
+ * every verified program given a 300-character CJK name and duration — inside
+ * both code-unit clamps — put the index at 10630 bytes and failed the cap. A
+ * clamp of 60 code units admits 180 bytes of CJK.
+ *
+ * `slice` also cuts surrogate pairs. With emoji names the first version wrote
+ * twelve U+FFFD into llms.txt, one per row, while verified.md — same data, no
+ * clamp — had none. Iterating by code point cannot split one.
+ */
+function clamp(text: string, maxBytes: number): string {
+  if (Buffer.byteLength(text) <= maxBytes) return text
+  let out = ""
+  let used = 0
+  for (const ch of text) {
+    const size = Buffer.byteLength(ch)
+    if (used + size > maxBytes - 3) break // 3 bytes for the ellipsis
+    out += ch
+    used += size
+  }
+  return `${out.trimEnd()}\u2026`
+}
+
+/**
+ * Verified rows for verified.md, each carrying the date it was checked.
+ *
+ * The page tells a reader the terms were read from the program's own page on a
+ * stated date. A reviewer caught that no entry stated one — the claim was
+ * simply false. Rather than drop the sentence, the date it promises is now
+ * here; verified.md has no size cap, so provenance is affordable.
+ */
+function verifiedRow(p: Program): string {
+  return `${row(p)} — ${checkedOn(p)}`
+}
+
+/**
+ * The checked date, as a plain calendar date.
+ *
+ * `last_verified_at` is not one shape in the registry: 48 entries are
+ * `YYYY-MM-DD` and one is `2026-04-18 19:51:47.799000+00:00`, interpolated raw
+ * in the first version of this column. Microsecond precision on "we read this
+ * page" is noise that implies more than was measured, and a column with two
+ * formats reads like a bug. Truncating to the date is the honest rendering.
+ */
+function checkedOn(p: Program): string {
+  const raw = p.last_verified_at
+  if (!raw) return "date not recorded"
+  const date = /^(\d{4}-\d{2}-\d{2})/.exec(raw)
+  return date ? `checked ${date[1]}` : `checked ${raw}`
 }
 
 // ---------- Category / network pages ----------------------------------------
@@ -341,6 +483,70 @@ function docsMd(): string {
 
 // ---------- llms.txt --------------------------------------------------------
 
+function verifiedByScore(): Program[] {
+  // affiliateScore returns NaN for a program with no cookie_days
+  // (Math.min(undefined / 90, 1)). NaN subtraction is NaN, which is falsy, so
+  // `||` would fall through for that pair only — a comparator that is
+  // non-transitive for some pairs and consistent for others, which leaves the
+  // sort order implementation-defined. The index would then list the wrong
+  // twelve, and no check would notice, because the checks count rows rather
+  // than identify them. One program in the registry hits this today
+  // (unverified, so latent). Non-finite sorts last.
+  const score = new Map(
+    sitePrograms.map(p => {
+      const s = affiliateScore(p)
+      return [p.slug, Number.isFinite(s) ? s : -1] as const
+    }),
+  )
+  return programs
+    .filter(p => p.verified)
+    .sort(
+      (a, b) =>
+        (score.get(b.slug) ?? -1) - (score.get(a.slug) ?? -1) ||
+        a.name.localeCompare(b.name),
+    )
+}
+
+/**
+ * Every verified program, uncapped. This is where the list llms.txt used to
+ * inline now lives, so the index can stay a fixed size while the data grows.
+ */
+function verifiedMd(): string {
+  const verified = verifiedByScore()
+  return joinSections([
+    `# Verified affiliate programs`,
+    [
+      `> The ${verified.length} programs OpenAffiliate has checked against the`,
+      `> program's own page, highest Affiliate Score first. The other`,
+      `> ${programs.length - verified.length} in the registry are community-submitted`,
+      `> and unconfirmed.`,
+    ].join("\n"),
+    section(
+      "What verified means",
+      [
+        `The commission rate, cookie window and payout terms below were read from`,
+        `the program's own page on the date each entry states, or the entry says`,
+        `the date was not recorded. Everything still changes without notice, so`,
+        `cite the program's signup URL for anything a reader will act on.`,
+      ].join("\n"),
+    ),
+    section(
+      "Programs",
+      verified.length
+        ? verified.map(verifiedRow).join("\n")
+        : `No program has been checked against its own page yet.`,
+    ),
+    section(
+      "Elsewhere",
+      [
+        `- [Short index](${BASE}/llms.txt)`,
+        `- [All ${programs.length} programs, grouped by category](${BASE}/programs.md)`,
+        `- [Every program in full](${BASE}/llms-full.txt)`,
+      ].join("\n"),
+    ),
+  ])
+}
+
 function llmsTxt(): string {
   const verified = programs.filter(p => p.verified)
   const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
@@ -388,11 +594,28 @@ function llmsTxt(): string {
         `Use the API or MCP tools below when you need the latest deployed data.`,
       ].join("\n"),
     ),
+    // The heading says "sample" because it is one: a reader skimming headings
+    // would otherwise take this for the whole verified set, and the omission is
+    // systematic rather than random — every program that survives the cut pays
+    // 30-50% recurring.
+    //
+    // The claim line has the same shape at every count, zero included. An
+    // earlier version emitted a bare "None yet." there, which the verifier's
+    // new check could not read, so an empty verified set failed CI: generator
+    // and verifier disagreeing about the contract between them.
     section(
-      "Verified programs",
-      verified.length
-        ? verified.map(row).join("\n")
-        : "None yet.",
+      verified.length > VERIFIED_SAMPLE
+        ? "Verified programs (sample)"
+        : "Verified programs",
+      [
+        verified.length > VERIFIED_SAMPLE
+          ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
+          : `All ${verified.length} verified. Also at ${BASE}/verified.md`,
+        ``,
+        verified.length
+          ? verifiedByScore().slice(0, VERIFIED_SAMPLE).map(indexRow).join("\n")
+          : `No program has been checked against its own page yet.`,
+      ].join("\n"),
     ),
     section("Categories", catLines),
     section("Networks", netLines),
@@ -431,7 +654,8 @@ function llmsFullTxt(): string {
     `# OpenAffiliate — full registry`,
     [
       `> Every one of the ${programs.length} programs, in full. Generated from the same`,
-      `> registry the website reads. For the short version see ${BASE}/llms.txt.`,
+      `> registry the website reads. For the short version see ${BASE}/llms.txt,`,
+      `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
     [
       `${programs.filter(p => p.verified).length} programs are verified by OpenAffiliate.`,
@@ -495,6 +719,7 @@ function indexMd(): string {
         `- [Entry point](${BASE}/llms.txt)`,
         `- [Full registry](${BASE}/llms-full.txt)`,
         `- [All programs](${BASE}/programs.md)`,
+        `- [Verified programs](${BASE}/verified.md)`,
         `- [Rankings](${BASE}/rankings.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [One program](${BASE}/programs/vercel.md)`,
@@ -511,7 +736,7 @@ function rankingsMd(): string {
   const programLines = ranked
     .map((p, i) => {
       const mark = p.verified ? "" : " (unverified)"
-      return `${i + 1}. [${p.name}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${commissionDisplay(p.commission)} ${p.commission.type}${mark}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(commissionDisplay(p.commission))} ${p.commission.type}${mark}`
     })
     .join("\n")
   const networkLines = getNetworkStats()
@@ -576,6 +801,7 @@ function main(): void {
   }
 
   write("llms.txt", llmsTxt())
+  write("verified.md", verifiedMd())
   write("llms-full.txt", llmsFullTxt())
   write("programs.md", programsIndexMd())
   write("docs.md", docsMd())
