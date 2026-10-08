@@ -85,25 +85,38 @@ if (llmsBytes > LLMS_MAX_BYTES) {
   );
 }
 // Nothing warned before the wall last time, which is how the file came to sit
-// 4 bytes under it. This is the warning.
+// 4 bytes under it. This is the warning — and it is emitted as a workflow
+// annotation when there is one to emit, because a console.warn goes to stderr
+// and scrolls past in a job log, which is a warning nobody reads.
 if (llmsBytes > LLMS_MAX_BYTES * 0.85) {
-  console.warn(
-    `[machine-surfaces] warning: llms.txt is ${llmsBytes} bytes, ` +
-      `${Math.round((llmsBytes / LLMS_MAX_BYTES) * 100)}% of the ${LLMS_MAX_BYTES} cap. ` +
-      `Move content to a linked surface before it fails.`
-  );
+  const pct = Math.round((llmsBytes / LLMS_MAX_BYTES) * 100);
+  const message =
+    `llms.txt is ${llmsBytes} bytes, ${pct}% of the ${LLMS_MAX_BYTES} cap. ` +
+    `Move content to a linked surface before it fails.`;
+  console.warn(`[machine-surfaces] warning: ${message}`);
+  if (process.env.GITHUB_ACTIONS) {
+    console.log(`::warning file=public/llms.txt::${message}`);
+  }
 }
 
 /**
  * The index must stay bounded in inline programs, and must describe itself
  * truthfully.
  *
- * Two different things get checked, because self-consistency alone is not
- * enough. Reading the file's claim and matching it against the file catches a
- * reintroduced listing earlier than the byte cap would. But a claim about the
- * *registry* — "All N verified" — cannot be validated from the file at all:
- * stating `All 12 verified` while 49 are verified passed the first version of
- * this check. So totals come from the registry, not from the text.
+ * Three different things get checked, because each earlier version was slipped
+ * past in a way the next one closes:
+ *
+ *   - Self-consistency alone cannot validate a claim about the *registry*.
+ *     "All 12 verified" while 49 are verified passed the first version.
+ *     Totals now come from the registry.
+ *   - Counting one serialization cannot bound the rows. Counting `- [` missed
+ *     nine rows written `* [`; counting the https URL then missed
+ *     `](<https://…>)` and `](/programs/…)`. Matching one more spelling only
+ *     moves the gap, so this does the opposite: the generator emits one exact
+ *     shape, and any line in the section that mentions a program in some other
+ *     shape is rejected rather than ignored. A whitelist has no gap to find.
+ *   - `.match()` returns the first hit, so a second, contradicting claim after
+ *     a correct one passed. Exactly one claim is now allowed.
  */
 const LLMS_MAX_INLINE_PROGRAMS = 20;
 const verifiedCount = programs.filter((p) => p.verified).length;
@@ -112,44 +125,69 @@ const verifiedSection = llms
   .find((part) => part.startsWith("Verified programs"));
 if (!verifiedSection) fail("llms.txt has no 'Verified programs' section");
 
-const sampled = verifiedSection.match(/^Highest-scoring (\d+) of (\d+) verified\./m);
-const all = verifiedSection.match(/^All (\d+) verified\./m);
-if (!sampled && !all) {
+// Exactly one count claim, so a later line cannot contradict an earlier one.
+const claimPattern = /^(?:Highest-scoring (\d+) of (\d+)|All (\d+)) verified\./gm;
+const claims = [...verifiedSection.matchAll(claimPattern)];
+if (claims.length === 0) {
   fail(
     "llms.txt's verified section does not state how many programs it lists; " +
       "it must, so this check can hold it to that number and to the registry"
   );
 }
-
-// Count every program link in the section, not only lines beginning "- [".
-// A reviewer slipped nine extra rows past the first counter by writing them as
-// "* [" — valid Markdown, same rendered list, invisible to a /^- \[/ match.
-const inlined = (
-  verifiedSection.match(/\]\(https:\/\/openaffiliate\.dev\/programs\//g) ?? []
-).length;
-const claimed = Number((sampled ?? all)![1]);
-
-if (inlined !== claimed) {
-  fail(`llms.txt says it lists ${claimed} verified programs but links ${inlined}`);
+if (claims.length > 1) {
+  fail(
+    `llms.txt's verified section states its count ${claims.length} times; ` +
+      `exactly one claim is allowed, or they can contradict each other`
+  );
 }
+const [claim] = claims;
+const isSample = claim[1] !== undefined;
+const claimed = Number(isSample ? claim[1] : claim[3]);
+
+/**
+ * The row contract. Every program row the generator writes looks exactly like
+ * this, so anything else that names a program is a serialization this check
+ * was not written to count — and is refused on that basis.
+ */
+const ROW = /^- \[[^\]\n]+\]\(https:\/\/openaffiliate\.dev\/programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.md\) — \S/;
+const rows: string[] = [];
+for (const line of verifiedSection.split("\n")) {
+  if (ROW.test(line)) {
+    rows.push(line);
+  } else if (line.includes("/programs/")) {
+    fail(
+      `llms.txt's verified section mentions a program in a shape this check ` +
+        `cannot count, so it would not be bounded: ${line.slice(0, 120)}`
+    );
+  }
+}
+if (rows.length !== claimed) {
+  fail(`llms.txt says it lists ${claimed} verified programs but lists ${rows.length}`);
+}
+// Parent of this ceiling is the generator's VERIFIED_SAMPLE (12) plus slack.
+// It is not derived from the byte cap: bytes per row are not bounded, so a
+// byte-derived ceiling would rest on a figure that does not hold. If the
+// sample is raised past this, the check above fails loudly rather than
+// silently permitting an unbounded block.
 if (claimed > LLMS_MAX_INLINE_PROGRAMS) {
   fail(
     `llms.txt inlines ${claimed} programs; the ceiling is ${LLMS_MAX_INLINE_PROGRAMS}. ` +
       `The inline block must not grow with the registry — link verified.md instead.`
   );
 }
-if (sampled) {
-  const statedTotal = Number(sampled[2]);
+if (isSample) {
+  const statedTotal = Number(claim[2]);
   if (statedTotal !== verifiedCount) {
     fail(
       `llms.txt says ${statedTotal} programs are verified; the registry has ${verifiedCount}`
     );
   }
+  // Reachable only below the ceiling, where a sample can exceed the total.
+  // Not dead: do not delete it because today's registry shadows it.
   if (claimed > statedTotal) {
     fail(`llms.txt claims to list ${claimed} of only ${statedTotal} verified programs`);
   }
-}
-if (all && claimed !== verifiedCount) {
+} else if (claimed !== verifiedCount) {
   fail(
     `llms.txt claims to list all ${claimed} verified programs; the registry has ${verifiedCount}`
   );
@@ -161,21 +199,23 @@ if (all && claimed !== verifiedCount) {
  */
 const verifiedPage = requireText("verified.md");
 if (!verifiedPage.startsWith("# ")) fail("verified.md must start with an H1");
+const verifiedLines = verifiedPage.split("\n");
 for (const program of programs.filter((p) => p.verified)) {
-  if (!verifiedPage.includes(`/programs/${program.slug}.md`)) {
-    fail(`verified.md is missing verified program ${program.slug}`);
+  const marker = `/programs/${program.slug}.md`;
+  const entry = verifiedLines.find((line) => line.includes(marker));
+  if (!entry) fail(`verified.md is missing verified program ${program.slug}`);
+  // Per entry, not page-wide. There are only four distinct dates across 49
+  // programs, so a page-wide `includes` was satisfied for every program by
+  // four surviving rows: stripping the date from the other 45 passed.
+  const expected = program.lastVerifiedAt
+    ? `checked ${program.lastVerifiedAt.slice(0, 10)}`
+    : "date not recorded";
+  if (!entry.includes(expected)) {
+    fail(
+      `verified.md's entry for ${program.slug} should say "${expected}" ` +
+        `and says: ${entry.slice(-60)}`
+    );
   }
-}
-// verified.md tells a reader each entry states when it was checked. Hold it to
-// that: the sentence shipped once with no date anywhere on the page.
-const undatedVerified = programs.filter(
-  (p) => p.verified && p.lastVerifiedAt && !verifiedPage.includes(p.lastVerifiedAt)
-);
-if (undatedVerified.length) {
-  fail(
-    `verified.md promises a checked date per entry but omits it for ` +
-      `${undatedVerified.length} program(s), e.g. ${undatedVerified[0].slug}`
-  );
 }
 if (!llms.includes(`${BASE_URL}/verified.md`)) {
   fail("llms.txt does not link verified.md, where the full verified list now lives");

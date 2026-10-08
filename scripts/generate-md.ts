@@ -65,15 +65,28 @@ const BASE = "https://openaffiliate.dev"
 const VERIFIED_SAMPLE = 12
 
 /**
- * Longest program name rendered inline in llms.txt.
+ * Longest name and longest commission text rendered inline in llms.txt.
  *
- * A fixed row count is not a fixed byte count. `name` has no maxLength in the
- * schema, and a reviewer proved it: one program renamed to 5000 characters put
- * the index at 11619 bytes and failed the cap, with twelve rows. Truncating
- * only the index keeps the inline block bounded per row; verified.md is
- * uncapped and prints names in full.
+ * A fixed row count is not a fixed byte count. Reviewers proved it three ways,
+ * each with a schema-valid registry: `name` at 5000 characters put the index at
+ * 11619 bytes, `commission.duration` at 5000 gave 11618, and a tiered
+ * `commission.rate` at 5000 gave 11603 — all with twelve rows, all failing the
+ * cap. None of the three has a maxLength in the schema.
+ *
+ * Capping only the name was the version of this that did not work: it bounded
+ * one of three terms while the comment claimed the row was bounded. Both
+ * free-text fields are capped here now.
+ *
+ * What is still not bounded: the slug, which the schema constrains in charset
+ * (`^[a-z0-9]+(-[a-z0-9]+)*$`) but not in length — the longest today is 53
+ * characters. It cannot be truncated, because it is the link destination. So a
+ * row is bounded in what it renders and not in what it points at, and the byte
+ * cap plus its 85% warning remain the backstop.
+ *
+ * verified.md is uncapped and prints everything in full.
  */
 const INLINE_NAME_MAX = 60
+const INLINE_TERMS_MAX = 80
 const OUT = join(process.cwd(), "public")
 
 // ---------- Types -----------------------------------------------------------
@@ -258,14 +271,15 @@ function row(p: Program): string {
   return `- [${p.name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}${mark}`
 }
 
-/** As `row`, but with the name capped so the inline block stays bounded. */
+/** As `row`, but with both free-text fields capped. See INLINE_NAME_MAX. */
 function indexRow(p: Program): string {
-  const name =
-    p.name.length > INLINE_NAME_MAX
-      ? `${p.name.slice(0, INLINE_NAME_MAX - 1).trimEnd()}\u2026`
-      : p.name
   const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
-  return `- [${name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}`
+  const terms = `${commissionLine(p.commission)}${cookie}`
+  return `- [${clamp(p.name, INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
+}
+
+function clamp(text: string, max: number): string {
+  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}\u2026` : text
 }
 
 /**
@@ -277,8 +291,23 @@ function indexRow(p: Program): string {
  * here; verified.md has no size cap, so provenance is affordable.
  */
 function verifiedRow(p: Program): string {
-  const checked = p.last_verified_at ? ` — checked ${p.last_verified_at}` : " — date not recorded"
-  return `${row(p)}${checked}`
+  return `${row(p)} — ${checkedOn(p)}`
+}
+
+/**
+ * The checked date, as a plain calendar date.
+ *
+ * `last_verified_at` is not one shape in the registry: 48 entries are
+ * `YYYY-MM-DD` and one is `2026-04-18 19:51:47.799000+00:00`, interpolated raw
+ * in the first version of this column. Microsecond precision on "we read this
+ * page" is noise that implies more than was measured, and a column with two
+ * formats reads like a bug. Truncating to the date is the honest rendering.
+ */
+function checkedOn(p: Program): string {
+  const raw = p.last_verified_at
+  if (!raw) return "date not recorded"
+  const date = /^(\d{4}-\d{2}-\d{2})/.exec(raw)
+  return date ? `checked ${date[1]}` : `checked ${raw}`
 }
 
 // ---------- Category / network pages ----------------------------------------
@@ -438,9 +467,9 @@ function verifiedMd(): string {
       "What verified means",
       [
         `The commission rate, cookie window and payout terms below were read from`,
-        `the program's own page on the date each entry states. Everything still`,
-        `changes without notice, so cite the program's signup URL for anything a`,
-        `reader will act on.`,
+        `the program's own page on the date each entry states, or the entry says`,
+        `the date was not recorded. Everything still changes without notice, so`,
+        `cite the program's signup URL for anything a reader will act on.`,
       ].join("\n"),
     ),
     section(
@@ -517,7 +546,9 @@ function llmsTxt(): string {
     // new check could not read, so an empty verified set failed CI: generator
     // and verifier disagreeing about the contract between them.
     section(
-      "Verified programs (sample)",
+      verified.length > VERIFIED_SAMPLE
+        ? "Verified programs (sample)"
+        : "Verified programs",
       [
         verified.length > VERIFIED_SAMPLE
           ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
