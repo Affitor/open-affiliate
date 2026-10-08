@@ -77,16 +77,18 @@ const VERIFIED_SAMPLE = 12
  * one of three terms while the comment claimed the row was bounded. Both
  * free-text fields are capped here now.
  *
- * What is still not bounded: the slug, which the schema constrains in charset
- * (`^[a-z0-9]+(-[a-z0-9]+)*$`) but not in length — the longest today is 53
- * characters. It cannot be truncated, because it is the link destination. So a
- * row is bounded in what it renders and not in what it points at, and the byte
- * cap plus its 85% warning remain the backstop.
+ * These are byte budgets, not character counts — the cap they serve is in
+ * bytes, and a code-unit clamp admitted three times its number in CJK.
+ *
+ * The slug is bounded too, though not by the schema, which gives it a charset
+ * and no maxLength: build-registry refuses a slug that is not its own filename,
+ * so the filesystem's 255-byte limit caps it. Worst case across the sample
+ * lands under the byte cap and above the 85% warning. Longest today is 53.
  *
  * verified.md is uncapped and prints everything in full.
  */
 const INLINE_NAME_MAX = 60
-const INLINE_TERMS_MAX = 80
+const INLINE_TERMS_MAX = 80 // bytes, both
 const OUT = join(process.cwd(), "public")
 
 // ---------- Types -----------------------------------------------------------
@@ -230,7 +232,7 @@ function joinSections(parts: (string | null)[]): string {
 
 function programMd(p: Program): string {
   const facts = [
-    `Commission: ${commissionLine(p.commission)}`,
+    `Commission: ${mdEscape(commissionLine(p.commission))}`,
     p.commission.conditions ? `Commission conditions: ${p.commission.conditions}` : null,
     p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${p.cookie_days} days` : null,
     payoutLine(p) ? `Payout: ${payoutLine(p)}` : null,
@@ -250,7 +252,7 @@ function programMd(p: Program): string {
   ].filter(Boolean).join("\n")
 
   return joinSections([
-    `# ${p.name} affiliate program`,
+    `# ${mdEscape(p.name)} affiliate program`,
     p.short_description ? `> ${p.short_description}` : null,
     statusBlock(p),
     section("Terms", facts),
@@ -268,18 +270,74 @@ function programMd(p: Program): string {
 function row(p: Program): string {
   const mark = p.verified ? "" : " (unverified)"
   const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
-  return `- [${p.name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}${mark}`
+  return `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${mark}`
 }
 
 /** As `row`, but with both free-text fields capped. See INLINE_NAME_MAX. */
 function indexRow(p: Program): string {
   const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
-  const terms = `${commissionLine(p.commission)}${cookie}`
-  return `- [${clamp(p.name, INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
+  const terms = mdEscape(`${commissionLine(p.commission)}${cookie}`)
+  return `- [${clamp(mdEscape(p.name), INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
 }
 
-function clamp(text: string, max: number): string {
-  return text.length > max ? `${text.slice(0, max - 1).trimEnd()}\u2026` : text
+/**
+ * Escape contributor text before it becomes Markdown.
+ *
+ * Program names, commission rates and durations come from YAML a contributor
+ * wrote, and they were interpolated straight into every generated surface. A
+ * reviewer took that through the real pipeline: `commission.duration` set to
+ * `[Extra](/programs/11x.md)` — valid against the schema, short enough to
+ * survive the length cap — produced
+ *
+ *   - [Framer](…/programs/framer.md) — 50% recurring for [Extra](/programs/11x.md), 90d cookie
+ *
+ * which is a second link in a row that is supposed to hold one, and the
+ * verifier counted the row as one program. Emphasis, code spans and raw HTML
+ * had the same opening. This closes the class rather than the instance: with
+ * the literals escaped, contributor text can only ever render as text.
+ *
+ * `&`, `<` and `>` become entities because backslash does not escape them in
+ * Markdown; everything else takes a backslash, which CommonMark strips on
+ * render, so `Framer [US]` still reads as `Framer [US]`.
+ */
+function mdEscape(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    // Only what can open structure mid-line: a code span, emphasis, or a link.
+    // Not `-`, `+`, `#` or `1.`, which are list and heading markers and only
+    // mean anything at the start of a line — this text is always interpolated
+    // after "- [" or after "— ", so it never starts one. Escaping them anyway
+    // turned "10% one-time" into "10% one\\-time" across every surface, which
+    // is noise in a file meant to be read.
+    .replace(/([\\`*_[\]])/g, "\\$1")
+}
+
+/**
+ * Truncate to a byte budget, never mid-character.
+ *
+ * The first version counted `String.length`, which is UTF-16 code units, while
+ * the thing it exists to protect is a byte cap. A reviewer measured the gap:
+ * every verified program given a 300-character CJK name and duration — inside
+ * both code-unit clamps — put the index at 10630 bytes and failed the cap. A
+ * clamp of 60 code units admits 180 bytes of CJK.
+ *
+ * `slice` also cuts surrogate pairs. With emoji names the first version wrote
+ * twelve U+FFFD into llms.txt, one per row, while verified.md — same data, no
+ * clamp — had none. Iterating by code point cannot split one.
+ */
+function clamp(text: string, maxBytes: number): string {
+  if (Buffer.byteLength(text) <= maxBytes) return text
+  let out = ""
+  let used = 0
+  for (const ch of text) {
+    const size = Buffer.byteLength(ch)
+    if (used + size > maxBytes - 3) break // 3 bytes for the ellipsis
+    out += ch
+    used += size
+  }
+  return `${out.trimEnd()}\u2026`
 }
 
 /**
@@ -678,7 +736,7 @@ function rankingsMd(): string {
   const programLines = ranked
     .map((p, i) => {
       const mark = p.verified ? "" : " (unverified)"
-      return `${i + 1}. [${p.name}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${commissionDisplay(p.commission)} ${p.commission.type}${mark}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(commissionDisplay(p.commission))} ${p.commission.type}${mark}`
     })
     .join("\n")
   const networkLines = getNetworkStats()

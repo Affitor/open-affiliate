@@ -126,8 +126,14 @@ const verifiedSection = llms
 if (!verifiedSection) fail("llms.txt has no 'Verified programs' section");
 
 // Exactly one count claim, so a later line cannot contradict an earlier one.
-const claimPattern = /^(?:Highest-scoring (\d+) of (\d+)|All (\d+)) verified\./gm;
-const claims = [...verifiedSection.matchAll(claimPattern)];
+// Leading whitespace is insignificant in Markdown, and a single space in
+// front of a second claim hid it from a column-zero anchor: the verifier saw
+// only the true claim and passed at 6665 bytes. Lines are trimmed first.
+const claimPattern = /^(?:Highest-scoring (\d+) of (\d+)|All (\d+)) verified\./;
+const claims = verifiedSection
+  .split("\n")
+  .map((line) => claimPattern.exec(line.trim()))
+  .filter((m): m is RegExpExecArray => m !== null);
 if (claims.length === 0) {
   fail(
     "llms.txt's verified section does not state how many programs it lists; " +
@@ -145,14 +151,66 @@ const isSample = claim[1] !== undefined;
 const claimed = Number(isSample ? claim[1] : claim[3]);
 
 /**
- * The row contract. Every program row the generator writes looks exactly like
- * this, so anything else that names a program is a serialization this check
- * was not written to count — and is refused on that basis.
+ * The row contract.
+ *
+ * The generator escapes every contributor literal before interpolating it, so
+ * a row can hold exactly one link by construction and anything a contributor
+ * writes renders as text. This checks that the shape it produces is the shape
+ * that arrived, which is the regression this guard is actually for: these
+ * bytes are generated, gitignored and overwritten by the next prebuild, so
+ * nothing reaches llms.txt except through generate-md.ts.
+ *
+ * Earlier versions of this check counted a serialization instead, and were
+ * walked past five ways — `* [`, reference-style, root-relative, bare
+ * autolinks, angle-bracket destinations — then, once inverted, two more:
+ * `&#47;` entity slashes and a second link riding along after the commission
+ * text, because the pattern only matched a prefix. The claim that a whitelist
+ * "has no gap to find" was wrong twice over, and is not made here: a reviewer
+ * editing the generated file by hand can still get past this. What it does
+ * cover is the generator emitting something other than its contract.
+ *
+ * The label admits backslash escapes, because the escaper produces them —
+ * refusing them rejected the valid name `Framer [US]` and failed the build on
+ * legitimate data.
  */
-const ROW = /^- \[[^\]\n]+\]\(https:\/\/openaffiliate\.dev\/programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.md\) — \S/;
+const ROW =
+  /^- \[((?:[^[\]\\\n]|\\.)+)\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9]+(?:-[a-z0-9]+)*)\.md\) — (.+)$/;
+// Two whole classes the generator never emits, refused as classes rather than
+// as the particular spellings a reviewer happened to try. Numeric character
+// references: the escaper only ever writes &amp;, &lt; and &gt;, so any `&#`
+// is foreign — which closes `&#47;programs&#47;` and `&#x2F;` alike, where
+// matching the one spelling would not. Link reference definitions: the
+// generator writes only inline links, and definitions are document-scoped, so
+// uses inside the section can be resolved by a definition placed after it —
+// hence this looks at the whole file, not the section.
+if (/&#/.test(verifiedSection)) {
+  fail(
+    "llms.txt's verified section contains a numeric character reference; the " +
+      "generator never writes one, and a link destination can hide in it"
+  );
+}
+const linkDefinition = llms.split("\n").find((line) => /^ {0,3}\[[^\]]+\]:\s/.test(line));
+if (linkDefinition) {
+  fail(
+    `llms.txt contains a link reference definition, which the generator never ` +
+      `writes and which can give the verified section links from outside it: ` +
+      `${linkDefinition.slice(0, 80)}`
+  );
+}
+
 const rows: string[] = [];
 for (const line of verifiedSection.split("\n")) {
-  if (ROW.test(line)) {
+  const match = ROW.exec(line);
+  if (match) {
+    // The terms are escaped, so no unescaped bracket should survive there. One
+    // that does means a second link could render in a row counted as one.
+    const bare = match[3].replace(/\\./g, "");
+    if (/[[\]]/.test(bare)) {
+      fail(
+        `llms.txt row for ${match[2]} has an unescaped bracket in its terms, ` +
+          `so it could render more than one link: ${line.slice(0, 120)}`
+      );
+    }
     rows.push(line);
   } else if (line.includes("/programs/")) {
     fail(
