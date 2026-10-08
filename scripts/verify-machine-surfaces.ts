@@ -55,55 +55,103 @@ for (const program of programs) {
   }
 }
 /**
- * llms.txt is fetched once and read whole, so it has a size budget.
+ * llms.txt is fetched once and read whole, so it is kept small.
  *
- * The budget only means something if the file's size does not grow with the
- * registry. It used to: every verified program was listed inline, ~101 bytes a
- * row, and at 49 verified the file sat 4 bytes under this number. That is not
- * a budget, it is a tripwire — the next program to be verified would have
- * failed this check with nothing in the code to explain why.
+ * Calling 10240 a budget was generous to it: the file had grown to 4 bytes
+ * under this number, which makes it a line the file grew into rather than a
+ * figure anyone derived. It is a deliberate choice to keep the index
+ * skimmable — roughly 2.5k tokens — and llmstxt.org sets no limit at all.
  *
- * So the number stayed and the file shrank: the index now shows a bounded
- * sample and links verified.md for the rest. The two checks below are what
- * keep it that way. If this cap is ever approached again, move content out to
- * a linked surface rather than raising it, because the point is a file an
- * agent reads in full.
+ * What changed is that the file no longer grows with the number of verified
+ * programs: the index shows a bounded sample and links verified.md for the
+ * rest. Three things still grow it, and they are debt, not claims:
+ *
+ *   - categories and networks are enumerated in full, measured at ~96 and ~76
+ *     bytes a line. With ~3600 bytes of headroom that is roughly 37 more
+ *     networks before this fires again, and neither enum is enforced by
+ *     validateProgram, so the registry can introduce new values.
+ *   - commission strings and durations have no length limit in the schema.
+ *   - program names are capped in the index only (INLINE_NAME_MAX).
+ *
+ * So: bounded in the number of inline programs, not in bytes. If this fires,
+ * move content to a linked surface rather than raising the number.
  */
 const LLMS_MAX_BYTES = 10240;
-if (Buffer.byteLength(llms) > LLMS_MAX_BYTES) {
+const llmsBytes = Buffer.byteLength(llms);
+if (llmsBytes > LLMS_MAX_BYTES) {
   fail(
-    `llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is ${LLMS_MAX_BYTES}. ` +
+    `llms.txt is ${llmsBytes} bytes; the cap is ${LLMS_MAX_BYTES}. ` +
       `Move content to a linked surface instead of raising the cap.`
+  );
+}
+// Nothing warned before the wall last time, which is how the file came to sit
+// 4 bytes under it. This is the warning.
+if (llmsBytes > LLMS_MAX_BYTES * 0.85) {
+  console.warn(
+    `[machine-surfaces] warning: llms.txt is ${llmsBytes} bytes, ` +
+      `${Math.round((llmsBytes / LLMS_MAX_BYTES) * 100)}% of the ${LLMS_MAX_BYTES} cap. ` +
+      `Move content to a linked surface before it fails.`
   );
 }
 
 /**
- * The index must stay bounded, and must say so truthfully.
+ * The index must stay bounded in inline programs, and must describe itself
+ * truthfully.
  *
- * Rather than duplicate the generator's sample size here — two constants drift
- * — this reads the claim llms.txt makes about itself and checks the file
- * against it. A reintroduced full listing fails both halves: the stated count
- * would exceed the ceiling, and an unstated one has no claim to match.
+ * Two different things get checked, because self-consistency alone is not
+ * enough. Reading the file's claim and matching it against the file catches a
+ * reintroduced listing earlier than the byte cap would. But a claim about the
+ * *registry* — "All N verified" — cannot be validated from the file at all:
+ * stating `All 12 verified` while 49 are verified passed the first version of
+ * this check. So totals come from the registry, not from the text.
  */
 const LLMS_MAX_INLINE_PROGRAMS = 20;
-const verifiedSection = llms.split(/^## /m).find((part) => part.startsWith("Verified programs"));
+const verifiedCount = programs.filter((p) => p.verified).length;
+const verifiedSection = llms
+  .split(/^## /m)
+  .find((part) => part.startsWith("Verified programs"));
 if (!verifiedSection) fail("llms.txt has no 'Verified programs' section");
-const claim = verifiedSection.match(/^(?:Highest-scoring (\d+) of \d+|All (\d+)) verified/m);
-if (!claim) {
+
+const sampled = verifiedSection.match(/^Highest-scoring (\d+) of (\d+) verified\./m);
+const all = verifiedSection.match(/^All (\d+) verified\./m);
+if (!sampled && !all) {
   fail(
     "llms.txt's verified section does not state how many programs it lists; " +
-      "it must, so this check can hold it to that number"
+      "it must, so this check can hold it to that number and to the registry"
   );
 }
-const claimed = Number(claim[1] ?? claim[2]);
-const inlined = (verifiedSection.match(/^- \[/gm) ?? []).length;
+
+// Count every program link in the section, not only lines beginning "- [".
+// A reviewer slipped nine extra rows past the first counter by writing them as
+// "* [" — valid Markdown, same rendered list, invisible to a /^- \[/ match.
+const inlined = (
+  verifiedSection.match(/\]\(https:\/\/openaffiliate\.dev\/programs\//g) ?? []
+).length;
+const claimed = Number((sampled ?? all)![1]);
+
 if (inlined !== claimed) {
-  fail(`llms.txt says it lists ${claimed} verified programs but lists ${inlined}`);
+  fail(`llms.txt says it lists ${claimed} verified programs but links ${inlined}`);
 }
 if (claimed > LLMS_MAX_INLINE_PROGRAMS) {
   fail(
     `llms.txt inlines ${claimed} programs; the ceiling is ${LLMS_MAX_INLINE_PROGRAMS}. ` +
-      `The index's size must not grow with the registry — link verified.md instead.`
+      `The inline block must not grow with the registry — link verified.md instead.`
+  );
+}
+if (sampled) {
+  const statedTotal = Number(sampled[2]);
+  if (statedTotal !== verifiedCount) {
+    fail(
+      `llms.txt says ${statedTotal} programs are verified; the registry has ${verifiedCount}`
+    );
+  }
+  if (claimed > statedTotal) {
+    fail(`llms.txt claims to list ${claimed} of only ${statedTotal} verified programs`);
+  }
+}
+if (all && claimed !== verifiedCount) {
+  fail(
+    `llms.txt claims to list all ${claimed} verified programs; the registry has ${verifiedCount}`
   );
 }
 
@@ -117,6 +165,17 @@ for (const program of programs.filter((p) => p.verified)) {
   if (!verifiedPage.includes(`/programs/${program.slug}.md`)) {
     fail(`verified.md is missing verified program ${program.slug}`);
   }
+}
+// verified.md tells a reader each entry states when it was checked. Hold it to
+// that: the sentence shipped once with no date anywhere on the page.
+const undatedVerified = programs.filter(
+  (p) => p.verified && p.lastVerifiedAt && !verifiedPage.includes(p.lastVerifiedAt)
+);
+if (undatedVerified.length) {
+  fail(
+    `verified.md promises a checked date per entry but omits it for ` +
+      `${undatedVerified.length} program(s), e.g. ${undatedVerified[0].slug}`
+  );
 }
 if (!llms.includes(`${BASE_URL}/verified.md`)) {
   fail("llms.txt does not link verified.md, where the full verified list now lives");

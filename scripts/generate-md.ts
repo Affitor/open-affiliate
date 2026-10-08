@@ -52,12 +52,28 @@ const BASE = "https://openaffiliate.dev"
  * program to be verified would have failed the build — measured, by toggling
  * one: 10316 bytes against a cap of 10240.
  *
- * A sample plus a link to the full list makes the index's size independent of
- * how many programs get verified, which is the actual fix. The number is
- * small on purpose: llms.txt exists to tell an agent what this registry is and
- * how to query it, and the full data belongs behind a link it can follow.
+ * Twelve is an editorial choice, not a derivation: about as many rows as a
+ * reader takes in before deciding whether to follow the link. Nothing computes
+ * it, and saying so is more useful than inventing a formula.
+ *
+ * Ties at the boundary are broken alphabetically, which matters more than the
+ * number does: ranks 10-15 currently all score 79, so three tied programs are
+ * shown and three are not, decided by name alone. The section says
+ * "highest-scoring", so that is worth knowing — being listed here is free
+ * promotion, and the cut is partly arbitrary.
  */
 const VERIFIED_SAMPLE = 12
+
+/**
+ * Longest program name rendered inline in llms.txt.
+ *
+ * A fixed row count is not a fixed byte count. `name` has no maxLength in the
+ * schema, and a reviewer proved it: one program renamed to 5000 characters put
+ * the index at 11619 bytes and failed the cap, with twelve rows. Truncating
+ * only the index keeps the inline block bounded per row; verified.md is
+ * uncapped and prints names in full.
+ */
+const INLINE_NAME_MAX = 60
 const OUT = join(process.cwd(), "public")
 
 // ---------- Types -----------------------------------------------------------
@@ -242,6 +258,29 @@ function row(p: Program): string {
   return `- [${p.name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}${mark}`
 }
 
+/** As `row`, but with the name capped so the inline block stays bounded. */
+function indexRow(p: Program): string {
+  const name =
+    p.name.length > INLINE_NAME_MAX
+      ? `${p.name.slice(0, INLINE_NAME_MAX - 1).trimEnd()}\u2026`
+      : p.name
+  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  return `- [${name}](${BASE}/programs/${p.slug}.md) — ${commissionLine(p.commission)}${cookie}`
+}
+
+/**
+ * Verified rows for verified.md, each carrying the date it was checked.
+ *
+ * The page tells a reader the terms were read from the program's own page on a
+ * stated date. A reviewer caught that no entry stated one — the claim was
+ * simply false. Rather than drop the sentence, the date it promises is now
+ * here; verified.md has no size cap, so provenance is affordable.
+ */
+function verifiedRow(p: Program): string {
+  const checked = p.last_verified_at ? ` — checked ${p.last_verified_at}` : " — date not recorded"
+  return `${row(p)}${checked}`
+}
+
 // ---------- Category / network pages ----------------------------------------
 
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
@@ -358,12 +397,25 @@ function docsMd(): string {
 // ---------- llms.txt --------------------------------------------------------
 
 function verifiedByScore(): Program[] {
-  const score = new Map(sitePrograms.map(p => [p.slug, affiliateScore(p)]))
+  // affiliateScore returns NaN for a program with no cookie_days
+  // (Math.min(undefined / 90, 1)). NaN subtraction is NaN, which is falsy, so
+  // `||` would fall through for that pair only — a comparator that is
+  // non-transitive for some pairs and consistent for others, which leaves the
+  // sort order implementation-defined. The index would then list the wrong
+  // twelve, and no check would notice, because the checks count rows rather
+  // than identify them. One program in the registry hits this today
+  // (unverified, so latent). Non-finite sorts last.
+  const score = new Map(
+    sitePrograms.map(p => {
+      const s = affiliateScore(p)
+      return [p.slug, Number.isFinite(s) ? s : -1] as const
+    }),
+  )
   return programs
     .filter(p => p.verified)
     .sort(
       (a, b) =>
-        (score.get(b.slug) ?? 0) - (score.get(a.slug) ?? 0) ||
+        (score.get(b.slug) ?? -1) - (score.get(a.slug) ?? -1) ||
         a.name.localeCompare(b.name),
     )
 }
@@ -391,7 +443,12 @@ function verifiedMd(): string {
         `reader will act on.`,
       ].join("\n"),
     ),
-    section("Programs", verified.map(row).join("\n")),
+    section(
+      "Programs",
+      verified.length
+        ? verified.map(verifiedRow).join("\n")
+        : `No program has been checked against its own page yet.`,
+    ),
     section(
       "Elsewhere",
       [
@@ -450,17 +507,26 @@ function llmsTxt(): string {
         `Use the API or MCP tools below when you need the latest deployed data.`,
       ].join("\n"),
     ),
+    // The heading says "sample" because it is one: a reader skimming headings
+    // would otherwise take this for the whole verified set, and the omission is
+    // systematic rather than random — every program that survives the cut pays
+    // 30-50% recurring.
+    //
+    // The claim line has the same shape at every count, zero included. An
+    // earlier version emitted a bare "None yet." there, which the verifier's
+    // new check could not read, so an empty verified set failed CI: generator
+    // and verifier disagreeing about the contract between them.
     section(
-      "Verified programs",
-      verified.length
-        ? [
-            verified.length > VERIFIED_SAMPLE
-              ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
-              : `All ${verified.length} verified. Also at ${BASE}/verified.md`,
-            ``,
-            verifiedByScore().slice(0, VERIFIED_SAMPLE).map(row).join("\n"),
-          ].join("\n")
-        : "None yet.",
+      "Verified programs (sample)",
+      [
+        verified.length > VERIFIED_SAMPLE
+          ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
+          : `All ${verified.length} verified. Also at ${BASE}/verified.md`,
+        ``,
+        verified.length
+          ? verifiedByScore().slice(0, VERIFIED_SAMPLE).map(indexRow).join("\n")
+          : `No program has been checked against its own page yet.`,
+      ].join("\n"),
     ),
     section("Categories", catLines),
     section("Networks", netLines),
