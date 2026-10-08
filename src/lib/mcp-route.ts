@@ -27,71 +27,93 @@ const CORS = {
 };
 
 /**
- * Per-IP request cap.
+ * Flood guard. Not a quota, and deliberately not a security boundary.
  *
  * The tools read an in-process import of registry.json — no database, no
  * upstream API — so the only cost of abuse is function invocations, and the
- * only thing worth stopping is one client flooding the endpoint. That makes a
- * shared store (Redis, KV) the wrong amount of machinery: this is the same
- * in-memory per-IP map /api/content-lab already uses, which means the cap is
- * per instance and therefore a floor, not a ceiling. Deliberate. A real MCP
- * session spends well under 100 requests, so a legitimate client never sees a
- * 429, and the SSE responses here cannot be CDN-cached to serve the same end.
+ * only thing worth stopping is a single source hammering the endpoint. Three
+ * things follow from that, and they are limits of this design rather than
+ * oversights:
+ *
+ * 1. The count lives in one instance's memory. There is no shared store, so
+ *    the real ceiling is this number times however many instances are warm.
+ *    A flood still gets capped on whichever instance it lands on.
+ * 2. The address comes from the proxy-set forwarded header. Nothing here can
+ *    prove it: on Vercel the edge overwrites x-forwarded-for with the real
+ *    client address, and that overwrite — not this code — is what stops a
+ *    caller inventing one. Run this behind a proxy that passes the header
+ *    through and the dimension becomes caller-controlled.
+ * 3. Because of 2, the budget is set as a flood threshold rather than a fair
+ *    share: 20 requests a second from one address. The docs point Claude.ai
+ *    and ChatGPT at this endpoint and those connect from the vendor's own
+ *    egress addresses, so every user of one of those clients shares a single
+ *    bucket. A per-session budget would 429 real users; this one should only
+ *    ever be reached by something behaving badly.
  */
-const MAX_REQUESTS = 300;
-const WINDOW_MS = 5 * 60 * 1000;
-const MAX_TRACKED_IPS = 10_000;
+const WINDOW_MS = 60_000;
+const MAX_REQUESTS_PER_WINDOW = 1200;
+const MAX_TRACKED_ADDRESSES = 20_000;
 
-const hits = new Map<string, { count: number; resetAt: number }>();
+let counts = new Map<string, number>();
+let windowStartedAt = Date.now();
 
-function clientIp(req: Request): string {
+function clientAddress(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
   return (
     forwarded?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown"
   );
 }
 
+/**
+ * O(1) per request. The window ends by dropping the whole Map rather than
+ * scanning it for expired entries, and the bound is enforced the same way:
+ * an earlier version pruned only entries whose window had passed, which is
+ * useless in the one case a bound exists for — many distinct addresses inside
+ * a single window, where nothing has expired. That version grew without limit
+ * and scanned the whole map on every new address.
+ *
+ * Dropping the map early costs one forgotten window. Nothing more: a caller
+ * able to rotate addresses fast enough to force that already defeats any
+ * per-address limiter, so this trades no protection for a hard bound.
+ */
 function withinLimit(req: Request): boolean {
   const now = Date.now();
-  const ip = clientIp(req);
-  const entry = hits.get(ip);
-
-  if (!entry || now >= entry.resetAt) {
-    // Pruned here rather than on a module-level setInterval: a timer in a
-    // serverless function fires on whichever instance happens to be warm,
-    // while this runs exactly when the map is actually being written to.
-    if (hits.size >= MAX_TRACKED_IPS) {
-      for (const [key, value] of hits) {
-        if (now >= value.resetAt) hits.delete(key);
-      }
-    }
-    hits.set(ip, { count: 1, resetAt: now + WINDOW_MS });
-    return true;
+  if (now - windowStartedAt >= WINDOW_MS) {
+    counts = new Map();
+    windowStartedAt = now;
   }
+  if (counts.size >= MAX_TRACKED_ADDRESSES) counts.clear();
 
-  if (entry.count >= MAX_REQUESTS) return false;
-
-  entry.count++;
-  return true;
+  const address = clientAddress(req);
+  const seen = (counts.get(address) ?? 0) + 1;
+  counts.set(address, seen);
+  return seen <= MAX_REQUESTS_PER_WINDOW;
 }
 
+/**
+ * Plain text, not a JSON-RPC error envelope.
+ *
+ * The limit is checked from the headers alone, before the body is read, so
+ * the request's JSON-RPC id is not known here. An envelope carrying
+ * `id: null` is worse than no envelope: a client following the spec reads it
+ * as an error belonging to no request, never settles the call it is waiting
+ * on, and hangs to its own timeout instead of failing on the status. The
+ * status line and Retry-After are unambiguous.
+ */
 function tooManyRequests(): Response {
-  // JSON-RPC shaped so an MCP client surfaces the reason instead of "the
-  // server returned invalid JSON".
-  return Response.json(
-    {
-      jsonrpc: "2.0",
-      id: null,
-      error: {
-        code: -32000,
-        message: `Rate limit reached: ${MAX_REQUESTS} requests per ${
-          WINDOW_MS / 60000
-        } minutes per IP. The same data is available uncapped at https://openaffiliate.dev/api/programs and as markdown at https://openaffiliate.dev/programs.md`,
-      },
-    },
+  return new Response(
+    `Rate limit reached: ${MAX_REQUESTS_PER_WINDOW} requests per ${
+      WINDOW_MS / 1000
+    } seconds per address.\n` +
+      "The same data is uncapped at https://openaffiliate.dev/api/programs " +
+      "and as markdown at https://openaffiliate.dev/programs.md\n",
     {
       status: 429,
-      headers: { ...CORS, "Retry-After": String(WINDOW_MS / 1000) },
+      headers: {
+        ...CORS,
+        "Content-Type": "text/plain; charset=utf-8",
+        "Retry-After": String(WINDOW_MS / 1000),
+      },
     }
   );
 }
@@ -167,8 +189,10 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         cookieDays: p.cookieDays,
         verified: p.verified,
         signupUrl: p.signupUrl ?? p.url,
-        // Agents cite what they can fetch. The markdown twin is the citable
-        // form of this row.
+        // Agents cite what they can fetch, and the markdown twin is the
+        // citable form of this row. Hardcoded to production on purpose: this
+        // is the URL a citation should point at, which is not the preview
+        // deployment a client may happen to be talking to.
         markdownUrl: `https://openaffiliate.dev/programs/${p.slug}.md`,
       }));
 
@@ -257,9 +281,11 @@ export function createMcpRoute(basePath: string) {
     registerTools,
     {
       // Named, because a client listing its connected servers should not be
-      // shown mcp-handler's placeholder. Version is this surface's own, and
-      // moves one patch step when the tool set changes.
-      serverInfo: { name: "openaffiliate", version: "1.0.0" },
+      // shown mcp-handler's placeholder ("mcp-typescript server on vercel").
+      // The version stays at the 0.1.0 this endpoint already reported, so the
+      // name is the only thing a connected client sees change, and it moves
+      // one patch step when the tool set does.
+      serverInfo: { name: "openaffiliate", version: "0.1.0" },
     },
     { basePath, maxDuration: 30 }
   );

@@ -54,19 +54,8 @@ for (const program of programs) {
     fail(`missing Markdown twin for ${program.slug}`);
   }
 }
-// llms.txt is a fetch-once index, so it has a size budget: small enough that
-// a client reads the whole thing rather than truncating it, with llms-full.txt
-// carrying the long form. The budget was 10240 and the file had reached 10236
-// — four bytes of headroom, on a file that grows ~100 bytes with every
-// program that gets verified. That is not a budget, it is a tripwire for
-// whoever verifies the next program. 12288 restores real headroom; if it is
-// ever approached again, move content to llms-full.txt rather than raising
-// this number, because the point is a file an agent reads in full.
-const LLMS_MAX_BYTES = 12288;
-if (Buffer.byteLength(llms) > LLMS_MAX_BYTES) {
-  fail(
-    `llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is ${LLMS_MAX_BYTES}`
-  );
+if (Buffer.byteLength(llms) > 10240) {
+  fail(`llms.txt is ${Buffer.byteLength(llms)} bytes; the cap is 10240`);
 }
 for (const file of ["index.md", "programs.md", "rankings.md", "changelog.md"]) {
   const text = requireText(file);

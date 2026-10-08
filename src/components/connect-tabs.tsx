@@ -57,7 +57,7 @@ import { anthropic } from "@ai-sdk/anthropic";
 
 const mcpClient = await createMCPClient({
   transport: {
-    type: "sse",
+    type: "http",
     url: "https://openaffiliate.dev/mcp",
   },
 });

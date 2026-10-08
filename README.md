@@ -113,7 +113,7 @@ import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 
 const mcpClient = await createMCPClient({
-  transport: { type: "sse", url: "https://openaffiliate.dev/mcp" },
+  transport: { type: "http", url: "https://openaffiliate.dev/mcp" },
 });
 const tools = await mcpClient.tools();
 
