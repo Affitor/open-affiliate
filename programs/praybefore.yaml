@@ -7,15 +7,16 @@ verified: false
 commission:
   type: recurring
   mode: percentage
-  value: 30
+  value: 50
+  rate: 50
   currency: USD
-cookie_days: 30
+cookie_days: 90
 
 payout:
-  minimum: 100
+  minimum: 50
   frequency: monthly
 
-short_description: "PrayBefore is a Christian prayer and Bible app designed to help people build a consistent daily prayer habit and put God first."
+short_description: "PrayBefore is a Christian app that helps you build daily prayer habits and put God first."
 description: |
   PrayBefore is a Christian prayer and Bible app designed to help people build a consistent daily prayer habit and put God before digital distractions.
 
@@ -23,11 +24,11 @@ description: |
 
   Affiliate Program
 
-  Earn 30% lifetime recurring commission for every subscriber you refer. As long as your referred user remains subscribed, you continue earning commission from their subscription renewals.
+  Earn up to 50% lifetime recurring commission for every subscriber you refer. As long as your referred user remains subscribed, you continue earning commission from their subscription renewals.
 
   Approved affiliates receive:
 
-  • 30% lifetime recurring commission
+  • Up to 50% lifetime recurring commission
   • A unique coupon code for tracking referrals
   • An exclusive discount for their audience
   • Free PrayBefore Premium
