@@ -4,6 +4,7 @@ const assert = require("node:assert/strict")
 const {
   evaluateAutoMergePolicy,
   fetchProgramContent,
+  shouldArmAutoMerge,
 } = require("./auto-merge-policy.cjs")
 
 const validContent = `name: Example
@@ -66,6 +67,86 @@ test("blocks code, workflow, dependency, and program update paths", () => {
     })
     assert.equal(result.eligible, false, `${filename} should be blocked`)
   }
+})
+
+test("blocks a restrictions sentence like PR 92", () => {
+  const sentence =
+    'restrictions: No self-referrals, trademark bidding, cookie stuffing, incentive traffic or purchased lists; FTC disclosure required.\n'
+  const result = evaluate({
+    files: [
+      {
+        filename: "programs/example.yaml",
+        status: "added",
+        additions: 8,
+        deletions: 0,
+        content: validContent + sentence,
+      },
+    ],
+  })
+  assert.equal(result.eligible, false)
+  assert.match(result.reasons.join("\n"), /restrictions must be a list/)
+})
+
+test("allows restrictions written as a list", () => {
+  const result = evaluate({
+    files: [
+      {
+        filename: "programs/example.yaml",
+        status: "added",
+        additions: 8,
+        deletions: 0,
+        content: validContent + "restrictions:\n  - No self-referrals.\n",
+      },
+    ],
+  })
+  assert.equal(result.eligible, true)
+})
+
+test("arms native auto-merge only when the reviewed label is present", () => {
+  assert.equal(
+    shouldArmAutoMerge({ eligible: true, labels: [], live: true }),
+    false
+  )
+  assert.equal(
+    shouldArmAutoMerge({
+      eligible: true,
+      labels: ["automerge:candidate"],
+      live: true,
+    }),
+    false
+  )
+  assert.equal(
+    shouldArmAutoMerge({
+      eligible: true,
+      labels: ["reviewed"],
+      live: true,
+    }),
+    true
+  )
+  assert.equal(
+    shouldArmAutoMerge({
+      eligible: true,
+      labels: ["reviewed", "do-not-merge"],
+      live: true,
+    }),
+    false
+  )
+  assert.equal(
+    shouldArmAutoMerge({
+      eligible: false,
+      labels: ["reviewed"],
+      live: true,
+    }),
+    false
+  )
+  assert.equal(
+    shouldArmAutoMerge({
+      eligible: true,
+      labels: ["reviewed"],
+      live: false,
+    }),
+    false
+  )
 })
 
 test("blocks drafts and human-review labels", () => {

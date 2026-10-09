@@ -98,6 +98,14 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     }
   }
 
+  // PR 92: a sentence here passes a loose YAML load and then crashes
+  // generate-md.ts (`restrictions.map`). Lists only.
+  if (data.restrictions != null && !Array.isArray(data.restrictions)) {
+    throw new Error(
+      `${filename}: restrictions must be a list. PR 92 used one sentence and the production build failed.`
+    )
+  }
+
   const expectedSlug = basename(filename, ".yaml")
   if (data.slug !== expectedSlug) {
     throw new Error(
