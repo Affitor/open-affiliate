@@ -216,7 +216,8 @@ function statusBlock(p: Program): string {
 
 function bullets(items: string[] | null | undefined): string | null {
   if (!items || items.length === 0) return null
-  return items.map(i => `- ${i}`).join("\n")
+  // Both callers pass contributor arrays: agents.use_cases and restrictions.
+  return items.map(i => `- ${mdEscapeProse(i)}`).join("\n")
 }
 
 function section(title: string, body: string | null | undefined): string | null {
@@ -233,34 +234,34 @@ function joinSections(parts: (string | null)[]): string {
 function programMd(p: Program): string {
   const facts = [
     `Commission: ${mdEscape(commissionLine(p.commission))}`,
-    p.commission.conditions ? `Commission conditions: ${p.commission.conditions}` : null,
+    p.commission.conditions ? `Commission conditions: ${mdEscape(p.commission.conditions)}` : null,
     p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${p.cookie_days} days` : null,
     payoutLine(p) ? `Payout: ${payoutLine(p)}` : null,
-    p.attribution ? `Attribution: ${p.attribution}` : null,
-    p.tracking_method ? `Tracking: ${p.tracking_method}` : null,
-    `Network: ${p.network ?? IN_HOUSE}`,
-    p.approval ? `Approval: ${p.approval}${p.approval_time ? ` (${p.approval_time})` : ""}` : null,
-    p.program_age ? `Program age: ${p.program_age}` : null,
-    `Category: ${p.category}`,
+    p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
+    p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
+    `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
+    p.approval ? `Approval: ${mdEscape(p.approval)}${p.approval_time ? ` (${mdEscape(p.approval_time)})` : ""}` : null,
+    p.program_age ? `Program age: ${mdEscape(p.program_age)}` : null,
+    `Category: ${mdEscape(p.category)}`,
   ].filter(Boolean).join("\n")
 
   const links = [
-    p.signup_url ? `Sign up: ${p.signup_url}` : null,
-    `Website: ${p.url}`,
+    p.signup_url ? `Sign up: ${mdEscape(p.signup_url)}` : null,
+    `Website: ${mdEscape(p.url)}`,
     `Full listing: ${BASE}/programs/${p.slug}`,
     `JSON: ${BASE}/api/programs/${p.slug}`,
   ].filter(Boolean).join("\n")
 
   return joinSections([
     `# ${mdEscape(p.name)} affiliate program`,
-    p.short_description ? `> ${p.short_description}` : null,
+    p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
     section("Terms", facts),
-    section("When to recommend", p.agents?.prompt),
+    section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
     section("Use cases", bullets(p.agents?.use_cases)),
-    section("Trigger keywords", p.agents?.keywords?.join(", ")),
+    section("Trigger keywords", p.agents?.keywords?.map(mdEscape).join(", ")),
     section("Restrictions", bullets(p.restrictions)),
-    section("About", p.description),
+    section("About", p.description && mdEscapeProse(p.description)),
     section("Links", links),
   ])
 }
@@ -283,35 +284,75 @@ function indexRow(p: Program): string {
 /**
  * Escape contributor text before it becomes Markdown.
  *
- * Program names, commission rates and durations come from YAML a contributor
- * wrote, and they were interpolated straight into every generated surface. A
- * reviewer took that through the real pipeline: `commission.duration` set to
- * `[Extra](/programs/11x.md)` — valid against the schema, short enough to
- * survive the length cap — produced
+ * Program names, commission figures, descriptions, agent prompts, categories —
+ * all of it comes from YAML a contributor wrote, and all of it was
+ * interpolated straight into every surface this script writes. Reviewers took
+ * five separate fields through the real pipeline, with valid YAML:
  *
- *   - [Framer](…/programs/framer.md) — 50% recurring for [Extra](/programs/11x.md), 90d cookie
+ *   commission.duration  -> a second link inside a row meant to hold one
+ *   commission.conditions-> a link and a raw <b> on the program page
+ *   attribution          -> <img src=x onerror=…> verbatim
+ *   description          -> "# PWNED HEADING" at column zero, and a <script>
+ *   category             -> a live link in llms.txt's Categories section and
+ *                           the H1 of categories/*.md, via a 21st category
+ *                           that build-registry happily minted
  *
- * which is a second link in a row that is supposed to hold one, and the
- * verifier counted the row as one program. Emphasis, code spans and raw HTML
- * had the same opening. This closes the class rather than the instance: with
- * the literals escaped, contributor text can only ever render as text.
+ * The first attempt at this escaped only the name and the commission text,
+ * while the comment claimed the class was closed. It was not: everything above
+ * still landed. The lesson is in the shape of the bug, not the instances —
+ * every contributor string is hostile until escaped, so the two functions
+ * below are applied at every site that writes one.
+ *
+ * Two functions, because one would be wrong in both directions.
+ *
+ * `mdEscape` is for short inline facts. It neutralises anything that can open
+ * a link, emphasis, a code span, strikethrough, a table cell or raw HTML.
+ *
+ * `mdEscapeProse` is for block bodies — descriptions, prompts, restrictions.
+ * These go through `section()`, which emits `## Title\n\n${body}`, so they sit
+ * at column zero and the line-start markers matter there; that is the hole in
+ * "this text never starts a line", which was true only of the two fields the
+ * first attempt covered. But escaping every `*` and `_` in a paragraph of
+ * English is noise a reader has to see through, so prose keeps those and
+ * neutralises structure instead: brackets, raw HTML, and markers at the start
+ * of any line.
  *
  * `&`, `<` and `>` become entities because backslash does not escape them in
- * Markdown; everything else takes a backslash, which CommonMark strips on
- * render, so `Framer [US]` still reads as `Framer [US]`.
+ * Markdown. `&` is replaced first, so an escaped `&` can never combine with a
+ * following `#` into a numeric reference — which is what lets the verifier
+ * refuse `&#` outright without false-failing on a name containing `&`.
+ *
+ * Not escaped, deliberately: `!`. Not because it is a line-start marker — it
+ * is not, `![alt](url)` works mid-line — but because an image needs a `[` to
+ * follow it, and `[` is escaped. That safety is coupled: if `[` ever leaves
+ * the set, `!` has to join it.
  */
 function mdEscape(text: string): string {
+  // Newlines collapse to spaces. An inline fact is written into one line of a
+  // one-line contract, and a contributor newline broke that: `Framer\n[US]`
+  // split a row in two, which the verifier then refused, and a multi-line
+  // duration did the same to the date column. It also reopened the line-start
+  // markers this function deliberately leaves alone — a heading or a code
+  // block on the second line — which is the other half of why "this text never
+  // starts a line" was only true of where it was being used.
+  return entities(text.replace(/\s*\n\s*/g, " ")).replace(/([\\`*_[\]~|])/g, "\\$1")
+}
+
+function mdEscapeProse(text: string): string {
+  return entities(text)
+    .replace(/([\\[\]])/g, "\\$1")
+    // Per line, because section() puts the first one at column zero and a
+    // contributor newline puts the rest there too.
+    .split("\n")
+    .map(line => line.replace(/^(\s*)([#>+\-]|\d+[.)])(\s)/, "$1\\$2$3"))
+    .join("\n")
+}
+
+function entities(text: string): string {
   return text
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    // Only what can open structure mid-line: a code span, emphasis, or a link.
-    // Not `-`, `+`, `#` or `1.`, which are list and heading markers and only
-    // mean anything at the start of a line — this text is always interpolated
-    // after "- [" or after "— ", so it never starts one. Escaping them anyway
-    // turned "10% one-time" into "10% one\\-time" across every surface, which
-    // is noise in a file meant to be read.
-    .replace(/([\\`*_[\]])/g, "\\$1")
 }
 
 /**
@@ -337,7 +378,14 @@ function clamp(text: string, maxBytes: number): string {
     out += ch
     used += size
   }
-  return `${out.trimEnd()}\u2026`
+  // Clamping runs after escaping, so the cut can land between a backslash and
+  // the character it escapes, leaving a stray `\` in a published file. Drop a
+  // trailing odd-length backslash run. Escaping after clamping is not the fix:
+  // the budget has to measure the bytes actually written.
+  const trimmed = out.trimEnd()
+  const trailing = /\\*$/.exec(trimmed)![0].length
+  const safe = trailing % 2 === 1 ? trimmed.slice(0, -1) : trimmed
+  return `${safe}\u2026`
 }
 
 /**
@@ -373,7 +421,7 @@ function checkedOn(p: Program): string {
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
   const verified = list.filter(p => p.verified)
   const sorted = [...verified, ...list.filter(p => !p.verified)]
-  const title = kind === "category" ? `${label} affiliate programs` : `${label} affiliate network`
+  const title = kind === "category" ? `${mdEscape(label)} affiliate programs` : `${mdEscape(label)} affiliate network`
 
   return joinSections([
     `# ${title}`,
@@ -555,14 +603,14 @@ function llmsTxt(): string {
     .map(c => {
       const inCat = programs.filter(p => p.category === c)
       const v = inCat.filter(p => p.verified).length
-      return `- [${c}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
+      return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
     })
     .join("\n")
 
   const netLines = networks
     .map(n => {
       const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-      return `- [${n}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
+      return `- [${mdEscape(n)}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
     })
     .join("\n")
 
@@ -682,9 +730,9 @@ function programsIndexMd(): string {
       const shown = sorted.slice(0, 15)
       const more =
         sorted.length > shown.length
-          ? `\n- … ${sorted.length - shown.length} more in [${c}](${BASE}/categories/${categoryToSlug(c)}.md)`
+          ? `\n- … ${sorted.length - shown.length} more in [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md)`
           : ""
-      return `### ${c}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
+      return `### ${mdEscape(c)}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
     })
     .filter(Boolean)
     .join("\n\n")
@@ -740,10 +788,10 @@ function rankingsMd(): string {
     })
     .join("\n")
   const networkLines = getNetworkStats()
-    .map(n => `- [${n.network}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${n.bestCommissionDisplay}, top [${n.topProgram.name}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(n.network)}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
     .join("\n")
   const categoryLines = getCategoryStats()
-    .map(c => `- [${c.category}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${c.highestCommissionDisplay}, top [${c.topProgram.name}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
     .join("\n")
 
   return joinSections([
