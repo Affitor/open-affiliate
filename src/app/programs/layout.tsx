@@ -19,6 +19,12 @@ export const metadata: Metadata = {
     // drops the root opengraph-image and this page shared with no preview.
     images: ["/opengraph-image"],
   },
+  alternates: {
+    canonical: "/programs",
+    types: {
+      "text/markdown": "https://openaffiliate.dev/programs.md",
+    },
+  },
 };
 
 export default function ProgramsLayout({

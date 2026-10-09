@@ -5,7 +5,10 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server
 // CDN cache for an hour, so a handler only ever sees the misses. The proxy
 // runs before the cache, on every request. This is where agent traffic from
 // the skills repo (utm_source=affiliate-skills) becomes visible.
-export const config = { matcher: "/api/:path*" }
+// /mcp is listed beside /api/* because it is the canonical MCP endpoint and
+// clients are being migrated onto it — left out, `api_request` for MCP would
+// drift to zero as that migration worked, with nothing appearing broken.
+export const config = { matcher: ["/api/:path*", "/mcp"] }
 
 const POSTHOG_URL = "https://us.i.posthog.com/i/v0/e/"
 

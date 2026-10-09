@@ -60,19 +60,27 @@ npx openaffiliate add supabase
 
 ### MCP (for AI agents)
 
-**HTTP endpoint** (Claude.ai, ChatGPT, any MCP client):
+**Hosted HTTP endpoint** — public, read-only, no API key. One line:
+
+```bash
+claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
+```
+
+The same endpoint as config, for Claude.ai, ChatGPT, and any other remote MCP client:
 
 ```json
 {
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }
 ```
 
-**Stdio transport** (Claude Code, Cursor, local tools):
+`https://openaffiliate.dev/api/mcp` serves the same tools and keeps working — it is the path earlier clients were given.
+
+**Stdio transport** (local tools, or to pin a version):
 
 ```json
 {
@@ -87,6 +95,16 @@ npx openaffiliate add supabase
 
 Available tools: `search_programs`, `get_program`, `list_categories`
 
+### Markdown, without MCP
+
+Append `.md` to any program, category or network URL for a clean markdown version an agent can fetch and cite:
+
+```bash
+curl https://openaffiliate.dev/programs/vercel.md
+curl https://openaffiliate.dev/categories/ai.md
+curl https://openaffiliate.dev/llms.txt
+```
+
 ### AI SDK
 
 ```typescript
@@ -95,7 +113,7 @@ import { generateText } from "ai";
 import { anthropic } from "@ai-sdk/anthropic";
 
 const mcpClient = await createMCPClient({
-  transport: { type: "sse", url: "https://openaffiliate.dev/api/mcp" },
+  transport: { type: "http", url: "https://openaffiliate.dev/mcp" },
 });
 const tools = await mcpClient.tools();
 

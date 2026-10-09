@@ -22,18 +22,44 @@ export default function MCPPage() {
             HTTP transport (recommended)
           </h2>
           <p className="text-base text-muted-foreground mb-3">
-            For Claude.ai, ChatGPT, and remote MCP clients:
+            Hosted at <code className="text-xs">https://openaffiliate.dev/mcp</code>.
+            Public, read-only, no API key. One line in Claude Code:
+          </p>
+          <CodeBlock
+            label="terminal"
+            code={`claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp`}
+          />
+          <p className="text-base text-muted-foreground mt-3 mb-3">
+            Claude (web and desktop): Settings → Connectors → Add custom
+            connector, and paste the URL. Cursor, Windsurf and other
+            clients that take a JSON config:
           </p>
           <CodeBlock
             label="mcp config"
             code={`{
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }`}
           />
+          <p className="text-base text-muted-foreground mt-3 mb-3">
+            Codex CLI (<code className="text-xs">~/.codex/config.toml</code>):
+          </p>
+          <CodeBlock
+            label="config.toml"
+            code={`[mcp_servers.openaffiliate]
+url = "https://openaffiliate.dev/mcp"`}
+          />
+          <p className="text-base text-muted-foreground mt-3">
+            Clients that only speak stdio can bridge with{" "}
+            <code className="text-xs">npx mcp-remote https://openaffiliate.dev/mcp</code>.
+          </p>
+          <p className="text-xs text-muted-foreground mt-3">
+            <code>/api/mcp</code> serves the same tools and keeps working — it
+            is the path earlier clients were given.
+          </p>
         </section>
 
         <section>
@@ -79,6 +105,38 @@ export default function MCPPage() {
               </div>
             ))}
           </div>
+        </section>
+
+        <section>
+          <h2 id="agent-skill" className="text-lg font-semibold mb-2">Agent skill</h2>
+          <p className="text-base text-muted-foreground mb-3">
+            One <code className="text-xs">SKILL.md</code> for agents that load
+            skills (Claude Code and others): when to recommend a program, how to
+            query the registry, and how to treat unverified entries.{" "}
+            <a href="/skill/SKILL.md" className="underline underline-offset-4">Read it first</a>.
+          </p>
+          <CodeBlock
+            label="terminal"
+            code={`mkdir -p ~/.claude/skills/openaffiliate
+curl -s https://openaffiliate.dev/skill/SKILL.md -o ~/.claude/skills/openaffiliate/SKILL.md`}
+          />
+        </section>
+
+        <section>
+          <h2 id="markdown" className="text-lg font-semibold mb-2">
+            Markdown, without MCP
+          </h2>
+          <p className="text-base text-muted-foreground mb-3">
+            Append <code className="text-xs">.md</code> to any program,
+            category or network URL for a clean markdown version an agent can
+            fetch and cite directly:
+          </p>
+          <CodeBlock
+            label="terminal"
+            code={`curl https://openaffiliate.dev/programs/vercel.md
+curl https://openaffiliate.dev/categories/ai.md
+curl https://openaffiliate.dev/llms.txt`}
+          />
         </section>
       </div>
 

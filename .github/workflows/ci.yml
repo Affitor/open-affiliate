@@ -28,6 +28,8 @@ jobs:
       - run: node --test .github/scripts/sift-rankings-agg.test.cjs
       - run: node --test .github/scripts/fork-yaml-ci.test.cjs
       - run: node --test .github/scripts/program-logo-server.test.cjs
+      - run: npx tsx --test scripts/posthog-noise.test.ts
+      - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsc --noEmit
       - run: npm run build
       - run: npm run verify:client-registry

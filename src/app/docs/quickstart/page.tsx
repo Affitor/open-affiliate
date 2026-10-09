@@ -57,7 +57,7 @@ export default function QuickStartPage() {
             code={`{
   "mcpServers": {
     "openaffiliate": {
-      "url": "https://openaffiliate.dev/api/mcp"
+      "url": "https://openaffiliate.dev/mcp"
     }
   }
 }`}
