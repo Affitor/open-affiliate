@@ -10,6 +10,7 @@ commission:
   type: recurring
   rate: "40%"
   mode: percentage
+  value: 40
   currency: EUR
   duration: "lifetime"
   conditions: "40% of every payment for as long as the referred customer stays subscribed, all plans and billing cycles, upgrades included"
