@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-14T17:34:02.986Z",
-  "count": 760,
+  "generated_at": "2026-09-17T03:15:07.988Z",
+  "count": 761,
   "categories": [
     "AI",
     "Analytics",
@@ -6823,6 +6823,36 @@
       "verified": false,
       "network": "in-house",
       "createdAt": "2026-04-18",
+      "source": "community",
+      "descriptionAvailable": true,
+      "agentPromptAvailable": true,
+      "signupAvailable": true
+    },
+    {
+      "slug": "get-noticed-ai",
+      "name": "Get Noticed AI",
+      "category": "Marketing",
+      "tags": [
+        "local-seo",
+        "google-maps",
+        "ai-search",
+        "lead-generation",
+        "agencies",
+        "recurring",
+        "high-ticket"
+      ],
+      "commission": {
+        "type": "hybrid",
+        "rate": "20% recurring + $1,000 flat",
+        "mode": "hybrid",
+        "value": 20,
+        "currency": "USD"
+      },
+      "cookieDays": 90,
+      "shortDescription": "Local SEO and AI visibility platform for service businesses",
+      "verified": false,
+      "network": "in-house",
+      "createdAt": "2026-09-09",
       "source": "community",
       "descriptionAvailable": true,
       "agentPromptAvailable": true,
