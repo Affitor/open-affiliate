@@ -35,6 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, commissionUnknown} from "@/lib/programs";
 import { applyEarnLabel } from "@/lib/apply-cta";
+import { cookieWindowDisplay, isPublishedNumber, minimumPayoutDisplay, publishedText } from "@/lib/program-fields";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -61,7 +62,10 @@ export async function generateMetadata({
   const rate = commissionDisplay(program.commission);
   const rateForTitle = commissionUnknown(program.commission) ? "" : `${rate} `;
   const title = `${program.name} Affiliate Program — ${rateForTitle}${program.commission.type} | OpenAffiliate`;
-  const description = `${program.shortDescription}. ${rate} ${program.commission.type} commission, ${program.cookieDays}-day cookie. Join the ${program.name} affiliate program.`;
+  const cookieDescription = isPublishedNumber(program.cookieDays)
+    ? `, ${cookieWindowDisplay(program.cookieDays, "-day cookie")}`
+    : "";
+  const description = `${program.shortDescription}. ${rate} ${program.commission.type} commission${cookieDescription}. Join the ${program.name} affiliate program.`;
 
   return {
     title,
@@ -211,7 +215,7 @@ export default async function ProgramPage({
             offers: {
               "@type": "Offer",
               category: "Affiliate Program",
-              description: `${commissionDisplay(program.commission)} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
+              description: `${commissionDisplay(program.commission)} ${commissionLabel(program.commission)} commission${isPublishedNumber(program.cookieDays) ? `, ${cookieWindowDisplay(program.cookieDays, "-day cookie")}` : ""}`,
             },
           }),
         }}
@@ -280,7 +284,7 @@ export default async function ProgramPage({
         />
         <StatBadge
           icon={<Clock className="h-3 w-3" />}
-          label={`${program.cookieDays}d cookie`}
+          label={cookieWindowDisplay(program.cookieDays, "d cookie")}
         />
         {program.network && (
           <StatBadge
@@ -475,7 +479,7 @@ export default async function ProgramPage({
             )}
 
             <div className="h-px bg-border/50" />
-            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={`${program.cookieDays} days`} />
+            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={cookieWindowDisplay(program.cookieDays)} />
 
             {program.attribution && (
               <>
@@ -492,9 +496,9 @@ export default async function ProgramPage({
             )}
 
             <div className="h-px bg-border/50" />
-            <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
+            <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={minimumPayoutDisplay(program.payout.minimum)} />
             <div className="h-px bg-border/50" />
-            <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
+            <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{publishedText(program.payout.frequency)}</span>} />
 
             {program.payoutMethods && program.payoutMethods.length > 0 && (
               <>

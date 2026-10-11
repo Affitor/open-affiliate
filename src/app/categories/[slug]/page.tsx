@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
+import { averagePublishedCookie, cookieWindowDisplay, minimumPayoutDisplay } from "@/lib/program-fields";
 import {
   programs,
   categories,
@@ -71,10 +72,7 @@ export default async function CategoryPage({
   const rates = catPrograms.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const avgCookie =
-    catPrograms.length > 0
-      ? catPrograms.reduce((s, p) => s + p.cookieDays, 0) / catPrograms.length
-      : 0;
+  const avgCookie = averagePublishedCookie(catPrograms.map((p) => p.cookieDays));
   const recurringCount = catPrograms.filter(
     (p) => p.commission.type === "recurring"
   ).length;
@@ -156,7 +154,7 @@ export default async function CategoryPage({
             <Clock className="h-3 w-3" />
             <span className="text-[10px] uppercase tracking-wide">Avg Cookie</span>
           </div>
-          <p className="text-2xl font-bold">{avgCookie.toFixed(0)}d</p>
+          <p className="text-2xl font-bold">{cookieWindowDisplay(avgCookie === undefined ? undefined : Math.round(avgCookie), "d")}</p>
         </div>
       </div>
 
@@ -255,12 +253,12 @@ export default async function CategoryPage({
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
                     <span className="text-xs text-muted-foreground">
-                      {program.cookieDays}d
+                      {cookieWindowDisplay(program.cookieDays, "d")}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
                     <span className="text-xs text-muted-foreground">
-                      ${program.payout.minimum}
+                      {minimumPayoutDisplay(program.payout.minimum)}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">

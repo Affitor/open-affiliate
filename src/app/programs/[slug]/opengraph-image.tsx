@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { programs, getProgram , commissionDisplay} from "@/lib/programs";
+import { cookieWindowDisplay, minimumPayoutDisplay } from "@/lib/program-fields";
 
 export const alt = "OpenAffiliate: Affiliate Program Details";
 export const size = { width: 1200, height: 630 };
@@ -130,7 +131,7 @@ export default async function Image({
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              {program.cookieDays}d
+              {cookieWindowDisplay(program.cookieDays, "d")}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
               Cookie
@@ -138,7 +139,7 @@ export default async function Image({
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              ${program.payout.minimum}
+              {minimumPayoutDisplay(program.payout.minimum)}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
               Min Payout

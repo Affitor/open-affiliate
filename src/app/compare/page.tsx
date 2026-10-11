@@ -2,6 +2,7 @@
 
 import { useState, useMemo, Suspense, useEffect } from "react";
 import { track } from "@/lib/track";
+import { cookieWindowDisplay, minimumPayoutDisplay, publishedText } from "@/lib/program-fields";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -353,7 +354,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        {p.cookieDays} days
+                        {cookieWindowDisplay(p.cookieDays)}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -401,7 +402,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        ${p.payout.minimum}
+                        {minimumPayoutDisplay(p.payout.minimum)}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -414,7 +415,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm capitalize"
                       >
-                        {p.payout.frequency}
+                        {publishedText(p.payout.frequency)}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
