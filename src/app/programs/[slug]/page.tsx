@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay} from "@/lib/programs";
-import { applyEarnLabel, checkTermsLabel } from "@/lib/apply-cta";
+import { applyButton } from "@/lib/apply-cta";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -129,13 +129,12 @@ export default async function ProgramPage({
   const program = getProgram(slug);
   if (!program) notFound();
 
-  const joinUrl = program.signupUrl ?? program.url;
   const faq = buildFaq(program);
   const discontinued = isDiscontinued(program);
   const paused = isPaused(program);
   const unverified = isUnverified(program);
   const network = networkName(program);
-  const applyCta = unverified ? checkTermsLabel(program.name) : applyEarnLabel(program.commission);
+  const applyCta = applyButton(program);
   // Unverified: badges carry the listed figures but say they are not confirmed.
   const unconfirmed = unverified ? " (unconfirmed)" : "";
   const cookieText =
@@ -360,11 +359,11 @@ export default async function ProgramPage({
               <div className="rounded-xl border border-border/50 bg-card/30 p-5 space-y-4">
                 {program.signupUrl && (
                   <TrackLink
-                    href={program.signupUrl}
+                    href={applyCta.href}
                     slug={slug}
                     className="inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
                   >
-                    {applyCta}
+                    {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
                 )}
@@ -691,11 +690,11 @@ export default async function ProgramPage({
 
           {/* Join button */}
           {!discontinued && !paused && <TrackLink
-            href={joinUrl}
+            href={applyCta.href}
             slug={slug}
             className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
-            {applyCta}
+            {applyCta.label}
             <ExternalLink className="h-3.5 w-3.5" />
           </TrackLink>}
         </div>

@@ -55,6 +55,7 @@
         "cj-api",
         "impact-api",
         "awin-api",
+        "affitor-api",
         "reditus",
         "dub",
         "rewardful",
@@ -299,6 +300,7 @@
         "tolt",
         "lemonsqueezy",
         "tapfiliate",
+        "affitor",
         "in-house",
         null
       ],

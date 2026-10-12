@@ -11,7 +11,7 @@ commission:
   value: 12
   currency: USD
   duration: "18 months"
-  conditions: null
+  conditions: Paid 15 days after sale.
 
 cookie_days: 30
 attribution: last-click
@@ -20,20 +20,10 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
 
 signup_url: https://affitor.com/marketplace/kyma-api
-approval: auto
-approval_time: "instant"
-restrictions: []
 
-marketing_materials: true
-api_available: false
-dedicated_manager: false
-dashboard_url: null
-network: in-house
-program_age: "1+ year"
+network: affitor
 
 description: >
   Kyma API provides one gateway to 100+ AI models from Google, Anthropic, OpenAI, Meta,
@@ -67,3 +57,4 @@ updated_at: "2026-10-12"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: manual
+status: active
