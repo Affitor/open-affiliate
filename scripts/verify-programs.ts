@@ -316,7 +316,6 @@ async function verifyProgram(program: ProgramYaml): Promise<VerifyResult> {
 // Programs that we know are valid but can't be auto-verified
 // (e.g. own products, JS-heavy pages, known false negatives)
 const SKIP_VERIFY: Record<string, string> = {
-  "kyma-api": "Own product — affiliate page not yet built",
   tailwindcss: "Partner page 404 — program unconfirmed, kept as unverified",
 };
 
