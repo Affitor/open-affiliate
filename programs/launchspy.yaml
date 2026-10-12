@@ -16,6 +16,8 @@ commission:
   conditions: "40% of every payment for as long as the referred customer stays subscribed, all plans and billing cycles, upgrades included"
 
 cookie_days: 60
+attribution: last-click
+tracking_method: hybrid
 signup_url: https://partners.launchspy.io/register
 approval: manual
 approval_time: "24 hours"
