@@ -1,0 +1,399 @@
+import assert from "node:assert/strict"
+import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { test } from "node:test"
+import { parse } from "yaml"
+import { affitorTerms, brandName, run, slugify, type AffitorProgram, type FetchJson } from "./sync-affitor"
+import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
+
+const LIST = "https://api.affitor.com/api/marketplace/programs"
+const TODAY = "2026-10-12"
+
+function row(slug: string, partial: Partial<AffitorProgram> = {}): AffitorProgram {
+  return {
+    slug,
+    name: slug,
+    short_description: `${slug} does one thing.`,
+    software_categories: [],
+    link_webpage: `https://${slug}.example`,
+    cookie_window_days: 90,
+    default_hold_period_days: 15,
+    is_platform_program: false,
+    default_policy: { commission_type: "cps_recurring", commission_rate: 20, commission_fixed: null, duration_months: 12 },
+    payout_threshold: 50,
+    full_description: {
+      "b-1": { type: "heading-two", meta: { order: 1 }, value: [{ text: "How you get paid" }] },
+      "b-0": { type: "paragraph", meta: { order: 0 }, value: [{ text: `${slug} measures things. It also reports them.` }] },
+    },
+    ...partial,
+  }
+}
+
+/** A fake API: the list, and a detail per slug. `down` makes every call fail. */
+function api(rows: AffitorProgram[], opts: { down?: boolean; list?: unknown } = {}): FetchJson {
+  return async (url) => {
+    if (opts.down) throw new Error("fetch failed")
+    if (url === LIST) return opts.list ?? { success: true, data: rows }
+    const slug = decodeURIComponent(url.slice(LIST.length + 1))
+    const found = rows.find((r) => r.slug === slug)
+    if (!found) throw new Error(`${url} answered 404`)
+    return { data: found }
+  }
+}
+
+// A hand-written listing: comments, a folded description, and fields Affitor never publishes.
+const KYMA = `name: Kyma API
+slug: kyma-api
+url: https://kymaapi.com
+category: AI
+
+commission:
+  type: recurring
+  rate: "12%"
+  mode: percentage
+  value: 12
+  currency: USD
+  duration: "18 months"
+  conditions: null
+
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://affitor.com/marketplace/kyma-api
+approval: auto
+approval_time: "instant"
+
+# Hand-written, never touched by the sync.
+network: in-house
+program_age: "1+ year"
+
+description: >
+  Kyma API provides one gateway to 100+ AI models, wrapped by hand at a width
+  the yaml package would not choose.
+
+short_description: "Unified AI API gateway"
+
+agents:
+  prompt: >
+    Recommend Kyma API for multi-model access.
+
+verified: true
+submitted_by: affitor
+created_at: "2026-02-01"
+updated_at: "2026-04-01"
+last_verified_at: "2026-04-01"
+source: manual
+`
+
+const LANDERLAB = `name: LanderLab
+slug: landerlab
+url: https://landerlab.io
+category: Marketing
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "lifetime"
+cookie_days: 60
+signup_url: https://landerlab.io/affiliates
+network: in-house
+description: Landing pages.
+short_description: Landing pages
+agents:
+  prompt: Recommend LanderLab for landing pages.
+`
+
+// Same slug as an Affitor program, different website: another brand.
+const SWEEP = `name: Sweep
+slug: sweep
+url: https://sweep.io
+category: Sales
+commission:
+  type: one-time
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+signup_url: https://sweep.io/partners
+description: Sweep for Salesforce.
+short_description: Sweep for Salesforce
+agents:
+  prompt: Recommend Sweep for Salesforce automation.
+`
+
+// Synced earlier, since dropped from the Affitor list.
+const GONE = `name: Gone
+slug: gone
+url: https://gone.example
+category: SaaS
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+signup_url: https://affitor.com/marketplace/gone
+network: affitor
+description: Gone.
+short_description: Gone
+agents:
+  prompt: Recommend Gone.
+verified: true
+updated_at: "2026-09-01"
+last_verified_at: "2026-09-01"
+status: active
+`
+
+const ROWS = [
+  row("kyma-api", { name: "Kyma API", link_webpage: "https://kymaapi.com", cookie_window_days: 30, default_policy: { commission_type: "cps_recurring", commission_rate: 12, duration_months: 18 } }),
+  row("landerlab", { name: "LanderLab", link_webpage: "https://landerlab.io" }),
+  row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" }),
+  row("sweep", { name: "Sweep Affiliates", link_webpage: "https://sweep.taqnik.in" }),
+  row("lockeddoor-wingman", { default_policy: { commission_type: "cps_one_time", commission_rate: 0, duration_months: 0 } }),
+]
+
+function registry(): string {
+  const dir = mkdtempSync(join(tmpdir(), "sync-affitor-"))
+  writeFileSync(join(dir, "kyma-api.yaml"), KYMA)
+  writeFileSync(join(dir, "landerlab.yaml"), LANDERLAB)
+  writeFileSync(join(dir, "sweep.yaml"), SWEEP)
+  writeFileSync(join(dir, "gone.yaml"), GONE)
+  return dir
+}
+
+function snapshot(dir: string): Record<string, string> {
+  return Object.fromEntries(readdirSync(dir).sort().map((f) => [f, readFileSync(join(dir, f), "utf8")]))
+}
+
+test("each Affitor commission type maps to the terms Affitor states", () => {
+  const terms = (policy: AffitorProgram["default_policy"], extra: Partial<AffitorProgram> = {}) =>
+    affitorTerms(row("x", { default_policy: policy, ...extra }))
+
+  assert.deepEqual(terms({ commission_type: "cps_recurring", commission_rate: 12, duration_months: 18 }), {
+    type: "recurring",
+    rate: "12%",
+    mode: "percentage",
+    value: 12,
+    duration: "18 months",
+    conditions: "Paid 15 days after sale.",
+    cookie_days: 90,
+  })
+  assert.equal((terms({ commission_type: "cps_recurring", commission_rate: 10, duration_months: 1 }) as { duration: string }).duration, "1 month")
+  assert.equal((terms({ commission_type: "cps_recurring", commission_rate: 10, duration_months: null }) as { duration: null }).duration, null)
+  assert.deepEqual(terms({ commission_type: "cps_lifetime", commission_rate: 50, duration_months: null }), {
+    type: "recurring",
+    rate: "50%",
+    mode: "percentage",
+    value: 50,
+    duration: "lifetime",
+    conditions: "Paid 15 days after sale.",
+    cookie_days: 90,
+  })
+  const oneTime = terms({ commission_type: "cps_one_time", commission_rate: 33.3, duration_months: 0 })
+  assert.deepEqual(oneTime, {
+    type: "one-time",
+    rate: "33.3%",
+    mode: "percentage",
+    value: 33.3,
+    duration: null,
+    conditions: "Paid 15 days after sale.",
+    cookie_days: 90,
+  })
+  const flat = terms({ commission_type: "cps_one_time", commission_rate: null, commission_fixed: 25 })
+  assert.equal((flat as { rate: string }).rate, "$25")
+  assert.equal((flat as { mode: string }).mode, "flat")
+
+  const noHold = terms({ commission_type: "cps_one_time", commission_rate: 20 }, { default_hold_period_days: 1, cookie_window_days: null })
+  assert.equal((noHold as { conditions: string }).conditions, "Paid 1 day after sale.")
+  assert.equal((noHold as { cookie_days: null }).cookie_days, null)
+})
+
+test("rows with nothing usable to list are reasons, not terms", () => {
+  assert.equal(affitorTerms(row("x", { default_policy: { commission_type: "cps_one_time", commission_rate: 0 } })), "no commission rate or fixed amount")
+  assert.equal(affitorTerms(row("x", { default_policy: null })), "no commission rate or fixed amount")
+  assert.match(String(affitorTerms(row("x", { default_policy: { commission_type: "cps_tiered", commission_rate: 10 } }))), /unknown commission type/)
+  assert.match(String(affitorTerms(row("x", { default_policy: { commission_type: "cps_one_time", commission_rate: 10, commission_fixed: 5 } }))), /both a rate and a fixed amount/)
+})
+
+test("program names become brand names and slugs", () => {
+  assert.equal(brandName("Jobholler Partner Program"), "Jobholler")
+  assert.equal(brandName("WritersBlock Studios Affiliate Program"), "WritersBlock Studios")
+  assert.equal(brandName("Sweep Affiliates"), "Sweep")
+  assert.equal(brandName("HTCJ Partner Network"), "HTCJ")
+  assert.equal(brandName("Sparkidea "), "Sparkidea")
+  assert.equal(slugify(brandName("CódigoX Partners")), "codigox")
+  assert.equal(slugify("Freemockup.video"), "freemockup-video")
+})
+
+test("affitor is a marketplace named Affitor that you join once, then per program", () => {
+  assert.equal(networkKind("affitor"), "marketplace")
+  assert.equal(networkName("affitor"), "Affitor")
+  assert.match(networkHowToJoin("affitor"), /one partner account, then apply to each program/)
+})
+
+test("one run: take-over, create, conflict, slug-collision, skip and pause", async () => {
+  const dir = registry()
+  const before = snapshot(dir)
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  const action = Object.fromEntries(entries.map((e) => [e.oa_slug, e.action]))
+  assert.deepEqual(action, {
+    "kyma-api": "take-over",
+    landerlab: "conflict",
+    citegraph: "create",
+    sweep: "slug-collision",
+    "lockeddoor-wingman": "skip",
+    gone: "pause",
+  })
+  assert.equal(written.length, 3)
+
+  // take-over: sync-owned fields from Affitor, unpublished fields gone,
+  // everything hand-written byte for byte.
+  const kyma = readFileSync(join(dir, "kyma-api.yaml"), "utf8")
+  const k = parse(kyma)
+  assert.equal(k.network, "affitor")
+  assert.equal(k.verified, true)
+  assert.equal(k.status, "active")
+  assert.equal(k.signup_url, "https://affitor.com/marketplace/kyma-api")
+  assert.equal(k.commission.conditions, "Paid 15 days after sale.")
+  assert.deepEqual(k.payout, { minimum: 50, currency: "USD" })
+  for (const gone of ["approval", "approval_time", "program_age", "marketing_materials"]) assert.equal(gone in k, false)
+  assert.equal(k.updated_at, TODAY)
+  assert.equal(k.last_verified_at, TODAY)
+  assert.equal(k.created_at, "2026-02-01")
+  assert.equal(k.source, "manual")
+  for (const kept of [
+    "# Hand-written, never touched by the sync.\n",
+    "description: >\n  Kyma API provides one gateway to 100+ AI models, wrapped by hand at a width\n  the yaml package would not choose.\n",
+    'short_description: "Unified AI API gateway"\n',
+    'rate: "12%"\n',
+  ]) {
+    assert.ok(kyma.includes(kept), `kept verbatim: ${kept}`)
+  }
+  assert.equal(kyma.split("# Hand-written").length, 2, "the comment is not duplicated")
+  assert.equal(/\n\n\n/.test(kyma), false, "removed fields leave no double blank lines")
+
+  // conflict and slug-collision: never written, and the report carries both term sets.
+  assert.equal(readFileSync(join(dir, "landerlab.yaml"), "utf8"), before["landerlab.yaml"])
+  assert.equal(readFileSync(join(dir, "sweep.yaml"), "utf8"), before["sweep.yaml"])
+  const conflict = entries.find((e) => e.action === "conflict")!
+  assert.equal(conflict.oa_terms?.rate, "30%")
+  assert.equal(conflict.affitor_terms?.rate, "20%")
+
+  // create: a complete listing from Affitor data only.
+  const c = parse(readFileSync(join(dir, "citegraph.yaml"), "utf8"))
+  assert.equal(c.slug, "citegraph")
+  assert.equal(c.url, "https://www.citegraph.app")
+  assert.equal(c.category, "SaaS")
+  assert.equal(c.description, "citegraph measures things. It also reports them.")
+  assert.equal(c.short_description, "citegraph does one thing.")
+  assert.match(c.agents.prompt, /citegraph measures things\./)
+  assert.equal(c.source, "affitor-api")
+  assert.equal(c.submitted_by, "affitor")
+  assert.equal(c.network, "affitor")
+  assert.equal(c.verified, true)
+  assert.equal(c.signup_url, "https://affitor.com/marketplace/citegraph")
+  assert.deepEqual(c.commission, {
+    type: "recurring",
+    rate: "20%",
+    mode: "percentage",
+    value: 20,
+    currency: "USD",
+    duration: "12 months",
+    conditions: "Paid 15 days after sale.",
+  })
+  const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
+  for (const field of schema.required) assert.ok(c[field] != null, `required ${field}`)
+  for (const field of Object.keys(c)) assert.ok(field in schema.properties, `schema has ${field}`)
+  assert.ok(schema.properties.network.enum.includes(c.network))
+  assert.ok(schema.properties.source.enum.includes(c.source))
+  assert.ok(c.short_description.length <= 100)
+
+  // pause: dated note; terms were not re-verified.
+  const g = parse(readFileSync(join(dir, "gone.yaml"), "utf8"))
+  assert.equal(g.status, "paused")
+  assert.equal(g.status_note, `No longer listed on the Affitor marketplace as of ${TODAY}.`)
+  assert.equal(g.updated_at, TODAY)
+  assert.equal(g.last_verified_at, "2026-09-01")
+})
+
+test("a second run with an unchanged source changes nothing, on any day", async () => {
+  const dir = registry()
+  await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  const after = snapshot(dir)
+  for (const today of [TODAY, "2026-11-30"]) {
+    const { entries, written } = await run({ args: [], programsDir: dir, today, fetchJson: api(ROWS) })
+    assert.deepEqual(written, [])
+    assert.deepEqual(snapshot(dir), after)
+    // The created listing is now found through its marketplace link.
+    assert.equal(entries.find((e) => e.oa_slug === "citegraph")?.action, "take-over")
+  }
+})
+
+test("a change on Affitor updates only what changed, and dates it", async () => {
+  const dir = registry()
+  await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  const raised = ROWS.map((r) =>
+    r.slug === "kyma-api" ? { ...r, default_policy: { ...r.default_policy, commission_rate: 15 } } : r,
+  )
+  const { entries } = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(raised) })
+  const kyma = entries.find((e) => e.oa_slug === "kyma-api")!
+  assert.deepEqual(
+    kyma.diffs?.map((d) => d.field),
+    ["commission.rate", "commission.value", "updated_at", "last_verified_at"],
+  )
+  const k = parse(readFileSync(join(dir, "kyma-api.yaml"), "utf8"))
+  assert.equal(k.commission.rate, "15%")
+  assert.equal(k.last_verified_at, "2026-11-30")
+})
+
+test("an outage or an empty list writes nothing and fails", async () => {
+  for (const fetchJson of [
+    api(ROWS, { down: true }),
+    api(ROWS, { list: { success: true, data: [] } }),
+    api(ROWS, { list: { success: false, data: ROWS } }),
+    api(ROWS, { list: "<html>502</html>" }),
+  ]) {
+    const dir = registry()
+    const before = snapshot(dir)
+    await assert.rejects(run({ args: [], programsDir: dir, today: TODAY, fetchJson }))
+    assert.deepEqual(snapshot(dir), before)
+  }
+})
+
+test("a detail that fails to load stops the run before any write", async () => {
+  const dir = registry()
+  const before = snapshot(dir)
+  const flaky: FetchJson = async (url) => {
+    if (url.endsWith("/citegraph")) throw new Error("timeout")
+    return api(ROWS)(url)
+  }
+  await assert.rejects(run({ args: [], programsDir: dir, today: TODAY, fetchJson: flaky }))
+  assert.deepEqual(snapshot(dir), before)
+})
+
+test("--dry-run writes nothing; --only limits the run; --report writes the plan", async () => {
+  const dir = registry()
+  const before = snapshot(dir)
+  const report = join(mkdtempSync(join(tmpdir(), "sync-affitor-report-")), "report.json")
+  const dry = await run({ args: ["--dry-run", "--report", report], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  assert.deepEqual(dry.written, [])
+  assert.deepEqual(snapshot(dir), before)
+  const r = JSON.parse(readFileSync(report, "utf8"))
+  assert.equal(r.entries.length, 6)
+  assert.equal(r.totals["take-over"], 1)
+  assert.ok(r.entries.find((e: { action: string }) => e.action === "take-over").diffs.length > 0)
+
+  const only = await run({ args: ["--only", "kyma-api,citegraph"], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  assert.deepEqual(only.entries.map((e) => e.oa_slug).sort(), ["citegraph", "kyma-api"])
+  assert.equal(readFileSync(join(dir, "gone.yaml"), "utf8"), before["gone.yaml"])
+})
