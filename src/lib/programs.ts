@@ -124,9 +124,11 @@ function mapYamlToProgram(yaml: any): Program {
     attribution: yaml.attribution,
     trackingMethod: yaml.tracking_method,
     payoutMethods: yaml.payout?.methods ?? [],
-    marketingMaterials: yaml.marketing_materials ?? false,
-    apiAvailable: yaml.api_available ?? false,
-    dedicatedManager: yaml.dedicated_manager ?? false,
+    // Unstated stays undefined so the page shows nothing rather than a ✗ the
+    // source never said. A listing synced from Affitor omits all three.
+    marketingMaterials: yaml.marketing_materials,
+    apiAvailable: yaml.api_available,
+    dedicatedManager: yaml.dedicated_manager,
     dashboardUrl: yaml.dashboard_url ?? null,
     network: yaml.network ?? null,
     programAge: yaml.program_age ?? null,
@@ -480,6 +482,7 @@ export const NETWORK_KIND: Record<string, NetworkKind> = {
   impact: "marketplace",
   awin: "marketplace",
   "cj-affiliate": "marketplace",
+  affitor: "marketplace",
   rewardful: "software",
   firstpromoter: "software",
   tolt: "software",
@@ -515,6 +518,12 @@ export function networkName(network: string): string {
 
 /** One sentence explaining how a reader actually joins programs here. */
 export function networkHowToJoin(network: string): string {
+  // Affitor has no network-level application to pass: you sign up as a
+  // partner, then apply per program, approved instantly or by the brand
+  // (affitor.com/docs/partners).
+  if (network === "affitor") {
+    return "Affitor runs a marketplace: you create one partner account, then apply to each program inside it."
+  }
   const name = networkName(network)
   switch (networkKind(network)) {
     case "marketplace":

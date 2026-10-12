@@ -35,6 +35,7 @@ export function networkName(p: Program): string | null {
     tolt: "Tolt",
     lemonsqueezy: "Lemon Squeezy",
     tapfiliate: "Tapfiliate",
+    affitor: "Affitor",
   }
   return names[n] ?? n
 }
