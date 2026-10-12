@@ -22,6 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { programs, getProgram, type Program, commissionDisplay} from "@/lib/programs";
+import { applyButton } from "@/lib/apply-cta";
 import { CopyButton } from "@/components/copy-button";
 
 const MAX_COMPARE = 4;
@@ -511,7 +512,7 @@ function CompareContent() {
                     {selected.map((p) => (
                       <td key={p.slug} className="py-4 px-4 text-center">
                         <a
-                          href={p.signupUrl ?? p.url}
+                          href={applyButton(p).href}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 rounded-lg bg-foreground text-background px-4 py-2 text-xs font-medium hover:bg-foreground/90 transition-colors"
