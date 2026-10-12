@@ -425,10 +425,12 @@ for (const list of BEST_LISTS) {
   if (itemList?.numberOfItems !== items.length || items.some((item, i) => item.position !== i + 1)) {
     fail(`${htmlFile} ItemList numberOfItems or positions disagree with its items`);
   }
+  // Whole URLs, position by position: a bare slug is a relative URL that
+  // resolves under /best/, not to the program page.
   sameRows(
     `${htmlFile} ItemList`,
-    items.map((item) => (item.url ?? "").replace(`${BASE_URL}/programs/`, "")),
-    want
+    items.map((item) => item.url ?? ""),
+    want.map((slug) => `${BASE_URL}/programs/${slug}`)
   );
 }
 
@@ -446,9 +448,13 @@ for (const [mode, value, rate, want] of [
   ["hybrid", 25, "100% first payment + 25% recurring", 100],
   ["tiered", 50, "20-50%", 50],
   ["percentage", 30, "50% of the first payment, 30% of every renewal", 30], // shows 30%, ranks at 30
+  ["hybrid", 80, "80 percent or $20", 80], // "percent" is a percentage unit, so 80 is not dollars
 ] as const) {
   const got = listScore({ type: "one-time", mode, value, rate, currency: "USD" });
-  if (Math.abs(got - want) > 1e-9) fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
+  // NaN fails every comparison, so it would slip past the tolerance check alone.
+  if (!Number.isFinite(got) || Math.abs(got - want) > 1e-9) {
+    fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
+  }
 }
 
 const robotsText = JSON.stringify(robots());

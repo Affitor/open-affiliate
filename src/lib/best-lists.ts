@@ -79,17 +79,20 @@ export function getBestList(slug: string): BestList | undefined {
  * display their typed value, so ranking them by it keeps "30%" below "50%".
  *
  * A tiered or hybrid typed value carries no unit, so the text decides it: money
- * when the text has "$" and no "%" ("$50-75" is $75, not 75%). A money range
- * counts its upper bound whether or not it repeats the "$" ("$10-100",
- * "$10-$100", "$10 to 100"). verify-machine-surfaces pins these shapes.
+ * when the text has "$" and no percentage unit ("$50-75" is $75, not 75%). The
+ * schema keeps the rate text as written, so "percent", "per cent" and "pct"
+ * count as that unit alongside "%". A money range counts its upper bound
+ * whether or not it repeats the "$" ("$10-100", "$10-$100", "$10 to 100").
+ * verify-machine-surfaces pins these shapes.
  */
 export function listScore(c: Program["commission"]): number {
   if (c.mode !== "tiered" && c.mode !== "hybrid") return rankScore(c)
   const raw = String(c.rate).replace(/,/g, "")
-  const moneyOnly = raw.includes("$") && !raw.includes("%")
+  const percent = /([\d.]+)\s*(?:%|per\s?cent\b|pct\b)/gi
+  const moneyOnly = raw.includes("$") && !/%|\bper\s?cent\b|\bpct\b/i.test(raw)
   const parts = [
     rankScore(moneyOnly ? { ...c, mode: "flat" } : c),
-    ...[...raw.matchAll(/([\d.]+)\s*%/g)].map((m) => rankScore(`${m[1]}%`)),
+    ...[...raw.matchAll(percent)].map((m) => rankScore(`${m[1]}%`)),
     ...[...raw.matchAll(/\$\s*([\d.]+)(?:\s*(?:[-–]|to)\s*\$?\s*([\d.]+))?/g)].flatMap((m) =>
       [m[1], m[2]].filter(Boolean).map((n) => rankScore(`$${n}`))
     ),
