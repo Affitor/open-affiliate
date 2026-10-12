@@ -9,9 +9,11 @@ import {
   affitorTerms,
   brandName,
   checkReadBack,
+  checkSchema,
   run,
   slugify,
   type AffitorProgram,
+  type Edit,
   type FetchJson,
 } from "./sync-affitor"
 import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
@@ -241,7 +243,7 @@ test("rows with nothing usable to list are reasons, not terms", () => {
   assert.match(String(affitorTerms(row("x", { default_policy: { commission_type: "cps_one_time", commission_rate: 10, commission_fixed: 5 } }))), /both a rate and a fixed amount/)
 })
 
-test("numbers that are not finite non-negative numbers are reasons, never coerced", () => {
+test("numbers that are not finite non-negative (or whole, for days) are reasons, never coerced", () => {
   const bad = (partial: Partial<AffitorProgram>) => String(affitorTerms(row("x", partial)))
   const policy = { commission_type: "cps_recurring", duration_months: 12 }
   assert.equal(bad({ default_policy: { ...policy, commission_rate: "20" as unknown as number } }), 'commission_rate is "20", not a non-negative number')
@@ -251,6 +253,10 @@ test("numbers that are not finite non-negative numbers are reasons, never coerce
   assert.match(bad({ cookie_window_days: Number.POSITIVE_INFINITY }), /^cookie_window_days is Infinity/)
   assert.match(bad({ default_hold_period_days: "15" as unknown as number }), /^default_hold_period_days/)
   assert.match(bad({ payout_threshold: "50" as unknown as number }), /^payout_threshold/)
+  // Days and months are whole numbers; a rate may be fractional (33.3%).
+  assert.equal(bad({ cookie_window_days: 1.5 }), "cookie_window_days is 1.5, not a whole number")
+  assert.equal(bad({ default_hold_period_days: 0.5 }), "default_hold_period_days is 0.5, not a whole number")
+  assert.match(bad({ default_policy: { ...policy, commission_rate: 20, duration_months: 2.5 } }), /^duration_months is 2.5/)
   // null stays allowed where the API leaves a field out.
   assert.equal(typeof affitorTerms(row("x", { cookie_window_days: null, payout_threshold: null })), "object")
 })
@@ -489,7 +495,7 @@ test(`more than ${MAX_PAUSES} pauses in one run aborts with a report and writes 
   assert.equal(written.length, 2)
 })
 
-test("a shared host never identifies a brand: programs on one match by slug only", async () => {
+test("on a shared host only the same tenant is the same brand, never a host or a name", async () => {
   // alpha left Affitor and beta arrived, both on linktr.ee: beta must not take alpha's page.
   const dir = dirWith({ "alpha.yaml": synced("alpha", "https://linktr.ee/alpha") })
   const beta = row("beta", { name: "Beta", link_webpage: "https://linktr.ee/beta" })
@@ -501,11 +507,90 @@ test("a shared host never identifies a brand: programs on one match by slug only
   assert.equal(alpha.commission.rate, "10%")
   assert.equal(parse(readFileSync(join(dir, "beta.yaml"), "utf8")).url, "https://linktr.ee/beta")
 
-  // Subdomains of a hosting service are shared too.
-  const dir2 = dirWith({ "gamma.yaml": synced("gamma", "https://tools.vercel.app") })
-  const delta = row("delta", { name: "Delta", link_webpage: "https://tools.vercel.app" })
-  const r2 = await run({ args: ["--dry-run"], programsDir: dir2, today: TODAY, fetchJson: api([delta]) })
-  assert.equal(r2.entries.find((e) => e.affitor_slug === "delta")?.action, "create")
+  // Codex's case: same name and slug, same shared host, another tenant.
+  const oldAlpha = synced("alpha", "https://linktr.ee/alpha-store").replace("marketplace/alpha", "marketplace/old-alpha")
+  const dir2 = dirWith({ "alpha.yaml": oldAlpha })
+  const newAlpha = row("alpha-new", { name: "Alpha", link_webpage: "https://linktr.ee/alpha-ai" })
+  const r2 = await run({ args: [], programsDir: dir2, today: TODAY, fetchJson: api([newAlpha]) })
+  assert.equal(r2.entries.find((e) => e.affitor_slug === "alpha-new")?.action, "slug-collision")
+  const kept = parse(readFileSync(join(dir2, "alpha.yaml"), "utf8"))
+  assert.equal(kept.signup_url, "https://affitor.com/marketplace/old-alpha")
+  assert.equal(kept.commission.rate, "10%")
+
+  // The same tenant is the same brand: taken over.
+  const dir3 = dirWith({ "beta-shop.yaml": synced("beta-shop", "https://linktr.ee/Beta-Shop") })
+  const shop = row("beta-shop", { name: "Beta Shop", link_webpage: "https://linktr.ee/beta-shop/" })
+  const r3 = await run({ args: ["--dry-run"], programsDir: dir3, today: TODAY, fetchJson: api([shop]) })
+  assert.equal(r3.entries.find((e) => e.affitor_slug === "beta-shop")?.action, "take-over")
+
+  // A subdomain of a hosting service is shared too, so its path names the tenant.
+  const dir4 = dirWith({ "gamma.yaml": synced("gamma", "https://tools.vercel.app/gamma") })
+  const delta = row("delta", { name: "Delta", link_webpage: "https://tools.vercel.app/delta" })
+  const r4 = await run({ args: ["--dry-run"], programsDir: dir4, today: TODAY, fetchJson: api([delta]) })
+  assert.equal(r4.entries.find((e) => e.affitor_slug === "delta")?.action, "create")
+})
+
+test("a marketplace slug that now points at another website is a conflict, not a take-over", async () => {
+  // Codex's case: OA's sweep is sweep.io; Affitor's "sweep" is now sweep.taqnik.in.
+  const linked = SWEEP.replace("https://sweep.io/partners", "https://affitor.com/marketplace/sweep") + "network: affitor\n"
+  const dir = dirWith({ "sweep.yaml": linked })
+  const sweep = row("sweep", { name: "Sweep Affiliates", link_webpage: "https://sweep.taqnik.in" })
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([sweep]) })
+  const e = entries.find((x) => x.affitor_slug === "sweep")!
+  assert.equal(e.action, "conflict")
+  assert.match(e.reason, /marketplace slug now points at a different website: OA sweep.io, Affitor sweep.taqnik.in/)
+  assert.deepEqual(written, [])
+  assert.equal(readFileSync(join(dir, "sweep.yaml"), "utf8"), linked)
+})
+
+test("a listing missing from the list is paused only when its detail says the program is gone", async () => {
+  const files = { "kyma-api.yaml": synced("kyma-api", "https://kymaapi.com"), "citegraph.yaml": synced("citegraph", "https://www.citegraph.app") }
+  const list = [row("kyma-api", { name: "Kyma API", link_webpage: "https://kymaapi.com" })]
+  const cite = row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app" })
+
+  // The list lost citegraph, but its detail still answers: never a pause.
+  const dir = dirWith(files)
+  const still = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(list, { details: { citegraph: { success: true, data: cite } } }) })
+  const kept = still.entries.find((e) => e.oa_slug === "citegraph")!
+  assert.equal(kept.action, "skip")
+  assert.match(kept.reason, /detail still answers; not paused/)
+  assert.equal(readFileSync(join(dir, "citegraph.yaml"), "utf8"), files["citegraph.yaml"])
+
+  // The detail answers the measured not-found shape: paused.
+  const gone = await run({ args: [], programsDir: dirWith(files), today: TODAY, fetchJson: api(list) })
+  assert.equal(gone.entries.find((e) => e.oa_slug === "citegraph")?.action, "pause")
+
+  // Any other answer, or none, stops the run with nothing written.
+  for (const detail of [{ success: false }, { success: false, data: {} }, { message: "Bad gateway" }]) {
+    const d = dirWith(files)
+    await assert.rejects(run({ args: [], programsDir: d, today: TODAY, fetchJson: api(list, { details: { citegraph: detail } }) }), /citegraph/)
+    assert.deepEqual(snapshot(d), files)
+  }
+  const down: FetchJson = async (url) => {
+    if (url.endsWith("/citegraph")) throw new Error("https://api.affitor.com answered 502")
+    return api(list)(url)
+  }
+  const d = dirWith(files)
+  await assert.rejects(run({ args: [], programsDir: d, today: TODAY, fetchJson: down }), /502/)
+  assert.deepEqual(snapshot(d), files)
+})
+
+test("every value written is checked against the schema", () => {
+  const ok: Edit[] = [
+    [["cookie_days"], 90],
+    [["network"], "affitor"],
+    [["commission", "duration"], null],
+    [["short_description"], "x".repeat(100)],
+    [["slug"], "citegraph"],
+  ]
+  assert.doesNotThrow(() => checkSchema(ok, "x.yaml"))
+  assert.throws(() => checkSchema([[["cookie_days"], 1.5]], "x.yaml"), /cookie_days is 1.5, not integer/)
+  assert.throws(() => checkSchema([[["cookie_days"], -1]], "x.yaml"), /below 0/)
+  assert.throws(() => checkSchema([[["network"], "nope"]], "x.yaml"), /not one of the schema's values/)
+  assert.throws(() => checkSchema([[["short_description"], "x".repeat(101)]], "x.yaml"), /longer than 100/)
+  assert.throws(() => checkSchema([[["slug"], "Not A Slug"]], "x.yaml"), /pattern/)
+  assert.throws(() => checkSchema([[["verified"], "true"]], "x.yaml"), /not boolean/)
+  assert.throws(() => checkSchema([[["nonsense"], 1]], "x.yaml"), /not in the schema/)
 })
 
 test("an OA listing matched by two Affitor programs is taken over once; the second is a conflict", async () => {

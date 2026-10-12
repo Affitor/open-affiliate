@@ -16,19 +16,24 @@
  *                   on affitor.com, or network: affitor). Rewrite the terms the
  *                   sync owns; never touch the hand-written fields.
  *   create          the brand is not on OA. Write a new listing.
- *   conflict        the brand is on OA with its own program somewhere else, or
- *                   the listing cannot be edited safely. Write nothing; the
- *                   report carries both sets of terms.
+ *   conflict        the brand is on OA with its own program somewhere else, the
+ *                   marketplace slug now points at another website, or the
+ *                   listing cannot be edited safely. Write nothing; the report
+ *                   carries both sets of terms.
  *   slug-collision  an OA listing has the slug but another website, so it is a
  *                   different brand. Never touched.
+ * Every match needs the same website (siteOf): a slug, a name or a shared host
+ * alone never identifies a brand.
  *   skip            nothing usable to list: no commission, a malformed number,
  *                   no website, no description, or Affitor's own program.
  * and one per OA listing:
- *   pause           network: affitor, but no longer on the Affitor list.
+ *   pause           network: affitor, gone from the list, and its detail
+ *                   answers that the program does not exist.
  *
  * Fails closed: if the list or a detail is malformed, looks like one page of
- * several, or a run would pause more than MAX_PAUSES listings, nothing is
- * written. An outage must never pause every Affitor listing.
+ * several, gives no clear answer on a program that left, or a run would pause
+ * more than MAX_PAUSES listings, nothing is written. An outage must never
+ * pause every Affitor listing.
  */
 
 import { readFileSync, readdirSync, writeFileSync } from "node:fs"
@@ -40,9 +45,10 @@ const LIST_URL = "https://api.affitor.com/api/marketplace/programs"
 const MARKETPLACE = "https://affitor.com/marketplace/"
 
 /**
- * More listings leaving Affitor in one run than this is likelier a broken or
- * partial list than real churn, so the run stops and a person reads the
- * report. Pausing more on purpose means running with --only, a few at a time.
+ * A second guard behind the per-program evidence a pause needs: more
+ * confirmed departures than this in one run is unusual enough that the run
+ * stops and a person reads the report. Pausing more on purpose means
+ * running with --only, a few at a time.
  */
 export const MAX_PAUSES = 3
 
@@ -129,6 +135,8 @@ export interface Entry {
   notes?: string[]
 }
 
+const WHOLE = new Set(["duration_months", "cookie_window_days", "default_hold_period_days"])
+
 /** The API fields terms are built from, by name, for validation and comparison. */
 function termFields(p: AffitorProgram): Record<string, unknown> {
   const policy = p.default_policy ?? {}
@@ -146,12 +154,14 @@ function termFields(p: AffitorProgram): Record<string, unknown> {
 /** Commission as Affitor states it on its marketplace page, or why there is none to list. */
 export function affitorTerms(p: AffitorProgram): Terms | string {
   // Numbers must arrive as numbers. "20" or a negative is not coerced: a
-  // wrong figure on a verified page costs a partner real money.
+  // wrong figure on a verified page costs a partner real money. Days and
+  // months are whole: the schema stores cookie_days as an integer.
   for (const [field, v] of Object.entries(termFields(p))) {
     if (field === "commission_type" || v == null) continue
     if (typeof v !== "number" || !Number.isFinite(v) || v < 0) {
       return `${field} is ${typeof v === "number" ? v : JSON.stringify(v)}, not a non-negative number`
     }
+    if (WHOLE.has(field) && !Number.isInteger(v)) return `${field} is ${v}, not a whole number`
   }
   const policy = p.default_policy ?? {}
   const rate = policy.commission_rate ?? 0
@@ -219,6 +229,21 @@ function hostOf(url: unknown): string | null {
 
 const sharedHost = (host: string | null) => !!host && SHARED_HOSTS.some((s) => host === s || host.endsWith(`.${s}`))
 
+/**
+ * A brand's website as an identity: its host without www, and on a shared
+ * host also the first path segment, the tenant (linktr.ee/alpha-store).
+ * Hosts are compared exactly, not by registrable domain: without a public
+ * suffix list a guessed one would make brand-a.herokuapp.com and
+ * brand-b.herokuapp.com the same site. An exact host can only err toward a
+ * conflict, which writes nothing.
+ */
+function siteOf(url: unknown): string | null {
+  const host = hostOf(url)
+  if (!host || !sharedHost(host)) return host
+  const tenant = new URL(String(url).trim()).pathname.split("/")[1] ?? ""
+  return `${host}/${tenant.toLowerCase()}`
+}
+
 /** The Affitor slug a signup_url points at, when it is a marketplace page. */
 function marketplaceSlug(url: unknown): string | null {
   if (hostOf(url) !== "affitor.com") return null
@@ -231,7 +256,8 @@ interface Listing {
   path: string
   file: string
   slug: string
-  host: string | null
+  /** siteOf(url): the brand identity matching compares on. */
+  site: string | null
   linked: string | null
   network: string | null
   status: string | null
@@ -260,7 +286,7 @@ function loadListings(dir: string): Listing[] {
         path,
         file,
         slug: String(data.slug),
-        host: hostOf(data.url),
+        site: siteOf(data.url),
         linked: marketplaceSlug(data.signup_url),
         network: (data.network as string | undefined) ?? null,
         status: (data.status as string | undefined) ?? null,
@@ -396,6 +422,59 @@ export function checkReadBack(text: string, edits: Edit[], file: string): void {
   }
 }
 
+interface SchemaRule {
+  type?: string | string[]
+  enum?: unknown[]
+  minimum?: number
+  maxLength?: number
+  pattern?: string
+  properties?: Record<string, SchemaRule>
+}
+
+let schemaRoot: SchemaRule | undefined
+const schema = (): SchemaRule =>
+  (schemaRoot ??= JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8")))
+
+const TYPES: Record<string, (v: unknown) => boolean> = {
+  string: (v) => typeof v === "string",
+  number: (v) => typeof v === "number" && Number.isFinite(v),
+  integer: (v) => Number.isInteger(v),
+  boolean: (v) => typeof v === "boolean",
+  null: (v) => v === null,
+}
+
+/**
+ * Check every value the sync writes against schema/program.schema.json:
+ * type, enum, minimum, maxLength and pattern. The repo's build validates
+ * only a few fields, so a wrong type would otherwise reach a verified page.
+ */
+export function checkSchema(edits: Edit[], file: string): void {
+  for (const [path, value] of edits) {
+    if (value === DELETE) continue
+    let rule: SchemaRule | undefined = schema()
+    for (const key of path) rule = rule?.properties?.[key]
+    const bad = (why: string) => new Error(`${file}: ${path.join(".")} ${why}`)
+    if (!rule) throw bad("is not in the schema")
+    const types = rule.type === undefined ? [] : [rule.type].flat()
+    if (types.length && !types.some((t) => TYPES[t]?.(value))) throw bad(`is ${JSON.stringify(value)}, not ${types.join(" or ")}`)
+    if (rule.enum && !rule.enum.includes(value)) throw bad(`is ${JSON.stringify(value)}, not one of the schema's values`)
+    if (typeof value === "number" && rule.minimum !== undefined && value < rule.minimum) throw bad(`is below ${rule.minimum}`)
+    if (typeof value === "string" && rule.maxLength !== undefined && value.length > rule.maxLength) {
+      throw bad(`is longer than ${rule.maxLength} characters`)
+    }
+    if (typeof value === "string" && rule.pattern && !new RegExp(rule.pattern).test(value)) throw bad("does not match the schema pattern")
+  }
+}
+
+/** Every scalar in a parsed listing, as [path, value]; lists are skipped. */
+function leaves(value: unknown, path: string[] = []): Edit[] {
+  if (Array.isArray(value)) return []
+  if (typeof value === "object" && value !== null) {
+    return Object.entries(value).flatMap(([k, v]) => leaves(v, [...path, k]))
+  }
+  return [[path, value]]
+}
+
 /**
  * Apply `edits` to a listing's YAML. `stamps` (dates) apply only when an edit
  * changed something, so a run against an unchanged source writes nothing,
@@ -406,6 +485,7 @@ function edit(src: string, edits: Edit[], stamps: Edit[], file: string): { text:
   const diffs: Diff[] = []
   applyEdits(doc, edits, diffs)
   if (!diffs.length) return { text: null, diffs }
+  checkSchema([...edits, ...stamps], file)
   applyEdits(doc, stamps, diffs)
   const text = renderEdited(src, doc, new Set(diffs.map((d) => d.field.split(".")[0])))
   checkReadBack(text, [...edits, ...stamps], file)
@@ -435,10 +515,7 @@ function clip(text: string, max: number): string {
   return `${(space > 0 ? cut.slice(0, space) : cut).replace(/[\s,;:.!?-]+$/, "")}…`
 }
 
-function categories(): string[] {
-  const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
-  return schema.properties.category.enum as string[]
-}
+const categories = () => schema().properties!.category.enum as string[]
 
 /**
  * A new listing built only from what Affitor publishes. Hand-written fields
@@ -538,25 +615,25 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
   const listed = new Set(list.map((p) => p.slug))
   const matched = new Set<string>()
   const claimed = new Map<string, string>() // OA file → Affitor slug taking it over
-  const creating = new Map<string, string>() // slug or host → Affitor slug
+  const creating = new Map<string, string>() // slug or site → Affitor slug
   const out: Planned[] = []
 
   for (const p of list) {
     const name = brandName(p.name)
     const slug = slugify(name)
-    const host = hostOf(p.link_webpage)
-    const shared = sharedHost(host)
+    const site = siteOf(p.link_webpage)
     const at = (action: Action, reason: string, l?: Listing): Planned => ({
       entry: { action, affitor_slug: p.slug, oa_slug: l?.slug ?? slug, file: l ? `programs/${l.file}` : null, reason },
       program: p,
       listing: l,
     })
 
+    // Every branch needs the same website (siteOf), so neither a reused
+    // marketplace slug nor a shared name can carry terms to another brand.
     const linked = listings.find((l) => l.linked === p.slug)
     const bySlug = listings.find((l) => l.slug === slug)
-    // On a shared host the host names the hosting service, not the brand.
-    const byHost = host && !shared ? listings.find((l) => l.host === host) : undefined
-    const match = linked ?? (bySlug?.host === host ? bySlug : undefined) ?? byHost
+    const bySite = site ? listings.find((l) => l.site === site) : undefined
+    const match = linked ?? (bySlug?.site === site ? bySlug : undefined) ?? bySite
     if (match) matched.add(match.file)
 
     const terms = affitorTerms(p)
@@ -573,10 +650,12 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
     if (match) {
       const other = match.linked && match.linked !== p.slug && listed.has(match.linked) ? match.linked : null
       const prior = claimed.get(match.file)
-      if (other) planned = at("conflict", `already listed from Affitor program ${other}`, match)
+      if (match.site !== site) {
+        planned = at("conflict", `marketplace slug now points at a different website: OA ${match.site}, Affitor ${site}`, match)
+      } else if (other) planned = at("conflict", `already listed from Affitor program ${other}`, match)
       else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
       else if (!pointsAtAffitor(match)) {
-        planned = at("conflict", `OA lists ${match.host}'s own program at ${String(match.data.signup_url ?? match.data.url)}`, match)
+        planned = at("conflict", `OA lists ${match.site}'s own program at ${String(match.data.signup_url ?? match.data.url)}`, match)
         planned.entry.oa_terms = termsOf(match)
       } else if (match.anchors) {
         planned = at("conflict", "yaml anchors present; the sync does not edit a file with anchors or aliases", match)
@@ -585,15 +664,14 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
         planned = at("take-over", "OA listing already sends partners to Affitor", match)
       }
     } else if (bySlug) {
-      planned = at("slug-collision", `OA's ${bySlug.slug} is ${bySlug.host}, Affitor's ${p.slug} is ${host}: a different brand`, bySlug)
-    } else if (!host || !slug) {
-      planned = at("skip", host ? "no usable name for a slug" : "no website on Affitor")
-    } else if (creating.has(slug) || (!shared && creating.has(host))) {
+      planned = at("slug-collision", `OA's ${bySlug.slug} is ${bySlug.site}, Affitor's ${p.slug} is ${site}: a different brand`, bySlug)
+    } else if (!site || !slug) {
+      planned = at("skip", site ? "no usable name for a slug" : "no website on Affitor")
+    } else if (creating.has(slug) || creating.has(site)) {
       const first = creating.get(slug)
-      planned = at("conflict", `same ${first ? "slug" : "website"} as Affitor program ${first ?? creating.get(host)} in this run`)
+      planned = at("conflict", `same ${first ? "slug" : "website"} as Affitor program ${first ?? creating.get(site)} in this run`)
     } else {
-      creating.set(slug, p.slug)
-      if (!shared) creating.set(host, p.slug)
+      creating.set(slug, p.slug).set(site, p.slug)
       planned = at("create", "brand not on OA")
       planned.entry.file = `programs/${slug}.yaml`
     }
@@ -613,7 +691,10 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
       file: `programs/${l.file}`,
       reason: `no longer listed on the Affitor marketplace as of ${today}`,
     }
-    if (l.anchors) {
+    if (!l.linked) {
+      entry.action = "conflict"
+      entry.reason = "missing from the Affitor list, but its signup_url is no marketplace page to check; not paused"
+    } else if (l.anchors) {
       entry.action = "conflict"
       entry.reason = "no longer listed on the Affitor marketplace, but yaml anchors present; not paused"
     }
@@ -651,6 +732,18 @@ async function fetchDetail(fetchJson: FetchJson, slug: string): Promise<AffitorP
     throw new Error(`the Affitor detail for ${slug} came back failed or malformed`)
   }
   return data as unknown as AffitorProgram
+}
+
+/**
+ * Affitor's own answer on whether a program left: the not-found shape
+ * measured live on 2026-10-12 ({success: false, data: null}), or a valid
+ * detail showing it is still there. Any other answer stops the run.
+ */
+async function leftAffitor(fetchJson: FetchJson, slug: string): Promise<boolean> {
+  const body = await fetchJson(`${LIST_URL}/${encodeURIComponent(slug)}`)
+  if (isRecord(body) && body.success === false && body.data === null) return true
+  if (isRecord(body) && body.success === true && isRecord(body.data) && body.data.slug === slug) return false
+  throw new Error(`the Affitor detail for ${slug} neither confirms it left nor shows it is still there`)
 }
 
 function flag(args: string[], name: string): string | undefined {
@@ -694,6 +787,14 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
       .filter((k) => k !== "payout_threshold" && (fromList[k] ?? null) !== (fromDetail[k] ?? null))
       .map((field) => ({ field, list: fromList[field] ?? null, detail: fromDetail[field] ?? null }))
     if (disagree.length) entry.list_vs_detail = disagree
+  }
+
+  // Missing from one list response proves nothing: a pause needs Affitor's
+  // own detail to say the program is gone.
+  for (const { entry } of chosen) {
+    if (entry.action !== "pause" || (await leftAffitor(o.fetchJson, entry.affitor_slug!))) continue
+    entry.action = "skip"
+    entry.reason = "missing from the Affitor list, but its detail still answers; not paused"
   }
 
   const entries = chosen.map((c) => c.entry)
@@ -752,6 +853,7 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
       }
       const dates: Edit[] = ["created_at", "updated_at", "last_verified_at"].map((k): Edit => [[k], o.today])
       checkReadBack(made.text, [...ownedFields(program, terms), ...dates], entry.file!)
+      checkSchema(leaves(parseDocument(made.text).toJS()), entry.file!)
       entry.notes = made.notes
       writes.push([join(o.programsDir, `${entry.oa_slug}.yaml`), made.text])
     } else if (entry.action === "pause" && listing) {
