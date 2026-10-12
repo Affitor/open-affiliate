@@ -5,6 +5,7 @@ import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { getCategoryStats, categoryToSlug, commissionDisplay} from "@/lib/programs";
+import { BEST_LISTS } from "@/lib/best-lists";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Categories",
@@ -33,6 +34,18 @@ export default function CategoriesPage() {
         </div>
         <p className="text-sm text-muted-foreground">
           {stats.length} categories across {stats.reduce((s, c) => s + c.programCount, 0)} affiliate programs
+        </p>
+        <p className="text-sm text-muted-foreground mt-3 flex flex-wrap gap-x-3 gap-y-1">
+          <span>Best-of lists:</span>
+          {BEST_LISTS.map((list) => (
+            <Link
+              key={list.slug}
+              href={`/best/${list.slug}`}
+              className="text-foreground hover:text-emerald-600 dark:hover:text-emerald-400 underline-offset-4 hover:underline"
+            >
+              {list.h1}
+            </Link>
+          ))}
         </p>
       </div>
 
