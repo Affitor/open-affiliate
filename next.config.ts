@@ -18,6 +18,10 @@ const nextConfig: NextConfig = {
   // ad-blockers don't strip it. instrumentation-client.ts sets api_host:"/_ph".
   // US Cloud splits static assets onto us-assets.i.posthog.com.
   skipTrailingSlashRedirect: true,
+  // /for-agents is the conventional entry point other sites use; the MCP docs page covers it.
+  async redirects() {
+    return ["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false }));
+  },
   async rewrites() {
     return [
       {
