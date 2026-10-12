@@ -54,10 +54,13 @@ const UA =
 // Words in a homepage link's text or path that name an affiliate page, strongest first.
 // "partner" is last and weak: on most sites it means integrations or resellers, so
 // those links are tried only after the common paths.
-const LINK_WORDS = [/affiliate/, /referr|\brefer\b/, /ambassador|creator program/, /\bpartner(s|ships?)?\b/]
+const LINK_WORDS = [/affiliate/, /\breferral|\brefer\b/, /ambassador|creator program/, /\bpartner(s|ships?)?\b/]
 const WEAK = LINK_WORDS.length - 1
-// Articles mention programs without being one.
-const EDITORIAL = /\/(blog|news|press|stories|customers|case-studies|changelog)(\/|$)/
+// Pages that mention a program without being one: articles, disclosures, docs.
+const NOT_PROGRAM =
+  /\/(blog|news|press|stories|customers|case-studies|changelog|docs|help|support|resources|guides|learn|academy|glossary|integrations|templates)(\/|$)|disclosure|policy|privacy/
+// A subdomain counts only when its own name says so (affiliates.brand.com, partners.brand.com).
+const PROGRAM_HOST = /^(affiliates?|partners?|refer|referrals?|ambassadors?)\./
 const PROBE_ONLY = process.argv.includes("--probe")
 
 type Program = {
@@ -90,9 +93,11 @@ function targets(): Program[] {
 
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
+type Page = { code: string; body: string; final: string }
+
 /** One GET, redirects followed. No shell, so a URL cannot break out of quoting;
  *  the buffer fits pages over 1 MB, which used to come back empty. */
-function get(url: string): { code: string; body: string; final: string } {
+function get(url: string): Page {
   try {
     const out = execFileSync(
       "curl",
@@ -107,29 +112,38 @@ function get(url: string): { code: string; body: string; final: string } {
   }
 }
 
+const bare = (hostname: string) => hostname.replace(/^www\./, "")
+const title = (html: string) => /<title[^>]*>([^<]*)/i.exec(html)?.[1].trim() ?? ""
+// Text a reader sees: scripts, styles, nav and footer repeat program words on every page.
+const visible = (html: string) =>
+  html.replace(/<(script|style|nav|footer)\b[\s\S]*?<\/\1\s*>/gi, " ").replace(/<[^>]*>/g, " ")
+
+function urlOf(u?: string | null, base?: string): URL | null {
+  try {
+    return u ? new URL(u, base) : null
+  } catch {
+    return null
+  }
+}
+
 /** Same-site links on the homepage that name an affiliate page, best first, with
  *  their LINK_WORDS rank. The homepage is read for links only, never a target. */
-function homepageLinks(siteUrl: string, host: string): [string, number][] {
-  const home = new URL(siteUrl).origin
+function homepageLinks(home: Page, host: string): [string, number][] {
   const ranked = new Map<string, [number, number]>()
-  const html = get(home).body
-  for (const m of html.matchAll(/<a\b[^>]*?\bhref\s*=\s*["']([^"'#]+)[^>]*>/gi)) {
-    const href = m[1]
+  const html = home.body
+  for (const m of html.matchAll(/<a\b[^>]{0,1000}?\bhref\s*=\s*["']([^"'#]+)[^>]{0,1000}>/gi)) {
     const start = m.index + m[0].length
     const end = html.indexOf("</a>", start)
     const inner = html.slice(start, end < 0 ? start : Math.min(end, start + 3000))
-    let u: URL
-    try {
-      u = new URL(href.replace(/&amp;/g, "&"), home)
-    } catch {
-      continue
-    }
-    const h = u.hostname.replace(/^www\./, "")
-    if (h !== host && !h.endsWith(`.${host}`)) continue
-    if ((h === host && u.pathname.length <= 1) || EDITORIAL.test(u.pathname)) continue
+    const u = urlOf(m[1].replace(/&amp;/g, "&"), home.final)
+    if (!u) continue
+    const h = bare(u.hostname)
+    if (h !== host && !(h.endsWith(`.${host}`) && PROGRAM_HOST.test(h))) continue
+    if ((h === host && u.pathname.length <= 1) || NOT_PROGRAM.test(u.pathname.toLowerCase())) continue
     const text = `${inner.replace(/<[^>]*>/g, " ")} ${h} ${u.pathname}`.toLowerCase()
     const rank = LINK_WORDS.findIndex(w => w.test(text))
-    if (rank >= 0 && !ranked.has(u.href)) ranked.set(u.href, [rank, u.href.length])
+    const prev = ranked.get(u.href)
+    if (rank >= 0 && (!prev || rank < prev[0])) ranked.set(u.href, [rank, u.href.length])
   }
   return [...ranked]
     .sort((a, b) => a[1][0] - b[1][0] || a[1][1] - b[1][1])
@@ -140,34 +154,36 @@ function homepageLinks(siteUrl: string, host: string): [string, number][] {
 /** Stage 1+2, both free: a live page whose content talks like an affiliate page.
  *  The YAML signup_url goes first — it is usually the real affiliate page. */
 async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Promise<string | null> {
-  let host: string
-  try {
-    host = new URL(siteUrl).hostname.replace(/^www\./, "")
-  } catch {
-    return null
-  }
-  // Lazy, so the homepage is only read when the signup_url is not the page.
+  const site = urlOf(siteUrl)
+  if (!site) return null
+  const host = bare(site.hostname)
+  let homePage: Page | undefined
+  const home = () => (homePage ??= get(site.origin))
   function* candidates(): Generator<string> {
     // A signup_url that is just the homepage is not an affiliate page.
-    if (signupUrl?.startsWith("http") && new URL(signupUrl).pathname.length > 1) yield signupUrl
-    const links = homepageLinks(siteUrl, host)
+    const signup = urlOf(signupUrl)
+    if (signup && /^https?:$/.test(signup.protocol) && signup.pathname.length > 1) yield signup.href
+    const links = homepageLinks(home(), host)
     for (const [url, rank] of links) if (rank < WEAK) yield url
     for (const path of PATHS) yield `https://${host}${path}`
     for (const [url, rank] of links) if (rank === WEAK) yield url
   }
   const tried = new Set<string>()
   for (const url of candidates()) {
-    if (tried.has(url)) continue
-    tried.add(url)
+    const key = url.replace("://www.", "://")
+    if (tried.has(key)) continue
+    tried.add(key)
     await sleep(1000) // one request at a time per brand, with a pause
     const { code, body, final } = get(url)
-    if (code !== "200") continue
-    // A path that redirects to the homepage is the homepage.
-    const f = new URL(final)
-    if (f.pathname.length <= 1 && f.hostname.replace(/^www\./, "") === host) continue
+    const f = urlOf(final)
+    if (code !== "200" || !f) continue
+    // A redirect to a root or a bare locale (/, /en, /en-us) is a homepage, not a program page.
+    if (/^(\/[a-z]{2}(-[a-z]{2})?)?\/?$/i.test(f.pathname) && !PROGRAM_HOST.test(bare(f.hostname))) continue
+    // An SPA that answers 200 for any path serves the homepage's shell.
+    if (title(body) && title(body) === title(home().body)) continue
     // \b keeps "learn more" out: every marketing page says it.
-    const hits = (body.toLowerCase().match(/affiliate|commission|referral|\bearn/g) ?? []).length
-    if (hits >= 3 && body.length > 3000) return url
+    const hits = (visible(body).toLowerCase().match(/affiliate|commission|referral|\bearn/g) ?? []).length
+    if (hits >= 3) return url
   }
   return null
 }
@@ -256,6 +272,8 @@ async function main(): Promise<void> {
       extracted_at: new Date().toISOString().slice(0, 10),
       method: "context.dev extract, factCheck on",
     })
+    // Saved per slug: a paid extraction is never lost to a later crash.
+    writeFileSync(OUT, JSON.stringify(store, null, 2) + "\n")
     const meta = r.key_metadata as { credits_remaining?: number } | undefined
     console.log(`        credits remaining: ${meta?.credits_remaining ?? "?"}`)
     if ((meta?.credits_remaining ?? Infinity) < MIN_CREDITS) {
@@ -265,9 +283,10 @@ async function main(): Promise<void> {
     await new Promise(r => setTimeout(r, 3000))
   }
 
-  if (PROBE_ONLY) return
-  writeFileSync(OUT, JSON.stringify(store, null, 2) + "\n")
-  console.log(`\nwrote ${OUT}`)
+  if (!PROBE_ONLY) console.log(`\nwrote ${OUT}`)
 }
 
-main()
+main().catch(e => {
+  console.error(e)
+  process.exit(1)
+})
