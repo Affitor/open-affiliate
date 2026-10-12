@@ -40,7 +40,7 @@ import {
   getCategoryStats,
   getNetworkStats,
 } from "../src/lib/programs"
-import { BEST_LISTS, SHARED_RULES, buildBestList, type BestList } from "../src/lib/best-lists"
+import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -810,24 +810,34 @@ function rankingsMd(): string {
 
 // ---------- Best-of lists --------------------------------------------------
 
+/**
+ * Contributor text inside one line of a list page: rows, the intro blockquote
+ * and FAQ answers. A newline is collapsed first, because a line break inside a
+ * name would end the blockquote or start a heading on the next line.
+ */
+function bestInline(text: string): string {
+  return mdEscape(text.replace(/\s*\n\s*/g, " "))
+}
+
 /** Same rows, intro and FAQ as /best/<slug>, from the same builder. */
 function bestListMd(list: BestList): string {
   const data = buildBestList(list)
+  const { intro, faq } = bestListCopy(data, bestInline)
   const rows = data.rows
     .map((p, i) => {
       const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
+      return `${i + 1}. [${bestInline(p.name)}](${BASE}/programs/${p.slug}.md) — ${bestInline(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
     })
     .join("\n")
   return joinSections([
     `# ${list.h1}`,
-    `> ${data.intro}`,
+    `> ${intro}`,
     [
       `How we picked: ${list.criteria} ${SHARED_RULES}`,
       data.checked ? `Last checked: ${data.checked}, the most recent verification among these programs.` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
-    section("FAQ", data.faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),
+    section("FAQ", faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),
     section("Other lists", BEST_LISTS.filter(l => l.slug !== list.slug).map(l => `- [${l.h1}](${BASE}/best/${l.slug}.md)`).join("\n")),
     section("Links", [
       `HTML: ${BASE}/best/${list.slug}`,
@@ -846,7 +856,7 @@ function bestIndexMd(): string {
       "Lists",
       BEST_LISTS.map(l => {
         const data = buildBestList(l)
-        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${data.total} programs, ${data.verifiedTotal} verified. ${l.criteria}`
+        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${data.total} programs, ${data.verified.length} verified. ${l.criteria}`
       }).join("\n"),
     ),
   ])

@@ -8,8 +8,8 @@ import type { Faq } from "./program-seo"
  * Rules every list shares, so no list can be hand-picked:
  *   - live programs only, and only those that publish a commission figure
  *     (every list ranks by it, and "Not published" cannot be ranked);
- *   - verified programs first, then by rankScore, the same normalization the
- *     networks and categories pages use to compare % with flat fees;
+ *   - verified programs first, then by listScore (rankScore, the normalization
+ *     the networks and categories pages use to compare % with flat fees);
  *   - ties go to lifetime recurring deals, then the name;
  *   - at most MAX_ROWS rows.
  */
@@ -22,7 +22,7 @@ export interface BestList {
   description: string
   /** Completes "N live programs on OpenAffiliate …". */
   summary: string
-  /** The filter in words, shown under "How we picked". Keep it in step with qualifies. */
+  /** The filter in plain words, shown under "How we picked". Keep it in step with qualifies. */
   criteria: string
   qualifies: (p: Program) => boolean
 }
@@ -31,7 +31,7 @@ export const MAX_ROWS = 50
 
 /** Shown with every list, because it describes the shared rules above. */
 export const SHARED_RULES =
-  "Programs that do not publish a commission figure are left out. Verified programs come first, then the rest by top commission rate (a flat fee counts $1 as one point up to $50, then a tenth of a point per dollar, capped at 100). Ties go to lifetime recurring deals, then the name."
+  "Verified programs come first, then the rest, each ranked by commission; programs that do not publish a rate are left out."
 
 export const BEST_LISTS: BestList[] = [
   {
@@ -41,8 +41,8 @@ export const BEST_LISTS: BestList[] = [
     description:
       "Affiliate programs that pay a top rate of 30% or more, or a flat $30 or more, ranked by commission. Verified terms first, with cookie and duration.",
     summary: "pay a top rate of 30% or more, or a flat $30 or more",
-    criteria: "Live programs whose top commission rate is 30% or more, or whose flat payout is $30 or more.",
-    qualifies: (p) => rankScore(p.commission) >= 30,
+    criteria: "Programs that pay 30% or more, or a flat $30 or more, on at least part of the deal.",
+    qualifies: (p) => listScore(p) >= 30,
   },
   {
     slug: "affiliate-programs-for-beginners",
@@ -51,8 +51,7 @@ export const BEST_LISTS: BestList[] = [
     description:
       "Affiliate programs that approve new affiliates automatically, so you can start the day you sign up. Ranked by commission, with verified terms first.",
     summary: "approve new affiliates automatically and do not list a payout minimum above $100",
-    criteria:
-      "Live programs that approve affiliates automatically (no application review) and whose payout minimum, where stated, is $100 or less.",
+    criteria: "Programs that approve new affiliates automatically and do not list a payout minimum above $100.",
     qualifies: (p) => p.approval === "auto" && (p.payout.minimum == null || p.payout.minimum <= 100),
   },
   {
@@ -61,14 +60,34 @@ export const BEST_LISTS: BestList[] = [
     h1: "Recurring Affiliate Programs",
     description:
       "Recurring affiliate programs that keep paying on renewals, ranked by rate. See which pay for 12 months or for life, with verified terms listed first.",
-    summary: "pay recurring commission on the customers you refer",
-    criteria: "Live programs whose commission type is recurring.",
+    summary: "list their commission as recurring",
+    criteria: "Programs whose commission is listed as recurring.",
     qualifies: (p) => p.commission.type === "recurring",
   },
 ]
 
 export function getBestList(slug: string): BestList | undefined {
   return BEST_LISTS.find((l) => l.slug === slug)
+}
+
+/**
+ * The figure lists filter and rank on: rankScore of the typed value, except for
+ * tiered and hybrid deals. Those display their raw rate text, so every % and $
+ * figure in that text counts too, scored by rankScore one at a time: "$75 or
+ * 20%" has a typed value of 20 but pays $75 on one branch, and "100% first
+ * payment + 25% recurring" has 25 but pays 100% once. Percentage and flat deals
+ * display their typed value, so ranking them by it keeps "30%" below "50%".
+ */
+function listScore(p: Program): number {
+  const c = p.commission
+  const typed = rankScore(c)
+  if (c.mode !== "tiered" && c.mode !== "hybrid") return typed
+  const raw = String(c.rate).replace(/,/g, "")
+  const parts = [
+    ...[...raw.matchAll(/([\d.]+)\s*%/g)].map((m) => rankScore(`${m[1]}%`)),
+    ...[...raw.matchAll(/\$\s*([\d.]+)/g)].map((m) => rankScore(`$${m[1]}`)),
+  ]
+  return Math.max(typed, ...parts)
 }
 
 function isLifetime(p: Program): boolean {
@@ -99,94 +118,116 @@ export interface BestListData {
   rows: Program[]
   /** Every live program that qualifies, before the cap. */
   total: number
-  verifiedTotal: number
-  topVerified: Program | null
-  /** Median among qualifying verified programs that pay a percentage. */
-  medianVerifiedPct: number | null
+  /** Qualifying verified programs, in list order. */
+  verified: Program[]
+  /** Verified programs whose commission is a single percentage (mode "percentage"). */
+  singlePctCount: number
+  medianSinglePct: number | null
+  /** Verified programs whose commission type is "recurring", and those with a lifetime duration. */
+  recurringTypeCount: number
+  lifetimeCount: number
+  /** Verified programs that publish a cookie window. */
+  cookieDays: number[]
   /** Latest last_verified_at among the rows, YYYY-MM-DD. */
   checked: string | null
-  intro: string
-  faq: Faq[]
 }
 
-/**
- * Stats and FAQ answers come from verified programs only: an answer reads as a
- * statement of fact, and the rest of the registry is community-submitted.
- */
+const built = new Map<string, BestListData>()
+
 export function buildBestList(list: BestList): BestListData {
+  const cached = built.get(list.slug)
+  if (cached) return cached
   const qualifying = livePrograms
     .filter((p) => !commissionUnknown(p.commission) && list.qualifies(p))
     .sort(
       (a, b) =>
         Number(b.verified) - Number(a.verified) ||
-        rankScore(b.commission) - rankScore(a.commission) ||
+        listScore(b) - listScore(a) ||
         Number(isLifetime(b)) - Number(isLifetime(a)) ||
         a.name.localeCompare(b.name)
     )
   const rows = qualifying.slice(0, MAX_ROWS)
   const verified = qualifying.filter((p) => p.verified)
-  const pctRates = verified.flatMap((p) => (p.commission.mode === "percentage" && p.commission.value != null ? [p.commission.value] : []))
-  const medianVerifiedPct = median(pctRates)
-  const cookies = verified.flatMap((p) => (p.cookieDays != null ? [p.cookieDays] : []))
-  const recurring = verified.filter((p) => p.commission.type === "recurring")
-  const lifetime = recurring.filter(isLifetime)
-  const checked =
-    rows
-      .flatMap((p) => (p.lastVerifiedAt ? [p.lastVerifiedAt.slice(0, 10)] : []))
-      .sort()
-      .at(-1) ?? null
-  const topVerified = verified[0] ?? null
+  const singlePct = verified.flatMap((p) =>
+    p.commission.mode === "percentage" && p.commission.value != null ? [p.commission.value] : []
+  )
+  const recurringType = verified.filter((p) => p.commission.type === "recurring")
+  const data: BestListData = {
+    list,
+    rows,
+    total: qualifying.length,
+    verified,
+    singlePctCount: singlePct.length,
+    medianSinglePct: median(singlePct),
+    recurringTypeCount: recurringType.length,
+    lifetimeCount: recurringType.filter(isLifetime).length,
+    cookieDays: verified.flatMap((p) => (p.cookieDays != null ? [p.cookieDays] : [])),
+    checked:
+      rows
+        .flatMap((p) => (p.lastVerifiedAt ? [p.lastVerifiedAt.slice(0, 10)] : []))
+        .sort()
+        .at(-1) ?? null,
+  }
+  built.set(list.slug, data)
+  return data
+}
+
+/**
+ * The intro and FAQ, as sentences. Facts about specific programs come from
+ * verified programs only: an answer reads as a statement of fact, and the rest
+ * of the registry is community-submitted.
+ *
+ * `esc` is applied to every contributor-written piece (names, rate text,
+ * durations) and to nothing else. The page passes nothing, since React escapes;
+ * the markdown twin passes its inline escaper, so a name cannot become a link.
+ */
+export function bestListCopy(data: BestListData, esc: (text: string) => string = (t) => t): { intro: string; faq: Faq[] } {
+  const { list, verified, total, rows } = data
+  const pick = (p: Program) => `${esc(p.name)} (${esc(termsText(p))})`
+  const top = verified[0]
   const noun = list.h1.toLowerCase()
 
   const intro =
-    `${qualifying.length} live programs on OpenAffiliate ${list.summary}, and ${verified.length} of them have terms verified against the program's own page.` +
-    (topVerified
-      ? ` The top verified pick is ${topVerified.name} at ${termsText(topVerified)}` +
-        (medianVerifiedPct != null ? `, and the median verified percentage rate is ${medianVerifiedPct}%.` : ".")
+    `${total} live programs on OpenAffiliate ${list.summary}, and ${verified.length} of them have terms verified against the program's own page.` +
+    (top
+      ? ` The top verified pick is ${pick(top)}` +
+        (data.medianSinglePct != null
+          ? `, and the median among verified programs with a single percentage rate is ${data.medianSinglePct}%.`
+          : ".")
       : "")
 
   const faq: Faq[] = [
     {
       q: `How many ${noun} does OpenAffiliate list?`,
-      a: `${qualifying.length} live programs ${list.summary}. ${verified.length} have terms verified against the program's own page; the rest are community-submitted and not yet confirmed.${qualifying.length > rows.length ? ` This page shows the top ${rows.length}.` : ""}`,
+      a: `${total} live programs ${list.summary}. ${verified.length} have terms verified against the program's own page; the rest are community-submitted and not yet confirmed.${total > rows.length ? ` This page shows the top ${rows.length}.` : ""}`,
     },
   ]
-  if (verified.length > 0) {
+  if (top) {
     faq.push({
       q: `Which ${noun} pay the most?`,
-      a: `Among verified programs, the highest by commission are ${andList(verified.slice(0, 3).map((p) => `${p.name} (${termsText(p)})`))}.`,
+      a: `Among verified programs, the highest by commission are ${andList(verified.slice(0, 3).map(pick))}.`,
     })
   }
-  if (medianVerifiedPct != null) {
+  if (data.medianSinglePct != null) {
     faq.push({
       q: `How much do ${noun} pay?`,
       a:
-        `The median rate is ${medianVerifiedPct}% across the ${pctRates.length} verified programs that pay a percentage. ` +
-        (recurring.length === verified.length
-          ? `${lifetime.length} of the ${verified.length} verified programs pay for the customer's lifetime.`
-          : `${recurring.length} of the ${verified.length} verified programs pay recurring commission, ${lifetime.length} of them for the customer's lifetime.`),
+        `The median rate is ${data.medianSinglePct}% across the ${data.singlePctCount} verified programs with a single percentage rate. ` +
+        (data.recurringTypeCount === verified.length
+          ? `${data.lifetimeCount} of the ${verified.length} verified programs list a lifetime duration.`
+          : `${data.recurringTypeCount} of the ${verified.length} verified programs list recurring as their commission type, ${data.lifetimeCount} of those with a lifetime duration.`),
     })
   }
-  if (cookies.length > 0) {
+  if (data.cookieDays.length > 0) {
     faq.push({
       q: `How long do cookies last on ${noun}?`,
-      a: `Among the ${cookies.length} verified programs that publish a cookie window, the median is ${median(cookies)} days and the longest is ${Math.max(...cookies)} days.`,
+      a: `Among the ${data.cookieDays.length} verified programs that publish a cookie window, the median is ${median(data.cookieDays)} days and the longest is ${Math.max(...data.cookieDays)} days.`,
     })
   }
   faq.push({
     q: "How was this list picked?",
-    a: `${list.criteria} ${SHARED_RULES}${checked ? ` The most recent verification among these programs was on ${checked}.` : ""}`,
+    a: `${list.criteria} ${SHARED_RULES}${data.checked ? ` The most recent verification among these programs was on ${data.checked}.` : ""}`,
   })
 
-  return {
-    list,
-    rows,
-    total: qualifying.length,
-    verifiedTotal: verified.length,
-    topVerified,
-    medianVerifiedPct,
-    checked,
-    intro,
-    faq,
-  }
+  return { intro, faq }
 }

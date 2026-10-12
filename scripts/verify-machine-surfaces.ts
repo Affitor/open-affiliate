@@ -330,12 +330,36 @@ for (const network of networks) {
  */
 if (!llms.includes(`${BASE_URL}/best.md`)) fail("llms.txt does not link best.md");
 if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H1");
+
+/**
+ * Contributor text reaches a list page in its rows, intro and FAQ answers, and
+ * every piece is escaped. The generator itself writes links only as
+ * `[label](https://openaffiliate.dev/…)`, so any unescaped `]` not opening such
+ * a destination came from contributor text: an inline link, a reference link,
+ * or a link definition. A bracket is escaped when an odd number of backslashes
+ * precedes it. `<` (raw HTML, autolinks) and `&#` (entity-encoded URLs) never
+ * survive the escaper either. This guards the generator's output; it is not a
+ * Markdown parser.
+ */
+function foreignMarkup(md: string): string | null {
+  for (let i = md.indexOf("]"); i !== -1; i = md.indexOf("]", i + 1)) {
+    let slashes = 0;
+    for (let j = i - 1; j >= 0 && md[j] === "\\"; j--) slashes += 1;
+    if (slashes % 2 === 0 && !md.startsWith(`](${BASE_URL}/`, i)) {
+      return md.slice(Math.max(0, i - 60), i + 40);
+    }
+  }
+  const raw = /<|&#/.exec(md);
+  return raw ? md.slice(Math.max(0, raw.index - 60), raw.index + 40) : null;
+}
+
 for (const list of BEST_LISTS) {
   const url = `${BASE_URL}/best/${list.slug}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
-  if (!requireText(join("best", `${list.slug}.md`)).startsWith(`# ${list.h1}\n`)) {
-    fail(`best/${list.slug}.md must start with its H1`);
-  }
+  const md = requireText(join("best", `${list.slug}.md`));
+  if (!md.startsWith(`# ${list.h1}\n`)) fail(`best/${list.slug}.md must start with its H1`);
+  const foreign = foreignMarkup(md);
+  if (foreign) fail(`best/${list.slug}.md has markup the generator did not write: ${foreign}`);
   const title = `${list.title} | OpenAffiliate`;
   if (title.length > 60 || /[–—]/.test(title)) {
     fail(`best list title must be 60 characters or fewer with no en or em dash: ${title}`);

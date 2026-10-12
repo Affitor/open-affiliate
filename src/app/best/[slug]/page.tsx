@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { commissionDisplay, networkName, IN_HOUSE } from "@/lib/programs";
-import { BEST_LISTS, SHARED_RULES, buildBestList, getBestList } from "@/lib/best-lists";
+import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, getBestList } from "@/lib/best-lists";
 
 const SITE = "https://openaffiliate.dev";
 
@@ -55,12 +55,13 @@ export default async function BestListPage({
   if (!list) notFound();
 
   const data = buildBestList(list);
+  const { intro, faq } = bestListCopy(data);
   const url = `${SITE}/best/${slug}`;
   const stats = [
     { icon: Users, label: "Programs", value: String(data.total) },
-    { icon: BadgeCheck, label: "Verified", value: String(data.verifiedTotal) },
-    { icon: Trophy, label: "Top verified", value: data.topVerified?.name ?? "—" },
-    { icon: Percent, label: "Median verified", value: data.medianVerifiedPct != null ? `${data.medianVerifiedPct}%` : "—" },
+    { icon: BadgeCheck, label: "Verified", value: String(data.verified.length) },
+    { icon: Trophy, label: "Top verified", value: data.verified[0]?.name ?? "—" },
+    { icon: Percent, label: "Median verified %", value: data.medianSinglePct != null ? `${data.medianSinglePct}%` : "—" },
   ];
 
   return (
@@ -76,7 +77,7 @@ export default async function BestListPage({
               {
                 "@type": "ItemList",
                 name: list.h1,
-                description: data.intro,
+                description: intro,
                 url,
                 numberOfItems: data.rows.length,
                 itemListElement: data.rows.map((program, index) => ({
@@ -88,7 +89,7 @@ export default async function BestListPage({
               },
               {
                 "@type": "FAQPage",
-                mainEntity: data.faq.map((f) => ({
+                mainEntity: faq.map((f) => ({
                   "@type": "Question",
                   name: f.q,
                   acceptedAnswer: { "@type": "Answer", text: f.a },
@@ -116,7 +117,7 @@ export default async function BestListPage({
 
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{list.h1}</h1>
-        <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{data.intro}</p>
+        <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{intro}</p>
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {SHARED_RULES}
           {data.checked && ` Last checked ${data.checked}, the most recent verification among these programs.`}
@@ -160,19 +161,30 @@ export default async function BestListPage({
                         <span className="text-sm font-medium block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {program.name}
                         </span>
-                        {program.verified && (
+                        {program.verified ? (
                           <Badge
                             variant="outline"
                             className="text-[9px] px-1 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mt-0.5"
                           >
                             verified
                           </Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-[9px] px-1 py-0 text-muted-foreground mt-0.5">
+                            not verified
+                          </Badge>
                         )}
                       </div>
                     </Link>
                   </td>
                   <td className="py-3 px-3">
-                    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+                    {/* Only a verified figure gets the confirmed green; an unverified one is the submitter's claim. */}
+                    <span
+                      className={
+                        program.verified
+                          ? "text-sm font-semibold text-emerald-600 dark:text-emerald-400"
+                          : "text-sm text-muted-foreground"
+                      }
+                    >
                       {commissionDisplay(program.commission)}
                     </span>
                   </td>
@@ -198,7 +210,7 @@ export default async function BestListPage({
       <div className="mt-10 max-w-3xl">
         <h2 className="text-base font-semibold mb-3">{list.h1} FAQ</h2>
         <dl className="space-y-4">
-          {data.faq.map((f) => (
+          {faq.map((f) => (
             <div key={f.q}>
               <dt className="text-sm font-medium">{f.q}</dt>
               <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
