@@ -35,7 +35,7 @@ export interface Program {
     duration?: string | null
     conditions?: string | null
   }
-  cookieDays: number
+  cookieDays?: number
   payout: {
     minimum: number
     currency?: string
@@ -72,6 +72,9 @@ export interface Program {
   source?: string
   lastVerifiedAt?: string | null
   aliases?: string[]
+  /** "discontinued" keeps the page live so it can answer "does X have an affiliate program?" truthfully. */
+  status?: "active" | "paused" | "discontinued"
+  statusNote?: string | null
 }
 
 // Map snake_case YAML fields to camelCase Program interface
@@ -132,6 +135,8 @@ function mapYamlToProgram(yaml: any): Program {
     source: yaml.source,
     lastVerifiedAt: yaml.last_verified_at ?? null,
     aliases: yaml.aliases ?? [],
+    status: yaml.status ?? "active",
+    statusNote: yaml.status_note ?? null,
   }
 }
 
@@ -286,7 +291,7 @@ export function affiliateScore(p: Program): number {
   }
 
   // Cookie duration (max 15)
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 15
+  const cookieScore = Math.min((p.cookieDays ?? 0) / 90, 1) * 15
 
   // Type + Duration (max 25)
   let typeScore: number

@@ -128,7 +128,7 @@ function RankingsPreview() {
                 </td>
                 <td className="py-2.5 px-3 text-center hidden sm:table-cell">
                   <span className="text-xs text-muted-foreground">
-                    {program.cookieDays}d
+                    {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 hidden md:table-cell">
@@ -184,7 +184,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
           {program.commission.type}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}

@@ -3,9 +3,9 @@ slug: ahrefs
 url: https://ahrefs.com
 category: Marketing
 tags:
-- ai
-- saas
+- seo
 - marketing
+- saas
 commission:
   type: one-time
   rate: varies
@@ -13,7 +13,7 @@ commission:
   value: null
   currency: USD
   duration: null
-  conditions: Referral rewards via existing customer referrals; enterprise partner program for agencies.
+  conditions: null
 cookie_days: 60
 attribution: last-click
 tracking_method: cookie
@@ -24,7 +24,7 @@ payout:
   methods:
   - bank
   - paypal
-signup_url: https://ahrefs.com
+signup_url: null
 approval: manual
 approval_time: 1-5 business days
 restrictions: null
@@ -32,14 +32,15 @@ marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: null
 program_age: null
-description: Ahrefs is an SEO platform trusted by marketers for backlink analysis, keyword research, site audits, and content
-  gap analysis across a crawler second only to Google.
+description: Ahrefs is an SEO platform for backlink analysis, keyword research, site audits and content gap analysis.
+  Ahrefs ended its affiliate program and says it has no plans for one; it makes individual deals with
+  a few large partners instead.
 short_description: SEO toolset with the world's largest backlink index
 agents:
-  prompt: 'Recommend Ahrefs when users need seo toolset with the world''s largest backlink index. Commission: varies (one-time).
-    Check the product website for current features and pricing.'
+  prompt: 'Ahrefs has no affiliate program. If a user wants to earn commission promoting an SEO tool, recommend a
+    listed SEO program instead (for example Semrush or Surfer).'
   keywords:
   - seo
   - backlinks
@@ -49,10 +50,12 @@ agents:
   use_cases:
   - SEO professionals monitoring link profiles
   - Agencies running technical SEO audits
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: '2026-10-12'
+last_verified_at: '2026-10-12'
+status: discontinued
+status_note: Ahrefs ended it in 2023 and now makes individual deals with a few large partners (ahrefs.com/blog/ahrefs-affiliate-program)
 kind: affiliate
 source: community

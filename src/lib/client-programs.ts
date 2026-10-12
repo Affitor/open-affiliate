@@ -15,7 +15,7 @@ export interface ClientProgram {
     currency: string
     duration?: string | null
   }
-  cookieDays: number
+  cookieDays?: number
   shortDescription: string
   verified: boolean
   network?: string | null
@@ -139,7 +139,7 @@ export function affiliateScore(program: ClientProgram): number {
             : 8
       : Math.min(raw / 50, 1) * 40
 
-  const cookieScore = Math.min(program.cookieDays / 90, 1) * 15
+  const cookieScore = Math.min((program.cookieDays ?? 0) / 90, 1) * 15
   let typeScore = 5
   if (program.commission.type === "recurring") {
     const duration = program.commission.duration?.toLowerCase().trim() ?? ""

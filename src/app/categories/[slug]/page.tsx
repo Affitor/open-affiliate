@@ -71,10 +71,9 @@ export default async function CategoryPage({
   const rates = catPrograms.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const avgCookie =
-    catPrograms.length > 0
-      ? catPrograms.reduce((s, p) => s + p.cookieDays, 0) / catPrograms.length
-      : 0;
+  // Programs that do not publish a cookie window are left out, not counted as 0.
+  const cookies = catPrograms.flatMap((p) => (p.cookieDays != null ? [p.cookieDays] : []));
+  const avgCookie = cookies.length > 0 ? cookies.reduce((s, d) => s + d, 0) / cookies.length : 0;
   const recurringCount = catPrograms.filter(
     (p) => p.commission.type === "recurring"
   ).length;
@@ -255,12 +254,12 @@ export default async function CategoryPage({
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
                     <span className="text-xs text-muted-foreground">
-                      {program.cookieDays}d
+                      {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
                     <span className="text-xs text-muted-foreground">
-                      ${program.payout.minimum}
+                      {program.payout.minimum != null ? `$${program.payout.minimum}` : "—"}
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">

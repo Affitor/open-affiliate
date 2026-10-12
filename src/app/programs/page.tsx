@@ -105,7 +105,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -155,7 +155,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d
+          {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
         </Badge>
         <span className="hidden lg:inline text-[11px] text-muted-foreground">
           {program.category}

@@ -20,3 +20,9 @@ export function applyEarnLabel(commission: Program["commission"]): string {
   if (/[—–]/.test(label) || ctaWordCount(label) > 4) return prefix
   return label
 }
+
+/** Unverified program: no number in the button, since none is confirmed. Same 4-word cap. */
+export function checkTermsLabel(brand: string): string {
+  const label = `Check terms on ${brand}`
+  return ctaWordCount(label) > 4 ? "Check program terms" : label
+}

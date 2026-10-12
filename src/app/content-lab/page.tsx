@@ -349,7 +349,7 @@ export default function ContentLab() {
                       <div className="flex items-center gap-3 text-xs text-emerald-400">
                         <span>{p.commission}</span>
                         <span className="text-white/20">|</span>
-                        <span>{p.cookie_days}d cookie</span>
+                        <span>{p.cookie_days != null ? `${p.cookie_days}d cookie` : "Cookie not published"}</span>
                       </div>
                     </button>
                   ))}

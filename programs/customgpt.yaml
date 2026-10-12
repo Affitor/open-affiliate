@@ -10,39 +10,34 @@ tags:
 - knowledge-management
 commission:
   type: recurring
-  rate: 15-20%
+  rate: "15-20%"
   mode: tiered
   value: 20
-  currency: null
-  duration: null
-  conditions: null
-  recurring_period: null
-cookie_days: 60
+  currency: USD
+  duration: "2 years"
+  conditions: "Standard 15% (0-30 customers referred), Premium 18% (31-55), Master 20% (56+), each for the first 2 years of plan fees. Master tier gets a 60-day cookie."
+cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 10
   currency: USD
   frequency: monthly
-  methods:
-  - bank
-  - paypal
+  methods: [paypal]
 signup_url: https://customgpt.ai/partners/
-approval: manual
-approval_time: 1-5 business days
 restrictions:
 - Must accurately represent product capabilities
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: firstpromoter
 program_age: 2+ years
 description: 'CustomGPT lets businesses create custom AI chatbots trained on their own data — documents, websites, help centers,
   and knowledge bases. No coding required. Features include RAG-powered responses, website embedding, API access, and multi-language
   support. Used for customer support, internal knowledge bases, and sales automation.
 
-  The affiliate program pays 15-20% recurring for 24 months with a 60-day cookie window.
+  The affiliate program pays 15-20% recurring for 24 months with a 30-day cookie (60 days at the Master tier).
 
   '
 short_description: Earn up to 20% recurring monthly commission for 2 years referring businesses to CustomGPT's AI knowledge
@@ -68,8 +63,8 @@ agents:
 verified: true
 submitted_by: community
 created_at: 2026-04-17
-updated_at: null
-last_verified_at: 2026-08-05
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
 logo_url: https://logo.clearbit.com/customgpt.ai

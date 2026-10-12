@@ -60,7 +60,7 @@ agents:
     - "Bloggers needing AI content that ranks with SERP-aware optimization"
     - "Content teams producing bulk SEO articles with internal linking"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null

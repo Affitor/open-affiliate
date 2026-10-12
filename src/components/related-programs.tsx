@@ -3,8 +3,18 @@ import { Badge } from "@/components/ui/badge"
 import { ProgramLogo } from "@/components/program-logo"
 import { programs, affiliateScore, commissionLabel, type Program, commissionDisplay} from "@/lib/programs"
 
+const GENERIC = new Set(["saas", "marketing", "tool", "tools", "software", "platform", "app"])
+
+/** "keyword-research" and "ai-seo" become keyword, research, seo: matching on whole phrases missed most substitutes. */
+function words(phrases: string[]): Set<string> {
+  return new Set(
+    phrases.flatMap((x) => x.toLowerCase().split(/[^a-z0-9]+/)).filter((w) => w.length > 2 && !GENERIC.has(w))
+  )
+}
+
 function getRelatedPrograms(current: Program, limit = 4): Program[] {
   const candidates = programs.filter((p) => p.slug !== current.slug)
+  const currentWords = words(current.agentKeywords ?? [])
 
   const scored = candidates.map((p) => {
     let relevance = 0
@@ -13,6 +23,10 @@ function getRelatedPrograms(current: Program, limit = 4): Program[] {
     if (p.commission.type === current.commission.type) relevance += 1
     const tagOverlap = p.tags.filter((t) => current.tags.includes(t)).length
     relevance += Math.min(tagOverlap, 2)
+    // Agent keywords say what the product does ("keyword-research", "ai-seo"); tags are often generic.
+    const kwOverlap = [...words([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => currentWords.has(w)).length
+    // A discontinued program's page exists to point at substitutes, so what the product does outweighs category.
+    relevance += current.status === "discontinued" ? Math.min(kwOverlap, 3) * 2 : Math.min(kwOverlap, 3)
     return { program: p, relevance, score: affiliateScore(p) }
   })
 
@@ -20,13 +34,13 @@ function getRelatedPrograms(current: Program, limit = 4): Program[] {
   return scored.slice(0, limit).map((s) => s.program)
 }
 
-export function RelatedPrograms({ current }: { current: Program }) {
+export function RelatedPrograms({ current, title = "Related Programs" }: { current: Program; title?: string }) {
   const related = getRelatedPrograms(current)
   if (related.length === 0) return null
 
   return (
     <div>
-      <h2 className="text-base font-semibold mb-4">Related Programs</h2>
+      <h2 className="text-base font-semibold mb-4">{title}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {related.map((p) => {
           const score = affiliateScore(p)

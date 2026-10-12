@@ -370,6 +370,23 @@
       ],
       "format": "date",
       "description": "ISO date of last URL + data verification. Used for freshness / refresh cadence decisions."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "discontinued"
+      ],
+      "default": "active",
+      "description": "Whether the program accepts affiliates. discontinued keeps the page live to say so."
+    },
+    "status_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "One sentence on the status, with its source, e.g. 'Ended in 2023 per ahrefs.com/blog/ahrefs-affiliate-program'"
     }
   },
   "additionalProperties": false

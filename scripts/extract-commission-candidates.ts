@@ -29,6 +29,7 @@
  * Usage:
  *   CONTEXT_DEV_API_KEY=... npx tsx scripts/extract-commission-candidates.ts <slug> [slug...]
  *   npx tsx scripts/extract-commission-candidates.ts --unknowns --limit=10
+ *   ... --out=data/other.json   write to another file (default data/commission-candidates.json)
  */
 
 import { execSync } from "node:child_process"
@@ -39,12 +40,12 @@ import registry from "../src/lib/registry.json"
 
 const API = "https://api.context.dev/v1/web/extract"
 const KEY = process.env.CONTEXT_DEV_API_KEY
-const OUT = join(process.cwd(), "data", "commission-candidates.json")
 const PATHS = ["/affiliates", "/affiliate", "/partners", "/affiliate-program"]
 
 type Program = {
   slug: string
   url: string
+  signup_url?: string | null
   commission: { mode?: string }
   network?: string | null
 }
@@ -52,10 +53,15 @@ const programs = (registry as { programs: Program[] }).programs
 
 const args = process.argv.slice(2)
 const LIMIT = Number(args.find(a => a.startsWith("--limit="))?.split("=")[1] ?? 10)
+const MIN_CREDITS = Number(args.find(a => a.startsWith("--min-credits="))?.split("=")[1] ?? 0)
+const OUT = join(
+  process.cwd(),
+  args.find(a => a.startsWith("--out="))?.split("=")[1] ?? "data/commission-candidates.json"
+)
 
 function targets(): Program[] {
   const slugs = args.filter(a => !a.startsWith("--"))
-  if (slugs.length) return programs.filter(p => slugs.includes(p.slug))
+  if (slugs.length) return slugs.flatMap(s => programs.filter(p => p.slug === s))
   if (args.includes("--unknowns")) {
     return programs.filter(
       p => p.commission.mode === "unknown" && (p.network ?? "in-house") === "in-house"
@@ -72,16 +78,20 @@ function sh(cmd: string): string {
   }
 }
 
-/** Stage 1+2, both free: a live path whose content talks like an affiliate page. */
-function findAffiliatePage(siteUrl: string): string | null {
+/** Stage 1+2, both free: a live path whose content talks like an affiliate page.
+ *  The YAML signup_url goes first — it is usually the real affiliate page. */
+function findAffiliatePage(siteUrl: string, signupUrl?: string | null): string | null {
   let host: string
   try {
     host = new URL(siteUrl).hostname.replace(/^www\./, "")
   } catch {
     return null
   }
-  for (const path of PATHS) {
-    const url = `https://${host}${path}`
+  const urls = PATHS.map(path => `https://${host}${path}`)
+  // A signup_url that is just the homepage is not an affiliate page.
+  if (signupUrl?.startsWith("http") && !signupUrl.includes("'") && new URL(signupUrl).pathname.length > 1)
+    urls.unshift(signupUrl)
+  for (const url of urls) {
     const code = sh(`curl -s -o /dev/null -w '%{http_code}' -m 6 -L -A 'Mozilla/5.0' '${url}'`)
     if (code !== "200") continue
     const body = sh(`curl -s -m 8 -L -A 'Mozilla/5.0' '${url}'`).toLowerCase()
@@ -101,7 +111,7 @@ async function extract(url: string): Promise<Record<string, unknown> | null> {
       maxPages: 3,
       maxDepth: 1,
       instructions:
-        "Determine whether this company runs an AFFILIATE program where promoters earn a share of referred revenue. Integration partners, resellers, and agency directories are NOT affiliate programs — return has_affiliate_program=false for those. Extract commission terms exactly as published; leave null anything not stated.",
+        "Determine whether this company runs an AFFILIATE program where promoters earn a share of referred revenue. Integration partners, resellers, and agency directories are NOT affiliate programs — return has_affiliate_program=false for those. Extract commission terms exactly as published; leave null anything not stated. commission_quote is the verbatim sentence from the page stating the commission.",
       schema: {
         type: "object",
         properties: {
@@ -113,6 +123,8 @@ async function extract(url: string): Promise<Record<string, unknown> | null> {
           recurring: { type: ["boolean", "null"] },
           recurring_duration: { type: ["string", "null"] },
           cookie_days: { type: ["integer", "null"] },
+          payout_minimum_usd: { type: ["number", "null"] },
+          commission_quote: { type: ["string", "null"] },
         },
         required: ["has_affiliate_program"],
       },
@@ -150,7 +162,7 @@ async function main(): Promise<void> {
       console.log(`  skip  ${p.slug} — already has a candidate`)
       continue
     }
-    const page = findAffiliatePage(p.url)
+    const page = findAffiliatePage(p.url, p.signup_url)
     if (!page) {
       console.log(`  none  ${p.slug} — no live affiliate page found (free probe)`)
       continue
@@ -164,12 +176,17 @@ async function main(): Promise<void> {
       status: data?.has_affiliate_program ? "candidate" : "no-affiliate-program",
       note: "unreviewed machine extraction",
       extracted: data ?? null,
+      source_url: page,
       evidence_urls: r.urls_analyzed ?? [],
       extracted_at: new Date().toISOString().slice(0, 10),
       method: "context.dev extract, factCheck on",
     })
     const meta = r.key_metadata as { credits_remaining?: number } | undefined
     console.log(`        credits remaining: ${meta?.credits_remaining ?? "?"}`)
+    if ((meta?.credits_remaining ?? Infinity) < MIN_CREDITS) {
+      console.log(`  stop — credits below --min-credits=${MIN_CREDITS}`)
+      break
+    }
     await new Promise(r => setTimeout(r, 3000))
   }
 
