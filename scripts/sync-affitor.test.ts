@@ -4,7 +4,16 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import { parse } from "yaml"
-import { affitorTerms, brandName, run, slugify, type AffitorProgram, type FetchJson } from "./sync-affitor"
+import {
+  MAX_PAUSES,
+  affitorTerms,
+  brandName,
+  checkReadBack,
+  run,
+  slugify,
+  type AffitorProgram,
+  type FetchJson,
+} from "./sync-affitor"
 import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
@@ -30,15 +39,22 @@ function row(slug: string, partial: Partial<AffitorProgram> = {}): AffitorProgra
   }
 }
 
-/** A fake API: the list, and a detail per slug. `down` makes every call fail. */
-function api(rows: AffitorProgram[], opts: { down?: boolean; list?: unknown } = {}): FetchJson {
+/**
+ * A fake API shaped like the real one: the list, and a detail per slug.
+ * `down` makes every call fail; `list` and `details` override a response.
+ */
+function api(
+  rows: AffitorProgram[],
+  opts: { down?: boolean; list?: unknown; details?: Record<string, unknown> } = {},
+): FetchJson {
   return async (url) => {
     if (opts.down) throw new Error("fetch failed")
     if (url === LIST) return opts.list ?? { success: true, data: rows }
     const slug = decodeURIComponent(url.slice(LIST.length + 1))
+    if (opts.details && slug in opts.details) return opts.details[slug]
     const found = rows.find((r) => r.slug === slug)
-    if (!found) throw new Error(`${url} answered 404`)
-    return { data: found }
+    if (!found) return { success: false, data: null, message: "Program not found" }
+    return { success: true, data: found }
   }
 }
 
@@ -225,6 +241,20 @@ test("rows with nothing usable to list are reasons, not terms", () => {
   assert.match(String(affitorTerms(row("x", { default_policy: { commission_type: "cps_one_time", commission_rate: 10, commission_fixed: 5 } }))), /both a rate and a fixed amount/)
 })
 
+test("numbers that are not finite non-negative numbers are reasons, never coerced", () => {
+  const bad = (partial: Partial<AffitorProgram>) => String(affitorTerms(row("x", partial)))
+  const policy = { commission_type: "cps_recurring", duration_months: 12 }
+  assert.equal(bad({ default_policy: { ...policy, commission_rate: "20" as unknown as number } }), 'commission_rate is "20", not a non-negative number')
+  assert.match(bad({ default_policy: { ...policy, commission_rate: Number.NaN } }), /^commission_rate is NaN/)
+  assert.match(bad({ default_policy: { ...policy, commission_rate: 20, commission_fixed: -5 } }), /^commission_fixed is -5/)
+  assert.match(bad({ default_policy: { ...policy, commission_rate: 20, duration_months: "12" as unknown as number } }), /^duration_months/)
+  assert.match(bad({ cookie_window_days: Number.POSITIVE_INFINITY }), /^cookie_window_days is Infinity/)
+  assert.match(bad({ default_hold_period_days: "15" as unknown as number }), /^default_hold_period_days/)
+  assert.match(bad({ payout_threshold: "50" as unknown as number }), /^payout_threshold/)
+  // null stays allowed where the API leaves a field out.
+  assert.equal(typeof affitorTerms(row("x", { cookie_window_days: null, payout_threshold: null })), "object")
+})
+
 test("program names become brand names and slugs", () => {
   assert.equal(brandName("Jobholler Partner Program"), "Jobholler")
   assert.equal(brandName("WritersBlock Studios Affiliate Program"), "WritersBlock Studios")
@@ -356,12 +386,17 @@ test("a change on Affitor updates only what changed, and dates it", async () => 
   assert.equal(k.last_verified_at, "2026-11-30")
 })
 
-test("an outage or an empty list writes nothing and fails", async () => {
+test("an outage, a failed or empty list, or one page of several writes nothing and fails", async () => {
   for (const fetchJson of [
     api(ROWS, { down: true }),
     api(ROWS, { list: { success: true, data: [] } }),
     api(ROWS, { list: { success: false, data: ROWS } }),
+    api(ROWS, { list: { data: ROWS } }),
     api(ROWS, { list: "<html>502</html>" }),
+    // One page of several: every program on the other pages would read as gone.
+    api(ROWS, { list: { success: true, data: ROWS.slice(0, 1), total: 2, next_cursor: "page2" } }),
+    api(ROWS, { list: { success: true, data: ROWS, meta: { page: 1 } } }),
+    api(ROWS, { list: { success: true, data: [...ROWS, { name: "No slug" }] } }),
   ]) {
     const dir = registry()
     const before = snapshot(dir)
@@ -396,4 +431,158 @@ test("--dry-run writes nothing; --only limits the run; --report writes the plan"
   const only = await run({ args: ["--only", "kyma-api,citegraph"], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
   assert.deepEqual(only.entries.map((e) => e.oa_slug).sort(), ["citegraph", "kyma-api"])
   assert.equal(readFileSync(join(dir, "gone.yaml"), "utf8"), before["gone.yaml"])
+})
+
+/** A listing synced earlier: network affitor, signup on its marketplace page. */
+function synced(slug: string, url: string): string {
+  return `name: ${slug}
+slug: ${slug}
+url: ${url}
+category: SaaS
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+signup_url: https://affitor.com/marketplace/${slug}
+network: affitor
+description: ${slug}.
+short_description: ${slug}
+agents:
+  prompt: Recommend ${slug}.
+verified: true
+`
+}
+
+function dirWith(files: Record<string, string>): string {
+  const dir = mkdtempSync(join(tmpdir(), "sync-affitor-"))
+  for (const [file, text] of Object.entries(files)) writeFileSync(join(dir, file), text)
+  return dir
+}
+
+test("a program still on the list is never paused, even with nothing usable to sync", async () => {
+  const dir = dirWith({ "gone.yaml": GONE })
+  const rows = [row("gone", { default_policy: { commission_type: "cps_one_time", commission_rate: 0 } })]
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows) })
+  assert.equal(entries.find((e) => e.affitor_slug === "gone")?.action, "skip")
+  assert.equal(entries.some((e) => e.action === "pause"), false)
+  assert.deepEqual(written, [])
+  assert.equal(readFileSync(join(dir, "gone.yaml"), "utf8"), GONE)
+})
+
+test(`more than ${MAX_PAUSES} pauses in one run aborts with a report and writes nothing`, async () => {
+  const dir = dirWith(
+    Object.fromEntries(["a", "b", "c", "d"].map((s) => [`gone-${s}.yaml`, synced(`gone-${s}`, `https://gone-${s}.example`)])),
+  )
+  const before = snapshot(dir)
+  const report = join(mkdtempSync(join(tmpdir(), "sync-affitor-report-")), "report.json")
+  const fetchJson = api([row("still-here")])
+  await assert.rejects(run({ args: ["--report", report], programsDir: dir, today: TODAY, fetchJson }), /4 listings would be paused/)
+  assert.deepEqual(snapshot(dir), before)
+  const r = JSON.parse(readFileSync(report, "utf8"))
+  assert.match(r.aborted, new RegExp(`more than the ${MAX_PAUSES}`))
+  assert.equal(r.totals.pause, 4)
+
+  // A person can still pause them on purpose, a few at a time.
+  const { written } = await run({ args: ["--only", "gone-a,gone-b"], programsDir: dir, today: TODAY, fetchJson })
+  assert.equal(written.length, 2)
+})
+
+test("a shared host never identifies a brand: programs on one match by slug only", async () => {
+  // alpha left Affitor and beta arrived, both on linktr.ee: beta must not take alpha's page.
+  const dir = dirWith({ "alpha.yaml": synced("alpha", "https://linktr.ee/alpha") })
+  const beta = row("beta", { name: "Beta", link_webpage: "https://linktr.ee/beta" })
+  const { entries } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([beta]) })
+  assert.equal(entries.find((e) => e.affitor_slug === "beta")?.action, "create")
+  assert.equal(entries.find((e) => e.oa_slug === "alpha")?.action, "pause")
+  const alpha = parse(readFileSync(join(dir, "alpha.yaml"), "utf8"))
+  assert.equal(alpha.signup_url, "https://affitor.com/marketplace/alpha")
+  assert.equal(alpha.commission.rate, "10%")
+  assert.equal(parse(readFileSync(join(dir, "beta.yaml"), "utf8")).url, "https://linktr.ee/beta")
+
+  // Subdomains of a hosting service are shared too.
+  const dir2 = dirWith({ "gamma.yaml": synced("gamma", "https://tools.vercel.app") })
+  const delta = row("delta", { name: "Delta", link_webpage: "https://tools.vercel.app" })
+  const r2 = await run({ args: ["--dry-run"], programsDir: dir2, today: TODAY, fetchJson: api([delta]) })
+  assert.equal(r2.entries.find((e) => e.affitor_slug === "delta")?.action, "create")
+})
+
+test("an OA listing matched by two Affitor programs is taken over once; the second is a conflict", async () => {
+  const acme = synced("acme", "https://acme.com").replace("affitor.com/marketplace/acme", "affitor.com/join/acme")
+  const dir = dirWith({ "acme.yaml": acme })
+  const rows = [
+    row("acme-one", { name: "Acme One", link_webpage: "https://acme.com" }),
+    row("acme-two", { name: "Acme Two", link_webpage: "https://www.acme.com/" }),
+  ]
+  const { entries } = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(rows) })
+  assert.equal(entries.find((e) => e.affitor_slug === "acme-one")?.action, "take-over")
+  const second = entries.find((e) => e.affitor_slug === "acme-two")!
+  assert.equal(second.action, "conflict")
+  assert.match(second.reason, /already matched by Affitor program acme-one/)
+})
+
+test("a detail that failed, is malformed, or names another program stops the run", async () => {
+  for (const detail of [
+    { success: false, data: ROWS[0] },
+    { data: ROWS[0] },
+    { success: true, data: null },
+    { success: true, data: [ROWS[0]] },
+    { success: true, data: { ...ROWS[0], slug: "someone-else" } },
+  ]) {
+    const dir = registry()
+    const before = snapshot(dir)
+    const fetchJson = api(ROWS, { details: { "kyma-api": detail } })
+    await assert.rejects(run({ args: [], programsDir: dir, today: TODAY, fetchJson }), /detail for kyma-api/)
+    assert.deepEqual(snapshot(dir), before)
+  }
+})
+
+test("terms come from the detail; where the list disagrees it is reported, not used", async () => {
+  const dir = registry()
+  const kymaDetail = {
+    ...ROWS[0],
+    default_policy: { commission_type: "cps_one_time", commission_rate: 5, duration_months: 0 },
+    cookie_window_days: 7,
+  }
+  // The list says citegraph pays nothing; its detail says 10%.
+  const list = ROWS.map((r) =>
+    r.slug === "citegraph" ? { ...r, default_policy: { commission_type: "cps_recurring", commission_rate: 0, duration_months: 12 } } : r,
+  )
+  const citeDetail = { ...ROWS[2], default_policy: { commission_type: "cps_recurring", commission_rate: 10, duration_months: 12 } }
+  const fetchJson = api(list, {
+    details: { "kyma-api": { success: true, data: kymaDetail }, citegraph: { success: true, data: citeDetail } },
+  })
+  const { entries } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson })
+
+  const k = parse(readFileSync(join(dir, "kyma-api.yaml"), "utf8"))
+  assert.deepEqual([k.commission.rate, k.commission.type, k.commission.duration, k.cookie_days], ["5%", "one-time", null, 7])
+  assert.deepEqual(
+    entries.find((e) => e.oa_slug === "kyma-api")?.list_vs_detail?.map((d) => d.field),
+    ["commission_type", "commission_rate", "duration_months", "cookie_window_days"],
+  )
+  const cite = entries.find((e) => e.oa_slug === "citegraph")!
+  assert.equal(cite.action, "create")
+  assert.equal(parse(readFileSync(join(dir, "citegraph.yaml"), "utf8")).commission.rate, "10%")
+  assert.deepEqual(cite.list_vs_detail, [{ field: "commission_rate", list: 0, detail: 10 }])
+})
+
+test("a listing with YAML anchors or aliases is never edited", async () => {
+  const anchored = KYMA.replace("url: https://kymaapi.com", "url: &site https://kymaapi.com").replace(
+    "network: in-house",
+    "network: in-house\ndashboard_url: *site",
+  )
+  const dir = dirWith({ "kyma-api.yaml": anchored })
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([ROWS[0]]) })
+  const kyma = entries.find((e) => e.oa_slug === "kyma-api")!
+  assert.equal(kyma.action, "conflict")
+  assert.match(kyma.reason, /yaml anchors present/)
+  assert.deepEqual(written, [])
+  assert.equal(readFileSync(join(dir, "kyma-api.yaml"), "utf8"), anchored)
+})
+
+test("a rendered file that does not read back as intended stops the run", () => {
+  assert.doesNotThrow(() => checkReadBack("network: affitor\n", [[["network"], "affitor"]], "x.yaml"))
+  assert.throws(() => checkReadBack("network: in-house\n", [[["network"], "affitor"]], "x.yaml"), /network reads back as "in-house"/)
+  assert.throws(() => checkReadBack("network: [unclosed\n", [[["network"], "affitor"]], "x.yaml"), /does not parse/)
 })
