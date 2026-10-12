@@ -130,7 +130,7 @@ export default async function Image({
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              {program.cookieDays}d
+              {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
               Cookie
@@ -138,7 +138,7 @@ export default async function Image({
           </div>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              ${program.payout.minimum}
+              {program.payout.minimum != null ? `$${program.payout.minimum}` : "n/a"}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
               Min Payout

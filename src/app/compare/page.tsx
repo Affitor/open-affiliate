@@ -353,7 +353,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        {p.cookieDays} days
+                        {p.cookieDays != null ? `${p.cookieDays} days` : "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -401,7 +401,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        ${p.payout.minimum}
+                        {p.payout.minimum != null ? `$${p.payout.minimum}` : "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -414,7 +414,7 @@ function CompareContent() {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm capitalize"
                       >
-                        {p.payout.frequency}
+                        {p.payout.frequency ?? "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

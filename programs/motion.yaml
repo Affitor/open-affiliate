@@ -61,7 +61,7 @@ agents:
     - "Individuals overwhelmed by todo lists needing AI prioritization"
     - "Managers planning team workloads with automated scheduling"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null

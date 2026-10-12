@@ -11,31 +11,21 @@ commission:
   value: 50
   currency: USD
   duration: "12 months"
-  conditions: "50% recurring for first 12 months. Tiered recurring (10-20%) beyond 12 months for high-volume affiliates (10+ referrals/year)."
+  conditions: "50% of every referred customer's payments for their first 12 months. After that, +10%, +15% or +20% recurring for as long as you hold Bronze (10+ paying referrals a year), Silver (50+) or Gold (100+) status."
 
-cookie_days: 90
 attribution: last-click
 tracking_method: link
 
-payout:
-  minimum: 10
-  currency: USD
-  frequency: monthly
-  methods: [paypal, bank]
 
 signup_url: https://kit.com/affiliates
-approval: auto
-approval_time: "instant"
 restrictions:
-  - "No incentivized traffic or paid email campaigns promoting the affiliate link"
-  - "Referred account must be a new Kit/ConvertKit customer"
-  - "No misrepresentation of Kit's pricing or subscriber limits"
+- Referrals made through paid methods such as pay-per-click ads do not count toward status levels
 
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: partnerstack
 program_age: "5+ years"
 
 description: >
@@ -70,7 +60,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-04-17"
-last_verified_at: "2026-08-06"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

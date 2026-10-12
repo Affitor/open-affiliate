@@ -64,7 +64,7 @@ agents:
     - "Students researching topics with verified, cited information"
     - "Users wanting a Google alternative with direct AI answers"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null

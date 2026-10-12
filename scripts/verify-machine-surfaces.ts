@@ -119,7 +119,8 @@ if (llmsBytes > LLMS_MAX_BYTES * 0.85) {
  *     a correct one passed. Exactly one claim is now allowed.
  */
 const LLMS_MAX_INLINE_PROGRAMS = 20;
-const verifiedCount = programs.filter((p) => p.verified).length;
+// Discontinued and paused programs are never listed as verified, even if their status was checked.
+const verifiedCount = programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused").length;
 const verifiedSection = llms
   .split(/^## /m)
   .find((part) => part.startsWith("Verified programs"));
@@ -258,7 +259,7 @@ if (isSample) {
 const verifiedPage = requireText("verified.md");
 if (!verifiedPage.startsWith("# ")) fail("verified.md must start with an H1");
 const verifiedLines = verifiedPage.split("\n");
-for (const program of programs.filter((p) => p.verified)) {
+for (const program of programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused")) {
   const marker = `/programs/${program.slug}.md`;
   const entry = verifiedLines.find((line) => line.includes(marker));
   if (!entry) fail(`verified.md is missing verified program ${program.slug}`);

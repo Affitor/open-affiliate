@@ -68,6 +68,10 @@ export default function APIPage() {
 
         <section>
           <h2 id="example" className="text-lg font-semibold mb-3">Example</h2>
+          <p className="text-sm text-muted-foreground mb-3">
+            <code>cookieDays</code> and the <code>payout</code> fields are left out when a program does not publish them.
+            Programs with <code>status</code> <code>paused</code> or <code>discontinued</code> are returned by slug but not in search results.
+          </p>
           <CodeBlock
             label="curl"
             code={`curl "https://openaffiliate.dev/api/programs?q=database&type=recurring&verified=true"

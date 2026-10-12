@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { affiliateScore, programs } from "@/lib/programs";
+import { affiliateScore, programs, livePrograms } from "@/lib/programs";
 import { serializeJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default function RankingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const ranked = [...programs]
+  const ranked = [...livePrograms]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 20);
 

@@ -15,7 +15,7 @@ export interface ClientProgram {
     currency: string
     duration?: string | null
   }
-  cookieDays: number
+  cookieDays?: number
   shortDescription: string
   verified: boolean
   network?: string | null
@@ -24,6 +24,7 @@ export interface ClientProgram {
   descriptionAvailable: boolean
   agentPromptAvailable: boolean
   signupAvailable: boolean
+  status?: "paused" | "discontinued"
 }
 
 export type Program = ClientProgram
@@ -43,7 +44,10 @@ interface SearchOptions {
   verified?: boolean
 }
 
-export const programs = registryData.programs as ClientProgram[]
+// Discontinued and paused programs are not listed or ranked; their own page still renders.
+export const programs = (registryData.programs as ClientProgram[]).filter(
+  (p) => p.status !== "discontinued" && p.status !== "paused"
+)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
@@ -78,7 +82,7 @@ export function commissionDisplay(
         : "Not published"
     case "flat":
       return commission.value !== null
-        ? `$${commission.value.toLocaleString()}`
+        ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
         : "Not published"
     case "tiered":
     case "hybrid":
@@ -139,7 +143,7 @@ export function affiliateScore(program: ClientProgram): number {
             : 8
       : Math.min(raw / 50, 1) * 40
 
-  const cookieScore = Math.min(program.cookieDays / 90, 1) * 15
+  const cookieScore = Math.min((program.cookieDays ?? 0) / 90, 1) * 15
   let typeScore = 5
   if (program.commission.type === "recurring") {
     const duration = program.commission.duration?.toLowerCase().trim() ?? ""

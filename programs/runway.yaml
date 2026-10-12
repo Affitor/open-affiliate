@@ -1,40 +1,37 @@
 name: Runway
 slug: runway
-url: https://runwayml.com
+url: https://runway.com
 category: AI
 tags: [ai, ai-video, video-generation, creative, filmmaking]
 
 commission:
-  type: recurring
-  rate: "20%"
-  mode: percentage
-  value: 20
+  type: one-time
+  rate: "$15 per new subscriber"
+  mode: flat
+  value: 15
   currency: USD
-  duration: "12 months"
-  conditions: "20% recurring commission for the first 12 months"
+  duration: null
+  conditions: "Paid for every new subscriber who buys a paid Runway plan with your unique code; no cap. Your audience gets 25% off any plan."
 
-cookie_days: 30
+# 0 = no cookie: attribution is by the partner's discount code at checkout (runway.com/affiliate-program, checked 2026-10-12)
+cookie_days: 0
 attribution: last-click
-tracking_method: cookie
+tracking_method: server-side
 
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
+# payout minimum, schedule and methods: not published on runway.com/affiliate-program (checked 2026-10-12)
 
-signup_url: https://affiliates.runwayml.com/
+signup_url: https://runway.com/affiliate-program
 approval: manual
-approval_time: "3-7 business days"
 restrictions:
-  - "Must comply with Runway content policies"
-  - "No misleading demonstrations of AI capabilities"
+  - "Every partnership starts with a 3-month pilot"
+  - "Apply with a free Runway account; applications are tied to its email"
+  - "Affiliate program, not a paid sponsorship"
 
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: awin
+network: in-house
 program_age: "2+ years"
 
 description: >
@@ -45,8 +42,9 @@ description: >
   and AI-powered color grading. Used by filmmakers, content creators,
   and creative agencies.
 
-  The affiliate program pays 20% recurring for 12 months, tracked
-  via Awin.
+  The affiliate program pays $15 for every new paid subscriber who uses
+  your code, with no cap, and gives your audience 25% off. Active
+  partners get the Max plan free.
 
 short_description: "AI video generation and creative suite"
 
@@ -67,7 +65,8 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: active
 kind: affiliate
 source: community

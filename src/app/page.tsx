@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
+import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 function RankingsPreview() {
-  const top5 = [...programs]
+  const top5 = [...livePrograms]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 5);
 
@@ -128,7 +128,7 @@ function RankingsPreview() {
                 </td>
                 <td className="py-2.5 px-3 text-center hidden sm:table-cell">
                   <span className="text-xs text-muted-foreground">
-                    {program.cookieDays}d
+                    {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 hidden md:table-cell">
@@ -184,7 +184,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
           {program.commission.type}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -195,7 +195,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
 }
 
 export default function Home() {
-  const featured = programs.slice(0, 6);
+  const featured = livePrograms.slice(0, 6);
 
   return (
     <div>

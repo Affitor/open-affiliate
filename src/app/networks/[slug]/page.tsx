@@ -17,6 +17,7 @@ import {
   networkKind,
   networkHowToJoin,
   networkName,
+  livePrograms,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -61,7 +62,7 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
-  const netPrograms = [...programs.filter((p) => (p.network ?? "in-house") === network)].sort(
+  const netPrograms = [...livePrograms.filter((p) => (p.network ?? "in-house") === network)].sort(
     (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
   );
 
@@ -72,7 +73,8 @@ export default async function NetworkPage({
   const rates = priced.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const avgCookie = netPrograms.length > 0 ? netPrograms.reduce((s, p) => s + p.cookieDays, 0) / netPrograms.length : 0;
+  const cookies = netPrograms.flatMap((p) => (p.cookieDays != null ? [p.cookieDays] : []));
+  const avgCookie = cookies.length > 0 ? cookies.reduce((s, d) => s + d, 0) / cookies.length : 0;
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
   const verifiedCount = netPrograms.filter((p) => p.verified).length;
   const kind = networkKind(network);
@@ -209,10 +211,10 @@ export default async function NetworkPage({
                     <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    <span className="text-xs text-muted-foreground">{program.cookieDays}d</span>
+                    <span className="text-xs text-muted-foreground">{program.cookieDays != null ? `${program.cookieDays}d` : "—"}</span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
-                    <span className="text-xs text-muted-foreground">${program.payout.minimum}</span>
+                    <span className="text-xs text-muted-foreground">{program.payout.minimum != null ? `$${program.payout.minimum}` : "—"}</span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">
                     <span className="text-xs text-muted-foreground">{program.category}</span>

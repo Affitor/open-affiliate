@@ -33,8 +33,9 @@ import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, commissionUnknown} from "@/lib/programs";
-import { applyEarnLabel } from "@/lib/apply-cta";
+import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
+import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay} from "@/lib/programs";
+import { applyEarnLabel, checkTermsLabel } from "@/lib/apply-cta";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -56,12 +57,8 @@ export async function generateMetadata({
   const program = getProgram(slug);
   if (!program) return { title: "Program Not Found" };
 
-  // "11x Affiliate Program — Not published one-time" reads like a defect.
-  // When there is no figure, say the commission type and leave it there.
-  const rate = commissionDisplay(program.commission);
-  const rateForTitle = commissionUnknown(program.commission) ? "" : `${rate} `;
-  const title = `${program.name} Affiliate Program — ${rateForTitle}${program.commission.type} | OpenAffiliate`;
-  const description = `${program.shortDescription}. ${rate} ${program.commission.type} commission, ${program.cookieDays}-day cookie. Join the ${program.name} affiliate program.`;
+  const title = seoTitle(program);
+  const description = seoDescription(program);
 
   return {
     title,
@@ -88,7 +85,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: "summary",
-      title: `${program.name}: ${commissionDisplay(program.commission)} ${program.commission.type}`,
+      title,
       description,
     },
   };
@@ -133,13 +130,36 @@ export default async function ProgramPage({
   if (!program) notFound();
 
   const joinUrl = program.signupUrl ?? program.url;
-  const applyCta = applyEarnLabel(program.commission);
+  const faq = buildFaq(program);
+  const discontinued = isDiscontinued(program);
+  const paused = isPaused(program);
+  const unverified = isUnverified(program);
+  const network = networkName(program);
+  const applyCta = unverified ? checkTermsLabel(program.name) : applyEarnLabel(program.commission);
+  // Unverified: badges carry the listed figures but say they are not confirmed.
+  const unconfirmed = unverified ? " (unconfirmed)" : "";
+  const cookieText =
+    program.cookieDays == null ? "Cookie not published" : program.cookieDays === 0 ? "Code-based, no cookie" : `${program.cookieDays}d cookie`;
+  const trustLine = paused
+    ? `${program.createdAt ? `Listed ${program.createdAt} · ` : ""}Last known terms, not confirmed`
+    : program.verified
+      ? `Terms checked${program.lastVerifiedAt ? ` ${program.lastVerifiedAt}` : ""}${network && !discontinued ? ` · runs on ${network}` : ""}`
+      : `Community-submitted, not verified.${network && program.network !== IN_HOUSE ? ` This program may run on ${network} without a public page;` : ""} ${network && program.network !== IN_HOUSE ? "check" : "Check"} the brand's terms before promoting.`;
+
+  // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
+  const statusTag = discontinued ? "Discontinued" : paused ? "Status unclear" : unverified ? "Not verified" : null;
+  const pausedNote = program.statusNote
+    ? `${program.statusNote.replace(/\.?$/, ".")}`
+    : "The signup page is not working right now.";
 
   // Affiliate Score
   const score = affiliateScore(program);
   const categoryPrograms = programs.filter((p) => p.category === program.category);
+  // A program with no cookie_days scores NaN; one such entry turned every
+  // category average into "NaN vs avg".
+  const categoryScores = categoryPrograms.map(affiliateScore).filter(Number.isFinite);
   const categoryAvg = Math.round(
-    categoryPrograms.reduce((sum, p) => sum + affiliateScore(p), 0) / categoryPrograms.length
+    categoryScores.reduce((sum, v) => sum + v, 0) / Math.max(categoryScores.length, 1)
   );
   const scoreDiff = score - categoryAvg;
 
@@ -192,28 +212,7 @@ export default async function ProgramPage({
         type="application/ld+json"
         suppressHydrationWarning
         dangerouslySetInnerHTML={{
-          __html: serializeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "Product",
-            name: `${program.name} Affiliate Program`,
-            description: program.shortDescription,
-            url: `https://openaffiliate.dev/programs/${program.slug}`,
-            brand: { "@type": "Brand", name: program.name },
-            // Provenance. AI platforms weight recency and discount pages they
-            // cannot date, and they cite anonymous content less. These say who
-            // published the entry and when it was last checked — the same
-            // dates the page and the .md twin already show a reader.
-            ...(program.createdAt ? { datePublished: program.createdAt } : {}),
-            ...(program.lastVerifiedAt
-              ? { dateModified: program.lastVerifiedAt }
-              : {}),
-            publisher: { "@id": "https://openaffiliate.dev/#organization" },
-            offers: {
-              "@type": "Offer",
-              category: "Affiliate Program",
-              description: `${commissionDisplay(program.commission)} ${commissionLabel(program.commission)} commission, ${program.cookieDays}-day cookie`,
-            },
-          }),
+          __html: serializeJsonLd(programJsonLd(program, faq)),
         }}
       />
 
@@ -232,9 +231,9 @@ export default async function ProgramPage({
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-2.5">
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
-              {program.name}
+              {program.name} Affiliate Program
             </h1>
-            {program.verified && (
+            {program.verified && !statusTag && (
               <Badge
                 variant="outline"
                 className="text-xs border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
@@ -243,10 +242,19 @@ export default async function ProgramPage({
                 Verified
               </Badge>
             )}
+            {statusTag && (
+              <Badge
+                variant="outline"
+                className={`text-xs shrink-0 ${unverified ? "text-muted-foreground" : "border-amber-500/40 text-amber-700 dark:text-amber-400"}`}
+              >
+                {statusTag}
+              </Badge>
+            )}
           </div>
           <p className="text-sm text-muted-foreground mt-1">
             {program.shortDescription}
           </p>
+          <p className="text-xs text-muted-foreground mt-1.5">{trustLine}</p>
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2">
             <a
               href={program.url}
@@ -268,19 +276,22 @@ export default async function ProgramPage({
 
       {/* Stat badges row */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
+        {!discontinued && (
         <div className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
           Score: {score}
           <span className={`text-[10px] font-normal ${scoreDiff >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"}`}>
             ({scoreDiff >= 0 ? "+" : ""}{scoreDiff} vs avg)
           </span>
         </div>
+        )}
+        {!discontinued && (<>
         <StatBadge
           icon={<DollarSign className="h-3 w-3" />}
-          label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}`}
+          label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}${unconfirmed}`}
         />
         <StatBadge
           icon={<Clock className="h-3 w-3" />}
-          label={`${program.cookieDays}d cookie`}
+          label={`${cookieText}${program.cookieDays == null ? "" : unconfirmed}`}
         />
         {program.network && (
           <StatBadge
@@ -294,6 +305,7 @@ export default async function ProgramPage({
             label={approvalInfo.label}
           />
         )}
+        </>)}
         <StatBadge
           icon={<Globe className="h-3 w-3" />}
           label={program.category}
@@ -306,6 +318,28 @@ export default async function ProgramPage({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main content */}
         <div className="lg:col-span-2 space-y-8">
+          {paused && (
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5">
+              <p className="text-sm">
+                {pausedNote} The program may have closed or moved. Last known terms are shown for reference.
+              </p>
+              <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
+                See alternatives
+              </a>
+            </div>
+          )}
+          {discontinued && (
+            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5">
+              <h2 className="text-base font-semibold mb-1">{program.name} does not have an affiliate program</h2>
+              <p className="text-sm text-muted-foreground">
+                {program.statusNote ?? "The program no longer accepts affiliates."} The programs below still pay commission for similar products.
+              </p>
+              <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
+                See alternatives
+              </a>
+            </div>
+          )}
+
           {/* About */}
           <div>
             <h2 className="text-base font-semibold mb-3">About</h2>
@@ -320,7 +354,7 @@ export default async function ProgramPage({
           </Suspense>
 
           {/* How to Join */}
-          {(program.signupUrl ?? program.approval ?? program.approvalTime) && (
+          {!discontinued && !paused && (program.signupUrl ?? program.approval ?? program.approvalTime) && (
             <div>
               <h2 className="text-base font-semibold mb-3">How to Join</h2>
               <div className="rounded-xl border border-border/50 bg-card/30 p-5 space-y-4">
@@ -381,6 +415,21 @@ export default async function ProgramPage({
             </div>
           )}
 
+          {/* FAQ: answered only from the fields above; mirrors the FAQPage JSON-LD */}
+          {faq.length > 0 && (
+            <div>
+              <h2 className="text-base font-semibold mb-3">{program.name} affiliate program FAQ</h2>
+              <dl className="space-y-4">
+                {faq.map((f) => (
+                  <div key={f.q}>
+                    <dt className="text-sm font-medium">{f.q}</dt>
+                    <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+          )}
+
           {/* Agent Instructions */}
           <div className="gradient-border rounded-xl border border-border/50 bg-card/30 overflow-hidden">
             <div className="flex items-center gap-2 px-5 py-3 border-b border-border/30 bg-muted/30">
@@ -427,7 +476,23 @@ export default async function ProgramPage({
           </div>
 
           {/* Related Programs */}
-          <RelatedPrograms current={program} />
+          <div id="alternatives" className="scroll-mt-20">
+            <RelatedPrograms current={program} title={discontinued || paused ? `${program.name} affiliate program alternatives` : undefined} />
+          </div>
+
+          {/* Brand-side CTA. Button text is the approved affitor.com CTA (2026-10-02 audit): at most 4 words, no dash. */}
+          <div className="rounded-xl border border-border/50 bg-card/30 p-5 flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm text-muted-foreground">
+              <span className="font-medium text-foreground">Run a SaaS?</span> Start your own affiliate program on Affitor. Free until your first $10k in affiliate revenue.
+            </p>
+            <a
+              href={`https://affitor.com/?utm_source=openaffiliate&utm_medium=program_page&utm_campaign=${program.slug}`}
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
+            >
+              Launch your program free
+              <ExternalLink className="h-3.5 w-3.5" />
+            </a>
+          </div>
 
           {/* Contribute */}
           <div className="rounded-xl border border-border/40 bg-muted/10 p-5 flex items-start gap-3">
@@ -452,6 +517,7 @@ export default async function ProgramPage({
         {/* Sidebar */}
         <div className="space-y-4">
           {/* Commission card */}
+          {!discontinued && (
           <div className="rounded-xl border border-border/50 bg-card/50 p-5 space-y-3">
             <h3 className="text-sm font-semibold">Commission</h3>
 
@@ -475,7 +541,7 @@ export default async function ProgramPage({
             )}
 
             <div className="h-px bg-border/50" />
-            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={`${program.cookieDays} days`} />
+            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={program.cookieDays == null ? "Not published" : program.cookieDays === 0 ? "None (code-based)" : `${program.cookieDays} days`} />
 
             {program.attribution && (
               <>
@@ -491,10 +557,18 @@ export default async function ProgramPage({
               </>
             )}
 
-            <div className="h-px bg-border/50" />
-            <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
-            <div className="h-px bg-border/50" />
-            <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
+            {program.payout.minimum != null && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
+              </>
+            )}
+            {program.payout.frequency && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
+              </>
+            )}
 
             {program.payoutMethods && program.payoutMethods.length > 0 && (
               <>
@@ -514,9 +588,10 @@ export default async function ProgramPage({
               </>
             )}
           </div>
+          )}
 
           {/* Program Info card */}
-          {(program.network !== undefined ||
+          {!discontinued && (program.network !== undefined ||
             program.programAge ||
             program.marketingMaterials !== undefined ||
             program.apiAvailable !== undefined ||
@@ -590,6 +665,7 @@ export default async function ProgramPage({
           <ConnectTabs slug={program.slug} mcpHttp={mcpHttp} mcpStdio={mcpStdio} />
 
           {/* Badge embed */}
+          {!discontinued && (
           <div className="rounded-xl border border-border/50 bg-card/50 p-5">
             <h3 className="text-sm font-semibold mb-3">Badge</h3>
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -599,6 +675,7 @@ export default async function ProgramPage({
               <CopyButton text={badgeMarkdown} />
             </div>
           </div>
+          )}
 
           {/* Tags */}
           {program.tags.length > 0 && (
@@ -613,14 +690,14 @@ export default async function ProgramPage({
           )}
 
           {/* Join button */}
-          <TrackLink
+          {!discontinued && !paused && <TrackLink
             href={joinUrl}
             slug={slug}
             className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
             {applyCta}
             <ExternalLink className="h-3.5 w-3.5" />
-          </TrackLink>
+          </TrackLink>}
         </div>
       </div>
     </div>

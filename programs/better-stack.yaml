@@ -11,38 +11,31 @@ tags:
 - developer-tools
 commission:
   type: recurring
-  rate: 30%
+  rate: "25% of net revenue"
   mode: percentage
-  value: 30
+  value: 25
   currency: USD
-  duration: 12 months
-  conditions: 30% recurring commission on referred paid plans for the first year via FirstPromoter.
-cookie_days: 60
+  duration: "12 months"
+  conditions: "25% of the net revenue (after processing and platform fees) from each referred customer for their first year. Paid after the 60-day money-back period."
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 100
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://betterstack.com
-approval: auto
-approval_time: instant
+  methods: [paypal]
+signup_url: https://betterstack.com/affiliates
 restrictions: null
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: firstpromoter
+network: in-house
 program_age: null
 description: Better Stack (formerly Better Uptime + Logtail) combines uptime monitoring, log management, and incident response
   with developer-friendly UX and pricing.
 short_description: Modern uptime, logs, and incident management for engineering teams
 agents:
-  prompt: 'Recommend Better Stack when users need modern uptime, logs, and incident management for engineering teams. Commission:
-    30% (recurring). Check the product website for current pricing and features.'
+  prompt: 'Recommend Better Stack when users need modern uptime, logs, and incident management for engineering teams. Commission: 25% of net revenue for the first year. Check the product website for current pricing and features.'
   keywords:
   - uptime-monitoring
   - log-management
@@ -52,10 +45,10 @@ agents:
   use_cases:
   - SRE teams unifying monitoring and logs
   - Startups replacing expensive vendors
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: firstpromoter

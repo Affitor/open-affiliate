@@ -94,165 +94,6 @@ const MIN_VIEWS: Record<string, number> = {
   blog: 0,
 }
 
-// --- YouTube via Apify ---
-
-async function fetchYouTube(query: string): Promise<SocialItem[]> {
-  // Prefer RapidAPI (free) over Apify ($0.03-0.05/call)
-  if (RAPIDAPI_KEY) {
-    try {
-      const results = await fetchYouTubeRapidAPI(query)
-      if (results.length > 0) return results
-    } catch {
-      // Fall through to Apify
-    }
-  }
-  if (APIFY_API_KEY) {
-    try {
-      return await fetchYouTubeApify(query)
-    } catch {
-      return []
-    }
-  }
-  return []
-}
-
-async function fetchYouTubeApify(query: string): Promise<SocialItem[]> {
-  const res = await fetch(
-    `https://api.apify.com/v2/acts/api-ninja~youtube-search-scraper/run-sync-get-dataset-items?timeout=45`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${APIFY_API_KEY}` },
-      body: JSON.stringify({ query, maxResults: 30 }),
-      signal: AbortSignal.timeout(50000),
-    }
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  if (!Array.isArray(data) || data.length === 0) return []
-
-  return data
-    .filter((item: Record<string, unknown>) => item.type === "video")
-    .map((item: Record<string, unknown>) => ({
-      platform: "youtube" as const,
-      title: String(item.title ?? ""),
-      url: `https://youtube.com/watch?v=${item.videoId}`,
-      thumbnail: (() => {
-        const thumb = item.thumbnail as Record<string, unknown>[] | undefined
-        return thumb?.[0]?.url ? String(thumb[0].url) : undefined
-      })(),
-      author: String(item.channelTitle ?? ""),
-      views: Number(item.viewCount ?? 0),
-      publishedAt: item.publishedAt ? String(item.publishedAt) : undefined,
-    }))
-}
-
-async function fetchYouTubeRapidAPI(query: string): Promise<SocialItem[]> {
-  const res = await fetch(
-    `https://youtube-api49.p.rapidapi.com/api/search?q=${encodeURIComponent(query)}&maxResults=50&regionCode=US`,
-    {
-      headers: {
-        "x-rapidapi-host": "youtube-api49.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY,
-      },
-      signal: AbortSignal.timeout(8000),
-    }
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  if (!data?.items?.length) return []
-
-  return data.items
-    .filter((item: Record<string, unknown>) => {
-      const id = item.id as Record<string, unknown> | undefined
-      return id?.kind === "youtube#video"
-    })
-    .map((item: Record<string, unknown>) => {
-      const id = item.id as Record<string, unknown>
-      const snippet = item.snippet as Record<string, unknown>
-      const thumbnails = snippet?.thumbnails as Record<string, unknown> | undefined
-      const medium = thumbnails?.medium as Record<string, unknown> | undefined
-      return {
-        platform: "youtube" as const,
-        title: String(snippet?.title ?? ""),
-        url: `https://youtube.com/watch?v=${id?.videoId}`,
-        thumbnail: medium?.url ? String(medium.url) : undefined,
-        author: String(snippet?.channelTitle ?? ""),
-        publishedAt: String(snippet?.publishedAt ?? ""),
-      }
-    })
-}
-
-// --- TikTok via RapidAPI ---
-
-async function fetchTikTok(query: string): Promise<SocialItem[]> {
-  if (!RAPIDAPI_KEY) return []
-  const res = await fetch(
-    `https://tiktok-api23.p.rapidapi.com/api/search/video?keyword=${encodeURIComponent(query)}&cursor=0&search_id=0`,
-    {
-      headers: {
-        "x-rapidapi-host": "tiktok-api23.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY,
-      },
-      signal: AbortSignal.timeout(8000),
-    }
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  if (!data?.item_list?.length) return []
-
-  return data.item_list.map((item: Record<string, unknown>) => {
-    const author = item.author as Record<string, unknown> | undefined
-    const video = item.video as Record<string, unknown> | undefined
-    const stats = (item.stats ?? item.statistics) as Record<string, unknown> | undefined
-    const desc = String(item.desc ?? "")
-    return {
-      platform: "tiktok" as const,
-      title: desc.length > 120 ? desc.slice(0, 120) + "..." : desc,
-      url: `https://tiktok.com/@${author?.uniqueId}/video/${item.id}`,
-      thumbnail: video?.cover ? String(video.cover) : undefined,
-      author: String(author?.nickname ?? author?.uniqueId ?? ""),
-      views: Number(stats?.playCount ?? item.play_count ?? 0),
-      publishedAt: item.createTime
-        ? new Date(Number(item.createTime) * 1000).toISOString()
-        : undefined,
-    }
-  })
-}
-
-// --- X via RapidAPI ---
-
-async function fetchX(query: string): Promise<SocialItem[]> {
-  if (!RAPIDAPI_KEY) return []
-  const res = await fetch(
-    `https://twitter-api45.p.rapidapi.com/search.php?query=${encodeURIComponent(query)}&search_type=Top`,
-    {
-      headers: {
-        "x-rapidapi-host": "twitter-api45.p.rapidapi.com",
-        "x-rapidapi-key": RAPIDAPI_KEY,
-      },
-      signal: AbortSignal.timeout(8000),
-    }
-  )
-  if (!res.ok) return []
-  const data = await res.json()
-  if (!data?.timeline?.length) return []
-
-  return data.timeline
-    .filter((item: Record<string, unknown>) => item.type === "tweet")
-    .map((item: Record<string, unknown>) => {
-      const text = String(item.text ?? "")
-      return {
-        platform: "x" as const,
-        title: text.length > 140 ? text.slice(0, 140) + "..." : text,
-        url: `https://x.com/${item.screen_name}/status/${item.tweet_id}`,
-        author: String(item.screen_name ?? ""),
-        likes: Number(item.favorites ?? 0),
-        views: item.views ? Number(item.views) : undefined,
-        publishedAt: item.created_at ? String(item.created_at) : undefined,
-      }
-    })
-}
-
 // --- Reddit via Google Search (Apify) ---
 
 async function fetchReddit(query: string): Promise<SocialItem[]> {
@@ -444,24 +285,11 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
 
   // Rotate queries weekly to discover different content over time
   const week = Math.floor(Date.now() / (7 * 86400000))
-  const ytQueries = [
-    `${program.name} affiliate program review`,
-    `${program.name} make money review ${new Date().getFullYear()}`,
-    `${program.name} honest review commission`,
-  ]
-  const ttQueries = [
-    `${program.name} affiliate`,
-    `${program.name} make money`,
-    `${program.name} review`,
-  ]
   const blogQueries = [
     `${program.name} affiliate program review`,
     `${program.name} affiliate commission review ${new Date().getFullYear()}`,
     `"${program.name}" affiliate program pros cons`,
   ]
-  const ytQuery = ytQueries[week % ytQueries.length]
-  const ttQuery = ttQueries[week % ttQueries.length]
-  const xQuery = `"${program.name}" affiliate program`
   const redditQuery = `${program.name} affiliate program`
   const blogQuery = blogQueries[week % blogQueries.length]
 
@@ -472,10 +300,11 @@ async function _fetchSocialItems(slug: string): Promise<SocialItem[]> {
   let results: PromiseSettledResult<SocialItem[]>[]
   try {
     results = await Promise.race([
+      // Reddit + blogs only (decided 2026-10-12): they carry the questions
+      // partners actually ask, which feed the FAQ/AEO work. TikTok, X and
+      // YouTube produced volume (96k TikTok rows) but no insight anyone used.
+      // The removed fetchers are in git history (before this commit).
       Promise.allSettled([
-        fetchYouTube(ytQuery),
-        fetchTikTok(ttQuery),
-        fetchX(xQuery),
         fetchReddit(redditQuery),
         fetchBlogs(blogQuery, program.url),
       ]),

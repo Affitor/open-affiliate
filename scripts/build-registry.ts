@@ -89,6 +89,8 @@ interface YamlProgram {
   created_at?: string
   updated_at?: string
   last_verified_at?: string | null
+  status?: "active" | "paused" | "discontinued"
+  status_note?: string | null
 }
 
 function validateProgram(data: Record<string, unknown>, filename: string): void {
@@ -235,6 +237,7 @@ function buildRegistry(): void {
       descriptionAvailable: p.description.length > 20,
       agentPromptAvailable: p.agents.prompt.length > 10,
       signupAvailable: Boolean(p.signup_url),
+      ...(p.status && p.status !== "active" ? { status: p.status } : {}),
     })),
   }
 

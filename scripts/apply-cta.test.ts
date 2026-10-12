@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { applyEarnLabel, ctaWordCount } from "../src/lib/apply-cta"
+import { applyEarnLabel, checkTermsLabel, ctaWordCount } from "../src/lib/apply-cta"
 import type { Program } from "../src/lib/programs"
 
 function commission(partial: Partial<Program["commission"]>): Program["commission"] {
@@ -34,4 +34,16 @@ test("unknown and long rates stay short", () => {
   )
   assert.equal(long, "Apply & earn")
   assert.ok(ctaWordCount(long) <= 4)
+})
+
+test("unverified CTA carries no number and stays within 4 words", () => {
+  assert.equal(checkTermsLabel("Perplexity"), "Check terms on Perplexity")
+  assert.equal(checkTermsLabel("Housecall Pro"), "Check program terms")
+  assert.ok(ctaWordCount(checkTermsLabel("Fathom Analytics")) <= 4)
+})
+
+test("credit rewards carry no dollar figure", () => {
+  const label = applyEarnLabel(commission({ mode: "flat", type: "one-time", value: 20, rate: "$20 in Replit credits" }))
+  assert.equal(label, "Apply & earn credits")
+  assert.ok(ctaWordCount(label) <= 4)
 })
