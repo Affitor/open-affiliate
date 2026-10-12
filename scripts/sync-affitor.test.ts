@@ -517,8 +517,8 @@ test("on a shared host only the same tenant is the same brand, never a host or a
   assert.equal(kept.signup_url, "https://affitor.com/marketplace/old-alpha")
   assert.equal(kept.commission.rate, "10%")
 
-  // The same tenant is the same brand: taken over.
-  const dir3 = dirWith({ "beta-shop.yaml": synced("beta-shop", "https://linktr.ee/Beta-Shop") })
+  // The same tenant is the same brand: taken over. Host case and one trailing slash do not matter.
+  const dir3 = dirWith({ "beta-shop.yaml": synced("beta-shop", "https://LinkTr.ee/beta-shop") })
   const shop = row("beta-shop", { name: "Beta Shop", link_webpage: "https://linktr.ee/beta-shop/" })
   const r3 = await run({ args: ["--dry-run"], programsDir: dir3, today: TODAY, fetchJson: api([shop]) })
   assert.equal(r3.entries.find((e) => e.affitor_slug === "beta-shop")?.action, "take-over")
@@ -528,6 +528,34 @@ test("on a shared host only the same tenant is the same brand, never a host or a
   const delta = row("delta", { name: "Delta", link_webpage: "https://tools.vercel.app/delta" })
   const r4 = await run({ args: ["--dry-run"], programsDir: dir4, today: TODAY, fetchJson: api([delta]) })
   assert.equal(r4.entries.find((e) => e.affitor_slug === "delta")?.action, "create")
+})
+
+test("a shared host with no tenant, or a tenant in another case, never takes over a listing", async () => {
+  // Codex's round-3 cases. old-alpha's detail still answers, so alpha is not paused either.
+  const stillThere = { "old-alpha": { success: true, data: row("old-alpha", { name: "Alpha" }) } }
+  for (const [oaUrl, affitorUrl] of [
+    ["https://linktr.ee/", "https://linktr.ee/"],
+    ["https://tools.pages.dev/Alpha/", "https://tools.pages.dev/alpha/"],
+  ]) {
+    const alpha = synced("alpha", oaUrl).replace("marketplace/alpha", "marketplace/old-alpha")
+    const dir = dirWith({ "alpha.yaml": alpha })
+    const beta = row("beta", { name: "Beta", link_webpage: affitorUrl })
+    const { entries } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([beta], { details: stillThere }) })
+    assert.equal(entries.find((e) => e.affitor_slug === "beta")?.action, "create", affitorUrl)
+    assert.equal(entries.some((e) => e.action === "take-over"), false, affitorUrl)
+    assert.equal(readFileSync(join(dir, "alpha.yaml"), "utf8"), alpha, affitorUrl)
+  }
+
+  // Not even the marketplace link takes over when neither side names a tenant.
+  const linked = synced("alpha", "https://linktr.ee/")
+  const dir = dirWith({ "alpha.yaml": linked })
+  const sameSlug = row("alpha", { name: "Alpha", link_webpage: "https://linktr.ee/" })
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([sameSlug]) })
+  const alpha = entries.find((e) => e.affitor_slug === "alpha")!
+  assert.equal(alpha.action, "conflict")
+  assert.match(alpha.reason, /no website identity to confirm the brand/)
+  assert.deepEqual(written, [])
+  assert.equal(readFileSync(join(dir, "alpha.yaml"), "utf8"), linked)
 })
 
 test("a marketplace slug that now points at another website is a conflict, not a take-over", async () => {

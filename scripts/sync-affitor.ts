@@ -230,18 +230,20 @@ function hostOf(url: unknown): string | null {
 const sharedHost = (host: string | null) => !!host && SHARED_HOSTS.some((s) => host === s || host.endsWith(`.${s}`))
 
 /**
- * A brand's website as an identity: its host without www, and on a shared
- * host also the first path segment, the tenant (linktr.ee/alpha-store).
+ * A brand's website as an identity, or null when the URL names no brand.
+ * Normally the host without www. On a shared host, the host plus the first
+ * path segment, the tenant, in its own case (linktr.ee/alpha-store); with no
+ * tenant there is no identity, since the bare host is the hosting service.
  * Hosts are compared exactly, not by registrable domain: without a public
  * suffix list a guessed one would make brand-a.herokuapp.com and
- * brand-b.herokuapp.com the same site. An exact host can only err toward a
- * conflict, which writes nothing.
+ * brand-b.herokuapp.com the same site. Every rule here can only err toward a
+ * conflict or a create, never toward a take-over of another brand.
  */
 function siteOf(url: unknown): string | null {
   const host = hostOf(url)
   if (!host || !sharedHost(host)) return host
-  const tenant = new URL(String(url).trim()).pathname.split("/")[1] ?? ""
-  return `${host}/${tenant.toLowerCase()}`
+  const tenant = new URL(String(url).trim()).pathname.split("/")[1]
+  return tenant ? `${host}/${tenant}` : null
 }
 
 /** The Affitor slug a signup_url points at, when it is a marketplace page. */
@@ -621,6 +623,7 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
   for (const p of list) {
     const name = brandName(p.name)
     const slug = slugify(name)
+    const host = hostOf(p.link_webpage)
     const site = siteOf(p.link_webpage)
     const at = (action: Action, reason: string, l?: Listing): Planned => ({
       entry: { action, affitor_slug: p.slug, oa_slug: l?.slug ?? slug, file: l ? `programs/${l.file}` : null, reason },
@@ -633,7 +636,7 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
     const linked = listings.find((l) => l.linked === p.slug)
     const bySlug = listings.find((l) => l.slug === slug)
     const bySite = site ? listings.find((l) => l.site === site) : undefined
-    const match = linked ?? (bySlug?.site === site ? bySlug : undefined) ?? bySite
+    const match = linked ?? (site && bySlug?.site === site ? bySlug : undefined) ?? bySite
     if (match) matched.add(match.file)
 
     const terms = affitorTerms(p)
@@ -650,8 +653,13 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
     if (match) {
       const other = match.linked && match.linked !== p.slug && listed.has(match.linked) ? match.linked : null
       const prior = claimed.get(match.file)
-      if (match.site !== site) {
-        planned = at("conflict", `marketplace slug now points at a different website: OA ${match.site}, Affitor ${site}`, match)
+      // A take-over needs both identities, and equal: never null on either side.
+      if (!site || match.site !== site) {
+        const why =
+          site && match.site
+            ? `marketplace slug now points at a different website: OA ${match.site}, Affitor ${site}`
+            : `no website identity to confirm the brand: OA ${match.site ?? "none"}, Affitor ${site ?? "none"}`
+        planned = at("conflict", why, match)
       } else if (other) planned = at("conflict", `already listed from Affitor program ${other}`, match)
       else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
       else if (!pointsAtAffitor(match)) {
@@ -665,13 +673,14 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
       }
     } else if (bySlug) {
       planned = at("slug-collision", `OA's ${bySlug.slug} is ${bySlug.site}, Affitor's ${p.slug} is ${site}: a different brand`, bySlug)
-    } else if (!site || !slug) {
-      planned = at("skip", site ? "no usable name for a slug" : "no website on Affitor")
-    } else if (creating.has(slug) || creating.has(site)) {
+    } else if (!host || !slug) {
+      planned = at("skip", host ? "no usable name for a slug" : "no website on Affitor")
+    } else if (creating.has(slug) || (site && creating.has(site))) {
       const first = creating.get(slug)
-      planned = at("conflict", `same ${first ? "slug" : "website"} as Affitor program ${first ?? creating.get(site)} in this run`)
+      planned = at("conflict", `same ${first ? "slug" : "website"} as Affitor program ${first ?? creating.get(site ?? "")} in this run`)
     } else {
-      creating.set(slug, p.slug).set(site, p.slug)
+      creating.set(slug, p.slug)
+      if (site) creating.set(site, p.slug)
       planned = at("create", "brand not on OA")
       planned.entry.file = `programs/${slug}.yaml`
     }
