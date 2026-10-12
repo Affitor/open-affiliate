@@ -366,9 +366,12 @@ function jsonLdNodes(html: string): Record<string, unknown>[] {
  * Each surface must list the builder's rows, the same programs in the same
  * order. Checking the builder alone let an artifact with no rows pass: a
  * markdown file holding only its H1, or an ItemList with zero items.
+ *
+ * Element by element, never by joining: one item whose URL is all fifty
+ * expected URLs joined by spaces equals the joined list.
  */
 function sameRows(surface: string, got: string[], want: string[]): void {
-  if (got.join(" ") !== want.join(" ")) {
+  if (got.length !== want.length || got.some((value, i) => value !== want[i])) {
     const first = got.findIndex((slug, i) => slug !== want[i]);
     fail(
       `${surface} lists ${got.length} programs and the builder ${want.length}; ` +
