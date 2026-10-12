@@ -6,7 +6,7 @@ import { join } from "node:path";
 import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
-import { BEST_LISTS, MAX_ROWS, buildBestList } from "../src/lib/best-lists";
+import { BEST_LISTS, MAX_ROWS, buildBestList, listScore } from "../src/lib/best-lists";
 import {
   categories,
   categoryToSlug,
@@ -338,7 +338,9 @@ if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H
  * a destination came from contributor text: an inline link, a reference link,
  * or a link definition. A bracket is escaped when an odd number of backslashes
  * precedes it. `<` (raw HTML, autolinks) and `&#` (entity-encoded URLs) never
- * survive the escaper either. This guards the generator's output; it is not a
+ * survive the escaper either, and neither does a carriage return: the generator
+ * writes LF only, and a contributor CR would start a new line (a heading, a
+ * list item) in CommonMark. This guards the generator's output; it is not a
  * Markdown parser.
  */
 function foreignMarkup(md: string): string | null {
@@ -349,8 +351,30 @@ function foreignMarkup(md: string): string | null {
       return md.slice(Math.max(0, i - 60), i + 40);
     }
   }
-  const raw = /<|&#/.exec(md);
-  return raw ? md.slice(Math.max(0, raw.index - 60), raw.index + 40) : null;
+  const raw = /<|&#|\r/.exec(md);
+  return raw ? JSON.stringify(md.slice(Math.max(0, raw.index - 60), raw.index + 40)) : null;
+}
+
+/** JSON-LD nodes of a prerendered page, with any @graph flattened. */
+function jsonLdNodes(html: string): Record<string, unknown>[] {
+  return [...html.matchAll(/<script type="application\/ld\+json"[^>]*>(.*?)<\/script>/g)]
+    .map((match) => JSON.parse(match[1]) as Record<string, unknown> & { "@graph"?: Record<string, unknown>[] })
+    .flatMap((block) => block["@graph"] ?? [block]);
+}
+
+/**
+ * Each surface must list the builder's rows, the same programs in the same
+ * order. Checking the builder alone let an artifact with no rows pass: a
+ * markdown file holding only its H1, or an ItemList with zero items.
+ */
+function sameRows(surface: string, got: string[], want: string[]): void {
+  if (got.join(" ") !== want.join(" ")) {
+    const first = got.findIndex((slug, i) => slug !== want[i]);
+    fail(
+      `${surface} lists ${got.length} programs and the builder ${want.length}; ` +
+        `first difference at row ${(first === -1 ? Math.min(got.length, want.length) : first) + 1}`
+    );
+  }
 }
 
 for (const list of BEST_LISTS) {
@@ -376,6 +400,55 @@ for (const list of BEST_LISTS) {
   if (rows.some((p) => p.status === "discontinued" || p.status === "paused")) {
     fail(`best/${list.slug} lists a program that is not live`);
   }
+  const want = rows.map((p) => p.slug);
+
+  // Markdown: numbered rows, numbered from 1, each linking its program twin.
+  const mdRows = [
+    ...md.matchAll(/^(\d+)\. \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
+  ];
+  if (mdRows.some((m, i) => Number(m[1]) !== i + 1)) fail(`best/${list.slug}.md numbers its rows out of order`);
+  sameRows(`best/${list.slug}.md`, mdRows.map((m) => m[2]), want);
+
+  // Prerendered page: the table's program links, and the JSON-LD ItemList.
+  const htmlFile = join("best", `${list.slug}.html`);
+  if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
+  const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  const tbodyStart = html.indexOf("<tbody>");
+  const tbodyEnd = html.indexOf("</tbody>", tbodyStart);
+  if (tbodyStart === -1 || tbodyEnd === -1) fail(`${htmlFile} has no table body`);
+  const tableRows = [...html.slice(tbodyStart, tbodyEnd).matchAll(/href="\/programs\/([a-z0-9-]+)"/g)];
+  sameRows(`${htmlFile} table`, tableRows.map((m) => m[1]), want);
+  const itemList = jsonLdNodes(html).find((node) => node["@type"] === "ItemList") as
+    | { numberOfItems?: number; itemListElement?: { position?: number; url?: string }[] }
+    | undefined;
+  const items = itemList?.itemListElement ?? [];
+  if (itemList?.numberOfItems !== items.length || items.some((item, i) => item.position !== i + 1)) {
+    fail(`${htmlFile} ItemList numberOfItems or positions disagree with its items`);
+  }
+  sameRows(
+    `${htmlFile} ItemList`,
+    items.map((item) => (item.url ?? "").replace(`${BASE_URL}/programs/`, "")),
+    want
+  );
+}
+
+/**
+ * listScore reads tiered and hybrid rate text, and the registry does not hold
+ * every shape it must read, so the shapes are pinned here.
+ */
+for (const [mode, value, rate, want] of [
+  ["hybrid", 20, "$10-100 + 20%", 55], // money range, upper bound without its own "$"
+  ["hybrid", 20, "$10-$100 + 20%", 55],
+  ["hybrid", 20, "$10 to 100 + 20%", 55],
+  ["tiered", 75, "$50-75", 52.5], // money-only text: the typed 75 is dollars, not percent
+  ["flat", 200, "$200", 65], // so it ranks below a flat $200
+  ["hybrid", 20, "$75 or 20%", 52.5],
+  ["hybrid", 25, "100% first payment + 25% recurring", 100],
+  ["tiered", 50, "20-50%", 50],
+  ["percentage", 30, "50% of the first payment, 30% of every renewal", 30], // shows 30%, ranks at 30
+] as const) {
+  const got = listScore({ type: "one-time", mode, value, rate, currency: "USD" });
+  if (Math.abs(got - want) > 1e-9) fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
 }
 
 const robotsText = JSON.stringify(robots());
@@ -421,14 +494,7 @@ for (const [file, expectedType] of [
   if (html.includes("AggregateRating")) {
     fail(`${file} contains unsupported AggregateRating markup`);
   }
-  const jsonLdBlocks = [
-    ...html.matchAll(
-      /<script type="application\/ld\+json"[^>]*>(.*?)<\/script>/g
-    ),
-  ]
-    .map((match) => JSON.parse(match[1]) as { "@type"?: string; "@graph"?: { "@type"?: string }[] })
-    .flatMap((block) => block["@graph"] ?? [block]);
-  if (!jsonLdBlocks.some((block) => block["@type"] === expectedType)) {
+  if (!jsonLdNodes(html).some((block) => block["@type"] === expectedType)) {
     fail(`${file} has no ${expectedType} JSON-LD block`);
   }
 }

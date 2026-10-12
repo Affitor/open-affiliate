@@ -812,11 +812,12 @@ function rankingsMd(): string {
 
 /**
  * Contributor text inside one line of a list page: rows, the intro blockquote
- * and FAQ answers. A newline is collapsed first, because a line break inside a
- * name would end the blockquote or start a heading on the next line.
+ * and FAQ answers. Line breaks are collapsed first, because one inside a name
+ * would end the blockquote or start a heading on the next line. CommonMark ends
+ * a line at CR as well as LF, and YAML's "\r" escape delivers a bare CR.
  */
 function bestInline(text: string): string {
-  return mdEscape(text.replace(/\s*\n\s*/g, " "))
+  return mdEscape(text.replace(/\s*[\r\n]+\s*/g, " "))
 }
 
 /** Same rows, intro and FAQ as /best/<slug>, from the same builder. */

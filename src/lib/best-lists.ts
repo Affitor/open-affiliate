@@ -42,7 +42,7 @@ export const BEST_LISTS: BestList[] = [
       "Affiliate programs that pay a top rate of 30% or more, or a flat $30 or more, ranked by commission. Verified terms first, with cookie and duration.",
     summary: "pay a top rate of 30% or more, or a flat $30 or more",
     criteria: "Programs that pay 30% or more, or a flat $30 or more, on at least part of the deal.",
-    qualifies: (p) => listScore(p) >= 30,
+    qualifies: (p) => listScore(p.commission) >= 30,
   },
   {
     slug: "affiliate-programs-for-beginners",
@@ -77,17 +77,24 @@ export function getBestList(slug: string): BestList | undefined {
  * 20%" has a typed value of 20 but pays $75 on one branch, and "100% first
  * payment + 25% recurring" has 25 but pays 100% once. Percentage and flat deals
  * display their typed value, so ranking them by it keeps "30%" below "50%".
+ *
+ * A tiered or hybrid typed value carries no unit, so the text decides it: money
+ * when the text has "$" and no "%" ("$50-75" is $75, not 75%). A money range
+ * counts its upper bound whether or not it repeats the "$" ("$10-100",
+ * "$10-$100", "$10 to 100"). verify-machine-surfaces pins these shapes.
  */
-function listScore(p: Program): number {
-  const c = p.commission
-  const typed = rankScore(c)
-  if (c.mode !== "tiered" && c.mode !== "hybrid") return typed
+export function listScore(c: Program["commission"]): number {
+  if (c.mode !== "tiered" && c.mode !== "hybrid") return rankScore(c)
   const raw = String(c.rate).replace(/,/g, "")
+  const moneyOnly = raw.includes("$") && !raw.includes("%")
   const parts = [
+    rankScore(moneyOnly ? { ...c, mode: "flat" } : c),
     ...[...raw.matchAll(/([\d.]+)\s*%/g)].map((m) => rankScore(`${m[1]}%`)),
-    ...[...raw.matchAll(/\$\s*([\d.]+)/g)].map((m) => rankScore(`$${m[1]}`)),
+    ...[...raw.matchAll(/\$\s*([\d.]+)(?:\s*(?:[-–]|to)\s*\$?\s*([\d.]+))?/g)].flatMap((m) =>
+      [m[1], m[2]].filter(Boolean).map((n) => rankScore(`$${n}`))
+    ),
   ]
-  return Math.max(typed, ...parts)
+  return Math.max(...parts)
 }
 
 function isLifetime(p: Program): boolean {
@@ -142,7 +149,7 @@ export function buildBestList(list: BestList): BestListData {
     .sort(
       (a, b) =>
         Number(b.verified) - Number(a.verified) ||
-        listScore(b) - listScore(a) ||
+        listScore(b.commission) - listScore(a.commission) ||
         Number(isLifetime(b)) - Number(isLifetime(a)) ||
         a.name.localeCompare(b.name)
     )
