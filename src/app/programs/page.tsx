@@ -31,6 +31,7 @@ import {
 } from "@/lib/client-programs";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
+import { cookieWindowDisplay } from "@/lib/program-fields";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
 
@@ -105,7 +106,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {cookieWindowDisplay(program.cookieDays, "d cookie")}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -155,7 +156,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d
+          {cookieWindowDisplay(program.cookieDays, "d")}
         </Badge>
         <span className="hidden lg:inline text-[11px] text-muted-foreground">
           {program.category}

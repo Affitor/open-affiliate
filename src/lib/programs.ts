@@ -1,4 +1,5 @@
 import registryData from "./registry.json"
+import { cookieScore as scoreCookie } from "./program-fields"
 
 /**
  * Fallback network for programs whose YAML omits `network`.
@@ -35,11 +36,11 @@ export interface Program {
     duration?: string | null
     conditions?: string | null
   }
-  cookieDays: number
+  cookieDays?: number | null
   payout: {
-    minimum: number
+    minimum?: number | null
     currency?: string
-    frequency: string
+    frequency?: string | null
     methods?: string[]
   }
   description: string
@@ -286,7 +287,7 @@ export function affiliateScore(p: Program): number {
   }
 
   // Cookie duration (max 15)
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 15
+  const cookieScore = scoreCookie(p.cookieDays)
 
   // Type + Duration (max 25)
   let typeScore: number

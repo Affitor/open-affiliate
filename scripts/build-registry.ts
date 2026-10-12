@@ -58,13 +58,13 @@ interface YamlProgram {
     duration?: string | null
     conditions?: string | null
   }
-  cookie_days: number
+  cookie_days?: number | null
   attribution?: string
   tracking_method?: string
-  payout: {
-    minimum: number
+  payout?: {
+    minimum?: number | null
     currency: string
-    frequency: string
+    frequency?: string | null
     methods?: string[]
   }
   signup_url?: string

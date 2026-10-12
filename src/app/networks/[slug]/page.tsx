@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
+import { averagePublishedCookie, cookieWindowDisplay, minimumPayoutDisplay } from "@/lib/program-fields";
 import {
   programs,
   networkToSlug,
@@ -72,7 +73,7 @@ export default async function NetworkPage({
   const rates = priced.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const avgCookie = netPrograms.length > 0 ? netPrograms.reduce((s, p) => s + p.cookieDays, 0) / netPrograms.length : 0;
+  const avgCookie = averagePublishedCookie(netPrograms.map((p) => p.cookieDays));
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
   const verifiedCount = netPrograms.filter((p) => p.verified).length;
   const kind = networkKind(network);
@@ -163,7 +164,7 @@ export default async function NetworkPage({
             <Clock className="h-3 w-3" />
             <span className="text-[10px] uppercase tracking-wide">Avg Cookie</span>
           </div>
-          <p className="text-2xl font-bold">{avgCookie.toFixed(0)}d</p>
+          <p className="text-2xl font-bold">{cookieWindowDisplay(avgCookie === undefined ? undefined : Math.round(avgCookie), "d")}</p>
         </div>
       </div>
 
@@ -209,10 +210,10 @@ export default async function NetworkPage({
                     <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    <span className="text-xs text-muted-foreground">{program.cookieDays}d</span>
+                    <span className="text-xs text-muted-foreground">{cookieWindowDisplay(program.cookieDays, "d")}</span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
-                    <span className="text-xs text-muted-foreground">${program.payout.minimum}</span>
+                    <span className="text-xs text-muted-foreground">{minimumPayoutDisplay(program.payout.minimum)}</span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">
                     <span className="text-xs text-muted-foreground">{program.category}</span>

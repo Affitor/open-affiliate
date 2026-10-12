@@ -1,4 +1,5 @@
 import registryData from "./client-registry.json"
+import { cookieScore as scoreCookie } from "./program-fields"
 
 export const IN_HOUSE = "in-house"
 
@@ -15,7 +16,7 @@ export interface ClientProgram {
     currency: string
     duration?: string | null
   }
-  cookieDays: number
+  cookieDays?: number | null
   shortDescription: string
   verified: boolean
   network?: string | null
@@ -139,7 +140,7 @@ export function affiliateScore(program: ClientProgram): number {
             : 8
       : Math.min(raw / 50, 1) * 40
 
-  const cookieScore = Math.min(program.cookieDays / 90, 1) * 15
+  const cookieScore = scoreCookie(program.cookieDays)
   let typeScore = 5
   if (program.commission.type === "recurring") {
     const duration = program.commission.duration?.toLowerCase().trim() ?? ""
