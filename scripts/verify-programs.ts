@@ -374,6 +374,13 @@ async function main() {
       continue;
     }
 
+    // A discontinued or paused program is listed precisely because its page is
+    // gone or says no; a dead URL there is the recorded state, not a failure.
+    if (p.status === "discontinued" || p.status === "paused") {
+      console.log(`⏭️  skipped (status: ${p.status})`);
+      continue;
+    }
+
     const result = await verifyProgram(p);
     results.push(result);
 

@@ -37,9 +37,9 @@ export interface Program {
   }
   cookieDays?: number
   payout: {
-    minimum: number
+    minimum?: number
     currency?: string
-    frequency: string
+    frequency?: string
     methods?: string[]
   }
   description: string
@@ -142,6 +142,12 @@ function mapYamlToProgram(yaml: any): Program {
 
 export const programs: Program[] = (registryData.programs as unknown[]).map(mapYamlToProgram)
 
+/** Discontinued and paused programs keep their page (reachable by slug) but are never listed or ranked as live. */
+export function isLive(p: { status?: string | null }): boolean {
+  return p.status !== "discontinued" && p.status !== "paused"
+}
+export const livePrograms: Program[] = programs.filter(isLive)
+
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): Program | undefined {
@@ -218,7 +224,8 @@ export function commissionDisplay(c: Program["commission"]): string {
     case "percentage":
       return c.value !== null ? `${c.value}%` : "Not published"
     case "flat":
-      return c.value !== null ? `$${c.value.toLocaleString()}` : "Not published"
+      if (c.value === null) return "Not published"
+      return isCreditReward(c) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
     case "tiered":
     case "hybrid":
       // A band or a two-part deal — the raw string carries nuance a single
@@ -228,6 +235,11 @@ export function commissionDisplay(c: Program["commission"]): string {
     default:
       return "Not published"
   }
+}
+
+/** Reward paid as product credit, not cash (e.g. "$20 in Replit credits"). */
+export function isCreditReward(c: Program["commission"]): boolean {
+  return /credit/i.test(String(c.rate))
 }
 
 /** True when there is no figure to compare on. */
@@ -326,7 +338,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
     ? { query: queryOrOptions, category }
     : queryOrOptions
 
-  let results = programs
+  let results = livePrograms
 
   if (opts.category) {
     results = results.filter((p) => p.category === opts.category)
@@ -553,7 +565,7 @@ function rankScore(rate: string | number): number {
 
 export function getNetworkStats(): NetworkStats[] {
   const networkMap = new Map<string, Program[]>()
-  for (const p of programs) {
+  for (const p of livePrograms) {
     const net = p.network ?? IN_HOUSE
     if (!networkMap.has(net)) networkMap.set(net, [])
     networkMap.get(net)!.push(p)
@@ -598,7 +610,7 @@ export interface CategoryStats {
 
 export function getCategoryStats(): CategoryStats[] {
   const catMap = new Map<string, Program[]>()
-  for (const p of programs) {
+  for (const p of livePrograms) {
     if (!catMap.has(p.category)) catMap.set(p.category, [])
     catMap.get(p.category)!.push(p)
   }

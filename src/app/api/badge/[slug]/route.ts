@@ -14,6 +14,7 @@ type ProgramYaml = ScoreInput & {
   url?: string
   logo_url?: string
   brand_color?: string
+  status?: string
 }
 
 type Commission = NonNullable<ScoreInput["commission"]>
@@ -59,6 +60,9 @@ export async function GET(
 
   const program = await loadProgram(slugClean)
   if (!program) return svgError("program not found", 404)
+  // No live score for a program that does not accept affiliates.
+  if (program.status === "discontinued") return svgError("program discontinued", 200)
+  if (program.status === "paused") return svgError("program status unclear", 200)
 
   const score = computeScoreV1({
     commission: program.commission ?? null,

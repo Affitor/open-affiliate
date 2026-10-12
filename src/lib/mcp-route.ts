@@ -1,6 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { programs, categories, getProgram } from "@/lib/programs";
+import { livePrograms, categories, getProgram } from "@/lib/programs";
 
 /**
  * The hosted MCP server, as route handlers.
@@ -146,7 +146,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       },
     },
     async (params) => {
-      let results = programs;
+      // Discontinued and paused programs stay reachable through get_program, which carries their status.
+      let results = livePrograms;
 
       if (params.category) {
         results = results.filter((p) => p.category === params.category);
@@ -253,7 +254,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
     },
     async () => {
       const counts: Record<string, number> = {};
-      for (const p of programs) {
+      for (const p of livePrograms) {
         counts[p.category] = (counts[p.category] ?? 0) + 1;
       }
       const result = categories.map((name) => ({

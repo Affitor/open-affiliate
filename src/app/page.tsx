@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
+import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 function RankingsPreview() {
-  const top5 = [...programs]
+  const top5 = [...livePrograms]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 5);
 
@@ -195,7 +195,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
 }
 
 export default function Home() {
-  const featured = programs.slice(0, 6);
+  const featured = livePrograms.slice(0, 6);
 
   return (
     <div>

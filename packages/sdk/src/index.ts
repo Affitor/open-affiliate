@@ -24,9 +24,9 @@ export interface Commission {
 }
 
 export interface Payout {
-  minimum: number;
+  minimum?: number;
   currency?: string;
-  frequency: string;
+  frequency?: string;
   methods?: string[];
 }
 
@@ -36,7 +36,8 @@ export interface Program {
   url: string;
   category: string;
   commission: Commission;
-  cookieDays: number;
+  /** Omitted when the program does not publish a cookie window. */
+  cookieDays?: number;
   payout: Payout;
   description: string;
   shortDescription: string;
@@ -54,6 +55,9 @@ export interface Program {
   network?: string | null;
   submittedBy: string;
   createdAt: string;
+  /** "paused" or "discontinued": returned by slug, left out of search results. */
+  status?: "active" | "paused" | "discontinued";
+  statusNote?: string | null;
 }
 
 export interface Category {

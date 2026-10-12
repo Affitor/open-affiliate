@@ -14,19 +14,9 @@ commission:
   currency: USD
   duration: null
   conditions: null
-cookie_days: 60
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
 signup_url: null
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false

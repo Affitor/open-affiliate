@@ -140,11 +140,17 @@ export default async function ProgramPage({
   const unconfirmed = unverified ? " (unconfirmed)" : "";
   const cookieText =
     program.cookieDays == null ? "Cookie not published" : program.cookieDays === 0 ? "Code-based, no cookie" : `${program.cookieDays}d cookie`;
-  const trustLine = program.verified
-    ? `Terms checked ${program.lastVerifiedAt ?? ""}${network && !discontinued ? ` · runs on ${network}` : ""}`
-    : paused
-      ? `Listed ${program.createdAt}${program.statusNote ? ` · ${program.statusNote}` : ""}`
+  const trustLine = paused
+    ? `${program.createdAt ? `Listed ${program.createdAt} · ` : ""}Last known terms, not confirmed`
+    : program.verified
+      ? `Terms checked${program.lastVerifiedAt ? ` ${program.lastVerifiedAt}` : ""}${network && !discontinued ? ` · runs on ${network}` : ""}`
       : `Community-submitted, not verified.${network && program.network !== IN_HOUSE ? ` This program may run on ${network} without a public page;` : ""} ${network && program.network !== IN_HOUSE ? "check" : "Check"} the brand's terms before promoting.`;
+
+  // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
+  const statusTag = discontinued ? "Discontinued" : paused ? "Status unclear" : unverified ? "Not verified" : null;
+  const pausedNote = program.statusNote
+    ? `${program.statusNote.replace(/\.?$/, ".")}`
+    : "The signup page is not working right now.";
 
   // Affiliate Score
   const score = affiliateScore(program);
@@ -227,13 +233,21 @@ export default async function ProgramPage({
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">
               {program.name} Affiliate Program
             </h1>
-            {program.verified && (
+            {program.verified && !statusTag && (
               <Badge
                 variant="outline"
                 className="text-xs border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
               >
                 <Shield className="h-3 w-3 mr-1" />
                 Verified
+              </Badge>
+            )}
+            {statusTag && (
+              <Badge
+                variant="outline"
+                className={`text-xs shrink-0 ${unverified ? "text-muted-foreground" : "border-amber-500/40 text-amber-700 dark:text-amber-400"}`}
+              >
+                {statusTag}
               </Badge>
             )}
           </div>
@@ -262,7 +276,7 @@ export default async function ProgramPage({
 
       {/* Stat badges row */}
       <div className="flex flex-wrap items-center gap-2 mb-8">
-{!discontinued && (
+        {!discontinued && (
         <div className="inline-flex items-center gap-1.5 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-600 dark:text-emerald-400">
           Score: {score}
           <span className={`text-[10px] font-normal ${scoreDiff >= 0 ? "text-emerald-600 dark:text-emerald-400" : "text-red-500"}`}>
@@ -270,7 +284,7 @@ export default async function ProgramPage({
           </span>
         </div>
         )}
-{!discontinued && (<>
+        {!discontinued && (<>
         <StatBadge
           icon={<DollarSign className="h-3 w-3" />}
           label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}${unconfirmed}`}
@@ -307,8 +321,11 @@ export default async function ProgramPage({
           {paused && (
             <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-5">
               <p className="text-sm">
-                The signup page is not working right now. The program may have closed or moved. Last known terms are shown for reference.
+                {pausedNote} The program may have closed or moved. Last known terms are shown for reference.
               </p>
+              <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
+                See alternatives
+              </a>
             </div>
           )}
           {discontinued && (
@@ -317,6 +334,9 @@ export default async function ProgramPage({
               <p className="text-sm text-muted-foreground">
                 {program.statusNote ?? "The program no longer accepts affiliates."} The programs below still pay commission for similar products.
               </p>
+              <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
+                See alternatives
+              </a>
             </div>
           )}
 
@@ -456,7 +476,9 @@ export default async function ProgramPage({
           </div>
 
           {/* Related Programs */}
-          <RelatedPrograms current={program} title={discontinued || paused ? `${program.name} affiliate program alternatives` : undefined} />
+          <div id="alternatives" className="scroll-mt-20">
+            <RelatedPrograms current={program} title={discontinued || paused ? `${program.name} affiliate program alternatives` : undefined} />
+          </div>
 
           {/* Brand-side CTA. Button text is the approved affitor.com CTA (2026-10-02 audit): at most 4 words, no dash. */}
           <div className="rounded-xl border border-border/50 bg-card/30 p-5 flex flex-wrap items-center justify-between gap-3">

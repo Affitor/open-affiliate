@@ -1,4 +1,4 @@
-import { commissionDisplay, commissionUnknown, IN_HOUSE, type Program } from "@/lib/programs"
+import { commissionDisplay, commissionUnknown, isCreditReward, IN_HOUSE, type Program } from "@/lib/programs"
 
 const SITE = "https://openaffiliate.dev"
 
@@ -44,19 +44,36 @@ export function earningPhrase(p: Program): string | null {
   const c = p.commission
   if (commissionUnknown(c)) return null
   const amount = commissionDisplay(c)
+  // A two-part deal already says what it pays per what; "per sale" after it misreads.
+  if (c.mode === "hybrid") return c.duration ? `${amount}, for ${c.duration}` : amount
   if (c.type === "recurring") {
     return c.duration ? `${amount} recurring for ${c.duration}` : `${amount} recurring`
   }
+  if (isCreditReward(c)) return `${amount} per referral`
   return `${amount} per sale`
+}
+
+/** Title label after the figure; empty when the raw rate already says it. */
+function rateLabel(c: Program["commission"]): string {
+  if (c.mode === "hybrid") return ""
+  if (c.type === "recurring") return " Recurring"
+  if (isCreditReward(c)) return " per Referral"
+  if (c.mode === "flat") return " per Sale"
+  return c.type === "one-time" ? " One-Time" : ""
 }
 
 /** Title under 60 characters: the query, the number, the site. No dashes. */
 export function seoTitle(p: Program): string {
   if (isDiscontinued(p)) return `${p.name} Affiliate Program: Discontinued | OpenAffiliate`
   const base = `${p.name} Affiliate Program`
-  const rate = commissionUnknown(p.commission)
-    ? ""
-    : `: ${commissionDisplay(p.commission)} ${p.commission.type === "recurring" ? "Recurring" : p.commission.mode === "flat" ? "per Sale" : "One-Time"}`
+  // Unconfirmed figures stay out of the search snippet; the page shows them labelled.
+  const rate = isPaused(p)
+    ? ": Status Unclear"
+    : isUnverified(p)
+      ? ": Terms and How to Join"
+      : commissionUnknown(p.commission)
+        ? ""
+        : `: ${commissionDisplay(p.commission)}${rateLabel(p.commission)}`
   const full = `${base}${rate} | OpenAffiliate`
   return full.length <= 60 ? full : `${base}${rate}`.length <= 60 ? `${base}${rate}` : `${base} | OpenAffiliate`
 }
@@ -65,6 +82,12 @@ export function seoTitle(p: Program): string {
 export function seoDescription(p: Program): string {
   if (isDiscontinued(p)) {
     return `${p.name} no longer runs an affiliate program. Compare similar programs that still pay commission, with their terms and how to join.`
+  }
+  if (isPaused(p)) {
+    return `${p.name} affiliate program status is unclear. See the last known terms, not confirmed, and similar programs that still pay commission.`
+  }
+  if (isUnverified(p)) {
+    return `${p.name} affiliate program: community-submitted terms we have not confirmed, where to check them, and similar programs to compare.`
   }
   const parts: string[] = []
   const earn = earningPhrase(p)
@@ -134,7 +157,7 @@ export function buildFaq(p: Program): Faq[] {
       .join(" "),
   })
   if (p.restrictions?.length) {
-    faq.push({ q: `What are the rules for ${name} affiliates?`, a: p.restrictions.join(". ").replace(/\.\.$/, ".") + "." })
+    faq.push({ q: `What are the rules for ${name} affiliates?`, a: p.restrictions.map((r) => r.replace(/\.+$/, "")).join(". ") + "." })
   }
   return faq
 }

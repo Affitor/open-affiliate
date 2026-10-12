@@ -12,7 +12,8 @@ import {
   categoryToSlug,
   slugToCategory,
   parseCommissionRate,
-  commissionLabel,  commissionDisplay
+  commissionLabel,  commissionDisplay,
+  livePrograms,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -62,7 +63,7 @@ export default async function CategoryPage({
   const category = slugToCategory(slug);
   if (!category) notFound();
 
-  const catPrograms = [...programs.filter((p) => p.category === category)].sort(
+  const catPrograms = [...livePrograms.filter((p) => p.category === category)].sort(
     (a, b) =>
       parseCommissionRate(b.commission) -
       parseCommissionRate(a.commission)

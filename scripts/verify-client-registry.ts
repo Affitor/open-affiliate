@@ -5,7 +5,7 @@ import {
   categories as fullCategories,
   commissionDisplay as fullCommissionDisplay,
   commissionLabel as fullCommissionLabel,
-  programs as fullPrograms,
+  livePrograms as fullPrograms, // client lists only live programs
 } from "../src/lib/programs"
 import {
   affiliateScore as clientAffiliateScore,

@@ -10,9 +10,10 @@ interface ProgramSummary {
   shortDescription: string;
   category: string;
   commission: { type: string; rate: string };
-  cookieDays: number;
+  cookieDays?: number;
   verified: boolean;
   signupUrl?: string;
+  status?: "active" | "paused" | "discontinued";
 }
 
 interface ProgramFull extends ProgramSummary {
@@ -29,7 +30,7 @@ interface ProgramFull extends ProgramSummary {
   payoutMethods?: string[];
   network?: string;
   programAge?: string;
-  payout: { minimum: number; frequency: string };
+  payout?: { minimum?: number; frequency?: string };
 }
 
 
@@ -118,7 +119,7 @@ program
       ...programs.map((p) => [
         p.name,
         `${p.commission.rate} ${p.commission.type}`,
-        `${p.cookieDays}d`,
+        p.cookieDays != null ? `${p.cookieDays}d` : "—",
         p.category,
         p.verified ? "✓" : "",
       ]),
@@ -141,13 +142,13 @@ program
     }
 
     console.log(`
-  ${p.name}${p.verified ? " ✓" : ""}
+  ${p.name}${p.verified ? " ✓" : ""}${p.status && p.status !== "active" ? ` (${p.status})` : ""}
   ${p.shortDescription}
   ${"─".repeat(50)}
 
   Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
-  Cookie:      ${p.cookieDays} days
-  Payout:      $${p.payout.minimum} min / ${p.payout.frequency}
+  Cookie:      ${p.cookieDays != null ? `${p.cookieDays} days` : "not published"}
+  Payout:      ${[p.payout?.minimum != null ? `$${p.payout.minimum} min` : null, p.payout?.frequency].filter(Boolean).join(" / ") || "not published"}
   ${p.payoutMethods ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
   ${p.approval ? `Approval:    ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : ""}
   ${p.network ? `Network:     ${p.network}` : ""}

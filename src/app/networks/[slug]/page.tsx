@@ -17,6 +17,7 @@ import {
   networkKind,
   networkHowToJoin,
   networkName,
+  livePrograms,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -61,7 +62,7 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
-  const netPrograms = [...programs.filter((p) => (p.network ?? "in-house") === network)].sort(
+  const netPrograms = [...livePrograms.filter((p) => (p.network ?? "in-house") === network)].sort(
     (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
   );
 

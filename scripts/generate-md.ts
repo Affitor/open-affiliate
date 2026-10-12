@@ -123,6 +123,8 @@ type Program = {
   program_age?: string | null
   verified?: boolean
   last_verified_at?: string | null
+  status?: string | null
+  status_note?: string | null
   source?: string | null
   submitted_by?: string | null
   tags?: string[] | null
@@ -135,6 +137,23 @@ const registryData = registry as {
   categories: string[]
 }
 const programs = registryData.programs
+
+/**
+ * Discontinued and paused programs keep their own .md (it says so), but are
+ * never listed as live: not in verified lists, rankings or counts of verified.
+ */
+function isLive(p: { status?: string | null }): boolean {
+  return p.status !== "discontinued" && p.status !== "paused"
+}
+function listedVerified(p: Program): boolean {
+  return Boolean(p.verified) && isLive(p)
+}
+/** Suffix for list rows: what a reader must know before trusting the terms. */
+function statusMark(p: { verified?: boolean; status?: string | null }): string {
+  if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "paused") return " (status unclear)"
+  return p.verified ? "" : " (unverified, terms unconfirmed)"
+}
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
 
@@ -160,7 +179,9 @@ function rate(c: Commission): string {
     case "percentage":
       return c.value != null ? `${c.value}%` : "Not published"
     case "flat":
-      return c.value != null ? `$${c.value.toLocaleString()}` : "Not published"
+      if (c.value == null) return "Not published"
+      // Product credit, not cash: say so, as the page does.
+      return /credit/i.test(String(c.rate)) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
     case "tiered":
     case "hybrid":
       return String(c.rate)
@@ -198,6 +219,20 @@ function payoutLine(p: Program): string | null {
  */
 function statusBlock(p: Program): string {
   const when = p.last_verified_at ? String(p.last_verified_at) : "never"
+  if (p.status === "discontinued") {
+    return [
+      `Status: discontinued. ${p.name} does not run an affiliate program.`,
+      p.status_note ? `Source: ${p.status_note}` : null,
+      `Last checked: ${when}`,
+    ].filter(Boolean).join("\n")
+  }
+  if (p.status === "paused") {
+    return [
+      `Status: unclear (paused).${p.status_note ? ` ${p.status_note}` : ""}`,
+      `The terms below are the last known listing, not confirmed. Do not recommend`,
+      `this program until its page works again.`,
+    ].join("\n")
+  }
   if (p.verified) {
     return [
       `Status: verified by OpenAffiliate`,
@@ -255,7 +290,7 @@ function programMd(p: Program): string {
     `# ${mdEscape(p.name)} affiliate program`,
     p.short_description ? `> ${p.short_description}` : null,
     statusBlock(p),
-    section("Terms", facts),
+    p.status === "discontinued" ? null : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt),
     section("Use cases", bullets(p.agents?.use_cases)),
     section("Trigger keywords", p.agents?.keywords?.join(", ")),
@@ -268,7 +303,7 @@ function programMd(p: Program): string {
 // ---------- Compact row used by index pages ---------------------------------
 
 function row(p: Program): string {
-  const mark = p.verified ? "" : " (unverified)"
+  const mark = statusMark(p)
   const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
   return `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${mark}`
 }
@@ -371,8 +406,8 @@ function checkedOn(p: Program): string {
 // ---------- Category / network pages ----------------------------------------
 
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
-  const verified = list.filter(p => p.verified)
-  const sorted = [...verified, ...list.filter(p => !p.verified)]
+  const verified = list.filter(listedVerified)
+  const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
   const title = kind === "category" ? `${label} affiliate programs` : `${label} affiliate network`
 
   return joinSections([
@@ -508,7 +543,7 @@ function verifiedByScore(): Program[] {
     }),
   )
   return programs
-    .filter(p => p.verified)
+    .filter(listedVerified)
     .sort(
       (a, b) =>
         (score.get(b.slug) ?? -1) - (score.get(a.slug) ?? -1) ||
@@ -557,13 +592,13 @@ function verifiedMd(): string {
 }
 
 function llmsTxt(): string {
-  const verified = programs.filter(p => p.verified)
+  const verified = programs.filter(listedVerified)
   const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
 
   const catLines = categories
     .map(c => {
       const inCat = programs.filter(p => p.category === c)
-      const v = inCat.filter(p => p.verified).length
+      const v = inCat.filter(listedVerified).length
       return `- [${c}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
     })
     .join("\n")
@@ -667,13 +702,13 @@ function llmsFullTxt(): string {
       `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
     [
-      `${programs.filter(p => p.verified).length} programs are verified by OpenAffiliate.`,
+      `${programs.filter(listedVerified).length} programs are verified by OpenAffiliate.`,
       `The rest are community-submitted and unconfirmed — each states its own`,
       `status below.`,
     ].join("\n"),
   ])
 
-  const sorted = [...programs.filter(p => p.verified), ...programs.filter(p => !p.verified)]
+  const sorted = [...programs.filter(listedVerified), ...programs.filter(p => !listedVerified(p))]
   return header + "\n" + sorted.map(programMd).join("\n---\n\n")
 }
 
@@ -686,8 +721,8 @@ function programsIndexMd(): string {
     .map(c => {
       const inCat = programs.filter(p => p.category === c)
       if (!inCat.length) return null
-      const v = inCat.filter(p => p.verified)
-      const sorted = [...v, ...inCat.filter(p => !p.verified)]
+      const v = inCat.filter(listedVerified)
+      const sorted = [...v, ...inCat.filter(p => !listedVerified(p))]
       const shown = sorted.slice(0, 15)
       const more =
         sorted.length > shown.length
@@ -702,7 +737,7 @@ function programsIndexMd(): string {
     `# All affiliate programs`,
     [
       `> ${programs.length} programs across ${categories.length} categories.`,
-      `> ${programs.filter(p => p.verified).length} verified by OpenAffiliate; the rest are`,
+      `> ${programs.filter(listedVerified).length} verified by OpenAffiliate; the rest are`,
       `> community-submitted and unconfirmed.`,
     ].join("\n"),
     [
@@ -739,12 +774,12 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  const ranked = [...sitePrograms].sort(
+  const ranked = sitePrograms.filter(isLive).sort(
     (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
   )
   const programLines = ranked
     .map((p, i) => {
-      const mark = p.verified ? "" : " (unverified)"
+      const mark = statusMark(p)
       return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(commissionDisplay(p.commission))} ${p.commission.type}${mark}`
     })
     .join("\n")
@@ -833,7 +868,7 @@ function main(): void {
     write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))
   }
 
-  const verified = programs.filter(p => p.verified).length
+  const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)
   console.log(`  ${written} files`)
   console.log(`  ${programs.length} programs (${verified} verified, ${programs.length - verified} unverified)`)

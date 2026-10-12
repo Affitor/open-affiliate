@@ -13,7 +13,7 @@ function words(phrases: string[]): Set<string> {
 }
 
 function getRelatedPrograms(current: Program, limit = 4): Program[] {
-  const candidates = programs.filter((p) => p.slug !== current.slug)
+  const candidates = programs.filter((p) => p.slug !== current.slug && p.status !== "discontinued" && p.status !== "paused")
   const currentWords = words(current.agentKeywords ?? [])
 
   const scored = candidates.map((p) => {

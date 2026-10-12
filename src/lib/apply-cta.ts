@@ -1,4 +1,4 @@
-import { commissionDisplay, commissionUnknown, type Program } from "@/lib/programs"
+import { commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
 
 /** Whitespace-separated tokens. "&" counts, so the signed cap stays at 4. */
 export function ctaWordCount(label: string): number {
@@ -14,6 +14,8 @@ export function ctaWordCount(label: string): number {
 export function applyEarnLabel(commission: Program["commission"]): string {
   const prefix = "Apply & earn"
   if (commissionUnknown(commission)) return prefix
+  // Credits are not cash: no dollar figure in the button.
+  if (isCreditReward(commission)) return `${prefix} credits`
   const shown = commissionDisplay(commission)
   if (!shown || shown === "Not published") return prefix
   const label = `${prefix} ${shown}`

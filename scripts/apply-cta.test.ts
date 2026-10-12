@@ -41,3 +41,9 @@ test("unverified CTA carries no number and stays within 4 words", () => {
   assert.equal(checkTermsLabel("Housecall Pro"), "Check program terms")
   assert.ok(ctaWordCount(checkTermsLabel("Fathom Analytics")) <= 4)
 })
+
+test("credit rewards carry no dollar figure", () => {
+  const label = applyEarnLabel(commission({ mode: "flat", type: "one-time", value: 20, rate: "$20 in Replit credits" }))
+  assert.equal(label, "Apply & earn credits")
+  assert.ok(ctaWordCount(label) <= 4)
+})
