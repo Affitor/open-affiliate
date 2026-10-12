@@ -6,6 +6,7 @@ import { join } from "node:path";
 import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
+import { BEST_LISTS, MAX_ROWS, buildBestList } from "../src/lib/best-lists";
 import {
   categories,
   categoryToSlug,
@@ -323,6 +324,36 @@ for (const network of networks) {
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
 }
 
+/**
+ * Best-of lists: each is a config entry, so these hold every entry to what the
+ * page promises. The <title> carries the layout's " | OpenAffiliate" suffix.
+ */
+if (!llms.includes(`${BASE_URL}/best.md`)) fail("llms.txt does not link best.md");
+if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H1");
+for (const list of BEST_LISTS) {
+  const url = `${BASE_URL}/best/${list.slug}`;
+  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  if (!requireText(join("best", `${list.slug}.md`)).startsWith(`# ${list.h1}\n`)) {
+    fail(`best/${list.slug}.md must start with its H1`);
+  }
+  const title = `${list.title} | OpenAffiliate`;
+  if (title.length > 60 || /[–—]/.test(title)) {
+    fail(`best list title must be 60 characters or fewer with no en or em dash: ${title}`);
+  }
+  if (list.description.length < 120 || list.description.length > 155) {
+    fail(`best list description is ${list.description.length} characters; keep it 120 to 155: ${list.slug}`);
+  }
+  const { rows } = buildBestList(list);
+  if (rows.length === 0 || rows.length > MAX_ROWS) fail(`best/${list.slug} has ${rows.length} rows`);
+  const firstUnverified = rows.findIndex((p) => !p.verified);
+  if (firstUnverified !== -1 && rows.slice(firstUnverified).some((p) => p.verified)) {
+    fail(`best/${list.slug} lists an unverified program above a verified one`);
+  }
+  if (rows.some((p) => p.status === "discontinued" || p.status === "paused")) {
+    fail(`best/${list.slug} lists a program that is not live`);
+  }
+}
+
 const robotsText = JSON.stringify(robots());
 for (const userAgent of [
   "OAI-SearchBot",
@@ -355,7 +386,8 @@ for (const [file, expectedType] of [
   ["rankings.html", "CollectionPage"],
   [join("categories", "ai.html"), "CollectionPage"],
   ["compare.html", "WebPage"],
-] as const) {
+  ...BEST_LISTS.map((list) => [join("best", `${list.slug}.html`), "ItemList"] as const),
+]) {
   const htmlPath = join(BUILD_APP, file);
   if (!existsSync(htmlPath)) fail(`${file} was not prerendered`);
   const html = readFileSync(htmlPath, "utf8");
@@ -369,7 +401,9 @@ for (const [file, expectedType] of [
     ...html.matchAll(
       /<script type="application\/ld\+json"[^>]*>(.*?)<\/script>/g
     ),
-  ].map((match) => JSON.parse(match[1]) as { "@type"?: string });
+  ]
+    .map((match) => JSON.parse(match[1]) as { "@type"?: string; "@graph"?: { "@type"?: string }[] })
+    .flatMap((block) => block["@graph"] ?? [block]);
   if (!jsonLdBlocks.some((block) => block["@type"] === expectedType)) {
     fail(`${file} has no ${expectedType} JSON-LD block`);
   }

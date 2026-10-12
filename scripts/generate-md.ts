@@ -40,6 +40,7 @@ import {
   getCategoryStats,
   getNetworkStats,
 } from "../src/lib/programs"
+import { BEST_LISTS, SHARED_RULES, buildBestList, type BestList } from "../src/lib/best-lists"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -680,6 +681,7 @@ function llmsTxt(): string {
       [
         `- [All programs, grouped by category](${BASE}/programs.md)`,
         `- [Full dump, every program in one file](${BASE}/llms-full.txt)`,
+        `- [Best-of lists: high-paying, recurring and more](${BASE}/best.md)`,
         `- [Documentation index](${BASE}/docs.md)`,
       ].join("\n"),
     ),
@@ -806,6 +808,50 @@ function rankingsMd(): string {
   ])
 }
 
+// ---------- Best-of lists --------------------------------------------------
+
+/** Same rows, intro and FAQ as /best/<slug>, from the same builder. */
+function bestListMd(list: BestList): string {
+  const data = buildBestList(list)
+  const rows = data.rows
+    .map((p, i) => {
+      const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
+    })
+    .join("\n")
+  return joinSections([
+    `# ${list.h1}`,
+    `> ${data.intro}`,
+    [
+      `How we picked: ${list.criteria} ${SHARED_RULES}`,
+      data.checked ? `Last checked: ${data.checked}, the most recent verification among these programs.` : null,
+    ].filter(Boolean).join("\n\n"),
+    section("Programs", rows),
+    section("FAQ", data.faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),
+    section("Other lists", BEST_LISTS.filter(l => l.slug !== list.slug).map(l => `- [${l.h1}](${BASE}/best/${l.slug}.md)`).join("\n")),
+    section("Links", [
+      `HTML: ${BASE}/best/${list.slug}`,
+      `All categories: ${BASE}/categories`,
+      `Registry entry point: ${BASE}/llms.txt`,
+    ].join("\n")),
+  ])
+}
+
+/** One pointer from llms.txt reaches every list, so adding a list never grows the index. */
+function bestIndexMd(): string {
+  return joinSections([
+    `# Best-of affiliate program lists`,
+    `> Ranked lists built from the registry. Each states its criteria and puts verified programs first.`,
+    section(
+      "Lists",
+      BEST_LISTS.map(l => {
+        const data = buildBestList(l)
+        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${data.total} programs, ${data.verifiedTotal} verified. ${l.criteria}`
+      }).join("\n"),
+    ),
+  ])
+}
+
 const CHANGELOG_TAG: Record<string, string> = {
   new: "New",
   improved: "Improved",
@@ -840,7 +886,7 @@ function write(relPath: string, body: string): void {
 function main(): void {
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
-  for (const dir of ["programs", "categories", "networks"]) {
+  for (const dir of ["programs", "categories", "networks", "best"]) {
     rmSync(join(OUT, dir), { recursive: true, force: true })
   }
 
@@ -852,6 +898,11 @@ function main(): void {
   write("index.md", indexMd())
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
+  write("best.md", bestIndexMd())
+
+  for (const list of BEST_LISTS) {
+    write(`best/${list.slug}.md`, bestListMd(list))
+  }
 
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))

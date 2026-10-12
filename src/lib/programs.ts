@@ -550,11 +550,17 @@ export interface NetworkStats {
  * can compare a percentage rate against a flat-fee rate. Heuristic: treat
  * $1 ≈ 1pp up to a cap of 100 (so $500 flat ≈ a cap, preventing giant
  * referral bounties like $10,000 from dominating the "best" slot).
+ *
+ * Also orders the /best list pages, which pass the typed commission: like
+ * parseCommissionRate, the typed value and mode beat re-parsing the raw string,
+ * which reads "50% of the first payment, 30% of every renewal" as 50 while the
+ * page displays 30. Raw-string callers keep their current behavior.
  */
-function rankScore(rate: string | number): number {
+export function rankScore(rate: string | number | Program["commission"]): number {
   const n = parseCommissionRate(rate)
   if (!isFinite(n) || n <= 0) return 0
-  if (isCommissionFlat(rate)) {
+  const flat = typeof rate === "object" ? rate.mode === "flat" : isCommissionFlat(rate)
+  if (flat) {
     // $1-$49 → 5-49, $50-$500 → 50-100, $500+ → 100 cap
     if (n < 50) return n
     return Math.min(100, 50 + (n - 50) * 0.1)
