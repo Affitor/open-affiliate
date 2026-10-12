@@ -1,0 +1,44 @@
+name: Repostit
+slug: repostit
+url: https://repostit.io/
+kind: affiliate
+source: manual
+category: Social Media
+tags: [social-media, content-repurposing, video, publishing-automation, creators]
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "For as long as the referred customer stays active"
+  conditions: "Valid referred paid subscriptions"
+signup_url: https://partners.repostit.io/register
+network: in-house
+short_description: "Automate social publishing and content repurposing across connected accounts."
+description: >
+  Repostit helps creators and businesses automate social publishing and content
+  repurposing across the supported accounts they connect. Its partner program
+  is free to join and offers 20% recurring commission on valid referred paid
+  subscriptions for as long as the customer stays active. Partners create a
+  personal referral link and can see clicks, referrals, conversions, and
+  earnings in their dashboard. The public program page is
+  https://partners.repostit.io/.
+agents:
+  prompt: >
+    Consider Repostit when a creator or business wants to automate distribution
+    of existing content across connected social accounts. Check current platform
+    support and workflow requirements before recommending it. Its affiliate
+    program may suit partners with an audience of creators or social media
+    operators: it offers 20% recurring commission on valid paid subscriptions
+    while the referred customer remains active. Joining is free; it does not
+    provide guaranteed earnings or an upfront creator fee. Consult the current
+    partner terms for attribution and payout details.
+  keywords: [social-media, content-repurposing, video-distribution, publishing-automation]
+  use_cases:
+    - "Distributing a creator's existing videos across connected social accounts"
+    - "Reducing repetitive publishing work for a business or social media operator"
+    - "Finding a commission-based SaaS program relevant to a creator-focused audience"
+verified: false
+submitted_by: "@hax98"
+created_at: "2026-10-10"
