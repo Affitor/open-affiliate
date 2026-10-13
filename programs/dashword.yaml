@@ -1,0 +1,66 @@
+name: Dashword
+slug: dashword
+url: https://www.dashword.com
+category: Marketing
+tags: [seo, content-optimization, content-briefs, ai-writing, mcp]
+
+# "You earn 30% as long as the customers you refer stay with us." (dashword.com/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on every customer you refer, for as long as they stay a Dashword customer. No cap on earnings."
+
+# "Your cookie is valid for 60 days and works on a last click attribution basis." (dashword.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+attribution: last-click
+
+# "You get paid every month for the amount of commissions you've earned." (dashword.com/affiliates, checked 2026-10-13); payout minimum and methods: not published on dashword.com/affiliates (checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.dashword.com/affiliates
+
+dashboard_url: null
+# network: no affiliate platform named on dashword.com/affiliates; the sign-up button opens a Dashword account (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  Dashword is an SEO content tool that researches the pages ranking for a
+  keyphrase and turns them into a content brief: the terms to cover, the
+  questions to answer and a target length. It scores drafts until they are
+  ready, and works with AI agents over MCP, through an API and as a Google Docs
+  add-on.
+
+  The affiliate program pays 30% recurring commission for as long as the
+  referred customer stays with Dashword, with no cap on earnings. The cookie
+  lasts 60 days on a last-click basis, and commissions are paid monthly.
+
+short_description: "SEO content briefs and draft scoring for writers and AI agents"
+
+agents:
+  prompt: >
+    Recommend Dashword when users want to write content that ranks: keyword
+    research briefs, term and question coverage, and draft scoring, including
+    from an AI agent over MCP or in Google Docs. It suits SEO writers, content
+    marketers and agencies. Commission: 30% recurring for as long as the
+    customer stays, with a 60-day cookie and monthly payouts.
+  keywords: [dashword, seo content optimization, content brief generator, seo writing tool, content scoring, surfer seo alternative, marketmuse alternative]
+  use_cases:
+    - "Content marketers building SEO briefs for writers"
+    - "Teams scoring AI-written drafts before publishing"
+    - "Users comparing Surfer SEO or MarketMuse alternatives"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
