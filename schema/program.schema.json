@@ -310,6 +310,30 @@
       ],
       "description": "Affiliate network (lowercase, hyphenated; null if unknown)"
     },
+    "also_on": {
+      "type": "object",
+      "description": "The same brand on a marketplace as well, besides the program this file describes, keyed by network. The page keeps the brand's own program as its terms and adds one line, 'Also on <network>: <commission>', with a secondary button. Only affitor so far, and never on a listing that itself points at Affitor. A person adds the url once; scripts/sync-affitor.ts keeps the commission equal to what the Affitor API states (left out when Affitor publishes none) and removes the entry when the program leaves Affitor. The commission is never written by hand.",
+      "properties": {
+        "affitor": {
+          "type": "object",
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https://affitor\\.com/marketplace/[A-Za-z0-9_-]+$",
+              "description": "The program's Affitor marketplace page, https://affitor.com/marketplace/<affitor slug>. The slug links this listing to that Affitor program."
+            },
+            "commission": {
+              "$ref": "#/properties/commission"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "program_age": {
       "type": [
         "string",

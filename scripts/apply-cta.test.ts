@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { applyButton, applyEarnLabel, checkTermsLabel, ctaWordCount } from "../src/lib/apply-cta"
+import { alsoOnAffitor, applyButton, applyEarnLabel, checkTermsLabel, ctaWordCount } from "../src/lib/apply-cta"
 import type { Program } from "../src/lib/programs"
 
 function commission(partial: Partial<Program["commission"]>): Program["commission"] {
@@ -103,4 +103,29 @@ test("other networks keep their signup link and label untouched", () => {
   const noSignup = applyButton(program({ network: "in-house", signupUrl: undefined, verified: false }))
   assert.equal(noSignup.label, "Check terms on CiteGraph")
   assert.equal(noSignup.href, "https://www.citegraph.app")
+})
+
+test("a brand also on Affitor keeps its own button and gains one Affitor line and a secondary button", () => {
+  const url = "https://affitor.com/marketplace/landerlab"
+  const own = program({
+    slug: "landerlab",
+    name: "LanderLab",
+    network: "in-house",
+    signupUrl: "https://landerlab.io/affiliates",
+    commission: commission({ rate: "30%", value: 30, duration: "lifetime" }),
+    alsoOn: { affitor: { url, commission: commission({ duration: "12 months" }) } },
+  })
+  assert.deepEqual(alsoOnAffitor(own), {
+    line: "Also on Affitor: 20% recurring/12mo",
+    label: "Apply on Affitor",
+    href: `${url}?utm_source=openaffiliate&utm_medium=apply&utm_campaign=landerlab`,
+  })
+  assert.ok(ctaWordCount(alsoOnAffitor(own)!.label) <= 4)
+  assert.deepEqual(applyButton(own), { label: "Apply & earn 30%", href: "https://landerlab.io/affiliates" })
+  // No figure when Affitor publishes none, or none that reads as a number.
+  assert.equal(alsoOnAffitor({ ...own, alsoOn: { affitor: { url } } })!.line, "Also on Affitor")
+  const unknown = commission({ mode: "unknown", value: null, rate: "varies" })
+  assert.equal(alsoOnAffitor({ ...own, alsoOn: { affitor: { url, commission: unknown } } })!.line, "Also on Affitor")
+  assert.equal(alsoOnAffitor(program({})), null)
+  assert.equal(alsoOnAffitor(program({ alsoOn: null })), null)
 })

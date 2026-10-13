@@ -2,7 +2,9 @@ name: Sync Affitor
 
 # Once a day, list the Affitor marketplace programs in programs/
 # (scripts/sync-affitor.ts) and open up to two pull requests:
-#   sync/affitor-YYYY-MM-DD      updates and pauses of existing listings. The
+#   sync/affitor-YYYY-MM-DD      updates and pauses of existing listings, and
+#                                the also_on.affitor commission on brands' own
+#                                listings (refreshed, or removed with the program). The
 #                                affitor-sync lane of auto-merge.yml re-reads
 #                                every term from the Affitor API and merges it
 #                                once CI is green. Superseded by the next one.
@@ -130,10 +132,10 @@ jobs:
             git switch -q -c "$branch"
             git add -u -- programs
             {
-              echo "Daily sync from the Affitor marketplace API by \`scripts/sync-affitor.ts\`: updates and pauses of existing listings."
+              echo "Daily sync from the Affitor marketplace API by \`scripts/sync-affitor.ts\`: updates and pauses of existing listings, and the Affitor line (also_on) on brands' own listings."
               echo
               echo '```'
-              grep -E '^(take-over|pause) ' "$log" | grep -v 'already up to date' || true
+              grep -E '^(take-over|also-on|pause|unlink) ' "$log" | grep -v 'already up to date' || true
               echo '```'
               echo
               echo "The \`$label\` lane of the auto-merge policy re-reads every term from the Affitor API and merges once CI is green. Anything it cannot confirm stays open for a person."

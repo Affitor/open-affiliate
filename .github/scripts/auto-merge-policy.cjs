@@ -242,6 +242,10 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
     ) {
       reasons.push(`restrictions must be a list: ${file.filename}`)
     }
+    // Affitor terms on a page come only from the Affitor API, through the sync.
+    if (program.also_on !== undefined) {
+      reasons.push(`also_on is linked by a maintainer and filled by the Affitor sync: ${file.filename}`)
+    }
   }
 
   return {
@@ -277,7 +281,10 @@ function shouldArmAutoMerge({ eligible, labels, live }) {
 // sync already created: every file must be modified (never new, removed or
 // renamed), keep the Affitor program it is linked to, hold only schema keys
 // and no anchors, not be on the skip list, have every field the sync owns
-// equal to what the Affitor API says now, and change nothing else. A pull
+// equal to what the Affitor API says now, and change nothing else. A brand's
+// own listing that a person linked to an Affitor program under
+// also_on.affitor passes the same way: the sync owns only the commission
+// there, and removing the entry once Affitor confirms the program left. A pull
 // request with a new listing always goes to a person, who sets its category,
 // description and agents block. Anything this lane cannot confirm leaves the
 // pull request to a person. auto-merge.yml runs it for the comment; the merge
@@ -288,14 +295,39 @@ function isAffitorSyncPullRequest(pullRequest, config = AFFITOR_SYNC) {
   return pullRequest.user?.login === config.bot
 }
 
-/** The Affitor API, read like a program file: time-bounded, size-capped. */
+/**
+ * The Affitor API, read like a program file: time-bounded, size-capped, and
+ * only a 200 is read, since the API answers 200 whether a program exists or
+ * not (measured 2026-10-13). Any other status fails, 2xx included.
+ */
 async function fetchAffitorJson(url, options = {}) {
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch
   return JSON.parse(
     await fetchProgramContent(url, {
       maxBytes: MAX_API_BYTES,
       accept: "application/json",
       ...options,
+      fetchImpl: async (...args) => {
+        const response = await fetchImpl(...args)
+        if (response.status !== 200) throw new Error(`HTTP ${response.status}`)
+        return response
+      },
     })
+  )
+}
+
+/**
+ * Affitor's answer for a slug it does not have, and nothing else: exactly
+ * config.not_found. Another message, a code or any extra key is no proof a
+ * program left. Mirrors affitorNotFound() in scripts/sync-affitor.ts.
+ */
+function affitorNotFound(body, config) {
+  const want = config.not_found
+  return (
+    isRecord(body) &&
+    isRecord(want) &&
+    Object.keys(body).length === Object.keys(want).length &&
+    Object.entries(want).every(([key, value]) => Object.hasOwn(body, key) && body[key] === value)
   )
 }
 
@@ -391,6 +423,24 @@ function affitorOwnedFields(program, marketplace) {
   }
 }
 
+/**
+ * What the sync owns on a brand's own listing linked under also_on.affitor:
+ * Affitor's commission there without its conditions, or none at all when
+ * Affitor publishes no commission. Keyed like affitorOwnedFields, from its
+ * result. Mirrors alsoOnFields() in scripts/sync-affitor.ts.
+ */
+function alsoOnOwnedFields(expected) {
+  const at = "also_on.affitor.commission"
+  if (expected === "no commission rate or fixed amount") return { [at]: ABSENT }
+  if (typeof expected === "string") return expected
+  return {
+    ...Object.fromEntries(
+      ["type", "rate", "mode", "value", "currency", "duration"].map((key) => [`${at}.${key}`, expected[`commission.${key}`]])
+    ),
+    [`${at}.conditions`]: ABSENT,
+  }
+}
+
 // Paths are arrays of keys, never joined strings: a root key "agents.prompt"
 // and the nested agents → prompt are different paths. The dotted keys of
 // affitorOwnedFields are this file's own constants, split once by ownedPath.
@@ -428,11 +478,17 @@ function changedPaths(before, after) {
     .map((key) => (a.get(key) ?? b.get(key)).path)
 }
 
+/** A rule, or the top-level property its `$ref` names (also_on reuses commission). */
+const deref = (rule) =>
+  typeof rule?.$ref === "string" && rule.$ref.startsWith("#/properties/")
+    ? PROGRAM_SCHEMA.properties[rule.$ref.slice("#/properties/".length)]
+    : rule
+
 /** Keys the schema does not name, at every level where it names keys (additionalProperties: false). */
 function unknownKeys(value, rule = PROGRAM_SCHEMA, path = [], out = []) {
   if (rule?.properties && isRecord(value)) {
     for (const [key, child] of Object.entries(value)) {
-      if (Object.hasOwn(rule.properties, key)) unknownKeys(child, rule.properties[key], [...path, key], out)
+      if (Object.hasOwn(rule.properties, key)) unknownKeys(child, deref(rule.properties[key]), [...path, key], out)
       else out.push([...path, key])
     }
   } else if (rule?.items && Array.isArray(value)) {
@@ -534,7 +590,12 @@ async function evaluateAffitorSyncPolicy({
       if (!base) continue
     }
 
-    if (program.network !== "affitor" || program.source !== "affitor-api") {
+    // A brand's own listing (not network affitor) that a person linked to an
+    // Affitor program under also_on.affitor, in the base version: that link is
+    // its identity here, as signup_url is for a listing the sync created.
+    const alsoSlug = base === null ? "" : marketplaceSlug(valueAt(base, ["also_on", "affitor", "url"]), config.marketplace)
+    const alsoOn = alsoSlug !== "" && base.network !== "affitor"
+    if (!alsoOn && (program.network !== "affitor" || program.source !== "affitor-api")) {
       reasons.push(`not a listing the sync created (network affitor, source affitor-api): ${name}`)
     }
     if (program.slug !== fileSlug) {
@@ -549,30 +610,42 @@ async function evaluateAffitorSyncPolicy({
     if (hasAnchors(file.content)) {
       reasons.push(`uses a YAML anchor or alias: ${name}`)
     }
-    const slug = marketplaceSlug(program.signup_url, config.marketplace)
-    if (!slug) {
-      reasons.push(`signup_url is not an Affitor marketplace page: ${name}`)
-    }
-    // The Affitor program a listing is linked to is its identity, reviewed when
-    // the listing was created. The sync may refresh its terms, never re-link it.
-    const baseSlug = base === null ? "" : marketplaceSlug(base.signup_url, config.marketplace)
-    if (
-      base !== null &&
-      (!baseSlug || baseSlug !== slug || base.network !== "affitor" || base.source !== "affitor-api")
-    ) {
-      reasons.push(
-        `Affitor identity changed (base ${baseSlug || "none"}, head ${slug || "none"}), a person must confirm: ${name}`
-      )
+    let slug, baseSlug, pause
+    if (alsoOn) {
+      // The link is the person's: the sync keeps it, or removes the whole
+      // entry (an unlink, which counts as a pause) once the program left.
+      slug = baseSlug = alsoSlug
+      pause = valueAt(program, ["also_on"]) === ABSENT
+      const headSlug = marketplaceSlug(valueAt(program, ["also_on", "affitor", "url"]), config.marketplace)
+      if (!pause && headSlug !== alsoSlug) {
+        reasons.push(`also_on Affitor link changed (base ${alsoSlug}, head ${headSlug || "none"}), a person must confirm: ${name}`)
+      }
+    } else {
+      slug = marketplaceSlug(program.signup_url, config.marketplace)
+      if (!slug) {
+        reasons.push(`signup_url is not an Affitor marketplace page: ${name}`)
+      }
+      // The Affitor program a listing is linked to is its identity, reviewed when
+      // the listing was created. The sync may refresh its terms, never re-link it.
+      baseSlug = base === null ? "" : marketplaceSlug(base.signup_url, config.marketplace)
+      if (
+        base !== null &&
+        (!baseSlug || baseSlug !== slug || base.network !== "affitor" || base.source !== "affitor-api")
+      ) {
+        reasons.push(
+          `Affitor identity changed (base ${baseSlug || "none"}, head ${slug || "none"}), a person must confirm: ${name}`
+        )
+      }
+      pause = program.status === "paused" && base !== null && base.status !== "paused"
+      if (program.status === "paused" && base === null) {
+        reasons.push(`a new listing cannot be paused: ${name}`)
+      }
     }
     const skipped = [fileSlug, slug, baseSlug].find((s) => s && Object.hasOwn(skip, s))
     if (skipped) {
       reasons.push(`${skipped} is on the skip list (data/affitor-sync-skip.json): ${name}`)
     }
-    const pause = program.status === "paused" && base !== null && base.status !== "paused"
-    if (program.status === "paused" && base === null) {
-      reasons.push(`a new listing cannot be paused: ${name}`)
-    }
-    programs.push({ name, program, base, slug, pause })
+    programs.push({ name, program, base, slug, pause, alsoOn })
   }
 
   if (newSlugs.length > 0) {
@@ -607,7 +680,7 @@ async function evaluateAffitorSyncPolicy({
   }
   const listed = new Set(list.data.map((row) => (isRecord(row) ? row.slug : null)))
 
-  for (const { name, program, base, slug, pause } of programs) {
+  for (const { name, program, base, slug, pause, alsoOn } of programs) {
     let detail
     try {
       detail = await fetchJson(`${config.list_url}/${encodeURIComponent(slug)}`)
@@ -618,16 +691,19 @@ async function evaluateAffitorSyncPolicy({
 
     let allowed
     if (pause) {
-      // Same evidence the sync needs: gone from the list, and the detail's not-found shape.
-      const gone = isRecord(detail) && detail.success === false && detail.data === null
-      if (listed.has(slug) || !gone) {
+      // Same evidence the sync needs: gone from the list, and the detail's exact not-found body.
+      if (listed.has(slug) || !affitorNotFound(detail, config)) {
         reasons.push(`Affitor does not confirm ${slug} left the marketplace: ${name}`)
         continue
       }
-      if (!PAUSE_NOTE.test(String(program.status_note ?? ""))) {
-        reasons.push(`status_note is not the sync's pause note: ${name}`)
+      if (alsoOn) {
+        allowed = [["also_on"], ["updated_at"]]
+      } else {
+        if (!PAUSE_NOTE.test(String(program.status_note ?? ""))) {
+          reasons.push(`status_note is not the sync's pause note: ${name}`)
+        }
+        allowed = [["status"], ["status_note"], ["updated_at"]]
       }
-      allowed = [["status"], ["status_note"], ["updated_at"]]
     } else {
       const data = isRecord(detail) && detail.success === true ? detail.data : null
       if (!isRecord(data) || data.slug !== slug || !listed.has(slug)) {
@@ -637,7 +713,8 @@ async function evaluateAffitorSyncPolicy({
       if (data.is_platform_program) {
         reasons.push(`${slug} is Affitor's own platform program: ${name}`)
       }
-      const expected = affitorOwnedFields(data, config.marketplace)
+      const owned = affitorOwnedFields(data, config.marketplace)
+      const expected = alsoOn ? alsoOnOwnedFields(owned) : owned
       if (typeof expected === "string") {
         reasons.push(`Affitor's terms for ${slug} are unusable (${expected}): ${name}`)
         continue
@@ -648,7 +725,8 @@ async function evaluateAffitorSyncPolicy({
           reasons.push(`${path} is ${show(actual)}, Affitor says ${show(value)}: ${name}`)
         }
       }
-      allowed = [...Object.keys(expected).map(ownedPath), ["updated_at"], ["last_verified_at"]]
+      // The brand's own terms were not re-verified: no last_verified_at under also_on.
+      allowed = [...Object.keys(expected).map(ownedPath), ["updated_at"], ...(alsoOn ? [] : [["last_verified_at"]])]
     }
 
     for (const path of changedPaths(base, program)) {

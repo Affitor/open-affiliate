@@ -1,4 +1,4 @@
-import { commissionDisplay, commissionUnknown, isCreditReward, isLive, type Program } from "@/lib/programs"
+import { commissionDisplay, commissionLabel, commissionUnknown, isCreditReward, isLive, type Program } from "@/lib/programs"
 import { isUnverified } from "@/lib/program-seo"
 
 /** Whitespace-separated tokens. "&" counts, so the signed cap stays at 4. */
@@ -39,14 +39,34 @@ export function checkTermsLabel(brand: string): string {
  */
 export function applyButton(program: Program): { label: string; href: string } {
   if (program.network === "affitor" && isLive(program) && program.signupUrl) {
-    const href = new URL(program.signupUrl)
-    href.searchParams.set("utm_source", "openaffiliate")
-    href.searchParams.set("utm_medium", "apply")
-    href.searchParams.set("utm_campaign", program.slug)
-    return { label: "Apply on Affitor", href: href.toString() }
+    return { label: "Apply on Affitor", href: affitorHref(program.signupUrl, program.slug) }
   }
   return {
     label: isUnverified(program) ? checkTermsLabel(program.name) : applyEarnLabel(program.commission),
     href: program.signupUrl ?? program.url,
   }
+}
+
+/** An Affitor marketplace link with the apply UTM, which the YAML never stores. */
+function affitorHref(url: string, slug: string): string {
+  const href = new URL(url)
+  href.searchParams.set("utm_source", "openaffiliate")
+  href.searchParams.set("utm_medium", "apply")
+  href.searchParams.set("utm_campaign", slug)
+  return href.toString()
+}
+
+/**
+ * The line and secondary button for a brand that also lists on Affitor
+ * (also_on.affitor), under its own program's terms, which keep the main
+ * button. "Also on Affitor: 20% recurring/12mo" from structured fields only,
+ * like every commission on the site; just "Also on Affitor" when Affitor
+ * publishes no figure. Null when the brand is not on Affitor.
+ */
+export function alsoOnAffitor(program: Program): { line: string; label: string; href: string } | null {
+  const entry = program.alsoOn?.affitor
+  if (!entry) return null
+  const c = entry.commission
+  const figure = c && !commissionUnknown(c) ? `: ${commissionDisplay(c)} ${commissionLabel(c)}` : ""
+  return { line: `Also on Affitor${figure}`, label: "Apply on Affitor", href: affitorHref(entry.url, program.slug) }
 }

@@ -83,6 +83,12 @@ export interface Program {
   statusNote?: string | null
   /** Registrable domain whose owner verified the listing (claim flow). */
   claimedBy?: string | null
+  /**
+   * The same brand on Affitor too (schema `also_on`): its marketplace page, and
+   * the commission scripts/sync-affitor.ts copies from the Affitor API, absent
+   * when Affitor publishes none. One extra line on the page; never ranked.
+   */
+  alsoOn?: { affitor?: { url: string; commission?: Program["commission"] } } | null
   /** Type of income program as the YAML states it; undefined when the file leaves it out. */
   kind?: "affiliate" | "referral" | "creator-payout" | "revenue-share" | "cashback" | "partner-network"
 }
@@ -150,6 +156,7 @@ function mapYamlToProgram(yaml: any): Program {
     status: yaml.status ?? "active",
     statusNote: yaml.status_note ?? null,
     claimedBy: yaml.claimed_by ?? null,
+    alsoOn: yaml.also_on ?? null,
     kind: yaml.kind,
   }
 }

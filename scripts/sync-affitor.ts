@@ -15,6 +15,11 @@
  *   take-over       the OA listing already sends partners to Affitor (signup_url
  *                   on affitor.com, or network: affitor). Rewrite the terms the
  *                   sync owns; never touch the hand-written fields.
+ *   also-on         the OA listing is the brand's own program, and a person
+ *                   linked it to this Affitor program under also_on.affitor.
+ *                   Rewrite only also_on.affitor.commission (left out when
+ *                   Affitor publishes none); the page shows it as one "Also on
+ *                   Affitor" line. The sync never adds the link itself.
  *   create          the brand is not on OA. Write a new listing.
  *   conflict        the brand is on OA with its own program somewhere else, the
  *                   marketplace slug now points at another website, the
@@ -34,6 +39,8 @@
  * and one per OA listing:
  *   pause           network: affitor, gone from the list, and its detail
  *                   answers that the program does not exist.
+ *   unlink          the same evidence for the program an also_on.affitor entry
+ *                   links to: the entry is removed. Counts as a pause.
  *
  * Fails closed: if the list or a detail is malformed, looks like one page of
  * several, gives no clear answer on a program that left, or a run would pause
@@ -116,7 +123,7 @@ export interface AffitorProgram {
 
 export type FetchJson = (url: string) => Promise<unknown>
 
-export type Action = "take-over" | "create" | "conflict" | "slug-collision" | "skip" | "pause"
+export type Action = "take-over" | "also-on" | "create" | "conflict" | "slug-collision" | "skip" | "pause" | "unlink"
 
 export interface Diff {
   field: string
@@ -150,6 +157,9 @@ export interface Entry {
 
 const WHOLE = new Set(["duration_months", "cookie_window_days", "default_hold_period_days"])
 
+/** affitorTerms' reason when Affitor publishes no commission at all, as opposed to a malformed one. */
+export const NO_COMMISSION = "no commission rate or fixed amount"
+
 /** The API fields terms are built from, by name, for validation and comparison. */
 function termFields(p: AffitorProgram): Record<string, unknown> {
   const policy = p.default_policy ?? {}
@@ -180,7 +190,7 @@ export function affitorTerms(p: AffitorProgram): Terms | string {
   const rate = policy.commission_rate ?? 0
   const fixed = policy.commission_fixed ?? 0
   if (rate > 0 && fixed > 0) return "both a rate and a fixed amount, which this sync has no mapping for"
-  if (!(rate > 0) && !(fixed > 0)) return "no commission rate or fixed amount"
+  if (!(rate > 0) && !(fixed > 0)) return NO_COMMISSION
 
   // Affitor's own wording: "12% recurring for 18 months", "50% recurring for
   // life", "25% one-time". OA writes "for life" as lifetime.
@@ -274,6 +284,8 @@ interface Listing {
   /** siteOf(url): the brand identity matching compares on. */
   site: string | null
   linked: string | null
+  /** The Affitor program also_on.affitor links the brand's own listing to. */
+  alsoOn: string | null
   network: string | null
   status: string | null
   /** Anchors or aliases: deleting a field could orphan an alias, so the sync never edits these. */
@@ -297,12 +309,14 @@ function loadListings(dir: string): Listing[] {
         }
       })
       const data = doc.toJS() as Record<string, unknown>
+      const alsoOn = data.also_on as { affitor?: { url?: unknown } } | undefined
       return {
         path,
         file,
         slug: String(data.slug),
         site: siteOf(data.url),
         linked: marketplaceSlug(data.signup_url),
+        alsoOn: marketplaceSlug(alsoOn?.affitor?.url),
         network: (data.network as string | undefined) ?? null,
         status: (data.status as string | undefined) ?? null,
         anchors,
@@ -365,6 +379,26 @@ function ownedFields(p: AffitorProgram, t: Terms): Edit[] {
     [["status"], "active"],
     [["status_note"], DELETE],
     ...UNPUBLISHED.map((k): Edit => [[k], DELETE]),
+  ]
+}
+
+/**
+ * Everything the sync owns on the brand's own listing: the commission under
+ * also_on.affitor, at the value Affitor states, or left out when Affitor
+ * publishes none, so the page says "Also on Affitor" with no figure. The url
+ * is the person's link and is never written.
+ */
+function alsoOnFields(t: Terms | null): Edit[] {
+  const at = (...keys: string[]) => ["also_on", "affitor", "commission", ...keys]
+  if (!t) return [[at(), DELETE]]
+  return [
+    [at("type"), t.type],
+    [at("rate"), t.rate],
+    [at("mode"), t.mode],
+    [at("value"), t.value],
+    [at("currency"), "USD"],
+    [at("duration"), t.duration],
+    [at("conditions"), DELETE],
   ]
 }
 
@@ -444,11 +478,16 @@ interface SchemaRule {
   maxLength?: number
   pattern?: string
   properties?: Record<string, SchemaRule>
+  $ref?: string
 }
 
 let schemaRoot: SchemaRule | undefined
 const schema = (): SchemaRule =>
   (schemaRoot ??= JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8")))
+
+/** A rule, or the top-level property its `$ref` names (also_on reuses commission). Any other ref finds nothing. */
+const deref = (rule: SchemaRule | undefined): SchemaRule | undefined =>
+  rule?.$ref?.startsWith("#/properties/") ? schema().properties?.[rule.$ref.slice("#/properties/".length)] : rule
 
 const TYPES: Record<string, (v: unknown) => boolean> = {
   string: (v) => typeof v === "string",
@@ -467,7 +506,7 @@ export function checkSchema(edits: Edit[], file: string): void {
   for (const [path, value] of edits) {
     if (value === DELETE) continue
     let rule: SchemaRule | undefined = schema()
-    for (const key of path) rule = rule?.properties?.[key]
+    for (const key of path) rule = deref(rule?.properties?.[key])
     const bad = (why: string) => new Error(`${file}: ${path.join(".")} ${why}`)
     if (!rule) throw bad("is not in the schema")
     const types = rule.type === undefined ? [] : [rule.type].flat()
@@ -620,9 +659,10 @@ function newListing(
 
 interface Planned {
   entry: Entry
-  /** Set for an Affitor program's entry; absent for an OA listing's (pause). */
+  /** Set for an Affitor program's entry; absent for an OA listing's (pause, unlink). */
   program?: AffitorProgram
-  terms?: Terms
+  /** Null only on an also-on entry whose program publishes no commission. */
+  terms?: Terms | null
   listing?: Listing
 }
 
@@ -650,26 +690,32 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
 
     // Every branch needs the same website (siteOf), so neither a reused
     // marketplace slug nor a shared name can carry terms to another brand.
-    const linked = listings.find((l) => l.linked === p.slug)
+    // A listing links to an Affitor program through its signup_url or, for the
+    // brand's own listing, through also_on.affitor.
+    const linked = listings.find((l) => l.linked === p.slug || l.alsoOn === p.slug)
     const bySlug = listings.find((l) => l.slug === slug)
     const bySite = site ? listings.find((l) => l.site === site) : undefined
     const match = linked ?? (site && bySlug?.site === site ? bySlug : undefined) ?? bySite
     if (match) matched.add(match.file)
+    const alsoOn = match?.alsoOn === p.slug
 
     // Before every other rule, and with no program attached: a skipped brand
     // has no detail fetched, nothing written and nothing paused.
-    // match.linked: the Affitor program the matched listing is already linked to.
-    const skipped = onSkipList(skip, p.slug, slug, match?.slug, match?.linked)
+    // match.linked, match.alsoOn: the Affitor program the matched listing is already linked to.
+    const skipped = onSkipList(skip, p.slug, slug, match?.slug, match?.linked, match?.alsoOn)
     if (skipped) {
       out.push({ ...at("skip", `on the skip list (${SKIP_FILE}): ${skip[skipped]}`, match), program: undefined })
       continue
     }
 
-    const terms = affitorTerms(p)
-    if (typeof terms === "string") {
-      out.push(at("skip", terms, match))
+    const found = affitorTerms(p)
+    // Under also_on, no published commission is shown as such (no figure); any
+    // other unusable number is skipped, as everywhere else.
+    if (typeof found === "string" && !(alsoOn && found === NO_COMMISSION)) {
+      out.push(at("skip", found, match))
       continue
     }
+    const terms = typeof found === "string" ? null : found
     if (p.is_platform_program) {
       out.push(at("skip", "Affitor's own platform program, not a brand listing", match))
       continue
@@ -679,7 +725,9 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
     if (match) {
       // A listing linked to one Affitor program is never re-linked to another,
       // listed or gone: a website is self-declared and proves no ownership.
-      const other = match.linked && match.linked !== p.slug ? match.linked : null
+      // So the sync never adds an also_on link either; a person does.
+      const link = match.linked ?? match.alsoOn
+      const other = link && link !== p.slug ? link : null
       const prior = claimed.get(match.file)
       // A take-over needs both identities, and equal: never null on either side.
       if (!site || match.site !== site) {
@@ -694,11 +742,15 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
           : `linked to Affitor program ${other}, which left the list; a website match never re-links a listing`
         planned = at("conflict", why, match)
       } else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
-      else if (!pointsAtAffitor(match)) {
+      else if (!alsoOn && !pointsAtAffitor(match)) {
         planned = at("conflict", `OA lists ${match.site}'s own program at ${String(match.data.signup_url ?? match.data.url)}`, match)
         planned.entry.oa_terms = termsOf(match)
       } else if (match.anchors) {
         planned = at("conflict", "yaml anchors present; the sync does not edit a file with anchors or aliases", match)
+      } else if (alsoOn) {
+        claimed.set(match.file, p.slug)
+        planned = at("also-on", `OA lists ${match.site}'s own program, linked to this one under also_on.affitor`, match)
+        if (!terms) planned.entry.reason += "; Affitor publishes no commission, so the line shows none"
       } else {
         claimed.set(match.file, p.slug)
         planned = at("take-over", "OA listing already sends partners to Affitor", match)
@@ -716,32 +768,36 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
       planned = at("create", "brand not on OA")
       planned.entry.file = `programs/${slug}.yaml`
     }
-    planned.entry.affitor_terms = terms
+    if (terms) planned.entry.affitor_terms = terms
     planned.terms = terms
     out.push(planned)
   }
 
   for (const l of listings) {
+    // A listing on Affitor is paused; the brand's own listing loses its also_on.affitor entry.
+    const unlink = l.network !== "affitor" && l.alsoOn !== null
+    const link = unlink ? l.alsoOn : l.linked
+    const not = unlink ? "not unlinked" : "not paused"
     // A program still on the list is never paused, even when it has nothing usable to sync.
-    if (l.network !== "affitor" || matched.has(l.file) || (l.linked && listed.has(l.linked))) continue
-    if ((l.status ?? "active") !== "active") continue
+    if ((l.network !== "affitor" && !unlink) || matched.has(l.file) || (link && listed.has(link))) continue
+    if (!unlink && (l.status ?? "active") !== "active") continue
     const entry: Entry = {
-      action: "pause",
-      affitor_slug: l.linked,
+      action: unlink ? "unlink" : "pause",
+      affitor_slug: link,
       oa_slug: l.slug,
       file: `programs/${l.file}`,
-      reason: `no longer listed on the Affitor marketplace as of ${today}`,
+      reason: `no longer listed on the Affitor marketplace as of ${today}${unlink ? "; also_on.affitor removed" : ""}`,
     }
-    const skipped = onSkipList(skip, l.slug, l.linked)
+    const skipped = onSkipList(skip, l.slug, link)
     if (skipped) {
       entry.action = "skip"
-      entry.reason = `on the skip list (${SKIP_FILE}): ${skip[skipped]}; not paused`
-    } else if (!l.linked) {
+      entry.reason = `on the skip list (${SKIP_FILE}): ${skip[skipped]}; ${not}`
+    } else if (!link) {
       entry.action = "conflict"
-      entry.reason = "missing from the Affitor list, but its signup_url is no marketplace page to check; not paused"
+      entry.reason = `missing from the Affitor list, but its signup_url is no marketplace page to check; ${not}`
     } else if (l.anchors) {
       entry.action = "conflict"
-      entry.reason = "no longer listed on the Affitor marketplace, but yaml anchors present; not paused"
+      entry.reason = `no longer listed on the Affitor marketplace, but yaml anchors present; ${not}`
     }
     out.push({ entry, listing: l })
   }
@@ -780,13 +836,29 @@ async function fetchDetail(fetchJson: FetchJson, slug: string): Promise<AffitorP
 }
 
 /**
- * Affitor's own answer on whether a program left: the not-found shape
- * measured live on 2026-10-12 ({success: false, data: null}), or a valid
- * detail showing it is still there. Any other answer stops the run.
+ * Affitor's answer for a slug it does not have, and nothing else: measured
+ * live on 2026-10-13, HTTP 200 with exactly config.not_found,
+ * {"success":false,"data":null,"message":"Program not found"}. Another
+ * message, a code or any extra key (an outage reported as success: false)
+ * is not proof a program left. The merge lane checks the same shape.
+ */
+export function affitorNotFound(body: unknown): boolean {
+  const want: Record<string, unknown> = config.not_found
+  return (
+    isRecord(body) &&
+    Object.keys(body).length === Object.keys(want).length &&
+    Object.entries(want).every(([key, value]) => Object.hasOwn(body, key) && body[key] === value)
+  )
+}
+
+/**
+ * Affitor's own answer on whether a program left: its exact not-found body
+ * (affitorNotFound), or a valid detail showing it is still there. Any other
+ * answer stops the run, so neither a pause nor an unlink rests on an error.
  */
 async function leftAffitor(fetchJson: FetchJson, slug: string): Promise<boolean> {
   const body = await fetchJson(`${LIST_URL}/${encodeURIComponent(slug)}`)
-  if (isRecord(body) && body.success === false && body.data === null) return true
+  if (affitorNotFound(body)) return true
   if (isRecord(body) && body.success === true && isRecord(body.data) && body.data.slug === slug) return false
   throw new Error(`the Affitor detail for ${slug} neither confirms it left nor shows it is still there`)
 }
@@ -837,12 +909,13 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
     if (disagree.length) entry.list_vs_detail = disagree
   }
 
-  // Missing from one list response proves nothing: a pause needs Affitor's
-  // own detail to say the program is gone.
+  // Missing from one list response proves nothing: a pause or an unlink needs
+  // Affitor's own detail to say the program is gone.
+  const removes = (e: Entry) => e.action === "pause" || e.action === "unlink"
   for (const { entry } of chosen) {
-    if (entry.action !== "pause" || (await leftAffitor(o.fetchJson, entry.affitor_slug!))) continue
+    if (!removes(entry) || (await leftAffitor(o.fetchJson, entry.affitor_slug!))) continue
+    entry.reason = `missing from the Affitor list, but its detail still answers; not ${entry.action === "unlink" ? "unlinked" : "paused"}`
     entry.action = "skip"
-    entry.reason = "missing from the Affitor list, but its detail still answers; not paused"
   }
 
   const entries = chosen.map((c) => c.entry)
@@ -868,9 +941,9 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
     log(`report: ${reportPath}`)
   }
 
-  const pauses = entries.filter((e) => e.action === "pause").length
+  const pauses = entries.filter(removes).length
   if (pauses > MAX_PAUSES) {
-    const why = `${pauses} listings would be paused, more than the ${MAX_PAUSES} one run may pause`
+    const why = `${pauses} listings would be paused or unlinked, more than the ${MAX_PAUSES} one run may pause`
     report(why)
     throw new Error(why)
   }
@@ -888,6 +961,12 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
         ],
         entry.file!,
       )
+      entry.diffs = diffs
+      if (text) writes.push([listing.path, text])
+      else entry.reason += "; already up to date"
+    } else if (entry.action === "also-on" && program && listing) {
+      // The brand's own terms were not re-verified, so last_verified_at stays.
+      const { text, diffs } = edit(readFileSync(listing.path, "utf8"), alsoOnFields(terms ?? null), [[["updated_at"], o.today]], entry.file!)
       entry.diffs = diffs
       if (text) writes.push([listing.path, text])
       else entry.reason += "; already up to date"
@@ -918,6 +997,10 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
       )
       entry.diffs = diffs
       if (text) writes.push([listing.path, text])
+    } else if (entry.action === "unlink" && listing) {
+      const { text, diffs } = edit(readFileSync(listing.path, "utf8"), [[["also_on"], DELETE]], [[["updated_at"], o.today]], entry.file!)
+      entry.diffs = diffs
+      if (text) writes.push([listing.path, text])
     }
   }
 
@@ -932,9 +1015,10 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
   return { entries, written: dryRun ? [] : writes.map(([path]) => path) }
 }
 
-async function httpJson(url: string): Promise<unknown> {
+/** The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a program exists or not. */
+export async function httpJson(url: string): Promise<unknown> {
   const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) })
-  if (!res.ok) throw new Error(`${url} answered ${res.status}`)
+  if (res.status !== 200) throw new Error(`${url} answered ${res.status}`)
   return res.json()
 }
 
