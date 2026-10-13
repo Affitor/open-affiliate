@@ -33,7 +33,7 @@ restrictions:
 
 marketing_materials: true
 dashboard_url: null
-# tracking platform: not named on commoninja.com/affiliates (checked 2026-10-13)
+# tracking platform: not named; payouts run through Paddle (not in the network enum): "Create a Common Ninja affiliate account, and set your payouts via Paddle." (commoninja.com/affiliates, checked 2026-10-13)
 network: null
 program_age: null
 

@@ -32,7 +32,8 @@ restrictions:
 
 marketing_materials: false
 dashboard_url: null
-network: in-house
+# network: read from page code, not stated in page text: bigspy.com/affiliate loads FirstPromoter's tracker (t.src='https://cdn.firstpromoter.com/fprom.js', $FPROM.init(affCode,domain)), and bigspy.firstpromoter.com is BigSpy's branded portal: "Thank you for promoting BigSpy! This is your affiliate dashboard." (checked 2026-10-13)
+network: firstpromoter
 program_age: null
 
 description: >
@@ -61,7 +62,7 @@ agents:
     - "Media buyers researching competitor creatives"
     - "Agencies building ad inspiration boards for clients"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"

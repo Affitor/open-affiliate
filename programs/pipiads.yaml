@@ -12,7 +12,7 @@ commission:
   value: 20
   currency: USD
   duration: lifetime
-  conditions: "20% of every subscription payment from referred customers, renewals included. Referrals get 20% off automatically applied at checkout. Commissions are confirmed 30 days after the customer pays. No commission on $1 trial orders. Affiliates must drive at least 1 customer every 3 months to stay in the program. Google Ads and bidding on brand terms such as \"Pipiads\" are not allowed."
+  conditions: "20% of every subscription payment from referred customers, renewals included. Referrals get 20% off automatically applied at checkout. Commissions are confirmed 30 days after the customer pays. Affiliates must drive at least 1 customer every 3 months to stay in the program. Google Ads and bidding on brand terms such as \"Pipiads\" are not allowed."
 
 # 90 days: "Cookies last for 90 days after someone clicks on your link." (pipiads.com/affiliate-home, checked 2026-10-13)
 cookie_days: 90
@@ -27,8 +27,6 @@ payout:
 
 signup_url: https://www.pipiads.com/affiliate-home
 
-marketing_materials: false
-dedicated_manager: false
 dashboard_url: null
 # network: not named on pipiads.com/affiliate-home; the affiliate dashboard is on pipiads.com itself (checked 2026-10-13)
 network: in-house

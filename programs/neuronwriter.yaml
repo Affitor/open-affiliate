@@ -14,7 +14,7 @@ commission:
   value: 30
   currency: USD
   duration: null
-  conditions: "30% of every payment the referred customer makes after their first successful payment, calculated on the amount before taxes. Commission is paid in USD (the program treats 1 USD as 1 EUR). A payment becomes withdrawable once paid in full and 30 days have passed; refunds requested within 30 days earn nothing. Commission can also be exchanged for NeuronWriter subscriptions."
+  conditions: "30% of every payment the referred customer makes, starting with their first successful payment, calculated on the amount before taxes. Commission is paid in USD (the program treats 1 USD as 1 EUR). A payment becomes withdrawable once paid in full and 30 days have passed; refunds requested within 30 days earn nothing. Commission can also be exchanged for NeuronWriter subscriptions."
 
 # "60 days cookie duration." (neuronwriter.com/contact/affiliates, checked 2026-10-13)
 cookie_days: 60

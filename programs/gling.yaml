@@ -5,7 +5,7 @@ category: AI
 tags: [ai-video-editor, youtube, video-editing, captions, content-creation]
 
 commission:
-  # type "recurring" is our reading of "all payments within the first 12 months"; the page does not use the word recurring
+  # "you'll earn a commission of 20% on the revenue generated from their subscriptions for up to one year" (gling.notion.site/Gling-s-Affiliate-Program-Earn-20-Revenue-for-Your-Referrals-d0f8886799224ae3a16a23ecf172d99a, linked from affiliates.gling.ai/signup, checked 2026-10-13)
   type: recurring
   # "receive a 20% commission on all payments within the first 12 months for paying customers you refer" (affiliates.gling.ai/signup, checked 2026-10-13)
   rate: "20%"
@@ -13,12 +13,21 @@ commission:
   value: 20
   currency: USD
   duration: "12 months"
-  conditions: "20% of all payments made by paying customers you refer, during their first 12 months."
+  conditions: "20% of all payments made by paying customers you refer, during their first 12 months. Payouts go out monthly via Wise once earnings reach $100."
 
-# cookie window: not published on affiliates.gling.ai/signup (checked 2026-10-13); the linked terms page did not load without JavaScript
-# payout: minimum, frequency and methods not published on affiliates.gling.ai/signup (checked 2026-10-13)
+# cookie window: not published on affiliates.gling.ai/signup or the linked terms (checked 2026-10-13)
+
+# "Payments will be made via Wise (formerly TransferWise) every month. To qualify for a payment, you must reach the minimum payment threshold of $100." (gling.notion.site terms, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [wise]
 
 signup_url: https://affiliates.gling.ai/signup
+# "Affiliates are not allowed to use paid advertising platforms such as Google Adsense or any other paid ad networks to promote their referral codes." (gling.notion.site terms, checked 2026-10-13)
+restrictions:
+  - "No paid advertising platforms or paid ad networks to promote referral codes"
 
 dashboard_url: null
 # "Gling Affiliate Program is powered by Rewardful" (affiliates.gling.ai/signup, checked 2026-10-13)
@@ -33,7 +42,8 @@ description: >
   video ideas. Gling runs as a desktop app.
 
   The affiliate program runs on Rewardful and pays 20% of all payments from the
-  paying customers you refer during their first 12 months.
+  paying customers you refer during their first 12 months, paid monthly via
+  Wise once earnings reach $100.
 
 short_description: "AI video editor that cuts bad takes and silences for YouTube"
 
@@ -49,7 +59,7 @@ agents:
     - "Podcasters turning recordings into edited YouTube videos"
     - "Creators who want short clips from their long videos"
 
-verified: false
+verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"

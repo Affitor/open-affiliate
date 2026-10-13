@@ -11,9 +11,10 @@ tags: [ai-headshots, headshot-generator, linkedin-photo, team-headshots, profess
 #   "Affiliates will receive from 20% up to 35% commission on all payments made by a user" (betterpic.io/legal/affiliates-policy, checked 2026-10-13)
 # duration: also stated two ways, so left out:
 #   "35% commission for 3 months" (partners.dub.co/betterpic) vs "you will receive a commission for all the purchases made, with no limit in time" (betterpic.io/legal/affiliates-policy)
-# type recurring is our reading, not a quote: "for each subscription generated through your referral, you'll earn a share of the revenue" (partners.dub.co/betterpic)
+# type: one-time is our reading. partners.dub.co/betterpic says "for each subscription generated through your referral, you'll earn a share of the revenue",
+#   but the products are one-off purchases: "No hidden prices, no subscriptions" and every plan is "ONCE, for 1 person" (betterpic.io, checked 2026-10-13)
 commission:
-  type: recurring
+  type: one-time
   rate: "varies"
   mode: unknown
   value: null

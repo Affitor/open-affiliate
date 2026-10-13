@@ -23,7 +23,15 @@ payout:
   methods: [paypal]
 
 signup_url: https://klap.app/affiliate
-restrictions: null
+# "We will evaluate your application and notify you of its acceptance or rejection." (Klap Affiliate Program Terms and Conditions, notion.so/ziggapp/Klap-Affiliate-Program-Terms-and-Conditions-56bd7c6ae25744b4aaa9ea92171e8042, linked from klap.app/affiliate, checked 2026-10-13)
+approval: manual
+# Same terms, section 5 and 6: "Sending unsolicited email promotions or spamming any kind of messaging platforms." / "Making false or misleading statements about Klap or its products and services." / "Using Klap’s copyrighted or trademarked materials without express permission." / "Any method that places the affiliate tracking cookie without the user's knowledge or via deceptive practices." / paid influencers "are strictly prohibited from using the Klap Affiliate Program in conjunction with their paid promotional activities"
+restrictions:
+  - "No spam or unsolicited email promotions"
+  - "No false or misleading claims about Klap"
+  - "No use of Klap's copyrighted or trademarked materials without permission"
+  - "No cookie stuffing"
+  - "Influencers paid directly by Klap may not use the affiliate program with those paid promotions"
 
 dashboard_url: null
 # Rewardful tracking script and "Rewardful screenshot of Klap affiliate revenue" on klap.app/affiliate (checked 2026-10-13)

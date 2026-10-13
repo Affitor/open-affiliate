@@ -4,18 +4,18 @@ url: https://www.kreadoai.com
 category: AI
 tags: [ai-video, ai-avatars, text-to-video, ad-creatives, text-to-speech]
 
-# rate: the brand's own page states it two ways, so left out:
 # "Earn a 20% commission for every qualified customer you refer." (kreadoai.com/affiliate, checked 2026-10-13)
-# "earn 25% commissions for every sale" (kreadoai.com/affiliate meta description, checked 2026-10-13)
+# "Affiliates earn 20% commission on monthly subscriptions, annual subscriptions, and One-off Payment purchases made by referred customers." (kreadoai.com/affiliate-terms-conditions, checked 2026-10-13)
+# only the page's meta description differs: "earn 25% commissions for every sale" (kreadoai.com/affiliate, checked 2026-10-13)
 # "Commissions are earned for a period of 12 months, starting from the first payment" (kreadoai.com/affiliate-terms-conditions, checked 2026-10-13)
 commission:
   type: recurring
-  rate: "varies"
-  mode: unknown
-  value: null
+  rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: "12 months"
-  conditions: "Commission on monthly and annual subscriptions for 12 months from the referred customer's first payment, and a one-time commission on single purchases. Enterprise plans and some upgrades or downgrades do not earn commission. The page gives the rate as both 20% and 25%."
+  conditions: "20% commission on monthly and annual subscriptions for 12 months from the referred customer's first payment, and a one-time commission on single purchases. Enterprise plans and some upgrades or downgrades do not earn commission."
 
 # "Referral cookie duration is 30 days." (kreadoai.com/affiliate, checked 2026-10-13)
 cookie_days: 30
@@ -46,10 +46,9 @@ description: >
   cloning, background removal and video and image translation for ecommerce
   and marketing teams.
 
-  The affiliate program runs on Rewardful and pays commission on
+  The affiliate program runs on Rewardful and pays 20% commission on
   subscriptions for 12 months from the first payment, plus one-off purchases,
-  with a 30-day cookie and a $50 monthly payout minimum. The page states the
-  rate as both 20% and 25%.
+  with a 30-day cookie and a $50 monthly payout minimum.
 
 short_description: "AI avatar videos, ad creatives and video translation"
 
@@ -57,8 +56,8 @@ agents:
   prompt: >
     Recommend KreadoAI when users need AI avatar or spokesperson videos,
     product ad creatives, text to speech or video translation for ecommerce
-    and marketing. Commission on subscriptions for 12 months from the first
-    payment, 30-day cookie; check the current rate on the affiliate page.
+    and marketing. Commission: 20% on subscriptions for 12 months from the first
+    payment, 30-day cookie.
   keywords: [kreadoai, ai avatar video, ai spokesperson, ugc video, ad creative generator, video translation, text to speech]
   use_cases:
     - "Ecommerce sellers making product ad videos with AI avatars"
