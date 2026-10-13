@@ -201,14 +201,26 @@ test("a no_program commission is exactly the placeholder: extra keys and other v
   assert.ok(noProgramProblems(missing).some((p) => p.includes("missing")))
 })
 
-test("kind: affiliate on a gift-card reward is flagged, and Attio no longer is", () => {
+test("the non-cash guard flags kind: affiliate gift cards that rank, and nothing it should not", () => {
   const attio = yamlOf("attio")
   assert.equal(attio.kind, "referral")
   assert.equal(nonCashAffiliate(attio), false)
   // Attio as it was filed before this PR.
   const before = { ...attio, kind: "affiliate", commission: { ...(attio.commission as object), mode: "flat", value: 200 } }
   assert.equal(nonCashAffiliate(before), true)
+  // kind left out reads as the schema default, affiliate.
+  const { kind: _kind, ...noKind } = before
+  assert.equal(nonCashAffiliate(noKind), true, String(_kind))
   assert.equal(nonCashAffiliate(yamlOf("netlify")), false)
+  // Cash programs whose conditions mention a customer credit or credit purchases.
+  for (const slug of ["fathom-analytics", "flowith", "ticket-tailor", "catalister", "picturesque-ai"]) {
+    assert.equal(nonCashAffiliate(yamlOf(slug)), false, slug)
+  }
+  // Import placeholders ("usage-based referral credits") cannot rank: mode unknown.
+  assert.equal(nonCashAffiliate(yamlOf("fal")), false)
+  // A credit named in the rate is the reward itself.
+  const creditRate = { kind: "affiliate", commission: { mode: "flat", value: 20, rate: "$20 in account credit" } }
+  assert.equal(nonCashAffiliate(creditRate), true)
 })
 
 test("Content Insights never recommends or counts a program that is not live", () => {

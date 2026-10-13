@@ -41,14 +41,6 @@ const SCHEMA_PROPERTIES = (
 /** Status values, read from the schema like the URL patterns above. */
 const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
 
-/**
- * `kind: affiliate` on a file whose own rate or conditions say gift card,
- * voucher or credit. A warning while a separate data sweep reclassifies the
- * existing ones (fix/non-cash-rewards-kind); once it has merged, set this to
- * true and the same list fails the build.
- */
-const NON_CASH_AFFILIATE_FAILS = false
-
 const REQUIRED_FIELDS = [
   "name",
   "slug",
@@ -255,7 +247,6 @@ function buildRegistry(): void {
 
   const programs: YamlProgram[] = []
   const errors: string[] = []
-  const nonCash: string[] = []
 
   for (const filename of yamlFiles) {
     const filepath = join(PROGRAMS_DIR, filename)
@@ -264,21 +255,17 @@ function buildRegistry(): void {
       const data = parse(raw) as Record<string, unknown>
 
       validateProgram(data, filename)
-      if (nonCashAffiliate(data)) nonCash.push(filename)
+      // kind: affiliate with a figure that ranks, while the file's own text says
+      // gift card, voucher or store credit. Rule and its limits in program-rules.ts.
+      if (nonCashAffiliate(data)) {
+        throw new Error(
+          `kind is affiliate but the commission names a gift card, voucher or credit; set kind: referral, ` +
+            `or mode: unknown and value: null if it is not cash`
+        )
+      }
       programs.push(data as unknown as YamlProgram)
     } catch (err) {
       errors.push(`${filename}: ${(err as Error).message}`)
-    }
-  }
-
-  if (nonCash.length > 0) {
-    const message =
-      `${nonCash.length} programs say kind: affiliate while their commission mentions a gift card, voucher or credit; ` +
-      `set kind: referral (or reword) for: ${nonCash.join(", ")}`
-    if (NON_CASH_AFFILIATE_FAILS) errors.push(message)
-    else {
-      console.warn(`Warning: ${message}`)
-      if (process.env.GITHUB_ACTIONS) console.log(`::warning::${message}`)
     }
   }
 

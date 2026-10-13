@@ -41,15 +41,30 @@ export function noProgramProblems(data: Record<string, unknown>): string[] {
 }
 
 /**
- * Words in a program's own commission text that say the reward is not cash.
- * This is not a money parser and decides nothing about amounts: it flags a
- * file whose `kind: affiliate` (which the alternatives on no-program pages
- * read as "pays cash") is contradicted by its own rate or conditions.
+ * A file whose `kind` says affiliate (the schema's default when it is missing)
+ * and whose commission can rank, while its own commission text names a
+ * non-cash reward. The alternatives on no-program pages read kind: affiliate
+ * plus a flat or percentage figure as "pays cash", so such a file would be
+ * offered as a cash program.
+ *
+ * This is not a money parser and decides nothing about amounts. It is kept
+ * narrow on purpose, because a hit fails the build:
+ * - mode unknown never ranks, so the many import placeholders that read
+ *   "usage-based referral credits" are not flagged;
+ * - gift cards, vouchers and store credit name the reward wherever they
+ *   appear;
+ * - any other "credit", account credit included, counts only in `rate`, which
+ *   names the reward itself. In conditions it often describes something else:
+ *   a credit the referred customer gets (Fathom, Flowith, Ticket Tailor) or
+ *   credit purchases the commission is paid on (Catalister, Picturesque).
  */
-const NON_CASH_WORDS = /gift ?cards?|vouchers?|credits?/i
+const NON_CASH_ANYWHERE = /\bgift ?cards?\b|\bvouchers?\b|\bstore credits?\b/i
+const CREDIT_IN_RATE = /\bcredits?\b/i
 
 export function nonCashAffiliate(data: Record<string, unknown>): boolean {
-  if (data.kind !== "affiliate") return false
+  if (data.kind != null && data.kind !== "affiliate") return false
   const commission = (data.commission ?? {}) as Record<string, unknown>
-  return NON_CASH_WORDS.test(`${commission.rate ?? ""} ${commission.conditions ?? ""}`)
+  if (commission.mode === "unknown") return false
+  const rate = String(commission.rate ?? "")
+  return NON_CASH_ANYWHERE.test(`${rate} ${commission.conditions ?? ""}`) || CREDIT_IN_RATE.test(rate)
 }
