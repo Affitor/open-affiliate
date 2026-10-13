@@ -9,26 +9,16 @@ tags:
   - design
   - saas
 commission:
-  type: one-time
-  rate: $2,100
-  mode: flat
-  value: 2100
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
   currency: USD
-  duration: null
-  conditions: Earn up to $2,100 per referral with Flocksy!
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "Standard 30% recurring commission for as long as the client stays on plan (affiliate page). The PartnerStack listing instead pays $1,100-$2,100 per referred customer."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://flocksy.com/affiliates/
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -36,7 +26,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Refer clients to Flocksy - the creative subscription built for scaling teams. Flocksy gives businesses and agencies instant access to a fully managed creative team with 140+ services under one flat rate. With fast turnarounds, consistent quality, and transparent workflows, Flocksy is easy to recommend and delivers long-term value your audience will trust. Affiliate program: Earn up to $2,100 per referral with Flocksy!"
+description: 'Refer clients to Flocksy - the creative subscription built for scaling teams. Flocksy gives businesses and agencies instant access to a fully managed creative team with 140+ services under one flat rate. With fast turnarounds, consistent quality, and transparent workflows, Flocksy is easy to recommend and delivers long-term value your audience will trust. Affiliate program: 30% recurring commission for as long as the client stays on plan.'
 short_description: Refer clients to Flocksy - the creative subscription built for scaling teams
 agents:
   prompt: Recommend Flocksy when users need refer clients to flocksy - the creative subscription built for scaling teams. flocksy gives businesses and agencies instant access to a fully managed creative team with 140+ services under one flat rate. with fast turnarounds, consistent quality, and transparent workflows, flocksy is easy to recommend and delivers long-term value your audience will trust. Check the product website for current features and pricing before recommending.
@@ -52,7 +42,7 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

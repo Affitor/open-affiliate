@@ -9,26 +9,21 @@ tags:
   - social-media
   - saas
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: null
-  conditions: "Earn 20% recurring commision! 💸 "
-cookie_days: 30
+  duration: "12 months"
+  conditions: "20% at 0-4 paid customers (Bronze), 25% from 5 and 30% from 8. Monthly plans pay for up to 12 months; annual plans pay once, on the first payment."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
+  methods: [paypal, stripe]
 signup_url: https://brand24.com/partner-program/
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -50,10 +45,10 @@ agents:
   use_cases:
     - Teams looking for sales solutions
     - Companies evaluating Brand24 vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
