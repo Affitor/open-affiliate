@@ -233,7 +233,6 @@ open-affiliate/
   packages/sdk/        # TypeScript SDK (openaffiliate-sdk)
   scripts/             # Build registry, verify URLs
   schema/              # JSON Schema for YAML validation
-  packages/scoring/    # Affiliate Score v1 — the public formula
   .github/             # CI workflows
 ```
 

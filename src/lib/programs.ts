@@ -315,36 +315,53 @@ export function formatCommissionDisplay(value: number, flat: boolean): string {
 }
 
 /**
- * Affiliate Score (0–100)
+ * The commission a ranking may count, from structured fields only: a single
+ * percentage (mode "percentage"), or a flat amount in explicit US dollars
+ * (mode "flat", currency "USD"). Null for everything else: tiered, hybrid and
+ * unknown modes, a flat amount in another or no currency, and referral rewards
+ * (kind "referral": credit or gift cards). The rate text is never read.
+ * listScore (best-lists.ts) and affiliateScore both go through here, so a list
+ * and the Affiliate Score cannot disagree on what counts as cash.
+ */
+export function rankedCommission(p: Pick<Program, "commission" | "kind">): Program["commission"] | null {
+  const c = p.commission
+  if (p.kind === "referral") return null
+  if (c.mode === "percentage" || (c.mode === "flat" && c.currency === "USD")) return c
+  return null
+}
+
+/**
+ * Affiliate Score (0–100), from structured fields only: the rate text is
+ * never read, so rewording it cannot move a program.
  *
  * | Component          | Max | Formula                                               |
  * |--------------------|-----|-------------------------------------------------------|
- * | Commission value   |  40 | Percentage: min(rate/50,1)×40                         |
- * |                    |     | Flat fee: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
- * |                    |     | "varies": 15                                          |
- * | Cookie duration    |  15 | min(days/90,1) × 15                                  |
- * | Type + Duration    |  25 | one-time:5, tiered:12, hybrid:15                      |
+ * | Commission value   |  40 | rankedCommission only, otherwise 0                    |
+ * |                    |     | Percentage: min(value/50,1)×40                        |
+ * |                    |     | Flat USD: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
+ * | Cookie window      |  15 | min(days/90,1) × 15, once terms are confirmed; else 0 |
+ * | Type + Duration    |  25 | one-time:5, hybrid:5, tiered:12                       |
  * |                    |     | recurring:18, rec/12mo:21, rec/24mo:23, rec/lifetime:25|
  * | Verified           |  10 | 10 if verified                                        |
  * | Completeness       |  10 | +4 description, +3 agent prompt, +3 signup URL        |
  * | **Total**          | 100 |                                                       |
  */
 export function affiliateScore(p: Program): number {
-  const raw = parseCommissionRate(p.commission)
-  const isVaries = typeof p.commission.rate === "string" && /varies/i.test(p.commission.rate)
-
   // Commission value (max 40)
-  let commScore: number
-  if (isVaries) {
-    commScore = 15
-  } else if (isCommissionFlat(p.commission.rate)) {
-    commScore = raw >= 500 ? 40 : raw >= 100 ? 28 : raw >= 50 ? 16 : 8
-  } else {
-    commScore = Math.min(raw / 50, 1) * 40
+  const c = rankedCommission(p)
+  const value = c?.value ?? 0
+  let commScore = 0
+  if (c && Number.isFinite(value) && value > 0) {
+    commScore =
+      c.mode === "percentage"
+        ? Math.min(value / 50, 1) * 40
+        : value >= 500 ? 40 : value >= 100 ? 28 : value >= 50 ? 16 : 8
   }
 
-  // Cookie duration (max 15)
-  const cookieScore = Math.min((p.cookieDays ?? 0) / 90, 1) * 15
+  // Cookie window (max 15). An unverified program's stored window is usually
+  // an import default, and no surface shows it (confirmed-terms.ts), so it
+  // counts as unknown here too.
+  const cookieScore = termsConfirmed(p) ? Math.min((p.cookieDays ?? 0) / 90, 1) * 15 : 0
 
   // Type + Duration (max 25)
   let typeScore: number

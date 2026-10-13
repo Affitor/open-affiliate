@@ -302,10 +302,10 @@ async function buildRegistry(): Promise<void> {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
 
-  // The Affiliate Score reads the stored cookie window, which the browser
-  // must not receive for an unverified program (src/lib/confirmed-terms.ts).
-  // So the score ships precomputed, by the site's own affiliateScore over the
-  // registry.json just written: lists rank exactly as the server does.
+  // The Affiliate Score reads fields the browser's copy leaves out (the
+  // description, agent prompt and signup URL). So the score ships precomputed,
+  // by the site's own affiliateScore over the registry.json just written:
+  // lists rank exactly as the server does.
   const site = await import("../src/lib/programs")
   const scoreBySlug = new Map(site.programs.map((p) => [p.slug, site.affiliateScore(p)]))
 
