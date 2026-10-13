@@ -449,12 +449,13 @@ function mdUrl(url: string): string {
   // percent-encoded, with `[`, `]`, backslash and backtick. The schema's URL
   // patterns make the rest true before a value gets here: an absolute
   // lowercase http(s) URL in printable ASCII, no backslash, no character
-  // reference (a data bug), and an authority that is exactly host[:port]
-  // with an ASCII domain-name host of at most 253 characters: no IP address
-  // and no `xn--` label. Every looser host let some renderer show a host
-  // other than the one the URL reaches (a 259-character one dropped, `%61`
-  // decoded into the shown host, `!` split off with the port, `0x7f.1`
-  // shown for 127.0.0.1, punycode shown as a Unicode look-alike). Anything
+  // reference (a data bug), and an authority that is only a lowercase ASCII
+  // domain name of at most 253 characters: no port, no IP address and no
+  // `xn--` label. So the host shown is the host a URL parser reaches, byte
+  // for byte. Every looser host let some renderer show another one (a
+  // 259-character one dropped, `%61` decoded into the shown host, `!` split
+  // off with the port, `0x7f.1` shown for 127.0.0.1, punycode shown as a
+  // Unicode look-alike, `Flippa.com` and `:443` normalised away). Anything
   // else — only possible if the schema was bypassed — is printed bare rather
   // than given angle brackets, because `<foo>` without a scheme is an HTML
   // tag and `<javascript:…>` is a link.

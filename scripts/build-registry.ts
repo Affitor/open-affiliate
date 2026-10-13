@@ -23,8 +23,8 @@ const SIGNUP_URL_DEBT = new Set<string>(
 
 /**
  * URL fields whose schema `pattern` admits only an absolute lowercase http(s)
- * URL whose authority is exactly host[:port], with an ASCII domain-name host
- * (no IP address, no IDN), in printable ASCII without a backslash and without
+ * URL whose authority is only a lowercase ASCII domain name (no port, no IP
+ * address, no IDN), in printable ASCII without a backslash and without
  * HTML character references (`&amp;`, `&#38;`, `&#x26;`).
  * Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
@@ -141,10 +141,12 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // (`2130706433`, `0x7f.1`, `1.2.3`) that a URL parser reads as 127.0.0.1 or
   // 1.2.0.3; and punycode, which markdown-it shows decoded, so
   // `xn--pple-43d.com` displays as a Cyrillic look-alike of apple.com. So the
-  // host is an allow-list: a domain name of at least two labels of letters,
-  // digits and hyphens whose last label starts with a letter, with no `xn--`
-  // label. The authority is nothing but host[:port], and the whole URL is
-  // printable ASCII.
+  // host is an allow-list: a lowercase domain name of at least two labels of
+  // letters, digits and hyphens whose last label starts with a letter, with no
+  // `xn--` label. The authority is nothing but that host, because what a
+  // parser does with the rest also differs from what is shown: it lowercases
+  // `Flippa.com` and drops a written default port such as `:443`. The whole
+  // URL is printable ASCII.
   //
   // IDN is refused outright (PR #170, review round 10), not handled. If a real
   // brand ever only has an internationalised domain, a person should decide
@@ -158,15 +160,15 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
       const shown = value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)
       throw new Error(
         `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must be an ` +
-          `absolute http:// or https:// URL (lowercase scheme) whose authority is ` +
-          `exactly host[:port]: the host is a domain name of letters, digits, dots and ` +
-          `hyphens (at most 253 characters; at least two labels, each 1 to 63 characters, ` +
-          `not starting or ending with a hyphen; the last label starts with a letter), so ` +
-          `no user@, no IP address, no IPv6 literal and no percent-encoding in the host. ` +
-          `Internationalised domains are not accepted (no xn-- label); use the brand's ` +
-          `ASCII domain. A port is 1 to 5 digits. The whole URL must be printable ASCII ` +
-          `with no spaces or backslash, and contain no HTML character reference (write ` +
-          `"&", not "&amp;" or "&#38;").`
+          `absolute http:// or https:// URL (lowercase scheme) whose authority is a ` +
+          `lowercase domain name and nothing else: no port and no user@. The domain uses ` +
+          `only lowercase letters, digits, dots and hyphens (at most 253 characters; at ` +
+          `least two labels, each 1 to 63 characters, not starting or ending with a ` +
+          `hyphen; the last label starts with a letter), so no IP address, no IPv6 ` +
+          `literal and no percent-encoding in the host. Internationalised domains are not ` +
+          `accepted (no xn-- label); use the brand's ASCII domain. The whole URL must be ` +
+          `printable ASCII with no spaces or backslash, and contain no HTML character ` +
+          `reference (write "&", not "&amp;" or "&#38;").`
       )
     }
   }

@@ -33,8 +33,8 @@
     "url": {
       "type": "string",
       "format": "uri",
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))(?:(?![xX][nN]--)[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+(?![xX][nN]--)[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?::[0-9]{1,5})?(?:[/?#]|$)",
-      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a domain name of letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no user@, no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "kind": {
       "type": "string",
@@ -235,8 +235,8 @@
         "null"
       ],
       "format": "uri",
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))(?:(?![xX][nN]--)[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+(?![xX][nN]--)[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?::[0-9]{1,5})?(?:[/?#]|$)",
-      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a domain name of letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no user@, no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "approval": {
       "type": "string",
@@ -284,8 +284,8 @@
         "string",
         "null"
       ],
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))(?:(?![xX][nN]--)[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\\.)+(?![xX][nN]--)[A-Za-z](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?::[0-9]{1,5})?(?:[/?#]|$)",
-      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a domain name of letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no user@, no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "network": {
       "type": [

@@ -611,7 +611,7 @@ test("every value written is checked against the schema", () => {
     [["short_description"], "x".repeat(100)],
     [["slug"], "citegraph"],
     [["signup_url"], "https://x.com/join?a=1&b=2"],
-    [["url"], "https://a.b.co.uk:8443/p"],
+    [["url"], "https://a.b.co.uk/Path?Q=1"],
   ]
   assert.doesNotThrow(() => checkSchema(ok, "x.yaml"))
   for (const url of [
@@ -624,6 +624,8 @@ test("every value written is checked against the schema", () => {
     "https://xn--bcher-kva%61.com/path",
     "https://a!b.example:80/path",
     "https://0x7f.1/path",
+    "https://Flippa.com/",
+    "https://x.com:443/",
     "https://localhost/",
     "https://xn--pple-43d.com/path",
   ]) {
