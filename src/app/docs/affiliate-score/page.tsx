@@ -260,11 +260,11 @@ export default function AffiliateScorePage() {
               </thead>
               <tbody className="text-muted-foreground">
                 <tr className="border-b border-border/20">
-                  <td className="px-4 py-2">Description (20+ chars)</td>
+                  <td className="px-4 py-2">Description (21+ chars)</td>
                   <td className="px-4 py-2 text-center">4</td>
                 </tr>
                 <tr className="border-b border-border/20">
-                  <td className="px-4 py-2">Agent prompt (10+ chars)</td>
+                  <td className="px-4 py-2">Agent prompt (11+ chars)</td>
                   <td className="px-4 py-2 text-center">3</td>
                 </tr>
                 <tr>

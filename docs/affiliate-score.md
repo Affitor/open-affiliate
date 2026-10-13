@@ -77,8 +77,8 @@ Programs with the `verified` badge receive 10 bonus points. A verified program h
 
 | Field | Points |
 |---|---|
-| Description (20+ chars) | 4 |
-| Agent prompt (10+ chars) | 3 |
+| Description (21+ chars) | 4 |
+| Agent prompt (11+ chars) | 3 |
 | Signup URL | 3 |
 
 Programs that provide complete data help both human affiliates and AI agents make better decisions.

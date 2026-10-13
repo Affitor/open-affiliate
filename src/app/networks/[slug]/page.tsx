@@ -6,10 +6,12 @@ import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
+import { listScore } from "@/lib/best-lists";
 import {
   networkToSlug,
   slugToNetwork,
-  parseCommissionRate,
+  commissionStats,
+  formatCommissionDisplay,
   commissionLabel,
   commissionDisplay,
   commissionUnknown,
@@ -23,6 +25,7 @@ import {
   NETWORK_META,
   NETWORK_KIND_LABEL,
   confirmedTerms,
+  type PaidBy,
   type Program,
 } from "@/lib/programs";
 
@@ -35,6 +38,14 @@ export function generateStaticParams() {
 
 function liveOn(network: string): Program[] {
   return livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network);
+}
+
+/** "Acme, at 50% recurring/12mo — verified by OpenAffiliate." */
+function paidBy({ value, program }: PaidBy, flat: boolean): string {
+  return (
+    `${program.name}, at ${formatCommissionDisplay(value, flat)} ${commissionLabel(program.commission)}` +
+    (program.verified ? " — verified by OpenAffiliate." : " — community-submitted and unconfirmed.")
+  );
 }
 
 /**
@@ -122,21 +133,21 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
+  // By commission as the list pages order it (listScore: structured fields
+  // only), then programs that publish no figure last.
   const netPrograms = [...liveOn(network)].sort(
-    (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
+    (a, b) =>
+      listScore(b) - listScore(a) ||
+      Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission))
   );
   if (netPrograms.length === 0) notFound();
   const name = networkName(network);
   const heading = networkHeading(network);
   const meta = NETWORK_META[network];
 
-  // Only programs with a published figure feed the averages. Averaging an
-  // unknown as zero is how a network of mostly-unpublished programs ends up
-  // advertising a 4% average it never earned.
   const priced = netPrograms.filter((p) => !commissionUnknown(p.commission));
-  const rates = priced.map((p) => parseCommissionRate(p.commission));
-  const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
-  const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
+  // Rates and flat payouts apart, from structured fields only (commissionStats).
+  const { topRate, topFlatUsd } = commissionStats(netPrograms);
   // Verified cookie windows only: an unverified one is not shown (confirmed-terms.ts).
   const cookies = netPrograms.flatMap((p) => {
     const days = confirmedTerms(p).cookieDays;
@@ -146,7 +157,6 @@ export default async function NetworkPage({
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
   const verifiedCount = netPrograms.filter((p) => p.verified).length;
   const kind = networkKind(network);
-  const topProgram = netPrograms[0];
 
   const answer =
     kind === "direct"
@@ -232,9 +242,9 @@ export default async function NetworkPage({
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
             <DollarSign className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wide">Highest</span>
+            <span className="text-[10px] uppercase tracking-wide">Highest rate</span>
           </div>
-          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{priced.length ? (priced[0].commission.mode === "flat" ? `$${priced[0].commission.value}` : `${priced[0].commission.value}%`) : "—"}</p>
+          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{topRate ? formatCommissionDisplay(topRate.value, false) : "—"}</p>
         </div>
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
@@ -319,15 +329,15 @@ export default async function NetworkPage({
             {networkHowToJoin(network)}
           </p>
         </div>
-        {topProgram && (
+        {(topRate || topFlatUsd) && (
           <div>
             <h2 className="text-base font-semibold">Which pays the most?</h2>
             <p className="mt-1.5 text-sm text-muted-foreground max-w-prose">
-              {topProgram.name}, at {commissionDisplay(topProgram.commission)}{" "}
-              {commissionLabel(topProgram.commission)}
-              {topProgram.verified
-                ? " — verified by OpenAffiliate."
-                : " — community-submitted and unconfirmed."}
+              {topRate && topFlatUsd
+                ? `By rate, ${paidBy(topRate, false)} By flat payout, ${paidBy(topFlatUsd, true)} A rate and a flat amount compare only against a sale price, so both are given.`
+                : topRate
+                  ? paidBy(topRate, false)
+                  : paidBy(topFlatUsd!, true)}
             </p>
           </div>
         )}
@@ -338,8 +348,8 @@ export default async function NetworkPage({
               {netPrograms.length - priced.length} of {netPrograms.length}{" "}
               {netPrograms.length === 1 ? "program" : "programs"} here
               never published a commission figure. Rather than print a guess, the
-              registry records that no figure exists — and the averages above are
-              taken from the {priced.length} that did publish one.
+              registry records that no figure exists, and the highest rate above
+              counts only programs that publish a single percentage.
             </p>
           </div>
         )}

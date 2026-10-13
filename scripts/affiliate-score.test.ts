@@ -81,6 +81,17 @@ test("a flat amount in another currency, or in none, is not read as US dollars",
   assert.equal(affiliateScore(fixture({}, { mode: "percentage", value: 25, currency: "EUR", rate: "25%" })), 60)
 })
 
+test("a tiered or hybrid deal scores 0 commission points, whatever value it stores", () => {
+  for (const mode of ["tiered", "hybrid"] as const) {
+    for (const value of [30, 150, 500]) {
+      assert.equal(affiliateScore(fixture({}, { mode, value, currency: "USD", rate: "up to $150" })), 40, `${mode} ${value}`)
+    }
+  }
+  // Non-vacuity: the same values as a single rate or a flat USD amount count.
+  assert.equal(affiliateScore(fixture({}, { mode: "percentage", value: 30, rate: "up to $150" })), 64)
+  assert.equal(affiliateScore(fixture({}, { mode: "flat", value: 150, currency: "USD", rate: "up to $150" })), 68)
+})
+
 test("an unverified program's stored cookie window adds nothing", () => {
   const unverified = fixture({ verified: false, cookieDays: 90 })
   // 0 commission, 0 cookie, 5 type, 0 verified, 10 completeness.

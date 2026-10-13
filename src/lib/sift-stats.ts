@@ -1,11 +1,11 @@
 import { createClient } from "@supabase/supabase-js"
 import {
   livePrograms,
-  parseCommissionRate,
-  isCommissionFlat,
   formatCommissionDisplay,
   affiliateScore,
+  commissionStats,
   confirmedTerms,
+  rankedCommission,
   type Program,
 } from "./programs"
 
@@ -171,14 +171,15 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
   const opportunities = allProgramsWithData
     .filter((p) => p._program && p.affiliateScore >= 50 && p.verifiedContent <= 3)
     .map((p) => {
-      const commRate = p._program ? parseCommissionRate(p._program.commission.rate) : 0
-      const flat = p._program ? isCommissionFlat(p._program.commission.rate) : false
-      const commDisplay = formatCommissionDisplay(commRate, flat)
+      // The figure only when the structured fields give one (rankedCommission):
+      // a gift card, a tiered deal or another currency is never printed as "$X" or "X%".
+      const c = p._program ? rankedCommission(p._program) : null
+      const figure = c?.value && c.value > 0 ? `${formatCommissionDisplay(c.value, c.mode === "flat")} ` : ""
       return {
         ...p,
         reason: p.verifiedContent === 0
-          ? `${commDisplay} ${p.commissionType} commission, zero verified content — wide open`
-          : `${commDisplay} ${p.commissionType}, only ${p.verifiedContent} verified pieces — low competition`,
+          ? `${figure}${p.commissionType} commission, zero verified content — wide open`
+          : `${figure}${p.commissionType}, only ${p.verifiedContent} verified pieces — low competition`,
         _program: undefined,
       }
     })
@@ -239,12 +240,9 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
       const catPrograms = allProgramsWithData.filter((p) => p.category === category && p.totalContent >= 3)
       const topProg = catPrograms.sort((a, b) => b.avgSiftScore - a.avgSiftScore)[0]
 
-      // Avg commission for category
-      const catProgramsFull = livePrograms.filter((p) => p.category === category)
-      const pctRates = catProgramsFull
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      const avgComm = pctRates.length ? Math.round(pctRates.reduce((a, b) => a + b, 0) / pctRates.length) : 0
+      // Mean single percentage rate in the category (commissionStats): flat
+      // amounts, tiered deals and unpublished rates are not averaged in.
+      const avgRate = commissionStats(livePrograms.filter((p) => p.category === category)).avgRate
 
       return {
         category,
@@ -256,7 +254,7 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
         topProgram: topProg
           ? { slug: topProg.slug, name: topProg.name, avgScore: topProg.avgSiftScore }
           : { slug: "", name: "—", avgScore: 0 },
-        avgCommission: avgComm > 0 ? `${avgComm}%` : "—",
+        avgCommission: avgRate != null ? `${Math.round(avgRate)}%` : "—",
       }
     })
     .sort((a, b) => b.avgSiftScore - a.avgSiftScore)

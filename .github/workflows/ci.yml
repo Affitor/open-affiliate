@@ -35,6 +35,7 @@ jobs:
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
       - run: npx tsx --test scripts/affiliate-score.test.ts
+      - run: npx tsx --test scripts/commission-stats.test.ts
       - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
       - run: npm run verify:client-registry
       - run: npm run verify:machine-surfaces
