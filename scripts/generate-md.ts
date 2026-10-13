@@ -895,11 +895,7 @@ function rankingsMd(): string {
 /** Same rows, intro and FAQ as /best/<slug>, from the same builder. */
 function bestListMd(list: BestList): string {
   const data = buildBestList(list)
-  // bestListCopy escapes names and terms but prints `checked` as given. It is
-  // the first ten characters of a contributor's last_verified_at, which is room
-  // enough for `[a](//x.y)` or `<a href=x>`.
-  const checked = data.checked && mdEscape(data.checked)
-  const { intro, faq } = bestListCopy({ ...data, checked }, mdEscape)
+  const { intro, faq } = bestListCopy(data, mdEscape)
   const rows = data.rows
     .map((p, i) => {
       const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
@@ -911,7 +907,7 @@ function bestListMd(list: BestList): string {
     `> ${intro}`,
     [
       `How we picked: ${list.criteria} ${SHARED_RULES}`,
-      checked ? `Last checked: ${checked}, the most recent verification among these programs.` : null,
+      data.checked ? `Last checked: ${mdEscape(data.checked)}, the most recent verification among these programs.` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
     section("FAQ", faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),

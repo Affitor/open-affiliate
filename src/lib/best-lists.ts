@@ -188,7 +188,9 @@ export function buildBestList(list: BestList): BestListData {
  * of the registry is community-submitted.
  *
  * `esc` is applied to every contributor-written piece (names, rate text,
- * durations) and to nothing else. The page passes nothing, since React escapes;
+ * durations, and `checked`: ten characters of a contributor's
+ * last_verified_at are room enough for `[a](//x.y)`) and to nothing else.
+ * The page passes nothing, since React escapes;
  * the markdown twin passes its inline escaper, so a name cannot become a link.
  */
 export function bestListCopy(data: BestListData, esc: (text: string) => string = (t) => t): { intro: string; faq: Faq[] } {
@@ -236,7 +238,7 @@ export function bestListCopy(data: BestListData, esc: (text: string) => string =
   }
   faq.push({
     q: "How was this list picked?",
-    a: `${list.criteria} ${SHARED_RULES}${data.checked ? ` The most recent verification among these programs was on ${data.checked}.` : ""}`,
+    a: `${list.criteria} ${SHARED_RULES}${data.checked ? ` The most recent verification among these programs was on ${esc(data.checked)}.` : ""}`,
   })
 
   return { intro, faq }
