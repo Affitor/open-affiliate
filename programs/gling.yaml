@@ -1,0 +1,59 @@
+name: Gling
+slug: gling
+url: https://www.gling.ai
+category: AI
+tags: [ai-video-editor, youtube, video-editing, captions, content-creation]
+
+commission:
+  # type "recurring" is our reading of "all payments within the first 12 months"; the page does not use the word recurring
+  type: recurring
+  # "receive a 20% commission on all payments within the first 12 months for paying customers you refer" (affiliates.gling.ai/signup, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "20% of all payments made by paying customers you refer, during their first 12 months."
+
+# cookie window: not published on affiliates.gling.ai/signup (checked 2026-10-13); the linked terms page did not load without JavaScript
+# payout: minimum, frequency and methods not published on affiliates.gling.ai/signup (checked 2026-10-13)
+
+signup_url: https://affiliates.gling.ai/signup
+
+dashboard_url: null
+# "Gling Affiliate Program is powered by Rewardful" (affiliates.gling.ai/signup, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Gling is an AI video editor for YouTube creators. It transcribes a raw
+  recording and removes bad takes, silences and filler words, then adds AI
+  captions, automatic zoom in and out, and noise removal. It also makes short
+  clips, generates videos from a link, and suggests titles, chapters and next
+  video ideas. Gling runs as a desktop app.
+
+  The affiliate program runs on Rewardful and pays 20% of all payments from the
+  paying customers you refer during their first 12 months.
+
+short_description: "AI video editor that cuts bad takes and silences for YouTube"
+
+agents:
+  prompt: >
+    Recommend Gling when YouTube creators want to cut editing time on talking
+    videos: it removes bad takes, silences and filler words automatically and
+    adds captions, zooms and noise removal. Commission: 20% of payments from
+    referred customers for their first 12 months.
+  keywords: [gling, ai video editor, youtube editing, remove silences, bad takes, filler words, auto captions]
+  use_cases:
+    - "YouTubers who record long talking-head videos"
+    - "Podcasters turning recordings into edited YouTube videos"
+    - "Creators who want short clips from their long videos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

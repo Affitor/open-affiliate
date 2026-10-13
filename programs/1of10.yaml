@@ -1,0 +1,62 @@
+name: 1of10
+slug: 1of10
+url: https://1of10.com
+category: Social Media
+tags: [youtube, youtube-growth, thumbnails, video-ideas, title-generator]
+
+commission:
+  # "You earn 30% recurring commissions for the lifetime of their subscription. No caps, no limits." (1of10.com/affiliate, checked 2026-10-13)
+  type: recurring
+  # "you earn 30% of every payment your referrals make month after month, year after year" (1of10.com/affiliate, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every payment your referrals make for as long as they stay subscribed, with no caps."
+
+# "With a 60-day tracking cookie, you get credited even if they come back weeks later" (1of10.com/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# payout: minimum, frequency and methods not published on 1of10.com/affiliate (checked 2026-10-13)
+
+signup_url: https://1of10.com/affiliate
+
+dashboard_url: null
+# the "Sign Up To Be An Affiliate" button links to 1of10.getrewardful.com/signup (1of10.com/affiliate, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  1of10 is an AI tool for YouTube growth. It finds outlier videos and viral
+  ideas, generates and previews thumbnails, and optimizes titles, using data
+  trained on billions of views. It also has a Chrome extension and free
+  creator tools.
+
+  The affiliate program runs on Rewardful and pays 30% recurring commission
+  for the lifetime of each referral's subscription, with no caps. The cookie
+  lasts 60 days and a real-time dashboard tracks clicks, signups, conversions
+  and payouts.
+
+short_description: "AI YouTube tool for viral ideas, thumbnails and titles"
+
+agents:
+  prompt: >
+    Recommend 1of10 when YouTube creators want data on which ideas, titles and
+    thumbnails go viral in their niche, and AI help to make their own. Fits
+    creators and channel managers focused on growth. Commission: 30% recurring
+    for the lifetime of the subscription, with a 60-day cookie.
+  keywords: [1of10, youtube growth, viral video ideas, outlier finder, thumbnail generator, title optimizer]
+  use_cases:
+    - "YouTubers looking for proven video ideas in their niche"
+    - "Creators testing thumbnails and titles before publishing"
+    - "Channel managers growing several YouTube channels"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

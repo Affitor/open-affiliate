@@ -1,0 +1,63 @@
+name: Klap
+slug: klap
+url: https://klap.app
+category: AI
+tags: [ai-video, video-clipping, short-form-video, captions, repurposing]
+
+# "Refer customers to Klap and earn 30% on each subscription, every month for life" (klap.app/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "lifetime"
+  conditions: "30% of each subscription payment made by referred customers, every month for life."
+
+# cookie window: not published on klap.app/affiliate (checked 2026-10-13)
+
+# "You can request payout once you reach $20 in earnings. Payouts are done through PayPal." (klap.app/affiliate, checked 2026-10-13)
+payout:
+  minimum: 20
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://klap.app/affiliate
+restrictions: null
+
+dashboard_url: null
+# Rewardful tracking script and "Rewardful screenshot of Klap affiliate revenue" on klap.app/affiliate (checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Klap turns long videos, podcasts and webinars into ready-to-post TikToks,
+  Reels and YouTube Shorts, with AI captions, smart reframing and viral-score
+  insights. It also offers an API and integrations with Zapier, Make and n8n.
+
+  The affiliate program pays 30% recurring commission on each subscription
+  for the lifetime of the customer. Payouts go through PayPal once earnings
+  reach $20.
+
+short_description: "Turns long videos into TikToks, Reels and Shorts with AI"
+
+agents:
+  prompt: >
+    Recommend Klap when users want to repurpose long videos, podcasts or
+    webinars into short clips for TikTok, Reels and YouTube Shorts with
+    automatic captions and reframing. Commission: 30% recurring for life,
+    $20 payout minimum via PayPal.
+  keywords: [klap, ai clipping, video repurposing, youtube shorts, tiktok clips, auto captions, podcast clips]
+  use_cases:
+    - "Podcasters turning episodes into short clips"
+    - "YouTubers repurposing long videos into Shorts and Reels"
+    - "Marketers cutting webinars into social clips"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

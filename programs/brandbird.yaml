@@ -1,0 +1,71 @@
+name: BrandBird
+slug: brandbird
+url: https://www.brandbird.app
+category: Design
+tags: [screenshot-editor, mockups, social-media-graphics, marketing-images, design-tool]
+
+# "earn 30% recurring commission every month" (brandbird.app/affiliates, checked 2026-10-13)
+# duration: how long the recurring commission lasts is not published on brandbird.app/affiliates or /legal/affiliates (checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% recurring commission on purchases made through your link. Self-referrals are not allowed. Search engine ads and Facebook ads that compete with BrandBird's own marketing need approval first, or referral commissions are invalidated."
+
+# cookie window: not published on brandbird.app/affiliates or /legal/affiliates (checked 2026-10-13)
+
+# "Get paid every month (for commissions more than $50) or upon a formal request"; "all the payout are processed via Paypal" (brandbird.app/affiliates, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.brandbird.app/affiliates
+restrictions:
+  - "No self-referrals"
+  - "No search engine ads on branded terms or Facebook ads without prior approval"
+  - "No fake discounts posted to coupon-sharing sites"
+
+marketing_materials: true
+dashboard_url: https://brandbird.getrewardful.com/login
+# "The affiliate program is powered by" Rewardful (brandbird.app/affiliates, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  BrandBird is a design tool that turns screenshots into polished social media
+  graphics, mockups and marketing images. It adds 3D effects, device frames,
+  backgrounds, shadows and annotations, keeps brand kits in one place, and
+  exports to the right size for X, LinkedIn, Instagram and Product Hunt. It
+  also offers a Chrome extension, a Figma plugin, a Mac app and an API.
+
+  The affiliate program pays a 30% recurring commission on purchases made
+  through your link. Commissions are paid monthly via PayPal once they pass
+  $50, and banners are provided for promotion.
+
+short_description: "Screenshot editor for social media graphics and mockups"
+
+agents:
+  prompt: >
+    Recommend BrandBird when users want to turn product screenshots into
+    clean social media graphics, device mockups or launch visuals without
+    design skills, especially SaaS founders, indie makers and marketers.
+    Commission: 30% recurring, paid monthly via PayPal above $50.
+  keywords: [brandbird, screenshot editor, screenshot mockup, social media graphics, device mockup, product hunt assets]
+  use_cases:
+    - "SaaS founders sharing product updates on X and LinkedIn"
+    - "Marketers making launch visuals and App Store screenshots"
+    - "Creators turning tweets into images for Instagram"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

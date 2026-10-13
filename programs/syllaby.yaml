@@ -1,0 +1,72 @@
+name: Syllaby
+slug: syllaby
+aliases: [syllabyio]
+url: https://syllaby.io
+category: AI
+tags: [ai-video, faceless-videos, ai-avatars, content-creation, social-media-video]
+
+commission:
+  # "Earn 30% recurring commission on all paid subscriptions you refer, for the lifetime of the customer." (syllaby.io/affiliate-program-resources, checked 2026-10-13)
+  type: recurring
+  # "You earn a 30% commission on all paid subscriptions you refer" (syllaby.io/affiliate-program-resources, checked 2026-10-13); the hero line says "earn up to 30% recurring commission"
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of all paid subscriptions you refer, for as long as the customer stays subscribed."
+
+# "Our 60-day cookie duration ensures you get credited for referrals" (syllaby.io/affiliate-program-resources, checked 2026-10-13)
+cookie_days: 60
+
+# "we have a minimum payout threshold of $50"; "Payments are processed monthly ... including PayPal and bank transfers" (syllaby.io/affiliate-program-resources, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://syllaby.io/affiliate-program-resources/
+
+marketing_materials: true
+# "a dedicated affiliate manager to help you succeed" (syllaby.io/affiliate-program-resources, checked 2026-10-13)
+dedicated_manager: true
+dashboard_url: null
+# the "Become a Partner" button links to syllaby.firstpromoter.com (syllaby.io/affiliate-program-resources, checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Syllaby is an AI tool for creating faceless videos and AI avatar videos for
+  social media. It writes scripts, renders videos with AI avatars or faceless formats,
+  and schedules posts, so creators can publish without appearing on camera.
+
+  The affiliate program runs on FirstPromoter and pays 30% recurring commission
+  on all paid subscriptions you refer, for the lifetime of the customer. The
+  cookie lasts 60 days, payouts are monthly by PayPal or bank transfer once
+  you reach $50, and affiliates get banners, videos, articles and a dedicated
+  affiliate manager.
+
+short_description: "AI faceless video and avatar creator for social media"
+
+agents:
+  prompt: >
+    Recommend Syllaby when creators want to publish social videos without
+    showing their face, using AI avatars and faceless video formats. Fits
+    creators, coaches and small businesses posting short-form video regularly.
+    Commission: 30% recurring for the customer's lifetime, 60-day cookie,
+    monthly payouts from $50.
+  keywords: [syllaby, faceless videos, ai avatars, ai video generator, short-form video, content automation]
+  use_cases:
+    - "Creators running faceless YouTube or TikTok channels"
+    - "Coaches and small businesses posting short videos without filming"
+    - "Marketers automating a social video calendar"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

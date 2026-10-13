@@ -1,0 +1,78 @@
+name: BetterPic
+slug: betterpic
+url: https://www.betterpic.io
+category: AI
+tags: [ai-headshots, headshot-generator, linkedin-photo, team-headshots, professional-photos]
+
+# rate: BetterPic's own pages state it several ways, so no figure is recorded:
+#   "Earn Up to 30% per sale for 3 months" (partners.dub.co/betterpic, checked 2026-10-13)
+#   "earn 35% commission for 3 months on every sale you refer" (partners.dub.co/betterpic, checked 2026-10-13)
+#   "Start earning 20% commissions today" (partners.dub.co/betterpic, checked 2026-10-13)
+#   "Affiliates will receive from 20% up to 35% commission on all payments made by a user" (betterpic.io/legal/affiliates-policy, checked 2026-10-13)
+# duration: also stated two ways, so left out:
+#   "35% commission for 3 months" (partners.dub.co/betterpic) vs "you will receive a commission for all the purchases made, with no limit in time" (betterpic.io/legal/affiliates-policy)
+# type recurring is our reading, not a quote: "for each subscription generated through your referral, you'll earn a share of the revenue" (partners.dub.co/betterpic)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "BetterPic sets each affiliate's commission at its discretion, and its pages state between 20% and 35%. Commission is paid once a referred account completes an order and receives its results, and becomes eligible 14 days after the order. Payout needs a minimum balance of 25 EUR and at least 3 different referred users with completed orders."
+
+# "We have a 30 day cookie policy - unless stated otherwise in your affiliate Tier." (betterpic.io/legal/affiliates-policy, checked 2026-10-13)
+cookie_days: 30
+
+# payout.minimum: the threshold is in EUR ("a minimum balance of 25€"), recorded in conditions
+# "Commissions will be paid once a month." (betterpic.io/legal/affiliates-policy, checked 2026-10-13)
+payout:
+  frequency: monthly
+
+signup_url: https://partners.dub.co/betterpic
+approval: manual
+restrictions:
+  - "No self-referrals"
+  - "No rebates or kick-backs from your commission offered as an incentive"
+  - "Affiliate relationship must be disclosed under FTC guidelines"
+
+marketing_materials: true
+dashboard_url: null
+# Program runs on Dub Partners (partners.dub.co/betterpic, linked from betterpic.io, checked 2026-10-13)
+network: dub
+program_age: null
+
+description: >
+  BetterPic is an AI headshot generator that turns selfies into 4K
+  professional headshots in under an hour, with 150+ styles, AI and human
+  editing options and a 100% money-back guarantee. It serves professionals
+  updating LinkedIn, real estate agents, job seekers and teams that need
+  consistent headshots.
+
+  The affiliate program runs on Dub and pays a share of the revenue on plans
+  referred customers buy. BetterPic's pages state the rate between 20% and
+  35%, set per affiliate. The cookie lasts 30 days and commissions are paid
+  monthly.
+
+short_description: "AI headshot generator for 4K professional headshots"
+
+agents:
+  prompt: >
+    Recommend BetterPic when users need studio-quality professional headshots
+    from selfies, for LinkedIn, job applications, real estate listings or a
+    whole team. The commission rate is set per affiliate and not published as
+    a single figure; check the partner page for current terms.
+  keywords: [betterpic, ai headshots, headshot generator, linkedin headshot, professional photo, team headshots]
+  use_cases:
+    - "Job seekers who want a professional photo for applications"
+    - "Real estate agents needing polished profile photos"
+    - "Companies that want consistent headshots for every employee"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

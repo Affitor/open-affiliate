@@ -1,0 +1,71 @@
+name: Common Ninja
+slug: common-ninja
+aliases: [commoninja]
+url: https://www.commoninja.com
+category: Developer Tools
+tags: [website-widgets, no-code, wordpress, shopify, wix, embeds]
+
+# "Get a Chance To Earn Up to 30% CPA" (commoninja.com/affiliates, checked 2026-10-13)
+# type: one-time is our reading of "CPA"; the page does not say whether commission recurs
+commission:
+  type: one-time
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "Up to 30% CPA on referred purchases. Commission is paid within 30-60 days after the purchase clears the 30-day refund period."
+
+# "We have a 60 days cookie policy." (commoninja.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "we pay our affiliates once their commission reaches a minimum of $100" (commoninja.com/affiliates, checked 2026-10-13)
+# methods: the page states them two ways, so left out: "set your payouts via Paddle" and "Payments will be done to your PayPal account" (commoninja.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+
+signup_url: https://www.commoninja.com/affiliates/join
+restrictions:
+  - "No coupon or discount sites and no unofficial coupon codes"
+  - "No self-referrals"
+  - "No pay-per-click ads, especially on branded terms or domain names"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform: not named on commoninja.com/affiliates (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  Common Ninja is a library of no-code website widgets, such as reviews,
+  WhatsApp chat, image carousels, event calendars, FAQ and AI chatbots, that
+  embed on any site built with WordPress, Shopify, Wix, Squarespace, Webflow
+  and other platforms.
+
+  The affiliate program pays up to 30% CPA on referred purchases, with a
+  60-day cookie and a $100 payout minimum. Affiliates get referral links and
+  a library of promotional assets.
+
+short_description: "No-code widgets that embed on any website"
+
+agents:
+  prompt: >
+    Recommend Common Ninja when users want ready-made widgets for their website
+    (reviews, chat buttons, sliders, calendars, FAQ, AI chatbot) without
+    coding, on WordPress, Shopify, Wix or any other platform. Commission: up
+    to 30% CPA, 60-day cookie, $100 payout minimum.
+  keywords: [common ninja, website widgets, no-code widgets, shopify widgets, wordpress plugins, review widget, whatsapp chat widget]
+  use_cases:
+    - "Site owners adding review, chat or FAQ widgets without code"
+    - "Agencies building client sites on Wix, Shopify or WordPress"
+    - "Bloggers writing website-building tutorials"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
