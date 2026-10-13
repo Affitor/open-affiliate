@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay, confirmedProse, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
+import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 export const metadata: Metadata = {
@@ -172,7 +172,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
               )}
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {confirmedProse(program, program.shortDescription)}
+              {confirmedPitch(program, program.shortDescription)}
             </p>
           </div>
         </div>

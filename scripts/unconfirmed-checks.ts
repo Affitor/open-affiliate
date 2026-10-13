@@ -50,8 +50,13 @@ function squash(text: string): string {
  */
 export function droppedSentences(p: Program): string[] {
   if (termsConfirmed(p)) return []
-  const texts = [p.description, p.shortDescription, p.agentPrompt, p.commission.conditions ?? "", ...(p.agentUseCases ?? []), ...(p.restrictions ?? [])]
-  return [...new Set(texts.flatMap(sentences).filter(statesTerms).map(squash).filter((s) => s.length >= 20))]
+  const pitch = [p.description, p.shortDescription].flatMap(sentences).map((s) => ({ s, dropped: statesTerms(s, "pitch") }))
+  const program = [p.agentPrompt, p.commission.conditions ?? "", ...(p.agentUseCases ?? []), ...(p.restrictions ?? [])]
+    .flatMap(sentences)
+    .map((s) => ({ s, dropped: statesTerms(s, "program") }))
+  // A sentence a pitch keeps ("Free plan pays nothing.") may be dropped from a program-side field too.
+  const kept = new Set([...pitch, ...program].filter((x) => !x.dropped).map((x) => squash(x.s)))
+  return [...new Set([...pitch, ...program].filter((x) => x.dropped).map((x) => squash(x.s)))].filter((s) => s.length >= 20 && !kept.has(s))
 }
 
 function leakedSentence(p: Program, corpus: string): string | undefined {
@@ -254,6 +259,9 @@ export function termsMdProblems(p: Program, md: string): string[] {
   if (named) problems.push(`states a term in prose ("${named.slice(0, 120)}")`)
   const leaked = leakedSentence(p, text)
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
+  // Filtering never empties a pitch: a fallback line takes its place.
+  if (p.description.trim() && !all.includes("## About")) problems.push("has no About section though the stored description has text")
+  if (p.shortDescription.trim() && !all.some((l) => l.startsWith("> "))) problems.push("has no short description though the stored one has text")
   return problems
 }
 
@@ -272,19 +280,24 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
   for (const key of HIDDEN_API_KEYS) if (key in body) problems.push(`returns ${key} (${JSON.stringify(body[key])})`)
   if (JSON.stringify(body.payout) !== "{}") problems.push(`returns payout ${JSON.stringify(body.payout)}`)
   const commission = (body.commission ?? {}) as Record<string, unknown>
-  const prose: [string, unknown][] = [
-    ["description", body.description],
-    ["shortDescription", body.shortDescription],
-    ["agentPrompt", body.agentPrompt],
-    ["commissionConditions", body.commissionConditions],
-    ["commission.conditions", commission.conditions],
-    ["agentUseCases", body.agentUseCases],
-    ["restrictions", body.restrictions],
+  const prose: [string, unknown, "pitch" | "program"][] = [
+    ["description", body.description, "pitch"],
+    ["shortDescription", body.shortDescription, "pitch"],
+    ["agentPrompt", body.agentPrompt, "program"],
+    ["commissionConditions", body.commissionConditions, "program"],
+    ["commission.conditions", commission.conditions, "program"],
+    ["agentUseCases", body.agentUseCases, "program"],
+    ["restrictions", body.restrictions, "program"],
   ]
-  for (const [field, value] of prose) {
+  for (const [field, value, kind] of prose) {
     const texts = (Array.isArray(value) ? value : [value]).map((v) => String(v ?? ""))
-    const stated = texts.flatMap(sentences).find(statesTerms)
+    const stated = texts.flatMap(sentences).find((s) => statesTerms(s, kind))
     if (stated) problems.push(`states a term in ${field} ("${stated.slice(0, 120)}")`)
+  }
+  for (const field of ["description", "shortDescription", "agentPrompt"]) {
+    if (!String(body[field] ?? "").trim() && String((p as unknown as Record<string, unknown>)[field] ?? "").trim()) {
+      problems.push(`returns an empty ${field} where the stored one has text`)
+    }
   }
   const leaked = leakedSentence(p, stringsIn(body).join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)

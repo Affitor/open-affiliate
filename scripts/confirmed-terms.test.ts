@@ -17,7 +17,16 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
-import { confirmedProse, confirmedProseList, proseSentences, statesTerms } from "../src/lib/confirmed-terms"
+import {
+  confirmedPitch,
+  confirmedPrompt,
+  confirmedProse,
+  confirmedProseList,
+  pitchFallback,
+  promptFallback,
+  proseSentences,
+  statesTerms,
+} from "../src/lib/confirmed-terms"
 import { confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
@@ -81,11 +90,18 @@ test("confirmedTerms leaves out cookie, payout, approval and the sentences stati
     assert.equal(p.verified, false, p.slug)
     for (const key of HIDDEN) assert.equal(shown[key], undefined, `${p.slug}: ${key}`)
     assert.deepEqual(shown.payout, {}, p.slug)
-    assert.equal(shown.description, confirmedProse(p, p.description), p.slug)
-    assert.equal(shown.agentPrompt, confirmedProse(p, p.agentPrompt), p.slug)
+    assert.equal(shown.description, confirmedPitch(p, p.description), p.slug)
+    assert.equal(shown.shortDescription, confirmedPitch(p, p.shortDescription), p.slug)
+    assert.equal(shown.agentPrompt, confirmedPrompt(p, p.agentPrompt), p.slug)
     assert.deepEqual(shown.restrictions, confirmedProseList(p, p.restrictions), p.slug)
-    const prose = [shown.description, shown.shortDescription, shown.agentPrompt, shown.commissionConditions ?? "", ...(shown.agentUseCases ?? []), ...(shown.restrictions ?? [])]
-    for (const sentence of prose.flatMap(sentences)) assert.equal(statesTerms(sentence), false, `${p.slug}: ${sentence}`)
+    const pitch = [shown.description, shown.shortDescription]
+    for (const sentence of pitch.flatMap(sentences)) assert.equal(statesTerms(sentence, "pitch"), false, `${p.slug}: ${sentence}`)
+    const programSide = [shown.agentPrompt, shown.commissionConditions ?? "", ...(shown.agentUseCases ?? []), ...(shown.restrictions ?? [])]
+    for (const sentence of programSide.flatMap(sentences)) assert.equal(statesTerms(sentence, "program"), false, `${p.slug}: ${sentence}`)
+    // Never emptied: a pitch or prompt with text keeps text.
+    for (const key of ["description", "shortDescription", "agentPrompt"] as const) {
+      if (p[key].trim()) assert.ok(shown[key].trim(), `${p.slug}: ${key} emptied`)
+    }
     // Everything else is the stored program.
     const others = (x: Program) => {
       const o: Record<string, unknown> = { ...x, commission: { ...x.commission, conditions: null } }
@@ -160,6 +176,56 @@ test("statesTerms drops any sentence with a term word, and keeps commission-only
   ]) {
     assert.equal(statesTerms(s), false, s)
   }
+})
+
+test("a pitch keeps the product's own words; a product word counts next to the program or a figure", () => {
+  // Payments products: "payments", "pay" and "Windows" describe the product, not a term.
+  for (const slug of ["lemon-squeezy", "paddle", "mercury", "ollama"]) {
+    const p = getProgram(slug)!
+    assert.ok(p, `programs/${slug}.yaml is a pitch regression case`)
+    const off = confirmedTerms({ ...p, verified: false })
+    assert.equal(off.description, p.description, `${slug}: description`)
+    assert.equal(off.shortDescription, p.shortDescription, `${slug}: short description`)
+  }
+  for (const s of [
+    "Lemon Squeezy is a merchant-of-record payments platform handling global tax, subscriptions, and checkout for digital products.",
+    "Mercury is a banking platform built for startups with AI-powered cash flow, bill pay, corporate cards, and treasury.",
+    "Run open-source LLMs locally on Mac, Linux, and Windows.",
+  ]) {
+    assert.equal(statesTerms(s, "pitch"), false, s)
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+  for (const s of [
+    "Affiliates get paid monthly.",
+    "Partners receive payments every month.",
+    "Balances over $50 are sent on the 1st.",
+    "Get paid within 30 days.",
+    "A 60-day cookie applies.",
+    "Applications are reviewed within two days.",
+  ]) {
+    assert.equal(statesTerms(s, "pitch"), true, s)
+  }
+})
+
+test("a pitch or prompt the filter would empty falls back to a neutral line from structured fields", () => {
+  const p = { ...getProgram("asana")!, verified: false }
+  const off = confirmedTerms({
+    ...p,
+    description: "Affiliates get paid monthly. A 60-day cookie applies.",
+    shortDescription: "Payouts every month",
+    agentPrompt: "Payouts are monthly by bank transfer.",
+  })
+  assert.equal(off.description, pitchFallback(p))
+  assert.equal(off.description, `${p.name} is a product in the ${p.category} category.`)
+  assert.equal(off.shortDescription, pitchFallback(p))
+  assert.equal(off.agentPrompt, promptFallback(p))
+  for (const line of [pitchFallback(p), promptFallback(p)]) {
+    assert.equal(statesTerms(line, "program"), false, line)
+    assert.equal(/\d/.test(line), false, line)
+  }
+  // Verified, nothing is replaced.
+  const on = { ...p, verified: true, description: "Affiliates get paid monthly." }
+  assert.equal(confirmedTerms(on).description, "Affiliates get paid monthly.")
 })
 
 test("filed prose that states terms is dropped whole when unverified, guardrails stay, verified text is untouched", () => {
@@ -253,7 +319,7 @@ test("MCP get_program and search_programs match the REST API", async () => {
     if (p.verified) assert.equal(row.cookieDays, p.cookieDays, `search_programs ${p.slug}`)
     else {
       assert.equal("cookieDays" in row, false, `search_programs ${p.slug}: cookieDays must be left out`)
-      assert.equal(row.shortDescription, confirmedProse(p, p.shortDescription), `search_programs ${p.slug}`)
+      assert.equal(row.shortDescription, confirmedPitch(p, p.shortDescription), `search_programs ${p.slug}`)
     }
   }
 })

@@ -1,6 +1,6 @@
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
-import { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
+import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
  * Fallback network for programs whose YAML omits `network`.
@@ -167,7 +167,7 @@ export function getProgram(slug: string): Program | undefined {
   return programs.find((p) => p.slug === slug)
 }
 
-export { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE }
+export { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE }
 
 /**
  * The program as a reader may see it: unconfirmed cookie window, payout and
@@ -187,9 +187,9 @@ export function confirmedTerms(p: Program): Program {
     payoutMethods: undefined,
     approval: undefined,
     approvalTime: undefined,
-    description: confirmedProse(p, p.description),
-    shortDescription: confirmedProse(p, p.shortDescription),
-    agentPrompt: confirmedProse(p, p.agentPrompt),
+    description: confirmedPitch(p, p.description),
+    shortDescription: confirmedPitch(p, p.shortDescription),
+    agentPrompt: confirmedPrompt(p, p.agentPrompt),
     agentUseCases: confirmedProseList(p, p.agentUseCases),
     restrictions: confirmedProseList(p, p.restrictions),
   }

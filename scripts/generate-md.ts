@@ -56,7 +56,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
-import { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
+import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton } from "../src/lib/apply-cta"
 
 const BASE = "https://openaffiliate.dev"
@@ -301,11 +301,11 @@ function shownProse(p: Program): Program {
   if (termsConfirmed(p)) return p
   return {
     ...p,
-    short_description: confirmedProse(p, p.short_description),
-    description: confirmedProse(p, p.description),
+    short_description: confirmedPitch(p, p.short_description),
+    description: confirmedPitch(p, p.description),
     commission: { ...p.commission, conditions: confirmedProse(p, p.commission.conditions) || null },
     restrictions: confirmedProseList(p, p.restrictions),
-    agents: p.agents && { ...p.agents, prompt: confirmedProse(p, p.agents.prompt), use_cases: confirmedProseList(p, p.agents.use_cases) },
+    agents: p.agents && { ...p.agents, prompt: confirmedPrompt(p, p.agents.prompt), use_cases: confirmedProseList(p, p.agents.use_cases) },
   }
 }
 

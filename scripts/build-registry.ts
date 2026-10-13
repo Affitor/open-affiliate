@@ -2,7 +2,7 @@ import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
 import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
-import { confirmedProse, termsConfirmed } from "../src/lib/confirmed-terms"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -333,7 +333,7 @@ async function buildRegistry(): Promise<void> {
       },
       // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
       cookieDays: termsConfirmed(p) ? p.cookie_days : undefined,
-      shortDescription: confirmedProse(p, p.short_description),
+      shortDescription: confirmedPitch(p, p.short_description),
       verified: p.verified ?? false,
       network: p.network ?? null,
       createdAt: p.created_at ?? "",

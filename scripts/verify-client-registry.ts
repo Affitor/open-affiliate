@@ -8,7 +8,7 @@ import {
   livePrograms as fullPrograms, // client lists only live programs
   programs as allPrograms,
 } from "../src/lib/programs"
-import { confirmedProse, termsConfirmed } from "../src/lib/confirmed-terms"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 import {
   affiliateScore as clientAffiliateScore,
   categories as clientCategories,
@@ -60,7 +60,7 @@ for (const fullProgram of fullPrograms) {
     },
     // Unverified: no cookie window, in figures or prose (confirmed-terms.ts).
     cookieDays: termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined,
-    shortDescription: confirmedProse(fullProgram, fullProgram.shortDescription),
+    shortDescription: confirmedPitch(fullProgram, fullProgram.shortDescription),
     verified: fullProgram.verified,
     network: fullProgram.network ?? null,
     createdAt: fullProgram.createdAt,
@@ -128,7 +128,7 @@ for (const row of (JSON.parse(raw.toString("utf8")) as { programs: Record<string
   for (const key of ["cookieDays", "cookie_days", "payout", "payoutMethods", "approval", "approvalTime"]) {
     if (key in row) fail(`unverified ${full.slug} ships ${key} to the browser`)
   }
-  if (row.shortDescription !== confirmedProse(full, full.shortDescription)) {
+  if (row.shortDescription !== confirmedPitch(full, full.shortDescription)) {
     fail(`unverified ${full.slug} ships a shortDescription with terms in it`)
   }
 }

@@ -69,13 +69,29 @@ const TERM_SENTENCE: RegExp[] = [
 ]
 
 /**
- * Any word that touches a cookie window, payout or approval. Deliberately
- * broad: on an unverified page a dropped sentence costs little and a missed
- * one shows an unsourced term. "Commission" alone is not here; the commission
- * itself stays. Cookie stuffing, cookie consent and the like are not terms.
+ * Words that touch a cookie window, payout or approval, in any field.
+ * Deliberately broad: on an unverified page a dropped sentence costs little and
+ * a missed one shows an unsourced term. "Commission" alone is not here; the
+ * commission itself stays. Cookie stuffing, cookie consent and the like are not
+ * terms.
  */
 const TERM_WORD =
-  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\battribution\b|\bwindows?\b|\bdays to\b|\bpayouts?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bbalances?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\battribution\b|\bdays to\b|\bpayouts?\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+/**
+ * Words that are terms in what a program says about itself, and often the
+ * product itself in a pitch: "a payments platform", "bill pay", "Windows".
+ */
+const PRODUCT_WORD = /\bwindows?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bbalances?\b/i
+/** What makes a product word a term in a pitch: the program is the subject, or a money or day figure is stated. */
+const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partners?|partnerships?|commissions?|payouts?)\b|${MONEY}|\b\d+[\s-]*(?:days?|months?)\b`, "i")
+
+/**
+ * Which field a text is. A pitch (description, short description) describes the
+ * product, so its product words count only next to the program or a figure.
+ * Everything else (commission conditions, restrictions, agent prompt, use
+ * cases) is what the program says about itself, and every term word counts.
+ */
+export type ProseField = "pitch" | "program"
 
 /** A figure or a value a term takes: a number, an amount, a schedule, a method. */
 const TERM_FIGURE = new RegExp(String.raw`\d|${MONEY}|${FREQUENCY}|${PAY_METHOD}`, "i")
@@ -105,10 +121,12 @@ export function namesTerm(sentence: string): boolean {
   return TERM_SENTENCE.some((re) => re.test(sentence)) || (PAYOUT_SCHEDULE.test(sentence) && PROGRAM_CONTEXT.test(sentence))
 }
 
-/** True when confirmedProse drops this sentence for an unverified program: any term word, or a named term. */
-export function statesTerms(sentence: string): boolean {
+/** True when confirmedProse drops this sentence, from a field of this kind, for an unverified program. */
+export function statesTerms(sentence: string, field: ProseField = "program"): boolean {
   if (guarded(sentence)) return false
-  return TERM_WORD.test(sentence) || namesTerm(sentence)
+  if (TERM_WORD.test(sentence) || namesTerm(sentence)) return true
+  if (!PRODUCT_WORD.test(sentence)) return false
+  return field === "program" || PROGRAM_SUBJECT.test(sentence)
 }
 
 /**
@@ -134,12 +152,12 @@ export function proseSentences(text: string): { sentence: string; after: string 
  * dropped whole, never rewritten. Text with nothing to drop, and every
  * verified program's text, comes back unchanged.
  */
-export function confirmedProse<T extends string | null | undefined>(p: { verified?: boolean | null }, text: T): T {
+export function confirmedProse<T extends string | null | undefined>(p: { verified?: boolean | null }, text: T, field: ProseField = "program"): T {
   if (termsConfirmed(p) || !text) return text
   const parts = proseSentences(text)
   const kept: { sentence: string; after: string }[] = []
   for (const part of parts) {
-    if (!statesTerms(part.sentence)) {
+    if (!statesTerms(part.sentence, field)) {
       kept.push({ ...part })
       continue
     }
@@ -158,4 +176,26 @@ export function confirmedProse<T extends string | null | undefined>(p: { verifie
 export function confirmedProseList<T extends string[] | null | undefined>(p: { verified?: boolean | null }, items: T): T {
   if (termsConfirmed(p) || !items) return items
   return items.map((item) => confirmedProse(p, item)).filter((item) => item.trim() !== "") as T
+}
+
+/** In place of a pitch the filter empties: from structured fields only, no terms, no figures. */
+export function pitchFallback(p: { name: string; category: string }): string {
+  return `${p.name} is a product in the ${p.category} category.`
+}
+
+/** In place of an agent prompt the filter empties. */
+export function promptFallback(p: { name: string }): string {
+  return `Unconfirmed terms; check ${p.name}'s own affiliate page before recommending.`
+}
+
+/** A description or short description as a reader may see it: filtered as a pitch, and never emptied. */
+export function confirmedPitch<T extends string | null | undefined>(p: { verified?: boolean | null; name: string; category: string }, text: T): T {
+  const out = confirmedProse(p, text, "pitch")
+  return (text?.trim() && !out?.trim() ? pitchFallback(p) : out) as T
+}
+
+/** An agent prompt as a reader may see it: filtered with every term word, and never emptied. */
+export function confirmedPrompt<T extends string | null | undefined>(p: { verified?: boolean | null; name: string }, text: T): T {
+  const out = confirmedProse(p, text, "program")
+  return (text?.trim() && !out?.trim() ? promptFallback(p) : out) as T
 }
