@@ -26,12 +26,10 @@
 
 import { readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
+import { parseCommissionMode, type CommissionMode as Mode, type ParsedCommission as Parsed } from "../src/lib/commission-mode"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const DRY_RUN = process.argv.includes("--dry-run")
-
-type Mode = "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
-type Parsed = { mode: Mode; value: number | null; why: string }
 
 /**
  * Ten programs store a bare number with no unit — "175", "200", "6". Whether
@@ -60,66 +58,9 @@ const BARE_NUMBER_RULINGS: Record<string, Parsed> = {
 }
 
 function parseRate(raw: string, slug: string): Parsed {
-  const r = raw.trim()
-
-  if (!r || /^(varies|unknown|n\/a|tbd)$/i.test(r)) {
-    return { mode: "unknown", value: null, why: "no figure recorded" }
-  }
-
-  // A bare number carries no unit and cannot be read without evidence.
-  if (/^\d+(\.\d+)?$/.test(r)) {
-    return (
-      BARE_NUMBER_RULINGS[slug] ?? {
-        mode: "unknown",
-        value: null,
-        why: "bare number with no unit and no ruling",
-      }
-    )
-  }
-
-  const hasPct = /%/.test(r)
-  const hasDollar = /\$/.test(r)
-
-  // Both symbols means two components — a flat bounty plus a share, or a choice
-  // between them. Neither number alone describes the deal.
-  if (hasPct && hasDollar) {
-    const pct = r.match(/(\d+(?:\.\d+)?)\s*%/)
-    return {
-      mode: "hybrid",
-      value: pct ? parseFloat(pct[1]) : null,
-      why: "contains both a flat amount and a percentage",
-    }
-  }
-
-  if (hasPct) {
-    // "20-30%" and "75-125% CPA + 25% annual" — a band, not a single rate.
-    // Take the top of the band, which is what a reader compares on, and say so.
-    const range = r.match(/(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)\s*%/)
-    if (range) {
-      return { mode: "tiered", value: parseFloat(range[2]), why: "range, using the upper bound" }
-    }
-    const one = r.match(/(\d+(?:\.\d+)?)\s*%/)
-    if (one) {
-      return { mode: "percentage", value: parseFloat(one[1]), why: "single percentage" }
-    }
-  }
-
-  if (hasDollar) {
-    const range = r.match(/\$\s*(\d[\d,]*(?:\.\d+)?)\s*[-–]\s*\$?\s*(\d[\d,]*(?:\.\d+)?)/)
-    if (range) {
-      return {
-        mode: "tiered",
-        value: parseFloat(range[2].replace(/,/g, "")),
-        why: "flat range, using the upper bound",
-      }
-    }
-    const one = r.match(/\$\s*(\d[\d,]*(?:\.\d+)?)/)
-    if (one) {
-      return { mode: "flat", value: parseFloat(one[1].replace(/,/g, "")), why: "single flat amount" }
-    }
-  }
-
-  return { mode: "unknown", value: null, why: "unrecognised format" }
+  // A bare number carries no unit: only a per-program ruling can read it.
+  if (/^\d+(\.\d+)?$/.test(raw.trim()) && BARE_NUMBER_RULINGS[slug]) return BARE_NUMBER_RULINGS[slug]
+  return parseCommissionMode(raw)
 }
 
 function main(): void {
