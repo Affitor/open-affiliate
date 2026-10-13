@@ -24,13 +24,22 @@ const nextConfig: NextConfig = {
   async redirects() {
     // A program's URL-shaped YAML `aliases` (former names, the spellings people
     // and agents guess) send its page and .md twin to the canonical slug, e.g.
-    // /programs/quso -> /programs/vidyo. Read from the registry.json prebuild
-    // has just regenerated; scripts/program-rules.ts aliasRoutes decides which
-    // aliases qualify, and never one that is a real slug. Two redirects per
-    // alias; Vercel caps a deployment at 1,024 redirects
+    // /programs/quso -> /programs/vidyo. Read from the registry.json that
+    // prebuild (npm run build) or predev (npm run dev) has just regenerated;
+    // scripts/program-rules.ts aliasRoutes decides which aliases qualify, and
+    // never one that is a real slug. Two redirects per alias; Vercel caps a
+    // deployment at 1,024 redirects
     // (node_modules/next/dist/docs/01-app/02-guides/redirecting.md).
     const registry = JSON.parse(readFileSync(join(process.cwd(), "src", "lib", "registry.json"), "utf8"));
-    const aliases: Record<string, string> = registry.aliases ?? {};
+    // A registry from before the map existed would ship no program redirects
+    // at all, and nothing would look broken. Refuse it instead.
+    if (typeof registry.aliases !== "object" || registry.aliases === null) {
+      throw new Error(
+        "src/lib/registry.json has no `aliases` map, so no /programs/<alias> redirect would exist. " +
+          "Regenerate it with `npm run registry:build` (npm run build and npm run dev do this first)."
+      );
+    }
+    const aliases: Record<string, string> = registry.aliases;
     return [
       ...["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false })),
       ...Object.entries(aliases).flatMap(([alias, slug]) =>

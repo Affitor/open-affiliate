@@ -9,7 +9,12 @@
  * mcp-handler keeps a module-level timer alive (see no-program.test.ts).
  */
 import assert from "node:assert/strict"
+import { spawnSync } from "node:child_process"
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { test } from "node:test"
+import { pathToFileURL } from "node:url"
 import { NextRequest } from "next/server"
 import nextConfig from "../next.config"
 import { GET as restGet } from "../src/app/api/programs/[slug]/route"
@@ -80,11 +85,37 @@ test("each alias and its .md are a 308 to the canonical page; no real slug is re
   }
 })
 
-test("REST /api/programs/<alias> answers 200 with the canonical program's body", async () => {
+test("next.config refuses a registry.json with no alias map instead of shipping no redirects", () => {
+  const dir = mkdtempSync(join(tmpdir(), "oa-stale-registry-"))
+  try {
+    mkdirSync(join(dir, "src", "lib"), { recursive: true })
+    writeFileSync(join(dir, "src", "lib", "registry.json"), JSON.stringify({ count: 0, categories: [], programs: [] }))
+    // The config reads registry.json from the working directory, so it runs in
+    // a child process started there; this process's cwd is left alone.
+    const loader = pathToFileURL(join(process.cwd(), "node_modules", "tsx", "dist", "loader.mjs")).href
+    const config = pathToFileURL(join(process.cwd(), "next.config.ts")).href
+    const run = spawnSync(
+      process.execPath,
+      // tsx loads next.config.ts as CommonJS here, so its default export arrives one level down.
+      ["--import", loader, "--input-type=module", "-e", `import m from ${JSON.stringify(config)}; await (m.default ?? m).redirects()`],
+      { cwd: dir, encoding: "utf8" }
+    )
+    assert.notEqual(run.status, 0, "redirects() resolved with a registry.json that has no aliases")
+    assert.match(run.stderr, /no `aliases` map.*npm run registry:build/)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("REST /api/programs/<alias> answers 200 with the canonical program's body, in any case", async () => {
   for (const [alias, slug] of aliases) {
-    const viaAlias = await rest(alias)
-    assert.equal(viaAlias.status, 200, `/api/programs/${alias}`)
-    assert.deepEqual(await viaAlias.json(), await (await rest(slug)).json(), `/api/programs/${alias} differs from ${slug}`)
+    const canonical = await (await rest(slug)).json()
+    for (const asked of [alias, alias.toUpperCase(), ` ${alias} `]) {
+      const viaAlias = await rest(asked)
+      assert.equal(viaAlias.status, 200, `/api/programs/${asked}`)
+      assert.deepEqual(await viaAlias.json(), canonical, `/api/programs/${asked} differs from ${slug}`)
+    }
+    assert.deepEqual(await (await rest(slug.toUpperCase())).json(), canonical, `/api/programs/${slug.toUpperCase()}`)
   }
   assert.equal((await rest("no-such-program-or-alias")).status, 404)
 })
@@ -94,6 +125,7 @@ test("MCP get_program resolves an alias to the canonical program", async () => {
     const text = await mcpGetProgram(alias)
     assert.equal(JSON.parse(text).slug, slug)
     assert.equal(text, await mcpGetProgram(slug))
+    assert.equal(await mcpGetProgram(alias.toUpperCase()), text)
   }
   assert.match(await mcpGetProgram("no-such-program-or-alias"), /not found/)
 })

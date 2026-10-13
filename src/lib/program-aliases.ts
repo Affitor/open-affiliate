@@ -14,10 +14,15 @@ const ALIASES = new Map(
  * A program by its slug or by one of its aliases, for the REST API and MCP
  * get_program. Pages do not use this: /programs/<alias> is a 308 in
  * next.config.ts, so a page has one URL. A real slug always wins.
+ *
+ * The exact input is tried first, so a real slug answers as it always did.
+ * Then the input is trimmed and lowercased, matching the page redirects,
+ * which Next matches case-insensitively (/programs/Quso is a 308 too).
  */
 export function resolveProgram(slugOrAlias: string): Program | undefined {
-  const program = getProgram(slugOrAlias)
+  const key = slugOrAlias.trim().toLowerCase()
+  const program = getProgram(slugOrAlias) ?? getProgram(key)
   if (program) return program
-  const slug = ALIASES.get(slugOrAlias)
+  const slug = ALIASES.get(key)
   return slug ? getProgram(slug) : undefined
 }
