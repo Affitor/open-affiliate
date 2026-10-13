@@ -1,12 +1,14 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.sonpiaz/openaffiliate-mcp",
-  "description": "Search and discover affiliate programs with agent-ready data and commission details.",
+  "title": "OpenAffiliate",
+  "description": "Search 790+ affiliate programs: commission terms, signup URL, verified status. Read-only, no key.",
+  "websiteUrl": "https://openaffiliate.dev",
   "repository": {
     "url": "https://github.com/Affitor/open-affiliate",
     "source": "github"
   },
-  "version": "0.0.3",
+  "version": "0.0.4",
   "packages": [
     {
       "registryType": "npm",

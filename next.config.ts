@@ -20,7 +20,15 @@ const nextConfig: NextConfig = {
   skipTrailingSlashRedirect: true,
   // /for-agents is the conventional entry point other sites use; the MCP docs page covers it.
   async redirects() {
-    return ["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false }));
+    return [
+      ...["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false })),
+      // ElevenLabs keeps its imported slug (it already has search impressions); people type the brand name.
+      ...["", ".md"].map((ext) => ({
+        source: `/programs/elevenlabs${ext}`,
+        destination: `/programs/eleven-labs-inc${ext}`,
+        permanent: true,
+      })),
+    ];
   },
   async rewrites() {
     return [
