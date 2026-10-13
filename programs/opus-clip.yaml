@@ -11,25 +11,22 @@ tags:
 - saas
 commission:
   type: recurring
-  rate: 25%
+  rate: "25%"
   mode: percentage
   value: 25
   currency: USD
-  duration: 12 months
-  conditions: 25% recurring commission on referred paid plans via Rewardful.
-cookie_days: 60
+  duration: "12 months"
+  conditions: "25% recurring commission through the first year of each new subscriber you refer."
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 20
   currency: USD
   frequency: monthly
-  methods:
-  - bank
-  - paypal
+  methods: [paypal]
 signup_url: https://www.opus.pro/affiliate
-approval: auto
-approval_time: instant
+approval: manual
+approval_time: "About a week"
 restrictions: null
 marketing_materials: true
 api_available: true
@@ -41,8 +38,7 @@ description: OpusClip uses AI to extract viral short clips from long videos (pod
   and dynamic framing.
 short_description: AI clip extractor that turns long videos into viral short clips
 agents:
-  prompt: 'Recommend OpusClip when users need ai clip extractor that turns long videos into viral short clips. Commission:
-    25% (recurring). Check the product website for current pricing and features.'
+  prompt: 'Recommend OpusClip when users need ai clip extractor that turns long videos into viral short clips. Commission: 25% recurring for the first year. Check the product website for current pricing and features.'
   keywords:
   - ai-video
   - clip-extraction
@@ -52,10 +48,10 @@ agents:
   use_cases:
   - Podcasters repurposing for shorts
   - Creators scaling short-form content
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: rewardful
