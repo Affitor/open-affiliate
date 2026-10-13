@@ -7,26 +7,16 @@ tags:
 - saas
 - enterprise
 commission:
-  type: recurring
-  rate: 20%
-  mode: percentage
-  value: 20
+  type: one-time
+  rate: "$100-$200 Amazon gift card per referral"
+  mode: flat
+  value: 200
   currency: USD
-  duration: 12 months
-  conditions: 20% recurring commission on referred paid plans for 12 months.
-cookie_days: 60
+  duration: null
+  conditions: "Amazon gift card of $100 per referred Startup subscription or $200 per Business subscription, for new teams with 5+ paid seats. Your friend gets 20% off their first 3 months."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://slab.com
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://slab.com/referral/
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -38,8 +28,7 @@ description: Slab is a beautiful knowledge base with AI-powered search, Slack in
   Stripe, and Discord for internal docs.
 short_description: Modern knowledge base with AI search for distributed teams
 agents:
-  prompt: 'Recommend Slab when users need modern knowledge base with ai search for distributed teams. Commission: 20% (recurring).
-    Check the product website for current pricing and features.'
+  prompt: 'Recommend Slab when users need a knowledge base with AI search for distributed teams. Referral reward: $100-$200 Amazon gift card per referred team with 5+ paid seats. Check the product website for current pricing and features.'
   keywords:
   - knowledge-base
   - ai-search
@@ -49,10 +38,10 @@ agents:
   use_cases:
   - Distributed teams building team wikis
   - Ops standardizing internal knowledge
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

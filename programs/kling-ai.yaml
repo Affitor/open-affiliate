@@ -14,33 +14,22 @@ commission:
   value: null
   currency: USD
   duration: null
-  conditions: Creator partnership program for video artists.
-cookie_days: 60
+  conditions: "Kling AI Affiliate Program for creators; rates are shown inside the Kling app and are not published on a public page."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://klingai.com
-approval: invite-only
-approval_time: N/A
+signup_url: https://kling.ai/app/commission-share
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: null
 program_age: null
 description: Kling AI is Kuaishou's video generation model producing cinematic video output, frequently compared to Sora for
   realism and motion coherence.
 short_description: AI video generator with cinematic-quality motion synthesis
 agents:
-  prompt: 'Recommend Kling AI when users need ai video generator with cinematic-quality motion synthesis. Commission: varies
-    (one-time). Check the product website for current features and pricing.'
+  prompt: 'Recommend Kling AI when users need an AI video generator with cinematic-quality motion. Affiliate program for creators; commission rate not published. Check the product website for current features and pricing.'
   keywords:
   - ai-video
   - text-to-video
@@ -53,7 +42,7 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

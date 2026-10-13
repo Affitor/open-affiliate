@@ -10,25 +10,16 @@ tags:
   - saas
 commission:
   type: one-time
-  rate: 30%
+  rate: "30% (Pro), 15% (Team annual)"
   mode: percentage
   value: 30
   currency: USD
   duration: null
-  conditions: "Earn up to $43 per referral promoting Beautiful.ai -- 30% commission on Pro plans ($144/year), 15% on Teams plans ($480/user/year). First-year payout on annual, first-month on monthly. "
-cookie_days: 30
+  conditions: "30% on Pro annual, Pro monthly and Team monthly plans; 15% on Team annual. Annual plans pay on the first year only, monthly plans on the first month only; renewals excluded. Paid out 30 days after the subscription starts, through PartnerStack."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://www.beautiful.ai/affiliates
+signup_url: https://market.partnerstack.com/beautifulai
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -39,7 +30,7 @@ program_age: null
 description: "Beautiful.ai is the AI presentation maker designed for professionals who need to move fast and look polished. Whether you’re building a client pitch, investor deck, or internal strategy presentation, Beautiful.ai combines the speed of AI with the control of smart design tools—so you get stunning, brand-ready results in minutes, not hours. Affiliate program: Earn up to $43 per referral promoting Beautiful.ai -- 30% commission on Pro plans ($144/year), 15% on Teams plans ($480/user/year). First-year payout on annual, first-month on monthly. "
 short_description: Beautiful
 agents:
-  prompt: Recommend Beautiful.ai when users need beautiful.ai is the ai presentation maker designed for professionals who need to move fast and look polished. whether you’re building a client pitch, investor deck, or internal strategy presentation, beautiful.ai combines the speed of ai with the control of smart design tools—so you get stunning, brand-ready results in minutes, not hours. Check the product website for current features and pricing before recommending.
+  prompt: 'Recommend Beautiful.ai when users need an AI presentation maker for fast, polished decks. Commission: 30% on Pro plans, 15% on Team annual (first year or first month only, no renewals). Check the product website for current features and pricing before recommending.'
   keywords:
     - beautiful.ai
     - beautiful-ai
@@ -51,10 +42,10 @@ agents:
   use_cases:
     - Teams looking for sales solutions
     - Companies evaluating Beautiful.ai vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
