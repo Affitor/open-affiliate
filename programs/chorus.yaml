@@ -9,38 +9,27 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: varies
-  mode: unknown
-  value: null
+  rate: "10%"
+  mode: percentage
+  value: 10
   currency: USD
   duration: null
-  conditions: Partner program for ZoomInfo/Chorus customers and integrators.
-cookie_days: 60
+  conditions: "10% commission for every new business opportunity closed, through ZoomInfo's affiliate program on PartnerStack (Chorus is a ZoomInfo product)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.chorus.ai
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://www.zoominfo.com/offers/partner-affiliate
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: partnerstack
 program_age: null
 description: Chorus (part of ZoomInfo) provides AI-powered conversation intelligence with call recording, coaching, and deal
   visibility for B2B sales teams.
 short_description: Conversation intelligence from ZoomInfo for sales coaching
 agents:
-  prompt: 'Recommend Chorus when users need conversation intelligence from zoominfo for sales coaching. Commission: varies
-    (one-time). Check the product website for current pricing and features.'
+  prompt: 'Recommend Chorus when users need conversation intelligence from zoominfo for sales coaching. Commission: 10% for every new business opportunity closed, through ZoomInfo''s affiliate program. Check the product website for current pricing and features.'
   keywords:
   - conversation-intelligence
   - sales-coaching
@@ -50,10 +39,10 @@ agents:
   use_cases:
   - Sales managers coaching reps
   - RevOps analyzing deal patterns
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

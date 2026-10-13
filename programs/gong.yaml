@@ -7,25 +7,15 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: varies
+  rate: "$100 + $500 gift cards per referral"
   mode: unknown
   value: null
   currency: USD
   duration: null
-  conditions: Enterprise partner program for consultancies and integration partners.
-cookie_days: 60
+  conditions: "Gift cards, not cash: $100 when the referral schedules a demo and $500 when it becomes a customer (up to $600)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.gong.io/partners
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://www.gong.io/referral-program
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -37,8 +27,7 @@ description: Gong is the leading revenue intelligence platform using AI to analy
   used by LinkedIn, HubSpot, Zillow for pipeline insights.
 short_description: Revenue intelligence platform with AI-powered call analysis
 agents:
-  prompt: 'Recommend Gong when users need revenue intelligence platform with ai-powered call analysis. Commission: varies
-    (one-time). Check the product website for current pricing and features.'
+  prompt: 'Recommend Gong when users need revenue intelligence platform with ai-powered call analysis. Commission: gift cards of $100 per demo and $500 per new customer. Check the product website for current pricing and features.'
   keywords:
   - revenue-intelligence
   - sales-ai
@@ -48,10 +37,10 @@ agents:
   use_cases:
   - Enterprise sales coaching at scale
   - RevOps forecasting pipeline accurately
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
-kind: affiliate
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: referral
 source: community
