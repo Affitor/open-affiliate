@@ -29,6 +29,7 @@ import {
   type Program,
   commissionLabel,  commissionDisplay
 } from "@/lib/client-programs";
+import { networkName } from "@/lib/network-meta";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
 
@@ -391,21 +392,11 @@ function ProgramsContent() {
   ];
 
   // Network options with counts
-  const NETWORK_LABELS: Record<string, string> = {
-    "in-house": "In-house",
-    partnerstack: "PartnerStack",
-    impact: "Impact",
-    rewardful: "Rewardful",
-    "cj-affiliate": "CJ Affiliate",
-    firstpromoter: "FirstPromoter",
-    awin: "Awin",
-    dub: "Dub",
-  };
   const networkOptions = [
     { value: "", label: "All Networks" },
     ...networks.map((n) => ({
       value: n,
-      label: NETWORK_LABELS[n] ?? n.charAt(0).toUpperCase() + n.slice(1),
+      label: networkName(n),
       count: networkCounts[n] ?? 0,
     })),
   ];
@@ -561,7 +552,7 @@ function ProgramsContent() {
                 onClick={() => handleNetwork("")}
                 className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
-                {selectedNetwork}
+                {networkName(selectedNetwork)}
                 <X className="h-3 w-3" />
               </button>
             )}

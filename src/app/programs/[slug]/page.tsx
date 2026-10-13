@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
-import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay} from "@/lib/programs";
+import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -297,7 +297,7 @@ export default async function ProgramPage({
         {program.network && (
           <StatBadge
             icon={<Network className="h-3 w-3" />}
-            label={program.network}
+            label={networkLabel(program.network)}
           />
         )}
         {approvalInfo && (
@@ -609,7 +609,7 @@ export default async function ProgramPage({
                       <Network className="h-3 w-3" /> Network
                     </span>
                     <span className="text-xs font-medium">
-                      {program.network ?? IN_HOUSE}
+                      {networkLabel(program.network ?? IN_HOUSE)}
                     </span>
                   </div>
                 )}
