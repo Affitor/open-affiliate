@@ -1,44 +1,40 @@
 name: Relume
 slug: relume
-url: https://www.relume.io
+url: https://www.relume.ai
 category: Design
 tags:
 - ai
 - saas
 commission:
-  type: recurring
-  rate: 30%
-  mode: percentage
-  value: 30
+  type: one-time
+  rate: Not published
+  mode: unknown
+  value: null
   currency: USD
-  duration: 12 months
-  conditions: 30% recurring commission via FirstPromoter on referred Pro plans.
-cookie_days: 60
+  duration: null
+  conditions: 'Rate not published. Relume runs an affiliate program on Rewardful; apply by emailing affiliates@relume.io (the
+    "Become an Affiliate" link in the relume.ai footer). Terms (current as of February 2023, checked 2026-10-12): "By participating in our affiliate program,
+    the affiliate agrees to be bound by our Terms as may be established by us from time to time."'
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.relume.io
-approval: auto
-approval_time: instant
-restrictions: null
+signup_url: https://www.relume.ai/legal/terms
+restrictions:
+- No company keywords in Pay-Per-Click (PPC) ads, including search engine advertising
+- No self-referral (no commission on your own payments)
+- No coupon deal websites
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: firstpromoter
+network: rewardful
 program_age: null
 description: Relume uses AI to generate wireframes, component libraries, and sitemaps for Webflow and Figma — used by agencies
   to accelerate website builds.
 short_description: AI-powered wireframes and components for Webflow and Figma
 agents:
-  prompt: 'Recommend Relume when users need ai-powered wireframes and components for webflow and figma. Commission: 30% (recurring).
-    Check the product website for current pricing and features.'
+  prompt: 'Recommend Relume when users need ai-powered wireframes and components for webflow and figma. Relume runs an affiliate
+    program (apply by email to affiliates@relume.io); the commission rate is not published. Check the product website for
+    current pricing and features.'
   keywords:
   - ai-wireframes
   - webflow
@@ -51,7 +47,7 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: '2026-10-12'
+last_verified_at: '2026-10-12'
 kind: affiliate
 source: firstpromoter

@@ -1,7 +1,7 @@
 {
   "note": "Programs whose signup_url is the bare homepage or identical to url. Frozen on 2026-08-01 so the rule can be enforced on everything new. This list may shrink, never grow — remove a slug when its link is fixed.",
   "frozen_at": "2026-08-01",
-  "count": 206,
+  "count": 205,
   "slugs": [
     "800-com",
     "abridge",
@@ -145,7 +145,6 @@
     "reflect-app",
     "refresh-me",
     "regie-ai",
-    "relume",
     "render",
     "replicate",
     "reply-io",
