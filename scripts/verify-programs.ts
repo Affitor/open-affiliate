@@ -322,6 +322,7 @@ const SKIP_VERIFY: Record<string, string> = {
   fiverr: "www.fiverr.com answers 403 to Node fetch while curl with browser headers gets 200 (checked 2026-10-13)",
   vidiq: "vidiq.com answers 429 to curl and Node fetch while a browser reads it (checked 2026-10-13)",
   tubebuddy: "www.tubebuddy.com answers 502 to Node fetch while curl gets 200 (checked 2026-10-13)",
+  storylab: "storylab.ai times out intermittently on automated checks while the page reads fine (checked 2026-10-13)",
 };
 
 // ── Main ──

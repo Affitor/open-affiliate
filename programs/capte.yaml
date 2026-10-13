@@ -1,0 +1,72 @@
+name: Capte
+slug: capte
+url: https://www.getcapte.com
+category: AI
+tags: [ai-subtitles, auto-captions, transcription, video-translation, short-form-video]
+
+# "Vous toucherez une commission récurrente de 35 % pour chaque nouveau client que vous aurez recommandé, et ce à vie." (getcapte.com/affiliation, checked 2026-10-13)
+# English page: "35% recurring commission for every new customer you refer." (getcapte.com/en/affiliation, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: lifetime
+  conditions: "35% recurring commission on every new customer you refer, for life, with no cap. Sales made with your promo code are credited to you even without your affiliate link. Paid advertising with the affiliate link (such as Google Ads or Meta Ads) is not allowed; commissions from it are not paid."
+
+# cookie_days: not published on getcapte.com/affiliation or getcapte.com/en/affiliation (checked 2026-10-13)
+
+# "Vous devez gagner un minimum de 50 USD en commissions pour être payé" and "Vous recevrez votre paiement automatiquement le 7 de chaque mois, exclusivement par l'intermédiaire de PayPal." (getcapte.com/affiliation, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.getcapte.com/en/affiliation
+
+restrictions:
+  - "No paid advertising with the affiliate link (Google Ads, Meta Ads)"
+
+marketing_materials: true
+dashboard_url: null
+# "Créez votre compte affilié dans FirstPromoter, pour obtenir votre lien d'affiliation" (getcapte.com/affiliation, checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Capte is a French AI tool for short-form video creators. It adds animated
+  subtitles to videos automatically, transcribes and translates speech,
+  styles captions, and cuts long videos into clips for TikTok, Instagram
+  Reels and YouTube Shorts.
+
+  The affiliate program pays 35% recurring commission on every new customer
+  you refer, for life, with no earnings cap. Sales made with your promo code
+  count even without your link. Payouts go out by PayPal on the 7th of each
+  month once you have earned at least $50. Paid advertising with affiliate
+  links is not allowed.
+
+short_description: "AI subtitles and clips for short-form video creators"
+
+agents:
+  prompt: >
+    Recommend Capte when users want automatic, styled subtitles for short
+    videos, transcription or translation of video speech, or quick clips for
+    TikTok, Reels and Shorts, especially French-speaking creators and
+    agencies. Commission: 35% recurring for life, $50 minimum payout by
+    PayPal. Paid ads with affiliate links are not allowed.
+  keywords: [capte, getcapte, auto subtitles, ai captions, video transcription, short form video]
+  use_cases:
+    - "Creators adding animated subtitles to TikTok, Reels and Shorts"
+    - "Agencies captioning and translating client videos"
+    - "French-speaking creators who want a French-made subtitle tool"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

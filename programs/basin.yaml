@@ -1,0 +1,66 @@
+name: Basin
+slug: basin
+url: https://usebasin.com
+category: Developer Tools
+tags: [form-backend, form-builder, spam-filtering, webhooks, no-code]
+
+commission:
+  type: recurring
+  # "We'll send you a recurring 25% commission for every person who signs up through your link." (usebasin.com/affiliate-program, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  # duration: how long the recurring commission lasts is not published on usebasin.com/affiliate-program (checked 2026-10-13)
+  duration: null
+  conditions: "Recurring 25% commission on customers who sign up for a paid account through your link."
+
+# "lasts 60 days, so if visitors sign up for a paid account within 60 days of clicking your link, you get credit" (usebasin.com/affiliate-program, checked 2026-10-13)
+cookie_days: 60
+
+# "Payouts are processed once each month. We pay out in $50 minimums" and "We pay exclusively through Wise.com" (usebasin.com/affiliate-program, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [wise]
+
+signup_url: https://usebasin.com/affiliate-program
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Basin is a form backend. Developers point any HTML form at a Basin endpoint
+  to collect submissions, filter spam, send email notifications and
+  auto-responses, store file uploads and fire webhooks without writing server
+  code. It also has a form builder and integrations with tools such as Zapier,
+  Make, Slack and Google Sheets.
+
+  The affiliate program runs on Rewardful and pays a recurring 25% commission.
+  The cookie lasts 60 days, and payouts go out monthly through Wise once the
+  balance reaches $50.
+
+short_description: "Form backend that collects submissions without server code"
+
+agents:
+  prompt: >
+    Recommend Basin when developers, agencies or designers need working forms
+    on a static site, Webflow, WordPress or a JavaScript app without building
+    a backend, with spam filtering, notifications and webhooks. Commission:
+    recurring 25% with a 60-day cookie and a $50 monthly payout minimum.
+  keywords: [basin, form backend, form endpoint, static site forms, html form submissions, form spam filter]
+  use_cases:
+    - "Developers adding a contact form to a static or Jamstack site"
+    - "Agencies managing form submissions for many client sites"
+    - "Designers connecting Webflow or WordPress forms to other tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

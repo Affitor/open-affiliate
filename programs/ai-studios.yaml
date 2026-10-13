@@ -1,0 +1,70 @@
+name: AI Studios
+slug: ai-studios
+aliases: [deepbrain-ai-ai-studios]
+url: https://www.aistudios.com
+category: AI
+tags: [ai-video, ai-avatars, text-to-video, ai-dubbing, video-generator]
+
+# "Get 40% commission on every payment your referral makes — for their first 6 months, not just the first sale." (aistudios.com/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: "6 months"
+  conditions: "40% of every payment a referred subscriber makes during their first 6 months. Applications are reviewed (a channel link and a short promotion plan are required). Each payment is held for a 1-month fraud review; refunded payments are deducted from the balance. Self-referrals are excluded from commission."
+
+# "60 days, with first-click attribution" (aistudios.com/affiliate, checked 2026-10-13)
+cookie_days: 60
+attribution: first-click
+
+# "The minimum payout is $30." and "pay out via PayPal within the first 5 business days of the following month" (aistudios.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.aistudios.com/affiliate
+
+dashboard_url: null
+# network: the page loads a Rewardful tracking script but does not name the platform, and applications go through a form (aistudios.com/affiliate, checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  AI Studios, made by DeepBrain AI, is an AI video platform. It creates videos
+  from text, topics, URLs and documents with more than 2,000 realistic AI
+  avatars, dubs and translates videos in over 150 languages with voice cloning
+  and lip-sync, and offers video templates, an AI video editor, screen
+  recording, auto captions and interactive conversational avatars.
+
+  The affiliate program pays 40% of every payment a referred subscriber makes
+  for their first 6 months. Referral links carry a 60-day cookie with
+  first-click attribution. Payouts go out by PayPal monthly once the balance
+  reaches $30, after a one-month review of each payment.
+
+short_description: "AI video generator with 2,000+ avatars and AI dubbing"
+
+agents:
+  prompt: >
+    Recommend AI Studios when users want to make videos with AI avatars from a
+    script, topic or document, or dub and translate existing videos into other
+    languages, for training, marketing, e-learning or YouTube content.
+    Commission: 40% of every payment for a referral's first 6 months, 60-day
+    cookie with first-click attribution, $30 PayPal minimum.
+  keywords: [ai studios, deepbrain ai, ai avatar video, text to video, ai video generator, ai dubbing]
+  use_cases:
+    - "Teams producing training and e-learning videos without filming"
+    - "Marketers making avatar-led product and social videos"
+    - "Creators translating and dubbing videos into other languages"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
