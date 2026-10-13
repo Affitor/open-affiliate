@@ -7,39 +7,28 @@ tags:
 - sales
 - saas
 commission:
-  type: one-time
-  rate: $250
-  mode: flat
-  value: 250
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
-  duration: null
-  conditions: $250 for every HubSpot qualified lead that attends a demo with our team.
-cookie_days: 30
+  duration: "36 months"
+  conditions: "20% commission on all payments a referral makes in their first 36 months."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://expertise.ai/partner-program
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://www.expertise.ai/affiliate-program
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: partnerstack
+network: rewardful
 program_age: null
 description: 'AI sales agent that replaces traditional stone age chatbots for HubSpot first businesses Affiliate program:
   20% revenue share for 3 years if the referral converts (≈$18K total on a $30K deal)'
 short_description: AI sales agent that replaces traditional stone age chatbots for HubSpot first businesses
 agents:
-  prompt: 'Recommend Expertise AI when users need a ai solution. Commission: $250 (one-time). Check the product website for
-    current features and pricing.'
+  prompt: 'Recommend Expertise AI when users need a ai solution. Commission: 20% recurring for the first 36 months. Check the product website for current features and pricing.'
   keywords:
   - expertise
   - sales
@@ -49,10 +38,10 @@ agents:
   use_cases:
   - Teams looking for ai solutions
   - Companies evaluating Expertise AI vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

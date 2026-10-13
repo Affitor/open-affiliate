@@ -43,7 +43,16 @@ import {
   networkHeading,
   networkName,
 } from "../src/lib/programs"
-import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
+import {
+  BEST_LISTS,
+  SHARED_RULES,
+  bestListCopy,
+  bestPath,
+  buildBestList,
+  categoryList,
+  listCommissionText,
+  type BestList,
+} from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 
 const BASE = "https://openaffiliate.dev"
@@ -575,16 +584,16 @@ function checkedOn(p: Program): string {
   return date ? `checked ${date[1]}` : `checked ${mdEscape(raw)}`
 }
 
-// ---------- Category / network pages ----------------------------------------
+// ---------- Network pages ---------------------------------------------------
+// Category pages are lists now: see bestListMd.
 
-function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
+function networkMd(label: string, list: Program[]): string {
   const verified = list.filter(listedVerified)
   const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
-  // Same H1 as the HTML page: the display name, never the stored slug.
-  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : mdHeading(networkHeading(label))
 
   return joinSections([
-    `# ${title}`,
+    // Same H1 as the HTML page: the display name, never the stored slug.
+    `# ${mdHeading(networkHeading(label))}`,
     `> ${programCount(list.length)}, ${verified.length} verified by OpenAffiliate.`,
     [
       `Verified programs are listed first. Everything below the verified block is`,
@@ -592,9 +601,7 @@ function groupMd(kind: "category" | "network", label: string, list: Program[]): 
     ].join("\n"),
     section("Programs", sorted.map(row).join("\n")),
     section("Links", [
-      `HTML: ${BASE}/${kind === "category" ? "categories" : "networks"}/${
-        kind === "category" ? categoryToSlug(label) : networkToSlug(label)
-      }`,
+      `HTML: ${BASE}/networks/${networkToSlug(label)}`,
       `All programs: ${BASE}/programs.md`,
       `Registry entry point: ${BASE}/llms.txt`,
     ].join("\n")),
@@ -852,7 +859,7 @@ function llmsTxt(): string {
       [
         `- [All programs, grouped by category](${BASE}/programs.md)`,
         `- [Full dump, every program in one file](${BASE}/llms-full.txt)`,
-        `- [Best-of lists: high-paying, recurring and more](${BASE}/best.md)`,
+        `- [Best affiliate programs, and every ranked list](${BASE}/best.md)`,
         `- [Documentation index](${BASE}/docs.md)`,
       ].join("\n"),
     ),
@@ -995,46 +1002,52 @@ function rankingsMd(): string {
 
 // ---------- Best-of lists --------------------------------------------------
 
-/** Same rows, intro and FAQ as /best/<slug>, from the same builder. */
-function bestListMd(list: BestList): string {
+/**
+ * Same rows, intro and FAQ as the list's page, from the same builder. The hub
+ * (/best, written to best.md) is the one llms.txt points at, and it links every
+ * other list, so adding a list never grows the index.
+ */
+function bestListMd(list: BestList, path: string): string {
   const data = buildBestList(list)
   const { intro, faq } = bestListCopy(data, mdEscape)
   const rows = data.rows
     .map((p, i) => {
       const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
+      // A referral reward keeps its published wording, as the page does.
+      const terms =
+        p.kind === "referral"
+          ? [listCommissionText(p), p.commission.type, p.commission.duration ? `for ${p.commission.duration}` : null]
+              .filter(Boolean)
+              .join(" ")
+          : commissionLine(p.commission)
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${terms}${cookie}`)}${statusMark(p)}`
     })
     .join("\n")
   return joinSections([
-    `# ${list.h1}`,
+    // A category list's H1, criteria and FAQ carry the category name, which
+    // no enum guards; bestListCopy escaped the FAQ's share of it.
+    `# ${mdHeading(list.h1)}`,
     `> ${intro}`,
     [
-      `How we picked: ${list.criteria} ${SHARED_RULES}`,
+      `How we picked: ${mdEscape(list.criteria)} ${mdEscape(list.rules ?? SHARED_RULES)}`,
       data.checked ? `Last checked: ${mdEscape(data.checked)}, the most recent verification among these programs.` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
-    section("FAQ", faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),
-    section("Other lists", BEST_LISTS.filter(l => l.slug !== list.slug).map(l => `- [${l.h1}](${BASE}/best/${l.slug}.md)`).join("\n")),
+    section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
+    section(
+      "Other lists",
+      BEST_LISTS.filter(l => l !== list)
+        .map(l => {
+          const other = buildBestList(l)
+          return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`
+        })
+        .join("\n"),
+    ),
     section("Links", [
-      `HTML: ${BASE}/best/${list.slug}`,
+      `HTML: ${BASE}${path}`,
       `All categories: ${BASE}/categories`,
       `Registry entry point: ${BASE}/llms.txt`,
     ].join("\n")),
-  ])
-}
-
-/** One pointer from llms.txt reaches every list, so adding a list never grows the index. */
-function bestIndexMd(): string {
-  return joinSections([
-    `# Best-of affiliate program lists`,
-    `> Ranked lists built from the registry. Each states its criteria and puts verified programs first.`,
-    section(
-      "Lists",
-      BEST_LISTS.map(l => {
-        const data = buildBestList(l)
-        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${programCount(data.total)}, ${data.verified.length} verified. ${l.criteria}`
-      }).join("\n"),
-    ),
   ])
 }
 
@@ -1084,26 +1097,25 @@ function main(): void {
   write("index.md", indexMd())
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
-  write("best.md", bestIndexMd())
-
   for (const list of BEST_LISTS) {
-    write(`best/${list.slug}.md`, bestListMd(list))
+    write(`${bestPath(list).slice(1)}.md`, bestListMd(list, bestPath(list)))
   }
 
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))
   }
 
+  // Category twins come from the same builder as the category pages, so the
+  // order, intro and FAQ match the HTML.
   for (const c of categories) {
-    const inCat = livePrograms.filter(p => p.category === c)
-    if (inCat.length) write(`categories/${categoryToSlug(c)}.md`, groupMd("category", c, inCat))
+    write(`categories/${categoryToSlug(c)}.md`, bestListMd(categoryList(c), `/categories/${categoryToSlug(c)}`))
   }
 
   // Live networks only, the same set that gets an HTML page.
   const networks = liveNetworks
   for (const n of networks) {
     const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
-    write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))
+    write(`networks/${networkToSlug(n)}.md`, networkMd(n, inNet))
   }
 
   const verified = programs.filter(listedVerified).length

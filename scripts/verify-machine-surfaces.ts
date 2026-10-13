@@ -8,7 +8,18 @@ import { join } from "node:path";
 import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
-import { BEST_LISTS, MAX_ROWS, buildBestList, listScore } from "../src/lib/best-lists";
+import {
+  BEST_LISTS,
+  MAX_ROWS,
+  bestPath,
+  bestListCopy,
+  buildBestList,
+  categoryList,
+  listScore,
+  listCommissionText,
+  flatUsdPayout,
+  type BestList,
+} from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
 import {
   commissionDisplay,
@@ -22,6 +33,9 @@ import {
   networkName,
   IN_HOUSE,
   NETWORK_META,
+  livePrograms,
+  commissionUnknown,
+  type Program,
 } from "../src/lib/programs";
 
 const ROOT = process.cwd();
@@ -394,40 +408,42 @@ function sameRows(surface: string, got: string[], want: string[]): void {
   }
 }
 
-for (const list of BEST_LISTS) {
-  const url = `${BASE_URL}/best/${list.slug}`;
+/**
+ * One list page, whichever route serves it: the /best hub, a /best/<slug>
+ * list, or a category page (a directory on the same builder, so no row cap).
+ * Checks the page, its JSON-LD and its markdown twin against the builder.
+ */
+function checkListPage(list: BestList, path: string): void {
+  const url = `${BASE_URL}${path}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
-  const md = requireText(join("best", `${list.slug}.md`));
-  if (!md.startsWith(`# ${list.h1}\n`)) fail(`best/${list.slug}.md must start with its H1`);
-  const foreign = foreignMarkup(md);
-  if (foreign) fail(`best/${list.slug}.md has markup the generator did not write: ${foreign}`);
   const title = `${list.title} | OpenAffiliate`;
   if (title.length > 60 || /[–—]/.test(title)) {
-    fail(`best list title must be 60 characters or fewer with no en or em dash: ${title}`);
+    fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
   }
   if (list.description.length < 120 || list.description.length > 155) {
-    fail(`best list description is ${list.description.length} characters; keep it 120 to 155: ${list.slug}`);
+    fail(`${path} description is ${list.description.length} characters; keep it 120 to 155`);
   }
   const { rows } = buildBestList(list);
-  if (rows.length === 0 || rows.length > MAX_ROWS) fail(`best/${list.slug} has ${rows.length} rows`);
+  if (rows.length === 0 || (!list.directory && rows.length > MAX_ROWS)) fail(`${path} has ${rows.length} rows`);
   const firstUnverified = rows.findIndex((p) => !p.verified);
   if (firstUnverified !== -1 && rows.slice(firstUnverified).some((p) => p.verified)) {
-    fail(`best/${list.slug} lists an unverified program above a verified one`);
+    fail(`${path} lists an unverified program above a verified one`);
   }
   if (rows.some((p) => !isLive(p))) {
-    fail(`best/${list.slug} lists a program that is not live`);
+    fail(`${path} lists a program that is not live`);
   }
+  // "Programs that do not publish a rate are listed last": within the verified
+  // and the unverified group, no published rate follows an unpublished one.
+  rows.forEach((p, i) => {
+    const prev = rows[i - 1];
+    if (prev && prev.verified === p.verified && commissionUnknown(prev.commission) && !commissionUnknown(p.commission)) {
+      fail(`${path} lists ${p.slug}, which publishes a rate, after ${prev.slug}, which does not`);
+    }
+  });
   const want = rows.map((p) => p.slug);
 
-  // Markdown: numbered rows, numbered from 1, each linking its program twin.
-  const mdRows = [
-    ...md.matchAll(/^(\d+)\. \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
-  ];
-  if (mdRows.some((m, i) => Number(m[1]) !== i + 1)) fail(`best/${list.slug}.md numbers its rows out of order`);
-  sameRows(`best/${list.slug}.md`, mdRows.map((m) => m[2]), want);
-
   // Prerendered page: the table's program links, and the JSON-LD ItemList.
-  const htmlFile = join("best", `${list.slug}.html`);
+  const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
   const tbodyStart = html.indexOf("<tbody>");
@@ -443,35 +459,127 @@ for (const list of BEST_LISTS) {
     fail(`${htmlFile} ItemList numberOfItems or positions disagree with its items`);
   }
   // Whole URLs, position by position: a bare slug is a relative URL that
-  // resolves under /best/, not to the program page.
+  // resolves under the page's own path, not to the program page.
   sameRows(
     `${htmlFile} ItemList`,
     items.map((item) => item.url ?? ""),
     want.map((slug) => `${BASE_URL}/programs/${slug}`)
   );
+
+  // Markdown twin, from the same builder: its H1, the intro, the builder's
+  // rows in order, and the FAQ the page shows. A twin holding only its H1, or
+  // one written by another generator, fails here.
+  const mdFile = `${path.slice(1)}.md`;
+  const md = requireText(mdFile);
+  const h1 = /^# (.*)\n/.exec(md)?.[1] ?? "";
+  // The generator escapes an H1 because a category name can carry markup.
+  if (h1.replace(/\\(.)/g, "$1").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&") !== list.h1) {
+    fail(`${mdFile} must start with its H1, "${list.h1}"`);
+  }
+  // Intro and every FAQ question and answer, against the builder's own text.
+  // The twin's copy is escaped, so it is unescaped before comparing; the
+  // builder's copy has its line breaks collapsed, as the escaper does.
+  const unescape = (s: string) =>
+    s.replace(/\\(.)/g, "$1").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+  const oneLine = (s: string) => s.replace(/\s*[\r\n]+\s*/g, " ");
+  const copy = bestListCopy(buildBestList(list));
+  const intro = /^# .*\n\n> (.*)\n/.exec(md)?.[1];
+  if (intro === undefined || unescape(intro) !== oneLine(copy.intro)) {
+    fail(`${mdFile} intro differs from the page's: ${JSON.stringify((intro ?? "").slice(0, 80))}`);
+  }
+  const faqSection = /\n## FAQ\n\n([\s\S]*?)(?=\n## |$)/.exec(md)?.[1] ?? "";
+  const pairs = faqSection
+    .split(/^### /m)
+    .slice(1)
+    .map((chunk) => {
+      const [q, ...rest] = chunk.split("\n");
+      return { q: unescape(q), a: unescape(rest.join("\n").trim()) };
+    });
+  if (
+    pairs.length !== copy.faq.length ||
+    pairs.some((pair, i) => pair.q !== oneLine(copy.faq[i].q) || pair.a !== oneLine(copy.faq[i].a))
+  ) {
+    fail(`${mdFile} FAQ differs from the page's (${pairs.length} pairs, the page has ${copy.faq.length})`);
+  }
+  const foreign = foreignMarkup(md);
+  if (foreign) fail(`${mdFile} has markup the generator did not write: ${foreign}`);
+  // Numbered rows, numbered from 1, each linking its program twin.
+  const mdRows = [
+    ...md.matchAll(/^(\d+)\. \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
+  ];
+  if (mdRows.some((m, i) => Number(m[1]) !== i + 1)) fail(`${mdFile} numbers its rows out of order`);
+  sameRows(mdFile, mdRows.map((m) => m[2]), want);
+}
+
+for (const list of BEST_LISTS) checkListPage(list, bestPath(list));
+for (const category of categories) {
+  checkListPage(categoryList(category), `/categories/${categoryToSlug(category)}`);
 }
 
 /**
- * listScore reads tiered and hybrid rate text, and the registry does not hold
- * every shape it must read, so the shapes are pinned here.
+ * listScore, and so high-paying qualification, reads structured fields only.
+ * The rate text in these fixtures is deliberately misleading: it must make no
+ * difference. The first two are the inputs that got a text parser to score 60
+ * ("-$150 adjustment", "$150 customer credits").
  */
-for (const [mode, value, rate, want] of [
-  ["hybrid", 20, "$10-100 + 20%", 55], // money range, upper bound without its own "$"
-  ["hybrid", 20, "$10-$100 + 20%", 55],
-  ["hybrid", 20, "$10 to 100 + 20%", 55],
-  ["tiered", 75, "$50-75", 52.5], // money-only text: the typed 75 is dollars, not percent
-  ["flat", 200, "$200", 65], // so it ranks below a flat $200
-  ["hybrid", 20, "$75 or 20%", 52.5],
-  ["hybrid", 25, "100% first payment + 25% recurring", 100],
-  ["tiered", 50, "20-50%", 50],
-  ["percentage", 30, "50% of the first payment, 30% of every renewal", 30], // shows 30%, ranks at 30
-  ["hybrid", 80, "80 percent or $20", 80], // "percent" is a percentage unit, so 80 is not dollars
+const highPaying = BEST_LISTS.find((list) => list.slug === "high-paying-affiliate-programs");
+if (!highPaying) fail("the high-paying list is missing");
+for (const [mode, value, currency, kind, rate, want] of [
+  ["hybrid", 20, "USD", "affiliate", "20% per sale; -$150 adjustment", 0],
+  ["hybrid", 20, "USD", "affiliate", "20% per sale; $150 customer credits", 0],
+  ["tiered", 75, "USD", "affiliate", "$50-75 per sale", 0],
+  ["unknown", null, "USD", "affiliate", "$500 per sale", 0],
+  ["flat", 200, "EUR", "affiliate", "$200", 0],
+  ["flat", 200, null, "affiliate", "$200", 0], // currency must be set explicitly
+  ["flat", 150, "USD", "referral", "$150 per referral", 0], // credit or a gift card
+  ["percentage", 30, "USD", "affiliate", "$900 per sale", 30], // the typed percentage, not the text
+  ["percentage", 25, "EUR", "affiliate", "25%", 25], // a percentage carries no currency
+  ["flat", 200, "USD", "affiliate", "up to $5,000", 65], // the typed dollars, not the text
+  ["percentage", Infinity, "USD", "affiliate", "", 0],
 ] as const) {
-  const got = listScore({ type: "one-time", mode, value, rate, currency: "USD" });
+  const commission = { type: "one-time", mode, value, currency, rate } as unknown as Program["commission"];
+  const got = listScore({ commission, kind });
   // NaN fails every comparison, so it would slip past the tolerance check alone.
   if (!Number.isFinite(got) || Math.abs(got - want) > 1e-9) {
-    fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
+    fail(`listScore(${mode} ${value} ${currency} ${kind} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
   }
+  const qualifies = highPaying.qualifies({ ...livePrograms[0], commission, kind });
+  if (qualifies !== want >= 30) {
+    fail(`high-paying ${qualifies ? "takes" : "refuses"} ${mode} ${value} ${currency} ${kind} ${JSON.stringify(rate)}`);
+  }
+}
+
+/**
+ * A referral reward (credit or a gift card) shows its published wording in
+ * list and category tables, never the bare number, and scores 0.
+ */
+{
+  const rate = "$100-$200 Amazon gift card per referral";
+  const commission = { type: "one-time", mode: "flat", value: 200, currency: "USD", rate } as Program["commission"];
+  const shown = listCommissionText({ commission, kind: "referral" });
+  if (shown !== rate) fail(`a referral reward shows ${JSON.stringify(shown)} instead of its own wording`);
+  if (listScore({ commission, kind: "referral" }) !== 0) fail("a referral reward has a commission score");
+  if (listCommissionText({ commission, kind: "affiliate" }) !== "$200") {
+    fail("an affiliate flat payout no longer shows its figure");
+  }
+}
+
+/**
+ * flatUsdPayout, the filter a high-ticket list will use, reads structured
+ * fields only. The rate text is deliberately misleading in these fixtures: it
+ * must make no difference.
+ */
+for (const [mode, value, currency, rate, want] of [
+  ["flat", 300, "USD", "anything", 300],
+  ["flat", 150, "EUR", "$150 per sale", 0],
+  ["flat", 150, "", "$150 per sale", 0], // currency must be set explicitly
+  ["tiered", 550, "USD", "$550 per sale", 0],
+  ["hybrid", 550, "USD", "$550 per sale", 0],
+  ["percentage", 150, "USD", "$150 per sale", 0],
+  ["flat", null, "USD", "$150 per sale", 0],
+] as const) {
+  const got = flatUsdPayout({ type: "one-time", mode, value, rate, currency });
+  if (got !== want) fail(`flatUsdPayout(${mode} ${value} ${JSON.stringify(currency)}) is ${got}, expected ${want}`);
 }
 
 /**
@@ -530,10 +638,11 @@ if (JSON.stringify(JSON.parse(serialized)) !== JSON.stringify(dangerousValue)) {
 for (const [file, expectedType] of [
   ["rankings.html", "CollectionPage"],
   [join("categories", "ai.html"), "CollectionPage"],
+  [join("categories", "ai.html"), "FAQPage"],
   ["compare.html", "WebPage"],
   ["networks.html", "FAQPage"],
   ["networks.html", "BreadcrumbList"],
-  ...BEST_LISTS.map((list) => [join("best", `${list.slug}.html`), "ItemList"] as const),
+  ...BEST_LISTS.map((list) => [`${bestPath(list).slice(1)}.html`, "ItemList"] as const),
 ]) {
   const htmlPath = join(BUILD_APP, file);
   if (!existsSync(htmlPath)) fail(`${file} was not prerendered`);
@@ -698,8 +807,9 @@ if (htmlH1(networksIndex) !== "Affiliate Networks") {
 /**
  * /networks against the registry: one card per network with its counts, the
  * ItemList, and FAQ answers whose numbers are recomputed here rather than read
- * back from the page. Order is the page's rule: most live programs first, ties
- * by stored value.
+ * back from the page. Two orders, as on the page: cards and the ItemList go A
+ * to Z by display name, ignoring case; the FAQ ranks by live program count,
+ * ties by stored value.
  */
 const liveList = programs.filter(isLive);
 const networkRows = liveNetworks
@@ -708,7 +818,10 @@ const networkRows = liveNetworks
     return { network, count: list.length, verified: list.filter((p) => p.verified).length };
   })
   .sort((a, b) => b.count - a.count || a.network.localeCompare(b.network));
-const cardRows = networkRows.filter((row) => row.network !== IN_HOUSE);
+const byCount = networkRows.filter((row) => row.network !== IN_HOUSE);
+const cardRows = [...byCount].sort((a, b) =>
+  networkName(a.network).localeCompare(networkName(b.network), "en", { sensitivity: "base" })
+);
 const inHouseCount = networkRows.find((row) => row.network === IN_HOUSE)?.count ?? 0;
 const plural = (n: number) => `${n} ${n === 1 ? "program" : "programs"}`;
 
@@ -744,7 +857,7 @@ const faq = (
     | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
     | undefined)?.mainEntity ?? []
 ).map((q) => ({ q: q.name ?? "", a: q.acceptedAnswer?.text ?? "" }));
-const [top1, top2, top3] = cardRows;
+const [top1, top2, top3] = byCount;
 const faqWant: [string, string[]][] = [
   ["What is an affiliate network?", cardRows.map((row) => networkName(row.network))],
   [

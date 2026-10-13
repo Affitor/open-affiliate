@@ -7,26 +7,16 @@ tags:
   - marketing
   - saas
 commission:
-  type: one-time
-  rate: 15%
+  type: recurring
+  rate: "15%"
   mode: percentage
   value: 15
   currency: USD
-  duration: 12 months
-  conditions: 15% commission for the first year on an avg. $10K deal size!
-cookie_days: 30
+  duration: "24 months"
+  conditions: "15% for every plan in the first year and 7.5% in the second year (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://salesrabbit.com/refer-a-friend/
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -47,10 +37,10 @@ agents:
   use_cases:
     - Teams looking for sales solutions
     - Companies evaluating SalesRabbit vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
