@@ -445,21 +445,30 @@ function mdUrl(url: string): string {
   // schema/program.schema.json refuse such a value before it gets here, in
   // build-registry and in the sync alike.
   const s = String(url)
-  // Brackets are legal in a URL only around an IPv6 host, and percent-encoding
-  // those breaks it: https://[2001:db8::1]/ became https://%5B2001:db8::1%5D/.
-  // That pair is kept when the raw string opens with it and the URL parses with
-  // an IPv6 host. Parsing is what makes keeping it safe: a host the parser
-  // accepts ends at `/ ? # :` or the end, never at the `(` a link would need.
-  const ipv6 = /^[a-z][a-z0-9+.-]*:\/\/(?:[^/?#@[\]\s]*@)?\[[0-9a-f:.]+\]/i.exec(s)?.[0] ?? ""
-  let keep = 0
-  if (ipv6) {
-    try {
-      if (new URL(s).hostname.startsWith("[")) keep = ipv6.length
-    } catch {
-      // Not a URL: encode everything.
-    }
+  const out = s.replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  // Brackets are legal in a URL only around an IPv6 host, and encoding those
+  // breaks it: https://[2001:db8::1]/ became https://%5B2001:db8::1%5D/. So
+  // after everything is encoded, that one pair is put back. The version before
+  // this skipped encoding for the whole prefix instead, and let the userinfo
+  // of `https://<b>@[::1]/` through as raw HTML.
+  //
+  // Put back only when the URL parses with an IPv6 host, only that host's
+  // text (hex digits, colons, dots), and only where the host sits: right
+  // after `scheme://` and any userinfo, and followed by `/ ? # :` or the end.
+  // Not merely the first match — `https://u:[::1](x)@[::1]/` parses, and
+  // restoring the pair in its password would make `[::1](x)` a link.
+  let inner = ""
+  try {
+    const host = new URL(s).hostname
+    if (host.startsWith("[")) inner = host.slice(1, -1)
+  } catch {
+    // Not a URL: nothing to put back.
   }
-  return s.slice(0, keep) + s.slice(keep).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  const pair = `%5B${inner}%5D`
+  const at = /^[a-z][a-z0-9+.-]*:\/\/(?:[^/?#]*@)?/i.exec(out)?.[0].length ?? -1
+  const fits = /^[0-9a-fA-F:.]+$/.test(inner) && at >= 0 && out.startsWith(pair, at)
+  if (!fits || !/^(?:[/?#:]|$)/.test(out.slice(at + pair.length))) return out
+  return `${out.slice(0, at)}[${inner}]${out.slice(at + pair.length)}`
 }
 
 function entities(text: string): string {
