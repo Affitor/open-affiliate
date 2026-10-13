@@ -9,6 +9,7 @@ const {
   evaluateAutoMergePolicy,
   fetchAffitorJson,
   fetchProgramContent,
+  finalMergeCheck,
   isAffitorSyncPullRequest,
   requiredChecksPass,
   shouldArmAutoMerge,
@@ -732,6 +733,35 @@ test("merge gate: every required check passed on exactly this head, by the requi
   // Nothing required means nothing proves the head.
   assert.match(verdict(green, []).reasons.join("\n"), /main lists no required checks/)
   assert.equal(requiredChecksPass({ headSha: SHA, required: undefined, checkRuns: green }).ok, false)
+})
+
+test("merge gate, last look: same head, open, no stop label, strict main, head contains main (Codex r2)", () => {
+  const SHA = "a".repeat(40)
+  const pr = (overrides = {}) => syncPullRequest({ state: "open", head: { sha: SHA, repo: REPO }, ...overrides })
+  const look = (overrides = {}) =>
+    finalMergeCheck({ pullRequest: pr(), headSha: SHA, strict: true, behindBy: 0, ...overrides })
+  assert.deepEqual(look(), { ok: true, reasons: [] })
+
+  // Stop labels a person adds while the job runs, read fresh right before the merge.
+  for (const label of ["do-not-merge", "needs-human-review", "security"]) {
+    const verdict = look({ pullRequest: pr({ labels: [{ name: AFFITOR_SYNC.label }, { name: label }] }) })
+    assert.equal(verdict.ok, false)
+    assert.match(verdict.reasons.join("\n"), new RegExp(`blocking label: ${label}`))
+  }
+  assert.match(look({ pullRequest: pr({ head: { sha: "b".repeat(40), repo: REPO } }) }).reasons.join("\n"), /head moved past aaaaaaa/)
+  assert.match(look({ pullRequest: pr({ state: "closed" }) }).reasons.join("\n"), /no longer open/)
+  assert.match(look({ pullRequest: pr({ user: { login: "sonpiaz", type: "User" } }) }).reasons.join("\n"), /author is not/)
+
+  // main moved: the squash would combine main's change with a head that never saw it.
+  assert.deepEqual(look({ behindBy: 2 }), {
+    ok: false,
+    reasons: ["behind main (2 commit(s)), waiting for the next sync"],
+  })
+  assert.equal(look({ behindBy: undefined }).ok, false)
+  // Without strict protection, main could move between this look and the merge.
+  for (const strict of [false, undefined]) {
+    assert.match(look({ strict }).reasons.join("\n"), /main does not require branches to be up to date/)
+  }
 })
 
 test("reads the Affitor API as bounded JSON", async () => {

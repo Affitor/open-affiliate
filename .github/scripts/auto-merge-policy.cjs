@@ -695,6 +695,50 @@ function requiredChecksPass({ headSha, required, checkRuns }) {
   return { ok: reasons.length === 0, reasons: [...new Set(reasons)] }
 }
 
+/**
+ * For the merge job, right before it merges: a fresh read of the pull request
+ * (still the App's, open, at the judged head, no stop label), of main's
+ * protection (branches must be up to date) and of the head against main's
+ * current tip (nothing on main the head lacks). Then the squash result is
+ * exactly the head the lane checked.
+ */
+function finalMergeCheck({ pullRequest, headSha, strict, behindBy, config = AFFITOR_SYNC }) {
+  const reasons = []
+  const head = String(headSha).slice(0, 7)
+  if (!isAffitorSyncPullRequest(pullRequest, config)) reasons.push(`author is not ${config.bot}`)
+  if (pullRequest.state !== "open") reasons.push("pull request is no longer open")
+  if (pullRequest.head?.sha !== headSha) reasons.push(`head moved past ${head}`)
+  const labels = labelNames(pullRequest.labels)
+  for (const label of BLOCKING_LABELS) {
+    if (labels.has(label)) reasons.push(`blocking label: ${label}`)
+  }
+  if (strict !== true) {
+    reasons.push("main does not require branches to be up to date (required_status_checks.strict), so a stale head could merge")
+  }
+  if (behindBy !== 0) {
+    reasons.push(`behind main (${behindBy ?? "unknown"} commit(s)), waiting for the next sync`)
+  }
+  return { ok: reasons.length === 0, reasons }
+}
+
+/** The merge job's one comment on a pull request: created once, then updated. */
+const MERGE_MARKER = "<!-- openaffiliate-affitor-sync-merge -->"
+async function reportMerge(github, { owner, repo, number, sha, text }) {
+  const body = `${MERGE_MARKER}\n### affitor-sync merge — ${String(sha).slice(0, 7)}\n\n${text}`
+  const comments = await github.paginate(github.rest.issues.listComments, {
+    owner,
+    repo,
+    issue_number: number,
+    per_page: 100,
+  })
+  const previous = comments.find((comment) => comment.body?.includes(MERGE_MARKER))
+  if (previous) {
+    await github.rest.issues.updateComment({ owner, repo, comment_id: previous.id, body })
+  } else {
+    await github.rest.issues.createComment({ owner, repo, issue_number: number, body })
+  }
+}
+
 module.exports = {
   AFFITOR_SKIP,
   AFFITOR_SYNC,
@@ -710,7 +754,9 @@ module.exports = {
   evaluateAutoMergePolicy,
   fetchAffitorJson,
   fetchProgramContent,
+  finalMergeCheck,
   isAffitorSyncPullRequest,
+  reportMerge,
   requiredChecksPass,
   shouldArmAutoMerge,
 }
