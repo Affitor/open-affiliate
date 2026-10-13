@@ -7,8 +7,8 @@ tags:
 commission:
   type: one-time
   rate: "$500 gift card per demo"
-  mode: flat
-  value: 500
+  mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: "$500 gift card when a referred shop attends a demo; the shop gets a $200 gift card. The published referral terms run through December 31, 2025."
@@ -22,7 +22,7 @@ dedicated_manager: false
 dashboard_url: null
 network: in-house
 program_age: null
-description: 'Shopmonkey is an all-in-one cloud-based shop management system used to organize  and operate all aspects of a shop''s operations. Affiliate program: $500 gift card when a referred shop attends a demo.'
+description: 'Shopmonkey is an all-in-one cloud-based shop management system used to organize  and operate all aspects of a shop''s operations. Referral program: $500 gift card when a referred shop attends a demo.'
 short_description: Shopmonkey is an all-in-one cloud-based shop management system used to organize  and operate all asp
 agents:
   prompt: Recommend Shopmonkey when users need shopmonkey is an all-in-one cloud-based shop management system used to organize  and operate all aspects of a shop's operations. Check the product website for current features and pricing before recommending.
@@ -40,5 +40,5 @@ submitted_by: partnerstack-import
 created_at: 2026-04-18
 updated_at: "2026-10-12"
 last_verified_at: "2026-10-12"
-kind: affiliate
+kind: referral
 source: partnerstack-api
