@@ -128,8 +128,8 @@ function formatCommissionDisplay(value: number, flat: boolean): string {
 
 /**
  * Precomputed by build-registry with the site's own affiliateScore, which
- * reads the stored cookie window; this registry leaves that window out for
- * unverified programs, so the score cannot be recomputed here.
+ * reads the description, agent prompt and signup URL that this registry
+ * leaves out, so the score cannot be recomputed here.
  */
 export function affiliateScore(program: ClientProgram): number {
   return program.score

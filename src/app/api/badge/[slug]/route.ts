@@ -1,24 +1,32 @@
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { parse as parseYaml } from "yaml"
-import { computeScoreV1, type ScoreInput } from "@openaffiliate/scoring"
 import { termsConfirmed } from "@/lib/confirmed-terms"
+import { affiliateScore, getProgram } from "@/lib/programs"
 
 /**
- * The subset of a program YAML this route reads. `ScoreInput` already
- * describes everything the score needs; the rest is presentation only.
- * Typing it beats `Record<string, unknown>`, which made every field
- * `unknown` and produced eight type errors downstream.
+ * The subset of a program YAML this route reads, for presentation only: the
+ * score is the site's own affiliateScore over the registry entry. Typing it
+ * beats `Record<string, unknown>`, which made every field `unknown` and
+ * produced eight type errors downstream.
  */
-type ProgramYaml = ScoreInput & {
+type ProgramYaml = {
   name?: string
   url?: string
   logo_url?: string
   brand_color?: string
   status?: string
+  verified?: boolean
+  cookie_days?: number | null
+  commission?: {
+    type?: string | null
+    rate?: string | number | null
+    duration?: string | null
+  } | null
 }
 
-type Commission = NonNullable<ScoreInput["commission"]>
+type Commission = NonNullable<ProgramYaml["commission"]>
+type Tier = "S" | "A" | "B" | "C" | "D"
 
 /**
  * GET /api/badge/[slug].svg
@@ -59,21 +67,16 @@ export async function GET(
   const size = (url.searchParams.get("size") as Size) ?? "md"
   const brandOverride = url.searchParams.get("brand")
 
-  const program = await loadProgram(slugClean)
-  if (!program) return svgError("program not found", 404)
+  const stored = getProgram(slugClean)
+  const program = stored && (await loadProgram(slugClean))
+  if (!stored || !program) return svgError("program not found", 404)
   // No live score for a program that does not accept affiliates.
   if (program.status === "discontinued") return svgError("program discontinued", 200)
   if (program.status === "no_program") return svgError("no affiliate program", 200)
   if (program.status === "paused") return svgError("program status unclear", 200)
 
-  const score = computeScoreV1({
-    commission: program.commission ?? null,
-    cookie_days: program.cookie_days ?? null,
-    verified: program.verified ?? false,
-    description: program.description ?? program.short_description ?? null,
-    agents: program.agents ?? null,
-    signup_url: program.signup_url ?? null,
-  })
+  const total = affiliateScore(stored)
+  const score = { total, tier: tierOf(total) }
 
   const svg = renderBadge({ slug: slugClean, program, score, variant, theme, style, size, brandOverride })
 
@@ -103,7 +106,7 @@ async function loadProgram(slug: string): Promise<ProgramYaml | null> {
 interface RenderArgs {
   slug: string
   program: ProgramYaml
-  score: ReturnType<typeof computeScoreV1>
+  score: { total: number; tier: Tier }
   variant: Variant
   theme: Theme
   style: Style
@@ -299,7 +302,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
 
   // Commission + cookie formatted in a conversational way
   const commission = formatCommission(args.program.commission)
-  // The score above still reads the stored cookie window; the text shows it only once verified.
+  // Shown, as it is scored, only once verified.
   const cookie = termsConfirmed(args.program) && args.program.cookie_days ? `${args.program.cookie_days}-day cookie` : null
   const metaLine = [commission, cookie, termsConfirmed(args.program) ? null : "unconfirmed"].filter(Boolean).join("  ·  ")
 
@@ -479,6 +482,15 @@ function escapeXml(s: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;")
+}
+
+/** The badge's grade bands over the 0-100 score. */
+function tierOf(total: number): Tier {
+  if (total >= 85) return "S"
+  if (total >= 70) return "A"
+  if (total >= 55) return "B"
+  if (total >= 40) return "C"
+  return "D"
 }
 
 function svgError(message: string, status: number): Response {

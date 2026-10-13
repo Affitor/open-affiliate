@@ -5,6 +5,7 @@ import {
   commissionUnknown,
   confirmedTerms,
   livePrograms,
+  rankedCommission,
   rankScore,
   type Program,
 } from "./programs"
@@ -232,9 +233,10 @@ function nounOf(h1: string): string {
 }
 
 /**
- * The commission score lists filter and rank on, from structured fields only:
- * a single percentage (mode "percentage") scores its value, and a flat amount
- * in explicit US dollars scores through rankScore's dollar mapping. Everything
+ * The commission score lists filter and rank on, from structured fields only,
+ * through the same rankedCommission the Affiliate Score uses: a single
+ * percentage (mode "percentage") scores its value, and a flat amount in
+ * explicit US dollars scores through rankScore's dollar mapping. Everything
  * else scores 0: tiered, hybrid and unknown modes, flat amounts in another or
  * no currency, and referral rewards (kind "referral": credit or gift cards).
  *
@@ -245,11 +247,8 @@ function nounOf(h1: string): string {
  * places it after single rates in the others; its own page shows the terms.
  */
 export function listScore(p: Pick<Program, "commission" | "kind">): number {
-  const c = p.commission
-  if (p.kind === "referral") return 0
-  if (c.mode === "percentage") return rankScore(c)
-  if (c.mode === "flat" && c.currency === "USD") return rankScore(c)
-  return 0
+  const c = rankedCommission(p)
+  return c ? rankScore(c) : 0
 }
 
 /**
