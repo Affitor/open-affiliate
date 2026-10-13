@@ -15,8 +15,13 @@
  * build-registry (CI runs it after `npm run build`).
  */
 import assert from "node:assert/strict"
+import { spawnSync } from "node:child_process"
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { test } from "node:test"
 import { BEST_LISTS, buildBestList, categoryList, listScore } from "../src/lib/best-lists"
+import { compareCommission, type CommissionOrdered } from "../src/lib/commission-order"
 import {
   compareByCommission,
   programs as clientPrograms,
@@ -33,6 +38,32 @@ import {
   searchPrograms,
   type Program,
 } from "../src/lib/programs"
+
+/**
+ * Child mode for the locale test below: write every order this file checks,
+ * as this process's locale produces them, to the file named by
+ * COMMISSION_ORDER_DUMP, and exit before any test runs. (A file, not stdout:
+ * exiting right after a large console.log cuts the pipe short.)
+ */
+if (process.env.COMMISSION_ORDER_DUMP) {
+  const ids = (rows: { slug: string }[]) => rows.map((r) => r.slug)
+  const orders: Record<string, string[]> = {}
+  for (const sort of ["commission_desc", "az", "za", "newest", "relevance"] as const) {
+    orders[`rest ${sort}`] = ids(searchPrograms({ sort }))
+    orders[`browser ${sort}`] = ids(clientSearch({ sort }))
+  }
+  for (const list of [...BEST_LISTS, ...categories.map(categoryList)]) orders[`list ${list.slug}`] = ids(buildBestList(list).rows)
+  for (const network of liveNetworks) orders[`network ${network}`] = ids(searchPrograms({ network, sort: "commission_desc" }))
+  writeFileSync(
+    process.env.COMMISSION_ORDER_DUMP,
+    JSON.stringify({
+      // Proof the locale took effect: localeCompare orders these two differently in tr and en.
+      probe: ["Airwallex", "AISQ"].sort((a, b) => a.localeCompare(b)).join(","),
+      orders,
+    })
+  )
+  process.exit(0)
+}
 
 function program(name: string, commission: Partial<Program["commission"]>, over: Partial<Omit<Program, "commission">> = {}): Program {
   return {
@@ -103,6 +134,30 @@ test("lists and category pages order each group by commissionRank, and the cap t
     }
   }
   assert.ok(capTies > 0, "no list holds two programs at the cap, so the tie-break went untested")
+})
+
+/** Two or more programs at one rank, in the order compareCommission gives them. */
+function tieOrder(...rows: [slug: string, name: string, duration: string | null][]): string[] {
+  const programs: CommissionOrdered[] = rows.map(([slug, name, duration]) => ({
+    slug,
+    name,
+    commission: { type: "recurring", mode: "percentage", value: 30, duration },
+  }))
+  return programs.sort((a, b) => compareCommission(a, b, () => 30)).map((p) => p.slug)
+}
+
+test("at equal rank: lifetime first, then the name in a locale-independent order, then the slug", () => {
+  // Lifetime decides before the name: Zeta (lifetime) before Alpha (12 months).
+  assert.deepEqual(tieOrder(["b-alpha", "Alpha", "12 months"], ["a-zeta", "Zeta", "lifetime"]), ["a-zeta", "b-alpha"])
+  // The name decides before the slug; each slug pair below runs the other way.
+  // Dotless and dotted i: "airwallex" < "aisq" in code units, whatever the locale.
+  assert.deepEqual(tieOrder(["a-aisq", "AISQ", null], ["b-airwallex", "Airwallex", null]), ["b-airwallex", "a-aisq"])
+  // Case: compared lower-cased, so "alpha" before "Beta" (raw code units put "B" first).
+  assert.deepEqual(tieOrder(["a-beta", "Beta", null], ["b-alpha", "alpha", null]), ["b-alpha", "a-beta"])
+  // Diacritics dropped: "Émile" before "Emma" (raw code units put "É" after every ASCII letter).
+  assert.deepEqual(tieOrder(["a-emma", "Emma", null], ["b-emile", "Émile", null]), ["b-emile", "a-emma"])
+  // Identical names: the slug, whatever the input order.
+  assert.deepEqual(tieOrder(["b-same", "Same", null], ["a-same", "Same", null]), ["a-same", "b-same"])
 })
 
 function row(slug: string, commissionRank: number): ClientProgram {
@@ -203,4 +258,23 @@ test("searchPrograms leaves livePrograms alone, so one request cannot reorder th
   // base would show here.
   assert.deepEqual(slugs(searchPrograms({})), relevance)
   assert.deepEqual(slugs(searchPrograms({ sort: "commission_desc" })), commission)
+})
+
+test("no order depends on the runtime's locale: a Turkish and an English process agree on every surface", () => {
+  const dir = mkdtempSync(join(tmpdir(), "commission-order-"))
+  const run = (locale: string) => {
+    const out = join(dir, `${locale}.json`)
+    const child = spawnSync(process.execPath, ["--import", "tsx", join(process.cwd(), "scripts", "commission-order.test.ts")], {
+      env: { ...process.env, COMMISSION_ORDER_DUMP: out, LC_ALL: locale, LANG: locale },
+      encoding: "utf8",
+    })
+    assert.equal(child.status, 0, child.stderr)
+    return JSON.parse(readFileSync(out, "utf8")) as { probe: string; orders: Record<string, string[]> }
+  }
+  const [tr, en] = [run("tr_TR.UTF-8"), run("en_US.UTF-8")]
+  rmSync(dir, { recursive: true, force: true })
+  // Non-vacuity: the two children really collate differently.
+  assert.notEqual(tr.probe, en.probe, "both children collated alike, so the locale did not take effect")
+  assert.ok(Object.keys(en.orders).length > 30)
+  for (const key of Object.keys(en.orders)) assert.deepEqual(tr.orders[key], en.orders[key], key)
 })

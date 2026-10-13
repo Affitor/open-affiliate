@@ -1,6 +1,6 @@
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
-import { commissionUnknown, compareCommission } from "./commission-order"
+import { commissionUnknown, compareCommission, compareText } from "./commission-order"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
@@ -382,10 +382,10 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
   const sort = opts.sort ?? "relevance"
   switch (sort) {
     case "az":
-      results.sort((a, b) => a.name.localeCompare(b.name))
+      results.sort((a, b) => compareText(a.name, b.name))
       break
     case "za":
-      results.sort((a, b) => b.name.localeCompare(a.name))
+      results.sort((a, b) => compareText(b.name, a.name))
       break
     case "commission_desc":
       // The order every commission surface shares (commission-order.ts).
@@ -421,7 +421,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
           return map[s ?? ""] ?? 2
         }
         results.sort((a, b) => {
-          const byDate = (b.createdAt || "").localeCompare(a.createdAt || "")
+          const byDate = compareText(b.createdAt || "", a.createdAt || "")
           if (byDate !== 0) return byDate
           const bySource = sourceWeight(b.source) - sourceWeight(a.source)
           if (bySource !== 0) return bySource

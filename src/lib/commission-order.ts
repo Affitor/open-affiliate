@@ -21,6 +21,19 @@ export function commissionUnknown(c: { mode: string; value: number | null }): bo
   return c.mode === "unknown" || c.value === null
 }
 
+/**
+ * Text in A to Z order, the same in every runtime: diacritics dropped, lower
+ * case by toLowerCase (which, unlike toLocaleLowerCase, ignores the locale),
+ * then plain code-unit order, with the raw strings as the last resort.
+ * localeCompare followed the runtime's default locale, so a Turkish browser
+ * (dotted and dotless i) put AISQ before Airwallex while the server did not.
+ */
+export function compareText(a: string, b: string): number {
+  const key = (s: string) => s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  const [x, y] = [key(a), key(b)]
+  return x < y ? -1 : x > y ? 1 : a < b ? -1 : a > b ? 1 : 0
+}
+
 export function isLifetime(p: { commission: { type: string; duration?: string | null } }): boolean {
   return p.commission.type === "recurring" && /lifetime/i.test(p.commission.duration ?? "")
 }
@@ -29,8 +42,8 @@ export function isLifetime(p: { commission: { type: string; duration?: string | 
  * Larger rank first (dir -1) or smaller first (dir 1). Whatever the direction,
  * programs the rank cannot place (0 or less: tiered, referral, unpublished…)
  * come last, those that publish no figure after those that do. Ties go to
- * lifetime recurring deals, then the name, then the slug, so no order depends
- * on how the input happened to be sorted.
+ * lifetime recurring deals, then the name, then the slug (both by compareText,
+ * so no order depends on the input's order or the runtime's locale).
  */
 export function compareCommission<T extends CommissionOrdered>(a: T, b: T, rank: (p: T) => number, dir = -1): number {
   const [ra, rb] = [rank(a), rank(b)]
@@ -39,7 +52,7 @@ export function compareCommission<T extends CommissionOrdered>(a: T, b: T, rank:
     (ra - rb) * dir ||
     Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission)) ||
     Number(isLifetime(b)) - Number(isLifetime(a)) ||
-    a.name.localeCompare(b.name) ||
-    (a.slug < b.slug ? -1 : a.slug > b.slug ? 1 : 0)
+    compareText(a.name, b.name) ||
+    compareText(a.slug, b.slug)
   )
 }
