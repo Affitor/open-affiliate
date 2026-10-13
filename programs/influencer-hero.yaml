@@ -8,26 +8,16 @@ tags:
   - social-media
   - saas
 commission:
-  type: one-time
-  rate: 30%
+  type: recurring
+  rate: "20%"
   mode: percentage
-  value: 30
+  value: 20
   currency: USD
   duration: null
-  conditions: "Earn up to 30% recurring commission by referring brands to our all-in-one influencer marketing platform "
-cookie_days: 30
+  conditions: "Base offer is a 20% revenue share (Bronze); the listing advertises up to 30% recurring."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://www.influencer-hero.com/influencer-page/affiliate-payments
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/influencerhero
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -50,10 +40,10 @@ agents:
   use_cases:
     - Teams looking for marketing solutions
     - Companies evaluating Influencer Hero vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

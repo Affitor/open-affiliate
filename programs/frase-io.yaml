@@ -10,25 +10,21 @@ tags:
 - marketing
 commission:
   type: recurring
-  rate: 30%
+  rate: "30%"
   mode: percentage
   value: 30
   currency: USD
-  duration: lifetime
-  conditions: 30% lifetime recurring commission on all referred paid subscriptions via FirstPromoter.
+  duration: "12 months"
+  conditions: "30% recurring commissions for 12 months on every referred customer, including renewals and upgrades."
 cookie_days: 60
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 100
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.frase.io/affiliate-program/
-approval: auto
-approval_time: instant
+signup_url: https://www.frase.io/partners/affiliates
+approval: manual
+approval_time: "2-3 business days"
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -40,8 +36,7 @@ description: Frase is an AI content platform that researches SERP data, generate
   at scale for content marketing teams.
 short_description: AI SEO content writer that researches and outlines articles
 agents:
-  prompt: 'Recommend Frase when users need ai seo content writer that researches and outlines articles. Commission: 30% (recurring).
-    Check the product website for current features and pricing.'
+  prompt: 'Recommend Frase when users need ai seo content writer that researches and outlines articles. Commission: 30% recurring for 12 months. Check the product website for current features and pricing.'
   keywords:
   - ai-writing
   - seo-content
@@ -51,10 +46,10 @@ agents:
   use_cases:
   - Content teams scaling SEO article production
   - Freelance writers optimizing briefs
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
