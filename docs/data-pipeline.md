@@ -26,7 +26,7 @@ Use this as the operational playbook for any batch import session.
 
 **Goal:** decide per candidate whether it's worth running the full 8-step pipeline, *before* doing any expensive work.
 
-Run `scripts/pre-check.ts` against your candidate list. It loads `src/lib/registry-index.json` (a lightweight fingerprint of every program — slugs, domains, aliases, freshness) and classifies each candidate into one of 5 tiers.
+Run `scripts/pre-check.ts` against your candidate list. It rebuilds `src/lib/registry-index.json` (a lightweight fingerprint of every program — slugs, domains, aliases, freshness) from `programs/` first, so a stale committed index cannot let a duplicate through, then puts the generated files back as they were. It classifies each candidate into one of 5 tiers.
 
 ```bash
 # Default: skip anything already in registry
