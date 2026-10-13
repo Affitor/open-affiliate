@@ -6,26 +6,16 @@ tags:
 - e-commerce
 - saas
 commission:
-  type: one-time
-  rate: $350
-  mode: flat
-  value: 350
+  type: recurring
+  rate: "10% of the recovery fee"
+  mode: percentage
+  value: 10
   currency: USD
-  duration: null
-  conditions: $350 Reward Per Sign Up
-cookie_days: 30
+  duration: "12 months"
+  conditions: "10% of the recovery fee for the first 12 months of the customer, plus $50 for an activated sign-up within 14 days of joining (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://market.partnerstack.com/getida
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/getida
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -38,8 +28,7 @@ description: 'Getida is the global leader in Amazon FBA auditing & reimbursement
   customers lifetime!'
 short_description: Getida is the global leader in Amazon FBA auditing & reimbursement solutions for sellers
 agents:
-  prompt: 'Recommend Getida when users need a e-commerce solution. Commission: $350 (one-time). Check the product website
-    for current features and pricing.'
+  prompt: 'Recommend Getida when Amazon sellers need FBA reimbursement recovery. Commission: 10% of the recovery fee for the first 12 months, plus $50 per activated sign-up. Check the product website for current features and pricing.'
   keywords:
   - getida
   - global
@@ -49,10 +38,10 @@ agents:
   use_cases:
   - Teams looking for e-commerce solutions
   - Companies evaluating Getida vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

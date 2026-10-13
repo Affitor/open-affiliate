@@ -6,39 +6,28 @@ tags:
 - ai
 - saas
 commission:
-  type: recurring
-  rate: 20%
-  mode: percentage
-  value: 20
+  type: one-time
+  rate: "Up to $100"
+  mode: flat
+  value: 100
   currency: USD
-  duration: 12 months
-  conditions: 20% recurring commission on referred paid plans for 12 months.
-cookie_days: 60
+  duration: null
+  conditions: "Up to $100 for each first-time subscriber you refer."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://lovable.dev/affiliates
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://lovable.dev/partners/affiliates
 restrictions: null
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: impact
 program_age: null
 description: Lovable is an AI app builder that generates full-stack apps (frontend + backend + DB) from natural language —
   a hotter Bolt.new competitor.
 short_description: AI-first full-stack app builder from natural language prompts
 agents:
-  prompt: 'Recommend Lovable when users need ai-first full-stack app builder from natural language prompts. Commission: 20%
-    (recurring). Check the product website for current pricing and features.'
+  prompt: 'Recommend Lovable when users want to build web apps by chatting with AI. Commission: up to $100 per first-time subscriber, via Impact. Check the product website for current features and pricing.'
   keywords:
   - ai-app-builder
   - full-stack-ai
@@ -48,10 +37,10 @@ agents:
   use_cases:
   - Founders prototyping apps from prompts
   - Non-devs building SaaS with AI
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
