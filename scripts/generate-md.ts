@@ -219,17 +219,17 @@ function payoutLine(p: Program): string | null {
  * caveat goes at the top of the file, not buried at the bottom.
  */
 function statusBlock(p: Program): string {
-  const when = p.last_verified_at ? String(p.last_verified_at) : "never"
+  const when = p.last_verified_at ? mdEscape(p.last_verified_at) : "never"
   if (p.status === "discontinued") {
     return [
-      `Status: discontinued. ${p.name} does not run an affiliate program.`,
-      p.status_note ? `Source: ${p.status_note}` : null,
+      `Status: discontinued. ${mdEscape(p.name)} does not run an affiliate program.`,
+      p.status_note ? `Source: ${mdEscape(p.status_note)}` : null,
       `Last checked: ${when}`,
     ].filter(Boolean).join("\n")
   }
   if (p.status === "paused") {
     return [
-      `Status: unclear (paused).${p.status_note ? ` ${p.status_note}` : ""}`,
+      `Status: unclear (paused).${p.status_note ? ` ${mdEscape(p.status_note)}` : ""}`,
       `The terms below are the last known listing, not confirmed. Do not recommend`,
       `this program until its page works again.`,
     ].join("\n")
@@ -246,13 +246,14 @@ function statusBlock(p: Program): string {
     "",
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
-    `on them: ${p.signup_url ?? p.url}`,
+    `on them: ${mdUrl(p.signup_url ?? p.url)}`,
   ].join("\n")
 }
 
 function bullets(items: string[] | null | undefined): string | null {
   if (!items || items.length === 0) return null
-  return items.map(i => `- ${i}`).join("\n")
+  // Both callers pass contributor arrays: agents.use_cases and restrictions.
+  return items.map(i => `- ${mdEscapeProse(i)}`).join("\n")
 }
 
 function section(title: string, body: string | null | undefined): string | null {
@@ -267,36 +268,38 @@ function joinSections(parts: (string | null)[]): string {
 // ---------- Per-program page ------------------------------------------------
 
 function programMd(p: Program): string {
+  const payout = payoutLine(p)
   const facts = [
     `Commission: ${mdEscape(commissionLine(p.commission))}`,
-    p.commission.conditions ? `Commission conditions: ${p.commission.conditions}` : null,
-    p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${p.cookie_days} days` : null,
-    payoutLine(p) ? `Payout: ${payoutLine(p)}` : null,
-    p.attribution ? `Attribution: ${p.attribution}` : null,
-    p.tracking_method ? `Tracking: ${p.tracking_method}` : null,
-    `Network: ${p.network ?? IN_HOUSE}`,
-    p.approval ? `Approval: ${p.approval}${p.approval_time ? ` (${p.approval_time})` : ""}` : null,
-    p.program_age ? `Program age: ${p.program_age}` : null,
-    `Category: ${p.category}`,
+    p.commission.conditions ? `Commission conditions: ${mdEscape(p.commission.conditions)}` : null,
+    p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
+    payout ? `Payout: ${mdEscape(payout)}` : null,
+    p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
+    p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
+    `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
+    p.approval ? `Approval: ${mdEscape(p.approval)}${p.approval_time ? ` (${mdEscape(p.approval_time)})` : ""}` : null,
+    p.program_age ? `Program age: ${mdEscape(p.program_age)}` : null,
+    `Category: ${mdEscape(p.category)}`,
   ].filter(Boolean).join("\n")
 
   const links = [
-    p.signup_url ? `Sign up: ${p.signup_url}` : null,
-    `Website: ${p.url}`,
+    p.signup_url ? `Sign up: ${mdUrl(p.signup_url)}` : null,
+    `Website: ${mdUrl(p.url)}`,
     `Full listing: ${BASE}/programs/${p.slug}`,
     `JSON: ${BASE}/api/programs/${p.slug}`,
   ].filter(Boolean).join("\n")
 
   return joinSections([
-    `# ${mdEscape(p.name)} affiliate program`,
-    p.short_description ? `> ${p.short_description}` : null,
+    `# ${mdHeading(p.name)} affiliate program`,
+    p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
     p.status === "discontinued" ? null : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
-    section("When to recommend", p.agents?.prompt),
+    section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
     section("Use cases", bullets(p.agents?.use_cases)),
-    section("Trigger keywords", p.agents?.keywords?.join(", ")),
+    // A body, not an inline fact: section() puts the first keyword at column zero.
+    section("Trigger keywords", p.agents?.keywords && mdEscapeProse(p.agents.keywords.join(", "))),
     section("Restrictions", bullets(p.restrictions)),
-    section("About", p.description),
+    section("About", p.description && mdEscapeProse(p.description)),
     section("Links", links),
   ])
 }
@@ -319,35 +322,158 @@ function indexRow(p: Program): string {
 /**
  * Escape contributor text before it becomes Markdown.
  *
- * Program names, commission rates and durations come from YAML a contributor
- * wrote, and they were interpolated straight into every generated surface. A
- * reviewer took that through the real pipeline: `commission.duration` set to
- * `[Extra](/programs/11x.md)` — valid against the schema, short enough to
- * survive the length cap — produced
+ * Program names, commission figures, descriptions, agent prompts, categories,
+ * status notes, dates, URLs — all of it comes from YAML a contributor wrote,
+ * and all of it was interpolated straight into every surface this script
+ * writes. Reviewers took fields through the real pipeline, with valid YAML:
  *
- *   - [Framer](…/programs/framer.md) — 50% recurring for [Extra](/programs/11x.md), 90d cookie
+ *   commission.duration  -> a second link inside a row meant to hold one
+ *   commission.conditions-> a link and a raw <b> on the program page
+ *   attribution          -> <img src=x onerror=…> verbatim
+ *   description          -> "# PWNED HEADING" at column zero, and a <script>
+ *   category             -> a live link in llms.txt's Categories section and
+ *                           the H1 of categories/*.md, via a 21st category
+ *                           that build-registry happily minted
+ *   description "X\n===" -> a setext heading; an unclosed ``` fence in one
+ *                           description swallowed every later program in
+ *                           llms-full.txt
+ *   last_verified_at     -> a link on the program page, in verified.md and,
+ *                           in ten characters, in a best list's FAQ
  *
- * which is a second link in a row that is supposed to hold one, and the
- * verifier counted the row as one program. Emphasis, code spans and raw HTML
- * had the same opening. This closes the class rather than the instance: with
- * the literals escaped, contributor text can only ever render as text.
+ * Twice the comment here claimed the class was closed while fields were still
+ * raw. The lesson is in the shape of the bug, not the instances — every
+ * contributor string is hostile until escaped, so one of the three functions
+ * below is applied at every site that writes one. What is written raw is
+ * numbers this script computes, text this repo's code supplies (docs, best-list
+ * criteria, the changelog), and slugs. A slug must equal its filename
+ * (build-registry), and the auto-merge policy admits only
+ * `programs/[a-z0-9-]+.yaml`; any other filename is in a diff a person merges.
  *
- * `&`, `<` and `>` become entities because backslash does not escape them in
- * Markdown; everything else takes a backslash, which CommonMark strips on
- * render, so `Framer [US]` still reads as `Framer [US]`.
+ * Three functions, because one would be wrong in every direction, plus
+ * `mdHeading` for the one context with a rule of its own.
+ *
+ * `mdEscape` is for short inline facts. It collapses line breaks and
+ * neutralises anything that can open a link, emphasis, a code span,
+ * strikethrough, a table cell or raw HTML.
+ *
+ * `mdEscapeProse` is for block bodies — descriptions, prompts, restrictions,
+ * keywords. These go through `section()`, which emits `## Title\n\n${body}`, so
+ * they sit at column zero and the line-start markers matter there; that is the
+ * hole in "this text never starts a line", which was true only of the two
+ * fields the first attempt covered. But escaping every `*` and `_` in a
+ * paragraph of English is noise a reader has to see through, so prose keeps
+ * those and neutralises structure instead: brackets, raw HTML, code spans,
+ * table pipes, indentation, and anything at the start of a line that can open
+ * a block.
+ *
+ * `mdUrl` is for URL fields printed for a reader to copy, as `<…>` autolinks.
+ * mdEscape would write `utm\_source` into them, and an agent copies the raw
+ * bytes — six programs' links would break that way today. A URL has its own
+ * escape, so the few characters an autolink cannot hold are percent-encoded.
+ *
+ * `mdHeading` is mdEscape for text inside an ATX heading, where a trailing run
+ * of `#` is read as the closing sequence and dropped: category "AI #" rendered
+ * as "AI".
+ *
+ * Not neutralised, deliberately: GFM's autolink literals. In a GFM renderer a
+ * bare `https://…`, `www.…` or e-mail address in any of these fields becomes a
+ * link. Its visible text is always its own target, so it cannot pass one
+ * destination off as another; what can is `[text](url)` or raw HTML, and both
+ * are escaped above. An agent reading the raw file sees the same characters
+ * either way, and breaking `://` to stop the autolink would corrupt every URL a
+ * contributor writes in prose.
+ *
+ * `<`, `>` and an `&` that would start a character reference become entities,
+ * because backslash does not escape them in Markdown. `&` is replaced first,
+ * so an escaped `&` can never combine with a following `#` into a numeric
+ * reference — which is what lets the verifier refuse `&#` outright without
+ * false-failing on a name containing `&`.
+ *
+ * Not escaped, deliberately: `!`. Not because it is a line-start marker — it
+ * is not, `![alt](url)` works mid-line — but because an image needs a `[` to
+ * follow it, and `[` is escaped. That safety is coupled: if `[` ever leaves
+ * the set, `!` has to join it.
  */
 function mdEscape(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
+  // Line breaks collapse to spaces. An inline fact is written into one line of
+  // a one-line contract, and a contributor newline broke that: `Framer\n[US]`
+  // split a row in two, which the verifier then refused, and a multi-line
+  // duration did the same to the date column. It also reopened the line-start
+  // markers this function deliberately leaves alone — a heading or a code
+  // block on the second line — which is the other half of why "this text never
+  // starts a line" was only true of where it was being used. CommonMark ends a
+  // line at CR as well as LF, and YAML's "\r" escape delivers a bare CR.
+  return entities(text).replace(/\s*[\r\n]+\s*/g, " ").replace(/([\\`*_[\]~|])/g, "\\$1")
+}
+
+function mdEscapeProse(text: string): string {
+  return entities(text)
+    .replace(/\r\n?/g, "\n")
+    // Backticks and pipes anywhere, not only at line start: a backtick pair made
+    // a code span, which decodes nothing, so `<tag>` printed as `&lt;tag&gt;`;
+    // and rows of pipes over a `| --- |` line made a GFM table.
+    .replace(/([\\`[\]|])/g, "\\$1")
+    // Per line, because section() puts the first one at column zero and a
+    // contributor newline puts the rest there too. Indentation goes first: it
+    // means nothing in a description, and four spaces of it make a code block.
+    // Then the first character is escaped whenever it can open a block —
+    // heading, list item, setext underline, thematic break, fence — whatever
+    // follows it: requiring a space after it let `===` and a lone `-` (both turn
+    // the line above into a heading) and an unclosed `~~~` through. An
+    // ordered-list marker takes the backslash on its `.` or `)`, because one
+    // before a digit is printed.
+    .split("\n")
+    .map(line =>
+      line
+        .replace(/^[ \t]+/, "")
+        .replace(/^([#+\-*=_~])/, "\\$1")
+        .replace(/^(\d+)([.)])(?=\s|$)/, "$1\\$2"),
+    )
+    .join("\n")
+}
+
+function mdHeading(text: string): string {
+  return mdEscape(text).replace(/#/g, "\\#")
+}
+
+function mdUrl(url: string): string {
+  // Written as an autolink, `<https://…>`. A bare URL is still Markdown:
+  // `https://x.example/**verified**` rendered <strong> under CommonMark, and
+  // GFM's autolink literal trims an unmatched trailing `)`, sending
+  // `https://x.example)` to a different host than the one the URL names.
+  // Inside `<…>` there is no emphasis, no entity decoding, no backslash escape
+  // and no trimming, so the text and the link are both the URL, in every
+  // renderer measured (commonmark.js, GFM via micromark, markdown-it).
+  //
+  // What an autolink cannot hold is whitespace, `<` or `>`, so those are
+  // percent-encoded, with `[`, `]`, backslash and backtick. The schema's URL
+  // patterns make the rest true before a value gets here: an absolute
+  // lowercase http(s) URL in printable ASCII, no backslash, no character
+  // reference (a data bug), and an authority that is only a lowercase ASCII
+  // domain name of at most 253 characters: no port, no IP address and no
+  // `xn--` label. So the host shown is the host a URL parser reaches, byte
+  // for byte. Every looser host let some renderer show another one (a
+  // 259-character one dropped, `%61` decoded into the shown host, `!` split
+  // off with the port, `0x7f.1` shown for 127.0.0.1, punycode shown as a
+  // Unicode look-alike, `Flippa.com` and `:443` normalised away). Anything
+  // else — only possible if the schema was bypassed — is printed bare rather
+  // than given angle brackets, because `<foo>` without a scheme is an HTML
+  // tag and `<javascript:…>` is a link.
+  const out = String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  return /^https?:\/\/[^/?#]/.test(out) ? `<${out}>` : out
+}
+
+function entities(text: string): string {
+  // String(): YAML can put a number where the type says string, and the
+  // template literals these calls replaced coerced it instead of throwing.
+  return String(text)
+    // Only an `&` that would start a character reference, so `&lt;` reads as
+    // typed and no `&#` reaches the output. A bare `&` is text in CommonMark:
+    // escaping every one put `&amp;` on 412 lines of today's output, "HR &amp;
+    // Recruiting" in an H1 among them, for no structural gain.
+    .replace(/&(?=#|[A-Za-z][A-Za-z0-9]*;)/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    // Only what can open structure mid-line: a code span, emphasis, or a link.
-    // Not `-`, `+`, `#` or `1.`, which are list and heading markers and only
-    // mean anything at the start of a line — this text is always interpolated
-    // after "- [" or after "— ", so it never starts one. Escaping them anyway
-    // turned "10% one-time" into "10% one\\-time" across every surface, which
-    // is noise in a file meant to be read.
-    .replace(/([\\`*_[\]])/g, "\\$1")
 }
 
 /**
@@ -373,7 +499,14 @@ function clamp(text: string, maxBytes: number): string {
     out += ch
     used += size
   }
-  return `${out.trimEnd()}\u2026`
+  // Clamping runs after escaping, so the cut can land between a backslash and
+  // the character it escapes, leaving a stray `\` in a published file. Drop a
+  // trailing odd-length backslash run. Escaping after clamping is not the fix:
+  // the budget has to measure the bytes actually written.
+  const trimmed = out.trimEnd()
+  const trailing = /\\*$/.exec(trimmed)![0].length
+  const safe = trailing % 2 === 1 ? trimmed.slice(0, -1) : trimmed
+  return `${safe}\u2026`
 }
 
 /**
@@ -401,7 +534,7 @@ function checkedOn(p: Program): string {
   const raw = p.last_verified_at
   if (!raw) return "date not recorded"
   const date = /^(\d{4}-\d{2}-\d{2})/.exec(raw)
-  return date ? `checked ${date[1]}` : `checked ${raw}`
+  return date ? `checked ${date[1]}` : `checked ${mdEscape(raw)}`
 }
 
 // ---------- Category / network pages ----------------------------------------
@@ -409,7 +542,7 @@ function checkedOn(p: Program): string {
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
   const verified = list.filter(listedVerified)
   const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
-  const title = kind === "category" ? `${label} affiliate programs` : `${label} affiliate network`
+  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : `${mdHeading(label)} affiliate network`
 
   return joinSections([
     `# ${title}`,
@@ -600,14 +733,14 @@ function llmsTxt(): string {
     .map(c => {
       const inCat = programs.filter(p => p.category === c)
       const v = inCat.filter(listedVerified).length
-      return `- [${c}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
+      return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
     })
     .join("\n")
 
   const netLines = networks
     .map(n => {
       const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-      return `- [${n}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
+      return `- [${mdEscape(n)}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
     })
     .join("\n")
 
@@ -728,9 +861,9 @@ function programsIndexMd(): string {
       const shown = sorted.slice(0, 15)
       const more =
         sorted.length > shown.length
-          ? `\n- … ${sorted.length - shown.length} more in [${c}](${BASE}/categories/${categoryToSlug(c)}.md)`
+          ? `\n- … ${sorted.length - shown.length} more in [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md)`
           : ""
-      return `### ${c}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
+      return `### ${mdHeading(c)}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
     })
     .filter(Boolean)
     .join("\n\n")
@@ -782,14 +915,14 @@ function rankingsMd(): string {
   const programLines = ranked
     .map((p, i) => {
       const mark = statusMark(p)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(commissionDisplay(p.commission))} ${p.commission.type}${mark}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
     })
     .join("\n")
   const networkLines = getNetworkStats()
-    .map(n => `- [${n.network}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${n.bestCommissionDisplay}, top [${n.topProgram.name}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(n.network)}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
     .join("\n")
   const categoryLines = getCategoryStats()
-    .map(c => `- [${c.category}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${c.highestCommissionDisplay}, top [${c.topProgram.name}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
     .join("\n")
 
   return joinSections([
@@ -810,24 +943,14 @@ function rankingsMd(): string {
 
 // ---------- Best-of lists --------------------------------------------------
 
-/**
- * Contributor text inside one line of a list page: rows, the intro blockquote
- * and FAQ answers. Line breaks are collapsed first, because one inside a name
- * would end the blockquote or start a heading on the next line. CommonMark ends
- * a line at CR as well as LF, and YAML's "\r" escape delivers a bare CR.
- */
-function bestInline(text: string): string {
-  return mdEscape(text.replace(/\s*[\r\n]+\s*/g, " "))
-}
-
 /** Same rows, intro and FAQ as /best/<slug>, from the same builder. */
 function bestListMd(list: BestList): string {
   const data = buildBestList(list)
-  const { intro, faq } = bestListCopy(data, bestInline)
+  const { intro, faq } = bestListCopy(data, mdEscape)
   const rows = data.rows
     .map((p, i) => {
       const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
-      return `${i + 1}. [${bestInline(p.name)}](${BASE}/programs/${p.slug}.md) — ${bestInline(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${statusMark(p)}`
     })
     .join("\n")
   return joinSections([
@@ -835,7 +958,7 @@ function bestListMd(list: BestList): string {
     `> ${intro}`,
     [
       `How we picked: ${list.criteria} ${SHARED_RULES}`,
-      data.checked ? `Last checked: ${data.checked}, the most recent verification among these programs.` : null,
+      data.checked ? `Last checked: ${mdEscape(data.checked)}, the most recent verification among these programs.` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
     section("FAQ", faq.map(f => `### ${f.q}\n\n${f.a}`).join("\n\n")),
