@@ -16,6 +16,7 @@ import {
   networkKind,
   networkHowToJoin,
   networkName,
+  networkHeading,
   livePrograms,
   liveNetworks,
   IN_HOUSE,
@@ -41,7 +42,7 @@ function liveOn(network: string): Program[] {
  * title fits in 60 characters, so long names such as PartnerStack drop it.
  */
 function networkTitle(network: string, count: number): string {
-  return `${networkName(network)} Affiliate Programs: ${count} ${count === 1 ? "Program" : "Programs"}`;
+  return `${networkHeading(network)}: ${count} ${count === 1 ? "Program" : "Programs"}`;
 }
 
 const META_MAX = 155;
@@ -52,7 +53,8 @@ const META_MAX = 155;
  * instead of overflowing. verify-machine-surfaces holds every page to the range.
  */
 function networkDescription(network: string, count: number, verified: number): string {
-  const name = networkName(network);
+  // The short form, since the name runs into "affiliate program" here too.
+  const name = NETWORK_META[network]?.shortName ?? networkName(network);
   const one = count === 1;
   const direct = networkKind(network) === "direct";
   let out = direct
@@ -124,6 +126,7 @@ export default async function NetworkPage({
   );
   if (netPrograms.length === 0) notFound();
   const name = networkName(network);
+  const heading = networkHeading(network);
   const meta = NETWORK_META[network];
 
   // Only programs with a published figure feed the averages. Averaging an
@@ -142,7 +145,7 @@ export default async function NetworkPage({
 
   const answer =
     kind === "direct"
-      ? `${netPrograms.length} programs run directly by the brand, with no network in between. ${verifiedCount} are verified.`
+      ? `${netPrograms.length} ${netPrograms.length === 1 ? "program runs" : "programs run"} directly by the brand, with no network in between. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`
       : `${netPrograms.length} affiliate ${netPrograms.length === 1 ? "program" : "programs"} on ${name}, across ${categoryCount} ${categoryCount === 1 ? "category" : "categories"}. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`;
 
   return (
@@ -161,7 +164,7 @@ export default async function NetworkPage({
             "@graph": [
               {
                 "@type": "CollectionPage",
-                name: `${name} Affiliate Programs`,
+                name: heading,
                 description: answer,
                 url: `${SITE}/networks/${slug}`,
                 isPartOf: { "@id": `${SITE}/#website` },
@@ -182,7 +185,7 @@ export default async function NetworkPage({
                 itemListElement: [
                   { "@type": "ListItem", position: 1, name: "OpenAffiliate", item: SITE },
                   { "@type": "ListItem", position: 2, name: "Affiliate Networks", item: `${SITE}/networks` },
-                  { "@type": "ListItem", position: 3, name: `${name} Affiliate Programs` },
+                  { "@type": "ListItem", position: 3, name: heading },
                 ],
               },
             ],
@@ -200,7 +203,7 @@ export default async function NetworkPage({
       <div className="mb-8">
         <div className="flex items-center gap-3 flex-wrap">
           <ProgramLogo slug={network} name={name} src={meta?.logo ?? null} size={40} className="shrink-0" />
-          <h1 className="text-2xl font-bold tracking-tight">{name} Affiliate Programs</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{heading}</h1>
           <Badge variant="outline" className="text-[10px] text-muted-foreground">
             {NETWORK_KIND_LABEL[kind]}
           </Badge>

@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import sitemap from "../src/app/sitemap";
@@ -13,6 +13,7 @@ import {
   networkToSlug,
   programs,
   liveNetworks,
+  networkHeading,
   networkName,
   IN_HOUSE,
   NETWORK_META,
@@ -39,7 +40,9 @@ const llmsFull = requireText("llms-full.txt");
 if (!llms.startsWith("# OpenAffiliate\n")) {
   fail("llms.txt must start with the project H1");
 }
-if (!llms.includes(`${programs.length} programs`)) {
+// Same singular rule as generate-md's programCount().
+const programsPhrase = `${programs.length} ${programs.length === 1 ? "program" : "programs"}`;
+if (!llms.includes(programsPhrase)) {
   fail("llms.txt program count differs from the registry");
 }
 for (const requiredUrl of [
@@ -51,7 +54,7 @@ for (const requiredUrl of [
 ]) {
   if (!llms.includes(requiredUrl)) fail(`llms.txt does not link ${requiredUrl}`);
 }
-if (!llmsFull.includes(`Every one of the ${programs.length} programs`)) {
+if (!llmsFull.includes(`Every one of the ${programsPhrase}`)) {
   fail("llms-full.txt program count differs from the registry");
 }
 for (const program of programs) {
@@ -579,24 +582,39 @@ for (const network of liveNetworks) {
     fail(`NETWORK_META.${network}.logo points at ${meta.logo}, which is not in public/`);
   }
 
-  const name = networkName(network);
+  // "CJ Affiliate Programs", never "CJ Affiliate Affiliate Programs".
+  const heading = networkHeading(network);
+  if (/\bAffiliate Affiliate\b/i.test(heading)) {
+    fail(`NETWORK_META.${network} needs a shortName: its heading reads "${heading}"`);
+  }
   const slug = networkToSlug(network);
   const file = join("networks", `${slug}.html`);
   const html = readBuilt(file);
-  checkHead(file, html, name);
-  if (htmlH1(html) !== `${name} Affiliate Programs`) {
-    fail(`${file} H1 should be "${name} Affiliate Programs" and is "${htmlH1(html)}"`);
+  checkHead(file, html, heading);
+  if (htmlH1(html) !== heading) {
+    fail(`${file} H1 should be "${heading}" and is "${htmlH1(html)}"`);
   }
   const nodes = jsonLdNodes(html);
-  if (!nodes.some((node) => node["@type"] === "CollectionPage" && node.name === `${name} Affiliate Programs`)) {
-    fail(`${file} CollectionPage JSON-LD must be named "${name} Affiliate Programs"`);
+  if (!nodes.some((node) => node["@type"] === "CollectionPage" && node.name === heading)) {
+    fail(`${file} CollectionPage JSON-LD must be named "${heading}"`);
   }
   if (!nodes.some((node) => node["@type"] === "BreadcrumbList")) fail(`${file} has no BreadcrumbList JSON-LD`);
 
   const md = requireText(join("networks", `${slug}.md`));
-  if (!md.startsWith(`# ${name} Affiliate Programs\n`)) {
-    fail(`networks/${slug}.md must start with "# ${name} Affiliate Programs": ${md.split("\n")[0]}`);
+  if (!md.startsWith(`# ${heading}\n`)) {
+    fail(`networks/${slug}.md must start with "# ${heading}": ${md.split("\n")[0]}`);
   }
+}
+
+/**
+ * A count agrees with its noun on every generated surface: "1 program". The
+ * network twins and llms.txt printed "1 programs" for five networks. Reads
+ * every Markdown file and llms*.txt under public/.
+ */
+for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
+  if (!file.endsWith(".md") && !/(^|\/)llms[^/]*\.txt$/.test(file)) continue;
+  const hit = /\b1 programs\b/.exec(readFileSync(join(PUBLIC, file), "utf8"));
+  if (hit) fail(`public/${file} says "1 programs"; a count of one takes the singular`);
 }
 
 const networksIndex = readBuilt("networks.html");

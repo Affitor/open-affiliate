@@ -480,6 +480,7 @@ export function slugToCategory(slug: string): string | undefined {
 export {
   NETWORK_META,
   NETWORK_KIND_LABEL,
+  networkHeading,
   networkKind,
   networkName,
   type NetworkKind,

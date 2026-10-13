@@ -9,6 +9,7 @@ import {
   getNetworkStats,
   networkToSlug,
   networkName,
+  networkHeading,
   networkKind,
   IN_HOUSE,
   NETWORK_META,
@@ -129,7 +130,7 @@ export default function NetworksPage() {
                     "@type": "ListItem",
                     position: i + 1,
                     url: `${SITE}/networks/${networkToSlug(n.network)}`,
-                    name: `${networkName(n.network)} Affiliate Programs`,
+                    name: networkHeading(n.network),
                   })),
                 },
               },
@@ -208,7 +209,8 @@ export default function NetworksPage() {
           href={`/networks/${networkToSlug(IN_HOUSE)}`}
           className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          {inHouse} programs run in-house, with no network <ArrowRight className="h-3.5 w-3.5" />
+          {inHouse} {inHouse === 1 ? "program runs" : "programs run"} in-house, with no network{" "}
+          <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       )}
 

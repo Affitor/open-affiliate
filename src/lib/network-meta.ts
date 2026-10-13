@@ -33,6 +33,12 @@ export const NETWORK_KIND_LABEL: Record<NetworkKind, string> = {
 export interface NetworkMeta {
   /** Display name, cased the way the brand writes it. */
   name: string
+  /**
+   * Name used in front of "Affiliate Programs" in headings and titles, where
+   * the full name would repeat a word: "CJ Affiliate Programs", not
+   * "CJ Affiliate Affiliate Programs". Defaults to `name`.
+   */
+  shortName?: string
   kind: NetworkKind
   /** One factual sentence, 20 words at most. */
   description: string
@@ -99,6 +105,7 @@ export const NETWORK_META: Record<string, NetworkMeta> = {
   },
   "cj-affiliate": {
     name: "CJ Affiliate",
+    shortName: "CJ",
     kind: "marketplace",
     description: "Affiliate network formerly called Commission Junction, where publishers apply to advertisers' programs from one account.",
     website: "https://www.cj.com",
@@ -149,6 +156,11 @@ export function networkName(network: string): string {
     .split("-")
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(" ")
+}
+
+/** "<this> Affiliate Programs": the heading and title form of the name. */
+export function networkHeading(network: string): string {
+  return `${NETWORK_META[network]?.shortName ?? networkName(network)} Affiliate Programs`
 }
 
 export function networkKind(network: string): NetworkKind {
