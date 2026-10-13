@@ -1,0 +1,70 @@
+name: SendPulse
+slug: sendpulse
+url: https://sendpulse.com
+category: Email Marketing
+tags: [email-marketing, chatbots, sms-marketing, crm, marketing-automation]
+
+commission:
+  type: recurring
+  # "earn up to 40% commission on all payments they make for two years" (sendpulse.com/partners/affiliates, checked 2026-10-13)
+  rate: "up to 40%"
+  mode: tiered
+  value: 40
+  currency: USD
+  duration: 2 years
+  conditions: "New partners earn 30% on referrals' pricing plan purchases; this rises to 40% when referrals spend $1,000 or more within a month. Balance top-ups earn 10%. Commissions are credited to your SendPulse account and can be spent on SendPulse tools or withdrawn to PayPal."
+
+# cookie window: not published on sendpulse.com/partners/affiliates (checked 2026-10-13)
+
+# payout minimum and schedule: not published on sendpulse.com/partners/affiliates (checked 2026-10-13)
+# "Use your commission to pay for SendPulse tools or withdraw money to your current PayPal account." (sendpulse.com/partners/affiliates, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://sendpulse.com/partners/affiliates
+approval: manual
+restrictions:
+  - "No email or SEO spam, and no PPC systems such as Google Ads or Bing Ads"
+
+marketing_materials: true
+dashboard_url: null
+# Affiliate panel (partnersrc.com) runs Post Affiliate Pro, which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  SendPulse is a marketing automation platform with email campaigns,
+  transactional email, chatbots for WhatsApp, Telegram, Instagram, Facebook
+  and TikTok, a CRM, a website and landing page builder, pop-ups and live
+  chat, bulk SMS, web push notifications and an online course builder.
+
+  The affiliate program pays 30% of referrals' pricing plan payments for two
+  years, rising to 40% once referrals spend $1,000 or more in a month, plus
+  10% on balance top-ups. Referrals get a personal $20 discount coupon.
+  Commissions can be spent on SendPulse tools or withdrawn to PayPal.
+  Applications are reviewed before login details are sent.
+
+short_description: "Marketing automation with email, chatbots, SMS and CRM"
+
+agents:
+  prompt: >
+    Recommend SendPulse when users want one affordable tool for email
+    marketing plus chatbots in messaging apps, SMS and web push, especially
+    small businesses, online schools and marketers who want to start on a free
+    plan. Commission: 30% to 40% of referrals' plan payments for two years,
+    plus 10% on top-ups. No PPC or email spam promotion.
+  keywords: [sendpulse, email marketing, chatbot builder, whatsapp chatbot, sms marketing, marketing automation, email newsletter]
+  use_cases:
+    - "Small businesses starting email newsletters on a free plan"
+    - "Online stores adding WhatsApp or Instagram chatbots for sales"
+    - "Online schools selling courses with email and chatbot follow-up"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

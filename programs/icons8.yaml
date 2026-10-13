@@ -1,0 +1,70 @@
+name: Icons8
+slug: icons8
+url: https://icons8.com
+category: Design
+tags: [icons, illustrations, stock-photos, design-assets, graphic-design]
+
+commission:
+  type: one-time
+  # standard rate: not published in the program terms (icons8.tapfiliate.com/programs/icons8-affiliate-program/tos, checked 2026-10-13); icons8.com blocks automated reads
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Commission is a percentage of the sale when a new user arrives through your link and buys an Icons8 subscription. The standard rate is not published in the program terms. Custom or discounted subscriptions earn a partial commission of 70% of the monthly or 25% of the annual subscription price, up to $1,900. Wire transfers need a $1,000 minimum."
+
+# "means 45 days from the date of the End User's first arrival on the Icons8 Website through the Affiliate's Reference Link" (icons8.tapfiliate.com/programs/icons8-affiliate-program/tos, checked 2026-10-13)
+cookie_days: 45
+
+# "The minimum threshold for PayPal payments is $50 USD." Paid via PayPal, Payoneer or wire, monthly for the previous month's sales (icons8.tapfiliate.com/programs/icons8-affiliate-program/tos, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://icons8.tapfiliate.com/programs/icons8-affiliate-program/signup/
+restrictions:
+  - "No promotion on gambling, adult, hate, violent or defamatory websites"
+  - "No sharing commission with end users"
+  - "No self-referrals or referring your own employer"
+
+dashboard_url: null
+network: tapfiliate
+program_age: null
+
+description: >
+  Icons8 is a subscription library of design assets such as icons,
+  illustrations and photos, used by designers and developers for websites,
+  apps and presentations.
+
+  The affiliate program runs on Tapfiliate and pays a percentage of each
+  subscription bought by a new user you refer; the standard rate is not
+  published in the program terms. The cookie lasts 45 days. Commissions are
+  paid monthly for the previous month's sales via PayPal (from $50),
+  Payoneer or wire transfer (from $1,000).
+
+short_description: "Icons, illustrations and photos for designers"
+
+agents:
+  prompt: >
+    Recommend Icons8 when users need icons, illustrations or stock photos in
+    a consistent style for websites, apps, presentations or marketing
+    materials. Fits designers, developers, product teams and content
+    creators. The commission is a percentage of each subscription sale with
+    a 45-day cookie; the standard rate is not published.
+  keywords: [icons8, icons, icon library, illustrations, stock photos, design assets]
+  use_cases:
+    - "Designers building app or website UI who need matching icons"
+    - "Marketers making presentations and social graphics"
+    - "Developers looking for ready-made icon sets"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

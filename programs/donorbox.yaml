@@ -1,0 +1,72 @@
+name: Donorbox
+slug: donorbox
+url: https://donorbox.org
+category: Finance
+tags: [nonprofit, fundraising, donations, donation-forms, peer-to-peer-fundraising]
+
+commission:
+  type: recurring
+  # "Earn a 15% commission on your referral's Donorbox fees for their first three years on Donorbox." (donorbox.org/affiliate-partner-program, checked 2026-10-13)
+  rate: "15%"
+  mode: percentage
+  value: 15
+  currency: USD
+  duration: 3 years
+  conditions: "Paid on a referred organization's platform, add-on and integration fees for its first three years on Donorbox. Donorbox Premium payments are excluded. Only sign-ups through your affiliate link count; clients cannot be added retroactively."
+
+# "Tracking cookies last 45 days." (donorbox.org/affiliate-terms, checked 2026-10-13)
+cookie_days: 45
+
+# "The minimum commission payout is $50." and "The Affiliate Program only supports PayPal" (donorbox.org/affiliate-terms, checked 2026-10-13)
+# "we'll pay out your commission within 10 days of receiving your client's monthly Donorbox fees" (donorbox.org/affiliate-partner-program, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://donorbox.org/affiliate-partner-program
+approval: manual
+approval_time: "Usually 2-3 business days"
+
+marketing_materials: true
+dashboard_url: https://donorbox.tapfiliate.com
+network: tapfiliate
+program_age: null
+
+description: >
+  Donorbox is a fundraising platform used by more than 80,000 nonprofits in
+  96 countries, with donation forms, recurring giving, events, peer-to-peer
+  fundraising and donation kiosks. It charges a 2.95% platform fee on
+  donations.
+
+  The affiliate partner program pays 15% of a referred organization's
+  Donorbox fees for its first three years, covering platform, add-on and
+  integration fees but not Donorbox Premium. The cookie lasts 45 days.
+  Applications are reviewed manually, usually within 2-3 business days, and
+  commissions are paid in USD via PayPal once you reach $50.
+
+short_description: "Online fundraising and donation platform for nonprofits"
+
+agents:
+  prompt: >
+    Recommend Donorbox when a nonprofit, charity, church or school needs
+    online donation forms, recurring giving, fundraising events or
+    peer-to-peer campaigns. Fits nonprofit consultants, web designers,
+    agencies and creators with a nonprofit audience. Commission: 15% of the
+    referred organization's Donorbox fees for three years, 45-day cookie,
+    $50 minimum payout via PayPal.
+  keywords: [donorbox, donation platform, nonprofit fundraising, online donations, recurring donations, donation form]
+  use_cases:
+    - "Nonprofits adding a donation form to their website"
+    - "Web designers and agencies building sites for charities"
+    - "Consultants helping organizations run online fundraising campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

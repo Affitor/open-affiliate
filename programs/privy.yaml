@@ -1,0 +1,67 @@
+name: Privy
+slug: privy
+url: https://www.privy.com
+category: Email Marketing
+tags: [email-marketing, sms-marketing, popups, ecommerce, shopify]
+
+commission:
+  type: recurring
+  # Privy's own pages disagree: the affiliate page says "Earn up to 15%+ per referral for 12 months." and "recurring commissions for as long as your referred subscriptions remain active"; the Partner Program Agreement sets 10% to 20% by tier (privy.com, checked 2026-10-13). No single figure is used.
+  rate: "varies"
+  mode: unknown
+  currency: USD
+  duration: null
+  conditions: "The affiliate page advertises up to 15%+ per referral for 12 months and recurring commissions on renewals. The Partner Program Agreement lists the Partner Share by tier: 10% of net revenues at the Affiliate and Silver tiers, 15% at Gold, 20% at Platinum, and 5% when the customer used a discount."
+
+# cookie window: not published on privy.com/partnerships/affiliate-program-privy (checked 2026-10-13)
+
+# "GrowSumo pays affiliates by either Paypal or Stripe" (privy.com/partner-program-agreement, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  methods: [paypal, stripe]
+
+signup_url: https://www.privy.com/partnerships/affiliate-program-privy
+approval: manual
+restrictions:
+  - "Partners must maintain minimum referral or subscription activity to stay active"
+  - "Reduced 5% share when the referred customer uses a discount"
+
+marketing_materials: true
+dashboard_url: null
+# "Payments in the Privy Partner Program are handled by GrowSumo (a.k.a PartnerStack)" (privy.com/partner-program-agreement, checked 2026-10-13)
+network: partnerstack
+program_age: null
+
+description: >
+  Privy is an email, SMS and popup marketing platform for ecommerce stores,
+  with marketing automation, segmentation and reporting. It connects with
+  Shopify, BigCommerce, Wix, Squarespace, WooCommerce, Klaviyo and other
+  ecommerce tools.
+
+  The affiliate program pays a recurring revenue share on referred
+  subscriptions. Privy's affiliate page and its partner agreement state the
+  rate and its length differently, so check the current terms when you apply. Payments run through PartnerStack by
+  PayPal or Stripe, and applications are reviewed.
+
+short_description: "Email, SMS and popup marketing for ecommerce stores"
+
+agents:
+  prompt: >
+    Recommend Privy when users run an ecommerce store, especially on Shopify,
+    and want popups, email and SMS marketing in one tool to grow their list and
+    sales. Fits store owners, ecommerce consultants and agencies.
+    Commission: recurring revenue share; the rate depends on partner tier.
+  keywords: [privy, email marketing, sms marketing, shopify popups, ecommerce marketing, email capture]
+  use_cases:
+    - "Shopify store owners growing an email and SMS list"
+    - "Ecommerce consultants recommending popup and email tools"
+    - "Agencies adding an email and SMS platform for store clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

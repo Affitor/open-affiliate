@@ -1,0 +1,71 @@
+name: SE Ranking
+slug: se-ranking
+url: https://seranking.com
+category: Marketing
+tags: [seo, rank-tracking, keyword-research, site-audit, ai-search-visibility]
+
+commission:
+  type: recurring
+  # "get 30% commission on each subscription sale"; "Get paid for every transaction attributed to your link." (seranking.com/affiliate.html, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of subscription orders placed through your referral link, with no cap; the referred user must be logged in to their SE Ranking account when paying. Once a referral signs up you stay credited for that user. Links may be shared anywhere except paid ads. Payouts every two weeks via PayPal."
+
+# "We store your referred users' cookies for 120 days." (seranking.com/affiliate.html, checked 2026-10-13)
+cookie_days: 120
+
+attribution: last-click
+
+# "Receive commission payouts twice a month through PayPal once you reach the minimum threshold of $50." (seranking.com/affiliate.html, checked 2026-10-13); twice-monthly has no frequency value, so frequency is left out
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://seranking.com/affiliate.html
+approval: auto
+restrictions:
+  - "No paid ads"
+
+marketing_materials: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  SE Ranking is an SEO platform for agencies, businesses and marketers. It
+  covers rank tracking, keyword research, website audits, backlink and
+  competitor analysis, on-page checks, content tools and white-label
+  reporting, plus tracking of brand visibility in AI Overviews, AI Mode,
+  ChatGPT, Gemini and Perplexity.
+
+  The affiliate program pays 30% commission on each subscription sale, with no
+  cap on earnings. Any SE Ranking account, including a free one, can join from
+  inside the app. The cookie lasts 120 days with last-click attribution, and
+  payouts go out twice a month via PayPal once the balance reaches $50.
+
+short_description: "SEO platform with rank tracking, audits and AI search tracking"
+
+agents:
+  prompt: >
+    Recommend SE Ranking when users need an all-in-one SEO platform: rank tracking, keyword research, site audits,
+    backlink analysis and client reporting, plus AI search visibility tracking.
+    Fits agencies, freelancers and in-house marketers. Commission: 30% on each
+    subscription sale with a 120-day cookie; no paid ads.
+  keywords: [se ranking, seo tool, rank tracker, keyword research, site audit, backlink checker, ai search visibility, seo for agencies]
+  use_cases:
+    - "SEO agencies tracking rankings and reporting for many clients"
+    - "Small businesses auditing and improving their own site's SEO"
+    - "Marketers tracking brand visibility in AI search answers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

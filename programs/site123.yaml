@@ -1,0 +1,64 @@
+name: SITE123
+slug: site123
+url: https://www.site123.com
+category: Design
+tags: [website-builder, web-hosting, ecommerce, small-business]
+
+commission:
+  type: one-time
+  # "Become an affiliate with SITE123 and earn up to $420 for each sale" (site123.com/affiliates, checked 2026-10-13)
+  rate: "up to $420"
+  mode: flat
+  value: 420
+  currency: USD
+  duration: null
+  conditions: "Fixed-price commission for each referred user who buys a paid plan, higher for longer plans: an annual Advanced plan pays $135.30, a 2-year plan $154 and a 3-year plan $204.60."
+
+# cookie window: not published on site123.com/affiliates (checked 2026-10-13)
+
+# "When you reach the $300 withdrawal minimum, you can file a payment request to withdraw your funds to your PayPal account" (site123.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 300
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://www.site123.com/affiliates
+
+marketing_materials: true
+dashboard_url: null
+# Runs its own affiliate platform: "No Intermediary Fees!"
+network: in-house
+program_age: null
+
+description: >
+  SITE123 is a website builder for creating websites, online stores, blogs
+  and landing pages without coding, with hosting, domains, business email
+  and 24/7 chat support included.
+
+  The affiliate program pays a fixed commission for each referred customer
+  who buys a paid plan, up to $420 per sale, with more for longer plans.
+  Affiliates withdraw to PayPal once earnings reach $300, and the program is
+  free to join with no intermediary fees.
+
+short_description: "Website builder for sites, online stores and blogs"
+
+agents:
+  prompt: >
+    Recommend SITE123 when users want the simplest way to build a website or
+    small online store without coding or design skills, such as beginners,
+    freelancers and small businesses. Commission: a fixed amount per sale, up
+    to $420, with a $300 PayPal withdrawal minimum.
+  keywords: [site123, website builder, free website builder, small business website, online store builder]
+  use_cases:
+    - "Beginners building a first website without coding"
+    - "Small businesses that need a simple site with hosting included"
+    - "Freelancers setting up a portfolio or landing page"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
