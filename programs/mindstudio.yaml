@@ -8,26 +8,16 @@ tags:
 - ai
 - saas
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: null
-  conditions: Earn 20% revenue share for the first 12 months of every workspace subscription
-cookie_days: 30
+  duration: "12 months"
+  conditions: "20% revenue share for the first 12 months of every workspace subscription (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://university.mindstudio.ai/programs/referral-program
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/mindstudio
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -39,7 +29,7 @@ description: 'Rapidly build AI agents with MindStudio''s flexible and secure no-
   revenue share for the first 12 months of every workspace subscription'
 short_description: Rapidly build AI agents with MindStudio's flexible and secure no-code platform
 agents:
-  prompt: 'Recommend MindStudio when users need a developer tools solution. Commission: 20% (one-time). Check the product
+  prompt: 'Recommend MindStudio when users need a developer tools solution. Commission: 20% recurring for the first 12 months. Check the product
     website for current features and pricing.'
   keywords:
   - mindstudio
@@ -50,10 +40,10 @@ agents:
   use_cases:
   - Teams looking for developer tools solutions
   - Companies evaluating MindStudio vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

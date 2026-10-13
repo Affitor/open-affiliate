@@ -1,6 +1,6 @@
 name: Flippa.com
 slug: flippa-com
-url: https://Flippa.com
+url: https://flippa.com
 category: E-Commerce
 tags:
   - e-commerce
@@ -23,7 +23,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://flippa.com/search?search_template=most_relevant&amp;query[keyword]=affiliate&amp;filter[sale_method]=auction,classified&amp;filter[status]=open&amp;filter[property_type]=website,established_website,starter_site
+signup_url: https://flippa.com/search?search_template=most_relevant&query[keyword]=affiliate&filter[sale_method]=auction,classified&filter[status]=open&filter[property_type]=website,established_website,starter_site
 approval: manual
 approval_time: 1-5 business days
 restrictions: null
