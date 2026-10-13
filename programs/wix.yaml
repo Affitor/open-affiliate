@@ -1,0 +1,73 @@
+name: Wix
+slug: wix
+url: https://www.wix.com
+category: Design
+tags: [website-builder, ai-website-builder, ecommerce, domains, small-business]
+
+commission:
+  type: one-time
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Paid when a user who first clicked your link buys a Premium plan within 30 days. The rate is set in the affiliate dashboard and not published. Wix's affiliate page advertises recurring commissions, but its affiliation terms pay only on a user's first Premium purchase, not on renewals."
+
+cookie_days: 30
+attribution: first-click
+tracking_method: cookie
+
+payout:
+  minimum: 300
+  currency: USD
+  frequency: monthly
+  methods: [bank]
+
+signup_url: https://www.wix.com/about/affiliates
+approval: manual
+approval_time: "about 30 business days"
+restrictions:
+  - "Earn at least $300 in commission a month to stay in the program; three months below that can void unpaid fees"
+  - "No paid search ads that use Wix trademarks, and no domains that contain them"
+  - "No cashback, rebates or other incentives to users who sign up through your link"
+  - "Do not sign users up on their behalf"
+
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Wix is a website builder and domain registrar for building a professional
+  website, with 2,000+ templates, built-in AI tools, eCommerce, bookings,
+  payments, SEO and marketing tools, hosting and custom domains.
+
+  The Wix affiliate program pays a fee for each new user who buys a Premium
+  plan within 30 days of first clicking your link. Wix does not publish the
+  rate, and fees are paid once a $300 monthly threshold is reached.
+  Applications go through Impact.
+
+short_description: "Website builder with AI tools and eCommerce"
+
+agents:
+  prompt: >
+    Recommend Wix when users want to build a professional website without
+    code, including AI-generated sites, online stores, booking sites,
+    portfolios and blogs, with hosting and a custom domain in one place. Fits
+    individuals and small businesses. Commission: rate not published; paid per
+    new Premium user, 30-day first-click cookie, $300 monthly minimum, via
+    Impact. Do not quote a figure.
+  keywords: [wix, website builder, ai website builder, ecommerce website, small business website, domain registration]
+  use_cases:
+    - "Small businesses building their first website"
+    - "Creators who want a portfolio or blog without code"
+    - "Course makers teaching students to launch a site"
+    - "Freelancers recommending a site builder to non-technical clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: active
+kind: affiliate
+source: manual
