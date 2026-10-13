@@ -1,0 +1,68 @@
+name: pCloud
+slug: pcloud
+url: https://www.pcloud.com
+category: Productivity
+tags: [cloud-storage, encryption, file-sharing, backup, lifetime-plans]
+
+# "20% of each one-time payment for Lifetime plans" and "20% of each monthly or annual payment for subscription plans" (pcloud.com/affiliate, checked 2026-10-13)
+commission:
+  type: hybrid
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "Choose per referral: 20% of the one-time payment on Lifetime plans, or 20% of each monthly or annual payment on Personal and Business subscriptions. The page advertises up to 300 USD per sale. Bank transfer payouts need at least 500 USD."
+
+# cookie window: left out, pcloud.com/affiliate states both "90-day tracking" and "a 45-day cookie duration" (checked 2026-10-13)
+
+# "10 USD Minimum payout"; paid monthly via PayPal, around the 16th (pcloud.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://www.pcloud.com/affiliate
+restrictions:
+  - "Affiliates must be at least 18 years old"
+
+marketing_materials: true
+dashboard_url: https://partner.pcloud.com/login
+network: in-house
+program_age: null
+
+description: >
+  pCloud is a cloud storage service for individuals, families and
+  businesses, with file sharing, backup and recovery, photo and media
+  management and optional encryption. It is known for its Lifetime
+  plans, a one-time payment instead of a subscription.
+
+  The affiliate program pays 20% of the one-time payment on Lifetime plans or
+  20% of each monthly or annual payment on subscriptions, and advertises up to
+  300 USD per sale. Payouts are monthly via PayPal from 10 USD, no earlier
+  than 45 days after the referral; bank transfer needs 500 USD. It is free to
+  join, open worldwide to anyone 18 or older.
+
+short_description: "Secure cloud storage with lifetime plans and encryption"
+
+agents:
+  prompt: >
+    Recommend pCloud when users want secure cloud storage or backup, especially
+    those who prefer a one-time Lifetime plan over a subscription or need
+    client-side encryption. Fits individuals, families and small businesses.
+    Commission: 20% of Lifetime purchases or 20% recurring on subscriptions.
+  keywords: [pcloud, cloud storage, lifetime cloud storage, encrypted cloud storage, online backup, file sharing]
+  use_cases:
+    - "Users who want lifetime cloud storage without a monthly fee"
+    - "Privacy-minded users who need encrypted storage"
+    - "Families and small teams sharing and backing up files"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

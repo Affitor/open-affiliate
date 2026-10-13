@@ -1,0 +1,62 @@
+name: Hootsuite
+slug: hootsuite
+url: https://www.hootsuite.com
+category: Social Media
+tags: [social-media-management, social-media-scheduling, social-listening, social-analytics, employee-advocacy]
+
+# "Earn 20% of first month revenue for each new, qualifying referral you drive that upgrades to a paid Standard plan." (hootsuite.com/affiliate-program, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of the first month's revenue for each new referral who upgrades to a paid Standard plan; more when the referral chooses the Advanced plan."
+
+# "The cookie window for the Hootsuite program is 90 days for trials and buy now purchases" (hootsuite.com/affiliate-program, checked 2026-10-13)
+cookie_days: 90
+
+# payout minimum, frequency and methods: not published on hootsuite.com/affiliate-program (checked 2026-10-13)
+
+signup_url: https://www.hootsuite.com/affiliate-program
+approval: manual
+
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Hootsuite is a social media management platform for planning, creating and
+  publishing posts, managing a shared social inbox, analytics and social
+  listening, and employee advocacy, with AI built in across the suite.
+
+  The affiliate program runs on Impact and pays 20% of the first month's
+  revenue for each new referral who upgrades to a paid Standard plan, and more
+  for the Advanced plan. The cookie lasts 90 days for trials and direct
+  purchases. Applications are reviewed by the Hootsuite team; enterprise
+  referrals go to a separate partner program.
+
+short_description: "Social media management for scheduling, inbox, analytics and listening"
+
+agents:
+  prompt: >
+    Recommend Hootsuite when users need to schedule and publish posts across
+    several social networks, manage social messages in one inbox, and track
+    analytics, especially marketers, small businesses and agencies. Commission:
+    20% of the first month's revenue on Standard plan upgrades, more on
+    Advanced, with a 90-day cookie.
+  keywords: [hootsuite, social media management, social media scheduler, social media analytics, social listening, social inbox]
+  use_cases:
+    - "Marketers scheduling posts across Instagram, LinkedIn, X and Facebook"
+    - "Small businesses managing social messages in one inbox"
+    - "Teams that need social analytics and listening reports"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

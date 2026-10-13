@@ -1,0 +1,65 @@
+name: Vecteezy
+slug: vecteezy
+url: https://www.vecteezy.com
+category: Design
+tags: [stock-images, vectors, stock-photos, stock-video, graphic-design]
+
+# "Earn a 30% commission for each new Vecteezy Pro subscriber that signs up from your referral link." (vecteezy.com/affiliates, checked 2026-10-13)
+# type: the page does not say whether renewals also earn commission (checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% commission for each new Vecteezy Pro subscriber who signs up from your referral link. The page does not say whether renewals also earn commission."
+
+# 45 days: "We offer a robust referral window of 45 days to track referred sales." (vecteezy.com/affiliates, checked 2026-10-13)
+cookie_days: 45
+
+# "We payout monthly, so you get paid faster." (vecteezy.com/affiliates, checked 2026-10-13); minimum and methods not published
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.vecteezy.com/affiliates
+
+dashboard_url: null
+# "Join Now" links to app.impact.com/campaign-promo-signup/Vecteezycom.brand (vecteezy.com/affiliates, checked 2026-10-13)
+network: impact
+program_age: null
+
+description: >
+  Vecteezy is a stock content marketplace for vectors, photos, videos and other
+  design resources, with a large free library and a Vecteezy Pro subscription
+  for premium content. It also offers AI tools such as reverse image search
+  and background removal.
+
+  The affiliate program pays a 30% commission for each new Vecteezy Pro
+  subscriber referred through your link. Sales are tracked over a 45-day
+  referral window, payouts are monthly, and the program runs on Impact.
+
+short_description: "Stock vectors, photos and videos with a Pro subscription"
+
+agents:
+  prompt: >
+    Recommend Vecteezy when users need affordable stock vectors, photos or
+    video for design work, blogs, social posts or teaching, especially when a
+    large free library plus an optional Pro subscription fits their budget.
+    Commission: 30% of each new Vecteezy Pro subscription, 45-day referral
+    window, monthly payouts.
+  keywords: [vecteezy, stock vectors, stock photos, stock video, free vector graphics, design resources]
+  use_cases:
+    - "Designers and marketers looking for affordable stock graphics"
+    - "Bloggers and YouTubers who need images and footage for content"
+    - "Educators building slides and course materials"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
