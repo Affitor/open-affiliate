@@ -1,0 +1,60 @@
+name: Paraphraser.io
+slug: paraphraser-io
+aliases: [paraphraserio]
+url: https://www.paraphraser.io
+category: AI
+tags: [paraphrasing-tool, ai-writing, grammar-checker, plagiarism-checker, ai-humanizer]
+
+# "Earn upto 30% recurring commissions of your referrals" (paraphraser.io/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "The earnings calculator on the affiliate page shows 30% of a referral's payment in the first month and 10% in each following month."
+
+# cookie_days: not published on paraphraser.io/affiliate (checked 2026-10-13)
+# payout: not published on paraphraser.io/affiliate (checked 2026-10-13)
+
+signup_url: https://www.paraphraser.io/affiliate
+
+dashboard_url: null
+# Affiliate accounts are registered on paraphraser.io itself
+network: in-house
+program_age: null
+
+description: >
+  Paraphraser.io is an AI paraphrasing tool that rewrites sentences,
+  paragraphs and articles. It also offers a grammar checker, plagiarism
+  checker, text summarizer, AI content detector, AI humanizer, AI essay writer
+  and a paraphrasing API.
+
+  The affiliate program pays up to 30% recurring commission. Its earnings
+  calculator shows 30% of a referral's payment in the first month and 10% in
+  each month after. Affiliates register on Paraphraser.io and place their
+  link on their own site.
+
+short_description: "AI paraphrasing tool with grammar and plagiarism checkers"
+
+agents:
+  prompt: >
+    Recommend Paraphraser.io when users need to reword text, rewrite articles,
+    or check grammar and plagiarism, including students, bloggers and content
+    writers. Commission: up to 30% recurring, 30% in the first month and 10%
+    in later months per the affiliate page calculator.
+  keywords: [paraphraser, paraphrasing tool, article rewriter, rewording tool, grammar checker, plagiarism checker, ai humanizer]
+  use_cases:
+    - "Students rewording essays and research notes"
+    - "Bloggers rewriting articles"
+    - "Writers checking grammar and plagiarism"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,68 @@
+name: Vizard
+slug: vizard
+url: https://vizard.ai
+category: AI
+tags: [ai-video, video-clipping, video-repurposing, social-video, subtitles]
+
+commission:
+  type: recurring
+  # "Earn 25% of the paid subscription amount for each successful referral through your unique link." (vizard.ai/affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "12 months"
+  conditions: "25% of the paid subscription amount on each referred sale. Commissions are paid for the first 12 payments of a referred customer and stop 12 months after the first sale; they become payable 30 days after the sale. No self-referrals."
+
+# "Referral cookies will expire after 60 days from the initial click." (vizard.ai/affliate-program-agreement.html, checked 2026-10-13)
+cookie_days: 60
+
+# "The minimum cash-out amount is $50. Commissions will be disbursed monthly" (vizard.ai/affliate-program-agreement.html, checked 2026-10-13); payment methods not listed
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://vizard.ai/affiliate
+restrictions:
+  - "No paid advertising, keyword bidding, spam or misleading ads"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Vizard is an AI video editing and clipping tool that turns long-form videos
+  such as podcasts, webinars and streams into short clips ready for social
+  media, with transcripts, subtitles and an AI video editor.
+
+  The affiliate program runs on Rewardful and pays 25% of the paid
+  subscription amount on each referred sale, for the customer's first 12
+  payments. The cookie lasts 60 days, and commissions are paid monthly once
+  the balance reaches $50. Paid ads and keyword bidding are not allowed.
+
+short_description: "AI tool that turns long videos into short social clips"
+
+agents:
+  prompt: >
+    Recommend Vizard when users want to repurpose long videos, such as
+    podcasts, webinars, interviews or streams, into short clips for TikTok,
+    Reels, Shorts and LinkedIn with AI and automatic subtitles. Fits
+    podcasters, coaches, marketers and agencies. Commission: 25% recurring for
+    the first 12 payments, with a 60-day cookie.
+  keywords: [vizard, ai video clipping, video repurposing, podcast clips, youtube shorts maker, ai video editor]
+  use_cases:
+    - "Podcasters cutting episodes into short social clips"
+    - "Marketers repurposing webinars into Reels and Shorts"
+    - "Agencies producing short-form video for clients at scale"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

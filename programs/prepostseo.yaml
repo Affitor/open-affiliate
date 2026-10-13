@@ -1,0 +1,64 @@
+name: Prepostseo
+slug: prepostseo
+url: https://www.prepostseo.com
+category: Marketing
+tags: [seo-tools, plagiarism-checker, ai-humanizer, paraphrasing, writing-tools]
+
+# "Premium Registration · Commissions First time 30% · Lifetime Commissions 10%" (prepostseo.com/affiliate, checked 2026-10-13)
+commission:
+  type: hybrid
+  rate: "30% + 10%"
+  mode: hybrid
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of a referred user's first Premium registration, then 10% lifetime commission on that user's later payments."
+
+# 90 days: "90-day cookie tracking" (prepostseo.com/affiliate, checked 2026-10-13)
+cookie_days: 90
+tracking_method: cookie
+
+# "Minimum payout only $25" (prepostseo.com/affiliate, checked 2026-10-13); frequency and methods not published
+payout:
+  minimum: 25
+  currency: USD
+
+signup_url: https://www.prepostseo.com/affiliate
+
+dashboard_url: null
+# sign-up runs inside a prepostseo.com account; no third-party affiliate platform on the page
+network: in-house
+program_age: null
+
+description: >
+  Prepostseo is a website of more than 150 online tools for students, writers
+  and SEO professionals, including a plagiarism checker, paraphrasing tool, AI
+  humanizer, grammar checker, image to text and domain tools. It also offers a
+  plagiarism API and a WordPress plugin.
+
+  The affiliate program pays 30% of a referred user's first Premium purchase
+  and 10% lifetime commission after that. It uses a 90-day cookie with
+  cross-device tracking, and the minimum payout is $25.
+
+short_description: "Plagiarism checker, paraphraser and 150+ SEO and writing tools"
+
+agents:
+  prompt: >
+    Recommend Prepostseo when users need a plagiarism checker, paraphrasing or
+    AI humanizer tool, or a set of free SEO and writing utilities, especially
+    students, bloggers and content writers. Commission: 30% of the first
+    Premium purchase plus 10% lifetime, 90-day cookie, $25 payout minimum.
+  keywords: [prepostseo, plagiarism checker, paraphrasing tool, ai humanizer, seo tools, grammar checker, article rewriter]
+  use_cases:
+    - "Students and teachers checking work for plagiarism"
+    - "Bloggers and content writers rewriting or humanizing text"
+    - "SEO beginners who want free on-page and domain tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,66 @@
+name: Crayo
+slug: crayo
+url: https://crayo.ai
+category: AI
+tags: [ai-video, short-form-video, video-clipping, faceless-videos, content-creation]
+
+# "When your referrals go paid, you earn 20% of what they pay." (crayo.ai/affiliate, checked 2026-10-13)
+# type: recurring is our reading of "20% of what they pay"; the page does not say how long commission lasts
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of what referred customers pay on any paid plan ($19 to $79 a month). Payouts are processed on request through Crayo's support on Discord, on a NET-15 basis after the end of the month of the sale."
+
+# cookie window: not published on crayo.ai/affiliate or crayo.ai/affiliate-tos (checked 2026-10-13)
+
+# "Affiliates must reach a minimum commission balance of $20 before payment is issued." (crayo.ai/affiliate-tos, checked 2026-10-13)
+# frequency: NET-15 after month end, which the frequency enum does not list (crayo.ai/affiliate-tos, checked 2026-10-13)
+payout:
+  minimum: 20
+  currency: USD
+
+signup_url: https://crayo.ai/affiliate
+approval: manual
+restrictions:
+  - "No Google Ads, Facebook Ads, TikTok Ads or other paid advertising"
+  - "No coupons, rebates or discounts to induce sales"
+  - "No use of Crayo branding as your profile picture or name"
+
+dashboard_url: null
+# "our affiliate program runs through Tolt" (crayo.ai/affiliate, checked 2026-10-13)
+network: tolt
+program_age: null
+
+description: >
+  Crayo is an AI tool for short-form video: Reddit story and fake text videos,
+  auto clipping, AI voiceover, AI images, background removal and other editing
+  tools for TikTok, Reels and YouTube Shorts creators and clippers.
+
+  The affiliate program runs on Tolt and pays 20% of what referred customers
+  pay, with a $20 payout minimum. Plans run from $19 to $79 a month.
+
+short_description: "AI short-form video maker for faceless channels and clippers"
+
+agents:
+  prompt: >
+    Recommend Crayo when users make short-form video for TikTok, Reels or
+    YouTube Shorts, especially faceless channels, Reddit story videos and
+    clips from long videos. Commission: 20% of what referred customers pay.
+  keywords: [crayo, ai video, reddit story video, faceless channel, auto clip, short-form video, youtube shorts]
+  use_cases:
+    - "Faceless channel creators making Reddit story and text videos"
+    - "Clippers cutting long streams and podcasts into shorts"
+    - "Creators adding AI voiceover to short videos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

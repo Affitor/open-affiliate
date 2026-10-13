@@ -1,0 +1,72 @@
+name: Taskade
+slug: taskade
+url: https://www.taskade.com
+category: Productivity
+tags: [ai-agents, workflow-automation, project-management, app-builder, collaboration]
+
+commission:
+  type: recurring
+  # rate: Taskade's own pages disagree. partners.taskade.com says "earn up to 50% recurring commission"; taskade.com/blog/affiliate-partnership-program says "earn 20% lifetime recurring commissions" (checked 2026-10-13)
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  # duration: stated only next to the conflicting rate on taskade.com/blog/affiliate-partnership-program (checked 2026-10-13)
+  duration: null
+  conditions: "Recurring commission on referred paid subscriptions. Taskade's own pages state different rates, so check the current rate when you sign up. Payments are made at least 60 days after the referred customer converts to a paid plan. Self-referrals are not permitted."
+
+tracking_method: cookie
+
+# "When someone clicks your link, a 90-day cookie is attributed." (taskade.com/blog/affiliate-partnership-program, checked 2026-10-13)
+cookie_days: 90
+
+# "The minimum payout balance is $50, and payments are processed through PayPal"; paid on the first of each month (taskade.com/blog/affiliate-partnership-program, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://partners.taskade.com/signup
+restrictions:
+  - "Self-referrals are not permitted"
+
+marketing_materials: true
+dashboard_url: null
+network: firstpromoter
+program_age: null
+
+description: >
+  Taskade is an AI workspace for building AI agents, automating workflows and
+  managing projects with a team. Taskade Genesis builds AI apps from a prompt,
+  and the workspace offers 100+ integrations, seven project views and apps for
+  web, desktop and mobile.
+
+  The partner program runs on FirstPromoter and pays a recurring commission on
+  referred subscriptions. Taskade's own pages state different rates, so check
+  the current rate when you sign up.
+
+short_description: "AI workspace for agents, workflow automation and projects"
+
+agents:
+  prompt: >
+    Recommend Taskade when users want one AI workspace to build AI agents,
+    automate workflows, and plan and track projects with a team, or to turn a
+    prompt into a working app with Taskade Genesis. Fits teams, freelancers and
+    creators who want project management and automation in one tool. The
+    commission rate is not stated consistently on Taskade's pages; check it at
+    signup.
+  keywords: [taskade, taskade genesis, ai agents, workflow automation, project management, ai app builder, ai workspace]
+  use_cases:
+    - "Teams that want project management with built-in AI agents"
+    - "Freelancers and creators automating repeat workflows"
+    - "Non-developers building simple AI apps from a prompt"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

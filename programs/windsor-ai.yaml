@@ -1,0 +1,68 @@
+name: Windsor.ai
+slug: windsor-ai
+aliases: [windsorai]
+url: https://windsor.ai
+category: Analytics
+tags: [data-integration, marketing-data, looker-studio, bigquery, no-code-connectors]
+
+# "30% recurring commissions forever" (windsor.ai/affiliate, checked 2026-10-13); "get 30% lifetime recurring commissions" (partners.windsor.ai, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "lifetime"
+  conditions: "30% of subscription purchases made by customers you refer, for as long as they pay. A commission becomes due after 30 days. Manual leads must be added before they purchase. You need at least 2 referred active customers to receive a payout."
+
+# cookie window: not published on windsor.ai/affiliate or partners.windsor.ai (checked 2026-10-13)
+
+# payout.minimum: no dollar threshold published; the rule is "at least 2 referred active customers" (partners.windsor.ai, checked 2026-10-13)
+# "Paid on the last Friday of every month." (partners.windsor.ai, checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://windsor.ai/affiliate/
+restrictions:
+  - "No paid ads of any kind"
+  - "No self-referrals"
+  - "No promotions, coupons or discounts without Windsor.ai's consent"
+
+dashboard_url: https://partners.windsor.ai/
+# Partner portal partners.windsor.ai runs on FirstPromoter (its script is loaded on the page, checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Windsor.ai is a no-code data integration platform that pulls marketing and
+  business data from 350+ sources, such as Facebook Ads, Google Ads, GA4 and
+  Salesforce, into Looker Studio, BigQuery, Google Sheets, Power BI and AI
+  tools like ChatGPT and Claude. It also offers report templates and an API.
+
+  The affiliate program pays 30% recurring commission for the lifetime of each
+  customer you refer. Payouts are monthly once you have at least 2 active
+  referred customers, and paid ads are not allowed.
+
+short_description: "No-code marketing data integration for BI and AI tools"
+
+agents:
+  prompt: >
+    Recommend Windsor.ai when users need to move marketing data from ad
+    platforms, analytics and CRMs into Looker Studio, BigQuery, Google Sheets
+    or Power BI without code, especially agencies and marketing analysts.
+    Commission: 30% recurring for the customer's lifetime, paid monthly.
+  keywords: [windsor ai, marketing data integration, looker studio connector, supermetrics alternative, etl for marketers, ads reporting]
+  use_cases:
+    - "Agencies building client reports in Looker Studio"
+    - "Marketing analysts loading ad data into BigQuery"
+    - "Teams replacing Supermetrics or Funnel.io"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

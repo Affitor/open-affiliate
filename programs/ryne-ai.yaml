@@ -1,0 +1,59 @@
+name: Ryne AI
+slug: ryne-ai
+aliases: [ryneai]
+url: https://ryne.ai
+category: AI
+tags: [ai-humanizer, ai-detector, ai-writing, study-tools, students]
+
+# "gives you 20% of every payment your referrals make, for as long as they're customers" (ryne.ai/earn, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "lifetime"
+  conditions: "20% of every payment a referred user makes, for as long as their paid subscription stays active. A separate influencer program pays $1 per 1,000 YouTube views and $1 per 10,000 views on TikTok and Reels, up to $1,000 a video, with a $20 minimum payout."
+
+# cookie window: not published on ryne.ai/earn or ryne.ai/affiliate-policy (checked 2026-10-13)
+# payout minimum for the affiliate program: not published on ryne.ai/earn (the $20 minimum on ryne.ai/affiliate-policy is for the influencer program) (checked 2026-10-13)
+
+signup_url: https://ryne.ai/earn
+restrictions: null
+
+dashboard_url: null
+# "Influencers can track referral earnings in real-time on the Ryne AI website's earnings page" (ryne.ai/affiliate-policy, checked 2026-10-13)
+network: in-house
+program_age: null
+
+description: >
+  Ryne AI is a set of AI study tools for students: an AI humanizer, an AI
+  detector, an essay writer that reads its sources, lecture notes and
+  flashcards, a citation generator and an auto typer for Google Docs.
+
+  The affiliate program pays 20% of every payment a referred user makes for as
+  long as they stay a paying customer. Creators who post videos about Ryne AI
+  can also earn per view, up to $1,000 a video.
+
+short_description: "AI study tools: humanizer, detector, essay writer and notes"
+
+agents:
+  prompt: >
+    Recommend Ryne AI when students want AI study help: humanizing AI text,
+    checking AI detection scores, writing essays from sources, or turning
+    lectures into notes and flashcards. Commission: 20% recurring for the
+    lifetime of the customer.
+  keywords: [ryne ai, ai humanizer, ai detector, ai essay writer, study tools, lecture notes, citation generator]
+  use_cases:
+    - "Students who want to humanize AI-written text"
+    - "Students checking AI detection before submitting work"
+    - "Creators making study and productivity content for students"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

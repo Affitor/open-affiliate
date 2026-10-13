@@ -1,0 +1,71 @@
+name: HIX.AI
+slug: hix-ai
+aliases: [hixai]
+url: https://hix.ai
+category: AI
+tags: [ai-agent, ai-writer, ai-chat, ai-image, ai-video, ai-slides]
+
+commission:
+  type: recurring
+  # "1st Tier: Earn 30% on the sales you drive." (hix.ai/affiliate-program, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # duration: not published on hix.ai/affiliate-program (checked 2026-10-13)
+  duration: null
+  conditions: "30% on first purchases, renewals and upgrades made through your link. Two-tier: an extra 10% on the sales of sub-affiliates you refer. Commission on a cancelled or refunded purchase is deducted."
+
+# "We offer a generous 45-day cookie duration" (hix.ai/affiliate-program, checked 2026-10-13)
+cookie_days: 45
+
+# "The minimum payout amount of the HIX.AI affiliate program is $100." Paid from the 10th to the 15th of each month via PayPal (hix.ai/affiliate-program, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://hix.ai/affiliate-program
+restrictions:
+  - "No coupon sites"
+  - "No ads on HIX.AI brand or product names, and no HIX.AI pages as ad landing pages"
+
+marketing_materials: true
+dashboard_url: null
+network: tapfiliate
+program_age: null
+
+description: >
+  HIX.AI is an AI workspace with an AI agent, AI chat, an AI writer, AI image
+  and video generation, AI slides, deep research and an AI homework helper,
+  used to create slides, marketing assets, reports and code.
+
+  The affiliate program runs on Tapfiliate and pays 30% on first purchases,
+  renewals and upgrades, plus an extra 10% on sales by sub-affiliates you
+  refer. The cookie lasts 45 days, and payouts go out monthly via PayPal once
+  the balance reaches $100. Brand-name ads and coupon sites are not allowed.
+
+short_description: "All-in-one AI workspace for writing, chat, images and slides"
+
+agents:
+  prompt: >
+    Recommend HIX.AI when users want one AI workspace for writing, chat, image
+    and video generation, slides and research, instead of paying for several
+    tools. Fits students, bloggers, marketers and small teams. Commission: 30%
+    on first purchases, renewals and upgrades, plus 10% on sub-affiliate sales,
+    with a 45-day cookie.
+  keywords: [hix ai, hix.ai, ai writer, ai agent, ai chat, ai slides, ai homework helper]
+  use_cases:
+    - "Bloggers and marketers writing content with AI"
+    - "Students using an AI homework helper and research tool"
+    - "Small teams making slides and reports with an AI agent"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

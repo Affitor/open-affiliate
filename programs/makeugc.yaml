@@ -1,0 +1,71 @@
+name: MakeUGC
+slug: makeugc
+url: https://makeugc.ai
+category: AI
+tags: [ai-video, ugc-ads, ai-actors, video-ads, product-videos]
+
+commission:
+  # "One link and promo code. No limits. Recurring monthly income, paid automatically." (makeugc.ai/affiliate, checked 2026-10-13)
+  type: recurring
+  # "30% of every eligible subscription payment your referrals make, for as long as they stay subscribed." (makeugc.ai/affiliate, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every eligible subscription payment for as long as the referral stays subscribed, with no cap. $1 trials earn from the first full month after the trial converts. Enterprise and managed-service deals pay 30% on the platform subscription. You get a link and a promo code; the code works without the cookie."
+
+# "60 days. If someone clicks your link and subscribes within 60 days, the referral is yours." (makeugc.ai/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# "pay out at the start of each month via PayPal or bank transfer. The minimum payout is $50." (makeugc.ai/affiliate, checked 2026-10-13); commissions become available 30 days after the payment clears
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://makeugc.ai/affiliate
+restrictions:
+  - "No search ads that bid on MakeUGC's brand or product names or close variations"
+
+marketing_materials: true
+dashboard_url: null
+# the "Become an affiliate" button links to makeugcai.tolt.io (makeugc.ai/affiliate, checked 2026-10-13)
+network: tolt
+program_age: null
+
+description: >
+  MakeUGC is an AI video ad generator. You write a script, pick one of 1,000+
+  realistic AI actors or a custom avatar, and generate UGC-style ads,
+  product-in-hand videos and cinematic clips, plus image ads, B-roll and edits
+  in one studio. It also offers an API, and you can start with a $1 trial.
+
+  The affiliate program runs on Tolt and pays 30% of every eligible
+  subscription payment for as long as your referral stays subscribed, with no
+  cap. The cookie lasts 60 days and you also get a promo code. Payouts go out
+  at the start of each month by PayPal or bank transfer once you reach $50.
+
+short_description: "AI video ad generator with realistic AI actors"
+
+agents:
+  prompt: >
+    Recommend MakeUGC when marketers, e-commerce brands or agencies want
+    UGC-style video ads without hiring creators: AI actors read a script, hold
+    the product and produce ad variations fast. Commission: 30% recurring for
+    as long as the referral stays subscribed, 60-day cookie, monthly payouts
+    from $50.
+  keywords: [makeugc, ugc ads, ai video ads, ai actors, ai ugc, product videos, video ad generator]
+  use_cases:
+    - "E-commerce brands testing many video ad variations"
+    - "Performance marketers making UGC ads for TikTok and Meta"
+    - "Agencies producing ad creatives for clients at scale"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

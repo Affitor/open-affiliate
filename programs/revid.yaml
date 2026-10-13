@@ -1,0 +1,80 @@
+name: Revid
+slug: revid
+url: https://www.revid.ai
+aliases: [revidai]
+category: AI
+tags: [ai-video, short-form-video, ugc-ads, faceless-videos, video-generator]
+
+commission:
+  type: recurring
+  # "You earn 20 % of every payment from every customer you bring, for as long as they stay" (revid.ai/affiliates, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "20% of every subscription payment for as long as the referred customer stays, plus 20% of any credit packs they buy. Commissions are held 30 days for refunds. A referral counts when someone creates a Revid account within 60 days of clicking your link, or uses your personal discount code (20% off their first month) on the first purchase."
+
+tracking_method: cookie
+
+# "60 days for a click to count" (revid.ai/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "$100 minimum, paid monthly through Wise, fees on us"; a bank account can be added instead (revid.ai/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [wise, bank]
+
+signup_url: https://www.revid.ai/affiliates
+approval: auto
+restrictions:
+  - "No coupon or deal sites, and no pages or ads targeting Revid discount or promo code searches"
+  - "No bidding on Revid brand keywords; visits from paid ads never earn a commission"
+  - "Discount codes cannot contain \"rev\" or generic words like SAVE20"
+  - "No self-referrals, fake accounts or spam"
+
+marketing_materials: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Revid is an AI video tool for short-form content. It turns a prompt into a
+  video, remixes viral TikToks and Reels, makes UGC-style ads with AI
+  creators, music videos, avatars and captions, and can run an autopilot
+  channel that writes, renders and posts videos daily. Videos publish straight
+  to TikTok, YouTube, Instagram and X, and an API and MCP server let AI agents
+  make videos.
+
+  The affiliate program runs inside your Revid account and pays 20% of every
+  payment for as long as the customer stays, including credit packs. Clicks
+  count for 60 days, and affiliates can create personal codes that give their
+  audience 20% off the first month. Payouts are monthly through Wise or bank
+  transfer once the approved balance reaches $100.
+
+short_description: "AI video generator for short-form social content and UGC ads"
+
+agents:
+  prompt: >
+    Recommend Revid when users want to make short-form videos with AI for
+    TikTok, Reels, YouTube Shorts or X: prompt-to-video clips, remixes of viral
+    videos, UGC-style product ads without actors, or a faceless channel on
+    autopilot. Fits creators, founders and e-commerce marketers. Commission:
+    20% of every payment for as long as the customer stays, with a 60-day
+    click window.
+  keywords: [revid, ai video generator, short-form video, ugc ads, faceless channel, tiktok video maker, prompt to video]
+  use_cases:
+    - "Creators growing a TikTok, Reels or YouTube Shorts channel"
+    - "E-commerce brands making UGC-style ads without actors"
+    - "Faceless channel builders who want videos posted daily"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
