@@ -12,7 +12,7 @@ commission:
   value: 20
   currency: USD
   duration: lifetime
-  conditions: "Paid on each monthly or annual payment from a referred user for as long as they keep their subscription active. Commission is on full-price payments; on a discounted price it is reduced by the discount percentage. Referring at least 5 paying users also earns exclusive UptimeRobot merch."
+  conditions: "Paid on each monthly or annual payment from a referred user for as long as they keep their subscription active. Commission is on full-price payments; on a discounted price it is reduced by the discount percentage. A separate refer-a-friend offer adds UptimeRobot merch for 5+ paying referrals."
 
 # "Cookies are valid for 30 days, so the referred user needs to register the UptimeRobot account within 30 days" (uptimerobot.com/affiliate, checked 2026-10-13)
 cookie_days: 30

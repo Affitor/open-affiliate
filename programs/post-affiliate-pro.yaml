@@ -6,6 +6,7 @@ tags: [affiliate-software, affiliate-tracking, partner-management, referral-prog
 
 commission:
   type: recurring
+  # the same page also has an "Earn flat 20% commissions" button; the level table is used
   # "you can be rewarded with 10, 20 or 30% commission for each recurring payment" (postaffiliatepro.com/affiliate-program, checked 2026-10-13)
   rate: "up to 30%"
   mode: tiered
@@ -38,8 +39,7 @@ program_age: null
 description: >
   Post Affiliate Pro is affiliate management software for running affiliate,
   referral and partner programs. It tracks clicks and sales, automates
-  commissions and payouts, detects fraud and integrates with more than 220
-  ecommerce and payment platforms.
+  commissions and payouts, detects fraud and offers 220+ integrations.
 
   The affiliate program pays recurring commission on each customer payment:
   up to 10%, 20% or 30% depending on the partner level, set by accounts sold

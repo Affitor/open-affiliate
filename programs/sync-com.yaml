@@ -5,6 +5,7 @@ category: Security
 tags: [cloud-storage, secure-file-sharing, team-collaboration, dropbox-alternative]
 
 commission:
+  # type: one-time is a reading of the page, which does not say whether renewals pay
   type: one-time
   # "Get commission on every sale! Watch your earnings grow with commissions up to $150 per sale." (sync.com/affiliates, checked 2026-10-13)
   rate: "up to $150"
@@ -51,7 +52,7 @@ agents:
     - "Small teams that need secure cloud storage"
     - "Privacy-minded users replacing Dropbox or Google Drive"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"

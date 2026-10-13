@@ -28,7 +28,7 @@ restrictions:
 
 marketing_materials: true
 dashboard_url: null
-# "Payments in the Privy Partner Program are handled by GrowSumo (a.k.a PartnerStack)" (privy.com/partner-program-agreement, checked 2026-10-13)
+# "Payments in the Privy Partner Program are handled by GrowSumo (a.k.a PartnerStack)" (privy.com/partner-program-agreement, effective January 22, 2021, checked 2026-10-13); the current affiliate page does not name a platform
 network: partnerstack
 program_age: null
 

@@ -12,12 +12,13 @@ commission:
   value: 30
   currency: USD
   duration: null
+  # logged-in condition and payout cadence: seranking.com/legal/affiliate.html and seranking.com/affiliate.html (checked 2026-10-13)
   conditions: "30% of subscription orders placed through your referral link, with no cap; the referred user must be logged in to their SE Ranking account when paying. Once a referral signs up you stay credited for that user. Links may be shared anywhere except paid ads. Payouts every two weeks via PayPal."
 
 # "We store your referred users' cookies for 120 days." (seranking.com/affiliate.html, checked 2026-10-13)
 cookie_days: 120
 
-attribution: last-click
+# attribution left out: the affiliate page says "First cookie, first claim" while the terms say "last-click attribution" (seranking.com/affiliate.html and seranking.com/legal/affiliate.html, checked 2026-10-13)
 
 # "Receive commission payouts twice a month through PayPal once you reach the minimum threshold of $50." (seranking.com/affiliate.html, checked 2026-10-13); twice-monthly has no frequency value, so frequency is left out
 payout:
@@ -44,7 +45,7 @@ description: >
 
   The affiliate program pays 30% commission on each subscription sale, with no
   cap on earnings. Any SE Ranking account, including a free one, can join from
-  inside the app. The cookie lasts 120 days with last-click attribution, and
+  inside the app. The cookie lasts 120 days, and
   payouts go out twice a month via PayPal once the balance reaches $50.
 
 short_description: "SEO platform with rank tracking, audits and AI search tracking"

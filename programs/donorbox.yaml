@@ -17,6 +17,7 @@ commission:
 # "Tracking cookies last 45 days." (donorbox.org/affiliate-terms, checked 2026-10-13)
 cookie_days: 45
 
+# Terms §4.4 also says "We do not enforce any payout thresholds."; the program page and §4.1 state $50, which is kept (donorbox.org/affiliate-terms, checked 2026-10-13)
 # "The minimum commission payout is $50." and "The Affiliate Program only supports PayPal" (donorbox.org/affiliate-terms, checked 2026-10-13)
 # "we'll pay out your commission within 10 days of receiving your client's monthly Donorbox fees" (donorbox.org/affiliate-partner-program, checked 2026-10-13)
 payout:

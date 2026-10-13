@@ -6,6 +6,7 @@ tags: [website-security, web-application-firewall, malware-removal, cdn, wordpre
 
 commission:
   type: one-time
+  # "WAF Basic $29.97 WAF Professional $59.97" (sucuri.net/referral, checked 2026-10-13)
   # "Commission Basic $49.99 Professional $74.99 Business $124.99" (sucuri.net/referral, checked 2026-10-13)
   rate: "$29.97 to $124.99"
   mode: flat

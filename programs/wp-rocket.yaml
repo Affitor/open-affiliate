@@ -5,6 +5,7 @@ category: Infrastructure
 tags: [wordpress, caching-plugin, page-speed, core-web-vitals, performance]
 
 commission:
+  # type: one-time is a reading of the page, which does not say whether renewals pay
   type: one-time
   # "You will get 20% commission on each sale." (wp-rocket.me/wp-rocket-affiliate-program, checked 2026-10-13)
   rate: "20%"
@@ -59,7 +60,7 @@ agents:
     - "Sites failing Core Web Vitals or PageSpeed tests"
     - "Agencies speeding up client WordPress sites"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"

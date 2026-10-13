@@ -5,6 +5,7 @@ category: Design
 tags: [website-builder, web-hosting, ecommerce, small-business]
 
 commission:
+  # type: one-time is a reading of the page, which does not say whether renewals pay
   type: one-time
   # "Become an affiliate with SITE123 and earn up to $420 for each sale" (site123.com/affiliates, checked 2026-10-13)
   rate: "up to $420"
@@ -54,7 +55,7 @@ agents:
     - "Small businesses that need a simple site with hosting included"
     - "Freelancers setting up a portfolio or landing page"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"
