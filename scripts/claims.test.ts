@@ -4,11 +4,13 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   PILOT_SLUGS,
+  SIGNUP_URL_PATTERN,
   claimEnvReady,
   claimsEnabledFor,
   emailMatchesDomain,
   normalizeEmail,
   registrableDomain,
+  signupUrlAllowed,
   unclaimableReason,
 } from "../src/lib/claims/rules"
 import {
@@ -56,7 +58,7 @@ type StoredEvent = ClaimEvent & { id: number; at: number }
 class MemoryStore implements ClaimStore {
   claims = new Map<string, ClaimRow>()
   events: StoredEvent[] = []
-  edits: { claim_id: string; slug: string; fields: Record<string, unknown> }[] = []
+  edits: { claim_id: string; slug: string; fields: Record<string, unknown>; at: number }[] = []
   failNextAddEvent = false
   private seq = 1
   constructor(private clock: () => Date) {}
@@ -108,8 +110,15 @@ class MemoryStore implements ClaimStore {
     const c = this.claims.get(id)
     if (c) Object.assign(c, { status: "released", email: null })
   }
-  async addEdit(edit: { claim_id: string; slug: string; fields: Record<string, unknown> }) {
-    this.edits.push(edit)
+  /** Synchronous body, so atomic like the claim_submit_edit function in migration 010. */
+  async submitEdit(edit: { claim_id: string; slug: string; fields: Record<string, unknown> }, dailyLimit: number) {
+    const c = this.claims.get(edit.claim_id)
+    if (!c || c.status !== "active" || !c.verified_at) return "not_owner" as const
+    const since = this.clock().getTime() - 24 * 60 * 60_000
+    if (this.edits.filter((e) => e.claim_id === edit.claim_id && e.at > since).length >= dailyLimit) return "quota" as const
+    this.edits.push({ ...edit, at: this.clock().getTime() })
+    this.events.push({ id: this.seq++, type: "terms.submitted", claim_id: c.id, slug: edit.slug, domain: c.domain, at: this.clock().getTime() })
+    return "ok" as const
   }
   async prune() {}
   async countProgramEvents() {
@@ -120,7 +129,13 @@ class MemoryStore implements ClaimStore {
   }
 }
 
-function setup(opts: { turnstile?: boolean; sendOk?: boolean } = {}) {
+/**
+ * Test tokens read "tok|<action>|<hostname>": the fake siteverify answers with
+ * that action and hostname (hostname defaults to openaffiliate.dev).
+ */
+const tokenFor = (action: string, hostname = "openaffiliate.dev") => `tok|${action}|${hostname}`
+
+function setup(opts: { turnstile?: boolean | null; sendOk?: boolean } = {}) {
   let now = new Date("2026-10-12T12:00:00Z")
   const clock = () => now
   const store = new MemoryStore(clock)
@@ -132,9 +147,11 @@ function setup(opts: { turnstile?: boolean; sendOk?: boolean } = {}) {
     secret: SECRET,
     now: clock,
     getProgram: (slug) => PROGRAMS[slug],
-    verifyTurnstile: async () => {
+    verifyTurnstile: async (token) => {
       turnstileCalls++
-      return opts.turnstile ?? true
+      if (opts.turnstile === null) return null
+      const [, action, hostname = "openaffiliate.dev"] = token.split("|")
+      return { success: opts.turnstile ?? true, action, hostname }
     },
     sendEmail: async (mail) => {
       sent.push(mail)
@@ -183,7 +200,7 @@ function setup(opts: { turnstile?: boolean; sendOk?: boolean } = {}) {
 }
 
 const sendCode = (t: ReturnType<typeof setup>, email: string, slug = "kyma-api", o: { ip?: string } = {}) =>
-  t.call("send-code", { slug, email, turnstileToken: "tok" }, o)
+  t.call("send-code", { slug, email, turnstileToken: tokenFor("send-code") }, o)
 
 // ---------------------------------------------------------------- domain rule
 
@@ -364,6 +381,33 @@ test("a missing Turnstile token is refused before any write; a failed one too", 
   const r2 = await sendCode(f, "me@kymaapi.com")
   assert.equal(r2.status, 403)
   assert.equal(f.sent.length + f.store.events.length + f.store.claims.size, 0)
+
+  const down = setup({ turnstile: null })
+  assert.equal((await sendCode(down, "me@kymaapi.com")).status, 403, "siteverify unreachable fails closed")
+})
+
+test("Turnstile: a token solved on another host, or for another step, is refused", async () => {
+  const t = setup()
+  const send = (token: string) => t.call("send-code", { slug: "kyma-api", email: "me@kymaapi.com", turnstileToken: token })
+  // Cloudflare's test keys report example.com; a token from a copy of the form elsewhere reports its host.
+  for (const host of ["example.com", "openaffiliate.dev.evil.io", "localhost", ""]) {
+    assert.equal((await send(tokenFor("send-code", host))).status, 403, host)
+  }
+  // Solved for the manual-review or DNS form, spent on send-code; or no action at all.
+  for (const action of ["manual", "dns-start", ""]) {
+    assert.equal((await send(tokenFor(action))).status, 403, action || "no action")
+  }
+  assert.equal(
+    (await t.call("dns-start", { slug: "kyma-api", email: "a@b.io", turnstileToken: tokenFor("send-code") })).status,
+    403,
+  )
+  assert.equal(
+    (await t.call("manual", { slug: "kyma-api", email: "a@b.io", turnstileToken: tokenFor("dns-start") })).status,
+    403,
+  )
+  assert.equal(t.sent.length + t.store.events.length + t.store.claims.size, 0)
+  // The right step on our own host passes, www included.
+  assert.equal((await send(tokenFor("send-code", "www.openaffiliate.dev"))).status, 200)
 })
 
 // ---------------------------------------------------------------- verify
@@ -444,8 +488,8 @@ test("DNS token is single-use and bound to its own claim", async () => {
   const t = setup()
   const jarA = new Map<string, string>()
   const jarB = new Map<string, string>()
-  const a = await t.call("dns-start", { slug: "build-to-own-replay", email: "ops@gmail.com", turnstileToken: "tok" }, { cookies: jarA })
-  const b = await t.call("dns-start", { slug: "build-to-own-replay", email: "x@gmail.com", turnstileToken: "tok" }, { cookies: jarB, ip: "198.51.100.2" })
+  const a = await t.call("dns-start", { slug: "build-to-own-replay", email: "ops@gmail.com", turnstileToken: tokenFor("dns-start") }, { cookies: jarA })
+  const b = await t.call("dns-start", { slug: "build-to-own-replay", email: "x@gmail.com", turnstileToken: tokenFor("dns-start") }, { cookies: jarB, ip: "198.51.100.2" })
   assert.equal(a.status, 200)
   assert.match(String(a.body.record), /^openaffiliate-verify=[A-Za-z0-9_-]{43}$/)
   assert.notEqual(a.body.record, b.body.record)
@@ -472,7 +516,7 @@ test("DNS token is single-use and bound to its own claim", async () => {
 
 test("a DNS record on a subdomain or another domain does not count", async () => {
   const t = setup()
-  const r = await t.call("dns-start", { slug: "kyma-api", email: "a@b.io", turnstileToken: "tok" })
+  const r = await t.call("dns-start", { slug: "kyma-api", email: "a@b.io", turnstileToken: tokenFor("dns-start") })
   t.txt["www.kymaapi.com"] = [[String(r.body.record)]]
   t.txt["evil.com"] = [[String(r.body.record)]]
   assert.equal((await t.call("dns-check", { slug: "kyma-api" })).status, 404)
@@ -508,7 +552,7 @@ test("a failed send withdraws the reservation, so the address can try again", as
 test("rate limit: five requests per IP per hour across send, DNS and manual", async () => {
   const t = setup()
   for (let i = 0; i < LIMITS.requestsPerIpHour; i++) {
-    assert.equal((await t.call("dns-start", { slug: "build-to-own-replay", email: `p${i}@x.io`, turnstileToken: "tok" })).status, 200)
+    assert.equal((await t.call("dns-start", { slug: "build-to-own-replay", email: `p${i}@x.io`, turnstileToken: tokenFor("dns-start") })).status, 200)
   }
   assert.equal((await sendCode(t, "me@kymaapi.com")).status, 429)
   assert.equal(t.sent.length, 0)
@@ -538,7 +582,7 @@ test("rate limit: the site-wide ceiling stops all code email and leaves a cap.re
 test("rate limit: two manual review requests per address per day", async () => {
   const t = setup()
   const ask = (ip: string) =>
-    t.call("manual", { slug: "kyma-api", email: "me@agency.io", note: "I run partnerships", turnstileToken: "tok" }, { ip })
+    t.call("manual", { slug: "kyma-api", email: "me@agency.io", note: "I run partnerships", turnstileToken: tokenFor("manual") }, { ip })
   assert.equal((await ask("198.51.100.1")).status, 200)
   assert.equal((await ask("198.51.100.2")).status, 200)
   assert.equal((await ask("198.51.100.3")).status, 429)
@@ -591,6 +635,58 @@ test("edits go to the review queue, never to the YAML", async () => {
     (await t.call("terms", { slug: "kyma-api", terms: { rate: "20%", type: "recurring", signupUrl: "javascript:alert(1)" } })).status,
     400,
   )
+  assert.equal(t.store.count("terms.submitted"), 1, "the event is written with the edit")
+})
+
+test("edit quota: 20 parallel submissions at 9 of 10 queue exactly one", async () => {
+  const t = setup()
+  await owner(t)
+  const terms = { rate: "20%", type: "recurring" }
+  for (let i = 0; i < LIMITS.editsPerClaimDay - 1; i++) {
+    assert.equal((await t.call("terms", { slug: "kyma-api", terms })).status, 200)
+  }
+  const results = await Promise.all(Array.from({ length: 20 }, () => t.call("terms", { slug: "kyma-api", terms })))
+  assert.equal(results.filter((r) => r.status === 200).length, 1)
+  assert.equal(results.filter((r) => r.status === 429).length, 19)
+  assert.equal(t.store.edits.length, LIMITS.editsPerClaimDay)
+  assert.equal(t.store.count("terms.submitted"), LIMITS.editsPerClaimDay)
+  // The window is 24 hours.
+  t.advance(24 * 60 * 60_000 + 1000)
+  assert.equal((await t.call("terms", { slug: "kyma-api", terms })).status, 200)
+})
+
+test("an edit that lands after a release is refused by the store, not queued", async () => {
+  const t = setup()
+  await owner(t)
+  const claim = [...t.store.claims.values()][0]
+  // Released between the session check and the write.
+  const realGet = t.store.getClaim.bind(t.store)
+  t.store.getClaim = async (id: string) => {
+    const row = await realGet(id)
+    await t.store.release(id)
+    return row
+  }
+  const r = await t.call("terms", { slug: "kyma-api", terms: { rate: "20%", type: "recurring" } })
+  assert.equal(r.status, 401)
+  assert.equal(t.store.edits.length, 0)
+  assert.equal(claim.status, "released")
+})
+
+test("owner signup links follow the schema's signup_url rule", () => {
+  const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
+  const declared: string | undefined = schema.properties.signup_url.pattern
+  // Read from the schema, never copied: when the schema gains or tightens a pattern, owner edits follow.
+  assert.equal(SIGNUP_URL_PATTERN?.source ?? null, declared ? new RegExp(declared, "u").source : null)
+
+  assert.equal(signupUrlAllowed("https://kymaapi.com/partners?ref=oa"), true)
+  for (const bad of ["javascript:alert(1)", "http://kymaapi.com/partners", "https://", "https://exa mple.com", "partners", ""]) {
+    assert.equal(signupUrlAllowed(bad), false, bad)
+  }
+  // With a pattern like the one #170 adds (no user@ before the host, host of at most 253 characters).
+  const strict = new RegExp("^(?=https?://[^/?#@]{1,253}(?:[/?#]|$))", "u")
+  assert.equal(signupUrlAllowed("https://kymaapi.com/partners", strict), true)
+  assert.equal(signupUrlAllowed("https://kymaapi.com@evil.io/join", strict), false)
+  assert.equal(signupUrlAllowed(`https://${"a".repeat(250)}.com/`, strict), false)
 })
 
 test("edits need a live session: no cookie, a forged cookie, or another domain's listing all fail", async () => {
@@ -642,7 +738,7 @@ test("logs never contain an email address, a code or a DNS token", async () => {
     const ok = setup()
     await sendCode(ok, "secret.person@kymaapi.com")
     await ok.call("verify", { slug: "kyma-api", code: "123456" })
-    const dns = await ok.call("dns-start", { slug: "build-to-own-replay", email: "secret.person@kymaapi.com", turnstileToken: "tok" }, { ip: "198.51.100.3" })
+    const dns = await ok.call("dns-start", { slug: "build-to-own-replay", email: "secret.person@kymaapi.com", turnstileToken: tokenFor("dns-start") }, { ip: "198.51.100.3" })
     // A store failure whose message carries an address must not reach the log.
     ok.store.failNextAddEvent = true
     assert.equal((await sendCode(ok, "other.person@kymaapi.com", "kyma-api", { ip: "198.51.100.4" })).status, 500)
