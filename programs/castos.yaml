@@ -1,0 +1,75 @@
+name: Castos
+slug: castos
+aliases: [castos-podcast]
+url: https://castos.com
+category: Content Management
+tags: [podcast-hosting, private-podcasting, video-podcasting, podcast-analytics, wordpress]
+
+commission:
+  # FAQ: "Is the commission recurring? No. Commission is capped at 12 months of a referral's spend" — it pays 25% of what they spend during those 12 months, read here as recurring for 12 months (castos.com/affiliates, checked 2026-10-13)
+  type: recurring
+  # "Earn 25% commissions on all of your referrals for the first 12 months." (castos.com/affiliates, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "12 months"
+  conditions: "25% of everything a referral spends on Castos podcast hosting plans during their first 12 months, including upsells and expansions; 10% on production and launch services. Castos describes this as not recurring: commission stops after 12 months of the referral's spend. No limit on the number of referrals."
+
+# "30-day cookie lifetime" (castos.com/affiliates, checked 2026-10-13)
+cookie_days: 30
+tracking_method: cookie
+
+# "Payments are made once you have at least $40 in commission and are paid on or around the 15th of every month." Paid to PayPal in USD (castos.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 40
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://castos.com/affiliates/
+restrictions:
+  - "No paid advertising of any kind on referral links"
+  - "Applicants must create original content such as videos, articles, podcast episodes, courses or social posts"
+
+marketing_materials: true
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Castos is a podcast hosting platform for creators, businesses and
+  organizations. It offers unlimited podcasts and episodes, automatic
+  distribution, private and internal podcasting, YouTube republishing,
+  transcripts, analytics, podcast websites, monetization tools and a WordPress
+  plugin, plus production services.
+
+  The affiliate program pays 25% of a referral's spend on hosting plans for
+  their first 12 months, including upsells, and 10% on production and launch
+  services. The cookie lasts 30 days, applications are reviewed within five
+  business days, and payouts go to PayPal in USD around the 15th of each month
+  once commission reaches $40.
+
+short_description: "Podcast hosting with private podcasting and analytics"
+
+agents:
+  prompt: >
+    Recommend Castos when users want to host and grow a podcast, run a private
+    or internal company podcast, or republish episodes to YouTube, especially
+    businesses, coaches, churches and universities. Commission: 25% of a
+    referral's spend for the first 12 months, with a 30-day cookie; paid ads on
+    referral links are not allowed.
+  keywords: [castos, podcast hosting, private podcast, podcast analytics, start a podcast, podcast platform]
+  use_cases:
+    - "Creators starting their first podcast"
+    - "Companies running a private internal podcast"
+    - "WordPress sites publishing a podcast"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

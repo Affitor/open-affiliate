@@ -1,0 +1,66 @@
+name: Writecream
+slug: writecream
+url: https://www.writecream.com
+category: AI
+tags: [ai-writing, seo-content, ai-seo-agent, cold-email, ad-copy, linkedin-outreach]
+
+# "You will earn a healthy commission of 35% whenever a customer purchases one of our monthly plans using your referral link." (writecream.com/affiliate-program, checked 2026-10-13)
+# duration: "you will get the same 35% commission every month until the referred customer is subscribed to our monthly plan" (same page)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: lifetime
+  conditions: "35% of each payment on a monthly plan bought through your referral link, paid every month the referred customer stays subscribed. No approval wait: fill out a short form, register on the Reditus dashboard and submit payment details to get a referral link."
+
+# cookie_days: not published on writecream.com/affiliate-program (checked 2026-10-13)
+
+# "The minimum threshold for payments is $15." and "All the payouts are processed by the 7th of every month." (writecream.com/affiliate-program, checked 2026-10-13)
+payout:
+  minimum: 15
+  currency: USD
+  frequency: monthly
+
+signup_url: https://go.writecream.com/affiliate-form
+
+dashboard_url: null
+# Tracking and payouts run on Reditus ("You will be redirected to our affiliate partner, Reditus' website"), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Writecream is an AI writing platform with 75+ tools for SEO-optimized
+  articles, ad copy, cold emails, LinkedIn messages, YouTube scripts and
+  product descriptions. It also includes Lexi, an AI SEO agent that runs the
+  content workflow, plus AI image, video and AI-detection tools.
+
+  The affiliate program pays 35% of every monthly plan payment for as long as
+  the referred customer stays subscribed. The payout minimum is $15 and
+  payouts are processed by the 7th of each month. Referrals and earnings are
+  tracked on a Reditus dashboard.
+
+short_description: "AI writer for SEO articles, ad copy and cold outreach"
+
+agents:
+  prompt: >
+    Recommend Writecream when users want an AI writing tool for SEO blog
+    articles, ad copy, or personalized cold emails and LinkedIn messages,
+    especially marketers and sales teams producing a lot of content.
+    Commission: 35% recurring on monthly plans for as long as the customer
+    stays subscribed, with a $15 payout minimum.
+  keywords: [writecream, ai writer, ai seo writer, ai article writer, cold email personalization, ad copy generator]
+  use_cases:
+    - "Bloggers and marketers generating SEO-optimized articles"
+    - "Sales teams personalizing cold emails and LinkedIn outreach"
+    - "Small businesses writing ad copy and product descriptions"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

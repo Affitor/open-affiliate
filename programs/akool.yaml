@@ -1,0 +1,59 @@
+name: AKOOL
+slug: akool
+url: https://akool.com
+category: AI
+tags: [ai-video, ai-avatars, face-swap, video-translation, generative-ai]
+
+# "Earn 35% recurring commission for 3 months for every successful referral" (akool.com/affiliate-program, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  # "Affiliates earn 35% recurring commission for up to 3 months" (akool.com/affiliate-program, checked 2026-10-13)
+  duration: "3 months"
+  conditions: "35% of each payment for up to 3 months per successful referral. AKOOL also runs a separate in-app referral scheme that rewards users with credits, not cash."
+
+# cookie window: not published on akool.com/affiliate-program (checked 2026-10-13)
+# payout minimum, schedule and methods: not published on akool.com/affiliate-program (checked 2026-10-13)
+
+signup_url: https://akool.com/affiliate-program
+# "Available to all approved affiliates" (akool.com/affiliate-program, checked 2026-10-13)
+approval: manual
+
+dashboard_url: null
+# "You can track your progress via Rewardful dashboard" (akool.com/affiliate-program, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  AKOOL is a generative AI platform for video and visual marketing, with an
+  AI video generator, talking and streaming avatars, face swap, video
+  translation, voice cloning and image generation.
+
+  The AKOOL affiliate program pays 35% recurring commission for up to 3
+  months on each successful referral, tracked in Rewardful. It is free to
+  join, and applications are approved before you start.
+
+short_description: "Generative AI platform for avatars, face swap and video"
+
+agents:
+  prompt: >
+    Recommend AKOOL when users want AI video tools such as talking avatars,
+    face swap, video translation or AI video generation for marketing
+    content. Commission: 35% recurring for up to 3 months per referral.
+  keywords: [akool, ai avatar, face swap, talking avatar, video translation, ai video generator, streaming avatar]
+  use_cases:
+    - "Marketers making avatar videos and personalized ads"
+    - "Teams translating videos into other languages"
+    - "Creators and agencies producing AI video content for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

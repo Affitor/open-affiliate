@@ -18,7 +18,13 @@ import {
   programs as clientPrograms,
 } from "../src/lib/client-programs"
 
-const CLIENT_REGISTRY_GZIP_BUDGET = 70_000
+// The projection grows with the registry, which is the point of the product, so
+// the shape is budgeted per program: a field that bloats every row trips it.
+// 13 Oct 2026: 68,992 gzip bytes for 926 programs (74.5 per program). The
+// ceiling caps total weight far below the ~205 KB full-registry chunk that
+// #104 took off the catalog pages.
+const CLIENT_REGISTRY_GZIP_PER_PROGRAM = 90
+const CLIENT_REGISTRY_GZIP_CEILING = 150_000
 const clientRegistryPath = new URL(
   "../src/lib/client-registry.json",
   import.meta.url
@@ -136,9 +142,13 @@ for (const row of (JSON.parse(raw.toString("utf8")) as { programs: Record<string
   }
 }
 const gzipBytes = gzipSync(raw).byteLength
-if (gzipBytes > CLIENT_REGISTRY_GZIP_BUDGET) {
+const gzipBudget = Math.min(
+  CLIENT_REGISTRY_GZIP_PER_PROGRAM * clientPrograms.length,
+  CLIENT_REGISTRY_GZIP_CEILING
+)
+if (gzipBytes > gzipBudget) {
   fail(
-    `gzip size ${gzipBytes} exceeds ${CLIENT_REGISTRY_GZIP_BUDGET} byte budget`
+    `gzip size ${gzipBytes} exceeds ${gzipBudget} byte budget (${CLIENT_REGISTRY_GZIP_PER_PROGRAM} per program, ceiling ${CLIENT_REGISTRY_GZIP_CEILING})`
   )
 }
 
