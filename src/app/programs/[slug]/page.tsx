@@ -47,10 +47,7 @@ export function generateStaticParams() {
   const top = [...programs]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 50);
-  // No-program pages answer the most-clicked brand queries (openrouter,
-  // cursor), and verify-machine-surfaces reads their prerendered HTML.
-  const noProgram = programs.filter((p) => hasNoProgram(p) && !top.includes(p));
-  return [...top, ...noProgram].map((p) => ({ slug: p.slug }));
+  return top.map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({

@@ -1,6 +1,8 @@
 #!/usr/bin/env tsx
 
+import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
+import { createServer, type AddressInfo } from "node:net";
 import { join } from "node:path";
 
 import sitemap from "../src/app/sitemap";
@@ -465,56 +467,27 @@ for (const [mode, value, rate, want] of [
 
 /**
  * A brand with no program (no_program, or discontinued) gets a page that
- * answers "no" and shows no terms. These read the prerendered HTML and the
- * generated .md, so they hold what a reader and a crawler receive.
+ * answers "no" and shows no terms, on the HTML page and in its .md twin.
  *
- * The alternatives on the page are other programs' cards and do show their
- * terms; each is one `<a href="/programs/…">`, so those anchors are cut before
- * looking for this program's own.
+ * The .md twins are generated files and are read here. Program pages are not
+ * prerendered: SocialListenLoader awaits connection(), so /programs/[slug] is
+ * dynamic and the build writes no HTML for it. checkNoProgramPages, at the end
+ * of this file, boots this build with `next start` and fetches each page, which
+ * is the HTML a reader and a crawler receive.
  */
-const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
-const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
-for (const program of programs.filter(hasNoProgram)) {
-  const file = join("programs", `${program.slug}.html`);
-  if (!existsSync(join(BUILD_APP, file))) fail(`${file} was not prerendered; no-program pages are prerendered`);
-  const html = readFileSync(join(BUILD_APP, file), "utf8");
-  const own = html
-    .replace(/<script[\s\S]*?<\/script>/g, " ")
-    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
-
-  for (const label of JOIN_LABELS) {
-    if (own.includes(label)) fail(`${file} shows a join button ("${label}") for a brand with no program`);
-  }
-  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
-    fail(`${file} links the signup URL of a brand with no program`);
-  }
-  if (/>Commission<\/h3>/.test(own)) fail(`${file} shows a Commission card for a brand with no program`);
-  for (const label of TERM_LABELS) {
-    if (own.includes(label)) fail(`${file} shows "${label}" for a brand with no program`);
-  }
-  if (/\b\d+d cookie\b/.test(own)) fail(`${file} shows a cookie window for a brand with no program`);
-  if (program.commission.value != null) {
-    const figure = commissionDisplay(program.commission);
-    if (own.includes(figure)) fail(`${file} shows its stored commission (${figure}) for a brand with no program`);
-  }
-
-  const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
-    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
-    | undefined;
-  const first = faqPage?.mainEntity?.[0];
-  const answer = first?.acceptedAnswer?.text ?? "";
-  const checked = program.lastVerifiedAt ? `No (checked ${program.lastVerifiedAt}).` : "No.";
-  if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(checked)) {
-    fail(`${file} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${checked}"; got ${JSON.stringify(answer.slice(0, 80))}`);
-  }
-
+const noProgramPages = programs.filter(hasNoProgram);
+for (const program of noProgramPages) {
   const md = requireText(join("programs", `${program.slug}.md`));
   for (const line of ["## Terms", "Commission:", "Cookie window:", "Payout:", "Sign up:", "## Restrictions"]) {
     if (md.includes(line)) fail(`programs/${program.slug}.md shows "${line}" for a brand with no program`);
   }
-  if (!md.includes(`have an affiliate program? ${checked}`)) {
-    fail(`programs/${program.slug}.md does not answer "${checked}"`);
+  if (!md.includes(`have an affiliate program? ${noAnswerStart(program)}`)) {
+    fail(`programs/${program.slug}.md does not answer "${noAnswerStart(program)}"`);
   }
+}
+
+function noAnswerStart(program: { lastVerifiedAt?: string | null }): string {
+  return program.lastVerifiedAt ? `No (checked ${program.lastVerifiedAt}).` : "No.";
 }
 
 const robotsText = JSON.stringify(robots());
@@ -567,4 +540,90 @@ for (const [file, expectedType] of [
 
 console.log(
   `[machine-surfaces] verified ${programs.length} programs, ${categories.length} categories, ${networks.size} networks, and ${sitemapEntries.length} sitemap URLs`
+);
+
+/**
+ * The page checks. The alternatives on a no-program page are other programs'
+ * cards and do show their terms; each is one `<a href="/programs/…">`, so those
+ * anchors are cut before looking for this program's own.
+ */
+const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
+const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
+
+function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+  const own = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
+  for (const label of JOIN_LABELS) {
+    if (own.includes(label)) fail(`${page} shows a join button ("${label}") for a brand with no program`);
+  }
+  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
+    fail(`${page} links the signup URL of a brand with no program`);
+  }
+  if (/>Commission<\/h3>/.test(own)) fail(`${page} shows a Commission card for a brand with no program`);
+  for (const label of TERM_LABELS) {
+    if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
+  }
+  if (/\b\d+d cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
+  if (program.commission.value != null) {
+    const figure = commissionDisplay(program.commission);
+    if (own.includes(figure)) fail(`${page} shows its stored commission (${figure}) for a brand with no program`);
+  }
+
+  const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
+    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
+    | undefined;
+  const first = faqPage?.mainEntity?.[0];
+  const answer = first?.acceptedAnswer?.text ?? "";
+  const start = noAnswerStart(program);
+  if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(start)) {
+    fail(`${page} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
+  }
+}
+
+async function checkNoProgramPages(): Promise<number> {
+  if (noProgramPages.length === 0) return 0;
+  const port = await new Promise<number>((resolve, reject) => {
+    const probe = createServer();
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", () => {
+      const { port } = probe.address() as AddressInfo;
+      probe.close(() => resolve(port));
+    });
+  });
+  const base = `http://127.0.0.1:${port}`;
+  const server = spawn(
+    process.execPath,
+    [join(ROOT, "node_modules", "next", "dist", "bin", "next"), "start", "-p", String(port), "-H", "127.0.0.1"],
+    { cwd: ROOT, stdio: "ignore" }
+  );
+  let exited = false;
+  server.once("exit", () => {
+    exited = true;
+  });
+  try {
+    for (let waited = 0; ; waited += 250) {
+      if (exited) fail("next start exited before serving; the no-program page checks need `npm run build` first");
+      if (waited > 30_000) fail("next start did not answer within 30 seconds");
+      if (await fetch(`${base}/robots.txt`).then((r) => r.ok, () => false)) break;
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    for (const program of noProgramPages) {
+      const page = `/programs/${program.slug}`;
+      const res = await fetch(`${base}${page}`);
+      if (res.status !== 200) fail(`${page} answered ${res.status}`);
+      checkNoProgramHtml(program, page, await res.text());
+    }
+  } finally {
+    server.kill();
+  }
+  return noProgramPages.length;
+}
+
+checkNoProgramPages().then(
+  (count) => console.log(`[machine-surfaces] verified ${count} no-program pages as served by next start`),
+  (error) => {
+    console.error(error);
+    process.exit(1);
+  }
 );
