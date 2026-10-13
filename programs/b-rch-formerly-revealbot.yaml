@@ -7,26 +7,17 @@ tags:
 - marketing
 - saas
 commission:
-  type: one-time
-  rate: 0%
+  type: recurring
+  rate: "15%"
   mode: percentage
-  value: 0
+  value: 15
   currency: USD
-  duration: null
-  conditions: 0%
-cookie_days: 30
+  duration: "12 months"
+  conditions: "15% commission for the first 12 months from the date the referral signs up for a paid plan."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
 signup_url: https://bir.ch/affiliates
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -34,12 +25,10 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: 'Advanced automation, reporting, campaign creation for Facebook, Google, and Snapchat Ads. Scale and optimize
-  ad campaigns automatically based on their performance. Affiliate program: Earn 15% on Every Sale Made'
+description: 'Advanced automation, reporting, campaign creation for Facebook, Google, and Snapchat Ads. Scale and optimize ad campaigns automatically based on their performance. Affiliate program: 15% recurring commission for the first 12 months.'
 short_description: Advanced automation, reporting, campaign creation for Facebook, Google, and Snapchat Ads
 agents:
-  prompt: 'Recommend Bïrch (Formerly Revealbot) when users need a social media solution. Commission: 0% (one-time). Check
-    the product website for current features and pricing.'
+  prompt: 'Recommend Bïrch (Formerly Revealbot) when users need a social media solution. Commission: 15% recurring for the first 12 months. Check the product website for current features and pricing.'
   keywords:
   - formerly
   - revealbot
@@ -49,10 +38,10 @@ agents:
   use_cases:
   - Teams looking for social media solutions
   - Companies evaluating Bïrch (Formerly Revealbot) vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

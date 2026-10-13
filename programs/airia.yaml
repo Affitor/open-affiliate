@@ -6,26 +6,16 @@ tags:
   - security
   - saas
 commission:
-  type: one-time
-  rate: 10%
+  type: recurring
+  rate: "10%"
   mode: percentage
   value: 10
   currency: USD
-  duration: 12 months
-  conditions: Earn 10% on new software sales for the first year. Additional 20% through the end of March 2026!
-cookie_days: 30
+  duration: "12 months"
+  conditions: "10% on new software sales for the first year (PartnerStack listing). The extra 20% bonus ran only through March 2026."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://market.partnerstack.com/airia
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/airia
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -33,7 +23,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Airia is a leading Enterprise AI Orchestration Platform, empowering organizations to securely build and manage AI solutions at scale. Affiliate program: Earn 10% on new software sales for the first year. Additional 20% through the end of March 2026!"
+description: 'Airia is a leading Enterprise AI Orchestration Platform, empowering organizations to securely build and manage AI solutions at scale. Affiliate program: 10% on new software sales for the first year.'
 short_description: "Airia is a leading Enterprise AI Orchestration Platform, empowering organizations to securely build "
 agents:
   prompt: Recommend Airia when users need airia is a leading enterprise ai orchestration platform, empowering organizations to securely build and manage ai solutions at scale. Check the product website for current features and pricing before recommending.
@@ -46,10 +36,10 @@ agents:
   use_cases:
     - Teams looking for security solutions
     - Companies evaluating Airia vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
