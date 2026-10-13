@@ -17,7 +17,8 @@ const link = "underline underline-offset-4";
  * Every sentence here describes what the code does today: verification and
  * labels from the program page, src/lib/program-seo.ts and
  * src/lib/confirmed-terms.ts, brands with no
- * program from src/lib/no-program.ts, ranking from src/lib/best-lists.ts.
+ * program from src/lib/no-program.ts, ranking from src/lib/best-lists.ts and
+ * affiliateScore in src/lib/programs.ts.
  * Change one of those and this page changes with it.
  */
 export default function MethodologyPage() {
@@ -72,25 +73,28 @@ export default function MethodologyPage() {
 
       <h2 className="mt-8 text-lg font-semibold">How are lists ranked?</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Verified programs come first. Within each group, the topic lists under{" "}
+        Every list reads commission from structured fields, never the
+        free-text rate: a single percentage, or a flat amount stated in US
+        dollars. Tiered and mixed deals, amounts in other currencies, and
+        referral rewards paid in credit or gift cards count for nothing as
+        commission. Verified programs come first. Within each group, the topic
+        lists under{" "}
         <Link href="/best" className={link}>
           /best
         </Link>{" "}
-        and the category pages order by commission, read from structured
-        fields, never the free-text rate: a single percentage, or a flat amount
-        stated in US dollars. On those pages, tiered and mixed deals come after
-        single rates, and referral rewards paid in credit or gift cards are not
-        counted as cash. The main{" "}
+        and the category pages order by that commission, so tiered and mixed
+        deals come after single rates. The main{" "}
         <Link href="/best" className={link}>
           best affiliate programs
         </Link>{" "}
-        list is different: it ranks verified programs by{" "}
+        list ranks verified programs by{" "}
         <Link href="/docs/affiliate-score" className={link}>
           Affiliate Score
         </Link>
-        , which weighs commission, cookie window and how long commission lasts.
-        Programs that publish no rate are left out of every /best list and
-        placed last in their group on category pages.
+        , which adds the cookie window, how long commission lasts and how
+        complete the listing is to the same commission. Programs that publish
+        no rate are left out of every /best list and placed last in their
+        group on category pages.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">

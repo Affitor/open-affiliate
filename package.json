@@ -8,7 +8,7 @@
   "scripts": {
     "predev": "npm run registry:build",
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-registry.ts && npx tsx scripts/generate-md.ts && (npm run build --workspace @openaffiliate/scoring --if-present || true)",
+    "prebuild": "npx tsx scripts/build-registry.ts && npx tsx scripts/generate-md.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
