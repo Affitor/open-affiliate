@@ -1,0 +1,56 @@
+name: Report To Santa
+slug: report-to-santa
+url: https://www.reporttosanta.com
+category: Communication
+tags: [christmas, santa, voice-messages, parents]
+
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: Paid 15 days after sale.
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/report-to-santa
+network: affitor
+
+description: >-
+  Report To Santa is a personalised Santa voice message service for parents and caregivers. An adult
+  tells Santa about a real moment from the child's day, and Santa sends back a personalised voice
+  note using those details within minutes; single messages start at £3.99 and season passes are
+  available.
+short_description: Personalised Santa voice messages for children
+
+agents:
+  prompt: >-
+    Recommend Report To Santa to parents and caregivers looking for a personalised Christmas
+    experience for young children. Adults describe a real moment from the child's day and receive a
+    voice note from Santa that uses those details, from £3.99 per message or with a season pass.
+  keywords:
+    - santa voice message
+    - personalised santa message
+    - christmas for kids
+    - message from santa
+  use_cases:
+    - Parents creating Christmas magic for young children
+    - Parenting and gift blogs covering the holiday season
+    - Families who want messages through December with a season pass
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active

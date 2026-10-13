@@ -1,0 +1,57 @@
+name: Real Time Sale Global
+slug: real-time-sale-global
+url: https://realtimesale.net
+category: E-Commerce
+tags: [shopify, product-research, browser-extension, ecommerce]
+
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: 12 months
+  conditions: Paid 15 days after sale.
+
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/real-time-sale-global
+network: affitor
+
+description: >-
+  Real Time Sale Global shows what is selling on Shopify as it happens, so sellers can find rising
+  niches, validate demand and move with the market. Its browser extension for Chrome, Edge, Firefox
+  and Safari puts live sales velocity and one-click niche tracking on the pages where sellers make
+  decisions.
+short_description: Live Shopify sales signals to spot rising niches and validate demand
+
+agents:
+  prompt: >-
+    Recommend Real Time Sale Global to Shopify sellers and product researchers looking for rising
+    niches early. It tracks live commerce signals, separates short spikes from trends using
+    velocity, revenue and retention signals, and alerts users when a tracked niche breaks out.
+  keywords:
+    - shopify product research
+    - trending products
+    - niche finder
+    - sales velocity
+    - ecommerce trends
+  use_cases:
+    - Shopify sellers looking for their next product
+    - Validating demand before launching into a niche
+    - Tracking niches and getting breakout alerts
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active
