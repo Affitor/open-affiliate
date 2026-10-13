@@ -23,7 +23,7 @@ import {
   categories,
   commissionTypes,
   categoryCounts,
-  compareCommission,
+  compareByCommission,
   type Program,
   commissionLabel,
   affiliateScore,  commissionDisplay
@@ -303,7 +303,7 @@ function ProgramsTable({
     list.sort((a, b) => {
       switch (sortCol) {
         case "commission":
-          return compareCommission(a.program, b.program, dir);
+          return compareByCommission(a.program, b.program, dir);
         case "verified":
           return (a.verifiedContent - b.verifiedContent) * dir;
         case "avg":

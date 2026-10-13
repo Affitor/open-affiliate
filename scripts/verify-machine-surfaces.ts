@@ -39,7 +39,7 @@ import {
   IN_HOUSE,
   NETWORK_META,
   livePrograms,
-  commissionRank,
+  searchPrograms,
   commissionUnknown,
   type Program,
 } from "../src/lib/programs";
@@ -897,24 +897,6 @@ function readBuilt(file: string): string {
 }
 
 const TITLE_MAX = 60;
-const programBySlug = new Map(programs.map((p) => [p.slug, p]));
-
-/**
- * Why a run of rows is not in commission order (commissionRank never rises;
- * once a row publishes no figure, every later one publishes none), or null.
- */
-function commissionOrderProblem(rows: Program[]): string | null {
-  for (let i = 1; i < rows.length; i++) {
-    const [a, b] = [rows[i - 1], rows[i]];
-    if (commissionUnknown(a.commission) && !commissionUnknown(b.commission)) {
-      return `${b.slug} publishes a figure but follows ${a.slug}, which publishes none`;
-    }
-    if (commissionRank(b) > commissionRank(a)) {
-      return `${b.slug} (${commissionRank(b)}) follows ${a.slug} (${commissionRank(a)})`;
-    }
-  }
-  return null;
-}
 const DESCRIPTION_RANGE = [120, 155] as const;
 /** networks/[slug]/page.tsx puts the first 20 table rows in its ItemList. */
 const NETWORK_ITEMLIST_MAX = 20;
@@ -982,11 +964,14 @@ for (const network of liveNetworks) {
     items.map((item) => item.url ?? ""),
     htmlRows.slice(0, NETWORK_ITEMLIST_MAX).map((s) => `${BASE_URL}/programs/${s}`)
   );
-  // Table order is the list pages' commission order: commissionRank, larger
-  // first (a tie at listScore's cap goes to the larger figure: $10,000 before
-  // $550), then the programs that publish no figure.
-  const networkOrderProblem = commissionOrderProblem(htmlRows.map((s) => programBySlug.get(s)!));
-  if (networkOrderProblem) fail(`${file} table is not in commission order: ${networkOrderProblem}`);
+  // Table order is the commission order every surface shares
+  // (commission-order.ts): exactly what the REST API's commission_desc returns
+  // for the same network, ties included.
+  sameRows(
+    `${file} table order vs /api/programs?network=…&sort=commission_desc`,
+    htmlRows,
+    searchPrograms({ network, sort: "commission_desc" }).map((p) => p.slug)
+  );
 
   const md = requireText(join("networks", `${slug}.md`));
   if (!md.startsWith(`# ${heading}\n`)) {

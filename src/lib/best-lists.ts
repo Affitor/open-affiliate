@@ -9,6 +9,7 @@ import {
   type Program,
 } from "./programs"
 import type { Faq } from "./program-seo"
+import { compareCommission, isLifetime } from "./commission-order"
 
 /**
  * Ranked list pages. Adding a list is one entry in BEST_LISTS: the page, its
@@ -21,8 +22,9 @@ import type { Faq } from "./program-seo"
  *     (every list ranks by it, and "Not published" cannot be ranked);
  *   - verified programs first, then by commissionRank (structured fields
  *     only: a single percentage or a flat US-dollar amount; listScore without
- *     its cap, so $10,000 comes before $550), or by the list's own `rank`;
- *   - ties go to lifetime recurring deals, then the name;
+ *     its cap, so $10,000 comes before $550), or by the list's own `rank`,
+ *     through compareCommission, the order every commission surface shares;
+ *   - ties go to lifetime recurring deals, then the name, then the slug;
  *   - at most MAX_ROWS rows.
  */
 export interface BestList {
@@ -267,10 +269,6 @@ export function flatUsdPayout(c: Program["commission"]): number {
   return c.mode === "flat" && c.currency === "USD" && typeof c.value === "number" && Number.isFinite(c.value) ? c.value : 0
 }
 
-function isLifetime(p: Program): boolean {
-  return p.commission.type === "recurring" && /lifetime/i.test(p.commission.duration ?? "")
-}
-
 /** "75-125% CPA + 25% annual, lifetime": the table's figure plus its duration. */
 export function termsText(p: Program): string {
   const d = p.commission.duration
@@ -340,9 +338,7 @@ export function buildBestList(list: BestList): BestListData {
         // A directory keeps programs that publish no rate: they go last in
         // their group, not mixed in with tiered deals that also score 0.
         Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission)) ||
-        rank(b) - rank(a) ||
-        Number(isLifetime(b)) - Number(isLifetime(a)) ||
-        a.name.localeCompare(b.name)
+        compareCommission(a, b, rank)
     )
   const rows = list.directory ? qualifying : qualifying.slice(0, MAX_ROWS)
   const verified = qualifying.filter((p) => p.verified)
@@ -387,7 +383,7 @@ export function bestListCopy(data: BestListData, esc: (text: string) => string =
   const v = verified.length
   const rules = esc(list.rules ?? SHARED_RULES)
   // "Pay the most" is by commission whatever order the list itself uses.
-  const topPaying = [...verified].sort((a, b) => commissionRank(b) - commissionRank(a)).slice(0, 3)
+  const topPaying = [...verified].sort((a, b) => compareCommission(a, b, commissionRank)).slice(0, 3)
   const list1 = (k: number, one: string, many: string) => (k === 1 ? one : many)
 
   const intro =

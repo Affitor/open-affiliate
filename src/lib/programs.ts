@@ -1,5 +1,6 @@
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
+import { commissionUnknown, compareCommission } from "./commission-order"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
@@ -248,10 +249,7 @@ export function isCreditReward(c: Program["commission"]): boolean {
   return /credit/i.test(String(c.rate))
 }
 
-/** True when there is no figure to compare on. */
-export function commissionUnknown(c: Program["commission"]): boolean {
-  return c.mode === "unknown" || c.value === null
-}
+export { commissionUnknown, compareCommission }
 
 /**
  * Format a commission figure for display: `flat` for a US-dollar amount
@@ -350,7 +348,8 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
     ? { query: queryOrOptions, category }
     : queryOrOptions
 
-  let results = livePrograms
+  // A copy: sorting livePrograms itself reordered it for every later caller.
+  let results = [...livePrograms]
 
   if (opts.category) {
     results = results.filter((p) => p.category === opts.category)
@@ -389,9 +388,8 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
       results.sort((a, b) => b.name.localeCompare(a.name))
       break
     case "commission_desc":
-      // commissionRank: structured fields only; unpublished, tiered, hybrid and
-      // referral rewards score 0 and stay last.
-      results.sort((a, b) => commissionRank(b) - commissionRank(a))
+      // The order every commission surface shares (commission-order.ts).
+      results.sort((a, b) => compareCommission(a, b, commissionRank))
       break
     case "newest":
       // Many existing programs share a backfill date of 2026-04-18. To give

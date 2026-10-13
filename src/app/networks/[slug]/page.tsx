@@ -11,6 +11,7 @@ import {
   slugToNetwork,
   commissionRank,
   commissionStats,
+  compareCommission,
   formatCommissionDisplay,
   commissionLabel,
   commissionDisplay,
@@ -135,13 +136,9 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
-  // By commission as the list pages order it (commissionRank: structured
-  // fields only, $10,000 before $550), then programs that publish no figure last.
-  const netPrograms = [...liveOn(network)].sort(
-    (a, b) =>
-      commissionRank(b) - commissionRank(a) ||
-      Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission))
-  );
+  // The order every commission surface shares (commission-order.ts):
+  // commissionRank, programs that publish no figure last, then lifetime, name.
+  const netPrograms = [...liveOn(network)].sort((a, b) => compareCommission(a, b, commissionRank));
   if (netPrograms.length === 0) notFound();
   const name = networkName(network);
   const heading = networkHeading(network);

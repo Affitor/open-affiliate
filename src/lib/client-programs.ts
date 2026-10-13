@@ -1,4 +1,5 @@
 import registryData from "./client-registry.json"
+import { compareCommission } from "./commission-order"
 
 export const IN_HOUSE = "in-house"
 
@@ -110,12 +111,12 @@ export function affiliateScore(program: ClientProgram): number {
 
 /**
  * Commission order for the browser's sorts (/programs "Highest Commission",
- * the /rankings commission column): commissionRank in `dir` (-1 for largest
- * first), and programs it cannot rank (unpublished, tiered, hybrid, referral,
- * a flat amount in another currency) last in either direction.
+ * the /rankings commission column): the order every commission surface shares
+ * (commission-order.ts), on the commissionRank build-registry ships. `dir` -1
+ * puts the largest first; programs it cannot rank stay last either way.
  */
-export function compareCommission(a: ClientProgram, b: ClientProgram, dir: number): number {
-  return Number(a.commissionRank === 0) - Number(b.commissionRank === 0) || (a.commissionRank - b.commissionRank) * dir
+export function compareByCommission(a: ClientProgram, b: ClientProgram, dir = -1): number {
+  return compareCommission(a, b, (p) => p.commissionRank, dir)
 }
 
 export function searchPrograms(query: string, category?: string): ClientProgram[]
@@ -165,7 +166,7 @@ export function searchPrograms(
     case "za":
       return results.sort((a, b) => b.name.localeCompare(a.name))
     case "commission_desc":
-      return results.sort((a, b) => compareCommission(a, b, -1))
+      return results.sort((a, b) => compareByCommission(a, b))
     case "newest": {
       const sourceWeight: Record<string, number> = {
         community: 9,
