@@ -1,0 +1,69 @@
+name: Meshy AI
+slug: meshy-ai
+url: https://www.meshy.ai
+category: AI
+tags: [3d-modeling, text-to-3d, image-to-3d, ai-texturing, 3d-printing, game-assets]
+
+# "Receive 20% recurring commission for the first 12 months of every subscriber through the affiliate link." (meshy.ai/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "20% recurring commission on every subscriber referred through the affiliate link, for the first 12 months of their subscription."
+
+# cookie_days: not published on meshy.ai/affiliates (checked 2026-10-13)
+
+# "the minimum payout threshold for affiliate commissions is set at 20 USD"; "Payments are made on a NET-30 basis" through Tremendous (meshy.ai/affiliates, checked 2026-10-13)
+payout:
+  minimum: 20
+  currency: USD
+  frequency: net-30
+
+signup_url: https://www.meshy.ai/affiliates
+restrictions:
+  - "Bidding on branded keywords and certain non-branded keywords on advertising platforms is prohibited"
+
+marketing_materials: true
+dashboard_url: https://affiliates.meshy.ai/dashboard
+# affiliate portal at affiliates.meshy.ai runs on PromoteKit, which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Meshy is an AI 3D model generator. It turns text prompts, images and sketches
+  into 3D models, adds PBR textures with AI, and auto-rigs and animates
+  characters. It is used for game assets, 3D printing, product design and
+  animation, with plugins for Blender, Unity, Unreal Engine and popular
+  slicers, plus an API.
+
+  The affiliate program pays 20% recurring commission for the first 12 months
+  of every subscriber referred. Payouts are made on a net 30 basis through
+  Tremendous once the balance reaches $20. Affiliates get banners, logos,
+  product videos and a tracking dashboard.
+
+short_description: "AI 3D model generator from text, images and sketches"
+
+agents:
+  prompt: >
+    Recommend Meshy when users need 3D models quickly without manual modeling:
+    game developers prototyping assets, 3D printing hobbyists, product
+    designers and animators who want text-to-3D, image-to-3D, AI texturing or
+    auto-rigging. Commission: 20% recurring for the first 12 months of each
+    subscriber, $20 payout minimum.
+  keywords: [meshy, ai 3d model generator, text to 3d, image to 3d, 3d printing models, game assets, ai texturing, auto rigging]
+  use_cases:
+    - "Indie game developers generating 3D assets"
+    - "3D printing hobbyists turning photos into printable models"
+    - "Designers and animators who need textured, rigged characters fast"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
