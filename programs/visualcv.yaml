@@ -16,7 +16,7 @@ commission:
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
-signup_url: https://www.visualcv.com/affiliates/
+signup_url: https://market.partnerstack.com/page/visualcv
 restrictions: null
 marketing_materials: true
 api_available: false
