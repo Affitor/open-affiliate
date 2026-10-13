@@ -179,8 +179,8 @@ test("statesTerms drops any sentence with a term word, and keeps commission-only
 })
 
 test("a pitch keeps the product's own words; a product word counts next to the program or a figure", () => {
-  // Payments products: "payments", "pay" and "Windows" describe the product, not a term.
-  for (const slug of ["lemon-squeezy", "paddle", "mercury", "ollama"]) {
+  // Payments and attribution products: "payments", "pay", "Windows" and "attribution" describe the product, not a term.
+  for (const slug of ["lemon-squeezy", "paddle", "mercury", "ollama", "hockeystack", "triple-whale"]) {
     const p = getProgram(slug)!
     assert.ok(p, `programs/${slug}.yaml is a pitch regression case`)
     const off = confirmedTerms({ ...p, verified: false })
@@ -191,12 +191,18 @@ test("a pitch keeps the product's own words; a product word counts next to the p
     "Lemon Squeezy is a merchant-of-record payments platform handling global tax, subscriptions, and checkout for digital products.",
     "Mercury is a banking platform built for startups with AI-powered cash flow, bill pay, corporate cards, and treasury.",
     "Run open-source LLMs locally on Mac, Linux, and Windows.",
+    "HockeyStack unifies marketing, sales, and product data into a single attribution platform for B2B SaaS.",
   ]) {
     assert.equal(statesTerms(s, "pitch"), false, s)
     assert.equal(statesTerms(s, "program"), true, s)
   }
+  // In commission conditions, attribution is a term on its own.
+  assert.equal(statesTerms("Attribution is first-touch.", "program"), true)
+  assert.equal(statesTerms("Attribution is first-touch.", "pitch"), false)
   for (const s of [
     "Affiliates get paid monthly.",
+    "A 90-day attribution window.",
+    "Partner attribution is first-touch.",
     "Partners receive payments every month.",
     "Balances over $50 are sent on the 1st.",
     "Get paid within 30 days.",

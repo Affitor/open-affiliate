@@ -76,12 +76,13 @@ const TERM_SENTENCE: RegExp[] = [
  * terms.
  */
 const TERM_WORD =
-  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\battribution\b|\bdays to\b|\bpayouts?\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\bdays to\b|\bpayouts?\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
 /**
  * Words that are terms in what a program says about itself, and often the
- * product itself in a pitch: "a payments platform", "bill pay", "Windows".
+ * product itself in a pitch: "a payments platform", "bill pay", "Windows", an
+ * "attribution platform".
  */
-const PRODUCT_WORD = /\bwindows?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bbalances?\b/i
+const PRODUCT_WORD = /\battribution\b|\bwindows?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bbalances?\b/i
 /** What makes a product word a term in a pitch: the program is the subject, or a money or day figure is stated. */
 const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partners?|partnerships?|commissions?|payouts?)\b|${MONEY}|\b\d+[\s-]*(?:days?|months?)\b`, "i")
 
