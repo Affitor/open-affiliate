@@ -9,6 +9,7 @@ commission:
   # Privy's own pages disagree: the affiliate page says "Earn up to 15%+ per referral for 12 months." and "recurring commissions for as long as your referred subscriptions remain active"; the Partner Program Agreement sets 10% to 20% by tier (privy.com, checked 2026-10-13). No single figure is used.
   rate: "varies"
   mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: "The affiliate page advertises up to 15%+ per referral for 12 months and recurring commissions on renewals. The Partner Program Agreement lists the Partner Share by tier: 10% of net revenues at the Affiliate and Silver tiers, 15% at Gold, 20% at Platinum, and 5% when the customer used a discount."
