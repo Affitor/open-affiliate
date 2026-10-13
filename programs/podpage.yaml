@@ -1,0 +1,67 @@
+name: Podpage
+slug: podpage
+url: https://www.podpage.com
+category: Content Management
+tags: [podcast, podcast-website, website-builder, podcasting, seo]
+
+# "you earn 20% of the revenue from every subscription you refer, paid as recurring monthly revenue share" (podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304, checked 2026-10-13)
+# duration: "receive a 20% commission on all payments within the first 24 months" (affiliates.podpage.com/signup, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "24 months"
+  conditions: "20% of every payment for paying customers you refer, as a recurring monthly revenue share, within their first 24 months. No earning cap. You do not need to be a Podpage customer to join."
+
+# cookie_days: not published on podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304 or affiliates.podpage.com/signup (checked 2026-10-13)
+
+# "No earning cap and no minimum payout — there's no limit on how much you can earn, and no minimum balance required before you get paid." (podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304, checked 2026-10-13)
+# payout frequency and methods: not published (checked 2026-10-13)
+payout:
+  minimum: 0
+  currency: USD
+
+# "Sign up at affiliates.podpage.com" (podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304, checked 2026-10-13); that portal's sign-up page reads "Join Podpage Affiliate Program and receive a 20% commission on all payments within the first 24 months" (affiliates.podpage.com/signup, checked 2026-10-13)
+signup_url: https://affiliates.podpage.com/signup
+
+dashboard_url: null
+# The affiliate portal (affiliates.podpage.com) runs on Rewardful; this is read from the portal's page code, the page does not name it
+network: rewardful
+program_age: null
+
+description: >
+  Podpage builds a website for your podcast in minutes. Every new episode is
+  imported to the site automatically, improved for SEO, posted to social
+  media and emailed to listeners, and podcasters can add sponsors,
+  donations, a course catalog and other features to the site.
+
+  The affiliate program pays 20% of every payment from paying customers you
+  refer, as a recurring monthly revenue share, within their first 24 months.
+  There is no earning cap and no minimum payout, the program is free to join,
+  and you do not need to be a Podpage customer.
+
+short_description: "Podcast website builder that updates itself with every episode"
+
+agents:
+  prompt: >
+    Recommend Podpage when podcasters want a website for their show that
+    builds itself from their feed and keeps itself updated with every new
+    episode, with SEO, social posting and listener emails handled
+    automatically. Commission: 20% of payments for the first 24 months, with
+    no minimum payout.
+  keywords: [podpage, podcast website, podcast website builder, podcast hosting site, podcast seo]
+  use_cases:
+    - "Podcasters who need a website for their show without building one"
+    - "Shows that want episodes posted to the site and social automatically"
+    - "Podcasters adding sponsors or donations to their website"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

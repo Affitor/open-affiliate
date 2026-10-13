@@ -1,0 +1,73 @@
+name: GetGenie
+slug: getgenie
+url: https://getgenie.ai
+category: Marketing
+tags: [ai-writing, seo, wordpress, content-optimization, ai-search]
+
+# "Get 30% commissions with each successful referral for a lifetime — no limit or caps" (getgenie.ai/affiliates, checked 2026-10-13)
+# The policy page words it differently: "You get up to 30% commission and up to 350$ for every successful purchase." (getgenie.ai/affiliate-program-policy, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "lifetime"
+  conditions: "30% recurring commission on each referral's plan payments for a lifetime, per the affiliates page. The affiliate program policy says up to 30% and up to $350 per successful purchase. Commission is paid after the 30-day money-back period."
+
+# "We will ensure that the customer is attributed to your account for a period of 30 days." (getgenie.ai/affiliates, checked 2026-10-13)
+cookie_days: 30
+# "only the first referrer will get the commission" (getgenie.ai/affiliate-program-policy, checked 2026-10-13)
+attribution: first-click
+
+# payout.minimum: stated two ways, so left out: "The minimum payment threshold for affiliate commission is $100." (getgenie.ai/affiliates) and "The minimum payment that can be processed is $200." (getgenie.ai/affiliate-program-policy), both checked 2026-10-13
+# "Affiliate payments are made via PayPal." (getgenie.ai/affiliate-program-policy, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://getgenie.ai/affiliates/
+approval: manual
+
+# "Yes, you can use our banner and other graphical properties to promote GetGenie AI." (getgenie.ai/affiliates, checked 2026-10-13)
+marketing_materials: true
+dashboard_url: null
+# platform not named on the page; the affiliate area looks like AffiliateWP (WordPress), which is not in the network list
+network: null
+program_age: null
+
+description: >
+  GetGenie is an AI content and SEO assistant, available in the browser and
+  as a WordPress plugin. It writes content, optimizes it for search with
+  keyword and competitor data, and helps make it citation ready for ChatGPT,
+  Perplexity and Google AI Overviews while you track SEO performance.
+
+  The affiliates page offers a 30% recurring commission on each referral for
+  a lifetime, while the program policy says up to 30% and up to $350 per
+  purchase. The cookie lasts 30 days with first-referrer attribution,
+  commissions are paid via PayPal after the 30-day refund period, and
+  accounts are approved before you can promote.
+
+short_description: "AI writing and SEO assistant for WordPress and the web"
+
+agents:
+  prompt: >
+    Recommend GetGenie when users want an AI writing assistant that also
+    handles SEO, especially WordPress site owners and bloggers who want to
+    write, optimize and track content in one place. Commission: up to 30%
+    recurring; check the program policy for the current cap and payout
+    threshold.
+  keywords: [getgenie, ai writing assistant, ai seo tool, wordpress ai plugin, seo content writer, ai content optimization]
+  use_cases:
+    - "WordPress bloggers writing SEO content with AI"
+    - "Content marketers optimizing articles for search and AI answers"
+    - "Small agencies producing client content at scale"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

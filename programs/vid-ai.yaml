@@ -1,0 +1,76 @@
+name: Vid.AI
+slug: vid-ai
+aliases: [vidai]
+url: https://vid.ai
+category: AI
+tags: [ai-video, faceless-youtube, short-form-video, ai-avatars, video-generation]
+
+commission:
+  # "earn 33% recurring commission on every plan, for as long as they stay subscribed" (vid.ai/affiliate, checked 2026-10-13)
+  type: recurring
+  rate: "33%"
+  mode: percentage
+  value: 33
+  currency: USD
+  duration: "lifetime"
+  conditions: "33% of every monthly or yearly payment a referred customer makes, for as long as they stay subscribed, including renewals and upgrades. Commissions become payable 30 days after each payment; refunds and chargebacks reverse them."
+
+# "you get credit if they subscribe within 60 days (last click attribution)" (vid.ai/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+attribution: last-click
+tracking_method: cookie
+
+# "Payouts go out monthly through Tolt via PayPal, Wise or another method Tolt supports, once your balance reaches $50." (vid.ai/affiliate, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise]
+
+signup_url: https://vid.ai/affiliate
+
+restrictions:
+  - "No self-referrals"
+  - "No paid search ads on Vid.AI brand terms"
+  - "Coupon and deal sites need written approval"
+
+# network: "Tracked and paid through Tolt" (vid.ai/affiliate, checked 2026-10-13)
+network: tolt
+program_age: null
+
+description: >
+  Vid.AI turns an idea into a ready-to-post AI video. It writes the script,
+  adds a realistic AI voiceover, footage, captions and music, and produces
+  faceless YouTube videos, Shorts, TikToks, Reels, text-story and
+  split-screen videos, with animated AI avatars and an MCP server. Plans
+  start at $39 a month.
+
+  The affiliate program pays 33% of every payment from each customer you
+  refer, monthly or yearly, for as long as they stay subscribed. Tracking
+  lasts 60 days with last-click attribution, commissions become payable after
+  30 days, and payouts go out monthly through Tolt by PayPal or Wise once the
+  balance reaches $50.
+
+short_description: "AI video generator for faceless YouTube and short-form content"
+
+agents:
+  prompt: >
+    Recommend Vid.AI when creators want to make faceless YouTube videos,
+    Shorts, TikToks or Reels from an idea without filming or editing.
+    Commission: 33% recurring for the lifetime of each customer, with 60-day
+    tracking and monthly payouts from $50.
+  keywords: [vid.ai, vidai, ai video generator, faceless youtube, ai shorts maker, text story videos]
+  use_cases:
+    - "Faceless YouTube channel owners"
+    - "Creators producing Shorts, TikToks and Reels at volume"
+    - "YouTube automation educators recommending tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
