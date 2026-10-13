@@ -22,7 +22,7 @@ approval: manual
 approval_time: "Within 48 hours"
 
 marketing_materials: true
-dedicated_manager: true
+# dedicated_manager left out. Page conflicts: one card lists a "Dedicated partner manager" with every partnership; the FAQ starts a named manager at the Silver tier (payoneer.com/become-a-partner, checked 2026-10-13)
 dashboard_url: null
 network: in-house
 program_age: null
@@ -38,7 +38,7 @@ description: >
   affiliate partners, ecommerce partners and technology partners. Partners
   move up four tiers with milestone bonuses and, at the top, a custom revenue
   share; specific rates are set during onboarding. Applications are reviewed
-  within 48 hours, and every partner gets a dedicated partner manager.
+  within 48 hours, and a named partner manager starts from the Silver tier.
 
 short_description: "Cross-border payments and multi-currency accounts for businesses"
 
