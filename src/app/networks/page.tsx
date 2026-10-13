@@ -34,8 +34,10 @@ function listNames(names: string[]): string {
  * unverified program while the registry held an unverified $10k one. Which
  * program pays most is answered on each network page, next to its full list.
  *
- * Most programs first, ties by stored value, so the order and the FAQ built on
- * it are the same on every build. verify-machine-surfaces uses the same rule.
+ * Two orders. `networks` is most programs first, ties by stored value: the
+ * intro and FAQ answer "which has the most" from it. `cards` is A to Z by
+ * display name, ignoring case, for the grid and its ItemList, so a reader can
+ * find a network by name. verify-machine-surfaces uses the same two rules.
  */
 function networksData() {
   const stats = liveNetworks
@@ -45,6 +47,9 @@ function networksData() {
     })
     .sort((a, b) => b.programCount - a.programCount || a.network.localeCompare(b.network));
   const networks = stats.filter((n) => n.network !== IN_HOUSE);
+  const cards = [...networks].sort((a, b) =>
+    networkName(a.network).localeCompare(networkName(b.network), "en", { sensitivity: "base" })
+  );
   const inHouse = stats.find((n) => n.network === IN_HOUSE)?.programCount ?? 0;
   const total = stats.reduce((sum, n) => sum + n.programCount, 0);
   const networked = total - inHouse;
@@ -82,7 +87,7 @@ function networksData() {
     });
   }
 
-  return { networks, inHouse, total, intro, faq, first };
+  return { networks, cards, inHouse, total, intro, faq, first };
 }
 
 /**
@@ -118,7 +123,7 @@ export function generateMetadata(): Metadata {
 }
 
 export default function NetworksPage() {
-  const { networks, inHouse, intro, faq } = networksData();
+  const { cards, inHouse, intro, faq } = networksData();
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
@@ -139,8 +144,8 @@ export default function NetworksPage() {
                 publisher: { "@id": `${SITE}/#organization` },
                 mainEntity: {
                   "@type": "ItemList",
-                  numberOfItems: networks.length,
-                  itemListElement: networks.map((n, i) => ({
+                  numberOfItems: cards.length,
+                  itemListElement: cards.map((n, i) => ({
                     "@type": "ListItem",
                     position: i + 1,
                     url: `${SITE}/networks/${networkToSlug(n.network)}`,
@@ -175,7 +180,7 @@ export default function NetworksPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {networks.map((net) => {
+        {cards.map((net) => {
           const name = networkName(net.network);
           const meta = NETWORK_META[net.network];
           return (

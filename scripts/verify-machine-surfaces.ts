@@ -807,8 +807,9 @@ if (htmlH1(networksIndex) !== "Affiliate Networks") {
 /**
  * /networks against the registry: one card per network with its counts, the
  * ItemList, and FAQ answers whose numbers are recomputed here rather than read
- * back from the page. Order is the page's rule: most live programs first, ties
- * by stored value.
+ * back from the page. Two orders, as on the page: cards and the ItemList go A
+ * to Z by display name, ignoring case; the FAQ ranks by live program count,
+ * ties by stored value.
  */
 const liveList = programs.filter(isLive);
 const networkRows = liveNetworks
@@ -817,7 +818,10 @@ const networkRows = liveNetworks
     return { network, count: list.length, verified: list.filter((p) => p.verified).length };
   })
   .sort((a, b) => b.count - a.count || a.network.localeCompare(b.network));
-const cardRows = networkRows.filter((row) => row.network !== IN_HOUSE);
+const byCount = networkRows.filter((row) => row.network !== IN_HOUSE);
+const cardRows = [...byCount].sort((a, b) =>
+  networkName(a.network).localeCompare(networkName(b.network), "en", { sensitivity: "base" })
+);
 const inHouseCount = networkRows.find((row) => row.network === IN_HOUSE)?.count ?? 0;
 const plural = (n: number) => `${n} ${n === 1 ? "program" : "programs"}`;
 
@@ -853,7 +857,7 @@ const faq = (
     | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
     | undefined)?.mainEntity ?? []
 ).map((q) => ({ q: q.name ?? "", a: q.acceptedAnswer?.text ?? "" }));
-const [top1, top2, top3] = cardRows;
+const [top1, top2, top3] = byCount;
 const faqWant: [string, string[]][] = [
   ["What is an affiliate network?", cardRows.map((row) => networkName(row.network))],
   [
