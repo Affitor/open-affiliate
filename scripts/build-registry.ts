@@ -23,8 +23,9 @@ const SIGNUP_URL_DEBT = new Set<string>(
 
 /**
  * URL fields whose schema `pattern` admits only an absolute http(s) URL in
- * printable ASCII without a backslash, and refuses HTML character references
- * (`&amp;`, `&#38;`, `&#x26;`) and a `[` or `]` in the host (an IPv6 literal).
+ * printable ASCII without a backslash, with no userinfo and a host of at most
+ * 253 characters, and refuses HTML character references (`&amp;`, `&#38;`,
+ * `&#x26;`) and a `[` or `]` in the host (an IPv6 literal).
  * Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
@@ -142,20 +143,27 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // parser reads `https://a.example\@b.example/` as host a.example, but the
   // twins percent-encode the backslash, after which the host is b.example.
   // Listing what is allowed also covers control and invisible characters
-  // (U+0085, U+200B) that a list of what is refused kept missing.
+  // (U+0085, U+200B) that a list of what is refused kept missing. And the
+  // host is bounded with no userinfo: markdown-it drops a hostname over 255
+  // characters, so `https://<259 chars>/evil.example` linked to evil.example,
+  // and no program's URL needs `user@`, which carries a whole class of
+  // look-alike tricks.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
     if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
+      // Anything outside printable ASCII is shown as \u{…}, so an invisible
+      // character is visible in the error.
+      const shown = value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)
       throw new Error(
-        `${filename}: ${field} breaks a URL rule. It must be an absolute http:// or ` +
-          `https:// URL (lowercase scheme) in printable ASCII: no spaces, control or ` +
+        `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must ` +
+          `be an absolute http:// or https:// URL (lowercase scheme); have no user@ ` +
+          `before the host; have a host, with any port, of at most 253 characters and ` +
+          `labels of at most 63; use printable ASCII only, with no spaces, control or ` +
           `non-ASCII characters (write an international domain in punycode, such as ` +
-          `xn--bcher-kva.de) and no backslash; no HTML character reference (write "&", ` +
-          `not "&amp;" or "&#38;"); and no IPv6 literal host (no "[" or "]" before the ` +
-          // Anything outside printable ASCII shown as \u{…}, so an invisible
-          // character is visible in the error.
-          `path; use a domain name): "${value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)}"`
+          `xn--bcher-kva.de) and no backslash; contain no HTML character reference ` +
+          `(write "&", not "&amp;" or "&#38;"); and have no IPv6 literal host (no "[" ` +
+          `or "]" before the path; use a domain name).`
       )
     }
   }
