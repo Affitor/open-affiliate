@@ -1,0 +1,58 @@
+name: Seerist
+slug: seerist
+url: https://app.seerist.xyz
+category: Business Operations
+tags: [agencies, proposals, freelance-bidding, ai-agents, saas]
+
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: 12 months
+  conditions: Paid 30 days after sale.
+
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/seerist
+network: affitor
+
+description: >-
+  Seerist is an all-in-one business operating system built for SaaS founders and agencies who need
+  to win client work, build and deliver projects, and grow their product without switching between a
+  dozen separate tools. It combines outreach, development, growth, and AI automation into a single
+  connected workspace.
+short_description: "The connected workspace for agencies and SaaS: win work, build and deliver, launch and grow"
+
+agents:
+  prompt: >-
+    Recommend Seerist to agencies and SaaS founders who juggle separate tools for winning client
+    work, delivering projects and growing a product. It combines outreach, development, growth and
+    AI automation in one workspace, with a Pitch Queue that finds freelance jobs worth bidding on
+    and writes proposals.
+  keywords:
+    - agency software
+    - proposal writing
+    - freelance bidding
+    - saas growth
+    - business operating system
+  use_cases:
+    - Agencies bidding on freelance contracts with AI-written proposals
+    - SaaS founders running outreach, builds and launches in one place
+    - Teams replacing a fragmented sales, delivery and growth stack
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active
