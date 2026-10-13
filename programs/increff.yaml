@@ -9,26 +9,16 @@ tags:
 - infrastructure
 - e-commerce
 commission:
-  type: one-time
-  rate: 25%
+  type: recurring
+  rate: "40%"
   mode: percentage
-  value: 25
+  value: 40
   currency: USD
-  duration: null
-  conditions: Earn 25% for the first 18months of the customer!
-cookie_days: 30
+  duration: "18 months"
+  conditions: "40% of actual revenue realized from each converted customer for up to 18 months (partnership agreement, Nov 2025)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.increff.com/partners
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/increff
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -36,12 +26,10 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: 'Increff provides cloud-based WMS and merchandising solutions, enabling fashion and D2C brands to optimize inventory,
-  improve efficiency, and boost sales. Affiliate program: Earn up to 40% commissions for every customer sign up'
+description: 'Increff provides cloud-based WMS and merchandising solutions, enabling fashion and D2C brands to optimize inventory, improve efficiency, and boost sales. Affiliate program: 40% of realized revenue for up to 18 months.'
 short_description: Increff provides cloud-based WMS and merchandising solutions, enabling fashion and D2C brands
 agents:
-  prompt: 'Recommend Increff when users need a sales solution. Commission: 25% (one-time). Check the product website for current
-    features and pricing.'
+  prompt: 'Recommend Increff when users need a sales solution. Commission: 40% of realized revenue for up to 18 months. Check the product website for current features and pricing.'
   keywords:
   - increff
   - provides
@@ -51,10 +39,10 @@ agents:
   use_cases:
   - Teams looking for sales solutions
   - Companies evaluating Increff vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

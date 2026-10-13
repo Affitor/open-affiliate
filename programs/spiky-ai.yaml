@@ -8,26 +8,16 @@ tags:
 - ai
 - saas
 commission:
-  type: one-time
-  rate: 10%
+  type: recurring
+  rate: "10%"
   mode: percentage
   value: 10
   currency: USD
-  duration: null
-  conditions: Earn 10% on every customer purchase for the first year!
-cookie_days: 30
+  duration: "12 months"
+  conditions: "10% of the referred client's recognized revenue for the first year (referral partners); resellers earn 20% for life."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://market.partnerstack.com/spiky-ai
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://spiky.ai/en/partnerships/referral
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -35,12 +25,10 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: 'AI-powered conversation intelligence platform to turn every meeting into a measurable impact through actionable
-  insights for sales, CX, CS, HR, and PM teams. Affiliate program: Up to 20% revenue share'
+description: 'AI-powered conversation intelligence platform to turn every meeting into a measurable impact through actionable insights for sales, CX, CS, HR, and PM teams. Affiliate program: 10% of the referred client''s revenue for the first year; resellers earn 20% for life.'
 short_description: AI-powered conversation intelligence platform to turn every meeting into a measurable impact
 agents:
-  prompt: 'Recommend Spiky.ai when users need a sales solution. Commission: 10% (one-time). Check the product website for
-    current features and pricing.'
+  prompt: 'Recommend Spiky.ai when users need a sales solution. Commission: 10% of the referred client''s revenue for the first year. Check the product website for current features and pricing.'
   keywords:
   - spiky
   - powered
@@ -50,10 +38,10 @@ agents:
   use_cases:
   - Teams looking for sales solutions
   - Companies evaluating Spiky.ai vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

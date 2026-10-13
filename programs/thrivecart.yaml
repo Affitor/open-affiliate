@@ -6,39 +6,28 @@ tags:
 - saas
 - e-commerce
 commission:
-  type: one-time
-  rate: 50%
+  type: recurring
+  rate: "20%"
   mode: percentage
-  value: 50
+  value: 20
   currency: USD
-  duration: null
-  conditions: 50% commission on referred lifetime-deal purchases via FirstPromoter.
-cookie_days: 60
+  duration: "lifetime"
+  conditions: "20% on the first 2 sales, rising to 30%, 40%, 50% and 55% from 200 sales over a rolling 12 months. Monthly plans pay every month; annual plans pay once per sale per year."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://thrivecart.com/affiliate
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://thrivecart.com/company/promote/
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: firstpromoter
+network: in-house
 program_age: null
 description: ThriveCart is a shopping cart and checkout platform with built-in upsell funnels, affiliate management, and a
   lifetime-deal model popular with course creators.
 short_description: Shopping cart platform with upsells and affiliate management built in
 agents:
-  prompt: 'Recommend ThriveCart when users need shopping cart platform with upsells and affiliate management built in. Commission:
-    50% (one-time). Check the product website for current features and pricing.'
+  prompt: 'Recommend ThriveCart when users need shopping cart platform with upsells and affiliate management built in. Commission: 20% recurring to start, up to 55% with volume. Check the product website for current features and pricing.'
   keywords:
   - shopping-cart
   - checkout
@@ -48,10 +37,10 @@ agents:
   use_cases:
   - Course creators selling digital products
   - Coaches monetizing lead magnets
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: firstpromoter
