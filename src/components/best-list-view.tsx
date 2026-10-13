@@ -5,12 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE } from "@/lib/programs";
+import { applyButton } from "@/lib/apply-cta";
 import {
   BEST_INDEX,
   BEST_LISTS,
   MIN_SAMPLE,
   SHARED_RULES,
   bestListCopy,
+  VERIFIED_NOTE,
   bestPath,
   buildBestList,
   listCommissionText,
@@ -130,8 +132,12 @@ export function BestListView({
         <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{intro}</p>
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
-          {data.checked && ` Last checked ${data.checked}, the most recent verification among these programs.`}
         </p>
+        {data.checked && (
+          <p className="text-xs text-muted-foreground mt-2 max-w-3xl">
+            <span className="font-medium text-foreground">Verified {data.checked}:</span> {VERIFIED_NOTE}
+          </p>
+        )}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -158,6 +164,7 @@ export function BestListView({
                 <th className={`min-w-[90px] ${th}`}>Duration</th>
                 <th className={`hidden sm:table-cell ${th}`}>Cookie</th>
                 <th className={`hidden md:table-cell ${th}`}>Network</th>
+                <th className={th}>Sign up</th>
               </tr>
             </thead>
             <tbody>
@@ -209,6 +216,17 @@ export function BestListView({
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell text-xs text-muted-foreground">
                     {networkName(program.network ?? IN_HOUSE)}
+                  </td>
+                  <td className="py-3 px-3 text-xs">
+                    {/* The program page's own apply link, so both send readers to the same place. */}
+                    <a
+                      href={applyButton(program).href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="whitespace-nowrap text-emerald-600 dark:text-emerald-400 hover:underline"
+                    >
+                      Sign up
+                    </a>
                   </td>
                 </tr>
               ))}

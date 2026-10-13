@@ -18,9 +18,11 @@ import {
   listScore,
   listCommissionText,
   flatUsdPayout,
+  verifiedDate,
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
+import { applyButton } from "../src/lib/apply-cta";
 import {
   commissionDisplay,
   categories,
@@ -370,7 +372,19 @@ if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H
  * writes LF only, and a contributor CR would start a new line (a heading, a
  * list item) in CommonMark. This guards the generator's output; it is not a
  * Markdown parser.
+ *
+ * The one `<` the generator writes is mdUrl's autolink around a signup URL:
+ * `<http(s)://host…>`. An autolink is set aside only when the URL inside it
+ * passes the schema's own URL allow-list (SCHEMA_URL: lowercase ASCII domain
+ * of two or more labels with an alphabetic last label, no xn--, no port, no
+ * user@, at most 253 characters, no character reference). Anything else in
+ * angle brackets stays, and its `<` fails the check.
  */
+const SCHEMA_URL = new RegExp(
+  (JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8")) as {
+    properties: { signup_url: { pattern: string } };
+  }).properties.signup_url.pattern
+);
 function foreignMarkup(md: string): string | null {
   for (let i = md.indexOf("]"); i !== -1; i = md.indexOf("]", i + 1)) {
     let slashes = 0;
@@ -379,8 +393,20 @@ function foreignMarkup(md: string): string | null {
       return md.slice(Math.max(0, i - 60), i + 40);
     }
   }
-  const raw = /<|&#|\r/.exec(md);
-  return raw ? JSON.stringify(md.slice(Math.max(0, raw.index - 60), raw.index + 40)) : null;
+  const text = md.replace(/<(https?:\/\/[^\s<>]*)>/g, (autolink, url: string) => (SCHEMA_URL.test(url) ? "" : autolink));
+  const raw = /<|&#|\r/.exec(text);
+  return raw ? JSON.stringify(text.slice(Math.max(0, raw.index - 60), raw.index + 40)) : null;
+}
+for (const [autolink, allowed] of [
+  ["<https://example.com/partners?ref=1>", true],
+  ["<https://user@evil.example/>", false],
+  ["<https://example.com:8080/>", false],
+  ["<https://xn--pple-43d.com/>", false],
+  ["<https://example.com/&#47;x>", false],
+] as const) {
+  if ((foreignMarkup(`x ${autolink}`) === null) !== allowed) {
+    fail(`the markup guard ${allowed ? "refuses" : "accepts"} the autolink ${autolink}`);
+  }
 }
 
 /** JSON-LD nodes of a prerendered page, with any @graph flattened. */
@@ -509,6 +535,44 @@ function checkListPage(list: BestList, path: string): void {
   ];
   if (mdRows.some((m, i) => Number(m[1]) !== i + 1)) fail(`${mdFile} numbers its rows out of order`);
   sameRows(mdFile, mdRows.map((m) => m[2]), want);
+
+  // A referral reward (credit or a gift card) shows its rate as published in
+  // the table's commission cell and in its twin row, never the bare number:
+  // Attio is "$200 gift card per referral", not "$200".
+  const tableTrs = html.slice(tbodyStart, tbodyEnd).match(/<tr[\s\S]*?<\/tr>/g) ?? [];
+  const mdLines = md.split("\n");
+  rows.forEach((p, i) => {
+    if (p.kind !== "referral") return;
+    const rate = String(p.commission.rate);
+    const cells = tableTrs[i]?.match(/<td[\s\S]*?<\/td>/g) ?? [];
+    const shown = decodeEntities((cells[2] ?? "").replace(/<[^>]*>/g, "")).trim();
+    if (shown !== rate) fail(`${htmlFile} shows ${p.slug}'s reward as ${JSON.stringify(shown)}, not ${JSON.stringify(rate)}`);
+    const line = mdLines.find((l) => l.includes(`/programs/${p.slug}.md) — `)) ?? "";
+    const terms = unescape(line.slice(line.indexOf(" — ") + 3));
+    if (!terms.startsWith(`${rate} `)) fail(`${mdFile} shows ${p.slug}'s reward as ${JSON.stringify(terms.slice(0, 60))}`);
+  });
+
+  // "Verified <date>" appears exactly when a shown row is verified, with the
+  // date verifiedDate gives over those rows, on the page and in the twin.
+  // React splits the text around {date} with comments, so those go first.
+  const expectedDate = verifiedDate(rows) ?? "";
+  const pageText = visibleText(html.replace(/<!--[\s\S]*?-->/g, "")).replace(/\s+/g, " ");
+  const pageDates = [...pageText.matchAll(/Verified (\d{4}-\d{2}-\d{2}):/g)].map((m) => m[1]).join();
+  const mdDates = [...md.matchAll(/^Verified (\d{4}-\d{2}-\d{2}): /gm)].map((m) => m[1]).join();
+  if (pageDates !== expectedDate) fail(`${htmlFile} says "Verified ${pageDates}"; the verified rows give "${expectedDate}"`);
+  if (mdDates !== expectedDate) fail(`${mdFile} says "Verified ${mdDates}"; the verified rows give "${expectedDate}"`);
+
+  // Each row's signup link is the program page's apply link, on both surfaces.
+  // The twin prints it as mdUrl does: an autolink with the few characters
+  // Markdown would read as structure percent-encoded.
+  rows.forEach((p, i) => {
+    const href = applyButton(p).href;
+    const shownHref = decodeEntities(/<a href="([^"]*)"[^>]*>Sign up<\/a>/.exec(tableTrs[i] ?? "")?.[1] ?? "");
+    if (shownHref !== href) fail(`${htmlFile} links ${p.slug} to ${JSON.stringify(shownHref)}, not ${href}`);
+    const line = mdLines.find((l) => l.includes(`/programs/${p.slug}.md) — `)) ?? "";
+    const autolink = `<${href.replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
+    if (!line.endsWith(`, sign up: ${autolink}`)) fail(`${mdFile} row for ${p.slug} does not end with "sign up: ${autolink}"`);
+  });
 }
 
 for (const list of BEST_LISTS) checkListPage(list, bestPath(list));
@@ -547,6 +611,20 @@ for (const [mode, value, currency, kind, rate, want] of [
   if (qualifies !== want >= 30) {
     fail(`high-paying ${qualifies ? "takes" : "refuses"} ${mode} ${value} ${currency} ${kind} ${JSON.stringify(rate)}`);
   }
+}
+
+/**
+ * verifiedDate counts verified rows only. An unverified row with a date of
+ * its own gave a "Verified" line to a list with no verified row, and a later
+ * date than the real verification when both were present.
+ */
+for (const [rows, want] of [
+  [[{ verified: false, lastVerifiedAt: "2026-10-12" }], null],
+  [[{ verified: false, lastVerifiedAt: "2026-10-12" }, { verified: true, lastVerifiedAt: "2026-09-01" }], "2026-09-01"],
+  [[{ verified: true, lastVerifiedAt: "2026-09-01 19:51:47.799000+00:00" }, { verified: true, lastVerifiedAt: null }], "2026-09-01"],
+] as const) {
+  const got = verifiedDate(rows.map((r) => ({ ...r })));
+  if (got !== want) fail(`verifiedDate(${JSON.stringify(rows)}) is ${got}, expected ${want}`);
 }
 
 /**
