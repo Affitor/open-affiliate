@@ -317,6 +317,7 @@ async function verifyProgram(program: ProgramYaml): Promise<VerifyResult> {
 // (e.g. own products, JS-heavy pages, known false negatives)
 const SKIP_VERIFY: Record<string, string> = {
   tailwindcss: "Partner page 404 — program unconfirmed, kept as unverified",
+  thryv: "www.thryv.com answers 403 to automated requests (checked 2026-10-13)",
 };
 
 // ── Main ──
