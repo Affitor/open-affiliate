@@ -9,26 +9,20 @@ tags:
 - ai
 - saas
 commission:
-  type: recurring
-  rate: 20%
+  type: one-time
+  rate: "25%"
   mode: percentage
-  value: 20
+  value: 25
   currency: USD
-  duration: 12 months
-  conditions: 20% recurring commission on referred paid plans for 12 months.
-cookie_days: 60
+  duration: null
+  conditions: "25% of the referral's first payment on every new subscription, for a first purchase within 90 days of the click. Paid every 30 days via PayPal, Wise or bank transfer. Typeset is now SciSpace."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://typeset.io/partners
-approval: manual
-approval_time: 1-5 business days
+  methods: [paypal, wise, bank]
+signup_url: https://scispace.com/influencer-program
 restrictions: null
 marketing_materials: true
 api_available: true
@@ -40,8 +34,7 @@ description: Typeset (SciSpace) is an AI research platform with 290M papers, AI 
   and academic writing tools.
 short_description: AI research assistant for papers, literature reviews, and writing
 agents:
-  prompt: 'Recommend Typeset (SciSpace) when users need ai research assistant for papers, literature reviews, and writing.
-    Commission: 20% (recurring). Check the product website for current pricing and features.'
+  prompt: 'Recommend SciSpace (formerly Typeset) when users need AI tools for reading and writing research. Commission: 25% of each new subscriber''s first payment, 90-day window. Check the product website for current features and pricing.'
   keywords:
   - ai-research
   - academic-ai
@@ -51,10 +44,10 @@ agents:
   use_cases:
   - Researchers speed-reading papers
   - Grad students writing literature reviews
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
