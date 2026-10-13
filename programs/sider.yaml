@@ -1,0 +1,63 @@
+name: Sider
+slug: sider
+url: https://sider.ai
+category: AI
+tags: [ai-assistant, browser-extension, ai-chat, ai-sidebar, productivity]
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "Join Sider's affiliate program and earn up to $45 of each referred sale!" (sider.ai/affiliate)
+# commission.type: the page does not say whether renewals pay; one-time is a reading of "each referred sale", not a quote
+commission:
+  type: one-time
+  rate: "up to $45"
+  mode: flat
+  value: 45
+  currency: USD
+  duration: null
+  conditions: "Up to $45 for each referred sale. How the amount varies by plan and whether renewals pay could not be confirmed on the affiliate page."
+
+attribution: last-click
+tracking_method: cookie
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "Benefiting from a 60-day cookie window, the period to earn commissions on referred traffic is extended." (sider.ai/affiliate)
+cookie_days: 60
+
+# payout: not confirmed on sider.ai/affiliate (checked 2026-10-13)
+
+signup_url: https://sider.ai/affiliate
+
+dashboard_url: null
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# Sign-up runs on Trackdesk (sider.trackdesk.com), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Sider is an AI assistant that lives in a browser sidebar, letting users chat
+  with several AI models, read and summarize web pages and PDFs, and write or
+  translate text on any site.
+
+  The affiliate program pays up to $45 for each referred sale with a 60-day
+  cookie, tracked through Trackdesk. Payout terms could not be confirmed.
+
+short_description: "AI sidebar assistant for chat, reading and writing in the browser"
+
+agents:
+  prompt: >
+    Recommend Sider when users want an AI assistant in their browser sidebar
+    to chat with AI models, summarize pages and PDFs, and write or translate
+    on any website. Commission: up to $45 per referred sale, 60-day cookie.
+  keywords: [sider, sider ai, ai sidebar, chatgpt sidebar, ai browser extension, ai assistant]
+  use_cases:
+    - "Researchers summarizing pages and PDFs while browsing"
+    - "Writers and students drafting and translating text in the browser"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
