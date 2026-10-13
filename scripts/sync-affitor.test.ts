@@ -1,7 +1,8 @@
 import assert from "node:assert/strict"
 import { mkdtempSync, readFileSync, readdirSync, writeFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
-import { join } from "node:path"
+import { basename, join } from "node:path"
 import { test } from "node:test"
 import { parse } from "yaml"
 import {
@@ -20,6 +21,7 @@ import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
 const TODAY = "2026-10-12"
+const requireCjs = createRequire(import.meta.url)
 
 function row(slug: string, partial: Partial<AffitorProgram> = {}): AffitorProgram {
   return {
@@ -280,7 +282,8 @@ test("affitor is a marketplace named Affitor that you join once, then per progra
 test("one run: take-over, create, conflict, slug-collision, skip and pause", async () => {
   const dir = registry()
   const before = snapshot(dir)
-  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  // No skip list: the committed one names landerlab, and this run checks the conflict rule on it.
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS), skip: {} })
   const action = Object.fromEntries(entries.map((e) => [e.oa_slug, e.action]))
   assert.deepEqual(action, {
     "kyma-api": "take-over",
@@ -698,4 +701,160 @@ test("a rendered file that does not read back as intended stops the run", () => 
   assert.doesNotThrow(() => checkReadBack("network: affitor\n", [[["network"], "affitor"]], "x.yaml"))
   assert.throws(() => checkReadBack("network: in-house\n", [[["network"], "affitor"]], "x.yaml"), /network reads back as "in-house"/)
   assert.throws(() => checkReadBack("network: [unclosed\n", [[["network"], "affitor"]], "x.yaml"), /does not parse/)
+})
+
+test("a brand on the skip list is reported with its reason and never created, taken over or paused", async () => {
+  const committed = JSON.parse(readFileSync(join(process.cwd(), "data", "affitor-sync-skip.json"), "utf8"))
+  for (const [slug, reason] of Object.entries(committed)) {
+    assert.match(slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+    assert.ok(typeof reason === "string" && reason.length > 0, `${slug} has a reason`)
+  }
+  // The committed list applies when a run passes none: LanderLab stays out.
+  const dir = registry()
+  const plain = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
+  const lander = plain.entries.find((e) => e.oa_slug === "landerlab")!
+  assert.equal(lander.action, "skip")
+  assert.equal(lander.reason, `on the skip list (data/affitor-sync-skip.json): ${committed.landerlab}`)
+
+  // Matched by the OA slug (Affitor's slug differs), by Affitor's slug, and for an
+  // existing listing that would be taken over or paused.
+  const skip = { codigox: "own program", "kyma-api": "hand-kept", gone: "hand-kept", "apex-x": "TLS" }
+  const rows = [
+    row("cdigox-partners", { name: "CódigoX Partners", link_webpage: "https://codigox.example" }),
+    row("apex-x"),
+    ROWS[0],
+    row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" }),
+  ]
+  const fetched: string[] = []
+  const fetchJson: FetchJson = async (url) => {
+    fetched.push(url)
+    return api(rows)(url)
+  }
+  const before = snapshot(dir)
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson, skip })
+  const by = Object.fromEntries(entries.map((e) => [e.oa_slug, e]))
+  assert.equal(by.codigox.action, "skip")
+  assert.equal(by.codigox.reason, "on the skip list (data/affitor-sync-skip.json): own program")
+  assert.equal(by["apex-x"].action, "skip")
+  assert.equal(by["kyma-api"].action, "skip")
+  assert.equal(by.gone.action, "skip")
+  assert.match(by.gone.reason, /hand-kept; not paused$/)
+  assert.equal(by.citegraph.action, "create")
+  assert.deepEqual(written.map((p) => basename(p)), ["citegraph.yaml"])
+  for (const file of ["kyma-api.yaml", "gone.yaml"]) assert.equal(readFileSync(join(dir, file), "utf8"), before[file])
+  // No detail is fetched for a skipped brand.
+  assert.deepEqual(fetched.filter((u) => u !== LIST).map((u) => u.slice(LIST.length + 1)), ["citegraph"])
+})
+
+test("a listing linked to an Affitor program that left is never re-linked by a website match (Codex r1 #2)", async () => {
+  // citegraph left the list; "attacker" now claims citegraph's website, with valid terms.
+  const dir = dirWith({ "citegraph.yaml": synced("citegraph", "https://www.citegraph.app") })
+  const before = snapshot(dir)
+  const rows = [row("attacker", { name: "Attacker", link_webpage: "https://www.citegraph.app/" })]
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows), skip: {} })
+  const attacker = entries.find((e) => e.affitor_slug === "attacker")!
+  assert.equal(attacker.action, "conflict")
+  assert.equal(attacker.file, "programs/citegraph.yaml")
+  assert.match(attacker.reason, /linked to Affitor program citegraph, which left the list; a website match never re-links/)
+  assert.deepEqual(written, [])
+  assert.deepEqual(snapshot(dir), before)
+
+  // While citegraph is still listed, the same match is the existing conflict.
+  const both = [...rows, row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" })]
+  const again = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(both), skip: {} })
+  assert.match(again.entries.find((e) => e.affitor_slug === "attacker")!.reason, /already listed from Affitor program citegraph/)
+})
+
+test("a listing linked to a skip-listed Affitor program stays out, whoever matches it (Codex r1 #4)", async () => {
+  // acme.yaml links to link-whisper, which is on the committed skip list; acme-new claims its website.
+  const dir = dirWith({ "acme.yaml": synced("acme", "https://acme.example").replace("marketplace/acme", "marketplace/link-whisper") })
+  const before = snapshot(dir)
+  const rows = [row("acme-new", { name: "Acme New", link_webpage: "https://acme.example" })]
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows) })
+  const acme = entries.find((e) => e.affitor_slug === "acme-new")!
+  assert.equal(acme.action, "skip")
+  assert.match(acme.reason, /^on the skip list \(data\/affitor-sync-skip\.json\): /)
+  assert.deepEqual(written, [])
+  assert.deepEqual(snapshot(dir), before)
+})
+
+/** The files of the pull request one run would open, with each modified file's base version. */
+async function pullRequestFiles(dir: string, rows: AffitorProgram[], today: string) {
+  const before = snapshot(dir)
+  const { written } = await run({ args: [], programsDir: dir, today, fetchJson: api(rows) })
+  return written.map((path) => {
+    const file = basename(path)
+    const content = readFileSync(path, "utf8")
+    return file in before
+      ? { filename: `programs/${file}`, status: "modified", content, baseContent: before[file] }
+      : { filename: `programs/${file}`, status: "added", content }
+  })
+}
+
+test("the affitor-sync merge lane accepts what the sync writes, and only while the API agrees", async () => {
+  // The lane re-derives every sync-owned field in CommonJS. Running it on
+  // this script's own output is what keeps the two mappings from drifting.
+  const policy = requireCjs("../.github/scripts/auto-merge-policy.cjs")
+  const repo = { full_name: "Affitor/open-affiliate" }
+  const pullRequest = {
+    user: { login: policy.AFFITOR_SYNC.bot, type: "Bot" },
+    labels: [{ name: policy.AFFITOR_SYNC.label }],
+    base: { ref: "main", repo },
+    head: { ref: `sync/affitor-${TODAY}`, repo },
+    draft: false,
+  }
+  const lane = async (files: unknown[], rows: AffitorProgram[]) =>
+    policy.evaluateAffitorSyncPolicy({ pullRequest, files, fetchJson: api(rows) })
+
+  const rows = [
+    row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" }),
+    row("lifer", {
+      default_policy: { commission_type: "cps_lifetime", commission_rate: 50, duration_months: null },
+      cookie_window_days: null,
+      default_hold_period_days: 0,
+      payout_threshold: null,
+    }),
+    row("flat-fee", { default_policy: { commission_type: "cps_one_time", commission_fixed: 25 }, default_hold_period_days: 1 }),
+    row("one-month", { default_policy: { commission_type: "cps_recurring", commission_rate: 33.3, duration_months: 1 } }),
+  ]
+  const dir = dirWith({ "gone.yaml": `${GONE}source: affitor-api\n` })
+
+  // Day one: four listings created, one paused. The workflow opens the new
+  // listings as their own pull request, for a person; the pause auto-merges.
+  const created = await pullRequestFiles(dir, rows, TODAY)
+  assert.deepEqual(created.map((f) => `${f.status} ${f.filename}`).sort(), [
+    "added programs/citegraph.yaml",
+    "added programs/flat-fee.yaml",
+    "added programs/lifer.yaml",
+    "added programs/one-month.yaml",
+    "modified programs/gone.yaml",
+  ])
+  const newListings = await lane(created.filter((f) => f.status === "added"), rows)
+  assert.equal(newListings.eligible, false)
+  assert.deepEqual(newListings.newSlugs.sort(), ["citegraph", "flat-fee", "lifer", "one-month"])
+  assert.deepEqual(await lane(created.filter((f) => f.status === "modified"), rows), {
+    eligible: true,
+    reasons: [],
+    programCount: 1,
+    pauses: 1,
+    newSlugs: [],
+  })
+
+  // Day two: every term moved on Affitor. Each refresh is in the lane.
+  const moved = rows.map((r) => ({
+    ...r,
+    cookie_window_days: r.cookie_window_days == null ? 45 : null,
+    payout_threshold: r.payout_threshold == null ? 100 : null,
+    default_hold_period_days: 30,
+    default_policy: { ...r.default_policy, commission_rate: r.default_policy?.commission_rate ? 40 : null },
+  }))
+  const refreshed = await pullRequestFiles(dir, moved, "2026-11-30")
+  assert.equal(refreshed.length, 4)
+  assert.ok(refreshed.every((f) => f.status === "modified"))
+  assert.deepEqual(await lane(refreshed, moved), { eligible: true, reasons: [], programCount: 4, pauses: 0, newSlugs: [] })
+
+  // The same pull request after Affitor changed again: blocked, and why.
+  const verdict = await lane(refreshed, rows)
+  assert.equal(verdict.eligible, false)
+  assert.match(verdict.reasons.join("\n"), /commission\.rate is "40%", Affitor says "20%": programs\/citegraph\.yaml/)
 })

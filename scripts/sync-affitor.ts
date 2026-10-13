@@ -17,15 +17,20 @@
  *                   sync owns; never touch the hand-written fields.
  *   create          the brand is not on OA. Write a new listing.
  *   conflict        the brand is on OA with its own program somewhere else, the
- *                   marketplace slug now points at another website, or the
- *                   listing cannot be edited safely. Write nothing; the report
- *                   carries both sets of terms.
+ *                   marketplace slug now points at another website, the
+ *                   listing is linked to another Affitor program (listed or
+ *                   gone: a listing is never re-linked), or it cannot be
+ *                   edited safely. Write nothing; the report carries both
+ *                   sets of terms.
  *   slug-collision  an OA listing has the slug but another website, so it is a
  *                   different brand. Never touched.
  * Every match needs the same website (siteOf): a slug, a name or a shared host
  * alone never identifies a brand.
  *   skip            nothing usable to list: no commission, a malformed number,
- *                   no website, no description, or Affitor's own program.
+ *                   no website, no description, or Affitor's own program. Or
+ *                   the brand is on data/affitor-sync-skip.json, which a person
+ *                   keeps: checked first, and such a brand is never written,
+ *                   taken over or paused.
  * and one per OA listing:
  *   pause           network: affitor, gone from the list, and its detail
  *                   answers that the program does not exist.
@@ -40,17 +45,25 @@ import { readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { pathToFileURL } from "node:url"
 import { Document, Scalar, isAlias, isNode, isScalar, parseDocument, visit, type YAMLMap } from "yaml"
+// Shared with the affitor-sync lane of .github/scripts/auto-merge-policy.cjs,
+// which re-checks a sync pull request against the same API before merging it.
+import config from "./sync-affitor.config.json"
+// Brands a person decided the sync must never list, by OA or Affitor slug,
+// with the reason. Read by the merge lane too.
+import skipList from "../data/affitor-sync-skip.json"
 
-const LIST_URL = "https://api.affitor.com/api/marketplace/programs"
-const MARKETPLACE = "https://affitor.com/marketplace/"
+const LIST_URL = config.list_url
+const MARKETPLACE = config.marketplace
+const SKIP_FILE = "data/affitor-sync-skip.json"
 
 /**
  * A second guard behind the per-program evidence a pause needs: more
  * confirmed departures than this in one run is unusual enough that the run
  * stops and a person reads the report. Pausing more on purpose means
- * running with --only, a few at a time.
+ * running with --only, a few at a time. The merge lane holds a pull request
+ * to the same limit.
  */
-export const MAX_PAUSES = 3
+export const MAX_PAUSES: number = config.max_pauses
 
 /**
  * Hosting and link-in-bio services. Many brands share one of these hosts, so
@@ -613,7 +626,11 @@ interface Planned {
   listing?: Listing
 }
 
-function plan(list: AffitorProgram[], listings: Listing[], today: string): Planned[] {
+/** The skip list's slug among `slugs`, if any. */
+const onSkipList = (skip: Record<string, string>, ...slugs: (string | null | undefined)[]) =>
+  slugs.find((s): s is string => !!s && Object.hasOwn(skip, s))
+
+function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: Record<string, string>): Planned[] {
   const listed = new Set(list.map((p) => p.slug))
   const matched = new Set<string>()
   const claimed = new Map<string, string>() // OA file → Affitor slug taking it over
@@ -639,6 +656,15 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
     const match = linked ?? (site && bySlug?.site === site ? bySlug : undefined) ?? bySite
     if (match) matched.add(match.file)
 
+    // Before every other rule, and with no program attached: a skipped brand
+    // has no detail fetched, nothing written and nothing paused.
+    // match.linked: the Affitor program the matched listing is already linked to.
+    const skipped = onSkipList(skip, p.slug, slug, match?.slug, match?.linked)
+    if (skipped) {
+      out.push({ ...at("skip", `on the skip list (${SKIP_FILE}): ${skip[skipped]}`, match), program: undefined })
+      continue
+    }
+
     const terms = affitorTerms(p)
     if (typeof terms === "string") {
       out.push(at("skip", terms, match))
@@ -651,7 +677,9 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
 
     let planned: Planned
     if (match) {
-      const other = match.linked && match.linked !== p.slug && listed.has(match.linked) ? match.linked : null
+      // A listing linked to one Affitor program is never re-linked to another,
+      // listed or gone: a website is self-declared and proves no ownership.
+      const other = match.linked && match.linked !== p.slug ? match.linked : null
       const prior = claimed.get(match.file)
       // A take-over needs both identities, and equal: never null on either side.
       if (!site || match.site !== site) {
@@ -660,8 +688,12 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
             ? `marketplace slug now points at a different website: OA ${match.site}, Affitor ${site}`
             : `no website identity to confirm the brand: OA ${match.site ?? "none"}, Affitor ${site ?? "none"}`
         planned = at("conflict", why, match)
-      } else if (other) planned = at("conflict", `already listed from Affitor program ${other}`, match)
-      else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
+      } else if (other) {
+        const why = listed.has(other)
+          ? `already listed from Affitor program ${other}`
+          : `linked to Affitor program ${other}, which left the list; a website match never re-links a listing`
+        planned = at("conflict", why, match)
+      } else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
       else if (!pointsAtAffitor(match)) {
         planned = at("conflict", `OA lists ${match.site}'s own program at ${String(match.data.signup_url ?? match.data.url)}`, match)
         planned.entry.oa_terms = termsOf(match)
@@ -700,7 +732,11 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string): Plann
       file: `programs/${l.file}`,
       reason: `no longer listed on the Affitor marketplace as of ${today}`,
     }
-    if (!l.linked) {
+    const skipped = onSkipList(skip, l.slug, l.linked)
+    if (skipped) {
+      entry.action = "skip"
+      entry.reason = `on the skip list (${SKIP_FILE}): ${skip[skipped]}; not paused`
+    } else if (!l.linked) {
       entry.action = "conflict"
       entry.reason = "missing from the Affitor list, but its signup_url is no marketplace page to check; not paused"
     } else if (l.anchors) {
@@ -766,10 +802,13 @@ export interface RunOptions {
   today: string
   fetchJson: FetchJson
   log?: (line: string) => void
+  /** Slug → reason. Defaults to the committed data/affitor-sync-skip.json. */
+  skip?: Record<string, string>
 }
 
 export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: string[] }> {
   const log = o.log ?? (() => {})
+  const skip = o.skip ?? skipList
   const dryRun = o.args.includes("--dry-run")
   const only = flag(o.args, "--only")?.split(",").map((s) => s.trim()).filter(Boolean)
   const reportPath = flag(o.args, "--report")
@@ -782,10 +821,10 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
   // The list is discovery. Every term comes from each program's own detail:
   // load the detail of every program in scope, then plan again on those.
   const details = new Map<string, AffitorProgram>()
-  for (const { program } of plan(list, listings, o.today).filter(inScope)) {
+  for (const { program } of plan(list, listings, o.today, skip).filter(inScope)) {
     if (program) details.set(program.slug, await fetchDetail(o.fetchJson, program.slug))
   }
-  const chosen = plan(list.map((r) => details.get(r.slug) ?? r), listings, o.today).filter(inScope)
+  const chosen = plan(list.map((r) => details.get(r.slug) ?? r), listings, o.today, skip).filter(inScope)
   for (const { entry, program } of chosen) {
     if (!program) continue
     const detail = details.get(program.slug)
