@@ -13,6 +13,8 @@ import { test } from "node:test"
 import { parse } from "yaml"
 import { freshnessLine } from "../src/lib/best-lists"
 import { programs } from "../src/lib/programs"
+import registry from "../src/lib/registry.json"
+import { programMd } from "./generate-md"
 
 const root = join(__dirname, "..")
 
@@ -55,4 +57,31 @@ test("only live verified rows count, and only their dates", () => {
   ]
   assert.equal(freshnessLine(rows), "3 programs · 1 verified · last checked 2026-10-01")
   assert.equal(freshnessLine(rows.slice(1)), "2 programs · 0 verified")
+})
+
+type Entry = Parameters<typeof programMd>[0]
+
+// An unverified entry can carry last_verified_at (a check that confirmed
+// nothing); no surface may print that date as a verification date.
+test("an unverified program's .md shows no verification date", () => {
+  const base = (registry.programs as Entry[]).find((p) => !p.verified && (p.status ?? "active") === "active")
+  assert.ok(base, "no unverified live program to build the fixture from")
+  const md = programMd({ ...base, last_verified_at: "2026-10-12" })
+  assert.match(md, /Status: unverified/)
+  assert.doesNotMatch(md, /Last verified/)
+  assert.ok(!md.includes("2026-10-12"), "the unverified entry's date leaks into its .md")
+  const verified = programMd({ ...base, verified: true, last_verified_at: "2026-10-12" })
+  assert.match(verified, /Last verified: 2026-10-12/)
+})
+
+test("no generated unverified file or llms-full entry says Last verified", () => {
+  const dir = join(root, "public", "programs")
+  const files = readdirSync(dir).filter((f) => f.endsWith(".md"))
+  assert.ok(files.length > 0)
+  const unverified = files.map((f) => readFileSync(join(dir, f), "utf8")).filter((t) => t.includes("Status: unverified"))
+  assert.ok(unverified.length > 0)
+  for (const text of unverified) assert.doesNotMatch(text, /Last verified/)
+  for (const entry of readFileSync(join(root, "public", "llms-full.txt"), "utf8").split("\n---\n")) {
+    if (entry.includes("Status: unverified")) assert.doesNotMatch(entry, /Last verified/)
+  }
 })

@@ -279,8 +279,10 @@ function statusBlock(p: Program): string {
     ].join("\n")
   }
   return [
+    // No date: an unverified entry's last_verified_at is a check that confirmed
+    // nothing, and "Last verified: <date>" read as verification. The facts
+    // below carry UNCONFIRMED_NOTE.
     `Status: unverified`,
-    `Last verified: ${when}`,
     "",
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
