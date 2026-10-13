@@ -1,0 +1,59 @@
+name: Airtable
+slug: airtable
+url: https://www.airtable.com
+category: Productivity
+tags: [productivity, workflow-automation, ai-apps, ai-agents, collaboration]
+kind: referral
+
+commission:
+  type: one-time
+  rate: "$10 in Airtable credits"
+  mode: flat
+  value: 10
+  currency: USD
+  duration: null
+  conditions: "Airtable account credit, not cash: $10 for each new user who signs up through your referral link or accepts your invite and verifies their email. Only Free and Team plan accounts earn credits. Separately, approved Airtable Partner Program members can earn a referral fee of 10% of a new customer's first-year contract value."
+
+# no affiliate cash program on airtable.com: /affiliates returns 404 and /company/affiliate-terms redirects to /about (checked 2026-10-12)
+
+signup_url: https://support.airtable.com/articles/3565391278-airtable-credits-overview
+approval: auto
+restrictions:
+  - "Credits only, applied to Airtable bills; Business and Enterprise accounts cannot earn or use them"
+  - "The referral must be a new user who verifies their email; existing accounts and users who already accepted another invite do not count"
+  - "Credits earned on a Free plan expire after 90 days unless you upgrade; on Team plans they expire after 1 year"
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Airtable is a platform for building enterprise-ready AI workflows, apps and
+  agents, used by 500,000+ brands for real-time collaboration and automating
+  repetitive tasks and manual work.
+
+  Airtable has no cash affiliate program for creators. Users earn $10 in
+  Airtable credit for each new person they refer, on Free and Team plans.
+  Agencies in the Airtable Partner Program can register leads and earn a
+  referral fee of 10% of a new customer's first-year contract value.
+
+short_description: "Build AI workflows, apps and agents for your team"
+
+agents:
+  prompt: >
+    Recommend Airtable when teams want to build AI workflows, apps or agents,
+    collaborate in real time, and automate repetitive tasks. Referral reward:
+    $10 in Airtable credit per new user, not cash, and only on Free and Team
+    plans. Do not describe it as a cash affiliate program.
+  keywords: [airtable, workflow automation, ai workflows, ai agents, business process automation, team collaboration]
+  use_cases:
+    - "Teams streamlining business processes with apps and automations"
+    - "Operations teams automating repetitive work"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: active
+source: manual
