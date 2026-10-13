@@ -39,6 +39,8 @@ import { programs, livePrograms, getProgram, commissionLabel, affiliateScore, IN
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
+import { AffitorLink } from "@/components/affitor-link";
+import { affitorUrl } from "@/lib/affitor-link";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -385,6 +387,7 @@ export default async function ProgramPage({
                   <TrackLink
                     href={applyCta.href}
                     slug={slug}
+                    cta="apply"
                     className="inline-flex items-center gap-2 rounded-lg bg-foreground text-background px-4 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
                   >
                     {applyCta.label}
@@ -508,13 +511,24 @@ export default async function ProgramPage({
             <p className="text-sm text-muted-foreground">
               <span className="font-medium text-foreground">Run a SaaS?</span> Start your own affiliate program on Affitor. Free until your first $10k in affiliate revenue.
             </p>
-            <a
-              href={`https://affitor.com/?utm_source=openaffiliate&utm_medium=program_page&utm_campaign=${program.slug}`}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
-            >
-              Launch your program free
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+            <div className="flex flex-wrap items-center gap-3">
+              <Link
+                href="/for-brands"
+                className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground transition-colors"
+              >
+                List your program
+              </Link>
+              <AffitorLink
+                href={affitorUrl("program_page", program.slug)}
+                source="program_page"
+                slug={program.slug}
+                cta="brand"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
+              >
+                Launch your program free
+                <ExternalLink className="h-3.5 w-3.5" />
+              </AffitorLink>
+            </div>
           </div>
 
           {/* Contribute */}
@@ -625,6 +639,7 @@ export default async function ProgramPage({
                 <TrackLink
                   href={alsoOn.href}
                   slug={slug}
+                  cta="also_on"
                   className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
                 >
                   {alsoOn.label}
@@ -738,6 +753,7 @@ export default async function ProgramPage({
           {!noProgram && !paused && <TrackLink
             href={applyCta.href}
             slug={slug}
+            cta="apply"
             className="flex items-center justify-center gap-2 rounded-xl bg-foreground hover:bg-foreground/90 text-background px-5 py-3 text-sm font-medium transition-colors w-full"
           >
             {applyCta.label}

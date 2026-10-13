@@ -2,6 +2,7 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import type { CaptureResult } from "posthog-js"
 import { dropNoisyException } from "../src/lib/posthog-noise"
+import { AFFITOR_CLICK } from "../src/lib/affitor-link"
 
 function exception(value: string, filenames: string[]): CaptureResult {
   return {
@@ -53,4 +54,13 @@ test("does not touch pageviews", () => {
   }
   assert.equal(dropNoisyException(event), event)
   assert.equal(dropNoisyException(null), null)
+})
+
+test("keeps the OA → Affitor click event", () => {
+  const event: CaptureResult = {
+    uuid: "00000000-0000-4000-8000-000000000003",
+    event: AFFITOR_CLICK,
+    properties: { source: "program_page", slug: "kyma-api", cta: "apply" },
+  }
+  assert.equal(dropNoisyException(event), event)
 })
