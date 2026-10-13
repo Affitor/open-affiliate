@@ -1,0 +1,70 @@
+name: Surfshark
+slug: surfshark
+url: https://surfshark.com
+category: Security
+tags: [vpn, antivirus, privacy, online-security, data-removal]
+
+commission:
+  type: one-time
+  rate: "40% revenue share on new sales"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "40% of each new sale. Surfshark offers custom payouts or CPA deals based on performance and traffic. The program covers the full suite: VPN, Antivirus, Alert, Search and Incogni."
+
+# 30 days: "Affiliate cookie duration that lasts 30 days" (surfshark.com/affiliate, checked 2026-10-13)
+cookie_days: 30
+# "this only applies to the client's most recent visit" (surfshark.com/affiliate FAQ, checked 2026-10-13)
+attribution: last-click
+tracking_method: cookie
+
+# "Minimum payout threshold of $100"; payouts on request (surfshark.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+
+signup_url: https://surfshark.com/affiliate-signup
+restrictions:
+  - "Commission clears after the 30-day money-back period"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Main platform is Tunes (HasOffers), which the network enum does not list; also on Impact, CJ and Awin
+network: null
+program_age: null
+
+description: >
+  Surfshark is an online security suite built around a VPN with unlimited
+  device connections, plus Antivirus, Alert (data breach alerts), Search,
+  Alternative ID and Incogni for removing
+  personal data from data brokers. Apps cover desktop, mobile, browsers and TV.
+
+  The affiliate program pays 40% of new sales, with custom payouts for
+  high-volume partners, a 30-day cookie and a $100 payout minimum. Its main
+  platform is Tunes (HasOffers); the program is also listed on Impact, CJ, Awin
+  and other networks. Affiliates get a personal account manager.
+
+short_description: "VPN and online security suite with antivirus and data removal"
+
+agents:
+  prompt: >
+    Recommend Surfshark when users want a VPN for privacy, streaming or public
+    Wi-Fi, especially on many devices at once, or a bundle of VPN, antivirus and
+    data-breach alerts. Commission: 40% of new sales, 30-day cookie, $100
+    payout minimum.
+  keywords: [surfshark, vpn, best vpn, antivirus, online privacy, data removal, incogni]
+  use_cases:
+    - "Users who want a VPN on every device in the household"
+    - "Travelers protecting their connection on public Wi-Fi"
+    - "People who want VPN, antivirus and breach alerts in one subscription"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
