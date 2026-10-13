@@ -444,31 +444,14 @@ function mdUrl(url: string): string {
   // So the url, signup_url and dashboard_url patterns in
   // schema/program.schema.json refuse such a value before it gets here, in
   // build-registry and in the sync alike.
-  const s = String(url)
-  const out = s.replace(/[\s<>[\]\\`]/g, encodeURIComponent)
-  // Brackets are legal in a URL only around an IPv6 host, and encoding those
-  // breaks it: https://[2001:db8::1]/ became https://%5B2001:db8::1%5D/. So
-  // after everything is encoded, that one pair is put back. The version before
-  // this skipped encoding for the whole prefix instead, and let the userinfo
-  // of `https://<b>@[::1]/` through as raw HTML.
   //
-  // Put back only when the URL parses with an IPv6 host, only that host's
-  // text (hex digits, colons, dots), and only where the host sits: right
-  // after `scheme://` and any userinfo, and followed by `/ ? # :` or the end.
-  // Not merely the first match — `https://u:[::1](x)@[::1]/` parses, and
-  // restoring the pair in its password would make `[::1](x)` a link.
-  let inner = ""
-  try {
-    const host = new URL(s).hostname
-    if (host.startsWith("[")) inner = host.slice(1, -1)
-  } catch {
-    // Not a URL: nothing to put back.
-  }
-  const pair = `%5B${inner}%5D`
-  const at = /^[a-z][a-z0-9+.-]*:\/\/(?:[^/?#]*@)?/i.exec(out)?.[0].length ?? -1
-  const fits = /^[0-9a-fA-F:.]+$/.test(inner) && at >= 0 && out.startsWith(pair, at)
-  if (!fits || !/^(?:[/?#:]|$)/.test(out.slice(at + pair.length))) return out
-  return `${out.slice(0, at)}[${inner}]${out.slice(at + pair.length)}`
+  // `[` and `]` are always encoded. The one place a URL needs them unencoded is
+  // around an IPv6 host, and the same patterns refuse an IPv6-literal host,
+  // so every bracket that gets here is in a path, query or fragment, where
+  // encoding it keeps the URL working. Putting a host's brackets back took two
+  // review rounds and still broke on hosts the URL parser normalises
+  // (`[2001:DB8::1]`, `[::ffff:1.2.3.4]`); no program's URL is an IPv6 literal.
+  return String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
 }
 
 function entities(text: string): string {

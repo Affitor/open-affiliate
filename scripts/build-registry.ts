@@ -23,7 +23,8 @@ const SIGNUP_URL_DEBT = new Set<string>(
 
 /**
  * URL fields whose schema `pattern` refuses HTML character references
- * (`&amp;`, `&#38;`, `&#x26;`). Read from the schema, so this build (CI's
+ * (`&amp;`, `&#38;`, `&#x26;`) and a `[` or `]` in the host (an IPv6
+ * literal). Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
  */
@@ -132,13 +133,16 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // and Markdown renderers disagree on it: CommonMark shows `&amp;` as `&`,
   // while a GFM autolink keeps it and drops the `;` from the link. Refusing the
   // value is cheaper than rewriting every URL line of the Markdown twins.
+  // The same pattern refuses an IPv6-literal host: the twins percent-encode
+  // every bracket, which would break one, and no program's URL is one.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
     if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
       throw new Error(
-        `${filename}: ${field} contains an HTML character reference such as "&amp;". ` +
-          `Write the character itself ("&", not "&amp;"): "${value}"`
+        `${filename}: ${field} breaks one of two URL rules: no HTML character reference ` +
+          `(write "&", not "&amp;" or "&#38;"), and no IPv6 literal host (no "[" or "]" ` +
+          `before the path; use a domain name): "${value}"`
       )
     }
   }
