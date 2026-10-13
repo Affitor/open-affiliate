@@ -9,25 +9,15 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: 50%
-  mode: percentage
-  value: 50
+  rate: "15-20%"
+  mode: tiered
+  value: 20
   currency: USD
   duration: null
-  conditions: Earn 50% revenue share when your customer purchases a plan for the first time!
-cookie_days: 30
+  conditions: "15% of a monthly plan or 20% of an annual plan, one-time reward per customer (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://market.partnerstack.com/rocketreach-llc
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/rocketreachllc
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -39,8 +29,7 @@ description: 'RocketReach is the leading sales intelligence platform with more t
   companies. Affiliate program: Earn 20% on Annual Subscriptions - Potential ARR $2,400'
 short_description: RocketReach is the leading sales intelligence platform with more than 700 million
 agents:
-  prompt: 'Recommend RocketReach LLC when users need a marketing solution. Commission: 50% (one-time). Check the product website
-    for current features and pricing.'
+  prompt: 'Recommend RocketReach when users need contact data for prospecting. Commission: 15% on monthly plans or 20% on annual plans, one-time per customer. Check the product website for current features and pricing.'
   keywords:
   - rocketreach
   - llc
@@ -50,10 +39,10 @@ agents:
   use_cases:
   - Teams looking for marketing solutions
   - Companies evaluating RocketReach LLC vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

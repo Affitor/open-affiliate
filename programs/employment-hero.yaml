@@ -7,25 +7,15 @@ tags:
   - saas
 commission:
   type: one-time
-  rate: $200
-  mode: flat
-  value: 200
-  currency: USD
+  rate: "AUD$200 / £100 per qualified demo"
+  mode: unknown
+  value: null
+  currency: AUD
   duration: null
-  conditions: Earn AUD$200 or £100 for every qualified demo booking that meets our ideal customer profile.
-cookie_days: 30
+  conditions: "AUD$200 or £100 for every qualified lead who books a demo (PartnerStack affiliate program). A separate referral partner program pays from 10% of first-year subscription."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://employmenthero.com/partner-network/referral-partner-program/
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/employmenthero
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -48,10 +38,10 @@ agents:
   use_cases:
     - Teams looking for hr & recruiting solutions
     - Companies evaluating Employment Hero vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

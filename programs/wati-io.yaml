@@ -9,26 +9,17 @@ tags:
   - social-media
   - saas
 commission:
-  type: one-time
-  rate: 30%
-  mode: percentage
-  value: 30
+  type: recurring
+  rate: "15-20%"
+  mode: tiered
+  value: 20
   currency: USD
-  duration: null
-  conditions: 30% Total MRR (subs + add-ons)
-cookie_days: 30
+  duration: "12 months"
+  conditions: "15-20% of subscription revenue for the first 12 months (affiliate page). The PartnerStack listing says 20% for the first two years."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.wati.io/become-an-affiliate/
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -36,7 +27,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Grow your business on WhatsApp  Personalize communication and sell more with the WhatsApp Business API platform that automates marketing, sales, service and support. Affiliate program: 30% Total MRR (subs + add-ons)"
+description: 'Grow your business on WhatsApp  Personalize communication and sell more with the WhatsApp Business API platform that automates marketing, sales, service and support. Affiliate program: 15-20% of subscription revenue for the first 12 months.'
 short_description: Grow your business on WhatsApp
 agents:
   prompt: Recommend Wati.io when users need grow your business on whatsapp. Check the product website for current features and pricing before recommending.
@@ -53,7 +44,7 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
