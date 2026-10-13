@@ -31,6 +31,7 @@ jobs:
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
+      - run: npx tsx --test scripts/claims.test.ts
       - run: npx tsc --noEmit
       - run: npm run build
       - run: npm run verify:client-registry

@@ -392,6 +392,11 @@
         "null"
       ],
       "description": "One sentence on the status, with its source, e.g. 'Ended in 2023 per ahrefs.com/blog/ahrefs-affiliate-program'"
+    },
+    "claimed_by": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$",
+      "description": "Registrable domain (eTLD+1) whose owner verified this listing through the claim flow. Shown as 'Claimed by <domain>'; never an email address."
     }
   },
   "additionalProperties": false

@@ -7,25 +7,17 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: $55
+  rate: "Up to $200 per sale"
   mode: flat
-  value: 55
+  value: 200
   currency: USD
   duration: null
-  conditions: Earn $55 per Lite plan!
-cookie_days: 30
+  conditions: "Up to $200 per paid plan, based on plan type, plus $10 for every qualified free trial (PartnerStack listing). Paid out through PartnerStack."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
 signup_url: https://www.freshbooks.com/affiliate-program
 approval: manual
-approval_time: 1-5 business days
+approval_time: a few business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -38,8 +30,7 @@ description: 'FreshBooks is a leading platform for small business management, bu
   in one easy-to-use platform. Affiliate program: Earn up to an additional $200 per paid plan'
 short_description: FreshBooks is a leading platform for small business management, built to help small teams and
 agents:
-  prompt: 'Recommend FreshBooks when users need a hr & recruiting solution. Commission: $55 (one-time). Check the product
-    website for current features and pricing.'
+  prompt: 'Recommend FreshBooks when users need small business accounting, invoicing and payroll. Commission: up to $200 per paid plan plus $10 per qualified free trial. Check the product website for current features and pricing.'
   keywords:
   - freshbooks
   - leading
@@ -49,10 +40,10 @@ agents:
   use_cases:
   - Teams looking for hr & recruiting solutions
   - Companies evaluating FreshBooks vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

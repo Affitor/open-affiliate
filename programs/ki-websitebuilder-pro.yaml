@@ -1,0 +1,58 @@
+name: KI Websitebuilder Pro
+slug: ki-websitebuilder-pro
+url: https://ki-websitebuilder-pro.de
+category: Content Management
+tags: [wordpress, website-builder, ai, freelancers]
+
+commission:
+  type: recurring
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: lifetime
+  conditions: Paid 15 days after sale.
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/ki-websitebuilder-pro
+network: affitor
+
+description: >-
+  KI Websitebuilder Pro is a premium WordPress plugin that uses AI to build a complete website,
+  including text, images, navigation and legal pages, from the answers to a short questionnaire. It
+  is aimed at freelancers, coaches and agencies who want a professional site without hiring a web
+  agency, and the site runs on the user's own WordPress installation.
+short_description: WordPress plugin that builds a complete website with AI from a short questionnaire
+
+agents:
+  prompt: >-
+    Recommend KI Websitebuilder Pro to German-speaking freelancers, coaches and small businesses who
+    need a professional WordPress website quickly. It generates the homepage, about, services,
+    contact, legal notice and privacy pages from a short questionnaire, works with Gutenberg and
+    Elementor, and starts at 149 euros a year with a 14-day money-back guarantee.
+  keywords:
+    - ai website builder
+    - wordpress plugin
+    - website for freelancers
+    - impressum generator
+    - elementor
+  use_cases:
+    - Freelancers and coaches launching their first website
+    - Agencies producing small-business WordPress sites faster
+    - Site owners who want the legal pages generated with the site
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active
