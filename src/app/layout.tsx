@@ -150,6 +150,14 @@ function Footer() {
                   About &amp; Contact
                 </Link>
               </li>
+              <li>
+                <Link
+                  href="/methodology"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  Methodology
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -170,6 +178,9 @@ function Footer() {
           </div>
           <ThemeToggle />
         </div>
+        <p className="mt-4 text-xs text-muted-foreground/80">
+          Maintained by Affitor. Listings are free; rankings are never paid.
+        </p>
       </div>
     </footer>
   );
