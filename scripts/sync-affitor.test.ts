@@ -7,10 +7,12 @@ import { test } from "node:test"
 import { parse } from "yaml"
 import {
   MAX_PAUSES,
+  affitorNotFound,
   affitorTerms,
   brandName,
   checkReadBack,
   checkSchema,
+  httpJson,
   run,
   slugify,
   type AffitorProgram,
@@ -905,6 +907,57 @@ test("an also_on link to a program that left Affitor is removed, on the detail's
     ),
   )
   await assert.rejects(run({ args: [], programsDir: many, today: TODAY, fetchJson: api(others) }), /4 listings would be paused or unlinked/)
+})
+
+test("only Affitor's exact not-found body unlinks or pauses; an outage reported as success: false stops the run (Codex PR206 r1)", async () => {
+  // Measured 2026-10-13: HTTP 200 and exactly this body for a slug Affitor does not have.
+  const NOT_FOUND = { success: false, data: null, message: "Program not found" }
+  const TIMEOUT = { success: false, data: null, message: "Temporary database timeout", code: "SERVICE_UNAVAILABLE" }
+  const others = [row("still-here")]
+  const own = dirWith({ "landerlab.yaml": LINKED })
+  await run({ args: [], programsDir: own, today: TODAY, fetchJson: api([LANDER]) })
+  const linked = snapshot(own)
+  const FIVE_XX = Symbol("503")
+  const answering = (detail: unknown): FetchJson => async (url) => {
+    if (url.endsWith("/landerlab") || url.endsWith("/gone")) {
+      // What httpJson throws on a non-200.
+      if (detail === FIVE_XX) throw new Error(`${url} answered 503`)
+      return detail
+    }
+    return api(others)(url)
+  }
+  for (const [what, detail] of [
+    ["the outage payload", TIMEOUT],
+    ["a 5xx", FIVE_XX],
+    ["a malformed body", "<html>502 Bad Gateway</html>"],
+    ["not-found without its message", { success: false, data: null }],
+    ["another message", { success: false, data: null, message: "Program not found in cache" }],
+  ] as [string, unknown][]) {
+    await assert.rejects(run({ args: [], programsDir: own, today: "2026-11-30", fetchJson: answering(detail) }), /landerlab/, what)
+    assert.deepEqual(snapshot(own), linked, what)
+    // A pause rests on the same answer.
+    const paused = dirWith({ "gone.yaml": GONE })
+    await assert.rejects(run({ args: [], programsDir: paused, today: TODAY, fetchJson: answering(detail) }), /gone/, what)
+    assert.equal(readFileSync(join(paused, "gone.yaml"), "utf8"), GONE, what)
+  }
+  const { entries } = await run({ args: [], programsDir: own, today: "2026-11-30", fetchJson: answering(NOT_FOUND) })
+  assert.equal(entries.find((e) => e.oa_slug === "landerlab")?.action, "unlink")
+})
+
+test("the sync reads Affitor only on a 200, and the API's not-found body is a 200", async () => {
+  const real = globalThis.fetch
+  try {
+    for (const status of [503, 404, 204]) {
+      globalThis.fetch = async () => new Response(status === 204 ? null : "{}", { status })
+      await assert.rejects(httpJson(`${LIST}/landerlab`), new RegExp(`answered ${status}`))
+    }
+    globalThis.fetch = async () => new Response('{"success":false,"data":null,"message":"Program not found"}', { status: 200 })
+    assert.equal(affitorNotFound(await httpJson(`${LIST}/nope`)), true)
+    globalThis.fetch = async () => new Response("<html>oops</html>", { status: 200 })
+    await assert.rejects(httpJson(`${LIST}/nope`))
+  } finally {
+    globalThis.fetch = real
+  }
 })
 
 test("a listing linked to a skip-listed Affitor program stays out, whoever matches it (Codex r1 #4)", async () => {

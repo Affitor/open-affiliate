@@ -295,14 +295,39 @@ function isAffitorSyncPullRequest(pullRequest, config = AFFITOR_SYNC) {
   return pullRequest.user?.login === config.bot
 }
 
-/** The Affitor API, read like a program file: time-bounded, size-capped. */
+/**
+ * The Affitor API, read like a program file: time-bounded, size-capped, and
+ * only a 200 is read, since the API answers 200 whether a program exists or
+ * not (measured 2026-10-13). Any other status fails, 2xx included.
+ */
 async function fetchAffitorJson(url, options = {}) {
+  const fetchImpl = options.fetchImpl ?? globalThis.fetch
   return JSON.parse(
     await fetchProgramContent(url, {
       maxBytes: MAX_API_BYTES,
       accept: "application/json",
       ...options,
+      fetchImpl: async (...args) => {
+        const response = await fetchImpl(...args)
+        if (response.status !== 200) throw new Error(`HTTP ${response.status}`)
+        return response
+      },
     })
+  )
+}
+
+/**
+ * Affitor's answer for a slug it does not have, and nothing else: exactly
+ * config.not_found. Another message, a code or any extra key is no proof a
+ * program left. Mirrors affitorNotFound() in scripts/sync-affitor.ts.
+ */
+function affitorNotFound(body, config) {
+  const want = config.not_found
+  return (
+    isRecord(body) &&
+    isRecord(want) &&
+    Object.keys(body).length === Object.keys(want).length &&
+    Object.entries(want).every(([key, value]) => Object.hasOwn(body, key) && body[key] === value)
   )
 }
 
@@ -666,9 +691,8 @@ async function evaluateAffitorSyncPolicy({
 
     let allowed
     if (pause) {
-      // Same evidence the sync needs: gone from the list, and the detail's not-found shape.
-      const gone = isRecord(detail) && detail.success === false && detail.data === null
-      if (listed.has(slug) || !gone) {
+      // Same evidence the sync needs: gone from the list, and the detail's exact not-found body.
+      if (listed.has(slug) || !affitorNotFound(detail, config)) {
         reasons.push(`Affitor does not confirm ${slug} left the marketplace: ${name}`)
         continue
       }

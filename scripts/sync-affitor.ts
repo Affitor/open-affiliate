@@ -836,13 +836,29 @@ async function fetchDetail(fetchJson: FetchJson, slug: string): Promise<AffitorP
 }
 
 /**
- * Affitor's own answer on whether a program left: the not-found shape
- * measured live on 2026-10-12 ({success: false, data: null}), or a valid
- * detail showing it is still there. Any other answer stops the run.
+ * Affitor's answer for a slug it does not have, and nothing else: measured
+ * live on 2026-10-13, HTTP 200 with exactly config.not_found,
+ * {"success":false,"data":null,"message":"Program not found"}. Another
+ * message, a code or any extra key (an outage reported as success: false)
+ * is not proof a program left. The merge lane checks the same shape.
+ */
+export function affitorNotFound(body: unknown): boolean {
+  const want: Record<string, unknown> = config.not_found
+  return (
+    isRecord(body) &&
+    Object.keys(body).length === Object.keys(want).length &&
+    Object.entries(want).every(([key, value]) => Object.hasOwn(body, key) && body[key] === value)
+  )
+}
+
+/**
+ * Affitor's own answer on whether a program left: its exact not-found body
+ * (affitorNotFound), or a valid detail showing it is still there. Any other
+ * answer stops the run, so neither a pause nor an unlink rests on an error.
  */
 async function leftAffitor(fetchJson: FetchJson, slug: string): Promise<boolean> {
   const body = await fetchJson(`${LIST_URL}/${encodeURIComponent(slug)}`)
-  if (isRecord(body) && body.success === false && body.data === null) return true
+  if (affitorNotFound(body)) return true
   if (isRecord(body) && body.success === true && isRecord(body.data) && body.data.slug === slug) return false
   throw new Error(`the Affitor detail for ${slug} neither confirms it left nor shows it is still there`)
 }
@@ -999,9 +1015,10 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
   return { entries, written: dryRun ? [] : writes.map(([path]) => path) }
 }
 
-async function httpJson(url: string): Promise<unknown> {
+/** The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a program exists or not. */
+export async function httpJson(url: string): Promise<unknown> {
   const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) })
-  if (!res.ok) throw new Error(`${url} answered ${res.status}`)
+  if (res.status !== 200) throw new Error(`${url} answered ${res.status}`)
   return res.json()
 }
 

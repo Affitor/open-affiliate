@@ -787,6 +787,34 @@ test("affitor-sync: on a brand's own listing, only the commission under also_on.
   assert.match(added.reasons.join("\n"), /changes also_on\.affitor\.url, which the sync does not own/)
 })
 
+test("affitor-sync: only Affitor's exact not-found body confirms an unlink or a pause (Codex PR206 r1)", async () => {
+  // Measured 2026-10-13: HTTP 200 and exactly this body for a slug Affitor does not have.
+  const NOT_FOUND = { success: false, data: null, message: "Program not found" }
+  const unlink = modified("lander", ownYaml("lander", { rate: 20 }), ownYaml("lander", { linked: false, date: "2026-10-13" }))
+  const listed = [affitorProgram("alpha")]
+  for (const [what, detail, reason] of [
+    [
+      "the outage payload",
+      { success: false, data: null, message: "Temporary database timeout", code: "SERVICE_UNAVAILABLE" },
+      /Affitor does not confirm (lander|gone) left the marketplace/,
+    ],
+    ["a 5xx", new Error("HTTP 503"), /could not read Affitor's detail for (lander|gone) \(HTTP 503\)/],
+    ["a malformed body", "<html>502 Bad Gateway</html>", /Affitor does not confirm (lander|gone) left the marketplace/],
+    ["not-found without its message", { success: false, data: null }, /Affitor does not confirm (lander|gone) left the marketplace/],
+    ["another message", { success: false, data: null, message: "Program not found in cache" }, /Affitor does not confirm/],
+  ]) {
+    for (const file of [unlink, paused("gone")]) {
+      const result = await evaluateSync({ files: [file], fetchJson: affitorApi(listed, { details: { lander: detail, gone: detail } }) })
+      assert.equal(result.eligible, false, `${what}: ${file.filename}`)
+      assert.match(result.reasons.join("\n"), reason, `${what}: ${file.filename}`)
+    }
+  }
+  for (const file of [unlink, paused("gone")]) {
+    const result = await evaluateSync({ files: [file], fetchJson: affitorApi(listed, { details: { lander: NOT_FOUND, gone: NOT_FOUND } }) })
+    assert.equal(result.eligible, true, result.reasons.join("\n"))
+  }
+})
+
 test("merge gate: every required check passed on exactly this head, by the required app", () => {
   const SHA = "a".repeat(40)
   const required = [
@@ -867,5 +895,18 @@ test("reads the Affitor API as bounded JSON", async () => {
       maxBytes: 10,
     }),
     /exceeds 10 bytes/
+  )
+  // Only a 200 is read: the API answers 200 for found and not found alike.
+  for (const status of [503, 404, 204, 202]) {
+    await assert.rejects(
+      fetchAffitorJson("https://api.example/programs/x", {
+        fetchImpl: async () => new Response(status === 204 ? null : '{"success":false,"data":null,"message":"Program not found"}', { status }),
+      }),
+      new RegExp(`HTTP ${status}`)
+    )
+  }
+  await assert.rejects(
+    fetchAffitorJson("https://api.example/programs/x", { fetchImpl: async () => new Response("<html>oops</html>") }),
+    SyntaxError
   )
 })

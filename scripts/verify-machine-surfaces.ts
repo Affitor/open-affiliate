@@ -26,6 +26,7 @@ import { hasNoProgram } from "../src/lib/no-program";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
+import { programMd } from "./generate-md";
 import {
   commissionDisplay,
   categories,
@@ -705,19 +706,51 @@ for (const program of termsPages) {
 }
 // A brand on Affitor too (also_on.affitor): exactly one line in its twin's
 // terms, with the stored figure (none when Affitor publishes none) and the
-// marketplace link; no such line on any other twin.
-if (!termsPages.some((p) => p.alsoOn?.affitor)) fail("no program has also_on.affitor; the Also on Affitor checks would read nothing");
-for (const program of termsPages) {
-  const lines = requireText(join("programs", `${program.slug}.md`)).split("\n").filter((l) => l.startsWith("Also on Affitor"));
+// marketplace link; no such line on any other twin. The registry may hold no
+// link at all (the sync removes one when its program leaves Affitor), so the
+// fixture below, not the data, proves these checks read something.
+function alsoOnMdProblem(program: Program, md: string): string | null {
+  const lines = md.split("\n").filter((l) => l.startsWith("Also on Affitor"));
   const a = program.alsoOn?.affitor;
-  if (!a) {
-    if (lines.length) fail(`programs/${program.slug}.md shows "${lines[0]}" with no also_on`);
-    continue;
-  }
+  if (!a) return lines.length ? `shows "${lines[0]}" with no also_on` : null;
   const figure = a.commission && !commissionUnknown(a.commission) ? `: ${commissionDisplay(a.commission)} ` : ", ";
-  if (lines.length !== 1 || !lines[0].startsWith(`Also on Affitor${figure}`) || !lines[0].endsWith(`sign up: <${a.url}>`)) {
-    fail(`programs/${program.slug}.md does not show its Affitor line once, with ${figure.trim() || "no figure"} and ${a.url}: ${JSON.stringify(lines)}`);
+  if (lines.length === 1 && lines[0].startsWith(`Also on Affitor${figure}`) && lines[0].endsWith(`sign up: <${a.url}>`)) return null;
+  return `does not show its Affitor line once, with ${figure.trim() || "no figure"} and ${a.url}: ${JSON.stringify(lines)}`;
+}
+function alsoOnHtmlProblem(program: Program, html: string): string | null {
+  const also = alsoOnAffitor(program);
+  if (!also) return html.includes("Also on Affitor") ? "shows an Affitor line with no also_on" : null;
+  const shown = html.includes(`>${also.line}</p>`) && html.includes(`href="${also.href.replaceAll("&", "&amp;")}"`);
+  return shown ? null : `does not show "${also.line}" with its Affitor button`;
+}
+for (const program of termsPages) {
+  const problem = alsoOnMdProblem(program, requireText(join("programs", `${program.slug}.md`)));
+  if (problem) fail(`programs/${program.slug}.md ${problem}`);
+}
+// The fixture: a synthetic link on a real entry, rendered by generate-md's own
+// programMd, must pass; the same twin broken any way, or a line on a program
+// with no link, must fail.
+const ALSO_ON_URL = "https://affitor.com/marketplace/fixture";
+const ALSO_ON_COMMISSION = { type: "recurring", rate: "20%", mode: "percentage", value: 20, currency: "USD", duration: "12 months" } as const;
+const alsoOnBase = termsPages.find((p) => !p.alsoOn?.affitor)!;
+const alsoOnFixture: Program = { ...alsoOnBase, alsoOn: { affitor: { url: ALSO_ON_URL, commission: ALSO_ON_COMMISSION } } };
+{
+  const entry = (registryData.programs as unknown as Parameters<typeof programMd>[0][]).find((e) => e.slug === alsoOnBase.slug)!;
+  const linkedMd = programMd({ ...entry, also_on: { affitor: { url: ALSO_ON_URL, commission: ALSO_ON_COMMISSION } } });
+  const bareMd = programMd({ ...entry, also_on: { affitor: { url: ALSO_ON_URL } } });
+  const bare: Program = { ...alsoOnBase, alsoOn: { affitor: { url: ALSO_ON_URL } } };
+  if (alsoOnMdProblem(alsoOnFixture, linkedMd)) fail(`the Affitor line check refused the fixture's own twin: ${alsoOnMdProblem(alsoOnFixture, linkedMd)}`);
+  if (alsoOnMdProblem(bare, bareMd)) fail(`the Affitor line check refused the fixture's twin with no figure: ${alsoOnMdProblem(bare, bareMd)}`);
+  for (const [what, md] of [
+    ["no line", programMd(entry)],
+    ["another figure", linkedMd.replace(": 20% ", ": 25% ")],
+    ["another url", linkedMd.replace(ALSO_ON_URL, "https://affitor.com/marketplace/other")],
+    ["the line twice", linkedMd.replace(/^(Also on Affitor.*)$/m, "$1\n$1")],
+    ["no figure", bareMd],
+  ] as const) {
+    if (!alsoOnMdProblem(alsoOnFixture, md)) fail(`the Affitor line check passed a fixture twin with ${what}`);
   }
+  if (!alsoOnMdProblem(alsoOnBase, linkedMd)) fail("the Affitor line check passed a line on a program with no also_on");
 }
 // llms-full.txt is every live twin verbatim, so it holds when the twins do.
 for (const program of livePrograms) {
@@ -1263,11 +1296,9 @@ async function checkServedPages(): Promise<string> {
       const problems = termsHtmlProblems(program, html);
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
       // The Affitor line and its secondary button, only where also_on says so.
-      const also = alsoOnAffitor(program);
-      if (also ? !html.includes(`>${also.line}</p>`) || !html.includes(`href="${also.href.replaceAll("&", "&amp;")}"`) : html.includes("Also on Affitor")) {
-        fail(`${page} ${also ? `does not show "${also.line}" with its Affitor button` : "shows an Affitor line with no also_on"}`);
-      }
-      if (program === off || program === on || program === dropped.p) kept.set(program, html);
+      const also = alsoOnHtmlProblem(program, html);
+      if (also) fail(`${page} ${also}`);
+      if (program === off || program === on || program === dropped.p || program === alsoOnBase) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
@@ -1295,6 +1326,17 @@ async function checkServedPages(): Promise<string> {
     }
     if (termsHtmlProblems(on, onHtml.replaceAll(`>$${on.payout.minimum}</span>`, `>$${(on.payout.minimum ?? 0) + 1}</span>`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
+    }
+    // The also_on fixture on a served page: the page's markup for its line and
+    // button passes; a page without them, or that markup on a program with no
+    // link, fails. No real link is needed.
+    {
+      const baseHtml = kept.get(alsoOnBase)!;
+      const also = alsoOnAffitor(alsoOnFixture)!;
+      const markup = `<p class="text-xs text-muted-foreground">${also.line}</p><a href="${also.href.replaceAll("&", "&amp;")}" target="_blank">`;
+      if (alsoOnHtmlProblem(alsoOnFixture, baseHtml + markup)) fail("the page Affitor check refused the fixture's line and button");
+      if (!alsoOnHtmlProblem(alsoOnFixture, baseHtml)) fail("the page Affitor check passed a page missing the fixture's line");
+      if (!alsoOnHtmlProblem(alsoOnBase, baseHtml + markup)) fail("the page Affitor check passed an Affitor line on a program with no also_on");
     }
 
     // /compare as served: its props carry every program's comparable terms.
