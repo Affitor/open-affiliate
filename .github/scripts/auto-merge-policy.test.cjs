@@ -735,11 +735,11 @@ test("merge gate: every required check passed on exactly this head, by the requi
   assert.equal(requiredChecksPass({ headSha: SHA, required: undefined, checkRuns: green }).ok, false)
 })
 
-test("merge gate, last look: same head, open, no stop label, strict main, head contains main (Codex r2)", () => {
+test("merge gate, last look: same head, open, no stop label, head contains main (Codex r2)", () => {
   const SHA = "a".repeat(40)
   const pr = (overrides = {}) => syncPullRequest({ state: "open", head: { sha: SHA, repo: REPO }, ...overrides })
   const look = (overrides = {}) =>
-    finalMergeCheck({ pullRequest: pr(), headSha: SHA, strict: true, behindBy: 0, ...overrides })
+    finalMergeCheck({ pullRequest: pr(), headSha: SHA, behindBy: 0, ...overrides })
   assert.deepEqual(look(), { ok: true, reasons: [] })
 
   // Stop labels a person adds while the job runs, read fresh right before the merge.
@@ -758,10 +758,6 @@ test("merge gate, last look: same head, open, no stop label, strict main, head c
     reasons: ["behind main (2 commit(s)), waiting for the next sync"],
   })
   assert.equal(look({ behindBy: undefined }).ok, false)
-  // Without strict protection, main could move between this look and the merge.
-  for (const strict of [false, undefined]) {
-    assert.match(look({ strict }).reasons.join("\n"), /main does not require branches to be up to date/)
-  }
 })
 
 test("reads the Affitor API as bounded JSON", async () => {

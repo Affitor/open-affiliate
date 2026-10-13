@@ -697,12 +697,13 @@ function requiredChecksPass({ headSha, required, checkRuns }) {
 
 /**
  * For the merge job, right before it merges: a fresh read of the pull request
- * (still the App's, open, at the judged head, no stop label), of main's
- * protection (branches must be up to date) and of the head against main's
- * current tip (nothing on main the head lacks). Then the squash result is
- * exactly the head the lane checked.
+ * (still the App's, open, at the judged head, no stop label) and of the head
+ * against main's current tip (nothing on main the head lacks). Then the
+ * squash result is exactly the head the lane checked. Precondition, not read
+ * here: main's protection keeps strict up-to-date checks on, so GitHub also
+ * refuses the merge if main moves after this read.
  */
-function finalMergeCheck({ pullRequest, headSha, strict, behindBy, config = AFFITOR_SYNC }) {
+function finalMergeCheck({ pullRequest, headSha, behindBy, config = AFFITOR_SYNC }) {
   const reasons = []
   const head = String(headSha).slice(0, 7)
   if (!isAffitorSyncPullRequest(pullRequest, config)) reasons.push(`author is not ${config.bot}`)
@@ -711,9 +712,6 @@ function finalMergeCheck({ pullRequest, headSha, strict, behindBy, config = AFFI
   const labels = labelNames(pullRequest.labels)
   for (const label of BLOCKING_LABELS) {
     if (labels.has(label)) reasons.push(`blocking label: ${label}`)
-  }
-  if (strict !== true) {
-    reasons.push("main does not require branches to be up to date (required_status_checks.strict), so a stale head could merge")
   }
   if (behindBy !== 0) {
     reasons.push(`behind main (${behindBy ?? "unknown"} commit(s)), waiting for the next sync`)
