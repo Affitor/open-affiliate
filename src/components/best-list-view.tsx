@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight, BadgeCheck, Percent, Trophy, Users } from "lucid
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { networkName, IN_HOUSE } from "@/lib/programs";
+import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import {
   BEST_INDEX,
@@ -212,7 +212,7 @@ export function BestListView({
                   </td>
                   <td className="py-3 px-3 text-xs text-muted-foreground">{program.commission.duration ?? "—"}</td>
                   <td className="py-3 px-3 hidden sm:table-cell text-xs text-muted-foreground">
-                    {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+                    {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell text-xs text-muted-foreground">
                     {networkName(program.network ?? IN_HOUSE)}

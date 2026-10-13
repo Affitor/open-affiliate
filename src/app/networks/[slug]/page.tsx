@@ -22,6 +22,7 @@ import {
   IN_HOUSE,
   NETWORK_META,
   NETWORK_KIND_LABEL,
+  confirmedTerms,
   type Program,
 } from "@/lib/programs";
 
@@ -136,7 +137,11 @@ export default async function NetworkPage({
   const rates = priced.map((p) => parseCommissionRate(p.commission));
   const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
   const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const cookies = netPrograms.flatMap((p) => (p.cookieDays != null ? [p.cookieDays] : []));
+  // Verified cookie windows only: an unverified one is not shown (confirmed-terms.ts).
+  const cookies = netPrograms.flatMap((p) => {
+    const days = confirmedTerms(p).cookieDays;
+    return days != null ? [days] : [];
+  });
   const avgCookie = cookies.length > 0 ? cookies.reduce((s, d) => s + d, 0) / cookies.length : 0;
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
   const verifiedCount = netPrograms.filter((p) => p.verified).length;
@@ -241,9 +246,9 @@ export default async function NetworkPage({
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
             <Clock className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wide">Avg Cookie</span>
+            <span className="text-[10px] uppercase tracking-wide">Avg Cookie (verified)</span>
           </div>
-          <p className="text-2xl font-bold">{avgCookie.toFixed(0)}d</p>
+          <p className="text-2xl font-bold">{cookies.length > 0 ? `${avgCookie.toFixed(0)}d` : "—"}</p>
         </div>
       </div>
 
@@ -262,7 +267,7 @@ export default async function NetworkPage({
               </tr>
             </thead>
             <tbody>
-              {netPrograms.map((program, i) => (
+              {netPrograms.map(confirmedTerms).map((program, i) => (
                 <tr key={program.slug} className="border-t border-border/20 hover:bg-muted/20 transition-colors group">
                   <td className="py-3 px-3 text-center">
                     <span className={`text-xs font-medium ${i < 3 ? (i === 0 ? "text-amber-500" : i === 1 ? "text-zinc-400" : "text-orange-500") : "text-muted-foreground"}`}>

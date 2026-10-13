@@ -5,6 +5,7 @@ import {
   isCommissionFlat,
   formatCommissionDisplay,
   affiliateScore,
+  confirmedTerms,
   type Program,
 } from "./programs"
 
@@ -23,7 +24,8 @@ export interface Opportunity {
   category: string
   commission: string
   commissionType: string
-  cookieDays: number
+  /** Null when not published, or not shown because the program is unverified. */
+  cookieDays: number | null
   affiliateScore: number
   verifiedContent: number
   totalContent: number
@@ -153,7 +155,7 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
       category: program?.category ?? "Other",
       commission: program ? String(program.commission.rate) : "—",
       commissionType: program?.commission.type ?? "unknown",
-      cookieDays: program?.cookieDays ?? 0,
+      cookieDays: program ? (confirmedTerms(program).cookieDays ?? null) : null,
       affiliateScore: program ? affiliateScore(program) : 0,
       verifiedContent: verified,
       totalContent: data.scores.length,

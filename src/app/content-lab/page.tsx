@@ -14,6 +14,7 @@ import {
   TONES,
   MODELS,
 } from "@/lib/content-lab-types";
+import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 
 const MAX_PROGRAMS = 5;
 
@@ -23,7 +24,9 @@ interface ApiProgram {
   url: string;
   category: string;
   description: string;
-  cookieDays: number;
+  /** Left out by the API when not published, or when the program is unverified. */
+  cookieDays?: number;
+  verified: boolean;
   commission: {
     type: string;
     rate: string | number;
@@ -42,7 +45,7 @@ function toContentLabProgram(program: ApiProgram): Program {
     category: program.category,
     description: program.description,
     cookie_days: program.cookieDays,
-    commission: `${program.commission.rate} ${program.commission.type}${duration}`,
+    commission: `${program.commission.rate} ${program.commission.type}${duration}${termsConfirmed(program) ? "" : ` (${UNCONFIRMED.toLowerCase()})`}`,
   };
 }
 
@@ -348,8 +351,12 @@ export default function ContentLab() {
                       </p>
                       <div className="flex items-center gap-3 text-xs text-emerald-400">
                         <span>{p.commission}</span>
-                        <span className="text-white/20">|</span>
-                        <span>{p.cookie_days != null ? `${p.cookie_days}d cookie` : "Cookie not published"}</span>
+                        {p.cookie_days != null && (
+                          <>
+                            <span className="text-white/20">|</span>
+                            <span>{p.cookie_days}d cookie</span>
+                          </>
+                        )}
                       </div>
                     </button>
                   ))}

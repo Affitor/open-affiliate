@@ -55,6 +55,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton } from "../src/lib/apply-cta"
 
 const BASE = "https://openaffiliate.dev"
@@ -264,6 +265,7 @@ function statusBlock(p: Program): string {
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
     `on them: ${mdUrl(p.signup_url ?? p.url)}`,
+    ...(termsConfirmed(p) ? [] : ["", `The cookie window, payout and approval terms are left out until they are checked.`]),
   ].join("\n")
 }
 
@@ -290,16 +292,19 @@ function joinSections(parts: (string | null)[]): string {
 // ---------- Per-program page ------------------------------------------------
 
 function programMd(p: Program): string {
-  const payout = payoutLine(p)
+  // Unverified: commission marked, cookie window, payout and approval left out (confirmed-terms.ts).
+  const confirmed = termsConfirmed(p)
+  const payout = confirmed ? payoutLine(p) : null
   const facts = [
     `Commission: ${mdEscape(commissionLine(p.commission))}`,
+    confirmed ? null : UNCONFIRMED_NOTE,
     p.commission.conditions ? `Commission conditions: ${mdEscape(p.commission.conditions)}` : null,
-    p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
+    confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
     payout ? `Payout: ${mdEscape(payout)}` : null,
     p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
     p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
     `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
-    p.approval ? `Approval: ${mdEscape(p.approval)}${p.approval_time ? ` (${mdEscape(p.approval_time)})` : ""}` : null,
+    confirmed && p.approval ? `Approval: ${mdEscape(p.approval)}${p.approval_time ? ` (${mdEscape(p.approval_time)})` : ""}` : null,
     p.program_age ? `Program age: ${mdEscape(p.program_age)}` : null,
     `Category: ${mdEscape(p.category)}`,
   ].filter(Boolean).join("\n")
@@ -357,13 +362,13 @@ function noProgramAlternativesSection(p: Program): string | null {
 
 function row(p: Program): string {
   const mark = statusMark(p)
-  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  const cookie = termsConfirmed(p) && p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
   return `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${mark}`
 }
 
 /** As `row`, but with both free-text fields capped. See INLINE_NAME_MAX. */
 function indexRow(p: Program): string {
-  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  const cookie = termsConfirmed(p) && p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
   const terms = mdEscape(`${commissionLine(p.commission)}${cookie}`)
   return `- [${clamp(mdEscape(p.name), INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
 }
@@ -805,8 +810,9 @@ function llmsTxt(): string {
       ``,
       `${verified.length} of ${programCount(livePrograms.length)} (${((verified.length / livePrograms.length) * 100).toFixed(1)}%)`,
       `have been verified by OpenAffiliate. The rest are community-submitted and`,
-      `unconfirmed: the commission rate, cookie window and payout terms come from`,
-      `the submitter and have not been checked against the program page.`,
+      `unconfirmed: the commission rate comes from the submitter and has not been`,
+      `checked against the program page, and their cookie window, payout and`,
+      `approval terms are left out until it is.`,
       ``,
       `Every program file states its own status and verification date at the top.`,
       `Prefer verified entries when accuracy matters, and cite the program's`,
@@ -1014,7 +1020,7 @@ function bestListMd(list: BestList, path: string): string {
   const { intro, faq } = bestListCopy(data, mdEscape)
   const rows = data.rows
     .map((p, i) => {
-      const cookie = p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
+      const cookie = termsConfirmed(p) && p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
       // A referral reward keeps its published wording, as the page does.
       const terms =
         p.kind === "referral"

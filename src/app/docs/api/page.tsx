@@ -70,6 +70,9 @@ export default function APIPage() {
           <h2 id="example" className="text-lg font-semibold mb-3">Example</h2>
           <p className="text-sm text-muted-foreground mb-3">
             <code>cookieDays</code> and the <code>payout</code> fields are left out when a program does not publish them.
+            For a program with <code>verified</code> <code>false</code>, <code>cookieDays</code>, <code>approval</code>,{" "}
+            <code>approvalTime</code> and <code>payoutMethods</code> are left out and <code>payout</code> is an empty object
+            until its terms are checked against the program&apos;s own page; its <code>commission</code> is returned but unconfirmed.
             Programs with <code>status</code> <code>paused</code>, <code>discontinued</code> or <code>no_program</code> are returned by slug but not in search results or category counts.
           </p>
           <CodeBlock

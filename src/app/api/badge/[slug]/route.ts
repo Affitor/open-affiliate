@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { parse as parseYaml } from "yaml"
 import { computeScoreV1, type ScoreInput } from "@openaffiliate/scoring"
+import { termsConfirmed } from "@/lib/confirmed-terms"
 
 /**
  * The subset of a program YAML this route reads. `ScoreInput` already
@@ -182,7 +183,7 @@ function renderBadge(args: RenderArgs): string {
     ? `${args.score.total.toFixed(0)} · ${args.score.tier}`
     : args.variant === "commission"
     ? (args.program.commission?.rate ?? "unknown").toString()
-    : args.program.cookie_days ? `${args.program.cookie_days}d` : "—"
+    : termsConfirmed(args.program) && args.program.cookie_days ? `${args.program.cookie_days}d` : "—"
 
   if (args.style === "card") return renderCard(args, label, value)
   return renderPill(args, label, value)
@@ -298,7 +299,8 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
 
   // Commission + cookie formatted in a conversational way
   const commission = formatCommission(args.program.commission)
-  const cookie = args.program.cookie_days ? `${args.program.cookie_days}-day cookie` : null
+  // The score above still reads the stored cookie window; the text shows it only once verified.
+  const cookie = termsConfirmed(args.program) && args.program.cookie_days ? `${args.program.cookie_days}-day cookie` : null
   const metaLine = [commission, cookie].filter(Boolean).join("  ·  ")
 
   // Ring geometry

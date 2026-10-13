@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { searchPrograms, type SortOption } from "@/lib/programs"
+import { confirmedTerms, searchPrograms, type SortOption } from "@/lib/programs"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -46,7 +46,8 @@ export function GET(request: NextRequest) {
 
   return NextResponse.json(
     {
-      programs: results,
+      // Unverified programs leave out their cookie window, payout and approval.
+      programs: results.map(confirmedTerms),
       total,
       filters: {
         q: q || null,

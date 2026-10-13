@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, getProgram, isLive, type Program, commissionDisplay, networkName, IN_HOUSE } from "@/lib/programs";
+import { programs, getProgram, isLive, type Program, commissionDisplay, networkName, IN_HOUSE, confirmedTerms, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import { hasNoProgram, noProgramAnswer } from "@/lib/no-program";
 import { applyButton } from "@/lib/apply-cta";
 import { CopyButton } from "@/components/copy-button";
@@ -153,7 +153,8 @@ function CompareContent() {
     .filter((p): p is Program => p !== undefined);
   // A column of terms only for a live program. A slug from an old link that has
   // no program, or an unclear one, gets its answer above the table instead.
-  const selected = requested.filter(isLive);
+  // Unverified columns leave out cookie, payout and approval (confirmed-terms.ts).
+  const selected = requested.filter(isLive).map(confirmedTerms);
   const notLive = requested.filter((p) => !isLive(p));
 
   const syncUrl = (newSlugs: string[]) => {
@@ -348,6 +349,9 @@ function CompareContent() {
                         <span className="text-base font-semibold text-emerald-600 dark:text-emerald-400">
                           {commissionDisplay(p.commission)}
                         </span>
+                        {!termsConfirmed(p) && (
+                          <span className="block text-[10px] text-muted-foreground">{UNCONFIRMED}</span>
+                        )}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

@@ -2,6 +2,7 @@ import {
   affiliateScore,
   commissionDisplay,
   commissionLabel,
+  confirmedTerms,
   isLive,
   programs,
   type Program,
@@ -122,13 +123,15 @@ const NO_COMMISSION = {
 } as const
 
 /**
- * What GET /api/programs/{slug} and MCP get_program return. A live program is
- * returned as it is. A brand with no program keeps the response's shape, with
- * the neutral commission and an empty payout in place of its terms, and gains
- * the page's answer and its alternatives.
+ * What GET /api/programs/{slug} and MCP get_program return. Any other program
+ * is returned through confirmedTerms(): unverified, its cookie window,
+ * approval and payout methods are left out and payout is empty. A brand with
+ * no program keeps the response's shape, with the neutral commission and an
+ * empty payout in place of its terms, and gains the page's answer and its
+ * alternatives.
  */
 export function apiProgram(p: Program): Program | Record<string, unknown> {
-  if (!hasNoProgram(p)) return p
+  if (!hasNoProgram(p)) return confirmedTerms(p)
   const out: Record<string, unknown> = { ...p }
   for (const key of TERM_FIELDS) delete out[key]
   return {

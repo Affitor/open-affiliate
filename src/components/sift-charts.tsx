@@ -59,7 +59,7 @@ function OpportunityRow({ item }: { item: Opportunity }) {
           {item.commission}
         </span>
         <p className="text-[10px] text-muted-foreground">
-          {item.commissionType} &middot; {item.cookieDays}d cookie
+          {item.commissionType}{item.cookieDays != null && <> &middot; {item.cookieDays}d cookie</>}
         </p>
       </div>
     </Link>

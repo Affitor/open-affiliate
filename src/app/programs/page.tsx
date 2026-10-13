@@ -16,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { FilterSelect } from "@/components/filter-select";
+import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 import {
   programs,
   categories,
@@ -106,7 +107,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
+          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -156,7 +157,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+          {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
         </Badge>
         <span className="hidden lg:inline text-[11px] text-muted-foreground">
           {program.category}

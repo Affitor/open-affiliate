@@ -23,6 +23,8 @@ import {
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
+import { termsConfirmed } from "../src/lib/confirmed-terms";
+import { termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { applyButton } from "../src/lib/apply-cta";
 import {
   commissionDisplay,
@@ -686,6 +688,55 @@ function noAnswerStart(program: { lastVerifiedAt?: string | null }): string {
   return program.lastVerifiedAt ? `No (checked ${program.lastVerifiedAt}).` : "No.";
 }
 
+/**
+ * An unverified program shows no cookie window, payout or approval, and its
+ * commission is marked unconfirmed; a verified one shows all three
+ * (src/lib/confirmed-terms.ts). Every program with a terms page is checked:
+ * its .md twin here, its HTML page and the API in checkServedPages below.
+ */
+const termsPages = programs.filter((p) => !hasNoProgram(p));
+const unconfirmedCount = termsPages.filter((p) => !termsConfirmed(p)).length;
+if (unconfirmedCount === 0 || unconfirmedCount === termsPages.length) {
+  fail(`${unconfirmedCount} of ${termsPages.length} programs are unverified; the terms checks need both kinds to mean anything`);
+}
+for (const program of termsPages) {
+  const problems = termsMdProblems(program, requireText(join("programs", `${program.slug}.md`)));
+  if (problems.length) fail(`programs/${program.slug}.md ${problems.join("; ")}`);
+}
+// llms-full.txt is every live twin verbatim, so it holds when the twins do.
+for (const program of livePrograms) {
+  if (!llmsFull.includes(requireText(join("programs", `${program.slug}.md`)))) {
+    fail(`llms-full.txt does not carry programs/${program.slug}.md verbatim`);
+  }
+}
+// A row naming an unverified program, in any index or list twin, gives no cookie window.
+const unconfirmedSlugs = new Set(termsPages.filter((p) => !termsConfirmed(p)).map((p) => p.slug));
+function unconfirmedCookieRow(line: string): string | null {
+  const slug = /\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\)/.exec(line)?.[1];
+  return slug && unconfirmedSlugs.has(slug) && /\b\d+d cookie\b/.test(line) ? slug : null;
+}
+for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
+  if (!file.endsWith(".md") && !/(^|\/)llms[^/]*\.txt$/.test(file)) continue;
+  for (const line of readFileSync(join(PUBLIC, file), "utf8").split("\n")) {
+    const slug = unconfirmedCookieRow(line);
+    if (slug) fail(`public/${file} gives a cookie window for unverified ${slug}: ${line}`);
+  }
+}
+// Non-vacuity: each md check must fail on a twin that breaks the rule.
+{
+  const off = termsPages.find((p) => !termsConfirmed(p) && p.cookieDays != null)!;
+  const offMd = requireText(join("programs", `${off.slug}.md`));
+  const leaked = offMd.replace(/^(Commission: .*)$/m, `$1\nCookie window: ${off.cookieDays} days`);
+  if (termsMdProblems(off, leaked).length === 0) fail("the .md terms check passed a twin showing an unverified cookie window");
+  const on = termsPages.find((p) => termsConfirmed(p) && p.cookieDays != null)!;
+  const onMd = requireText(join("programs", `${on.slug}.md`));
+  if (termsMdProblems(on, onMd.replace(/^Cookie window: .*\n/m, "")).length === 0) {
+    fail("the .md terms check passed a verified twin with its cookie window removed");
+  }
+  const row = `- [${off.name}](${BASE_URL}/programs/${off.slug}.md) — 20% recurring, ${off.cookieDays}d cookie (unverified, terms unconfirmed)`;
+  if (unconfirmedCookieRow(row) !== off.slug) fail("the index row check passed an unverified row with a cookie window");
+}
+
 const robotsText = JSON.stringify(robots());
 for (const userAgent of [
   "OAI-SearchBot",
@@ -1063,7 +1114,21 @@ async function checkAliasRedirects(base: string): Promise<number> {
   return aliases.length;
 }
 
-async function checkNoProgramPages(): Promise<number> {
+/** Fetches each path with a few requests in flight; a dynamic page renders per request. */
+async function fetchAll(base: string, paths: string[], each: (path: string, body: string) => void): Promise<void> {
+  const queue = [...paths];
+  await Promise.all(
+    Array.from({ length: 8 }, async () => {
+      for (let path = queue.shift(); path; path = queue.shift()) {
+        const res = await fetch(`${base}${path}`);
+        if (res.status !== 200) fail(`${path} answered ${res.status}`);
+        each(path, await res.text());
+      }
+    })
+  );
+}
+
+async function checkServedPages(): Promise<string> {
   const port = await new Promise<number>((resolve, reject) => {
     const probe = createServer();
     probe.once("error", reject);
@@ -1084,7 +1149,7 @@ async function checkNoProgramPages(): Promise<number> {
   });
   try {
     for (let waited = 0; ; waited += 250) {
-      if (exited) fail("next start exited before serving; the no-program page checks need `npm run build` first");
+      if (exited) fail("next start exited before serving; the served page checks need `npm run build` first");
       if (waited > 30_000) fail("next start did not answer within 30 seconds");
       if (await fetch(`${base}/robots.txt`).then((r) => r.ok, () => false)) break;
       await new Promise((resolve) => setTimeout(resolve, 250));
@@ -1097,14 +1162,57 @@ async function checkNoProgramPages(): Promise<number> {
     }
     const probed = await checkAliasRedirects(base);
     console.log(`[machine-surfaces] verified ${probed} aliases (page, .md and API) as served by next start`);
+
+    // Terms pages: every program with terms, verified or not.
+    const storesAll = (p: Program) => (p.cookieDays ?? 0) > 0 && p.payout.minimum != null && Boolean(p.approval);
+    const off = termsPages.find((p) => !termsConfirmed(p) && storesAll(p));
+    const on = termsPages.find((p) => termsConfirmed(p) && storesAll(p));
+    if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
+    const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
+    const kept = new Map<Program, string>();
+    await fetchAll(base, [...bySlug.keys()], (page, html) => {
+      const program = bySlug.get(page)!;
+      const problems = termsHtmlProblems(program, html);
+      if (problems.length) fail(`${page} ${problems.join("; ")}`);
+      if (program === off || program === on) kept.set(program, html);
+    });
+    // Non-vacuity: the page check fails on a page that breaks the rule either way.
+    const offHtml = kept.get(off)!;
+    for (const [leak, extra] of [
+      ["a cookie badge", `<div>${off.cookieDays}d cookie</div>`],
+      ["a minimum payout row", `<span>Min payout</span><span>$${off.payout.minimum}</span>`],
+    ]) {
+      if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
+    }
+    if (termsHtmlProblems(on, kept.get(on)!.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
+      fail("the page terms check passed a verified page with its cookie badge removed");
+    }
+
+    // REST: the list and one program of each kind, as served.
+    const list = (await (await fetch(`${base}/api/programs`)).json()).programs as Record<string, unknown>[];
+    if (list.length !== livePrograms.length) fail(`/api/programs returned ${list.length} programs; ${livePrograms.length} are live`);
+    for (const row of list) {
+      const program = programs.find((p) => p.slug === row.slug)!;
+      const problems = termsApiProblems(program, row);
+      if (problems.length) fail(`/api/programs row ${program.slug} ${problems.join("; ")}`);
+    }
+    for (const program of [off, on]) {
+      const body = await (await fetch(`${base}/api/programs/${program.slug}`)).json();
+      const problems = termsApiProblems(program, body);
+      if (problems.length) fail(`/api/programs/${program.slug} ${problems.join("; ")}`);
+      const leaked = { ...body, cookieDays: program.cookieDays };
+      if (!termsConfirmed(program) && termsApiProblems(program, leaked).length === 0) {
+        fail("the API terms check passed an unverified program returning its cookieDays");
+      }
+    }
+    return `${noProgramPages.length} no-program pages, ${termsPages.length} program pages (${unconfirmedCount} unverified) and ${list.length} API rows`;
   } finally {
     server.kill();
   }
-  return noProgramPages.length;
 }
 
-checkNoProgramPages().then(
-  (count) => console.log(`[machine-surfaces] verified ${count} no-program pages as served by next start`),
+checkServedPages().then(
+  (summary) => console.log(`[machine-surfaces] verified ${summary} as served by next start`),
   (error) => {
     console.error(error);
     process.exit(1);

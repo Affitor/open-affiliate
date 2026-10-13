@@ -15,7 +15,8 @@ const link = "underline underline-offset-4";
 
 /**
  * Every sentence here describes what the code does today: verification and
- * labels from the program page and src/lib/program-seo.ts, brands with no
+ * labels from the program page, src/lib/program-seo.ts and
+ * src/lib/confirmed-terms.ts, brands with no
  * program from src/lib/no-program.ts, ranking from src/lib/best-lists.ts.
  * Change one of those and this page changes with it.
  */
@@ -55,9 +56,10 @@ export default function MethodologyPage() {
         What about unverified programs?
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        They are community-submitted. Their pages mark the commission and
-        cookie window as unconfirmed, and lists tag them &ldquo;not
-        verified&rdquo;. Check the brand&apos;s own terms before promoting one.
+        They are community-submitted. Their commission is marked unconfirmed,
+        and their cookie window, payout and approval are hidden everywhere
+        until checked. Lists tag them &ldquo;not verified&rdquo;. Check the
+        brand&apos;s own terms before promoting one.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">

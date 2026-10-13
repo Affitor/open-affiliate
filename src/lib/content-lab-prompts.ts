@@ -193,7 +193,7 @@ ${affiliateInstruction}${templateInstruction}`;
 Category: ${p.category}
 URL: ${p.url}
 Commission: ${p.commission}
-Cookie Duration: ${p.cookie_days != null ? `${p.cookie_days} days` : "not published"}
+${p.cookie_days != null ? `Cookie Duration: ${p.cookie_days} days` : ""}
 Description: ${p.description}
 ${p.features ? `Key Features: ${p.features.join(", ")}` : ""}
 ${p.pros ? `Pros: ${p.pros.join(", ")}` : ""}

@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
-import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
+import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel, confirmedTerms, termsConfirmed, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
@@ -140,10 +140,14 @@ export default async function ProgramPage({
   const unverified = isUnverified(program);
   const network = networkName(program);
   const applyCta = applyButton(program);
-  // Unverified: badges carry the listed figures but say they are not confirmed.
+  // Unverified: the commission badge says it is not confirmed.
   const unconfirmed = unverified ? " (unconfirmed)" : "";
+  // Cookie window, payout and approval as a reader may see them: left out
+  // until the terms are verified (confirmed-terms.ts). The score reads `program`.
+  const confirmed = termsConfirmed(program);
+  const terms = confirmedTerms(program);
   const cookieText =
-    program.cookieDays == null ? "Cookie not published" : program.cookieDays === 0 ? "Code-based, no cookie" : `${program.cookieDays}d cookie`;
+    terms.cookieDays == null ? "Cookie not published" : terms.cookieDays === 0 ? "Code-based, no cookie" : `${terms.cookieDays}d cookie`;
   const trustLine = noProgram
     ? `Status checked${program.lastVerifiedAt ? ` ${program.lastVerifiedAt}` : ""}`
     : paused
@@ -188,7 +192,7 @@ export default async function ProgramPage({
     },
   } as const;
 
-  const approvalKey = program.approval as keyof typeof approvalConfig | undefined;
+  const approvalKey = terms.approval as keyof typeof approvalConfig | undefined;
   const approvalInfo = approvalKey ? approvalConfig[approvalKey] : null;
 
   const mcpHttp = `{
@@ -297,10 +301,12 @@ export default async function ProgramPage({
           icon={<DollarSign className="h-3 w-3" />}
           label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}${unconfirmed}`}
         />
-        <StatBadge
-          icon={<Clock className="h-3 w-3" />}
-          label={`${cookieText}${program.cookieDays == null ? "" : unconfirmed}`}
-        />
+        {confirmed && (
+          <StatBadge
+            icon={<Clock className="h-3 w-3" />}
+            label={`${cookieText}${terms.cookieDays == null ? "" : unconfirmed}`}
+          />
+        )}
         {program.network && (
           <StatBadge
             icon={<Network className="h-3 w-3" />}
@@ -368,7 +374,7 @@ export default async function ProgramPage({
           </Suspense>
 
           {/* How to Join */}
-          {!noProgram && !paused && (program.signupUrl ?? program.approval ?? program.approvalTime) && (
+          {!noProgram && !paused && (program.signupUrl ?? terms.approval ?? terms.approvalTime) && (
             <div>
               <h2 className="text-base font-semibold mb-3">How to Join</h2>
               <div className="rounded-xl border border-border/50 bg-card/30 p-5 space-y-4">
@@ -396,14 +402,14 @@ export default async function ProgramPage({
                       </div>
                     </div>
                   )}
-                  {program.approvalTime && (
+                  {terms.approvalTime && (
                     <div className="flex items-center gap-2">
                       <Clock className="h-3.5 w-3.5 text-muted-foreground" />
                       <div>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
                           Approval time
                         </p>
-                        <p className="text-sm font-medium">{program.approvalTime}</p>
+                        <p className="text-sm font-medium">{terms.approvalTime}</p>
                       </div>
                     </div>
                   )}
@@ -540,6 +546,9 @@ export default async function ProgramPage({
               icon={<DollarSign className="h-3 w-3" />}
               value={<>{commissionDisplay(program.commission)} <span className="text-xs text-muted-foreground font-normal">{commissionLabel(program.commission)}</span></>}
             />
+            {!confirmed && (
+              <p className="text-[11px] text-muted-foreground leading-relaxed">{UNCONFIRMED_NOTE}</p>
+            )}
 
             {program.commissionDuration && (
               <>
@@ -554,8 +563,12 @@ export default async function ProgramPage({
               </p>
             )}
 
-            <div className="h-px bg-border/50" />
-            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={program.cookieDays == null ? "Not published" : program.cookieDays === 0 ? "None (code-based)" : `${program.cookieDays} days`} />
+            {confirmed && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={terms.cookieDays == null ? "Not published" : terms.cookieDays === 0 ? "None (code-based)" : `${terms.cookieDays} days`} />
+              </>
+            )}
 
             {program.attribution && (
               <>
@@ -571,20 +584,20 @@ export default async function ProgramPage({
               </>
             )}
 
-            {program.payout.minimum != null && (
+            {terms.payout.minimum != null && (
               <>
                 <div className="h-px bg-border/50" />
-                <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
+                <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${terms.payout.minimum}`} />
               </>
             )}
-            {program.payout.frequency && (
+            {terms.payout.frequency && (
               <>
                 <div className="h-px bg-border/50" />
-                <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
+                <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{terms.payout.frequency}</span>} />
               </>
             )}
 
-            {program.payoutMethods && program.payoutMethods.length > 0 && (
+            {terms.payoutMethods && terms.payoutMethods.length > 0 && (
               <>
                 <div className="h-px bg-border/50" />
                 <div>
@@ -592,7 +605,7 @@ export default async function ProgramPage({
                     <CreditCard className="h-3 w-3" /> Payment methods
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {program.payoutMethods.map((method) => (
+                    {terms.payoutMethods.map((method) => (
                       <Badge key={method} variant="outline" className="text-[10px] capitalize">
                         {method}
                       </Badge>
