@@ -2,7 +2,15 @@ import { createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from 
 import { z } from "zod"
 import { parseCommissionMode } from "@/lib/commission-mode"
 import type { Program } from "@/lib/programs"
-import { PILOT_SLUGS, emailMatchesDomain, normalizeEmail, registrableDomain, unclaimableReason } from "./rules"
+import {
+  PILOT_SLUGS,
+  TURNSTILE_HOSTNAMES,
+  emailMatchesDomain,
+  normalizeEmail,
+  registrableDomain,
+  signupUrlAllowed,
+  unclaimableReason,
+} from "./rules"
 
 /**
  * Claim flow v1: prove you run a listing's domain (6-digit email code, or a
@@ -116,7 +124,17 @@ export interface ClaimStore {
   confirm(id: string, now: Date): Promise<"ok" | "gone" | "conflict">
   /** Ends the claim and forgets the owner's address. */
   release(id: string): Promise<void>
-  addEdit(edit: { claim_id: string; slug: string; fields: Record<string, unknown> }): Promise<void>
+  /**
+   * Queues an owner edit and its `terms.submitted` event, unless the claim
+   * already has `dailyLimit` edits in the last 24 hours or is no longer
+   * active. Quota check and both writes are one atomic step (migration 010:
+   * claim_submit_edit, under a per-claim row lock), so parallel submissions
+   * cannot pass the quota together.
+   */
+  submitEdit(
+    edit: { claim_id: string; slug: string; fields: Record<string, unknown> },
+    dailyLimit: number,
+  ): Promise<"ok" | "quota" | "not_owner">
   /** Unverified claims older than 30 days and events older than a year. */
   prune(now: Date): Promise<void>
   /** Program page events for the owner panel; null when unavailable (the panel hides it). */
@@ -133,12 +151,22 @@ export interface OutgoingEmail {
   idempotencyKey: string
 }
 
+export interface TurnstileResult {
+  success: boolean
+  hostname?: string
+  action?: string
+}
+
+/** One Turnstile action per step, so a token solved for one form cannot be spent on another. */
+export type TurnstileAction = "send-code" | "dns-start" | "manual"
+
 export interface ClaimDeps {
   store: ClaimStore
   secret: string
   now: () => Date
   getProgram: (slug: string) => ClaimProgram | undefined
-  verifyTurnstile: (token: string, ip: string) => Promise<boolean>
+  /** siteverify's answer, or null when it could not be reached. */
+  verifyTurnstile: (token: string, ip: string) => Promise<TurnstileResult | null>
   sendEmail: (mail: OutgoingEmail) => Promise<boolean>
   resolveTxt: (domain: string) => Promise<string[][]>
 }
@@ -261,13 +289,21 @@ async function readBody<T>(req: Request, schema: z.ZodType<T>): Promise<T | null
   return parsed.success ? parsed.data : null
 }
 
-/** null when the visitor passed Turnstile; otherwise the response to send. */
-async function turnstileFailure(req: Request, deps: ClaimDeps, token: string | undefined): Promise<Response | null> {
+/**
+ * null when the visitor passed Turnstile on our own site, for this step;
+ * otherwise the response to send.
+ */
+async function turnstileFailure(
+  req: Request,
+  deps: ClaimDeps,
+  token: string | undefined,
+  action: TurnstileAction,
+): Promise<Response | null> {
   if (!token) return fail(400, "turnstile_required", "Complete the check above the button.")
-  if (!(await deps.verifyTurnstile(token, clientIp(req)))) {
-    return fail(403, "turnstile_failed", "The check did not pass. Reload the page and try again.")
-  }
-  return null
+  const result = await deps.verifyTurnstile(token, clientIp(req))
+  const passed =
+    result?.success === true && TURNSTILE_HOSTNAMES.has(result.hostname ?? "") && result.action === action
+  return passed ? null : fail(403, "turnstile_failed", "The check did not pass. Reload the page and try again.")
 }
 
 type Identity = { slug: string; domain: string; email_hash: string; ip_hash: string }
@@ -387,7 +423,7 @@ async function sendCode(req: Request, deps: ClaimDeps): Promise<Response> {
   if (!emailMatchesDomain(email, target.domain)) {
     return fail(400, "domain_mismatch", `Use an email address at ${target.domain}, or verify with DNS.`)
   }
-  const turnstile = await turnstileFailure(req, deps, body.turnstileToken)
+  const turnstile = await turnstileFailure(req, deps, body.turnstileToken, "send-code")
   if (turnstile) return turnstile
 
   const who: Identity = {
@@ -467,7 +503,7 @@ async function startDns(req: Request, deps: ClaimDeps): Promise<Response> {
   // Any address works here: it is how we reach the owner, not the proof.
   const email = normalizeEmail(body.email)
   if (!email) return badEmail()
-  const turnstile = await turnstileFailure(req, deps, body.turnstileToken)
+  const turnstile = await turnstileFailure(req, deps, body.turnstileToken, "dns-start")
   if (turnstile) return turnstile
 
   const who: Identity = {
@@ -533,7 +569,7 @@ async function requestManual(req: Request, deps: ClaimDeps): Promise<Response> {
   if (!target) return notEnabled()
   const email = normalizeEmail(body.email)
   if (!email) return badEmail()
-  const turnstile = await turnstileFailure(req, deps, body.turnstileToken)
+  const turnstile = await turnstileFailure(req, deps, body.turnstileToken, "manual")
   if (turnstile) return turnstile
 
   const now = deps.now()
@@ -596,22 +632,23 @@ async function submitTerms(req: Request, deps: ClaimDeps): Promise<Response> {
   const owner = await ownerOf(req, deps, body.slug)
   if (!owner) return fail(401, "not_owner", "Verify that you run this listing first.")
   const { terms } = body
-  if (terms.signupUrl && !/^https:\/\/[^\s]+$/i.test(terms.signupUrl)) {
-    return fail(400, "bad_signup_url", "The signup link must start with https://.")
+  if (terms.signupUrl && !signupUrlAllowed(terms.signupUrl)) {
+    return fail(400, "bad_signup_url", "Use a full https:// link to your affiliate signup page.")
   }
-  const now = deps.now()
-  const recent = await deps.store.countEvents({ type: "terms.submitted", since: ago(now, DAY), claim_id: owner.claim.id })
-  if (recent >= LIMITS.editsPerClaimDay) return tooMany()
 
   const derived = parseCommissionMode(terms.rate)
   // A queue row for a person to review and turn into a YAML PR. Nothing here
   // writes to the registry.
-  await deps.store.addEdit({
-    claim_id: owner.claim.id,
-    slug: body.slug,
-    fields: { ...terms, mode: derived.mode, value: derived.value, flags: editFlags(owner.target.program, terms) },
-  })
-  await deps.store.addEvent({ type: "terms.submitted", claim_id: owner.claim.id, slug: body.slug, domain: owner.claim.domain })
+  const result = await deps.store.submitEdit(
+    {
+      claim_id: owner.claim.id,
+      slug: body.slug,
+      fields: { ...terms, mode: derived.mode, value: derived.value, flags: editFlags(owner.target.program, terms) },
+    },
+    LIMITS.editsPerClaimDay,
+  )
+  if (result === "not_owner") return fail(401, "not_owner", "Verify that you run this listing first.")
+  if (result === "quota") return tooMany()
   return reply(200, { ok: true })
 }
 

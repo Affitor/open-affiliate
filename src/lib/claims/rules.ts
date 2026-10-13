@@ -1,4 +1,5 @@
 import { parse } from "tldts"
+import programSchema from "../../../schema/program.schema.json"
 
 /**
  * Claim flow v1 is a pilot: these listings only. Widening it is a code change
@@ -105,6 +106,33 @@ export function emailMatchesDomain(email: string, domain: string): boolean {
   const normalized = normalizeEmail(email)
   if (!normalized) return false
   return normalized.slice(normalized.indexOf("@") + 1) === domain.toLowerCase()
+}
+
+/**
+ * Hostnames a Turnstile token may have been solved on. siteverify reports the
+ * hostname, and a token solved on any other site (or Cloudflare's test
+ * hostname) is refused.
+ */
+export const TURNSTILE_HOSTNAMES: ReadonlySet<string> = new Set(["openaffiliate.dev", "www.openaffiliate.dev"])
+
+/**
+ * The registry's own rule for `signup_url`, read from the schema so an owner
+ * edit can never carry a link the YAML would reject. The schema says
+ * `format: uri` and, where present, a `pattern` (ECMA-262, compiled the way
+ * JSON Schema validators do, with the u flag).
+ */
+const signupPattern = (programSchema.properties.signup_url as { pattern?: string }).pattern
+export const SIGNUP_URL_PATTERN: RegExp | null = signupPattern ? new RegExp(signupPattern, "u") : null
+
+/** Owner-submitted signup links: https only, a parseable absolute URI, and the schema's pattern. */
+export function signupUrlAllowed(url: string, pattern: RegExp | null = SIGNUP_URL_PATTERN): boolean {
+  if (!url.startsWith("https://")) return false
+  try {
+    new URL(url)
+  } catch {
+    return false
+  }
+  return pattern ? pattern.test(url) : true
 }
 
 /** True when this listing shows a claim button: pilot, claimable, and every secret set. */
