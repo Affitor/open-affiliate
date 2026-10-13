@@ -80,8 +80,19 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
     async release(id) {
       check(await claims().update({ status: "released", email: null }).eq("id", id))
     },
-    async addEdit(edit) {
-      check(await db.from("claim_edits").insert(edit))
+    async submitEdit(edit, dailyLimit) {
+      // Migration 010: lock the claim row, check the quota, insert the edit and
+      // its terms.submitted event, all in one transaction.
+      const { data } = check(
+        await db.rpc("claim_submit_edit", {
+          p_claim_id: edit.claim_id,
+          p_slug: edit.slug,
+          p_fields: edit.fields,
+          p_daily_limit: dailyLimit,
+        }),
+      )
+      if (data === "ok" || data === "quota" || data === "not_owner") return data
+      throw Object.assign(new Error("claim_submit_edit returned an unexpected value"), { code: "unexpected_result" })
     },
     // Same cutoffs as the daily pg_cron job in migration 009; this covers a
     // database where pg_cron is not enabled.
@@ -127,11 +138,15 @@ export function liveClaimDeps(
           body: form,
           signal: AbortSignal.timeout(5000),
         })
-        if (!res.ok) return false
-        const result = (await res.json()) as { success?: unknown }
-        return result.success === true
+        if (!res.ok) return null
+        const result = (await res.json()) as { success?: unknown; hostname?: unknown; action?: unknown }
+        return {
+          success: result.success === true,
+          hostname: typeof result.hostname === "string" ? result.hostname : undefined,
+          action: typeof result.action === "string" ? result.action : undefined,
+        }
       } catch {
-        return false
+        return null
       }
     },
     async sendEmail(mail) {
