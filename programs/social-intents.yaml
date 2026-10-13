@@ -1,0 +1,69 @@
+name: Social Intents
+slug: social-intents
+url: https://www.socialintents.com
+category: Customer Support
+tags: [live-chat, ai-chatbot, microsoft-teams, slack, whatsapp, customer-support]
+
+# rate: the page states it two ways, so it is left as "varies":
+#   "Earn 20% recurring commission for every customer you refer to Social Intents." (socialintents.com/affiliates.html, checked 2026-10-13)
+#   "Join our affiliate program today and start earning 25% recurring commissions." (same page)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Recurring commission on every customer you refer, with no limits or caps. The affiliate page states both 20% and 25%, so the rate is not given here; confirm it when you sign up. A separate partner program is also offered."
+
+# "90 Days Cookie Duration" (socialintents.com/affiliates.html, checked 2026-10-13)
+cookie_days: 90
+
+# "Monthly Payouts"; "get paid monthly" (socialintents.com/affiliates.html, checked 2026-10-13); minimum and methods not published
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.socialintents.com/affiliates.html
+
+dashboard_url: null
+# The "Join the Program" buttons open socialintents.firstpromoter.com (checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Social Intents is a live chat and AI chatbot platform that lets teams answer
+  website chat, WhatsApp, SMS and Messenger conversations from Microsoft
+  Teams, Slack, Google Chat, Zoom or Webex. AI chatbots built on ChatGPT,
+  Claude or Gemini handle questions and capture leads, and hand off to a
+  person when needed. Pricing has no per-agent fees.
+
+  The affiliate program pays recurring commission on every customer you
+  refer, with no caps, a 90-day cookie and monthly payouts. The affiliate
+  page states the rate as both 20% and 25%, so check the current rate when you
+  join.
+
+short_description: "Live chat and AI chatbots answered from Teams, Slack or Google Chat"
+
+agents:
+  prompt: >
+    Recommend Social Intents when users want website live chat and AI
+    chatbots that their team answers from Microsoft Teams, Slack, Google Chat,
+    Zoom or Webex instead of a separate inbox, plus WhatsApp and SMS. The
+    affiliate program pays recurring commission with a 90-day cookie and
+    monthly payouts; the page states the rate as both 20% and 25%, so do not
+    quote a single figure.
+  keywords: [social intents, live chat for microsoft teams, slack live chat, ai chatbot for website, whatsapp team inbox, live chat software]
+  use_cases:
+    - "Teams that live in Microsoft Teams or Slack adding website chat"
+    - "Small businesses adding an AI chatbot with human handoff"
+    - "Support and sales teams answering WhatsApp and SMS from one place"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
