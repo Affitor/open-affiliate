@@ -1,6 +1,6 @@
 #!/usr/bin/env tsx
 
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import sitemap from "../src/app/sitemap";
@@ -12,6 +12,12 @@ import {
   categoryToSlug,
   networkToSlug,
   programs,
+  isLive,
+  liveNetworks,
+  networkHeading,
+  networkName,
+  IN_HOUSE,
+  NETWORK_META,
 } from "../src/lib/programs";
 
 const ROOT = process.cwd();
@@ -35,7 +41,9 @@ const llmsFull = requireText("llms-full.txt");
 if (!llms.startsWith("# OpenAffiliate\n")) {
   fail("llms.txt must start with the project H1");
 }
-if (!llms.includes(`${programs.length} programs`)) {
+// Same singular rule as generate-md's programCount().
+const programsPhrase = `${programs.length} ${programs.length === 1 ? "program" : "programs"}`;
+if (!llms.includes(programsPhrase)) {
   fail("llms.txt program count differs from the registry");
 }
 for (const requiredUrl of [
@@ -47,7 +55,7 @@ for (const requiredUrl of [
 ]) {
   if (!llms.includes(requiredUrl)) fail(`llms.txt does not link ${requiredUrl}`);
 }
-if (!llmsFull.includes(`Every one of the ${programs.length} programs`)) {
+if (!llmsFull.includes(`Every one of the ${programsPhrase}`)) {
   fail("llms-full.txt program count differs from the registry");
 }
 for (const program of programs) {
@@ -316,9 +324,9 @@ for (const category of categories) {
   const url = `${BASE_URL}/categories/${categoryToSlug(category)}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
 }
-const networks = new Set(
-  programs.map((program) => program.network ?? "in-house")
-);
+// Live networks only: a network whose programs are all paused or discontinued
+// gets no page, so it must not be in the sitemap either.
+const networks = new Set(liveNetworks);
 for (const network of networks) {
   const url = `${BASE_URL}/networks/${networkToSlug(network)}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
@@ -492,6 +500,8 @@ for (const [file, expectedType] of [
   ["rankings.html", "CollectionPage"],
   [join("categories", "ai.html"), "CollectionPage"],
   ["compare.html", "WebPage"],
+  ["networks.html", "FAQPage"],
+  ["networks.html", "BreadcrumbList"],
   ...BEST_LISTS.map((list) => [join("best", `${list.slug}.html`), "ItemList"] as const),
 ]) {
   const htmlPath = join(BUILD_APP, file);
@@ -505,6 +515,250 @@ for (const [file, expectedType] of [
   }
   if (!jsonLdNodes(html).some((block) => block["@type"] === expectedType)) {
     fail(`${file} has no ${expectedType} JSON-LD block`);
+  }
+}
+
+/**
+ * Network pages target "<Network> affiliate programs" and /networks targets
+ * "affiliate networks". Production once shipped the stored slug as the name
+ * on every one of them: "partnerstack Affiliate Programs — 408 Programs |
+ * OpenAffiliate", with an em dash, at 62 characters (measured 2026-10-12).
+ * These read the prerendered HTML, so they hold what a reader and a crawler
+ * receive, not what the code meant to send.
+ */
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;|&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+function htmlTitle(html: string): string {
+  return decodeEntities(/<title>([^<]*)<\/title>/.exec(html)?.[1] ?? "");
+}
+function htmlDescription(html: string): string {
+  return decodeEntities(/<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "");
+}
+function htmlH1(html: string): string {
+  const inner = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)?.[1] ?? "";
+  return decodeEntities(inner.replace(/<!--[\s\S]*?-->/g, "").replace(/<[^>]+>/g, "")).trim();
+}
+/** The text a reader sees: no scripts (the RSC payload carries raw values), styles, comments or tags. */
+function visibleText(html: string): string {
+  return decodeEntities(
+    html
+      .replace(/<script[\s\S]*?<\/script>/g, " ")
+      .replace(/<style[\s\S]*?<\/style>/g, " ")
+      .replace(/<!--[\s\S]*?-->/g, " ")
+      .replace(/<[^>]+>/g, " ")
+  );
+}
+function readBuilt(file: string): string {
+  if (!existsSync(join(BUILD_APP, file))) fail(`${file} was not prerendered`);
+  return readFileSync(join(BUILD_APP, file), "utf8");
+}
+
+const TITLE_MAX = 60;
+const DESCRIPTION_RANGE = [120, 155] as const;
+/** networks/[slug]/page.tsx puts the first 20 table rows in its ItemList. */
+const NETWORK_ITEMLIST_MAX = 20;
+function checkHead(file: string, html: string, mustInclude: string): void {
+  const title = htmlTitle(html);
+  if (title.length > TITLE_MAX || /[–—]/.test(title) || !title.includes(mustInclude)) {
+    fail(`${file} title must be ${TITLE_MAX} characters or fewer, with no en or em dash, and name "${mustInclude}": ${title}`);
+  }
+  const description = htmlDescription(html);
+  if (description.length < DESCRIPTION_RANGE[0] || description.length > DESCRIPTION_RANGE[1]) {
+    fail(`${file} meta description is ${description.length} characters; keep it 120 to 155: ${description}`);
+  }
+}
+
+for (const network of liveNetworks) {
+  const meta = NETWORK_META[network];
+  if (!meta) {
+    fail(`network "${network}" has live programs but no NETWORK_META entry, so its name would be guessed`);
+  }
+  const words = meta.description.trim().split(/\s+/).length;
+  if (words > 20) fail(`NETWORK_META.${network}.description is ${words} words; the limit is 20`);
+  if (meta.logo && !existsSync(join(PUBLIC, meta.logo))) {
+    fail(`NETWORK_META.${network}.logo points at ${meta.logo}, which is not in public/`);
+  }
+
+  // "CJ Affiliate Programs", never "CJ Affiliate Affiliate Programs".
+  const heading = networkHeading(network);
+  if (/\bAffiliate Affiliate\b/i.test(heading)) {
+    fail(`NETWORK_META.${network} needs a shortName: its heading reads "${heading}"`);
+  }
+  const slug = networkToSlug(network);
+  const file = join("networks", `${slug}.html`);
+  const html = readBuilt(file);
+  checkHead(file, html, heading);
+  if (htmlH1(html) !== heading) {
+    fail(`${file} H1 should be "${heading}" and is "${htmlH1(html)}"`);
+  }
+  const nodes = jsonLdNodes(html);
+  if (!nodes.some((node) => node["@type"] === "CollectionPage" && node.name === heading)) {
+    fail(`${file} CollectionPage JSON-LD must be named "${heading}"`);
+  }
+  if (!nodes.some((node) => node["@type"] === "BreadcrumbList")) fail(`${file} has no BreadcrumbList JSON-LD`);
+
+  // The rows, not only the shell around them: a table with no rows, an
+  // ItemList with no items or a twin holding only its H1 kept a correct title
+  // and H1, and every check above passed. Expected sets come from the registry.
+  const inNetwork = (p: { network?: string | null }) => (p.network ?? IN_HOUSE) === network;
+  const want = programs.filter((p) => inNetwork(p) && isLive(p)).map((p) => p.slug);
+  const tbody = /<tbody>([\s\S]*?)<\/tbody>/.exec(html)?.[1] ?? "";
+  const htmlRows = [...tbody.matchAll(/href="\/programs\/([a-z0-9-]+)"/g)].map((m) => m[1]);
+  sameRows(`${file} table`, [...htmlRows].sort(), [...want].sort());
+  const itemList = (
+    nodes.find((node) => node["@type"] === "CollectionPage") as
+      | { mainEntity?: { numberOfItems?: number; itemListElement?: { position?: number; url?: string }[] } }
+      | undefined
+  )?.mainEntity;
+  const items = itemList?.itemListElement ?? [];
+  if (itemList?.numberOfItems !== want.length) {
+    fail(`${file} ItemList says ${itemList?.numberOfItems} programs; the network has ${want.length} live`);
+  }
+  if (items.some((item, i) => item.position !== i + 1)) fail(`${file} ItemList positions are not 1..n`);
+  // The page lists its first NETWORK_ITEMLIST_MAX table rows, in table order.
+  sameRows(
+    `${file} ItemList`,
+    items.map((item) => item.url ?? ""),
+    htmlRows.slice(0, NETWORK_ITEMLIST_MAX).map((s) => `${BASE_URL}/programs/${s}`)
+  );
+
+  const md = requireText(join("networks", `${slug}.md`));
+  if (!md.startsWith(`# ${heading}\n`)) {
+    fail(`networks/${slug}.md must start with "# ${heading}": ${md.split("\n")[0]}`);
+  }
+  const foreign = foreignMarkup(md);
+  if (foreign) fail(`networks/${slug}.md has markup the generator did not write: ${foreign}`);
+  // The twin lists every program on the network, paused and discontinued ones
+  // included and marked, as the category twins do.
+  const mdWant = programs.filter(inNetwork).map((p) => p.slug);
+  const mdSection = md.split(/^## /m).find((part) => part.startsWith("Programs\n")) ?? "";
+  const mdRows = [
+    ...mdSection.matchAll(/^- \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
+  ].map((m) => m[1]);
+  sameRows(`networks/${slug}.md`, [...mdRows].sort(), [...mdWant].sort());
+  const mdVerified = programs.filter((p) => inNetwork(p) && p.verified && isLive(p)).length;
+  const mdClaim = `> ${mdWant.length} ${mdWant.length === 1 ? "program" : "programs"}, ${mdVerified} verified by OpenAffiliate.`;
+  if (!md.split("\n").includes(mdClaim)) fail(`networks/${slug}.md should state "${mdClaim}"`);
+}
+
+/**
+ * A count agrees with its noun on every generated surface: "1 program". The
+ * network twins and llms.txt printed "1 programs" for five networks. Reads
+ * every Markdown file and llms*.txt under public/.
+ */
+for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
+  if (!file.endsWith(".md") && !/(^|\/)llms[^/]*\.txt$/.test(file)) continue;
+  const hit = /\b1 programs\b/.exec(readFileSync(join(PUBLIC, file), "utf8"));
+  if (hit) fail(`public/${file} says "1 programs"; a count of one takes the singular`);
+}
+
+const networksIndex = readBuilt("networks.html");
+checkHead("networks.html", networksIndex, "Affiliate Networks");
+if (htmlH1(networksIndex) !== "Affiliate Networks") {
+  fail(`networks.html H1 should be "Affiliate Networks" and is "${htmlH1(networksIndex)}"`);
+}
+/**
+ * /networks against the registry: one card per network with its counts, the
+ * ItemList, and FAQ answers whose numbers are recomputed here rather than read
+ * back from the page. Order is the page's rule: most live programs first, ties
+ * by stored value.
+ */
+const liveList = programs.filter(isLive);
+const networkRows = liveNetworks
+  .map((network) => {
+    const list = liveList.filter((p) => (p.network ?? IN_HOUSE) === network);
+    return { network, count: list.length, verified: list.filter((p) => p.verified).length };
+  })
+  .sort((a, b) => b.count - a.count || a.network.localeCompare(b.network));
+const cardRows = networkRows.filter((row) => row.network !== IN_HOUSE);
+const inHouseCount = networkRows.find((row) => row.network === IN_HOUSE)?.count ?? 0;
+const plural = (n: number) => `${n} ${n === 1 ? "program" : "programs"}`;
+
+const anchors = [...networksIndex.matchAll(/<a [^>]*href="\/networks\/([a-z0-9-]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+sameRows(
+  "networks.html cards",
+  anchors.map((m) => m[1]),
+  [...cardRows.map((row) => networkToSlug(row.network)), ...(inHouseCount > 0 ? [networkToSlug(IN_HOUSE)] : [])]
+);
+cardRows.forEach((row, i) => {
+  const want = `${plural(row.count)} · ${row.verified} verified`;
+  const text = visibleText(anchors[i][2]).replace(/\s+/g, " ");
+  if (!text.includes(want)) fail(`networks.html card for ${row.network} should say "${want}": ${text.trim().slice(0, 120)}`);
+});
+
+const indexNodes = jsonLdNodes(networksIndex);
+const indexList = (
+  indexNodes.find((node) => node["@type"] === "CollectionPage") as
+    | { mainEntity?: { numberOfItems?: number; itemListElement?: { position?: number; url?: string }[] } }
+    | undefined
+)?.mainEntity;
+if (indexList?.numberOfItems !== cardRows.length) {
+  fail(`networks.html ItemList says ${indexList?.numberOfItems} networks; the registry has ${cardRows.length}`);
+}
+sameRows(
+  "networks.html ItemList",
+  (indexList?.itemListElement ?? []).map((item) => item.url ?? ""),
+  cardRows.map((row) => `${BASE_URL}/networks/${networkToSlug(row.network)}`)
+);
+
+const faq = (
+  (indexNodes.find((node) => node["@type"] === "FAQPage") as
+    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
+    | undefined)?.mainEntity ?? []
+).map((q) => ({ q: q.name ?? "", a: q.acceptedAnswer?.text ?? "" }));
+const [top1, top2, top3] = cardRows;
+const faqWant: [string, string[]][] = [
+  ["What is an affiliate network?", cardRows.map((row) => networkName(row.network))],
+  [
+    "Which affiliate network has the most programs?",
+    top1
+      ? [
+          `${networkName(top1.network)}, with ${top1.count} of the ${liveList.length} live programs listed here.`,
+          ...[top2, top3].filter(Boolean).map((row) => `${networkName(row.network)} (${row.count})`),
+        ]
+      : [],
+  ],
+  [
+    "Do you need an affiliate network to join a program?",
+    [`${inHouseCount} of the ${liveList.length} programs here (${Math.round((inHouseCount / liveList.length) * 100)}%)`],
+  ],
+];
+if (faq.length !== faqWant.length) fail(`networks.html FAQPage has ${faq.length} questions; expected ${faqWant.length}`);
+const indexText = visibleText(networksIndex).replace(/\s+/g, " ");
+faqWant.forEach(([q, parts], i) => {
+  if (faq[i].q !== q) fail(`networks.html FAQ question ${i + 1} should be "${q}" and is "${faq[i].q}"`);
+  const missing = parts.find((part) => !faq[i].a.includes(part));
+  if (missing) fail(`networks.html FAQ answer to "${q}" should include "${missing}": ${faq[i].a}`);
+  // What the crawler reads is what the reader sees.
+  if (!indexText.includes(faq[i].q) || !indexText.includes(faq[i].a)) {
+    fail(`networks.html shows a different FAQ from its FAQPage JSON-LD: "${q}"`);
+  }
+});
+
+/**
+ * The pilot pages must never show a stored slug where the display name
+ * belongs. Case-sensitive on purpose: "Impact" is right, "impact" is the raw
+ * value. "in-house" is skipped because it is also an ordinary English word,
+ * and a slug followed by ".com" is a domain, not a name.
+ */
+for (const file of ["networks.html", join("networks", "impact.html"), join("networks", "affitor.html")]) {
+  const text = visibleText(readBuilt(file));
+  for (const network of liveNetworks) {
+    if (network === IN_HOUSE || networkName(network) === network) continue;
+    const raw = new RegExp(`(?<![\\w./-])${network}(?![\\w-]|\\.\\w)`);
+    const hit = raw.exec(text);
+    if (hit) {
+      fail(
+        `${file} shows the raw network value "${network}" where a reader should see "${networkName(network)}": ` +
+          JSON.stringify(text.slice(Math.max(0, hit.index - 40), hit.index + 40))
+      );
+    }
   }
 }
 
