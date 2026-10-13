@@ -18,7 +18,7 @@ commission:
   conditions: "30% on Pro annual, Pro monthly and Team monthly plans; 15% on Team annual. Annual plans pay on the first year only, monthly plans on the first month only; renewals excluded. Paid out 30 days after the subscription starts, through PartnerStack."
 attribution: last-click
 tracking_method: cookie
-signup_url: https://market.partnerstack.com/beautifulai
+signup_url: https://market.partnerstack.com/page/beautifulai
 approval: manual
 restrictions:
 - No bidding on Beautiful.ai brand keywords, misspellings or variants in any paid media channel

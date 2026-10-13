@@ -15,7 +15,7 @@ commission:
   conditions: "Earn $100 for every successful CoRecruit referral (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-signup_url: https://market.partnerstack.com/quil
+signup_url: https://market.partnerstack.com/page/quil
 restrictions: null
 marketing_materials: true
 api_available: false

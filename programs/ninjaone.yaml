@@ -18,7 +18,7 @@ commission:
   conditions: "Pays on clicks, leads and demos, personalized to each affiliate's advertising portfolio (PartnerStack listing). Commissions are paid through PartnerStack."
 attribution: last-click
 tracking_method: cookie
-signup_url: https://market.partnerstack.com/ninjaone
+signup_url: https://market.partnerstack.com/page/ninjaone
 restrictions: null
 marketing_materials: true
 api_available: false
