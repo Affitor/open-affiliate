@@ -21,7 +21,7 @@ payout:
   currency: USD
   frequency: weekly
 
-signup_url: https://app.paykickstart.com/register/affiliate
+signup_url: https://paykickstart.com/partner/
 
 marketing_materials: true
 dashboard_url: null

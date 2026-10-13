@@ -11,7 +11,7 @@ commission:
   mode: percentage
   value: 15
   currency: USD
-  duration: "365 days from the referral's first click"
+  duration: "365 days"
   conditions: "15% on license purchases, including recurring payments and additional licenses, made within 365 days of the referral's first click on your link. Commission is earned once a purchase has passed 30 days without cancellation, refund or chargeback. Only standard consumer licenses qualify; bulk and Enterprise licenses do not."
 
 # 365 days: "purchases made within 365 days of each referral's first click on one of your links" (tubebuddy.com/affiliate-program-terms, checked 2026-10-13)
