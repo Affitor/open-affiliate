@@ -5,6 +5,7 @@ category: Infrastructure
 tags: [proxies, residential-proxies, web-scraping, scraper-api, data-collection]
 
 commission:
+  # type: one-time is a reading; the page says recurring sales are discussed with the affiliate manager (oxylabs.io/affiliates, checked 2026-10-13)
   type: one-time
   # "You'll get a 50% commission on each referred customer's purchase." (oxylabs.io/affiliates, checked 2026-10-13)
   rate: "50%"

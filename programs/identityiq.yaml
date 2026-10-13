@@ -14,6 +14,7 @@ commission:
   value: 100
   currency: USD
   duration: null
+  # "with an average cost per acquisition (CPA) of $40 per qualified enrollment" (idiq.com/articles/idiq-affiliate-program, checked 2026-10-13)
   conditions: "Paid per qualified enrollment, with an average cost per acquisition of $40. The program covers IDIQ brands including IdentityIQ, MyScoreIQ and CreditBuilderIQ."
 
 # 60 days: "with our 60-day cookie tracking window" (idiq.com/partnerships/affiliate-partners, checked 2026-10-13)
@@ -29,6 +30,7 @@ signup_url: https://www.idiq.com/partnerships/affiliate-partners
 approval: manual
 
 marketing_materials: true
+# "support from a dedicated account manager" (idiq.com/articles/idiq-affiliate-program, checked 2026-10-13)
 dedicated_manager: true
 dashboard_url: null
 # Tracking platform is Everflow (idiq.everflowclient.io), not in the network list

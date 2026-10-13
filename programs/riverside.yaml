@@ -5,7 +5,7 @@ category: AI
 tags: [podcast-recording, video-recording, video-editor, ai-editing, livestreaming]
 
 commission:
-  # type: whether the commission repeats on renewals is not published on riverside.com/affiliate-program (checked 2026-10-13); "up to 20%" with no published tiers
+  # type: whether the commission repeats on renewals is not published on riverside.com/affiliate-program (checked 2026-10-13); "tiered" is a reading of "up to 20%", the page publishes no tiers
   type: tiered
   # "Earn up to 20% revenue for every subscription." (riverside.com/affiliate-program, checked 2026-10-13)
   rate: "up to 20%"
