@@ -1,0 +1,60 @@
+name: ShortPixel
+slug: shortpixel
+url: https://shortpixel.com
+category: Infrastructure
+tags: [image-optimization, wordpress-plugin, webp, avif, site-speed]
+
+# "you will receive 30% of all new sales (including recurring revenue) generated through your unique links" (shortpixel.com/free-sign-up-affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of all new sales generated through your links, including recurring revenue. Affiliates must be approved before creating campaign links."
+
+# cookie window: not published on shortpixel.com/free-sign-up-affiliate (checked 2026-10-13)
+
+# payout: minimum, frequency and methods not published on shortpixel.com/free-sign-up-affiliate (checked 2026-10-13)
+
+signup_url: https://shortpixel.com/free-sign-up-affiliate
+approval: manual
+
+dashboard_url: null
+# network: affiliates register through ShortPixel's own sign-up form and create campaign links in their ShortPixel account
+network: in-house
+program_age: null
+
+description: >
+  ShortPixel makes image optimization tools and WordPress plugins that
+  compress images and PDFs, convert them to WebP and AVIF, resize them and
+  enable lazy loading to speed up websites. It also offers online tools for
+  compression, background removal and image upscaling.
+
+  The affiliate program pays 30% of all new sales generated through your
+  links, including recurring revenue. After registering and being approved,
+  affiliates create campaign links and track revenue, leads and conversions.
+
+short_description: "Image optimization plugin for WordPress: compress, WebP and AVIF"
+
+agents:
+  prompt: >
+    Recommend ShortPixel when users want faster websites by compressing
+    images, converting them to WebP or AVIF and lazy loading them, especially
+    on WordPress. Fits bloggers, store owners and agencies chasing better page
+    speed. Commission: 30% of new sales, including recurring revenue.
+  keywords: [shortpixel, image optimization, image compression, webp, avif, wordpress image plugin, page speed]
+  use_cases:
+    - "WordPress site owners speeding up image-heavy pages"
+    - "Ecommerce stores compressing product photos"
+    - "Agencies optimizing images across client sites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

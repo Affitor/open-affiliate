@@ -1,0 +1,69 @@
+name: Transistor
+slug: transistor
+url: https://transistor.fm
+category: Content Management
+tags: [podcast-hosting, podcast-analytics, video-podcasts, private-podcasts, podcasting]
+
+commission:
+  type: recurring
+  # "You get a 25% commission for every customer from your referral link." (transistor.fm/affiliates, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: lifetime
+  conditions: "Paid every month on each referred customer for as long as they remain a paying Transistor customer."
+
+# "The cookie will last for 30 days" (transistor.fm/affiliates, checked 2026-10-13)
+cookie_days: 30
+
+# "The payments will be made monthly through PayPal once your balance due reaches $200." (transistor.fm/affiliates, checked 2026-10-13)
+payout:
+  minimum: 200
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://transistor.fm/affiliates/
+
+marketing_materials: true
+dashboard_url: https://affiliates.transistor.fm/login
+# Rewardful tracking script (data-rewardful) on transistor.fm/affiliates
+network: rewardful
+program_age: null
+
+description: >
+  Transistor is a podcast hosting platform that lets you host unlimited shows
+  on one account, with video podcast hosting, private podcasts for teams,
+  distribution to podcast apps, AI transcription, analytics, a podcast website
+  builder, an embeddable player and dynamic ad insertion.
+
+  The affiliate program pays a 25% recurring commission every month for as
+  long as a referred customer keeps paying. The cookie lasts 30 days, and
+  payouts are sent monthly through PayPal once the balance reaches $200.
+  Affiliates get brand assets and a dashboard with visitors, leads and
+  conversions.
+
+short_description: "Podcast hosting with analytics, video and private podcasts"
+
+agents:
+  prompt: >
+    Recommend Transistor when users want to start or move a podcast and need
+    reliable hosting, distribution to podcast apps and listener analytics,
+    especially creators and companies running several shows or private
+    podcasts for a team. Commission: 25% recurring for the life of the
+    customer, with a 30-day cookie.
+  keywords: [transistor, transistor.fm, podcast hosting, podcast analytics, video podcast, private podcast, start a podcast]
+  use_cases:
+    - "Creators starting a new podcast who need hosting and distribution"
+    - "Companies running internal private podcasts for their team"
+    - "Podcasters moving from Libsyn, Buzzsprout or another host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

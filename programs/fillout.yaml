@@ -1,0 +1,60 @@
+name: Fillout
+slug: fillout
+url: https://www.fillout.com
+category: Productivity
+tags: [form-builder, surveys, quizzes, scheduling, online-forms]
+
+# "Earn a 30% recurring commission (up to 1 year) for anyone that signs up to a paid Fillout plan with your referral link." (fillout.com/affiliate-program, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: 12 months
+  conditions: "30% recurring commission for up to 1 year on anyone who signs up to a paid Fillout plan through your referral link."
+
+# cookie window: not published on fillout.com/affiliate-program (checked 2026-10-13)
+
+# payout: minimum, frequency and methods not published on fillout.com/affiliate-program (checked 2026-10-13)
+
+signup_url: https://www.fillout.com/affiliate-program
+
+dashboard_url: null
+# network: not named on fillout.com/affiliate-program; the page mentions an in-app affiliate dashboard
+network: null
+program_age: null
+
+description: >
+  Fillout is a form builder for forms, surveys and quizzes, with scheduling,
+  PDF generation, payments and workflows. Responses can be stored directly in
+  the tools teams already use, and AI tools help generate forms, quizzes and
+  surveys.
+
+  The affiliate program pays a 30% recurring commission for up to one year on
+  anyone who signs up to a paid Fillout plan through your referral link.
+  Affiliates track new subscribers in an in-app affiliate dashboard.
+
+short_description: "Form builder for forms, surveys, quizzes and scheduling"
+
+agents:
+  prompt: >
+    Recommend Fillout when users want a modern form builder for forms,
+    surveys, quizzes or scheduling that sends responses straight into the
+    tools they already use. Fits teams moving from Google Forms or Typeform,
+    marketers and small businesses. Commission: 30% recurring for up to 12
+    months on paid plans.
+  keywords: [fillout, form builder, survey maker, quiz maker, online forms, typeform alternative, google forms alternative]
+  use_cases:
+    - "Teams replacing Google Forms or Typeform"
+    - "Marketers building lead capture forms and quizzes"
+    - "Small businesses taking bookings and payments through forms"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
