@@ -9,11 +9,19 @@
  *
  * The pipeline is three stages, and the order is the economics:
  *
- *   1. probe   (free)       curl common affiliate paths on the domain.
+ *   1. probe   (free)       curl candidate pages: the YAML signup_url first,
+ *                           then same-site links on the brand's homepage whose
+ *                           text or path names an affiliate, referral or
+ *                           ambassador page (the brand's own nav knows paths
+ *                           no fixed list guesses, like /channelpartners or
+ *                           /refer-a-seller), interleaved with common paths
+ *                           (order at LINK_WORDS).
  *                           Extraction must never start at a homepage — the
  *                           first calibration call did, crawled careers pages,
- *                           and concluded Framer has no affiliate program.
- *   2. filter  (free)       fetch the page, require affiliate vocabulary.
+ *                           and concluded Framer has no affiliate program. The
+ *                           homepage is only read for its links.
+ *   2. filter  (free)       fetch the page, require affiliate vocabulary
+ *                           beyond what the homepage already carries.
  *                           SPAs answer 200 for any path; bolt.new/affiliate
  *                           opens their editor.
  *   3. extract (10 credits) context.dev /v1/web/extract with factCheck on.
@@ -30,9 +38,10 @@
  *   CONTEXT_DEV_API_KEY=... npx tsx scripts/extract-commission-candidates.ts <slug> [slug...]
  *   npx tsx scripts/extract-commission-candidates.ts --unknowns --limit=10
  *   ... --out=data/other.json   write to another file (default data/commission-candidates.json)
+ *   ... --probe                 stages 1+2 only: print the page found, spend no credits
  */
 
-import { execSync } from "node:child_process"
+import { execFileSync } from "node:child_process"
 import { readFileSync, writeFileSync, existsSync } from "node:fs"
 import { join } from "node:path"
 
@@ -40,7 +49,22 @@ import registry from "../src/lib/registry.json"
 
 const API = "https://api.context.dev/v1/web/extract"
 const KEY = process.env.CONTEXT_DEV_API_KEY
-const PATHS = ["/affiliates", "/affiliate", "/partners", "/affiliate-program"]
+const PATHS = ["/affiliates", "/affiliate", "/affiliate-program"]
+const UA =
+  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
+// Words in a homepage link's text or path that name an affiliate page, strongest first.
+// Order of trial: "affiliate" links, the common affiliate paths, referral/ambassador
+// links (often customer refer-a-friend), /partners, and last links that only say
+// "partner", which on most sites means integrations or resellers.
+const LINK_WORDS = [/affiliate/, /\breferral|\brefer\b/, /ambassador|creator program/, /\bpartner(s|ships?)?\b/]
+const WEAK = LINK_WORDS.length - 1
+// Pages that mention a program without being one: articles, disclosures, docs, and
+// product pages (an affiliate tool the brand sells is not its own program).
+const NOT_PROGRAM =
+  /\/(blog|news|press|stories|customers|case-studies|changelog|docs|help|support|resources|guides|learn|academy|glossary|integrations|templates|marketing|features?|solutions|use-cases|products?|platform|industries|for|compare|alternatives|careers|jobs|legal)(\/|$)|disclosure|policy|privacy/
+// A subdomain counts only when its own name says so (affiliates.brand.com, partners.brand.com).
+const PROGRAM_HOST = /^(affiliates?|partners?|refer|referrals?|ambassadors?)\./
+const PROBE_ONLY = process.argv.includes("--probe")
 
 type Program = {
   slug: string
@@ -70,33 +94,110 @@ function targets(): Program[] {
   return []
 }
 
-function sh(cmd: string): string {
+const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
+
+type Page = { code: string; body: string; final: string }
+
+/** One GET, redirects followed. No shell, so a URL cannot break out of quoting;
+ *  the buffer fits pages over 1 MB, which used to come back empty. */
+function get(url: string): Page {
   try {
-    return execSync(cmd, { encoding: "utf8", timeout: 20_000 }).trim()
+    const out = execFileSync(
+      "curl",
+      ["-s", "-L", "-m", "10", "-A", UA, "-w", "\n%{http_code} %{url_effective}", url],
+      { encoding: "utf8", timeout: 20_000, maxBuffer: 32 * 1024 * 1024 }
+    )
+    const i = out.lastIndexOf("\n")
+    const [code, final] = out.slice(i + 1).split(" ")
+    return { code, body: out.slice(0, i), final }
   } catch {
-    return ""
+    return { code: "", body: "", final: url }
   }
 }
 
-/** Stage 1+2, both free: a live path whose content talks like an affiliate page.
- *  The YAML signup_url goes first — it is usually the real affiliate page. */
-function findAffiliatePage(siteUrl: string, signupUrl?: string | null): string | null {
-  let host: string
+const bare = (hostname: string) => hostname.replace(/^www\./, "")
+// Program words a reader sees. Scripts, styles, nav and footer repeat them on every page,
+// and so do footers built from plain divs, so callers compare against the homepage.
+const vocab = (html: string) =>
+  (
+    html
+      .replace(/<(script|style|nav|footer)\b[\s\S]*?<\/\1\s*>/gi, " ")
+      .replace(/<[^>]*>/g, " ")
+      .toLowerCase()
+      // \b keeps "learn more" out: every marketing page says it.
+      .match(/affiliate|commission|referral|\bearn/g) ?? []
+  ).length
+
+function urlOf(u?: string | null, base?: string): URL | null {
   try {
-    host = new URL(siteUrl).hostname.replace(/^www\./, "")
+    return u ? new URL(u, base) : null
   } catch {
     return null
   }
-  const urls = PATHS.map(path => `https://${host}${path}`)
-  // A signup_url that is just the homepage is not an affiliate page.
-  if (signupUrl?.startsWith("http") && !signupUrl.includes("'") && new URL(signupUrl).pathname.length > 1)
-    urls.unshift(signupUrl)
-  for (const url of urls) {
-    const code = sh(`curl -s -o /dev/null -w '%{http_code}' -m 6 -L -A 'Mozilla/5.0' '${url}'`)
-    if (code !== "200") continue
-    const body = sh(`curl -s -m 8 -L -A 'Mozilla/5.0' '${url}'`).toLowerCase()
-    const hits = (body.match(/affiliate|commission|referral|earn/g) ?? []).length
-    if (hits >= 3 && body.length > 3000) return url
+}
+
+/** Same-site links on the homepage that name an affiliate page, best first, with
+ *  their LINK_WORDS rank. The homepage is read for links only, never a target. */
+function homepageLinks(home: Page, host: string): [string, number][] {
+  const ranked = new Map<string, [number, number]>()
+  const html = home.body
+  for (const m of html.matchAll(/<a\b[^>]{0,1000}?\bhref\s*=\s*["']([^"'#]+)[^>]{0,1000}>/gi)) {
+    const start = m.index + m[0].length
+    const end = html.indexOf("</a>", start)
+    const inner = html.slice(start, end < 0 ? start : Math.min(end, start + 3000))
+    const u = urlOf(m[1].replace(/&amp;/g, "&"), home.final)
+    if (!u) continue
+    const h = bare(u.hostname)
+    if (h !== host && !(h.endsWith(`.${host}`) && PROGRAM_HOST.test(h))) continue
+    if ((h === host && u.pathname.length <= 1) || NOT_PROGRAM.test(u.pathname.toLowerCase())) continue
+    const text = `${inner.replace(/<[^>]*>/g, " ")} ${h === host ? "" : h} ${u.pathname}`.toLowerCase()
+    const rank = LINK_WORDS.findIndex(w => w.test(text))
+    const prev = ranked.get(u.href)
+    if (rank >= 0 && (!prev || rank < prev[0])) ranked.set(u.href, [rank, u.href.length])
+  }
+  return [...ranked]
+    .sort((a, b) => a[1][0] - b[1][0] || a[1][1] - b[1][1])
+    .slice(0, 5)
+    .map(([url, [rank]]) => [url, rank])
+}
+
+/** Stage 1+2, both free: a live page whose content talks like an affiliate page.
+ *  The YAML signup_url goes first — it is usually the real affiliate page. */
+async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Promise<string | null> {
+  const site = urlOf(siteUrl)
+  if (!site) return null
+  const host = bare(site.hostname)
+  let homePage: Page | undefined
+  const home = () => (homePage ??= get(site.origin))
+  function* candidates(): Generator<string> {
+    // A signup_url that is just the homepage is not an affiliate page.
+    const signup = urlOf(signupUrl)
+    if (signup && /^https?:$/.test(signup.protocol) && signup.pathname.length > 1) yield signup.href
+    const links = homepageLinks(home(), host)
+    for (const [url, rank] of links) if (rank === 0) yield url
+    for (const path of PATHS) yield `https://${host}${path}`
+    for (const [url, rank] of links) if (rank > 0 && rank < WEAK) yield url
+    yield `https://${host}/partners`
+    for (const [url, rank] of links) if (rank === WEAK) yield url
+  }
+  const tried = new Set<string>()
+  let homeHits: number | undefined
+  for (const url of candidates()) {
+    const key = url.replace("://www.", "://")
+    if (tried.has(key)) continue
+    tried.add(key)
+    await sleep(1000) // one request at a time per brand, with a pause
+    const { code, body, final } = get(url)
+    const f = urlOf(final)
+    // A redirect can land on a product or docs page too.
+    if (code !== "200" || !f || NOT_PROGRAM.test(f.pathname.toLowerCase())) continue
+    // A redirect to a root or a bare locale (/, /en, /en-us) is a homepage, not a program page.
+    if (/^(\/[a-z]{2}(-[a-z]{2})?)?\/?$/i.test(f.pathname) && !PROGRAM_HOST.test(bare(f.hostname))) continue
+    // Count only what the page says beyond the site chrome the homepage also carries.
+    // An SPA shell that answers 200 for any path has nothing beyond it.
+    // No homepage, no baseline: accept nothing rather than guess.
+    homeHits ??= home().code === "200" ? vocab(home().body) : Infinity
+    if (vocab(body) - homeHits >= 3) return url
   }
   return null
 }
@@ -140,7 +241,7 @@ async function extract(url: string): Promise<Record<string, unknown> | null> {
 }
 
 async function main(): Promise<void> {
-  if (!KEY) {
+  if (!KEY && !PROBE_ONLY) {
     console.error("CONTEXT_DEV_API_KEY is not set")
     process.exit(1)
   }
@@ -158,22 +259,35 @@ async function main(): Promise<void> {
   )
 
   for (const p of list) {
-    if (seen.has(p.slug)) {
+    if (seen.has(p.slug) && !PROBE_ONLY) {
       console.log(`  skip  ${p.slug} — already has a candidate`)
       continue
     }
-    const page = findAffiliatePage(p.url, p.signup_url)
+    const page = await findAffiliatePage(p.url, p.signup_url)
     if (!page) {
       console.log(`  none  ${p.slug} — no live affiliate page found (free probe)`)
       continue
     }
+    if (PROBE_ONLY) {
+      console.log(`  found ${p.slug} ← ${page}`)
+      continue
+    }
     console.log(`  extract ${p.slug} ← ${page}`)
-    const r = await extract(page)
+    const r = await extract(page).catch(e => {
+      console.error(`  extract failed for ${page}: ${e instanceof Error ? e.message : e}`)
+      return null
+    })
     if (!r) continue
     const data = r.data as Record<string, unknown> | undefined
     store.candidates.push({
       slug: p.slug,
-      status: data?.has_affiliate_program ? "candidate" : "no-affiliate-program",
+      // An empty response is not evidence of absence.
+      status:
+        data?.has_affiliate_program === true
+          ? "candidate"
+          : data?.has_affiliate_program === false
+            ? "no-affiliate-program"
+            : "extract-empty",
       note: "unreviewed machine extraction",
       extracted: data ?? null,
       source_url: page,
@@ -181,6 +295,8 @@ async function main(): Promise<void> {
       extracted_at: new Date().toISOString().slice(0, 10),
       method: "context.dev extract, factCheck on",
     })
+    // Saved per slug: a paid extraction is never lost to a later crash.
+    writeFileSync(OUT, JSON.stringify(store, null, 2) + "\n")
     const meta = r.key_metadata as { credits_remaining?: number } | undefined
     console.log(`        credits remaining: ${meta?.credits_remaining ?? "?"}`)
     if ((meta?.credits_remaining ?? Infinity) < MIN_CREDITS) {
@@ -190,8 +306,10 @@ async function main(): Promise<void> {
     await new Promise(r => setTimeout(r, 3000))
   }
 
-  writeFileSync(OUT, JSON.stringify(store, null, 2) + "\n")
-  console.log(`\nwrote ${OUT}`)
+  if (!PROBE_ONLY) console.log(`\nwrote ${OUT}`)
 }
 
-main()
+main().catch(e => {
+  console.error(e)
+  process.exit(1)
+})
