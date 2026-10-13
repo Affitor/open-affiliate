@@ -1179,8 +1179,8 @@ async function checkServedPages(): Promise<string> {
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
     for (const [leak, extra] of [
-      ["a cookie badge", `<div>${off.cookieDays}d cookie</div>`],
-      ["a minimum payout row", `<span>Min payout</span><span>$${off.payout.minimum}</span>`],
+      ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
+      ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
     ]) {
       if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
     }

@@ -4,6 +4,10 @@
  * all three (src/lib/confirmed-terms.ts). Pure functions returning problems, so
  * verify-machine-surfaces can also feed them a mutated page and require a
  * failure: a check that cannot fail proves nothing.
+ *
+ * They read the markup and lines the page and generate-md write for terms, not
+ * free text: a description saying "Payment methods are not specified" or
+ * "60-day cookie" is contributor prose, which rendering does not parse.
  */
 import { termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import type { Program } from "../src/lib/programs"
@@ -23,8 +27,8 @@ function decodeEntities(text: string): string {
 }
 
 /**
- * The program's own markup: no scripts or styles, and no cards linking other
- * programs (related programs show their own terms).
+ * The program's own markup: no scripts, styles or comments, and no cards
+ * linking other programs (related programs show their own terms).
  */
 function ownHtml(html: string): string {
   return html
@@ -34,46 +38,68 @@ function ownHtml(html: string): string {
     .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ")
 }
 
-function text(html: string): string {
-  return decodeEntities(html.replace(/<[^>]+>/g, " ")).replace(/\s+/g, " ")
-}
+/**
+ * How the program page writes each term: a badge or row label right after its
+ * icon's </svg>, and the How to Join labels as whole <p> elements.
+ */
+const APPROVAL_BADGE = /<\/svg>(?:Automatic|Manual review|Invite only)<\/div>/
+const TERM_MARKUP: [string, RegExp][] = [
+  ["a cookie badge", /<\/svg>(?:\d+d cookie(?: \(unconfirmed\))?|Cookie not published|Code-based, no cookie)<\/div>/],
+  ["a Cookie row", /<\/svg>Cookie<\/span>/],
+  ["a Min payout row", /<\/svg>Min payout<\/span>/],
+  ["a Frequency row", /<\/svg>Frequency<\/span>/],
+  ["a Payment methods row", /<\/svg>\s*Payment methods<\/span>/],
+  ["an approval badge", APPROVAL_BADGE],
+  ["an Approval or Approval time field", />Approval(?: time)?<\/p>/],
+]
 
 /** /programs/<slug> as served. */
 export function termsHtmlProblems(p: Program, html: string): string[] {
   const own = ownHtml(html)
-  const seen = text(own)
+  const marked = decodeEntities(own).includes(`>${UNCONFIRMED_NOTE}<`)
   const problems: string[] = []
   if (termsConfirmed(p)) {
-    if (seen.includes(UNCONFIRMED_NOTE)) problems.push("marks verified terms unconfirmed")
+    if (marked) problems.push("marks verified terms unconfirmed")
     if (p.cookieDays != null) {
       const badge = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays}d cookie`
-      const row = p.cookieDays === 0 ? "Cookie None (code-based)" : `Cookie ${p.cookieDays} days`
-      if (!seen.includes(badge) || !seen.includes(row)) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
+      const row = p.cookieDays === 0 ? "None (code-based)" : `${p.cookieDays} days`
+      if (!own.includes(`</svg>${badge}</div>`) || !own.includes(`</svg>Cookie</span><span class="text-sm font-semibold">${row}</span>`)) {
+        problems.push(`does not show its cookie window (${p.cookieDays} days)`)
+      }
     }
-    if (p.payout.minimum != null && !seen.includes(`Min payout $${p.payout.minimum}`)) problems.push("does not show its minimum payout")
-    if (p.approval && ["auto", "manual", "invite-only"].includes(p.approval) && !own.includes("lucide-zap")) {
+    if (p.payout.minimum != null && !own.includes(`</svg>Min payout</span><span class="text-sm font-semibold">$${p.payout.minimum}</span>`)) {
+      problems.push("does not show its minimum payout")
+    }
+    if (p.approval && ["auto", "manual", "invite-only"].includes(p.approval) && !APPROVAL_BADGE.test(own)) {
       problems.push("does not show its approval")
     }
     return problems
   }
-  if (!seen.includes(UNCONFIRMED_NOTE)) problems.push(`does not mark its commission "${UNCONFIRMED_NOTE}"`)
-  if (COOKIE_BADGE.test(seen)) problems.push(`shows a cookie window ("${COOKIE_BADGE.exec(seen)![0]}")`)
-  for (const label of ["Cookie not published", "Code-based, no cookie", "Min payout", "Payment methods", "Approval time"]) {
-    if (seen.includes(label)) problems.push(`shows "${label}"`)
+  if (!marked) problems.push(`does not mark its commission "${UNCONFIRMED_NOTE}"`)
+  for (const [what, markup] of TERM_MARKUP) {
+    const hit = markup.exec(own)
+    if (hit) problems.push(`shows ${what} (${JSON.stringify(hit[0])})`)
   }
-  if (/\bCookie (?:\d+ days|None \(code-based\)|Not published)/.test(seen)) problems.push("shows a Cookie row")
-  if (/>Frequency<\/span>/.test(own)) problems.push("shows a payout frequency")
-  if (/>Approval<\/p>/.test(own) || own.includes("lucide-zap")) problems.push("shows an approval")
   return problems
+}
+
+/** The Terms (or Last known terms) section of a twin: the only place generate-md states terms. */
+function termsSection(md: string): string[] {
+  const lines = md.split("\n")
+  const start = lines.findIndex((l) => l === "## Terms" || l === "## Last known terms")
+  if (start === -1) return []
+  const end = lines.findIndex((l, i) => i > start && l.startsWith("## "))
+  return lines.slice(start + 1, end === -1 ? undefined : end)
 }
 
 /** programs/<slug>.md, as generate-md writes it. */
 export function termsMdProblems(p: Program, md: string): string[] {
-  const lines = md.split("\n")
+  const lines = termsSection(md)
+  if (lines.length === 0) return ["has no Terms section"]
   const has = (prefix: string) => lines.some((l) => l.startsWith(prefix))
   const problems: string[] = []
   if (termsConfirmed(p)) {
-    if (md.includes(UNCONFIRMED_NOTE)) problems.push("marks verified terms unconfirmed")
+    if (lines.includes(UNCONFIRMED_NOTE)) problems.push("marks verified terms unconfirmed")
     if (p.cookieDays != null && !has(`Cookie window: ${p.cookieDays} days`)) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     if (p.payout.minimum != null && !has("Payout: ")) problems.push("does not show its payout")
     if (p.approval && !has("Approval: ")) problems.push("does not show its approval")
@@ -85,7 +111,8 @@ export function termsMdProblems(p: Program, md: string): string[] {
   for (const prefix of ["Cookie window:", "Payout:", "Approval:"]) {
     if (has(prefix)) problems.push(`shows "${prefix}"`)
   }
-  if (COOKIE_BADGE.test(md)) problems.push(`shows a cookie window ("${COOKIE_BADGE.exec(md)![0]}")`)
+  const cookie = lines.find((l) => COOKIE_BADGE.test(l))
+  if (cookie) problems.push(`shows a cookie window ("${cookie}")`)
   return problems
 }
 
