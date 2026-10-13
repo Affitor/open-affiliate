@@ -16,6 +16,7 @@ commission:
   conditions: "15% of the referred user's initial payment only; renewals do not earn commission. Affiliates first apply on Lemon Squeezy, which vets every applicant, then join the Screen Studio program."
 
 # "Clicks are tracked on the user side for 30 days." (screen.studio/affiliate, checked 2026-10-13)
+# the terms (§6) also say 30 days; screen.studio/affiliate/getting-started says purchases "within seven days" earn the commission (checked 2026-10-13)
 cookie_days: 30
 # "The last referral will be credited if someone clicks multiple referral links from different people." (same page)
 attribution: last-click
@@ -23,6 +24,7 @@ tracking_method: cookie
 
 # "The minimum balance you must reach before receiving an automated payout is 10$." (screen.studio/affiliate, checked 2026-10-13)
 payout:
+  # the terms (§5) state "Minimum Payout: €10 (or equivalent)"; /affiliate and the Lemon Squeezy hub say $10 (checked 2026-10-13)
   minimum: 10
   currency: USD
 

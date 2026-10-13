@@ -7,7 +7,7 @@ tags: [ai-video, image-to-video, text-to-video, ai-effects, ai-image-generator]
 commission:
   type: one-time
   # "When your referral completes the purchase, you will receive 30% commission" (deevid.ai/affiliate, checked 2026-10-13)
-  rate: "30%"
+  rate: "up to 30%"
   mode: percentage
   value: 30
   currency: USD

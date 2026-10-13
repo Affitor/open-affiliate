@@ -25,7 +25,7 @@ payout:
 signup_url: https://www.dupdub.com/affiliate
 
 dashboard_url: null
-# network: affiliate platform not named on dupdub.com/affiliate (checked 2026-10-13)
+# network: the page says "dashboard powered by Linkmink", which the network enum does not list (dupdub.com/affiliate, checked 2026-10-13)
 network: null
 program_age: null
 

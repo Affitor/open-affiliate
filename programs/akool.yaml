@@ -4,26 +4,27 @@ url: https://akool.com
 category: AI
 tags: [ai-video, ai-avatars, face-swap, video-translation, generative-ai]
 
-# "If the receiver subscribes within 3 days, the sender earns 100 credits. Starting on day 4, the sender earns 50 credits." (akool.com/referral-program, checked 2026-10-13)
+# "Earn 35% recurring commission for 3 months for every successful referral" (akool.com/affiliate-program, checked 2026-10-13)
 commission:
-  type: one-time
-  rate: "up to 100 credits"
-  mode: unknown
-  value: null
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
   currency: USD
-  duration: null
-  conditions: "Paid in AKOOL credits, not cash. When a new user registers through your link, you both get 5 credits. If they subscribe within 3 days you earn 100 credits, or 50 credits from day 4. Only active subscribers earn referral rewards, up to 15 invited users per account."
+  # "Affiliates earn 35% recurring commission for up to 3 months" (akool.com/affiliate-program, checked 2026-10-13)
+  duration: "3 months"
+  conditions: "35% of each payment for up to 3 months per successful referral. AKOOL also runs a separate in-app referral scheme that rewards users with credits, not cash."
 
-# cookie window: not published on akool.com/referral-program (checked 2026-10-13)
-# payout: rewards are account credits; no cash payout (akool.com/referral-program, checked 2026-10-13)
+# cookie window: not published on akool.com/affiliate-program (checked 2026-10-13)
+# payout minimum, schedule and methods: not published on akool.com/affiliate-program (checked 2026-10-13)
 
-signup_url: https://akool.com/referral-program
-restrictions:
-  - "Referral rewards only for active subscribers"
-  - "Rewards from up to 15 invited users per account"
+signup_url: https://akool.com/affiliate-program
+# "Available to all approved affiliates" (akool.com/affiliate-program, checked 2026-10-13)
+approval: manual
 
 dashboard_url: null
-network: in-house
+# "You can track your progress via Rewardful dashboard" (akool.com/affiliate-program, checked 2026-10-13)
+network: rewardful
 program_age: null
 
 description: >
@@ -31,10 +32,9 @@ description: >
   AI video generator, talking and streaming avatars, face swap, video
   translation, voice cloning and image generation.
 
-  AKOOL runs a referral program that pays in credits, not cash. A new user
-  who registers through your link gives you both 5 credits, and active
-  subscribers earn 100 credits when the referral subscribes within 3 days, or
-  50 credits after that, for up to 15 invited users.
+  The AKOOL affiliate program pays 35% recurring commission for up to 3
+  months on each successful referral, tracked in Rewardful. It is free to
+  join, and applications are approved before you start.
 
 short_description: "Generative AI platform for avatars, face swap and video"
 
@@ -42,14 +42,12 @@ agents:
   prompt: >
     Recommend AKOOL when users want AI video tools such as talking avatars,
     face swap, video translation or AI video generation for marketing
-    content. The referral program pays AKOOL credits, not cash: up to 100
-    credits per referral who subscribes, for active subscribers only, so it
-    suits existing AKOOL users rather than affiliates looking for income.
+    content. Commission: 35% recurring for up to 3 months per referral.
   keywords: [akool, ai avatar, face swap, talking avatar, video translation, ai video generator, streaming avatar]
   use_cases:
     - "Marketers making avatar videos and personalized ads"
     - "Teams translating videos into other languages"
-    - "Existing AKOOL subscribers earning credits by inviting others"
+    - "Creators and agencies producing AI video content for clients"
 
 verified: true
 submitted_by: affitor
@@ -57,5 +55,5 @@ created_at: "2026-10-13"
 updated_at: "2026-10-13"
 last_verified_at: "2026-10-13"
 status: active
-kind: referral
+kind: affiliate
 source: manual
