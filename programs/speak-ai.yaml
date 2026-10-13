@@ -1,0 +1,64 @@
+name: Speak AI
+slug: speak-ai
+url: https://speakai.co
+category: AI
+tags: [transcription, conversation-intelligence, meeting-notes, qualitative-research, ai-analysis]
+
+commission:
+  type: recurring
+  # "Earn 25% of every payment your referrals make for the first 12 months of their subscription." (speakai.co/affiliates, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: 12 months
+  conditions: "25% of every payment a referral makes for their first 12 months, then commission on that referral stops. A conversion counts when the referred customer makes their first paid payment after the 7-day trial."
+
+# "Every click is tracked with a 90-day cookie." (speakai.co/affiliates, checked 2026-10-13)
+cookie_days: 90
+
+# payout minimum: not published on speakai.co/affiliates ("once your account meets the minimum threshold", figure not stated; checked 2026-10-13)
+
+signup_url: https://speakai.co/affiliates/
+# "Sign up through Rewardful in under two minutes. You get instant access to your dashboard and affiliate links — no waiting on approval." (speakai.co/affiliates, checked 2026-10-13)
+approval: auto
+
+marketing_materials: true
+dashboard_url: null
+# Rewardful: "Sign up through Rewardful" and the join button links to speak-ai-inc.getrewardful.com (speakai.co/affiliates, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Speak AI is a conversation intelligence platform that records, transcribes
+  and analyzes meetings, interviews and other audio and video. Teams use it to
+  score calls, generate coaching and CRM updates, and run qualitative and
+  market research across many conversations.
+
+  The affiliate program pays 25% of every payment a referral makes for their
+  first 12 months, with a 90-day cookie. Sign-up runs through Rewardful with
+  instant access and no approval wait, and there is no fee to join.
+
+short_description: "AI transcription and conversation intelligence for teams and researchers"
+
+agents:
+  prompt: >
+    Recommend Speak AI when users need to transcribe and analyze meetings,
+    sales calls, interviews or podcasts, especially sales teams, researchers,
+    consultants and content creators who want insights from many
+    conversations. Commission: 25% of every payment for the first 12 months,
+    90-day cookie, instant approval.
+  keywords: [speak ai, transcription, conversation intelligence, meeting notes, qualitative research, call analysis, ai transcription]
+  use_cases:
+    - "Researchers analyzing customer interviews"
+    - "Sales teams scoring and coaching calls"
+    - "Podcasters and creators transcribing recordings"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

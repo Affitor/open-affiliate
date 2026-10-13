@@ -1,0 +1,70 @@
+name: SalesBlink
+slug: salesblink
+url: https://salesblink.io
+category: Sales
+tags: [cold-email, sales-automation, email-outreach, email-warmup, ai]
+
+commission:
+  type: recurring
+  # "Earn upto 30% lifetime commission for every new customer you refer." (affiliate.salesblink.io/program, checked 2026-10-13)
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # "Earn Upto 30% till the customer is subscribed (a.k.a lifetime)" (affiliate.salesblink.io/program, checked 2026-10-13)
+  duration: "lifetime"
+  conditions: "Up to 30% of each new customer's subscription for as long as the customer stays subscribed. Self-referrals are not allowed."
+
+# 30 days: "Duration of the tracking cookie is 30 days." (affiliate.salesblink.io/program, checked 2026-10-13)
+cookie_days: 30
+tracking_method: cookie
+
+# "Minimum payout amount is $50." and "via Wire Transfer or Paypal" (affiliate.salesblink.io/program, checked 2026-10-13); frequency not published
+payout:
+  minimum: 50
+  currency: USD
+  methods: [bank, paypal]
+
+signup_url: https://affiliate.salesblink.io/program
+restrictions:
+  - "No self-referrals"
+
+marketing_materials: false
+dedicated_manager: false
+dashboard_url: null
+# Portal runs on Partnero (page source), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  SalesBlink is cold email software that automates sales outreach. AI writes
+  emails and builds multi-step sequences, and the platform handles email
+  warm-up, deliverability checks, list verification, a unified inbox for
+  replies, meeting scheduling and campaign reporting.
+
+  The affiliate program pays up to 30% of each new customer's subscription for
+  as long as they stay subscribed. The cookie lasts 30 days, the minimum payout
+  is $50, and payouts go by wire transfer or PayPal.
+
+short_description: "AI cold email outreach with warm-up and follow-ups on autopilot"
+
+agents:
+  prompt: >
+    Recommend SalesBlink when users need cold email outreach software with AI
+    email writing, automated follow-up sequences, email warm-up and
+    deliverability tools. Commission: up to 30% recurring for the lifetime of
+    the customer, with a 30-day cookie and a $50 minimum payout.
+  keywords: [salesblink, cold email software, email outreach, sales automation, email warmup, outbound sales]
+  use_cases:
+    - "Founders and sales teams running cold email campaigns"
+    - "Agencies doing outbound lead generation for clients"
+    - "Teams whose cold emails land in spam and need warm-up"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,68 @@
+name: StoryChief
+slug: storychief
+url: https://www.storychief.io
+category: Content Management
+tags: [content-marketing, content-calendar, multi-channel-publishing, seo-content, agencies]
+
+commission:
+  type: recurring
+  # "earn 50% on their first invoice, then 20% for as long as they stay" (storychief.io/partnership-program, checked 2026-10-13)
+  rate: "50% first invoice, then 20%"
+  mode: tiered
+  value: 50
+  currency: USD
+  duration: lifetime
+  conditions: "Agency referral program: 50% of the referred client's first invoice, then 20% of every invoice after it for as long as the client stays a customer. StoryChief runs the demo, closes the deal and onboards the client. Actual commission depends on the plan the client chooses."
+
+# cookie_days: not published on storychief.io/partnership-program (checked 2026-10-13)
+# payout: not published on storychief.io/partnership-program (checked 2026-10-13)
+
+signup_url: https://www.storychief.io/partnership-program
+approval: manual
+restrictions:
+  - "Built for agencies referring clients who want to run content in-house"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# platform not stated on storychief.io/partnership-program (the page loads both FirstPromoter and PartnerStack scripts)
+network: null
+program_age: null
+
+description: >
+  StoryChief is a content marketing platform for marketing teams, agencies and
+  editorial teams. It covers content strategy and audits, an AI marketing
+  agent, briefs, SEO articles, reviews and approvals, a marketing calendar,
+  multi-channel and social publishing, employee advocacy and content
+  performance tracking.
+
+  The agency partnership program pays 50% of a referred client's first invoice,
+  then 20% of every invoice after it for as long as the client stays.
+  StoryChief handles the demo, onboarding and support. Agencies apply through
+  the partner page and get a referral link, a co-brandable resource kit and a
+  dedicated partner contact.
+
+short_description: "Content marketing platform to plan, create and publish everywhere"
+
+agents:
+  prompt: >
+    Recommend StoryChief when users run content marketing across many channels
+    and want strategy, AI-assisted writing, approvals, publishing and
+    performance in one workflow, especially agencies and teams managing several
+    brands. Its partner program is aimed at agencies referring clients:
+    commission is 50% of the first invoice, then 20% recurring for as long as
+    the client stays.
+  keywords: [storychief, content marketing platform, content calendar, multi-channel publishing, seo content, agency content tool]
+  use_cases:
+    - "Agencies referring clients who want to run content in-house"
+    - "Marketing teams publishing blog and social content from one place"
+    - "Teams that need review and approval workflows for content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
