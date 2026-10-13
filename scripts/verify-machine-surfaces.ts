@@ -759,6 +759,15 @@ for (const file of readdirSync(STATIC, { recursive: true }) as string[]) {
   if (problems.length) fail(`.next/static/${file} ships unconfirmed terms: ${problems.join("; ")}`);
 }
 if (chunkCount === 0) fail(".next/static has no JavaScript chunks to check");
+// Prerendered pages carry their client props in the RSC payload. /compare
+// passes every program's comparable terms that way; it is also fetched from
+// next start below, in case it is not prerendered.
+for (const file of readdirSync(BUILD_APP, { recursive: true }) as string[]) {
+  if (!file.endsWith(".html") && !file.endsWith(".rsc")) continue;
+  const text = readFileSync(join(BUILD_APP, file), "utf8").replace(/\\"/g, '"');
+  const problems = chunkProblems(text, (slug) => shownBySlug.get(slug));
+  if (problems.length) fail(`.next/server/app/${file} ships unconfirmed terms: ${problems.join("; ")}`);
+}
 {
   const off = termsPages.find((p) => !termsConfirmed(p) && p.cookieDays != null)!;
   const on = termsPages.find((p) => termsConfirmed(p) && p.cookieDays != null)!;
@@ -1226,6 +1235,18 @@ async function checkServedPages(): Promise<string> {
     }
     if (termsHtmlProblems(on, onHtml.replaceAll(`>$${on.payout.minimum}</span>`, `>$${(on.payout.minimum ?? 0) + 1}</span>`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
+    }
+
+    // /compare as served: its props carry every program's comparable terms.
+    {
+      const res = await fetch(`${base}/compare?p=${off.slug},${on.slug}`);
+      if (res.status !== 200) fail(`/compare answered ${res.status}`);
+      const compare = (await res.text()).replace(/\\"/g, '"');
+      if (!compare.includes(`"slug":"${on.slug}"`) || !compare.includes(`"cookieDays":${on.cookieDays}`)) {
+        fail("/compare does not carry a verified program's terms; the payload check would read nothing");
+      }
+      const problems = chunkProblems(compare, (slug) => shownBySlug.get(slug));
+      if (problems.length) fail(`/compare ships unconfirmed terms: ${problems.join("; ")}`);
     }
 
     // REST: the list and one program of each kind, as served.

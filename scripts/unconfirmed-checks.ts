@@ -216,9 +216,11 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
 }
 
 /**
- * A browser chunk (or any shipped JS/JSON): a term field serialized with a
- * value must belong to a verified program, judged by the nearest slug before
- * it. `confirmed(slug)` says whether that slug's terms are shown.
+ * Shipped data (a browser chunk, a prerendered page's RSC payload): a term
+ * field serialized with a value belongs to the record of the nearest slug
+ * before it, and must not belong to a program whose terms are unconfirmed.
+ * `confirmed(slug)` is undefined for a slug that is not a program (the docs'
+ * illustrative examples), which is not judged.
  */
 export function chunkProblems(text: string, confirmed: (slug: string) => boolean | undefined): string[] {
   const problems: string[] = []
@@ -230,8 +232,8 @@ export function chunkProblems(text: string, confirmed: (slug: string) => boolean
       if (s.at > m.index!) break
       owner = s.slug
     }
-    if (owner === undefined || confirmed(owner) !== true) {
-      problems.push(`${JSON.stringify(m[0])} for ${owner ?? "no slug"}`)
+    if (owner !== undefined && confirmed(owner) === false) {
+      problems.push(`${JSON.stringify(m[0])} for ${owner}`)
       if (problems.length >= 5) break
     }
   }

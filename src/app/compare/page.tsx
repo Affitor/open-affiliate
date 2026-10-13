@@ -26,7 +26,8 @@ function toCompare(stored: Program): CompareProgram {
       applyHref: "",
     };
   }
-  return {
+  // A left-out term stays out of the payload instead of crossing as "$undefined".
+  return withoutUndefined({
     ...base,
     live: true,
     commission: commissionDisplay(p.commission),
@@ -44,7 +45,11 @@ function toCompare(stored: Program): CompareProgram {
     apiAvailable: p.apiAvailable,
     dedicatedManager: p.dedicatedManager,
     applyHref: applyButton(p).href,
-  };
+  });
+}
+
+function withoutUndefined<T extends object>(o: T): T {
+  return Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
 }
 
 export default function ComparePage() {

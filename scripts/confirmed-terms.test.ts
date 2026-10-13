@@ -161,6 +161,23 @@ test("REST /api/programs/{slug} leaves out an unverified program's terms and kee
   }
 })
 
+test("an alias of an unverified program answers with its terms hidden too, on REST and MCP", async () => {
+  const aliases = Object.entries((registry as { aliases?: Record<string, string> }).aliases ?? {})
+  const hit = aliases.find(([, slug]) => {
+    const p = getProgram(slug)
+    return p && isLive(p) && !termsConfirmed(p) && p.cookieDays != null
+  })
+  assert.ok(hit, "no alias points at an unverified program with a cookie window")
+  const [alias, slug] = hit
+  const p = getProgram(slug)!
+  const viaAlias = await restGetProgram(alias)
+  assert.equal(viaAlias.slug, slug)
+  assertHidden(viaAlias, p, `REST alias ${alias}`)
+  assert.deepEqual(viaAlias, await restGetProgram(slug))
+  const viaMcp = await mcpGetProgram(alias)
+  assertHidden(viaMcp, p, `MCP alias ${alias}`)
+})
+
 test("REST /api/programs leaves out the hidden terms for every unverified row", async () => {
   const rows = await restListPrograms("")
   assert.ok(rows.length > 100)
