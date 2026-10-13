@@ -1,9 +1,9 @@
-name: Typeset (SciSpace)
+name: SciSpace (formerly Typeset)
 slug: typeset
 aliases:
 - scispace
 - typeset-io
-url: https://typeset.io
+url: https://scispace.com
 category: AI
 tags:
 - ai
@@ -30,7 +30,7 @@ dedicated_manager: false
 dashboard_url: null
 network: in-house
 program_age: null
-description: Typeset (SciSpace) is an AI research platform with 290M papers, AI Copilot for reading, literature review automation,
+description: SciSpace (formerly Typeset) is an AI research platform with 290M papers, AI Copilot for reading, literature review automation,
   and academic writing tools.
 short_description: AI research assistant for papers, literature reviews, and writing
 agents:
