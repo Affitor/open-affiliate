@@ -10,26 +10,20 @@ tags:
   - sales
   - saas
 commission:
-  type: recurring
-  rate: 15%
-  mode: percentage
-  value: 15
+  type: tiered
+  rate: "Up to 25%"
+  mode: tiered
+  value: 25
   currency: USD
-  duration: 12 months
-  conditions: "Earn 15% Commission: For every successful  paid customer you make, with the potential to increase your rate by advancing through our tiered system."
-cookie_days: 30
+  duration: null
+  conditions: "15% for every successful paid customer to start, rising through tiers to up to 25%."
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 0
   currency: USD
   frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://get.nicejob.com/affiliate-program
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://get.nicejob.com/partners
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -50,10 +44,10 @@ agents:
   use_cases:
     - Teams looking for marketing solutions
     - Companies evaluating NiceJob vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

@@ -9,26 +9,23 @@ tags:
   - content-management
   - saas
 commission:
-  type: one-time
-  rate: 35%
-  mode: percentage
+  type: hybrid
+  rate: "Up to $250 or up to 35% recurring"
+  mode: hybrid
   value: 35
   currency: USD
   duration: null
-  conditions: 💸 Earn up to $250 in commissions or up to 35% recurring commissions for each new customer
-cookie_days: 30
+  conditions: "By tier, $100-$250 per yearly subscription or 20-35% recurring on monthly subscriptions: Bronze $100 or 20%, Silver (10 customers) $150 or 30%, Gold (50 customers) $250 or 35%."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
   frequency: monthly
-  methods:
-    - bank
-    - paypal
+  methods: [paypal, stripe]
 signup_url: https://www.iconosquare.com/affiliate-program
 approval: manual
-approval_time: 1-5 business days
+approval_time: "5-7 business days"
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -49,10 +46,10 @@ agents:
   use_cases:
     - Teams looking for social media solutions
     - Companies evaluating Iconosquare vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
