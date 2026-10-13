@@ -13,6 +13,7 @@ commission:
   currency: USD
   duration: "12 months"
   conditions: "20% of the customer's first-year subscription revenue, rising to 25% and 30% with monthly referral volume."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.freshworks.com/company/affiliate-partner/

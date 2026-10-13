@@ -8,7 +8,7 @@ tags:
 commission:
   type: one-time
   rate: "Up to $100"
-  mode: flat
+  mode: hybrid
   value: 100
   currency: USD
   duration: null

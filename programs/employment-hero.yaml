@@ -8,8 +8,8 @@ tags:
 commission:
   type: one-time
   rate: "AUD$200 / £100 per qualified demo"
-  mode: hybrid
-  value: 200
+  mode: unknown
+  value: null
   currency: AUD
   duration: null
   conditions: "AUD$200 or £100 for every qualified lead who books a demo (PartnerStack affiliate program). A separate referral partner program pays from 10% of first-year subscription."
