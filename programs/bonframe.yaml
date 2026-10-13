@@ -25,9 +25,10 @@ signup_url: https://affitor.com/marketplace/bonframe
 network: affitor
 
 description: >-
-  Bonframe translates video with dubbing in a clone of the original speaker's voice and AI lip sync.
-  It can also find the right moments in long footage locally, in seconds, before those clips go to
-  new audiences.
+  Bonframe is a desktop app for Mac and Windows that translates video locally, dubs it in a clone of
+  the original speaker's voice and syncs lips with AI, in over 200 languages. It also finds the
+  publishable moment in long footage in seconds, before that clip goes to audiences in other
+  languages.
 short_description: Video translation with cloned original-voice dubbing and AI lip sync
 
 agents:
