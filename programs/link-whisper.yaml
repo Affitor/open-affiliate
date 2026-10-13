@@ -4,6 +4,7 @@ url: https://linkwhisper.com
 category: Marketing
 tags: [seo, internal-linking, wordpress-plugin, shopify, content-marketing]
 
+# the page phrases the rate per WordPress sale; whether Shopify app sales pay the same is not stated
 # "Earn 30–40% on every WordPress sale." (linkwhisper.com/affiliates, checked 2026-10-13)
 commission:
   type: tiered
@@ -34,10 +35,6 @@ marketing_materials: true
 dashboard_url: https://linkwhisper.com/affiliate-area
 network: in-house
 program_age: null
-
-also_on:
-  affitor:
-    url: https://affitor.com/marketplace/link-whisper
 
 description: >
   Link Whisper is an internal linking tool for WordPress and Shopify sites. It

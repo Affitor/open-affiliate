@@ -29,7 +29,7 @@ restrictions:
   - "No commissions on your own purchases"
   - "No coupons, discounts or deals unless approved"
   - "Domain name must not contain 'themify' unless approved"
-  - "No paid search ads (e.g. Google Ads) unless approved"
+  - "No ads (e.g. Google AdWords) unless approved"
   - "No spam or misleading links"
 
 marketing_materials: true
@@ -57,7 +57,7 @@ agents:
     a drag-and-drop page builder, for blogs, business sites or WooCommerce
     stores. Fits WordPress beginners, freelancers and agencies. Commission:
     40% on the initial purchase, with a 60-day cookie. Do not promote with
-    coupons or paid search ads unless approved.
+    coupons or ads unless approved.
   keywords: [themify, wordpress themes, themify builder, page builder, wordpress plugins, woocommerce themes]
   use_cases:
     - "Bloggers and small businesses picking a fast WordPress theme"

@@ -12,7 +12,7 @@ commission:
   value: 30
   currency: USD
   duration: "24 months"
-  conditions: "Paid on eligible payments, including subscription renewals, for up to 24 months from the referred customer's first qualifying purchase. Refunded, disputed or fraudulent payments are excluded or reversed."
+  conditions: "Paid on eligible payments for up to 24 months from the referred customer's first qualifying purchase; recurring subscription payments in that period may also qualify. Refunded, disputed or fraudulent payments are excluded or reversed."
 
 # "The standard attribution window is 90 days." (domer.io/affiliate/terms, checked 2026-10-13)
 cookie_days: 90
@@ -31,10 +31,6 @@ dashboard_url: null
 network: null
 program_age: null
 
-also_on:
-  affitor:
-    url: https://affitor.com/marketplace/domer-affiliate-program
-
 description: >
   Domer is an AI creative studio for content creators. It generates videos from
   text or images and images from text prompts, with a prompt library, video and
@@ -42,7 +38,7 @@ description: >
   start with free credits.
 
   The affiliate program pays 30% recurring commission on eligible payments from
-  referred customers for up to 24 months, including subscription renewals.
+  referred customers for up to 24 months; renewals in that period may also qualify.
   Referrals are attributed for 90 days. Applications are reviewed before
   approval, and bidding on Domer brand keywords is not allowed.
 
