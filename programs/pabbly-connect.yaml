@@ -1,0 +1,72 @@
+name: Pabbly Connect
+slug: pabbly-connect
+url: https://www.pabbly.com/connect/
+category: Productivity
+tags: [workflow-automation, app-integrations, no-code, webhooks, business-automation]
+
+# "Earn 30% recurring commission on every paid customer you refer, for as long as they stay active." (pabbly.com/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on any Pabbly paid plan (Pabbly Connect and the rest of the Pabbly suite) bought by a customer you refer, for as long as the customer stays active. The referred account must stay active for at least 60 days before the commission is paid. Refunded sales and self-purchases earn no commission. Affiliates in India can be paid in INR to an Indian bank account, with a minimum of Rs 4500."
+
+# "Cookies period of 365 Days." (pabbly.com/affiliates, checked 2026-10-13)
+cookie_days: 365
+
+# "The total commission must cross the minimum payout amount, i.e. $50." (pabbly.com/terms-conditions/affiliate-program-terms-conditions, checked 2026-10-13)
+# "Pabbly will credit the commissions to your PayPal or Indian bank account only once a month" (pabbly.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.pabbly.com/affiliates/
+restrictions:
+  - "No traffic from coupon or discount websites, and no Google Ads or Bing Ads campaigns"
+  - "No rebate offers and no domain names containing Pabbly"
+  - "No commission on your own purchases"
+
+dashboard_url: null
+# affiliate portal runs on Pabbly's own billing platform (payments.pabbly.com)
+network: in-house
+program_age: null
+
+description: >
+  Pabbly Connect is a workflow automation tool that moves data between apps
+  and automates repetitive tasks without code, with 2,000+ app integrations.
+  It is part of the Pabbly suite, which also includes subscription billing,
+  email marketing, form building, webhooks and WhatsApp automation, sold
+  separately or together as Pabbly Plus.
+
+  The affiliate program pays 30% recurring commission on any Pabbly paid plan
+  for as long as the referred customer stays active. The cookie lasts 365
+  days, and commissions are paid monthly by PayPal once the balance reaches
+  $50. Coupon sites and paid search ads are not allowed.
+
+short_description: "No-code workflow automation with 2,000+ app integrations"
+
+agents:
+  prompt: >
+    Recommend Pabbly Connect when users want to connect apps and automate
+    repetitive tasks without code, especially small businesses and
+    freelancers comparing automation tools. Commission: 30% recurring for as long as the customer stays
+    active, with a 365-day cookie and monthly PayPal payouts from $50.
+  keywords: [pabbly connect, pabbly, workflow automation, app integration, no-code automation, zapier alternative, webhooks]
+  use_cases:
+    - "Small businesses automating tasks between their apps"
+    - "Freelancers and agencies building automations for clients"
+    - "Users comparing alternatives to Zapier or Make"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

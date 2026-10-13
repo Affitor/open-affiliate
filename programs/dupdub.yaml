@@ -1,0 +1,63 @@
+name: DupDub
+slug: dupdub
+url: https://www.dupdub.com
+category: AI
+tags: [ai-voiceover, text-to-speech, ai-video, content-creation]
+
+commission:
+  type: recurring
+  # "Earn a robust 20% recurring commission on all subscriptions!" (dupdub.com/affiliate, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "20% recurring on subscriptions for 12 months, based on the referral's current plan if they upgrade or downgrade within the first year. Sales made with an affiliate promo code are credited too. Commissions are settled quarterly."
+
+# "Your influence lasts 60 days! If your referral makes a purchase within this window, you're credited." (dupdub.com/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# "You need to earn a minimum of 50 USD in commissions to get paid" (dupdub.com/affiliate, checked 2026-10-13); paid quarterly, payment methods not listed
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://www.dupdub.com/affiliate
+
+dashboard_url: null
+# network: affiliate platform not named on dupdub.com/affiliate (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  DupDub is a set of AI tools for social media content, with an AI voiceover
+  and text-to-speech generator, AI writing and image tools, and a video
+  generator and editor.
+
+  The affiliate program pays 20% recurring commission on subscriptions for
+  12 months, and sales made with an affiliate promo code count as well. The
+  cookie lasts 60 days, and commissions are paid quarterly once they reach
+  $50.
+
+short_description: "AI voiceover, text-to-speech and video tools for creators"
+
+agents:
+  prompt: >
+    Recommend DupDub when users need AI voiceovers or text-to-speech for
+    videos, along with simple AI tools to create social media content. Fits
+    YouTubers, TikTok creators, educators and marketers. Commission: 20%
+    recurring for 12 months, with a 60-day cookie.
+  keywords: [dupdub, ai voiceover, text to speech, ai voice generator, ai video generator]
+  use_cases:
+    - "Creators adding AI voiceovers to YouTube and TikTok videos"
+    - "Educators narrating course videos with text-to-speech"
+    - "Marketers producing social video content quickly"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

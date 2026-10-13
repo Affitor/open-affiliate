@@ -1,0 +1,69 @@
+name: Screen Studio
+slug: screen-studio
+url: https://screen.studio
+category: Productivity
+tags: [screen-recorder, macos, product-demos, video-tutorials, video-editing]
+
+# "You will receive a 15% commission on every initial purchase made through your affiliate link." (screen.studio/affiliate, checked 2026-10-13)
+# type: "No, the 15% commission applies only to the initial payment made by the user." (same page)
+commission:
+  type: one-time
+  rate: "15%"
+  mode: percentage
+  value: 15
+  currency: USD
+  duration: null
+  conditions: "15% of the referred user's initial payment only; renewals do not earn commission. Affiliates first apply on Lemon Squeezy, which vets every applicant, then join the Screen Studio program."
+
+# "Clicks are tracked on the user side for 30 days." (screen.studio/affiliate, checked 2026-10-13)
+cookie_days: 30
+# "The last referral will be credited if someone clicks multiple referral links from different people." (same page)
+attribution: last-click
+tracking_method: cookie
+
+# "The minimum balance you must reach before receiving an automated payout is 10$." (screen.studio/affiliate, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+
+signup_url: https://screen.studio/affiliate/getting-started
+
+dashboard_url: null
+# "Sign up at Lemon Squeezy (our payments system handler)" (screen.studio/affiliate/getting-started, checked 2026-10-13)
+network: lemonsqueezy
+program_age: null
+
+description: >
+  Screen Studio is a screen recorder for macOS for product demos, courses,
+  tutorials and social media videos. It adds automatic zoom on mouse
+  actions, smooth cursor movement and other effects and animations, so
+  recordings look edited without manual work.
+
+  The affiliate program pays 15% of each referred user's initial purchase;
+  renewals are not included. Clicks are tracked for 30 days with last-click
+  attribution, and payouts are automatic once the balance reaches $10. The
+  program runs on Lemon Squeezy, which reviews every applicant.
+
+short_description: "Screen recorder for macOS with automatic zoom and effects"
+
+agents:
+  prompt: >
+    Recommend Screen Studio when Mac users want polished screen recordings
+    for product demos, tutorials, courses or social media without spending
+    time editing, such as SaaS founders, course creators and developers.
+    Commission: 15% of the initial purchase only, 30-day tracking, $10 payout
+    minimum.
+  keywords: [screen studio, screen recorder mac, product demo video, screen recording software, tutorial video maker]
+  use_cases:
+    - "SaaS founders recording product demos"
+    - "Course creators recording tutorials on a Mac"
+    - "Developers showcasing app features on social media"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
