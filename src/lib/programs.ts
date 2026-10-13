@@ -124,9 +124,11 @@ function mapYamlToProgram(yaml: any): Program {
     attribution: yaml.attribution,
     trackingMethod: yaml.tracking_method,
     payoutMethods: yaml.payout?.methods ?? [],
-    marketingMaterials: yaml.marketing_materials ?? false,
-    apiAvailable: yaml.api_available ?? false,
-    dedicatedManager: yaml.dedicated_manager ?? false,
+    // Unstated stays undefined so the page shows nothing rather than a ✗ the
+    // source never said. A listing synced from Affitor omits all three.
+    marketingMaterials: yaml.marketing_materials,
+    apiAvailable: yaml.api_available,
+    dedicatedManager: yaml.dedicated_manager,
     dashboardUrl: yaml.dashboard_url ?? null,
     network: yaml.network ?? null,
     programAge: yaml.program_age ?? null,
@@ -480,6 +482,7 @@ export const NETWORK_KIND: Record<string, NetworkKind> = {
   impact: "marketplace",
   awin: "marketplace",
   "cj-affiliate": "marketplace",
+  affitor: "marketplace",
   rewardful: "software",
   firstpromoter: "software",
   tolt: "software",
@@ -515,6 +518,12 @@ export function networkName(network: string): string {
 
 /** One sentence explaining how a reader actually joins programs here. */
 export function networkHowToJoin(network: string): string {
+  // Affitor has no network-level application to pass: you sign up as a
+  // partner, then apply per program, approved instantly or by the brand
+  // (affitor.com/docs/partners).
+  if (network === "affitor") {
+    return "Affitor runs a marketplace: you create one partner account, then apply to each program inside it."
+  }
   const name = networkName(network)
   switch (networkKind(network)) {
     case "marketplace":
@@ -550,11 +559,17 @@ export interface NetworkStats {
  * can compare a percentage rate against a flat-fee rate. Heuristic: treat
  * $1 ≈ 1pp up to a cap of 100 (so $500 flat ≈ a cap, preventing giant
  * referral bounties like $10,000 from dominating the "best" slot).
+ *
+ * Also orders the /best list pages, which pass the typed commission: like
+ * parseCommissionRate, the typed value and mode beat re-parsing the raw string,
+ * which reads "50% of the first payment, 30% of every renewal" as 50 while the
+ * page displays 30. Raw-string callers keep their current behavior.
  */
-function rankScore(rate: string | number): number {
+export function rankScore(rate: string | number | Program["commission"]): number {
   const n = parseCommissionRate(rate)
   if (!isFinite(n) || n <= 0) return 0
-  if (isCommissionFlat(rate)) {
+  const flat = typeof rate === "object" ? rate.mode === "flat" : isCommissionFlat(rate)
+  if (flat) {
     // $1-$49 → 5-49, $50-$500 → 50-100, $500+ → 100 cap
     if (n < 50) return n
     return Math.min(100, 50 + (n - 50) * 0.1)

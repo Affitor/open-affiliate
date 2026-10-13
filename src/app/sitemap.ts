@@ -7,6 +7,7 @@ import {
   type Program,
 } from "@/lib/programs";
 import { docsNav } from "@/app/docs/_config";
+import { BEST_LISTS, buildBestList } from "@/lib/best-lists";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -67,6 +68,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
+  const bestPages: MetadataRoute.Sitemap = BEST_LISTS.map((list) => ({
+    url: `${BASE_URL}/best/${list.slug}`,
+    lastModified: latestProgramDate(buildBestList(list).rows),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
     url: `${BASE_URL}/programs/${p.slug}`,
     lastModified: p.updatedAt ?? p.lastVerifiedAt ?? p.createdAt ?? undefined,
@@ -74,5 +82,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...docsPages, ...categoryPages, ...networkPages, ...programPages];
+  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages];
 }
