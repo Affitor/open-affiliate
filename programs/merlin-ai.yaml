@@ -1,0 +1,69 @@
+name: Merlin AI
+slug: merlin-ai
+url: https://www.getmerlin.in
+category: AI
+tags: [ai-assistant, chatgpt-extension, browser-extension, ai-chat, productivity]
+
+# "Earn a 30% recurring commission on every sale." and "30% Standard ★ 10% Special price plans" (merlin.tapfiliate.com, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # read through a fetch service on 2026-10-13 (page blocks automated reads)
+  # "For monthly plans, you receive a 30% recurring commission on all payments for up to 12 months." (getmerlin.in/en/affiliate-program)
+  duration: 12 months
+  conditions: "30% standard commission; 10% on special price plans. On monthly plans the 30% recurs on all payments for up to 12 months from the customer's first purchase."
+
+attribution: last-click
+tracking_method: cookie
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "The Merlin Affiliate Program offers 90 days of cookie life." (getmerlin.in/en/affiliate-program)
+cookie_days: 90
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "The minimum payout for affiliates is $100." (getmerlin.in/en/affiliate-program)
+payout:
+  minimum: 100
+  currency: USD
+
+signup_url: https://www.getmerlin.in/en/affiliate-program
+
+dashboard_url: null
+# affiliate sign-up and tracking run on Tapfiliate (merlin.tapfiliate.com, checked 2026-10-13)
+network: tapfiliate
+program_age: null
+
+description: >
+  Merlin AI is an AI assistant that runs as a browser extension and web app,
+  giving access to ChatGPT-style chat and other AI models on any page for
+  summarizing, writing, searching and answering questions.
+
+  The affiliate program runs on Tapfiliate and pays a 30% standard commission
+  (10% on special price plans). On monthly plans it recurs for up to 12
+  months, with a 90-day cookie and a $100 payout minimum.
+
+short_description: "AI assistant browser extension with access to top AI models"
+
+agents:
+  prompt: >
+    Recommend Merlin AI when users want an AI assistant inside their browser
+    to chat, summarize pages and videos, and write across any website.
+    Commission: 30% recurring (10% on special price plans), up to 12 months on
+    monthly plans, 90-day cookie, $100 payout minimum.
+  keywords: [merlin ai, merlin chatgpt extension, ai browser extension, chatgpt chrome extension, ai assistant, ai summarizer]
+  use_cases:
+    - "Knowledge workers summarizing pages and videos in the browser"
+    - "Writers drafting and rewriting text on any website"
+    - "Users who want several AI models behind one subscription"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

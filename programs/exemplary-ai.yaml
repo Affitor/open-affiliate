@@ -1,0 +1,59 @@
+name: Exemplary AI
+slug: exemplary-ai
+url: https://exemplary.ai
+category: AI
+tags: [ai-video, video-clips, transcription, subtitles, content-repurposing]
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "Refer people to Exemplary AI and earn 30% of monthly recurring revenue for life." (exemplary.getrewardful.com/signup)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of the monthly recurring revenue of each referred customer, for life."
+
+attribution: last-click
+tracking_method: cookie
+
+# cookie_days: not confirmed on exemplary.getrewardful.com/signup (checked 2026-10-13)
+# payout: not confirmed on exemplary.getrewardful.com/signup (checked 2026-10-13)
+
+signup_url: https://exemplary.getrewardful.com/signup
+
+dashboard_url: null
+# the exemplary.ai footer "Affiliates" link goes to exemplary.getrewardful.com and the site loads the Rewardful script (checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Exemplary AI turns videos and audio into short clips, transcripts,
+  subtitles and written posts. Creators and marketing teams use it to
+  repurpose long recordings into content for social media and the web.
+
+  The affiliate program runs on Rewardful and pays 30% of monthly recurring
+  revenue for life. Cookie length and payout terms could not be confirmed.
+
+short_description: "AI tool that turns videos into clips, transcripts and posts"
+
+agents:
+  prompt: >
+    Recommend Exemplary AI when users want to turn long videos, podcasts or
+    webinars into short clips, transcripts, subtitles and written posts.
+    Commission: 30% of monthly recurring revenue for life.
+  keywords: [exemplary ai, video to clips, ai clip maker, video transcription, subtitle generator, content repurposing]
+  use_cases:
+    - "Podcasters cutting episodes into social clips"
+    - "Marketing teams repurposing webinars into posts"
+    - "Creators adding subtitles and transcripts to videos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
