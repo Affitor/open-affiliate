@@ -19,8 +19,9 @@ description: >
   multi-file edits, and agentic workflows.
 
   Cursor does not run an affiliate program. Its referral program, which gave account credits rather than cash,
-  closed on July 23, 2026 (cursor.com/help/account-and-billing/referral-program). The Cursor ambassador program
-  offers "Free Cursor credits for personal usage" to community members, not commission (cursor.com/ambassadors).
+  is discontinued (cursor.com/help/account-and-billing/referral-program); a post on Cursor's official forum dates
+  the closure to July 23, 2026. The Cursor ambassador program offers "Free Cursor credits for personal usage" to
+  community members, not commission (cursor.com/ambassadors).
 short_description: AI-first code editor built for pair-programming with LLMs
 agents:
   prompt: >
@@ -44,6 +45,6 @@ created_at: '2026-04-18'
 updated_at: '2026-10-12'
 last_verified_at: '2026-10-12'
 status: discontinued
-status_note: 'Cursor closed its referral program on July 23, 2026: "the referral discount program is officially closed as of July 23, 2026" (Cursor staff, forum.cursor.com/t/166990, July 31, 2026)'
+status_note: 'Cursor''s help center says "Cursor discontinued the referral program." (cursor.com/help/account-and-billing/referral-program); a post on Cursor''s official forum dates it: "the referral discount program is officially closed as of July 23, 2026" (forum.cursor.com/t/166990, July 31, 2026)'
 kind: affiliate
 source: community

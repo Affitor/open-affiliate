@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { programs, categories } from "@/lib/programs";
+import { livePrograms as programs, categories } from "@/lib/programs";
 
 export const alt = "OpenAffiliate: The Open Registry of Affiliate Programs";
 export const size = { width: 1200, height: 630 };

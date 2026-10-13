@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { programs, categories } from "@/lib/programs"
+import { livePrograms, categories } from "@/lib/programs"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -17,7 +17,8 @@ export function OPTIONS() {
 export function GET() {
   const categoriesWithCounts = categories.map((name) => ({
     name,
-    count: programs.filter((p) => p.category === name).length,
+    // Live programs only: a brand with no program is not one to count.
+    count: livePrograms.filter((p) => p.category === name).length,
   }))
 
   return NextResponse.json(

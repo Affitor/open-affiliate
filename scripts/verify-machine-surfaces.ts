@@ -45,8 +45,10 @@ const llmsFull = requireText("llms-full.txt");
 if (!llms.startsWith("# OpenAffiliate\n")) {
   fail("llms.txt must start with the project H1");
 }
-// Same singular rule as generate-md's programCount().
-const programsPhrase = `${programs.length} ${programs.length === 1 ? "program" : "programs"}`;
+// Same singular rule as generate-md's programCount(). Counts are of live
+// programs: a brand with no program to join is not counted as one.
+const liveCount = programs.filter(isLive).length;
+const programsPhrase = `${liveCount} ${liveCount === 1 ? "program" : "programs"}`;
 if (!llms.includes(programsPhrase)) {
   fail("llms.txt program count differs from the registry");
 }

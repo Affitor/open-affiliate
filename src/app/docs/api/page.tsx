@@ -70,7 +70,7 @@ export default function APIPage() {
           <h2 id="example" className="text-lg font-semibold mb-3">Example</h2>
           <p className="text-sm text-muted-foreground mb-3">
             <code>cookieDays</code> and the <code>payout</code> fields are left out when a program does not publish them.
-            Programs with <code>status</code> <code>paused</code>, <code>discontinued</code> or <code>no_program</code> are returned by slug but not in search results. A <code>discontinued</code> or <code>no_program</code> entry carries no terms: it returns <code>answer</code> and <code>alternatives</code> instead.
+            Programs with <code>status</code> <code>paused</code>, <code>discontinued</code> or <code>no_program</code> are returned by slug but not in search results or category counts.
           </p>
           <CodeBlock
             label="curl"
@@ -88,6 +88,49 @@ export default function APIPage() {
     ...
   }
 ]`}
+          />
+        </section>
+
+        <section>
+          <h2 id="no-program" className="text-lg font-semibold mb-3">Brands with no affiliate program</h2>
+          <p className="text-sm text-muted-foreground mb-3">
+            <code>status</code> <code>no_program</code> means no public affiliate program could be found on the brand&apos;s own
+            site; <code>discontinued</code> means the brand closed it. <code>GET /api/programs/{"{slug}"}</code> still answers for
+            these, with the same shape as any program so existing clients keep working, but with no terms in it:
+          </p>
+          <ul className="text-sm text-muted-foreground mb-3 list-disc pl-5 space-y-1">
+            <li>
+              <code>commission</code> is a placeholder: <code>type</code> <code>&quot;none&quot;</code>, <code>rate</code>{" "}
+              <code>&quot;No affiliate program&quot;</code>, <code>mode</code> <code>&quot;unknown&quot;</code>,{" "}
+              <code>value</code> <code>null</code>. <code>payout</code> is an empty object. Cookie, signup, approval and
+              restriction fields are left out.
+            </li>
+            <li>
+              <code>answer</code> is the page&apos;s answer: &quot;No (checked &lt;date&gt;).&quot;, then the source and quote from{" "}
+              <code>statusNote</code>.
+            </li>
+            <li>
+              <code>alternatives</code> lists verified programs in the same category that pay cash, each with{" "}
+              <code>slug</code>, <code>name</code>, <code>commission</code> and <code>url</code>. It can be empty.
+            </li>
+          </ul>
+          <CodeBlock
+            label="curl"
+            code={`curl "https://openaffiliate.dev/api/programs/openrouter"
+
+# Response
+{
+  "slug": "openrouter",
+  "name": "OpenRouter",
+  "status": "no_program",
+  "commission": { "type": "none", "rate": "No affiliate program", "mode": "unknown", "value": null, "currency": "USD" },
+  "payout": {},
+  "answer": "No (checked 2026-10-12). OpenRouter has no public affiliate program. ...",
+  "alternatives": [
+    { "slug": "kyma-api", "name": "Kyma API", "commission": "12% recurring/18mo", "url": "https://openaffiliate.dev/programs/kyma-api" }
+  ],
+  ...
+}`}
           />
         </section>
       </div>

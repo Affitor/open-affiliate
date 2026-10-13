@@ -16,7 +16,8 @@
 const DEFAULT_API = "https://openaffiliate.dev";
 
 export interface Commission {
-  type: "recurring" | "one-time" | "tiered" | "hybrid";
+  /** "none" with rate "No affiliate program" when status is "discontinued" or "no_program". */
+  type: "recurring" | "one-time" | "tiered" | "hybrid" | "none";
   rate: string | number;
   currency: string;
   duration?: string | null;
@@ -35,11 +36,10 @@ export interface Program {
   name: string;
   url: string;
   category: string;
-  /** Absent when status is "discontinued" or "no_program": there are no terms. */
-  commission?: Commission;
+  commission: Commission;
   /** Omitted when the program does not publish a cookie window. */
   cookieDays?: number;
-  payout?: Payout;
+  payout: Payout;
   description: string;
   shortDescription: string;
   tags: string[];

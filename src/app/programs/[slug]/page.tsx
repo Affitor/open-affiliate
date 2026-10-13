@@ -37,7 +37,7 @@ import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
-import { hasNoProgram, noProgramHeadline } from "@/lib/no-program";
+import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
 
 export const revalidate = 86400;
@@ -135,6 +135,7 @@ export default async function ProgramPage({
   const discontinued = isDiscontinued(program);
   // Closed or never run: the page answers "no" and shows no terms.
   const noProgram = hasNoProgram(program);
+  const hasAlternatives = noProgram && noProgramAlternatives(program).length > 0;
   const paused = isPaused(program);
   const unverified = isUnverified(program);
   const network = networkName(program);
@@ -341,11 +342,14 @@ export default async function ProgramPage({
                 {program.statusNote ? program.statusNote.trim().replace(/\.?$/, ".") : "The program no longer accepts affiliates."}
               </p>
               <p className="text-sm text-muted-foreground mt-2">
-                {program.lastVerifiedAt ? `Checked ${program.lastVerifiedAt}. ` : ""}The programs below pay commission for similar products.
+                {program.lastVerifiedAt ? `Checked ${program.lastVerifiedAt}.` : ""}
+                {hasAlternatives ? " The programs below pay commission for similar products." : ""}
               </p>
-              <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
-                See alternatives
-              </a>
+              {hasAlternatives && (
+                <a href="#alternatives" className="mt-3 inline-flex rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/50 transition-colors">
+                  See alternatives
+                </a>
+              )}
             </div>
           )}
 

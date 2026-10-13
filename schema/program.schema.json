@@ -386,7 +386,7 @@
         "no_program"
       ],
       "default": "active",
-      "description": "Whether the program accepts affiliates. discontinued (closed) and no_program (the brand runs no public program and no closure is on record) keep the page live to say so, with no terms. A credit-only referral reward is not a status: it is active, with the reward in commission and conditions. A no_program file sets no cookie_days, payout, signup_url, approval, approval_time, restrictions or commission figure."
+      "description": "Whether the program accepts affiliates. discontinued (closed) and no_program (the brand runs no public program and no closure is on record) keep the page live to say so, with no terms. A credit-only referral reward is not a status: it is active, with the reward in commission and conditions. A no_program file sets no cookie_days, payout, signup_url, approval, approval_time or restrictions, and its commission is the placeholder: mode unknown, value null, rate \"none\", no duration or conditions."
     },
     "status_note": {
       "type": [

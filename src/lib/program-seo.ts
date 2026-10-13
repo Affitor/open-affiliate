@@ -1,5 +1,5 @@
 import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, networkName as displayName, type Program } from "@/lib/programs"
-import { hasNoProgram, noProgramAnswer } from "@/lib/no-program"
+import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "@/lib/no-program"
 
 const SITE = "https://openaffiliate.dev"
 
@@ -110,7 +110,7 @@ export function buildFaq(p: Program): Faq[] {
     return [
       {
         q: `Does ${name} have an affiliate program?`,
-        a: `${noProgramAnswer(p)} The programs listed below pay commission for promoting similar products.`,
+        a: `${noProgramAnswer(p)}${noProgramAlternatives(p).length ? " The programs listed below pay commission for promoting similar products." : ""}`,
       },
     ]
   }

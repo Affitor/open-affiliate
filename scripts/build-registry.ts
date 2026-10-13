@@ -130,15 +130,27 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
 
   // An unknown status would read as active: a typo like "no-program" puts the
   // page back in every list, with whatever terms the file still holds.
-  if (data.status != null && !STATUSES.includes(String(data.status))) {
-    throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got "${data.status}"`)
+  // A string, compared as is: `[no_program]` coerced to "no_program" and passed,
+  // while every reader compares with === and treated the entry as active.
+  if (data.status != null && (typeof data.status !== "string" || !STATUSES.includes(data.status))) {
+    throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got ${JSON.stringify(data.status)}`)
   }
   // A no_program file holds no terms. The page, .md and API hide them anyway;
   // this keeps stale ones out of the YAML that contributors and scripts read.
   if (data.status === "no_program") {
     const terms = NO_PROGRAM_FORBIDDEN.filter((field) => data[field] != null)
+    // The commission object is required, so it holds the placeholder and nothing else.
     const commission = data.commission as Record<string, unknown> | undefined
-    if (commission && (commission.mode !== "unknown" || commission.value != null)) terms.push("a commission figure")
+    if (
+      commission &&
+      (commission.mode !== "unknown" ||
+        commission.value != null ||
+        commission.rate !== "none" ||
+        commission.duration != null ||
+        commission.conditions != null)
+    ) {
+      terms.push('commission beyond the placeholder (mode: unknown, value: null, rate: "none", no duration or conditions)')
+    }
     if (terms.length) {
       throw new Error(`${filename}: status is no_program but the file still sets ${terms.join(", ")}. Remove them.`)
     }

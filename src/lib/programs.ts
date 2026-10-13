@@ -81,6 +81,8 @@ export interface Program {
   statusNote?: string | null
   /** Registrable domain whose owner verified the listing (claim flow). */
   claimedBy?: string | null
+  /** Type of income program as the YAML states it; undefined when the file leaves it out. */
+  kind?: "affiliate" | "referral" | "creator-payout" | "revenue-share" | "cashback" | "partner-network"
 }
 
 // Map snake_case YAML fields to camelCase Program interface
@@ -146,6 +148,7 @@ function mapYamlToProgram(yaml: any): Program {
     status: yaml.status ?? "active",
     statusNote: yaml.status_note ?? null,
     claimedBy: yaml.claimed_by ?? null,
+    kind: yaml.kind,
   }
 }
 

@@ -2,8 +2,6 @@ import {
   affiliateScore,
   commissionDisplay,
   commissionLabel,
-  commissionUnknown,
-  isCreditReward,
   isLive,
   programs,
   type Program,
@@ -48,39 +46,39 @@ export function keywordWords(phrases: string[]): Set<string> {
 }
 
 /**
- * "<Brand> affiliate program alternatives": verified, live programs that pay
- * in cash and publish a figure. Same category first, closest by what the
- * product does; programs from other categories only top the list up, and only
- * when they share a keyword. Credit-only referral rewards are not alternatives
- * to a program that pays nothing either.
+ * Pays in cash, proven by structured fields only: an explicit `kind:
+ * affiliate`, and a flat or percentage commission with a number. Rate text is
+ * never parsed to decide what counts as money, so a reward the structure
+ * cannot prove is cash (credits, gift cards, vouchers, tiers, "up to") is out.
+ */
+function paysCash(p: Program): boolean {
+  return p.kind === "affiliate" && (p.commission.mode === "flat" || p.commission.mode === "percentage") && typeof p.commission.value === "number"
+}
+
+/**
+ * "<Brand> affiliate program alternatives": verified, live programs in the same
+ * category that pay cash, closest first by what the product does. Empty when
+ * the category has none: a program from another category is not an
+ * alternative to this one.
  */
 export function noProgramAlternatives(current: Program, limit = 4): Program[] {
   const want = keywordWords([...(current.agentKeywords ?? []), ...current.tags])
   return programs
-    .filter(
-      (p) =>
-        p.slug !== current.slug &&
-        isLive(p) &&
-        p.verified &&
-        !commissionUnknown(p.commission) &&
-        !isCreditReward(p.commission)
-    )
+    .filter((p) => p.slug !== current.slug && p.category === current.category && isLive(p) && p.verified && paysCash(p))
     .map((p) => ({
       program: p,
-      sameCategory: p.category === current.category ? 1 : 0,
       overlap: [...keywordWords([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => want.has(w)).length,
       score: affiliateScore(p),
     }))
-    .filter((x) => x.sameCategory || x.overlap > 0)
-    .sort((a, b) => b.sameCategory - a.sameCategory || b.overlap - a.overlap || b.score - a.score)
+    .sort((a, b) => b.overlap - a.overlap || b.score - a.score)
     .slice(0, limit)
     .map((x) => x.program)
 }
 
 /**
- * Fields that say how a program pays or how to join it. The schema requires a
- * commission object even for a brand with no program, so the registry still
- * holds one; an agent reading it from the API would cite it as a program.
+ * Fields that say how a program pays or how to join it. The registry still
+ * holds a commission placeholder for a brand with no program (the schema
+ * requires one); none of these leave the API as stored.
  */
 const TERM_FIELDS = [
   "commission",
@@ -101,11 +99,32 @@ const TERM_FIELDS = [
   "dashboardUrl",
   "network",
   "programAge",
+  "kind",
 ] as const
 
 /**
+ * Clients already installed read `commission` and `payout` without a guard:
+ * openaffiliate@0.0.2, npm's latest, prints the commission as rate + "% " +
+ * type and the payout as "$" + payout.minimum + " min" in `info`, and `add`
+ * reads commission.rate and .type. A response without either object crashes
+ * them. So a brand with no program keeps both objects, holding nothing that
+ * reads as a term: that CLI prints "No affiliate program% none" and
+ * "$undefined min / undefined".
+ */
+const NO_COMMISSION = {
+  type: "none",
+  rate: "No affiliate program",
+  mode: "unknown",
+  value: null,
+  currency: "USD",
+  duration: null,
+  conditions: null,
+} as const
+
+/**
  * What GET /api/programs/{slug} and MCP get_program return. A live program is
- * returned as it is. A brand with no program loses every term field and gains
+ * returned as it is. A brand with no program keeps the response's shape, with
+ * the neutral commission and an empty payout in place of its terms, and gains
  * the page's answer and its alternatives.
  */
 export function apiProgram(p: Program): Program | Record<string, unknown> {
@@ -114,6 +133,8 @@ export function apiProgram(p: Program): Program | Record<string, unknown> {
   for (const key of TERM_FIELDS) delete out[key]
   return {
     ...out,
+    commission: NO_COMMISSION,
+    payout: {},
     answer: noProgramAnswer(p),
     alternatives: noProgramAlternatives(p).map((a) => ({
       slug: a.slug,
