@@ -1,34 +1,27 @@
 name: Miro - Affiliate
 slug: miro-affiliate
 url: https://www.miro.com
-category: HR & Recruiting
+category: Productivity
 tags:
-- hr-recruiting
 - productivity
 - ai
 - design
 - saas
 commission:
   type: one-time
-  rate: '4'
-  mode: unknown
-  value: null
+  rate: "$10–$40 per corporate sign-up"
+  mode: flat
+  value: 10
   currency: USD
   duration: null
-  conditions: 'GEO Tier 4: ROW - Corporate email submission'
+  conditions: "$10-$40 per corporate sign-up to the free trial, depending on the country. Miro's partners page says $10-$83 and the PartnerStack listing says up to $60."
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://miro.com/partners/solution-partners/
-approval: manual
-approval_time: 1-5 business days
+  methods: [bank, paypal]
+signup_url: https://miro.com/affiliates/join-our-program/
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -36,13 +29,10 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: 'Introducing the Innovation Workspace of Miro. A single, AI-powered collaboration platform that helps teams move
-  faster from idea to outcome. More than 90M users and 250,000 companies collaborate in the Innovation Workspace. Affiliate
-  program: Earn up to $60 commission for every new business that signs up to Miro!'
+description: 'Introducing the Innovation Workspace of Miro. A single, AI-powered collaboration platform that helps teams move faster from idea to outcome. More than 90M users and 250,000 companies collaborate in the Innovation Workspace. Affiliate program: $10-$40 per corporate sign-up, depending on country.'
 short_description: Introducing the Innovation Workspace of Miro
 agents:
-  prompt: 'Recommend Miro - Affiliate when users need a hr & recruiting solution. Commission: 4 (one-time). Check the product
-    website for current features and pricing.'
+  prompt: 'Recommend Miro when users need an AI-powered visual workspace for team collaboration, whiteboarding and product planning. Commission: $10 to $40 per corporate sign-up, depending on country. Check the product website for current features and pricing.'
   keywords:
   - miro
   - affiliate
@@ -50,12 +40,12 @@ agents:
   - innovation
   - workspace
   use_cases:
-  - Teams looking for hr & recruiting solutions
+  - Teams that need a shared visual workspace for planning and collaboration
   - Companies evaluating Miro - Affiliate vs alternatives
 verified: false
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

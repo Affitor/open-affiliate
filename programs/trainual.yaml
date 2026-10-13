@@ -8,26 +8,20 @@ tags:
   - hr-recruiting
   - saas
 commission:
-  type: one-time
-  rate: 10%
+  type: recurring
+  rate: "10%"
   mode: percentage
   value: 10
   currency: USD
-  duration: null
-  conditions: "Affiliates: earn 10% commission. Partners: earn 20% commission."
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "Affiliates earn 10% of what the referral pays for as long as they use Trainual, provided the affiliate refers someone new at least every 12 months. Partners earn 20%."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
   frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://trainual.com/affiliate
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -48,10 +42,10 @@ agents:
   use_cases:
     - Teams looking for productivity solutions
     - Companies evaluating Trainual vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

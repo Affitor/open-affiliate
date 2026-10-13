@@ -10,26 +10,16 @@ tags:
   - e-commerce
   - saas
 commission:
-  type: one-time
-  rate: 25%
+  type: recurring
+  rate: "25%"
   mode: percentage
   value: 25
   currency: USD
-  duration: lifetime
-  conditions: Earn 25% Lifetime Revenue Share
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "25% lifetime revenue share. The listing also offers 30% commission on Essentials and Premier orders (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://dash.partnerstack.com/application?company=campaignmonitor&group=affiliatepartner
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -52,10 +42,10 @@ agents:
   use_cases:
     - Teams looking for marketing solutions
     - Companies evaluating Campaign Monitor by Marigold vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
