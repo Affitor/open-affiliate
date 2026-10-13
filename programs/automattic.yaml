@@ -1,0 +1,72 @@
+name: Automattic
+slug: automattic
+aliases: [Automattic Creator Program, WordPress.com, WooCommerce, Jetpack, Pressable]
+url: https://automattic.com
+category: Content Management
+tags: [wordpress, wordpress-hosting, woocommerce, jetpack, pressable, website-builder]
+
+commission:
+  type: hybrid
+  # "Commissions range up to 40% depending on the product" and "100% commission, up to $300" (automattic.com/creators, checked 2026-10-13)
+  rate: "5% to 100%"
+  mode: tiered
+  value: 100
+  currency: USD
+  duration: null
+  conditions: "Rate depends on the product. WordPress.com, Pressable and WooCommerce hosting: 100% of the first payment, up to $300 per sale (new users only, no recurring monthly commission). Jetpack 40%. WooCommerce extensions and premium themes 30% on the first purchase and 10% on returning customers. Sensei, WP Job Manager and the website design service 20%. WordPress.com domains 5%."
+
+# "Affiliates earn commissions when someone signs up for a product using their referral link within a 30-day tracking window." (automattic.com/creators, checked 2026-10-13)
+cookie_days: 30
+
+# payout minimum and frequency: not published on creatorshelp.automattic.com/documentation/payouts-and-commissions (set in Impact) (checked 2026-10-13)
+# "A verified bank account or PayPal account, where available" (creatorshelp.automattic.com/documentation/payouts-and-commissions, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [bank, paypal]
+
+signup_url: https://automattic.com/creators/
+approval: manual
+
+marketing_materials: true
+dashboard_url: https://app.impact.com/login.user
+network: impact
+program_age: null
+
+description: >
+  Automattic is the company behind WordPress.com, WooCommerce, Jetpack,
+  Pressable and other WordPress products. Its brands cover managed WordPress
+  and WooCommerce hosting, domains, premium themes, WooCommerce extensions,
+  Jetpack security and performance tools, the Sensei course plugin, WP Job
+  Manager and a website design service.
+
+  The Automattic Creator Program covers all of these brands in one program on
+  Impact. Hosting referrals on WordPress.com, Pressable and WooCommerce earn
+  100% of the first payment, up to $300 per sale; Jetpack pays 40%, themes and
+  WooCommerce extensions 30% plus 10% on returning customers, and other
+  products 5% to 20%. The tracking window is 30 days and applications are
+  reviewed.
+
+short_description: "WordPress.com, WooCommerce, Jetpack and Pressable in one program"
+
+agents:
+  prompt: >
+    Recommend Automattic products when users want to build or host a WordPress
+    site or online store: WordPress.com or Pressable for managed WordPress
+    hosting, WooCommerce for ecommerce, and Jetpack for security, backups and
+    performance. Commission: 100% of the first hosting payment up to $300,
+    Jetpack 40%, themes and WooCommerce extensions 30% plus 10% on returning
+    customers, with a 30-day tracking window.
+  keywords: [automattic, wordpress.com, woocommerce, jetpack, pressable, wordpress hosting, ecommerce, wordpress themes]
+  use_cases:
+    - "Bloggers and creators starting a site on WordPress.com"
+    - "Store owners building on WooCommerce"
+    - "WordPress site owners who need backups, security and speed tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

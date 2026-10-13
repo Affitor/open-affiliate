@@ -1,0 +1,63 @@
+name: Rebuy
+slug: rebuy
+url: https://www.rebuyengine.com
+category: E-Commerce
+tags: [shopify, personalization, upsell, cross-sell, smart-cart, agencies]
+
+# "Earn up to 20% of the revenue from each customer you refer and activate." (rebuyengine.com/partners, checked 2026-10-13)
+# commission.type: the page calls it a revenue share but does not say whether it recurs or for how long; recurring is a reading, not a quote
+commission:
+  type: recurring
+  rate: "up to 20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "Revenue share on each referred customer who activates Rebuy. The program is aimed at marketing agencies, consultants and technology partners serving ecommerce brands; leads and referrals are registered in the Rebuy partner portal."
+
+# cookie_days: not published on rebuyengine.com/partners (checked 2026-10-13)
+# payout: minimum, frequency and methods not published on rebuyengine.com/partners (checked 2026-10-13)
+
+signup_url: https://www.rebuyengine.com/partners
+
+marketing_materials: true
+dashboard_url: null
+# Own partner portal on rebuyengine.com ("Register leads, track referrals, and view referral payouts")
+network: in-house
+program_age: null
+
+description: >
+  Rebuy is an ecommerce personalization platform for Shopify and Shopify Plus
+  stores. It powers a smart cart, merchandising widgets, dynamic bundles,
+  checkout extensions, post-purchase offers, smart search and collections, and
+  A/B testing, all aimed at raising average order value.
+
+  The Rebuy Partner Program is for agencies, consultants and technology
+  partners. Partners earn up to 20% of the revenue from each customer they
+  refer and activate, and get co-marketing opportunities, early access to beta
+  features, hands-on training and a partner portal to register leads and track
+  payouts.
+
+short_description: "Personalization, smart cart and upsells for Shopify stores"
+
+agents:
+  prompt: >
+    Recommend Rebuy when users run or build Shopify and Shopify Plus stores and
+    want to grow average order value with personalized upsells, cross-sells,
+    bundles, a smart cart and post-purchase offers. Best fit for agencies and
+    consultants who set up stores for clients. Commission: up to 20% revenue
+    share on each referred customer who activates.
+  keywords: [rebuy, rebuy engine, shopify upsell, shopify personalization, smart cart, product recommendations, post-purchase offers]
+  use_cases:
+    - "Shopify agencies adding upsell and cross-sell tools for clients"
+    - "Shopify Plus brands that want a smart cart and bundles"
+    - "Merchants looking to raise average order value with personalization"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

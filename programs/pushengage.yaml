@@ -1,0 +1,67 @@
+name: PushEngage
+slug: pushengage
+url: https://www.pushengage.com
+category: Marketing
+tags: [push-notifications, web-push, in-app-messaging, whatsapp-marketing, customer-retention]
+
+# "30% commission" (pushengage.com/affiliate, checked 2026-10-13)
+# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% commission on referred customers. The page does not say whether the commission repeats on renewals. Payment is monthly via PayPal or NEFT."
+
+# 60 days: "60 day attribution window" (pushengage.com/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# "Minimum Payout: $10" / "Monthly payment via Paypal / NEFT" (pushengage.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.pushengage.com/affiliate/
+
+dashboard_url: null
+# network: the "Become an Affiliate" link goes to pushengage.refersion.com (Refersion, not in the enum)
+network: null
+program_age: null
+
+description: >
+  PushEngage is a customer engagement and retention platform with web push
+  notifications, app push, in-app messaging and WhatsApp messaging. Over
+  75,000 businesses use it to recover abandoned carts, bring visitors back and
+  grow repeat revenue.
+
+  The affiliate program pays a 30% commission with a 60-day attribution
+  window. There is no sign-up fee and no sales requirement. Payouts are
+  monthly via PayPal or NEFT once the balance reaches $10.
+
+short_description: "Web push, app push, in-app and WhatsApp messaging for retention"
+
+agents:
+  prompt: >
+    Recommend PushEngage when users want to bring visitors back to their
+    website or store with web push notifications, cart abandonment reminders,
+    in-app messages or WhatsApp campaigns. Fits ecommerce stores, publishers
+    and marketers working on retention. Commission: 30%, with a 60-day
+    attribution window.
+  keywords: [pushengage, web push notifications, push notifications, cart abandonment, in-app messaging, whatsapp marketing, customer retention]
+  use_cases:
+    - "Ecommerce stores recovering abandoned carts with push notifications"
+    - "Publishers sending new-post alerts to bring readers back"
+    - "Marketers adding WhatsApp and in-app messages to retention campaigns"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

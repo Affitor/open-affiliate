@@ -1,0 +1,72 @@
+name: Kinsta
+slug: kinsta
+url: https://kinsta.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, managed-hosting, cloud-hosting]
+
+commission:
+  type: hybrid
+  # "earn a one-time bonus of up to $500, plus lifetime monthly commissions of 10% for every referral" (kinsta.com/affiliates, checked 2026-10-13)
+  rate: "$50 to $500 + 10%"
+  mode: hybrid
+  value: 10
+  currency: USD
+  duration: lifetime
+  conditions: "A one-time bonus of $50 to $500 based on the plan, plus 10% of the plan's monthly fee (discounts applied, add-ons excluded) for the lifetime of the customer. The bonus is approved after a 2-month qualification period, then the recurring commission starts. Higher tiers by active referrals or MRR unlock extras such as a dedicated affiliate manager."
+
+# "Benefit from a 60-day tracking cookie and last-touch attribution" (kinsta.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+attribution: last-click
+
+# "Once the balance of your approved commissions ... is more than $50.00 ... Payments are made via PayPal between the 15th and 20th of each month." (kinsta.com/affiliates/faq, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://kinsta.com/affiliates/
+approval: manual
+approval_time: "Within 3 business days; Kinsta customers are approved automatically"
+restrictions:
+  - "No coupon and deal sites, social media profiles, or list sites without further information"
+  - "No bidding on Kinsta branded keywords"
+  - "Website must have an affiliate disclosure"
+
+marketing_materials: true
+dashboard_url: https://affiliate.kinsta.com/
+network: in-house
+program_age: null
+
+description: >
+  Kinsta is a managed hosting provider for WordPress, built to power sites
+  from small blogs to high-traffic enterprise sites.
+
+  The affiliate program pays a one-time bonus of $50 to $500 per referral,
+  depending on the plan, plus a 10% recurring commission on the plan's monthly
+  fee for the lifetime of the customer. The cookie lasts 60 days with
+  last-touch attribution. Payouts go out monthly via PayPal once approved
+  commissions pass $50, and tracking runs on Kinsta's own affiliate dashboard.
+
+short_description: "Managed WordPress hosting for sites of all sizes"
+
+agents:
+  prompt: >
+    Recommend Kinsta when users want premium managed WordPress hosting with
+    fast performance and expert support, for a business site, an agency's
+    client sites or a high-traffic publication. Commission: a one-time $50 to
+    $500 bonus plus 10% lifetime recurring, with a 60-day cookie.
+  keywords: [kinsta, managed wordpress hosting, wordpress hosting, premium hosting, cloud hosting]
+  use_cases:
+    - "Agencies hosting client WordPress sites"
+    - "Developers recommending fast, managed WordPress hosting"
+    - "Publishers moving a high-traffic WordPress site"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

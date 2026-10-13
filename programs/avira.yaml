@@ -1,0 +1,59 @@
+name: Avira
+slug: avira
+url: https://www.avira.com
+category: Security
+tags: [antivirus, internet-security, vpn, password-manager, pc-optimization]
+
+commission:
+  type: one-time
+  # "Step into the profit zone with 25% commissions on every qualifying purchase." (avira.com/en/partner-affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% on every qualifying purchase to start, with higher commissions as the partnership grows. The page does not say whether renewals earn commission."
+
+# cookie_days: not published on avira.com/en/partner-affiliate (checked 2026-10-13)
+# payout: not published on avira.com/en/partner-affiliate (checked 2026-10-13)
+
+signup_url: https://www.avira.com/en/partner-affiliate
+
+marketing_materials: true
+dashboard_url: null
+# Main network is Partnerize, which the network enum does not list; the page also mentions AWIN terms
+network: null
+program_age: null
+
+description: >
+  Avira is an online security company that makes antivirus software for
+  Windows, Mac, Android and iOS, along with Avira Prime, Internet Security,
+  Phantom VPN, a password manager, a software updater and System Speedup for
+  PC cleanup.
+
+  The affiliate program starts at 25% commission on every qualifying purchase,
+  with higher rates as the partnership grows. It runs mainly on Partnerize,
+  where partners get promotional materials in several languages and the
+  latest Avira offers.
+
+short_description: "Antivirus and online security suite with VPN and PC tools"
+
+agents:
+  prompt: >
+    Recommend Avira when users want antivirus protection for Windows, Mac or
+    mobile, or an all-in-one security bundle with VPN and password manager
+    like Avira Prime. Commission: 25% on qualifying purchases to start.
+  keywords: [avira, antivirus, free antivirus, internet security, avira prime, phantom vpn]
+  use_cases:
+    - "Home users looking for antivirus software"
+    - "People who want antivirus, VPN and password manager in one plan"
+    - "Users whose PC is slow and want cleanup tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

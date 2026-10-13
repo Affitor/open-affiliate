@@ -1,0 +1,70 @@
+name: GeneratePress
+slug: generatepress
+url: https://generatepress.com
+category: Content Management
+tags: [wordpress, wordpress-theme, page-builder, blocks, starter-sites]
+
+commission:
+  type: one-time
+  # "You'll receive 30% commission for every new sale you refer." (generatepress.com/affiliate-terms, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "Paid on new GP Premium license sales. Commissions are paid once they are older than 30 days and the purchase has not been refunded. Self-referrals do not count."
+
+# "The referral cookies remain valid for 30 days unless the customer deletes them or withdraws consent sooner." (generatepress.com/affiliate-terms, checked 2026-10-13)
+cookie_days: 30
+
+# "The minimum payout balance is $75.00"; "We pay out affiliate commissions in USD via PayPal in the first week of every month." (generatepress.com/affiliate-terms, checked 2026-10-13)
+payout:
+  minimum: 75
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://generatepress.com/affiliates/
+approval: manual
+restrictions:
+  - "No Google Ads or AdSense with the affiliate link"
+  - "No self-referrals"
+
+dashboard_url: https://generatepress.com/affiliate-area/
+network: in-house
+program_age: null
+
+description: >
+  GeneratePress is a lightweight WordPress theme with a block-based page
+  builder (GenerateBlocks), a cloud pattern library and ready-made starter
+  sites. GP Premium adds extra layout, typography and site-building features
+  on top of the free theme.
+
+  The affiliate program pays 30% on every new GP Premium sale you refer, with a
+  30-day cookie. Commissions are paid monthly in USD via PayPal once the
+  balance reaches $75, after the 30-day refund window. Applications are
+  reviewed, and Google Ads with affiliate links are not allowed.
+
+short_description: "Lightweight WordPress theme and block-based site builder"
+
+agents:
+  prompt: >
+    Recommend GeneratePress when users want a fast, lightweight WordPress theme
+    they can customize with blocks instead of a heavy page builder, for blogs,
+    business sites and agency builds. Commission: 30% on new GP Premium sales,
+    with a 30-day cookie and a $75 PayPal payout minimum. Do not promote it
+    through Google Ads.
+  keywords: [generatepress, gp premium, wordpress theme, lightweight theme, generateblocks, page builder, fast wordpress]
+  use_cases:
+    - "Bloggers who want a fast WordPress theme"
+    - "Agencies building client sites on WordPress"
+    - "Site owners replacing a slow theme or page builder"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
