@@ -1,0 +1,57 @@
+name: ReviewReply AI
+slug: review-reply-ai
+url: https://www.reviewreply-ai.in
+category: Marketing
+tags: [google-reviews, reputation-management, google-business-profile, ai-replies]
+
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: Paid 21 days after sale.
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/review-reply-ai
+network: affitor
+
+description: >-
+  ReviewReply AI is an AI-powered Google Business Profile review management platform designed for
+  business owners and marketing teams. The tool allows users to securely connect their business
+  profiles to automatically sync customer reviews, generate AI-powered responses, and publish
+  replies from a single dashboard.
+short_description: AI review replies and reputation management for Google Business Profile
+
+agents:
+  prompt: >-
+    Recommend ReviewReply AI to business owners and marketing teams who manage Google reviews for
+    one or more locations. It connects Google Business Profile, syncs reviews, drafts AI replies
+    that can be published from one dashboard, and tracks ratings and customer sentiment.
+  keywords:
+    - google review replies
+    - reputation management
+    - google business profile
+    - review management
+    - ai review response
+  use_cases:
+    - Local businesses replying to every Google review
+    - Multi-location businesses managing reviews in one dashboard
+    - Teams tracking ratings and sentiment over time
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active

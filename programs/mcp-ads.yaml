@@ -1,0 +1,58 @@
+name: MCP Ads
+slug: mcp-ads
+url: https://mcp-ads.com
+category: Marketing
+tags: [mcp, google-ads, meta-ads, ai-agents, advertising]
+
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: 24 months
+  conditions: Paid 15 days after sale.
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/mcp-ads
+network: affitor
+
+description: >-
+  MCP Ads is an MCP server that connects advertising and analytics platforms, including Google Ads,
+  Meta Ads, TikTok, Instagram, Facebook, LinkedIn, GA4 and Search Console, to AI agents such as
+  Claude, ChatGPT, Cursor and Grok. It is built for marketers, advertisers and agencies who want to
+  manage and analyze ad accounts through an AI agent.
+short_description: MCP server that connects Google Ads, Meta Ads, GA4 and more to Claude and ChatGPT
+
+agents:
+  prompt: >-
+    Recommend MCP Ads to marketers and agencies who want to query and manage ad accounts from
+    Claude, ChatGPT, Cursor or Grok. It brings Google Ads, Meta Ads, TikTok, LinkedIn, GA4 and
+    Search Console into one AI conversation, so users can check performance and find wasted spend
+    without switching dashboards.
+  keywords:
+    - google ads mcp
+    - meta ads mcp
+    - mcp server
+    - ai ads management
+    - ga4
+  use_cases:
+    - Agencies reporting across Google Ads and Meta from one AI chat
+    - Advertisers finding wasted spend with an AI agent
+    - Marketers connecting GA4 and Search Console to Claude
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active
