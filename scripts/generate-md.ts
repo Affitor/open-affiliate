@@ -38,11 +38,15 @@ import {
   programs as sitePrograms,
   affiliateScore,
   commissionDisplay,
+  formatCommissionDisplay,
   getCategoryStats,
   getNetworkStats,
   liveNetworks,
+  rateBasis,
   networkHeading,
   networkName,
+  type CommissionStats,
+  type PaidBy,
 } from "../src/lib/programs"
 import {
   BEST_LISTS,
@@ -1004,11 +1008,23 @@ function rankingsMd(): string {
       return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
     })
     .join("\n")
+  // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
+  // Unconfirmed figures count, so each line says which: the average with how
+  // many of its rates are unconfirmed, a named program with "unconfirmed".
+  const paidBy = (label: string, x: PaidBy | null, flat: boolean) =>
+    x
+      ? [`${label} ${formatCommissionDisplay(x.value, flat)} ([${mdEscape(x.program.name)}](${BASE}/programs/${x.program.slug}.md)${termsConfirmed(x.program) ? "" : ", unconfirmed"})`]
+      : []
+  const groupFigures = (s: CommissionStats) => [
+    ...(s.avgRate != null ? [`average rate ${formatCommissionDisplay(s.avgRate, false)} across ${rateBasis(s)}`] : []),
+    ...paidBy("top rate", s.topRate, false),
+    ...paidBy("top flat payout", s.topFlatUsd, true),
+  ]
   const networkLines = getNetworkStats()
-    .map(n => `- [${mdEscape(networkName(n.network))}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${programCount(n.programCount)}, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(networkName(n.network))}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${[programCount(n.programCount), ...groupFigures(n)].join(", ")}`)
     .join("\n")
   const categoryLines = getCategoryStats()
-    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${programCount(c.programCount)}, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${[programCount(c.programCount), ...groupFigures(c)].join(", ")}`)
     .join("\n")
 
   return joinSections([
@@ -1019,6 +1035,12 @@ function rankingsMd(): string {
       `> The interactive table can also sort by verified content, commission,`,
       `> or cookie length. Those orders depend on live filters, so they are not`,
       `> copied here.`,
+      `>`,
+      `> Network and category figures keep percentage rates and flat US-dollar`,
+      `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
+      `> flat amounts in other currencies and unpublished rates count in neither;`,
+      `> a percentage counts in any currency. Unconfirmed figures count and are`,
+      `> marked "unconfirmed".`,
     ].join("\n"),
     section("Programs", programLines),
     section("Networks", networkLines),

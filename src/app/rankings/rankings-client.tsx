@@ -24,13 +24,14 @@ import {
   commissionTypes,
   categoryCounts,
   parseCommissionRate,
-  getCategoryStats,
-  getNetworkStats,
   type Program,
   commissionLabel,
   affiliateScore,  commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
+import { UNCONFIRMED } from "@/lib/confirmed-terms";
+// Types only: the rows are built on the server (groupRow), never the registry.
+import type { GroupRow, PaidFigure } from "@/lib/programs";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -551,44 +552,84 @@ function ProgramsTable({
   );
 }
 
-// ── Networks Table ──────────────────────────────────────────────
+// ── Networks and Categories Tables ──────────────────────────────
 
-function NetworksTable() {
-  const stats = useMemo(() => getNetworkStats(), []);
+// Rows come from groupRow (src/lib/programs.ts): percentage rates and flat
+// US-dollar payouts in separate columns, unconfirmed figures marked.
 
+const GROUP_HEAD = "py-3 px-3 text-[11px] font-medium text-muted-foreground uppercase tracking-wide";
+
+function GroupHead({ label }: { label: string }) {
+  return (
+    <thead>
+      <tr className="border-b border-border/40 bg-muted/30">
+        <th className={`w-12 text-center ${GROUP_HEAD}`}>#</th>
+        <th className={`text-left ${GROUP_HEAD}`}>{label}</th>
+        <th className={`w-24 text-center ${GROUP_HEAD}`}>Programs</th>
+        <th className={`w-28 text-center hidden sm:table-cell ${GROUP_HEAD}`}>Avg Rate</th>
+        <th className={`text-left hidden sm:table-cell ${GROUP_HEAD}`}>Top Rate</th>
+        <th className={`text-left hidden md:table-cell ${GROUP_HEAD}`}>Top Flat Payout</th>
+      </tr>
+    </thead>
+  );
+}
+
+function PaidCell({ paid, className }: { paid: PaidFigure | null; className: string }) {
+  return (
+    <td className={`py-3 px-3 ${className}`}>
+      {paid ? (
+        <Link
+          href={`/programs/${paid.slug}`}
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center gap-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+        >
+          <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+            {paid.display}
+          </span>
+          <ProgramLogo slug={paid.slug} name={paid.name} size={20} />
+          <span className="text-xs font-medium truncate">{paid.name}</span>
+          {paid.unconfirmed && (
+            <span className="text-[10px] text-muted-foreground shrink-0">{UNCONFIRMED}</span>
+          )}
+        </Link>
+      ) : (
+        <span className="text-sm text-muted-foreground">—</span>
+      )}
+    </td>
+  );
+}
+
+function GroupCells({ row }: { row: GroupRow }) {
+  return (
+    <>
+      <td className="py-3 px-3 text-center">
+        <span className="text-sm tabular-nums">{row.programCount}</span>
+      </td>
+      <td className="py-3 px-3 text-center hidden sm:table-cell">
+        <span className="text-sm text-muted-foreground tabular-nums">{row.avgRate}</span>
+        {row.avgBasis && (
+          <span className="block text-[10px] leading-tight text-muted-foreground/70">{row.avgBasis}</span>
+        )}
+      </td>
+      <PaidCell paid={row.topRate} className="hidden sm:table-cell" />
+      <PaidCell paid={row.topFlatUsd} className="hidden md:table-cell" />
+    </>
+  );
+}
+
+function NetworksTable({ rows }: { rows: GroupRow[] }) {
   return (
     <div className="rounded-xl border border-border/40 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border/40 bg-muted/30">
-              <th className="w-12 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                #
-              </th>
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Network
-              </th>
-              <th className="w-24 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Programs
-              </th>
-              <th className="w-28 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Avg Commission
-              </th>
-              <th className="w-28 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Best
-              </th>
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">
-                Top Program
-              </th>
-            </tr>
-          </thead>
+          <GroupHead label="Network" />
           <tbody>
-            {stats.map((row, i) => (
+            {rows.map((row, i) => (
               <tr
-                key={row.network}
+                key={row.name}
                 className="border-t border-border/20 hover:bg-muted/20 transition-colors cursor-pointer group"
                 onClick={() =>
-                  (window.location.href = `/programs?network=${encodeURIComponent(row.network)}`)
+                  (window.location.href = `/programs?network=${encodeURIComponent(row.name)}`)
                 }
               >
                 <td className="py-3 px-3 text-center">
@@ -596,42 +637,10 @@ function NetworksTable() {
                 </td>
                 <td className="py-3 px-3">
                   <span className="text-sm font-medium group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    {networkName(row.network)}
+                    {networkName(row.name)}
                   </span>
                 </td>
-                <td className="py-3 px-3 text-center">
-                  <span className="text-sm tabular-nums">
-                    {row.programCount}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-center hidden sm:table-cell">
-                  <span className="text-sm text-muted-foreground tabular-nums">
-                    {row.avgCommission > 0
-                      ? `${row.avgCommission.toFixed(1)}%`
-                      : "—"}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-center hidden sm:table-cell">
-                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                    {row.bestCommissionDisplay}
-                  </span>
-                </td>
-                <td className="py-3 px-3 hidden md:table-cell">
-                  <Link
-                    href={`/programs/${row.topProgram.slug}`}
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex items-center gap-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-                  >
-                    <ProgramLogo
-                      slug={row.topProgram.slug}
-                      name={row.topProgram.name}
-                      size={24}
-                    />
-                    <span className="text-xs font-medium truncate">
-                      {row.topProgram.name}
-                    </span>
-                  </Link>
-                </td>
+                <GroupCells row={row} />
               </tr>
             ))}
           </tbody>
@@ -641,41 +650,16 @@ function NetworksTable() {
   );
 }
 
-// ── Categories Table ────────────────────────────────────────────
-
-function CategoriesTable() {
-  const stats = useMemo(() => getCategoryStats(), []);
-
+function CategoriesTable({ rows }: { rows: GroupRow[] }) {
   return (
     <div className="rounded-xl border border-border/40 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border/40 bg-muted/30">
-              <th className="w-12 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                #
-              </th>
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Category
-              </th>
-              <th className="w-24 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Programs
-              </th>
-              <th className="w-28 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Avg Commission
-              </th>
-              <th className="w-28 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Highest
-              </th>
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">
-                Top Program
-              </th>
-            </tr>
-          </thead>
+          <GroupHead label="Category" />
           <tbody>
-            {stats.map((row, i) => (
+            {rows.map((row, i) => (
               <tr
-                key={row.category}
+                key={row.name}
                 className="border-t border-border/20 hover:bg-muted/20 transition-colors"
               >
                 <td className="py-3 px-3 text-center">
@@ -683,44 +667,13 @@ function CategoriesTable() {
                 </td>
                 <td className="py-3 px-3">
                   <Link
-                    href={`/programs?category=${encodeURIComponent(row.category)}`}
+                    href={`/programs?category=${encodeURIComponent(row.name)}`}
                     className="text-sm font-medium hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
-                    {row.category}
+                    {row.name}
                   </Link>
                 </td>
-                <td className="py-3 px-3 text-center">
-                  <span className="text-sm tabular-nums">
-                    {row.programCount}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-center hidden sm:table-cell">
-                  <span className="text-sm text-muted-foreground tabular-nums">
-                    {row.avgCommission > 0
-                      ? `${row.avgCommission.toFixed(1)}%`
-                      : "—"}
-                  </span>
-                </td>
-                <td className="py-3 px-3 text-center hidden sm:table-cell">
-                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                    {row.highestCommissionDisplay}
-                  </span>
-                </td>
-                <td className="py-3 px-3 hidden md:table-cell">
-                  <Link
-                    href={`/programs/${row.topProgram.slug}`}
-                    className="flex items-center gap-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
-                  >
-                    <ProgramLogo
-                      slug={row.topProgram.slug}
-                      name={row.topProgram.name}
-                      size={24}
-                    />
-                    <span className="text-xs font-medium truncate">
-                      {row.topProgram.name}
-                    </span>
-                  </Link>
-                </td>
+                <GroupCells row={row} />
               </tr>
             ))}
           </tbody>
@@ -734,8 +687,12 @@ function CategoriesTable() {
 
 export default function RankingsClient({
   initialContent = [],
+  networkRows,
+  categoryRows,
 }: {
   initialContent?: ContentData[];
+  networkRows: GroupRow[];
+  categoryRows: GroupRow[];
 }) {
   const [activeTab, setActiveTab] = useState<Tab>("programs");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -856,7 +813,7 @@ export default function RankingsClient({
 
   const tabs: { value: Tab; label: string; count: number }[] = [
     { value: "programs", label: "Programs", count: programs.length },
-    { value: "networks", label: "Networks", count: getNetworkStats().length },
+    { value: "networks", label: "Networks", count: networkRows.length },
     { value: "categories", label: "Categories", count: categories.length },
   ];
 
@@ -1006,8 +963,8 @@ export default function RankingsClient({
           contentLoaded={contentLoaded}
         />
       )}
-      {activeTab === "networks" && <NetworksTable />}
-      {activeTab === "categories" && <CategoriesTable />}
+      {activeTab === "networks" && <NetworksTable rows={networkRows} />}
+      {activeTab === "categories" && <CategoriesTable rows={categoryRows} />}
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getCategoryStats, categoryToSlug, commissionDisplay} from "@/lib/programs";
+import { getCategoryStats, categoryToSlug, formatCommissionDisplay, rateBasis, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import { BEST_LISTS, bestPath } from "@/lib/best-lists";
 
 export const metadata: Metadata = {
@@ -65,35 +65,43 @@ export default function CategoriesPage() {
               </Badge>
             </div>
 
-            <div className="flex items-center gap-4 mb-3">
+            {/* Percentage rates only (commissionStats): a flat payout is not a rate.
+                Unconfirmed rates count, so the card says how many. */}
+            <div className="flex items-center gap-4 mb-1">
               <div>
                 <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">
-                  Highest
+                  Highest rate
                 </p>
                 <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                  {cat.highestCommission}%
+                  {cat.topRate ? formatCommissionDisplay(cat.topRate.value, false) : "—"}
                 </p>
               </div>
               <div>
                 <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">
-                  Average
+                  Average rate
                 </p>
                 <p className="text-lg font-bold text-muted-foreground">
-                  {cat.avgCommission.toFixed(0)}%
+                  {cat.avgRate != null ? `${cat.avgRate.toFixed(0)}%` : "—"}
                 </p>
               </div>
             </div>
+            <p className="text-[10px] text-muted-foreground/70 mb-3">
+              {cat.avgRate != null ? `Average across ${rateBasis(cat)}` : "No single rate published"}
+            </p>
 
-            <div className="flex items-center gap-2 pt-3 border-t border-border/30">
-              <ProgramLogo
-                slug={cat.topProgram.slug}
-                name={cat.topProgram.name}
-                size={20}
-              />
-              <span className="text-xs text-muted-foreground truncate">
-                Top: {cat.topProgram.name} ({commissionDisplay(cat.topProgram.commission)})
-              </span>
-            </div>
+            {cat.topRate && (
+              <div className="flex items-center gap-2 pt-3 border-t border-border/30">
+                <ProgramLogo
+                  slug={cat.topRate.program.slug}
+                  name={cat.topRate.program.name}
+                  size={20}
+                />
+                <span className="text-xs text-muted-foreground truncate">
+                  Top rate: {cat.topRate.program.name}
+                  {termsConfirmed(cat.topRate.program) ? "" : ` · ${UNCONFIRMED}`}
+                </span>
+              </div>
+            )}
           </Link>
         ))}
       </div>

@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
-import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel, confirmedTerms, termsConfirmed, UNCONFIRMED_NOTE } from "@/lib/programs";
+import { programs, livePrograms, getProgram, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel, confirmedTerms, termsConfirmed, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";

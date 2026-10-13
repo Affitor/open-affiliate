@@ -288,21 +288,10 @@ export function commissionUnknown(c: Program["commission"]): boolean {
   return c.mode === "unknown" || c.value === null
 }
 
-export function isCommissionFlat(rate: string | number): boolean {
-  if (typeof rate === "number") return false
-  const s = String(rate).replace(/,/g, "")
-  // If it has a percentage sign, it's not flat
-  if (s.includes("%")) return false
-  // If it has a dollar sign, it's flat
-  if (s.includes("$")) return true
-  return false
-}
-
 /**
- * Format a parsed commission value for display. A raw parsed number can
- * be either a percentage or a flat dollar fee — the `flat` flag tells
- * the renderer which suffix to use. Used by rankings and category stats
- * where we show aggregated best/avg values pulled from mixed rate types.
+ * Format a commission figure for display: `flat` for a US-dollar amount
+ * ("$150", "$1.5k"), otherwise a percentage ("30%", "12.5%"). Callers pass a
+ * figure from rankedCommission, so the unit is known, never guessed.
  */
 export function formatCommissionDisplay(value: number, flat: boolean): string {
   if (!isFinite(value) || value <= 0) return "—"
@@ -567,37 +556,137 @@ export function slugToNetwork(slug: string): string | undefined {
   return liveNetworks.find((n) => networkToSlug(n) === slug)
 }
 
-export interface NetworkStats {
-  network: string
-  programCount: number
-  avgCommission: number        // legacy — mean of percentage rates only
-  bestCommission: number       // legacy — max of percentage rates only
-  bestCommissionDisplay: string // formatted, covers both flat and percentage
-  topProgram: Program           // the program with the strongest commission
-}
-
 /**
- * Rank programs within a network or category using a normalized score that
- * can compare a percentage rate against a flat-fee rate. Heuristic: treat
- * $1 ≈ 1pp up to a cap of 100 (so $500 flat ≈ a cap, preventing giant
- * referral bounties like $10,000 from dominating the "best" slot).
- *
- * Also orders the /best list pages, which pass the typed commission: like
- * parseCommissionRate, the typed value and mode beat re-parsing the raw string,
- * which reads "50% of the first payment, 30% of every renewal" as 50 while the
- * page displays 30. Raw-string callers keep their current behavior.
+ * Orders programs by commission on the list pages (listScore in best-lists.ts),
+ * with a normalized score that can place a percentage next to a flat fee.
+ * Heuristic: $1 ≈ 1pp up to a cap of 100, so every flat amount from $550 up
+ * ties at the cap. That is fine for an order and wrong for a "best" figure,
+ * which is why commissionStats never uses it. Takes a commission that
+ * rankedCommission has let through: the typed value and mode, never the text.
  */
-export function rankScore(rate: string | number | Program["commission"]): number {
-  const n = parseCommissionRate(rate)
+export function rankScore(c: Program["commission"]): number {
+  const n = c.value ?? 0
   if (!isFinite(n) || n <= 0) return 0
-  const flat = typeof rate === "object" ? rate.mode === "flat" : isCommissionFlat(rate)
-  if (flat) {
-    // $1-$49 → 5-49, $50-$500 → 50-100, $500+ → 100 cap
+  if (c.mode === "flat") {
+    // $1-$49 → 1-49, $50-$500 → 50-95, capped at 100
     if (n < 50) return n
     return Math.min(100, 50 + (n - 50) * 0.1)
   }
   // Percentage: direct, capped at 100
   return Math.min(n, 100)
+}
+
+/** A commission figure and the program that pays it. */
+export interface PaidBy {
+  value: number
+  program: Program
+}
+
+/**
+ * Commission figures for a group of programs (a network, a category), from
+ * rankedCommission only. A percentage and a dollar amount are never averaged
+ * or compared with each other: without the sale price there is no honest
+ * exchange rate between "30%" and "$150". So a group has a rate side and a
+ * flat side:
+ *   - avgRate, topRate: mean and highest single percentage rate;
+ *   - topFlatUsd: highest flat payout in US dollars.
+ * Credit and gift-card rewards, tiered and hybrid deals, flat amounts in
+ * another or no currency, and unpublished rates count on neither side (a
+ * tiered "up to $150" was shown as a 150% rate). A percentage counts in any
+ * currency. Each is null when nothing in the group counts. A tie goes to the
+ * verified program, then to the earlier one in the group.
+ *
+ * Unverified commissions count, as everywhere else on the site, so every
+ * surface that shows these figures says so: the average with rateBasis, a
+ * named top program with the "unconfirmed" marker when !termsConfirmed.
+ */
+export interface CommissionStats {
+  avgRate: number | null
+  /** The single rates the average is taken over, and how many are unconfirmed. */
+  rateCount: number
+  unconfirmedRates: number
+  topRate: PaidBy | null
+  topFlatUsd: PaidBy | null
+}
+
+export function commissionStats(progs: Program[]): CommissionStats {
+  const side = (mode: "percentage" | "flat"): PaidBy[] =>
+    progs.flatMap((program) => {
+      const c = rankedCommission(program)
+      const value = c?.value
+      return c?.mode === mode && typeof value === "number" && Number.isFinite(value) && value > 0 ? [{ value, program }] : []
+    })
+  const top = (paid: PaidBy[]): PaidBy | null =>
+    paid.reduce<PaidBy | null>(
+      (best, x) =>
+        !best || x.value > best.value || (x.value === best.value && x.program.verified && !best.program.verified) ? x : best,
+      null
+    )
+  const rates = side("percentage")
+  return {
+    avgRate: rates.length ? rates.reduce((sum, r) => sum + r.value, 0) / rates.length : null,
+    rateCount: rates.length,
+    unconfirmedRates: rates.filter((r) => !termsConfirmed(r.program)).length,
+    topRate: top(rates),
+    topFlatUsd: top(side("flat")),
+  }
+}
+
+/** What an average rate is taken over: "289 rates (214 unconfirmed)". */
+export function rateBasis(s: CommissionStats): string {
+  const n = s.rateCount
+  return `${n} ${n === 1 ? "rate" : "rates"}${s.unconfirmedRates > 0 ? ` (${s.unconfirmedRates} unconfirmed)` : ""}`
+}
+
+/** A figure on a /rankings networks or categories row, as the browser shows it. */
+export interface PaidFigure {
+  display: string
+  slug: string
+  name: string
+  /** The program's terms are not verified: shown with the UNCONFIRMED marker. */
+  unconfirmed: boolean
+}
+
+/**
+ * A /rankings networks or categories row, built on the server as display
+ * strings: the browser's copy of the registry has no `kind`, so it could not
+ * leave referral rewards out.
+ */
+export interface GroupRow {
+  /** The network id or the category name. */
+  name: string
+  programCount: number
+  /** Mean single percentage rate, "23.4%", or "—". */
+  avgRate: string
+  /** rateBasis, or null when no rate counts. */
+  avgBasis: string | null
+  topRate: PaidFigure | null
+  topFlatUsd: PaidFigure | null
+}
+
+export function groupRow(name: string, programCount: number, s: CommissionStats): GroupRow {
+  const figure = (x: PaidBy | null, flat: boolean): PaidFigure | null =>
+    x
+      ? {
+          display: formatCommissionDisplay(x.value, flat),
+          slug: x.program.slug,
+          name: x.program.name,
+          unconfirmed: !termsConfirmed(x.program),
+        }
+      : null
+  return {
+    name,
+    programCount,
+    avgRate: s.avgRate != null ? `${s.avgRate.toFixed(1)}%` : "—",
+    avgBasis: s.avgRate != null ? rateBasis(s) : null,
+    topRate: figure(s.topRate, false),
+    topFlatUsd: figure(s.topFlatUsd, true),
+  }
+}
+
+export interface NetworkStats extends CommissionStats {
+  network: string
+  programCount: number
 }
 
 export function getNetworkStats(): NetworkStats[] {
@@ -609,40 +698,13 @@ export function getNetworkStats(): NetworkStats[] {
   }
 
   return Array.from(networkMap.entries())
-    .map(([network, progs]) => {
-      const scores = progs.map((p) => rankScore(p.commission.rate))
-      const bestIdx = scores.indexOf(Math.max(...scores))
-      const topProgram = progs[bestIdx]
-      // Avg and bestCommission legacy: only consider percentage rates, so the
-      // displayed "X%" makes semantic sense. Flat-fee-only networks will show
-      // a conservative 0 for avg and use bestCommissionDisplay for UI.
-      const pctRates = progs
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      return {
-        network,
-        programCount: progs.length,
-        avgCommission: pctRates.length
-          ? pctRates.reduce((a, b) => a + b, 0) / pctRates.length
-          : 0,
-        bestCommission: pctRates.length ? Math.max(...pctRates) : 0,
-        bestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission),
-          isCommissionFlat(topProgram.commission.rate)
-        ),
-        topProgram,
-      }
-    })
+    .map(([network, progs]) => ({ network, programCount: progs.length, ...commissionStats(progs) }))
     .sort((a, b) => b.programCount - a.programCount)
 }
 
-export interface CategoryStats {
+export interface CategoryStats extends CommissionStats {
   category: string
   programCount: number
-  highestCommission: number        // legacy — max of percentage rates only
-  avgCommission: number             // legacy — mean of percentage rates only
-  highestCommissionDisplay: string  // formatted, covers both flat and percentage
-  topProgram: Program
 }
 
 export function getCategoryStats(): CategoryStats[] {
@@ -653,26 +715,6 @@ export function getCategoryStats(): CategoryStats[] {
   }
 
   return Array.from(catMap.entries())
-    .map(([category, progs]) => {
-      const scores = progs.map((p) => rankScore(p.commission.rate))
-      const bestIdx = scores.indexOf(Math.max(...scores))
-      const topProgram = progs[bestIdx]
-      const pctRates = progs
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      return {
-        category,
-        programCount: progs.length,
-        highestCommission: pctRates.length ? Math.max(...pctRates) : 0,
-        avgCommission: pctRates.length
-          ? pctRates.reduce((a, b) => a + b, 0) / pctRates.length
-          : 0,
-        highestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission),
-          isCommissionFlat(topProgram.commission.rate)
-        ),
-        topProgram,
-      }
-    })
+    .map(([category, progs]) => ({ category, programCount: progs.length, ...commissionStats(progs) }))
     .sort((a, b) => b.programCount - a.programCount)
 }

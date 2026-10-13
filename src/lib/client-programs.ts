@@ -110,22 +110,6 @@ export function parseCommissionRate(
   return number ? Number.parseFloat(number[0]) : 0
 }
 
-function isCommissionFlat(rate: string | number): boolean {
-  if (typeof rate === "number") return false
-  const value = rate.replace(/,/g, "")
-  return !value.includes("%") && value.includes("$")
-}
-
-function formatCommissionDisplay(value: number, flat: boolean): string {
-  if (!Number.isFinite(value) || value <= 0) return "—"
-  if (flat) {
-    return value >= 1000
-      ? `$${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k`
-      : `$${value.toLocaleString()}`
-  }
-  return `${value % 1 === 0 ? value : value.toFixed(1)}%`
-}
-
 /**
  * Precomputed by build-registry with the site's own affiliateScore, which
  * reads the description, agent prompt and signup URL that this registry
@@ -249,85 +233,3 @@ export const networkCounts = Object.fromEntries(
     ).length,
   ])
 )
-
-function rankScore(rate: string | number): number {
-  const value = parseCommissionRate(rate)
-  if (!Number.isFinite(value) || value <= 0) return 0
-  if (isCommissionFlat(rate)) {
-    return value < 50 ? value : Math.min(100, 50 + (value - 50) * 0.1)
-  }
-  return Math.min(value, 100)
-}
-
-interface AggregateStats {
-  programCount: number
-  avgCommission: number
-  topProgram: ClientProgram
-}
-
-function aggregatePrograms(items: ClientProgram[]): AggregateStats {
-  const scores = items.map((program) => rankScore(program.commission.rate))
-  const topProgram = items[scores.indexOf(Math.max(...scores))]
-  const percentageRates = items
-    .filter((program) => !isCommissionFlat(program.commission.rate))
-    .map((program) => parseCommissionRate(program.commission))
-
-  return {
-    programCount: items.length,
-    avgCommission: percentageRates.length
-      ? percentageRates.reduce((sum, value) => sum + value, 0) /
-        percentageRates.length
-      : 0,
-    topProgram,
-  }
-}
-
-export function getNetworkStats() {
-  return networks
-    .map((network) => {
-      const items = programs.filter(
-        (program) => (program.network ?? IN_HOUSE) === network
-      )
-      const stats = aggregatePrograms(items)
-      const percentageRates = items
-        .filter((program) => !isCommissionFlat(program.commission.rate))
-        .map((program) => parseCommissionRate(program.commission))
-      return {
-        network,
-        ...stats,
-        bestCommission: percentageRates.length
-          ? Math.max(...percentageRates)
-          : 0,
-        bestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(stats.topProgram.commission),
-          isCommissionFlat(stats.topProgram.commission.rate)
-        ),
-      }
-    })
-    .sort((a, b) => b.programCount - a.programCount)
-}
-
-export function getCategoryStats() {
-  return categories
-    .map((category) => {
-      const items = programs.filter(
-        (program) => program.category === category
-      )
-      const stats = aggregatePrograms(items)
-      const percentageRates = items
-        .filter((program) => !isCommissionFlat(program.commission.rate))
-        .map((program) => parseCommissionRate(program.commission))
-      return {
-        category,
-        ...stats,
-        highestCommission: percentageRates.length
-          ? Math.max(...percentageRates)
-          : 0,
-        highestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(stats.topProgram.commission),
-          isCommissionFlat(stats.topProgram.commission.rate)
-        ),
-      }
-    })
-    .sort((a, b) => b.programCount - a.programCount)
-}
