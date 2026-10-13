@@ -4,6 +4,7 @@ import {
   formatCommissionDisplay,
   affiliateScore,
   commissionStats,
+  rateBasis,
   confirmedTerms,
   rankedCommission,
   termsConfirmed,
@@ -45,6 +46,8 @@ export interface CategoryInsight {
   verifiedRate: number
   topProgram: { slug: string; name: string; avgScore: number }
   avgCommission: string
+  /** What avgCommission is over, as /categories says it: "89 rates (74 unconfirmed)"; null with no rate. */
+  avgCommissionBasis: string | null
 }
 
 export interface PlatformInsight {
@@ -247,7 +250,8 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
 
       // Mean single percentage rate in the category (commissionStats): flat
       // amounts, tiered deals and unpublished rates are not averaged in.
-      const avgRate = commissionStats(livePrograms.filter((p) => p.category === category)).avgRate
+      const rates = commissionStats(livePrograms.filter((p) => p.category === category))
+      const avgRate = rates.avgRate
 
       return {
         category,
@@ -260,6 +264,7 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
           ? { slug: topProg.slug, name: topProg.name, avgScore: topProg.avgSiftScore }
           : { slug: "", name: "—", avgScore: 0 },
         avgCommission: avgRate != null ? `${Math.round(avgRate)}%` : "—",
+        avgCommissionBasis: avgRate != null ? rateBasis(rates) : null,
       }
     })
     .sort((a, b) => b.avgSiftScore - a.avgSiftScore)

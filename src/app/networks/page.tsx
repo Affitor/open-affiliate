@@ -30,7 +30,7 @@ function listNames(names: string[]): string {
  * so it is counted apart.
  *
  * Counts only. The cards once showed a "Best" commission and a "Top" program
- * picked by rankScore, a capped heuristic: PartnerStack read "Best $1k" from an
+ * picked by a capped heuristic (rankScore, since removed): PartnerStack read "Best $1k" from an
  * unverified program while the registry held an unverified $10k one. Which
  * program pays most is answered on each network page, next to its full list.
  *

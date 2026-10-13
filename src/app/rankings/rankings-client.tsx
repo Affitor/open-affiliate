@@ -23,7 +23,8 @@ import {
   categories,
   commissionTypes,
   categoryCounts,
-  parseCommissionRate,
+  compareByCommission,
+  compareText,
   type Program,
   commissionLabel,
   affiliateScore,  commissionDisplay
@@ -303,10 +304,7 @@ function ProgramsTable({
     list.sort((a, b) => {
       switch (sortCol) {
         case "commission":
-          return (
-            parseCommissionRate(a.program.commission) -
-            parseCommissionRate(b.program.commission)
-          ) * dir;
+          return compareByCommission(a.program, b.program, dir);
         case "verified":
           return (a.verifiedContent - b.verifiedContent) * dir;
         case "avg":
@@ -314,7 +312,7 @@ function ProgramsTable({
         case "total":
           return (a.totalContent - b.totalContent) * dir;
         case "name":
-          return a.program.name.localeCompare(b.program.name) * dir;
+          return compareText(a.program.name, b.program.name) * dir;
         default:
           return 0;
       }
