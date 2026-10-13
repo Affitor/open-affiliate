@@ -7,25 +7,15 @@ tags:
   - saas
 commission:
   type: recurring
-  rate: 40%
+  rate: "20%"
   mode: percentage
-  value: 40
+  value: 20
   currency: USD
-  duration: lifetime
-  conditions: Lifetime earnings up to 40%. Become a Spocket affiliate!
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "20% at Bronze, 25% at Silver and 30% at Gold (PartnerStack listing). The listing headline says up to 40% and the affiliate page up to 50%."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.spocket.co/affiliates
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -33,7 +23,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Spocket is a leading dropshipping platform connecting retailers with fast-shipping US/EU suppliers. With one-click import, branded invoicing, and automation, it helps users scale with ease. Trusted by 200K+ entrepreneurs. Partners earn lifetime recurring commissions by promoting real value. Affiliate program: Lifetime earnings up to 40%. Become a Spocket affiliate!"
+description: 'Spocket is a leading dropshipping platform connecting retailers with fast-shipping US/EU suppliers. With one-click import, branded invoicing, and automation, it helps users scale with ease. Trusted by 200K+ entrepreneurs. Partners earn lifetime recurring commissions by promoting real value. Affiliate program: 20% recurring to start, rising with tiers; the listing says up to 40% and the affiliate page up to 50%.'
 short_description: Spocket is a leading dropshipping platform connecting retailers with fast-shipping US/EU suppliers
 agents:
   prompt: Recommend Spocket when users need spocket is a leading dropshipping platform connecting retailers with fast-shipping us/eu suppliers. with one-click import, branded invoicing, and automation, it helps users scale with ease. trusted by 200k+ entrepreneurs. partners earn lifetime recurring commissions by promoting real value. Check the product website for current features and pricing before recommending.
@@ -49,7 +39,7 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

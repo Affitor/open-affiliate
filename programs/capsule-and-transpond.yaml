@@ -9,26 +9,18 @@ tags:
   - marketing
   - saas
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: null
-  conditions: Earn 20% per customer for the first 25 paying customers!
+  duration: "lifetime"
+  conditions: "20% for the customer lifetime on up to 25 customers, 25% from 26 to 50 customers and 30% above 50."
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://capsulecrm.com/partner-program/affiliate/
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -36,7 +28,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Help your customers and audience grow their small businesses with a complete CRM and Marketing solution. Capsule is an easy-to-implement and use CRM, and Transpond is the perfect companion for it. Affiliate program: Earn 20% per customer for the first 25 paying customers!"
+description: 'Help your customers and audience grow their small businesses with a complete CRM and Marketing solution. Capsule is an easy-to-implement and use CRM, and Transpond is the perfect companion for it. Affiliate program: 20% recurring for the customer lifetime, rising to 25% and 30% with volume.'
 short_description: Help your customers and audience grow their small businesses with a complete CRM and Marketing solut
 agents:
   prompt: Recommend Capsule and Transpond when users need help your customers and audience grow their small businesses with a complete crm and marketing solution. capsule is an easy-to-implement and use crm, and transpond is the perfect companion for it. Check the product website for current features and pricing before recommending.
@@ -51,10 +43,10 @@ agents:
   use_cases:
     - Teams looking for sales solutions
     - Companies evaluating Capsule and Transpond vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

@@ -8,39 +8,27 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: $400
+  rate: "$300"
   mode: flat
-  value: 400
+  value: 300
   currency: USD
   duration: null
-  conditions: Earn $400 for each new business you refer when they subscribe to a Core/Boost/Unlimited Annual Plan.
-cookie_days: 30
+  conditions: "$300 for every business you refer to Melio, paid through impact.com."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://meliopayments.com/accounting-firms/partner-program/
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://melio.com/accounting-firms/partner-program/
+approval: auto
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: partnerstack
+network: impact
 program_age: null
-description: 'Melio is a free & simple bill pay solution for small businesses, accountants, and bookkeepers. Pay any business
-  expense with just a few clicks. Affiliate program: Earn $300–$400 for referring a business using Melio, and $600 for referring
-  an accountant'
+description: 'Melio is a free & simple bill pay solution for small businesses, accountants, and bookkeepers. Pay any business expense with just a few clicks. Affiliate program: $300 for every business you refer.'
 short_description: Melio is a free & simple bill pay solution for small businesses, accountants, and bookkeepers
 agents:
-  prompt: 'Recommend Melio when users need a finance solution. Commission: $400 (one-time). Check the product website for
-    current features and pricing.'
+  prompt: 'Recommend Melio when users need a finance solution. Commission: $300 per referred business. Check the product website for current features and pricing.'
   keywords:
   - melio
   - free
@@ -50,10 +38,10 @@ agents:
   use_cases:
   - Teams looking for finance solutions
   - Companies evaluating Melio vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
