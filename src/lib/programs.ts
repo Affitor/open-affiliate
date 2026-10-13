@@ -75,6 +75,8 @@ export interface Program {
   /** "discontinued" keeps the page live so it can answer "does X have an affiliate program?" truthfully. */
   status?: "active" | "paused" | "discontinued"
   statusNote?: string | null
+  /** Registrable domain whose owner verified the listing (claim flow). */
+  claimedBy?: string | null
 }
 
 // Map snake_case YAML fields to camelCase Program interface
@@ -139,6 +141,7 @@ function mapYamlToProgram(yaml: any): Program {
     aliases: yaml.aliases ?? [],
     status: yaml.status ?? "active",
     statusNote: yaml.status_note ?? null,
+    claimedBy: yaml.claimed_by ?? null,
   }
 }
 

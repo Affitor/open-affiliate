@@ -32,6 +32,7 @@ import { ConnectTabs } from "@/components/connect-tabs";
 import { CapabilityCards } from "@/components/capability-cards";
 import { RelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
+import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
 import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay} from "@/lib/programs";
@@ -249,6 +250,7 @@ export default async function ProgramPage({
                 {statusTag}
               </Badge>
             )}
+            <ClaimChip program={program} />
           </div>
           <p className="text-sm text-muted-foreground mt-1">
             {program.shortDescription}
