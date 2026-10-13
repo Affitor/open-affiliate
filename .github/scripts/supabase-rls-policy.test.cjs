@@ -92,6 +92,17 @@ test("claim tables are service-role only: RLS on, no policies, anon/authenticate
   )
 })
 
+test("claim_submit_edit is callable by service_role only", () => {
+  const sql = fs.readFileSync(path.join(migrationsDir, "010_claim_edit_quota.sql"), "utf8")
+  assert.match(sql, /SECURITY INVOKER/i, "must run with the caller's rights")
+  assert.match(
+    sql,
+    /REVOKE ALL ON FUNCTION public\.claim_submit_edit\(uuid, text, jsonb, int\) FROM PUBLIC, anon, authenticated;/i,
+    "PostgREST exposes public functions; revoke the default PUBLIC execute grant"
+  )
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.claim_submit_edit\(uuid, text, jsonb, int\) TO service_role;/i)
+})
+
 test("migration 007 drops the previously open analytics policies", () => {
   const lockMigration = fs.readFileSync(
     path.join(migrationsDir, "007_lock_analytics_rls.sql"),
