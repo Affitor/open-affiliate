@@ -611,7 +611,7 @@ test("every value written is checked against the schema", () => {
     [["short_description"], "x".repeat(100)],
     [["slug"], "citegraph"],
     [["signup_url"], "https://x.com/join?a=1&b=2"],
-    [["url"], "https://xn--bcher-kva.de:8443/p"],
+    [["url"], "https://a.b.co.uk:8443/p"],
   ]
   assert.doesNotThrow(() => checkSchema(ok, "x.yaml"))
   for (const url of [
@@ -623,6 +623,9 @@ test("every value written is checked against the schema", () => {
     `https://${("a".repeat(63) + ".").repeat(4)}com/evil.example`,
     "https://xn--bcher-kva%61.com/path",
     "https://a!b.example:80/path",
+    "https://0x7f.1/path",
+    "https://localhost/",
+    "https://xn--pple-43d.com/path",
   ]) {
     assert.throws(() => checkSchema([[["signup_url"], url]], "x.yaml"), /signup_url .*pattern/, url)
   }

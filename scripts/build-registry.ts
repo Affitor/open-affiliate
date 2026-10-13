@@ -23,9 +23,9 @@ const SIGNUP_URL_DEBT = new Set<string>(
 
 /**
  * URL fields whose schema `pattern` admits only an absolute lowercase http(s)
- * URL whose authority is exactly host[:port], with a letters-digits-dots-
- * hyphens host, in printable ASCII without a backslash and without HTML
- * character references (`&amp;`, `&#38;`, `&#x26;`).
+ * URL whose authority is exactly host[:port], with an ASCII domain-name host
+ * (no IP address, no IDN), in printable ASCII without a backslash and without
+ * HTML character references (`&amp;`, `&#38;`, `&#x26;`).
  * Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
@@ -137,9 +137,18 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // an IPv6 host whose brackets the twins must encode; a backslash a URL
   // parser treats as `/` but the twins encode; a 259-character host that
   // markdown-it drops; and `%61` or `!` in a host, which markdown-it's URL
-  // parser splits so the shown host differs from the real one. So the host is
-  // an allow-list (letters, digits, dots, hyphens, as DNS has them), the
-  // authority is nothing but host[:port], and the whole URL is printable ASCII.
+  // parser splits so the shown host differs from the real one; numeric hosts
+  // (`2130706433`, `0x7f.1`, `1.2.3`) that a URL parser reads as 127.0.0.1 or
+  // 1.2.0.3; and punycode, which markdown-it shows decoded, so
+  // `xn--pple-43d.com` displays as a Cyrillic look-alike of apple.com. So the
+  // host is an allow-list: a domain name of at least two labels of letters,
+  // digits and hyphens whose last label starts with a letter, with no `xn--`
+  // label. The authority is nothing but host[:port], and the whole URL is
+  // printable ASCII.
+  //
+  // IDN is refused outright (PR #170, review round 10), not handled. If a real
+  // brand ever only has an internationalised domain, a person should decide
+  // how to show it, rather than loosening this pattern.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
@@ -150,13 +159,14 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
       throw new Error(
         `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must be an ` +
           `absolute http:// or https:// URL (lowercase scheme) whose authority is ` +
-          `exactly host[:port]: the host uses only letters, digits, dots and hyphens ` +
-          `(at most 253 characters; each label 1 to 63 characters, not starting or ending ` +
-          `with a hyphen; no empty label), so no user@, no IPv6 literal and no ` +
-          `percent-encoding in the host; write an international domain in punycode, such ` +
-          `as xn--bcher-kva.de; a port is 1 to 5 digits. The whole URL must be printable ` +
-          `ASCII with no spaces or backslash, and contain no HTML character reference ` +
-          `(write "&", not "&amp;" or "&#38;").`
+          `exactly host[:port]: the host is a domain name of letters, digits, dots and ` +
+          `hyphens (at most 253 characters; at least two labels, each 1 to 63 characters, ` +
+          `not starting or ending with a hyphen; the last label starts with a letter), so ` +
+          `no user@, no IP address, no IPv6 literal and no percent-encoding in the host. ` +
+          `Internationalised domains are not accepted (no xn-- label); use the brand's ` +
+          `ASCII domain. A port is 1 to 5 digits. The whole URL must be printable ASCII ` +
+          `with no spaces or backslash, and contain no HTML character reference (write ` +
+          `"&", not "&amp;" or "&#38;").`
       )
     }
   }
