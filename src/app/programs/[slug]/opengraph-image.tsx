@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { programs, getProgram , commissionDisplay} from "@/lib/programs";
+import { programs, getProgram , commissionDisplay, confirmedTerms, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import { hasNoProgram } from "@/lib/no-program";
 
 export const alt = "OpenAffiliate: Affiliate Program Details";
@@ -16,9 +16,9 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = getProgram(slug);
+  const stored = getProgram(slug);
 
-  if (!program) {
+  if (!stored) {
     return new ImageResponse(
       (
         <div
@@ -40,8 +40,12 @@ export default async function Image({
     );
   }
 
+  // As a reader may see it: unverified, no cookie, payout or approval, in figures or prose.
+  const program = confirmedTerms(stored);
   // Closed or never run: the card says so instead of showing placeholder terms.
   const noProgram = hasNoProgram(program);
+  // Cookie and payout only once the terms are verified; commission says when it is not.
+  const confirmed = termsConfirmed(program);
 
   return new ImageResponse(
     (
@@ -129,10 +133,10 @@ export default async function Image({
               {noProgram ? "No affiliate program" : commissionDisplay(program.commission)}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
-              {noProgram ? (program.lastVerifiedAt ? `Checked ${program.lastVerifiedAt}` : "Status") : `${program.commission.type} commission`}
+              {noProgram ? (program.lastVerifiedAt ? `Checked ${program.lastVerifiedAt}` : "Status") : `${program.commission.type} commission${confirmed ? "" : ` · ${UNCONFIRMED}`}`}
             </span>
           </div>
-          {!noProgram && (
+          {!noProgram && confirmed && (
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
                 {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
@@ -142,7 +146,7 @@ export default async function Image({
               </span>
             </div>
           )}
-          {!noProgram && (
+          {!noProgram && confirmed && (
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
                 {program.payout.minimum != null ? `$${program.payout.minimum}` : "n/a"}

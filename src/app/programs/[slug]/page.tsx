@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
-import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
+import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel, confirmedTerms, termsConfirmed, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
@@ -128,8 +128,12 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = getProgram(slug);
-  if (!program) notFound();
+  const stored = getProgram(slug);
+  if (!stored) notFound();
+  // What a reader may see: unverified, no cookie window, payout or approval,
+  // and no sentence of free text stating them (confirmed-terms.ts). Only the
+  // score reads the stored program.
+  const program = confirmedTerms(stored);
 
   const faq = buildFaq(program);
   const discontinued = isDiscontinued(program);
@@ -140,8 +144,9 @@ export default async function ProgramPage({
   const unverified = isUnverified(program);
   const network = networkName(program);
   const applyCta = applyButton(program);
-  // Unverified: badges carry the listed figures but say they are not confirmed.
+  // Unverified: the commission badge says it is not confirmed.
   const unconfirmed = unverified ? " (unconfirmed)" : "";
+  const confirmed = termsConfirmed(program);
   const cookieText =
     program.cookieDays == null ? "Cookie not published" : program.cookieDays === 0 ? "Code-based, no cookie" : `${program.cookieDays}d cookie`;
   const trustLine = noProgram
@@ -159,7 +164,7 @@ export default async function ProgramPage({
     : "The signup page is not working right now.";
 
   // Affiliate Score
-  const score = affiliateScore(program);
+  const score = affiliateScore(stored);
   // Compared with live programs only: a brand with no program has no score to average.
   const categoryPrograms = livePrograms.filter((p) => p.category === program.category);
   // A program with no cookie_days scores NaN; one such entry turned every
@@ -297,10 +302,12 @@ export default async function ProgramPage({
           icon={<DollarSign className="h-3 w-3" />}
           label={`${commissionDisplay(program.commission)} ${commissionLabel(program.commission)}${unconfirmed}`}
         />
-        <StatBadge
-          icon={<Clock className="h-3 w-3" />}
-          label={`${cookieText}${program.cookieDays == null ? "" : unconfirmed}`}
-        />
+        {confirmed && (
+          <StatBadge
+            icon={<Clock className="h-3 w-3" />}
+            label={`${cookieText}${program.cookieDays == null ? "" : unconfirmed}`}
+          />
+        )}
         {program.network && (
           <StatBadge
             icon={<Network className="h-3 w-3" />}
@@ -540,6 +547,9 @@ export default async function ProgramPage({
               icon={<DollarSign className="h-3 w-3" />}
               value={<>{commissionDisplay(program.commission)} <span className="text-xs text-muted-foreground font-normal">{commissionLabel(program.commission)}</span></>}
             />
+            {!confirmed && (
+              <p className="text-[11px] text-muted-foreground leading-relaxed">{UNCONFIRMED_NOTE}</p>
+            )}
 
             {program.commissionDuration && (
               <>
@@ -554,8 +564,12 @@ export default async function ProgramPage({
               </p>
             )}
 
-            <div className="h-px bg-border/50" />
-            <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={program.cookieDays == null ? "Not published" : program.cookieDays === 0 ? "None (code-based)" : `${program.cookieDays} days`} />
+            {confirmed && (
+              <>
+                <div className="h-px bg-border/50" />
+                <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={program.cookieDays == null ? "Not published" : program.cookieDays === 0 ? "None (code-based)" : `${program.cookieDays} days`} />
+              </>
+            )}
 
             {program.attribution && (
               <>

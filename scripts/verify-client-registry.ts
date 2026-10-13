@@ -6,7 +6,9 @@ import {
   commissionDisplay as fullCommissionDisplay,
   commissionLabel as fullCommissionLabel,
   livePrograms as fullPrograms, // client lists only live programs
+  programs as allPrograms,
 } from "../src/lib/programs"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 import {
   affiliateScore as clientAffiliateScore,
   categories as clientCategories,
@@ -56,15 +58,14 @@ for (const fullProgram of fullPrograms) {
       currency: fullProgram.commission.currency,
       duration: fullProgram.commission.duration ?? undefined,
     },
-    cookieDays: fullProgram.cookieDays,
-    shortDescription: fullProgram.shortDescription,
+    // Unverified: no cookie window, in figures or prose (confirmed-terms.ts).
+    cookieDays: termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined,
+    shortDescription: confirmedPitch(fullProgram, fullProgram.shortDescription),
     verified: fullProgram.verified,
     network: fullProgram.network ?? null,
     createdAt: fullProgram.createdAt,
     source: fullProgram.source,
-    descriptionAvailable: fullProgram.description.length > 20,
-    agentPromptAvailable: fullProgram.agentPrompt.length > 10,
-    signupAvailable: Boolean(fullProgram.signupUrl),
+    score: fullAffiliateScore(fullProgram),
   }
   const normalizedClientProgram = {
     ...clientProgram,
@@ -83,7 +84,7 @@ for (const fullProgram of fullPrograms) {
   const checks: Array<[string, unknown, unknown]> = [
     ["name", clientProgram.name, fullProgram.name],
     ["category", clientProgram.category, fullProgram.category],
-    ["cookieDays", clientProgram.cookieDays, fullProgram.cookieDays],
+    ["cookieDays", clientProgram.cookieDays, termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined],
     ["verified", clientProgram.verified, fullProgram.verified],
     ["network", clientProgram.network, fullProgram.network],
     [
@@ -113,6 +114,24 @@ for (const fullProgram of fullPrograms) {
 }
 
 const raw = readFileSync(clientRegistryPath)
+
+/**
+ * The browser gets this file whole, paused and closed programs included, so
+ * no row of an unverified program may carry a cookie window, payout or
+ * approval key, or a sentence of prose stating one.
+ */
+const fullBySlug = new Map(allPrograms.map((p) => [p.slug, p]))
+for (const row of (JSON.parse(raw.toString("utf8")) as { programs: Record<string, unknown>[] }).programs) {
+  const full = fullBySlug.get(String(row.slug))
+  if (!full) fail(`client row ${String(row.slug)} is not in the registry`)
+  if (termsConfirmed(full)) continue
+  for (const key of ["cookieDays", "cookie_days", "payout", "payoutMethods", "approval", "approvalTime"]) {
+    if (key in row) fail(`unverified ${full.slug} ships ${key} to the browser`)
+  }
+  if (row.shortDescription !== confirmedPitch(full, full.shortDescription)) {
+    fail(`unverified ${full.slug} ships a shortDescription with terms in it`)
+  }
+}
 const gzipBytes = gzipSync(raw).byteLength
 if (gzipBytes > CLIENT_REGISTRY_GZIP_BUDGET) {
   fail(

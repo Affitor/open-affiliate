@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
 import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -240,7 +241,7 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   }
 }
 
-function buildRegistry(): void {
+async function buildRegistry(): Promise<void> {
   const yamlFiles = readdirSync(PROGRAMS_DIR)
     .filter((f) => f.endsWith(".yaml"))
     .sort()
@@ -301,6 +302,13 @@ function buildRegistry(): void {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
 
+  // The Affiliate Score reads the stored cookie window, which the browser
+  // must not receive for an unverified program (src/lib/confirmed-terms.ts).
+  // So the score ships precomputed, by the site's own affiliateScore over the
+  // registry.json just written: lists rank exactly as the server does.
+  const site = await import("../src/lib/programs")
+  const scoreBySlug = new Map(site.programs.map((p) => [p.slug, site.affiliateScore(p)]))
+
   // Client-side catalog pages need filtering and comparison fields, not the
   // long descriptions, agent prompts, restrictions, or use cases in the full
   // registry. Importing registry.json from a Client Component previously put
@@ -323,15 +331,14 @@ function buildRegistry(): void {
         currency: p.commission.currency,
         duration: p.commission.duration,
       },
-      cookieDays: p.cookie_days,
-      shortDescription: p.short_description,
+      // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
+      cookieDays: termsConfirmed(p) ? p.cookie_days : undefined,
+      shortDescription: confirmedPitch(p, p.short_description),
       verified: p.verified ?? false,
       network: p.network ?? null,
       createdAt: p.created_at ?? "",
       source: p.source,
-      descriptionAvailable: p.description.length > 20,
-      agentPromptAvailable: p.agents.prompt.length > 10,
-      signupAvailable: Boolean(p.signup_url),
+      score: scoreBySlug.get(p.slug),
       ...(p.status && p.status !== "active" ? { status: p.status } : {}),
     })),
   }
@@ -431,4 +438,7 @@ function buildLogoMap(): void {
   console.log(`  Logos: ${png} .png, ${Object.keys(map).length} mapped`)
 }
 
-buildRegistry()
+buildRegistry().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

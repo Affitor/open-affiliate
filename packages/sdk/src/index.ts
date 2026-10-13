@@ -37,8 +37,9 @@ export interface Program {
   url: string;
   category: string;
   commission: Commission;
-  /** Omitted when the program does not publish a cookie window. */
+  /** Omitted when the program does not publish a cookie window, or is not verified. */
   cookieDays?: number;
+  /** Empty when the program is not verified: payout terms are shown once checked. */
   payout: Payout;
   description: string;
   shortDescription: string;
@@ -48,6 +49,7 @@ export interface Program {
   agentKeywords?: string[];
   agentUseCases?: string[];
   signupUrl?: string;
+  /** Omitted when not published, or when the program is not verified. */
   approval?: string;
   approvalTime?: string;
   restrictions?: string[];

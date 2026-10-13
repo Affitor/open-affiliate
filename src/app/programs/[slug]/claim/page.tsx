@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { getProgram } from "@/lib/programs";
+import { confirmedTerms, getProgram } from "@/lib/programs";
 import { PILOT_SLUGS, claimsEnabledFor, registrableDomain } from "@/lib/claims/rules";
 import { ClaimFlow } from "./claim-flow";
 
@@ -30,6 +30,9 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
   if (!program || !claimsEnabledFor(program)) notFound();
   const domain = registrableDomain(program.url);
   if (!domain) notFound();
+  // Unverified: hidden terms start blank, so the owner enters the real ones
+  // instead of confirming an import default.
+  const shown = confirmedTerms(program);
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
@@ -54,8 +57,8 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
           rate: String(program.commission.rate ?? ""),
           type: program.commission.type,
           duration: program.commission.duration ?? "",
-          cookieDays: program.cookieDays == null ? "" : String(program.cookieDays),
-          payoutMinimum: program.payout.minimum == null ? "" : String(program.payout.minimum),
+          cookieDays: shown.cookieDays == null ? "" : String(shown.cookieDays),
+          payoutMinimum: shown.payout.minimum == null ? "" : String(shown.payout.minimum),
           signupUrl: program.signupUrl ?? "",
           note: "",
         }}

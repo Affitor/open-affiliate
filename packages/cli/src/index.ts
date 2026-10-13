@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import { approvalText, cookieCell, cookieText, payoutText } from "./format";
 
 const API_BASE = process.env.OPENAFFILIATE_API || "https://openaffiliate.dev";
 
@@ -121,7 +122,7 @@ program
       ...programs.map((p) => [
         p.name,
         `${p.commission.rate} ${p.commission.type}`,
-        p.cookieDays != null ? `${p.cookieDays}d` : "—",
+        cookieCell(p),
         p.category,
         p.verified ? "✓" : "",
       ]),
@@ -154,11 +155,11 @@ program
   ${p.shortDescription}
   ${"─".repeat(50)}
 
-  Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
-  Cookie:      ${p.cookieDays != null ? `${p.cookieDays} days` : "not published"}
-  Payout:      ${[p.payout?.minimum != null ? `$${p.payout.minimum} min` : null, p.payout?.frequency].filter(Boolean).join(" / ") || "not published"}
-  ${p.payoutMethods ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
-  ${p.approval ? `Approval:    ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : ""}
+  Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}${p.verified ? "" : " (unconfirmed)"}
+  Cookie:      ${cookieText(p)}
+  Payout:      ${payoutText(p)}
+  ${p.payoutMethods?.length ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
+  Approval:    ${approvalText(p)}
   ${p.network ? `Network:     ${p.network}` : ""}
   URL:         ${p.url}
   ${p.signupUrl ? `Signup:      ${p.signupUrl}` : ""}

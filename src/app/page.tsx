@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
+import { programs, livePrograms, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 export const metadata: Metadata = {
@@ -128,7 +128,7 @@ function RankingsPreview() {
                 </td>
                 <td className="py-2.5 px-3 text-center hidden sm:table-cell">
                   <span className="text-xs text-muted-foreground">
-                    {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+                    {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 hidden md:table-cell">
@@ -172,7 +172,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
               )}
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {program.shortDescription}
+              {confirmedPitch(program, program.shortDescription)}
             </p>
           </div>
         </div>
@@ -184,7 +184,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
           {program.commission.type}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
+          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}

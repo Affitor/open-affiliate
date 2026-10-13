@@ -1,6 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { livePrograms, categories } from "@/lib/programs";
+import { livePrograms, categories, confirmedPitch, termsConfirmed } from "@/lib/programs";
 import { resolveProgram } from "@/lib/program-aliases";
 import { apiProgram } from "@/lib/no-program";
 
@@ -177,7 +177,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         slug: p.slug,
         name: p.name,
         category: p.category,
-        shortDescription: p.shortDescription,
+        shortDescription: confirmedPitch(p, p.shortDescription),
         commission: {
           type: p.commission.type,
           // mode and value are what an agent should read. rate is the raw
@@ -189,7 +189,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
           rate: p.commission.rate,
           currency: p.commission.currency,
         },
-        cookieDays: p.cookieDays,
+        // Left out until the program's terms are verified, as in get_program.
+        cookieDays: termsConfirmed(p) ? p.cookieDays : undefined,
         verified: p.verified,
         signupUrl: p.signupUrl ?? p.url,
         // Agents cite what they can fetch, and the markdown twin is the

@@ -3,6 +3,7 @@ import {
   categoryToSlug,
   commissionDisplay,
   commissionUnknown,
+  confirmedTerms,
   livePrograms,
   rankScore,
   type Program,
@@ -117,9 +118,14 @@ export const BEST_LISTS: BestList[] = [
     h1: "Affiliate Programs for Beginners",
     description:
       "Affiliate programs that approve new affiliates automatically, so you can start the day you sign up. Ranked by commission, with verified terms first.",
-    summary: "approve new affiliates automatically and do not list a payout minimum above $100",
-    criteria: "Programs that approve new affiliates automatically and do not list a payout minimum above $100.",
-    qualifies: (p) => p.approval === "auto" && (p.payout.minimum == null || p.payout.minimum <= 100),
+    summary: "approve new affiliates automatically and do not list a payout minimum above $100, going by verified terms",
+    criteria:
+      "Programs whose verified terms say they approve new affiliates automatically and list no payout minimum above $100. Approval and payout are not shown for unverified programs, so they are not counted.",
+    // Approval and payout as shown: unverified programs carry none (confirmed-terms.ts).
+    qualifies: (p) => {
+      const t = confirmedTerms(p)
+      return t.approval === "auto" && (t.payout.minimum == null || t.payout.minimum <= 100)
+    },
   },
   {
     slug: "recurring-affiliate-programs",

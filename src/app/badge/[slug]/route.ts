@@ -1,4 +1,4 @@
-import { programs, commissionDisplay} from "@/lib/programs"
+import { programs, commissionDisplay, termsConfirmed} from "@/lib/programs"
 import { hasNoProgram } from "@/lib/no-program"
 
 const BADGE_HEIGHT = 20
@@ -67,7 +67,9 @@ export async function GET(
   // sign to flat amounts.
   const rate = commissionDisplay(program.commission)
   // No program, no terms: the stored commission is a schema placeholder.
-  const value = hasNoProgram(program) ? "no affiliate program" : `${rate} ${program.commission.type}`
+  const value = hasNoProgram(program)
+    ? "no affiliate program"
+    : `${rate} ${program.commission.type}${termsConfirmed(program) ? "" : " (unconfirmed)"}`
 
   const color = program.verified ? "#3b82f6" : "#6b7280"
   const svg = renderBadge("OpenAffiliate", value, color, program.verified && !hasNoProgram(program))

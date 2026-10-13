@@ -28,7 +28,10 @@ export interface Program {
   slug: string;
   url: string;
   commission: string;
-  cookie_days: number;
+  /** Absent when not published, or not shown because the program is unverified. */
+  cookie_days?: number | null;
+  /** Unverified: the cookie is left out rather than called "not published". */
+  verified?: boolean;
   category: string;
   description: string;
   features?: string[];

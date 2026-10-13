@@ -16,14 +16,12 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { parse } from "yaml"
-import { NextRequest } from "next/server"
-import { GET as restGet } from "../src/app/api/programs/[slug]/route"
-import { createMcpRoute } from "../src/lib/mcp-route"
 import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
 import { buildFaq } from "../src/lib/program-seo"
 import { getProgram, isLive, programs } from "../src/lib/programs"
 import { buildSiftInsights, type ScoredRow } from "../src/lib/sift-stats"
 import { noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { mcpGetProgram, publishedCliAddCommission, publishedCliInfo, restGetProgram } from "./surface-test-helpers"
 
 /** Left out entirely. `commission` and `payout` stay, as neutral placeholders. */
 const OMITTED = ["cookieDays", "signupUrl", "approval", "approvalTime", "restrictions", "commissionDuration", "commissionConditions"]
@@ -47,68 +45,6 @@ function assertAnswerWithoutTerms(body: Record<string, unknown>, slug: string): 
     const alt = getProgram(a.slug)!
     assert.ok(alt.verified && isLive(alt) && alt.category === p.category, `${slug}: alternative ${a.slug}`)
   }
-}
-
-async function restGetProgram(slug: string): Promise<Record<string, unknown>> {
-  const res = await restGet(new NextRequest(`http://localhost/api/programs/${slug}`), {
-    params: Promise.resolve({ slug }),
-  })
-  assert.equal(res.status, 200)
-  return res.json()
-}
-
-async function mcpGetProgram(slug: string): Promise<Record<string, unknown>> {
-  const { POST } = createMcpRoute("")
-  const res = await POST(
-    new Request("http://localhost/mcp", {
-      method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
-      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name: "get_program", arguments: { slug } } }),
-    })
-  )
-  assert.equal(res.status, 200)
-  const raw = await res.text()
-  // Streamable HTTP may answer as one SSE event; the JSON-RPC message is its data line.
-  const message = JSON.parse(raw.trim().startsWith("{") ? raw : raw.split("\n").find((l) => l.startsWith("data: "))!.slice(6))
-  return JSON.parse(message.result.content[0].text)
-}
-
-/**
- * The `info` and `add` code of openaffiliate@0.0.2, npm's `latest` (0.2.0 is
- * the same code), copied verbatim from its dist/index.js. Installed copies
- * cannot be updated, so the API has to keep working for exactly this.
- */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function publishedCliInfo(p: any): string {
-  return `
-  ${p.name}${p.verified ? " ✓" : ""}
-  ${p.shortDescription}
-  ${"─".repeat(50)}
-
-  Commission:  ${p.commission.rate}% ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
-  Cookie:      ${p.cookieDays} days
-  Payout:      $${p.payout.minimum} min / ${p.payout.frequency}
-  ${p.payoutMethods ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
-  ${p.approval ? `Approval:    ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : ""}
-  ${p.network ? `Network:     ${p.network}` : ""}
-  URL:         ${p.url}
-  ${p.signupUrl ? `Signup:      ${p.signupUrl}` : ""}
-
-  Tags: ${p.tags.join(", ")}
-  ${p.restrictions?.length ? `
-  Restrictions:
-${p.restrictions.map((r: string) => `    • ${r}`).join("\n")}` : ""}
-
-  AGENTS.md:
-  ${p.agentPrompt}
-  ${p.agentUseCases?.length ? `
-  Use cases:
-${p.agentUseCases.map((u: string) => `    • ${u}`).join("\n")}` : ""}
-`
-}
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function publishedCliAddCommission(p: any): string {
-  return `${p.commission.rate} ${p.commission.type}`
 }
 
 test("the registry has at least one no_program and one discontinued entry to check", () => {
