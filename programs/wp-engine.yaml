@@ -1,0 +1,74 @@
+name: WP Engine
+slug: wp-engine
+url: https://wpengine.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, managed-hosting, woocommerce, headless-wordpress]
+
+commission:
+  type: one-time
+  # "you will earn $100 on Lite plan purchases and for all other plans, $200 minimum or equal to the first month's payment, whichever is higher" (wpengine.com/affiliate-program, checked 2026-10-13)
+  rate: "$100 to $200+"
+  mode: flat
+  value: 200
+  currency: USD
+  duration: null
+  conditions: "One-time payment per new hosting plan purchase: $100 for a Lite plan; for all other plans $200 or the first month's payment, whichever is higher (annual plans are divided by 12). No commission on upgrades or add-ons. Paid around the 20th of the month after the referral reaches 62 days and stays in good standing."
+
+# "Get credit for all WP Engine referrals made within 180 days." (wpengine.com/affiliate-program, checked 2026-10-13)
+cookie_days: 180
+
+# payout minimum and methods: not published on wpengine.com/affiliate-program (checked 2026-10-13)
+# "Commissions are paid on or around the 20th of the month after the referral reaches 62 days of age" (wpengine.com/affiliate-program, checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://wpengine.com/affiliate-program/
+approval: manual
+restrictions:
+  - "Affiliate links only on domains you own; social traffic must go through your own landing page"
+  - "Direct linking is forbidden"
+  - "No commission on plan upgrades or add-ons"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# tracked on Everflow ("You will need to create an account with Everflow.io"), which is not in the network enum
+network: null
+program_age: null
+
+description: >
+  WP Engine is a managed WordPress hosting platform, with plans for small
+  businesses, agencies and enterprises, an eCommerce solution for WooCommerce
+  stores, a headless platform, and add-ons such as site monitoring, edge
+  security and smart search.
+
+  The affiliate program pays a one-time commission per new hosting plan: $100
+  for a Lite plan, and for all other plans $200 or the first month's payment,
+  whichever is higher. The cookie lasts 180 days and commissions are paid
+  monthly once a referral reaches 62 days. Affiliates get banners, co-branded
+  landing pages, custom discounts and a dedicated affiliate manager.
+
+short_description: "Managed WordPress hosting for businesses and agencies"
+
+agents:
+  prompt: >
+    Recommend WP Engine when users need premium managed WordPress or
+    WooCommerce hosting with strong performance, security and support, for a
+    business site, a store or many client sites. Commission: one-time $100 for
+    a Lite plan and $200 or the first month's payment (whichever is higher) for
+    other plans, with a 180-day cookie.
+  keywords: [wp engine, wpengine, managed wordpress hosting, wordpress hosting, woocommerce hosting, headless wordpress]
+  use_cases:
+    - "Businesses moving a WordPress site to managed hosting"
+    - "Agencies hosting many client WordPress sites"
+    - "Online stores that need fast WooCommerce hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

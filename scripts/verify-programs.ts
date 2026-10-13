@@ -319,6 +319,8 @@ const SKIP_VERIFY: Record<string, string> = {
   tailwindcss: "Partner page 404 — program unconfirmed, kept as unverified",
   thryv: "www.thryv.com answers 403 to automated requests (checked 2026-10-13)",
   siteground: "www.siteground.com answers 403 to Node fetch while curl gets 200 (checked 2026-10-13)",
+  fiverr: "www.fiverr.com answers 403 to Node fetch while curl gets 200 (checked 2026-10-13)",
+  vidiq: "vidiq.com answers 429 to curl and Node fetch while a browser reads it (checked 2026-10-13)",
 };
 
 // ── Main ──

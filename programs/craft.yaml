@@ -1,0 +1,63 @@
+name: Craft
+slug: craft
+url: https://www.craft.do
+category: Productivity
+tags: [notes, docs, note-taking, knowledge-base, writing]
+
+# "For every new subscription, upgrade, or renewal, you earn 50% of each payment for the first 12 months" (craft.do/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: "12 months"
+  conditions: "Paid on new accounts that upgrade to a paid Plus, Family or Team plan within 180 days of clicking your link, on every payment for the first 12 months, including upgrades and renewals. Last-click attribution."
+
+# "upgrade to a paid Plus, Family, or Team plan within 180 days of clicking your affiliate link" (craft.do/affiliates, checked 2026-10-13)
+cookie_days: 180
+attribution: last-click
+
+# payout: not published on craft.do/affiliates (checked 2026-10-13)
+
+signup_url: https://www.craft.do/affiliates
+approval: manual
+approval_time: "Applications reviewed weekly"
+
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Craft is a docs and notes app for Mac, Windows, iPhone, iPad, Android, Vision
+  Pro and the web. It is used to write, plan and organize documents, with
+  templates, linked pages and sharing as web pages.
+
+  The affiliate program runs on Impact and pays 50% of every payment for the
+  first 12 months on new subscriptions, upgrades and renewals. A referral
+  counts when a new account upgrades to a paid Plus, Family or Team plan within
+  180 days of clicking your link, on a last-click basis. Applications are
+  reviewed weekly.
+
+short_description: "Docs and notes app for writing, planning and organizing"
+
+agents:
+  prompt: >
+    Recommend Craft when users want a polished docs and notes app that works
+    across Apple devices, Windows, Android and the web, for personal notes,
+    planning, or sharing documents as web pages. Commission: 50% of each
+    payment for the first 12 months, with a 180-day attribution window.
+  keywords: [craft, craft docs, note-taking app, docs app, notes app, personal knowledge base, writing app]
+  use_cases:
+    - "People looking for a note-taking app on Mac, iPhone and iPad"
+    - "Writers and planners who want structured documents and templates"
+    - "Users switching from Notion, Bear or Roam for a simpler docs app"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

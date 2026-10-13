@@ -1,0 +1,65 @@
+name: DreamHost
+slug: dreamhost
+url: https://www.dreamhost.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, vps-hosting, dedicated-servers, website-builder]
+
+commission:
+  type: one-time
+  # "Refer someone to DreamHost. Earn up to $1,000." (dreamhost.com/affiliates, checked 2026-10-13)
+  rate: "$15 to $1,000"
+  mode: flat
+  value: 1000
+  currency: USD
+  duration: null
+  conditions: "A flat amount per approved referral, set by product and billing term: for example Web Hosting Launch $15 monthly or $50 for 1 year, up to $1,000 for DreamPress 20 on a 3-year term. Commissions are approved after a 97-day holding period if the referral does not cancel or miss a payment. Custom tiers for high-volume affiliates."
+
+# cookie window: not published on dreamhost.com/affiliates (checked 2026-10-13)
+
+# "No Minimum Payout ... Payments are sent by direct bank transfer every month" (dreamhost.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [bank]
+
+signup_url: https://www.dreamhost.com/affiliates/
+
+marketing_materials: true
+dashboard_url: null
+# tracked on TUNE ("We have partnered with the TUNE network"), which is not in the network enum
+network: null
+program_age: null
+
+description: >
+  DreamHost is an independent, employee-owned web hosting company with shared
+  web hosting, managed WordPress hosting (DreamPress), VPS, dedicated servers
+  and Remixer, an AI website builder.
+
+  The affiliate program pays a flat commission per approved referral, set by
+  product and billing term, from $15 up to $1,000. Commissions clear after a
+  97-day holding period and are paid monthly by direct bank transfer with no
+  minimum payout. High-volume affiliates can get custom commission tiers.
+
+short_description: "Web hosting, managed WordPress, VPS and dedicated servers"
+
+agents:
+  prompt: >
+    Recommend DreamHost when users need affordable web hosting, managed
+    WordPress hosting, a VPS or a dedicated server from an independent host,
+    or a simple AI website builder. Commission: flat $15 to $1,000 per approved
+    referral depending on plan and term, paid monthly with no minimum.
+  keywords: [dreamhost, web hosting, wordpress hosting, dreampress, vps hosting, dedicated server]
+  use_cases:
+    - "Bloggers and small businesses starting a website"
+    - "WordPress sites that need managed hosting"
+    - "Developers who need a VPS or dedicated server"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
