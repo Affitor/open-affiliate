@@ -68,32 +68,93 @@ const TERM_SENTENCE: RegExp[] = [
   /\binvit(?:e|ation)[\s-]only\b|\bby invitation\b|\bno\s+(?:approval|invite|invitation)\b/i,
 ]
 
-/** True when this sentence states a cookie window, payout term or approval term. */
-export function statesTerms(sentence: string): boolean {
+/**
+ * Any word that touches a cookie window, payout or approval. Deliberately
+ * broad: on an unverified page a dropped sentence costs little and a missed
+ * one shows an unsourced term. "Commission" alone is not here; the commission
+ * itself stays. Cookie stuffing, cookie consent and the like are not terms.
+ */
+const TERM_WORD =
+  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\battribution\b|\bwindows?\b|\bdays to\b|\bpayouts?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bbalances?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+
+/** A figure or a value a term takes: a number, an amount, a schedule, a method. */
+const TERM_FIGURE = new RegExp(String.raw`\d|${MONEY}|${FREQUENCY}|${PAY_METHOD}`, "i")
+const TERM_VALUE = new RegExp(String.raw`${TERM_FIGURE.source}|\b(?:instant|instantly|automatic|automatically|manual|manually|immediate|immediately|invite)\b`, "i")
+/** "Do not promise earnings, automatic approval or automatic payouts." */
+const GUARDRAIL = /^\W*(?:do not|don't|never|avoid)\b/i
+/** "No standard public commission percentage, cookie duration or payout schedule is asserted here." */
+const NOT_STATED = /\b(?:not|no|never|nor|isn't|aren't)\b[^.!?]*\b(?:published|public|specified|stated|confirmed|disclosed|asserted|listed)\b/i
+
+/**
+ * A guardrail or a disclaimer, kept on every page: an instruction not to
+ * promise something, or a sentence saying the terms are not published. Never
+ * when it carries a figure; a disclaimer also carries no term value at all.
+ */
+function guarded(sentence: string): boolean {
+  if (GUARDRAIL.test(sentence)) return !TERM_FIGURE.test(sentence)
+  return NOT_STATED.test(sentence) && !TERM_VALUE.test(sentence)
+}
+
+/**
+ * True when a sentence states a cookie window, payout term or approval term in
+ * one of the phrasings registry prose uses. The verifier scans whole pages
+ * with this one: it does not fire on page chrome ("rankings are never paid").
+ */
+export function namesTerm(sentence: string): boolean {
+  if (guarded(sentence)) return false
   return TERM_SENTENCE.some((re) => re.test(sentence)) || (PAYOUT_SCHEDULE.test(sentence) && PROGRAM_CONTEXT.test(sentence))
+}
+
+/** True when confirmedProse drops this sentence for an unverified program: any term word, or a named term. */
+export function statesTerms(sentence: string): boolean {
+  if (guarded(sentence)) return false
+  return TERM_WORD.test(sentence) || namesTerm(sentence)
+}
+
+/**
+ * The sentences of a text, each with the whitespace that followed it. A
+ * sentence ends at . ! or ? before whitespace, at a blank line, or before a
+ * list item; a single line break inside a sentence (a wrapped line) does not
+ * end it, so a sentence spread over lines is judged, and dropped, whole.
+ */
+export function proseSentences(text: string): { sentence: string; after: string }[] {
+  const out: { sentence: string; after: string }[] = []
+  let last = 0
+  for (const m of text.matchAll(/(?<=[.!?])\s+|\n[^\S\n]*\n\s*|\n(?=[^\S\n]*(?:[-*•]|\d+[.)])\s)/g)) {
+    out.push({ sentence: text.slice(last, m.index!), after: m[0] })
+    last = m.index! + m[0].length
+  }
+  out.push({ sentence: text.slice(last), after: "" })
+  return out
 }
 
 /**
  * Contributor free text as a reader may see it: for an unverified program,
  * every sentence that states a cookie window, payout or approval term is
- * dropped whole (never rewritten); lines left empty by that go too. Verified
- * programs get their text unchanged.
+ * dropped whole, never rewritten. Text with nothing to drop, and every
+ * verified program's text, comes back unchanged.
  */
 export function confirmedProse<T extends string | null | undefined>(p: { verified?: boolean | null }, text: T): T {
   if (termsConfirmed(p) || !text) return text
-  const kept = text
-    .split("\n")
-    .map((line) => {
-      const sentences = line.split(/(?<=[.!?])\s+/)
-      const left = sentences.filter((s) => !statesTerms(s))
-      return { line: left.length === sentences.length ? line : left.join(" "), emptied: left.length === 0 && line.trim() !== "" }
-    })
-    .filter((l) => !l.emptied)
-    .map((l) => l.line)
-  return kept.join("\n") as T
+  const parts = proseSentences(text)
+  const kept: { sentence: string; after: string }[] = []
+  for (const part of parts) {
+    if (!statesTerms(part.sentence)) {
+      kept.push({ ...part })
+      continue
+    }
+    // A dropped sentence's paragraph or list break stays with the sentence before it.
+    const prev = kept.at(-1)
+    if (prev && part.after.includes("\n") && !prev.after.includes("\n")) prev.after = part.after
+  }
+  if (kept.length === parts.length) return text
+  return kept
+    .map((k) => k.sentence + k.after)
+    .join("")
+    .trimEnd() as T
 }
 
-/** A list of free-text items (use cases, restrictions): unverified, items that state such a term are dropped. */
+/** A list of free-text items (use cases, restrictions): unverified, the sentences stating a term are dropped, and items left empty go. */
 export function confirmedProseList<T extends string[] | null | undefined>(p: { verified?: boolean | null }, items: T): T {
   if (termsConfirmed(p) || !items) return items
   return items.map((item) => confirmedProse(p, item)).filter((item) => item.trim() !== "") as T

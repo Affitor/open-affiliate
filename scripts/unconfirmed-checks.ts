@@ -6,11 +6,13 @@
  * verify-machine-surfaces can also feed them a mutated input and require a
  * failure: a check that cannot fail proves nothing.
  *
- * An unverified page is read whole, scripts included: the JSON-LD and the RSC
- * payload ship to every reader too. Prose is judged sentence by sentence with
- * the same statesTerms() the renderer uses.
+ * Prose is checked two ways. Every sentence the filter drops from a program's
+ * stored text must be absent from its page, RSC payload, twin and API body.
+ * And every sentence anywhere on those surfaces, page chrome included, is run
+ * through namesTerm(), which recognises a stated term without firing on
+ * "rankings are never paid".
  */
-import { statesTerms, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
+import { namesTerm, proseSentences, statesTerms, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import type { Program } from "../src/lib/programs"
 
 /** Fields the API leaves out for an unverified program; `payout` stays as {}. */
@@ -20,6 +22,7 @@ const COOKIE_BADGE = /\b\d+d cookie\b/
 const APPROVAL_LABEL: Record<string, string> = { auto: "Automatic", manual: "Manual review", "invite-only": "Invite only" }
 /** A term field serialized as data: a key with a value, quoted (JSON) or not (a JS object literal). */
 const SERIALIZED_TERM = /["']?\b(?:cookieDays|cookie_days|payoutMethods|approvalTime|approval_time)\b["']?\s*:\s*(?!null\b|undefined\b|void\b)["'\d[]/
+const SLUG_KEY = /["']?\bslug\b["']?\s*:\s*["']([a-z0-9-]+)["']/g
 
 function decodeEntities(text: string): string {
   return text
@@ -30,13 +33,100 @@ function decodeEntities(text: string): string {
     .replace(/&amp;/g, "&")
 }
 
-/** Sentences of a text, split as confirmedProse splits them. */
+/** Sentences of a text, segmented as confirmedProse segments them. */
 function sentences(text: string): string[] {
-  return text
-    .split("\n")
-    .flatMap((line) => line.split(/(?<=[.!?])\s+/))
-    .map((s) => s.trim())
+  return proseSentences(text)
+    .map((s) => s.sentence.trim())
     .filter(Boolean)
+}
+
+function squash(text: string): string {
+  return text.replace(/\s+/g, " ").trim()
+}
+
+/**
+ * The sentences confirmedProse drops from a program's stored free text. None
+ * may reach a reader. Shorter than 20 characters is too generic to look for.
+ */
+export function droppedSentences(p: Program): string[] {
+  if (termsConfirmed(p)) return []
+  const texts = [p.description, p.shortDescription, p.agentPrompt, p.commission.conditions ?? "", ...(p.agentUseCases ?? []), ...(p.restrictions ?? [])]
+  return [...new Set(texts.flatMap(sentences).filter(statesTerms).map(squash).filter((s) => s.length >= 20))]
+}
+
+function leakedSentence(p: Program, corpus: string): string | undefined {
+  const text = squash(corpus)
+  return droppedSentences(p).find((s) => text.includes(s))
+}
+
+/** A JavaScript string literal's contents, unescaped. */
+function unescapeJs(inner: string): string {
+  let out = ""
+  for (let i = 0; i < inner.length; i++) {
+    const c = inner[i]
+    if (c !== "\\") {
+      out += c
+      continue
+    }
+    const n = inner[++i]
+    if (n === "n") out += "\n"
+    else if (n === "t") out += "\t"
+    else if (n === "r") out += "\r"
+    else if (n === "u" && /^[0-9a-fA-F]{4}$/.test(inner.slice(i + 1, i + 5))) {
+      out += String.fromCharCode(parseInt(inner.slice(i + 1, i + 5), 16))
+      i += 4
+    } else if (n === "x" && /^[0-9a-fA-F]{2}$/.test(inner.slice(i + 1, i + 3))) {
+      out += String.fromCharCode(parseInt(inner.slice(i + 1, i + 3), 16))
+      i += 2
+    } else if (n !== undefined) out += n
+  }
+  return out
+}
+
+/** The RSC (Flight) payload of a served page: every self.__next_f.push string, decoded. */
+function flightPayload(html: string): string {
+  let out = ""
+  for (const m of html.matchAll(/self\.__next_f\.push\(\[\d+,"((?:[^"\\]|\\.)*)"\]\)/g)) out += unescapeJs(m[1]) + "\n"
+  return out
+}
+
+/** Every string literal in a Flight payload, decoded: the text the page renders and the props it passes. */
+function payloadStrings(flight: string): string[] {
+  return [...flight.matchAll(/"((?:[^"\\]|\\.)*)"/g)].map((m) => unescapeJs(m[1]))
+}
+
+/** The visible text of a page's markup, one block per element. */
+function visibleBlocks(html: string): string[] {
+  return decodeEntities(
+    html
+      .replace(/<script[\s\S]*?<\/script>/g, "\n")
+      .replace(/<style[\s\S]*?<\/style>/g, "\n")
+      .replace(/<!--[\s\S]*?-->/g, "")
+      .replace(/<(?:p|div|li|dd|dt|h[1-6]|td|th|span|a|button)\b[^>]*>/g, "\n")
+      .replace(/<[^>]+>/g, " ")
+  )
+    .split("\n")
+    .map(squash)
+    .filter(Boolean)
+}
+
+/** Every string value inside a parsed JSON value. */
+function stringsIn(value: unknown): string[] {
+  if (typeof value === "string") return [value]
+  if (Array.isArray(value)) return value.flatMap(stringsIn)
+  if (value && typeof value === "object") return Object.values(value).flatMap(stringsIn)
+  return []
+}
+
+/** Every string inside the page's JSON-LD blocks. */
+function jsonLdStrings(html: string): string[] {
+  return [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)].flatMap((m) => {
+    try {
+      return stringsIn(JSON.parse(m[1]))
+    } catch {
+      return [m[1]]
+    }
+  })
 }
 
 /**
@@ -49,38 +139,6 @@ function ownHtml(html: string): string {
     .replace(/<!--[\s\S]*?-->/g, "")
     .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ")
     .replace(/\\"/g, '"')
-}
-
-/** The visible text of the page's own markup, one block per element. */
-function visibleBlocks(own: string): string[] {
-  return decodeEntities(
-    own
-      .replace(/<script[\s\S]*?<\/script>/g, "\n")
-      .replace(/<style[\s\S]*?<\/style>/g, "\n")
-      .replace(/<(?:p|div|li|dd|dt|h[1-6]|td|th|span|a|button)\b[^>]*>/g, "\n")
-      .replace(/<[^>]+>/g, " ")
-  )
-    .split("\n")
-    .map((s) => s.replace(/\s+/g, " ").trim())
-    .filter(Boolean)
-}
-
-/** Every string inside the page's JSON-LD blocks. */
-function jsonLdStrings(html: string): string[] {
-  const out: string[] = []
-  const walk = (v: unknown): void => {
-    if (typeof v === "string") out.push(v)
-    else if (Array.isArray(v)) v.forEach(walk)
-    else if (v && typeof v === "object") Object.values(v).forEach(walk)
-  }
-  for (const m of html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)) {
-    try {
-      walk(JSON.parse(m[1]))
-    } catch {
-      out.push(m[1])
-    }
-  }
-  return out
 }
 
 /**
@@ -102,7 +160,7 @@ const TERM_MARKUP: [string, RegExp][] = [
 /** /programs/<slug> as served. */
 export function termsHtmlProblems(p: Program, html: string): string[] {
   const own = ownHtml(html)
-  const blocks = visibleBlocks(own)
+  const blocks = visibleBlocks(html)
   const marked = blocks.includes(UNCONFIRMED_NOTE)
   const problems: string[] = []
   if (termsConfirmed(p)) {
@@ -136,10 +194,17 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   if (COOKIE_BADGE.test(own)) problems.push(`carries a cookie window ("${COOKIE_BADGE.exec(own)![0]}")`)
   // Stored values specific enough to find anywhere: "1-5 business days", not "instant".
   if (p.approvalTime && /\d/.test(p.approvalTime) && own.includes(p.approvalTime)) problems.push(`carries its approval time ("${p.approvalTime}")`)
-  const prose = blocks.flatMap(sentences).find(statesTerms)
-  if (prose) problems.push(`states a term in prose ("${prose.slice(0, 120)}")`)
-  const ld = jsonLdStrings(html).flatMap(sentences).find(statesTerms)
-  if (ld) problems.push(`states a term in its JSON-LD ("${ld.slice(0, 120)}")`)
+  const flight = payloadStrings(flightPayload(html))
+  for (const [where, texts] of [
+    ["prose", blocks],
+    ["its JSON-LD", jsonLdStrings(html)],
+    ["its RSC payload", flight],
+  ] as const) {
+    const named = texts.flatMap(sentences).find(namesTerm)
+    if (named) problems.push(`states a term in ${where} ("${named.slice(0, 120)}")`)
+  }
+  const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
+  if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
   return problems
 }
 
@@ -185,8 +250,10 @@ export function termsMdProblems(p: Program, md: string): string[] {
   // The whole twin, prose sections included.
   const text = all.map(unescapeMd).join("\n")
   if (COOKIE_BADGE.test(text)) problems.push(`shows a cookie window ("${COOKIE_BADGE.exec(text)![0]}")`)
-  const prose = sentences(text).find(statesTerms)
-  if (prose) problems.push(`states a term in prose ("${prose.slice(0, 120)}")`)
+  const named = sentences(text).find(namesTerm)
+  if (named) problems.push(`states a term in prose ("${named.slice(0, 120)}")`)
+  const leaked = leakedSentence(p, text)
+  if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
   return problems
 }
 
@@ -204,38 +271,107 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
   }
   for (const key of HIDDEN_API_KEYS) if (key in body) problems.push(`returns ${key} (${JSON.stringify(body[key])})`)
   if (JSON.stringify(body.payout) !== "{}") problems.push(`returns payout ${JSON.stringify(body.payout)}`)
-  for (const field of ["description", "shortDescription", "agentPrompt", "commissionConditions"]) {
-    const prose = sentences(String(body[field] ?? "")).find(statesTerms)
-    if (prose) problems.push(`states a term in ${field} ("${prose.slice(0, 120)}")`)
+  const commission = (body.commission ?? {}) as Record<string, unknown>
+  const prose: [string, unknown][] = [
+    ["description", body.description],
+    ["shortDescription", body.shortDescription],
+    ["agentPrompt", body.agentPrompt],
+    ["commissionConditions", body.commissionConditions],
+    ["commission.conditions", commission.conditions],
+    ["agentUseCases", body.agentUseCases],
+    ["restrictions", body.restrictions],
+  ]
+  for (const [field, value] of prose) {
+    const texts = (Array.isArray(value) ? value : [value]).map((v) => String(v ?? ""))
+    const stated = texts.flatMap(sentences).find(statesTerms)
+    if (stated) problems.push(`states a term in ${field} ("${stated.slice(0, 120)}")`)
   }
-  for (const field of ["agentUseCases", "restrictions"]) {
-    const prose = ((body[field] as string[] | undefined) ?? []).flatMap(sentences).find(statesTerms)
-    if (prose) problems.push(`states a term in ${field} ("${prose.slice(0, 120)}")`)
-  }
+  const leaked = leakedSentence(p, stringsIn(body).join("\n"))
+  if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
   return problems
 }
 
 /**
+ * The object a position sits in, found by brace depth, and the slug key at
+ * that object's own level, before or after the position. Walks up to the
+ * enclosing objects when the object has no slug. Strings with braces in them
+ * can mislead it; data records rarely carry any.
+ */
+function ownerSlug(text: string, at: number): string | undefined {
+  let from = at
+  for (let level = 0; level < 4; level++) {
+    let start = -1
+    for (let i = from, depth = 0; i >= 0 && from - i < 50_000; i--) {
+      const c = text[i]
+      if (c === "}") depth++
+      else if (c === "{") {
+        if (depth === 0) {
+          start = i
+          break
+        }
+        depth--
+      }
+    }
+    if (start === -1) return undefined
+    let end = -1
+    for (let i = start + 1, depth = 0; i < text.length && i - start < 100_000; i++) {
+      const c = text[i]
+      if (c === "{") depth++
+      else if (c === "}") {
+        if (depth === 0) {
+          end = i
+          break
+        }
+        depth--
+      }
+    }
+    if (end === -1) return undefined
+    const record = text.slice(start + 1, end)
+    // The slug at the record's own depth, not one inside a nested object.
+    let depth = 0
+    let cursor = 0
+    for (const m of record.matchAll(SLUG_KEY)) {
+      for (; cursor < m.index!; cursor++) {
+        if (record[cursor] === "{") depth++
+        else if (record[cursor] === "}") depth--
+      }
+      if (depth === 0) return m[1]
+    }
+    from = start - 1
+  }
+  return undefined
+}
+
+/** The strings a bundle passes to JSON.parse, decoded: data shipped as escaped JSON. */
+function embeddedJson(text: string): string[] {
+  return [...text.matchAll(/JSON\.parse\(\s*(["'`])((?:\\.|(?!\1)[^\\])*)\1\s*\)/g)].map((m) => unescapeJs(m[2]))
+}
+
+export interface ChunkScan {
+  /** Term fields serialized for a program whose terms are unconfirmed. */
+  problems: string[]
+  /** Term fields found on a verified program's record: proof the scan reads real records. */
+  confirmedRecords: number
+}
+
+/**
  * Shipped data (a browser chunk, a prerendered page's RSC payload): a term
- * field serialized with a value belongs to the record of the nearest slug
- * before it, and must not belong to a program whose terms are unconfirmed.
+ * field serialized with a value belongs to the record it sits in, wherever the
+ * record's slug is, and must not belong to a program whose terms are
+ * unconfirmed. Escaped JSON handed to JSON.parse is decoded and read too.
  * `confirmed(slug)` is undefined for a slug that is not a program (the docs'
  * illustrative examples), which is not judged.
  */
-export function chunkProblems(text: string, confirmed: (slug: string) => boolean | undefined): string[] {
-  const problems: string[] = []
-  const slugs = [...text.matchAll(/["']?\bslug\b["']?\s*:\s*["']([a-z0-9-]+)["']/g)].map((m) => ({ at: m.index!, slug: m[1] }))
-  const term = new RegExp(SERIALIZED_TERM.source, "g")
-  for (const m of text.matchAll(term)) {
-    let owner: string | undefined
-    for (const s of slugs) {
-      if (s.at > m.index!) break
-      owner = s.slug
-    }
-    if (owner !== undefined && confirmed(owner) === false) {
-      problems.push(`${JSON.stringify(m[0])} for ${owner}`)
-      if (problems.length >= 5) break
+export function chunkScan(text: string, confirmed: (slug: string) => boolean | undefined): ChunkScan {
+  const scan: ChunkScan = { problems: [], confirmedRecords: 0 }
+  for (const body of [text, ...embeddedJson(text)]) {
+    for (const m of body.matchAll(new RegExp(SERIALIZED_TERM.source, "g"))) {
+      const owner = ownerSlug(body, m.index!)
+      if (owner === undefined) continue
+      const shown = confirmed(owner)
+      if (shown === true) scan.confirmedRecords++
+      else if (shown === false && scan.problems.length < 5) scan.problems.push(`${JSON.stringify(m[0])} for ${owner}`)
     }
   }
-  return problems
+  return scan
 }

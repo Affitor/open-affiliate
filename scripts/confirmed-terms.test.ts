@@ -17,7 +17,7 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
-import { confirmedProse, confirmedProseList, statesTerms } from "../src/lib/confirmed-terms"
+import { confirmedProse, confirmedProseList, proseSentences, statesTerms } from "../src/lib/confirmed-terms"
 import { confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
@@ -45,7 +45,9 @@ const verified = live.find((p) => p.verified && hasAllTerms(p))
 const videogen = getProgram("videogen")!
 
 function sentences(text: string): string[] {
-  return text.split("\n").flatMap((line) => line.split(/(?<=[.!?])\s+/)).filter((s) => s.trim())
+  return proseSentences(text)
+    .map((s) => s.sentence)
+    .filter((s) => s.trim())
 }
 
 function assertHidden(body: Record<string, unknown>, p: Program, surface: string): void {
@@ -106,30 +108,83 @@ test("prose that states a term is dropped for an unverified program and kept for
   assert.equal(confirmedTerms(on), on)
 })
 
-test("statesTerms catches the filed phrasings and leaves commission-only sentences alone", () => {
+test("statesTerms drops any sentence with a term word, and keeps commission-only sentences and guardrails", () => {
   for (const s of [
     "Payouts are monthly with a $50 minimum; commissions become payable at least 30 days after purchase.",
     "Affiliates earn 30% recurring commission, with up to 60-day last-click cookie attribution.",
     "Applications are reviewed by VideoGen.",
+    "Applications reviewed within 48 hours.",
     "Attribution lasts 60 days.",
+    "A 90-day attribution window.",
     "Minimum payout $20 via PayPal, Wise, bank transfer or USDT.",
+    "Minimum withdrawal $25.",
     "Commissions are held 30 days; refunds and disputes reverse commissions.",
     "Free to join with instant approval.",
-    "Affiliate program: 20% of revenue, 90-day attribution, monthly NET-15 payouts, USD 50 minimum, free to join.",
+    "Payment terms are net-30.",
+    "Referrals last for 30 days.",
+    "Affiliate program: Get $300 Per Approved Application",
+    "Earn 10% of first year contract value on any new annual contracts (average payout of $1000)",
+    // A guardrail or a disclaimer never carries a figure or a term value.
+    "Do not expect payouts below $50.",
+    "Payouts are monthly; the minimum is not published.",
+  ]) {
+    assert.equal(statesTerms(s), true, s)
+  }
+  // One term word each, with nothing else to catch the sentence.
+  for (const s of [
+    "Tracking rests on the attribution.",
+    "Two windows apply.",
+    "Visitors have a while, days to decide.",
+    "Payouts go out often.",
+    "Earnings are paid as a Visa rewards card.",
+    "The brand pays out quarterly.",
+    "Earnings arrive as payments to the account.",
+    "The minimum is fifty dollars.",
+    "There is a threshold.",
+    "Withdraw at any time.",
+    "Earnings wait until the balance is large enough.",
+    "Terms are net-30.",
+    "Partners are approved by hand.",
+    "Each request is reviewed within two days.",
+    "Applications reviewed by the team.",
+    "A long cookie applies.",
   ]) {
     assert.equal(statesTerms(s), true, s)
   }
   for (const s of [
-    "Affiliate program: Get $300 Per Approved Application",
-    "Affiliate program: 25% Commission on all approved orders",
-    "Earn 10% of first year contract value on any new annual contracts (average payout of $1000)",
-    "Flatpay makes it easy for businesses to accept payments with transparent pricing, no hidden fees, and fast daily payouts.",
-    "No spam, incentivized traffic, misleading claims or cookie stuffing",
-    "No branded keyword bidding without prior written approval",
     "Earn 30% recurring commission for 12 months.",
-    "Cookie, payout and approval terms are left out until they are checked.",
+    "No spam, incentivized traffic, misleading claims or cookie stuffing",
+    "Do not promise earnings, automatic approval or automatic payouts.",
+    "Commercial terms are agreed in writing before promotion; no standard public commission percentage, cookie duration or payout schedule is asserted here.",
+    "Payment methods and commission duration beyond recurring subscriptions are not specified in the public terms.",
   ]) {
     assert.equal(statesTerms(s), false, s)
+  }
+})
+
+test("filed prose that states terms is dropped whole when unverified, guardrails stay, verified text is untouched", () => {
+  const swokei = getProgram("swokei")!
+  const gem = getProgram("gem")!
+  const mato = getProgram("mato")!
+  const powerCm = getProgram("power-cm-partners")!
+  for (const p of [swokei, gem, mato, powerCm]) assert.ok(p, "a regression program is missing from the registry")
+
+  // Swokei: a payout sentence wrapped over three lines goes whole, and the attribution windows in its conditions.
+  const sw = confirmedTerms({ ...swokei, verified: false })
+  for (const gone of ["Payouts are monthly", "once the balance is over $50", "waited a year is sent", "30 days to sign up", "fresh 30 days"]) {
+    assert.equal(sw.description.includes(gone) || String(sw.commissionConditions ?? "").includes(gone), false, gone)
+  }
+  assert.ok(sw.description.startsWith("Swokei is an outreach tool for web agencies and freelancers."))
+  // Gem: "paid as a Visa rewards card" in its agent prompt.
+  assert.equal(confirmedTerms({ ...gem, verified: false }).agentPrompt.includes("paid as a Visa rewards card"), false)
+  // Mato and Power CM: the disclaimer and the guardrail are kept.
+  assert.ok(confirmedTerms({ ...mato, verified: false }).description.includes("no standard public commission percentage, cookie duration or payout schedule is asserted here."))
+  assert.ok(confirmedTerms({ ...powerCm, verified: false }).agentPrompt.includes("Do not promise earnings, automatic approval or automatic payouts."))
+  // Verified, the same text is untouched.
+  for (const p of [swokei, gem, mato, powerCm, videogen]) {
+    const on = { ...p, verified: true }
+    assert.equal(confirmedTerms(on), on, p.slug)
+    assert.equal(confirmedProse(on, p.description), p.description, p.slug)
   }
 })
 

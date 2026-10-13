@@ -23,8 +23,8 @@ import {
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
-import { termsConfirmed } from "../src/lib/confirmed-terms";
-import { chunkProblems, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
+import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
+import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { applyButton } from "../src/lib/apply-cta";
 import {
   commissionDisplay,
@@ -739,6 +739,13 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
   // VideoGen's description stated these, in prose, before confirmedProse.
   const prose = offMd.replace(/^## About\n\n/m, "## About\n\nPayouts are monthly with a $50 minimum. Applications are reviewed by hand.\n\n");
   if (termsMdProblems(off, prose).length === 0) fail("the .md terms check passed a twin stating payout and approval in prose");
+  // A sentence the filter drops from a program's own prose, put back into its twin.
+  const dropped = termsPages
+    .filter((p) => !termsConfirmed(p))
+    .flatMap((p) => droppedSentences(p).filter((s) => !namesTerm(s)).map((s) => ({ p, s })))[0];
+  if (!dropped) fail("no unverified program has a dropped sentence to probe the .md prose check with");
+  const droppedMd = `${requireText(join("programs", `${dropped.p.slug}.md`))}\n${dropped.s}\n`;
+  if (termsMdProblems(dropped.p, droppedMd).length === 0) fail(`the .md terms check passed ${dropped.p.slug} carrying a dropped sentence`);
   const row = `- [${off.name}](${BASE_URL}/programs/${off.slug}.md) — 20% recurring, ${off.cookieDays}d cookie (unverified, terms unconfirmed)`;
   if (unconfirmedCookieRow(row) !== off.slug) fail("the index row check passed an unverified row with a cookie window");
 }
@@ -751,31 +758,41 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
 const STATIC = join(ROOT, ".next", "static");
 if (!existsSync(STATIC)) fail(".next/static is missing; the chunk check needs `npm run build` first");
 const shownBySlug = new Map(programs.map((p) => [p.slug, termsConfirmed(p)]));
+const shown = (slug: string) => shownBySlug.get(slug);
 let chunkCount = 0;
+let confirmedRecords = 0;
 for (const file of readdirSync(STATIC, { recursive: true }) as string[]) {
   if (!file.endsWith(".js")) continue;
   chunkCount++;
-  const problems = chunkProblems(readFileSync(join(STATIC, file), "utf8"), (slug) => shownBySlug.get(slug));
-  if (problems.length) fail(`.next/static/${file} ships unconfirmed terms: ${problems.join("; ")}`);
+  const scan = chunkScan(readFileSync(join(STATIC, file), "utf8"), shown);
+  if (scan.problems.length) fail(`.next/static/${file} ships unconfirmed terms: ${scan.problems.join("; ")}`);
+  confirmedRecords += scan.confirmedRecords;
 }
 if (chunkCount === 0) fail(".next/static has no JavaScript chunks to check");
+// The client registry ships verified cookie windows: a scan that finds none
+// is reading the chunks wrong, not proving them clean.
+if (confirmedRecords === 0) fail("the chunk check found no verified program's terms in any chunk; it cannot be reading the client registry");
 // Prerendered pages carry their client props in the RSC payload. /compare
 // passes every program's comparable terms that way; it is also fetched from
 // next start below, in case it is not prerendered.
 for (const file of readdirSync(BUILD_APP, { recursive: true }) as string[]) {
   if (!file.endsWith(".html") && !file.endsWith(".rsc")) continue;
-  const text = readFileSync(join(BUILD_APP, file), "utf8").replace(/\\"/g, '"');
-  const problems = chunkProblems(text, (slug) => shownBySlug.get(slug));
-  if (problems.length) fail(`.next/server/app/${file} ships unconfirmed terms: ${problems.join("; ")}`);
+  const scan = chunkScan(readFileSync(join(BUILD_APP, file), "utf8").replace(/\\"/g, '"'), shown);
+  if (scan.problems.length) fail(`.next/server/app/${file} ships unconfirmed terms: ${scan.problems.join("; ")}`);
 }
+// Non-vacuity: the record's slug before or after its terms, and escaped JSON.
 {
   const off = termsPages.find((p) => !termsConfirmed(p) && p.cookieDays != null)!;
   const on = termsPages.find((p) => termsConfirmed(p) && p.cookieDays != null)!;
-  if (chunkProblems(`[{"slug":"${on.slug}","cookieDays":${on.cookieDays}},{"slug":"${off.slug}","cookie_days":${off.cookieDays}}]`, (s) => shownBySlug.get(s)).length !== 1) {
-    fail("the chunk check did not flag exactly the unverified cookie window in a probe");
-  }
-  if (chunkProblems(`{slug:"${off.slug}",name:"x",cookieDays:${off.cookieDays}}`, (s) => shownBySlug.get(s)).length === 0) {
-    fail("the chunk check passed an unverified cookie window in an object literal");
+  for (const [what, probe, want] of [
+    ["slug before, two records", `[{"slug":"${on.slug}","cookieDays":${on.cookieDays}},{"slug":"${off.slug}","cookie_days":${off.cookieDays}}]`, 1],
+    ["slug after the term", `[{"cookieDays":${on.cookieDays},"slug":"${on.slug}"},{"cookieDays":${off.cookieDays},"slug":"${off.slug}"}]`, 1],
+    ["an object literal", `{slug:"${off.slug}",name:"x",cookieDays:${off.cookieDays}}`, 1],
+    ["escaped JSON", `const r=JSON.parse("{\\"cookieDays\\":${off.cookieDays},\\"slug\\":\\"${off.slug}\\"}")`, 1],
+    ["a nested commission object before the term", `{"slug":"${off.slug}","commission":{"rate":"20%"},"cookieDays":${off.cookieDays}}`, 1],
+  ] as const) {
+    const scan = chunkScan(probe, shown);
+    if (scan.problems.length !== want) fail(`the chunk check found ${scan.problems.length} problems in a probe with ${what}; expected ${want}`);
   }
 }
 
@@ -1211,12 +1228,18 @@ async function checkServedPages(): Promise<string> {
     const on = termsPages.find((p) => termsConfirmed(p) && storesAll(p));
     if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
     const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
+    // An unverified program whose stored prose has a sentence the filter drops
+    // and namesTerm alone would not catch: the probe for the dropped-sentence check.
+    const dropped = termsPages
+      .filter((p) => !termsConfirmed(p))
+      .flatMap((p) => droppedSentences(p).filter((s) => !namesTerm(s)).map((s) => ({ p, s })))[0];
+    if (!dropped) fail("no unverified program has a dropped sentence to probe the prose check with");
     const kept = new Map<Program, string>();
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
       const problems = termsHtmlProblems(program, html);
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
-      if (program === off || program === on) kept.set(program, html);
+      if (program === off || program === on || program === dropped.p) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
@@ -1226,8 +1249,14 @@ async function checkServedPages(): Promise<string> {
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],
       ["a cookie window in its JSON-LD", `<script type="application/ld+json">{"description":"Earn 30% with a 60-day cookie."}</script>`],
       ["a cookie window in its RSC payload", `<script>self.__next_f.push([1,"{\\"cookieDays\\":${off.cookieDays}}"])</script>`],
+      ["a payout sentence in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(`5:${JSON.stringify(["$", "p", null, { children: "Payouts are monthly with a $50 minimum." }])}\n`)}])</script>`],
     ]) {
       if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
+    }
+    // A sentence the filter drops from this program's own prose, put back into the RSC payload.
+    const flight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ children: dropped.s }))}])</script>`;
+    if (termsHtmlProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
+      fail(`the page terms check passed ${dropped.p.slug} carrying a dropped sentence in its RSC payload`);
     }
     const onHtml = kept.get(on)!;
     if (termsHtmlProblems(on, onHtml.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
@@ -1245,8 +1274,9 @@ async function checkServedPages(): Promise<string> {
       if (!compare.includes(`"slug":"${on.slug}"`) || !compare.includes(`"cookieDays":${on.cookieDays}`)) {
         fail("/compare does not carry a verified program's terms; the payload check would read nothing");
       }
-      const problems = chunkProblems(compare, (slug) => shownBySlug.get(slug));
-      if (problems.length) fail(`/compare ships unconfirmed terms: ${problems.join("; ")}`);
+      const scan = chunkScan(compare, shown);
+      if (scan.problems.length) fail(`/compare ships unconfirmed terms: ${scan.problems.join("; ")}`);
+      if (scan.confirmedRecords === 0) fail("/compare: the payload check found no verified program's terms to read");
     }
 
     // REST: the list and one program of each kind, as served.
