@@ -33,6 +33,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/compare`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/methodology`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE_URL}/changelog`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/content-lab`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${BASE_URL}/explore`, changeFrequency: "daily", priority: 0.6 },
