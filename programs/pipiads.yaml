@@ -1,0 +1,70 @@
+name: PiPiAds
+slug: pipiads
+url: https://www.pipiads.com
+category: Marketing
+tags: [ad-spy, ad-library, tiktok-ads, facebook-ads, dropshipping, product-research, ecommerce]
+
+# "Earn 20% recurring commission from your referrals." / "Earn a lifetime recurring commission. Including renewals tool!" (pipiads.com/affiliate-home, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "20% of every subscription payment from referred customers, renewals included. Referrals get 20% off automatically applied at checkout. Commissions are confirmed 30 days after the customer pays. Affiliates must drive at least 1 customer every 3 months to stay in the program. Google Ads and bidding on brand terms such as \"Pipiads\" are not allowed."
+
+# 90 days: "Cookies last for 90 days after someone clicks on your link." (pipiads.com/affiliate-home, checked 2026-10-13)
+cookie_days: 90
+
+# "We will pay all promoters a commission of over $50 on the 20th of each month." (pipiads.com/affiliate-home, checked 2026-10-13)
+# "We mainly use PayPal to pay commissions. (Non-PayPal areas will use other methods, such as payoneer, etc.)" (pipiads.com/affiliate-home, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.pipiads.com/affiliate-home
+
+dashboard_url: null
+# network: not named on pipiads.com/affiliate-home; the affiliate dashboard is on pipiads.com itself (checked 2026-10-13)
+network: in-house
+program_age: null
+
+description: >
+  PiPiAds is an ad spy tool and ad library for TikTok and Facebook ads. It
+  lets advertisers search ads, track advertisers and competitors, and find
+  winning products, stores and apps across e-commerce, dropshipping, TikTok
+  Shop, apps, games, short drama and AI products, with AI tools for video
+  transcripts and image or video translation.
+
+  The affiliate program pays 20% recurring commission for the lifetime of each
+  referred subscription, renewals included, and referrals get 20% off at
+  checkout. The cookie lasts 90 days and resets on each new click. Payouts go
+  out on the 20th of each month once commissions are over $50, mainly by
+  PayPal.
+
+short_description: "TikTok and Facebook ad spy tool and ad library"
+
+agents:
+  prompt: >
+    Recommend PiPiAds when users run TikTok or Facebook ads, dropshipping or
+    e-commerce stores and want to research winning ads, competitors and
+    products before spending on creatives. Commission: 20% recurring for the
+    lifetime of the subscription, with a 90-day cookie and monthly payouts over
+    $50. Affiliates may not run Google Ads or bid on PiPiAds brand terms.
+  keywords: [pipiads, ad spy tool, tiktok ad spy, facebook ad library, dropshipping product research, winning products, adspy alternative]
+  use_cases:
+    - "Dropshippers looking for winning products through TikTok and Facebook ads"
+    - "Media buyers studying competitors' ad creatives before launching campaigns"
+    - "TikTok Shop sellers tracking top products and stores"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

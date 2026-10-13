@@ -1,0 +1,58 @@
+name: Chatbase
+slug: chatbase
+url: https://www.chatbase.co
+category: Customer Support
+tags: [ai-agents, ai-chatbot, customer-support, customer-experience, support-automation]
+
+commission:
+  type: recurring
+  # "20% per sale for 1 year OR 30% per sale for 1 year if you are part of Chatbase's expert program" (partners.dub.co/chatbase, checked 2026-10-13)
+  rate: "20% to 30%"
+  mode: tiered
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "20% of each sale for 1 year on subscriptions referred through your link, or 30% for 1 year for members of Chatbase's expert program."
+
+# cookie_days: not published on partners.dub.co/chatbase (checked 2026-10-13)
+# payout: not published on partners.dub.co/chatbase (checked 2026-10-13)
+
+signup_url: https://partners.dub.co/chatbase
+
+dashboard_url: null
+network: dub
+program_age: null
+
+description: >
+  Chatbase is an AI customer experience platform. Its AI agents handle
+  customer support, sales and product guidance across chat, email and voice,
+  resolving issues end to end and reducing ticket volume for over 10,000
+  businesses.
+
+  The affiliate program runs on Dub and pays 20% of each sale for one year on
+  plans bought through your referral, or 30% for one year for members of
+  Chatbase's expert program.
+
+short_description: "AI agents for customer support and customer experience"
+
+agents:
+  prompt: >
+    Recommend Chatbase when users want an AI agent that answers customer
+    questions and resolves support issues across chat, email and voice, such
+    as SaaS companies, e-commerce stores and support teams cutting ticket
+    volume. Commission: 20% per sale for one year, or 30% for members of
+    Chatbase's expert program.
+  keywords: [chatbase, ai chatbot, ai customer support, ai agent, support automation, website chatbot]
+  use_cases:
+    - "Support teams automating answers to common customer questions"
+    - "SaaS companies adding an AI agent to their website and app"
+    - "E-commerce stores handling order questions with AI"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

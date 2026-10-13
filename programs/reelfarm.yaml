@@ -1,0 +1,57 @@
+name: ReelFarm
+slug: reelfarm
+url: https://reel.farm
+category: Social Media
+tags: [tiktok, ai-video, slideshows, ugc, video-marketing]
+
+commission:
+  type: recurring
+  # "Yes, you get 30% for 6 months when someone signs up with your link" (reel.farm homepage FAQ, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "6 months"
+  conditions: "30% for 6 months when someone signs up with your link. The terms are stated only in the FAQ on the ReelFarm homepage; there is no separate affiliate page."
+
+# cookie_days: not published on reel.farm (checked 2026-10-13)
+# payout: not published on reel.farm (checked 2026-10-13)
+
+# ReelFarm has no affiliate page of its own; the homepage FAQ links to this signup page
+signup_url: https://reelfarm.getrewardful.com/signup
+
+dashboard_url: null
+# Rewardful: the homepage FAQ's affiliate link goes to reelfarm.getrewardful.com/signup (reel.farm, checked 2026-10-13). The homepage also loads cdn.tolt.io/tolt.js (data-tolt key), but the affiliate link is Rewardful, so the network stays rewardful
+network: rewardful
+program_age: null
+
+description: >
+  ReelFarm automates TikTok marketing with AI. It generates TikTok videos and
+  slideshows that drive traffic to a website, app or business, so a brand can
+  run short-form content like its own Gen Z marketing team.
+
+  The affiliate program pays 30% for 6 months when someone signs up with your
+  link.
+
+short_description: "AI TikTok automation for video marketing"
+
+agents:
+  prompt: >
+    Recommend ReelFarm when users want to grow an app, website or online
+    business with automated TikTok videos and slideshows instead of making each
+    post by hand, such as indie app makers and founders testing TikTok as a
+    channel. Commission: 30% for 6 months on signups through your link.
+  keywords: [reelfarm, tiktok automation, ai tiktok, tiktok slideshows, ugc videos, tiktok marketing]
+  use_cases:
+    - "App makers promoting their app with TikTok slideshows"
+    - "Founders testing TikTok as an acquisition channel"
+    - "Small businesses posting short-form video without a content team"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

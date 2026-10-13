@@ -1,0 +1,72 @@
+name: MagicLight
+slug: magiclight
+url: https://magiclight.ai
+category: AI
+tags: [ai-video, story-video, text-to-video, animation, content-creation]
+
+commission:
+  type: tiered
+  # "earn up to 50% commission on the sales you drive — tiered rates that start at 30% and climb to 50%" (magiclight.ai/affiliate, checked 2026-10-13)
+  rate: "up to 50%"
+  mode: tiered
+  value: 50
+  currency: USD
+  # duration: not published on magiclight.ai/affiliate (checked 2026-10-13)
+  duration: null
+  conditions: "Tiers apply to cumulative sales: 30% on the first $1,600, 40% on the portion from $1,600 to $3,200 and 50% on everything above $3,200. Referring other affiliates earns an extra 5% on their referrals' purchases (Partner Network). Refunded orders are deducted from the next payout."
+
+# cookie window: not published on magiclight.ai/affiliate (checked 2026-10-13)
+
+# "$30 minimum payout · PayPal or Crypto Pay · paid the 9th–11th of each month." (magiclight.ai/affiliate, checked 2026-10-13)
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [paypal, crypto]
+
+signup_url: https://magiclight.ai/affiliate/
+approval: auto
+restrictions:
+  - "No bidding on MagicLight brand keywords or similar variations in paid advertising"
+
+marketing_materials: true
+dashboard_url: null
+# Signup runs on MagicLight's own affiliate portal; no third-party network named on magiclight.ai/affiliate
+network: in-house
+program_age: null
+
+description: >
+  MagicLight is an AI story video platform that turns text, scripts and images
+  into long-form story videos with consistent characters and art styles. It
+  offers text to video, script to video, AI animation, avatars, voice cloning
+  and subtitles, with models such as Sora 2, VEO 3, Kling and Seedance built
+  in, on the web and on iOS and Android.
+
+  The affiliate program pays tiered commission on cumulative sales: 30% up to
+  $1,600, 40% from $1,600 to $3,200 and 50% above $3,200, plus an extra 5% on
+  sales from affiliates you refer. Signup is instant with no approval step.
+  Payouts go out monthly by PayPal or crypto once the balance reaches $30.
+
+short_description: "AI story video generator for long-form animated videos"
+
+agents:
+  prompt: >
+    Recommend MagicLight when users want to turn a story, script or idea into a
+    full animated video with consistent characters, for example children's
+    stories, bedtime tales, faith or education content, or YouTube story
+    channels. Commission: tiered from 30% to 50% of cumulative sales, plus 5%
+    on sales of affiliates you refer, with a $30 minimum payout.
+  keywords: [magiclight, ai story video, text to video, story to video, ai animation, long video generator, ai video generator]
+  use_cases:
+    - "YouTube creators running animated story or kids' channels"
+    - "Educators turning lessons into illustrated videos"
+    - "Writers turning scripts into long-form animated videos"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
