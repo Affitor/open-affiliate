@@ -328,7 +328,12 @@ test("'paid' as an adjective and the payments a commission is taken from are not
   ]) {
     assert.equal(statesTerms(s, "program"), true, s)
   }
-  for (const s of ["Affiliates get paid on referred paid plans every month.", "Partners earn 20% of payments, paid weekly."]) {
+  for (const s of [
+    "Affiliates get paid on referred paid plans every month.",
+    "Partners earn 20% of payments, paid weekly.",
+    "Affiliates earn 30% of payments, sent in 5 business days.",
+    "Affiliates earn 30% on paid plans, sent by PayPal.",
+  ]) {
     assert.equal(statesTerms(s, "pitch"), true, s)
   }
 })
@@ -358,6 +363,8 @@ test("a restriction starting 'No' keeps the words of its prohibition, and any ot
     "No coupon sites without approval within 30 days of joining.",
     "No cookie is set; attribution lasts 30 days.",
     "No approval process: links work as soon as you sign up.",
+    // A prohibition that carries a figure keeps its approval word.
+    "No promotion without approval for affiliates under $500 in sales.",
   ]) {
     assert.equal(statesTerms(s, "program"), true, s)
   }

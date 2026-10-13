@@ -142,8 +142,8 @@ const PROHIBITION: RegExp[] = [
   /\bwithout\s+(?:(?:any|the|our|its|their|prior|advance|written|express|explicit|formal)\s+)*(?:approval|permission|consent)\b/gi,
   /\bforced\s+cookies?\b|\b(?:attribution|cookie)\s+hijack\w*|\bown\s+(?:payments?|purchases?|accounts?)\b/gi,
 ]
-/** A masked sentence is used only when what is left names no day count, frequency or payout method. */
-const RELAX_BLOCK = new RegExp(String.raw`${DAYS}|${FREQUENCY}|${PAY_METHOD}`, "i")
+/** A masked sentence is used only when what is left names no day, week or hour count, frequency or payout method. */
+const RELAX_BLOCK = new RegExp(String.raw`${DAYS}|\b\d+\s*(?:(?:business|working|calendar)\s+)?(?:days?|weeks?|hours?)\b|${FREQUENCY}|${PAY_METHOD}`, "i")
 
 /** The sentence with the words above taken out, or the sentence itself when something left still names a payout value. */
 function relaxed(sentence: string): string {
