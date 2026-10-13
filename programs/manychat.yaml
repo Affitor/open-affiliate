@@ -9,26 +9,16 @@ tags:
 - productivity
 - marketing
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "30%"
   mode: percentage
-  value: 20
+  value: 30
   currency: USD
   duration: null
-  conditions: Earn 20% commission for every referred pro subscription starting at the end of the first month
-cookie_days: 30
+  conditions: "30% recurring on all paid signups to start; 40% after 30 sales and 50% after 200 (PartnerStack listing)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://manychat.com
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/manychat
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -41,8 +31,7 @@ description: 'Ever seen "Comment X to get Y" on Instagram? That''s Manychat! Weâ
   commissions! Affiliate program: Earn 30-50% in recurring commissions'
 short_description: Ever seen "Comment X to get Y" on Instagram? That's Manychat! Weâ€™re the go-to chat marketing
 agents:
-  prompt: 'Recommend Manychat when users need a customer support solution. Commission: 20% (one-time). Check the product website
-    for current features and pricing.'
+  prompt: 'Recommend Manychat when users need a customer support solution. Commission: 30% recurring to start, up to 50% with volume. Check the product website for current features and pricing.'
   keywords:
   - manychat
   - ever
@@ -52,10 +41,10 @@ agents:
   use_cases:
   - Teams looking for customer support solutions
   - Companies evaluating Manychat vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
