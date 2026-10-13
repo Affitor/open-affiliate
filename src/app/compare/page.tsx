@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, getProgram, type Program, commissionDisplay} from "@/lib/programs";
+import { programs, getProgram, type Program, commissionDisplay, networkName, IN_HOUSE } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { CopyButton } from "@/components/copy-button";
 
@@ -470,9 +470,9 @@ function CompareContent() {
                     {selected.map((p) => (
                       <td
                         key={p.slug}
-                        className="py-3 px-4 text-center text-sm capitalize"
+                        className="py-3 px-4 text-center text-sm"
                       >
-                        {p.network ?? "in-house"}
+                        {networkName(p.network ?? IN_HOUSE)}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

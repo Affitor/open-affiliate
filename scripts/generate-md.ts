@@ -39,6 +39,9 @@ import {
   commissionDisplay,
   getCategoryStats,
   getNetworkStats,
+  liveNetworks,
+  networkHeading,
+  networkName,
 } from "../src/lib/programs"
 import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
@@ -256,6 +259,11 @@ function bullets(items: string[] | null | undefined): string | null {
 function section(title: string, body: string | null | undefined): string | null {
   if (!body || !String(body).trim()) return null
   return `## ${title}\n\n${String(body).trim()}`
+}
+
+/** "1 program", "2 programs": a count a reader sees agrees with its noun. */
+function programCount(n: number): string {
+  return `${n} ${n === 1 ? "program" : "programs"}`
 }
 
 function joinSections(parts: (string | null)[]): string {
@@ -566,11 +574,12 @@ function checkedOn(p: Program): string {
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
   const verified = list.filter(listedVerified)
   const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
-  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : `${mdHeading(label)} affiliate network`
+  // Same H1 as the HTML page: the display name, never the stored slug.
+  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : mdHeading(networkHeading(label))
 
   return joinSections([
     `# ${title}`,
-    `> ${list.length} programs, ${verified.length} verified by OpenAffiliate.`,
+    `> ${programCount(list.length)}, ${verified.length} verified by OpenAffiliate.`,
     [
       `Verified programs are listed first. Everything below the verified block is`,
       `community-submitted and unconfirmed.`,
@@ -718,7 +727,7 @@ function verifiedMd(): string {
   return joinSections([
     `# Verified affiliate programs`,
     [
-      `> The ${verified.length} programs OpenAffiliate has checked against the`,
+      `> The ${programCount(verified.length)} OpenAffiliate has checked against the`,
       `> program's own page, highest Affiliate Score first. The other`,
       `> ${programs.length - verified.length} in the registry are community-submitted`,
       `> and unconfirmed.`,
@@ -742,7 +751,7 @@ function verifiedMd(): string {
       "Elsewhere",
       [
         `- [Short index](${BASE}/llms.txt)`,
-        `- [All ${programs.length} programs, grouped by category](${BASE}/programs.md)`,
+        `- [All ${programCount(programs.length)}, grouped by category](${BASE}/programs.md)`,
         `- [Every program in full](${BASE}/llms-full.txt)`,
       ].join("\n"),
     ),
@@ -751,27 +760,26 @@ function verifiedMd(): string {
 
 function llmsTxt(): string {
   const verified = programs.filter(listedVerified)
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
 
   const catLines = categories
     .map(c => {
       const inCat = programs.filter(p => p.category === c)
       const v = inCat.filter(listedVerified).length
-      return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
+      return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${programCount(inCat.length)}, ${v} verified`
     })
     .join("\n")
 
-  const netLines = networks
+  const netLines = liveNetworks
     .map(n => {
       const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-      return `- [${mdEscape(n)}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
+      return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`
     })
     .join("\n")
 
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programs.length} programs across`,
+      `> The open registry of affiliate programs. ${programCount(programs.length)} across`,
       `> ${categories.length} categories, each with machine-readable guidance on when`,
       `> it is worth recommending.`,
     ].join("\n"),
@@ -780,7 +788,7 @@ function llmsTxt(): string {
     [
       `## Data quality`,
       ``,
-      `${verified.length} of ${programs.length} programs (${((verified.length / programs.length) * 100).toFixed(1)}%)`,
+      `${verified.length} of ${programCount(programs.length)} (${((verified.length / programs.length) * 100).toFixed(1)}%)`,
       `have been verified by OpenAffiliate. The rest are community-submitted and`,
       `unconfirmed: the commission rate, cookie window and payout terms come from`,
       `the submitter and have not been checked against the program page.`,
@@ -856,12 +864,12 @@ function llmsFullTxt(): string {
   const header = joinSections([
     `# OpenAffiliate — full registry`,
     [
-      `> Every one of the ${programs.length} programs, in full. Generated from the same`,
+      `> Every one of the ${programCount(programs.length)}, in full. Generated from the same`,
       `> registry the website reads. For the short version see ${BASE}/llms.txt,`,
       `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
     [
-      `${programs.filter(listedVerified).length} programs are verified by OpenAffiliate.`,
+      `${programCount(programs.filter(listedVerified).length)} ${programs.filter(listedVerified).length === 1 ? "is" : "are"} verified by OpenAffiliate.`,
       `The rest are community-submitted and unconfirmed — each states its own`,
       `status below.`,
     ].join("\n"),
@@ -887,7 +895,7 @@ function programsIndexMd(): string {
         sorted.length > shown.length
           ? `\n- … ${sorted.length - shown.length} more in [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md)`
           : ""
-      return `### ${mdHeading(c)}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
+      return `### ${mdHeading(c)}\n\n${programCount(inCat.length)}, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
     })
     .filter(Boolean)
     .join("\n\n")
@@ -895,7 +903,7 @@ function programsIndexMd(): string {
   return joinSections([
     `# All affiliate programs`,
     [
-      `> ${programs.length} programs across ${categories.length} categories.`,
+      `> ${programCount(programs.length)} across ${categories.length} categories.`,
       `> ${programs.filter(listedVerified).length} verified by OpenAffiliate; the rest are`,
       `> community-submitted and unconfirmed.`,
     ].join("\n"),
@@ -913,7 +921,7 @@ function indexMd(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programs.length} programs.`,
+      `> The open registry of affiliate programs. ${programCount(programs.length)}.`,
       `> Built for developers and AI agents.`,
     ].join("\n"),
     section(
@@ -943,16 +951,16 @@ function rankingsMd(): string {
     })
     .join("\n")
   const networkLines = getNetworkStats()
-    .map(n => `- [${mdEscape(n.network)}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(networkName(n.network))}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${programCount(n.programCount)}, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
     .join("\n")
   const categoryLines = getCategoryStats()
-    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${programCount(c.programCount)}, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
     .join("\n")
 
   return joinSections([
     `# Affiliate program rankings`,
     [
-      `> ${ranked.length} programs ordered by Affiliate Score, the same score as`,
+      `> ${programCount(ranked.length)} ordered by Affiliate Score, the same score as`,
       `> the podium on ${BASE}/rankings and the homepage preview.`,
       `> The interactive table can also sort by verified content, commission,`,
       `> or cookie length. Those orders depend on live filters, so they are not`,
@@ -1004,7 +1012,7 @@ function bestIndexMd(): string {
       "Lists",
       BEST_LISTS.map(l => {
         const data = buildBestList(l)
-        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${data.total} programs, ${data.verified.length} verified. ${l.criteria}`
+        return `- [${l.h1}](${BASE}/best/${l.slug}.md) — ${programCount(data.total)}, ${data.verified.length} verified. ${l.criteria}`
       }).join("\n"),
     ),
   ])
@@ -1071,7 +1079,8 @@ function main(): void {
     if (inCat.length) write(`categories/${categoryToSlug(c)}.md`, groupMd("category", c, inCat))
   }
 
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))]
+  // Live networks only, the same set that gets an HTML page.
+  const networks = liveNetworks
   for (const n of networks) {
     const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
     write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))
@@ -1080,7 +1089,7 @@ function main(): void {
   const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)
   console.log(`  ${written} files`)
-  console.log(`  ${programs.length} programs (${verified} verified, ${programs.length - verified} unverified)`)
+  console.log(`  ${programCount(programs.length)} (${verified} verified, ${programs.length - verified} unverified)`)
   console.log(`  ${categories.length} categories, ${networks.length} networks`)
   console.log(`  Output: public/`)
 }

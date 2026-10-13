@@ -4,6 +4,7 @@ import {
   categories,
   categoryToSlug,
   networkToSlug,
+  liveNetworks,
   type Program,
 } from "@/lib/programs";
 import { docsNav } from "@/app/docs/_config";
@@ -55,8 +56,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  const networks = [...new Set(programs.map((p) => p.network ?? "in-house"))];
-  const networkPages: MetadataRoute.Sitemap = networks.map((network) => {
+  const networkPages: MetadataRoute.Sitemap = liveNetworks.map((network) => {
     const items = programs.filter(
       (program) => (program.network ?? "in-house") === network
     );

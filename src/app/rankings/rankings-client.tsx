@@ -30,6 +30,7 @@ import {
   commissionLabel,
   affiliateScore,  commissionDisplay
 } from "@/lib/client-programs";
+import { networkName } from "@/lib/network-meta";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -552,14 +553,6 @@ function ProgramsTable({
 
 // ── Networks Table ──────────────────────────────────────────────
 
-function formatNetworkName(name: string): string {
-  if (!name || name === "in-house") return "In-house";
-  return name
-    .split(/[-_]/)
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
 function NetworksTable() {
   const stats = useMemo(() => getNetworkStats(), []);
 
@@ -603,7 +596,7 @@ function NetworksTable() {
                 </td>
                 <td className="py-3 px-3">
                   <span className="text-sm font-medium group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    {formatNetworkName(row.network)}
+                    {networkName(row.network)}
                   </span>
                 </td>
                 <td className="py-3 px-3 text-center">

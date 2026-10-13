@@ -1,4 +1,4 @@
-import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, type Program } from "@/lib/programs"
+import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, networkName as displayName, type Program } from "@/lib/programs"
 import { hasNoProgram, noProgramAnswer } from "@/lib/no-program"
 
 const SITE = "https://openaffiliate.dev"
@@ -18,27 +18,14 @@ export function isUnverified(p: Program): boolean {
 }
 
 /**
- * Network names as a reader writes them. Raw values are lowercase slugs
- * ("awin", "in-house"), which read like a defect in a sentence.
+ * The network as it reads in a sentence about this program: "runs on
+ * PartnerStack". Names come from NETWORK_META; in-house reads as a phrase.
  */
 export function networkName(p: Program): string | null {
   const n = p.network ?? null
   if (!n) return null
   if (n === IN_HOUSE) return "the brand's own platform"
-  const names: Record<string, string> = {
-    partnerstack: "PartnerStack",
-    impact: "Impact",
-    rewardful: "Rewardful",
-    awin: "Awin",
-    "cj-affiliate": "CJ Affiliate",
-    dub: "Dub",
-    firstpromoter: "FirstPromoter",
-    tolt: "Tolt",
-    lemonsqueezy: "Lemon Squeezy",
-    tapfiliate: "Tapfiliate",
-    affitor: "Affitor",
-  }
-  return names[n] ?? n
+  return displayName(n)
 }
 
 /** "20% recurring for 12 months" / "$15 per sale" / null when nothing was published. */

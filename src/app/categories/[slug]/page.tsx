@@ -14,6 +14,8 @@ import {
   parseCommissionRate,
   commissionLabel,  commissionDisplay,
   livePrograms,
+  networkName,
+  IN_HOUSE,
 } from "@/lib/programs";
 
 export function generateStaticParams() {
@@ -264,8 +266,8 @@ export default async function CategoryPage({
                     </span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">
-                    <span className="text-xs text-muted-foreground capitalize">
-                      {program.network ?? "in-house"}
+                    <span className="text-xs text-muted-foreground">
+                      {networkName(program.network ?? IN_HOUSE)}
                     </span>
                   </td>
                 </tr>
