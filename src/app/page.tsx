@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { programs, livePrograms, categories, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
+import { freshnessLine } from "@/lib/best-lists";
 
 export const metadata: Metadata = {
   alternates: {
@@ -234,6 +235,9 @@ export default function Home() {
               <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-md">
                 Discover, compare, and integrate affiliate programs. Built for
                 developers and AI agents. Community-contributed.
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground tabular-nums" data-freshness>
+                {freshnessLine(programs)}
               </p>
 
               <div className="mt-8 flex flex-col sm:flex-row gap-3">

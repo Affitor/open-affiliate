@@ -55,6 +55,7 @@ import {
   bestListCopy,
   bestPath,
   buildBestList,
+  freshnessLine,
   categoryList,
   listCommissionText,
   type BestList,
@@ -859,6 +860,8 @@ function llmsTxt(): string {
     section(
       "Freshness",
       [
+        `${freshnessLine(sitePrograms)}.`,
+        ``,
         `This snapshot was generated ${generatedAt}.`,
         `Use the API or MCP tools below when you need the latest deployed data.`,
       ].join("\n"),
@@ -994,8 +997,8 @@ function indexMd(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programCount(livePrograms.length)}.`,
-      `> Built for developers and AI agents.`,
+      `> The open registry of affiliate programs. Built for developers and AI agents.`,
+      `> ${freshnessLine(sitePrograms)}.`,
     ].join("\n"),
     section(
       "Read this as an agent",
