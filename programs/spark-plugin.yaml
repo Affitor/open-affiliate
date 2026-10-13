@@ -5,6 +5,7 @@ category: Design
 tags: [squarespace, website-design, animations, web-design-plugin, no-code]
 
 commission:
+  # the same page also says "earning a lifetime commission on every referral"; its plan table and FAQ give fixed $50–$250 per referral based on the first 12 months, which is used here (sparkplugin.com/affiliate, checked 2026-10-13)
   type: one-time
   # "Personal Plan: $50 / Business Plan: $100 / Agency Plan: $150–$250" (sparkplugin.com/affiliate, checked 2026-10-13)
   rate: "$50 to $250"

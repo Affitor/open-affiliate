@@ -28,7 +28,7 @@ restrictions:
 
 marketing_materials: true
 dashboard_url: https://affiliates.meshy.ai/dashboard
-# affiliate portal at affiliates.meshy.ai runs on PromoteKit, which the network enum does not list
+# affiliate portal at affiliates.meshy.ai runs on PromoteKit, which the network enum does not list; the site also loads an Awin tag
 network: null
 program_age: null
 

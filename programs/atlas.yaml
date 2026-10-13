@@ -5,6 +5,7 @@ category: AI
 tags: [ai-study-assistant, education, students, lecture-notes, practice-quizzes]
 
 commission:
+  # tiered is a reading of "The more users you refer, the more you earn"; no tier table is published
   type: tiered
   # "You can earn up to 30% commission on every paid subscription that comes through your referral link." (atlas.org/affiliate-program, checked 2026-10-13)
   rate: "up to 30%"
@@ -54,7 +55,7 @@ agents:
     - "Students who want automatic lecture notes and quizzes"
     - "Education creators recommending study tools"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
 updated_at: "2026-10-13"

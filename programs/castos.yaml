@@ -6,6 +6,7 @@ category: Content Management
 tags: [podcast-hosting, private-podcasting, video-podcasting, podcast-analytics, wordpress]
 
 commission:
+  # FAQ: "Is the commission recurring? No. Commission is capped at 12 months of a referral's spend" — it pays 25% of what they spend during those 12 months, read here as recurring for 12 months (castos.com/affiliates, checked 2026-10-13)
   type: recurring
   # "Earn 25% commissions on all of your referrals for the first 12 months." (castos.com/affiliates, checked 2026-10-13)
   rate: "25%"
