@@ -17,19 +17,9 @@ commission:
   currency: USD
   duration: null
   conditions: Earn commissions on your customer transactions
-cookie_days: 30
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://market.partnerstack.com/spsrevenuerecovery
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -55,7 +45,9 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: paused
+status_note: 'PartnerStack listing is empty on 2026-10-12 (market.partnerstack.com/page/spsrevenuerecovery); no affiliate page found on spscommerce.com'
 kind: affiliate
 source: partnerstack-api
