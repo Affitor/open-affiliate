@@ -1,0 +1,11 @@
+{
+  "ramp-network-wallet": "website is a linktr.ee page, not the brand's own site",
+  "sparkidea": "website is a vercel.app subdomain and the description is French only",
+  "apex-vision-ai": "website fails TLS",
+  "pivot-agent": "website is behind a Cloudflare wall, no sourceable text",
+  "wingman": "brand unclear",
+  "link-whisper": "runs its own program with different terms, listed by hand",
+  "domer": "runs its own program with different terms, listed by hand",
+  "codigox": "runs its own program with different terms, listed by hand",
+  "landerlab": "runs its own program with different terms, listed by hand"
+}

@@ -1,0 +1,119 @@
+name: Sync Affitor
+
+# Once a day, list the Affitor marketplace programs in programs/
+# (scripts/sync-affitor.ts) and open a pull request with any change.
+#
+# The pull request is opened with a token of the org's "OpenAffiliate Sync"
+# GitHub App, not GITHUB_TOKEN: the Affitor org forbids Actions from opening
+# pull requests, and a pull request opened with GITHUB_TOKEN would not run CI.
+# The App's pull requests take the affitor-sync lane of auto-merge.yml, which
+# re-reads every term from the Affitor API and merges only once CI is green.
+#
+# Nothing here writes to main. The App token is minted only after the sync has
+# run, and dependencies install with lifecycle scripts off, so no package code
+# runs while the token exists.
+
+on:
+  schedule:
+    - cron: "0 14 * * *" # 14:00 UTC, 07:00 in San Francisco
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-affitor
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      # Fails closed: an outage, a paged list, or more pauses than the config
+      # allows writes nothing and turns this run red for a person to read.
+      - name: Sync
+        shell: bash
+        run: npx tsx scripts/sync-affitor.ts | tee "$RUNNER_TEMP/sync-affitor.log"
+
+      - name: Check for changes
+        id: changes
+        shell: bash
+        run: |
+          if [ -n "$(git status --porcelain -- programs)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "programs/ already matches Affitor"
+          fi
+
+      - name: Mint the App token
+        if: steps.changes.outputs.changed == 'true'
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.OA_SYNC_APP_ID }}
+          private-key: ${{ secrets.OA_SYNC_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Open the pull request
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          day="$(date -u +%Y-%m-%d)"
+          branch="sync/affitor-$day"
+          label="$(node -p "require('./scripts/sync-affitor.config.json').label")"
+          bot="${APP_SLUG}[bot]"
+          bot_id="$(gh api "users/${bot}" --jq .id)"
+
+          git switch -c "$branch"
+          git add -A -- programs
+          git -c user.name="$bot" -c user.email="${bot_id}+${bot}@users.noreply.github.com" \
+            commit -q -m "chore: sync Affitor programs $day"
+          # The bot's own branch: a second run on the same day replaces it.
+          git push -q --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:refs/heads/$branch"
+
+          gh label create "$label" --repo "$GITHUB_REPOSITORY" --force --color 0e8a16 \
+            --description "Daily Affitor sync; terms re-checked against the Affitor API before merge"
+          {
+            echo "Daily sync from the Affitor marketplace API by \`scripts/sync-affitor.ts\`."
+            echo
+            echo '```'
+            grep -E '^(create|take-over|pause) ' "$RUNNER_TEMP/sync-affitor.log" | grep -v 'already up to date' || true
+            grep -E '^[0-9]+ Affitor programs; |^wrote ' "$RUNNER_TEMP/sync-affitor.log" || true
+            echo '```'
+            echo
+            echo "The \`$label\` lane of the auto-merge policy re-reads every term from the Affitor API and merges once CI is green. Anything it cannot confirm stays open for a person."
+            echo
+            echo "Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          } > "$RUNNER_TEMP/pr-body.md"
+
+          existing="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state open --json number --jq '.[0].number // empty')"
+          if [ -z "$existing" ]; then
+            gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+              --title "chore: sync Affitor programs $day" --body-file "$RUNNER_TEMP/pr-body.md" --label "$label"
+          else
+            echo "updated pull request #$existing"
+          fi
+
+          # An older sync pull request is superseded: today's is built on today's main.
+          gh pr list --repo "$GITHUB_REPOSITORY" --app "$APP_SLUG" --state open --json number,headRefName \
+            --jq ".[] | select(.headRefName != \"$branch\" and (.headRefName | startswith(\"sync/affitor-\"))) | .number" |
+            while read -r number; do
+              gh pr close "$number" --repo "$GITHUB_REPOSITORY" --delete-branch --comment "Superseded by the $day sync."
+            done
