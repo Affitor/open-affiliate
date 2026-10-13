@@ -33,8 +33,8 @@
     "url": {
       "type": "string",
       "format": "uri",
-      "pattern": "^(?=https?://[^\\s/?#])(?![\\s\\S]*\\s)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme and no whitespace, no HTML character references (write & itself, not &amp;), and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^\\s/?#])(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
+      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
     },
     "kind": {
       "type": "string",
@@ -235,8 +235,8 @@
         "null"
       ],
       "format": "uri",
-      "pattern": "^(?=https?://[^\\s/?#])(?![\\s\\S]*\\s)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme and no whitespace, no HTML character references (write & itself, not &amp;), and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^\\s/?#])(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
     },
     "approval": {
       "type": "string",
@@ -284,8 +284,8 @@
         "string",
         "null"
       ],
-      "pattern": "^(?=https?://[^\\s/?#])(?![\\s\\S]*\\s)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme and no whitespace, no HTML character references (write & itself, not &amp;), and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^\\s/?#])(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
+      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
     },
     "network": {
       "type": [

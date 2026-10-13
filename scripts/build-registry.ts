@@ -22,10 +22,10 @@ const SIGNUP_URL_DEBT = new Set<string>(
 )
 
 /**
- * URL fields whose schema `pattern` admits only an absolute http(s) URL with
- * no whitespace, and refuses HTML character references (`&amp;`, `&#38;`,
- * `&#x26;`) and a `[` or `]` in the host (an IPv6 literal). Read from the
- * schema, so this build (CI's
+ * URL fields whose schema `pattern` admits only an absolute http(s) URL in
+ * printable ASCII without a backslash, and refuses HTML character references
+ * (`&amp;`, `&#38;`, `&#x26;`) and a `[` or `]` in the host (an IPv6 literal).
+ * Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
  */
@@ -136,18 +136,26 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // value is cheaper than rewriting every URL line of the Markdown twins.
   // The same pattern refuses an IPv6-literal host: the twins percent-encode
   // every bracket, which would break one, and no program's URL is one. And it
-  // admits only an absolute http(s) URL with no whitespace, because the other
-  // two rules read the host from `scheme://` at the very start: " https://…"
-  // and "//[::1]/" slipped past them.
+  // admits only an absolute http(s) URL, because the other two rules read the
+  // host from `scheme://` at the very start: " https://…" and "//[::1]/"
+  // slipped past them. And only printable ASCII without a backslash: a URL
+  // parser reads `https://a.example\@b.example/` as host a.example, but the
+  // twins percent-encode the backslash, after which the host is b.example.
+  // Listing what is allowed also covers control and invisible characters
+  // (U+0085, U+200B) that a list of what is refused kept missing.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
     if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
       throw new Error(
         `${filename}: ${field} breaks a URL rule. It must be an absolute http:// or ` +
-          `https:// URL (lowercase scheme) with no spaces, no HTML character reference ` +
-          `(write "&", not "&amp;" or "&#38;"), and no IPv6 literal host (no "[" or "]" ` +
-          `before the path; use a domain name): "${value}"`
+          `https:// URL (lowercase scheme) in printable ASCII: no spaces, control or ` +
+          `non-ASCII characters (write an international domain in punycode, such as ` +
+          `xn--bcher-kva.de) and no backslash; no HTML character reference (write "&", ` +
+          `not "&amp;" or "&#38;"); and no IPv6 literal host (no "[" or "]" before the ` +
+          // Anything outside printable ASCII shown as \u{…}, so an invisible
+          // character is visible in the error.
+          `path; use a domain name): "${value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)}"`
       )
     }
   }
