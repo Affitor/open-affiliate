@@ -28,7 +28,8 @@
  */
 
 import { mkdirSync, rmSync, writeFileSync } from "node:fs"
-import { dirname, join } from "node:path"
+import { dirname, join, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
 import { docsNav } from "../src/app/docs/_config"
@@ -55,7 +56,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
-import { termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
+import { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton } from "../src/lib/apply-cta"
 
 const BASE = "https://openaffiliate.dev"
@@ -265,7 +266,7 @@ function statusBlock(p: Program): string {
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
     `on them: ${mdUrl(p.signup_url ?? p.url)}`,
-    ...(termsConfirmed(p) ? [] : ["", `The cookie window, payout and approval terms are left out until they are checked.`]),
+    ...(termsConfirmed(p) ? [] : ["", `Cookie, payout and approval terms are left out until they are checked.`]),
   ].join("\n")
 }
 
@@ -291,7 +292,25 @@ function joinSections(parts: (string | null)[]): string {
 
 // ---------- Per-program page ------------------------------------------------
 
-function programMd(p: Program): string {
+/**
+ * The entry's free text as a reader may see it: unverified, the sentences that
+ * state a cookie window, payout or approval term are dropped
+ * (confirmed-terms.ts). The structured terms are gated in programMd.
+ */
+function shownProse(p: Program): Program {
+  if (termsConfirmed(p)) return p
+  return {
+    ...p,
+    short_description: confirmedProse(p, p.short_description),
+    description: confirmedProse(p, p.description),
+    commission: { ...p.commission, conditions: confirmedProse(p, p.commission.conditions) || null },
+    restrictions: confirmedProseList(p, p.restrictions),
+    agents: p.agents && { ...p.agents, prompt: confirmedProse(p, p.agents.prompt), use_cases: confirmedProseList(p, p.agents.use_cases) },
+  }
+}
+
+export function programMd(entry: Program): string {
+  const p = shownProse(entry)
   // Unverified: commission marked, cookie window, payout and approval left out (confirmed-terms.ts).
   const confirmed = termsConfirmed(p)
   const payout = confirmed ? payoutLine(p) : null
@@ -1137,4 +1156,5 @@ function main(): void {
   console.log(`  Output: public/`)
 }
 
-main()
+// Only when run as a script, so a test can import programMd without writing public/.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main()

@@ -45,6 +45,7 @@ function toContentLabProgram(program: ApiProgram): Program {
     category: program.category,
     description: program.description,
     cookie_days: program.cookieDays,
+    verified: program.verified,
     commission: `${program.commission.rate} ${program.commission.type}${duration}${termsConfirmed(program) ? "" : ` (${UNCONFIRMED.toLowerCase()})`}`,
   };
 }
@@ -351,10 +352,11 @@ export default function ContentLab() {
                       </p>
                       <div className="flex items-center gap-3 text-xs text-emerald-400">
                         <span>{p.commission}</span>
-                        {p.cookie_days != null && (
+                        {/* Unverified: the API leaves the cookie out, and so does this line. */}
+                        {(p.cookie_days != null || termsConfirmed(p)) && (
                           <>
                             <span className="text-white/20">|</span>
-                            <span>{p.cookie_days}d cookie</span>
+                            <span>{p.cookie_days != null ? `${p.cookie_days}d cookie` : "Cookie not published"}</span>
                           </>
                         )}
                       </div>

@@ -1,6 +1,6 @@
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
-import { termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
+import { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
  * Fallback network for programs whose YAML omits `network`.
@@ -167,16 +167,32 @@ export function getProgram(slug: string): Program | undefined {
   return programs.find((p) => p.slug === slug)
 }
 
-export { termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE }
+export { confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE }
 
 /**
  * The program as a reader may see it: unconfirmed cookie window, payout and
- * approval left out (see confirmed-terms.ts). For display and API output only;
- * affiliateScore and list ranking take the stored program.
+ * approval left out, along with the sentences of free text that state them
+ * (see confirmed-terms.ts). For display and API output only; affiliateScore
+ * and list ranking take the stored program.
  */
 export function confirmedTerms(p: Program): Program {
   if (termsConfirmed(p)) return p
-  return { ...p, cookieDays: undefined, payout: {}, payoutMethods: undefined, approval: undefined, approvalTime: undefined }
+  const conditions = confirmedProse(p, p.commission.conditions) || null
+  return {
+    ...p,
+    commission: { ...p.commission, conditions },
+    commissionConditions: conditions,
+    cookieDays: undefined,
+    payout: {},
+    payoutMethods: undefined,
+    approval: undefined,
+    approvalTime: undefined,
+    description: confirmedProse(p, p.description),
+    shortDescription: confirmedProse(p, p.shortDescription),
+    agentPrompt: confirmedProse(p, p.agentPrompt),
+    agentUseCases: confirmedProseList(p, p.agentUseCases),
+    restrictions: confirmedProseList(p, p.restrictions),
+  }
 }
 
 /** Short label for commission type, e.g. "recurring/12mo", "rec/lifetime", "one-time" */

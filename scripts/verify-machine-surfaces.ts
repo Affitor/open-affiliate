@@ -24,7 +24,7 @@ import {
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
 import { termsConfirmed } from "../src/lib/confirmed-terms";
-import { termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
+import { chunkProblems, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { applyButton } from "../src/lib/apply-cta";
 import {
   commissionDisplay,
@@ -733,8 +733,41 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
   if (termsMdProblems(on, onMd.replace(/^Cookie window: .*\n/m, "")).length === 0) {
     fail("the .md terms check passed a verified twin with its cookie window removed");
   }
+  if (termsMdProblems(on, onMd.replace(/^Cookie window: \d+ days$/m, `Cookie window: ${(on.cookieDays ?? 0) + 1} days`)).length === 0) {
+    fail("the .md terms check passed a verified twin with a different cookie window");
+  }
+  // VideoGen's description stated these, in prose, before confirmedProse.
+  const prose = offMd.replace(/^## About\n\n/m, "## About\n\nPayouts are monthly with a $50 minimum. Applications are reviewed by hand.\n\n");
+  if (termsMdProblems(off, prose).length === 0) fail("the .md terms check passed a twin stating payout and approval in prose");
   const row = `- [${off.name}](${BASE_URL}/programs/${off.slug}.md) — 20% recurring, ${off.cookieDays}d cookie (unverified, terms unconfirmed)`;
   if (unconfirmedCookieRow(row) !== off.slug) fail("the index row check passed an unverified row with a cookie window");
+}
+
+/**
+ * What ships to the browser as JavaScript: no chunk may carry a cookie window,
+ * payout methods or approval time as data for an unverified program. /compare
+ * once bundled the whole registry, and the client registry every cookie window.
+ */
+const STATIC = join(ROOT, ".next", "static");
+if (!existsSync(STATIC)) fail(".next/static is missing; the chunk check needs `npm run build` first");
+const shownBySlug = new Map(programs.map((p) => [p.slug, termsConfirmed(p)]));
+let chunkCount = 0;
+for (const file of readdirSync(STATIC, { recursive: true }) as string[]) {
+  if (!file.endsWith(".js")) continue;
+  chunkCount++;
+  const problems = chunkProblems(readFileSync(join(STATIC, file), "utf8"), (slug) => shownBySlug.get(slug));
+  if (problems.length) fail(`.next/static/${file} ships unconfirmed terms: ${problems.join("; ")}`);
+}
+if (chunkCount === 0) fail(".next/static has no JavaScript chunks to check");
+{
+  const off = termsPages.find((p) => !termsConfirmed(p) && p.cookieDays != null)!;
+  const on = termsPages.find((p) => termsConfirmed(p) && p.cookieDays != null)!;
+  if (chunkProblems(`[{"slug":"${on.slug}","cookieDays":${on.cookieDays}},{"slug":"${off.slug}","cookie_days":${off.cookieDays}}]`, (s) => shownBySlug.get(s)).length !== 1) {
+    fail("the chunk check did not flag exactly the unverified cookie window in a probe");
+  }
+  if (chunkProblems(`{slug:"${off.slug}",name:"x",cookieDays:${off.cookieDays}}`, (s) => shownBySlug.get(s)).length === 0) {
+    fail("the chunk check passed an unverified cookie window in an object literal");
+  }
 }
 
 const robotsText = JSON.stringify(robots());
@@ -1181,11 +1214,18 @@ async function checkServedPages(): Promise<string> {
     for (const [leak, extra] of [
       ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
+      ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],
+      ["a cookie window in its JSON-LD", `<script type="application/ld+json">{"description":"Earn 30% with a 60-day cookie."}</script>`],
+      ["a cookie window in its RSC payload", `<script>self.__next_f.push([1,"{\\"cookieDays\\":${off.cookieDays}}"])</script>`],
     ]) {
       if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
     }
-    if (termsHtmlProblems(on, kept.get(on)!.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
+    const onHtml = kept.get(on)!;
+    if (termsHtmlProblems(on, onHtml.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
       fail("the page terms check passed a verified page with its cookie badge removed");
+    }
+    if (termsHtmlProblems(on, onHtml.replaceAll(`>$${on.payout.minimum}</span>`, `>$${(on.payout.minimum ?? 0) + 1}</span>`)).length === 0) {
+      fail("the page terms check passed a verified page showing a different minimum payout");
     }
 
     // REST: the list and one program of each kind, as served.
@@ -1203,6 +1243,10 @@ async function checkServedPages(): Promise<string> {
       const leaked = { ...body, cookieDays: program.cookieDays };
       if (!termsConfirmed(program) && termsApiProblems(program, leaked).length === 0) {
         fail("the API terms check passed an unverified program returning its cookieDays");
+      }
+      const prose = { ...body, description: `${body.description} Payouts are monthly with a $50 minimum.` };
+      if (!termsConfirmed(program) && termsApiProblems(program, prose).length === 0) {
+        fail("the API terms check passed an unverified program stating its payout in prose");
       }
     }
     return `${noProgramPages.length} no-program pages, ${termsPages.length} program pages (${unconfirmedCount} unverified) and ${list.length} API rows`;

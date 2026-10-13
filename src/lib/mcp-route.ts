@@ -1,6 +1,6 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { livePrograms, categories, termsConfirmed } from "@/lib/programs";
+import { livePrograms, categories, confirmedProse, termsConfirmed } from "@/lib/programs";
 import { resolveProgram } from "@/lib/program-aliases";
 import { apiProgram } from "@/lib/no-program";
 
@@ -177,7 +177,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         slug: p.slug,
         name: p.name,
         category: p.category,
-        shortDescription: p.shortDescription,
+        shortDescription: confirmedProse(p, p.shortDescription),
         commission: {
           type: p.commission.type,
           // mode and value are what an agent should read. rate is the raw

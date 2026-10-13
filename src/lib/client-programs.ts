@@ -15,15 +15,15 @@ export interface ClientProgram {
     currency: string
     duration?: string | null
   }
+  /** Left out for an unverified program (confirmed-terms.ts). */
   cookieDays?: number
   shortDescription: string
   verified: boolean
   network?: string | null
   createdAt: string
   source?: string
-  descriptionAvailable: boolean
-  agentPromptAvailable: boolean
-  signupAvailable: boolean
+  /** Affiliate Score, computed at build time from the stored program. */
+  score: number
   status?: "paused" | "discontinued" | "no_program"
 }
 
@@ -124,52 +124,13 @@ function formatCommissionDisplay(value: number, flat: boolean): string {
   return `${value % 1 === 0 ? value : value.toFixed(1)}%`
 }
 
+/**
+ * Precomputed by build-registry with the site's own affiliateScore, which
+ * reads the stored cookie window; this registry leaves that window out for
+ * unverified programs, so the score cannot be recomputed here.
+ */
 export function affiliateScore(program: ClientProgram): number {
-  const raw = parseCommissionRate(program.commission)
-  const varies =
-    typeof program.commission.rate === "string" &&
-    /varies/i.test(program.commission.rate)
-
-  const commissionScore = varies
-    ? 15
-    : isCommissionFlat(program.commission.rate)
-      ? raw >= 500
-        ? 40
-        : raw >= 100
-          ? 28
-          : raw >= 50
-            ? 16
-            : 8
-      : Math.min(raw / 50, 1) * 40
-
-  const cookieScore = Math.min((program.cookieDays ?? 0) / 90, 1) * 15
-  let typeScore = 5
-  if (program.commission.type === "recurring") {
-    const duration = program.commission.duration?.toLowerCase().trim() ?? ""
-    typeScore =
-      duration === "lifetime"
-        ? 25
-        : duration.includes("24")
-          ? 23
-          : duration.includes("12")
-            ? 21
-            : 18
-  } else if (program.commission.type === "tiered") {
-    typeScore = 12
-  }
-
-  const completeness =
-    (program.descriptionAvailable ? 4 : 0) +
-    (program.agentPromptAvailable ? 3 : 0) +
-    (program.signupAvailable ? 3 : 0)
-
-  return Math.round(
-    commissionScore +
-      cookieScore +
-      typeScore +
-      (program.verified ? 10 : 0) +
-      completeness
-  )
+  return program.score
 }
 
 export function searchPrograms(query: string, category?: string): ClientProgram[]

@@ -128,8 +128,12 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const program = getProgram(slug);
-  if (!program) notFound();
+  const stored = getProgram(slug);
+  if (!stored) notFound();
+  // What a reader may see: unverified, no cookie window, payout or approval,
+  // and no sentence of free text stating them (confirmed-terms.ts). Only the
+  // score reads the stored program.
+  const program = confirmedTerms(stored);
 
   const faq = buildFaq(program);
   const discontinued = isDiscontinued(program);
@@ -142,12 +146,9 @@ export default async function ProgramPage({
   const applyCta = applyButton(program);
   // Unverified: the commission badge says it is not confirmed.
   const unconfirmed = unverified ? " (unconfirmed)" : "";
-  // Cookie window, payout and approval as a reader may see them: left out
-  // until the terms are verified (confirmed-terms.ts). The score reads `program`.
   const confirmed = termsConfirmed(program);
-  const terms = confirmedTerms(program);
   const cookieText =
-    terms.cookieDays == null ? "Cookie not published" : terms.cookieDays === 0 ? "Code-based, no cookie" : `${terms.cookieDays}d cookie`;
+    program.cookieDays == null ? "Cookie not published" : program.cookieDays === 0 ? "Code-based, no cookie" : `${program.cookieDays}d cookie`;
   const trustLine = noProgram
     ? `Status checked${program.lastVerifiedAt ? ` ${program.lastVerifiedAt}` : ""}`
     : paused
@@ -163,7 +164,7 @@ export default async function ProgramPage({
     : "The signup page is not working right now.";
 
   // Affiliate Score
-  const score = affiliateScore(program);
+  const score = affiliateScore(stored);
   // Compared with live programs only: a brand with no program has no score to average.
   const categoryPrograms = livePrograms.filter((p) => p.category === program.category);
   // A program with no cookie_days scores NaN; one such entry turned every
@@ -192,7 +193,7 @@ export default async function ProgramPage({
     },
   } as const;
 
-  const approvalKey = terms.approval as keyof typeof approvalConfig | undefined;
+  const approvalKey = program.approval as keyof typeof approvalConfig | undefined;
   const approvalInfo = approvalKey ? approvalConfig[approvalKey] : null;
 
   const mcpHttp = `{
@@ -304,7 +305,7 @@ export default async function ProgramPage({
         {confirmed && (
           <StatBadge
             icon={<Clock className="h-3 w-3" />}
-            label={`${cookieText}${terms.cookieDays == null ? "" : unconfirmed}`}
+            label={`${cookieText}${program.cookieDays == null ? "" : unconfirmed}`}
           />
         )}
         {program.network && (
@@ -374,7 +375,7 @@ export default async function ProgramPage({
           </Suspense>
 
           {/* How to Join */}
-          {!noProgram && !paused && (program.signupUrl ?? terms.approval ?? terms.approvalTime) && (
+          {!noProgram && !paused && (program.signupUrl ?? program.approval ?? program.approvalTime) && (
             <div>
               <h2 className="text-base font-semibold mb-3">How to Join</h2>
               <div className="rounded-xl border border-border/50 bg-card/30 p-5 space-y-4">
@@ -402,14 +403,14 @@ export default async function ProgramPage({
                       </div>
                     </div>
                   )}
-                  {terms.approvalTime && (
+                  {program.approvalTime && (
                     <div className="flex items-center gap-2">
                       <Clock className="h-3.5 w-3.5 text-muted-foreground" />
                       <div>
                         <p className="text-[10px] text-muted-foreground uppercase tracking-wide">
                           Approval time
                         </p>
-                        <p className="text-sm font-medium">{terms.approvalTime}</p>
+                        <p className="text-sm font-medium">{program.approvalTime}</p>
                       </div>
                     </div>
                   )}
@@ -566,7 +567,7 @@ export default async function ProgramPage({
             {confirmed && (
               <>
                 <div className="h-px bg-border/50" />
-                <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={terms.cookieDays == null ? "Not published" : terms.cookieDays === 0 ? "None (code-based)" : `${terms.cookieDays} days`} />
+                <SidebarRow label="Cookie" icon={<Clock className="h-3 w-3" />} value={program.cookieDays == null ? "Not published" : program.cookieDays === 0 ? "None (code-based)" : `${program.cookieDays} days`} />
               </>
             )}
 
@@ -584,20 +585,20 @@ export default async function ProgramPage({
               </>
             )}
 
-            {terms.payout.minimum != null && (
+            {program.payout.minimum != null && (
               <>
                 <div className="h-px bg-border/50" />
-                <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${terms.payout.minimum}`} />
+                <SidebarRow label="Min payout" icon={<DollarSign className="h-3 w-3" />} value={`$${program.payout.minimum}`} />
               </>
             )}
-            {terms.payout.frequency && (
+            {program.payout.frequency && (
               <>
                 <div className="h-px bg-border/50" />
-                <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{terms.payout.frequency}</span>} />
+                <SidebarRow label="Frequency" icon={<Calendar className="h-3 w-3" />} value={<span className="capitalize">{program.payout.frequency}</span>} />
               </>
             )}
 
-            {terms.payoutMethods && terms.payoutMethods.length > 0 && (
+            {program.payoutMethods && program.payoutMethods.length > 0 && (
               <>
                 <div className="h-px bg-border/50" />
                 <div>
@@ -605,7 +606,7 @@ export default async function ProgramPage({
                     <CreditCard className="h-3 w-3" /> Payment methods
                   </span>
                   <div className="flex flex-wrap gap-1.5">
-                    {terms.payoutMethods.map((method) => (
+                    {program.payoutMethods.map((method) => (
                       <Badge key={method} variant="outline" className="text-[10px] capitalize">
                         {method}
                       </Badge>
