@@ -5,7 +5,7 @@ import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { getCategoryStats, categoryToSlug, commissionDisplay} from "@/lib/programs";
-import { BEST_LISTS } from "@/lib/best-lists";
+import { BEST_LISTS, bestPath } from "@/lib/best-lists";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Categories",
@@ -40,7 +40,7 @@ export default function CategoriesPage() {
           {BEST_LISTS.map((list) => (
             <Link
               key={list.slug}
-              href={`/best/${list.slug}`}
+              href={bestPath(list)}
               className="text-foreground hover:text-emerald-600 dark:hover:text-emerald-400 underline-offset-4 hover:underline"
             >
               {list.h1}
