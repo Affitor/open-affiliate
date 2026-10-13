@@ -101,6 +101,7 @@ const TERM_FIELDS = [
   "network",
   "programAge",
   "kind",
+  "alsoOn",
 ] as const
 
 /**

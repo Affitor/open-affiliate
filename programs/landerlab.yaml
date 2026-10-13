@@ -35,6 +35,17 @@ dashboard_url: null
 network: in-house
 program_age: "2+ years"
 
+also_on:
+  affitor:
+    url: https://affitor.com/marketplace/landerlab
+    commission:
+      type: recurring
+      rate: "20%"
+      mode: percentage
+      value: 20
+      currency: USD
+      duration: "12 months"
+
 description: >
   LanderLab is a landing page builder designed for performance marketers and agencies.
   Create, test, and optimize high-converting landing pages without coding. Features include

@@ -142,6 +142,7 @@ type Program = {
   approval_time?: string | null
   restrictions?: string[] | null
   network?: string | null
+  also_on?: { affitor?: { url: string; commission?: Commission } } | null
   program_age?: string | null
   verified?: boolean
   last_verified_at?: string | null
@@ -228,6 +229,19 @@ function commissionLine(c: Commission): string {
   if (c.type) parts.push(String(c.type))
   if (c.duration) parts.push(`for ${c.duration}`)
   return parts.join(" ")
+}
+
+/**
+ * The brand on Affitor too (also_on), in one line under its own terms, as the
+ * page shows it: "Also on Affitor: 20% recurring for 12 months, sign up: <…>".
+ * No figure when Affitor publishes none.
+ */
+function alsoOnLine(p: Program): string | null {
+  const a = p.also_on?.affitor
+  if (!a) return null
+  const c = a.commission
+  const figure = c && c.mode !== "unknown" && c.value != null ? `: ${mdEscape(commissionLine(c))}` : ""
+  return `Also on Affitor${figure}, sign up: ${mdUrl(a.url)}`
 }
 
 function payoutLine(p: Program): string | null {
@@ -322,6 +336,7 @@ export function programMd(entry: Program): string {
     `Commission: ${mdEscape(commissionLine(p.commission))}`,
     confirmed ? null : UNCONFIRMED_NOTE,
     p.commission.conditions ? `Commission conditions: ${mdEscape(p.commission.conditions)}` : null,
+    alsoOnLine(p),
     confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
     payout ? `Payout: ${mdEscape(payout)}` : null,
     p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,

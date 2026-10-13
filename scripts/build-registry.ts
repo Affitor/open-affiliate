@@ -42,6 +42,12 @@ const SCHEMA_PROPERTIES = (
 /** Status values, read from the schema like the URL patterns above. */
 const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
 
+/** also_on.affitor.url: an Affitor marketplace page, a subset of the URL allow-list. */
+const ALSO_ON_URL = new RegExp(
+  (SCHEMA_PROPERTIES.also_on as unknown as { properties: { affitor: { properties: { url: { pattern: string } } } } })
+    .properties.affitor.properties.url.pattern
+)
+
 const REQUIRED_FIELDS = [
   "name",
   "slug",
@@ -193,9 +199,29 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     }
   }
 
+  // also_on: a person links a brand's own listing to its Affitor program, and
+  // scripts/sync-affitor.ts keeps the commission there. The page and the .md
+  // twin print the url, so it must be a marketplace page. A listing that
+  // itself points at Affitor already shows those terms as its own.
+  if (data.also_on != null) {
+    const keys = (v: unknown) => (v && typeof v === "object" && !Array.isArray(v) ? Object.keys(v) : null)
+    const affitor = (data.also_on as { affitor?: { url?: unknown } }).affitor
+    if (
+      keys(data.also_on)?.join() !== "affitor" ||
+      !keys(affitor)?.every((k) => k === "url" || k === "commission") ||
+      typeof affitor?.url !== "string" ||
+      !ALSO_ON_URL.test(affitor.url)
+    ) {
+      throw new Error(`${filename}: also_on must be { affitor: { url: https://affitor.com/marketplace/<slug> } }, plus the commission the Affitor sync writes`)
+    }
+    if (data.network === "affitor" || /^https?:\/\/(?:www\.)?affitor\.com\//.test(String(data.signup_url ?? ""))) {
+      throw new Error(`${filename}: also_on.affitor is for a brand's own listing; this one already points at Affitor`)
+    }
+  }
+
   const commission = data.commission as Record<string, unknown> | undefined
   if (commission) {
-    const MODES = ["percentage", "flat", "tiered", "hybrid", "unknown"]
+    const MODES =["percentage", "flat", "tiered", "hybrid", "unknown"]
     if (!MODES.includes(String(commission.mode))) {
       throw new Error(
         `${filename}: commission.mode must be one of ${MODES.join(", ")} — got "${commission.mode}". ` +

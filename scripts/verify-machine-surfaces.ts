@@ -25,7 +25,7 @@ import {
 import { hasNoProgram } from "../src/lib/no-program";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
-import { applyButton } from "../src/lib/apply-cta";
+import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import {
   commissionDisplay,
   categories,
@@ -703,6 +703,22 @@ for (const program of termsPages) {
   const problems = termsMdProblems(program, requireText(join("programs", `${program.slug}.md`)));
   if (problems.length) fail(`programs/${program.slug}.md ${problems.join("; ")}`);
 }
+// A brand on Affitor too (also_on.affitor): exactly one line in its twin's
+// terms, with the stored figure (none when Affitor publishes none) and the
+// marketplace link; no such line on any other twin.
+if (!termsPages.some((p) => p.alsoOn?.affitor)) fail("no program has also_on.affitor; the Also on Affitor checks would read nothing");
+for (const program of termsPages) {
+  const lines = requireText(join("programs", `${program.slug}.md`)).split("\n").filter((l) => l.startsWith("Also on Affitor"));
+  const a = program.alsoOn?.affitor;
+  if (!a) {
+    if (lines.length) fail(`programs/${program.slug}.md shows "${lines[0]}" with no also_on`);
+    continue;
+  }
+  const figure = a.commission && !commissionUnknown(a.commission) ? `: ${commissionDisplay(a.commission)} ` : ", ";
+  if (lines.length !== 1 || !lines[0].startsWith(`Also on Affitor${figure}`) || !lines[0].endsWith(`sign up: <${a.url}>`)) {
+    fail(`programs/${program.slug}.md does not show its Affitor line once, with ${figure.trim() || "no figure"} and ${a.url}: ${JSON.stringify(lines)}`);
+  }
+}
 // llms-full.txt is every live twin verbatim, so it holds when the twins do.
 for (const program of livePrograms) {
   if (!llmsFull.includes(requireText(join("programs", `${program.slug}.md`)))) {
@@ -1246,6 +1262,11 @@ async function checkServedPages(): Promise<string> {
       const program = bySlug.get(page)!;
       const problems = termsHtmlProblems(program, html);
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
+      // The Affitor line and its secondary button, only where also_on says so.
+      const also = alsoOnAffitor(program);
+      if (also ? !html.includes(`>${also.line}</p>`) || !html.includes(`href="${also.href.replaceAll("&", "&amp;")}"`) : html.includes("Also on Affitor")) {
+        fail(`${page} ${also ? `does not show "${also.line}" with its Affitor button` : "shows an Affitor line with no also_on"}`);
+      }
       if (program === off || program === on || program === dropped.p) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
@@ -1296,6 +1317,10 @@ async function checkServedPages(): Promise<string> {
       const program = programs.find((p) => p.slug === row.slug)!;
       const problems = termsApiProblems(program, row);
       if (problems.length) fail(`/api/programs row ${program.slug} ${problems.join("; ")}`);
+      // also_on passes through as stored (additive: null when there is none).
+      if (JSON.stringify(row.alsoOn) !== JSON.stringify(program.alsoOn ?? null)) {
+        fail(`/api/programs row ${program.slug} alsoOn is ${JSON.stringify(row.alsoOn)}, stored ${JSON.stringify(program.alsoOn)}`);
+      }
     }
     for (const program of [off, on]) {
       const body = await (await fetch(`${base}/api/programs/${program.slug}`)).json();

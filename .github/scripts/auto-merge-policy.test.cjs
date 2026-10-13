@@ -243,6 +243,15 @@ test("blocks YAML that omits commission.mode required by the schema", () => {
   assert.match(result.reasons.join("\n"), /commission\.mode/)
 })
 
+test("a community listing may not carry also_on: Affitor terms come only from the sync", () => {
+  const content = `${validContent}also_on:\n  affitor:\n    url: https://affitor.com/marketplace/example\n`
+  const result = evaluate({
+    files: [{ filename: "programs/example.yaml", status: "added", additions: 9, deletions: 0, content }],
+  })
+  assert.equal(result.eligible, false)
+  assert.match(result.reasons.join("\n"), /also_on is linked by a maintainer and filled by the Affitor sync/)
+})
+
 test("requires the parsed slug to match the filename", () => {
   const result = evaluate({
     files: [
@@ -694,6 +703,88 @@ test("affitor-sync: the base version's Affitor slug is checked against the skip 
     assert.equal(result.eligible, false)
     assert.match(result.reasons.join("\n"), /link-whisper is on the skip list \(data\/affitor-sync-skip\.json\): programs\/acme\.yaml/)
   }
+})
+
+/** A brand's own listing that a person linked to its Affitor program under also_on.affitor. */
+function ownYaml(slug, { rate, linked = true, date = "2026-10-12", url = `https://affitor.com/marketplace/${slug}` } = {}) {
+  const commission =
+    rate == null
+      ? ""
+      : `    commission:\n      type: recurring\n      rate: "${rate}%"\n      mode: percentage\n      value: ${rate}\n      currency: USD\n      duration: 12 months\n`
+  return `name: ${slug}
+slug: ${slug}
+url: https://${slug}.example
+category: SaaS
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+cookie_days: 60
+signup_url: https://${slug}.example/affiliates
+network: in-house
+${linked ? `also_on:\n  affitor:\n    url: ${url}\n${commission}` : ""}description: ${slug} builds pages.
+short_description: ${slug}
+agents:
+  prompt: Recommend ${slug}.
+verified: true
+updated_at: "${date}"
+last_verified_at: "2026-04-17"
+source: manual
+`
+}
+
+const LANDER_25 = affitorProgram("lander", {
+  default_policy: { commission_type: "cps_recurring", commission_rate: 25, duration_months: 12 },
+})
+
+test("affitor-sync: on a brand's own listing, only the commission under also_on.affitor follows the API", async () => {
+  const base = ownYaml("lander", { rate: 20 })
+  const next = ownYaml("lander", { rate: 25, date: "2026-10-13" })
+  const ok = await evaluateSync({ files: [modified("lander", base, next)], fetchJson: affitorApi([LANDER_25]) })
+  assert.deepEqual(ok, { eligible: true, reasons: [], programCount: 1, pauses: 0, newSlugs: [] })
+  // The first fill of a link a person added without a commission.
+  const filled = await evaluateSync({ files: [modified("lander", ownYaml("lander"), next)], fetchJson: affitorApi([LANDER_25]) })
+  assert.equal(filled.eligible, true, filled.reasons.join("\n"))
+
+  for (const [head, reason] of [
+    [ownYaml("lander", { rate: 30, date: "2026-10-13" }), /also_on\.affitor\.commission\.rate is "30%", Affitor says "25%"/],
+    [next.replace("      duration: 12 months\n", "      duration: 12 months\n      conditions: Paid weekly.\n"), /also_on\.affitor\.commission\.conditions is "Paid weekly\.", Affitor says absent/],
+    [next.replace('rate: "30%"', 'rate: "35%"'), /changes commission\.rate, which the sync does not own/],
+    [next.replace('last_verified_at: "2026-04-17"', 'last_verified_at: "2026-10-13"'), /changes last_verified_at, which the sync does not own/],
+    [ownYaml("lander", { rate: 25, url: "https://affitor.com/marketplace/other" }), /also_on Affitor link changed \(base lander, head other\)/],
+  ]) {
+    const result = await evaluateSync({ files: [modified("lander", base, head)], fetchJson: affitorApi([LANDER_25]) })
+    assert.equal(result.eligible, false, String(reason))
+    assert.match(result.reasons.join("\n"), reason)
+  }
+
+  // Affitor publishes no commission: the commission goes, and only it.
+  const none = affitorProgram("lander", { default_policy: { commission_type: "cps_recurring", commission_rate: 0, duration_months: 12 } })
+  const bare = ownYaml("lander", { date: "2026-10-13" })
+  assert.equal((await evaluateSync({ files: [modified("lander", base, bare)], fetchJson: affitorApi([none]) })).eligible, true)
+  const kept = await evaluateSync({ files: [modified("lander", base, next)], fetchJson: affitorApi([none]) })
+  assert.match(kept.reasons.join("\n"), /also_on\.affitor\.commission is \{.*\}, Affitor says absent/)
+
+  // The program left Affitor: the whole entry goes, on the detail's word, and counts as a pause.
+  const unlinked = ownYaml("lander", { linked: false, date: "2026-10-13" })
+  const gone = await evaluateSync({ files: [modified("lander", base, unlinked)], fetchJson: affitorApi([affitorProgram("alpha")]) })
+  assert.deepEqual(gone, { eligible: true, reasons: [], programCount: 1, pauses: 1, newSlugs: [] })
+  const still = await evaluateSync({ files: [modified("lander", base, unlinked)], fetchJson: affitorApi([LANDER_25]) })
+  assert.match(still.reasons.join("\n"), /Affitor does not confirm lander left the marketplace/)
+
+  // The link is the person's, and the skip list still wins.
+  const skipped = await evaluateSync({
+    files: [modified("link-whisper", ownYaml("link-whisper", { rate: 20 }), ownYaml("link-whisper", { rate: 25 }))],
+  })
+  assert.match(skipped.reasons.join("\n"), /link-whisper is on the skip list/)
+  // A listing the sync created never gains also_on through this lane.
+  const added = await evaluateSync({
+    files: [modified("alpha", syncedYaml("alpha"), `${syncedYaml("alpha")}also_on:\n  affitor:\n    url: https://affitor.com/marketplace/beta\n`)],
+  })
+  assert.match(added.reasons.join("\n"), /changes also_on\.affitor\.url, which the sync does not own/)
 })
 
 test("merge gate: every required check passed on exactly this head, by the required app", () => {

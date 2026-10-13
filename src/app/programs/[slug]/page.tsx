@@ -36,7 +36,7 @@ import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
 import { programs, livePrograms, getProgram, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel, confirmedTerms, termsConfirmed, UNCONFIRMED_NOTE } from "@/lib/programs";
-import { applyButton } from "@/lib/apply-cta";
+import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
 
@@ -144,6 +144,8 @@ export default async function ProgramPage({
   const unverified = isUnverified(program);
   const network = networkName(program);
   const applyCta = applyButton(program);
+  // The brand on Affitor too: one line under its own terms, and a secondary button.
+  const alsoOn = alsoOnAffitor(program);
   // Unverified: the commission badge says it is not confirmed.
   const unconfirmed = unverified ? " (unconfirmed)" : "";
   const confirmed = termsConfirmed(program);
@@ -613,6 +615,21 @@ export default async function ProgramPage({
                     ))}
                   </div>
                 </div>
+              </>
+            )}
+
+            {alsoOn && (
+              <>
+                <div className="h-px bg-border/50" />
+                <p className="text-xs text-muted-foreground">{alsoOn.line}</p>
+                <TrackLink
+                  href={alsoOn.href}
+                  slug={slug}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-border px-3.5 py-2 text-sm font-medium hover:bg-muted/50 transition-colors"
+                >
+                  {alsoOn.label}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </TrackLink>
               </>
             )}
           </div>

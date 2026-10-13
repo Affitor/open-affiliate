@@ -728,12 +728,13 @@ test("a brand on the skip list is reported with its reason and never created, ta
     assert.match(slug, /^[a-z0-9]+(?:-[a-z0-9]+)*$/)
     assert.ok(typeof reason === "string" && reason.length > 0, `${slug} has a reason`)
   }
-  // The committed list applies when a run passes none: LanderLab stays out.
+  // The committed list applies when a run passes none: Link Whisper stays out.
   const dir = registry()
-  const plain = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(ROWS) })
-  const lander = plain.entries.find((e) => e.oa_slug === "landerlab")!
-  assert.equal(lander.action, "skip")
-  assert.equal(lander.reason, `on the skip list (data/affitor-sync-skip.json): ${committed.landerlab}`)
+  const whisper = row("link-whisper", { name: "Link Whisper", link_webpage: "https://www.linkwhisper.com" })
+  const plain = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api([...ROWS, whisper]) })
+  const skipped = plain.entries.find((e) => e.oa_slug === "link-whisper")!
+  assert.equal(skipped.action, "skip")
+  assert.equal(skipped.reason, `on the skip list (data/affitor-sync-skip.json): ${committed["link-whisper"]}`)
 
   // Matched by the OA slug (Affitor's slug differs), by Affitor's slug, and for an
   // existing listing that would be taken over or paused.
@@ -782,6 +783,128 @@ test("a listing linked to an Affitor program that left is never re-linked by a w
   const both = [...rows, row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" })]
   const again = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(both), skip: {} })
   assert.match(again.entries.find((e) => e.affitor_slug === "attacker")!.reason, /already listed from Affitor program citegraph/)
+})
+
+/** LanderLab's own program, linked by a person to its Affitor program under also_on (A2). */
+const LINKED = LANDERLAB.replace(
+  "network: in-house\n",
+  "network: in-house\nalso_on:\n  affitor:\n    url: https://affitor.com/marketplace/landerlab\n",
+)
+const LANDER = ROWS[1]
+/** The file with also_on and updated_at taken out: what the sync must leave byte for byte. */
+const ownPart = (text: string) => text.replace(/^also_on:\n(?: {2}.*\n)+/m, "").replace(/^updated_at: .*\n/m, "")
+
+test("a brand's own listing linked under also_on gets Affitor's commission there, and nothing else", async () => {
+  const dir = dirWith({ "landerlab.yaml": LINKED })
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([LANDER]) })
+  const e = entries.find((x) => x.affitor_slug === "landerlab")!
+  assert.equal(e.action, "also-on")
+  assert.equal(written.length, 1)
+  const text = readFileSync(join(dir, "landerlab.yaml"), "utf8")
+  const l = parse(text)
+  assert.deepEqual(l.also_on, {
+    affitor: {
+      url: "https://affitor.com/marketplace/landerlab",
+      commission: { type: "recurring", rate: "20%", mode: "percentage", value: 20, currency: "USD", duration: "12 months" },
+    },
+  })
+  // The brand's own program stays the page's: no take-over field, not re-verified.
+  assert.equal(l.signup_url, "https://landerlab.io/affiliates")
+  assert.equal(l.network, "in-house")
+  assert.equal(l.commission.rate, "30%")
+  assert.equal(l.updated_at, TODAY)
+  for (const field of ["verified", "last_verified_at", "attribution", "payout"]) assert.equal(field in l, false, field)
+  assert.equal(ownPart(text), ownPart(LINKED))
+
+  // A second run, on any day, writes nothing.
+  for (const today of [TODAY, "2026-11-30"]) {
+    const again = await run({ args: [], programsDir: dir, today, fetchJson: api([LANDER]) })
+    assert.deepEqual(again.written, [])
+    assert.match(again.entries[0].reason, /already up to date$/)
+  }
+
+  // Affitor raises the rate: only the commission under also_on moves, and the date.
+  const raised = { ...LANDER, default_policy: { ...LANDER.default_policy, commission_rate: 25 } }
+  const r = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api([raised]) })
+  assert.deepEqual(
+    r.entries[0].diffs?.map((d) => d.field),
+    ["also_on.affitor.commission.rate", "also_on.affitor.commission.value", "updated_at"],
+  )
+
+  // A malformed number is skipped, as everywhere: the last figure stays.
+  const before = snapshot(dir)
+  const malformed = { ...LANDER, default_policy: { ...LANDER.default_policy, commission_rate: "25" as unknown as number } }
+  const m = await run({ args: [], programsDir: dir, today: "2026-12-01", fetchJson: api([malformed]) })
+  assert.equal(m.entries[0].action, "skip")
+  assert.deepEqual(snapshot(dir), before)
+
+  // Affitor publishes no commission: the line stays, with no figure.
+  const none = { ...LANDER, default_policy: { commission_type: "cps_recurring", commission_rate: 0, duration_months: 12 } }
+  const n = await run({ args: [], programsDir: dir, today: "2026-12-01", fetchJson: api([none]) })
+  assert.equal(n.entries[0].action, "also-on")
+  assert.match(n.entries[0].reason, /Affitor publishes no commission, so the line shows none/)
+  assert.deepEqual(parse(readFileSync(join(dir, "landerlab.yaml"), "utf8")).also_on, {
+    affitor: { url: "https://affitor.com/marketplace/landerlab" },
+  })
+})
+
+test("an also_on link is matched like any link: another website, anchors or the skip list write nothing, and the sync never adds one", async () => {
+  const cases: [string, AffitorProgram[], Record<string, string>, string, RegExp][] = [
+    [LINKED, [{ ...LANDER, link_webpage: "https://landerlab.example" }], {}, "conflict", /marketplace slug now points at a different website/],
+    [LINKED.replace("url: https://landerlab.io", "url: &site https://landerlab.io"), [LANDER], {}, "conflict", /yaml anchors present/],
+    [LINKED, [LANDER], { landerlab: "hand-kept" }, "skip", /on the skip list .*: hand-kept$/],
+    // No link: a website match alone stays a conflict, whose report carries both term sets.
+    [LANDERLAB, [LANDER], {}, "conflict", /OA lists landerlab\.io's own program/],
+  ]
+  for (const [file, rows, skip, action, reason] of cases) {
+    const dir = dirWith({ "landerlab.yaml": file })
+    const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows), skip })
+    const e = entries.find((x) => x.affitor_slug === "landerlab")!
+    assert.equal(e.action, action, String(reason))
+    assert.match(e.reason, reason)
+    assert.deepEqual(written, [])
+    assert.equal(readFileSync(join(dir, "landerlab.yaml"), "utf8"), file)
+  }
+  // Another Affitor program claiming the website never takes the link over.
+  const dir = dirWith({ "landerlab.yaml": LINKED })
+  const rival = row("lander-two", { name: "Lander Two", link_webpage: "https://landerlab.io" })
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([LANDER, rival]) })
+  assert.equal(entries.find((x) => x.affitor_slug === "landerlab")?.action, "also-on")
+  assert.match(entries.find((x) => x.affitor_slug === "lander-two")!.reason, /already listed from Affitor program landerlab/)
+  assert.equal(written.length, 1)
+})
+
+test("an also_on link to a program that left Affitor is removed, on the detail's word only", async () => {
+  const dir = dirWith({ "landerlab.yaml": LINKED })
+  await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api([LANDER]) })
+  const synced = readFileSync(join(dir, "landerlab.yaml"), "utf8")
+  const others = [row("still-here")]
+
+  // Gone from the list, but the detail still answers: kept.
+  const kept = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(others, { details: { landerlab: { success: true, data: LANDER } } }) })
+  const k = kept.entries.find((x) => x.oa_slug === "landerlab")!
+  assert.equal(k.action, "skip")
+  assert.match(k.reason, /detail still answers; not unlinked/)
+  assert.equal(readFileSync(join(dir, "landerlab.yaml"), "utf8"), synced)
+
+  // The detail answers not found: the entry goes, the brand's own listing stays byte for byte.
+  const { entries, written } = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(others) })
+  const u = entries.find((x) => x.oa_slug === "landerlab")!
+  assert.equal(u.action, "unlink")
+  assert.equal(u.affitor_slug, "landerlab")
+  assert.equal(written.length, 1)
+  const text = readFileSync(join(dir, "landerlab.yaml"), "utf8")
+  assert.equal("also_on" in parse(text), false)
+  assert.equal(parse(text).updated_at, "2026-11-30")
+  assert.equal(ownPart(text), ownPart(LINKED))
+
+  // Unlinks count against the same limit as pauses.
+  const many = dirWith(
+    Object.fromEntries(
+      ["a", "b", "c", "d"].map((s) => [`own-${s}.yaml`, LINKED.replaceAll("landerlab", `own-${s}`)]),
+    ),
+  )
+  await assert.rejects(run({ args: [], programsDir: many, today: TODAY, fetchJson: api(others) }), /4 listings would be paused or unlinked/)
 })
 
 test("a listing linked to a skip-listed Affitor program stays out, whoever matches it (Codex r1 #4)", async () => {
@@ -876,4 +999,26 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   const verdict = await lane(refreshed, rows)
   assert.equal(verdict.eligible, false)
   assert.match(verdict.reasons.join("\n"), /commission\.rate is "40%", Affitor says "20%": programs\/citegraph\.yaml/)
+
+  // A brand's own listing linked under also_on: the first fill, a move on
+  // Affitor, no published commission and the unlink are each in the lane.
+  const own = dirWith({ "landerlab.yaml": LINKED })
+  const passes = { eligible: true, reasons: [], programCount: 1, pauses: 0, newSlugs: [] }
+  for (const [day, now] of [
+    [TODAY, [LANDER]],
+    ["2026-11-30", [{ ...LANDER, default_policy: { ...LANDER.default_policy, commission_rate: 25 } }]],
+    ["2026-12-01", [{ ...LANDER, default_policy: { commission_type: "cps_lifetime", commission_rate: 0 } }]],
+  ] as [string, AffitorProgram[]][]) {
+    const files = await pullRequestFiles(own, now, day)
+    assert.equal(files.length, 1, day)
+    assert.deepEqual(await lane(files, now), passes, day)
+    // The next day's Affitor no longer agrees: blocked.
+    assert.equal((await lane(files, [{ ...LANDER, default_policy: { commission_type: "cps_one_time", commission_rate: 5 } }])).eligible, false, day)
+  }
+  const left = [row("still-here")]
+  // still-here is new, so it goes to its own pull request.
+  const unlinked = (await pullRequestFiles(own, left, "2026-12-02")).filter((f) => f.status === "modified")
+  assert.deepEqual(unlinked.map((f) => f.filename), ["programs/landerlab.yaml"])
+  assert.deepEqual(await lane(unlinked, left), { ...passes, pauses: 1 })
+  assert.equal((await lane(unlinked, [LANDER])).eligible, false)
 })
