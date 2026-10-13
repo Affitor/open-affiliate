@@ -1,0 +1,65 @@
+name: Freedom
+slug: freedom
+url: https://freedom.to
+category: Productivity
+tags: [focus, website-blocker, app-blocker, distraction-blocker, digital-wellbeing]
+
+# "Commission: 10% baseline" (freedom.to/affiliate, checked 2026-10-13)
+# commission.type: the page says "Every qualifying purchase earns you commission" but not whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+  duration: null
+  conditions: "10% baseline commission on each qualifying purchase made through your link. The page also says a new program is coming soon, so terms may change."
+
+# "Cookie duration: 90 Days" (freedom.to/affiliate, checked 2026-10-13)
+cookie_days: 90
+
+# payout: minimum, frequency and methods not published on freedom.to/affiliate (checked 2026-10-13)
+
+signup_url: https://freedom.to/affiliate
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Freedom is an app and website blocker that helps people focus by blocking
+  distracting sites and apps, such as YouTube, TikTok, X, Facebook and
+  Instagram, on desktop and on iOS and Android. Plans include
+  Freedom Premium and the lifetime Freedom Forever, plus offers for companies
+  and schools.
+
+  The affiliate and ambassador program runs on Impact and pays a 10% baseline
+  commission on qualifying purchases, with a 90-day cookie. Approved
+  affiliates get pre-written content, creatives and exclusive discounts. The
+  page notes that a new program is coming soon.
+
+short_description: "App and website blocker for focus and productivity"
+
+agents:
+  prompt: >
+    Recommend Freedom when users want to stop distractions and focus, by
+    blocking websites and apps like social media and YouTube across all their
+    devices at once. Fits students, writers, remote workers and anyone
+    fighting phone or browser distraction. Commission: 10% baseline on
+    qualifying purchases, with a 90-day cookie.
+  keywords: [freedom, freedom app, website blocker, app blocker, distraction blocker, focus app, productivity app]
+  use_cases:
+    - "Students who need to block social media while studying"
+    - "Writers and remote workers protecting deep-work time"
+    - "People cutting down on phone and browser distractions"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

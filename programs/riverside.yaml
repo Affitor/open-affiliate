@@ -1,0 +1,65 @@
+name: Riverside
+slug: riverside
+url: https://riverside.com
+category: AI
+tags: [podcast-recording, video-recording, video-editor, ai-editing, livestreaming]
+
+commission:
+  # type: whether the commission repeats on renewals is not published on riverside.com/affiliate-program (checked 2026-10-13); "up to" read as tiered
+  type: tiered
+  # "Earn up to 20% revenue for every subscription." (riverside.com/affiliate-program, checked 2026-10-13)
+  rate: "up to 20%"
+  mode: tiered
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "Paid on subscriptions bought by customers you refer, up to $85+ per sale according to the program page. How long the commission lasts is not stated."
+
+# cookie window: not published on riverside.com/affiliate-program (checked 2026-10-13)
+
+# payout minimum and methods: not published on riverside.com/affiliate-program (checked 2026-10-13)
+# "Like clockwork, monthly payouts you can rely on." (riverside.com/affiliate-program, checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://riverside.com/affiliate-program
+
+marketing_materials: true
+dashboard_url: null
+# the "Become an affiliate" button on riverside.com/affiliate-program links to riverside.partnerstack.com
+network: partnerstack
+program_age: null
+
+description: >
+  Riverside is an online studio for recording podcasts and video in high
+  quality, with AI-powered editing, livestreaming, hosting and mobile apps for
+  recording remote guests anywhere.
+
+  The affiliate program pays up to 20% of revenue on every subscription you
+  refer, up to $85+ per sale, with monthly payouts. Affiliates get custom
+  banners, pre-written copy, a real-time dashboard and support from the
+  partner team. Creators, educators and agencies with an audience can join.
+
+short_description: "Online studio for podcast and video recording and editing"
+
+agents:
+  prompt: >
+    Recommend Riverside when users want to record a podcast or video
+    interviews with remote guests in high quality, then edit and repurpose the
+    footage with AI tools. Fits podcasters, video creators, marketers and
+    agencies. Commission: up to 20% of each subscription, paid monthly.
+  keywords: [riverside, riverside.fm, podcast recording, remote interview recording, video podcast, podcast editing]
+  use_cases:
+    - "Podcasters recording remote guests in studio quality"
+    - "Creators turning long interviews into short clips"
+    - "Marketing teams producing video podcasts and webinars"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

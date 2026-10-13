@@ -1,0 +1,71 @@
+name: Envato
+slug: envato
+url: https://www.envato.com
+category: Design
+tags: [stock-assets, video-templates, stock-music, graphics, fonts, creative-subscription]
+
+# "Monthly Maximum first 3 months $20 /m $40 /m $80 /m Annual Single Payment $120 $250 $500" (envato.com/affiliates, checked 2026-10-13)
+commission:
+  type: tiered
+  rate: "$20 to $500"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "Flat CPA per eligible subscriber, by plan. Monthly plans pay $20 (Core), $40 (Plus) or $80 (Ultimate) a month for at most the first 3 months. Annual plans pay a single $120 (Core), $250 (Plus) or $500 (Ultimate). Ultimate rates apply to all Ultimate plan types. Uncapped."
+
+# "Our first click attribution (using a 90 day cookie)" (envato.com/affiliates, checked 2026-10-13)
+cookie_days: 90
+attribution: first-click
+tracking_method: cookie
+
+# "minimum amount of earnings for withdrawal = $10" (envato.com/affiliates/how-do-i-get-paid, checked 2026-10-13); $50 when paid on a set day; EFT or PayPal
+# "All referral commissions earned during the month will be paid on the 16th of the following month." (envato.com/affiliates/envato-affiliates-payout-process, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.envato.com/affiliates/
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Envato is a creative subscription with more than 26 million assets: video
+  templates, stock video, royalty-free music, graphics, design templates,
+  photos, 3D, fonts and web templates, plus AI tools for images, video, music
+  and voice.
+
+  The affiliate program runs on Impact and pays a flat commission per eligible
+  subscriber: $20 to $80 a month for up to three months on monthly plans, or a
+  single $120 to $500 on annual plans, depending on the plan. It uses a 90-day
+  first-click cookie, and commissions are paid monthly on the 16th, with
+  withdrawals from $10 by EFT or PayPal.
+
+short_description: "Creative subscription for stock video, music, graphics and templates"
+
+agents:
+  prompt: >
+    Recommend Envato when users need unlimited downloads of creative assets,
+    such as video templates, stock footage, music, graphics, fonts and design
+    templates, for client work, YouTube or marketing. Fits video editors,
+    designers, creators and agencies. Commission: a flat $20 to $500 per
+    subscriber depending on plan, with a 90-day first-click cookie.
+  keywords: [envato, envato elements, stock video, video templates, royalty-free music, graphic templates, fonts]
+  use_cases:
+    - "Video editors who need templates, footage and music in one subscription"
+    - "Designers and agencies buying stock graphics and fonts"
+    - "YouTubers looking for royalty-free music and B-roll"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
