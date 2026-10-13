@@ -11,9 +11,9 @@ tags:
   - saas
 commission:
   type: tiered
-  rate: "Up to 25%"
-  mode: tiered
-  value: 25
+  rate: "15%"
+  mode: percentage
+  value: 15
   currency: USD
   duration: null
   conditions: "15% for every successful paid customer to start, rising through tiers to up to 25%."

@@ -7,9 +7,9 @@ tags:
 - saas
 commission:
   type: recurring
-  rate: "20-50%"
-  mode: tiered
-  value: 50
+  rate: "20%"
+  mode: percentage
+  value: 20
   currency: USD
   duration: null
   conditions: "20% of initial sales plus 20% of all recurring subscription payments; bonus commissions up to 50% as you grow."

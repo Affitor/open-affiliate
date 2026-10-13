@@ -10,12 +10,12 @@ tags:
   - saas
 commission:
   type: hybrid
-  rate: "Up to $250 or up to 35% recurring"
+  rate: "$100 or 20% recurring"
   mode: hybrid
-  value: 35
+  value: 20
   currency: USD
   duration: null
-  conditions: "By tier, $100-$250 per yearly subscription or 20-35% recurring on monthly subscriptions: Bronze $100 or 20%, Silver (10 customers) $150 or 30%, Gold (50 customers) $250 or 35%."
+  conditions: "Starting (Bronze) rate: $100 per yearly subscription or 20% recurring on monthly subscriptions. Silver (10 customers) pays $150 or 30%, Gold (50 customers) $250 or 35%."
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie

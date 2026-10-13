@@ -13,7 +13,7 @@ commission:
   value: 40
   currency: USD
   duration: "12 months"
-  conditions: "Up to 40% recurring commission for the first 12 months of each qualified referral; no lifetime commissions."
+  conditions: "Up to 40% recurring commission for the first 12 months of each qualified referral; no lifetime commissions. 40% is the published up-to figure; Kartra publishes no lower base rate."
 attribution: last-click
 tracking_method: cookie
 payout:
