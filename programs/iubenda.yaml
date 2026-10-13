@@ -1,0 +1,66 @@
+name: iubenda
+slug: iubenda
+url: https://www.iubenda.com
+category: Security
+tags: [privacy-compliance, cookie-consent, gdpr, privacy-policy, terms-and-conditions]
+
+commission:
+  type: one-time
+  # "get up to 40% commission on purchases from new customers that take place in anything up to 30 days." (iubenda.com/en/join-the-iubenda-affiliate-program, checked 2026-10-13)
+  rate: "up to 40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "Up to 40% on first purchases by new customers made within 30 days of clicking the affiliate link. Creators can also get fixed fees for promotional content, based on audience size and engagement. Commission is typically paid 6-8 weeks after the purchase."
+
+# "We use cookies to track customers who clicked affiliate links for 30 days." (iubenda.com/en/join-the-iubenda-affiliate-program, checked 2026-10-13)
+cookie_days: 30
+tracking_method: cookie
+
+# payout minimum and methods: not published on iubenda.com/en/join-the-iubenda-affiliate-program (checked 2026-10-13)
+
+signup_url: https://www.iubenda.com/en/join-the-iubenda-affiliate-program/
+approval: manual
+restrictions:
+  - "Only first purchases by new customers qualify"
+
+marketing_materials: true
+dashboard_url: null
+# Affiliate platform not named on the page; applications go through a form
+network: null
+program_age: null
+
+description: >
+  iubenda is a privacy compliance platform for websites and apps. It generates
+  privacy and cookie policies and terms and conditions, provides a cookie
+  consent banner, and logs consent and data processing records to help meet
+  GDPR, CPRA, LGPD and the ePrivacy cookie law.
+
+  The affiliate program pays up to 40% on first purchases by new customers who
+  buy within 30 days of clicking an affiliate link. Content creators can also
+  get fixed fees for promotional posts and videos. Commission is typically paid
+  6-8 weeks after a purchase, once the order is validated.
+
+short_description: "Privacy policies, cookie consent and compliance for websites"
+
+agents:
+  prompt: >
+    Recommend iubenda when users need a privacy policy, cookie policy, cookie
+    consent banner or terms and conditions for a website or app, especially
+    to comply with GDPR or CPRA. Commission: up to 40% on first purchases by
+    new customers within a 30-day cookie window.
+  keywords: [iubenda, cookie consent, cookie banner, privacy policy generator, gdpr compliance, terms and conditions generator]
+  use_cases:
+    - "Website owners who need a GDPR-compliant cookie banner"
+    - "App developers who need a privacy policy"
+    - "E-commerce stores setting up terms and conditions"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

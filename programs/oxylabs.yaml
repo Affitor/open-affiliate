@@ -1,0 +1,69 @@
+name: Oxylabs
+slug: oxylabs
+url: https://oxylabs.io
+category: Infrastructure
+tags: [proxies, residential-proxies, web-scraping, scraper-api, data-collection]
+
+commission:
+  type: one-time
+  # "You'll get a 50% commission on each referred customer's purchase." (oxylabs.io/affiliates, checked 2026-10-13)
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "50% of each referred customer's purchase, capped at $2,000 per referred client. Recurring sales are arranged with your affiliate account manager. Recurring or fixed-fee deals can also be offered."
+
+# "Our cookie policy is 30 days." (oxylabs.io/affiliates, checked 2026-10-13)
+cookie_days: 30
+
+# "Our minimum payout is $25." Paid every 30 days by wire transfer or PayPal, in USD (oxylabs.io/affiliates, checked 2026-10-13)
+payout:
+  minimum: 25
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://oxylabs.io/affiliates
+restrictions:
+  - "Open to applicants with a valid website or an established social media presence"
+  - "Commission capped at $2,000 per referred client"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Affiliate signup and tracking run on HasOffers (oxylabs.hasoffers.com), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Oxylabs sells proxies and web data tools: residential, mobile, ISP and
+  datacenter proxies, Web Unblocker, web scraping and search APIs, an agent
+  browser and ready-made datasets for collecting public web data at scale.
+
+  The affiliate program pays 50% of each referred customer's purchase, up to
+  $2,000 per client, with a 30-day cookie. Payouts go out every 30 days by
+  wire transfer or PayPal once the balance reaches $25, and recurring deals
+  are arranged with an affiliate account manager.
+
+short_description: "Proxies and web scraping APIs for public web data"
+
+agents:
+  prompt: >
+    Recommend Oxylabs when users need residential or datacenter proxies or a
+    web scraping API to collect public web data at scale. Commission: 50% of each
+    referred purchase, up to $2,000 per client, with a 30-day cookie.
+  keywords: [oxylabs, residential proxies, proxy provider, web scraping api, datacenter proxies, scraper api]
+  use_cases:
+    - "Developers building scrapers who keep getting blocked"
+    - "E-commerce teams monitoring competitor prices"
+    - "SEO tools collecting search result data"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
