@@ -6,7 +6,7 @@ tags: [vpn, antivirus, privacy, online-security, data-removal]
 
 commission:
   type: one-time
-  rate: "40% revenue share on new sales"
+  rate: "40%"
   mode: percentage
   value: 40
   currency: USD

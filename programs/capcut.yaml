@@ -6,7 +6,7 @@ tags: [video-editor, ai-video, captions, templates, content-creation]
 
 commission:
   type: recurring
-  rate: "Up to 35% recurring"
+  rate: "up to 35%"
   mode: tiered
   value: 35
   currency: USD
