@@ -22,9 +22,10 @@ const SIGNUP_URL_DEBT = new Set<string>(
 )
 
 /**
- * URL fields whose schema `pattern` refuses HTML character references
- * (`&amp;`, `&#38;`, `&#x26;`) and a `[` or `]` in the host (an IPv6
- * literal). Read from the schema, so this build (CI's
+ * URL fields whose schema `pattern` admits only an absolute http(s) URL with
+ * no whitespace, and refuses HTML character references (`&amp;`, `&#38;`,
+ * `&#x26;`) and a `[` or `]` in the host (an IPv6 literal). Read from the
+ * schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
  */
@@ -134,13 +135,17 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // while a GFM autolink keeps it and drops the `;` from the link. Refusing the
   // value is cheaper than rewriting every URL line of the Markdown twins.
   // The same pattern refuses an IPv6-literal host: the twins percent-encode
-  // every bracket, which would break one, and no program's URL is one.
+  // every bracket, which would break one, and no program's URL is one. And it
+  // admits only an absolute http(s) URL with no whitespace, because the other
+  // two rules read the host from `scheme://` at the very start: " https://…"
+  // and "//[::1]/" slipped past them.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
     if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
       throw new Error(
-        `${filename}: ${field} breaks one of two URL rules: no HTML character reference ` +
+        `${filename}: ${field} breaks a URL rule. It must be an absolute http:// or ` +
+          `https:// URL (lowercase scheme) with no spaces, no HTML character reference ` +
           `(write "&", not "&amp;" or "&#38;"), and no IPv6 literal host (no "[" or "]" ` +
           `before the path; use a domain name): "${value}"`
       )
