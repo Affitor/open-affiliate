@@ -219,7 +219,7 @@ export default function Home() {
                   variant="outline"
                   className="text-xs px-2.5 py-1 border-border/60"
                 >
-                  {programs.length} programs
+                  {livePrograms.length} programs
                 </Badge>
               </div>
 
@@ -318,7 +318,7 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/25">
             {[
-              { value: programs.length.toString(), label: "Programs", sub: "and growing" },
+              { value: livePrograms.length.toString(), label: "Programs", sub: "and growing" },
               { value: categories.length.toString(), label: "Categories", sub: "fully indexed" },
               { value: "100%", label: "Open Source", sub: "MIT licensed" },
             ].map((stat) => (

@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
-  programs,
   categories,
   categoryToSlug,
   slugToCategory,
@@ -31,7 +30,7 @@ export async function generateMetadata({
   const category = slugToCategory(slug);
   if (!category) return { title: "Category Not Found" };
 
-  const catPrograms = programs.filter((p) => p.category === category);
+  const catPrograms = livePrograms.filter((p) => p.category === category);
   // No brand suffix: the root layout's title template appends
   // " | OpenAffiliate". openGraph.title is not templated, so it adds its own.
   const title = `${category} Affiliate Programs — ${catPrograms.length} Programs`;

@@ -382,17 +382,18 @@
       "enum": [
         "active",
         "paused",
-        "discontinued"
+        "discontinued",
+        "no_program"
       ],
       "default": "active",
-      "description": "Whether the program accepts affiliates. discontinued keeps the page live to say so."
+      "description": "Whether the program accepts affiliates. discontinued (closed) and no_program (the brand runs no public program and no closure is on record) keep the page live to say so, with no terms. A credit-only referral reward is not a status: it is active, with the reward in commission and conditions. A no_program file sets no cookie_days, payout, signup_url, approval, approval_time or restrictions, and its commission is exactly the placeholder: type \"one-time\", rate \"none\", mode \"unknown\", value null, currency \"USD\", and no other key except a null duration or conditions."
     },
     "status_note": {
       "type": [
         "string",
         "null"
       ],
-      "description": "One sentence on the status, with its source, e.g. 'Ended in 2023 per ahrefs.com/blog/ahrefs-affiliate-program'"
+      "description": "One sentence on the status, with its source and a short quote where there is one, e.g. 'Cursor closed its referral program on July 23, 2026: \"the referral discount program is officially closed as of July 23, 2026\" (forum.cursor.com/t/166990)'. last_verified_at is the date it was checked."
     },
     "claimed_by": {
       "type": "string",

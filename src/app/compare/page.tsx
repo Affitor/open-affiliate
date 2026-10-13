@@ -21,7 +21,8 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, getProgram, type Program, commissionDisplay, networkName, IN_HOUSE } from "@/lib/programs";
+import { programs, getProgram, isLive, type Program, commissionDisplay, networkName, IN_HOUSE } from "@/lib/programs";
+import { hasNoProgram, noProgramAnswer } from "@/lib/no-program";
 import { applyButton } from "@/lib/apply-cta";
 import { CopyButton } from "@/components/copy-button";
 
@@ -70,9 +71,11 @@ function ProgramSearch({
   const results = useMemo(() => {
     if (!query) return [];
     const q = query.toLowerCase();
+    // Only live programs have terms to compare.
     return programs
       .filter(
         (p) =>
+          isLive(p) &&
           !excludeSlugs.includes(p.slug) &&
           (p.name.toLowerCase().includes(q) ||
             p.category.toLowerCase().includes(q) ||
@@ -145,9 +148,13 @@ function CompareContent() {
 
   const [slugs, setSlugs] = useState<string[]>(initialSlugs);
 
-  const selected: Program[] = slugs
+  const requested: Program[] = slugs
     .map((s) => getProgram(s))
     .filter((p): p is Program => p !== undefined);
+  // A column of terms only for a live program. A slug from an old link that has
+  // no program, or an unclear one, gets its answer above the table instead.
+  const selected = requested.filter(isLive);
+  const notLive = requested.filter((p) => !isLive(p));
 
   const syncUrl = (newSlugs: string[]) => {
     const qs = newSlugs.length > 0 ? `?p=${newSlugs.join(",")}` : "";
@@ -168,7 +175,10 @@ function CompareContent() {
   };
 
   const loadComparison = (comparison: string[]) => {
-    const valid = comparison.filter((s) => getProgram(s));
+    const valid = comparison.filter((s) => {
+      const p = getProgram(s);
+      return p !== undefined && isLive(p);
+    });
     setSlugs(valid);
     syncUrl(valid);
   };
@@ -184,6 +194,31 @@ function CompareContent() {
           Select up to {MAX_COMPARE} programs to compare side-by-side
         </p>
       </div>
+
+      {/* Brands in the link with no program to compare */}
+      {notLive.length > 0 && (
+        <div className="mb-6 space-y-2">
+          {notLive.map((p) => (
+            <div key={p.slug} className="flex items-start justify-between gap-3 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4">
+              <p className="text-sm">
+                {hasNoProgram(p)
+                  ? `Does ${p.name} have an affiliate program? ${noProgramAnswer(p)}`
+                  : `${p.name} affiliate program status is unclear. ${p.statusNote ? p.statusNote.trim().replace(/\.?$/, ".") : "The signup page is not working right now."}`}{" "}
+                <Link href={`/programs/${p.slug}`} className="underline underline-offset-4">
+                  Details
+                </Link>
+              </p>
+              <button
+                onClick={() => removeProgram(p.slug)}
+                className="text-muted-foreground/60 hover:text-foreground transition-colors shrink-0"
+                aria-label={`Remove ${p.name}`}
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Empty state */}
       {selected.length === 0 && (
@@ -201,8 +236,9 @@ function CompareContent() {
             <div className="flex flex-wrap gap-3">
               {POPULAR_COMPARISONS.map((comparison) => {
                 const names = comparison
-                  .map((s) => getProgram(s)?.name)
-                  .filter(Boolean);
+                  .map((s) => getProgram(s))
+                  .filter((p): p is Program => p !== undefined && isLive(p))
+                  .map((p) => p.name);
                 if (names.length < 2) return null;
                 return (
                   <button

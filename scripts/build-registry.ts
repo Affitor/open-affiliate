@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
+import { noProgramProblems, nonCashAffiliate } from "./program-rules"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -36,6 +37,9 @@ const SCHEMA_PROPERTIES = (
     properties: Record<string, { pattern?: string }>
   }
 ).properties
+
+/** Status values, read from the schema like the URL patterns above. */
+const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
 
 const REQUIRED_FIELDS = [
   "name",
@@ -105,7 +109,7 @@ interface YamlProgram {
   created_at?: string
   updated_at?: string
   last_verified_at?: string | null
-  status?: "active" | "paused" | "discontinued"
+  status?: "active" | "paused" | "discontinued" | "no_program"
   status_note?: string | null
 }
 
@@ -122,6 +126,21 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     throw new Error(
       `${filename}: restrictions must be a list. PR 92 used one sentence and the production build failed.`
     )
+  }
+
+  // An unknown status would read as active: a typo like "no-program" puts the
+  // page back in every list, with whatever terms the file still holds.
+  // A string, compared as is: `[no_program]` coerced to "no_program" and passed,
+  // while every reader compares with === and treated the entry as active.
+  if (data.status != null && (typeof data.status !== "string" || !STATUSES.includes(data.status))) {
+    throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got ${JSON.stringify(data.status)}`)
+  }
+  // A no_program file holds no terms and only the commission placeholder. The
+  // page, .md and API hide terms anyway; this keeps them out of the YAML that
+  // contributors and scripts read. Rules in scripts/program-rules.ts.
+  const noProgram = noProgramProblems(data)
+  if (noProgram.length) {
+    throw new Error(`${filename}: status is no_program, so it holds no terms: ${noProgram.join("; ")}`)
   }
 
   const expectedSlug = basename(filename, ".yaml")
@@ -236,6 +255,14 @@ function buildRegistry(): void {
       const data = parse(raw) as Record<string, unknown>
 
       validateProgram(data, filename)
+      // kind: affiliate with a figure that ranks, while the file's own text says
+      // gift card, voucher or store credit. Rule and its limits in program-rules.ts.
+      if (nonCashAffiliate(data)) {
+        throw new Error(
+          `kind is affiliate but the commission names a gift card, voucher or credit; set kind: referral, ` +
+            `or mode: unknown and value: null if it is not cash`
+        )
+      }
       programs.push(data as unknown as YamlProgram)
     } catch (err) {
       errors.push(`${filename}: ${(err as Error).message}`)

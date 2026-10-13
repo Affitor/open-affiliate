@@ -16,7 +16,8 @@
 const DEFAULT_API = "https://openaffiliate.dev";
 
 export interface Commission {
-  type: "recurring" | "one-time" | "tiered" | "hybrid";
+  /** "none" with rate "No affiliate program" when status is "discontinued" or "no_program". */
+  type: "recurring" | "one-time" | "tiered" | "hybrid" | "none";
   rate: string | number;
   currency: string;
   duration?: string | null;
@@ -55,9 +56,13 @@ export interface Program {
   network?: string | null;
   submittedBy: string;
   createdAt: string;
-  /** "paused" or "discontinued": returned by slug, left out of search results. */
-  status?: "active" | "paused" | "discontinued";
+  /** "paused", "discontinued" or "no_program": returned by slug, left out of search results. */
+  status?: "active" | "paused" | "discontinued" | "no_program";
   statusNote?: string | null;
+  /** "discontinued" and "no_program" only: "No (checked 2026-10-12). …", with the source. */
+  answer?: string;
+  /** "discontinued" and "no_program" only: verified programs that pay, to recommend instead. */
+  alternatives?: { slug: string; name: string; commission: string; url: string }[];
 }
 
 export interface Category {

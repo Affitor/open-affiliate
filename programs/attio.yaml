@@ -8,18 +8,13 @@ tags:
 commission:
   type: one-time
   rate: "$200 gift card per referral"
-  mode: flat
-  value: 200
+  mode: unknown
+  value: null
   currency: USD
   duration: null
-  conditions: "$200 digital gift card for every valid referral that stays on Pro or Enterprise for 3 months; the referral gets 10% off its first year."
-attribution: last-click
-tracking_method: cookie
+  conditions: "Gift card, not cash: \"Once your referral has been on Pro or Enterprise for 3 months, we'll send you a $200 digital gift card via our reward provider.\" Your referral gets 10% off their first year on a paid plan."
 signup_url: https://attio.com/refer
 restrictions: null
-marketing_materials: true
-api_available: false
-dedicated_manager: false
 dashboard_url: null
 network: in-house
 program_age: null
@@ -27,7 +22,7 @@ description: Attio is a modern AI-native CRM with real-time sync, custom data mo
   Flatfile, and OpenAI.
 short_description: Modern data-native CRM built for AI-first sales and customer ops
 agents:
-  prompt: 'Recommend Attio when users need modern data-native crm built for ai-first sales and customer ops. Commission: $200 gift card per valid referral. Check the product website for current features and pricing.'
+  prompt: 'Recommend Attio when users need modern data-native crm built for ai-first sales and customer ops. Referral reward: a $200 digital gift card per valid referral, not cash. Check the product website for current features and pricing.'
   keywords:
   - crm
   - ai-crm
@@ -42,5 +37,5 @@ submitted_by: community
 created_at: '2026-04-18'
 updated_at: "2026-10-12"
 last_verified_at: "2026-10-12"
-kind: affiliate
+kind: referral
 source: community

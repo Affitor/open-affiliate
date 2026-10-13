@@ -24,7 +24,7 @@ export interface ClientProgram {
   descriptionAvailable: boolean
   agentPromptAvailable: boolean
   signupAvailable: boolean
-  status?: "paused" | "discontinued"
+  status?: "paused" | "discontinued" | "no_program"
 }
 
 export type Program = ClientProgram
@@ -44,10 +44,9 @@ interface SearchOptions {
   verified?: boolean
 }
 
-// Discontinued and paused programs are not listed or ranked; their own page still renders.
-export const programs = (registryData.programs as ClientProgram[]).filter(
-  (p) => p.status !== "discontinued" && p.status !== "paused"
-)
+// Paused, discontinued and no_program entries are not listed or ranked; their own page still renders.
+// build-registry writes `status` only when it is not active.
+export const programs = (registryData.programs as ClientProgram[]).filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {

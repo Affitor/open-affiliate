@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { programs } from "@/lib/programs";
+import { livePrograms as programs } from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "About",

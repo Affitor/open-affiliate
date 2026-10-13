@@ -1,4 +1,5 @@
 import { programs, commissionDisplay} from "@/lib/programs"
+import { hasNoProgram } from "@/lib/no-program"
 
 const BADGE_HEIGHT = 20
 const FONT = 'font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"'
@@ -65,10 +66,11 @@ export async function GET(
   // "varies" on a badge people embed in their README, and appended a percent
   // sign to flat amounts.
   const rate = commissionDisplay(program.commission)
-  const value = `${rate} ${program.commission.type}`
+  // No program, no terms: the stored commission is a schema placeholder.
+  const value = hasNoProgram(program) ? "no affiliate program" : `${rate} ${program.commission.type}`
 
   const color = program.verified ? "#3b82f6" : "#6b7280"
-  const svg = renderBadge("OpenAffiliate", value, color, program.verified)
+  const svg = renderBadge("OpenAffiliate", value, color, program.verified && !hasNoProgram(program))
 
   return new Response(svg, {
     headers: {

@@ -1,19 +1,13 @@
 import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { ProgramLogo } from "@/components/program-logo"
-import { programs, affiliateScore, commissionLabel, type Program, commissionDisplay} from "@/lib/programs"
-
-const GENERIC = new Set(["saas", "marketing", "tool", "tools", "software", "platform", "app"])
-
-/** "keyword-research" and "ai-seo" become keyword, research, seo: matching on whole phrases missed most substitutes. */
-function words(phrases: string[]): Set<string> {
-  return new Set(
-    phrases.flatMap((x) => x.toLowerCase().split(/[^a-z0-9]+/)).filter((w) => w.length > 2 && !GENERIC.has(w))
-  )
-}
+import { programs, affiliateScore, commissionLabel, isLive, type Program, commissionDisplay} from "@/lib/programs"
+import { hasNoProgram, keywordWords as words, noProgramAlternatives } from "@/lib/no-program"
 
 function getRelatedPrograms(current: Program, limit = 4): Program[] {
-  const candidates = programs.filter((p) => p.slug !== current.slug && p.status !== "discontinued" && p.status !== "paused")
+  // A page that answers "no program" points only at verified programs that pay.
+  if (hasNoProgram(current)) return noProgramAlternatives(current, limit)
+  const candidates = programs.filter((p) => p.slug !== current.slug && isLive(p))
   const currentWords = words(current.agentKeywords ?? [])
 
   const scored = candidates.map((p) => {
@@ -25,8 +19,7 @@ function getRelatedPrograms(current: Program, limit = 4): Program[] {
     relevance += Math.min(tagOverlap, 2)
     // Agent keywords say what the product does ("keyword-research", "ai-seo"); tags are often generic.
     const kwOverlap = [...words([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => currentWords.has(w)).length
-    // A discontinued program's page exists to point at substitutes, so what the product does outweighs category.
-    relevance += current.status === "discontinued" ? Math.min(kwOverlap, 3) * 2 : Math.min(kwOverlap, 3)
+    relevance += Math.min(kwOverlap, 3)
     return { program: p, relevance, score: affiliateScore(p) }
   })
 

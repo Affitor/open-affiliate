@@ -13,7 +13,7 @@ interface ProgramSummary {
   cookieDays?: number;
   verified: boolean;
   signupUrl?: string;
-  status?: "active" | "paused" | "discontinued";
+  status?: "active" | "paused" | "discontinued" | "no_program";
 }
 
 interface ProgramFull extends ProgramSummary {
@@ -31,6 +31,8 @@ interface ProgramFull extends ProgramSummary {
   network?: string;
   programAge?: string;
   payout?: { minimum?: number; frequency?: string };
+  /** Set instead of terms when the brand has no program to join. */
+  answer?: string;
 }
 
 
@@ -141,6 +143,12 @@ program
       return;
     }
 
+    // A brand with no program comes back with an answer and no commission.
+    if (p.answer) {
+      console.log(`\n  ${p.name}\n  ${p.answer}\n  URL: ${p.url}\n`);
+      return;
+    }
+
     console.log(`
   ${p.name}${p.verified ? " ✓" : ""}${p.status && p.status !== "active" ? ` (${p.status})` : ""}
   ${p.shortDescription}
@@ -191,6 +199,10 @@ program
   .action(async (slug: string) => {
     const data = await fetchJSON(`/api/programs/${slug}`);
     const p = data as ProgramFull;
+    if (p.answer) {
+      console.error(`${p.name} has no affiliate program to add. ${p.answer}`);
+      process.exit(1);
+    }
 
     const fs = await import("fs");
     const entry: Record<string, unknown> = {

@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { getProgram } from "@/lib/programs"
+import { apiProgram } from "@/lib/no-program"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -28,5 +29,6 @@ export async function GET(
     )
   }
 
-  return NextResponse.json(program, { headers: CORS_HEADERS })
+  // A brand with no program gets the page's answer and alternatives, not terms.
+  return NextResponse.json(apiProgram(program), { headers: CORS_HEADERS })
 }

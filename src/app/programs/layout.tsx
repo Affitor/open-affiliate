@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { programs } from "@/lib/programs";
+import { livePrograms as programs } from "@/lib/programs";
 
 export const metadata: Metadata = {
   // No brand suffix here: the root layout's title template already appends

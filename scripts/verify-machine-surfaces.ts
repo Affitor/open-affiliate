@@ -1,13 +1,17 @@
 #!/usr/bin/env tsx
 
+import { spawn } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { createServer, type AddressInfo } from "node:net";
 import { join } from "node:path";
 
 import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
 import { BEST_LISTS, MAX_ROWS, buildBestList, listScore } from "../src/lib/best-lists";
+import { hasNoProgram } from "../src/lib/no-program";
 import {
+  commissionDisplay,
   categories,
   categoryToSlug,
   networkToSlug,
@@ -41,8 +45,10 @@ const llmsFull = requireText("llms-full.txt");
 if (!llms.startsWith("# OpenAffiliate\n")) {
   fail("llms.txt must start with the project H1");
 }
-// Same singular rule as generate-md's programCount().
-const programsPhrase = `${programs.length} ${programs.length === 1 ? "program" : "programs"}`;
+// Same singular rule as generate-md's programCount(). Counts are of live
+// programs: a brand with no program to join is not counted as one.
+const liveCount = programs.filter(isLive).length;
+const programsPhrase = `${liveCount} ${liveCount === 1 ? "program" : "programs"}`;
 if (!llms.includes(programsPhrase)) {
   fail("llms.txt program count differs from the registry");
 }
@@ -128,8 +134,8 @@ if (llmsBytes > LLMS_MAX_BYTES * 0.85) {
  *     a correct one passed. Exactly one claim is now allowed.
  */
 const LLMS_MAX_INLINE_PROGRAMS = 20;
-// Discontinued and paused programs are never listed as verified, even if their status was checked.
-const verifiedCount = programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused").length;
+// Paused, discontinued and no_program entries are never listed as verified, even if their status was checked.
+const verifiedCount = programs.filter((p) => p.verified && isLive(p)).length;
 const verifiedSection = llms
   .split(/^## /m)
   .find((part) => part.startsWith("Verified programs"));
@@ -268,7 +274,7 @@ if (isSample) {
 const verifiedPage = requireText("verified.md");
 if (!verifiedPage.startsWith("# ")) fail("verified.md must start with an H1");
 const verifiedLines = verifiedPage.split("\n");
-for (const program of programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused")) {
+for (const program of programs.filter((p) => p.verified && isLive(p))) {
   const marker = `/programs/${program.slug}.md`;
   const entry = verifiedLines.find((line) => line.includes(marker));
   if (!entry) fail(`verified.md is missing verified program ${program.slug}`);
@@ -408,7 +414,7 @@ for (const list of BEST_LISTS) {
   if (firstUnverified !== -1 && rows.slice(firstUnverified).some((p) => p.verified)) {
     fail(`best/${list.slug} lists an unverified program above a verified one`);
   }
-  if (rows.some((p) => p.status === "discontinued" || p.status === "paused")) {
+  if (rows.some((p) => !isLive(p))) {
     fail(`best/${list.slug} lists a program that is not live`);
   }
   const want = rows.map((p) => p.slug);
@@ -466,6 +472,31 @@ for (const [mode, value, rate, want] of [
   if (!Number.isFinite(got) || Math.abs(got - want) > 1e-9) {
     fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
   }
+}
+
+/**
+ * A brand with no program (no_program, or discontinued) gets a page that
+ * answers "no" and shows no terms, on the HTML page and in its .md twin.
+ *
+ * The .md twins are generated files and are read here. Program pages are not
+ * prerendered: SocialListenLoader awaits connection(), so /programs/[slug] is
+ * dynamic and the build writes no HTML for it. checkNoProgramPages, at the end
+ * of this file, boots this build with `next start` and fetches each page, which
+ * is the HTML a reader and a crawler receive.
+ */
+const noProgramPages = programs.filter(hasNoProgram);
+for (const program of noProgramPages) {
+  const md = requireText(join("programs", `${program.slug}.md`));
+  for (const line of ["## Terms", "Commission:", "Cookie window:", "Payout:", "Sign up:", "## Restrictions"]) {
+    if (md.includes(line)) fail(`programs/${program.slug}.md shows "${line}" for a brand with no program`);
+  }
+  if (!md.includes(`have an affiliate program? ${noAnswerStart(program)}`)) {
+    fail(`programs/${program.slug}.md does not answer "${noAnswerStart(program)}"`);
+  }
+}
+
+function noAnswerStart(program: { lastVerifiedAt?: string | null }): string {
+  return program.lastVerifiedAt ? `No (checked ${program.lastVerifiedAt}).` : "No.";
 }
 
 const robotsText = JSON.stringify(robots());
@@ -634,9 +665,10 @@ for (const network of liveNetworks) {
   }
   const foreign = foreignMarkup(md);
   if (foreign) fail(`networks/${slug}.md has markup the generator did not write: ${foreign}`);
-  // The twin lists every program on the network, paused and discontinued ones
-  // included and marked, as the category twins do.
-  const mdWant = programs.filter(inNetwork).map((p) => p.slug);
+  // The twin lists the network's live programs, the same set as the HTML table
+  // and the category twins: a brand with no program, or a status nobody could
+  // confirm, keeps its own .md and is neither listed nor counted here.
+  const mdWant = programs.filter((p) => inNetwork(p) && isLive(p)).map((p) => p.slug);
   const mdSection = md.split(/^## /m).find((part) => part.startsWith("Programs\n")) ?? "";
   const mdRows = [
     ...mdSection.matchAll(/^- \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
@@ -764,4 +796,90 @@ for (const file of ["networks.html", join("networks", "impact.html"), join("netw
 
 console.log(
   `[machine-surfaces] verified ${programs.length} programs, ${categories.length} categories, ${networks.size} networks, and ${sitemapEntries.length} sitemap URLs`
+);
+
+/**
+ * The page checks. The alternatives on a no-program page are other programs'
+ * cards and do show their terms; each is one `<a href="/programs/…">`, so those
+ * anchors are cut before looking for this program's own.
+ */
+const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
+const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
+
+function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+  const own = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
+  for (const label of JOIN_LABELS) {
+    if (own.includes(label)) fail(`${page} shows a join button ("${label}") for a brand with no program`);
+  }
+  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
+    fail(`${page} links the signup URL of a brand with no program`);
+  }
+  if (/>Commission<\/h3>/.test(own)) fail(`${page} shows a Commission card for a brand with no program`);
+  for (const label of TERM_LABELS) {
+    if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
+  }
+  if (/\b\d+d cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
+  if (program.commission.value != null) {
+    const figure = commissionDisplay(program.commission);
+    if (own.includes(figure)) fail(`${page} shows its stored commission (${figure}) for a brand with no program`);
+  }
+
+  const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
+    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
+    | undefined;
+  const first = faqPage?.mainEntity?.[0];
+  const answer = first?.acceptedAnswer?.text ?? "";
+  const start = noAnswerStart(program);
+  if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(start)) {
+    fail(`${page} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
+  }
+}
+
+async function checkNoProgramPages(): Promise<number> {
+  if (noProgramPages.length === 0) return 0;
+  const port = await new Promise<number>((resolve, reject) => {
+    const probe = createServer();
+    probe.once("error", reject);
+    probe.listen(0, "127.0.0.1", () => {
+      const { port } = probe.address() as AddressInfo;
+      probe.close(() => resolve(port));
+    });
+  });
+  const base = `http://127.0.0.1:${port}`;
+  const server = spawn(
+    process.execPath,
+    [join(ROOT, "node_modules", "next", "dist", "bin", "next"), "start", "-p", String(port), "-H", "127.0.0.1"],
+    { cwd: ROOT, stdio: "ignore" }
+  );
+  let exited = false;
+  server.once("exit", () => {
+    exited = true;
+  });
+  try {
+    for (let waited = 0; ; waited += 250) {
+      if (exited) fail("next start exited before serving; the no-program page checks need `npm run build` first");
+      if (waited > 30_000) fail("next start did not answer within 30 seconds");
+      if (await fetch(`${base}/robots.txt`).then((r) => r.ok, () => false)) break;
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+    for (const program of noProgramPages) {
+      const page = `/programs/${program.slug}`;
+      const res = await fetch(`${base}${page}`);
+      if (res.status !== 200) fail(`${page} answered ${res.status}`);
+      checkNoProgramHtml(program, page, await res.text());
+    }
+  } finally {
+    server.kill();
+  }
+  return noProgramPages.length;
+}
+
+checkNoProgramPages().then(
+  (count) => console.log(`[machine-surfaces] verified ${count} no-program pages as served by next start`),
+  (error) => {
+    console.error(error);
+    process.exit(1);
+  }
 );

@@ -62,6 +62,7 @@ export async function GET(
   if (!program) return svgError("program not found", 404)
   // No live score for a program that does not accept affiliates.
   if (program.status === "discontinued") return svgError("program discontinued", 200)
+  if (program.status === "no_program") return svgError("no affiliate program", 200)
   if (program.status === "paused") return svgError("program status unclear", 200)
 
   const score = computeScoreV1({

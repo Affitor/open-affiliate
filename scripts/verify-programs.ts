@@ -374,9 +374,9 @@ async function main() {
       continue;
     }
 
-    // A discontinued or paused program is listed precisely because its page is
-    // gone or says no; a dead URL there is the recorded state, not a failure.
-    if (p.status === "discontinued" || p.status === "paused") {
+    // A discontinued, paused or no_program entry is listed precisely because its
+    // page is gone or says no; a dead URL there is the recorded state, not a failure.
+    if (p.status === "discontinued" || p.status === "paused" || p.status === "no_program") {
       console.log(`⏭️  skipped (status: ${p.status})`);
       continue;
     }

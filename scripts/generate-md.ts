@@ -44,6 +44,7 @@ import {
   networkName,
 } from "../src/lib/programs"
 import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
+import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -143,18 +144,26 @@ const registryData = registry as {
 const programs = registryData.programs
 
 /**
- * Discontinued and paused programs keep their own .md (it says so), but are
- * never listed as live: not in verified lists, rankings or counts of verified.
+ * Paused, discontinued and no_program entries keep their own .md (it says so),
+ * but are never listed as live: not in verified lists, rankings or counts of
+ * verified.
  */
 function isLive(p: { status?: string | null }): boolean {
-  return p.status !== "discontinued" && p.status !== "paused"
+  return (p.status ?? "active") === "active"
 }
 function listedVerified(p: Program): boolean {
   return Boolean(p.verified) && isLive(p)
 }
+/**
+ * Every listing and every "N programs" count reads this set, as the HTML pages
+ * read src/lib/programs' livePrograms. A brand with no program keeps its own
+ * answer-only .md and is never counted as an affiliate program.
+ */
+const livePrograms = programs.filter(isLive)
 /** Suffix for list rows: what a reader must know before trusting the terms. */
 function statusMark(p: { verified?: boolean; status?: string | null }): string {
   if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "no_program") return " (no affiliate program)"
   if (p.status === "paused") return " (status unclear)"
   return p.verified ? "" : " (unverified, terms unconfirmed)"
 }
@@ -223,13 +232,7 @@ function payoutLine(p: Program): string | null {
  */
 function statusBlock(p: Program): string {
   const when = p.last_verified_at ? mdEscape(p.last_verified_at) : "never"
-  if (p.status === "discontinued") {
-    return [
-      `Status: discontinued. ${mdEscape(p.name)} does not run an affiliate program.`,
-      p.status_note ? `Source: ${mdEscape(p.status_note)}` : null,
-      `Last checked: ${when}`,
-    ].filter(Boolean).join("\n")
-  }
+  if (hasNoProgram(p)) return noProgramStatus(p)
   if (p.status === "paused") {
     return [
       `Status: unclear (paused).${p.status_note ? ` ${mdEscape(p.status_note)}` : ""}`,
@@ -291,7 +294,7 @@ function programMd(p: Program): string {
   ].filter(Boolean).join("\n")
 
   const links = [
-    p.signup_url ? `Sign up: ${mdUrl(p.signup_url)}` : null,
+    p.signup_url && !hasNoProgram(p) ? `Sign up: ${mdUrl(p.signup_url)}` : null,
     `Website: ${mdUrl(p.url)}`,
     `Full listing: ${BASE}/programs/${p.slug}`,
     `JSON: ${BASE}/api/programs/${p.slug}`,
@@ -301,15 +304,42 @@ function programMd(p: Program): string {
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
-    p.status === "discontinued" ? null : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
+    hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
     section("Use cases", bullets(p.agents?.use_cases)),
     // A body, not an inline fact: section() puts the first keyword at column zero.
     section("Trigger keywords", p.agents?.keywords && mdEscapeProse(p.agents.keywords.join(", "))),
-    section("Restrictions", bullets(p.restrictions)),
+    hasNoProgram(p) ? null : section("Restrictions", bullets(p.restrictions)),
     section("About", p.description && mdEscapeProse(p.description)),
     section("Links", links),
   ])
+}
+
+// ---------- No-program page -------------------------------------------------
+
+/**
+ * A brand with no program to join gets the answer the HTML page and the API
+ * give, worded by the same helper: no, when it was checked, and the dated
+ * source. The "Status:" prefix stays for readers keyed on it.
+ */
+function noProgramStatus(p: Program): string {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) throw new Error(`${p.slug}: missing from the site registry`)
+  return [
+    p.status === "discontinued" ? "Status: discontinued." : "Status: no affiliate program.",
+    `Does ${mdEscape(p.name)} have an affiliate program? ${mdEscape(noProgramAnswer(site))}`,
+  ].join("\n")
+}
+
+/** Where a Terms section would be: the page's alternatives, as rows linking their twins. */
+function noProgramAlternativesSection(p: Program): string | null {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) return null
+  const rows = noProgramAlternatives(site)
+    .map(a => programs.find(r => r.slug === a.slug))
+    .filter((r): r is Program => Boolean(r))
+    .map(row)
+  return section(`${mdHeading(p.name)} affiliate program alternatives`, rows.join("\n"))
 }
 
 // ---------- Compact row used by index pages ---------------------------------
@@ -705,7 +735,7 @@ function verifiedMd(): string {
     [
       `> The ${programCount(verified.length)} OpenAffiliate has checked against the`,
       `> program's own page, highest Affiliate Score first. The other`,
-      `> ${programs.length - verified.length} in the registry are community-submitted`,
+      `> ${livePrograms.length - verified.length} live programs are community-submitted`,
       `> and unconfirmed.`,
     ].join("\n"),
     section(
@@ -727,7 +757,7 @@ function verifiedMd(): string {
       "Elsewhere",
       [
         `- [Short index](${BASE}/llms.txt)`,
-        `- [All ${programCount(programs.length)}, grouped by category](${BASE}/programs.md)`,
+        `- [All ${programCount(livePrograms.length)}, grouped by category](${BASE}/programs.md)`,
         `- [Every program in full](${BASE}/llms-full.txt)`,
       ].join("\n"),
     ),
@@ -739,7 +769,7 @@ function llmsTxt(): string {
 
   const catLines = categories
     .map(c => {
-      const inCat = programs.filter(p => p.category === c)
+      const inCat = livePrograms.filter(p => p.category === c)
       const v = inCat.filter(listedVerified).length
       return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${programCount(inCat.length)}, ${v} verified`
     })
@@ -747,7 +777,7 @@ function llmsTxt(): string {
 
   const netLines = liveNetworks
     .map(n => {
-      const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
+      const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
       return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`
     })
     .join("\n")
@@ -755,7 +785,7 @@ function llmsTxt(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programCount(programs.length)} across`,
+      `> The open registry of affiliate programs. ${programCount(livePrograms.length)} across`,
       `> ${categories.length} categories, each with machine-readable guidance on when`,
       `> it is worth recommending.`,
     ].join("\n"),
@@ -764,7 +794,7 @@ function llmsTxt(): string {
     [
       `## Data quality`,
       ``,
-      `${verified.length} of ${programCount(programs.length)} (${((verified.length / programs.length) * 100).toFixed(1)}%)`,
+      `${verified.length} of ${programCount(livePrograms.length)} (${((verified.length / livePrograms.length) * 100).toFixed(1)}%)`,
       `have been verified by OpenAffiliate. The rest are community-submitted and`,
       `unconfirmed: the commission rate, cookie window and payout terms come from`,
       `the submitter and have not been checked against the program page.`,
@@ -840,7 +870,7 @@ function llmsFullTxt(): string {
   const header = joinSections([
     `# OpenAffiliate — full registry`,
     [
-      `> Every one of the ${programCount(programs.length)}, in full. Generated from the same`,
+      `> Every one of the ${programCount(livePrograms.length)}, in full. Generated from the same`,
       `> registry the website reads. For the short version see ${BASE}/llms.txt,`,
       `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
@@ -851,8 +881,22 @@ function llmsFullTxt(): string {
     ].join("\n"),
   ])
 
-  const sorted = [...programs.filter(listedVerified), ...programs.filter(p => !listedVerified(p))]
-  return header + "\n" + sorted.map(programMd).join("\n---\n\n")
+  const sorted = [...livePrograms.filter(listedVerified), ...livePrograms.filter(p => !listedVerified(p))]
+  // Not counted above: no program to join, or a status nobody could confirm.
+  const notLive = programs.filter(p => !isLive(p))
+  const tail = notLive.length
+    ? "\n---\n\n" + joinSections([
+        section(
+          "Not live",
+          [
+            `No affiliate program to join, or its status is unclear. Each page says which, and why.`,
+            ``,
+            ...notLive.map(p => `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)${statusMark(p)}`),
+          ].join("\n"),
+        ),
+      ])
+    : ""
+  return header + "\n" + sorted.map(programMd).join("\n---\n\n") + tail
 }
 
 // ---------- programs.md index ----------------------------------------------
@@ -862,7 +906,7 @@ function programsIndexMd(): string {
   // link out; llms-full.txt is where everything lives.
   const blocks = categories
     .map(c => {
-      const inCat = programs.filter(p => p.category === c)
+      const inCat = livePrograms.filter(p => p.category === c)
       if (!inCat.length) return null
       const v = inCat.filter(listedVerified)
       const sorted = [...v, ...inCat.filter(p => !listedVerified(p))]
@@ -879,8 +923,8 @@ function programsIndexMd(): string {
   return joinSections([
     `# All affiliate programs`,
     [
-      `> ${programCount(programs.length)} across ${categories.length} categories.`,
-      `> ${programs.filter(listedVerified).length} verified by OpenAffiliate; the rest are`,
+      `> ${programCount(livePrograms.length)} across ${categories.length} categories.`,
+      `> ${livePrograms.filter(listedVerified).length} verified by OpenAffiliate; the rest are`,
       `> community-submitted and unconfirmed.`,
     ].join("\n"),
     [
@@ -897,7 +941,7 @@ function indexMd(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programCount(programs.length)}.`,
+      `> The open registry of affiliate programs. ${programCount(livePrograms.length)}.`,
       `> Built for developers and AI agents.`,
     ].join("\n"),
     section(
@@ -1051,21 +1095,21 @@ function main(): void {
   }
 
   for (const c of categories) {
-    const inCat = programs.filter(p => p.category === c)
+    const inCat = livePrograms.filter(p => p.category === c)
     if (inCat.length) write(`categories/${categoryToSlug(c)}.md`, groupMd("category", c, inCat))
   }
 
   // Live networks only, the same set that gets an HTML page.
   const networks = liveNetworks
   for (const n of networks) {
-    const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
+    const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
     write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))
   }
 
   const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)
   console.log(`  ${written} files`)
-  console.log(`  ${programCount(programs.length)} (${verified} verified, ${programs.length - verified} unverified)`)
+  console.log(`  ${programCount(livePrograms.length)} live (${verified} verified, ${livePrograms.length - verified} unverified), ${programs.length - livePrograms.length} not live`)
   console.log(`  ${categories.length} categories, ${networks.length} networks`)
   console.log(`  Output: public/`)
 }

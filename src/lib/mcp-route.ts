@@ -1,6 +1,7 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
 import { livePrograms, categories, getProgram } from "@/lib/programs";
+import { apiProgram } from "@/lib/no-program";
 
 /**
  * The hosted MCP server, as route handlers.
@@ -146,7 +147,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       },
     },
     async (params) => {
-      // Discontinued and paused programs stay reachable through get_program, which carries their status.
+      // Paused, discontinued and no_program entries stay reachable through get_program, which carries their status.
       let results = livePrograms;
 
       if (params.category) {
@@ -231,7 +232,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
             type: "text" as const,
             text: JSON.stringify(
               {
-                ...program,
+                // A brand with no program gets the page's answer, not terms.
+                ...apiProgram(program),
                 markdownUrl: `https://openaffiliate.dev/programs/${program.slug}.md`,
               },
               null,
