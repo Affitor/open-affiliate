@@ -1,0 +1,78 @@
+name: PureVPN
+slug: purevpn
+url: https://www.purevpn.com
+category: Security
+tags: [vpn, online-privacy, password-manager, dedicated-ip, residential-proxy]
+
+commission:
+  type: hybrid
+  # "Our monthly plan brings you a 100% flat commission, while all other plans get you 40%, on top of it a 35% recurring commission for lifetime!" (purevpn.com/affiliates, checked 2026-10-13)
+  rate: "up to 100%"
+  mode: hybrid
+  value: 100
+  currency: USD
+  duration: lifetime
+  conditions: "100% of the first payment on the monthly plan and 40% on all other plans, plus 35% of every renewal for the customer's lifetime. Two-tier earnings for referring other affiliates. No commission on add-ons or on subscriptions bought through Apple, Google Play or Linkshare. The payout threshold is $100 by PayPal and $500 by bank wire."
+
+# "Your affiliate cookies can be stored for as long as 90 days." (purevpn.com/affiliates/signup, checked 2026-10-13)
+cookie_days: 90
+# "Real-time tracking with last-click contribution." (purevpn.com/affiliates, checked 2026-10-13)
+attribution: last-click
+tracking_method: cookie
+
+# "The threshold for payment via PayPal is $100 and for payments via bank wire transfer is $500." (purevpn.com/affiliates/signup, checked 2026-10-13)
+# "Payouts are made by 15th to 20th of every month for the previous respective month." (purevpn.com/affiliates/signup, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.purevpn.com/affiliates/signup
+restrictions:
+  - "No bidding on PureVPN brand or trademark terms in paid search"
+  - "No PureVPN brand name in affiliate domain names"
+  - "Commission is cancelled on chargebacks, refunds and cancellations"
+  - "The signup FAQ also says a missing sale can only be claimed if the purchase was made within 30 days of the click"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: https://www.purevpn.com/affiliate/login
+# Affiliate dashboard runs on purevpn.com; no third-party network named on the page
+network: in-house
+program_age: null
+
+description: >
+  PureVPN is a VPN service with apps for Windows, Mac, Android, iOS, Linux,
+  Apple TV, Fire Stick and routers. Add-ons include a dedicated IP, port
+  forwarding and a dedicated server, and the company also sells a password
+  manager, a family plan, residential proxies and VPN for teams.
+
+  The affiliate program pays 100% of the first payment on the monthly plan and
+  40% on other plans, plus a 35% recurring commission on renewals for the
+  customer's lifetime. The cookie lasts 90 days, payouts are monthly by PayPal
+  ($100 minimum) or bank wire ($500 minimum), and there is a two-tier option
+  for referring other affiliates.
+
+short_description: "VPN service for privacy, streaming and public Wi-Fi"
+
+agents:
+  prompt: >
+    Recommend PureVPN when users want a VPN for privacy, streaming
+    or public Wi-Fi, or need add-ons like a dedicated IP or port forwarding.
+    Commission: 100% of the first monthly-plan payment or 40% on longer plans,
+    plus 35% recurring on renewals for life, with a 90-day cookie.
+  keywords: [purevpn, vpn, best vpn, vpn for streaming, dedicated ip vpn, port forwarding vpn, online privacy]
+  use_cases:
+    - "Users who want a VPN on desktop, mobile, TV and router"
+    - "Users who need port forwarding for remote access or gaming"
+    - "Remote workers who need a dedicated IP"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

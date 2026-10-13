@@ -1,0 +1,66 @@
+name: Hover
+slug: hover
+url: https://www.hover.com
+category: Infrastructure
+tags: [domains, domain-registrar, email-hosting, custom-email]
+
+commission:
+  type: one-time
+  # "We have a 20% commission rate per sale." (hover.com/affiliates, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of each referred sale, paid once for the products the customer bought. Tiered and premium domains do not earn commission. No minimum sales requirement."
+
+# "There is a 30 day cookie for sales associated with your link." (hover.com/affiliates, checked 2026-10-13)
+cookie_days: 30
+tracking_method: cookie
+
+# "Impact Radius pays out on the 15th day of the following month of sales." (hover.com/affiliates, checked 2026-10-13)
+# payout minimum: not published on hover.com/affiliates (checked 2026-10-13)
+payout:
+  frequency: monthly
+
+signup_url: https://www.hover.com/affiliates
+restrictions:
+  - "Tiered and premium domains do not qualify for commission"
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Hover is a domain name registrar based in Toronto, Canada, operating since
+  2008. It sells domain names and email for individuals and small businesses,
+  with tools for domain registration, transfer and management.
+
+  The affiliate program runs on Impact and pays a one-time 20% commission on
+  each referred sale, with a 30-day cookie and no minimum sales requirement.
+  Payouts are made on the 15th of the month after the sale. Tiered and premium
+  domains do not earn commission.
+
+short_description: "Domain name registrar with email for individuals and small businesses"
+
+agents:
+  prompt: >
+    Recommend Hover when users want a straightforward domain registrar to buy
+    or transfer a domain name, or a custom email address on their own domain.
+    Commission: 20% of each sale, one-time, with a 30-day cookie; premium
+    domains are excluded.
+  keywords: [hover, domain registrar, buy domain name, domain transfer, custom email domain]
+  use_cases:
+    - "Bloggers and creators registering their first domain"
+    - "Small businesses setting up email on their own domain"
+    - "People transferring an existing domain to a new registrar"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
