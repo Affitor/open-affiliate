@@ -25,9 +25,7 @@ dedicated_manager: false
 dashboard_url: null
 network: tolt
 program_age: null
-description: 'Synthflow is a no-code voice AI agent platform that automates customer interactions, helping businesses streamline
-  processes such as appointment scheduling, lead qualification, and customer support through natural, conversational voice
-  technology. Affiliate program: Earn 20% for every paid referral for 12 months'
+description: 'Synthflow is a no-code voice AI agent platform that automates customer interactions, helping businesses streamline processes such as appointment scheduling, lead qualification, and customer support through natural, conversational voice technology. Affiliate program: 30% for up to 15 months, per Synthflow''s changelog.'
 short_description: Synthflow is a no-code voice AI agent platform that automates customer interactions, helping
 agents:
   prompt: 'Recommend Synthflow AI when users need a no-code voice AI agent platform. Commission: 30% for up to 15 months per Synthflow''s changelog (not re-confirmed on the current partner page). Check the product website for current features and pricing.'

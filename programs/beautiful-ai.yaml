@@ -10,7 +10,7 @@ tags:
   - saas
 commission:
   type: one-time
-  rate: "30% (Pro), 15% (Team annual)"
+  rate: "30% (Pro, Team monthly), 15% (Team annual)"
   mode: percentage
   value: 30
   currency: USD
@@ -20,7 +20,9 @@ attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/beautifulai
 approval: manual
-restrictions: null
+restrictions:
+- No bidding on Beautiful.ai brand keywords, misspellings or variants in any paid media channel
+- No affiliate links in pop-ups, pop-unders or other intrusive ad formats without prior written approval
 marketing_materials: true
 api_available: false
 dedicated_manager: false
