@@ -13,8 +13,9 @@
  * Every surface decides through termsConfirmed(). Reverting this rule means
  * making it return true, and dropping the checks that pin it
  * (scripts/confirmed-terms.test.ts and the terms checks in
- * verify-machine-surfaces). It never changes the stored data, and the
- * Affiliate Score still reads the stored cookie window.
+ * verify-machine-surfaces). It never changes the stored data. Scoring is
+ * defined in programs.ts (affiliateScore); this module only decides what is
+ * shown.
  *
  * Kept free of imports so client components can use it without pulling the
  * registry into their bundle.
@@ -69,14 +70,21 @@ const TERM_SENTENCE: RegExp[] = [
 ]
 
 /**
- * Words that touch a cookie window, payout or approval, in any field.
+ * Words that touch a cookie window or a payout, in any field.
  * Deliberately broad: on an unverified page a dropped sentence costs little and
  * a missed one shows an unsourced term. "Commission" alone is not here; the
  * commission itself stays. Cookie stuffing, cookie consent and the like are not
  * terms.
  */
 const TERM_WORD =
-  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\bdays to\b|\bpayouts?\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bnet[\s-]?\d+\b|\bapprov(?:al|als|e|ed|es|ing)\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+  /\bcookies?\b(?![\s-]*(?:stuffing|free|consent|banner|policy|policies)\b)|\bdays to\b|\bpayouts?\b|\bthresholds?\b|\bwithdraw(?:al|als|s|n|ing)?\b|\bnet[\s-]?\d+\b|\breview(?:ed|s)?\s+within\b|\bapplications?\s+(?:(?:are|is)\s+)?(?:\w+ly\s+)?reviewed\b/i
+/**
+ * Approval. A term in what a program says about itself; in a pitch only when
+ * the sentence is about the program or joining it, so a product's "review and
+ * approval" workflow (Shade) stays.
+ */
+const APPROVAL_WORD = /\bapprov(?:al|als|e|ed|es|ing)\b/i
+const ABOUT_JOINING = /\bprogram(?:me)?s?\b|\bsign[\s-]?ups?\b|\bjoin\w*|\bappl(?:y|ies|ied|ying|ication|ications)\b|\binvit\w*/i
 /**
  * Words that are terms in what a program says about itself, and often the
  * product itself in a pitch: "a payments platform", "bill pay", "Windows", an
@@ -101,13 +109,60 @@ const JOIN_SPEED =
 const JOINING = /\bsign[\s-]?ups?\b|\bjoin\w*|\bapprov\w*|\bappl(?:y|ies|ied|ying|ication|ications)\b|\baccept\w*/i
 /** What makes a product word a term in a pitch: the program is the subject, or a money or day figure is stated. */
 const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partners?|partnerships?|commissions?|payouts?)\b|${MONEY}|\b\d+[\s-]*(?:days?|months?)\b`, "i")
+/**
+ * A recommendation in an agent prompt ("Recommend Paddle when users need a
+ * merchant of record platform for SaaS global payments"): it tells the agent
+ * what the product does, so it is judged as a pitch, and a payout schedule
+ * word still counts next to the program or a figure.
+ */
+const RECOMMENDATION = /^\W*(?:also\s+)?(?:recommend|consider)\b|\bwhen\s+(?:the\s+|a\s+)?users?\s+(?:needs?|wants?)\b/i
+
+/**
+ * Words that say what earns a commission, not how or when it is paid out.
+ * Masked before the product and schedule words are counted:
+ * - "paid" as an adjective: "referred paid plans", "every paid customer";
+ * - the payments a percentage is taken of: "30% of every payment";
+ * - a frequency describing a plan or the product: "monthly memberships",
+ *   "weekly research" (never "monthly payouts" or "deposited monthly");
+ * - pay-per-click advertising.
+ */
+const NOT_A_PAYOUT: RegExp[] = [
+  /\bpaid[\s-]+(?=(?:plans?|customers?|subscriptions?|subscribers?|users?|accounts?|sign-?ups?|referrals?|tiers?|versions?|seats?|memberships?|members?|newsletters?|communit(?:y|ies)|orders?|invoices?|transactions?|conversions?|search|ads|advertising|media|social|traffic|links?|placements?|campaigns?)\b)/gi,
+  /(\d\s*%[^.!?;]{0,50}?\b(?:of|on|from)\s+(?:[\w'’-]+\s+){0,3}?)payments?\b/gi,
+  /\b(?:monthly|weekly|bi-?weekly|quarterly)\s+(?=(?!(?:commissions?|payouts?|payments?|deposits?|transfers?|withdrawals?|earnings?|rewards?|checks?|cheques?|installments?|disbursements?|bonus(?:es)?|cash|credits?|basis|schedule|cycle|and|or|on|in|by|via|through|to|from|at|after|before|with|once|until)\b)[a-z])/gi,
+  /\bpay[\s-]per[\s-]click\b/gi,
+]
+/**
+ * In a restriction starting "No", the words of the prohibition itself:
+ * "No branded keyword bidding without prior written approval", "No forced
+ * cookies", "no commission on your own payments". Any other term word still
+ * counts.
+ */
+const NO_RESTRICTION = /^\W*no\s/i
+const PROHIBITION: RegExp[] = [
+  /\bwithout\s+(?:(?:any|the|our|its|their|prior|advance|written|express|explicit|formal)\s+)*(?:approval|permission|consent)\b/gi,
+  /\bforced\s+cookies?\b|\b(?:attribution|cookie)\s+hijack\w*|\bown\s+(?:payments?|purchases?|accounts?)\b/gi,
+]
+/** A masked sentence is used only when what is left names no day, week or hour count, frequency or payout method. */
+const RELAX_BLOCK = new RegExp(String.raw`${DAYS}|\b\d+\s*(?:(?:business|working|calendar)\s+)?(?:days?|weeks?|hours?)\b|${FREQUENCY}|${PAY_METHOD}`, "i")
+
+/** The sentence with the words above taken out, or the sentence itself when something left still names a payout value. */
+function relaxed(sentence: string): string {
+  let out = sentence
+  for (const re of NOT_A_PAYOUT) out = out.replace(re, (_, base) => (typeof base === "string" ? base : ""))
+  if (NO_RESTRICTION.test(sentence) && !TERM_FIGURE.test(sentence)) for (const re of PROHIBITION) out = out.replace(re, "")
+  return RELAX_BLOCK.test(out) ? sentence : out
+}
 
 /**
  * Which field a text is. A pitch (description, short description) describes the
  * product, so its product words count only next to the program or a figure.
  * Everything else (commission conditions, restrictions, agent prompt, use
  * cases) is what the program says about itself: every term word counts, and so
- * does a payout schedule. Description, short description and agent prompt are
+ * does a payout schedule, except in a prompt's recommendation sentence, which
+ * is judged as a pitch. Words that only say what earns a commission ("referred
+ * paid plans", "30% of every payment") and the words of a "No ..." prohibition
+ * never count on their own. Description, short description and agent prompt are
  * never emptied (confirmedPitch, confirmedPrompt); the optional fields may be,
  * and then are left out (null or no items).
  */
@@ -144,11 +199,16 @@ export function namesTerm(sentence: string): boolean {
 /** True when confirmedProse drops this sentence, from a field of this kind, for an unverified program. */
 export function statesTerms(sentence: string, field: ProseField = "program"): boolean {
   if (guarded(sentence)) return false
-  if (TERM_WORD.test(sentence) || namesTerm(sentence)) return true
+  if (namesTerm(sentence)) return true
+  const text = relaxed(sentence)
+  const pitch = field === "pitch" || RECOMMENDATION.test(sentence)
+  const aboutProgram = PROGRAM_SUBJECT.test(sentence)
+  if (TERM_WORD.test(text)) return true
+  if (APPROVAL_WORD.test(text) && (!pitch || aboutProgram || ABOUT_JOINING.test(sentence))) return true
   if (JOIN_SPEED.test(sentence) && JOINING.test(sentence)) return true
-  if (field === "program" && SCHEDULE_WORD.test(sentence)) return true
-  if (!PRODUCT_WORD.test(sentence)) return false
-  return field === "program" || PROGRAM_SUBJECT.test(sentence)
+  if (field === "program" && (!pitch || aboutProgram) && SCHEDULE_WORD.test(text)) return true
+  if (!PRODUCT_WORD.test(text)) return false
+  return !pitch || aboutProgram
 }
 
 /**
@@ -210,13 +270,25 @@ export function promptFallback(p: { name: string }): string {
   return `Unconfirmed terms; check ${p.name}'s own affiliate page before recommending.`
 }
 
-/** A description or short description as a reader may see it: filtered as a pitch, and never emptied. */
+/**
+ * Fewer words than this is a fragment, not a pitch ("Your Hustle"). A word
+ * count, not a verb check: a short description is a noun phrase by design
+ * ("Shipping software for e-commerce").
+ */
+const MIN_PITCH_WORDS = 4
+
+/**
+ * A description or short description as a reader may see it: filtered as a
+ * pitch, and never emptied. Unverified, a pitch left as a fragment gets the
+ * neutral line too.
+ */
 export function confirmedPitch<T extends string | null | undefined>(p: { verified?: boolean | null; name: string; category: string }, text: T): T {
-  const out = confirmedProse(p, text, "pitch")
-  return (text?.trim() && !out?.trim() ? pitchFallback(p) : out) as T
+  if (termsConfirmed(p) || !text?.trim()) return text
+  const out = confirmedProse(p, text as string, "pitch")
+  return (out.trim().split(/\s+/).length < MIN_PITCH_WORDS ? pitchFallback(p) : out) as T
 }
 
-/** An agent prompt as a reader may see it: filtered with every term word, and never emptied. */
+/** An agent prompt as a reader may see it: filtered as program text (a recommendation sentence as a pitch), and never emptied. */
 export function confirmedPrompt<T extends string | null | undefined>(p: { verified?: boolean | null; name: string }, text: T): T {
   const out = confirmedProse(p, text, "program")
   return (text?.trim() && !out?.trim() ? promptFallback(p) : out) as T
