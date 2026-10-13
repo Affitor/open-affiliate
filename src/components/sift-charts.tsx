@@ -136,6 +136,11 @@ function CategoryInsightsTable({ data }: { data: CategoryInsight[] }) {
                 </td>
                 <td className="px-3 py-2.5 text-right hidden lg:table-cell tabular-nums font-medium">
                   {cat.avgCommission}
+                  {cat.avgCommissionBasis && (
+                    <span className="block text-[10px] font-normal text-muted-foreground/70">
+                      across {cat.avgCommissionBasis}
+                    </span>
+                  )}
                 </td>
                 <td className="px-3 py-2.5 hidden lg:table-cell">
                   {cat.topProgram.slug ? (
@@ -151,7 +156,7 @@ function CategoryInsightsTable({ data }: { data: CategoryInsight[] }) {
         </table>
       </div>
       <p className="px-4 py-2 text-[10px] text-muted-foreground/60">
-        Avg Commission: the mean single percentage rate across the category&apos;s live programs, unconfirmed rates included.
+        Avg Commission: the mean single percentage rate across the category&apos;s live programs; the line under it counts the rates and how many are unconfirmed.
       </p>
     </section>
   )

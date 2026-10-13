@@ -4,12 +4,12 @@ import {
   commissionDisplay,
   commissionUnknown,
   confirmedTerms,
+  commissionRank,
   livePrograms,
-  rankedCommission,
-  rankScore,
   type Program,
 } from "./programs"
 import type { Faq } from "./program-seo"
+import { compareCommission, isLifetime } from "./commission-order"
 
 /**
  * Ranked list pages. Adding a list is one entry in BEST_LISTS: the page, its
@@ -20,10 +20,11 @@ import type { Faq } from "./program-seo"
  * Rules every list shares, so no list can be hand-picked:
  *   - live programs only, and only those that publish a commission figure
  *     (every list ranks by it, and "Not published" cannot be ranked);
- *   - verified programs first, then by listScore (structured fields only:
- *     a single percentage or a flat US-dollar amount, compared through
- *     rankScore), or by the list's own `rank`;
- *   - ties go to lifetime recurring deals, then the name;
+ *   - verified programs first, then by commissionRank (structured fields
+ *     only: a single percentage or a flat US-dollar amount; listScore without
+ *     its cap, so $10,000 comes before $550), or by the list's own `rank`,
+ *     through compareCommission, the order every commission surface shares;
+ *   - ties go to lifetime recurring deals, then the name, then the slug;
  *   - at most MAX_ROWS rows.
  */
 export interface BestList {
@@ -38,7 +39,7 @@ export interface BestList {
   /** The filter in plain words, shown under "How we picked". Keep it in step with qualifies. */
   criteria: string
   qualifies: (p: Program) => boolean
-  /** Order within the verified and unverified groups; listScore when absent. */
+  /** Order within the verified and unverified groups; commissionRank when absent. */
   rank?: (p: Program) => number
   /** How the list is ordered, in plain words; SHARED_RULES when absent. */
   rules?: string
@@ -233,12 +234,14 @@ function nounOf(h1: string): string {
 }
 
 /**
- * The commission score lists filter and rank on, from structured fields only,
- * through the same rankedCommission the Affiliate Score uses: a single
- * percentage (mode "percentage") scores its value, and a flat amount in
- * explicit US dollars scores through rankScore's dollar mapping. Everything
- * else scores 0: tiered, hybrid and unknown modes, flat amounts in another or
- * no currency, and referral rewards (kind "referral": credit or gift cards).
+ * The commission score lists filter on, from structured fields only, through
+ * the same rankedCommission the Affiliate Score uses: commissionRank capped at
+ * 100. A single percentage (mode "percentage") scores its value, and a flat
+ * amount in explicit US dollars scores through commissionRank's dollar
+ * mapping. Everything else scores 0: tiered, hybrid and unknown modes, flat
+ * amounts in another or no currency, and referral rewards (kind "referral":
+ * credit or gift cards). Lists order on commissionRank itself, so a tie at the
+ * cap goes to the larger figure.
  *
  * The rate text is never read. Earlier versions parsed it for the % and $
  * figures inside tiered and hybrid deals, and every review round found another
@@ -247,8 +250,7 @@ function nounOf(h1: string): string {
  * places it after single rates in the others; its own page shows the terms.
  */
 export function listScore(p: Pick<Program, "commission" | "kind">): number {
-  const c = rankedCommission(p)
-  return c ? rankScore(c) : 0
+  return Math.min(100, commissionRank(p))
 }
 
 /**
@@ -265,10 +267,6 @@ export function listScore(p: Pick<Program, "commission" | "kind">): number {
  */
 export function flatUsdPayout(c: Program["commission"]): number {
   return c.mode === "flat" && c.currency === "USD" && typeof c.value === "number" && Number.isFinite(c.value) ? c.value : 0
-}
-
-function isLifetime(p: Program): boolean {
-  return p.commission.type === "recurring" && /lifetime/i.test(p.commission.duration ?? "")
 }
 
 /** "75-125% CPA + 25% annual, lifetime": the table's figure plus its duration. */
@@ -331,7 +329,7 @@ const built = new Map<string, BestListData>()
 export function buildBestList(list: BestList): BestListData {
   const cached = built.get(list.slug)
   if (cached) return cached
-  const rank = list.rank ?? listScore
+  const rank = list.rank ?? commissionRank
   const qualifying = livePrograms
     .filter((p) => (list.directory || !commissionUnknown(p.commission)) && list.qualifies(p))
     .sort(
@@ -340,9 +338,7 @@ export function buildBestList(list: BestList): BestListData {
         // A directory keeps programs that publish no rate: they go last in
         // their group, not mixed in with tiered deals that also score 0.
         Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission)) ||
-        rank(b) - rank(a) ||
-        Number(isLifetime(b)) - Number(isLifetime(a)) ||
-        a.name.localeCompare(b.name)
+        compareCommission(a, b, rank)
     )
   const rows = list.directory ? qualifying : qualifying.slice(0, MAX_ROWS)
   const verified = qualifying.filter((p) => p.verified)
@@ -387,7 +383,7 @@ export function bestListCopy(data: BestListData, esc: (text: string) => string =
   const v = verified.length
   const rules = esc(list.rules ?? SHARED_RULES)
   // "Pay the most" is by commission whatever order the list itself uses.
-  const topPaying = [...verified].sort((a, b) => listScore(b) - listScore(a)).slice(0, 3)
+  const topPaying = [...verified].sort((a, b) => compareCommission(a, b, commissionRank)).slice(0, 3)
   const list1 = (k: number, one: string, many: string) => (k === 1 ? one : many)
 
   const intro =

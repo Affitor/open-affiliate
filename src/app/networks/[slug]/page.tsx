@@ -6,11 +6,12 @@ import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { listScore } from "@/lib/best-lists";
 import {
   networkToSlug,
   slugToNetwork,
+  commissionRank,
   commissionStats,
+  compareCommission,
   formatCommissionDisplay,
   commissionLabel,
   commissionDisplay,
@@ -135,13 +136,9 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
-  // By commission as the list pages order it (listScore: structured fields
-  // only), then programs that publish no figure last.
-  const netPrograms = [...liveOn(network)].sort(
-    (a, b) =>
-      listScore(b) - listScore(a) ||
-      Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission))
-  );
+  // The order every commission surface shares (commission-order.ts):
+  // commissionRank, programs that publish no figure last, then lifetime, name.
+  const netPrograms = [...liveOn(network)].sort((a, b) => compareCommission(a, b, commissionRank));
   if (netPrograms.length === 0) notFound();
   const name = networkName(network);
   const heading = networkHeading(network);

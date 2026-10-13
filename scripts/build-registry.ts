@@ -331,9 +331,11 @@ async function buildRegistry(): Promise<void> {
   // The Affiliate Score reads fields the browser's copy leaves out (the
   // description, agent prompt and signup URL). So the score ships precomputed,
   // by the site's own affiliateScore over the registry.json just written:
-  // lists rank exactly as the server does.
+  // lists rank exactly as the server does. The commission order key ships
+  // the same way: it reads `kind`, which the browser's copy leaves out.
   const site = await import("../src/lib/programs")
   const scoreBySlug = new Map(site.programs.map((p) => [p.slug, site.affiliateScore(p)]))
+  const commissionRankBySlug = new Map(site.programs.map((p) => [p.slug, site.commissionRank(p)]))
 
   // Client-side catalog pages need filtering and comparison fields, not the
   // long descriptions, agent prompts, restrictions, or use cases in the full
@@ -365,6 +367,7 @@ async function buildRegistry(): Promise<void> {
       createdAt: p.created_at ?? "",
       source: p.source,
       score: scoreBySlug.get(p.slug),
+      commissionRank: commissionRankBySlug.get(p.slug),
       ...(p.status && p.status !== "active" ? { status: p.status } : {}),
     })),
   }

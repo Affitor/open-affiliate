@@ -40,6 +40,7 @@ import {
   IN_HOUSE,
   NETWORK_META,
   livePrograms,
+  searchPrograms,
   commissionUnknown,
   type Program,
 } from "../src/lib/programs";
@@ -1011,6 +1012,14 @@ for (const network of liveNetworks) {
     `${file} ItemList`,
     items.map((item) => item.url ?? ""),
     htmlRows.slice(0, NETWORK_ITEMLIST_MAX).map((s) => `${BASE_URL}/programs/${s}`)
+  );
+  // Table order is the commission order every surface shares
+  // (commission-order.ts): exactly what the REST API's commission_desc returns
+  // for the same network, ties included.
+  sameRows(
+    `${file} table order vs /api/programs?network=…&sort=commission_desc`,
+    htmlRows,
+    searchPrograms({ network, sort: "commission_desc" }).map((p) => p.slug)
   );
 
   const md = requireText(join("networks", `${slug}.md`));
