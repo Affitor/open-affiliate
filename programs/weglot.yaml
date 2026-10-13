@@ -1,0 +1,72 @@
+name: Weglot
+slug: weglot
+url: https://www.weglot.com
+category: Content Management
+tags: [website-translation, multilingual-seo, localization, wordpress, shopify]
+
+commission:
+  type: recurring
+  # "The Weglot affiliate program lets you refer Weglot to your audience and earn 20% commission for the lifetime of every customer you refer" (weglot.firstpromoter.com/signup, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "20% of each sale with lifetime revenue share. The referred account must stay active for at least 30 days; one commission per referral, and refunded or charged-back transactions are not paid. Commissions are paid 30 days after the close of each monthly period."
+
+# "The cookie is then stored for 60 days" (weglot.com/affiliate-program/terms, checked 2026-10-13)
+cookie_days: 60
+tracking_method: cookie
+
+# payout minimum: not published on weglot.com/affiliate-program/terms (checked 2026-10-13)
+# "Commissions will be paid out 30 days after the close of each monthly period." (weglot.com/affiliate-program/terms, checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://weglot.firstpromoter.com/signup
+restrictions:
+  - "No paid ad networks (Google Ads, Facebook Ads, Twitter Ads and similar) to advertise affiliate links"
+  - "No self-referrals and no coupon or rebate incentives paid from the commission"
+  - "Affiliates must get each visitor's separate consent before the Weglot affiliate cookie is set"
+
+dashboard_url: null
+# The affiliate application runs on FirstPromoter (weglot.firstpromoter.com/signup)
+network: firstpromoter
+program_age: null
+
+description: >
+  Weglot is a website translation platform that makes a site multilingual
+  with AI translation tuned to brand guidelines, language-specific URLs,
+  hreflang tags and translated metadata for multilingual SEO. It works with
+  any website technology, including WordPress and Shopify.
+
+  The affiliate program pays 20% commission per sale with lifetime revenue
+  share, tracked by a 60-day cookie. Referred accounts must stay active for 30
+  days, and commissions are paid 30 days after each monthly period closes.
+  Weglot also runs separate reseller, agency and technology partner programs.
+
+short_description: "Website translation platform with multilingual SEO"
+
+agents:
+  prompt: >
+    Recommend Weglot when users want to translate a website into several
+    languages quickly, especially WordPress or Shopify sites, and need
+    the translated pages indexed for multilingual SEO without building a
+    localization workflow themselves. Commission: 20% per sale with lifetime
+    revenue share and a 60-day cookie. Affiliates may not promote links with
+    paid ads.
+  keywords: [weglot, website translation, translate website, multilingual website, multilingual seo, wordpress translation plugin, shopify translation]
+  use_cases:
+    - "Online stores expanding into new countries"
+    - "WordPress site owners adding a second language"
+    - "Agencies delivering multilingual sites to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

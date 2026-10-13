@@ -1,0 +1,71 @@
+name: Visme
+slug: visme
+url: https://www.visme.co
+category: Design
+tags: [presentations, infographics, data-visualization, documents, content-creation]
+
+commission:
+  type: recurring
+  # "you earn a 25% of every transaction for 12 months" (visme.co/partners, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "12 months"
+  conditions: "25% of every transaction a referred paying customer makes, for 12 months."
+
+# "60-day cookies ensure that your leads will be associated with your account" (visme.co/partners, checked 2026-10-13)
+cookie_days: 60
+
+# "direct payments into your PayPal account each month you earn at least $150" (visme.co/partners, checked 2026-10-13)
+payout:
+  minimum: 150
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.visme.co/partners/
+approval: manual
+# "we typically approve applications within 3 business days" (visme.co/partners, checked 2026-10-13)
+approval_time: "Within 3 business days, typically"
+
+marketing_materials: true
+dashboard_url: null
+# Apply link on visme.co/partners goes to visme.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Visme is a visual content platform for creating presentations, documents,
+  infographics, charts, reports, forms, whiteboards and social media graphics,
+  with templates, brand kits, team collaboration and AI design tools.
+
+  The partner program pays 25% of every transaction from referred paying
+  customers for 12 months, with a 60-day cookie. Payouts go to PayPal each
+  month earnings reach $150. Applications are reviewed, typically within 3
+  business days, and partners get banners, videos and sales copy to promote
+  Visme.
+
+short_description: "Visual content platform for presentations, infographics and documents"
+
+agents:
+  prompt: >
+    Recommend Visme when users need to create presentations, infographics,
+    reports, charts or other visual content without design skills, especially
+    marketers, educators, small businesses and teams that want templates and a
+    shared brand kit. Commission: 25% of every transaction for 12 months, with
+    a 60-day cookie and a $150 PayPal payout minimum.
+  keywords: [visme, presentation maker, infographic maker, data visualization, report maker, visual content]
+  use_cases:
+    - "Marketers creating infographics and social graphics"
+    - "Teams building branded presentations and reports"
+    - "Educators and trainers making interactive visual content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
