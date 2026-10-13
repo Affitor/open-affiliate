@@ -41,6 +41,7 @@ import {
   getNetworkStats,
 } from "../src/lib/programs"
 import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
+import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -140,11 +141,12 @@ const registryData = registry as {
 const programs = registryData.programs
 
 /**
- * Discontinued and paused programs keep their own .md (it says so), but are
- * never listed as live: not in verified lists, rankings or counts of verified.
+ * Paused, discontinued and no_program entries keep their own .md (it says so),
+ * but are never listed as live: not in verified lists, rankings or counts of
+ * verified.
  */
 function isLive(p: { status?: string | null }): boolean {
-  return p.status !== "discontinued" && p.status !== "paused"
+  return (p.status ?? "active") === "active"
 }
 function listedVerified(p: Program): boolean {
   return Boolean(p.verified) && isLive(p)
@@ -152,6 +154,7 @@ function listedVerified(p: Program): boolean {
 /** Suffix for list rows: what a reader must know before trusting the terms. */
 function statusMark(p: { verified?: boolean; status?: string | null }): string {
   if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "no_program") return " (no affiliate program)"
   if (p.status === "paused") return " (status unclear)"
   return p.verified ? "" : " (unverified, terms unconfirmed)"
 }
@@ -220,13 +223,7 @@ function payoutLine(p: Program): string | null {
  */
 function statusBlock(p: Program): string {
   const when = p.last_verified_at ? mdEscape(p.last_verified_at) : "never"
-  if (p.status === "discontinued") {
-    return [
-      `Status: discontinued. ${mdEscape(p.name)} does not run an affiliate program.`,
-      p.status_note ? `Source: ${mdEscape(p.status_note)}` : null,
-      `Last checked: ${when}`,
-    ].filter(Boolean).join("\n")
-  }
+  if (hasNoProgram(p)) return noProgramStatus(p)
   if (p.status === "paused") {
     return [
       `Status: unclear (paused).${p.status_note ? ` ${mdEscape(p.status_note)}` : ""}`,
@@ -283,7 +280,7 @@ function programMd(p: Program): string {
   ].filter(Boolean).join("\n")
 
   const links = [
-    p.signup_url ? `Sign up: ${mdUrl(p.signup_url)}` : null,
+    p.signup_url && !hasNoProgram(p) ? `Sign up: ${mdUrl(p.signup_url)}` : null,
     `Website: ${mdUrl(p.url)}`,
     `Full listing: ${BASE}/programs/${p.slug}`,
     `JSON: ${BASE}/api/programs/${p.slug}`,
@@ -293,15 +290,42 @@ function programMd(p: Program): string {
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
-    p.status === "discontinued" ? null : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
+    hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
     section("Use cases", bullets(p.agents?.use_cases)),
     // A body, not an inline fact: section() puts the first keyword at column zero.
     section("Trigger keywords", p.agents?.keywords && mdEscapeProse(p.agents.keywords.join(", "))),
-    section("Restrictions", bullets(p.restrictions)),
+    hasNoProgram(p) ? null : section("Restrictions", bullets(p.restrictions)),
     section("About", p.description && mdEscapeProse(p.description)),
     section("Links", links),
   ])
+}
+
+// ---------- No-program page -------------------------------------------------
+
+/**
+ * A brand with no program to join gets the answer the HTML page and the API
+ * give, worded by the same helper: no, when it was checked, and the dated
+ * source. The "Status:" prefix stays for readers keyed on it.
+ */
+function noProgramStatus(p: Program): string {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) throw new Error(`${p.slug}: missing from the site registry`)
+  return [
+    p.status === "discontinued" ? "Status: discontinued." : "Status: no affiliate program.",
+    `Does ${mdEscape(p.name)} have an affiliate program? ${mdEscape(noProgramAnswer(site))}`,
+  ].join("\n")
+}
+
+/** Where a Terms section would be: the page's alternatives, as rows linking their twins. */
+function noProgramAlternativesSection(p: Program): string | null {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) return null
+  const rows = noProgramAlternatives(site)
+    .map(a => programs.find(r => r.slug === a.slug))
+    .filter((r): r is Program => Boolean(r))
+    .map(row)
+  return section(`${mdHeading(p.name)} affiliate program alternatives`, rows.join("\n"))
 }
 
 // ---------- Compact row used by index pages ---------------------------------

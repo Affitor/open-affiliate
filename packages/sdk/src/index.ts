@@ -35,10 +35,11 @@ export interface Program {
   name: string;
   url: string;
   category: string;
-  commission: Commission;
+  /** Absent when status is "discontinued" or "no_program": there are no terms. */
+  commission?: Commission;
   /** Omitted when the program does not publish a cookie window. */
   cookieDays?: number;
-  payout: Payout;
+  payout?: Payout;
   description: string;
   shortDescription: string;
   tags: string[];
@@ -55,9 +56,13 @@ export interface Program {
   network?: string | null;
   submittedBy: string;
   createdAt: string;
-  /** "paused" or "discontinued": returned by slug, left out of search results. */
-  status?: "active" | "paused" | "discontinued";
+  /** "paused", "discontinued" or "no_program": returned by slug, left out of search results. */
+  status?: "active" | "paused" | "discontinued" | "no_program";
   statusNote?: string | null;
+  /** "discontinued" and "no_program" only: "No (checked 2026-10-12). …", with the source. */
+  answer?: string;
+  /** "discontinued" and "no_program" only: verified programs that pay, to recommend instead. */
+  alternatives?: { slug: string; name: string; commission: string; url: string }[];
 }
 
 export interface Category {

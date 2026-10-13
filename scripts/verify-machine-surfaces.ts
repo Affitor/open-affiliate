@@ -7,7 +7,10 @@ import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
 import { BEST_LISTS, MAX_ROWS, buildBestList, listScore } from "../src/lib/best-lists";
+import { hasNoProgram } from "../src/lib/no-program";
 import {
+  isLive,
+  commissionDisplay,
   categories,
   categoryToSlug,
   networkToSlug,
@@ -120,8 +123,8 @@ if (llmsBytes > LLMS_MAX_BYTES * 0.85) {
  *     a correct one passed. Exactly one claim is now allowed.
  */
 const LLMS_MAX_INLINE_PROGRAMS = 20;
-// Discontinued and paused programs are never listed as verified, even if their status was checked.
-const verifiedCount = programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused").length;
+// Paused, discontinued and no_program entries are never listed as verified, even if their status was checked.
+const verifiedCount = programs.filter((p) => p.verified && isLive(p)).length;
 const verifiedSection = llms
   .split(/^## /m)
   .find((part) => part.startsWith("Verified programs"));
@@ -260,7 +263,7 @@ if (isSample) {
 const verifiedPage = requireText("verified.md");
 if (!verifiedPage.startsWith("# ")) fail("verified.md must start with an H1");
 const verifiedLines = verifiedPage.split("\n");
-for (const program of programs.filter((p) => p.verified && p.status !== "discontinued" && p.status !== "paused")) {
+for (const program of programs.filter((p) => p.verified && isLive(p))) {
   const marker = `/programs/${program.slug}.md`;
   const entry = verifiedLines.find((line) => line.includes(marker));
   if (!entry) fail(`verified.md is missing verified program ${program.slug}`);
@@ -400,7 +403,7 @@ for (const list of BEST_LISTS) {
   if (firstUnverified !== -1 && rows.slice(firstUnverified).some((p) => p.verified)) {
     fail(`best/${list.slug} lists an unverified program above a verified one`);
   }
-  if (rows.some((p) => p.status === "discontinued" || p.status === "paused")) {
+  if (rows.some((p) => !isLive(p))) {
     fail(`best/${list.slug} lists a program that is not live`);
   }
   const want = rows.map((p) => p.slug);
@@ -457,6 +460,60 @@ for (const [mode, value, rate, want] of [
   // NaN fails every comparison, so it would slip past the tolerance check alone.
   if (!Number.isFinite(got) || Math.abs(got - want) > 1e-9) {
     fail(`listScore(${mode} ${JSON.stringify(rate)}) is ${got}, expected ${want}`);
+  }
+}
+
+/**
+ * A brand with no program (no_program, or discontinued) gets a page that
+ * answers "no" and shows no terms. These read the prerendered HTML and the
+ * generated .md, so they hold what a reader and a crawler receive.
+ *
+ * The alternatives on the page are other programs' cards and do show their
+ * terms; each is one `<a href="/programs/…">`, so those anchors are cut before
+ * looking for this program's own.
+ */
+const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
+const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
+for (const program of programs.filter(hasNoProgram)) {
+  const file = join("programs", `${program.slug}.html`);
+  if (!existsSync(join(BUILD_APP, file))) fail(`${file} was not prerendered; no-program pages are prerendered`);
+  const html = readFileSync(join(BUILD_APP, file), "utf8");
+  const own = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
+
+  for (const label of JOIN_LABELS) {
+    if (own.includes(label)) fail(`${file} shows a join button ("${label}") for a brand with no program`);
+  }
+  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
+    fail(`${file} links the signup URL of a brand with no program`);
+  }
+  if (/>Commission<\/h3>/.test(own)) fail(`${file} shows a Commission card for a brand with no program`);
+  for (const label of TERM_LABELS) {
+    if (own.includes(label)) fail(`${file} shows "${label}" for a brand with no program`);
+  }
+  if (/\b\d+d cookie\b/.test(own)) fail(`${file} shows a cookie window for a brand with no program`);
+  if (program.commission.value != null) {
+    const figure = commissionDisplay(program.commission);
+    if (own.includes(figure)) fail(`${file} shows its stored commission (${figure}) for a brand with no program`);
+  }
+
+  const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
+    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
+    | undefined;
+  const first = faqPage?.mainEntity?.[0];
+  const answer = first?.acceptedAnswer?.text ?? "";
+  const checked = program.lastVerifiedAt ? `No (checked ${program.lastVerifiedAt}).` : "No.";
+  if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(checked)) {
+    fail(`${file} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${checked}"; got ${JSON.stringify(answer.slice(0, 80))}`);
+  }
+
+  const md = requireText(join("programs", `${program.slug}.md`));
+  for (const line of ["## Terms", "Commission:", "Cookie window:", "Payout:", "Sign up:", "## Restrictions"]) {
+    if (md.includes(line)) fail(`programs/${program.slug}.md shows "${line}" for a brand with no program`);
+  }
+  if (!md.includes(`have an affiliate program? ${checked}`)) {
+    fail(`programs/${program.slug}.md does not answer "${checked}"`);
   }
 }
 

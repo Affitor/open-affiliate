@@ -70,7 +70,7 @@ export default function APIPage() {
           <h2 id="example" className="text-lg font-semibold mb-3">Example</h2>
           <p className="text-sm text-muted-foreground mb-3">
             <code>cookieDays</code> and the <code>payout</code> fields are left out when a program does not publish them.
-            Programs with <code>status</code> <code>paused</code> or <code>discontinued</code> are returned by slug but not in search results.
+            Programs with <code>status</code> <code>paused</code>, <code>discontinued</code> or <code>no_program</code> are returned by slug but not in search results. A <code>discontinued</code> or <code>no_program</code> entry carries no terms: it returns <code>answer</code> and <code>alternatives</code> instead.
           </p>
           <CodeBlock
             label="curl"

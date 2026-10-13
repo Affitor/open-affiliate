@@ -37,6 +37,10 @@ const SCHEMA_PROPERTIES = (
   }
 ).properties
 
+/** Status values, read from the schema like the URL patterns above. */
+const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
+const NO_PROGRAM_FORBIDDEN = ["cookie_days", "payout", "signup_url", "approval", "approval_time", "restrictions"]
+
 const REQUIRED_FIELDS = [
   "name",
   "slug",
@@ -105,7 +109,7 @@ interface YamlProgram {
   created_at?: string
   updated_at?: string
   last_verified_at?: string | null
-  status?: "active" | "paused" | "discontinued"
+  status?: "active" | "paused" | "discontinued" | "no_program"
   status_note?: string | null
 }
 
@@ -122,6 +126,22 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     throw new Error(
       `${filename}: restrictions must be a list. PR 92 used one sentence and the production build failed.`
     )
+  }
+
+  // An unknown status would read as active: a typo like "no-program" puts the
+  // page back in every list, with whatever terms the file still holds.
+  if (data.status != null && !STATUSES.includes(String(data.status))) {
+    throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got "${data.status}"`)
+  }
+  // A no_program file holds no terms. The page, .md and API hide them anyway;
+  // this keeps stale ones out of the YAML that contributors and scripts read.
+  if (data.status === "no_program") {
+    const terms = NO_PROGRAM_FORBIDDEN.filter((field) => data[field] != null)
+    const commission = data.commission as Record<string, unknown> | undefined
+    if (commission && (commission.mode !== "unknown" || commission.value != null)) terms.push("a commission figure")
+    if (terms.length) {
+      throw new Error(`${filename}: status is no_program but the file still sets ${terms.join(", ")}. Remove them.`)
+    }
   }
 
   const expectedSlug = basename(filename, ".yaml")

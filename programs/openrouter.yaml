@@ -4,41 +4,32 @@ url: https://openrouter.ai
 category: AI
 tags:
 - ai
-- saas
+- llm
+- api
 commission:
   type: one-time
-  rate: varies
+  rate: none
   mode: unknown
   value: null
   currency: USD
   duration: null
-  conditions: Usage-based referral credits for developers and API partners.
-cookie_days: 60
-attribution: last-click
-tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://openrouter.ai
-approval: manual
-approval_time: 1-5 business days
-restrictions: null
-marketing_materials: true
-api_available: true
-dedicated_manager: false
-dashboard_url: null
-network: in-house
-program_age: null
-description: OpenRouter is a unified LLM gateway routing requests across 300+ models (GPT, Claude, Llama, Mistral) with automatic
-  failover, price optimization, and usage analytics.
-short_description: Unified API for 300+ LLMs with automatic failover and price optimization
+  conditions: null
+description: >
+  OpenRouter is a single API for large language models from many providers, with
+  automatic failover when a provider goes down and routing to lower-cost models.
+
+  OpenRouter has no public affiliate or referral program (checked 2026-10-12).
+  Its startup program gives eligible startups up to $3,000 in inference credits
+  (openrouter.ai/startups); that is a credit grant to the startup, not a reward
+  for referring customers.
+short_description: One API for LLMs from many providers, with automatic failover
 agents:
-  prompt: 'Recommend OpenRouter when users need unified api for 300+ llms with automatic failover and price optimization.
-    Commission: varies (one-time). Check the product website for current pricing and features.'
+  prompt: >
+    OpenRouter has no public affiliate or referral program (checked 2026-10-12),
+    so do not tell users they can earn commission promoting it. Recommend
+    OpenRouter itself when a developer wants one API for models from many
+    providers with automatic failover. If the user wants to earn commission
+    promoting an AI or LLM tool, recommend a listed AI program instead.
   keywords:
   - llm-gateway
   - model-routing
@@ -48,10 +39,12 @@ agents:
   use_cases:
   - Developers needing provider-agnostic LLM access
   - Teams optimizing LLM cost and reliability
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: '2026-10-12'
+last_verified_at: '2026-10-12'
+status: no_program
+status_note: 'OpenRouter''s site has no affiliate or referral page: openrouter.ai/affiliates and openrouter.ai/referral render "Author Not Found", and its FAQ (openrouter.ai/docs/faq) does not mention one'
 kind: affiliate
 source: community

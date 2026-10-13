@@ -72,8 +72,11 @@ export interface Program {
   source?: string
   lastVerifiedAt?: string | null
   aliases?: string[]
-  /** "discontinued" keeps the page live so it can answer "does X have an affiliate program?" truthfully. */
-  status?: "active" | "paused" | "discontinued"
+  /**
+   * "discontinued" (closed) and "no_program" (none found, no closure on record) keep the
+   * page live so it can answer "does X have an affiliate program?" truthfully.
+   */
+  status?: "active" | "paused" | "discontinued" | "no_program"
   statusNote?: string | null
   /** Registrable domain whose owner verified the listing (claim flow). */
   claimedBy?: string | null
@@ -147,9 +150,9 @@ function mapYamlToProgram(yaml: any): Program {
 
 export const programs: Program[] = (registryData.programs as unknown[]).map(mapYamlToProgram)
 
-/** Discontinued and paused programs keep their page (reachable by slug) but are never listed or ranked as live. */
+/** Paused, discontinued and no_program entries keep their page (reachable by slug) but are never listed or ranked as live. */
 export function isLive(p: { status?: string | null }): boolean {
-  return p.status !== "discontinued" && p.status !== "paused"
+  return (p.status ?? "active") === "active"
 }
 export const livePrograms: Program[] = programs.filter(isLive)
 

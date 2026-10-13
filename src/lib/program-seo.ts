@@ -1,4 +1,5 @@
-import { commissionDisplay, commissionUnknown, isCreditReward, IN_HOUSE, type Program } from "@/lib/programs"
+import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, type Program } from "@/lib/programs"
+import { hasNoProgram, noProgramAnswer } from "@/lib/no-program"
 
 const SITE = "https://openaffiliate.dev"
 
@@ -13,7 +14,7 @@ export function isPaused(p: Program): boolean {
 
 /** Active but no quote from the brand's own page backs the terms. */
 export function isUnverified(p: Program): boolean {
-  return !p.verified && !isDiscontinued(p) && !isPaused(p)
+  return !p.verified && isLive(p)
 }
 
 /**
@@ -66,6 +67,7 @@ function rateLabel(c: Program["commission"]): string {
 /** Title under 60 characters: the query, the number, the site. No dashes. */
 export function seoTitle(p: Program): string {
   if (isDiscontinued(p)) return `${p.name} Affiliate Program: Discontinued | OpenAffiliate`
+  if (p.status === "no_program") return `${p.name} Affiliate Program: Not Offered | OpenAffiliate`
   const base = `${p.name} Affiliate Program`
   // Unconfirmed figures stay out of the search snippet; the page shows them labelled.
   const rate = isPaused(p)
@@ -83,6 +85,10 @@ export function seoTitle(p: Program): string {
 export function seoDescription(p: Program): string {
   if (isDiscontinued(p)) {
     return `${p.name} no longer runs an affiliate program. Compare similar programs that still pay commission, with their terms and how to join.`
+  }
+  if (p.status === "no_program") {
+    const checked = p.lastVerifiedAt ? ` (checked ${p.lastVerifiedAt})` : ""
+    return `${p.name} has no public affiliate program${checked}. Compare similar programs that pay commission, with their terms and how to join.`
   }
   if (isPaused(p)) {
     return `${p.name} affiliate program status is unclear. See the last known terms, not confirmed, and similar programs that still pay commission.`
@@ -113,11 +119,11 @@ export interface Faq {
 /** Questions partners search, answered only from fields we hold. A question with no data is left out. */
 export function buildFaq(p: Program): Faq[] {
   const name = p.name
-  if (isDiscontinued(p)) {
+  if (hasNoProgram(p)) {
     return [
       {
         q: `Does ${name} have an affiliate program?`,
-        a: `No. ${name} does not run an affiliate program${p.statusNote ? `: ${p.statusNote}` : ""}. The programs listed below pay commission for promoting similar products.`,
+        a: `${noProgramAnswer(p)} The programs listed below pay commission for promoting similar products.`,
       },
     ]
   }

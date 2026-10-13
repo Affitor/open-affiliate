@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { programs, getProgram , commissionDisplay} from "@/lib/programs";
+import { hasNoProgram } from "@/lib/no-program";
 
 export const alt = "OpenAffiliate: Affiliate Program Details";
 export const size = { width: 1200, height: 630 };
@@ -38,6 +39,9 @@ export default async function Image({
       { ...size }
     );
   }
+
+  // Closed or never run: the card says so instead of showing placeholder terms.
+  const noProgram = hasNoProgram(program);
 
   return new ImageResponse(
     (
@@ -102,7 +106,7 @@ export default async function Image({
               <span style={{ fontSize: "48px", fontWeight: 800, color: "white", lineHeight: 1.1 }}>
                 {program.name}
               </span>
-              {program.verified && (
+              {program.verified && !noProgram && (
                 <span style={{ fontSize: "14px", color: "#34d399", marginTop: "4px" }}>
                   Verified Program
                 </span>
@@ -121,29 +125,33 @@ export default async function Image({
         {/* Bottom stats */}
         <div style={{ display: "flex", gap: "48px" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: "36px", fontWeight: 700, color: "#34d399" }}>
-              {commissionDisplay(program.commission)}
+            <span style={{ fontSize: "36px", fontWeight: 700, color: noProgram ? "#fbbf24" : "#34d399" }}>
+              {noProgram ? "No affiliate program" : commissionDisplay(program.commission)}
             </span>
             <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
-              {program.commission.type} commission
+              {noProgram ? (program.lastVerifiedAt ? `Checked ${program.lastVerifiedAt}` : "Status") : `${program.commission.type} commission`}
             </span>
           </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
-            </span>
-            <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
-              Cookie
-            </span>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
-            <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
-              {program.payout.minimum != null ? `$${program.payout.minimum}` : "n/a"}
-            </span>
-            <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
-              Min Payout
-            </span>
-          </div>
+          {!noProgram && (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
+                {program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+              </span>
+              <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
+                Cookie
+              </span>
+            </div>
+          )}
+          {!noProgram && (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ fontSize: "36px", fontWeight: 700, color: "white" }}>
+                {program.payout.minimum != null ? `$${program.payout.minimum}` : "n/a"}
+              </span>
+              <span style={{ fontSize: "13px", color: "#64748b", textTransform: "uppercase", letterSpacing: "2px" }}>
+                Min Payout
+              </span>
+            </div>
+          )}
           <div style={{ display: "flex", flexDirection: "column" }}>
             <span style={{ fontSize: "20px", fontWeight: 500, color: "#94a3b8", marginTop: "8px" }}>
               {program.category}
