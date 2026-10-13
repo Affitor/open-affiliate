@@ -8,26 +8,16 @@ tags:
   - e-commerce
   - saas
 commission:
-  type: one-time
-  rate: 25%
+  type: recurring
+  rate: "25%"
   mode: percentage
   value: 25
   currency: USD
-  duration: null
-  conditions: Earn 25% Commission for your referrals (avg commission $80/mo/customer)
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "25% of every monthly payment for as long as the referral stays subscribed."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.tryatria.com/affiliate
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -48,10 +38,10 @@ agents:
   use_cases:
     - Teams looking for content management solutions
     - Companies evaluating Atria vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

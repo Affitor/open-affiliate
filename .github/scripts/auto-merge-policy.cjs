@@ -1,10 +1,18 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { parseDocument } = require("yaml")
+const { isAlias, isNode, parseDocument, visit } = require("yaml")
+// Every key a listing may have, at every level the schema names keys.
+const PROGRAM_SCHEMA = require("../../schema/program.schema.json")
+// The sync's own settings: API, marketplace prefix, pause limit, bot, label.
+const AFFITOR_SYNC = require("../../scripts/sync-affitor.config.json")
+// Brands the sync must never list (OA or Affitor slug → reason).
+const AFFITOR_SKIP = require("../../data/affitor-sync-skip.json")
 
 const MAX_PROGRAM_FILES = 3
 const MAX_ADDITIONS_PER_FILE = 150
 const MAX_TOTAL_ADDITIONS = 300
 const MAX_FILE_BYTES = 20_000
+// The Affitor list measured 71 KB for 52 programs on 2026-10-12.
+const MAX_API_BYTES = 2_000_000
 const FETCH_TIMEOUT_MS = 10_000
 
 const PROGRAM_PATH = /^programs\/[a-z0-9]+(?:-[a-z0-9]+)*\.yaml$/
@@ -71,6 +79,7 @@ async function fetchProgramContent(
     fetchImpl = globalThis.fetch,
     maxBytes = MAX_FILE_BYTES,
     timeoutMs = FETCH_TIMEOUT_MS,
+    accept = "text/plain",
   } = {}
 ) {
   const controller = new AbortController()
@@ -82,7 +91,7 @@ async function fetchProgramContent(
 
   try {
     const response = await fetchImpl(rawUrl, {
-      headers: { Accept: "text/plain" },
+      headers: { Accept: accept },
       signal: controller.signal,
     })
     if (!response.ok) {
@@ -252,6 +261,8 @@ function labelNames(labels) {
 
 // Native auto-merge stays off until a person adds `reviewed` for this head.
 // Eligible YAML without that label is still a candidate. `do-not-merge` never arms.
+// Human lane only: the affitor-sync lane never uses native auto-merge (see
+// .github/workflows/affitor-sync-merge.yml).
 function shouldArmAutoMerge({ eligible, labels, live }) {
   if (!live || !eligible) return false
   const names = labelNames(labels)
@@ -259,15 +270,491 @@ function shouldArmAutoMerge({ eligible, labels, live }) {
   return names.has("reviewed")
 }
 
+// ---------- affitor-sync lane ----------------------------------------------
+//
+// A pull request opened by the sync's GitHub App, from
+// .github/workflows/sync-affitor.yml. It passes only updates to listings the
+// sync already created: every file must be modified (never new, removed or
+// renamed), keep the Affitor program it is linked to, hold only schema keys
+// and no anchors, not be on the skip list, have every field the sync owns
+// equal to what the Affitor API says now, and change nothing else. A pull
+// request with a new listing always goes to a person, who sets its category,
+// description and agents block. Anything this lane cannot confirm leaves the
+// pull request to a person. auto-merge.yml runs it for the comment; the merge
+// itself is affitor-sync-merge.yml's, on the exact head CI passed.
+
+/** The bot's pull requests go through this lane; every other author through the human lane. */
+function isAffitorSyncPullRequest(pullRequest, config = AFFITOR_SYNC) {
+  return pullRequest.user?.login === config.bot
+}
+
+/** The Affitor API, read like a program file: time-bounded, size-capped. */
+async function fetchAffitorJson(url, options = {}) {
+  return JSON.parse(
+    await fetchProgramContent(url, {
+      maxBytes: MAX_API_BYTES,
+      accept: "application/json",
+      ...options,
+    })
+  )
+}
+
+const ABSENT = Symbol("absent")
+const UNPUBLISHED = [
+  "approval",
+  "approval_time",
+  "restrictions",
+  "marketing_materials",
+  "api_available",
+  "dedicated_manager",
+  "dashboard_url",
+  "program_age",
+]
+const WHOLE = new Set([
+  "duration_months",
+  "cookie_window_days",
+  "default_hold_period_days",
+])
+// Keys that would make the list one page of several (see fetchList in the sync).
+const PAGING = ["meta", "pagination", "next", "next_cursor", "total"]
+const PAUSE_NOTE = /^No longer listed on the Affitor marketplace as of \d{4}-\d{2}-\d{2}\.$/
+
+const isRecord = (value) =>
+  typeof value === "object" && value !== null && !Array.isArray(value)
+
+/**
+ * Every field the sync owns, keyed by dotted path, at the value the sync
+ * writes for this program's detail (ABSENT: the sync deletes it), or why the
+ * detail gives no terms. Mirrors affitorTerms() and ownedFields() in
+ * scripts/sync-affitor.ts. scripts/sync-affitor.test.ts runs this lane on
+ * the sync's own output, so a drift between the two fails a test.
+ */
+function affitorOwnedFields(program, marketplace) {
+  const policy = program.default_policy ?? {}
+  const numbers = {
+    commission_rate: policy.commission_rate,
+    commission_fixed: policy.commission_fixed,
+    duration_months: policy.duration_months,
+    cookie_window_days: program.cookie_window_days,
+    default_hold_period_days: program.default_hold_period_days,
+    payout_threshold: program.payout_threshold,
+  }
+  for (const [field, value] of Object.entries(numbers)) {
+    if (value == null) continue
+    if (typeof value !== "number" || !Number.isFinite(value) || value < 0) {
+      return `${field} is not a non-negative number`
+    }
+    if (WHOLE.has(field) && !Number.isInteger(value)) {
+      return `${field} is not a whole number`
+    }
+  }
+  const rate = policy.commission_rate ?? 0
+  const fixed = policy.commission_fixed ?? 0
+  if (rate > 0 && fixed > 0) return "both a rate and a fixed amount"
+  if (!(rate > 0) && !(fixed > 0)) return "no commission rate or fixed amount"
+  const months = policy.duration_months ?? 0
+  const kinds = {
+    cps_recurring: [
+      "recurring",
+      months > 0 ? `${months} ${months === 1 ? "month" : "months"}` : null,
+    ],
+    cps_lifetime: ["recurring", "lifetime"],
+    cps_one_time: ["one-time", null],
+  }
+  if (!Object.hasOwn(kinds, policy.commission_type)) {
+    return "unknown commission type"
+  }
+  const [type, duration] = kinds[policy.commission_type]
+  const hold = program.default_hold_period_days ?? 0
+  return {
+    "commission.type": type,
+    "commission.rate": rate > 0 ? `${rate}%` : `$${fixed}`,
+    "commission.mode": rate > 0 ? "percentage" : "flat",
+    "commission.value": rate > 0 ? rate : fixed,
+    "commission.currency": "USD",
+    "commission.duration": duration,
+    "commission.conditions":
+      hold > 0 ? `Paid ${hold} ${hold === 1 ? "day" : "days"} after sale.` : null,
+    cookie_days: program.cookie_window_days ?? ABSENT,
+    attribution: "last-click",
+    tracking_method: "cookie",
+    "payout.minimum": program.payout_threshold ?? ABSENT,
+    "payout.currency": "USD",
+    "payout.frequency": ABSENT,
+    "payout.methods": ABSENT,
+    signup_url: marketplace + program.slug,
+    network: "affitor",
+    verified: true,
+    status: "active",
+    status_note: ABSENT,
+    ...Object.fromEntries(UNPUBLISHED.map((key) => [key, ABSENT])),
+  }
+}
+
+// Paths are arrays of keys, never joined strings: a root key "agents.prompt"
+// and the nested agents → prompt are different paths. The dotted keys of
+// affitorOwnedFields are this file's own constants, split once by ownedPath.
+const ownedPath = (dotted) => dotted.split(".")
+const showPath = (path) =>
+  path.map((key) => (/^[A-Za-z0-9_-]+$/.test(key) ? key : JSON.stringify(key))).join(".")
+const isUnder = (path, prefix) =>
+  prefix.length <= path.length && prefix.every((key, i) => key === path[i])
+
+function valueAt(object, path) {
+  let value = object
+  for (const key of path) {
+    if (!isRecord(value) || !Object.hasOwn(value, key)) return ABSENT
+    value = value[key]
+  }
+  return value
+}
+
+const show = (value) => (value === ABSENT ? "absent" : JSON.stringify(value))
+
+/** Paths of every scalar or list that differs between two listings. */
+function changedPaths(before, after) {
+  const flat = (value, path, out) => {
+    if (isRecord(value) && Object.keys(value).length > 0) {
+      for (const [key, child] of Object.entries(value)) flat(child, [...path, key], out)
+    } else {
+      out.set(JSON.stringify(path), { path, json: JSON.stringify(value) })
+    }
+    return out
+  }
+  const a = flat(before, [], new Map())
+  const b = flat(after, [], new Map())
+  return [...new Set([...a.keys(), ...b.keys()])]
+    .filter((key) => a.get(key)?.json !== b.get(key)?.json)
+    .map((key) => (a.get(key) ?? b.get(key)).path)
+}
+
+/** Keys the schema does not name, at every level where it names keys (additionalProperties: false). */
+function unknownKeys(value, rule = PROGRAM_SCHEMA, path = [], out = []) {
+  if (rule?.properties && isRecord(value)) {
+    for (const [key, child] of Object.entries(value)) {
+      if (Object.hasOwn(rule.properties, key)) unknownKeys(child, rule.properties[key], [...path, key], out)
+      else out.push([...path, key])
+    }
+  } else if (rule?.items && Array.isArray(value)) {
+    value.forEach((item, i) => unknownKeys(item, rule.items, [...path, String(i)], out))
+  }
+  return out
+}
+
+/** Whether the YAML uses an anchor or an alias anywhere. */
+function hasAnchors(content) {
+  let found = false
+  visit(parseDocument(content), (_, node) => {
+    if (isAlias(node) || (isNode(node) && node.anchor)) {
+      found = true
+      return visit.BREAK
+    }
+  })
+  return found
+}
+
+/** The Affitor program a signup_url links to, or "" when it is no marketplace page. */
+function marketplaceSlug(signupUrl, marketplace) {
+  const url = typeof signupUrl === "string" ? signupUrl : ""
+  const slug = url.startsWith(marketplace) ? url.slice(marketplace.length) : ""
+  return /^[A-Za-z0-9_-]+$/.test(slug) ? slug : ""
+}
+
+/**
+ * The affitor-sync lane. `files` carry `content` (head) and, for a modified
+ * file, `baseContent`. `fetchJson` reads the Affitor API; any failure blocks.
+ */
+async function evaluateAffitorSyncPolicy({
+  pullRequest,
+  files,
+  fetchJson = fetchAffitorJson,
+  config = AFFITOR_SYNC,
+  skip = AFFITOR_SKIP,
+}) {
+  const reasons = []
+  const labels = labelNames(pullRequest.labels)
+  const newSlugs = []
+  const result = (programs, pauses) => ({
+    eligible: reasons.length === 0,
+    reasons: [...new Set(reasons)],
+    programCount: programs.length,
+    pauses,
+    newSlugs,
+  })
+
+  if (
+    pullRequest.user?.login !== config.bot ||
+    pullRequest.user?.type !== "Bot"
+  ) {
+    reasons.push(`author is not ${config.bot}`)
+  }
+  if (!labels.has(config.label)) reasons.push(`missing label: ${config.label}`)
+  if (pullRequest.base?.ref !== "main") reasons.push("base branch is not main")
+  if (pullRequest.draft) reasons.push("pull request is a draft")
+  if (
+    !pullRequest.head?.repo?.full_name ||
+    pullRequest.head.repo.full_name !== pullRequest.base?.repo?.full_name
+  ) {
+    reasons.push("head branch is not in this repository")
+  }
+  for (const label of BLOCKING_LABELS) {
+    if (labels.has(label)) reasons.push(`blocking label: ${label}`)
+  }
+  if (files.length === 0) reasons.push("pull request has no changed files")
+
+  const programs = []
+  for (const file of files) {
+    const name = file.filename
+    if (!PROGRAM_PATH.test(name)) {
+      reasons.push(`not a program file: ${name}`)
+      continue
+    }
+    if (file.status !== "added" && file.status !== "modified") {
+      reasons.push(`program is ${file.status}: ${name}`)
+      continue
+    }
+    if (typeof file.content !== "string") {
+      reasons.push(`could not read: ${name}`)
+      continue
+    }
+    const fileSlug = name.slice("programs/".length, -".yaml".length)
+    // A new listing's prose is the brand's own Affitor text: a person sets
+    // its category, description and agents block before it ships. The checks
+    // below still run on it, for that person to read.
+    if (file.status === "added") newSlugs.push(fileSlug)
+    const program = parseProgramYaml(file.content, name, reasons)
+    if (!program) continue
+    let base = null
+    if (file.status === "modified") {
+      if (typeof file.baseContent !== "string") {
+        reasons.push(`could not read the base version: ${name}`)
+        continue
+      }
+      base = parseProgramYaml(file.baseContent, name, reasons)
+      if (!base) continue
+    }
+
+    if (program.network !== "affitor" || program.source !== "affitor-api") {
+      reasons.push(`not a listing the sync created (network affitor, source affitor-api): ${name}`)
+    }
+    if (program.slug !== fileSlug) {
+      reasons.push(`slug must match filename: ${name}`)
+    }
+    if (/<\/?script\b/i.test(file.content)) {
+      reasons.push(`contains an HTML script tag: ${name}`)
+    }
+    for (const path of unknownKeys(program)) {
+      reasons.push(`key ${showPath(path)} is not in schema/program.schema.json: ${name}`)
+    }
+    if (hasAnchors(file.content)) {
+      reasons.push(`uses a YAML anchor or alias: ${name}`)
+    }
+    const slug = marketplaceSlug(program.signup_url, config.marketplace)
+    if (!slug) {
+      reasons.push(`signup_url is not an Affitor marketplace page: ${name}`)
+    }
+    // The Affitor program a listing is linked to is its identity, reviewed when
+    // the listing was created. The sync may refresh its terms, never re-link it.
+    const baseSlug = base === null ? "" : marketplaceSlug(base.signup_url, config.marketplace)
+    if (
+      base !== null &&
+      (!baseSlug || baseSlug !== slug || base.network !== "affitor" || base.source !== "affitor-api")
+    ) {
+      reasons.push(
+        `Affitor identity changed (base ${baseSlug || "none"}, head ${slug || "none"}), a person must confirm: ${name}`
+      )
+    }
+    const skipped = [fileSlug, slug, baseSlug].find((s) => s && Object.hasOwn(skip, s))
+    if (skipped) {
+      reasons.push(`${skipped} is on the skip list (data/affitor-sync-skip.json): ${name}`)
+    }
+    const pause = program.status === "paused" && base !== null && base.status !== "paused"
+    if (program.status === "paused" && base === null) {
+      reasons.push(`a new listing cannot be paused: ${name}`)
+    }
+    programs.push({ name, program, base, slug, pause })
+  }
+
+  if (newSlugs.length > 0) {
+    reasons.push(
+      `new listing(s) ${newSlugs.join(", ")}: needs hand category + description + agents block, then human review`
+    )
+  }
+  const pauses = programs.filter((p) => p.pause).length
+  if (pauses > config.max_pauses) {
+    reasons.push(`pauses ${pauses} listings, more than the ${config.max_pauses} one sync may pause`)
+  }
+  // Structure first: no API call for a pull request that is already blocked.
+  // Past this line every file is a modified listing with a base version.
+  if (reasons.length > 0) return result(programs, pauses)
+
+  let list
+  try {
+    list = await fetchJson(config.list_url)
+  } catch (error) {
+    reasons.push(`could not read the Affitor list (${error.message})`)
+    return result(programs, pauses)
+  }
+  if (
+    !isRecord(list) ||
+    list.success !== true ||
+    !Array.isArray(list.data) ||
+    list.data.length === 0 ||
+    PAGING.some((key) => key in list)
+  ) {
+    reasons.push("the Affitor list came back failed, empty, malformed or paged")
+    return result(programs, pauses)
+  }
+  const listed = new Set(list.data.map((row) => (isRecord(row) ? row.slug : null)))
+
+  for (const { name, program, base, slug, pause } of programs) {
+    let detail
+    try {
+      detail = await fetchJson(`${config.list_url}/${encodeURIComponent(slug)}`)
+    } catch (error) {
+      reasons.push(`could not read Affitor's detail for ${slug} (${error.message}): ${name}`)
+      continue
+    }
+
+    let allowed
+    if (pause) {
+      // Same evidence the sync needs: gone from the list, and the detail's not-found shape.
+      const gone = isRecord(detail) && detail.success === false && detail.data === null
+      if (listed.has(slug) || !gone) {
+        reasons.push(`Affitor does not confirm ${slug} left the marketplace: ${name}`)
+        continue
+      }
+      if (!PAUSE_NOTE.test(String(program.status_note ?? ""))) {
+        reasons.push(`status_note is not the sync's pause note: ${name}`)
+      }
+      allowed = [["status"], ["status_note"], ["updated_at"]]
+    } else {
+      const data = isRecord(detail) && detail.success === true ? detail.data : null
+      if (!isRecord(data) || data.slug !== slug || !listed.has(slug)) {
+        reasons.push(`Affitor does not list ${slug}: ${name}`)
+        continue
+      }
+      if (data.is_platform_program) {
+        reasons.push(`${slug} is Affitor's own platform program: ${name}`)
+      }
+      const expected = affitorOwnedFields(data, config.marketplace)
+      if (typeof expected === "string") {
+        reasons.push(`Affitor's terms for ${slug} are unusable (${expected}): ${name}`)
+        continue
+      }
+      for (const [path, value] of Object.entries(expected)) {
+        const actual = valueAt(program, ownedPath(path))
+        if (actual !== value) {
+          reasons.push(`${path} is ${show(actual)}, Affitor says ${show(value)}: ${name}`)
+        }
+      }
+      allowed = [...Object.keys(expected).map(ownedPath), ["updated_at"], ["last_verified_at"]]
+    }
+
+    for (const path of changedPaths(base, program)) {
+      if (!allowed.some((owned) => isUnder(path, owned))) {
+        reasons.push(`changes ${showPath(path)}, which the sync does not own: ${name}`)
+      }
+    }
+  }
+
+  return result(programs, pauses)
+}
+
+const PASSING = new Set(["success", "neutral", "skipped"])
+
+/**
+ * For the merge job: whether every check main requires has passed on exactly
+ * `headSha`, run by the app main names for it, and no finished check on that
+ * head failed. `required` is branch protection's required_status_checks.checks
+ * ({context, app_id}); none listed means no merge. GitHub enforces the same
+ * checks again when the merge is made.
+ */
+function requiredChecksPass({ headSha, required, checkRuns }) {
+  const reasons = []
+  const head = String(headSha).slice(0, 7)
+  if (!Array.isArray(required) || required.length === 0) {
+    reasons.push("main lists no required checks, so nothing proves this head")
+  }
+  const runs = checkRuns.filter((run) => run.head_sha === headSha)
+  for (const { context, app_id: appId } of required ?? []) {
+    const passed = runs.some(
+      (run) =>
+        run.name === context &&
+        run.status === "completed" &&
+        run.conclusion === "success" &&
+        (appId == null || run.app?.id === appId)
+    )
+    if (!passed) reasons.push(`required check ${context} has not passed on ${head}`)
+  }
+  for (const run of runs) {
+    if (run.status === "completed" && !PASSING.has(run.conclusion)) {
+      reasons.push(`check ${run.name} concluded ${run.conclusion} on ${head}`)
+    }
+  }
+  return { ok: reasons.length === 0, reasons: [...new Set(reasons)] }
+}
+
+/**
+ * For the merge job, right before it merges: a fresh read of the pull request
+ * (still the App's, open, at the judged head, no stop label) and of the head
+ * against main's current tip (nothing on main the head lacks). Then the
+ * squash result is exactly the head the lane checked. Precondition, not read
+ * here: main's protection keeps strict up-to-date checks on, so GitHub also
+ * refuses the merge if main moves after this read.
+ */
+function finalMergeCheck({ pullRequest, headSha, behindBy, config = AFFITOR_SYNC }) {
+  const reasons = []
+  const head = String(headSha).slice(0, 7)
+  if (!isAffitorSyncPullRequest(pullRequest, config)) reasons.push(`author is not ${config.bot}`)
+  if (pullRequest.state !== "open") reasons.push("pull request is no longer open")
+  if (pullRequest.head?.sha !== headSha) reasons.push(`head moved past ${head}`)
+  const labels = labelNames(pullRequest.labels)
+  for (const label of BLOCKING_LABELS) {
+    if (labels.has(label)) reasons.push(`blocking label: ${label}`)
+  }
+  if (behindBy !== 0) {
+    reasons.push(`behind main (${behindBy ?? "unknown"} commit(s)), waiting for the next sync`)
+  }
+  return { ok: reasons.length === 0, reasons }
+}
+
+/** The merge job's one comment on a pull request: created once, then updated. */
+const MERGE_MARKER = "<!-- openaffiliate-affitor-sync-merge -->"
+async function reportMerge(github, { owner, repo, number, sha, text }) {
+  const body = `${MERGE_MARKER}\n### affitor-sync merge — ${String(sha).slice(0, 7)}\n\n${text}`
+  const comments = await github.paginate(github.rest.issues.listComments, {
+    owner,
+    repo,
+    issue_number: number,
+    per_page: 100,
+  })
+  const previous = comments.find((comment) => comment.body?.includes(MERGE_MARKER))
+  if (previous) {
+    await github.rest.issues.updateComment({ owner, repo, comment_id: previous.id, body })
+  } else {
+    await github.rest.issues.createComment({ owner, repo, issue_number: number, body })
+  }
+}
+
 module.exports = {
+  AFFITOR_SKIP,
+  AFFITOR_SYNC,
   BLOCKING_LABELS,
   FETCH_TIMEOUT_MS,
+  changedPaths,
   MAX_ADDITIONS_PER_FILE,
   MAX_FILE_BYTES,
   MAX_PROGRAM_FILES,
   MAX_TOTAL_ADDITIONS,
   PROGRAM_PATH,
+  evaluateAffitorSyncPolicy,
   evaluateAutoMergePolicy,
+  fetchAffitorJson,
   fetchProgramContent,
+  finalMergeCheck,
+  isAffitorSyncPullRequest,
+  reportMerge,
+  requiredChecksPass,
   shouldArmAutoMerge,
 }
