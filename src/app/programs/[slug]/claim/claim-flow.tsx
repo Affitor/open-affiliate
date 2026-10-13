@@ -52,8 +52,12 @@ function loadTurnstile(): Promise<void> {
   return turnstileScript;
 }
 
-/** Cloudflare Turnstile. Tokens are single use: remount (new key) after each request. */
-function Turnstile({ siteKey, onToken }: { siteKey: string; onToken: (token: string) => void }) {
+/**
+ * Cloudflare Turnstile. Tokens are single use: remount (new key) after each
+ * request. `action` names the step; the server refuses a token solved for
+ * another step.
+ */
+function Turnstile({ siteKey, action, onToken }: { siteKey: string; action: string; onToken: (token: string) => void }) {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     let id: string | undefined;
@@ -63,6 +67,7 @@ function Turnstile({ siteKey, onToken }: { siteKey: string; onToken: (token: str
         if (!live || !ref.current || !window.turnstile) return;
         id = window.turnstile.render(ref.current, {
           sitekey: siteKey,
+          action,
           callback: onToken,
           "expired-callback": () => onToken(""),
           "error-callback": () => onToken(""),
@@ -73,7 +78,7 @@ function Turnstile({ siteKey, onToken }: { siteKey: string; onToken: (token: str
       live = false;
       if (id) window.turnstile?.remove(id);
     };
-  }, [siteKey, onToken]);
+  }, [siteKey, action, onToken]);
   return <div ref={ref} className="min-h-[65px]" />;
 }
 
@@ -199,7 +204,7 @@ export function ClaimFlow({
             }}
           >
             {emailField("claim-email", `Work email at ${domain}`, `you@${domain}`)}
-            <Turnstile key={widget} siteKey={siteKey} onToken={setToken} />
+            <Turnstile key={widget} siteKey={siteKey} action="send-code" onToken={setToken} />
             <button type="submit" className={primary} disabled={busy || !token}>Send code</button>
           </form>
           <p className="text-sm text-muted-foreground">
@@ -261,7 +266,7 @@ export function ClaimFlow({
             }}
           >
             {emailField("claim-dns-email", "Contact email", "you@example.com")}
-            <Turnstile key={widget} siteKey={siteKey} onToken={setToken} />
+            <Turnstile key={widget} siteKey={siteKey} action="dns-start" onToken={setToken} />
             <button type="submit" className={primary} disabled={busy || !token}>Get DNS record</button>
           </form>
           <p className="text-sm text-muted-foreground">
@@ -304,7 +309,7 @@ export function ClaimFlow({
             <label htmlFor="claim-note" className={label}>How you run this program</label>
             <textarea id="claim-note" className={field} rows={3} maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} />
           </div>
-          <Turnstile key={widget} siteKey={siteKey} onToken={setToken} />
+          <Turnstile key={widget} siteKey={siteKey} action="manual" onToken={setToken} />
           <div className="flex flex-wrap items-center gap-3">
             <button type="submit" className={primary} disabled={busy || !token}>Ask for review</button>
             <button type="button" className={quiet} onClick={() => go("email")}>Back</button>
