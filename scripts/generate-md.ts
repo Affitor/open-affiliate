@@ -366,10 +366,10 @@ function indexRow(p: Program): string {
  * table pipes, indentation, and anything at the start of a line that can open
  * a block.
  *
- * `mdUrl` is for bare URLs printed for a reader to copy. mdEscape would write
- * `utm\_source` into them, and an agent copies the raw bytes — six programs'
- * links would break that way today. A URL has its own escape, so the few
- * characters that can break out of one line of text are percent-encoded.
+ * `mdUrl` is for URL fields printed for a reader to copy, as `<…>` autolinks.
+ * mdEscape would write `utm\_source` into them, and an agent copies the raw
+ * bytes — six programs' links would break that way today. A URL has its own
+ * escape, so the few characters an autolink cannot hold are percent-encoded.
  *
  * `mdHeading` is mdEscape for text inside an ATX heading, where a trailing run
  * of `#` is read as the closing sequence and dropped: category "AI #" rendered
@@ -437,21 +437,24 @@ function mdHeading(text: string): string {
 }
 
 function mdUrl(url: string): string {
-  // `&` is left alone, and the schema is the guard. A character reference in a
-  // URL (`&amp;`, `&#x41;`) cannot be printed as bare text so that both
-  // renderers agree: CommonMark decodes it, so the text stops matching the URL,
-  // and escaping the `&` breaks GFM, whose autolink keeps the raw characters.
-  // So the url, signup_url and dashboard_url patterns in
-  // schema/program.schema.json refuse such a value before it gets here, in
-  // build-registry and in the sync alike.
+  // Written as an autolink, `<https://…>`. A bare URL is still Markdown:
+  // `https://x.example/**verified**` rendered <strong> under CommonMark, and
+  // GFM's autolink literal trims an unmatched trailing `)`, sending
+  // `https://x.example)` to a different host than the one the URL names.
+  // Inside `<…>` there is no emphasis, no entity decoding, no backslash escape
+  // and no trimming, so the text and the link are both the URL, in every
+  // renderer measured (commonmark.js, GFM via micromark, markdown-it).
   //
-  // `[` and `]` are always encoded. The one place a URL needs them unencoded is
-  // around an IPv6 host, and the same patterns refuse an IPv6-literal host,
-  // so every bracket that gets here is in a path, query or fragment, where
-  // encoding it keeps the URL working. Putting a host's brackets back took two
-  // review rounds and still broke on hosts the URL parser normalises
-  // (`[2001:DB8::1]`, `[::ffff:1.2.3.4]`); no program's URL is an IPv6 literal.
-  return String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  // What an autolink cannot hold is whitespace, `<` or `>`, so those are
+  // percent-encoded, with `[`, `]`, backslash and backtick. The schema's URL
+  // patterns make the rest true before a value gets here: an absolute
+  // lowercase http(s) URL in printable ASCII, no backslash, no character
+  // reference (a data bug), no IPv6-literal host (whose brackets this would
+  // break). Anything else — only possible if the schema was bypassed — is
+  // printed bare rather than given angle brackets, because `<foo>` without a
+  // scheme is an HTML tag and `<javascript:…>` is a link.
+  const out = String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  return /^https?:\/\/[^/?#]/.test(out) ? `<${out}>` : out
 }
 
 function entities(text: string): string {
