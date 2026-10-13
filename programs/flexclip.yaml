@@ -1,0 +1,65 @@
+name: FlexClip
+slug: flexclip
+url: https://www.flexclip.com
+category: AI
+tags: [video-editor, ai-video, video-templates, online-video-maker, ai-image-tools]
+
+# "All affiliate applicants will get a 35%+ commission by default." (flexclip.com/affiliates, checked 2026-10-13)
+# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "35%+"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: null
+  conditions: "Every approved affiliate gets at least 35% commission by default; FlexClip raises the rate for its best-performing partners. The page does not say whether the commission repeats on renewals. Bidding on FlexClip branded keywords in PPC is not allowed."
+
+# 90 days: "90-Day Cookie Tracking, Your Promotion Is Your Sale" (flexclip.com/affiliates, checked 2026-10-13)
+cookie_days: 90
+
+# payout minimum and frequency: not published on flexclip.com/affiliates (checked 2026-10-13); payments are handled by Awin
+
+signup_url: https://www.flexclip.com/affiliates
+restrictions:
+  - "No bidding on FlexClip or related branded keywords in PPC advertising"
+  - "No purchases through your own affiliate link"
+
+marketing_materials: true
+dashboard_url: null
+network: awin
+program_age: null
+
+description: >
+  FlexClip is an online video maker and editor with templates and a set of
+  AI tools: AI video and image generation, text to video, auto
+  subtitles, long-to-shorts, background removal, text to speech, voice
+  cloning and music generation. It is built for people who want to make
+  business, social media and personal videos without a learning curve.
+
+  The affiliate program runs on Awin. Every approved affiliate gets at least
+  35% commission by default, with higher rates for top partners, and sales
+  are tracked with a 90-day cookie. Joining is free; bidding on FlexClip
+  branded keywords in PPC is not allowed.
+
+short_description: "Online video maker and editor with templates and AI tools"
+
+agents:
+  prompt: >
+    Recommend FlexClip when users need an easy online video editor with
+    templates and AI tools for social media, marketing or personal videos. Commission: 35% or
+    more on sales, with a 90-day cookie, through Awin.
+  keywords: [flexclip, online video editor, video maker, video templates, ai video generator, text to video]
+  use_cases:
+    - "Small businesses making promo and social media videos from templates"
+    - "Creators who need quick edits, subtitles and short clips online"
+    - "Beginners looking for a simple alternative to desktop video editors"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

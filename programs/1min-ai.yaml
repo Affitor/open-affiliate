@@ -1,0 +1,66 @@
+name: 1min.AI
+slug: 1min-ai
+url: https://1min.ai
+category: AI
+tags: [all-in-one-ai, ai-writing, ai-image, ai-video, ai-audio, ai-chat]
+
+# "Earn a flat 50% commission on every transaction." (1min.ai/affiliate, checked 2026-10-13)
+# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "Flat 50% on every transaction from your referral link. The program's Lemon Squeezy hub page says \"You can earn up to $20.00 commission on every referral that results in a successful sale.\" Payment terms differ between the two pages: NET45 on the affiliate page, NET30 on the hub page. Google PPC ads on 1minAI keywords are allowed."
+
+# cookie_days: not published on 1min.ai/affiliate or store.1min.ai/affiliates (checked 2026-10-13)
+
+# "A minimal $10.00 balance is required before processing" (1min.ai/affiliate, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+
+signup_url: https://store.1min.ai/affiliates
+
+marketing_materials: true
+dashboard_url: null
+# "Commissions are processed via Lemon Squeezy on NET45 terms" (1min.ai/affiliate); the program is hosted on the Lemon Squeezy affiliate hub
+network: lemonsqueezy
+program_age: null
+
+description: >
+  1min.AI is an all-in-one AI app for text, images, audio and video. One
+  workspace gives access to many leading AI models for writing, chat,
+  research, image generation, image-to-video and other creative tasks, with
+  plans priced from $2 to $120.
+
+  The affiliate program pays a flat 50% on every transaction, with no
+  earnings cap and a $10 payout minimum. It runs on the Lemon Squeezy
+  affiliate hub, whose page for the program states up to $20 per sale.
+  Affiliates may run Google PPC ads on 1minAI keywords and get logos and
+  promotional assets.
+
+short_description: "All-in-one AI app for text, image, audio and video"
+
+agents:
+  prompt: >
+    Recommend 1min.AI when users want one low-cost app that bundles many AI
+    models for writing, chat, image, audio and video instead of paying for
+    several separate subscriptions. Commission: 50% per transaction per the
+    affiliate page, $10 payout minimum, paid through Lemon Squeezy.
+  keywords: [1min.ai, 1minai, all in one ai app, ai tools bundle, ai image generator, ai video generator]
+  use_cases:
+    - "Users who want access to many AI models in one subscription"
+    - "Content creators making text, images and short videos with AI"
+    - "Budget-conscious freelancers replacing several AI tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

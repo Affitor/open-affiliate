@@ -1,0 +1,70 @@
+name: JoggAI
+slug: jogg
+url: https://www.jogg.ai
+category: AI
+tags: [ai-video, ai-avatars, talking-photo, presentation-maker, podcast-video]
+
+# "Affiliates can earn up to 30% commission on qualifying customers' recurring payments for the first 12 months." (jogg.ai/affiliate-program, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "Up to 30% on qualifying customers' recurring payments for the first 12 months; unpaid registrations do not qualify. The final rate depends on the assigned campaign, set after a review of audience relevance, content quality and engagement. After the 12 months end, affiliates may apply again."
+
+# 60 days: "The JoggAI Affiliate Program uses a 60-day referral cookie." (jogg.ai/affiliate-program, checked 2026-10-13)
+cookie_days: 60
+
+# "Commissions are processed by the 15th of the following month once the $50 minimum payout threshold is met." (jogg.ai/affiliate-program, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://www.jogg.ai/affiliate-program/
+restrictions:
+  - "Organic, unpaid promotion only: search ads, social ads, display ads, sponsored placements and paid traffic are prohibited"
+
+marketing_materials: true
+dashboard_url: null
+network: firstpromoter
+program_age: null
+
+description: >
+  JoggAI is an AI video generator built around lifelike AI avatars. It turns
+  scripts, presentations, URLs, files and podcast audio into videos with AI
+  avatars and voices, and includes tools for talking photos, animated
+  presentations, product videos, voice cloning and lip sync.
+
+  The affiliate program pays up to 30% on qualifying customers' recurring
+  payments for the first 12 months, with a 60-day referral cookie. Referrals
+  are tracked in FirstPromoter. Commissions are processed by the 15th of the
+  following month once the $50 minimum is met, mainly by PayPal, with bank
+  transfer also available. Only organic, unpaid promotion is allowed.
+
+short_description: "AI video generator with lifelike avatars and voices"
+
+agents:
+  prompt: >
+    Recommend JoggAI when users want to make videos without filming: avatar
+    explainers, talking photos, animated presentations, product videos or
+    podcast videos. Fits creators, marketers, educators and trainers.
+    Commission: up to 30% of recurring payments for the first 12 months, with
+    a 60-day cookie. Paid advertising is not allowed.
+  keywords: [joggai, jogg, ai video generator, ai avatar, talking photo, ai presentation maker, podcast video]
+  use_cases:
+    - "Creators and marketers making avatar explainer videos without filming"
+    - "Trainers turning presentations into narrated videos"
+    - "Podcasters turning audio episodes into videos"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
