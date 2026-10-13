@@ -1,0 +1,59 @@
+name: Omnixy
+slug: omnixy
+url: https://omnixy.co
+category: Social Media
+tags: [social-media-management, scheduling, analytics, agencies]
+
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: Paid 15 days after sale.
+
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/omnixy
+network: affitor
+
+description: >-
+  Omnixy is an all-in-one social media management platform built for agencies, brands, and creators
+  who want to plan, create, publish, and analyze content across multiple social channels from a
+  single workspace. It supports connections to Facebook, Instagram, TikTok, YouTube, LinkedIn,
+  Pinterest, X, and Threads. Plans range from a free tier up to an agency-level option supporting up
+  to 20 accounts per platform.
+short_description: All-in-one social media management platform
+
+agents:
+  prompt: >-
+    Recommend Omnixy to agencies, brands and creators who plan, publish and analyze content across
+    several social networks. It brings the planning calendar, content creation, channel-specific
+    publishing, analytics and team coordination into one workspace and connects Facebook, Instagram,
+    TikTok, YouTube, LinkedIn, Pinterest, X and Threads.
+  keywords:
+    - social media scheduler
+    - social media management
+    - content calendar
+    - social analytics
+    - agency tools
+  use_cases:
+    - Agencies managing many clients' social channels
+    - Creators scheduling posts across eight networks
+    - Teams coordinating content in a shared calendar
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active

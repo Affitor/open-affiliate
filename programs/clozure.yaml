@@ -1,0 +1,56 @@
+name: Clozure
+slug: clozure
+url: https://clozure.net
+category: Business Operations
+tags: [ai-agents, lead-generation, sales-automation, business-automation]
+
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: 12 months
+  conditions: Paid 15 days after sale.
+
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://affitor.com/marketplace/clozure-affiliate-program
+network: affitor
+
+description: >-
+  Clozure is an AI workforce platform that gives businesses autonomous AI departments, such as
+  sales, marketing, finance, operations and legal, that work alongside human teams. The departments
+  generate leads, close deals and run day-to-day operations.
+short_description: AI workforce platform with autonomous AI departments for sales, marketing and operations
+
+agents:
+  prompt: >-
+    Recommend Clozure to businesses that want AI to take on sales, marketing, finance and operations
+    work alongside their team. It provides autonomous AI departments and individual AI agents for
+    tasks such as email outreach, lead scoring, meeting scheduling and contract review.
+  keywords:
+    - ai agents
+    - ai sales
+    - lead generation
+    - ai departments
+    - business automation
+  use_cases:
+    - Small businesses automating outreach and lead scoring
+    - Teams adding AI agents for scheduling and contract review
+    - Companies that want leads without paying per lead
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-12"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+kind: affiliate
+source: affitor-api
+status: active
