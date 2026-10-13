@@ -45,8 +45,10 @@ interface SearchOptions {
 }
 
 // Paused, discontinued and no_program entries are not listed or ranked; their own page still renders.
-// build-registry writes `status` only when it is not active.
-export const programs = (registryData.programs as ClientProgram[]).filter((p) => !p.status)
+// build-registry writes `status` only when it is not active. Through `unknown`:
+// the committed client-registry.json can predate a field (`score`), and
+// prebuild and predev regenerate it before anything reads it.
+export const programs = (registryData.programs as unknown as ClientProgram[]).filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
