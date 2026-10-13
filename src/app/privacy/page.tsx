@@ -11,9 +11,10 @@ const CONTACT = "support@affitor.com";
 
 /**
  * Covers the listing claim flow, the only place OpenAffiliate asks for
- * personal data. Retention here is enforced in code: src/lib/claims/live.ts
- * prune() deletes unverified claims after 30 days and audit events after a
- * year, and release() clears the owner's address.
+ * personal data. Retention is enforced by the daily pg_cron job in
+ * supabase/migrations/009_program_claims.sql and by prune() in
+ * src/lib/claims/live.ts (RETENTION_DAYS); release() clears the owner's
+ * address. Change the wording here and those cutoffs together.
  */
 export default function PrivacyPage() {
   return (
@@ -59,9 +60,12 @@ export default function PrivacyPage() {
 
       <h2 className="mt-8 text-lg font-semibold">How long we keep it</h2>
       <ul className="mt-2 list-disc pl-5 space-y-1 text-sm text-muted-foreground">
-        <li>A claim that is never verified, including a manual review request, is deleted after 30 days.</li>
+        <li>
+          A claim that is never verified, including a manual review request, is deleted within 30 days of the
+          claim&apos;s last activity.
+        </li>
         <li>A verified claim stays while you manage the listing. When you release it, we remove your email address.</li>
-        <li>Activity records, which hold only hashes, are deleted after 12 months.</li>
+        <li>Activity records, which hold only hashes, are deleted within 12 months.</li>
       </ul>
 
       <h2 className="mt-8 text-lg font-semibold">Site analytics</h2>

@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
+  PILOT_SLUGS,
   claimEnvReady,
   claimsEnabledFor,
   emailMatchesDomain,
@@ -44,6 +45,7 @@ function program(slug: string, url: string, rate = "12%", value = 12): ClaimProg
 const PROGRAMS: Record<string, ClaimProgram> = {
   "kyma-api": program("kyma-api", "https://kymaapi.com"),
   citegraph: program("citegraph", "https://www.foo.co.uk"),
+  "build-to-own-replay": program("build-to-own-replay", "https://build2own.dev"),
   landerlab: program("landerlab", "https://landerlab.io"),
   vercel: program("vercel", "https://vercel.com"),
 }
@@ -229,6 +231,15 @@ test("shared hosts and mailbox providers have no claim button", () => {
   assert.equal(unclaimableReason("https://kymaapi.com"), null)
 })
 
+test("floot.app is a shared host even though the PSL does not list it (prismbay-clean)", () => {
+  // tldts alone would make floot.app the registrable domain, claimable by floot.app staff.
+  assert.equal(registrableDomain("https://prismbay-clean-global.floot.app"), "floot.app")
+  assert.equal(unclaimableReason("https://prismbay-clean-global.floot.app"), "shared-host")
+  assert.equal(unclaimableReason("https://floot.app"), "shared-host")
+  const prismbay = program("prismbay-clean", "https://prismbay-clean-global.floot.app")
+  assert.equal(claimsEnabledFor(prismbay, FULL_ENV), false)
+})
+
 // ---------------------------------------------------------------- flag and secrets
 
 const FULL_ENV = {
@@ -241,8 +252,12 @@ const FULL_ENV = {
 }
 
 test("claim button shows only on pilot listings and only with every secret set", () => {
-  assert.equal(claimsEnabledFor(PROGRAMS["kyma-api"], FULL_ENV), true)
+  assert.deepEqual([...PILOT_SLUGS].sort(), ["build-to-own-replay", "citegraph", "kyma-api"])
+  for (const slug of ["kyma-api", "build-to-own-replay", "citegraph"]) {
+    assert.equal(claimsEnabledFor(PROGRAMS[slug], FULL_ENV), true, slug)
+  }
   assert.equal(claimsEnabledFor(PROGRAMS.vercel, FULL_ENV), false, "not a pilot slug")
+  assert.equal(claimsEnabledFor(PROGRAMS.landerlab, FULL_ENV), false, "third-party brand, left out of the pilot")
   assert.equal(claimsEnabledFor(PROGRAMS["kyma-api"], {}), false)
   for (const name of Object.keys(FULL_ENV)) {
     assert.equal(claimsEnabledFor(PROGRAMS["kyma-api"], { ...FULL_ENV, [name]: "" }), false, `${name} missing`)
@@ -277,6 +292,7 @@ test("a listing outside the pilot gets 404 and nothing is written", async () => 
   const t = setup()
   const r = await sendCode(t, "me@vercel.com", "vercel")
   assert.equal(r.status, 404)
+  assert.equal((await sendCode(t, "me@landerlab.io", "landerlab")).status, 404)
   assert.equal(t.sent.length, 0)
   assert.equal(t.store.events.length, 0)
 })
@@ -415,7 +431,7 @@ test("a code only works in the browser that asked for it, for the listing it was
   await sendCode(t, "me@kymaapi.com")
   const code = t.codeOf(t.sent[0])
   assert.equal((await t.call("verify", { slug: "kyma-api", code }, { cookies: new Map() })).status, 401)
-  assert.equal((await t.call("verify", { slug: "landerlab", code })).status, 401)
+  assert.equal((await t.call("verify", { slug: "build-to-own-replay", code })).status, 401)
   const tampered = new Map(t.jar)
   const [id, exp] = tampered.get("oa_claim_pending")!.split(".")
   tampered.set("oa_claim_pending", `${id}.${Number(exp) + 999999}.${"0".repeat(64)}`)
@@ -428,8 +444,8 @@ test("DNS token is single-use and bound to its own claim", async () => {
   const t = setup()
   const jarA = new Map<string, string>()
   const jarB = new Map<string, string>()
-  const a = await t.call("dns-start", { slug: "landerlab", email: "ops@gmail.com", turnstileToken: "tok" }, { cookies: jarA })
-  const b = await t.call("dns-start", { slug: "landerlab", email: "x@gmail.com", turnstileToken: "tok" }, { cookies: jarB, ip: "198.51.100.2" })
+  const a = await t.call("dns-start", { slug: "build-to-own-replay", email: "ops@gmail.com", turnstileToken: "tok" }, { cookies: jarA })
+  const b = await t.call("dns-start", { slug: "build-to-own-replay", email: "x@gmail.com", turnstileToken: "tok" }, { cookies: jarB, ip: "198.51.100.2" })
   assert.equal(a.status, 200)
   assert.match(String(a.body.record), /^openaffiliate-verify=[A-Za-z0-9_-]{43}$/)
   assert.notEqual(a.body.record, b.body.record)
@@ -439,18 +455,18 @@ test("DNS token is single-use and bound to its own claim", async () => {
 
   // Record A is published (TXT strings may arrive in chunks). It does not verify claim B.
   const recordA = String(a.body.record)
-  t.txt["landerlab.io"] = [["v=spf1 -all"], [recordA.slice(0, 20), recordA.slice(20)]]
-  assert.equal((await t.call("dns-check", { slug: "landerlab" }, { cookies: new Map(jarB) })).status, 404)
+  t.txt["build2own.dev"] = [["v=spf1 -all"], [recordA.slice(0, 20), recordA.slice(20)]]
+  assert.equal((await t.call("dns-check", { slug: "build-to-own-replay" }, { cookies: new Map(jarB) })).status, 404)
 
   const pendingA = new Map(jarA)
-  const okA = await t.call("dns-check", { slug: "landerlab" }, { cookies: jarA })
+  const okA = await t.call("dns-check", { slug: "build-to-own-replay" }, { cookies: jarA })
   assert.equal(okA.status, 200)
   assert.ok(jarA.has("oa_claim_session"))
   // Replay of the same check, and of the same record, after verification.
-  assert.equal((await t.call("dns-check", { slug: "landerlab" }, { cookies: pendingA })).status, 410)
+  assert.equal((await t.call("dns-check", { slug: "build-to-own-replay" }, { cookies: pendingA })).status, 410)
   // B publishes its own record now, but the domain has an owner.
-  t.txt["landerlab.io"].push([String(b.body.record)])
-  assert.equal((await t.call("dns-check", { slug: "landerlab" }, { cookies: jarB })).status, 409)
+  t.txt["build2own.dev"].push([String(b.body.record)])
+  assert.equal((await t.call("dns-check", { slug: "build-to-own-replay" }, { cookies: jarB })).status, 409)
   assert.equal(t.store.count("claim.confirmed"), 1)
 })
 
@@ -464,25 +480,35 @@ test("a DNS record on a subdomain or another domain does not count", async () =>
 
 // ---------------------------------------------------------------- rate limits
 
-test("rate limit: one code per address per 10 minutes, three per day", async () => {
+test("rate limit: one code per address per 24 hours, so the email's promise holds", async () => {
+  assert.equal(LIMITS.codesPerEmailDay, 1)
   const t = setup()
   assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.1" })).status, 200)
-  assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.2" })).status, 429)
-  for (let i = 3; i <= 4; i++) {
-    t.advance(11 * 60_000)
-    assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: `198.51.100.${i}` })).status, 200)
-  }
-  t.advance(11 * 60_000)
-  assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.9" })).status, 429)
-  assert.equal(t.sent.length, LIMITS.codesPerEmailDay)
+  // Fresh IPs, the address in other letter cases, and most of a day later: still refused.
+  const again = await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.2" })
+  assert.equal(again.status, 429)
+  assert.match(String(again.body.message), /already sent a code to this address/)
+  assert.equal((await sendCode(t, "ME@KymaAPI.com", "kyma-api", { ip: "198.51.100.3" })).status, 429)
+  t.advance(23 * 60 * 60_000)
+  assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.4" })).status, 429)
+  assert.equal(t.sent.length, 1)
   // Refused reservations are withdrawn, so they never count as sent.
-  assert.equal(t.store.count("code.sent"), LIMITS.codesPerEmailDay)
+  assert.equal(t.store.count("code.sent"), 1)
+  t.advance(61 * 60_000)
+  assert.equal((await sendCode(t, "me@kymaapi.com", "kyma-api", { ip: "198.51.100.5" })).status, 200)
+  assert.equal(t.sent.length, 2)
+})
+
+test("a failed send withdraws the reservation, so the address can try again", async () => {
+  const t = setup({ sendOk: false })
+  assert.equal((await sendCode(t, "me@kymaapi.com")).status, 502)
+  assert.equal(t.store.count("code.sent"), 0)
 })
 
 test("rate limit: five requests per IP per hour across send, DNS and manual", async () => {
   const t = setup()
   for (let i = 0; i < LIMITS.requestsPerIpHour; i++) {
-    assert.equal((await t.call("dns-start", { slug: "landerlab", email: `p${i}@x.io`, turnstileToken: "tok" })).status, 200)
+    assert.equal((await t.call("dns-start", { slug: "build-to-own-replay", email: `p${i}@x.io`, turnstileToken: "tok" })).status, 200)
   }
   assert.equal((await sendCode(t, "me@kymaapi.com")).status, 429)
   assert.equal(t.sent.length, 0)
@@ -576,7 +602,7 @@ test("edits need a live session: no cookie, a forged cookie, or another domain's
   const [id, exp] = forged.get("oa_claim_session")!.split(".")
   forged.set("oa_claim_session", `${id}.${exp}.${"f".repeat(64)}`)
   assert.equal((await t.call("terms", { slug: "kyma-api", terms }, { cookies: forged })).status, 401)
-  assert.equal((await t.call("terms", { slug: "landerlab", terms })).status, 401, "kymaapi.com owner cannot edit landerlab")
+  assert.equal((await t.call("terms", { slug: "build-to-own-replay", terms })).status, 401, "kymaapi.com owner cannot edit build2own.dev")
   assert.equal(t.store.edits.length, 0)
 })
 
@@ -616,7 +642,7 @@ test("logs never contain an email address, a code or a DNS token", async () => {
     const ok = setup()
     await sendCode(ok, "secret.person@kymaapi.com")
     await ok.call("verify", { slug: "kyma-api", code: "123456" })
-    const dns = await ok.call("dns-start", { slug: "landerlab", email: "secret.person@kymaapi.com", turnstileToken: "tok" }, { ip: "198.51.100.3" })
+    const dns = await ok.call("dns-start", { slug: "build-to-own-replay", email: "secret.person@kymaapi.com", turnstileToken: "tok" }, { ip: "198.51.100.3" })
     // A store failure whose message carries an address must not reach the log.
     ok.store.failNextAddEvent = true
     assert.equal((await sendCode(ok, "other.person@kymaapi.com", "kyma-api", { ip: "198.51.100.4" })).status, 500)

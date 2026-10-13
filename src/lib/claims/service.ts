@@ -24,7 +24,14 @@ const DAY = 24 * HOUR
 export const CODE_TTL_MS = 10 * MINUTE
 export const DNS_TTL_MS = 7 * DAY
 export const SESSION_TTL_MS = 7 * DAY
-/** Manual-review requests are never verified, so the 30-day prune removes them. */
+/**
+ * /privacy promises deletion within 30 days (unverified claims) and 12 months
+ * (events). Rows older than these cutoffs are deleted by the daily pg_cron job
+ * in migration 009 and by prune() on claim requests, so with a daily run every
+ * row is gone by day 30 / day 365. Keep the two in step with the migration.
+ */
+export const RETENTION_DAYS = { unverifiedClaims: 29, events: 364 } as const
+/** Manual-review requests are never verified, so the retention prune removes them. */
 const MANUAL_TTL_MS = 30 * DAY
 export const MAX_ATTEMPTS = 5
 export const DNS_PREFIX = "openaffiliate-verify="
@@ -34,8 +41,11 @@ export const LIMITS = {
   /** send-code, dns-start and manual together, per IP hash per hour. */
   requestsPerIpHour: 5,
   dnsChecksPerIpHour: 20,
-  codesPerEmail10Min: 1,
-  codesPerEmailDay: 3,
+  /**
+   * One code email per address per 24 hours, so the approved copy ("we won't
+   * email you again about it") holds for anyone who did not ask.
+   */
+  codesPerEmailDay: 1,
   codesPerSlugDay: 5,
   codesPerDomainDay: 5,
   /** Site-wide ceiling on code emails per 24 hours. */
@@ -196,7 +206,10 @@ const notEnabled = () => fail(404, "not_enabled", "Claims are not enabled for th
 const tooMany = () => fail(429, "rate_limited", "Too many requests. Try again later.")
 const alreadyClaimed = () =>
   fail(409, "already_claimed", "This listing already has an owner. Ask for a manual review if that is wrong.")
-const startAgain = () => fail(401, "no_pending_claim", "Start again to get a new code.")
+/** One code per address per day: after a lost or spent code the way on is DNS or a person. */
+const NO_NEW_CODE = "Verify with DNS instead, or ask for a manual review."
+const startAgain = () =>
+  fail(401, "no_pending_claim", `A code works only in the browser that asked for it, for 10 minutes. ${NO_NEW_CODE}`)
 
 // ---------------------------------------------------------------- email copy
 
@@ -278,15 +291,19 @@ async function requestLimited(deps: ClaimDeps, who: Identity, method: ClaimMetho
  * window including it. Over any cap, the reservation is withdrawn. Two racing
  * requests can both be refused; neither can push a window past its cap.
  */
-async function reserveCode(deps: ClaimDeps, who: Identity, claimId: string): Promise<number | null> {
-  const now = deps.now()
+async function reserveCode(deps: ClaimDeps, who: Identity, claimId: string): Promise<number | Response> {
+  const since = ago(deps.now(), DAY)
   const id = await deps.store.addEvent({ ...who, type: "code.sent", claim_id: claimId })
-  const windows: [Omit<EventFilter, "type">, number][] = [
-    [{ since: ago(now, 10 * MINUTE), email_hash: who.email_hash }, LIMITS.codesPerEmail10Min],
-    [{ since: ago(now, DAY), email_hash: who.email_hash }, LIMITS.codesPerEmailDay],
-    [{ since: ago(now, DAY), slug: who.slug }, LIMITS.codesPerSlugDay],
-    [{ since: ago(now, DAY), domain: who.domain }, LIMITS.codesPerDomainDay],
-    [{ since: ago(now, DAY) }, LIMITS.codesSiteDay],
+  const tryLater = "Too many codes requested for this listing today. Try again tomorrow, or verify with DNS."
+  const windows: [Omit<EventFilter, "type">, number, string][] = [
+    [
+      { since, email_hash: who.email_hash },
+      LIMITS.codesPerEmailDay,
+      "We already sent a code to this address in the last 24 hours. Use that code, or verify with DNS.",
+    ],
+    [{ since, slug: who.slug }, LIMITS.codesPerSlugDay, tryLater],
+    [{ since, domain: who.domain }, LIMITS.codesPerDomainDay, tryLater],
+    [{ since }, LIMITS.codesSiteDay, "We cannot send more codes today. Try again tomorrow."],
   ]
   const counts = await Promise.all(windows.map(([filter]) => deps.store.countEvents({ ...filter, type: "code.sent" })))
   const over = windows.findIndex(([, cap], i) => counts[i] > cap)
@@ -294,14 +311,14 @@ async function reserveCode(deps: ClaimDeps, who: Identity, claimId: string): Pro
   await deps.store.removeEvent(id)
   // The site-wide ceiling is the one maintainers need to hear about.
   if (over === windows.length - 1) await deps.store.addEvent({ type: "cap.reached", meta: { cap: LIMITS.codesSiteDay } })
-  return null
+  return fail(429, "rate_limited", windows[over][2])
 }
 
 async function confirmClaim(deps: ClaimDeps, claim: ClaimRow): Promise<Response> {
   const now = deps.now()
   const result = await deps.store.confirm(claim.id, now)
   if (result === "conflict") return alreadyClaimed()
-  if (result === "gone") return fail(410, "used_or_expired", "This code has expired or was already used. Request a new one.")
+  if (result === "gone") return fail(410, "used_or_expired", "This has expired or was already used. Start again, or ask for a manual review.")
   await deps.store.addEvent({
     type: "claim.confirmed",
     claim_id: claim.id,
@@ -385,7 +402,7 @@ async function sendCode(req: Request, deps: ClaimDeps): Promise<Response> {
 
   const claimId = randomUUID()
   const reservation = await reserveCode(deps, who, claimId)
-  if (reservation === null) return fail(429, "rate_limited", "Too many codes requested. Try again later.")
+  if (reservation instanceof Response) return reservation
 
   const now = deps.now()
   const code = String(randomInt(0, 1_000_000)).padStart(6, "0")
@@ -422,12 +439,12 @@ async function verifyCode(req: Request, deps: ClaimDeps): Promise<Response> {
 
   const now = deps.now()
   if (claim.status !== "pending" || claim.verified_at) {
-    return fail(410, "used_or_expired", "This code was already used. Request a new one.")
+    return fail(410, "used_or_expired", "This code was already used.")
   }
   if (Date.parse(claim.expires_at) <= now.getTime()) {
-    return fail(410, "used_or_expired", "This code has expired. Request a new one.")
+    return fail(410, "used_or_expired", `This code has expired. ${NO_NEW_CODE}`)
   }
-  if (claim.attempts >= MAX_ATTEMPTS) return fail(429, "too_many_attempts", "Too many attempts. Request a new code.")
+  if (claim.attempts >= MAX_ATTEMPTS) return fail(429, "too_many_attempts", `Too many attempts. ${NO_NEW_CODE}`)
   // Spend the attempt before comparing: a guess that loses the race is never compared.
   if (!(await deps.store.takeAttempt(claim.id, claim.attempts, now))) {
     return fail(409, "retry", "Try that code again.")
@@ -437,7 +454,7 @@ async function verifyCode(req: Request, deps: ClaimDeps): Promise<Response> {
     const left = MAX_ATTEMPTS - (claim.attempts + 1)
     return left > 0
       ? fail(400, "wrong_code", `That code is not right. ${left} ${left === 1 ? "try" : "tries"} left.`, { attemptsLeft: left })
-      : fail(429, "too_many_attempts", "Too many attempts. Request a new code.", { attemptsLeft: 0 })
+      : fail(429, "too_many_attempts", `Too many attempts. ${NO_NEW_CODE}`, { attemptsLeft: 0 })
   }
   return confirmClaim(deps, claim)
 }

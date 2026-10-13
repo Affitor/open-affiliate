@@ -1,7 +1,7 @@
 import { Resolver } from "node:dns/promises"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 import { claimEnvReady } from "./rules"
-import { MAX_ATTEMPTS, type ClaimDeps, type ClaimProgram, type ClaimRow, type ClaimStore } from "./service"
+import { MAX_ATTEMPTS, RETENTION_DAYS, type ClaimDeps, type ClaimProgram, type ClaimRow, type ClaimStore } from "./service"
 
 /**
  * affitor.com is the domain verified in the Resend account; openaffiliate.dev
@@ -83,14 +83,12 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
     async addEdit(edit) {
       check(await db.from("claim_edits").insert(edit))
     },
+    // Same cutoffs as the daily pg_cron job in migration 009; this covers a
+    // database where pg_cron is not enabled.
     async prune(now) {
-      check(
-        await claims()
-          .delete()
-          .is("verified_at", null)
-          .lt("created_at", new Date(now.getTime() - 30 * DAY).toISOString()),
-      )
-      check(await events().delete().lt("created_at", new Date(now.getTime() - 365 * DAY).toISOString()))
+      const before = (days: number) => new Date(now.getTime() - days * DAY).toISOString()
+      check(await claims().delete().is("verified_at", null).lt("created_at", before(RETENTION_DAYS.unverifiedClaims)))
+      check(await events().delete().lt("created_at", before(RETENTION_DAYS.events)))
     },
     async countProgramEvents(slug, type, since) {
       const { count, error } = await db

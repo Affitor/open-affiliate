@@ -236,7 +236,12 @@ export function ClaimFlow({
             </div>
             <button type="submit" className={primary} disabled={busy || code.length !== 6}>Verify</button>
           </form>
-          <button type="button" className={quiet} onClick={() => { setCode(""); go("email"); }}>Request a new code</button>
+          <p className="text-sm text-muted-foreground">
+            No email? We send one code per address per day.{" "}
+            <button type="button" className={quiet} onClick={() => go("dns")}>Verify with DNS</button>
+            {" · "}
+            <button type="button" className={quiet} onClick={() => go("manual")}>Ask for a manual review</button>
+          </p>
         </>
       )}
 

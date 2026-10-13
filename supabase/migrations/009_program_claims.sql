@@ -76,3 +76,28 @@ REVOKE ALL ON program_claims, claim_edits, claim_events FROM anon, authenticated
 REVOKE ALL ON SEQUENCE claim_events_id_seq FROM anon, authenticated;
 GRANT SELECT, INSERT, UPDATE, DELETE ON program_claims, claim_edits, claim_events TO service_role;
 GRANT USAGE, SELECT ON SEQUENCE claim_events_id_seq TO service_role;
+
+-- Retention promised on /privacy: unverified claims (manual requests
+-- included) within 30 days, events within 12 months. The job runs daily with
+-- cutoffs one day short (29 / 364 days), so every row is gone by day 30 /
+-- day 365. Same cutoffs as RETENTION_DAYS in src/lib/claims/service.ts, whose
+-- prune() also runs on claim requests. Scheduled only where pg_cron is
+-- enabled; elsewhere a NOTICE says so and the migration still applies.
+-- cron.schedule() with a job name replaces an existing job of that name, so
+-- re-running this file is safe.
+DO $do$
+BEGIN
+  IF EXISTS (SELECT 1 FROM pg_extension WHERE extname = 'pg_cron') THEN
+    PERFORM cron.schedule(
+      'oa-claims-retention',
+      '17 3 * * *',
+      $job$
+        DELETE FROM public.program_claims WHERE verified_at IS NULL AND created_at < now() - interval '29 days';
+        DELETE FROM public.claim_events WHERE created_at < now() - interval '364 days';
+      $job$
+    );
+  ELSE
+    RAISE NOTICE 'pg_cron is not enabled: oa-claims-retention was not scheduled. Enable pg_cron and re-run this migration.';
+  END IF;
+END
+$do$;

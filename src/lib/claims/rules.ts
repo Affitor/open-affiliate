@@ -3,8 +3,10 @@ import { parse } from "tldts"
 /**
  * Claim flow v1 is a pilot: these listings only. Widening it is a code change
  * reviewed like any other, not an environment toggle.
+ * kyma-api: email case (kymaapi.com) · build-to-own-replay: DNS case
+ * (build2own.dev) · citegraph: wrong-domain refusal case.
  */
-export const PILOT_SLUGS: ReadonlySet<string> = new Set(["kyma-api", "citegraph", "landerlab"])
+export const PILOT_SLUGS: ReadonlySet<string> = new Set(["kyma-api", "build-to-own-replay", "citegraph"])
 
 /**
  * Every secret the flow needs. If any is missing the API answers 503
@@ -56,16 +58,25 @@ export function registrableDomain(url: string): string | null {
   return parsed.domain.toLowerCase()
 }
 
+/**
+ * Hosting platforms that give customers subdomains but are missing from the
+ * PSL private section, so tldts reports the platform itself as the registrable
+ * domain. A listing there would be claimable by the platform's own staff.
+ * floot.app: prismbay-clean (prismbay-clean-global.floot.app).
+ */
+export const SHARED_HOSTS: ReadonlySet<string> = new Set(["floot.app"])
+
 export type UnclaimableReason = "invalid-url" | "shared-host" | "email-provider"
 
 /** Why a listing cannot be claimed online, or null when it can. */
 export function unclaimableReason(url: string): UnclaimableReason | null {
   const parsed = parse(url, { allowPrivateDomains: true })
   if (parsed.isIp || !parsed.domain) return "invalid-url"
+  const domain = parsed.domain.toLowerCase()
   // github.io, pages.dev, vercel.app, netlify.app…: the site's owner cannot
   // set DNS for it and nobody has a mailbox there.
-  if (parsed.isPrivate) return "shared-host"
-  if (EMAIL_PROVIDERS.has(parsed.domain.toLowerCase())) return "email-provider"
+  if (parsed.isPrivate || SHARED_HOSTS.has(domain)) return "shared-host"
+  if (EMAIL_PROVIDERS.has(domain)) return "email-provider"
   return null
 }
 
