@@ -68,3 +68,47 @@ export function nonCashAffiliate(data: Record<string, unknown>): boolean {
   const rate = String(commission.rate ?? "")
   return NON_CASH_ANYWHERE.test(`${rate} ${commission.conditions ?? ""}`) || CREDIT_IN_RATE.test(rate)
 }
+
+/**
+ * Alias → slug for every alias that can be a URL, across the whole registry.
+ * build-registry writes `routes` into registry.json; next.config.ts turns each
+ * one into a 308 from /programs/<alias> (and its .md) to the program, and the
+ * REST API and MCP get_program answer it with the program
+ * (src/lib/program-aliases.ts). This is the only place the rule lives:
+ *
+ * - An alias is compared lowercased and trimmed. One that is not slug-shaped
+ *   ("eleven labs", "appqr.io") stays a search name and gets no route.
+ * - A real slug always wins. Redirects run before pages, so an alias equal to
+ *   another program's slug would hide that program's page; it goes to
+ *   `shadowed` instead of `routes`.
+ * - The same alias on two programs has no right answer: it goes to `clashes`,
+ *   and build-registry fails.
+ */
+export function aliasRoutes(programs: readonly { slug: string; aliases?: unknown[] }[]): {
+  routes: Record<string, string>
+  shadowed: string[]
+  clashes: string[]
+} {
+  const slugs = new Set(programs.map((p) => p.slug))
+  const routes = new Map<string, string>()
+  const shadowed: string[] = []
+  const clashes: string[] = []
+  for (const p of programs) {
+    for (const raw of p.aliases ?? []) {
+      const alias = String(raw).trim().toLowerCase()
+      if (alias === p.slug || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(alias)) continue
+      if (slugs.has(alias)) {
+        shadowed.push(`${p.slug}: alias "${alias}" is another program's slug, so that program keeps the URL`)
+        continue
+      }
+      const owner = routes.get(alias)
+      if (owner && owner !== p.slug) clashes.push(`alias "${alias}" is claimed by both ${owner} and ${p.slug}`)
+      else routes.set(alias, p.slug)
+    }
+  }
+  return {
+    routes: Object.fromEntries([...routes].sort(([a], [b]) => a.localeCompare(b))),
+    shadowed,
+    clashes,
+  }
+}

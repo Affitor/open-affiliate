@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
-import { noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -277,6 +277,15 @@ function buildRegistry(): void {
     process.exit(1)
   }
 
+  // Aliases that become URLs. Rule in program-rules.ts.
+  const { routes: aliases, shadowed, clashes } = aliasRoutes(programs)
+  for (const s of shadowed) console.warn(`[warn] ${s}`)
+  if (clashes.length > 0) {
+    console.error("Alias clashes (an alias points at one program; remove it from one file):")
+    for (const c of clashes) console.error(`  - ${c}`)
+    process.exit(1)
+  }
+
   // Sort alphabetically by name
   programs.sort((a, b) => a.name.localeCompare(b.name))
 
@@ -286,6 +295,7 @@ function buildRegistry(): void {
     generated_at: new Date().toISOString(),
     count: programs.length,
     categories,
+    aliases,
     programs,
   }
 
@@ -334,6 +344,7 @@ function buildRegistry(): void {
   console.log(`Registry built successfully:`)
   console.log(`  ${programs.length} programs loaded`)
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
+  console.log(`  ${Object.keys(aliases).length} alias routes`)
   console.log(`  Output: src/lib/registry.json`)
   console.log(`  Client output: src/lib/client-registry.json`)
 

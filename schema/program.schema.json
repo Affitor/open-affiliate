@@ -28,7 +28,7 @@
       "items": {
         "type": "string"
       },
-      "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai)"
+      "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai). An alias written like a slug (letters, digits and hyphens, compared lowercased) also redirects /programs/<alias> to this program and resolves in the API and MCP; two programs may not claim the same alias, and another program's slug is never redirected."
     },
     "url": {
       "type": "string",
