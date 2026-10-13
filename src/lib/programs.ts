@@ -219,41 +219,6 @@ export interface SearchOptions {
 }
 
 /**
- * Parse commission rate string into a numeric percentage-equivalent.
- * - "30%" → 30
- * - "$1,000" → 1000 (flat fee, kept as-is — score handles conversion)
- * - "20-30%" → 30 (takes higher)
- * - "$5 per lead + 30%" → 30 (prefers percentage)
- * - "varies" → 0
- */
-export function parseCommissionRate(
-  rate: string | number | Program["commission"]
-): number {
-  // Prefer the typed value. The regexes below are what the registry used
-  // before commission was typed, and they had to guess: "175" could be
-  // percent or dollars, "varies" parsed to 0 and sorted like a real zero.
-  // They stay for any caller still passing a raw string.
-  if (rate && typeof rate === "object") {
-    return rate.value ?? 0
-  }
-  if (typeof rate === "number") return rate
-  const s = String(rate).replace(/,/g, "")
-  // Handle ranges like "20-30%" — take the higher value
-  const rangeMatch = s.match(/(\d+)\s*[-–]\s*(\d+)\s*%/)
-  if (rangeMatch) return parseFloat(rangeMatch[2])
-  // Compound rates: prefer percentage component ("$5 per lead + 30%")
-  const pctMatch = s.match(/([\d.]+)\s*%/)
-  if (pctMatch) return parseFloat(pctMatch[0])
-  // Flat fee: "$100", "$1000"
-  const dollarMatch = s.match(/\$\s*([\d.]+)/)
-  if (dollarMatch) return parseFloat(dollarMatch[1])
-  // Bare number
-  const numMatch = s.match(/[\d.]+/)
-  return numMatch ? parseFloat(numMatch[0]) : 0
-}
-
-/** Check if commission rate is a flat fee (dollar amount) vs percentage */
-/**
  * How a commission should be written for a reader.
  *
  * Every call site used to interpolate `commission.rate` directly, which is how
@@ -424,7 +389,9 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
       results.sort((a, b) => b.name.localeCompare(a.name))
       break
     case "commission_desc":
-      results.sort((a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission))
+      // commissionRank: structured fields only; unpublished, tiered, hybrid and
+      // referral rewards score 0 and stay last.
+      results.sort((a, b) => commissionRank(b) - commissionRank(a))
       break
     case "newest":
       // Many existing programs share a backfill date of 2026-04-18. To give
@@ -557,23 +524,23 @@ export function slugToNetwork(slug: string): string | undefined {
 }
 
 /**
- * Orders programs by commission on the list pages (listScore in best-lists.ts),
- * with a normalized score that can place a percentage next to a flat fee.
- * Heuristic: $1 ≈ 1pp up to a cap of 100, so every flat amount from $550 up
- * ties at the cap. That is fine for an order and wrong for a "best" figure,
- * which is why commissionStats never uses it. Takes a commission that
- * rankedCommission has let through: the typed value and mode, never the text.
+ * Where a program sits when a list orders by commission, from rankedCommission
+ * only (0 when it gives nothing: unpublished, tiered, hybrid, referral, a flat
+ * amount in another currency). A percentage scores itself; a flat US-dollar
+ * amount scores $1 ≈ 1 point up to $50, then 0.1 per dollar ($550 = 100,
+ * $10,000 = 1,045). A heuristic that places a rate next to a flat fee: fine
+ * for an order, wrong for a "best" figure, which is why commissionStats never
+ * uses it.
+ *
+ * listScore (best-lists.ts) is this capped at 100, for filters such as
+ * high-paying's 30. Ordering on the uncapped value is ordering on listScore
+ * with ties at the cap going to the larger figure: $10,000 before $550.
  */
-export function rankScore(c: Program["commission"]): number {
-  const n = c.value ?? 0
-  if (!isFinite(n) || n <= 0) return 0
-  if (c.mode === "flat") {
-    // $1-$49 → 1-49, $50-$500 → 50-95, capped at 100
-    if (n < 50) return n
-    return Math.min(100, 50 + (n - 50) * 0.1)
-  }
-  // Percentage: direct, capped at 100
-  return Math.min(n, 100)
+export function commissionRank(p: Pick<Program, "commission" | "kind">): number {
+  const c = rankedCommission(p)
+  const n = c?.value ?? 0
+  if (!c || !Number.isFinite(n) || n <= 0) return 0
+  return c.mode === "flat" ? (n < 50 ? n : 50 + (n - 50) * 0.1) : n
 }
 
 /** A commission figure and the program that pays it. */

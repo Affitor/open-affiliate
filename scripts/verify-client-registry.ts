@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs"
 import { gzipSync } from "node:zlib"
 import {
   affiliateScore as fullAffiliateScore,
+  commissionRank as fullCommissionRank,
   categories as fullCategories,
   commissionDisplay as fullCommissionDisplay,
   commissionLabel as fullCommissionLabel,
@@ -66,6 +67,7 @@ for (const fullProgram of fullPrograms) {
     createdAt: fullProgram.createdAt,
     source: fullProgram.source,
     score: fullAffiliateScore(fullProgram),
+    commissionRank: fullCommissionRank(fullProgram),
   }
   const normalizedClientProgram = {
     ...clientProgram,
@@ -92,6 +94,7 @@ for (const fullProgram of fullPrograms) {
       clientAffiliateScore(clientProgram),
       fullAffiliateScore(fullProgram),
     ],
+    ["commissionRank", clientProgram.commissionRank, fullCommissionRank(fullProgram)],
     [
       "commissionDisplay",
       clientCommissionDisplay(clientProgram.commission),

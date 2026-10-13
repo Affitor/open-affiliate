@@ -24,6 +24,12 @@ export interface ClientProgram {
   source?: string
   /** Affiliate Score, computed at build time from the stored program. */
   score: number
+  /**
+   * Commission order key, computed at build time by commissionRank: it reads
+   * `kind`, which this registry leaves out. 0 for unpublished, tiered, hybrid,
+   * referral and non-USD flat commissions.
+   */
+  commissionRank: number
   status?: "paused" | "discontinued" | "no_program"
 }
 
@@ -93,23 +99,6 @@ export function commissionDisplay(
   }
 }
 
-export function parseCommissionRate(
-  rate: string | number | ClientProgram["commission"]
-): number {
-  if (rate && typeof rate === "object") return rate.value ?? 0
-  if (typeof rate === "number") return rate
-
-  const value = String(rate).replace(/,/g, "")
-  const range = value.match(/(\d+)\s*[-–]\s*(\d+)\s*%/)
-  if (range) return Number.parseFloat(range[2])
-  const percentage = value.match(/([\d.]+)\s*%/)
-  if (percentage) return Number.parseFloat(percentage[1])
-  const dollars = value.match(/\$\s*([\d.]+)/)
-  if (dollars) return Number.parseFloat(dollars[1])
-  const number = value.match(/[\d.]+/)
-  return number ? Number.parseFloat(number[0]) : 0
-}
-
 /**
  * Precomputed by build-registry with the site's own affiliateScore, which
  * reads the description, agent prompt and signup URL that this registry
@@ -117,6 +106,16 @@ export function parseCommissionRate(
  */
 export function affiliateScore(program: ClientProgram): number {
   return program.score
+}
+
+/**
+ * Commission order for the browser's sorts (/programs "Highest Commission",
+ * the /rankings commission column): commissionRank in `dir` (-1 for largest
+ * first), and programs it cannot rank (unpublished, tiered, hybrid, referral,
+ * a flat amount in another currency) last in either direction.
+ */
+export function compareCommission(a: ClientProgram, b: ClientProgram, dir: number): number {
+  return Number(a.commissionRank === 0) - Number(b.commissionRank === 0) || (a.commissionRank - b.commissionRank) * dir
 }
 
 export function searchPrograms(query: string, category?: string): ClientProgram[]
@@ -166,11 +165,7 @@ export function searchPrograms(
     case "za":
       return results.sort((a, b) => b.name.localeCompare(a.name))
     case "commission_desc":
-      return results.sort(
-        (a, b) =>
-          parseCommissionRate(b.commission) -
-          parseCommissionRate(a.commission)
-      )
+      return results.sort((a, b) => compareCommission(a, b, -1))
     case "newest": {
       const sourceWeight: Record<string, number> = {
         community: 9,
