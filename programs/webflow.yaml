@@ -13,19 +13,17 @@ commission:
   duration: "12 months"
   conditions: "Earn 50% of the referred customer's subscription revenue for the first 12 months of their paid plan"
 
-cookie_days: 120
-attribution: last-click
+cookie_days: 90
+attribution: first-click
 tracking_method: link
 
 payout:
-  minimum: 50
   currency: USD
   frequency: monthly
-  methods: [bank, paypal]
 
 signup_url: https://webflow.com/affiliates
 approval: manual
-approval_time: "3-5 days"
+approval_time: "Typically within 10 business days"
 restrictions:
   - "No brand bidding on 'Webflow' keywords in paid search"
   - "No cashback, coupon, or incentivized traffic sites"
@@ -35,7 +33,7 @@ marketing_materials: true
 api_available: false
 dedicated_manager: true
 dashboard_url: null
-network: in-house
+network: partnerstack
 program_age: "5+ years"
 
 description: >
@@ -69,7 +67,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

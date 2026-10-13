@@ -62,7 +62,7 @@ agents:
     - "Teams using AI to generate designs from text prompts"
     - "Marketers producing visual content at scale with brand kits"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null

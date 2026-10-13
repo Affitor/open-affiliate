@@ -26,7 +26,7 @@ agents:
   - productivity-tool-promotion
   - saas-affiliate-marketing
 status: active
-network: in-house
+network: rewardful
 category: Developer Tools
 logo_url: https://cdn.brandfetch.io/idxxHV50Mm/w/800/h/309/theme/light/logo.png?c=1bxtwjz48s37dxrwob1iv46t3nySzUcFgVs
 verified: true
@@ -37,12 +37,14 @@ commission:
   type: recurring
   currency: null
   duration: null
-  conditions: null
+  conditions: "Referrals get a 10% discount. Commissions are paid via Wise once they exceed £50, after a 30-day pending period."
   recurring_period: null
+payout:
+  currency: GBP
+  methods: [wise]
 signup_url: https://www.raycast.com/blog/affiliate-program
-updated_at: 2026-04-18 19:51:47.799000+00:00
+updated_at: "2026-10-12"
 brand_color: '#FF6363'
-cookie_days: 30
 verified_at: 2026-04-18 19:52:02.845000+00:00
 signup_url_type: official
 short_description: Earn 30% recurring commission on Raycast Pro referrals.
@@ -56,6 +58,6 @@ description: 'Raycast is a productivity launcher for macOS built for developers.
 
   '
 verified_by: dev-bypass
-last_verified_at: 2026-04-18 19:51:47.799000+00:00
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: manual
