@@ -35,19 +35,20 @@ export default function MethodologyPage() {
         <a href="https://github.com/Affitor/open-affiliate" target="_blank" rel="noopener noreferrer" className={link}>
           GitHub repository
         </a>
-        , under an MIT licence. The program data on this site, in the API, the
-        MCP server and the markdown pages all comes from those files, and every
-        change lands as a public pull request.
+        . This site, the API, the MCP server and the markdown pages all read
+        program data from those files, and every change lands as a public pull
+        request.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">What does verified mean?</h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A verified program had its terms checked against its own affiliate
-        page, and its page shows the date of that check. Each list shows the
-        most recent such date among its verified programs. Programs that run on
-        the Affitor marketplace publish their terms there, and a daily sync reads
-        that marketplace and opens a pull request for any change.{" "}
-        {verified} of {livePrograms.length} live programs are verified.
+        page. Affitor, which maintains this site, also runs a marketplace:
+        programs listed on it are verified from the terms the brand publishes
+        there, read by a daily sync that opens a pull request for any change.
+        Program pages show the check date when one is recorded; a list shows the
+        latest among its verified programs. {verified} of {livePrograms.length} live
+        programs are verified.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">
@@ -63,8 +64,8 @@ export default function MethodologyPage() {
         What if a brand has no affiliate program?
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Its page says so, with the date the status was checked, and lists no
-        terms. Such a brand is never ranked.
+        Its page says so and lists no terms, with the check date when one is
+        recorded. Such a brand is never ranked.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">How are lists ranked?</h2>
@@ -75,16 +76,17 @@ export default function MethodologyPage() {
         </Link>{" "}
         and the category pages order by commission, read from structured
         fields, never the free-text rate: a single percentage, or a flat amount
-        stated in US dollars. Tiered and mixed deals come after single rates, and referral rewards paid in credit or gift cards are
-        not counted as cash. The main{" "}
+        stated in US dollars. On those pages, tiered and mixed deals come after
+        single rates, and referral rewards paid in credit or gift cards are not
+        counted as cash. The main{" "}
         <Link href="/best" className={link}>
           best affiliate programs
         </Link>{" "}
-        list instead ranks verified programs by{" "}
+        list is different: it ranks verified programs by{" "}
         <Link href="/docs/affiliate-score" className={link}>
           Affiliate Score
         </Link>
-        , which also weighs the cookie window and how long commission lasts.
+        , which weighs commission, cookie window and how long commission lasts.
         Programs that publish no rate are left out of every /best list and
         placed last in their group on category pages.
       </p>
@@ -94,8 +96,8 @@ export default function MethodologyPage() {
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
         No. Listing is free, and only the rules above set a program&apos;s
-        position. Programs on the Affitor marketplace
-        follow the same rules as every other program.
+        position. Programs on the Affitor marketplace follow the same rules as
+        every other program.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">
@@ -106,7 +108,7 @@ export default function MethodologyPage() {
         <Link href="/submit" className={link}>
           the submit form
         </Link>
-        , which writes the file for you and opens it on GitHub. To report an
+        , which writes the file and opens it on GitHub. To report an
         error,{" "}
         <a
           href="https://github.com/Affitor/open-affiliate/issues/new"
