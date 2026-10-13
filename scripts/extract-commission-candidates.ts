@@ -9,18 +9,19 @@
  *
  * The pipeline is three stages, and the order is the economics:
  *
- *   1. probe   (free)       curl candidate pages in this order: the YAML
- *                           signup_url; same-site links on the brand's
- *                           homepage whose text or path names an affiliate,
- *                           referral or ambassador page (the brand's own nav
- *                           knows paths no fixed list guesses, like /refer or
- *                           /refer-a-seller); common paths; last, homepage
- *                           links that only say "partner".
+ *   1. probe   (free)       curl candidate pages: the YAML signup_url first,
+ *                           then same-site links on the brand's homepage whose
+ *                           text or path names an affiliate, referral or
+ *                           ambassador page (the brand's own nav knows paths
+ *                           no fixed list guesses, like /channelpartners or
+ *                           /refer-a-seller), interleaved with common paths
+ *                           (order at LINK_WORDS).
  *                           Extraction must never start at a homepage — the
  *                           first calibration call did, crawled careers pages,
  *                           and concluded Framer has no affiliate program. The
  *                           homepage is only read for its links.
- *   2. filter  (free)       fetch the page, require affiliate vocabulary.
+ *   2. filter  (free)       fetch the page, require affiliate vocabulary
+ *                           beyond what the homepage already carries.
  *                           SPAs answer 200 for any path; bolt.new/affiliate
  *                           opens their editor.
  *   3. extract (10 credits) context.dev /v1/web/extract with factCheck on.
@@ -48,17 +49,19 @@ import registry from "../src/lib/registry.json"
 
 const API = "https://api.context.dev/v1/web/extract"
 const KEY = process.env.CONTEXT_DEV_API_KEY
-const PATHS = ["/affiliates", "/affiliate", "/partners", "/affiliate-program"]
+const PATHS = ["/affiliates", "/affiliate", "/affiliate-program"]
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
 // Words in a homepage link's text or path that name an affiliate page, strongest first.
-// "partner" is last and weak: on most sites it means integrations or resellers, so
-// those links are tried only after the common paths.
+// Order of trial: "affiliate" links, the common affiliate paths, referral/ambassador
+// links (often customer refer-a-friend), /partners, and last links that only say
+// "partner", which on most sites means integrations or resellers.
 const LINK_WORDS = [/affiliate/, /\breferral|\brefer\b/, /ambassador|creator program/, /\bpartner(s|ships?)?\b/]
 const WEAK = LINK_WORDS.length - 1
-// Pages that mention a program without being one: articles, disclosures, docs.
+// Pages that mention a program without being one: articles, disclosures, docs, and
+// product pages (an affiliate tool the brand sells is not its own program).
 const NOT_PROGRAM =
-  /\/(blog|news|press|stories|customers|case-studies|changelog|docs|help|support|resources|guides|learn|academy|glossary|integrations|templates)(\/|$)|disclosure|policy|privacy/
+  /\/(blog|news|press|stories|customers|case-studies|changelog|docs|help|support|resources|guides|learn|academy|glossary|integrations|templates|marketing|features?|solutions|use-cases|products?|platform|industries|for|compare|alternatives|careers|jobs|legal)(\/|$)|disclosure|policy|privacy/
 // A subdomain counts only when its own name says so (affiliates.brand.com, partners.brand.com).
 const PROGRAM_HOST = /^(affiliates?|partners?|refer|referrals?|ambassadors?)\./
 const PROBE_ONLY = process.argv.includes("--probe")
@@ -113,10 +116,17 @@ function get(url: string): Page {
 }
 
 const bare = (hostname: string) => hostname.replace(/^www\./, "")
-const title = (html: string) => /<title[^>]*>([^<]*)/i.exec(html)?.[1].trim() ?? ""
-// Text a reader sees: scripts, styles, nav and footer repeat program words on every page.
-const visible = (html: string) =>
-  html.replace(/<(script|style|nav|footer)\b[\s\S]*?<\/\1\s*>/gi, " ").replace(/<[^>]*>/g, " ")
+// Program words a reader sees. Scripts, styles, nav and footer repeat them on every page,
+// and so do footers built from plain divs, so callers compare against the homepage.
+const vocab = (html: string) =>
+  (
+    html
+      .replace(/<(script|style|nav|footer)\b[\s\S]*?<\/\1\s*>/gi, " ")
+      .replace(/<[^>]*>/g, " ")
+      .toLowerCase()
+      // \b keeps "learn more" out: every marketing page says it.
+      .match(/affiliate|commission|referral|\bearn/g) ?? []
+  ).length
 
 function urlOf(u?: string | null, base?: string): URL | null {
   try {
@@ -140,7 +150,7 @@ function homepageLinks(home: Page, host: string): [string, number][] {
     const h = bare(u.hostname)
     if (h !== host && !(h.endsWith(`.${host}`) && PROGRAM_HOST.test(h))) continue
     if ((h === host && u.pathname.length <= 1) || NOT_PROGRAM.test(u.pathname.toLowerCase())) continue
-    const text = `${inner.replace(/<[^>]*>/g, " ")} ${h} ${u.pathname}`.toLowerCase()
+    const text = `${inner.replace(/<[^>]*>/g, " ")} ${h === host ? "" : h} ${u.pathname}`.toLowerCase()
     const rank = LINK_WORDS.findIndex(w => w.test(text))
     const prev = ranked.get(u.href)
     if (rank >= 0 && (!prev || rank < prev[0])) ranked.set(u.href, [rank, u.href.length])
@@ -164,11 +174,14 @@ async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Pr
     const signup = urlOf(signupUrl)
     if (signup && /^https?:$/.test(signup.protocol) && signup.pathname.length > 1) yield signup.href
     const links = homepageLinks(home(), host)
-    for (const [url, rank] of links) if (rank < WEAK) yield url
+    for (const [url, rank] of links) if (rank === 0) yield url
     for (const path of PATHS) yield `https://${host}${path}`
+    for (const [url, rank] of links) if (rank > 0 && rank < WEAK) yield url
+    yield `https://${host}/partners`
     for (const [url, rank] of links) if (rank === WEAK) yield url
   }
   const tried = new Set<string>()
+  let homeHits: number | undefined
   for (const url of candidates()) {
     const key = url.replace("://www.", "://")
     if (tried.has(key)) continue
@@ -179,11 +192,10 @@ async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Pr
     if (code !== "200" || !f) continue
     // A redirect to a root or a bare locale (/, /en, /en-us) is a homepage, not a program page.
     if (/^(\/[a-z]{2}(-[a-z]{2})?)?\/?$/i.test(f.pathname) && !PROGRAM_HOST.test(bare(f.hostname))) continue
-    // An SPA that answers 200 for any path serves the homepage's shell.
-    if (title(body) && title(body) === title(home().body)) continue
-    // \b keeps "learn more" out: every marketing page says it.
-    const hits = (visible(body).toLowerCase().match(/affiliate|commission|referral|\bearn/g) ?? []).length
-    if (hits >= 3) return url
+    // Count only what the page says beyond the site chrome the homepage also carries.
+    // An SPA shell that answers 200 for any path has nothing beyond it.
+    homeHits ??= vocab(home().body)
+    if (vocab(body) - homeHits >= 3) return url
   }
   return null
 }
@@ -259,12 +271,16 @@ async function main(): Promise<void> {
       continue
     }
     console.log(`  extract ${p.slug} ← ${page}`)
-    const r = await extract(page)
+    const r = await extract(page).catch(e => {
+      console.error(`  extract failed for ${page}: ${e instanceof Error ? e.message : e}`)
+      return null
+    })
     if (!r) continue
     const data = r.data as Record<string, unknown> | undefined
     store.candidates.push({
       slug: p.slug,
-      status: data?.has_affiliate_program ? "candidate" : "no-affiliate-program",
+      // An empty response is not evidence of absence.
+      status: !data ? "extract-empty" : data.has_affiliate_program ? "candidate" : "no-affiliate-program",
       note: "unreviewed machine extraction",
       extracted: data ?? null,
       source_url: page,
