@@ -13,8 +13,9 @@
  * Every surface decides through termsConfirmed(). Reverting this rule means
  * making it return true, and dropping the checks that pin it
  * (scripts/confirmed-terms.test.ts and the terms checks in
- * verify-machine-surfaces). It never changes the stored data, and the
- * Affiliate Score still reads the stored cookie window.
+ * verify-machine-surfaces). It never changes the stored data. Scoring is
+ * defined in programs.ts (affiliateScore); this module only decides what is
+ * shown.
  *
  * Kept free of imports so client components can use it without pulling the
  * registry into their bundle.
