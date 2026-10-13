@@ -30,7 +30,7 @@ import {
 import { confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
-import { termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
+import { chunkScan, termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
 import {
   mcpCall,
   mcpGetProgram,
@@ -211,6 +211,47 @@ test("a pitch keeps the product's own words; a product word counts next to the p
   ]) {
     assert.equal(statesTerms(s, "pitch"), true, s)
   }
+})
+
+test("a payout schedule in program-side text is dropped (Bitwire), not in a pitch", () => {
+  const bitwire = getProgram("bitwire")!
+  assert.ok(bitwire, "programs/bitwire.yaml is the schedule regression case")
+  const off = confirmedTerms({ ...bitwire, verified: false })
+  assert.equal(String(off.commissionConditions ?? "").includes("deposited monthly"), false)
+  for (const s of [
+    "Revenue share on every referral purchase for a year, deposited monthly.",
+    "Payment terms: monthly",
+    "Commissions land in your account on the 15th.",
+    "Earnings are transferred quarterly.",
+  ]) {
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+  assert.equal(statesTerms("Monthly reports for every team.", "pitch"), false)
+})
+
+test("an optional field the filter empties is left out on every surface, never printed empty", () => {
+  const base = getProgram("asana")!
+  const entry = (registry.programs as unknown as Parameters<typeof programMd>[0][]).find((e) => e.slug === "asana")!
+  const conditions = "Payouts are monthly. A 60-day cookie applies."
+  const restrictions = ["Approval is manual.", "Payouts are sent by PayPal."]
+  const off = confirmedTerms({ ...base, verified: false, commission: { ...base.commission, conditions }, commissionConditions: conditions, restrictions })
+  assert.equal(off.commissionConditions, null)
+  assert.equal(off.commission.conditions, null)
+  assert.deepEqual(off.restrictions, [])
+  const md = programMd({ ...entry, verified: false, commission: { ...entry.commission, conditions }, restrictions })
+  assert.equal(md.includes("Commission conditions:"), false)
+  assert.equal(md.includes("## Restrictions"), false)
+  assert.deepEqual(termsMdProblems({ ...base, verified: false }, md), [])
+  assert.ok(termsApiProblems({ ...base, verified: false }, { ...JSON.parse(JSON.stringify(off)), commissionConditions: "" }).some((x) => x.includes("empty string")))
+})
+
+test("the chunk check finds a record's slug past braces inside strings", () => {
+  const off = live.find((p) => !termsConfirmed(p))!
+  const on = live.find((p) => termsConfirmed(p))!
+  const shown = (slug: string) => programs.find((p) => p.slug === slug)?.verified
+  assert.equal(chunkScan(`{"slug":"${off.slug}","description":"example {","cookieDays":60}`, shown).problems.length, 1)
+  assert.equal(chunkScan(`{"slug":"${on.slug}","description":"} example","cookieDays":60}`, shown).problems.length, 0)
+  assert.equal(chunkScan(`{"cookieDays":60,"note":"a } b","slug":"${off.slug}"}`, shown).problems.length, 1)
 })
 
 test("a pitch or prompt the filter would empty falls back to a neutral line from structured fields", () => {

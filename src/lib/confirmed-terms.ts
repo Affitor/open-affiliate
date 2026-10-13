@@ -83,6 +83,12 @@ const TERM_WORD =
  * "attribution platform".
  */
 const PRODUCT_WORD = /\battribution\b|\bwindows?\b|\bpaid\b|\bpays?\b|\bpayments?\b|\bminimum\b|\bbalances?\b/i
+/**
+ * A payout schedule in what a program says about itself: "deposited monthly",
+ * "commissions land in your account on the 15th". Program-side fields only;
+ * a pitch says "monthly reports" about the product.
+ */
+const SCHEDULE_WORD = /\bdeposit(?:s|ed|ing)?\b|\bmonthly\b|\bweekly\b|\bbi-?weekly\b|\bquarterly\b|\btransferred\b|\blands? in your account\b/i
 /** What makes a product word a term in a pitch: the program is the subject, or a money or day figure is stated. */
 const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partners?|partnerships?|commissions?|payouts?)\b|${MONEY}|\b\d+[\s-]*(?:days?|months?)\b`, "i")
 
@@ -90,7 +96,10 @@ const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partner
  * Which field a text is. A pitch (description, short description) describes the
  * product, so its product words count only next to the program or a figure.
  * Everything else (commission conditions, restrictions, agent prompt, use
- * cases) is what the program says about itself, and every term word counts.
+ * cases) is what the program says about itself: every term word counts, and so
+ * does a payout schedule. Description, short description and agent prompt are
+ * never emptied (confirmedPitch, confirmedPrompt); the optional fields may be,
+ * and then are left out (null or no items).
  */
 export type ProseField = "pitch" | "program"
 
@@ -126,6 +135,7 @@ export function namesTerm(sentence: string): boolean {
 export function statesTerms(sentence: string, field: ProseField = "program"): boolean {
   if (guarded(sentence)) return false
   if (TERM_WORD.test(sentence) || namesTerm(sentence)) return true
+  if (field === "program" && SCHEDULE_WORD.test(sentence)) return true
   if (!PRODUCT_WORD.test(sentence)) return false
   return field === "program" || PROGRAM_SUBJECT.test(sentence)
 }

@@ -54,9 +54,13 @@ export function droppedSentences(p: Program): string[] {
   const program = [p.agentPrompt, p.commission.conditions ?? "", ...(p.agentUseCases ?? []), ...(p.restrictions ?? [])]
     .flatMap(sentences)
     .map((s) => ({ s, dropped: statesTerms(s, "program") }))
-  // A sentence a pitch keeps ("Free plan pays nothing.") may be dropped from a program-side field too.
-  const kept = new Set([...pitch, ...program].filter((x) => !x.dropped).map((x) => squash(x.s)))
-  return [...new Set([...pitch, ...program].filter((x) => x.dropped).map((x) => squash(x.s)))].filter((s) => s.length >= 20 && !kept.has(s))
+  // A sentence a pitch keeps ("Free plan pays nothing.") may be dropped from a
+  // program-side field too; what a kept sentence contains is legitimately shown.
+  const kept = [...pitch, ...program]
+    .filter((x) => !x.dropped)
+    .map((x) => squash(x.s))
+    .join("\n")
+  return [...new Set([...pitch, ...program].filter((x) => x.dropped).map((x) => squash(x.s)))].filter((s) => s.length >= 20 && !kept.includes(s))
 }
 
 function leakedSentence(p: Program, corpus: string): string | undefined {
@@ -210,6 +214,14 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   }
   const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
+  // An optional field the filter empties is left out, not rendered empty.
+  if (/<p class="[^"]*border-t border-border\/30 pt-2"><\/p>/.test(own)) problems.push("renders empty commission conditions")
+  for (const label of [">Restrictions</h2>", ">Use cases:</p>"]) {
+    const at = own.indexOf(label)
+    if (at === -1) continue
+    const list = own.slice(at, own.indexOf("</ul>", at) + 5)
+    if (!list.includes("<li")) problems.push(`renders an empty list under ${JSON.stringify(label)}`)
+  }
   return problems
 }
 
@@ -262,6 +274,13 @@ export function termsMdProblems(p: Program, md: string): string[] {
   // Filtering never empties a pitch: a fallback line takes its place.
   if (p.description.trim() && !all.includes("## About")) problems.push("has no About section though the stored description has text")
   if (p.shortDescription.trim() && !all.some((l) => l.startsWith("> "))) problems.push("has no short description though the stored one has text")
+  // An optional field the filter empties is left out, not printed empty.
+  if (lines.some((l) => /^Commission conditions:\s*$/.test(l))) problems.push("prints an empty Commission conditions line")
+  all.forEach((l, i) => {
+    if (!l.startsWith("## ")) return
+    const next = all.findIndex((m, j) => j > i && m.startsWith("## "))
+    if (all.slice(i + 1, next === -1 ? undefined : next).every((m) => !m.trim())) problems.push(`prints an empty section (${JSON.stringify(l)})`)
+  })
   return problems
 }
 
@@ -299,24 +318,61 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
       problems.push(`returns an empty ${field} where the stored one has text`)
     }
   }
+  // An optional field the filter empties is left out: null, or no items. Never "".
+  for (const [field, value] of [
+    ["commissionConditions", body.commissionConditions],
+    ["commission.conditions", commission.conditions],
+  ] as const) {
+    if (typeof value === "string" && !value.trim()) problems.push(`returns ${field} as an empty string`)
+  }
+  for (const field of ["agentUseCases", "restrictions"]) {
+    const items = (body[field] as unknown[] | undefined) ?? []
+    if (items.some((i) => !String(i ?? "").trim())) problems.push(`returns an empty item in ${field}`)
+  }
   const leaked = leakedSentence(p, stringsIn(body).join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
   return problems
 }
 
+/** True when the quote at `i` is escaped by an odd run of backslashes before it. */
+function escaped(text: string, i: number): boolean {
+  let n = 0
+  for (let j = i - 1; j >= 0 && text[j] === "\\"; j--) n++
+  return n % 2 === 1
+}
+
+/** Index of the quote that opens the string literal whose closing quote is at `close`. */
+function stringStart(text: string, close: number): number {
+  const q = text[close]
+  for (let i = close - 1; i >= 0; i--) if (text[i] === q && !escaped(text, i)) return i
+  return -1
+}
+
+/** Index of the quote that closes the string literal opened at `open`. */
+function stringEnd(text: string, open: number): number {
+  const q = text[open]
+  for (let i = open + 1; i < text.length; i++) if (text[i] === q && !escaped(text, i)) return i
+  return text.length
+}
+
+const QUOTE = new Set(['"', "'"])
+
 /**
- * The object a position sits in, found by brace depth, and the slug key at
- * that object's own level, before or after the position. Walks up to the
- * enclosing objects when the object has no slug. Strings with braces in them
- * can mislead it; data records rarely carry any.
+ * The object a position sits in, found by brace depth with string literals
+ * skipped ("example {" is not a brace), and the slug key at that object's own
+ * level, before or after the position. Walks up to the enclosing objects when
+ * the object has no slug. `at` must sit outside a string: a key is.
  */
 function ownerSlug(text: string, at: number): string | undefined {
-  let from = at
+  let from = at - 1
   for (let level = 0; level < 4; level++) {
     let start = -1
     for (let i = from, depth = 0; i >= 0 && from - i < 50_000; i--) {
       const c = text[i]
-      if (c === "}") depth++
+      if (QUOTE.has(c) && !escaped(text, i)) {
+        i = stringStart(text, i)
+        if (i < 0) return undefined
+      } else if (c === "}") depth++
       else if (c === "{") {
         if (depth === 0) {
           start = i
@@ -326,29 +382,19 @@ function ownerSlug(text: string, at: number): string | undefined {
       }
     }
     if (start === -1) return undefined
-    let end = -1
+    // Forward through the object: its end, and the slug keys at its own depth.
+    const slugs = [...text.slice(start + 1, start + 100_000).matchAll(SLUG_KEY)].map((m) => ({ at: start + 1 + m.index!, slug: m[1] }))
+    let next = 0
     for (let i = start + 1, depth = 0; i < text.length && i - start < 100_000; i++) {
+      while (next < slugs.length && slugs[next].at < i) next++
+      if (next < slugs.length && slugs[next].at === i && depth === 0) return slugs[next].slug
       const c = text[i]
-      if (c === "{") depth++
+      if (QUOTE.has(c) && !escaped(text, i)) i = stringEnd(text, i)
+      else if (c === "{") depth++
       else if (c === "}") {
-        if (depth === 0) {
-          end = i
-          break
-        }
+        if (depth === 0) break
         depth--
       }
-    }
-    if (end === -1) return undefined
-    const record = text.slice(start + 1, end)
-    // The slug at the record's own depth, not one inside a nested object.
-    let depth = 0
-    let cursor = 0
-    for (const m of record.matchAll(SLUG_KEY)) {
-      for (; cursor < m.index!; cursor++) {
-        if (record[cursor] === "{") depth++
-        else if (record[cursor] === "}") depth--
-      }
-      if (depth === 0) return m[1]
     }
     from = start - 1
   }

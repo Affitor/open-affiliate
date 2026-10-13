@@ -746,6 +746,11 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
   if (!dropped) fail("no unverified program has a dropped sentence to probe the .md prose check with");
   const droppedMd = `${requireText(join("programs", `${dropped.p.slug}.md`))}\n${dropped.s}\n`;
   if (termsMdProblems(dropped.p, droppedMd).length === 0) fail(`the .md terms check passed ${dropped.p.slug} carrying a dropped sentence`);
+  // An optional field printed empty instead of left out.
+  if (termsMdProblems(off, offMd.replace(/^(Category: .*)$/m, "Commission conditions: \n$1")).length === 0) {
+    fail("the .md terms check passed an empty Commission conditions line");
+  }
+  if (termsMdProblems(off, `${offMd}\n## Restrictions\n\n`).length === 0) fail("the .md terms check passed an empty Restrictions section");
   const row = `- [${off.name}](${BASE_URL}/programs/${off.slug}.md) — 20% recurring, ${off.cookieDays}d cookie (unverified, terms unconfirmed)`;
   if (unconfirmedCookieRow(row) !== off.slug) fail("the index row check passed an unverified row with a cookie window");
 }
@@ -790,6 +795,8 @@ for (const file of readdirSync(BUILD_APP, { recursive: true }) as string[]) {
     ["an object literal", `{slug:"${off.slug}",name:"x",cookieDays:${off.cookieDays}}`, 1],
     ["escaped JSON", `const r=JSON.parse("{\\"cookieDays\\":${off.cookieDays},\\"slug\\":\\"${off.slug}\\"}")`, 1],
     ["a nested commission object before the term", `{"slug":"${off.slug}","commission":{"rate":"20%"},"cookieDays":${off.cookieDays}}`, 1],
+    ["a brace inside a string", `{"slug":"${off.slug}","description":"example {","cookieDays":${off.cookieDays}}`, 1],
+    ["a closing brace inside a string, verified", `{"slug":"${on.slug}","description":"} example","cookieDays":${on.cookieDays}}`, 0],
   ] as const) {
     const scan = chunkScan(probe, shown);
     if (scan.problems.length !== want) fail(`the chunk check found ${scan.problems.length} problems in a probe with ${what}; expected ${want}`);
@@ -1258,6 +1265,9 @@ async function checkServedPages(): Promise<string> {
     if (termsHtmlProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
       fail(`the page terms check passed ${dropped.p.slug} carrying a dropped sentence in its RSC payload`);
     }
+    // An optional field rendered empty instead of left out.
+    const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
+    if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
     const onHtml = kept.get(on)!;
     if (termsHtmlProblems(on, onHtml.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
       fail("the page terms check passed a verified page with its cookie badge removed");
@@ -1298,6 +1308,10 @@ async function checkServedPages(): Promise<string> {
       const prose = { ...body, description: `${body.description} Payouts are monthly with a $50 minimum.` };
       if (!termsConfirmed(program) && termsApiProblems(program, prose).length === 0) {
         fail("the API terms check passed an unverified program stating its payout in prose");
+      }
+      const emptied = { ...body, commissionConditions: "", restrictions: [""] };
+      if (!termsConfirmed(program) && termsApiProblems(program, emptied).length < 2) {
+        fail("the API terms check passed an empty string in place of a left-out optional field");
       }
     }
     return `${noProgramPages.length} no-program pages, ${termsPages.length} program pages (${unconfirmedCount} unverified) and ${list.length} API rows`;
