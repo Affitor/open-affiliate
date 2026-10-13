@@ -290,7 +290,7 @@ function programMd(p: Program): string {
   ].filter(Boolean).join("\n")
 
   return joinSections([
-    `# ${mdEscape(p.name)} affiliate program`,
+    `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
     p.status === "discontinued" ? null : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
@@ -349,7 +349,8 @@ function indexRow(p: Program): string {
  * (build-registry), and the auto-merge policy admits only
  * `programs/[a-z0-9-]+.yaml`; any other filename is in a diff a person merges.
  *
- * Three functions, because one would be wrong in every direction.
+ * Three functions, because one would be wrong in every direction, plus
+ * `mdHeading` for the one context with a rule of its own.
  *
  * `mdEscape` is for short inline facts. It collapses line breaks and
  * neutralises anything that can open a link, emphasis, a code span,
@@ -361,13 +362,26 @@ function indexRow(p: Program): string {
  * hole in "this text never starts a line", which was true only of the two
  * fields the first attempt covered. But escaping every `*` and `_` in a
  * paragraph of English is noise a reader has to see through, so prose keeps
- * those and neutralises structure instead: brackets, raw HTML, and anything at
- * the start of a line that can open a block.
+ * those and neutralises structure instead: brackets, raw HTML, code spans,
+ * table pipes, indentation, and anything at the start of a line that can open
+ * a block.
  *
  * `mdUrl` is for bare URLs printed for a reader to copy. mdEscape would write
  * `utm\_source` into them, and an agent copies the raw bytes — six programs'
  * links would break that way today. A URL has its own escape, so the few
  * characters that can break out of one line of text are percent-encoded.
+ *
+ * `mdHeading` is mdEscape for text inside an ATX heading, where a trailing run
+ * of `#` is read as the closing sequence and dropped: category "AI #" rendered
+ * as "AI".
+ *
+ * Not neutralised, deliberately: GFM's autolink literals. In a GFM renderer a
+ * bare `https://…`, `www.…` or e-mail address in any of these fields becomes a
+ * link. Its visible text is always its own target, so it cannot pass one
+ * destination off as another; what can is `[text](url)` or raw HTML, and both
+ * are escaped above. An agent reading the raw file sees the same characters
+ * either way, and breaking `://` to stop the autolink would corrupt every URL a
+ * contributor writes in prose.
  *
  * `<`, `>` and an `&` that would start a character reference become entities,
  * because backslash does not escape them in Markdown. `&` is replaced first,
@@ -395,21 +409,50 @@ function mdEscape(text: string): string {
 function mdEscapeProse(text: string): string {
   return entities(text)
     .replace(/\r\n?/g, "\n")
-    .replace(/([\\[\]])/g, "\\$1")
+    // Backticks and pipes anywhere, not only at line start: a backtick pair made
+    // a code span, which decodes nothing, so `<tag>` printed as `&lt;tag&gt;`;
+    // and rows of pipes over a `| --- |` line made a GFM table.
+    .replace(/([\\`[\]|])/g, "\\$1")
     // Per line, because section() puts the first one at column zero and a
-    // contributor newline puts the rest there too. The first character is
-    // escaped whenever it can open a block — heading, list item, setext
-    // underline, thematic break, code fence — whatever follows it: requiring a
-    // space after it let `===` and a lone `-` (both turn the line above into a
-    // heading) and an unclosed ``` through. An ordered-list marker takes the
-    // backslash on its `.` or `)`, because one before a digit is printed.
+    // contributor newline puts the rest there too. Indentation goes first: it
+    // means nothing in a description, and four spaces of it make a code block.
+    // Then the first character is escaped whenever it can open a block —
+    // heading, list item, setext underline, thematic break, fence — whatever
+    // follows it: requiring a space after it let `===` and a lone `-` (both turn
+    // the line above into a heading) and an unclosed `~~~` through. An
+    // ordered-list marker takes the backslash on its `.` or `)`, because one
+    // before a digit is printed.
     .split("\n")
-    .map(line => line.replace(/^(\s*)([#+\-*=_`~])/, "$1\\$2").replace(/^(\s*\d+)([.)])(?=\s|$)/, "$1\\$2"))
+    .map(line =>
+      line
+        .replace(/^[ \t]+/, "")
+        .replace(/^([#+\-*=_~])/, "\\$1")
+        .replace(/^(\d+)([.)])(?=\s|$)/, "$1\\$2"),
+    )
     .join("\n")
 }
 
+function mdHeading(text: string): string {
+  return mdEscape(text).replace(/#/g, "\\#")
+}
+
 function mdUrl(url: string): string {
-  return String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  const s = String(url)
+  // Brackets are legal in a URL only around an IPv6 host, and percent-encoding
+  // those breaks it: https://[2001:db8::1]/ became https://%5B2001:db8::1%5D/.
+  // That pair is kept when the raw string opens with it and the URL parses with
+  // an IPv6 host. Parsing is what makes keeping it safe: a host the parser
+  // accepts ends at `/ ? # :` or the end, never at the `(` a link would need.
+  const ipv6 = /^[a-z][a-z0-9+.-]*:\/\/(?:[^/?#@[\]\s]*@)?\[[0-9a-f:.]+\]/i.exec(s)?.[0] ?? ""
+  let keep = 0
+  if (ipv6) {
+    try {
+      if (new URL(s).hostname.startsWith("[")) keep = ipv6.length
+    } catch {
+      // Not a URL: encode everything.
+    }
+  }
+  return s.slice(0, keep) + s.slice(keep).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
 }
 
 function entities(text: string): string {
@@ -491,7 +534,7 @@ function checkedOn(p: Program): string {
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
   const verified = list.filter(listedVerified)
   const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
-  const title = kind === "category" ? `${mdEscape(label)} affiliate programs` : `${mdEscape(label)} affiliate network`
+  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : `${mdHeading(label)} affiliate network`
 
   return joinSections([
     `# ${title}`,
@@ -812,7 +855,7 @@ function programsIndexMd(): string {
         sorted.length > shown.length
           ? `\n- … ${sorted.length - shown.length} more in [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md)`
           : ""
-      return `### ${mdEscape(c)}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
+      return `### ${mdHeading(c)}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
     })
     .filter(Boolean)
     .join("\n\n")
