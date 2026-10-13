@@ -23,7 +23,8 @@ payout:
   minimum: 0
   currency: USD
 
-signup_url: https://www.podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304/
+# "Sign up at affiliates.podpage.com" (podpage.com/support/earn/all-about-podpages-affiliate-program-1772750304, checked 2026-10-13); that portal's sign-up page reads "Join Podpage Affiliate Program and receive a 20% commission on all payments within the first 24 months" (affiliates.podpage.com/signup, checked 2026-10-13)
+signup_url: https://affiliates.podpage.com/signup
 
 dashboard_url: null
 # The affiliate portal (affiliates.podpage.com) runs on Rewardful; this is read from the portal's page code, the page does not name it

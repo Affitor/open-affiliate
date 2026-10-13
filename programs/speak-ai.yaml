@@ -12,12 +12,17 @@ commission:
   value: 25
   currency: USD
   duration: 12 months
-  conditions: "25% of every payment a referral makes for their first 12 months, then commission on that referral stops. A conversion counts when the referred customer makes their first paid payment after the 7-day trial."
+  # "For an Affiliate to receive a commission, the referred account must remain active for a minimum of 31 days." (speakai.co/affiliate-terms-of-service/, checked 2026-10-13)
+  conditions: "25% of every payment a referral makes for their first 12 months, then commission on that referral stops. A conversion counts when the referred customer makes their first paid payment after the 7-day trial. The referred account must stay active for at least 31 days before commission is paid."
 
 # "Every click is tracked with a 90-day cookie." (speakai.co/affiliates, checked 2026-10-13)
 cookie_days: 90
 
-# payout minimum: not published on speakai.co/affiliates ("once your account meets the minimum threshold", figure not stated; checked 2026-10-13)
+# speakai.co/affiliates says only "once your account meets the minimum threshold" (checked 2026-10-13); the brand's affiliate terms (speakai.co/affiliate redirects to speakai.co/affiliate-terms-of-service/, "Last updated May 2022", checked 2026-10-13) give the figure and schedule, and do not conflict with /affiliates: "Payments will be made once an Affiliate’s commission total equals or exceeds $50USD."; "Commissions will be paid once a month at the end of a billing cycle for up to 12 months from the initial qualifying subscription date."; methods not published
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
 
 signup_url: https://speakai.co/affiliates/
 # "Sign up through Rewardful in under two minutes. You get instant access to your dashboard and affiliate links — no waiting on approval." (speakai.co/affiliates, checked 2026-10-13)
@@ -36,7 +41,8 @@ description: >
   market research across many conversations.
 
   The affiliate program pays 25% of every payment a referral makes for their
-  first 12 months, with a 90-day cookie. Sign-up runs through Rewardful with
+  first 12 months, with a 90-day cookie. Commission is paid monthly once you
+  reach $50, and a referred account must stay active for 31 days. Sign-up runs through Rewardful with
   instant access and no approval wait, and there is no fee to join.
 
 short_description: "AI transcription and conversation intelligence for teams and researchers"

@@ -7,13 +7,14 @@ tags: [automation, integrations, ipaas, no-code, ai-agents]
 commission:
   type: recurring
   # "Become an affiliate, refer new users to Albato, and earn up to 50%!"; tiers Bronze 30% (up to 10 active accounts), Silver 40% (11 to 30), Gold 50% (30+) (albato.com/affiliates, checked 2026-10-13)
+  # the page marks each tier as a raised rate over a struck-through regular rate (earnings-chart_oldRate 10% / 15% / 25% -> newRate 30% / 40% / 50%; albato.com/affiliates, checked 2026-10-13); content.albato.com/affiliates heads the same block "Boost campaign" and lists a separate scheme for "Sales of Albato lifetime plans": Bronze 10% (up to 10 active accounts), Silver 15% (11 to 20), Gold 20% (20+) (checked 2026-10-13). Re-check whether the boost has ended.
   rate: "up to 50%"
   mode: tiered
   value: 50
   currency: USD
   # "Be commissioned as long as the referred accounts stay active on paid plans." (albato.com/affiliates, checked 2026-10-13)
   duration: lifetime
-  conditions: "Paid monthly on the total amount paid by all referred users on Albato's recurring plans. Bronze 30% for up to 10 active accounts, Silver 40% for 11 to 30, Gold 50% for 30+. Affiliates can offer their audience 20% off the first payment on any plan with an exclusive coupon."
+  conditions: "Paid monthly on the total amount paid by all referred users on Albato's recurring plans. Bronze 30% for up to 10 active accounts, Silver 40% for 11 to 30, Gold 50% for 30+. These are shown as raised rates over regular 10% / 15% / 25% and are labelled a Boost campaign on content.albato.com/affiliates. Sales of Albato lifetime-deal plans pay a separate 10% / 15% / 20%. Affiliates can offer their audience 20% off the first payment on any plan with an exclusive coupon."
 
 # cookie window: not published on albato.com/affiliates (checked 2026-10-13)
 

@@ -21,6 +21,7 @@ commission:
 signup_url: https://reelfarm.getrewardful.com/signup
 
 dashboard_url: null
+# Rewardful: the homepage FAQ's affiliate link goes to reelfarm.getrewardful.com/signup (reel.farm, checked 2026-10-13). The homepage also loads cdn.tolt.io/tolt.js (data-tolt key), but the affiliate link is Rewardful, so the network stays rewardful
 network: rewardful
 program_age: null
 

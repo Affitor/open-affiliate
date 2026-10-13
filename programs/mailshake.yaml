@@ -28,6 +28,7 @@ approval: manual
 marketing_materials: true
 dedicated_manager: true
 dashboard_url: null
+# FirstPromoter: the "Apply Now" button on mailshake.com/affiliate-program links to mailshake.firstpromoter.com/signup/29680 (checked 2026-10-13)
 network: firstpromoter
 program_age: null
 
