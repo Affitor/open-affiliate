@@ -610,8 +610,10 @@ test("every value written is checked against the schema", () => {
     [["commission", "duration"], null],
     [["short_description"], "x".repeat(100)],
     [["slug"], "citegraph"],
+    [["signup_url"], "https://x.com/join?a=1&b=2"],
   ]
   assert.doesNotThrow(() => checkSchema(ok, "x.yaml"))
+  assert.throws(() => checkSchema([[["signup_url"], "https://x.com/join?a=1&amp;b=2"]], "x.yaml"), /signup_url .*pattern/)
   assert.throws(() => checkSchema([[["cookie_days"], 1.5]], "x.yaml"), /cookie_days is 1.5, not integer/)
   assert.throws(() => checkSchema([[["cookie_days"], -1]], "x.yaml"), /below 0/)
   assert.throws(() => checkSchema([[["network"], "nope"]], "x.yaml"), /not one of the schema's values/)

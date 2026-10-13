@@ -437,6 +437,13 @@ function mdHeading(text: string): string {
 }
 
 function mdUrl(url: string): string {
+  // `&` is left alone, and the schema is the guard. A character reference in a
+  // URL (`&amp;`, `&#x41;`) cannot be printed as bare text so that both
+  // renderers agree: CommonMark decodes it, so the text stops matching the URL,
+  // and escaping the `&` breaks GFM, whose autolink keeps the raw characters.
+  // So the url, signup_url and dashboard_url patterns in
+  // schema/program.schema.json refuse such a value before it gets here, in
+  // build-registry and in the sync alike.
   const s = String(url)
   // Brackets are legal in a URL only around an IPv6 host, and percent-encoding
   // those breaks it: https://[2001:db8::1]/ became https://%5B2001:db8::1%5D/.

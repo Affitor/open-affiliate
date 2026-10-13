@@ -33,7 +33,8 @@
     "url": {
       "type": "string",
       "format": "uri",
-      "description": "Product website URL"
+      "pattern": "^(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)",
+      "description": "Product website URL. No HTML character references: write & itself, not &amp;."
     },
     "kind": {
       "type": "string",
@@ -234,7 +235,8 @@
         "null"
       ],
       "format": "uri",
-      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing."
+      "pattern": "^(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)",
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. No HTML character references: write & itself, not &amp;."
     },
     "approval": {
       "type": "string",
@@ -282,7 +284,8 @@
         "string",
         "null"
       ],
-      "description": "URL to the affiliate dashboard"
+      "pattern": "^(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)",
+      "description": "URL to the affiliate dashboard. No HTML character references: write & itself, not &amp;."
     },
     "network": {
       "type": [

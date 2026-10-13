@@ -21,6 +21,19 @@ const SIGNUP_URL_DEBT = new Set<string>(
   ).slugs
 )
 
+/**
+ * URL fields whose schema `pattern` refuses HTML character references
+ * (`&amp;`, `&#38;`, `&#x26;`). Read from the schema, so this build (CI's
+ * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
+ * rule. See the check in validateProgram.
+ */
+const URL_FIELDS = ["url", "signup_url", "dashboard_url"]
+const SCHEMA_PROPERTIES = (
+  JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8")) as {
+    properties: Record<string, { pattern?: string }>
+  }
+).properties
+
 const REQUIRED_FIELDS = [
   "name",
   "slug",
@@ -113,6 +126,21 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     throw new Error(
       `Slug mismatch in ${filename}: expected "${expectedSlug}", got "${data.slug}"`
     )
+  }
+
+  // A URL holding `&amp;` or `&#…;` is a data bug, usually copied out of HTML,
+  // and Markdown renderers disagree on it: CommonMark shows `&amp;` as `&`,
+  // while a GFM autolink keeps it and drops the `;` from the link. Refusing the
+  // value is cheaper than rewriting every URL line of the Markdown twins.
+  for (const field of URL_FIELDS) {
+    const value = data[field]
+    const pattern = SCHEMA_PROPERTIES[field]?.pattern
+    if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
+      throw new Error(
+        `${filename}: ${field} contains an HTML character reference such as "&amp;". ` +
+          `Write the character itself ("&", not "&amp;"): "${value}"`
+      )
+    }
   }
 
   const commission = data.commission as Record<string, unknown> | undefined
