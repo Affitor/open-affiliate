@@ -172,6 +172,7 @@ export default async function NetworkPage({
                 mainEntity: {
                   "@type": "ItemList",
                   numberOfItems: netPrograms.length,
+                  // First 20 table rows; verify-machine-surfaces holds it to NETWORK_ITEMLIST_MAX.
                   itemListElement: netPrograms.slice(0, 20).map((p, i) => ({
                     "@type": "ListItem",
                     position: i + 1,

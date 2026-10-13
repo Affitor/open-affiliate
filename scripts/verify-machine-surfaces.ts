@@ -12,6 +12,7 @@ import {
   categoryToSlug,
   networkToSlug,
   programs,
+  isLive,
   liveNetworks,
   networkHeading,
   networkName,
@@ -560,6 +561,8 @@ function readBuilt(file: string): string {
 
 const TITLE_MAX = 60;
 const DESCRIPTION_RANGE = [120, 155] as const;
+/** networks/[slug]/page.tsx puts the first 20 table rows in its ItemList. */
+const NETWORK_ITEMLIST_MAX = 20;
 function checkHead(file: string, html: string, mustInclude: string): void {
   const title = htmlTitle(html);
   if (title.length > TITLE_MAX || /[–—]/.test(title) || !title.includes(mustInclude)) {
@@ -600,10 +603,48 @@ for (const network of liveNetworks) {
   }
   if (!nodes.some((node) => node["@type"] === "BreadcrumbList")) fail(`${file} has no BreadcrumbList JSON-LD`);
 
+  // The rows, not only the shell around them: a table with no rows, an
+  // ItemList with no items or a twin holding only its H1 kept a correct title
+  // and H1, and every check above passed. Expected sets come from the registry.
+  const inNetwork = (p: { network?: string | null }) => (p.network ?? IN_HOUSE) === network;
+  const want = programs.filter((p) => inNetwork(p) && isLive(p)).map((p) => p.slug);
+  const tbody = /<tbody>([\s\S]*?)<\/tbody>/.exec(html)?.[1] ?? "";
+  const htmlRows = [...tbody.matchAll(/href="\/programs\/([a-z0-9-]+)"/g)].map((m) => m[1]);
+  sameRows(`${file} table`, [...htmlRows].sort(), [...want].sort());
+  const itemList = (
+    nodes.find((node) => node["@type"] === "CollectionPage") as
+      | { mainEntity?: { numberOfItems?: number; itemListElement?: { position?: number; url?: string }[] } }
+      | undefined
+  )?.mainEntity;
+  const items = itemList?.itemListElement ?? [];
+  if (itemList?.numberOfItems !== want.length) {
+    fail(`${file} ItemList says ${itemList?.numberOfItems} programs; the network has ${want.length} live`);
+  }
+  if (items.some((item, i) => item.position !== i + 1)) fail(`${file} ItemList positions are not 1..n`);
+  // The page lists its first NETWORK_ITEMLIST_MAX table rows, in table order.
+  sameRows(
+    `${file} ItemList`,
+    items.map((item) => item.url ?? ""),
+    htmlRows.slice(0, NETWORK_ITEMLIST_MAX).map((s) => `${BASE_URL}/programs/${s}`)
+  );
+
   const md = requireText(join("networks", `${slug}.md`));
   if (!md.startsWith(`# ${heading}\n`)) {
     fail(`networks/${slug}.md must start with "# ${heading}": ${md.split("\n")[0]}`);
   }
+  const foreign = foreignMarkup(md);
+  if (foreign) fail(`networks/${slug}.md has markup the generator did not write: ${foreign}`);
+  // The twin lists every program on the network, paused and discontinued ones
+  // included and marked, as the category twins do.
+  const mdWant = programs.filter(inNetwork).map((p) => p.slug);
+  const mdSection = md.split(/^## /m).find((part) => part.startsWith("Programs\n")) ?? "";
+  const mdRows = [
+    ...mdSection.matchAll(/^- \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
+  ].map((m) => m[1]);
+  sameRows(`networks/${slug}.md`, [...mdRows].sort(), [...mdWant].sort());
+  const mdVerified = programs.filter((p) => inNetwork(p) && p.verified && isLive(p)).length;
+  const mdClaim = `> ${mdWant.length} ${mdWant.length === 1 ? "program" : "programs"}, ${mdVerified} verified by OpenAffiliate.`;
+  if (!md.split("\n").includes(mdClaim)) fail(`networks/${slug}.md should state "${mdClaim}"`);
 }
 
 /**
@@ -622,12 +663,83 @@ checkHead("networks.html", networksIndex, "Affiliate Networks");
 if (htmlH1(networksIndex) !== "Affiliate Networks") {
   fail(`networks.html H1 should be "Affiliate Networks" and is "${htmlH1(networksIndex)}"`);
 }
-const faqNode = jsonLdNodes(networksIndex).find((node) => node["@type"] === "FAQPage") as
-  | { mainEntity?: { acceptedAnswer?: { text?: string } }[] }
-  | undefined;
-if (!faqNode?.mainEntity?.length || faqNode.mainEntity.some((q) => !q.acceptedAnswer?.text || /undefined|NaN/.test(q.acceptedAnswer.text))) {
-  fail("networks.html FAQPage must carry answered questions, with no undefined or NaN in them");
+/**
+ * /networks against the registry: one card per network with its counts, the
+ * ItemList, and FAQ answers whose numbers are recomputed here rather than read
+ * back from the page. Order is the page's rule: most live programs first, ties
+ * by stored value.
+ */
+const liveList = programs.filter(isLive);
+const networkRows = liveNetworks
+  .map((network) => {
+    const list = liveList.filter((p) => (p.network ?? IN_HOUSE) === network);
+    return { network, count: list.length, verified: list.filter((p) => p.verified).length };
+  })
+  .sort((a, b) => b.count - a.count || a.network.localeCompare(b.network));
+const cardRows = networkRows.filter((row) => row.network !== IN_HOUSE);
+const inHouseCount = networkRows.find((row) => row.network === IN_HOUSE)?.count ?? 0;
+const plural = (n: number) => `${n} ${n === 1 ? "program" : "programs"}`;
+
+const anchors = [...networksIndex.matchAll(/<a [^>]*href="\/networks\/([a-z0-9-]+)"[^>]*>([\s\S]*?)<\/a>/g)];
+sameRows(
+  "networks.html cards",
+  anchors.map((m) => m[1]),
+  [...cardRows.map((row) => networkToSlug(row.network)), ...(inHouseCount > 0 ? [networkToSlug(IN_HOUSE)] : [])]
+);
+cardRows.forEach((row, i) => {
+  const want = `${plural(row.count)} · ${row.verified} verified`;
+  const text = visibleText(anchors[i][2]).replace(/\s+/g, " ");
+  if (!text.includes(want)) fail(`networks.html card for ${row.network} should say "${want}": ${text.trim().slice(0, 120)}`);
+});
+
+const indexNodes = jsonLdNodes(networksIndex);
+const indexList = (
+  indexNodes.find((node) => node["@type"] === "CollectionPage") as
+    | { mainEntity?: { numberOfItems?: number; itemListElement?: { position?: number; url?: string }[] } }
+    | undefined
+)?.mainEntity;
+if (indexList?.numberOfItems !== cardRows.length) {
+  fail(`networks.html ItemList says ${indexList?.numberOfItems} networks; the registry has ${cardRows.length}`);
 }
+sameRows(
+  "networks.html ItemList",
+  (indexList?.itemListElement ?? []).map((item) => item.url ?? ""),
+  cardRows.map((row) => `${BASE_URL}/networks/${networkToSlug(row.network)}`)
+);
+
+const faq = (
+  (indexNodes.find((node) => node["@type"] === "FAQPage") as
+    | { mainEntity?: { name?: string; acceptedAnswer?: { text?: string } }[] }
+    | undefined)?.mainEntity ?? []
+).map((q) => ({ q: q.name ?? "", a: q.acceptedAnswer?.text ?? "" }));
+const [top1, top2, top3] = cardRows;
+const faqWant: [string, string[]][] = [
+  ["What is an affiliate network?", cardRows.map((row) => networkName(row.network))],
+  [
+    "Which affiliate network has the most programs?",
+    top1
+      ? [
+          `${networkName(top1.network)}, with ${top1.count} of the ${liveList.length} live programs listed here.`,
+          ...[top2, top3].filter(Boolean).map((row) => `${networkName(row.network)} (${row.count})`),
+        ]
+      : [],
+  ],
+  [
+    "Do you need an affiliate network to join a program?",
+    [`${inHouseCount} of the ${liveList.length} programs here (${Math.round((inHouseCount / liveList.length) * 100)}%)`],
+  ],
+];
+if (faq.length !== faqWant.length) fail(`networks.html FAQPage has ${faq.length} questions; expected ${faqWant.length}`);
+const indexText = visibleText(networksIndex).replace(/\s+/g, " ");
+faqWant.forEach(([q, parts], i) => {
+  if (faq[i].q !== q) fail(`networks.html FAQ question ${i + 1} should be "${q}" and is "${faq[i].q}"`);
+  const missing = parts.find((part) => !faq[i].a.includes(part));
+  if (missing) fail(`networks.html FAQ answer to "${q}" should include "${missing}": ${faq[i].a}`);
+  // What the crawler reads is what the reader sees.
+  if (!indexText.includes(faq[i].q) || !indexText.includes(faq[i].a)) {
+    fail(`networks.html shows a different FAQ from its FAQPage JSON-LD: "${q}"`);
+  }
+});
 
 /**
  * The pilot pages must never show a stored slug where the display name

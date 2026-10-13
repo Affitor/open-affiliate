@@ -6,7 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
-  getNetworkStats,
+  livePrograms,
+  liveNetworks,
   networkToSlug,
   networkName,
   networkHeading,
@@ -27,9 +28,22 @@ function listNames(names: string[]): string {
  * Every number on this page comes from the registry, so the copy cannot drift
  * from the cards. In-house is a bucket with a page of its own, not a network,
  * so it is counted apart.
+ *
+ * Counts only. The cards once showed a "Best" commission and a "Top" program
+ * picked by rankScore, a capped heuristic: PartnerStack read "Best $1k" from an
+ * unverified program while the registry held an unverified $10k one. Which
+ * program pays most is answered on each network page, next to its full list.
+ *
+ * Most programs first, ties by stored value, so the order and the FAQ built on
+ * it are the same on every build. verify-machine-surfaces uses the same rule.
  */
 function networksData() {
-  const stats = getNetworkStats();
+  const stats = liveNetworks
+    .map((network) => {
+      const list = livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network);
+      return { network, programCount: list.length, verified: list.filter((p) => p.verified).length };
+    })
+    .sort((a, b) => b.programCount - a.programCount || a.network.localeCompare(b.network));
   const networks = stats.filter((n) => n.network !== IN_HOUSE);
   const inHouse = stats.find((n) => n.network === IN_HOUSE)?.programCount ?? 0;
   const total = stats.reduce((sum, n) => sum + n.programCount, 0);
@@ -80,7 +94,7 @@ function networksMeta() {
   const title = `Affiliate Networks: Compare ${networks.length} Networks and Their Programs`;
   const second = networks[1];
   const description =
-    `Compare ${networks.length} affiliate networks by program count, best commission and how you join` +
+    `Compare ${networks.length} affiliate networks by program count, verified programs and how you join` +
     (first
       ? `, led by ${networkName(first.network)} (${first.programCount} programs)${second ? ` and ${networkName(second.network)} (${second.programCount})` : ""}.`
       : ".");
@@ -177,7 +191,7 @@ export default function NetworksPage() {
                     {name}
                   </h2>
                   <p className="text-xs text-muted-foreground">
-                    {net.programCount} {net.programCount === 1 ? "program" : "programs"}
+                    {`${net.programCount} ${net.programCount === 1 ? "program" : "programs"} · ${net.verified} verified`}
                   </p>
                 </div>
                 <Badge variant="outline" className="text-[10px] shrink-0">
@@ -186,19 +200,6 @@ export default function NetworksPage() {
               </div>
 
               {meta && <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{meta.description}</p>}
-
-              <div className="mt-auto pt-4">
-                <div className="flex items-center justify-between gap-3 border-t border-border/30 pt-3">
-                  <div className="flex min-w-0 items-center gap-2">
-                    <ProgramLogo slug={net.topProgram.slug} name={net.topProgram.name} size={20} className="shrink-0" />
-                    <span className="text-xs text-muted-foreground truncate">Top: {net.topProgram.name}</span>
-                  </div>
-                  <div className="text-right shrink-0">
-                    <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">Best</p>
-                    <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{net.bestCommissionDisplay}</p>
-                  </div>
-                </div>
-              </div>
             </Link>
           );
         })}
@@ -209,7 +210,7 @@ export default function NetworksPage() {
           href={`/networks/${networkToSlug(IN_HOUSE)}`}
           className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
-          {inHouse} {inHouse === 1 ? "program runs" : "programs run"} in-house, with no network{" "}
+          {`${inHouse} ${inHouse === 1 ? "program runs" : "programs run"} in-house, with no network`}{" "}
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       )}
