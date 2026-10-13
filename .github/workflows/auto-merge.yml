@@ -7,7 +7,9 @@ name: Auto-merge Policy
 #
 # Two lanes. Pull requests from the sync App (sync-affitor.yml) take the
 # affitor-sync lane: no reviewed label, but every term is re-read from the
-# Affitor API before auto-merge is armed. Everyone else takes the human lane.
+# Affitor API before auto-merge is armed. Only updates and pauses of existing
+# listings merge that way; a pull request that adds a listing is labelled
+# affitor-sync-new and left to a person. Everyone else takes the human lane.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
@@ -106,6 +108,7 @@ jobs:
                   files,
                 })
             const checkedAt = new Date().toISOString()
+            const newListingsLabel = `${AFFITOR_SYNC.label}-new`
 
             const reviewedLabel = 'reviewed'
             const labelDefinitions = [
@@ -114,6 +117,7 @@ jobs:
               ['do-not-merge', 'b60205', 'Emergency stop: never auto-merge this pull request'],
               [reviewedLabel, '1d76db', 'Holder reviewed this head; native auto-merge may arm'],
               [AFFITOR_SYNC.label, '0e8a16', 'Daily Affitor sync; terms re-checked against the Affitor API before merge'],
+              [newListingsLabel, 'fbca04', 'Affitor sync adds listings: hand category, description and agents block, then human review'],
             ]
             for (const [name, color, description] of labelDefinitions) {
               try {
@@ -214,6 +218,11 @@ jobs:
               await addLabel(blockedLabel)
               await removeLabel(candidateLabel)
               action = 'Human review is required; auto-merge was not requested.'
+              // New listings never auto-merge: a person edits and merges them.
+              if (syncLane && result.newSlugs.length > 0) {
+                await addLabel(newListingsLabel)
+                action += ` New listings: ${result.newSlugs.join(', ')}. Each needs a hand category, description and agents block, then a person reviews and merges.`
+              }
 
               if (pullRequest.auto_merge) {
                 await disableAutoMerge()
@@ -226,7 +235,7 @@ jobs:
               : syncLane
                 ? [
                     `- author \`${AFFITOR_SYNC.bot}\`, label \`${AFFITOR_SYNC.label}\``,
-                    `- ${result.programCount} listing(s) the sync created under \`programs/*.yaml\`, none removed, none on the skip list`,
+                    `- ${result.programCount} updated listing(s) the sync created under \`programs/*.yaml\`; none new, removed or on the skip list`,
                     `- every sync-owned field equals the Affitor API as read at ${checkedAt}; a modified listing changes nothing else`,
                     `- ${result.pauses} pause(s), each confirmed by Affitor; at most ${AFFITOR_SYNC.max_pauses}`,
                     `- no emergency-stop label`,

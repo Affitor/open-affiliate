@@ -404,12 +404,14 @@ const paused = (slug) =>
     }).replace('updated_at: "2026-10-12"', 'updated_at: "2026-10-13"')
   )
 
-/** One sync: alpha's rate went 20% → 25%, beta is new, gone left Affitor. */
+/** One updates sync: alpha's rate went 20% → 25%, gone left Affitor. */
 const SYNC_FILES = [
   modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, date: "2026-10-13" })),
-  added("beta", syncedYaml("beta", { date: "2026-10-13" })),
   paused("gone"),
 ]
+/** A new listing, which the sync puts in its own pull request. */
+const NEW_BETA = added("beta", syncedYaml("beta", { date: "2026-10-13" }))
+const HAND_NOTE = /new listing\(s\) beta: needs hand category \+ description \+ agents block, then human review/
 const SYNC_API = [
   affitorProgram("alpha", {
     default_policy: { commission_type: "cps_recurring", commission_rate: 25, duration_months: 12 },
@@ -436,17 +438,48 @@ function evaluateSync({ pullRequest = {}, files = SYNC_FILES, fetchJson = affito
   })
 }
 
-test("affitor-sync: a sync whose every owned field matches the API is eligible", async () => {
+test("affitor-sync: an update-only sync whose every owned field matches the API auto-merges", async () => {
   const fetchJson = affitorApi(SYNC_API)
-  assert.deepEqual(await evaluateSync({ fetchJson }), {
+  const result = await evaluateSync({ fetchJson })
+  assert.deepEqual(result, {
     eligible: true,
     reasons: [],
-    programCount: 3,
+    programCount: 2,
     pauses: 1,
+    newSlugs: [],
   })
   // The list once, then one detail per file.
-  assert.equal(fetchJson.calls, 4)
+  assert.equal(fetchJson.calls, 3)
   assert.equal(isAffitorSyncPullRequest(syncPullRequest()), true)
+  assert.equal(
+    shouldArmAutoMerge({ eligible: result.eligible, labels: [AFFITOR_SYNC.label], live: true, lane: "affitor-sync" }),
+    true
+  )
+})
+
+test("affitor-sync: a create-only pull request goes to a person, with the new slugs", async () => {
+  const fetchJson = affitorApi(SYNC_API)
+  const result = await evaluateSync({ files: [NEW_BETA], fetchJson })
+  assert.equal(result.eligible, false)
+  assert.deepEqual(result.newSlugs, ["beta"])
+  assert.deepEqual(result.reasons, [
+    "new listing(s) beta: needs hand category + description + agents block, then human review",
+  ])
+  assert.equal(fetchJson.calls, 0)
+  assert.equal(
+    shouldArmAutoMerge({ eligible: result.eligible, labels: [AFFITOR_SYNC.label], live: true, lane: "affitor-sync" }),
+    false
+  )
+})
+
+test("affitor-sync: a mixed pull request goes to a person as a whole", async () => {
+  const fetchJson = affitorApi(SYNC_API)
+  const result = await evaluateSync({ files: [...SYNC_FILES, NEW_BETA], fetchJson })
+  assert.equal(result.eligible, false)
+  assert.deepEqual(result.newSlugs, ["beta"])
+  assert.match(result.reasons.join("\n"), HAND_NOTE)
+  assert.equal(result.reasons.length, 1)
+  assert.equal(fetchJson.calls, 0)
 })
 
 test("affitor-sync: any other author is blocked before the API is called", async () => {
@@ -522,15 +555,11 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
   })
   assert.match(prose.reasons.join("\n"), /changes description, which the sync does not own/)
 
-  // A field the API no longer publishes must be gone; a new listing names Affitor's website.
+  // A field the API no longer publishes must be gone.
   const stale = await evaluateSync({
-    files: [
-      modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval: auto\n" })),
-      added("beta", syncedYaml("beta").replace("url: https://beta.example", "url: https://other.example")),
-    ],
+    files: [modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval: auto\n" }))],
   })
   assert.match(stale.reasons.join("\n"), /approval is "auto", Affitor says absent/)
-  assert.match(stale.reasons.join("\n"), /url is not the website Affitor lists: programs\/beta\.yaml/)
 
   // A pause Affitor does not confirm: the program is still listed.
   const notGone = await evaluateSync({ fetchJson: affitorApi([...SYNC_API, affitorProgram("gone")]) })
@@ -543,8 +572,8 @@ test("affitor-sync: an unreachable, failed or paged API blocks the merge", async
     affitorApi(SYNC_API, { list: { success: false, data: null } }),
     affitorApi(SYNC_API, { list: { success: true, data: [] } }),
     affitorApi(SYNC_API, { list: { success: true, data: SYNC_API, next_cursor: "2" } }),
-    affitorApi(SYNC_API, { details: { beta: new Error("HTTP 502") } }),
-    affitorApi(SYNC_API, { details: { beta: "<html>502</html>" } }),
+    affitorApi(SYNC_API, { details: { alpha: new Error("HTTP 502") } }),
+    affitorApi(SYNC_API, { details: { alpha: "<html>502</html>" } }),
   ]) {
     const result = await evaluateSync({ fetchJson })
     assert.equal(result.eligible, false)

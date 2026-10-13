@@ -270,13 +270,13 @@ function shouldArmAutoMerge({ eligible, labels, live, lane = "human" }) {
 // ---------- affitor-sync lane ----------------------------------------------
 //
 // A pull request opened by the sync's GitHub App, from
-// .github/workflows/sync-affitor.yml. Nothing in it is taken on trust: every
-// file must be a listing the sync created and not on the skip list, every
-// field the sync owns must equal what the Affitor API says now, a new listing
-// must name the website Affitor lists, and a modified listing may change
-// nothing else. The prose of a new listing (description, agents.prompt) is
-// the brand's own Affitor text and is not checked here. Anything this lane
-// cannot confirm leaves the pull request to a person.
+// .github/workflows/sync-affitor.yml. It merges only updates to listings the
+// sync already created: every file must be modified (never new, removed or
+// renamed), not on the skip list, every field the sync owns must equal what
+// the Affitor API says now, and nothing else may change. A pull request with
+// a new listing always goes to a person, who sets its category, description
+// and agents block. Anything this lane cannot confirm leaves the pull request
+// to a person.
 
 /** The bot's pull requests go through this lane; every other author through the human lane. */
 function isAffitorSyncPullRequest(pullRequest, config = AFFITOR_SYNC) {
@@ -429,11 +429,13 @@ async function evaluateAffitorSyncPolicy({
 }) {
   const reasons = []
   const labels = labelNames(pullRequest.labels)
+  const newSlugs = []
   const result = (programs, pauses) => ({
     eligible: reasons.length === 0,
     reasons: [...new Set(reasons)],
     programCount: programs.length,
     pauses,
+    newSlugs,
   })
 
   if (
@@ -471,6 +473,11 @@ async function evaluateAffitorSyncPolicy({
       reasons.push(`could not read: ${name}`)
       continue
     }
+    const fileSlug = name.slice("programs/".length, -".yaml".length)
+    // A new listing's prose is the brand's own Affitor text: a person sets
+    // its category, description and agents block before it ships. The checks
+    // below still run on it, for that person to read.
+    if (file.status === "added") newSlugs.push(fileSlug)
     const program = parseProgramYaml(file.content, name, reasons)
     if (!program) continue
     let base = null
@@ -486,7 +493,6 @@ async function evaluateAffitorSyncPolicy({
     if (program.network !== "affitor" || program.source !== "affitor-api") {
       reasons.push(`not a listing the sync created (network affitor, source affitor-api): ${name}`)
     }
-    const fileSlug = name.slice("programs/".length, -".yaml".length)
     if (program.slug !== fileSlug) {
       reasons.push(`slug must match filename: ${name}`)
     }
@@ -511,11 +517,17 @@ async function evaluateAffitorSyncPolicy({
     programs.push({ name, program, base, slug, pause })
   }
 
+  if (newSlugs.length > 0) {
+    reasons.push(
+      `new listing(s) ${newSlugs.join(", ")}: needs hand category + description + agents block, then human review`
+    )
+  }
   const pauses = programs.filter((p) => p.pause).length
   if (pauses > config.max_pauses) {
     reasons.push(`pauses ${pauses} listings, more than the ${config.max_pauses} one sync may pause`)
   }
   // Structure first: no API call for a pull request that is already blocked.
+  // Past this line every file is a modified listing with a base version.
   if (reasons.length > 0) return result(programs, pauses)
 
   let list
@@ -578,15 +590,9 @@ async function evaluateAffitorSyncPolicy({
           reasons.push(`${path} is ${show(actual)}, Affitor says ${show(value)}: ${name}`)
         }
       }
-      // A new listing is about the website Affitor lists, never another one.
-      const website = String(data.link_webpage ?? "").trim().replace(/\/+$/, "")
-      if (base === null && program.url !== website) {
-        reasons.push(`url is not the website Affitor lists: ${name}`)
-      }
       allowed = [...Object.keys(expected), "updated_at", "last_verified_at"]
     }
 
-    if (base === null) continue
     for (const path of changedPaths(base, program)) {
       if (!allowed.some((owned) => path === owned || path.startsWith(`${owned}.`))) {
         reasons.push(`changes ${path}, which the sync does not own: ${name}`)

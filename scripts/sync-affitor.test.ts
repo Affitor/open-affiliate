@@ -787,7 +787,8 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   ]
   const dir = dirWith({ "gone.yaml": `${GONE}source: affitor-api\n` })
 
-  // Day one: four listings created, one paused.
+  // Day one: four listings created, one paused. The workflow opens the new
+  // listings as their own pull request, for a person; the pause auto-merges.
   const created = await pullRequestFiles(dir, rows, TODAY)
   assert.deepEqual(created.map((f) => `${f.status} ${f.filename}`).sort(), [
     "added programs/citegraph.yaml",
@@ -796,7 +797,16 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
     "added programs/one-month.yaml",
     "modified programs/gone.yaml",
   ])
-  assert.deepEqual(await lane(created, rows), { eligible: true, reasons: [], programCount: 5, pauses: 1 })
+  const newListings = await lane(created.filter((f) => f.status === "added"), rows)
+  assert.equal(newListings.eligible, false)
+  assert.deepEqual(newListings.newSlugs.sort(), ["citegraph", "flat-fee", "lifer", "one-month"])
+  assert.deepEqual(await lane(created.filter((f) => f.status === "modified"), rows), {
+    eligible: true,
+    reasons: [],
+    programCount: 1,
+    pauses: 1,
+    newSlugs: [],
+  })
 
   // Day two: every term moved on Affitor. Each refresh is in the lane.
   const moved = rows.map((r) => ({
@@ -809,7 +819,7 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   const refreshed = await pullRequestFiles(dir, moved, "2026-11-30")
   assert.equal(refreshed.length, 4)
   assert.ok(refreshed.every((f) => f.status === "modified"))
-  assert.deepEqual(await lane(refreshed, moved), { eligible: true, reasons: [], programCount: 4, pauses: 0 })
+  assert.deepEqual(await lane(refreshed, moved), { eligible: true, reasons: [], programCount: 4, pauses: 0, newSlugs: [] })
 
   // The same pull request after Affitor changed again: blocked, and why.
   const verdict = await lane(refreshed, rows)
