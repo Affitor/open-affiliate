@@ -40,7 +40,7 @@ import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
-import { affitorUrl } from "@/lib/affitor-link";
+import { FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -516,7 +516,7 @@ export default async function ProgramPage({
                 href="/for-brands"
                 className="text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground transition-colors"
               >
-                List your program
+                {FOR_BRANDS.programPageLink}
               </Link>
               <AffitorLink
                 href={affitorUrl("program_page", program.slug)}

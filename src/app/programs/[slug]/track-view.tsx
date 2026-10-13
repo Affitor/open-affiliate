@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { track } from "@/lib/track";
-import { AFFITOR_CLICK, isAffitorHref } from "@/lib/affitor-link";
+import { AFFITOR_ATTR, AFFITOR_CLICK, isAffitorHref } from "@/lib/affitor-link";
 
 export function TrackView({ slug }: { slug: string }) {
   useEffect(() => {
@@ -30,6 +30,7 @@ export function TrackLink({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
+      {...(isAffitorHref(href) ? { [AFFITOR_ATTR]: "program_page" } : {})}
       className={className}
       onClick={() => {
         track("outbound_click", { slug })

@@ -14,6 +14,7 @@ import { FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
+import { affitorAnchorProblems } from "./affitor-checks"
 
 const root = join(__dirname, "..")
 
@@ -51,10 +52,25 @@ test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () =
   for (const href of hrefs) assert.ok(hasUtm(href), `no UTM: ${href}`)
 })
 
-// The tracked components are the only way a page renders an Affitor href:
-// an anchor built from affitorUrl(), applyCta or alsoOn must be AffitorLink
-// (records the event itself) or TrackLink (records it for affitor.com hrefs).
-test("every affitor.com anchor in the source is a tracked component", () => {
+// Source guard, next to the served-HTML check in verify-machine-surfaces: a
+// plain <a> with a computed href is allowed only for the expressions below,
+// each reviewed as never pointing at affitor.com. Any other computed href
+// (applyButton(p).href, p.applyHref, a new one) must use AffitorLink or
+// TrackLink, which record oa_to_affitor_click when the href is on affitor.com.
+const PLAIN_ANCHORS = new Set([
+  "src/app/layout.tsx | href", // footer list: internal paths and GitHub
+  "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
+  "src/app/explore/page.tsx | `/explore?${sp.toString()}`",
+  "src/app/programs/[slug]/page.tsx | program.url", // the brand's own site; checked against the registry below
+  "src/app/programs/[slug]/page.tsx | `https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`",
+  "src/components/explore-table.tsx | item.url", // social posts
+  "src/components/social-listen.tsx | item.url", // social posts
+  "src/components/docs-toc.tsx | `#${h.id}`",
+  "src/components/affitor-link.tsx | href",
+  "src/app/programs/[slug]/track-view.tsx | href",
+])
+
+test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   const files = sourceFiles(join(root, "src")).filter((f) => !f.endsWith("src/lib/affitor-link.ts"))
   let tracked = 0
   for (const file of files) {
@@ -64,19 +80,31 @@ test("every affitor.com anchor in the source is a tracked component", () => {
     for (const m of text.matchAll(/https:\/\/(?:[\w-]+\.)?affitor\.com[^\s"'`]*/g)) {
       assert.ok(rel === "src/lib/network-meta.ts", `${rel}: hard-coded ${m[0]}; use affitorUrl() and AffitorLink`)
     }
-    for (const m of text.matchAll(/<(\w+)\s[^>]*?href=\{(affitorUrl\(|applyCta\.href|alsoOn\.href)/g)) {
-      assert.ok(m[1] === "AffitorLink" || m[1] === "TrackLink", `${rel}: <${m[1]}> links to Affitor without the event`)
-      tracked++
+    for (const m of text.matchAll(/<a\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
+      const key = `${rel} | ${m[1].trim()}`
+      assert.ok(PLAIN_ANCHORS.has(key), `${key}: a plain <a> with a computed href; use AffitorLink/TrackLink or review it into PLAIN_ANCHORS`)
     }
+    tracked += [...text.matchAll(/<(?:AffitorLink|TrackLink)\b/g)].length
   }
-  assert.ok(tracked >= 5, `found ${tracked} Affitor anchors; expected the 2 apply, also-on, brand, claim and for-brands links`)
+  // 2 apply + also-on (TrackLink), brand box, claim, /for-brands, compare Join, list Sign up.
+  assert.ok(tracked >= 8, `found ${tracked} tracked anchors`)
+  for (const p of programs) assert.equal(isAffitorHref(p.url), false, `${p.slug}: program.url is on affitor.com but rendered as a plain link`)
   const trackLink = readFileSync(join(root, "src/app/programs/[slug]/track-view.tsx"), "utf8")
   assert.match(trackLink, /if \(isAffitorHref\(href\)\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "program_page", cta \} \}\)/)
   const affitorLink = readFileSync(join(root, "src/components/affitor-link.tsx"), "utf8")
-  assert.match(affitorLink, /track\(AFFITOR_CLICK, \{ slug, metadata: \{ source, cta \} \}\)/)
+  assert.match(affitorLink, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source, cta \} \}\)/)
 })
 
-test("/for-brands states no pricing and is in the sitemap", () => {
+test("served-HTML check: an untracked Affitor link or one without the UTM fails", () => {
+  const ok = `<a href="https://affitor.com/?utm_source=openaffiliate&amp;utm_medium=x&amp;utm_campaign=y" data-oa-affitor="list">`
+  assert.deepEqual(affitorAnchorProblems(ok), { problems: [], tracked: 1 })
+  assert.equal(affitorAnchorProblems(ok.replace(' data-oa-affitor="list"', "")).problems.length, 1)
+  assert.equal(affitorAnchorProblems(ok.replace("utm_source=openaffiliate", "utm_source=x")).problems.length, 1)
+  assert.equal(affitorAnchorProblems(`<a href="https://example.com/">`).tracked, 0)
+})
+
+// cos-oa 13/10: no pricing in the copy this PR adds; copy already live keeps its wording.
+test("/for-brands and the new program-page link state no pricing; /for-brands is in the sitemap", () => {
   for (const [key, text] of Object.entries(FOR_BRANDS)) {
     assert.doesNotMatch(text, /\$|%|\bfree\b|\bfees?\b|pric|\bcost|\bpaid\b|\bpay\b|subscription|guarantee/i, `FOR_BRANDS.${key}`)
   }

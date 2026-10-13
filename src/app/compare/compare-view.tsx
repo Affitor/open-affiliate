@@ -23,6 +23,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 import { CopyButton } from "@/components/copy-button";
+import { AffitorLink } from "@/components/affitor-link";
 
 const MAX_COMPARE = 4;
 
@@ -581,15 +582,17 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                     <td className="py-4 px-4" />
                     {selected.map((p) => (
                       <td key={p.slug} className="py-4 px-4 text-center">
-                        <a
+                        <AffitorLink
                           href={p.applyHref}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                          source="compare"
+                          slug={p.slug}
+                          cta="join"
+                          newTab
                           className="inline-flex items-center gap-1.5 rounded-lg bg-foreground text-background px-4 py-2 text-xs font-medium hover:bg-foreground/90 transition-colors"
                         >
                           Join
                           <ExternalLink className="h-3 w-3" />
-                        </a>
+                        </AffitorLink>
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

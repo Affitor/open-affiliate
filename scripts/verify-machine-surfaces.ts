@@ -27,6 +27,7 @@ import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { programMd } from "./generate-md";
+import { affitorAnchorProblems } from "./affitor-checks";
 import {
   commissionDisplay,
   categories,
@@ -1300,6 +1301,7 @@ async function checkServedPages(): Promise<string> {
       .flatMap((p) => droppedSentences(p).filter((s) => !namesTerm(s)).map((s) => ({ p, s })))[0];
     if (!dropped) fail("no unverified program has a dropped sentence to probe the prose check with");
     const kept = new Map<Program, string>();
+    let affitorOnProgramPages = 0;
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
       const problems = termsHtmlProblems(program, html);
@@ -1307,6 +1309,10 @@ async function checkServedPages(): Promise<string> {
       // The Affitor line and its secondary button, only where also_on says so.
       const also = alsoOnHtmlProblem(program, html);
       if (also) fail(`${page} ${also}`);
+      // Every affitor.com link is tracked (oa_to_affitor_click) and carries the UTM.
+      const affitor = affitorAnchorProblems(html);
+      if (affitor.problems.length) fail(`${page} ${affitor.problems.join("; ")}`);
+      affitorOnProgramPages += affitor.tracked;
       if (program === off || program === on || program === dropped.p || program === alsoOnBase) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
@@ -1359,6 +1365,32 @@ async function checkServedPages(): Promise<string> {
       const scan = chunkScan(compare, shown);
       if (scan.problems.length) fail(`/compare ships unconfirmed terms: ${scan.problems.join("; ")}`);
       if (scan.confirmedRecords === 0) fail("/compare: the payload check found no verified program's terms to read");
+    }
+
+    // OA → Affitor links on every other page that renders them: each flow must
+    // show at least one tracked link, or the check reads nothing.
+    {
+      if (affitorOnProgramPages === 0) fail("no program page has a tracked Affitor link; the Affitor link check read nothing");
+      const onAffitor = livePrograms.find((p) => p.network === "affitor" && termsPages.includes(p));
+      if (!onAffitor) fail("no live Affitor-network program to probe /compare with");
+      const flows: [string, string[]][] = [
+        ["/for-brands", ["/for-brands"]],
+        ["/compare", [`/compare?p=${onAffitor.slug},${on.slug}`]],
+        ["lists", ["/best", ...BEST_LISTS.map(bestPath), ...categories.map((c) => `/categories/${categoryToSlug(c)}`)]],
+      ];
+      for (const [flow, paths] of flows) {
+        let tracked = 0;
+        await fetchAll(base, [...new Set(paths)], (page, html) => {
+          const affitor = affitorAnchorProblems(html);
+          if (affitor.problems.length) fail(`${page} ${affitor.problems.join("; ")}`);
+          tracked += affitor.tracked;
+        });
+        if (tracked === 0) fail(`${flow}: no tracked Affitor link found; the Affitor link check read nothing`);
+      }
+      // Non-vacuity: the same page with the tracking marker removed fails.
+      const html = kept.get(off) ?? "";
+      const plain = `<a href="https://affitor.com/marketplace/x?utm_source=openaffiliate&amp;utm_medium=apply&amp;utm_campaign=x">`;
+      if (affitorAnchorProblems(html + plain).problems.length === 0) fail("the Affitor link check passed an untracked link");
     }
 
     // REST: the list and one program of each kind, as served.
