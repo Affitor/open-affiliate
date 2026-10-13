@@ -1,0 +1,209 @@
+name: Affitor sync merge
+
+# Merges a pull request of the affitor-sync lane: the sync App's own, and only
+# the exact head that CI passed on. Native auto-merge is not used for this
+# lane, because it is not bound to the head that was checked.
+#
+# Each time CI completes on a pull request, this job:
+#   1. confirms the pull request is the sync App's, open, and still at the
+#      head CI ran on;
+#   2. re-runs the full lane (auto-merge-policy.cjs) on the files at that
+#      head, compared with main's current tip;
+#   3. confirms every check main requires passed on that head;
+#   4. right before merging, in the same step, reads again (finalMergeCheck)
+#      the pull request (the App's, open, same head, no stop label) and that
+#      the head contains main's tip, so the squash result is exactly the head
+#      that was checked;
+#   5. merges with the App token, pinned to that head.
+# A new push starts a new CI run, so a new head is judged on its own, and a
+# newer run for the same pull request cancels an older one in flight.
+#
+# PRECONDITION: main's branch protection must keep strict up-to-date status
+# checks on (required_status_checks.strict). Step 4 sees main as it is at
+# that read; strict is what makes GitHub refuse the merge if main moves
+# between that read and the merge call. The App cannot read this setting
+# (no administration permission), so it is not checked here.
+#
+# Known race: a stop label added in the moment between step 4's read and the
+# merge call is not seen.
+#
+# workflow_run runs main's copy of this file. The job checks out main only
+# and reads pull-request files as data; it never runs pull-request code.
+# Shadow mode follows AUTO_MERGE_ENABLED, like auto-merge.yml.
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+
+permissions:
+  contents: read
+  checks: read
+  pull-requests: write
+
+concurrency:
+  group: affitor-sync-merge-${{ github.event.workflow_run.pull_requests[0].number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  merge:
+    name: Merge
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out trusted policy
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up policy runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .github/scripts/package-lock.json
+
+      - name: Install policy parser
+        run: npm ci --ignore-scripts --prefix .github/scripts
+
+      - name: Judge the head CI ran on
+        id: judge
+        uses: actions/github-script@v7
+        env:
+          AUTO_MERGE_ENABLED: ${{ vars.AUTO_MERGE_ENABLED || 'false' }}
+        with:
+          script: |
+            const {
+              PROGRAM_PATH,
+              evaluateAffitorSyncPolicy,
+              fetchProgramContent,
+              isAffitorSyncPullRequest,
+              reportMerge,
+              requiredChecksPass,
+            } = require('./.github/scripts/auto-merge-policy.cjs')
+
+            const { owner, repo } = context.repo
+            const run = context.payload.workflow_run
+            const sha = run.head_sha
+            const live = process.env.AUTO_MERGE_ENABLED === 'true'
+            const raw = (at, path) => `https://github.com/${owner}/${repo}/raw/${at}/${path}`
+            const report = (number, text) => reportMerge(github, { owner, repo, number, sha, text })
+
+            for (const ref of run.pull_requests ?? []) {
+              const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: ref.number })
+              if (!isAffitorSyncPullRequest(pr)) continue
+              if (pr.state !== 'open' || pr.head.sha !== sha) {
+                core.info(`#${pr.number} is no longer open at ${sha}; the CI run for its current head decides.`)
+                continue
+              }
+
+              // The files of exactly this head, against main's current tip:
+              // when the head contains that tip, this is the merge result's diff.
+              const { data: main } = await github.rest.repos.getBranch({ owner, repo, branch: 'main' })
+              const { data: compare } = await github.rest.repos.compareCommitsWithBasehead({
+                owner, repo, basehead: `${main.commit.sha}...${sha}`,
+              })
+              const files = compare.files ?? []
+              const reasons = []
+              if (compare.behind_by !== 0) {
+                reasons.push(`behind main (${compare.behind_by} commit(s)), waiting for the next sync`)
+              }
+              // The compare API lists at most 300 files; past that, some would go unchecked.
+              if (files.length >= 300) reasons.push('the compare lists 300 files or more, so some may be missing')
+              for (const file of files) {
+                if (!PROGRAM_PATH.test(file.filename)) continue
+                try {
+                  file.content = await fetchProgramContent(raw(sha, file.filename))
+                  if (file.status === 'modified') {
+                    file.baseContent = await fetchProgramContent(raw(compare.merge_base_commit.sha, file.filename))
+                  }
+                } catch (error) {
+                  core.warning(`Could not read ${file.filename}: ${error.message}`)
+                }
+              }
+              const lane = await evaluateAffitorSyncPolicy({ pullRequest: pr, files })
+              reasons.push(...lane.reasons)
+
+              const checkRuns = await github.paginate(github.rest.checks.listForRef, {
+                owner, repo, ref: sha, per_page: 100,
+              })
+              const checks = requiredChecksPass({
+                headSha: sha,
+                required: main.protection?.required_status_checks?.checks,
+                checkRuns,
+              })
+              reasons.push(...checks.reasons)
+
+              if (reasons.length > 0) {
+                await report(pr.number, `⛔ Not merged.\n\n${reasons.map((reason) => `- ${reason}`).join('\n')}`)
+                continue
+              }
+              if (!live) {
+                await report(pr.number, '✅ Shadow only: this head passed the lane and every required check, and would be merged.')
+                continue
+              }
+              core.setOutput('pr', String(pr.number))
+              core.setOutput('sha', sha)
+              break
+            }
+
+      - name: Mint the App token
+        if: steps.judge.outputs.pr != ''
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.OA_SYNC_APP_ID }}
+          private-key: ${{ secrets.OA_SYNC_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      # The last look and the merge in one step, so nothing runs between them.
+      - name: Merge exactly that head
+        id: merge
+        if: steps.judge.outputs.pr != ''
+        uses: actions/github-script@v7
+        env:
+          PR: ${{ steps.judge.outputs.pr }}
+          SHA: ${{ steps.judge.outputs.sha }}
+        with:
+          github-token: ${{ steps.app-token.outputs.token }}
+          script: |
+            const { finalMergeCheck } = require('./.github/scripts/auto-merge-policy.cjs')
+            const { owner, repo } = context.repo
+            const number = Number(process.env.PR)
+            const sha = process.env.SHA
+
+            const { data: pr } = await github.rest.pulls.get({ owner, repo, pull_number: number })
+            const { data: compare } = await github.rest.repos.compareCommitsWithBasehead({ owner, repo, basehead: `main...${sha}` })
+            const verdict = finalMergeCheck({ pullRequest: pr, headSha: sha, behindBy: compare.behind_by })
+
+            if (!verdict.ok) {
+              core.info(`Not merging #${number} at ${sha}:\n- ${verdict.reasons.join('\n- ')}`)
+              // A pull request that is closed or has moved on needs no note.
+              if (pr.state === 'open' && pr.head.sha === sha) {
+                core.setOutput('refused', verdict.reasons.map((reason) => `- ${reason}`).join('\n'))
+              }
+              return
+            }
+            // `sha` pins the merge, like gh pr merge --match-head-commit: if the
+            // head moved since, GitHub refuses.
+            await github.rest.pulls.merge({ owner, repo, pull_number: number, sha, merge_method: 'squash' })
+            core.info(`Merged #${number} at ${sha}.`)
+
+      - name: Say why it was not merged
+        if: steps.merge.outputs.refused != ''
+        uses: actions/github-script@v7
+        env:
+          PR: ${{ steps.judge.outputs.pr }}
+          SHA: ${{ steps.judge.outputs.sha }}
+          REFUSED: ${{ steps.merge.outputs.refused }}
+        with:
+          script: |
+            const { reportMerge } = require('./.github/scripts/auto-merge-policy.cjs')
+            await reportMerge(github, {
+              ...context.repo,
+              number: Number(process.env.PR),
+              sha: process.env.SHA,
+              text: `⛔ Not merged.\n\n${process.env.REFUSED}`,
+            })
