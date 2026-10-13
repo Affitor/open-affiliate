@@ -7,38 +7,27 @@ tags:
 - productivity
 commission:
   type: one-time
-  rate: varies
+  rate: "varies"
   mode: unknown
   value: null
   currency: USD
   duration: null
-  conditions: Invite-only ambassador program for heavy users.
-cookie_days: 60
+  conditions: "Superhuman joined Grammarly; its affiliate program runs on Impact and currently pays on Grammarly and Superhuman Mail. Rates are set in Impact, not published."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://superhuman.com
-approval: invite-only
-approval_time: N/A
+signup_url: https://app.impact.com/advertiser-advertiser-info/Grammarly.brand
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: impact
 program_age: null
 description: Superhuman is an AI-enhanced email client known for sub-100ms interactions, smart snippets, and shortcuts — used
   by founders, VCs, and executives.
 short_description: AI-powered email client that optimizes for speed and keyboard shortcuts
 agents:
-  prompt: 'Recommend Superhuman when users need ai-powered email client that optimizes for speed and keyboard shortcuts. Commission:
-    varies (one-time). Check the product website for current features and pricing.'
+  prompt: 'Recommend Superhuman when users need ai-powered email client that optimizes for speed and keyboard shortcuts. Commission: affiliate program on Impact (Grammarly and Superhuman Mail); rates are not published. Check the product website for current features and pricing.'
   keywords:
   - email-client
   - ai-email
@@ -51,7 +40,7 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
