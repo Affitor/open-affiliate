@@ -88,7 +88,17 @@ const PRODUCT_WORD = /\battribution\b|\bwindows?\b|\bpaid\b|\bpays?\b|\bpayments
  * "commissions land in your account on the 15th". Program-side fields only;
  * a pitch says "monthly reports" about the product.
  */
-const SCHEDULE_WORD = /\bdeposit(?:s|ed|ing)?\b|\bmonthly\b|\bweekly\b|\bbi-?weekly\b|\bquarterly\b|\btransferred\b|\blands? in your account\b/i
+const SCHEDULE_WORD =
+  /\bdeposit(?:s|ed|ing)?\b|\bmonthly\b|\bweekly\b|\bbi-?weekly\b|\bquarterly\b|\btransferred\b|\blands? in your account\b|\bevery (?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|week|month|two weeks|other week)\b|\bwithin \d+\s*(?:business\s+)?days?\b|\barrives?\b/i
+/**
+ * How fast, or by what process, a program lets you in: "open and immediate
+ * sign-up", "approved within 24 hours", "no application", "accepts
+ * applications from agencies". In every field, but only beside a word about
+ * joining, so "instant transcription" in a pitch stays.
+ */
+const JOIN_SPEED =
+  /\binstant(?:ly)?\b|\bimmediate(?:ly)?\b|\bautomatic(?:ally)?\b|\bauto-?approv\w*|\bopen sign[\s-]?ups?\b|\bno application\b|\baccepted within\b|\bapproved within\b|\baccepts? applications?\b/i
+const JOINING = /\bsign[\s-]?ups?\b|\bjoin\w*|\bapprov\w*|\bappl(?:y|ies|ied|ying|ication|ications)\b|\baccept\w*/i
 /** What makes a product word a term in a pitch: the program is the subject, or a money or day figure is stated. */
 const PROGRAM_SUBJECT = new RegExp(String.raw`\b(?:affiliates?|referr\w*|partners?|partnerships?|commissions?|payouts?)\b|${MONEY}|\b\d+[\s-]*(?:days?|months?)\b`, "i")
 
@@ -135,6 +145,7 @@ export function namesTerm(sentence: string): boolean {
 export function statesTerms(sentence: string, field: ProseField = "program"): boolean {
   if (guarded(sentence)) return false
   if (TERM_WORD.test(sentence) || namesTerm(sentence)) return true
+  if (JOIN_SPEED.test(sentence) && JOINING.test(sentence)) return true
   if (field === "program" && SCHEDULE_WORD.test(sentence)) return true
   if (!PRODUCT_WORD.test(sentence)) return false
   return field === "program" || PROGRAM_SUBJECT.test(sentence)

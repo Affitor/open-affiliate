@@ -229,6 +229,36 @@ test("a payout schedule in program-side text is dropped (Bitwire), not in a pitc
   assert.equal(statesTerms("Monthly reports for every team.", "pitch"), false)
 })
 
+test("approval speed or process is dropped in every field; payout timing in program-side fields (DokuTrak, Mato)", () => {
+  const dokutrak = getProgram("dokutrak")!
+  assert.ok(dokutrak, "programs/dokutrak.yaml is the approval-speed regression case")
+  assert.equal(confirmedTerms({ ...dokutrak, verified: false }).description.includes("open and immediate sign-up"), false)
+  const mato = getProgram("mato")!
+  assert.equal(confirmedTerms({ ...mato, verified: false }).description.includes("accepts applications"), false)
+  for (const field of ["pitch", "program"] as const) {
+    for (const s of [
+      "In-house tracking, open and immediate sign-up at https://example.com/partners/sign-up.",
+      "Partners are approved within 24 hours.",
+      "Open signup, no application needed.",
+      "Instant approval for every affiliate.",
+      "Applications accepted within two days.",
+      "Join automatically when you create an account.",
+      "The partner program accepts applications from agencies.",
+    ]) {
+      assert.equal(statesTerms(s, field), true, `${field}: ${s}`)
+    }
+  }
+  for (const s of ["Earnings arrive every Friday.", "Commissions are sent within 5 days of month end.", "Rewards go out every month."]) {
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+  for (const s of ["Instant transcription in 30 languages.", "Automatic backups for every workspace.", "Fireflies auto-joins Zoom calls."]) {
+    assert.equal(statesTerms(s, "pitch"), false, s)
+  }
+  // Verified, untouched.
+  const on = { ...dokutrak, verified: true }
+  assert.equal(confirmedTerms(on), on)
+})
+
 test("an optional field the filter empties is left out on every surface, never printed empty", () => {
   const base = getProgram("asana")!
   const entry = (registry.programs as unknown as Parameters<typeof programMd>[0][]).find((e) => e.slug === "asana")!
