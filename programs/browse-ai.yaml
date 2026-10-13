@@ -10,32 +10,30 @@ tags:
 - SaaS
 commission:
   type: recurring
-  rate: 22%
+  rate: "20%"
   mode: percentage
-  value: 22
+  value: 20
   currency: null
   duration: Lifetime
-  conditions: null
+  conditions: "20% of every payment for as long as the referral stays subscribed. Paid monthly via Wise with no minimum, or via PayPal on request with a $200 minimum."
   recurring_period: null
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
   frequency: monthly
   methods:
-  - bank
+  - wise
   - paypal
 signup_url: https://www.browse.ai/affiliate-program
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: partnerstack
 program_age: 2+ years
 description: 'Browse AI is a no-code web scraping tool that lets you train AI robots to extract data from any website. Point-and-click
   interface — no coding required. Features include scheduled scraping, change monitoring, data export to Google Sheets, and
@@ -66,8 +64,8 @@ agents:
 verified: true
 submitted_by: community
 created_at: 2026-04-17
-updated_at: null
-last_verified_at: 2026-04-17
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
 logo_url: https://cdn.brandfetch.io/idWWWP01Qa/w/141/h/42/theme/dark/logo.png?c=1bxtwjz48s37dxrwob1iv46t3nySzUcFgVs
