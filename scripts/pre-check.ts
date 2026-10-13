@@ -22,13 +22,20 @@
  *   flag.txt       — fuzzy match — human review
  *   pre-check-report.json  — full per-candidate decision detail
  *
+ * The index is rebuilt from programs/ on every run, because the committed
+ * src/lib/registry-index.json goes stale between registry rebuilds (on
+ * 13 Oct 2026 it held 760 of 830 programs and missed every Affitor program).
+ * The four files build-registry writes are put back byte for byte afterwards,
+ * so a run leaves the working tree as it found it.
+ *
  * Exit codes:
  *   0 — ran successfully
- *   1 — missing registry-index.json (run `npm run registry:build` first)
+ *   1 — the registry rebuild failed
  */
 
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from "fs"
+import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from "fs"
 import { join, resolve } from "path"
+import { execFileSync } from "child_process"
 
 interface RegistryIndex {
   generated_at: string
@@ -67,12 +74,32 @@ const refreshMode = (args.find((a) => a.startsWith("--refresh="))?.split("=")[1]
 const staleDays = parseInt(args.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? "30", 10)
 const outDir = resolve(args.find((a) => a.startsWith("--out="))?.split("=")[1] ?? ".")
 
-if (!existsSync(REGISTRY_INDEX)) {
-  console.error(`Missing ${REGISTRY_INDEX}. Run: npm run registry:build`)
+// Every file scripts/build-registry.ts writes. Snapshot, rebuild, read the
+// fresh index, then restore the snapshot (or remove a file that was absent).
+const GENERATED = ["registry.json", "client-registry.json", "registry-index.json", "logo-files.json"].map((f) =>
+  join(process.cwd(), "src", "lib", f),
+)
+const snapshot = new Map(GENERATED.map((f) => [f, existsSync(f) ? readFileSync(f) : null]))
+let loaded: RegistryIndex | undefined
+let failure = ""
+try {
+  execFileSync(process.execPath, [...process.execArgv, join(process.cwd(), "scripts", "build-registry.ts")], {
+    stdio: ["ignore", "ignore", "pipe"],
+  })
+  loaded = JSON.parse(readFileSync(REGISTRY_INDEX, "utf-8"))
+} catch (err) {
+  failure = (err as { stderr?: Buffer }).stderr?.toString().trim() || (err as Error).message
+} finally {
+  for (const [f, bytes] of snapshot) {
+    if (bytes) writeFileSync(f, bytes)
+    else rmSync(f, { force: true })
+  }
+}
+if (!loaded) {
+  console.error(`Registry rebuild failed, so pre-check cannot trust the index.\n${failure}`)
   process.exit(1)
 }
-
-const index: RegistryIndex = JSON.parse(readFileSync(REGISTRY_INDEX, "utf-8"))
+const index: RegistryIndex = loaded
 
 // ── Normalization ──
 function normalizeCandidate(raw: string): { domain: string; name: string } {
