@@ -12,8 +12,8 @@ tags:
 commission:
   type: hybrid
   rate: "$500 per client + $100/month per hire"
-  mode: hybrid
-  value: 500
+  mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: "$50 per qualified referral who attends a demo, $500 when the referral becomes a paying client, and $100 a month for each hire while they stay active. The page does not name the currency."

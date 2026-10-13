@@ -16,6 +16,7 @@ commission:
   currency: USD
   duration: null
   conditions: "$5,000 for every new customer referral, paid upfront."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 signup_url: https://marketerhire.com/referrals
