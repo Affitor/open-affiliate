@@ -33,8 +33,8 @@
     "url": {
       "type": "string",
       "format": "uri",
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^/?#@]{1,253}(?:[/?#]|$))(?!https?://[^/?#]*[^./?#:]{64})(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme, no user@ before the host, a host (with any port) of at most 253 characters and labels of at most 63, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*(?::[0-9]{1,5})?(?:[/?#]|$)",
+      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a host of letters, digits, dots and hyphens only (at most 253 characters; labels of 1 to 63 characters that do not start or end with a hyphen; no empty label), so no user@, no IPv6 literal and no percent-encoding in the host; an international domain is written in punycode, e.g. xn--bcher-kva.de. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "kind": {
       "type": "string",
@@ -235,8 +235,8 @@
         "null"
       ],
       "format": "uri",
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^/?#@]{1,253}(?:[/?#]|$))(?!https?://[^/?#]*[^./?#:]{64})(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme, no user@ before the host, a host (with any port) of at most 253 characters and labels of at most 63, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*(?::[0-9]{1,5})?(?:[/?#]|$)",
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a host of letters, digits, dots and hyphens only (at most 253 characters; labels of 1 to 63 characters that do not start or end with a hyphen; no empty label), so no user@, no IPv6 literal and no percent-encoding in the host; an international domain is written in punycode, e.g. xn--bcher-kva.de. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "approval": {
       "type": "string",
@@ -284,8 +284,8 @@
         "string",
         "null"
       ],
-      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?=https?://[^/?#@]{1,253}(?:[/?#]|$))(?!https?://[^/?#]*[^./?#:]{64})(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)(?![A-Za-z][A-Za-z0-9+.-]*://[^/?#\\\\]*[\\[\\]])",
-      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme, no user@ before the host, a host (with any port) of at most 253 characters and labels of at most 63, written in printable ASCII only: no spaces, control or non-ASCII characters (write an international domain in punycode, e.g. xn--bcher-kva.de) and no backslash. No HTML character references (write & itself, not &amp;) and no IPv6-literal host (no [ or ] before the path)."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[A-Za-z0-9.-]{1,253}(?:[:/?#]|$))[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?(?:\\.[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*(?::[0-9]{1,5})?(?:[/?#]|$)",
+      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme whose authority is exactly host[:port]: a host of letters, digits, dots and hyphens only (at most 253 characters; labels of 1 to 63 characters that do not start or end with a hyphen; no empty label), so no user@, no IPv6 literal and no percent-encoding in the host; an international domain is written in punycode, e.g. xn--bcher-kva.de. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "network": {
       "type": [

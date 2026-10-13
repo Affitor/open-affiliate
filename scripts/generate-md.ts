@@ -449,10 +449,12 @@ function mdUrl(url: string): string {
   // percent-encoded, with `[`, `]`, backslash and backtick. The schema's URL
   // patterns make the rest true before a value gets here: an absolute
   // lowercase http(s) URL in printable ASCII, no backslash, no character
-  // reference (a data bug), no IPv6-literal host (whose brackets this would
-  // break), no userinfo, and a host of at most 253 characters (markdown-it
-  // drops a hostname over 255 and the link then names whatever follows it).
-  // Anything else — only possible if the schema was bypassed — is
+  // reference (a data bug), and an authority that is exactly host[:port]
+  // with a letters-digits-dots-hyphens host of at most 253 characters. Every
+  // looser host let markdown-it's URL parser show or follow a different host
+  // (a 259-character one dropped, `%61` decoded into the shown host, `!`
+  // split off with the port). Anything else — only possible if the schema
+  // was bypassed — is
   // printed bare rather than given angle brackets, because `<foo>` without a
   // scheme is an HTML tag and `<javascript:…>` is a link.
   const out = String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)

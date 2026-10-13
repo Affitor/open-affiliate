@@ -22,10 +22,10 @@ const SIGNUP_URL_DEBT = new Set<string>(
 )
 
 /**
- * URL fields whose schema `pattern` admits only an absolute http(s) URL in
- * printable ASCII without a backslash, with no userinfo and a host of at most
- * 253 characters, and refuses HTML character references (`&amp;`, `&#38;`,
- * `&#x26;`) and a `[` or `]` in the host (an IPv6 literal).
+ * URL fields whose schema `pattern` admits only an absolute lowercase http(s)
+ * URL whose authority is exactly host[:port], with a letters-digits-dots-
+ * hyphens host, in printable ASCII without a backslash and without HTML
+ * character references (`&amp;`, `&#38;`, `&#x26;`).
  * Read from the schema, so this build (CI's
  * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
  * rule. See the check in validateProgram.
@@ -131,23 +131,15 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     )
   }
 
-  // A URL holding `&amp;` or `&#…;` is a data bug, usually copied out of HTML,
-  // and Markdown renderers disagree on it: CommonMark shows `&amp;` as `&`,
-  // while a GFM autolink keeps it and drops the `;` from the link. Refusing the
-  // value is cheaper than rewriting every URL line of the Markdown twins.
-  // The same pattern refuses an IPv6-literal host: the twins percent-encode
-  // every bracket, which would break one, and no program's URL is one. And it
-  // admits only an absolute http(s) URL, because the other two rules read the
-  // host from `scheme://` at the very start: " https://…" and "//[::1]/"
-  // slipped past them. And only printable ASCII without a backslash: a URL
-  // parser reads `https://a.example\@b.example/` as host a.example, but the
-  // twins percent-encode the backslash, after which the host is b.example.
-  // Listing what is allowed also covers control and invisible characters
-  // (U+0085, U+200B) that a list of what is refused kept missing. And the
-  // host is bounded with no userinfo: markdown-it drops a hostname over 255
-  // characters, so `https://<259 chars>/evil.example` linked to evil.example,
-  // and no program's URL needs `user@`, which carries a whole class of
-  // look-alike tricks.
+  // The Markdown twins print these URLs for agents and readers, and every
+  // looser rule let some Markdown renderer show or follow a different host
+  // than the URL names. Review found, in turn: `&amp;` decoded by CommonMark;
+  // an IPv6 host whose brackets the twins must encode; a backslash a URL
+  // parser treats as `/` but the twins encode; a 259-character host that
+  // markdown-it drops; and `%61` or `!` in a host, which markdown-it's URL
+  // parser splits so the shown host differs from the real one. So the host is
+  // an allow-list (letters, digits, dots, hyphens, as DNS has them), the
+  // authority is nothing but host[:port], and the whole URL is printable ASCII.
   for (const field of URL_FIELDS) {
     const value = data[field]
     const pattern = SCHEMA_PROPERTIES[field]?.pattern
@@ -156,14 +148,15 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
       // character is visible in the error.
       const shown = value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)
       throw new Error(
-        `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must ` +
-          `be an absolute http:// or https:// URL (lowercase scheme); have no user@ ` +
-          `before the host; have a host, with any port, of at most 253 characters and ` +
-          `labels of at most 63; use printable ASCII only, with no spaces, control or ` +
-          `non-ASCII characters (write an international domain in punycode, such as ` +
-          `xn--bcher-kva.de) and no backslash; contain no HTML character reference ` +
-          `(write "&", not "&amp;" or "&#38;"); and have no IPv6 literal host (no "[" ` +
-          `or "]" before the path; use a domain name).`
+        `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must be an ` +
+          `absolute http:// or https:// URL (lowercase scheme) whose authority is ` +
+          `exactly host[:port]: the host uses only letters, digits, dots and hyphens ` +
+          `(at most 253 characters; each label 1 to 63 characters, not starting or ending ` +
+          `with a hyphen; no empty label), so no user@, no IPv6 literal and no ` +
+          `percent-encoding in the host; write an international domain in punycode, such ` +
+          `as xn--bcher-kva.de; a port is 1 to 5 digits. The whole URL must be printable ` +
+          `ASCII with no spaces or backslash, and contain no HTML character reference ` +
+          `(write "&", not "&amp;" or "&#38;").`
       )
     }
   }

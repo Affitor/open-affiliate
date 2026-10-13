@@ -611,14 +611,21 @@ test("every value written is checked against the schema", () => {
     [["short_description"], "x".repeat(100)],
     [["slug"], "citegraph"],
     [["signup_url"], "https://x.com/join?a=1&b=2"],
+    [["url"], "https://xn--bcher-kva.de:8443/p"],
   ]
   assert.doesNotThrow(() => checkSchema(ok, "x.yaml"))
-  assert.throws(() => checkSchema([[["signup_url"], "https://x.com/join?a=1&amp;b=2"]], "x.yaml"), /signup_url .*pattern/)
-  assert.throws(() => checkSchema([[["signup_url"], "https://[2001:db8::1]/join"]], "x.yaml"), /signup_url .*pattern/)
-  assert.throws(() => checkSchema([[["url"], " https://x.com/"]], "x.yaml"), /url .*pattern/)
-  assert.throws(() => checkSchema([[["signup_url"], "https://trusted.example\\@evil.example/join"]], "x.yaml"), /signup_url .*pattern/)
-  assert.throws(() => checkSchema([[["url"], "https://user@x.com/"]], "x.yaml"), /url .*pattern/)
-  assert.throws(() => checkSchema([[["url"], `https://${("a".repeat(63) + ".").repeat(4)}com/evil.example`]], "x.yaml"), /url .*pattern/)
+  for (const url of [
+    "https://x.com/join?a=1&amp;b=2",
+    "https://[2001:db8::1]/join",
+    " https://x.com/",
+    "https://trusted.example\\@evil.example/join",
+    "https://user@x.com/",
+    `https://${("a".repeat(63) + ".").repeat(4)}com/evil.example`,
+    "https://xn--bcher-kva%61.com/path",
+    "https://a!b.example:80/path",
+  ]) {
+    assert.throws(() => checkSchema([[["signup_url"], url]], "x.yaml"), /signup_url .*pattern/, url)
+  }
   assert.throws(() => checkSchema([[["cookie_days"], 1.5]], "x.yaml"), /cookie_days is 1.5, not integer/)
   assert.throws(() => checkSchema([[["cookie_days"], -1]], "x.yaml"), /below 0/)
   assert.throws(() => checkSchema([[["network"], "nope"]], "x.yaml"), /not one of the schema's values/)
