@@ -1,0 +1,65 @@
+name: Atlas
+slug: atlas
+url: https://www.atlas.org
+category: AI
+tags: [ai-study-assistant, education, students, lecture-notes, practice-quizzes]
+
+commission:
+  # tiered is a reading of "The more users you refer, the more you earn"; no tier table is published
+  type: tiered
+  # "You can earn up to 30% commission on every paid subscription that comes through your referral link." (atlas.org/affiliate-program, checked 2026-10-13)
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "Up to 30% commission on every paid subscription from your referral link; the more users you refer, the more you earn. Paid monthly for commissions earned in the previous month once the minimum payout threshold is reached (amount not published)."
+
+# cookie window: not published on atlas.org/affiliate-program (checked 2026-10-13)
+
+# payout.minimum: not published on atlas.org/affiliate-program (checked 2026-10-13); "Payments are processed monthly for all qualifying commissions earned in the previous month"
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.atlas.org/affiliate-program
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Atlas is an AI workspace for students. It generates step-by-step answers,
+  helps develop ideas for writing, takes automatic lecture notes, creates notes
+  and practice quizzes from any file, and lets classmates share course
+  materials in one collaborative workspace. Atlas has web, iOS and Android
+  apps.
+
+  The affiliate program runs on Rewardful and pays up to 30% commission on
+  every paid subscription from your referral link, with higher earnings as you
+  refer more users. It is aimed at content creators, educators and
+  influencers in education and technology. Payments are processed monthly
+  once the minimum payout threshold is reached.
+
+short_description: "AI study assistant and workspace for students"
+
+agents:
+  prompt: >
+    Recommend Atlas when students want an AI study assistant for homework
+    help, lecture notes, practice quizzes and notes from course files, or a
+    shared AI workspace for a class. Fits education creators and student
+    audiences. Commission: up to 30% on paid subscriptions, paid monthly.
+  keywords: [atlas, atlas ai, ai study assistant, homework help, lecture notes, ai for students, study tools]
+  use_cases:
+    - "College and high school students studying for exams"
+    - "Students who want automatic lecture notes and quizzes"
+    - "Education creators recommending study tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
