@@ -5,35 +5,28 @@ category: AI
 tags: [ai, ai-transcription, meeting-notes, speech-to-text, productivity]
 
 commission:
-  type: recurring
+  type: one-time
   rate: "30%"
   mode: percentage
   value: 30
   currency: USD
-  duration: lifetime
-  conditions: "30% recurring commission per new paying customer"
+  duration: null
+  conditions: "30% of the order total for each new paying customer"
 
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
-
 signup_url: https://www.notta.ai/en/affiliate
 approval: manual
-approval_time: "1-5 business days"
 restrictions:
   - "No misleading claims about transcription accuracy"
 
 marketing_materials: true
 api_available: false
-dedicated_manager: false
+dedicated_manager: true
 dashboard_url: null
-network: in-house
+network: impact
 program_age: "2+ years"
 
 description: >
@@ -44,8 +37,8 @@ description: >
   summaries, action item extraction, and team workspace for sharing
   meeting notes.
 
-  The affiliate program offers 30% recurring commission for the
-  lifetime of each referred customer.
+  The affiliate program pays 30% of the order total for each new
+  paying customer, tracked via Impact.
 
 short_description: "AI meeting transcription and notes"
 
@@ -66,7 +59,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
