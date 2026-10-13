@@ -1,6 +1,7 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { livePrograms, categories, getProgram } from "@/lib/programs";
+import { livePrograms, categories } from "@/lib/programs";
+import { resolveProgram } from "@/lib/program-aliases";
 import { apiProgram } from "@/lib/no-program";
 
 /**
@@ -218,7 +219,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       },
     },
     async ({ slug }) => {
-      const program = getProgram(slug);
+      // Aliases (old names, spellings agents guess) resolve too; the result carries the canonical slug.
+      const program = resolveProgram(slug);
       if (!program) {
         return {
           content: [

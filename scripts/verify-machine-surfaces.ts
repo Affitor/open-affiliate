@@ -8,6 +8,7 @@ import { join } from "node:path";
 import sitemap from "../src/app/sitemap";
 import robots from "../src/app/robots";
 import { serializeJsonLd } from "../src/lib/json-ld";
+import registryData from "../src/lib/registry.json";
 import {
   BEST_LISTS,
   MAX_ROWS,
@@ -1028,8 +1029,41 @@ function checkNoProgramHtml(program: (typeof programs)[number], page: string, ht
   }
 }
 
+/**
+ * Program aliases as next start serves them, probed inside the same server
+ * session as the no-program pages: /programs/<alias> and its .md answer 308
+ * with Location /programs/<slug> (and .md); that target answers 200, so there
+ * is one hop and no loop, and a real slug that has aliases is not itself
+ * redirected; /api/programs/<alias> answers the canonical program's exact
+ * body. scripts/program-aliases.test.ts checks every alias in the config; this
+ * checks a few over HTTP.
+ */
+const ALIAS_PROBES = 3;
+async function checkAliasRedirects(base: string): Promise<number> {
+  const aliases = Object.entries((registryData as { aliases?: Record<string, string> }).aliases ?? {}).slice(0, ALIAS_PROBES);
+  if (aliases.length === 0) fail("registry.json has no alias routes to probe; run `npm run build` first");
+  for (const [alias, slug] of aliases) {
+    for (const ext of ["", ".md"]) {
+      const from = `/programs/${alias}${ext}`;
+      const to = `/programs/${slug}${ext}`;
+      const res = await fetch(`${base}${from}`, { redirect: "manual" });
+      const location = res.headers.get("location");
+      if (res.status !== 308 || !location || new URL(location, base).pathname !== to) {
+        fail(`${from} answered ${res.status} with Location ${location}; expected 308 to ${to}`);
+      }
+      const target = await fetch(new URL(location, base), { redirect: "manual" });
+      if (target.status !== 200) fail(`${to}, where ${from} redirects, answered ${target.status}`);
+    }
+    const viaAlias = await fetch(`${base}/api/programs/${alias}`);
+    const canonical = await fetch(`${base}/api/programs/${slug}`);
+    if (viaAlias.status !== 200 || canonical.status !== 200 || (await viaAlias.text()) !== (await canonical.text())) {
+      fail(`/api/programs/${alias} (${viaAlias.status}) does not answer with the body of /api/programs/${slug}`);
+    }
+  }
+  return aliases.length;
+}
+
 async function checkNoProgramPages(): Promise<number> {
-  if (noProgramPages.length === 0) return 0;
   const port = await new Promise<number>((resolve, reject) => {
     const probe = createServer();
     probe.once("error", reject);
@@ -1061,6 +1095,8 @@ async function checkNoProgramPages(): Promise<number> {
       if (res.status !== 200) fail(`${page} answered ${res.status}`);
       checkNoProgramHtml(program, page, await res.text());
     }
+    const probed = await checkAliasRedirects(base);
+    console.log(`[machine-surfaces] verified ${probed} aliases (page, .md and API) as served by next start`);
   } finally {
     server.kill();
   }
