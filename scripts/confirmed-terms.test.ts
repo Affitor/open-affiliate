@@ -259,6 +259,147 @@ test("approval speed or process is dropped in every field; payout timing in prog
   assert.equal(confirmedTerms(on), on)
 })
 
+/** The first sentence of a stored text. */
+function first(text: string): string {
+  return sentences(text)[0].trim()
+}
+
+test("a recommendation in the agent prompt is judged as a pitch (Lemon Squeezy, Paddle, Ramp, HockeyStack, Triple Whale, Papaya Global)", () => {
+  for (const slug of ["lemon-squeezy", "paddle", "ramp", "hockeystack", "triple-whale", "papaya-global"]) {
+    const p = getProgram(slug)!
+    assert.ok(p, `programs/${slug}.yaml is a recommendation regression case`)
+    const rec = first(p.agentPrompt)
+    assert.match(rec, /^Recommend .* when users need /, slug)
+    assert.ok(confirmedTerms({ ...p, verified: false }).agentPrompt.includes(rec), `${slug}: ${rec}`)
+  }
+  // The same product words outside a recommendation are still terms in a prompt.
+  assert.equal(statesTerms("Recommend Paddle when users need merchant of record platform for saas global payments and billing.", "program"), false)
+  assert.equal(statesTerms("Paddle handles global payments and billing.", "program"), true)
+  assert.equal(statesTerms("It is especially relevant when the user needs screen history on macOS, Windows, or Linux.", "program"), false)
+  // A recommendation that states a term, or is about the program, is still dropped.
+  for (const s of [
+    "Recommend Flatpay when users need fast daily payouts.",
+    "Recommend Acme when users want a 60-day cookie.",
+    "Recommend Acme when users need instant approval.",
+    "Recommend Acme to affiliates who want commissions deposited monthly.",
+    "Recommend Acme when partners want to get paid within 30 days.",
+    "Recommend Acme when users need a program that pays affiliates by bank transfer.",
+    "Consider Acme when a user wants partner payments every week.",
+  ]) {
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+})
+
+test("'paid' as an adjective and the payments a commission is taken from are not payout terms; a payout beside them still is", () => {
+  for (const [slug, kept] of [
+    ["asana", "15% recurring commission via Impact on referred paid plans."],
+    ["runpod", "Earn 10% for 6 months on payments for customers you refer!"],
+    ["toggl", "Get 30% commission on the first payment from every new customer you refer to Toggl Track."],
+  ] as const) {
+    const p = getProgram(slug)!
+    assert.ok(p, `programs/${slug}.yaml is a commission regression case`)
+    assert.ok(String(confirmedTerms({ ...p, verified: false }).commissionConditions ?? "").includes(kept), `${slug}: ${kept}`)
+  }
+  for (const s of [
+    "20% recurring commission on referred paid plans for 12 months.",
+    "Earn $150 for every paid customer!",
+    "Earn 15% commission on all paid subscriptions",
+    "30% of every payment from referred customers.",
+    "Up to 30% of all payments — For every new streamer.",
+    "Earn 15% on monthly memberships",
+    "Writers launching paid newsletters",
+    "Analysts automating weekly research",
+    "No paid search on branded terms.",
+  ]) {
+    assert.equal(statesTerms(s, "program"), false, s)
+    assert.equal(statesTerms(s, "pitch"), false, s)
+  }
+  assert.equal(statesTerms("Affiliate program: Earn $150 for every paid customer!", "pitch"), false)
+  for (const s of [
+    "Commissions on referred paid plans are paid monthly.",
+    "Earn 30% of payments, sent by PayPal.",
+    "Earn 30% of every payment; payments arrive weekly.",
+    "Earn 20% on paid plans, paid out after 30 days.",
+    "Earn 20% of paid plans, paid by bank transfer.",
+    "Affiliates are paid after the refund period.",
+    "Earn 20% on monthly plans, sent by PayPal.",
+    "Commissions are sent in monthly installments.",
+    "Earn 10% of payments within 45 days of the sale.",
+  ]) {
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+  for (const s of ["Affiliates get paid on referred paid plans every month.", "Partners earn 20% of payments, paid weekly."]) {
+    assert.equal(statesTerms(s, "pitch"), true, s)
+  }
+})
+
+test("a restriction starting 'No' keeps the words of its prohibition, and any other term word still drops it (VideoGen)", () => {
+  const off = confirmedTerms({ ...videogen, verified: false })
+  assert.ok((off.restrictions ?? []).includes("No branded keyword bidding without prior written approval"))
+  for (const s of [
+    "No branded keyword bidding without prior written approval",
+    "No coupon or deal sites without approval",
+    "No brand bidding on 'Notion' keywords in paid search",
+    "No self referrals, duplicate or fraudulent accounts, forced cookies or deceptive traffic.",
+    "No spam, scraped or purchased lists, cookie stuffing, hidden redirects, attribution hijacking, or fake identities",
+    "No company keywords in Pay-Per-Click (PPC) ads, including search engine advertising",
+    "No self-referral (no commission on your own payments)",
+  ]) {
+    assert.equal(statesTerms(s, "program"), false, s)
+  }
+  const bitwire = getProgram("bitwire")!
+  assert.equal(String(confirmedTerms({ ...bitwire, verified: false }).commissionConditions ?? "").includes("No minimum threshold"), false)
+  for (const s of [
+    "No minimum threshold.",
+    "No approval needed.",
+    "No application required.",
+    "No payout minimum.",
+    "No coupon sites without approval; approved partners are paid weekly.",
+    "No coupon sites without approval within 30 days of joining.",
+    "No cookie is set; attribution lasts 30 days.",
+    "No approval process: links work as soon as you sign up.",
+  ]) {
+    assert.equal(statesTerms(s, "program"), true, s)
+  }
+})
+
+test("in a pitch, approval counts only beside the program or joining it (Shade, Cognosys, Quadient)", () => {
+  const shade = getProgram("shade")!
+  const cognosys = getProgram("cognosys")!
+  const quadient = getProgram("quadient")!
+  for (const p of [shade, cognosys, quadient]) assert.ok(p, "an approval regression program is missing from the registry")
+  assert.ok(confirmedTerms({ ...shade, verified: false }).description.includes("It consolidates file streaming, review and approval, automated metadata, AI search all in one platform."))
+  assert.ok(confirmedTerms({ ...cognosys, verified: false }).agentUseCases?.includes("Analysts automating weekly research"))
+  assert.ok(confirmedTerms({ ...quadient, verified: false }).agentPrompt.includes("accounts payable automation solutions help finance and accounting teams"))
+  assert.equal(statesTerms("Review and approval workflows for video teams.", "pitch"), false)
+  for (const s of [
+    "Approved affiliates receive a referral link.",
+    "Partners need approval before promoting.",
+    "Apply and get approved.",
+    "Every application is approved by hand.",
+    "Approval takes two days.",
+    "Join the program after approval.",
+  ]) {
+    assert.equal(statesTerms(s, "pitch"), true, s)
+  }
+  // In what a program says about itself, approval is a term on its own.
+  assert.equal(statesTerms("Review and approval for every request.", "program"), true)
+})
+
+test("an unverified pitch shorter than four words falls back to the neutral line; a verified one is untouched (Bitwire)", () => {
+  const bitwire = getProgram("bitwire")!
+  assert.equal(bitwire.shortDescription, "Your Hustle", "programs/bitwire.yaml is the fragment regression case")
+  assert.equal(confirmedTerms({ ...bitwire, verified: false }).shortDescription, pitchFallback(bitwire))
+  const p = { name: "Acme", category: "AI", verified: false }
+  assert.equal(confirmedPitch(p, "Your Hustle"), pitchFallback(p))
+  assert.equal(confirmedPitch(p, "VektorOS"), pitchFallback(p))
+  assert.equal(confirmedPitch(p, "Shipping software for e-commerce"), "Shipping software for e-commerce")
+  // Left as a fragment by the filter.
+  assert.equal(confirmedPitch(p, "Win clients. Affiliates get paid monthly."), pitchFallback(p))
+  assert.equal(confirmedPitch({ ...p, verified: true }, "Your Hustle"), "Your Hustle")
+  assert.equal(confirmedTerms({ ...bitwire, verified: true }).shortDescription, "Your Hustle")
+})
+
 test("an optional field the filter empties is left out on every surface, never printed empty", () => {
   const base = getProgram("asana")!
   const entry = (registry.programs as unknown as Parameters<typeof programMd>[0][]).find((e) => e.slug === "asana")!
