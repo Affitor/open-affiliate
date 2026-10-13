@@ -665,9 +665,10 @@ for (const network of liveNetworks) {
   }
   const foreign = foreignMarkup(md);
   if (foreign) fail(`networks/${slug}.md has markup the generator did not write: ${foreign}`);
-  // The twin lists every program on the network, paused and discontinued ones
-  // included and marked, as the category twins do.
-  const mdWant = programs.filter(inNetwork).map((p) => p.slug);
+  // The twin lists the network's live programs, the same set as the HTML table
+  // and the category twins: a brand with no program, or a status nobody could
+  // confirm, keeps its own .md and is neither listed nor counted here.
+  const mdWant = programs.filter((p) => inNetwork(p) && isLive(p)).map((p) => p.slug);
   const mdSection = md.split(/^## /m).find((part) => part.startsWith("Programs\n")) ?? "";
   const mdRows = [
     ...mdSection.matchAll(/^- \[(?:[^\]\\\n]|\\.)+\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\) — /gm),
