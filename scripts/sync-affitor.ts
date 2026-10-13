@@ -17,9 +17,11 @@
  *                   sync owns; never touch the hand-written fields.
  *   create          the brand is not on OA. Write a new listing.
  *   conflict        the brand is on OA with its own program somewhere else, the
- *                   marketplace slug now points at another website, or the
- *                   listing cannot be edited safely. Write nothing; the report
- *                   carries both sets of terms.
+ *                   marketplace slug now points at another website, the
+ *                   listing is linked to another Affitor program (listed or
+ *                   gone: a listing is never re-linked), or it cannot be
+ *                   edited safely. Write nothing; the report carries both
+ *                   sets of terms.
  *   slug-collision  an OA listing has the slug but another website, so it is a
  *                   different brand. Never touched.
  * Every match needs the same website (siteOf): a slug, a name or a shared host
@@ -656,7 +658,8 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
 
     // Before every other rule, and with no program attached: a skipped brand
     // has no detail fetched, nothing written and nothing paused.
-    const skipped = onSkipList(skip, p.slug, slug, match?.slug)
+    // match.linked: the Affitor program the matched listing is already linked to.
+    const skipped = onSkipList(skip, p.slug, slug, match?.slug, match?.linked)
     if (skipped) {
       out.push({ ...at("skip", `on the skip list (${SKIP_FILE}): ${skip[skipped]}`, match), program: undefined })
       continue
@@ -674,7 +677,9 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
 
     let planned: Planned
     if (match) {
-      const other = match.linked && match.linked !== p.slug && listed.has(match.linked) ? match.linked : null
+      // A listing linked to one Affitor program is never re-linked to another,
+      // listed or gone: a website is self-declared and proves no ownership.
+      const other = match.linked && match.linked !== p.slug ? match.linked : null
       const prior = claimed.get(match.file)
       // A take-over needs both identities, and equal: never null on either side.
       if (!site || match.site !== site) {
@@ -683,8 +688,12 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
             ? `marketplace slug now points at a different website: OA ${match.site}, Affitor ${site}`
             : `no website identity to confirm the brand: OA ${match.site ?? "none"}, Affitor ${site ?? "none"}`
         planned = at("conflict", why, match)
-      } else if (other) planned = at("conflict", `already listed from Affitor program ${other}`, match)
-      else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
+      } else if (other) {
+        const why = listed.has(other)
+          ? `already listed from Affitor program ${other}`
+          : `linked to Affitor program ${other}, which left the list; a website match never re-links a listing`
+        planned = at("conflict", why, match)
+      } else if (prior) planned = at("conflict", `OA listing already matched by Affitor program ${prior} in this run`, match)
       else if (!pointsAtAffitor(match)) {
         planned = at("conflict", `OA lists ${match.site}'s own program at ${String(match.data.signup_url ?? match.data.url)}`, match)
         planned.entry.oa_terms = termsOf(match)

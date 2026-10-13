@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { parseDocument } = require("yaml")
+const { isAlias, isNode, parseDocument, visit } = require("yaml")
+// Every key a listing may have, at every level the schema names keys.
+const PROGRAM_SCHEMA = require("../../schema/program.schema.json")
 // The sync's own settings: API, marketplace prefix, pause limit, bot, label.
 const AFFITOR_SYNC = require("../../scripts/sync-affitor.config.json")
 // Brands the sync must never list (OA or Affitor slug → reason).
@@ -259,24 +261,27 @@ function labelNames(labels) {
 
 // Native auto-merge stays off until a person adds `reviewed` for this head.
 // Eligible YAML without that label is still a candidate. `do-not-merge` never arms.
-// The affitor-sync lane arms without a person: its evidence is the API re-check.
-function shouldArmAutoMerge({ eligible, labels, live, lane = "human" }) {
+// Human lane only: the affitor-sync lane never uses native auto-merge (see
+// .github/workflows/affitor-sync-merge.yml).
+function shouldArmAutoMerge({ eligible, labels, live }) {
   if (!live || !eligible) return false
   const names = labelNames(labels)
   if (names.has("do-not-merge")) return false
-  return lane === "affitor-sync" || names.has("reviewed")
+  return names.has("reviewed")
 }
 
 // ---------- affitor-sync lane ----------------------------------------------
 //
 // A pull request opened by the sync's GitHub App, from
-// .github/workflows/sync-affitor.yml. It merges only updates to listings the
+// .github/workflows/sync-affitor.yml. It passes only updates to listings the
 // sync already created: every file must be modified (never new, removed or
-// renamed), not on the skip list, every field the sync owns must equal what
-// the Affitor API says now, and nothing else may change. A pull request with
-// a new listing always goes to a person, who sets its category, description
-// and agents block. Anything this lane cannot confirm leaves the pull request
-// to a person.
+// renamed), keep the Affitor program it is linked to, hold only schema keys
+// and no anchors, not be on the skip list, have every field the sync owns
+// equal to what the Affitor API says now, and change nothing else. A pull
+// request with a new listing always goes to a person, who sets its category,
+// description and agents block. Anything this lane cannot confirm leaves the
+// pull request to a person. auto-merge.yml runs it for the comment; the merge
+// itself is affitor-sync-merge.yml's, on the exact head CI passed.
 
 /** The bot's pull requests go through this lane; every other author through the human lane. */
 function isAffitorSyncPullRequest(pullRequest, config = AFFITOR_SYNC) {
@@ -386,9 +391,18 @@ function affitorOwnedFields(program, marketplace) {
   }
 }
 
-function valueAt(object, dotted) {
+// Paths are arrays of keys, never joined strings: a root key "agents.prompt"
+// and the nested agents → prompt are different paths. The dotted keys of
+// affitorOwnedFields are this file's own constants, split once by ownedPath.
+const ownedPath = (dotted) => dotted.split(".")
+const showPath = (path) =>
+  path.map((key) => (/^[A-Za-z0-9_-]+$/.test(key) ? key : JSON.stringify(key))).join(".")
+const isUnder = (path, prefix) =>
+  prefix.length <= path.length && prefix.every((key, i) => key === path[i])
+
+function valueAt(object, path) {
   let value = object
-  for (const key of dotted.split(".")) {
+  for (const key of path) {
     if (!isRecord(value) || !Object.hasOwn(value, key)) return ABSENT
     value = value[key]
   }
@@ -397,23 +411,53 @@ function valueAt(object, dotted) {
 
 const show = (value) => (value === ABSENT ? "absent" : JSON.stringify(value))
 
-/** Dotted paths of every scalar or list that differs between two listings. */
+/** Paths of every scalar or list that differs between two listings. */
 function changedPaths(before, after) {
   const flat = (value, path, out) => {
     if (isRecord(value) && Object.keys(value).length > 0) {
-      for (const [key, child] of Object.entries(value)) {
-        flat(child, path ? `${path}.${key}` : key, out)
-      }
+      for (const [key, child] of Object.entries(value)) flat(child, [...path, key], out)
     } else {
-      out.set(path, JSON.stringify(value))
+      out.set(JSON.stringify(path), { path, json: JSON.stringify(value) })
     }
     return out
   }
-  const a = flat(before, "", new Map())
-  const b = flat(after, "", new Map())
-  return [...new Set([...a.keys(), ...b.keys()])].filter(
-    (path) => a.get(path) !== b.get(path)
-  )
+  const a = flat(before, [], new Map())
+  const b = flat(after, [], new Map())
+  return [...new Set([...a.keys(), ...b.keys()])]
+    .filter((key) => a.get(key)?.json !== b.get(key)?.json)
+    .map((key) => (a.get(key) ?? b.get(key)).path)
+}
+
+/** Keys the schema does not name, at every level where it names keys (additionalProperties: false). */
+function unknownKeys(value, rule = PROGRAM_SCHEMA, path = [], out = []) {
+  if (rule?.properties && isRecord(value)) {
+    for (const [key, child] of Object.entries(value)) {
+      if (Object.hasOwn(rule.properties, key)) unknownKeys(child, rule.properties[key], [...path, key], out)
+      else out.push([...path, key])
+    }
+  } else if (rule?.items && Array.isArray(value)) {
+    value.forEach((item, i) => unknownKeys(item, rule.items, [...path, String(i)], out))
+  }
+  return out
+}
+
+/** Whether the YAML uses an anchor or an alias anywhere. */
+function hasAnchors(content) {
+  let found = false
+  visit(parseDocument(content), (_, node) => {
+    if (isAlias(node) || (isNode(node) && node.anchor)) {
+      found = true
+      return visit.BREAK
+    }
+  })
+  return found
+}
+
+/** The Affitor program a signup_url links to, or "" when it is no marketplace page. */
+function marketplaceSlug(signupUrl, marketplace) {
+  const url = typeof signupUrl === "string" ? signupUrl : ""
+  const slug = url.startsWith(marketplace) ? url.slice(marketplace.length) : ""
+  return /^[A-Za-z0-9_-]+$/.test(slug) ? slug : ""
 }
 
 /**
@@ -499,14 +543,28 @@ async function evaluateAffitorSyncPolicy({
     if (/<\/?script\b/i.test(file.content)) {
       reasons.push(`contains an HTML script tag: ${name}`)
     }
-    const signup = typeof program.signup_url === "string" ? program.signup_url : ""
-    const slug = signup.startsWith(config.marketplace)
-      ? signup.slice(config.marketplace.length)
-      : ""
-    if (!/^[A-Za-z0-9_-]+$/.test(slug)) {
+    for (const path of unknownKeys(program)) {
+      reasons.push(`key ${showPath(path)} is not in schema/program.schema.json: ${name}`)
+    }
+    if (hasAnchors(file.content)) {
+      reasons.push(`uses a YAML anchor or alias: ${name}`)
+    }
+    const slug = marketplaceSlug(program.signup_url, config.marketplace)
+    if (!slug) {
       reasons.push(`signup_url is not an Affitor marketplace page: ${name}`)
     }
-    const skipped = [fileSlug, slug].find((s) => s && Object.hasOwn(skip, s))
+    // The Affitor program a listing is linked to is its identity, reviewed when
+    // the listing was created. The sync may refresh its terms, never re-link it.
+    const baseSlug = base === null ? "" : marketplaceSlug(base.signup_url, config.marketplace)
+    if (
+      base !== null &&
+      (!baseSlug || baseSlug !== slug || base.network !== "affitor" || base.source !== "affitor-api")
+    ) {
+      reasons.push(
+        `Affitor identity changed (base ${baseSlug || "none"}, head ${slug || "none"}), a person must confirm: ${name}`
+      )
+    }
+    const skipped = [fileSlug, slug, baseSlug].find((s) => s && Object.hasOwn(skip, s))
     if (skipped) {
       reasons.push(`${skipped} is on the skip list (data/affitor-sync-skip.json): ${name}`)
     }
@@ -569,7 +627,7 @@ async function evaluateAffitorSyncPolicy({
       if (!PAUSE_NOTE.test(String(program.status_note ?? ""))) {
         reasons.push(`status_note is not the sync's pause note: ${name}`)
       }
-      allowed = ["status", "status_note", "updated_at"]
+      allowed = [["status"], ["status_note"], ["updated_at"]]
     } else {
       const data = isRecord(detail) && detail.success === true ? detail.data : null
       if (!isRecord(data) || data.slug !== slug || !listed.has(slug)) {
@@ -585,17 +643,17 @@ async function evaluateAffitorSyncPolicy({
         continue
       }
       for (const [path, value] of Object.entries(expected)) {
-        const actual = valueAt(program, path)
+        const actual = valueAt(program, ownedPath(path))
         if (actual !== value) {
           reasons.push(`${path} is ${show(actual)}, Affitor says ${show(value)}: ${name}`)
         }
       }
-      allowed = [...Object.keys(expected), "updated_at", "last_verified_at"]
+      allowed = [...Object.keys(expected).map(ownedPath), ["updated_at"], ["last_verified_at"]]
     }
 
     for (const path of changedPaths(base, program)) {
-      if (!allowed.some((owned) => path === owned || path.startsWith(`${owned}.`))) {
-        reasons.push(`changes ${path}, which the sync does not own: ${name}`)
+      if (!allowed.some((owned) => isUnder(path, owned))) {
+        reasons.push(`changes ${showPath(path)}, which the sync does not own: ${name}`)
       }
     }
   }
@@ -603,11 +661,46 @@ async function evaluateAffitorSyncPolicy({
   return result(programs, pauses)
 }
 
+const PASSING = new Set(["success", "neutral", "skipped"])
+
+/**
+ * For the merge job: whether every check main requires has passed on exactly
+ * `headSha`, run by the app main names for it, and no finished check on that
+ * head failed. `required` is branch protection's required_status_checks.checks
+ * ({context, app_id}); none listed means no merge. GitHub enforces the same
+ * checks again when the merge is made.
+ */
+function requiredChecksPass({ headSha, required, checkRuns }) {
+  const reasons = []
+  const head = String(headSha).slice(0, 7)
+  if (!Array.isArray(required) || required.length === 0) {
+    reasons.push("main lists no required checks, so nothing proves this head")
+  }
+  const runs = checkRuns.filter((run) => run.head_sha === headSha)
+  for (const { context, app_id: appId } of required ?? []) {
+    const passed = runs.some(
+      (run) =>
+        run.name === context &&
+        run.status === "completed" &&
+        run.conclusion === "success" &&
+        (appId == null || run.app?.id === appId)
+    )
+    if (!passed) reasons.push(`required check ${context} has not passed on ${head}`)
+  }
+  for (const run of runs) {
+    if (run.status === "completed" && !PASSING.has(run.conclusion)) {
+      reasons.push(`check ${run.name} concluded ${run.conclusion} on ${head}`)
+    }
+  }
+  return { ok: reasons.length === 0, reasons: [...new Set(reasons)] }
+}
+
 module.exports = {
   AFFITOR_SKIP,
   AFFITOR_SYNC,
   BLOCKING_LABELS,
   FETCH_TIMEOUT_MS,
+  changedPaths,
   MAX_ADDITIONS_PER_FILE,
   MAX_FILE_BYTES,
   MAX_PROGRAM_FILES,
@@ -618,5 +711,6 @@ module.exports = {
   fetchAffitorJson,
   fetchProgramContent,
   isAffitorSyncPullRequest,
+  requiredChecksPass,
   shouldArmAutoMerge,
 }

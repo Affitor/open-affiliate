@@ -95,19 +95,33 @@ jobs:
           gh label create "$label" --repo "$GITHUB_REPOSITORY" --force --color 0e8a16 \
             --description "Daily Affitor sync; terms re-checked against the Affitor API before merge"
 
-          # Commit what is staged, push it to branch $1 and open its pull request unless one is open.
+          # The App's own open pull requests from this repository into main, one
+          # "number branch" per line. A fork can open a pull request from a branch
+          # with the same name, so a branch name alone proves nothing. Listed
+          # without search, which can lag behind a pull request just opened.
+          app_prs() {
+            gh pr list --repo "$GITHUB_REPOSITORY" --base main --state open --limit 200 \
+              --json number,headRefName,author,isCrossRepository \
+              --jq ".[] | select(.isCrossRepository == false and .author.login == \"app/$APP_SLUG\") | \"\(.number) \(.headRefName)\""
+          }
+
+          # Commit what is staged, push it to branch $1, and make sure the App's
+          # pull request for it is open. Sets $opened to its number, or fails the run.
           publish() {
-            local branch="$1" title="$2" body="$3" existing
+            local branch="$1" title="$2" body="$3" url
             git -c user.name="$bot" -c user.email="${bot_id}+${bot}@users.noreply.github.com" commit -q -m "$title"
             # The bot's own branch: a second run on the same day replaces it.
             git push -q --force "$remote" "HEAD:refs/heads/$branch"
-            existing="$(gh pr list --repo "$GITHUB_REPOSITORY" --head "$branch" --state open --json number --jq '.[0].number // empty')"
-            if [ -z "$existing" ]; then
-              gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
-                --title "$title" --body-file "$body" --label "$label"
+            opened="$(app_prs | awk -v b="$branch" '$2 == b && !n { print $1; n = 1 }')"
+            if [ -z "$opened" ]; then
+              url="$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+                --title "$title" --body-file "$body" --label "$label")"
+              opened="${url##*/}"
+              echo "opened pull request #$opened"
             else
-              echo "updated pull request #$existing"
+              echo "updated pull request #$opened"
             fi
+            [[ "$opened" =~ ^[0-9]+$ ]] || { echo "::error::no pull request is open for $branch"; exit 1; }
           }
 
           # Updates and pauses of existing listings: the auto-merge lane's to merge.
@@ -127,11 +141,11 @@ jobs:
               echo "Run: $run_url"
             } > "$RUNNER_TEMP/updates.md"
             publish "$branch" "chore: sync Affitor terms $day" "$RUNNER_TEMP/updates.md"
-            # An older updates pull request is superseded: this one is built on today's main.
-            gh pr list --repo "$GITHUB_REPOSITORY" --app "$APP_SLUG" --state open --json number,headRefName \
-              --jq ".[] | select((.headRefName | startswith(\"sync/affitor-\")) and (.headRefName | startswith(\"sync/affitor-new-\") | not) and .headRefName != \"$branch\") | .number" |
+            # Only now that its replacement is open: the App's older updates pull
+            # requests are superseded, since this one is built on today's main.
+            app_prs | awk -v keep="$opened" '$2 ~ /^sync\/affitor-/ && $2 !~ /^sync\/affitor-new-/ && $1 != keep { print $1 }' |
               while read -r number; do
-                gh pr close "$number" --repo "$GITHUB_REPOSITORY" --delete-branch --comment "Superseded by the $day sync."
+                gh pr close "$number" --repo "$GITHUB_REPOSITORY" --delete-branch --comment "Superseded by #$opened, the $day sync."
               done
             # Back to main's files; the new listings are untracked and stay.
             git switch -q --detach "$base"
@@ -139,8 +153,7 @@ jobs:
 
           # New listings: a person edits and merges them, so an open one is never touched.
           if [ -n "$new_files" ]; then
-            open_new="$(gh pr list --repo "$GITHUB_REPOSITORY" --app "$APP_SLUG" --state open --json headRefName \
-              --jq '[.[] | select(.headRefName | startswith("sync/affitor-new-"))] | length')"
+            open_new="$(app_prs | awk '$2 ~ /^sync\/affitor-new-/ { n++ } END { print n + 0 }')"
             if [ "$open_new" != "0" ]; then
               echo "a new-listings pull request is still open; it is left to the person editing it"
             else

@@ -746,6 +746,38 @@ test("a brand on the skip list is reported with its reason and never created, ta
   assert.deepEqual(fetched.filter((u) => u !== LIST).map((u) => u.slice(LIST.length + 1)), ["citegraph"])
 })
 
+test("a listing linked to an Affitor program that left is never re-linked by a website match (Codex r1 #2)", async () => {
+  // citegraph left the list; "attacker" now claims citegraph's website, with valid terms.
+  const dir = dirWith({ "citegraph.yaml": synced("citegraph", "https://www.citegraph.app") })
+  const before = snapshot(dir)
+  const rows = [row("attacker", { name: "Attacker", link_webpage: "https://www.citegraph.app/" })]
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows), skip: {} })
+  const attacker = entries.find((e) => e.affitor_slug === "attacker")!
+  assert.equal(attacker.action, "conflict")
+  assert.equal(attacker.file, "programs/citegraph.yaml")
+  assert.match(attacker.reason, /linked to Affitor program citegraph, which left the list; a website match never re-links/)
+  assert.deepEqual(written, [])
+  assert.deepEqual(snapshot(dir), before)
+
+  // While citegraph is still listed, the same match is the existing conflict.
+  const both = [...rows, row("citegraph", { name: "CiteGraph", link_webpage: "https://www.citegraph.app/" })]
+  const again = await run({ args: ["--dry-run"], programsDir: dir, today: TODAY, fetchJson: api(both), skip: {} })
+  assert.match(again.entries.find((e) => e.affitor_slug === "attacker")!.reason, /already listed from Affitor program citegraph/)
+})
+
+test("a listing linked to a skip-listed Affitor program stays out, whoever matches it (Codex r1 #4)", async () => {
+  // acme.yaml links to link-whisper, which is on the committed skip list; acme-new claims its website.
+  const dir = dirWith({ "acme.yaml": synced("acme", "https://acme.example").replace("marketplace/acme", "marketplace/link-whisper") })
+  const before = snapshot(dir)
+  const rows = [row("acme-new", { name: "Acme New", link_webpage: "https://acme.example" })]
+  const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(rows) })
+  const acme = entries.find((e) => e.affitor_slug === "acme-new")!
+  assert.equal(acme.action, "skip")
+  assert.match(acme.reason, /^on the skip list \(data\/affitor-sync-skip\.json\): /)
+  assert.deepEqual(written, [])
+  assert.deepEqual(snapshot(dir), before)
+})
+
 /** The files of the pull request one run would open, with each modified file's base version. */
 async function pullRequestFiles(dir: string, rows: AffitorProgram[], today: string) {
   const before = snapshot(dir)

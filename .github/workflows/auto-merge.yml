@@ -6,10 +6,12 @@ name: Auto-merge Policy
 # only the trusted base commit is checked out.
 #
 # Two lanes. Pull requests from the sync App (sync-affitor.yml) take the
-# affitor-sync lane: no reviewed label, but every term is re-read from the
-# Affitor API before auto-merge is armed. Only updates and pauses of existing
-# listings merge that way; a pull request that adds a listing is labelled
-# affitor-sync-new and left to a person. Everyone else takes the human lane.
+# affitor-sync lane. Here it only comments and labels: it never arms native
+# auto-merge. affitor-sync-merge.yml re-runs the lane on the exact head CI
+# passed on and merges only that head. Only updates and pauses of existing
+# listings can pass; a pull request that adds a listing is labelled
+# affitor-sync-new and left to a person. Everyone else takes the human lane,
+# unchanged.
 on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review, labeled, unlabeled]
@@ -167,14 +169,26 @@ jobs:
             }
 
             let action
-            if (result.eligible) {
+            if (result.eligible && syncLane) {
+              // Never native auto-merge here: it is not bound to the head that
+              // was checked. affitor-sync-merge.yml re-runs this lane on the
+              // exact head CI passed on and merges that head only.
+              await addLabel(candidateLabel)
+              await removeLabel(blockedLabel)
+              action = live
+                ? 'Candidate. The affitor-sync merge job re-checks and merges this exact head once CI passes on it.'
+                : 'Shadow only: the affitor-sync merge job would merge this head once CI passes on it.'
+              if (pullRequest.auto_merge) {
+                await disableAutoMerge()
+                action += ' A previous auto-merge request was disabled.'
+              }
+            } else if (result.eligible) {
               await addLabel(candidateLabel)
               await removeLabel(blockedLabel)
               const arm = shouldArmAutoMerge({
                 eligible: true,
                 labels: pullRequest.labels,
                 live,
-                lane: syncLane ? 'affitor-sync' : 'human',
               })
               if (arm) {
                 action = 'Native squash auto-merge requested; GitHub still waits for every required branch check.'
@@ -210,9 +224,7 @@ jobs:
                   action += ' A previous auto-merge request was disabled.'
                 }
               } else {
-                action = syncLane
-                  ? 'Shadow only: this pull request would enter native squash auto-merge after the required checks.'
-                  : 'Shadow only: this pull request would enter native squash auto-merge after the reviewed label and required checks.'
+                action = 'Shadow only: this pull request would enter native squash auto-merge after the reviewed label and required checks.'
               }
             } else {
               await addLabel(blockedLabel)
@@ -235,7 +247,8 @@ jobs:
               : syncLane
                 ? [
                     `- author \`${AFFITOR_SYNC.bot}\`, label \`${AFFITOR_SYNC.label}\``,
-                    `- ${result.programCount} updated listing(s) the sync created under \`programs/*.yaml\`; none new, removed or on the skip list`,
+                    `- ${result.programCount} updated listing(s) the sync created under \`programs/*.yaml\`; none new, removed, re-linked to another Affitor program or on the skip list`,
+                    `- schema keys only, no YAML anchors or aliases`,
                     `- every sync-owned field equals the Affitor API as read at ${checkedAt}; a modified listing changes nothing else`,
                     `- ${result.pauses} pause(s), each confirmed by Affitor; at most ${AFFITOR_SYNC.max_pauses}`,
                     `- no emergency-stop label`,
