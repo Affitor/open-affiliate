@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js"
 import {
-  programs,
+  livePrograms,
   parseCommissionRate,
   isCommissionFlat,
   formatCommissionDisplay,
@@ -71,7 +71,7 @@ export interface SiftInsights {
 
 // ── Data Fetching ───────────────────────────────────────────────
 
-interface ScoredRow {
+export interface ScoredRow {
   sift_score: number
   sift_tag: string | null
   platform: string
@@ -102,7 +102,20 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
     .from("social_items")
     .select("id", { count: "exact", head: true })
 
-  const totalContent = totalCount ?? 0
+  return buildSiftInsights(allScored, totalCount ?? 0)
+}
+
+/**
+ * The insights from scored rows, without the database, so a test can feed it
+ * rows. Only rows for live programs count: content about a brand with no
+ * program (no_program, discontinued, paused) or a slug no longer in the
+ * registry is never recommended, never a category's top program and never
+ * counted in a stat.
+ */
+export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number): SiftInsights {
+  // Map programs to registry data
+  const programLookup = new Map(livePrograms.map((p) => [p.slug, p]))
+  const allScored = scoredRows.filter((row) => programLookup.has(row.program_slug))
   const scoredContent = allScored.length
 
   // Build program-level aggregates
@@ -123,9 +136,6 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
 
   const programsWithContent = programMap.size
   const verifiedContent = allScored.filter((r) => r.sift_score >= 7).length
-
-  // Map programs to registry data
-  const programLookup = new Map(programs.map((p) => [p.slug, p]))
 
   // ── Build Opportunities ─────────────────────────────────────
 
@@ -228,7 +238,7 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
       const topProg = catPrograms.sort((a, b) => b.avgSiftScore - a.avgSiftScore)[0]
 
       // Avg commission for category
-      const catProgramsFull = programs.filter((p) => p.category === category)
+      const catProgramsFull = livePrograms.filter((p) => p.category === category)
       const pctRates = catProgramsFull
         .filter((p) => !isCommissionFlat(p.commission.rate))
         .map((p) => parseCommissionRate(p.commission))

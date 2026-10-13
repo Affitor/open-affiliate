@@ -12,13 +12,18 @@
  * would otherwise stay alive after the last test.
  */
 import assert from "node:assert/strict"
+import { readFileSync } from "node:fs"
+import { join } from "node:path"
 import { test } from "node:test"
+import { parse } from "yaml"
 import { NextRequest } from "next/server"
 import { GET as restGet } from "../src/app/api/programs/[slug]/route"
 import { createMcpRoute } from "../src/lib/mcp-route"
 import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
 import { buildFaq } from "../src/lib/program-seo"
 import { getProgram, isLive, programs } from "../src/lib/programs"
+import { buildSiftInsights, type ScoredRow } from "../src/lib/sift-stats"
+import { noProgramProblems, nonCashAffiliate } from "./program-rules"
 
 /** Left out entirely. `commission` and `payout` stay, as neutral placeholders. */
 const OMITTED = ["cookieDays", "signupUrl", "approval", "approvalTime", "restrictions", "commissionDuration", "commissionConditions"]
@@ -162,7 +167,8 @@ test("FAQ answers no with the check date; alternatives are same-category, verifi
 
 test("a gift card or credit reward is never an alternative", () => {
   // Slab pays Amazon gift cards and Neon pays credits; both are kind: referral.
-  for (const slug of ["slab", "neon", "replit", "airtable"]) {
+  // Attio pays a $200 gift card and was filed kind: affiliate, mode flat, value 200 until this PR.
+  for (const slug of ["slab", "neon", "replit", "airtable", "attio"]) {
     const reward = getProgram(slug)
     assert.ok(reward, slug)
     // A probe in the same category with the same keywords: every candidate qualifies on category.
@@ -174,4 +180,53 @@ test("a gift card or credit reward is never an alternative", () => {
 test("a category with no qualifying program gets no alternatives", () => {
   const p = noProgram[0]
   assert.deepEqual(noProgramAlternatives({ ...p, category: "No Such Category" }), [])
+})
+
+function yamlOf(slug: string): Record<string, unknown> {
+  return parse(readFileSync(join(process.cwd(), "programs", `${slug}.yaml`), "utf8"))
+}
+
+test("a no_program commission is exactly the placeholder: extra keys and other values are refused", () => {
+  const openrouter = yamlOf("openrouter")
+  assert.deepEqual(noProgramProblems(openrouter), [])
+  const commission = openrouter.commission as Record<string, unknown>
+  // Both inputs from the Codex r2 review.
+  const bonus = { ...openrouter, commission: { ...commission, bonus: { amount: 500, currency: "USD" } } }
+  assert.ok(noProgramProblems(bonus).some((p) => p.includes("commission.bonus")), JSON.stringify(noProgramProblems(bonus)))
+  const typed = { ...openrouter, commission: { ...commission, type: "30% recurring" } }
+  assert.ok(noProgramProblems(typed).some((p) => p.includes("commission.type")), JSON.stringify(noProgramProblems(typed)))
+  const conditions = { ...openrouter, commission: { ...commission, conditions: "20% on sales" } }
+  assert.ok(noProgramProblems(conditions).length > 0)
+  const missing = { ...openrouter, commission: { mode: "unknown", value: null } }
+  assert.ok(noProgramProblems(missing).some((p) => p.includes("missing")))
+})
+
+test("kind: affiliate on a gift-card reward is flagged, and Attio no longer is", () => {
+  const attio = yamlOf("attio")
+  assert.equal(attio.kind, "referral")
+  assert.equal(nonCashAffiliate(attio), false)
+  // Attio as it was filed before this PR.
+  const before = { ...attio, kind: "affiliate", commission: { ...(attio.commission as object), mode: "flat", value: 200 } }
+  assert.equal(nonCashAffiliate(before), true)
+  assert.equal(nonCashAffiliate(yamlOf("netlify")), false)
+})
+
+test("Content Insights never recommends or counts a program that is not live", () => {
+  const openrouter = getProgram("openrouter")!
+  const live = programs.find((p) => isLive(p) && p.category === openrouter.category)!
+  // Codex r2's probe: five rows for openrouter at sift_score 8, plus rows for a live AI program and an unknown slug.
+  const rows: ScoredRow[] = [
+    ...Array.from({ length: 5 }, () => ({ sift_score: 8, sift_tag: "tutorial", platform: "youtube", program_slug: "openrouter" })),
+    ...Array.from({ length: 5 }, () => ({ sift_score: 6, sift_tag: "review", platform: "reddit", program_slug: live.slug })),
+    ...Array.from({ length: 5 }, () => ({ sift_score: 9, sift_tag: "review", platform: "x", program_slug: "no-such-program" })),
+  ]
+  const insights = buildSiftInsights(rows, rows.length)
+  const listed = [...insights.risingPrograms, ...insights.opportunities, ...insights.highValueVerified].map((p) => p.slug)
+  assert.equal(listed.includes("openrouter"), false)
+  assert.equal(listed.includes("no-such-program"), false)
+  const ai = insights.categoryInsights.find((c) => c.category === openrouter.category)!
+  assert.equal(ai.topProgram.slug, live.slug)
+  assert.equal(ai.programCount, 1)
+  assert.equal(insights.programsWithContent, 1)
+  assert.equal(insights.categoryInsights.some((c) => c.category === "Other"), false)
 })

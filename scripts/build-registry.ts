@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
+import { noProgramProblems, nonCashAffiliate } from "./program-rules"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -39,7 +40,14 @@ const SCHEMA_PROPERTIES = (
 
 /** Status values, read from the schema like the URL patterns above. */
 const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
-const NO_PROGRAM_FORBIDDEN = ["cookie_days", "payout", "signup_url", "approval", "approval_time", "restrictions"]
+
+/**
+ * `kind: affiliate` on a file whose own rate or conditions say gift card,
+ * voucher or credit. A warning while a separate data sweep reclassifies the
+ * existing ones (fix/non-cash-rewards-kind); once it has merged, set this to
+ * true and the same list fails the build.
+ */
+const NON_CASH_AFFILIATE_FAILS = false
 
 const REQUIRED_FIELDS = [
   "name",
@@ -135,25 +143,12 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   if (data.status != null && (typeof data.status !== "string" || !STATUSES.includes(data.status))) {
     throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got ${JSON.stringify(data.status)}`)
   }
-  // A no_program file holds no terms. The page, .md and API hide them anyway;
-  // this keeps stale ones out of the YAML that contributors and scripts read.
-  if (data.status === "no_program") {
-    const terms = NO_PROGRAM_FORBIDDEN.filter((field) => data[field] != null)
-    // The commission object is required, so it holds the placeholder and nothing else.
-    const commission = data.commission as Record<string, unknown> | undefined
-    if (
-      commission &&
-      (commission.mode !== "unknown" ||
-        commission.value != null ||
-        commission.rate !== "none" ||
-        commission.duration != null ||
-        commission.conditions != null)
-    ) {
-      terms.push('commission beyond the placeholder (mode: unknown, value: null, rate: "none", no duration or conditions)')
-    }
-    if (terms.length) {
-      throw new Error(`${filename}: status is no_program but the file still sets ${terms.join(", ")}. Remove them.`)
-    }
+  // A no_program file holds no terms and only the commission placeholder. The
+  // page, .md and API hide terms anyway; this keeps them out of the YAML that
+  // contributors and scripts read. Rules in scripts/program-rules.ts.
+  const noProgram = noProgramProblems(data)
+  if (noProgram.length) {
+    throw new Error(`${filename}: status is no_program, so it holds no terms: ${noProgram.join("; ")}`)
   }
 
   const expectedSlug = basename(filename, ".yaml")
@@ -260,6 +255,7 @@ function buildRegistry(): void {
 
   const programs: YamlProgram[] = []
   const errors: string[] = []
+  const nonCash: string[] = []
 
   for (const filename of yamlFiles) {
     const filepath = join(PROGRAMS_DIR, filename)
@@ -268,9 +264,21 @@ function buildRegistry(): void {
       const data = parse(raw) as Record<string, unknown>
 
       validateProgram(data, filename)
+      if (nonCashAffiliate(data)) nonCash.push(filename)
       programs.push(data as unknown as YamlProgram)
     } catch (err) {
       errors.push(`${filename}: ${(err as Error).message}`)
+    }
+  }
+
+  if (nonCash.length > 0) {
+    const message =
+      `${nonCash.length} programs say kind: affiliate while their commission mentions a gift card, voucher or credit; ` +
+      `set kind: referral (or reword) for: ${nonCash.join(", ")}`
+    if (NON_CASH_AFFILIATE_FAILS) errors.push(message)
+    else {
+      console.warn(`Warning: ${message}`)
+      if (process.env.GITHUB_ACTIONS) console.log(`::warning::${message}`)
     }
   }
 

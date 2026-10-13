@@ -35,7 +35,7 @@ import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, isDiscontinued, isPaused, isUnverified, networkName } from "@/lib/program-seo";
-import { programs, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
+import { programs, livePrograms, getProgram, parseCommissionRate, commissionLabel, affiliateScore, IN_HOUSE, commissionDisplay, networkName as networkLabel } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { hasNoProgram, noProgramAlternatives, noProgramHeadline } from "@/lib/no-program";
 import { TrackView, TrackLink } from "./track-view";
@@ -160,7 +160,8 @@ export default async function ProgramPage({
 
   // Affiliate Score
   const score = affiliateScore(program);
-  const categoryPrograms = programs.filter((p) => p.category === program.category);
+  // Compared with live programs only: a brand with no program has no score to average.
+  const categoryPrograms = livePrograms.filter((p) => p.category === program.category);
   // A program with no cookie_days scores NaN; one such entry turned every
   // category average into "NaN vs avg".
   const categoryScores = categoryPrograms.map(affiliateScore).filter(Number.isFinite);
