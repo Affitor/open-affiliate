@@ -15,8 +15,8 @@ commission:
   duration: null
   conditions: "The site states only the 50% figure, as the label of its affiliate link. What the 50% applies to, the cookie and the payout terms are not published on the site."
 
-# cookie_days: not published on anotherwrapper.com (checked 2026-10-13)
-# payout: not published on anotherwrapper.com (checked 2026-10-13)
+# cookie_days: not published on anotherwrapper.com; the site's Affonso pixel config sets "data-cookie_duration":"30" (anotherwrapper.com, checked 2026-10-13)
+# payout: not published on anotherwrapper.com. The Lemon Squeezy affiliate hub, whose script the site also loads, says "earn up to $274.50 on each sale" (50% of the $549 plan), "a minimum balance of $10.00 before processing an affiliate payout" and "We payout on NET30 terms" (anotherwrapper.lemonsqueezy.com/affiliates, checked 2026-10-13). Which hub is live is unclear, so these stay out of the fields
 
 signup_url: https://anotherwrapper.affonso.io/auth
 

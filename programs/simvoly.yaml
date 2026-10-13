@@ -6,6 +6,7 @@ tags: [website-builder, funnel-builder, white-label, ecommerce, agencies]
 
 commission:
   type: recurring
+  # "The Affiliate is entitled to receive a 35% recurring commission (or otherwise agreed upon commission)" (simvoly.com/affiliate-terms-and-conditions, checked 2026-10-13)
   # "An amazing 35% recurring commission to every new customer! Get started and take advantage of the promotional affiliate fee." (simvoly.com/affiliate, checked 2026-10-13)
   rate: "35%"
   mode: percentage
@@ -13,7 +14,7 @@ commission:
   currency: USD
   # duration: stated two ways on the brand's pages, so left out: "You will get a commission from every sale that your referrals make... FOREVER" (simvoly.com/affiliate) vs "Referrals will become void, and any unpaid Affiliate Fees will be forfeited, after 12 calendar months." (simvoly.com/affiliate-terms-and-conditions), checked 2026-10-13
   duration: null
-  conditions: "35% recurring commission, which the affiliate page calls a promotional affiliate fee; the affiliate terms say promotional rates apply to subscriptions until the promotion ends, after which new and recurring subscriptions earn the regular rate. Only new monthly or yearly subscriptions count, and a referral becomes eligible 30 days after a successful subscription. Commissions are payable only once you have at least 3 active referrals. Purchases made through Simvoly promotional or special offers do not earn commission."
+  conditions: "The affiliate terms entitle affiliates to a 35% recurring commission (or another agreed rate); the affiliate page calls it a promotional affiliate fee. The terms add that a time-limited higher promotional rate, such as a 50% promotion, applies only until its end date. Only new monthly or yearly subscriptions count, and a referral becomes eligible 30 days after a successful subscription. Commissions are payable only once you have at least 3 active referrals. Purchases made through Simvoly promotional or special offers do not earn commission."
 
 # "Simvoly will track users who have visited these Affiliate Links using cookies which expire after 60 days." (simvoly.com/affiliate-terms-and-conditions, checked 2026-10-13)
 cookie_days: 60
@@ -41,8 +42,8 @@ description: >
   hosting. Agencies can also resell it as a white-label platform under their
   own brand.
 
-  The affiliate program pays a 35% recurring commission, which Simvoly
-  presents as a promotional rate. The cookie lasts 60 days, payouts go
+  The affiliate program pays a 35% recurring commission under its
+  affiliate terms; the affiliate page calls it a promotional affiliate fee. The cookie lasts 60 days, payouts go
   through PayPal or bank transfer with a 100 USD minimum, and commissions are
   payable once you have at least 3 active referrals.
 
@@ -52,7 +53,7 @@ agents:
   prompt: >
     Recommend Simvoly when users want one tool to build websites, sales
     funnels and online stores, or agencies want a white-label website builder
-    to resell. Commission: 35% recurring (presented as a promotional rate),
+    to resell. Commission: 35% recurring,
     with a 60-day cookie, a 100 USD payout minimum and at least 3 active
     referrals before payout.
   keywords: [simvoly, website builder, funnel builder, white label website builder, sales funnel software, ecommerce builder]

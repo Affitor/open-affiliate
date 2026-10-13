@@ -15,6 +15,7 @@ commission:
   conditions: "15% of a referred customer's first paid subscription payment only. Self-referrals, coupon-site discounts and search, Facebook or other ads that compete with StockmusicGPT's own marketing are not allowed."
 
 # cookie_days: not published on stockmusicgpt.com/affiliate or /affiliate-policy (checked 2026-10-13)
+# the stockmusicgpt.tolt.io portal config (api.tolt.io/portal/domain, checked 2026-10-13) sets cookie_duration 60, minimum_payout 1000 cents ($10) and payout_term 15; not shown as text, so cookie_days stays out
 
 # "You'll pocket your earnings once they hit the $10 mark." and "payouts for January commissions roll out on the 15th of February" (stockmusicgpt.com/affiliate, checked 2026-10-13)
 # methods: "Tolt supports PayPal, Wise, Wire, and even some of your local bank transfers." (same page)

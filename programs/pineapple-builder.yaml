@@ -26,7 +26,7 @@ payout:
 signup_url: https://www.pineapplebuilder.com/affiliates
 
 dashboard_url: null
-# network: "Apply to partner" opens pineapplebuilder.partneroapp.com (Partnero), which the network enum does not list (checked 2026-10-13)
+# network: "Apply to partner" opens pineapplebuilder.partneroapp.com (Partnero), which the network enum does not list; the site also embeds a Rewardful script (r.wdfl.co/rw.js, data-rewardful='7fb84a') but applications go to Partnero (pineapplebuilder.com/affiliates, checked 2026-10-13)
 network: null
 program_age: null
 

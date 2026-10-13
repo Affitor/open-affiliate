@@ -17,6 +17,7 @@ commission:
 
 # cookie_days: not published on detectgpt.tolt.io (checked 2026-10-13)
 # payout: minimum, frequency and methods not published on detectgpt.tolt.io (checked 2026-10-13)
+# the portal config (api.tolt.io/portal/domain, origin detectgpt.tolt.io, checked 2026-10-13) sets cookie_duration 60, minimum_payout 5000 cents ($50), payout_term 30 and methods paypal, wise; not shown as text, so not used as fields
 
 signup_url: https://detectgpt.tolt.io/login
 

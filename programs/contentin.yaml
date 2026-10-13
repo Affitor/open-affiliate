@@ -16,6 +16,7 @@ commission:
   conditions: "20% lifetime commission for each referred customer who becomes a paid user. Applications are reviewed within 24 hours. The same page also says \"earn up to $200 per referral\" without explaining how that limit relates to the 20% lifetime commission."
 
 # cookie_days: not published on contentin.io/partner-program (checked 2026-10-13)
+# the partner.contentin.io portal config (api.tolt.io/portal/domain, checked 2026-10-13) sets cookie_duration 60, minimum_payout 3000 cents ($30) and methods wise, wire (no PayPal); not shown as text, so not used as fields
 
 # "Get paid monthly via PayPal, Wise or bank transfer" (contentin.io/partner-program, checked 2026-10-13); minimum not published
 payout:

@@ -13,7 +13,8 @@ commission:
   value: 40
   currency: USD
   duration: lifetime
-  conditions: "40% of all payments from referred customers on the Grow, Business, Agency and Franchise plans, for as long as their accounts stay on paid plans. A commission is earned once the referred account has stayed in good standing for 45 days. Affiliates also earn 20% on sales by affiliates they recruit (second tier). Commissions are calculated on fees received, less sales taxes."
+  # agency track: "Kick off with 40% recurring lifetime commissions" and "Reach 10 active clients and enjoy 50% commissions" (boomerangme.com/partnership-program, checked 2026-10-13)
+  conditions: "40% of all payments from referred customers on the Grow, Business, Agency and Franchise plans, for as long as their accounts stay on paid plans. A commission is earned once the referred account has stayed in good standing for 45 days. Affiliates also earn 20% on sales by affiliates they recruit (second tier). Commissions are calculated on fees received, less sales taxes. Agencies can instead join the separate partnership program, which starts at 40% recurring lifetime commissions and rises to 50% at 10 active clients."
 
 # "provided that it was the last Affiliate Link to the Boomerangme Site that the customer clicked within the last 90 days" (boomerangme.com/legal-docs/affiliate-program-agreement-code-of-conduct, checked 2026-10-13)
 cookie_days: 90

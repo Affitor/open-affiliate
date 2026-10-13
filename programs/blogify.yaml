@@ -21,7 +21,8 @@ cookie_days: 60
 payout:
   currency: USD
   frequency: net-30
-  methods: [paypal, bank]
+  # methods: the page says "PayPal, Bank Transfer" but the FirstPromoter portal says "Net 30 Payment & 60 Days cookie." and "Wise/ Bank Transfer" (blogify.firstpromoter.com, checked 2026-10-13); only bank transfer, which both state, is kept
+  methods: [bank]
 
 signup_url: https://blogify.ai/partner-program/
 # "Once applied, wait no more than 2 business days to get a response." (blogify.ai/partner-program, checked 2026-10-13)
@@ -43,7 +44,7 @@ description: >
 
   The partner program pays 40% recurring commission for as long as the
   referred user stays a customer. The cookie lasts 60 days, payouts are net 30
-  by PayPal or bank transfer, and applications get a response within two
+  by bank transfer, and applications get a response within two
   business days. Affiliates get 200+ free marketing assets.
 
 short_description: "AI blog writer that turns videos, podcasts and pages into SEO posts"
