@@ -7,6 +7,11 @@ interface ProgramLogoProps {
   name: string;
   size?: number;
   className?: string;
+  /**
+   * Public path that replaces the slug lookup; null means no logo, so the
+   * initial shows. Network logos live outside the program logo map.
+   */
+  src?: string | null;
 }
 
 export function ProgramLogo({
@@ -14,6 +19,7 @@ export function ProgramLogo({
   name,
   size = 40,
   className = "",
+  src,
 }: ProgramLogoProps) {
   // Most logos are <slug>.png. 48 are .jpg, .webp or .svg — hardcoding .png
   // meant those 404'd and rendered as a bare initial instead of the brand
@@ -22,7 +28,8 @@ export function ProgramLogo({
   // Server component: a client wrapper around every logo used to put ~20
   // islands on /categories and more on each program page. Letter fallback
   // sits under the image so a missing file still shows an initial, no JS.
-  const file = (logoFiles as Record<string, string>)[slug];
+  const mapped = (logoFiles as Record<string, string>)[slug];
+  const file = src !== undefined ? src : mapped ? `/logos/${mapped}` : null;
   const initial = name.charAt(0).toUpperCase();
 
   return (
@@ -38,7 +45,7 @@ export function ProgramLogo({
       </span>
       {file ? (
         <Image
-          src={`/logos/${file}`}
+          src={file}
           alt={`${name} logo`}
           width={size}
           height={size}

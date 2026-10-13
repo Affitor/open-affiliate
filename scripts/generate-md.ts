@@ -39,6 +39,8 @@ import {
   commissionDisplay,
   getCategoryStats,
   getNetworkStats,
+  liveNetworks,
+  networkName,
 } from "../src/lib/programs"
 import { BEST_LISTS, SHARED_RULES, bestListCopy, buildBestList, type BestList } from "../src/lib/best-lists"
 
@@ -542,7 +544,8 @@ function checkedOn(p: Program): string {
 function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
   const verified = list.filter(listedVerified)
   const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
-  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : `${mdHeading(label)} affiliate network`
+  // Same H1 as the HTML page: the display name, never the stored slug.
+  const title = kind === "category" ? `${mdHeading(label)} affiliate programs` : `${mdHeading(networkName(label))} Affiliate Programs`
 
   return joinSections([
     `# ${title}`,
@@ -727,7 +730,6 @@ function verifiedMd(): string {
 
 function llmsTxt(): string {
   const verified = programs.filter(listedVerified)
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
 
   const catLines = categories
     .map(c => {
@@ -737,10 +739,10 @@ function llmsTxt(): string {
     })
     .join("\n")
 
-  const netLines = networks
+  const netLines = liveNetworks
     .map(n => {
       const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-      return `- [${mdEscape(n)}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
+      return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
     })
     .join("\n")
 
@@ -919,7 +921,7 @@ function rankingsMd(): string {
     })
     .join("\n")
   const networkLines = getNetworkStats()
-    .map(n => `- [${mdEscape(n.network)}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(networkName(n.network))}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${mdEscape(n.bestCommissionDisplay)}, top [${mdEscape(n.topProgram.name)}](${BASE}/programs/${n.topProgram.slug}.md)`)
     .join("\n")
   const categoryLines = getCategoryStats()
     .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${mdEscape(c.highestCommissionDisplay)}, top [${mdEscape(c.topProgram.name)}](${BASE}/programs/${c.topProgram.slug}.md)`)
@@ -1047,7 +1049,8 @@ function main(): void {
     if (inCat.length) write(`categories/${categoryToSlug(c)}.md`, groupMd("category", c, inCat))
   }
 
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))]
+  // Live networks only, the same set that gets an HTML page.
+  const networks = liveNetworks
   for (const n of networks) {
     const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
     write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))

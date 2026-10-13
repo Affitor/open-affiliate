@@ -1,91 +1,227 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
-import { Network } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getNetworkStats, networkToSlug, commissionDisplay} from "@/lib/programs";
+import { serializeJsonLd } from "@/lib/json-ld";
+import {
+  getNetworkStats,
+  networkToSlug,
+  networkName,
+  networkKind,
+  IN_HOUSE,
+  NETWORK_META,
+  NETWORK_KIND_LABEL,
+} from "@/lib/programs";
 
-export const metadata: Metadata = {
-  title: "Affiliate Networks",
-  description:
-    "Compare affiliate networks by program count, average commission, and top programs. PartnerStack, Impact, ShareASale, and more.",
-  openGraph: {
-    title: "Affiliate Networks: OpenAffiliate",
-    description:
-      "Compare affiliate networks by program count, commission, and verified programs.",
-    url: "https://openaffiliate.dev/networks",
-    siteName: "OpenAffiliate",
-    images: ["/opengraph-image"],
-  },
-};
+const SITE = "https://openaffiliate.dev";
+
+/** "A, B and C" */
+function listNames(names: string[]): string {
+  return names.length <= 1 ? (names[0] ?? "") : `${names.slice(0, -1).join(", ")} and ${names.at(-1)}`;
+}
+
+/**
+ * Every number on this page comes from the registry, so the copy cannot drift
+ * from the cards. In-house is a bucket with a page of its own, not a network,
+ * so it is counted apart.
+ */
+function networksData() {
+  const stats = getNetworkStats();
+  const networks = stats.filter((n) => n.network !== IN_HOUSE);
+  const inHouse = stats.find((n) => n.network === IN_HOUSE)?.programCount ?? 0;
+  const total = stats.reduce((sum, n) => sum + n.programCount, 0);
+  const networked = total - inHouse;
+  const byKind = (kind: string) => networks.filter((n) => networkKind(n.network) === kind).map((n) => networkName(n.network));
+  const [first, ...rest] = networks;
+
+  const intro = first
+    ? `An affiliate network connects brands with the partners who promote them and pays commission on referred sales. ` +
+      `Of the ${total} live programs in this registry, ${networked} run on ${networks.length} affiliate networks, led by ${networkName(first.network)} with ${first.programCount}; the other ${inHouse} are run in-house by the brand.`
+    : `No program in this registry runs on an affiliate network yet.`;
+
+  const faq: { q: string; a: string }[] = [];
+  const marketplaces = byKind("marketplace");
+  const software = byKind("software");
+  faq.push({
+    q: "What is an affiliate network?",
+    a:
+      "A platform between brands and the partners who promote them: it tracks referrals and pays commission." +
+      (marketplaces.length ? ` ${listNames(marketplaces)} run marketplaces you browse and apply through.` : "") +
+      (software.length
+        ? ` ${listNames(software)} ${software.length === 1 ? "is" : "are"} affiliate software a brand runs its own program on, so you join through the brand.`
+        : ""),
+  });
+  if (first) {
+    const next = rest.slice(0, 2).map((n) => `${networkName(n.network)} (${n.programCount})`);
+    faq.push({
+      q: "Which affiliate network has the most programs?",
+      a: `${networkName(first.network)}, with ${first.programCount} of the ${total} live programs listed here.${next.length ? ` Next come ${listNames(next)}.` : ""}`,
+    });
+  }
+  if (total > 0) {
+    faq.push({
+      q: "Do you need an affiliate network to join a program?",
+      a: `No. ${inHouse} of the ${total} programs here (${Math.round((inHouse / total) * 100)}%) are run in-house: you apply on the brand's own site, with no network account.`,
+    });
+  }
+
+  return { networks, inHouse, total, intro, faq, first };
+}
+
+/**
+ * Title and description for "affiliate networks" (6,600/mo). The title skips
+ * the layout's " | OpenAffiliate" when the whole would pass 60 characters.
+ */
+function networksMeta() {
+  const { networks, first } = networksData();
+  const title = `Affiliate Networks: Compare ${networks.length} Networks and Their Programs`;
+  const second = networks[1];
+  const description =
+    `Compare ${networks.length} affiliate networks by program count, best commission and how you join` +
+    (first
+      ? `, led by ${networkName(first.network)} (${first.programCount} programs)${second ? ` and ${networkName(second.network)} (${second.programCount})` : ""}.`
+      : ".");
+  const withSuffix = `${title} | OpenAffiliate`;
+  return { title, description, fits: withSuffix.length <= 60, withSuffix };
+}
+
+export function generateMetadata(): Metadata {
+  const { title, description, fits, withSuffix } = networksMeta();
+  return {
+    title: fits ? title : { absolute: title },
+    description,
+    openGraph: {
+      title: fits ? withSuffix : title,
+      description,
+      url: `${SITE}/networks`,
+      siteName: "OpenAffiliate",
+      images: ["/opengraph-image"],
+    },
+  };
+}
 
 export default function NetworksPage() {
-  const stats = getNetworkStats();
+  const { networks, inHouse, intro, faq } = networksData();
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
       <TrackPageView />
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "CollectionPage",
+                name: "Affiliate Networks",
+                description: intro,
+                url: `${SITE}/networks`,
+                isPartOf: { "@id": `${SITE}/#website` },
+                publisher: { "@id": `${SITE}/#organization` },
+                mainEntity: {
+                  "@type": "ItemList",
+                  numberOfItems: networks.length,
+                  itemListElement: networks.map((n, i) => ({
+                    "@type": "ListItem",
+                    position: i + 1,
+                    url: `${SITE}/networks/${networkToSlug(n.network)}`,
+                    name: `${networkName(n.network)} Affiliate Programs`,
+                  })),
+                },
+              },
+              {
+                "@type": "FAQPage",
+                mainEntity: faq.map((f) => ({
+                  "@type": "Question",
+                  name: f.q,
+                  acceptedAnswer: { "@type": "Answer", text: f.a },
+                })),
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "OpenAffiliate", item: SITE },
+                  { "@type": "ListItem", position: 2, name: "Affiliate Networks" },
+                ],
+              },
+            ],
+          }),
+        }}
+      />
+
       <div className="mb-8">
-        <div className="flex items-center gap-2 mb-2">
-          <Network className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          <h1 className="text-2xl font-bold tracking-tight">
-            Affiliate Networks
-          </h1>
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {stats.length} networks powering{" "}
-          {stats.reduce((s, n) => s + n.programCount, 0)} affiliate programs
-        </p>
+        <h1 className="text-2xl font-bold tracking-tight">Affiliate Networks</h1>
+        {/* The answer first: what a network is and how the registry splits across them. */}
+        <p className="mt-3 max-w-3xl border-l-2 border-emerald-500/40 pl-3 text-sm">{intro}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {stats.map((net) => (
-          <Link
-            key={net.network}
-            href={`/networks/${networkToSlug(net.network)}`}
-            className="group rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
-          >
-            <div className="flex items-center justify-between mb-3">
-              <h2 className="text-sm font-semibold capitalize group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                {net.network}
-              </h2>
-              <Badge variant="outline" className="text-[10px]">
-                {net.programCount} programs
-              </Badge>
-            </div>
-
-            <div className="flex items-center gap-4 mb-3">
-              <div>
-                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">
-                  Best
-                </p>
-                <p className="text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                  {net.bestCommission}%
-                </p>
+        {networks.map((net) => {
+          const name = networkName(net.network);
+          const meta = NETWORK_META[net.network];
+          return (
+            <Link
+              key={net.network}
+              href={`/networks/${networkToSlug(net.network)}`}
+              className="group flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
+            >
+              <div className="flex items-center gap-3">
+                <ProgramLogo slug={net.network} name={name} src={meta?.logo ?? null} size={40} className="shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <h2 className="text-sm font-semibold truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                    {name}
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    {net.programCount} {net.programCount === 1 ? "program" : "programs"}
+                  </p>
+                </div>
+                <Badge variant="outline" className="text-[10px] shrink-0">
+                  {NETWORK_KIND_LABEL[networkKind(net.network)]}
+                </Badge>
               </div>
-              <div>
-                <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">
-                  Average
-                </p>
-                <p className="text-lg font-bold text-muted-foreground">
-                  {net.avgCommission.toFixed(0)}%
-                </p>
-              </div>
-            </div>
 
-            <div className="flex items-center gap-2 pt-3 border-t border-border/30">
-              <ProgramLogo
-                slug={net.topProgram.slug}
-                name={net.topProgram.name}
-                size={20}
-              />
-              <span className="text-xs text-muted-foreground truncate">
-                Top: {net.topProgram.name} ({commissionDisplay(net.topProgram.commission)})
-              </span>
+              {meta && <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{meta.description}</p>}
+
+              <div className="mt-auto pt-4">
+                <div className="flex items-center justify-between gap-3 border-t border-border/30 pt-3">
+                  <div className="flex min-w-0 items-center gap-2">
+                    <ProgramLogo slug={net.topProgram.slug} name={net.topProgram.name} size={20} className="shrink-0" />
+                    <span className="text-xs text-muted-foreground truncate">Top: {net.topProgram.name}</span>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">Best</p>
+                    <p className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{net.bestCommissionDisplay}</p>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {inHouse > 0 && (
+        <Link
+          href={`/networks/${networkToSlug(IN_HOUSE)}`}
+          className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {inHouse} programs run in-house, with no network <ArrowRight className="h-3.5 w-3.5" />
+        </Link>
+      )}
+
+      <div className="mt-10 max-w-3xl">
+        <h2 className="text-base font-semibold mb-3">Affiliate networks FAQ</h2>
+        <dl className="space-y-4">
+          {faq.map((f) => (
+            <div key={f.q}>
+              <dt className="text-sm font-medium">{f.q}</dt>
+              <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
             </div>
-          </Link>
-        ))}
+          ))}
+        </dl>
       </div>
     </div>
   );

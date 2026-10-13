@@ -12,6 +12,10 @@ import {
   categoryToSlug,
   networkToSlug,
   programs,
+  liveNetworks,
+  networkName,
+  IN_HOUSE,
+  NETWORK_META,
 } from "../src/lib/programs";
 
 const ROOT = process.cwd();
@@ -316,9 +320,9 @@ for (const category of categories) {
   const url = `${BASE_URL}/categories/${categoryToSlug(category)}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
 }
-const networks = new Set(
-  programs.map((program) => program.network ?? "in-house")
-);
+// Live networks only: a network whose programs are all paused or discontinued
+// gets no page, so it must not be in the sitemap either.
+const networks = new Set(liveNetworks);
 for (const network of networks) {
   const url = `${BASE_URL}/networks/${networkToSlug(network)}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
@@ -492,6 +496,8 @@ for (const [file, expectedType] of [
   ["rankings.html", "CollectionPage"],
   [join("categories", "ai.html"), "CollectionPage"],
   ["compare.html", "WebPage"],
+  ["networks.html", "FAQPage"],
+  ["networks.html", "BreadcrumbList"],
   ...BEST_LISTS.map((list) => [join("best", `${list.slug}.html`), "ItemList"] as const),
 ]) {
   const htmlPath = join(BUILD_APP, file);
@@ -505,6 +511,124 @@ for (const [file, expectedType] of [
   }
   if (!jsonLdNodes(html).some((block) => block["@type"] === expectedType)) {
     fail(`${file} has no ${expectedType} JSON-LD block`);
+  }
+}
+
+/**
+ * Network pages target "<Network> affiliate programs" and /networks targets
+ * "affiliate networks". Production once shipped the stored slug as the name
+ * on every one of them: "partnerstack Affiliate Programs — 408 Programs |
+ * OpenAffiliate", with an em dash, at 62 characters (measured 2026-10-12).
+ * These read the prerendered HTML, so they hold what a reader and a crawler
+ * receive, not what the code meant to send.
+ */
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&quot;/g, '"')
+    .replace(/&#x27;|&#39;/g, "'")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&");
+}
+function htmlTitle(html: string): string {
+  return decodeEntities(/<title>([^<]*)<\/title>/.exec(html)?.[1] ?? "");
+}
+function htmlDescription(html: string): string {
+  return decodeEntities(/<meta name="description" content="([^"]*)"/.exec(html)?.[1] ?? "");
+}
+function htmlH1(html: string): string {
+  const inner = /<h1[^>]*>([\s\S]*?)<\/h1>/.exec(html)?.[1] ?? "";
+  return decodeEntities(inner.replace(/<!--[\s\S]*?-->/g, "").replace(/<[^>]+>/g, "")).trim();
+}
+/** The text a reader sees: no scripts (the RSC payload carries raw values), styles, comments or tags. */
+function visibleText(html: string): string {
+  return decodeEntities(
+    html
+      .replace(/<script[\s\S]*?<\/script>/g, " ")
+      .replace(/<style[\s\S]*?<\/style>/g, " ")
+      .replace(/<!--[\s\S]*?-->/g, " ")
+      .replace(/<[^>]+>/g, " ")
+  );
+}
+function readBuilt(file: string): string {
+  if (!existsSync(join(BUILD_APP, file))) fail(`${file} was not prerendered`);
+  return readFileSync(join(BUILD_APP, file), "utf8");
+}
+
+const TITLE_MAX = 60;
+const DESCRIPTION_RANGE = [120, 155] as const;
+function checkHead(file: string, html: string, mustInclude: string): void {
+  const title = htmlTitle(html);
+  if (title.length > TITLE_MAX || /[–—]/.test(title) || !title.includes(mustInclude)) {
+    fail(`${file} title must be ${TITLE_MAX} characters or fewer, with no en or em dash, and name "${mustInclude}": ${title}`);
+  }
+  const description = htmlDescription(html);
+  if (description.length < DESCRIPTION_RANGE[0] || description.length > DESCRIPTION_RANGE[1]) {
+    fail(`${file} meta description is ${description.length} characters; keep it 120 to 155: ${description}`);
+  }
+}
+
+for (const network of liveNetworks) {
+  const meta = NETWORK_META[network];
+  if (!meta) {
+    fail(`network "${network}" has live programs but no NETWORK_META entry, so its name would be guessed`);
+  }
+  const words = meta.description.trim().split(/\s+/).length;
+  if (words > 20) fail(`NETWORK_META.${network}.description is ${words} words; the limit is 20`);
+  if (meta.logo && !existsSync(join(PUBLIC, meta.logo))) {
+    fail(`NETWORK_META.${network}.logo points at ${meta.logo}, which is not in public/`);
+  }
+
+  const name = networkName(network);
+  const slug = networkToSlug(network);
+  const file = join("networks", `${slug}.html`);
+  const html = readBuilt(file);
+  checkHead(file, html, name);
+  if (htmlH1(html) !== `${name} Affiliate Programs`) {
+    fail(`${file} H1 should be "${name} Affiliate Programs" and is "${htmlH1(html)}"`);
+  }
+  const nodes = jsonLdNodes(html);
+  if (!nodes.some((node) => node["@type"] === "CollectionPage" && node.name === `${name} Affiliate Programs`)) {
+    fail(`${file} CollectionPage JSON-LD must be named "${name} Affiliate Programs"`);
+  }
+  if (!nodes.some((node) => node["@type"] === "BreadcrumbList")) fail(`${file} has no BreadcrumbList JSON-LD`);
+
+  const md = requireText(join("networks", `${slug}.md`));
+  if (!md.startsWith(`# ${name} Affiliate Programs\n`)) {
+    fail(`networks/${slug}.md must start with "# ${name} Affiliate Programs": ${md.split("\n")[0]}`);
+  }
+}
+
+const networksIndex = readBuilt("networks.html");
+checkHead("networks.html", networksIndex, "Affiliate Networks");
+if (htmlH1(networksIndex) !== "Affiliate Networks") {
+  fail(`networks.html H1 should be "Affiliate Networks" and is "${htmlH1(networksIndex)}"`);
+}
+const faqNode = jsonLdNodes(networksIndex).find((node) => node["@type"] === "FAQPage") as
+  | { mainEntity?: { acceptedAnswer?: { text?: string } }[] }
+  | undefined;
+if (!faqNode?.mainEntity?.length || faqNode.mainEntity.some((q) => !q.acceptedAnswer?.text || /undefined|NaN/.test(q.acceptedAnswer.text))) {
+  fail("networks.html FAQPage must carry answered questions, with no undefined or NaN in them");
+}
+
+/**
+ * The pilot pages must never show a stored slug where the display name
+ * belongs. Case-sensitive on purpose: "Impact" is right, "impact" is the raw
+ * value. "in-house" is skipped because it is also an ordinary English word,
+ * and a slug followed by ".com" is a domain, not a name.
+ */
+for (const file of ["networks.html", join("networks", "impact.html"), join("networks", "affitor.html")]) {
+  const text = visibleText(readBuilt(file));
+  for (const network of liveNetworks) {
+    if (network === IN_HOUSE || networkName(network) === network) continue;
+    const raw = new RegExp(`(?<![\\w./-])${network}(?![\\w-]|\\.\\w)`);
+    const hit = raw.exec(text);
+    if (hit) {
+      fail(
+        `${file} shows the raw network value "${network}" where a reader should see "${networkName(network)}": ` +
+          JSON.stringify(text.slice(Math.max(0, hit.index - 40), hit.index + 40))
+      );
+    }
   }
 }
 
