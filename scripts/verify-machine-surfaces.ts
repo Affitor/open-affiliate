@@ -1375,7 +1375,6 @@ async function checkServedPages(): Promise<string> {
       if (!onAffitor) fail("no live Affitor-network program to probe /compare with");
       const flows: [string, string[]][] = [
         ["/for-brands", ["/for-brands"]],
-        ["/compare", [`/compare?p=${onAffitor.slug},${on.slug}`]],
         ["lists", ["/best", ...BEST_LISTS.map(bestPath), ...categories.map((c) => `/categories/${categoryToSlug(c)}`)]],
       ];
       for (const [flow, paths] of flows) {
@@ -1386,6 +1385,17 @@ async function checkServedPages(): Promise<string> {
           tracked += affitor.tracked;
         });
         if (tracked === 0) fail(`${flow}: no tracked Affitor link found; the Affitor link check read nothing`);
+      }
+      // /compare is static: its table, Join links included, renders in the
+      // browser from the props, so its served HTML has no anchors to check.
+      // The props must carry an Affitor applyHref (the flow exists); that
+      // compare-view renders p.applyHref only through AffitorLink is held by
+      // the source guard in scripts/affitor-links.test.ts.
+      {
+        const compare = (await (await fetch(`${base}/compare?p=${onAffitor.slug},${on.slug}`)).text()).replace(/\\"/g, '"');
+        if (!/"applyHref":"https:\/\/affitor\.com\/[^"]*utm_source=openaffiliate/.test(compare)) {
+          fail("/compare props carry no Affitor applyHref with the UTM; the compare Join flow is not checked");
+        }
       }
       // Non-vacuity: the same page with the tracking marker removed fails.
       const html = kept.get(off) ?? "";
