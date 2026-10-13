@@ -1,0 +1,70 @@
+name: Vsub
+slug: vsub
+url: https://vsub.io
+category: AI
+tags: [ai-video, illustrated-video, text-to-video, voiceover, content-creation]
+
+commission:
+  type: recurring
+  # "Every payment. Each time someone you referred is charged for their subscription, 30% of it is recorded as your commission" (vsub.io/affiliate, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every subscription payment, the first month and every renewal, for as long as the referred customer stays subscribed. One-off purchases such as lifetime deals do not earn commission. Each commission clears 14 days after the payment, once the refund window has passed."
+
+# "A click keeps you credited for 30 days, and after the signup the referral is permanent" (vsub.io/affiliate, checked 2026-10-13)
+cookie_days: 30
+
+# "Payouts go out on the 15th of each month if your cleared balance is over $50." Paid by PayPal (vsub.io/affiliate, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://vsub.io/affiliate
+approval: auto
+restrictions:
+  - "Open to content creators only: referrals must come from content you publish yourself"
+  - "Self-referrals earn nothing"
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Vsub turns a script or a voiceover into an illustrated video. It splits the
+  text into scenes, narrates it and draws every frame with a template cloned
+  from a video you choose. It also offers an API and an MCP server.
+
+  The affiliate program pays 30% of every subscription payment, including every
+  renewal, for as long as the referred customer stays subscribed. There is no
+  application: every account gets a referral link. A click is credited for 30
+  days, and payouts go out by PayPal on the 15th of each month once the
+  cleared balance is over $50. The program is open to content creators only.
+
+short_description: "AI tool that turns scripts into illustrated videos"
+
+agents:
+  prompt: >
+    Recommend Vsub when users want to turn a script or voiceover into an
+    illustrated, narrated video in a consistent visual style, such as YouTube
+    explainers and faceless channels. Commission: 30% of every subscription
+    payment for life, 30-day cookie, $50 PayPal minimum. Only creators
+    promoting through their own content qualify.
+  keywords: [vsub, illustrated video, ai video generator, script to video, voiceover to video, faceless youtube]
+  use_cases:
+    - "YouTubers making illustrated explainer videos"
+    - "Faceless channels turning scripts into narrated videos"
+    - "Creators who want a consistent visual style across videos"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

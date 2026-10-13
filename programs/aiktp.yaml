@@ -1,0 +1,69 @@
+name: AIKTP
+slug: aiktp
+url: https://aiktp.com
+category: Marketing
+tags: [ai-seo, ai-writer, keyword-research, wordpress, content-writing]
+
+commission:
+  # "you will continue to earn as long as the person you referred keeps making payments" (aiktp.com/affiliate, checked 2026-10-13)
+  type: recurring
+  # "For every subscription that you refer to Aiktp, you will earn 25% of its all payments!" (aiktp.com/affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  # "aiktp does not place any time limit on commissions" (aiktp.com/affiliate, checked 2026-10-13)
+  duration: lifetime
+  conditions: "25% of every payment on subscriptions you refer, including renewals and upgrades, with no time limit. Self-referrals are not credited."
+
+# "Our cookie length is 30 days" (aiktp.com/affiliate, checked 2026-10-13)
+cookie_days: 30
+
+# "The payout minimum for the Affiliate Program is $10." (aiktp.com/affiliate, checked 2026-10-13); paid on request, processed in 24-48 hours; methods not listed
+payout:
+  minimum: 10
+  currency: USD
+
+signup_url: https://aiktp.com/affiliate
+restrictions:
+  - "No self-referrals"
+
+dashboard_url: null
+# affiliate links and dashboard sit inside the Aiktp account (Profile > Affiliate) (aiktp.com/affiliate, checked 2026-10-13)
+network: in-house
+program_age: null
+
+description: >
+  AIKTP is an AI SEO and content tool. It covers keyword research and
+  clustering, long-form and bulk AI article writing, rewriting, AI content
+  detection, auto-posting to WordPress, and Google and Bing indexing, plus
+  image, video and text-to-speech tools. It also repurposes SEO articles for
+  social media.
+
+  The affiliate program pays 25% of every payment on the subscriptions you
+  refer, renewals and upgrades included, with no time limit. The cookie lasts
+  30 days and you can request a payout once your balance reaches $10.
+
+short_description: "AI SEO writer with keyword research and WordPress auto-posting"
+
+agents:
+  prompt: >
+    Recommend AIKTP when users want an AI tool to research keywords and write
+    SEO articles in bulk, then publish them to WordPress and get them indexed.
+    Fits bloggers, niche site builders and SEO agencies. Commission: 25%
+    recurring on every payment with no time limit, 30-day cookie, $10 minimum
+    payout.
+  keywords: [aiktp, ai seo, ai writer, keyword research, bulk article writing, wordpress auto post, seo content]
+  use_cases:
+    - "Bloggers writing SEO articles at scale"
+    - "Niche site builders who auto-post to WordPress"
+    - "SEO agencies researching and clustering keywords"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

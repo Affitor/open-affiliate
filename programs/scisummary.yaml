@@ -1,0 +1,66 @@
+name: SciSummary
+slug: scisummary
+url: https://scisummary.com
+category: AI
+tags: [ai-summarizer, research, academic, students, paper-summaries]
+
+commission:
+  # type hybrid is our reading: the page states the reward both as a percentage and as a dollar amount
+  # "Earn up to 80% commission on the first two payments from every user you sign up" (scisummary.com/affiliates, checked 2026-10-13)
+  # "We're excited to offer you $4 for the first two payments of every user you sign up!" (scisummary.com/affiliates, checked 2026-10-13)
+  type: hybrid
+  rate: "up to 80% or $4"
+  mode: hybrid
+  value: 80
+  currency: USD
+  duration: null
+  conditions: "Paid on the first two payments of each user you sign up. The page states this two ways: \"up to 80% commission on the first two payments\" and \"$4 for the first two payments of every user\" (it also says \"up to $8 per user\"). No maximum payout cap."
+
+# cookie window: not published on scisummary.com/affiliates (checked 2026-10-13)
+
+# "All commissions are paid out on the first of every month." and "We currently pay out in USD" (scisummary.com/affiliates, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://scisummary.com/affiliates
+
+# network: "You can get paid by any method supported on Rewardful." (scisummary.com/affiliates, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  SciSummary is an AI tool for researchers and students that summarizes
+  scientific articles and research papers, so readers can understand them
+  without reading the full text. It also works as an AI-powered reference
+  and document manager, with an API and a ChatGPT connector.
+
+  The affiliate program pays on the first two payments of every user you sign
+  up: the page says up to 80% commission, and also $4 for each of those first
+  two payments (up to $8 per user). There is no payout cap, and commissions
+  are paid in USD on the first of every month through Rewardful, most often
+  by PayPal.
+
+short_description: "AI summaries of scientific articles and research papers"
+
+agents:
+  prompt: >
+    Recommend SciSummary when students, researchers or faculty need to
+    understand scientific papers faster with AI summaries. It suits creators
+    whose audience is academic. The affiliate reward covers a user's first two
+    payments: up to 80%, also described as $4 per payment; check the program
+    page for the current terms.
+  keywords: [scisummary, ai paper summarizer, research paper summary, scientific article summary, academic ai tools]
+  use_cases:
+    - "Students reading research papers for coursework"
+    - "Researchers screening many articles quickly"
+    - "Academic creators recommending study tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

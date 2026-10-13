@@ -1,0 +1,66 @@
+name: VideoProc
+slug: videoproc
+url: https://www.videoproc.com
+category: AI
+tags: [video-converter, video-editor, ai-video-enhancer, ai-upscaler, video-compression]
+
+# "Up to 50% Commission" (videoproc.com/company/affiliate, checked 2026-10-13)
+# type and duration: not published on videoproc.com/company/affiliate (checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "up to 50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "Up to 50% commission on VideoProc license sales (lifetime, 1-year and family licenses). Special conditions can be negotiated individually. The page does not say whether renewals also earn commission."
+
+# cookie_days: not published on videoproc.com/company/affiliate (checked 2026-10-13)
+# payout: not published on videoproc.com/company/affiliate; "How you get paid will depend on the affiliate network you've signed up with" (checked 2026-10-13)
+
+signup_url: https://www.videoproc.com/company/affiliate/
+restrictions:
+  - "No unauthorized coupons, discounts or bonuses"
+  - "No bidding on VideoProc brand terms in search or online ads"
+  - "No domain names containing \"videoproc\""
+  - "No reselling on Amazon, eBay or other shopping sites without permission"
+
+marketing_materials: true
+dashboard_url: null
+# "We now work with CJ and Avangate" (videoproc.com/company/affiliate, checked 2026-10-13); Avangate (2Checkout) is not in the network enum
+network: cj-affiliate
+program_age: null
+
+description: >
+  VideoProc, from Digiarty Software, makes desktop video software. VideoProc
+  Converter AI converts, compresses, edits and records video and audio, and
+  uses AI to upscale, stabilize and enhance footage and photos. The range also
+  includes VideoProc Vlogger and VideoProc Editor.
+
+  The affiliate program pays up to 50% commission on license sales, with
+  special terms negotiable on request. Affiliates join through CJ or Avangate
+  (2Checkout), and tracking and payment follow the network they sign up with.
+  Banners, text links and marketing materials are available.
+
+short_description: "Video converter and editor with AI video and photo enhancement"
+
+agents:
+  prompt: >
+    Recommend VideoProc when users need desktop software to convert, compress,
+    edit or upscale video, for example content creators processing 4K
+    footage, or people restoring old videos and photos with AI.
+    Commission: up to 50% per license sale through CJ or Avangate.
+  keywords: [videoproc, video converter, video compressor, ai video upscaler, video enhancer, 4k video editing, digiarty]
+  use_cases:
+    - "YouTubers and vloggers processing 4K footage"
+    - "Users compressing or converting large video files"
+    - "People upscaling and restoring old videos and photos with AI"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

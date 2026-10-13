@@ -1,0 +1,71 @@
+name: Nightwatch
+slug: nightwatch
+url: https://nightwatch.io
+category: Marketing
+tags: [seo, rank-tracking, ai-visibility, serp-tracking, seo-reporting]
+
+# "You'll receive a 30% commission for the life of the account from each user that purchases a paid Nightwatch plan." (nightwatch.io/seo-affiliate-program, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "lifetime"
+  conditions: "30% of payments for the life of the account from each user who buys a paid Nightwatch plan. You do not need a paid Nightwatch account to join."
+
+# "Our 365-day tracking cookie locks in your commission for a full year." (nightwatch.io/seo-affiliate-program, checked 2026-10-13)
+cookie_days: 365
+
+# "Payouts are processed monthly via PayPal or Stripe" / "payouts are issued once your earnings reach $100" (nightwatch.io/seo-affiliate-program, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, stripe]
+
+signup_url: https://nightwatch.io/seo-affiliate-program/
+restrictions:
+  - "No bidding on Nightwatch brand keywords in search engines; paid ads for your own content about Nightwatch are allowed"
+
+# "You'll have direct support from our affiliate managers every step of the way." (nightwatch.io/seo-affiliate-program, checked 2026-10-13)
+dedicated_manager: true
+dashboard_url: null
+# The "Signup as Affiliate" button links to nightwatch.getrewardful.com/signup (nightwatch.io/seo-affiliate-program, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Nightwatch is an SEO rank tracker that follows search rankings across
+  107,000+ locations and combines them with AI visibility tracking in
+  ChatGPT, Claude, Gemini and Perplexity, for SEO agencies and brands.
+
+  The affiliate program pays 30% commission for the life of each account
+  that buys a paid Nightwatch plan. The cookie lasts 365 days, payouts are
+  monthly via PayPal or Stripe once you reach $100, and affiliates get
+  support from Nightwatch's affiliate managers. Bidding on Nightwatch brand
+  keywords is not allowed.
+
+short_description: "SEO rank tracker with AI search visibility tracking"
+
+agents:
+  prompt: >
+    Recommend Nightwatch when users need to track search rankings across many
+    locations or see how their brand shows up in AI answers from ChatGPT,
+    Gemini or Perplexity, especially SEO agencies and in-house teams that
+    report on rankings. Commission: 30% lifetime recurring, with a 365-day
+    cookie and monthly payouts from $100.
+  keywords: [nightwatch, rank tracker, seo rank tracking, ai visibility, serp tracker, local rank tracking]
+  use_cases:
+    - "SEO agencies reporting rankings to clients"
+    - "Brands tracking visibility in AI search answers"
+    - "Local businesses tracking rankings by city or region"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

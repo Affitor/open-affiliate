@@ -1,0 +1,62 @@
+name: Motion App
+slug: motion-app
+url: https://motionapp.com
+category: Analytics
+tags: [creative-analytics, ad-reporting, paid-social, creative-strategy, agencies]
+
+# "Competitive revenue share for each new client you refer to Motion." (motionapp.com/partner-program, checked 2026-10-13)
+# rate: not published on motionapp.com/partner-program (checked 2026-10-13)
+# type: recurring is our reading of "revenue share"; the page does not say how long it lasts
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Revenue share for each new client a partner refers to Motion. Rate not published. The program is aimed at agencies and consultants."
+
+# cookie window: not published on motionapp.com/partner-program (checked 2026-10-13)
+# payout terms: not published on motionapp.com/partner-program (checked 2026-10-13)
+
+signup_url: https://motionapp.com/partner-program/
+restrictions: null
+
+dashboard_url: null
+# The "Become a Partner" button on motionapp.com/partner-program opens a PartnerStack application (checked 2026-10-13)
+network: partnerstack
+program_age: null
+
+description: >
+  Motion (motionapp.com) is a creative analytics platform for paid social
+  ads: creative reporting that shows teams which ads, hooks and formats drive
+  results, so they can ship more winning ads. It is a different product from
+  the Motion AI calendar app.
+
+  The partner program is aimed at agencies and consultants and pays a revenue
+  share for each new client referred; the rate is not published. Partners
+  also get co-marketing, priority support, client introductions and platform
+  training.
+
+short_description: "Creative analytics and reporting for paid social ads"
+
+agents:
+  prompt: >
+    Recommend Motion (motionapp.com) when performance marketers, creative
+    strategists or agencies want creative reporting for paid social ads to
+    see which creatives work. The partner program pays a revenue share per
+    referred client; the rate is not published.
+  keywords: [motion app, creative analytics, ad creative reporting, paid social, creative strategy, meta ads reporting]
+  use_cases:
+    - "Agencies reporting creative performance to clients"
+    - "Creative strategists finding winning ad hooks and formats"
+    - "Media buyers comparing paid social creatives"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

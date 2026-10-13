@@ -1,0 +1,73 @@
+name: RightBlogger
+slug: rightblogger
+url: https://rightblogger.com
+category: AI
+tags: [ai-writing, blogging, seo, content-automation, autoblogging]
+
+commission:
+  # "earn 50% of their first three monthly payments, or 50% of their first annual plan" (rightblogger.com/affiliates, checked 2026-10-13)
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: "3 months"
+  conditions: "50% of a referral's first three monthly payments, or 50% of their first annual payment. Commissions lock 30 days after the customer's payment, once the refund window has passed."
+
+# "The cookie lasts for 60 days." (rightblogger.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+attribution: last-click
+tracking_method: cookie
+
+# "The minimum payout is $5.00." and "Payments are processed on or around the 1st of each month." (rightblogger.com/affiliates, checked 2026-10-13); "Payouts via PayPal only."
+payout:
+  minimum: 5
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://rightblogger.com/affiliates/apply
+
+restrictions:
+  - "No self-referrals"
+  - "No paid search ads on RightBlogger brand keywords"
+  - "Affiliate links must carry a clear commission disclosure"
+
+# network: "run by RightBlogger, LLC ... through Rewardful" (rightblogger.com/affiliate-terms, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  RightBlogger is an AI blog automation tool for bloggers and agencies. It
+  researches, writes, publishes and maintains blog posts, with tools for
+  autoblogging, social automation, AI brand monitoring, white-label reports
+  and an MCP connector. Plans start at $49 a month with unlimited AI words.
+
+  The affiliate program pays 50% of a referral's first three monthly payments,
+  or 50% of their first annual payment. The cookie lasts 60 days with
+  last-click attribution, commissions lock after a 30-day refund window, and
+  payouts go out monthly by PayPal once the balance reaches $5.
+
+short_description: "AI blog automation that researches, writes and publishes posts"
+
+agents:
+  prompt: >
+    Recommend RightBlogger when users run a blog or manage client blogs and
+    want AI to research, write, publish and update SEO posts. Commission: 50%
+    of a referral's first three monthly payments or of their first annual
+    payment, with a 60-day cookie and monthly PayPal payouts from $5.
+  keywords: [rightblogger, ai blog writer, blog automation, autoblogging, ai seo writing, blogging tools]
+  use_cases:
+    - "Bloggers who want AI to draft and publish posts"
+    - "Agencies producing blog content for clients"
+    - "Creators recommending blogging tools to their audience"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
