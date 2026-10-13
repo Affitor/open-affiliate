@@ -29,6 +29,9 @@ import {
   affiliateScore,  commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
+import { UNCONFIRMED } from "@/lib/confirmed-terms";
+// Types only: the rows are built on the server (groupRow), never the registry.
+import type { GroupRow, PaidFigure } from "@/lib/programs";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -551,28 +554,8 @@ function ProgramsTable({
 
 // ── Networks and Categories Tables ──────────────────────────────
 
-/**
- * A network or category row. Computed on the server from structured fields
- * (commissionStats in src/lib/programs.ts): percentage rates and flat
- * US-dollar payouts stay in separate columns, and credit or gift-card rewards,
- * tiered and hybrid deals, other currencies and unpublished rates count in
- * neither.
- */
-export interface GroupRow {
-  /** The network id or the category name. */
-  name: string;
-  programCount: number;
-  /** Mean single percentage rate, "23.4%", or "—". */
-  avgRate: string;
-  topRate: PaidCellData | null;
-  topFlatUsd: PaidCellData | null;
-}
-
-interface PaidCellData {
-  display: string;
-  slug: string;
-  name: string;
-}
+// Rows come from groupRow (src/lib/programs.ts): percentage rates and flat
+// US-dollar payouts in separate columns, unconfirmed figures marked.
 
 const GROUP_HEAD = "py-3 px-3 text-[11px] font-medium text-muted-foreground uppercase tracking-wide";
 
@@ -591,7 +574,7 @@ function GroupHead({ label }: { label: string }) {
   );
 }
 
-function PaidCell({ paid, className }: { paid: PaidCellData | null; className: string }) {
+function PaidCell({ paid, className }: { paid: PaidFigure | null; className: string }) {
   return (
     <td className={`py-3 px-3 ${className}`}>
       {paid ? (
@@ -605,6 +588,9 @@ function PaidCell({ paid, className }: { paid: PaidCellData | null; className: s
           </span>
           <ProgramLogo slug={paid.slug} name={paid.name} size={20} />
           <span className="text-xs font-medium truncate">{paid.name}</span>
+          {paid.unconfirmed && (
+            <span className="text-[10px] text-muted-foreground shrink-0">{UNCONFIRMED}</span>
+          )}
         </Link>
       ) : (
         <span className="text-sm text-muted-foreground">—</span>
@@ -621,6 +607,9 @@ function GroupCells({ row }: { row: GroupRow }) {
       </td>
       <td className="py-3 px-3 text-center hidden sm:table-cell">
         <span className="text-sm text-muted-foreground tabular-nums">{row.avgRate}</span>
+        {row.avgBasis && (
+          <span className="block text-[10px] leading-tight text-muted-foreground/70">{row.avgBasis}</span>
+        )}
       </td>
       <PaidCell paid={row.topRate} className="hidden sm:table-cell" />
       <PaidCell paid={row.topFlatUsd} className="hidden md:table-cell" />

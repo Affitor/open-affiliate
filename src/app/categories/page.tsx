@@ -4,7 +4,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { LayoutGrid } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { getCategoryStats, categoryToSlug, formatCommissionDisplay } from "@/lib/programs";
+import { getCategoryStats, categoryToSlug, formatCommissionDisplay, rateBasis, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import { BEST_LISTS, bestPath } from "@/lib/best-lists";
 
 export const metadata: Metadata = {
@@ -65,8 +65,9 @@ export default function CategoriesPage() {
               </Badge>
             </div>
 
-            {/* Percentage rates only (commissionStats): a flat payout is not a rate. */}
-            <div className="flex items-center gap-4 mb-3">
+            {/* Percentage rates only (commissionStats): a flat payout is not a rate.
+                Unconfirmed rates count, so the card says how many. */}
+            <div className="flex items-center gap-4 mb-1">
               <div>
                 <p className="text-[10px] text-muted-foreground/60 uppercase tracking-wide">
                   Highest rate
@@ -84,6 +85,9 @@ export default function CategoriesPage() {
                 </p>
               </div>
             </div>
+            <p className="text-[10px] text-muted-foreground/70 mb-3">
+              {cat.avgRate != null ? `Average across ${rateBasis(cat)}` : "No single rate published"}
+            </p>
 
             {cat.topRate && (
               <div className="flex items-center gap-2 pt-3 border-t border-border/30">
@@ -94,6 +98,7 @@ export default function CategoriesPage() {
                 />
                 <span className="text-xs text-muted-foreground truncate">
                   Top rate: {cat.topRate.program.name}
+                  {termsConfirmed(cat.topRate.program) ? "" : ` · ${UNCONFIRMED}`}
                 </span>
               </div>
             )}

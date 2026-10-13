@@ -2,7 +2,8 @@
  * Network and category commission figures (commissionStats, behind the
  * /rankings networks and categories tabs, the category index, the network
  * pages, rankings.md and the SIFT category table) come from structured fields
- * only, and never put a percentage and a dollar amount on one scale. Each
+ * only, never put a percentage and a dollar amount on one scale, and say
+ * which of the figures they count are unconfirmed. Each
  * fixture check sits next to a case where the excluded input does count, so a
  * check cannot pass because the component never counted anything.
  *
@@ -10,13 +11,20 @@
  * it after build-registry (CI runs it after `npm run build`).
  */
 import assert from "node:assert/strict"
+import { existsSync, readFileSync } from "node:fs"
+import { join } from "node:path"
 import { test } from "node:test"
 import {
   IN_HOUSE,
+  categoryToSlug,
   commissionStats,
+  formatCommissionDisplay,
   getCategoryStats,
   getNetworkStats,
+  groupRow,
   livePrograms,
+  networkToSlug,
+  termsConfirmed,
   type CommissionStats,
   type Program,
 } from "../src/lib/programs"
@@ -48,6 +56,23 @@ function shape(s: CommissionStats) {
   const paid = (x: CommissionStats["topRate"]) => (x ? `${x.value} ${x.program.slug}` : null)
   return { avgRate: s.avgRate, topRate: paid(s.topRate), topFlatUsd: paid(s.topFlatUsd) }
 }
+
+test("an unverified top program is labelled, and an average says how many of its rates are unconfirmed", () => {
+  const low = program("Low", { mode: "percentage", value: 20 }, { verified: true })
+  const top = program("Top", { mode: "percentage", value: 40 })
+  const flat = program("Flat", { mode: "flat", value: 100, currency: "USD" }, { verified: true })
+  const row = groupRow("Group", 3, commissionStats([low, top, flat]))
+  assert.equal(row.avgRate, "30.0%")
+  assert.equal(row.avgBasis, "2 rates (1 unconfirmed)")
+  assert.equal(row.topRate?.unconfirmed, true)
+  assert.equal(row.topFlatUsd?.unconfirmed, false)
+  // Non-vacuity: with every program verified there is no marker and no count.
+  const allVerified = groupRow("Group", 2, commissionStats([low, { ...top, verified: true }]))
+  assert.equal(allVerified.avgBasis, "2 rates")
+  assert.equal(allVerified.topRate?.unconfirmed, false)
+  // No rate: no average and no basis.
+  assert.equal(groupRow("Group", 1, commissionStats([flat])).avgBasis, null)
+})
 
 const EXCLUDED = [
   program("Gift", { mode: "flat", value: 200, currency: "USD", rate: "$100-$200 Amazon gift card per referral" }, { kind: "referral" }),
@@ -131,4 +156,40 @@ test("every top rate in the registry is a single percentage, and every top flat 
     if (members.some((p) => (p.commission.value ?? 0) > top && p.commission.mode !== "flat")) excludedAboveTop++
   }
   assert.ok(excludedAboveTop > 0, "no group holds an excluded figure above its top rate")
+})
+
+test("rankings.md marks every unconfirmed figure it names and says how many rates each average counts unconfirmed", () => {
+  const file = join(process.cwd(), "public", "rankings.md")
+  assert.ok(existsSync(file), "public/rankings.md is missing: run generate-md (npm run build does) first")
+  const md = readFileSync(file, "utf8")
+  const groups = [
+    ...networkGroups.map((g) => ({ ...g, href: `/networks/${networkToSlug(g.stats.network)}.md) — ` })),
+    ...categoryGroups.map((g) => ({ ...g, href: `/categories/${categoryToSlug(g.stats.category)}.md) — ` })),
+  ]
+  let marked = 0
+  let unmarked = 0
+  let countedUnconfirmed = 0
+  for (const { label, stats, href } of groups) {
+    const line = md.split("\n").find((l) => l.startsWith("- [") && l.includes(href))
+    assert.ok(line, `${label}: no line in rankings.md`)
+    if (stats.avgRate != null) {
+      // Spelled out here rather than through rateBasis, so a rateBasis that
+      // drops the count fails this check too. The figure ends the clause.
+      const n = stats.rateCount
+      const u = stats.unconfirmedRates
+      const average = `average rate ${formatCommissionDisplay(stats.avgRate, false)} across ${n} ${n === 1 ? "rate" : "rates"}${u > 0 ? ` (${u} unconfirmed)` : ""}`
+      const at = line.indexOf(average)
+      assert.ok(at >= 0 && [",", undefined].includes(line[at + average.length]), `${label}: ${line}`)
+      if (u > 0) countedUnconfirmed++
+    }
+    for (const x of [stats.topRate, stats.topFlatUsd]) {
+      if (!x) continue
+      const confirmed = termsConfirmed(x.program)
+      assert.ok(line.includes(`/programs/${x.program.slug}.md)${confirmed ? ")" : ", unconfirmed)"}`), `${label} ${x.program.slug}: ${line}`)
+      if (confirmed) unmarked++
+      else marked++
+    }
+  }
+  // Non-vacuity: both kinds of named program, and averages with unconfirmed rates.
+  assert.ok(marked > 0 && unmarked > 0 && countedUnconfirmed > 0, `${marked} marked, ${unmarked} unmarked, ${countedUnconfirmed} counted`)
 })

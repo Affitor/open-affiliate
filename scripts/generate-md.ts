@@ -42,6 +42,7 @@ import {
   getCategoryStats,
   getNetworkStats,
   liveNetworks,
+  rateBasis,
   networkHeading,
   networkName,
   type CommissionStats,
@@ -1008,10 +1009,14 @@ function rankingsMd(): string {
     })
     .join("\n")
   // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
+  // Unconfirmed figures count, so each line says which: the average with how
+  // many of its rates are unconfirmed, a named program with "unconfirmed".
   const paidBy = (label: string, x: PaidBy | null, flat: boolean) =>
-    x ? [`${label} ${formatCommissionDisplay(x.value, flat)} ([${mdEscape(x.program.name)}](${BASE}/programs/${x.program.slug}.md))`] : []
+    x
+      ? [`${label} ${formatCommissionDisplay(x.value, flat)} ([${mdEscape(x.program.name)}](${BASE}/programs/${x.program.slug}.md)${termsConfirmed(x.program) ? "" : ", unconfirmed"})`]
+      : []
   const groupFigures = (s: CommissionStats) => [
-    ...(s.avgRate != null ? [`average rate ${formatCommissionDisplay(s.avgRate, false)}`] : []),
+    ...(s.avgRate != null ? [`average rate ${formatCommissionDisplay(s.avgRate, false)} across ${rateBasis(s)}`] : []),
     ...paidBy("top rate", s.topRate, false),
     ...paidBy("top flat payout", s.topFlatUsd, true),
   ]
@@ -1033,7 +1038,9 @@ function rankingsMd(): string {
       `>`,
       `> Network and category figures keep percentage rates and flat US-dollar`,
       `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
-      `> other currencies and unpublished rates count in neither.`,
+      `> flat amounts in other currencies and unpublished rates count in neither;`,
+      `> a percentage counts in any currency. Unconfirmed figures count and are`,
+      `> marked "unconfirmed".`,
     ].join("\n"),
     section("Programs", programLines),
     section("Networks", networkLines),

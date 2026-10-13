@@ -150,6 +150,9 @@ function CategoryInsightsTable({ data }: { data: CategoryInsight[] }) {
           </tbody>
         </table>
       </div>
+      <p className="px-4 py-2 text-[10px] text-muted-foreground/60">
+        Avg Commission: the mean single percentage rate across the category&apos;s live programs, unconfirmed rates included.
+      </p>
     </section>
   )
 }

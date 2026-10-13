@@ -590,13 +590,21 @@ export interface PaidBy {
  * flat side:
  *   - avgRate, topRate: mean and highest single percentage rate;
  *   - topFlatUsd: highest flat payout in US dollars.
- * Credit and gift-card rewards, tiered and hybrid deals, other currencies and
- * unpublished rates count on neither side (a tiered "up to $150" was shown as
- * a 150% rate). Each is null when nothing in the group counts. A tie goes to
- * the verified program, then to the earlier one in the group.
+ * Credit and gift-card rewards, tiered and hybrid deals, flat amounts in
+ * another or no currency, and unpublished rates count on neither side (a
+ * tiered "up to $150" was shown as a 150% rate). A percentage counts in any
+ * currency. Each is null when nothing in the group counts. A tie goes to the
+ * verified program, then to the earlier one in the group.
+ *
+ * Unverified commissions count, as everywhere else on the site, so every
+ * surface that shows these figures says so: the average with rateBasis, a
+ * named top program with the "unconfirmed" marker when !termsConfirmed.
  */
 export interface CommissionStats {
   avgRate: number | null
+  /** The single rates the average is taken over, and how many are unconfirmed. */
+  rateCount: number
+  unconfirmedRates: number
   topRate: PaidBy | null
   topFlatUsd: PaidBy | null
 }
@@ -617,8 +625,62 @@ export function commissionStats(progs: Program[]): CommissionStats {
   const rates = side("percentage")
   return {
     avgRate: rates.length ? rates.reduce((sum, r) => sum + r.value, 0) / rates.length : null,
+    rateCount: rates.length,
+    unconfirmedRates: rates.filter((r) => !termsConfirmed(r.program)).length,
     topRate: top(rates),
     topFlatUsd: top(side("flat")),
+  }
+}
+
+/** What an average rate is taken over: "289 rates (214 unconfirmed)". */
+export function rateBasis(s: CommissionStats): string {
+  const n = s.rateCount
+  return `${n} ${n === 1 ? "rate" : "rates"}${s.unconfirmedRates > 0 ? ` (${s.unconfirmedRates} unconfirmed)` : ""}`
+}
+
+/** A figure on a /rankings networks or categories row, as the browser shows it. */
+export interface PaidFigure {
+  display: string
+  slug: string
+  name: string
+  /** The program's terms are not verified: shown with the UNCONFIRMED marker. */
+  unconfirmed: boolean
+}
+
+/**
+ * A /rankings networks or categories row, built on the server as display
+ * strings: the browser's copy of the registry has no `kind`, so it could not
+ * leave referral rewards out.
+ */
+export interface GroupRow {
+  /** The network id or the category name. */
+  name: string
+  programCount: number
+  /** Mean single percentage rate, "23.4%", or "—". */
+  avgRate: string
+  /** rateBasis, or null when no rate counts. */
+  avgBasis: string | null
+  topRate: PaidFigure | null
+  topFlatUsd: PaidFigure | null
+}
+
+export function groupRow(name: string, programCount: number, s: CommissionStats): GroupRow {
+  const figure = (x: PaidBy | null, flat: boolean): PaidFigure | null =>
+    x
+      ? {
+          display: formatCommissionDisplay(x.value, flat),
+          slug: x.program.slug,
+          name: x.program.name,
+          unconfirmed: !termsConfirmed(x.program),
+        }
+      : null
+  return {
+    name,
+    programCount,
+    avgRate: s.avgRate != null ? `${s.avgRate.toFixed(1)}%` : "—",
+    avgBasis: s.avgRate != null ? rateBasis(s) : null,
+    topRate: figure(s.topRate, false),
+    topFlatUsd: figure(s.topFlatUsd, true),
   }
 }
 

@@ -75,7 +75,7 @@ export default function MethodologyPage() {
       <p className="mt-2 text-sm text-muted-foreground">
         Every list reads commission from structured fields, never the
         free-text rate: a single percentage, or a flat amount stated in US
-        dollars. Tiered and mixed deals, amounts in other currencies, and
+        dollars. Tiered and mixed deals, flat amounts in other currencies, and
         referral rewards paid in credit or gift cards count for nothing as
         commission. Verified programs come first. Within each group, the topic
         lists under{" "}

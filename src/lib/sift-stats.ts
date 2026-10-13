@@ -6,6 +6,7 @@ import {
   commissionStats,
   confirmedTerms,
   rankedCommission,
+  termsConfirmed,
   type Program,
 } from "./programs"
 
@@ -172,9 +173,13 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
     .filter((p) => p._program && p.affiliateScore >= 50 && p.verifiedContent <= 3)
     .map((p) => {
       // The figure only when the structured fields give one (rankedCommission):
-      // a gift card, a tiered deal or another currency is never printed as "$X" or "X%".
+      // a gift card, a tiered deal or a flat amount in another currency is never
+      // printed as "$X" or "X%". An unverified one says so.
       const c = p._program ? rankedCommission(p._program) : null
-      const figure = c?.value && c.value > 0 ? `${formatCommissionDisplay(c.value, c.mode === "flat")} ` : ""
+      const figure =
+        p._program && c?.value && c.value > 0
+          ? `${formatCommissionDisplay(c.value, c.mode === "flat")}${termsConfirmed(p._program) ? "" : " (unconfirmed)"} `
+          : ""
       return {
         ...p,
         reason: p.verifiedContent === 0

@@ -25,6 +25,8 @@ import {
   NETWORK_META,
   NETWORK_KIND_LABEL,
   confirmedTerms,
+  termsConfirmed,
+  UNCONFIRMED,
   type PaidBy,
   type Program,
 } from "@/lib/programs";
@@ -40,11 +42,11 @@ function liveOn(network: string): Program[] {
   return livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network);
 }
 
-/** "Acme, at 50% recurring/12mo — verified by OpenAffiliate." */
+/** "Acme, at 50% recurring/12mo — verified by OpenAffiliate." An unverified figure says it is unconfirmed. */
 function paidBy({ value, program }: PaidBy, flat: boolean): string {
   return (
     `${program.name}, at ${formatCommissionDisplay(value, flat)} ${commissionLabel(program.commission)}` +
-    (program.verified ? " — verified by OpenAffiliate." : " — community-submitted and unconfirmed.")
+    (termsConfirmed(program) ? " — verified by OpenAffiliate." : " — community-submitted and unconfirmed.")
   );
 }
 
@@ -245,6 +247,9 @@ export default async function NetworkPage({
             <span className="text-[10px] uppercase tracking-wide">Highest rate</span>
           </div>
           <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{topRate ? formatCommissionDisplay(topRate.value, false) : "—"}</p>
+          {topRate && !termsConfirmed(topRate.program) && (
+            <p className="text-[10px] text-muted-foreground">{UNCONFIRMED}: {topRate.program.name}</p>
+          )}
         </div>
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
