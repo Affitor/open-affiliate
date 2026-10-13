@@ -189,12 +189,14 @@ async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Pr
     await sleep(1000) // one request at a time per brand, with a pause
     const { code, body, final } = get(url)
     const f = urlOf(final)
-    if (code !== "200" || !f) continue
+    // A redirect can land on a product or docs page too.
+    if (code !== "200" || !f || NOT_PROGRAM.test(f.pathname.toLowerCase())) continue
     // A redirect to a root or a bare locale (/, /en, /en-us) is a homepage, not a program page.
     if (/^(\/[a-z]{2}(-[a-z]{2})?)?\/?$/i.test(f.pathname) && !PROGRAM_HOST.test(bare(f.hostname))) continue
     // Count only what the page says beyond the site chrome the homepage also carries.
     // An SPA shell that answers 200 for any path has nothing beyond it.
-    homeHits ??= vocab(home().body)
+    // No homepage, no baseline: accept nothing rather than guess.
+    homeHits ??= home().code === "200" ? vocab(home().body) : Infinity
     if (vocab(body) - homeHits >= 3) return url
   }
   return null
@@ -280,7 +282,12 @@ async function main(): Promise<void> {
     store.candidates.push({
       slug: p.slug,
       // An empty response is not evidence of absence.
-      status: !data ? "extract-empty" : data.has_affiliate_program ? "candidate" : "no-affiliate-program",
+      status:
+        data?.has_affiliate_program === true
+          ? "candidate"
+          : data?.has_affiliate_program === false
+            ? "no-affiliate-program"
+            : "extract-empty",
       note: "unreviewed machine extraction",
       extracted: data ?? null,
       source_url: page,
