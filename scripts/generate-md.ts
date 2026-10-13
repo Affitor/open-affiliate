@@ -46,6 +46,7 @@ import {
 import {
   BEST_LISTS,
   SHARED_RULES,
+  VERIFIED_NOTE,
   bestListCopy,
   bestPath,
   buildBestList,
@@ -54,6 +55,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { applyButton } from "../src/lib/apply-cta"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1020,7 +1022,10 @@ function bestListMd(list: BestList, path: string): string {
               .filter(Boolean)
               .join(" ")
           : commissionLine(p.commission)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${terms}${cookie}`)}${statusMark(p)}`
+      // The page's columns, in its order: commission, type, duration, cookie,
+      // network, then the same signup link as the program page.
+      const facts = mdEscape(`${terms}${cookie}, network: ${networkName(p.network ?? IN_HOUSE)}`)
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p).href)}`
     })
     .join("\n")
   return joinSections([
@@ -1030,7 +1035,7 @@ function bestListMd(list: BestList, path: string): string {
     `> ${intro}`,
     [
       `How we picked: ${mdEscape(list.criteria)} ${mdEscape(list.rules ?? SHARED_RULES)}`,
-      data.checked ? `Last checked: ${mdEscape(data.checked)}, the most recent verification among these programs.` : null,
+      data.checked ? `Verified ${mdEscape(data.checked)}: ${VERIFIED_NOTE}` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
     section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),

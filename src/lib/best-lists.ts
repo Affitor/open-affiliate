@@ -51,6 +51,13 @@ export interface BestList {
 
 export const MAX_ROWS = 50
 
+/**
+ * Follows "Verified <date>" on every list, page and twin alike. The date is the
+ * latest last_verified_at among the rows shown (BestListData.checked); a list
+ * with no verified row shows no such line.
+ */
+export const VERIFIED_NOTE = "the most recent date a program on this list was checked against its own affiliate page."
+
 /** Shown with every list, because it describes the shared rules above. */
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
@@ -107,6 +114,19 @@ export const BEST_LISTS: BestList[] = [
     summary: "list their commission as recurring",
     criteria: "Programs whose commission is listed as recurring.",
     qualifies: (p) => p.commission.type === "recurring",
+  },
+  {
+    // Structured fields only: the registry's "saas" tag, the recurring type,
+    // and kind, so a credit or gift-card referral reward never counts.
+    slug: "saas-recurring-affiliate-programs",
+    title: "Recurring Commission SaaS Affiliate Programs",
+    h1: "SaaS Affiliate Programs With Recurring Commissions",
+    description:
+      "SaaS affiliate programs that pay partners a recurring commission, with the commission, duration, cookie and signup link for each, verified terms first.",
+    summary: "are SaaS products that pay partners a recurring commission",
+    criteria:
+      "Programs tagged SaaS in the registry whose commission is listed as recurring. Referral rewards paid in credit or gift cards are left out.",
+    qualifies: (p) => p.tags.includes("saas") && p.commission.type === "recurring" && p.kind !== "referral",
   },
   {
     // No field records a sign-up fee or a purchase requirement. What is sourced

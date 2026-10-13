@@ -370,6 +370,11 @@ if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H
  * writes LF only, and a contributor CR would start a new line (a heading, a
  * list item) in CommonMark. This guards the generator's output; it is not a
  * Markdown parser.
+ *
+ * The one `<` the generator writes is mdUrl's autolink around a signup URL:
+ * `<http(s)://host…>`, with whitespace, `<`, `>`, brackets, backslash and
+ * backtick already percent-encoded inside it. Exactly that shape is set aside
+ * before the check, so any other `<` still fails.
  */
 function foreignMarkup(md: string): string | null {
   for (let i = md.indexOf("]"); i !== -1; i = md.indexOf("]", i + 1)) {
@@ -379,8 +384,9 @@ function foreignMarkup(md: string): string | null {
       return md.slice(Math.max(0, i - 60), i + 40);
     }
   }
-  const raw = /<|&#|\r/.exec(md);
-  return raw ? JSON.stringify(md.slice(Math.max(0, raw.index - 60), raw.index + 40)) : null;
+  const text = md.replace(/<https?:\/\/[^/?#\s<>[\]\\`][^\s<>[\]\\`]*>/g, "");
+  const raw = /<|&#|\r/.exec(text);
+  return raw ? JSON.stringify(text.slice(Math.max(0, raw.index - 60), raw.index + 40)) : null;
 }
 
 /** JSON-LD nodes of a prerendered page, with any @graph flattened. */
@@ -509,6 +515,22 @@ function checkListPage(list: BestList, path: string): void {
   ];
   if (mdRows.some((m, i) => Number(m[1]) !== i + 1)) fail(`${mdFile} numbers its rows out of order`);
   sameRows(mdFile, mdRows.map((m) => m[2]), want);
+
+  // A referral reward (credit or a gift card) shows its rate as published in
+  // the table's commission cell and in its twin row, never the bare number:
+  // Attio is "$200 gift card per referral", not "$200".
+  const tableTrs = html.slice(tbodyStart, tbodyEnd).match(/<tr[\s\S]*?<\/tr>/g) ?? [];
+  const mdLines = md.split("\n");
+  rows.forEach((p, i) => {
+    if (p.kind !== "referral") return;
+    const rate = String(p.commission.rate);
+    const cells = tableTrs[i]?.match(/<td[\s\S]*?<\/td>/g) ?? [];
+    const shown = decodeEntities((cells[2] ?? "").replace(/<[^>]*>/g, "")).trim();
+    if (shown !== rate) fail(`${htmlFile} shows ${p.slug}'s reward as ${JSON.stringify(shown)}, not ${JSON.stringify(rate)}`);
+    const line = mdLines.find((l) => l.includes(`/programs/${p.slug}.md) — `)) ?? "";
+    const terms = unescape(line.slice(line.indexOf(" — ") + 3));
+    if (!terms.startsWith(`${rate} `)) fail(`${mdFile} shows ${p.slug}'s reward as ${JSON.stringify(terms.slice(0, 60))}`);
+  });
 }
 
 for (const list of BEST_LISTS) checkListPage(list, bestPath(list));
