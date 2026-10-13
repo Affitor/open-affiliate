@@ -61,10 +61,12 @@ agents:
     - "Rapid prototyping for a SaaS product or marketing site"
     - "Scaffolding UI components to speed up a Next.js project"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2025-12-01"
-updated_at: "2026-04-17"
+updated_at: "2026-10-12"
 last_verified_at: "2026-04-17"
+status: paused
+status_note: "Signup page showed a 404 on 2026-10-12 (partners.dub.co/v0)"
 kind: affiliate
 source: community
