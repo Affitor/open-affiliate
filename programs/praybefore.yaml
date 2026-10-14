@@ -6,7 +6,6 @@ verified: false
 
 commission:
   type: recurring
-  mode: percentage
   value: 50
   rate: "30% → 40% → 50%"
   mode: tiered
