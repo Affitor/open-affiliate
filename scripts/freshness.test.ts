@@ -4,7 +4,9 @@
  * numbers are recomputed here from programs/*.yaml, not from the helper.
  *
  * Reads public/index.md and public/llms.txt, so run it after `npm run build`
- * (prebuild writes them). Run with `npx tsx --test scripts/freshness.test.ts`.
+ * (prebuild writes them). Run with
+ * `npx tsx --test --test-force-exit scripts/freshness.test.ts`: the MCP route
+ * keeps a timer alive (see no-program.test.ts).
  */
 import assert from "node:assert/strict"
 import { readdirSync, readFileSync } from "node:fs"
@@ -15,6 +17,7 @@ import { freshnessLine } from "../src/lib/best-lists"
 import { programs } from "../src/lib/programs"
 import registry from "../src/lib/registry.json"
 import { programMd } from "./generate-md"
+import { mcpGetProgram, restGetProgram, restListPrograms } from "./surface-test-helpers"
 
 const root = join(__dirname, "..")
 
@@ -83,5 +86,28 @@ test("no generated unverified file or llms-full entry says Last verified", () =>
   for (const text of unverified) assert.doesNotMatch(text, /Last verified/)
   for (const entry of readFileSync(join(root, "public", "llms-full.txt"), "utf8").split("\n---\n")) {
     if (entry.includes("Status: unverified")) assert.doesNotMatch(entry, /Last verified/)
+  }
+})
+
+// The same rule for REST and MCP: the key is left out for an unverified
+// program (not null), kept for a verified one and for a brand with no program.
+test("REST and MCP leave out an unverified program's lastVerifiedAt", async () => {
+  const live = programs.filter((p) => (p.status ?? "active") === "active")
+  const unverified = live.find((p) => !p.verified && p.lastVerifiedAt)
+  const verified = live.find((p) => p.verified && p.lastVerifiedAt)
+  assert.ok(unverified && verified, "the registry has no dated unverified or verified program to probe")
+  for (const body of [await restGetProgram(unverified.slug), await mcpGetProgram(unverified.slug)]) {
+    assert.equal(body.verified, false)
+    assert.equal("lastVerifiedAt" in body, false, `${unverified.slug} returns lastVerifiedAt`)
+  }
+  for (const body of [await restGetProgram(verified.slug), await mcpGetProgram(verified.slug)]) {
+    assert.equal(body.lastVerifiedAt, verified.lastVerifiedAt)
+  }
+  // MCP search_programs rows carry no date at all; the REST list carries the program.
+  const rows = await restListPrograms("")
+  assert.ok(rows.some((r) => r.verified === false) && rows.some((r) => r.verified === true))
+  for (const row of rows) {
+    if (row.verified === false && (row.status ?? "active") === "active") assert.equal("lastVerifiedAt" in row, false, `${row.slug} list row`)
+    if (row.verified === true && programs.find((p) => p.slug === row.slug)?.lastVerifiedAt) assert.ok(row.lastVerifiedAt, `${row.slug} lost its date`)
   }
 })

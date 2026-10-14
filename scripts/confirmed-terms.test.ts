@@ -102,10 +102,13 @@ test("confirmedTerms leaves out cookie, payout, approval and the sentences stati
     for (const key of ["description", "shortDescription", "agentPrompt"] as const) {
       if (p[key].trim()) assert.ok(shown[key].trim(), `${p.slug}: ${key} emptied`)
     }
+    // The check date: left out (the key, not null) unless the brand has no program.
+    if (hasNoProgram(p)) assert.equal(shown.lastVerifiedAt, p.lastVerifiedAt, p.slug)
+    else assert.equal("lastVerifiedAt" in shown, false, `${p.slug}: lastVerifiedAt`)
     // Everything else is the stored program.
     const others = (x: Program) => {
       const o: Record<string, unknown> = { ...x, commission: { ...x.commission, conditions: null } }
-      for (const key of [...HIDDEN, ...PROSE, "payout"]) delete o[key]
+      for (const key of [...HIDDEN, ...PROSE, "payout", "lastVerifiedAt"]) delete o[key]
       return o
     }
     assert.deepEqual(others(shown), others(p), p.slug)
