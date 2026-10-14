@@ -42,8 +42,11 @@ program_age: null
 
 description: >
   TrueProxies provides residential and datacenter proxies for web scraping,
-  data collection, ad verification and multi-account automation, with a
-  residential network of more than 16 million IPs.
+  data collection, ad verification and multi-account automation, with country
+  targeting, rotating and sticky sessions, and HTTP/SOCKS5 support. Plans
+  include unlimited-bandwidth residential, pay-per-GB residential and
+  Datacenter IPv6, managed from a single dashboard with docs at
+  docs.trueproxies.com.
 
   The affiliate program pays 20% of every eligible payment for as long as a
   referred customer stays, with no cap. Referral links track for 30 days from
@@ -51,7 +54,7 @@ description: >
   in USD by PayPal, USDT (TRC20) or bank transfer once the balance reaches $50.
   Anyone with a verified TrueProxies account can join from the dashboard.
 
-short_description: "Residential and datacenter proxies for data collection at scale"
+short_description: "Residential and datacenter proxies for dependable web data"
 
 agents:
   prompt: >
@@ -68,8 +71,8 @@ agents:
 verified: true
 submitted_by: trueproxies
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-14"
+last_verified_at: "2026-10-14"
 status: active
 kind: affiliate
 source: community
