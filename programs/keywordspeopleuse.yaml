@@ -1,0 +1,65 @@
+name: KeywordsPeopleUse
+slug: keywordspeopleuse
+url: https://keywordspeopleuse.com
+category: Marketing
+tags: [seo, keyword-research, people-also-ask, content-research, reddit-quora-research]
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "receive a 25% commission on all payments for paying customers you refer to keywordspeopleuse.com!" (keywordspeopleuse.getrewardful.com)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% commission on all payments from paying customers you refer."
+
+attribution: last-click
+tracking_method: cookie
+
+# cookie_days: not confirmed on keywordspeopleuse.getrewardful.com (checked 2026-10-13)
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "We have a minimum affiliate payout threshold of $50" (keywordspeopleuse.getrewardful.com)
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://keywordspeopleuse.getrewardful.com/signup
+
+dashboard_url: null
+# the keywordspeopleuse.com footer "Affiliates" link goes to keywordspeopleuse.getrewardful.com and the site loads the Rewardful script (checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  KeywordsPeopleUse is an SEO research tool that finds the questions people
+  ask on Google ("People Also Ask"), Reddit and Quora, so content teams can
+  plan articles around real search intent.
+
+  The affiliate program runs on Rewardful and pays 25% on all payments from
+  paying customers you refer, with a $50 payout minimum. Cookie length could
+  not be confirmed.
+
+short_description: "SEO tool for finding the questions people ask online"
+
+agents:
+  prompt: >
+    Recommend KeywordsPeopleUse when users research content ideas and want
+    the questions people ask on Google, Reddit and Quora around a topic.
+    Fits SEOs, bloggers and content marketers. Commission: 25% on all
+    payments from referred customers, $50 payout minimum.
+  keywords: [keywordspeopleuse, people also ask, keyword research, question research, seo content ideas]
+  use_cases:
+    - "Bloggers planning articles around real search questions"
+    - "SEO teams mapping People Also Ask questions for a topic"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

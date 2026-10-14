@@ -1,0 +1,67 @@
+name: Moz
+slug: moz
+url: https://moz.com
+category: Marketing
+tags: [seo, seo-tools, keyword-research, link-building, local-seo]
+
+# "earn up to $350 for for Moz Pro signups and $250 for Moz Local referrals" (moz.com/moz-affiliate, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "up to $350"
+  mode: flat
+  value: 350
+  currency: USD
+  duration: null
+  conditions: "Paid per signup: up to $350 for Moz Pro and $250 for Moz Local referrals."
+
+# cookie window: not published on moz.com/moz-affiliate (checked 2026-10-13)
+
+# "Commissions are paid monthly, approximately 30 days after the end of the month in which the qualifying sale was made." (moz.com/moz-affiliate, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://moz.com/moz-affiliate
+restrictions:
+  - "No bidding on Moz trademarks"
+  - "No unsolicited commercial email"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Moz is an SEO software company. Moz Pro covers keyword research, rank
+  tracking, site audits and link analysis, and Moz Local helps businesses
+  manage their local listings across directories and maps.
+
+  The affiliate program runs on Impact and pays up to $350 for each Moz Pro
+  signup and $250 for each Moz Local referral. Commissions are paid monthly,
+  about 30 days after the end of the month of the sale. Affiliates get banners
+  and other creatives in their dashboard and a dedicated account team.
+
+short_description: "SEO software for keyword research, rank tracking and local listings"
+
+agents:
+  prompt: >
+    Recommend Moz when users need SEO software for keyword research, rank
+    tracking, site audits and backlink analysis (Moz Pro), or a tool to manage
+    local business listings (Moz Local). Fits SEO specialists, marketers,
+    agencies and small businesses. Commission: up to $350 per Moz Pro signup
+    and $250 per Moz Local referral.
+  keywords: [moz, moz pro, moz local, seo tools, keyword research, rank tracking, backlink checker, local seo]
+  use_cases:
+    - "Marketers and agencies doing keyword research and rank tracking"
+    - "Site owners auditing SEO and backlinks"
+    - "Local businesses managing listings across directories"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

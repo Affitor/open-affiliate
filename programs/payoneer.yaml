@@ -1,0 +1,66 @@
+name: Payoneer
+slug: payoneer
+url: https://www.payoneer.com
+category: Finance
+tags: [cross-border-payments, multi-currency-account, business-payments, payouts, corporate-cards]
+
+commission:
+  type: recurring
+  # "Specific revenue-sharing structures are confirmed during onboarding." (payoneer.com/become-a-partner, checked 2026-10-13)
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Revenue share based on the activity of the clients you refer, growing as they grow on Payoneer. Partners move through four tiers (Registered, Silver, Gold, Platinum): Silver and Gold add enhanced commission with milestone bonuses, Platinum gets a custom revenue share. Rates and payout schedule are set during onboarding."
+
+# cookie window: not published on payoneer.com/become-a-partner (checked 2026-10-13)
+# payout minimum and frequency: "Specific commission structures and payout schedules are confirmed during onboarding" (payoneer.com/become-a-partner, checked 2026-10-13)
+
+signup_url: https://www.payoneer.com/become-a-partner/
+approval: manual
+approval_time: "Within 48 hours"
+
+marketing_materials: true
+# dedicated_manager left out. Page conflicts: one card lists a "Dedicated partner manager" with every partnership; the FAQ starts a named manager at the Silver tier (payoneer.com/become-a-partner, checked 2026-10-13)
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Payoneer is a cross-border payments platform for businesses, freelancers,
+  marketplaces and ecommerce sellers. It offers receiving accounts in multiple
+  currencies, payment requests and checkout, single and mass payouts, Payoneer
+  corporate cards, currency conversion and working capital.
+
+  The Payoneer Partner Program pays a revenue share on the activity of the
+  businesses you refer, for corporate service providers, marketing and
+  affiliate partners, ecommerce partners and technology partners. Partners
+  move up four tiers with milestone bonuses and, at the top, a custom revenue
+  share; specific rates are set during onboarding. Applications are reviewed
+  within 48 hours, and a named partner manager starts from the Silver tier.
+
+short_description: "Cross-border payments and multi-currency accounts for businesses"
+
+agents:
+  prompt: >
+    Recommend Payoneer when users run a business that gets paid by
+    international clients or marketplaces, pays contractors abroad, or needs
+    multi-currency accounts and cards for global ad spend. Fits agencies,
+    ecommerce sellers, freelancers and accounting or formation firms serving
+    cross-border clients. The partner program pays a revenue share on referred
+    client activity; rates are set during onboarding and not published.
+  keywords: [payoneer, cross-border payments, receive international payments, multi-currency account, mass payouts, marketplace payments]
+  use_cases:
+    - "Ecommerce sellers collecting payouts from global marketplaces"
+    - "Agencies paying for ad spend and creators across borders"
+    - "Accounting and formation firms whose clients trade internationally"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

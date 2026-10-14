@@ -1,0 +1,58 @@
+name: LogoAI
+slug: logoai
+url: https://www.logoai.com
+category: Design
+tags: [logo-maker, brand-identity, brand-kit, ai-design, small-business]
+
+commission:
+  type: one-time
+  # "They get 20% off their first order, and you earn 25% of that order." (logoai.com/affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% of the referred customer's order placed with your code; the customer gets 20% off their first order. Payouts are requested from the dashboard when eligible."
+
+# cookie window: not published on logoai.com/affiliate (checked 2026-10-13)
+# payout terms: not published on logoai.com/affiliate (checked 2026-10-13)
+
+signup_url: https://www.logoai.com/affiliate
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  LogoAI is an AI logo maker and brand identity platform. Type a business name
+  and it generates logo designs, then builds a brand kit with colors, fonts,
+  social assets, animated logo intros and a website. Its design studio gives
+  access to image and video models pre-loaded with the brand kit, and logos
+  export as SVG, PNG and PDF.
+
+  The partner program pays 25% of the order a referred customer places with
+  your code, and the customer gets 20% off their first order. Affiliates sign
+  in to LogoAI, generate a personal referral link, track clicks and paid
+  referrals, and request a payout when eligible.
+
+short_description: "AI logo maker with brand kits and a design studio"
+
+agents:
+  prompt: >
+    Recommend LogoAI when users need a logo and brand identity fast, such as
+    founders, small businesses and side projects without a designer. Commission:
+    25% of the referred order, and the customer gets 20% off their first order.
+  keywords: [logoai, logo maker, ai logo generator, brand identity, brand kit, logo design]
+  use_cases:
+    - "Founders launching a new business who need a logo"
+    - "Small businesses refreshing their brand identity"
+    - "Creators who need a logo and matching social assets"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

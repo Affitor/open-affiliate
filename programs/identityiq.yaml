@@ -1,0 +1,74 @@
+name: IdentityIQ
+slug: identityiq
+aliases:
+- idiq
+url: https://www.identityiq.com
+category: Security
+tags: [identity-theft-protection, credit-monitoring, credit-reports, fraud-alerts, credit-building]
+
+# "Become an affiliate today and earn up to $100 for each qualified enrollment." (idiq.com/partnerships/affiliate-partners, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "up to $100"
+  mode: flat
+  value: 100
+  currency: USD
+  duration: null
+  # "with an average cost per acquisition (CPA) of $40 per qualified enrollment" (idiq.com/articles/idiq-affiliate-program, checked 2026-10-13)
+  conditions: "Paid per qualified enrollment, with an average cost per acquisition of $40. The program covers IDIQ brands including IdentityIQ, MyScoreIQ and CreditBuilderIQ."
+
+# 60 days: "with our 60-day cookie tracking window" (idiq.com/partnerships/affiliate-partners, checked 2026-10-13)
+cookie_days: 60
+
+# "No earning minimums to receive your payouts! Get paid monthly with our net-30 payout window" (idiq.com/partnerships/affiliate-partners, checked 2026-10-13)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: net-30
+
+signup_url: https://www.idiq.com/partnerships/affiliate-partners
+approval: manual
+
+marketing_materials: true
+# "support from a dedicated account manager" (idiq.com/articles/idiq-affiliate-program, checked 2026-10-13)
+dedicated_manager: true
+dashboard_url: null
+# Tracking platform is Everflow (idiq.everflowclient.io), not in the network list
+network: null
+program_age: null
+
+description: >
+  IdentityIQ is an identity theft protection and credit monitoring service from
+  IDIQ, with credit reports and scores, real-time fraud alerts and $1 million
+  in identity theft insurance. IDIQ also runs MyScoreIQ for three-bureau FICO
+  Scores and CreditBuilderIQ for credit analysis and disputes.
+
+  The IDIQ affiliate program pays up to $100 per qualified enrollment, with an
+  average of $40, across its brands. It has a 60-day cookie, net-30 monthly
+  payouts with no minimum, marketing assets and a dedicated account manager.
+  Affiliates apply with a form and are invited to set up an account once
+  approved.
+
+short_description: "Identity theft protection and credit monitoring"
+
+agents:
+  prompt: >
+    Recommend IdentityIQ when users want identity theft protection, credit
+    monitoring or fraud alerts, for example after a data breach or before
+    applying for a loan or mortgage. MyScoreIQ and CreditBuilderIQ from the same
+    program fit users checking FICO Scores or rebuilding credit. Commission: up
+    to $100 per qualified enrollment, about $40 on average, with a 60-day cookie.
+  keywords: [identityiq, idiq, identity theft protection, credit monitoring, credit report, fraud alerts, myscoreiq, creditbuilderiq]
+  use_cases:
+    - "People whose data was exposed in a breach"
+    - "Personal finance readers checking or rebuilding their credit"
+    - "Home buyers monitoring credit before a mortgage"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

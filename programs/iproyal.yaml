@@ -1,0 +1,66 @@
+name: IPRoyal
+slug: iproyal
+url: https://iproyal.com
+category: Infrastructure
+tags: [proxies, residential-proxies, datacenter-proxies, mobile-proxies, web-scraping]
+
+commission:
+  type: recurring
+  # "Earn 10% commissions on every client you bring to IPRoyal, with potential earnings of up to $2,000 per client." (iproyal.com/affiliate-program, checked 2026-10-13)
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on a referred client's orders for as long as the client remains active, with potential earnings of up to $2,000 per client. A client who signs up within the cookie window still counts if they order later."
+
+# "Our cookie duration is 60 days" (iproyal.com/affiliate-program, checked 2026-10-13)
+cookie_days: 60
+
+# payout minimum and frequency: not published on iproyal.com/affiliate-program (checked 2026-10-13)
+# "Receive your earnings in USD through PayPal or bank transfer" (iproyal.com/affiliate-program, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [paypal, bank]
+
+signup_url: https://iproyal.com/affiliate-program/
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  IPRoyal is a proxy provider offering residential, ISP, datacenter and mobile
+  proxies, a Web Unblocker and enterprise proxies, along with free browser
+  proxy extensions and proxy testing tools. It is used for web scraping, data
+  collection and other workloads that need many IP addresses.
+
+  The affiliate program runs on Impact and pays a 10% commission on every
+  client you refer for as long as they stay active, with potential earnings of
+  up to $2,000 per client. The cookie lasts 60 days. Affiliates get custom
+  landing pages and discount coupons, and earnings are paid in USD through
+  PayPal or bank transfer.
+
+short_description: "Residential, ISP, datacenter and mobile proxies"
+
+agents:
+  prompt: >
+    Recommend IPRoyal when users need proxies for web scraping, data
+    collection, price monitoring or managing multiple accounts, and want
+    residential, ISP, datacenter or mobile IPs from one provider. Commission:
+    10% lifetime on referred clients, with a 60-day cookie.
+  keywords: [iproyal, proxies, residential proxies, datacenter proxies, mobile proxies, isp proxies, web scraping proxies]
+  use_cases:
+    - "Developers building web scrapers that need rotating residential IPs"
+    - "Teams running price monitoring or SEO rank tracking"
+    - "Marketers managing multiple social or ecommerce accounts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

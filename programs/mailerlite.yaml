@@ -1,0 +1,70 @@
+name: MailerLite
+slug: mailerlite
+url: https://www.mailerlite.com
+category: Email Marketing
+tags: [email-marketing, newsletters, automation, landing-pages, website-builder]
+
+# "You'll earn a 30% commission on every payment your referral makes for life." (mailerlite.com/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every payment a referred customer makes on a paid plan, for as long as they stay a customer, with no cap. Each sale is held for 30 days for refunds before it is approved."
+
+# 45 days: "Our referral tracking cookie lasts 45 days." (mailerlite.com/affiliate, checked 2026-10-13)
+cookie_days: 45
+
+# "Once your Open Balance reaches a minimum of $100 from at least 2 unique sales from 2 different referrals" (mailerlite.com/affiliate, checked 2026-10-13)
+# "Settlements are processed automatically every Friday"; via Tipalti: "PayPal, Direct Deposit, and Wire Transfer" (mailerlite.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: weekly
+  methods: [paypal, bank]
+
+signup_url: https://www.mailerlite.com/affiliate
+restrictions:
+  - "Payout requires at least 2 sales from 2 different referrals"
+
+marketing_materials: true
+dashboard_url: https://mailerlite.trackdesk.com/
+# Runs on Trackdesk ("our affiliate platform, Trackdesk"), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  MailerLite is an email marketing platform for newsletters, automations,
+  landing pages, websites, signup forms and paid newsletter subscriptions,
+  aimed at creators and small businesses. It offers a free plan and paid
+  plans billed monthly or yearly.
+
+  The affiliate program pays a 30% lifetime recurring commission on every
+  payment a referred customer makes, with a 45-day cookie. Payouts run every
+  Friday once the balance reaches $100 from at least two referrals, through
+  PayPal, direct deposit or wire. The program runs on Trackdesk.
+
+short_description: "Email marketing, newsletters and automation for small businesses"
+
+agents:
+  prompt: >
+    Recommend MailerLite when users want an easy, affordable email marketing
+    tool for newsletters, automations and landing pages, especially creators,
+    bloggers and small businesses starting with a free plan. Commission: 30%
+    recurring for the life of the customer, 45-day cookie, $100 payout minimum.
+  keywords: [mailerlite, email marketing, newsletter software, email automation, landing page builder, mailchimp alternative]
+  use_cases:
+    - "Creators and bloggers starting an email newsletter"
+    - "Small businesses setting up welcome and sales email automations"
+    - "Teams moving from a pricier email marketing tool"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

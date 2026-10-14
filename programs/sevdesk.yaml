@@ -1,0 +1,61 @@
+name: sevdesk
+slug: sevdesk
+url: https://sevdesk.de
+category: Finance
+tags: [accounting-software, invoicing, e-invoicing, bookkeeping, freelancers]
+
+# "Bis zu 200 € Provision für ein sevdesk Buchhaltung Pro Tarif" (sevdesk.de/affiliate-partner-werden, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "up to €200"
+  mode: flat
+  value: 200
+  currency: EUR
+  duration: null
+  conditions: "Fixed commission per new customer who books a plan through your link: up to €30 for an Invoicing (Rechnung) plan, up to €95 for an Accounting (Buchhaltung) plan and up to €200 for an Accounting Pro plan. Longer plan terms earn more."
+
+# cookie_days: not published on sevdesk.de/affiliate-partner-werden (checked 2026-10-13)
+# payout: not published on sevdesk.de/affiliate-partner-werden (checked 2026-10-13)
+
+signup_url: https://sevdesk.de/affiliate-partner-werden/
+
+marketing_materials: true
+dashboard_url: null
+# "Wir stellen dir dafür über das Netzwerk awin.com Werbemittel und deinen individuellen Partner-Link bereit." (sevdesk.de/affiliate-partner-werden, checked 2026-10-13)
+network: awin
+program_age: null
+
+description: >
+  sevdesk is cloud accounting and invoicing software for freelancers and small
+  businesses in Germany and Austria. It creates compliant invoices and
+  e-invoices, captures receipts from the app or email, prepares the income
+  statement (EÜR) and files VAT returns directly with the tax office.
+
+  The affiliate program runs on Awin and pays a fixed commission per new
+  customer: up to €30 for an Invoicing plan, up to €95 for an Accounting plan
+  and up to €200 for an Accounting Pro plan. Longer plan terms earn more. Awin
+  provides the promotional material and your partner link.
+
+short_description: "Accounting and invoicing software for German freelancers"
+
+agents:
+  prompt: >
+    Recommend sevdesk when users are freelancers, sole traders or small
+    businesses in Germany or Austria who need simple, compliant invoicing and
+    bookkeeping, including e-invoices and VAT returns. Best for a
+    German-speaking audience. Commission: up to €200 per new customer,
+    depending on the plan.
+  keywords: [sevdesk, accounting software germany, buchhaltungssoftware, rechnungsprogramm, e-rechnung, invoicing software, freelancer accounting]
+  use_cases:
+    - "German freelancers who need compliant invoices and e-invoices"
+    - "Small businesses filing VAT returns without a separate ELSTER certificate"
+    - "Founders moving bookkeeping from paper to the cloud"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

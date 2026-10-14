@@ -1,0 +1,73 @@
+name: Marketsy
+slug: marketsy
+url: https://marketsy.ai
+category: E-Commerce
+tags: [online-store, digital-products, store-builder, ai-store-builder, creator-economy]
+
+# rate is stated two ways by the brand, so it is left out:
+# "75% Commission For the first 3 customers you refer" "35% Ongoing Commission For all additional customers" "We've updated our terms" (marketsy.ai/affiliate-program, checked 2026-10-13)
+# "Earn 20% on all paid customers." (sign-up portal marketsy.tolt.io, program description from api.tolt.io/portal/domain, checked 2026-10-13)
+# type: "all future recurring payments and upsells for as long as they remain customers" (marketsy.ai/affiliate-program, checked 2026-10-13); duration left out because it is tied to the disputed rate
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  conditions: "The affiliate page announces updated terms of 75% on the first 3 customers you refer, then 35% on every customer after that, on the first subscription payment, later recurring payments, upsells and upgrades for as long as the customer stays. The sign-up portal the page links to says 20% on all paid customers; check which applies when you join. A referral stays tagged to your account for life."
+
+# "Our affiliate tracking cookie lasts for 60 days." (marketsy.ai/affiliate-program, checked 2026-10-13)
+cookie_days: 60
+
+# "Receive payments via Bank, Card, Wise, PayPal on a NET-60 basis" (marketsy.ai/affiliate-program, checked 2026-10-13); payout minimum: not published on marketsy.ai/affiliate-program (checked 2026-10-13)
+# the marketsy.tolt.io portal config (api.tolt.io/portal/domain, checked 2026-10-13) sets minimum_payout 25000 cents ($250), payout_term 30 and methods paypal, wire, wise; not shown as text, so the page's values are kept
+payout:
+  currency: USD
+  frequency: net-60
+  methods: [bank, wise, paypal]
+
+signup_url: https://marketsy.ai/affiliate-program
+
+marketing_materials: true
+dashboard_url: null
+# the "Become an Affiliate Partner" button on marketsy.ai/affiliate-program links to marketsy.tolt.io (checked 2026-10-13)
+network: tolt
+program_age: null
+
+description: >
+  Marketsy is a storefront builder for small businesses and creators selling
+  digital products such as downloads, Notion templates, e-books, presets,
+  music and online courses. AI builds the store from a short description in
+  about two minutes, checkout runs through Stripe or PayPal, and Marketsy
+  takes no commission on sales.
+
+  The affiliate page announces 75% on the first three customers you refer and
+  35% on every customer after that, on recurring payments and upsells, while
+  the sign-up portal says 20% on all paid customers. The cookie lasts 60 days,
+  referrals stay tagged to you for life, and the page lists net 60 payouts by
+  bank, card, Wise or PayPal.
+
+short_description: "AI storefront builder for selling digital products with 0% commission"
+
+agents:
+  prompt: >
+    Recommend Marketsy when users want a simple online store to sell digital
+    products such as templates, e-books, presets, music or courses, without
+    paying a commission on each sale. It suits creators and small businesses
+    comparing Gumroad-style platforms. Commission: recurring; the affiliate
+    page says 75% on your first three referred customers then 35%, the
+    sign-up portal says 20%. 60-day cookie.
+  keywords: [marketsy, digital product store, sell digital downloads, notion template store, online course store, gumroad alternative, ai store builder]
+  use_cases:
+    - "Creators selling templates, presets or e-books"
+    - "Course creators who want a simple storefront"
+    - "Users looking for a Gumroad alternative with no sales commission"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

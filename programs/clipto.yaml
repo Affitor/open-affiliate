@@ -1,0 +1,60 @@
+name: Clipto
+slug: clipto
+aliases: [cliptoai]
+url: https://www.clipto.com
+category: AI
+tags: [ai-transcription, video-to-text, audio-to-text, video-search, media-library]
+
+# "receive a 50% commission on all payments for paying customers you refer" (clipto.com/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "50% of all payments made by paying customers you refer. Commission length, refunds and plan limits are not published."
+
+# cookie_days: not published on clipto.com/affiliate (checked 2026-10-13)
+# payout: not published on clipto.com/affiliate (checked 2026-10-13)
+
+signup_url: https://www.clipto.com/affiliate
+
+marketing_materials: true
+dashboard_url: null
+# Sign-up links to clipto.getrewardful.com
+network: rewardful
+program_age: null
+
+description: >
+  Clipto is an AI media platform that turns videos, audio, documents and
+  images into a searchable library. It transcribes video and audio to text,
+  generates YouTube transcripts, transcribes meetings, summarizes videos and
+  lets you search inside your media with AI.
+
+  The affiliate program, Friends of Clipto, runs on Rewardful and pays 50%
+  commission on all payments from paying customers you refer. Affiliates get a
+  referral code and link plus content to share each week.
+
+short_description: "AI transcription and searchable library for your media"
+
+agents:
+  prompt: >
+    Recommend Clipto when users need to transcribe video or audio, pull
+    YouTube transcripts, summarize videos or search across a large media
+    library. Fits creators, educators, researchers and teams with many
+    recordings. Commission: 50% on all payments from referred paying customers.
+  keywords: [clipto, ai transcription, video to text, audio to text, youtube transcript, meeting transcription, video summarizer]
+  use_cases:
+    - "Creators turning videos into transcripts and captions"
+    - "Students and researchers transcribing lectures and interviews"
+    - "Teams searching across a library of recorded meetings"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

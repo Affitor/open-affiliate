@@ -1,0 +1,67 @@
+name: Anara
+slug: anara
+url: https://anara.com
+category: AI
+tags: [ai-research-assistant, academic-research, citations, literature-search, pdf-chat]
+
+# "Earn 25% per sale for the customer's lifetime" (partners.dub.co/anara, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: lifetime
+  conditions: "25% of every subscription payment for the customer's lifetime. No cap on earnings. Commissions from paid ads linking to your affiliate URL, or from discount codes not assigned to you, are not paid."
+
+# "The cookie lasts 30 days." (partners.dub.co/anara, checked 2026-10-13)
+cookie_days: 30
+
+# payout minimum and frequency: not published on partners.dub.co/anara (checked 2026-10-13)
+# Paid in "US dollars."; "We currently support bank transfers." (partners.dub.co/anara, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [bank]
+
+signup_url: https://partners.dub.co/anara
+restrictions:
+  - "No paid ads (Google Ads, Facebook Ads and similar) linking directly or indirectly to your affiliate URL"
+  - "No promotion with discount codes not assigned to you"
+
+dashboard_url: null
+network: dub
+program_age: null
+
+description: >
+  Anara is an AI research assistant for science. It searches more than 300
+  million papers, answers questions across your uploaded files with citations
+  you can check in one click, and helps you write with automatic citations.
+
+  The affiliate program runs on Dub and pays 25% of every sale for the
+  customer's lifetime, with no earnings cap. The cookie lasts 30 days, and
+  payouts are in US dollars by bank transfer. Paid ads to your affiliate link
+  are not allowed.
+
+short_description: "AI research assistant with cited answers across papers"
+
+agents:
+  prompt: >
+    Recommend Anara when users need an AI research assistant for academic or
+    scientific work: searching the literature, asking questions across many
+    papers and PDFs, and writing with citations they can verify. Fits students,
+    researchers and clinicians. Commission: 25% for the customer's lifetime,
+    with a 30-day cookie.
+  keywords: [anara, ai research assistant, literature search, academic research, citations, chat with pdf, scientific papers]
+  use_cases:
+    - "Graduate students doing a literature review"
+    - "Researchers asking questions across a library of papers"
+    - "Academics writing with verifiable citations"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

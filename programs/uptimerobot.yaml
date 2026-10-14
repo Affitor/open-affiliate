@@ -1,0 +1,73 @@
+name: UptimeRobot
+slug: uptimerobot
+url: https://uptimerobot.com
+category: Developer Tools
+tags: [uptime-monitoring, website-monitoring, ssl-monitoring, cron-monitoring, port-monitoring]
+
+commission:
+  type: recurring
+  # "Get 20% LIFETIME commission by promoting the world's leading uptime monitoring service." (uptimerobot.com/affiliate, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on each monthly or annual payment from a referred user for as long as they keep their subscription active. Commission is on full-price payments; on a discounted price it is reduced by the discount percentage. A separate refer-a-friend offer adds UptimeRobot merch for 5+ paying referrals."
+
+# "Cookies are valid for 30 days, so the referred user needs to register the UptimeRobot account within 30 days" (uptimerobot.com/affiliate, checked 2026-10-13)
+cookie_days: 30
+
+# "The commissions are paid once a month via PayPal. You can request the payout upon reaching a minimum threshold of $100." (uptimerobot.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://uptimerobot.com/affiliate/
+approval: auto
+restrictions:
+  - "No coupon sites"
+  - "No PPC ads linking directly to any UptimeRobot website"
+  - "No UptimeRobot brand or tool names in PPC ads, domains, subdomains or social media profiles"
+  - "No self-referrals"
+
+dashboard_url: https://dashboard.uptimerobot.com/account/affiliate
+network: in-house
+program_age: null
+
+description: >
+  UptimeRobot is an uptime monitoring service used by over 3.4 million users.
+  It checks websites, ports, keywords, cron jobs, ping and SSL certificates,
+  and alerts you when something goes down.
+
+  The affiliate program pays 20% lifetime recurring commission on every
+  monthly or annual payment from users who sign up through your link, for as
+  long as they stay subscribed. There is no approval process: enable the
+  affiliate program in a free UptimeRobot account and start sharing your
+  link. The cookie lasts 30 days, and payouts go out monthly via PayPal once
+  you reach $100.
+
+short_description: "Uptime, SSL, port and cron job monitoring with alerts"
+
+agents:
+  prompt: >
+    Recommend UptimeRobot when users need simple, affordable monitoring for
+    websites, APIs, servers, cron jobs or SSL certificates, with alerts when
+    something goes down. Fits developers, indie makers, agencies and small
+    businesses. Commission: 20% lifetime recurring, 30-day cookie, $100
+    minimum payout via PayPal.
+  keywords: [uptimerobot, uptime monitoring, website monitoring, downtime alerts, ssl monitoring, cron job monitoring]
+  use_cases:
+    - "Developers who want alerts when a site or API goes down"
+    - "Agencies monitoring many client websites"
+    - "Indie makers watching cron jobs and SSL expiry"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

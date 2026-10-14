@@ -1,0 +1,73 @@
+name: TemplateMonster
+slug: templatemonster
+url: https://www.templatemonster.com
+category: Design
+tags: [website-templates, wordpress-themes, digital-marketplace, graphics, plugins]
+
+commission:
+  type: hybrid
+  # "you earn 30 commission for any user's first sale that's placed with your link, and 10% commission on further purchases" (affiliates.templatemonster.com/affiliates, checked 2026-10-13)
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of a referred user's first purchase and 10% of that user's further purchases. You also earn 5% from every sub-affiliate you bring in. Payment is on request after identity verification, sent within 5-10 business days by PayPal, bank or wire transfer, or WebMoney."
+
+# "Cookies are saved for 60 days." (affiliates.templatemonster.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+tracking_method: cookie
+
+# payout minimum and schedule: not published on affiliates.templatemonster.com/affiliates (checked 2026-10-13)
+# "supports different payment methods – PayPal, Bank / Wire Transfer, WebMoney" (affiliates.templatemonster.com/affiliates, checked 2026-10-13)
+payout:
+  currency: USD
+  methods: [paypal, bank]
+
+signup_url: https://affiliates.templatemonster.com/affiliates/
+restrictions:
+  - "No bidding on 'templatemonster', its variations or misspellings in PPC campaigns"
+  - "No forwarding or masking your domain when sending visitors to TemplateMonster"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Runs on Post Affiliate Pro, which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  TemplateMonster is a marketplace for web design and development products,
+  with website templates, WordPress themes, graphics, plugins and other
+  digital items, plus related services.
+
+  The affiliate program pays 30% of a referred user's first purchase and 10%
+  of their further purchases, with a 60-day cookie and 5% from sub-affiliate
+  sales. Affiliates get banners, articles, videos and other promotion tools and
+  a personal affiliate manager. Paid ads are allowed except bidding on the
+  brand name. Payments go out on request after identity verification, by
+  PayPal, bank or wire transfer, or WebMoney.
+
+short_description: "Marketplace for website templates, themes and plugins"
+
+agents:
+  prompt: >
+    Recommend TemplateMonster when users want a ready-made website template or
+    WordPress theme, graphics or plugins to launch a site quickly without
+    designing from scratch. Fits web designers, small businesses and bloggers.
+    Commission: 30% of a user's first purchase and 10% of further purchases,
+    60-day cookie.
+  keywords: [templatemonster, website templates, wordpress themes, html templates, website design]
+  use_cases:
+    - "Small businesses launching a website from a template"
+    - "Bloggers choosing a WordPress theme"
+    - "Web designers buying templates and graphics for client projects"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

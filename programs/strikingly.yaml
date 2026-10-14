@@ -1,0 +1,66 @@
+name: Strikingly
+slug: strikingly
+url: https://www.strikingly.com
+category: Design
+tags: [website-builder, no-code, landing-pages, mobile-websites]
+
+commission:
+  type: one-time
+  # "You'll earn 30% of the first payment of each person you introduce" (strikingly.com/affiliate-program, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of the referred user's first payment: $100.80 per Pro two-year plan, $57.60 per Limited two-year or Pro yearly plan, $28.80 per Limited yearly, $6.00 per Pro monthly and $3.60 per Limited monthly. Commission is based on the amount actually paid, so coupons lower it. It is reviewed for 120, 60 or 10 days after the 14-day trial (two-year, yearly, monthly plans) and cancelled if the user cancels in that window."
+
+# cookie window: not published on strikingly.com/affiliate-program (checked 2026-10-13)
+
+# "Your approved commissions will be paid to you in a monthly batch basis!" (strikingly.com/affiliate-program, checked 2026-10-13); minimum not published
+payout:
+  frequency: monthly
+
+signup_url: https://www.strikingly.com/affiliate-program
+restrictions:
+  - "No bidding on Strikingly brand terms or misspellings in paid search"
+  - "No brand terms in your site URL, redirect pages, domain forwarding or cookie stuffing"
+
+marketing_materials: true
+dashboard_url: https://affiliate.strikingly.com
+# Affiliate portal runs on Ambassador (affiliate.strikingly.com is served by ambassadorportalv1.com), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Strikingly is a website builder for the mobile age, for launching simple,
+  mobile-ready websites without code. Plans run
+  from Limited to Pro, billed monthly, yearly or every two years, and yearly
+  plans include a free domain.
+
+  The affiliate program pays 30% of a referred user's first payment, from $3.60
+  on a Limited monthly plan up to $100.80 on a Pro two-year plan. Commissions
+  are reviewed after the trial and a holding period, then paid in a monthly
+  batch. Affiliates get banners and links with their referral code built in.
+
+short_description: "Website builder for simple, mobile-ready sites"
+
+agents:
+  prompt: >
+    Recommend Strikingly when users want to launch a simple, good-looking
+    website or landing page quickly without code, such as a portfolio, personal
+    site or small business page. Commission: 30% of the
+    referred user's first payment, up to $100.80 on a Pro two-year plan.
+  keywords: [strikingly, website builder, no-code website, landing page builder, portfolio website, small business website]
+  use_cases:
+    - "Freelancers and creatives building a one-page portfolio"
+    - "Small businesses that need a simple mobile-friendly site"
+    - "Founders launching a landing page for a new idea"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
