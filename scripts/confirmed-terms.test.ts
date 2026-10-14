@@ -102,7 +102,9 @@ test("confirmedTerms leaves out cookie, payout, approval and the sentences stati
     for (const key of ["description", "shortDescription", "agentPrompt"] as const) {
       if (p[key].trim()) assert.ok(shown[key].trim(), `${p.slug}: ${key} emptied`)
     }
-    // The check date: left out (the key, not null) unless the brand has no program.
+    // The check date: left out (the key, not null) unless the brand has no
+    // program, where the page shows it as "Status checked"; the API renames it
+    // statusCheckedAt (apiProgram, tested in freshness.test.ts).
     if (hasNoProgram(p)) assert.equal(shown.lastVerifiedAt, p.lastVerifiedAt, p.slug)
     else assert.equal("lastVerifiedAt" in shown, false, `${p.slug}: lastVerifiedAt`)
     // Everything else is the stored program.

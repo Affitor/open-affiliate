@@ -111,3 +111,16 @@ test("REST and MCP leave out an unverified program's lastVerifiedAt", async () =
     if (row.verified === true && programs.find((p) => p.slug === row.slug)?.lastVerifiedAt) assert.ok(row.lastVerifiedAt, `${row.slug} lost its date`)
   }
 })
+
+// A brand with no program: the date is its status check, so it goes out as
+// statusCheckedAt; lastVerifiedAt is never in the response (Codex #212 r3).
+test("REST and MCP give a no-program brand statusCheckedAt, never lastVerifiedAt", async () => {
+  const gone = programs.filter((p) => (p.status === "no_program" || p.status === "discontinued") && p.lastVerifiedAt)
+  assert.ok(gone.some((p) => p.status === "no_program") && gone.some((p) => p.status === "discontinued"), "no dated no_program and discontinued entry to probe")
+  for (const p of gone) {
+    for (const body of [await restGetProgram(p.slug), await mcpGetProgram(p.slug)]) {
+      assert.equal("lastVerifiedAt" in body, false, `${p.slug} returns lastVerifiedAt`)
+      assert.equal(body.statusCheckedAt, p.lastVerifiedAt, `${p.slug} statusCheckedAt`)
+    }
+  }
+})
