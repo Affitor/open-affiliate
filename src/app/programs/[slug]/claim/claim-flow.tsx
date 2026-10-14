@@ -5,6 +5,8 @@ import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
 import { Input } from "@/components/ui/input";
 import { parseCommissionMode } from "@/lib/commission-mode";
+import { AffitorLink } from "@/components/affitor-link";
+import { affitorUrl } from "@/lib/affitor-link";
 
 declare global {
   interface Window {
@@ -425,9 +427,9 @@ export function ClaimFlow({
           <div className="rounded-lg border border-border/50 bg-muted/20 p-4 space-y-3">
             <p className="text-sm">Run this program on Affitor. Free until your first $10,000 in affiliate revenue, then 3.5%.</p>
             <div className="flex flex-wrap items-center gap-3">
-              <a href={`https://affitor.com/?utm_source=openaffiliate&utm_medium=claim&utm_campaign=${encodeURIComponent(slug)}`} className={primary}>
+              <AffitorLink href={affitorUrl("claim", slug)} source="claim" slug={slug} cta="launch" className={primary}>
                 Launch on Affitor
-              </a>
+              </AffitorLink>
               <Link href={`/programs/${slug}`} className={quiet}>Not now</Link>
             </div>
           </div>

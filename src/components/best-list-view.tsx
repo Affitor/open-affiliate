@@ -6,6 +6,7 @@ import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
+import { AffitorLink } from "@/components/affitor-link";
 import {
   BEST_INDEX,
   BEST_LISTS,
@@ -219,14 +220,16 @@ export function BestListView({
                   </td>
                   <td className="py-3 px-3 text-xs">
                     {/* The program page's own apply link, so both send readers to the same place. */}
-                    <a
+                    <AffitorLink
                       href={applyButton(program).href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      source="list"
+                      slug={program.slug}
+                      cta="sign_up"
+                      newTab
                       className="whitespace-nowrap text-emerald-600 dark:text-emerald-400 hover:underline"
                     >
                       Sign up
-                    </a>
+                    </AffitorLink>
                   </td>
                 </tr>
               ))}
