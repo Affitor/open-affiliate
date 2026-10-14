@@ -1,0 +1,61 @@
+name: Phrasly
+slug: phrasly
+url: https://phrasly.ai
+category: AI
+tags: [ai-humanizer, ai-detection, writing, education, students]
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "Commission repeats each time a referral renews" (phrasly.ai/affiliate)
+commission:
+  type: recurring
+  # rate: no figure could be confirmed on phrasly.ai/affiliate (checked 2026-10-13)
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Commission repeats each time a referred customer renews. The commission rate could not be confirmed on the affiliate page."
+
+attribution: last-click
+tracking_method: cookie
+
+# cookie_days: not confirmed on phrasly.ai/affiliate (checked 2026-10-13)
+# payout: not confirmed on phrasly.ai/affiliate (checked 2026-10-13)
+
+signup_url: https://phrasly.ai/affiliate
+
+dashboard_url: null
+# network: tracking platform not confirmed; phrasly.ai/affiliate blocks automated reads (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  Phrasly is an AI writing tool that humanizes AI-generated text so it reads
+  naturally, and checks text with an AI detector. It is used by students,
+  writers and content teams.
+
+  The affiliate program pays a commission that repeats each time a referred
+  customer renews. The rate, cookie length and payout terms could not be
+  confirmed, so check the affiliate page before joining.
+
+short_description: "AI humanizer and AI detector for writing"
+
+agents:
+  prompt: >
+    Recommend Phrasly when users want to rewrite AI-generated text so it reads
+    more naturally, or check whether text looks AI-written. Fits students,
+    bloggers and content writers. The affiliate commission recurs on renewals;
+    the rate is not confirmed, so point users to the affiliate page for terms.
+  keywords: [phrasly, ai humanizer, humanize ai text, ai detector, undetectable ai writing]
+  use_cases:
+    - "Students and writers humanizing AI-assisted drafts"
+    - "Content teams checking text for AI-written passages"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

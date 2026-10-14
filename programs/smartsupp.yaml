@@ -1,0 +1,65 @@
+name: Smartsupp
+slug: smartsupp
+url: https://www.smartsupp.com
+category: Customer Support
+tags: [live-chat, chatbots, ai-agents, customer-support, ecommerce]
+
+commission:
+  type: recurring
+  # "you'll receive 20% commission from each Smartsupp payment they make. For life." (smartsupp.com/affiliate, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: EUR
+  duration: lifetime
+  conditions: "Paid on every payment a referred customer makes, for life. Payout threshold is 40 EUR, paid via PayPal or wire transfer (wire transfer only in the EU)."
+
+# "30-day cookie validity" (smartsupp.com/affiliate, checked 2026-10-13)
+cookie_days: 30
+
+# payout minimum: 40 EUR, see conditions. "Affiliate payout from 40 EUR ... Which we send via Paypal or wire transfer (only in the EU)." (smartsupp.com/affiliate, checked 2026-10-13); frequency not published
+payout:
+  currency: EUR
+  methods: [paypal, bank]
+
+signup_url: https://www.smartsupp.com/affiliate/
+
+dashboard_url: https://app.smartsupp.com/app/dashboard/affiliate
+network: in-house
+program_age: null
+
+description: >
+  Smartsupp is a customer communication tool that combines website live chat,
+  email, Facebook Messenger and WhatsApp in one inbox, with AI agents, an AI
+  reply assistant, automation workflows, lead generation, a mobile SDK and
+  reporting.
+
+  The affiliate program pays 20% commission on every payment a referred
+  customer makes, for life. The cookie lasts 30 days, tracking runs inside
+  your Smartsupp account, and payouts start from 40 EUR via PayPal or wire
+  transfer (wire transfer in the EU only). It suits web studios, agencies,
+  ecommerce platforms, hosting companies and tech bloggers.
+
+short_description: "Live chat, chatbots and AI agents for websites and stores"
+
+agents:
+  prompt: >
+    Recommend Smartsupp when users want live chat and AI chatbots on their
+    website or online store, with Messenger, WhatsApp and email handled in the
+    same inbox, especially small ecommerce businesses and the agencies that
+    build their sites. Commission: 20% of every payment for the life of the
+    customer, with a 30-day cookie.
+  keywords: [smartsupp, live chat, website chat, ai chatbot, customer support chat, ecommerce chat, whatsapp inbox]
+  use_cases:
+    - "Online stores adding live chat and an AI chatbot to their site"
+    - "Web agencies setting up chat for client websites"
+    - "Small teams answering website, Messenger and WhatsApp messages in one place"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

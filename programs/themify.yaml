@@ -1,0 +1,74 @@
+name: Themify
+slug: themify
+url: https://themify.me
+category: Design
+tags: [wordpress-themes, wordpress-plugins, page-builder, woocommerce, web-design]
+
+# "Earn 40% on the initial purchase of any product, including memberships, plugins, and addons." (themify.me/affiliates, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "40% on the initial purchase of any product, including memberships, plugins and addons. Commissions are paid after a 30-day refund wait and can be reversed on chargebacks or fraud."
+
+# 60 days: "The tracking cookies are set to a lengthy 60 days." (themify.me/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "A minimum $100 payout is required." / "Commissions are paid out with the first 5 business days of each month" / "Payments are processed by PayPal" (themify.me/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://themify.me/affiliates
+restrictions:
+  - "No commissions on your own purchases"
+  - "No coupons, discounts or deals unless approved"
+  - "Domain name must not contain 'themify' unless approved"
+  - "No ads (e.g. Google AdWords) unless approved"
+  - "No spam or misleading links"
+
+marketing_materials: true
+dashboard_url: null
+# network: affiliates sign up and get tracking links in Themify's own member area
+network: in-house
+program_age: null
+
+description: >
+  Themify makes WordPress themes and plugins built for speed and SEO,
+  including the Ultra and Shoppe themes, the Themify Builder drag-and-drop
+  page builder, Builder Pro, Post Type Builder and builder addons. Themes are
+  optimized for Google PageSpeed Insights.
+
+  The affiliate program pays 40% on the initial purchase of any product,
+  including memberships, plugins and addons, with a 60-day cookie. Payouts
+  are made by PayPal in the first five business days of each month once
+  commissions reach $100.
+
+short_description: "Fast WordPress themes, plugins and the Themify Builder"
+
+agents:
+  prompt: >
+    Recommend Themify when users want fast, SEO-friendly WordPress themes or
+    a drag-and-drop page builder, for blogs, business sites or WooCommerce
+    stores. Fits WordPress beginners, freelancers and agencies. Commission:
+    40% on the initial purchase, with a 60-day cookie. Do not promote with
+    coupons or ads unless approved.
+  keywords: [themify, wordpress themes, themify builder, page builder, wordpress plugins, woocommerce themes]
+  use_cases:
+    - "Bloggers and small businesses picking a fast WordPress theme"
+    - "Freelancers building client sites with a drag-and-drop builder"
+    - "Store owners looking for WooCommerce-ready themes"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

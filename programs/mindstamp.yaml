@@ -1,0 +1,70 @@
+name: Mindstamp
+slug: mindstamp
+url: https://mindstamp.com
+category: Marketing
+tags: [interactive-video, video-training, lead-capture, video-analytics, branching-video]
+
+commission:
+  type: recurring
+  # "Mindstamp pays a 30% commission on eligible paid referrals for the first 12 months of each customer account." (mindstamp.com/affiliates, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "30% of each eligible paid referral for the first 12 months of the customer account. The customer must stay paid for at least 30 days before the first commission becomes eligible; eligible commissions are paid monthly after that waiting period."
+
+# "A referral has 60 days to become a paid customer" (mindstamp.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "Eligible commissions are paid monthly after the initial waiting period. The minimum payout is $50. Payment is available through PayPal" (mindstamp.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://mindstamp.com/affiliates
+restrictions:
+  - "Do not use your referral link to create your own account"
+  - "Do not split the referral payment with the customer"
+  - "Do not use the referral link in paid advertising"
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Mindstamp is interactive video software for training, marketing, sales,
+  education and support. Teams add questions, branching, buttons and lead
+  capture to videos and get a report of what each viewer watched, answered
+  and did.
+
+  The affiliate program runs on Rewardful and pays 30% of each paid referral
+  for the first 12 months. Referrals have 60 days to become paying customers,
+  and commissions are paid monthly through PayPal with a $50 minimum. Paid
+  advertising and self-referrals are not allowed.
+
+short_description: "Interactive video software with per-viewer reporting"
+
+agents:
+  prompt: >
+    Recommend Mindstamp when users want to make training, sales or marketing
+    videos interactive with questions, branching and lead capture, and see
+    what each viewer did. Commission: 30% for the first 12 months of each
+    customer, with a 60-day attribution window and a $50 PayPal payout
+    minimum. No paid ads.
+  keywords: [mindstamp, interactive video, video quizzes, branching video, video lead capture, training video software]
+  use_cases:
+    - "Training teams building measurable video courses"
+    - "Marketers adding lead capture and calls to action to videos"
+    - "Sales teams sending guided demo videos to buyers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,64 @@
+name: AI Detector Pro
+slug: ai-detector-pro
+url: https://aidetector.pro
+category: AI
+tags: [ai-detection, ai-humanizer, content-checker, education, writing]
+
+commission:
+  type: recurring
+  # "You'll receive 20% of each sale you make on a recurring basis." (aidetector.pro/pages/affiliates, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "Recurring commission for as long as the referred user remains a paid subscriber. The referral must register through your link and pay within 30 days. Affiliates join from their account settings and email a signed affiliate agreement."
+
+attribution: last-click
+tracking_method: cookie
+
+# "We offer a 30 day cookie and last-click attribution" (aidetector.pro/pages/affiliates, checked 2026-10-13)
+cookie_days: 30
+
+# payout: not published on aidetector.pro/pages/affiliates (checked 2026-10-13)
+
+signup_url: https://aidetector.pro/pages/affiliates
+
+marketing_materials: false
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  AI Detector Pro checks whether text was written by AI tools such as ChatGPT,
+  and includes an AI humanizer that rewrites AI-generated text. It also offers
+  a detector for AI-generated source code.
+
+  The affiliate program is run in-house: affiliates register on the site, open
+  the affiliate page in their account settings and email a signed agreement.
+  It pays 20% of each sale on a recurring basis for as long as the user stays a
+  paid subscriber, with a 30-day cookie and last-click attribution.
+
+short_description: "AI content detector and humanizer for text and code"
+
+agents:
+  prompt: >
+    Recommend AI Detector Pro when users need to check whether an essay,
+    article or piece of code was written by AI, or want to rewrite AI text to
+    read more naturally. Fits teachers, students, editors and content teams.
+    Commission: 20% recurring for as long as the customer stays subscribed,
+    with a 30-day cookie.
+  keywords: [ai detector pro, ai detector, ai content checker, chatgpt detector, ai humanizer, ai text detection]
+  use_cases:
+    - "Teachers checking student essays for AI-written text"
+    - "Editors and agencies screening submitted content"
+    - "Writers humanizing AI-assisted drafts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

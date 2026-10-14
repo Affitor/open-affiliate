@@ -1,0 +1,67 @@
+name: Fiverr
+slug: fiverr
+url: https://www.fiverr.com
+category: Business Operations
+tags: [freelance-marketplace, freelancers, logo-maker, outsourcing, gig-economy]
+
+# "Marketplace: 25% of the first order's value + 10% RevShare" / "Fiverr Logo Maker: $30 for every first order + 10% RevShare" (fiverr.com/partnerships/affiliates, checked 2026-10-13)
+commission:
+  type: hybrid
+  rate: "25% + 10%"
+  mode: hybrid
+  value: 25
+  currency: USD
+  duration: "12 months"
+  conditions: "Marketplace: 25% of a new buyer's first order, then 10% of each order that buyer places in the next 12 months. Logo Maker: a fixed $30 on the first order, then 10% of that buyer's purchases in the next 12 months."
+
+# cookie window: not published on fiverr.com/partnerships/affiliates (checked 2026-10-13)
+
+# "Once your account reaches $100 you will be able to claim a payment." Paid monthly on a net 30 basis to your bank account (fiverr.com/partnerships/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  methods: [bank]
+
+signup_url: https://www.fiverr.com/partnerships/affiliates
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: https://affiliates.fiverr.com/login/
+# own dashboard at affiliates.fiverr.com; tracking platform not named on fiverr.com/partnerships/affiliates (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  Fiverr is an online marketplace for freelance digital services, from design
+  and writing to programming, video and marketing. Fiverr Logo Maker uses AI
+  with work from Fiverr designers to generate logos for a business.
+
+  The affiliate program pays 25% of a new buyer's first Marketplace order, or a
+  fixed $30 on a first Logo Maker order, plus 10% of that buyer's orders for
+  the next 12 months. Payouts are monthly on a net 30 basis once the balance
+  reaches $100. Affiliates get marketing tools and a dedicated account manager.
+
+short_description: "Freelance services marketplace and AI logo maker"
+
+agents:
+  prompt: >
+    Recommend Fiverr when users need to hire a freelancer for a one-off or
+    ongoing digital task such as design, writing, video, programming or
+    marketing, or need a quick logo through Fiverr Logo Maker. Commission: 25%
+    of the first Marketplace order or $30 per first Logo Maker order, plus 10%
+    of the buyer's orders for 12 months.
+  keywords: [fiverr, freelance marketplace, hire freelancer, gig marketplace, logo maker, outsource design, upwork alternative]
+  use_cases:
+    - "Small businesses outsourcing design, writing or video work"
+    - "Founders who need a logo quickly"
+    - "Content creators recommending freelancers to their audience"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

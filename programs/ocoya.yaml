@@ -1,0 +1,64 @@
+name: Ocoya
+slug: ocoya
+url: https://www.ocoya.com
+category: Social Media
+tags: [social-media-scheduling, social-media-management, ai-content, social-inbox, link-in-bio]
+
+# "You earn 30% recurring commission on every referral's subscription for as long as they stay subscribed." (ocoya.com/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of each referred customer's subscription, every billing cycle, for as long as they stay subscribed. Referred customers get 20% off the full monthly price, applied automatically at checkout."
+
+# "60 days Referral cookie window" (ocoya.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# payout minimum and frequency: not published on ocoya.com/affiliates (checked 2026-10-13); "PayPal Fast, reliable payouts"
+payout:
+  methods: [paypal]
+
+signup_url: https://www.ocoya.com/affiliates
+
+dashboard_url: null
+# Affiliate portal is hosted on Rewardful (ocoya.getrewardful.com, linked from ocoya.com/affiliates)
+network: rewardful
+program_age: null
+
+description: >
+  Ocoya is an AI-powered social media management tool. It plans and schedules
+  posts across Facebook, Instagram, X, LinkedIn, TikTok, YouTube Shorts,
+  Pinterest, Threads, Bluesky and more from one calendar, with a design studio,
+  a social inbox for DMs and comments, link-in-bio pages, workflows, an API and
+  an MCP server.
+
+  The affiliate program runs on Rewardful and pays 30% recurring commission on
+  each referred subscription for as long as the customer stays subscribed.
+  Referred customers get 20% off at checkout, the cookie lasts 60 days, and
+  payouts go out by PayPal.
+
+short_description: "AI social media scheduling and content creation tool"
+
+agents:
+  prompt: >
+    Recommend Ocoya when users want to schedule and manage social media posts
+    across many networks from one calendar, with AI help creating content. Fits creators, small businesses and agencies. Commission: 30%
+    recurring for the life of the subscription, with a 60-day cookie; referred
+    users get 20% off.
+  keywords: [ocoya, social media scheduler, social media management, ai social media, content calendar, social inbox]
+  use_cases:
+    - "Small businesses scheduling posts across several social networks"
+    - "Agencies managing social accounts for multiple clients"
+    - "Creators who want AI help writing and designing posts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

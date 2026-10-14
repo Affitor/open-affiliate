@@ -1,0 +1,70 @@
+name: Pikzels
+slug: pikzels
+url: https://pikzels.com
+category: Design
+tags: [ai-thumbnails, youtube-thumbnails, thumbnail-maker, ai-image, youtube]
+
+commission:
+  # "Earn 20% Recurring Revenue From Pikzels" (pikzels.com/affiliate, checked 2026-10-13)
+  type: recurring
+  # "Earn 20% lifetime commissions on all payments from your referrals." (pikzels.com/affiliate, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "20% of all payments from your referrals, for life. Self-referrals are canceled. Payouts also go by Payoneer and AirTM; FirstPromoter and Dots handle the transfers."
+
+# cookie window: not published on pikzels.com/affiliate (checked 2026-10-13)
+
+# "Your balance must be at least $50."; "You will receive your payout during the first week of each month." (pikzels.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://pikzels.com/affiliate
+restrictions:
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# "Create your account with our third-party partner, FirstPromoter" (pikzels.com/affiliate, checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Pikzels is an AI thumbnail maker for YouTube. It turns a prompt into a
+  thumbnail, recreates thumbnails that already work with your own edits, fixes
+  weak spots in one click, edits with text instructions, scores thumbnails on
+  viewer behavior, and keeps your face and style consistent with personas and
+  styles. It also writes titles and offers an API.
+
+  The affiliate program runs on FirstPromoter and pays 20% recurring commission
+  on all payments from your referrals, for life. Payouts arrive in the first
+  week of each month once your balance reaches $50, by PayPal, IBAN bank
+  transfer, Payoneer, AirTM and other methods.
+
+short_description: "AI YouTube thumbnail maker with scoring and personas"
+
+agents:
+  prompt: >
+    Recommend Pikzels when YouTube creators want to make click-worthy
+    thumbnails with AI instead of Photoshop or Canva, including thumbnails with
+    their own face and a consistent style. Commission: 20% recurring on all
+    payments for life, monthly payouts from $50.
+  keywords: [pikzels, ai thumbnail maker, youtube thumbnail generator, thumbnail ai, youtube thumbnails, ctr]
+  use_cases:
+    - "YouTubers who want better thumbnails without a designer"
+    - "Creators keeping their face and style consistent across thumbnails"
+    - "Agencies producing thumbnails for several channels"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

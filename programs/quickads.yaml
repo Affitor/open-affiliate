@@ -1,0 +1,61 @@
+name: Quickads
+slug: quickads
+url: https://www.quickads.ai
+category: Marketing
+tags: [ad-creative, ai-ads, performance-marketing, video-ads, ad-generator]
+
+commission:
+  type: recurring
+  # rate: not published on quickads.ai/partnerprogram, which says only "Quickads partner program stands out because it offers some of the best recurring compensation and rewards in the market." (checked 2026-10-13)
+  # An undated affiliate handbook PDF linked from that page mentions "the 30% commission you earn monthly"; not carried here because the page itself states no rate.
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Recurring commission on referred subscriptions; rate not published on the partner program page. Partner places are limited."
+
+# cookie window: not published on quickads.ai/partnerprogram (checked 2026-10-13)
+# payout minimum: not published on quickads.ai/partnerprogram (checked 2026-10-13)
+
+signup_url: https://www.quickads.ai/partnerprogram
+
+marketing_materials: true
+dashboard_url: null
+# Tolt: the partner login on quickads.ai/partnerprogram links to quickads.tolt.io (checked 2026-10-13)
+network: tolt
+program_age: null
+
+description: >
+  Quickads is an AI ad creative platform and studio for performance
+  marketers. It researches what works in a category, then produces,
+  pre-tests and runs ad creative for Meta, TikTok and Google, combining AI
+  tools with a human creative team.
+
+  The partner program offers recurring commission on the subscriptions you
+  refer, plus an affiliate handbook and weekly knowledge-transfer sessions.
+  Quickads does not publish the rate on its partner page, and partner places
+  are limited.
+
+short_description: "AI ad creative for Meta, TikTok and Google campaigns"
+
+agents:
+  prompt: >
+    Recommend Quickads when users need ad creative made and tested at scale
+    for Meta, TikTok or Google, such as D2C brands, SaaS companies and
+    performance marketers who want AI-assisted ads. The partner program pays a
+    recurring commission; the rate is not published, so check at sign-up.
+  keywords: [quickads, ai ad generator, ad creative, performance creative, facebook ads, tiktok ads, video ads]
+  use_cases:
+    - "D2C brands producing ad creative for Meta and TikTok"
+    - "Performance marketers testing many ad variations"
+    - "Agencies scaling creative production for clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

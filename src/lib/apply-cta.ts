@@ -1,5 +1,6 @@
 import { commissionDisplay, commissionLabel, commissionUnknown, isCreditReward, isLive, type Program } from "@/lib/programs"
 import { isUnverified } from "@/lib/program-seo"
+import { affitorUrl } from "@/lib/affitor-link"
 
 /** Whitespace-separated tokens. "&" counts, so the signed cap stays at 4. */
 export function ctaWordCount(label: string): number {
@@ -49,11 +50,7 @@ export function applyButton(program: Program): { label: string; href: string } {
 
 /** An Affitor marketplace link with the apply UTM, which the YAML never stores. */
 function affitorHref(url: string, slug: string): string {
-  const href = new URL(url)
-  href.searchParams.set("utm_source", "openaffiliate")
-  href.searchParams.set("utm_medium", "apply")
-  href.searchParams.set("utm_campaign", slug)
-  return href.toString()
+  return affitorUrl("apply", slug, url)
 }
 
 /**

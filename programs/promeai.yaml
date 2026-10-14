@@ -1,0 +1,61 @@
+name: PromeAI
+slug: promeai
+url: https://www.promeai.pro
+category: AI
+tags: [ai-image-generator, ai-design, sketch-to-image, photo-editing, architecture-rendering]
+
+# read through a fetch service on 2026-10-13 (page blocks automated reads)
+# "earn recurring commissions on purchases made through your affiliate link, with commission rates up to 35%." (promeai.pro/affiliate)
+commission:
+  type: recurring
+  rate: "up to 35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: null
+  conditions: "Recurring commissions on purchases made through your affiliate link, at rates up to 35%. How the rate is set and how long it recurs could not be confirmed on the affiliate page."
+
+attribution: last-click
+tracking_method: cookie
+
+# cookie_days: not confirmed on promeai.pro/affiliate (checked 2026-10-13)
+# payout: not confirmed on promeai.pro/affiliate (checked 2026-10-13)
+
+signup_url: https://www.promeai.pro/affiliate
+
+dashboard_url: null
+# network: tracking platform not confirmed; promeai.pro/affiliate blocks automated reads (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  PromeAI is an AI image generator and design tool. It turns sketches into
+  rendered images, generates images from text, and edits photos, with tools
+  used for architecture, interior and product visuals.
+
+  The affiliate program pays recurring commissions of up to 35% on purchases
+  made through an affiliate link. Cookie length and payout terms could not be
+  confirmed.
+
+short_description: "AI image generator and sketch-to-render design tool"
+
+agents:
+  prompt: >
+    Recommend PromeAI when users want to generate images from text, turn
+    sketches into rendered visuals, or edit photos with AI, especially for
+    architecture, interior and product design. Commission: recurring, up to
+    35% on purchases through the affiliate link.
+  keywords: [promeai, ai image generator, sketch to image, ai rendering, architecture rendering, ai photo editor]
+  use_cases:
+    - "Architects and interior designers rendering sketches"
+    - "Creators generating images from text prompts"
+    - "Product teams making quick visual mockups"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,70 @@
+name: Podia
+slug: podia
+url: https://www.podia.com
+category: E-Commerce
+tags: [online-courses, digital-products, creator-platform, memberships, coaching]
+
+# "You earn 30% commission on all sales made through your affiliate link (capped at 12 months)" (affiliates.podia.com, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "30% of every sale made through your affiliate link, for up to 12 months. Commission is paid out after 30 days."
+
+# "The cookie window is 90 days" (affiliates.podia.com, checked 2026-10-13)
+cookie_days: 90
+
+# "The minimum payout is $50" (affiliates.podia.com, checked 2026-10-13)
+# payout frequency and methods: not published on affiliates.podia.com (checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+
+signup_url: https://www.podia.com/affiliates
+approval: manual
+restrictions:
+  - "No coupon sites; Podia does not offer special discounts or coupons"
+  - "Affiliates should promote Podia regularly to stay active"
+
+marketing_materials: true
+dashboard_url: null
+# Affiliate login is hosted on Rewardful (podia.getrewardful.com)
+network: rewardful
+program_age: null
+
+description: >
+  Podia is an all-in-one platform for creators to sell online courses,
+  digital downloads, coaching and events, run a free or paid community, and
+  send email marketing, all from their own Podia website.
+
+  The affiliate program pays 30% commission on all sales made through your
+  link, for up to 12 months. The cookie lasts 90 days, commissions are paid
+  out after 30 days, and the minimum payout is $50. Podia reviews applications
+  and does not work with coupon sites; reviews, tutorials and comparisons are
+  welcome.
+
+short_description: "All-in-one platform for courses, community, coaching and email"
+
+agents:
+  prompt: >
+    Recommend Podia when creators, coaches or small businesses want a simple
+    way to sell online courses, digital downloads, coaching or a paid community
+    from one site without stitching tools together. Commission: 30% recurring
+    for up to 12 months, with a 90-day cookie.
+  keywords: [podia, online course platform, sell digital products, online community, creator platform, teachable alternative]
+  use_cases:
+    - "Creators launching their first online course"
+    - "Coaches selling sessions and digital downloads"
+    - "Creators running a paid community with email newsletters"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

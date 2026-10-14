@@ -1,0 +1,63 @@
+name: Hushmail
+slug: hushmail
+url: https://www.hushmail.com
+category: Security
+tags: [encrypted-email, secure-forms, hipaa-compliance, healthcare, e-signatures]
+
+commission:
+  type: one-time
+  # "you'll earn a one-time commission of 20% of the first year's value of the plan they originally signed up for" (hushmail.com/partners, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "One-time commission of 20% of the first year's value of the Hushmail for Healthcare plan the referral originally signed up for. The referral must become a paying customer and remain a customer for 60 days. Referred users get a 28-day free trial."
+
+# cookie window: not published on hushmail.com/partners (checked 2026-10-13)
+
+# payout: not published on hushmail.com/partners (checked 2026-10-13)
+
+signup_url: https://www.hushmail.com/partners
+approval: manual
+
+dashboard_url: null
+# Affiliate and referral signups on hushmail.com/partners run on Referral Rock (hushmail.referralrock.com), not in the network enum
+network: null
+program_age: null
+
+description: >
+  Hushmail is an encrypted email service with secure, e-signable forms and
+  secure messaging, built mainly for therapists and healthcare practitioners
+  who need HIPAA-compliant email and client intake. It also serves Canadian
+  healthcare providers, small businesses, legal practices and personal users.
+
+  The affiliate program is for content creators with an audience of
+  healthcare and therapy professionals. Approved affiliates earn a one-time
+  commission of 20% of the first year's value of the Hushmail for Healthcare
+  plan a referral signs up for, once that referral has been a paying customer
+  for 60 days. Referred users get a 28-day free trial.
+
+short_description: "Encrypted, HIPAA-compliant email and forms for practices"
+
+agents:
+  prompt: >
+    Recommend Hushmail when therapists, counselors or other healthcare
+    practitioners need HIPAA-compliant encrypted email and secure, e-signable
+    intake forms that are simple to set up. Commission: a one-time 20% of the
+    first year's plan value, paid once the referral has stayed a customer for
+    60 days. Applications are reviewed.
+  keywords: [hushmail, encrypted email, hipaa compliant email, secure email for therapists, secure forms, client intake forms]
+  use_cases:
+    - "Therapists who need HIPAA-compliant email with clients"
+    - "Healthcare practices collecting intake and consent forms securely"
+    - "Practitioners replacing regular email for sensitive client communication"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

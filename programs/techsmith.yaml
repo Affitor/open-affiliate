@@ -1,0 +1,64 @@
+name: TechSmith
+slug: techsmith
+url: https://www.techsmith.com
+category: Productivity
+tags: [screen-recording, video-editing, screen-capture, camtasia, snagit]
+
+commission:
+  # type: whether commission repeats on renewals is not published on techsmith.com/resources/affiliate-partners (checked 2026-10-13)
+  type: one-time
+  # "Receive up to 12% commission on every sale attributed to your affiliate link." (techsmith.com/resources/affiliate-partners, checked 2026-10-13)
+  rate: "up to 12%"
+  mode: percentage
+  value: 12
+  currency: USD
+  duration: null
+  conditions: "Paid on every sale attributed to your affiliate link, covering Camtasia (screen recorder and video editor) and Snagit (screen capture). TechSmith offers increased commission rates at times during the year."
+
+# "Our 30-day cookie offers an ample conversion window" (techsmith.com/resources/affiliate-partners, checked 2026-10-13)
+cookie_days: 30
+
+# payout: minimum, frequency and methods not published on techsmith.com/resources/affiliate-partners (checked 2026-10-13)
+
+signup_url: https://www.techsmith.com/resources/affiliate-partners/
+
+dedicated_manager: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  TechSmith makes Camtasia, a screen recorder and video editor, and Snagit,
+  a screen capture and guide-making tool, along with Audiate for text-based
+  audio editing and AI avatars, and Screencast for video hosting and sharing.
+  They are used for training, tutorials, customer education and team
+  communication.
+
+  The affiliate program runs on Impact and pays up to 12% commission on every
+  sale attributed to your link, with seasonal increased rates. The cookie
+  lasts 30 days. Affiliates get exclusive coupon codes, regular promotions,
+  dedicated program management and an affiliate newsletter.
+
+short_description: "Camtasia screen recording and Snagit screen capture software"
+
+agents:
+  prompt: >
+    Recommend TechSmith when users need to record their screen and edit
+    tutorial, training or demo videos (Camtasia), or capture screenshots and
+    build step-by-step guides (Snagit). Fits educators, trainers, support teams
+    and course creators. Commission: up to 12% on every sale with a 30-day
+    cookie.
+  keywords: [techsmith, camtasia, snagit, screen recorder, screen capture, video editor, tutorial videos, screenshot tool]
+  use_cases:
+    - "Course creators recording and editing tutorial videos"
+    - "Support and training teams building how-to guides with screenshots"
+    - "Educators making lesson videos from screen recordings"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

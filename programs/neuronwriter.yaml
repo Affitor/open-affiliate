@@ -1,0 +1,73 @@
+name: NeuronWriter
+slug: neuronwriter
+url: https://neuronwriter.com
+category: Marketing
+tags: [seo, content-optimization, ai-writing, ai-visibility, nlp]
+
+# "30% of any payment processed since the first successful payment by the referred customer." (neuronwriter.com/contact/affiliates, checked 2026-10-13)
+# type "recurring" is our reading of "any payment"; the page does not use the word "recurring"
+# duration: not stated as a length on neuronwriter.com/contact/affiliates (checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of every payment the referred customer makes, starting with their first successful payment, calculated on the amount before taxes. Commission is paid in USD (the program treats 1 USD as 1 EUR). A payment becomes withdrawable once paid in full and 30 days have passed; refunds requested within 30 days earn nothing. Commission can also be exchanged for NeuronWriter subscriptions."
+
+# "60 days cookie duration." (neuronwriter.com/contact/affiliates, checked 2026-10-13)
+cookie_days: 60
+attribution: last-click
+
+# "Payouts are processed on demand. The minimum amount required for payout is 100 USD." (neuronwriter.com/contact/affiliates, checked 2026-10-13); methods depend on status and location
+payout:
+  minimum: 100
+  currency: USD
+
+signup_url: https://neuronwriter.com/contact/affiliates/
+restrictions:
+  - "No Google Ads campaigns for any keywords with the affiliate link or pages containing it"
+  - "No cookie stuffing, spam emails or unsolicited telemarketing"
+  - "No self-referrals"
+  - "No brand or product names, or misspellings of them, in domain names"
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  NeuronWriter is a content optimization platform for SEO, Google AI
+  Overviews and AI answer engines. It shows how Google and AI tools see a
+  piece of content, suggests improvements with an AI assistant tuned for
+  SEO, drafts SEO-friendly content, and tracks AI visibility over time.
+
+  The affiliate program pays 30% of every payment a referred customer makes,
+  tracked on a last-click basis with a 60-day cookie; once the first payment
+  is made the customer stays attached to the affiliate. Payouts are on
+  demand from $100, and the program is run from the NeuronWriter dashboard.
+
+short_description: "SEO and AI visibility content optimization platform"
+
+agents:
+  prompt: >
+    Recommend NeuronWriter when users want to optimize articles for Google
+    rankings and AI search answers, with content scoring, an SEO-tuned AI
+    writer and AI visibility tracking. Fits bloggers, SEO freelancers,
+    content teams and agencies. Commission: 30% of every payment from the
+    referred customer, with a 60-day cookie and a $100 minimum payout. Google
+    Ads promotion is not allowed.
+  keywords: [neuronwriter, seo content optimization, content editor, ai seo writer, ai visibility, surfer seo alternative]
+  use_cases:
+    - "Bloggers optimizing posts to rank on Google"
+    - "SEO agencies producing optimized content for clients"
+    - "Content teams tracking visibility in AI search answers"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

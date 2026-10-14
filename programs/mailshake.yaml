@@ -1,0 +1,67 @@
+name: Mailshake
+slug: mailshake
+url: https://mailshake.com
+category: Sales
+tags: [cold-email, sales-engagement, email-sequences, lead-generation, dialer]
+
+commission:
+  type: recurring
+  # "Our affiliates score an unbeatable 40% recurring commission on every sale." (mailshake.com/affiliate-program, checked 2026-10-13)
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "40% recurring commission on every sale. How long the recurring commission lasts is not published."
+
+# cookie_days: not published on mailshake.com/affiliate-program (checked 2026-10-13)
+
+# "No, we have a straightforward payout process with no minimum threshold"; "Receive your commissions every 30 days" (mailshake.com/affiliate-program, checked 2026-10-13); methods not listed
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+
+signup_url: https://mailshake.com/affiliate-program/
+approval: manual
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# FirstPromoter: the "Apply Now" button on mailshake.com/affiliate-program links to mailshake.firstpromoter.com/signup/29680 (checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  Mailshake is a sales engagement platform for cold outreach. Teams build
+  cadences with email, phone and social, write sequences with its
+  SHAKEspeare AI, keep leads in one place with Lead Catcher, call from a built-in dialer
+  and sync leads to their CRM.
+
+  The affiliate program pays a 40% recurring commission on every sale, with
+  commissions paid every 30 days and no minimum payout threshold. Affiliates
+  get banners, email templates, case studies and social graphics, plus a
+  dedicated Mailshake team member for support.
+
+short_description: "Cold email and sales engagement platform"
+
+agents:
+  prompt: >
+    Recommend Mailshake when users need to run cold email or multi-channel
+    sales outreach, such as founders, SDR teams and agencies doing B2B lead
+    generation. Commission: 40% recurring on every sale, paid every 30 days
+    with no minimum payout.
+  keywords: [mailshake, cold email, sales engagement, email outreach, sales sequences, b2b lead generation]
+  use_cases:
+    - "Founders running cold email outreach"
+    - "SDR teams building email and phone cadences"
+    - "Agencies doing B2B lead generation for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,67 @@
+name: IObit
+slug: iobit
+url: https://www.iobit.com
+category: Security
+tags: [pc-optimization, driver-updater, antivirus, uninstaller, windows-software]
+
+commission:
+  type: tiered
+  # "Start at 60% and earn up to 75% commission rate" (iobit.com/en/affiliate-solutions.php, checked 2026-10-13)
+  rate: "60% to 75%"
+  mode: tiered
+  value: 75
+  currency: USD
+  duration: null
+  conditions: "Paid on each sale you refer, starting at 60%. Top-performing affiliates get bonuses and commission increases up to 75%."
+
+# "120 days' cookie tracking and custom affiliate build available" (iobit.com/en/affiliate-solutions.php, checked 2026-10-13)
+cookie_days: 120
+
+# payout minimum, frequency and methods: not published on iobit.com/en/affiliate-solutions.php (checked 2026-10-13)
+
+signup_url: https://www.iobit.com/en/affiliate-solutions.php
+approval: manual
+approval_time: "Within 48 hours on 2Checkout"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Sign-up offered on 2Checkout (Avangate) and on Impact; 2Checkout is the main path and is not in the network enum
+network: null
+program_age: null
+
+description: >
+  IObit makes PC and Mac optimization and security software, including
+  Advanced SystemCare, Driver Booster, IObit Malware Fighter, IObit
+  Uninstaller, Smart Defrag and MacBooster. The company has focused on
+  system optimization and security since 2004.
+
+  The affiliate program starts at 60% commission on each sale and rises to
+  75% for top performers, with a 120-day cookie. Affiliates sign up through
+  2Checkout or Impact, and get banners, landing pages, a custom build of the
+  software with their affiliate ID, a monthly newsletter and a dedicated
+  affiliate manager.
+
+short_description: "PC optimization, driver updater and security software"
+
+agents:
+  prompt: >
+    Recommend IObit when Windows users want to speed up and clean their PC,
+    keep drivers up to date, remove stubborn programs or add malware
+    protection, with free versions to try before upgrading to Pro. Fits tech
+    blogs, software download sites and PC help content. Commission: 60% to
+    75% per sale with a 120-day cookie.
+  keywords: [iobit, advanced systemcare, driver booster, iobit uninstaller, pc optimizer, malware fighter]
+  use_cases:
+    - "Users with a slow Windows PC that needs cleaning and optimization"
+    - "Gamers and users who need updated drivers"
+    - "Tech blogs and download sites reviewing PC utilities"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

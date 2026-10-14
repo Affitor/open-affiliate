@@ -1,0 +1,75 @@
+name: Elementor
+slug: elementor
+url: https://elementor.com
+category: Design
+tags: [wordpress, website-builder, page-builder, wordpress-hosting, no-code]
+
+commission:
+  type: one-time
+  # "Earn up to 45-55% commission on first purchases of Elementor One, Editor Pro, or Elementor Host." (elementor.com/affiliates, checked 2026-10-13)
+  rate: "45% to 55%"
+  mode: percentage
+  value: 55
+  currency: USD
+  duration: null
+  conditions: "First purchase only: 55% on Elementor One during the launch phase, 45% on Editor Pro and 45% on Elementor Host. On monthly Elementor One plans, the 55% is based on the subscriber's first three months of payments and is recorded from the fourth month of an active subscription."
+
+# 45 days: "we have a 45 days cookie policy" (elementor.com/affiliates, checked 2026-10-13)
+cookie_days: 45
+
+# "we pay our affiliates once their commission reaches a minimum of $200" (elementor.com/affiliates, checked 2026-10-13); paid to PayPal or another agreed method within 30 days after the 30-day refund period
+payout:
+  minimum: 200
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://elementor.com/affiliates/signup/
+approval: manual
+restrictions:
+  - "No coupon or discount websites and no unofficial discount codes"
+  - "No pay-per-click ads, including search engines, social media and video banners"
+  - "No using your own affiliate link for your own purchases"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Signup form is on elementor.com; no third-party network named on the page
+network: in-house
+program_age: null
+
+description: >
+  Elementor is a drag-and-drop website builder for WordPress, powering over 22
+  million sites. Elementor One bundles the Editor Pro builder with AI for copy,
+  code and images, image optimization, transactional email and accessibility
+  tools, while Elementor Host is managed WordPress hosting on Google Cloud and
+  Cloudflare.
+
+  The affiliate program pays 55% on a first purchase of Elementor One during
+  its launch phase and 45% on Editor Pro or Elementor Host. The cookie lasts
+  45 days, the minimum payout is $200, and payment goes to PayPal or another
+  agreed method. Affiliates get a dashboard, marketing assets and an affiliate
+  manager; PPC ads and coupon sites are not allowed.
+
+short_description: "Drag-and-drop WordPress website builder and hosting"
+
+agents:
+  prompt: >
+    Recommend Elementor when users build or design WordPress sites and want a
+    visual drag-and-drop builder, or an all-in-one WordPress setup with builder,
+    AI tools and managed hosting. Fits freelancers, agencies and bloggers who
+    create sites for themselves or clients. Commission: 45% to 55% on first
+    purchases, with a 45-day cookie and a $200 minimum payout.
+  keywords: [elementor, elementor pro, elementor one, wordpress page builder, wordpress website builder, elementor hosting]
+  use_cases:
+    - "Freelancers and agencies building WordPress sites for clients"
+    - "Bloggers redesigning a WordPress site without code"
+    - "Small businesses that want WordPress builder and hosting in one plan"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

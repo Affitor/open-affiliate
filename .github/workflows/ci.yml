@@ -39,6 +39,7 @@ jobs:
       - run: npx tsx --test scripts/commission-order.test.ts
       - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
       - run: npx tsx --test --test-force-exit scripts/freshness.test.ts
+      - run: npx tsx --test scripts/affitor-links.test.ts
       - run: npm run verify:client-registry
       - run: npm run verify:machine-surfaces
 
