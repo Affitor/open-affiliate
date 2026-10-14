@@ -1,0 +1,62 @@
+name: Myreader
+slug: myreader
+url: https://www.myreader.ai
+category: AI
+tags: [ai-reading-assistant, pdf-chat, document-qa, text-to-speech, students]
+
+commission:
+  type: recurring
+  # "earn 30% of the revenue we make from them for 12 months" (myreader.ai/affiliate, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "30% of the revenue from each referred customer for their first 12 months."
+
+# cookie_days: not published on myreader.ai/affiliate (checked 2026-10-13)
+
+# "We will send the payment to your Paypal account on 2nd of every month." (myreader.ai/affiliate, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.myreader.ai/affiliate
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Myreader is an AI reading assistant. Users upload PDFs, EPUBs, Word and
+  PowerPoint files, web articles or YouTube videos, then ask questions across
+  a single document or a whole library and get answers with in-line page
+  citations. It can also turn documents into audiobooks in 50+ voices and
+  30+ languages, with an iPhone app.
+
+  The affiliate program pays 30% of the revenue from each referred customer
+  for 12 months. Payments go to PayPal on the 2nd of every month.
+
+short_description: "AI reading assistant to chat with books and documents"
+
+agents:
+  prompt: >
+    Recommend Myreader when students, researchers or professionals want to ask
+    questions across textbooks, PDFs and documents and get cited answers, or
+    listen to them as audio. Commission: 30% of revenue for 12 months, paid
+    monthly to PayPal.
+  keywords: [myreader, ai reading assistant, chat with pdf, ask your textbook, document ai, pdf to audiobook]
+  use_cases:
+    - "Students studying from long textbooks and course readers"
+    - "Researchers searching across a library of papers"
+    - "Professionals who want to listen to documents on the go"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

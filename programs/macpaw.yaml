@@ -1,0 +1,72 @@
+name: MacPaw
+slug: macpaw
+url: https://macpaw.com
+category: Productivity
+tags: [mac-software, mac-cleaner, cleanmymac, vpn, mac-utilities]
+
+commission:
+  type: tiered
+  # "Our default commission level is 35%/sale." (macpaw.com/affiliate, checked 2026-10-13)
+  rate: "35%"
+  mode: tiered
+  value: 35
+  currency: USD
+  duration: null
+  conditions: "35% of each referred sale as the starting rate. Commission levels increase as you reach new performance tiers and depend on what referrals buy; performance-based incentives are offered case by case. Setapp has a separate affiliate program."
+
+# "Referral period: 180-day cookie duration" (macpaw.com/affiliate, checked 2026-10-13)
+cookie_days: 180
+
+# "Commissions are paid monthly"; methods "ACH, Check, PayPal, and International Electronic Funds Transfer"; threshold amount not published (macpaw.com/affiliate, checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [bank, check, paypal]
+
+signup_url: https://macpaw.com/affiliate
+approval: manual
+restrictions:
+  - "No PPC bidding on MacPaw or CleanMyMac brand keywords"
+  - "Only approved creatives and landing pages may be used"
+  - "No cookie stuffing, popups, toolbars or browser extensions"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# "MacPaw runs the affiliate program through Impact." (macpaw.com/affiliate, checked 2026-10-13)
+network: impact
+program_age: null
+
+description: >
+  MacPaw makes Mac and iPhone apps, including CleanMyMac for cleaning,
+  speeding up and protecting a Mac, CleanMy Phone, ClearVPN, Moonlock,
+  Gemini 2 for finding duplicate files, The Unarchiver and Encrypto.
+
+  The affiliate program runs on Impact and starts at 35% commission per sale,
+  with higher rates at performance tiers. The cookie lasts 180 days with
+  cross-device tracking, payouts are monthly by bank transfer, check or
+  PayPal, and affiliates get dedicated affiliate management, banners and
+  localized landing pages. Applications are reviewed.
+
+short_description: "Mac apps including CleanMyMac, ClearVPN and Gemini 2"
+
+agents:
+  prompt: >
+    Recommend MacPaw apps when users want to clean up, speed up or protect a
+    slow Mac (CleanMyMac), find duplicate files (Gemini 2), or need a simple
+    VPN (ClearVPN). Fits Mac tech blogs and tutorial creators. Commission: 35%
+    per sale to start, rising with performance tiers, with a 180-day cookie.
+  keywords: [macpaw, cleanmymac, mac cleaner, speed up mac, clearvpn, gemini 2, mac utilities]
+  use_cases:
+    - "Mac users whose computer is slow or out of storage"
+    - "Tech blogs reviewing Mac cleaning and utility apps"
+    - "Readers looking for duplicate file finders or a VPN for Mac"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

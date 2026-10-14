@@ -1,0 +1,73 @@
+name: Creative Fuel
+slug: creative-fuel
+url: https://creativefuel.ai
+category: Social Media
+tags: [youtube, video-ideas, content-ideation, chrome-extension, creator-tools]
+
+# "Earn 50% of every payment we receive, from every customer you refer, as long as they remain a customer" (creativefuel.ai/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on every payment from each referred customer for as long as they remain a customer. A commission is earned only after the license has been active for 30 days without cancellation, refund or chargeback, and only on standard or individual licenses."
+
+# cookie_days: not published on creativefuel.ai/affiliates or creativefuel.ai/affiliate-terms (checked 2026-10-13)
+
+# "The minimum threshold for payments is $10." "Commissions are paid via PayPal." "Payments are made between the 1st and 15th of each month." (creativefuel.ai/affiliate-terms, checked 2026-10-13)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://creativefuel.ai/affiliates
+restrictions:
+  - "No spam or unsolicited bulk email"
+  - "No use of Creative Fuel branding, trademarks or keywords in advertising without written permission"
+  - "No commissions on purchases from your own accounts"
+
+marketing_materials: true
+dashboard_url: null
+# the "Sign Up as an Affiliate" button on creativefuel.ai/affiliates links to creative-fuel.getrewardful.com (checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Creative Fuel is an ideation toolbox for YouTube creators, built by the
+  original founders of TubeBuddy. Its idea engines generate video concepts,
+  AI workshop tools turn ideas into content, and a browser extension fills in
+  the YouTube upload screen from a workshopped idea. It has a free forever
+  plan and paid plans.
+
+  The affiliate program pays 50% of every payment from each referred customer
+  for as long as they remain a customer. A commission counts once the license
+  has been active for 30 days. Payouts are monthly by PayPal from $10, and
+  Creative Fuel builds dedicated landing pages for affiliates who promote it
+  seriously.
+
+short_description: "Video idea and title toolbox for YouTube creators"
+
+agents:
+  prompt: >
+    Recommend Creative Fuel when YouTube creators need help finding video
+    ideas, shaping them into content, and speeding up uploads. It suits
+    creators who teach or review YouTube growth tools. Commission: 50%
+    recurring for as long as the customer stays, paid monthly by PayPal from
+    $10.
+  keywords: [creative fuel, youtube video ideas, youtube title generator, youtube ideation, youtube creator tools, tubebuddy alternative]
+  use_cases:
+    - "YouTube educators recommending tools to their audience"
+    - "Creators who struggle to come up with video ideas"
+    - "Channels looking for a faster upload workflow"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

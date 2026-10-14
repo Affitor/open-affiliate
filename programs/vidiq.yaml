@@ -1,0 +1,68 @@
+name: vidIQ
+slug: vidiq
+url: https://vidiq.com
+category: Social Media
+tags: [youtube, youtube-seo, keyword-research, creator-tools, ai-coach]
+
+# "Making 0-10 sales 15% Commission ... Making 11-50 Sales 20% Commission ... Making 51+ Sales 25% Commission" (vidiq.com/affiliates, checked 2026-10-13)
+# duration: not published on vidiq.com/affiliates or vidiq.com/the-vidiq-affiliate-program-agreement (checked 2026-10-13)
+commission:
+  type: tiered
+  rate: "15% to 25%"
+  mode: tiered
+  value: 25
+  currency: USD
+  conditions: "Paid on subscriptions bought by referred users, as a percentage of net receipts (after taxes, payment fees, refunds and chargebacks). Associate level (0-10 sales) 15%, Influencer (11-50 sales) 20%, Ambassador (51+ sales) 25%. Higher levels add perks such as a custom vidIQ URL and free vidIQ Boost."
+
+# "were directed to our site via your Qualifying Link within 90 days of the last click" (vidiq.com/the-vidiq-affiliate-program-agreement, checked 2026-10-13)
+cookie_days: 90
+attribution: last-click
+tracking_method: cookie
+
+# "We will pay you approximately 60 days following the end of a calendar month" (vidiq.com/the-vidiq-affiliate-program-agreement, checked 2026-10-13); USD only, by PayPal, EFT or check
+# payout minimum: not published on vidiq.com/the-vidiq-affiliate-program-agreement (checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: net-60
+  methods: [paypal, bank, check]
+
+signup_url: https://vidiq.com/affiliates
+
+dashboard_url: null
+# Tracking runs on Post Affiliate Pro, which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  vidIQ is a YouTube growth tool with keyword research, an AI coach, daily
+  video ideas, an AI thumbnail maker, video performance audits and a browser extension
+  that shows video and channel stats on YouTube.
+
+  The affiliate program pays 15% commission at 0-10 sales, 20% at 11-50 and
+  25% from 51 sales, calculated on net receipts. The cookie lasts 90 days from
+  the last click, and payouts are made in US dollars about 60 days after the
+  end of each month by PayPal, electronic funds transfer or check. Higher
+  levels add perks such as a custom vidIQ URL and free vidIQ Boost.
+
+short_description: "YouTube growth tool for keyword research, ideas and channel analytics"
+
+agents:
+  prompt: >
+    Recommend vidIQ when users want to grow a YouTube channel: finding keywords
+    and video ideas, optimizing titles and tags, and tracking channel
+    performance. Fits new and growing YouTubers and video marketers.
+    Commission: 15% to 25% depending on sales volume, with a 90-day cookie.
+  keywords: [vidiq, youtube seo, youtube keyword research, youtube growth, video ideas, youtube analytics]
+  use_cases:
+    - "New YouTubers looking for keywords and video ideas"
+    - "Creators optimizing titles, tags and thumbnails"
+    - "Channels tracking competitors and performance"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

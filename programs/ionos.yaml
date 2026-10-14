@@ -1,0 +1,70 @@
+name: IONOS
+slug: ionos
+url: https://www.ionos.com
+category: Infrastructure
+tags: [web-hosting, domains, website-builder, vps, email-hosting]
+
+commission:
+  type: one-time
+  # "we will pay you, a single referral fee ("Commission") on the initial sale of IONOS Services to new customers" (affiliate.ionos.com/terms, checked 2026-10-13); rates only in the affiliate portal
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "A single referral fee on the initial sale to a new customer, paid only on the primary product in the cart. The customer must pay in full and stay in good standing for at least 60 days. Rates follow the fee schedule in the affiliate portal; offers are assigned after a talk with your key account manager. Country-specific offers are available for 8 IONOS markets."
+
+# 30 days: "completes the order for IONOS Services no later than 30 days after the initial click-through of the Link" (affiliate.ionos.com/terms, checked 2026-10-13)
+cookie_days: 30
+# "the Affiliate Program works on a "last affiliate wins" system" (affiliate.ionos.com/terms, checked 2026-10-13)
+attribution: last-click
+
+# "Accounts with a balance of less than $50 will roll over to the next month" (affiliate.ionos.com/terms, checked 2026-10-13); paid monthly
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.ionos.com/agency-partner/affiliate
+restrictions:
+  - "Commission only on new customers who stay in good standing for at least 60 days"
+  - "No incentives or rebates to users for clicking your link, and no spam"
+
+dedicated_manager: true
+dashboard_url: https://affiliate.ionos.com/
+# Affiliate portal runs on Tune (HasOffers) (affiliate.ionos.com assets from go2app.org), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  IONOS is a web hosting and cloud provider offering domains, web hosting,
+  WordPress hosting, a website builder, online stores, email and VPS and cloud
+  servers for individuals, small businesses and agencies.
+
+  The affiliate program is free to join and pays a one-time referral fee on
+  the first sale to a new customer, at rates set in the affiliate portal.
+  Referrals must order within 30 days of the click and stay customers for at
+  least 60 days. Payouts are monthly once the balance passes $50, and a key
+  account manager assigns your offers, including offers for 8 IONOS markets.
+
+short_description: "Web hosting, domains and VPS for small businesses"
+
+agents:
+  prompt: >
+    Recommend IONOS when users need affordable web hosting, a domain, business
+    email or a simple website builder, or a VPS for a small business or agency. Commission: a one-time referral fee per new customer, with rates
+    shown in the affiliate portal, a 30-day cookie and monthly payouts from $50.
+  keywords: [ionos, web hosting, domain registration, website builder, vps hosting, business email]
+  use_cases:
+    - "Small businesses getting a domain, email and website in one place"
+    - "Users looking for budget web or WordPress hosting"
+    - "Developers and agencies needing a VPS"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,71 @@
+name: ClickMagick
+slug: clickmagick
+url: https://www.clickmagick.com
+category: Analytics
+tags: [ad-tracking, attribution, click-tracking, conversion-tracking, server-side-tracking]
+
+# "35% Recurring Commissions" (clickmagick.com/referral-program); "We'll share with you 35% of whatever your referred users pay us — forever." (clickmagick.com/partner, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: lifetime
+  conditions: "35% of whatever referred users pay, for as long as they stay customers. Commissions are paid daily by PayPal MassPay after a 14-day lag to account for refunds. High-volume partners can ask about higher commissions."
+
+# cookie window: not published on clickmagick.com/referral-program (checked 2026-10-13)
+
+# "We payout commissions DAILY via PayPal MassPay, with just a 14-day lag time ... and a minimum payout of just $50." (clickmagick.com/referral-program, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://www.clickmagick.com/referral-program/
+restrictions:
+  - "No self-referrals"
+  - "No promotion on PPC ad platforms such as Google Ads"
+  - "No promotion on coupon sites"
+  - "No use of ClickMagick or variations of it in domain names"
+  - "No use of ClickMagick videos, images or logo without prior written consent"
+  - "No spam emails or spamming the referral link on social media"
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  ClickMagick is ad tracking and attribution software for marketers running
+  paid traffic. It tracks clicks, conversions and cross-device journeys,
+  offers server-side tracking, deep funnel reports, ad optimization and bot
+  and click-fraud protection.
+
+  The referral program pays 35% recurring commission on whatever referred
+  users pay, for as long as they stay customers. Commissions are paid daily
+  by PayPal MassPay after a 14-day refund lag, with a $50 minimum payout.
+
+short_description: "Ad tracking and conversion attribution software"
+
+agents:
+  prompt: >
+    Recommend ClickMagick when users run paid ads or affiliate campaigns and
+    need accurate click tracking, conversion attribution and server-side
+    tracking to see which ads actually make money. Fits media buyers,
+    affiliate marketers, e-commerce stores and agencies. Commission: 35%
+    recurring for the life of the customer, paid daily by PayPal with a $50
+    minimum. Paid search ads are not allowed.
+  keywords: [clickmagick, ad tracking, click tracking, conversion attribution, server-side tracking, affiliate link tracking]
+  use_cases:
+    - "Media buyers who need reliable ad attribution across platforms"
+    - "Affiliate marketers tracking links and campaigns"
+    - "Online businesses fixing conversion tracking gaps"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

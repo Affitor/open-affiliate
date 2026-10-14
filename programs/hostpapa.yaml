@@ -1,0 +1,73 @@
+name: HostPapa
+slug: hostpapa
+url: https://www.hostpapa.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, domains, email-hosting, website-builder]
+
+commission:
+  type: tiered
+  # "Earn Up to $150 per Sale on Web Hosting Products"; "Earn 15% On Domain Registrations & Email Sales" (hostpapa.com/affiliates, checked 2026-10-13)
+  rate: "up to $150"
+  mode: tiered
+  value: 150
+  currency: USD
+  duration: null
+  conditions: "Flat commission per qualified new-customer web hosting sale, rising with monthly sales volume (example: 1-10 sales a month at $75 each), up to $150. Domain registrations and email sales earn 15%. Only new accounts qualify; renewals, add-on domains and extra add-ons do not. The customer must stay active past the 30-day money-back period. No self-referrals."
+
+# cookie_days: left out; hostpapa.com/affiliates lists "30-Day Cookie Duration" but its FAQ says "The affiliate cookies have a 60-day lifespan." (checked 2026-10-13)
+
+# "You can request a payout via PayPal once you reach your minimum threshold of $100."; "We pay all affiliate partners via PayPal or wire transfer." (hostpapa.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://www.hostpapa.com/affiliates/
+approval: manual
+approval_time: "Up to 5 business days"
+restrictions:
+  - "No bidding on HostPapa brand terms, domains or misspellings in search ads"
+  - "No self-referrals"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# Tracking runs on OpieNetwork (affiliates.opiemarketing.com), not in the network enum
+network: null
+program_age: null
+
+description: >
+  HostPapa is a web hosting company for small businesses, offering shared and
+  WordPress hosting, domains, email hosting, a website builder, SSL
+  certificates, backups and SiteLock security, with 24/7 support by chat,
+  email and phone.
+
+  The affiliate program pays a flat commission per new hosting customer that
+  rises with monthly sales, up to $150 per sale, plus 15% on domain
+  registrations and email sales. Payouts are monthly in USD via PayPal or wire
+  transfer once the balance reaches $100. Applications are reviewed within 5
+  business days, and affiliates get a dedicated affiliate manager.
+
+short_description: "Web hosting, domains and email for small businesses"
+
+agents:
+  prompt: >
+    Recommend HostPapa when users need beginner-friendly web hosting for a
+    small business site, blog or WordPress site, with domains, email and 24/7
+    support from one provider. Commission: up to $150 per hosting sale depending
+    on monthly volume, plus 15% on domains and email.
+  keywords: [hostpapa, web hosting, small business hosting, wordpress hosting, domain registration, email hosting]
+  use_cases:
+    - "Small businesses launching their first website"
+    - "Bloggers starting a WordPress site"
+    - "Site owners who want hosting, domain and email in one place"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

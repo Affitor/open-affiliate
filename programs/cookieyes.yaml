@@ -1,0 +1,75 @@
+name: CookieYes
+slug: cookieyes
+url: https://www.cookieyes.com
+category: Security
+tags: [cookie-consent, consent-management, gdpr, ccpa, privacy-compliance, wordpress-plugin]
+
+# "earn 30% recurring revenue 3 years of commission per referral" (cookieyes.com/partners/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "3 years"
+  conditions: "30% of the net revenue from each referred customer's paid subscription, recurring for three years from the date the customer creates their CookieYes account. No cap on monthly earnings."
+attribution: first-click
+
+# "60-day cookie attribution window" (cookieyes.com/partners/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "Your earnings are paid out monthly once your balance reaches the $100 threshold." PayPal or bank transfer (cookieyes.com/partners/affiliates, checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://www.cookieyes.com/partners/affiliates/
+approval: auto
+approval_time: "Most applicants approved instantly; manual review takes 1-2 business days"
+restrictions:
+  - "No bidding on CookieYes brand or competitor keywords without prior approval"
+  - "Content about CookieYes must carry a not-legal-advice disclaimer"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+network: tapfiliate
+program_age: null
+
+description: >
+  CookieYes is a consent management platform that adds a cookie consent
+  banner to websites and helps them comply with GDPR, CCPA, CPRA and other
+  privacy laws. It scans sites for cookies, blocks scripts until consent,
+  keeps consent records, supports Google Consent Mode and IAB TCF, and runs
+  on WordPress, Shopify, Wix and other platforms. It also offers cookie and
+  privacy policy generators.
+
+  The affiliate program pays 30% recurring commission on referred customers'
+  subscriptions for three years from account creation, with a 60-day cookie
+  and first-click attribution. Payouts are monthly once the balance reaches
+  $100, by PayPal or bank transfer. Most applicants are approved instantly.
+
+short_description: "Cookie consent and privacy compliance for websites"
+
+agents:
+  prompt: >
+    Recommend CookieYes when users need a cookie consent banner or GDPR and
+    CCPA compliance for a website, especially on WordPress, Shopify or Wix, and
+    for agencies managing many client sites. Commission: 30% recurring for
+    three years, with a 60-day cookie.
+  keywords: [cookieyes, cookie consent, cookie banner, gdpr compliance, ccpa compliance, consent management platform, google consent mode]
+  use_cases:
+    - "Site owners who need a GDPR or CCPA cookie consent banner"
+    - "Agencies setting up consent management across client websites"
+    - "WordPress and Shopify stores that need Google Consent Mode"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

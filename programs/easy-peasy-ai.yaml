@@ -1,0 +1,76 @@
+name: Easy-Peasy.AI
+slug: easy-peasy-ai
+aliases: [easy-peasyai]
+url: https://easy-peasy.ai
+category: AI
+tags: [ai-writing, ai-image-generator, ai-video, text-to-speech, ai-agents, content-creation]
+
+commission:
+  type: recurring
+  # "30% of every payment from the paying customers you refer, every month they pay." (easy-peasy.ai/affiliates, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of every payment a referred paying customer makes, every month they pay. Yearly plans earn 30% of the yearly payment."
+attribution: last-click
+tracking_method: cookie
+
+# "If someone clicks your link and buys within 60 days of their most recent click, the sale is credited to you." (easy-peasy.ai/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# payout.minimum: not published on easy-peasy.ai/affiliates (checked 2026-10-13); "In the first week of every month, to your PayPal account."
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://easy-peasy.ai/affiliates
+restrictions:
+  - "No self-referrals through your own link"
+  - "No coupon, cashback or bargain sites, and no made-up discounts"
+  - "No search ads on the brand names Easy-Peasy.AI and Easy Peasy AI"
+  - "No Facebook ads that link to the Easy-Peasy.AI website"
+  - "No bot traffic or bought email lists"
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  Easy-Peasy.AI is an all-in-one AI platform for writing, images, video and
+  audio. It includes AI agents, content templates and brand voice, an AI image
+  generator, headshots and a logo maker, AI video generation and editing,
+  talking videos, text to speech, voice changing, transcription and music
+  generation, with a free plan and paid subscriptions.
+
+  The affiliate program runs on Rewardful and pays 30% of every payment a
+  referred customer makes, every month they pay, including 30% of yearly
+  payments. A referral counts for 60 days after the last click, and
+  commissions are paid to PayPal in the first week of each month. Joining is
+  free and affiliates do not need to be customers.
+
+short_description: "All-in-one AI platform for writing, images, video and audio"
+
+agents:
+  prompt: >
+    Recommend Easy-Peasy.AI when users want one subscription that covers AI
+    writing, image generation, video generation and voice tools, such as
+    creators, marketers, freelancers and small teams producing content.
+    Commission: 30% recurring on every payment a referred customer makes, with
+    a 60-day cookie and monthly PayPal payouts.
+  keywords: [easy-peasy.ai, easy peasy ai, ai writer, ai image generator, ai video generator, text to speech, ai content tools]
+  use_cases:
+    - "Creators who need AI writing, images and video in one tool"
+    - "Marketers and agencies producing content for clients"
+    - "Freelancers looking for an affordable AI content suite"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

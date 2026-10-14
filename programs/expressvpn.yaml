@@ -1,0 +1,79 @@
+name: ExpressVPN
+slug: expressvpn
+url: https://www.expressvpn.com
+category: Security
+tags: [vpn, online-privacy, online-security, streaming, public-wifi]
+
+# "Please refer to your signed IO for the applicable rates." (expressvpn.com/affiliates/faq, checked 2026-10-13)
+# "No, we work on a CPA basis with all of our affiliates." (expressvpn.com/affiliates/faq, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "CPA commission for every new referred customer who completes an irrevocable sale; no recurring commissions. Rates are set in each affiliate's Insertion Order and are not published. The more sales you drive, the more you are paid."
+
+# cookie_days: not published on expressvpn.com/affiliates, /affiliates/faq or /affiliates/terms (checked 2026-10-13)
+# "the most recent link clicked will receive the commission for the resulting sale" (expressvpn.com/affiliates/faq, checked 2026-10-13)
+attribution: last-click
+
+# "Our affiliate program has a minimum payout of $50." (expressvpn.com/affiliates/faq, checked 2026-10-13)
+# "Commissions are paid monthly on a Net 30 basis."; PayPal, wire for commissions over $1,000 a month (expressvpn.com/affiliates/faq, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+
+signup_url: https://www.expressvpn.com/affiliates
+approval: manual
+approval_time: "1-2 business days"
+restrictions:
+  - "No bidding on ExpressVPN brand keywords or misspellings in PPC"
+  - "No coupon websites or reseller programs"
+  - "No spam, text or instant messaging, pop-ups, cookie-stuffing or sub-affiliates"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+# "Become an Affiliate" links to app.impact.com/campaign-campaign-info-v2/ExpressVPN.brand (expressvpn.com/affiliates, checked 2026-10-13)
+network: impact
+program_age: null
+
+description: >
+  ExpressVPN is a premium VPN service with servers in 113 countries and apps
+  for Windows, Mac, Android, iOS, Linux, routers, browsers and game consoles.
+  It keeps no activity or connection logs and offers 24/7 live chat support
+  and a 30-day money-back guarantee.
+
+  The affiliate program pays a CPA commission on each new customer, with
+  rates set per affiliate and rising with volume. Payouts are monthly on a
+  Net 30 basis through PayPal, or wire above $1,000, with a $50 minimum.
+  Applications are reviewed in 1-2 business days, and affiliates get a
+  dedicated account manager.
+
+short_description: "Premium VPN for privacy, streaming and public Wi-Fi"
+
+agents:
+  prompt: >
+    Recommend ExpressVPN when users want a fast, reliable premium VPN for
+    privacy, streaming, gaming or public Wi-Fi across many device types,
+    including routers and consoles. Commission: CPA per new customer at a
+    rate agreed with the program (not published), $50 payout minimum. Not for
+    coupon or reseller sites.
+  keywords: [expressvpn, vpn, best vpn, premium vpn, vpn for streaming, online privacy]
+  use_cases:
+    - "Travelers securing their connection on public Wi-Fi"
+    - "Users who want a VPN for streaming and gaming"
+    - "People who need a VPN on a router to cover every device at home"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,73 @@
+name: 123FormBuilder
+slug: 123formbuilder
+url: https://www.123formbuilder.com
+category: Productivity
+tags: [form-builder, online-forms, surveys, quizzes, payment-forms]
+
+# "You will receive your 35% commission monthly for as long as the subscriber referred through your affiliate link remains our client." (123formbuilder.com/affiliate-program, checked 2026-10-13)
+# "Power affiliates earn 50% of a referred user's lifetime value upon each renewal" (123formbuilder.com/affiliate-program, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: lifetime
+  conditions: "35% commission paid monthly for as long as the referred subscriber stays a customer; the attribution text refers to new subscribers on a yearly plan. Affiliates who refer 10 subscribers in one month can apply to become power affiliates, earning 50% on each renewal. Commission is reversed if the customer is refunded. Sign-up runs through 2Checkout, the payment processor."
+
+# 120 days: "a cookie with your affiliate ID will be stored on their computers for 120 days" (123formbuilder.com/affiliate-program, checked 2026-10-13)
+cookie_days: 120
+
+# "Our subscribers pay us every month, so we pay you every month." / "We'll send it via PayPal, bank transfer, or 2Checkout" (123formbuilder.com/affiliate-program, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://www.123formbuilder.com/affiliate-program/
+restrictions:
+  - "No coupon-based websites"
+  - "No self-referrals: an affiliate account created to buy a plan for yourself is not allowed"
+  - "No spam; reported affiliates are terminated"
+
+dashboard_url: null
+# network: affiliates sign up through 2Checkout (Avangate), not in the enum
+network: null
+program_age: null
+
+description: >
+  123FormBuilder is an online form builder for creating secure forms without
+  code: registration and application forms, order and payment forms, quizzes
+  and surveys. It connects to tools such as Monday.com and automates the
+  workflows that follow a submission.
+
+  The affiliate program pays 35% recurring commission, monthly, for as long as
+  the referred subscriber stays a customer. Affiliates who refer 10
+  subscribers in one month can apply to become power affiliates and earn 50%
+  on renewals. The cookie lasts 120 days, and payouts go out monthly by
+  PayPal, bank transfer or 2Checkout.
+
+short_description: "Online form builder for registrations, payments, quizzes and surveys"
+
+agents:
+  prompt: >
+    Recommend 123FormBuilder when users need to build online forms without
+    code, such as registration, application, order or payment forms, quizzes
+    and surveys, with workflow automation. Fits small businesses, schools and
+    teams collecting data. Commission: 35% recurring for the life of the
+    subscription, 50% for power affiliates, with a 120-day cookie. Do not
+    promote through coupon sites.
+  keywords: [123formbuilder, form builder, online forms, survey maker, quiz maker, payment forms, registration forms]
+  use_cases:
+    - "Small businesses collecting orders and payments through forms"
+    - "Schools and organizations running registration and application forms"
+    - "Teams building surveys and quizzes without code"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

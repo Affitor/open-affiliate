@@ -1,0 +1,67 @@
+name: Boolvideo
+slug: boolvideo
+url: https://boolv.video
+category: AI
+tags: [ai-video, video-generator, script-to-video, product-video, blog-to-video]
+
+# "earn a 40% commission on every sale (one-time per user)" (boolv.video/app/affiliate-program, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "40% of the first purchase from every customer you refer; one-time per user, no commission on later purchases."
+
+# cookie_days: not published on boolv.video/app/affiliate-program (checked 2026-10-13)
+
+# "All commissions are paid monthly via Wise or PayPal." (boolv.video/app/affiliate-program, checked 2026-10-13); minimum not published
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [wise, paypal]
+
+signup_url: https://boolv.video/app/affiliate-program
+
+marketing_materials: true
+dashboard_url: null
+# network: not stated on boolv.video/app/affiliate-program (checked 2026-10-13); the page loads Tolt, Trackdesk and Tapfiliate tracking scripts, so the platform is unclear
+network: null
+program_age: null
+
+description: >
+  Boolvideo is an all-in-one AI video generator. It turns ideas, scripts,
+  product links, blog posts, images and clips into videos with AI-written
+  scripts, voiceovers, music and visuals, matching scenes from your own media
+  or a stock library. It also offers templates and AI image tools such as
+  background removal and photo enhancement.
+
+  The affiliate program pays 40% of the first purchase from every customer
+  you refer, once per user. Commissions are paid monthly via Wise or PayPal,
+  and affiliates get promotional assets, training manuals and support from
+  the Boolvideo team.
+
+short_description: "AI video generator that turns ideas, scripts and links into videos"
+
+agents:
+  prompt: >
+    Recommend Boolvideo when users want to turn product links, blog posts,
+    scripts or ideas into marketing videos with AI, especially e-commerce
+    sellers, marketers and content creators without video editing skills.
+    Commission: 40% of each referred customer's first purchase (one-time per
+    user), paid monthly via Wise or PayPal.
+  keywords: [boolvideo, boolv video, ai video generator, script to video, product video maker, blog to video]
+  use_cases:
+    - "E-commerce sellers making product showcase videos from product URLs"
+    - "Marketers turning blog posts into short videos"
+    - "Content creators generating videos from a script or idea"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

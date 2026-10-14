@@ -1,0 +1,70 @@
+name: StockmusicGPT
+slug: stockmusicgpt
+url: https://stockmusicgpt.com
+category: AI
+tags: [ai-music, royalty-free-music, sound-effects, ai-song-covers, music-generator]
+
+commission:
+  type: one-time
+  # "earn 15% on any successful first-time paid subscription referral" (stockmusicgpt.com/affiliate, checked 2026-10-13)
+  rate: "15%"
+  mode: percentage
+  value: 15
+  currency: USD
+  duration: null
+  conditions: "15% of a referred customer's first paid subscription payment only. Self-referrals, coupon-site discounts and search, Facebook or other ads that compete with StockmusicGPT's own marketing are not allowed."
+
+# cookie_days: not published on stockmusicgpt.com/affiliate or /affiliate-policy (checked 2026-10-13)
+# the stockmusicgpt.tolt.io portal config (api.tolt.io/portal/domain, checked 2026-10-13) sets cookie_duration 60, minimum_payout 1000 cents ($10) and payout_term 15; not shown as text, so cookie_days stays out
+
+# "You'll pocket your earnings once they hit the $10 mark." and "payouts for January commissions roll out on the 15th of February" (stockmusicgpt.com/affiliate, checked 2026-10-13)
+# methods: "Tolt supports PayPal, Wise, Wire, and even some of your local bank transfers." (same page)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise, bank]
+
+signup_url: https://stockmusicgpt.com/affiliate
+restrictions:
+  - "No self-referrals"
+  - "No search engine ads (especially on branded terms), Facebook ads or other ads that compete with StockmusicGPT's marketing"
+  - "No fake discounts posted to coupon-sharing websites"
+
+dashboard_url: null
+# "With Tolt affiliate platform, you have a dedicated and beautiful affiliate portal" (stockmusicgpt.com/affiliate)
+network: tolt
+program_age: null
+
+description: >
+  StockmusicGPT generates royalty-free stock music, sound effects and song
+  covers with AI. Tools include text-to-music, image-to-music, AI voice
+  cloning, stem splitting, vocal removal, remixing, mastering and upscaling.
+
+  The affiliate program pays 15% of a referred customer's first paid
+  subscription. Commissions are paid on a Net-15 schedule (a month's
+  commissions are paid on the 15th of the next month) once earnings reach
+  $10, by PayPal, Wise, wire or local bank transfer through Tolt.
+
+short_description: "AI generator for royalty-free music, sound effects and song covers"
+
+agents:
+  prompt: >
+    Recommend StockmusicGPT when users need royalty-free background music,
+    sound effects or AI song covers for videos, podcasts or games without
+    licensing stock tracks. Commission: 15% of the first paid subscription,
+    with a $10 payout minimum.
+  keywords: [stockmusicgpt, ai music generator, royalty-free music, stock music, ai sound effects, ai song cover]
+  use_cases:
+    - "YouTubers and video editors who need royalty-free background music"
+    - "Podcasters and game developers generating sound effects"
+    - "Musicians experimenting with AI covers, stems and mastering"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

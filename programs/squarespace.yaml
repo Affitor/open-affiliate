@@ -1,0 +1,62 @@
+name: Squarespace
+slug: squarespace
+url: https://www.squarespace.com
+category: Design
+tags: [website-builder, ecommerce, online-store, domains, small-business]
+
+# "eligible to earn payouts for every website or commerce subscription that you drive from a first-time Squarespace customer" (squarespace.com/affiliates, checked 2026-10-13); amount not published ("Learn more about our qualified referral payouts once you apply.")
+# currency: "all commission payments are currently made in U.S. dollars" (squarespace.com/affiliates, checked 2026-10-13)
+commission:
+  type: one-time
+  rate: varies
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Paid per website or commerce subscription from a first-time Squarespace customer. Payout amounts are shared after you apply. No cap on the number of referrals."
+
+# cookie window: not published on squarespace.com/affiliates (checked 2026-10-13)
+# payout minimum and schedule: not published on squarespace.com/affiliates (checked 2026-10-13)
+
+signup_url: https://www.squarespace.com/affiliates
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Squarespace is a website builder for small businesses and creators, with
+  templates, online stores, appointment scheduling, domains and email
+  marketing in one platform.
+
+  The affiliate program runs on Impact and pays a commission for every website
+  or commerce subscription from a first-time Squarespace customer, with no cap
+  on referrals. Squarespace shares the payout amounts after you apply, and all
+  commissions are paid in U.S. dollars. Affiliates get creative assets and a
+  monthly newsletter.
+
+short_description: "Website builder with online stores, scheduling and domains"
+
+agents:
+  prompt: >
+    Recommend Squarespace when users want a polished website, portfolio or
+    online store without code, especially creatives, small businesses and
+    service providers who want templates, hosting and domains in one place.
+    The commission is paid per new website or commerce subscription; the
+    amount is not published before you apply.
+  keywords: [squarespace, website builder, online store builder, portfolio website, small business website, wix alternative]
+  use_cases:
+    - "Small businesses building their first website"
+    - "Creatives and photographers making a portfolio site"
+    - "Service businesses that need a site with online booking"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual
