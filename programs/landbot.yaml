@@ -8,26 +8,22 @@ tags:
   - customer-support
   - saas
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: null
-  conditions: 💸 Earn 20% of every sale (recurring for 2 years)!
-cookie_days: 30
+  duration: "up to 2 years"
+  conditions: "20% recurring commission on all plans, for up to 2 years. Paid monthly through PartnerStack to Stripe or PayPal."
+cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
   frequency: monthly
-  methods:
-    - bank
-    - paypal
+  methods: [stripe, paypal]
 signup_url: https://landbot.io/affiliates
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -49,10 +45,10 @@ agents:
   use_cases:
     - Teams looking for marketing solutions
     - Companies evaluating Landbot vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

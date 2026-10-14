@@ -2,11 +2,14 @@ import { readFileSync } from "node:fs"
 import { gzipSync } from "node:zlib"
 import {
   affiliateScore as fullAffiliateScore,
+  commissionRank as fullCommissionRank,
   categories as fullCategories,
   commissionDisplay as fullCommissionDisplay,
   commissionLabel as fullCommissionLabel,
-  programs as fullPrograms,
+  livePrograms as fullPrograms, // client lists only live programs
+  programs as allPrograms,
 } from "../src/lib/programs"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 import {
   affiliateScore as clientAffiliateScore,
   categories as clientCategories,
@@ -15,7 +18,13 @@ import {
   programs as clientPrograms,
 } from "../src/lib/client-programs"
 
-const CLIENT_REGISTRY_GZIP_BUDGET = 70_000
+// The projection grows with the registry, which is the point of the product, so
+// the shape is budgeted per program: a field that bloats every row trips it.
+// 13 Oct 2026: 68,992 gzip bytes for 926 programs (74.5 per program). The
+// ceiling caps total weight far below the ~205 KB full-registry chunk that
+// #104 took off the catalog pages.
+const CLIENT_REGISTRY_GZIP_PER_PROGRAM = 90
+const CLIENT_REGISTRY_GZIP_CEILING = 150_000
 const clientRegistryPath = new URL(
   "../src/lib/client-registry.json",
   import.meta.url
@@ -56,15 +65,15 @@ for (const fullProgram of fullPrograms) {
       currency: fullProgram.commission.currency,
       duration: fullProgram.commission.duration ?? undefined,
     },
-    cookieDays: fullProgram.cookieDays,
-    shortDescription: fullProgram.shortDescription,
+    // Unverified: no cookie window, in figures or prose (confirmed-terms.ts).
+    cookieDays: termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined,
+    shortDescription: confirmedPitch(fullProgram, fullProgram.shortDescription),
     verified: fullProgram.verified,
     network: fullProgram.network ?? null,
     createdAt: fullProgram.createdAt,
     source: fullProgram.source,
-    descriptionAvailable: fullProgram.description.length > 20,
-    agentPromptAvailable: fullProgram.agentPrompt.length > 10,
-    signupAvailable: Boolean(fullProgram.signupUrl),
+    score: fullAffiliateScore(fullProgram),
+    commissionRank: fullCommissionRank(fullProgram),
   }
   const normalizedClientProgram = {
     ...clientProgram,
@@ -83,7 +92,7 @@ for (const fullProgram of fullPrograms) {
   const checks: Array<[string, unknown, unknown]> = [
     ["name", clientProgram.name, fullProgram.name],
     ["category", clientProgram.category, fullProgram.category],
-    ["cookieDays", clientProgram.cookieDays, fullProgram.cookieDays],
+    ["cookieDays", clientProgram.cookieDays, termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined],
     ["verified", clientProgram.verified, fullProgram.verified],
     ["network", clientProgram.network, fullProgram.network],
     [
@@ -91,6 +100,7 @@ for (const fullProgram of fullPrograms) {
       clientAffiliateScore(clientProgram),
       fullAffiliateScore(fullProgram),
     ],
+    ["commissionRank", clientProgram.commissionRank, fullCommissionRank(fullProgram)],
     [
       "commissionDisplay",
       clientCommissionDisplay(clientProgram.commission),
@@ -113,10 +123,32 @@ for (const fullProgram of fullPrograms) {
 }
 
 const raw = readFileSync(clientRegistryPath)
+
+/**
+ * The browser gets this file whole, paused and closed programs included, so
+ * no row of an unverified program may carry a cookie window, payout or
+ * approval key, or a sentence of prose stating one.
+ */
+const fullBySlug = new Map(allPrograms.map((p) => [p.slug, p]))
+for (const row of (JSON.parse(raw.toString("utf8")) as { programs: Record<string, unknown>[] }).programs) {
+  const full = fullBySlug.get(String(row.slug))
+  if (!full) fail(`client row ${String(row.slug)} is not in the registry`)
+  if (termsConfirmed(full)) continue
+  for (const key of ["cookieDays", "cookie_days", "payout", "payoutMethods", "approval", "approvalTime"]) {
+    if (key in row) fail(`unverified ${full.slug} ships ${key} to the browser`)
+  }
+  if (row.shortDescription !== confirmedPitch(full, full.shortDescription)) {
+    fail(`unverified ${full.slug} ships a shortDescription with terms in it`)
+  }
+}
 const gzipBytes = gzipSync(raw).byteLength
-if (gzipBytes > CLIENT_REGISTRY_GZIP_BUDGET) {
+const gzipBudget = Math.min(
+  CLIENT_REGISTRY_GZIP_PER_PROGRAM * clientPrograms.length,
+  CLIENT_REGISTRY_GZIP_CEILING
+)
+if (gzipBytes > gzipBudget) {
   fail(
-    `gzip size ${gzipBytes} exceeds ${CLIENT_REGISTRY_GZIP_BUDGET} byte budget`
+    `gzip size ${gzipBytes} exceeds ${gzipBudget} byte budget (${CLIENT_REGISTRY_GZIP_PER_PROGRAM} per program, ceiling ${CLIENT_REGISTRY_GZIP_CEILING})`
   )
 }
 

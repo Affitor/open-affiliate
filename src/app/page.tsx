@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, categories, parseCommissionRate, commissionLabel, affiliateScore, commissionDisplay} from "@/lib/programs";
+import { programs, livePrograms, categories, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 };
 
 function RankingsPreview() {
-  const top5 = [...programs]
+  const top5 = [...livePrograms]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 5);
 
@@ -128,7 +128,7 @@ function RankingsPreview() {
                 </td>
                 <td className="py-2.5 px-3 text-center hidden sm:table-cell">
                   <span className="text-xs text-muted-foreground">
-                    {program.cookieDays}d
+                    {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
                   </span>
                 </td>
                 <td className="py-2.5 px-3 hidden md:table-cell">
@@ -172,7 +172,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
               )}
             </div>
             <p className="text-xs text-muted-foreground mt-0.5">
-              {program.shortDescription}
+              {confirmedPitch(program, program.shortDescription)}
             </p>
           </div>
         </div>
@@ -184,7 +184,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
           {program.commission.type}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -195,7 +195,7 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
 }
 
 export default function Home() {
-  const featured = programs.slice(0, 6);
+  const featured = livePrograms.slice(0, 6);
 
   return (
     <div>
@@ -219,7 +219,7 @@ export default function Home() {
                   variant="outline"
                   className="text-xs px-2.5 py-1 border-border/60"
                 >
-                  {programs.length} programs
+                  {livePrograms.length} programs
                 </Badge>
               </div>
 
@@ -318,7 +318,7 @@ export default function Home() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/25">
             {[
-              { value: programs.length.toString(), label: "Programs", sub: "and growing" },
+              { value: livePrograms.length.toString(), label: "Programs", sub: "and growing" },
               { value: categories.length.toString(), label: "Categories", sub: "fully indexed" },
               { value: "100%", label: "Open Source", sub: "MIT licensed" },
             ].map((stat) => (

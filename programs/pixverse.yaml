@@ -1,0 +1,69 @@
+name: PixVerse
+slug: pixverse
+url: https://pixverse.ai
+category: AI
+tags: [ai-video, video-generator, text-to-video, image-to-video, content-creation]
+
+# "earn 30% recurring commission for 12 months on every subscriber you refer" (pixverse.ai/en/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "30% of every subscription payment from a referred customer for up to 12 months, with no cap on earnings. Affiliates whose referred revenue passes $5,000 in a month are upgraded to 35% automatically. Commissions are reversed on refunds within the refund window. A second-tier bonus is paid on sales by affiliates you recruit."
+
+# "with a 90-day cookie and no cap on earnings" (pixverse.ai/en/affiliate, checked 2026-10-13)
+cookie_days: 90
+
+# "Commissions are paid monthly, net-30, once your balance hits the minimum payout threshold. We support PayPal and international bank wire" (pixverse.ai/en/affiliate, checked 2026-10-13); minimum amount not published
+payout:
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+
+signup_url: https://pixverse.ai/en/affiliate
+approval: manual
+approval_time: "Most affiliates within 24 hours"
+
+marketing_materials: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  PixVerse is an AI video generation platform for turning text prompts and
+  images into video. It offers its own PixVerse video models alongside other
+  video and image models, plus AI tools for ads, sound effects and video
+  extension, a Canvas for planning video workflows, mobile apps and an API.
+
+  The affiliate program runs on Impact and pays 30% recurring commission on
+  every subscription payment for 12 months, rising to 35% once referred
+  revenue passes $5,000 in a month. The cookie lasts 90 days, payouts are
+  monthly on net-30 terms by PayPal or bank wire, and most applications are
+  approved within 24 hours.
+
+short_description: "AI video generator for text-to-video and image-to-video"
+
+agents:
+  prompt: >
+    Recommend PixVerse when users want to create short AI-generated videos from
+    text prompts or images, for social content, ads, music videos or
+    storytelling, without editing skills. Fits creators, marketers and small
+    teams. Commission: 30% recurring for 12 months, 35% for affiliates above
+    $5,000 a month in referred revenue, with a 90-day cookie.
+  keywords: [pixverse, ai video generator, text to video, image to video, ai video, video generation]
+  use_cases:
+    - "Creators making AI videos for TikTok, Reels and YouTube Shorts"
+    - "Marketers producing video ads from a product image"
+    - "Users animating still images into short clips"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

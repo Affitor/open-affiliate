@@ -9,25 +9,20 @@ tags:
 - analytics
 commission:
   type: recurring
-  rate: 25%
+  rate: "25%"
   mode: percentage
   value: 25
   currency: USD
-  duration: 12 months
-  conditions: 25% recurring commission on referred paid plans for 12 months.
-cookie_days: 60
+  duration: null
+  conditions: "Open to paying Fathom customers only. Your audience gets $10 off their first invoice. Commissions clear after 30 days; claim by Wise bank transfer ($200 minimum) or account credit ($20 minimum)."
+cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: 200
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
+  methods: [wise]
 signup_url: https://usefathom.com/affiliates
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -50,10 +45,10 @@ agents:
   use_cases:
   - Sites wanting GA alternatives
   - Privacy-focused teams tracking essentials
-verified: false
+verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

@@ -9,26 +9,16 @@ tags:
   - sales
   - saas
 commission:
-  type: one-time
-  rate: 20%
-  mode: percentage
-  value: 20
+  type: recurring
+  rate: "20-40%"
+  mode: tiered
+  value: 40
   currency: USD
-  duration: null
-  conditions: Earn 20%-40% recurring commission for one year on all sales
-cookie_days: 30
+  duration: "12 months"
+  conditions: "20-40% revenue share for every new customer, on all sales in their first year."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.nutshell.com/partner-program
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -50,10 +40,10 @@ agents:
   use_cases:
     - Teams looking for customer support solutions
     - Companies evaluating Nutshell vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

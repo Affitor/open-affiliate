@@ -1,4 +1,5 @@
 import { GenerateRequest, Platform, Language, Formula, Tone } from "./content-lab-types";
+import { termsConfirmed } from "./confirmed-terms";
 
 const PLATFORM_RULES: Record<Platform, string> = {
   linkedin: `Platform: LinkedIn
@@ -193,7 +194,7 @@ ${affiliateInstruction}${templateInstruction}`;
 Category: ${p.category}
 URL: ${p.url}
 Commission: ${p.commission}
-Cookie Duration: ${p.cookie_days} days
+${p.cookie_days != null || termsConfirmed(p) ? `Cookie Duration: ${p.cookie_days != null ? `${p.cookie_days} days` : "not published"}` : ""}
 Description: ${p.description}
 ${p.features ? `Key Features: ${p.features.join(", ")}` : ""}
 ${p.pros ? `Pros: ${p.pros.join(", ")}` : ""}

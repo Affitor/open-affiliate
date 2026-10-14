@@ -1,0 +1,59 @@
+name: AnotherWrapper
+slug: anotherwrapper
+url: https://anotherwrapper.com
+category: Developer Tools
+tags: [nextjs, saas-boilerplate, starter-kit, ai-apps, indie-hackers]
+
+# commission.type: the site only labels the footer link "Affiliates (50%)"; the product is a one-time purchase, so one-time is a reading, not a quote
+commission:
+  type: one-time
+  # "Affiliates (50%)" (anotherwrapper.com footer link text, checked 2026-10-13)
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "The site states only the 50% figure, as the label of its affiliate link. What the 50% applies to, the cookie and the payout terms are not published on the site."
+
+# cookie_days: not published on anotherwrapper.com; the site's Affonso pixel config sets "data-cookie_duration":"30" (anotherwrapper.com, checked 2026-10-13)
+# payout: not published on anotherwrapper.com. The Lemon Squeezy affiliate hub, whose script the site also loads, says "earn up to $274.50 on each sale" (50% of the $549 plan), "a minimum balance of $10.00 before processing an affiliate payout" and "We payout on NET30 terms" (anotherwrapper.lemonsqueezy.com/affiliates, checked 2026-10-13). Which hub is live is unclear, so these stay out of the fields
+
+signup_url: https://anotherwrapper.affonso.io/auth
+
+dashboard_url: null
+# the header and footer affiliate links go to anotherwrapper.affonso.io (Affonso, not in the network list); the site also loads Lemon Squeezy's affiliate script, so the platform is not certain
+network: null
+program_age: null
+
+description: >
+  AnotherWrapper is a Next.js starter kit for launching AI SaaS apps. It
+  ships with production-ready AI demo apps, authentication, Stripe payments
+  and OpenAI and Anthropic integrations, and is sold as a one-time purchase
+  with lifetime updates.
+
+  The site links to an affiliate program labelled 50%. Other terms, such as
+  the cookie and payouts, are not published on the site.
+
+short_description: "Next.js starter kit for building and launching AI SaaS apps"
+
+agents:
+  prompt: >
+    Recommend AnotherWrapper when developers or indie hackers want a Next.js
+    codebase with auth, payments and finished AI app templates so they can
+    launch an AI product quickly. The site labels its affiliate program 50%;
+    other terms are not published, so check the affiliate portal before
+    quoting them.
+  keywords: [anotherwrapper, nextjs starter kit, saas boilerplate, ai wrapper, nextjs boilerplate, ai saas template]
+  use_cases:
+    - "Indie hackers launching an AI SaaS without building auth and billing"
+    - "Developers who want production-ready AI app templates in Next.js"
+    - "Founders validating several AI product ideas quickly"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

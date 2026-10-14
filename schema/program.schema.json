@@ -28,12 +28,13 @@
       "items": {
         "type": "string"
       },
-      "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai)"
+      "description": "Alternative names or brand references used for dedup/fuzzy matching (e.g. ChatGPT → openai). An alias written like a slug (letters, digits and hyphens, compared lowercased) also redirects /programs/<alias> to this program and resolves in the API and MCP; two programs may not claim the same alias, and another program's slug is never redirected."
     },
     "url": {
       "type": "string",
       "format": "uri",
-      "description": "Product website URL"
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "Product website URL. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "kind": {
       "type": "string",
@@ -55,6 +56,7 @@
         "cj-api",
         "impact-api",
         "awin-api",
+        "affitor-api",
         "reditus",
         "dub",
         "rewardful",
@@ -233,7 +235,8 @@
         "null"
       ],
       "format": "uri",
-      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing."
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "Direct link to the affiliate signup or program page. Must not be the bare homepage and must differ from url — a link that only repeats the website tells a reader nothing. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "approval": {
       "type": "string",
@@ -281,7 +284,8 @@
         "string",
         "null"
       ],
-      "description": "URL to the affiliate dashboard"
+      "pattern": "^(?=[\\x21-\\x5B\\x5D-\\x7E]+$)(?![\\s\\S]*&(?:#[0-9]+|#[xX][0-9a-fA-F]+|[A-Za-z][A-Za-z0-9]*);)https?://(?=[a-z0-9.-]{1,253}(?:[/?#]|$))(?:(?!xn--)[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\\.)+(?!xn--)[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?(?:[/?#]|$)",
+      "description": "URL to the affiliate dashboard. Must be an absolute http(s) URL with a lowercase scheme whose authority is a lowercase domain name and nothing else (no port, no user@): lowercase letters, digits, dots and hyphens only (at most 253 characters; at least two labels of 1 to 63 characters that do not start or end with a hyphen; the last label starts with a letter), so no IP address, no IPv6 literal and no percent-encoding in the host. Internationalised domains are not accepted (no xn-- label); use the brand's ASCII domain. The whole URL is printable ASCII with no spaces and no backslash, and has no HTML character references (write & itself, not &amp;)."
     },
     "network": {
       "type": [
@@ -299,10 +303,36 @@
         "tolt",
         "lemonsqueezy",
         "tapfiliate",
+        "affitor",
+        "creem",
         "in-house",
         null
       ],
       "description": "Affiliate network (lowercase, hyphenated; null if unknown)"
+    },
+    "also_on": {
+      "type": "object",
+      "description": "The same brand on a marketplace as well, besides the program this file describes, keyed by network. The page keeps the brand's own program as its terms and adds one line, 'Also on <network>: <commission>', with a secondary button. Only affitor so far, and never on a listing that itself points at Affitor. A person adds the url once; scripts/sync-affitor.ts keeps the commission equal to what the Affitor API states (left out when Affitor publishes none) and removes the entry when the program leaves Affitor. The commission is never written by hand.",
+      "properties": {
+        "affitor": {
+          "type": "object",
+          "required": [
+            "url"
+          ],
+          "properties": {
+            "url": {
+              "type": "string",
+              "pattern": "^https://affitor\\.com/marketplace/[A-Za-z0-9_-]+$",
+              "description": "The program's Affitor marketplace page, https://affitor.com/marketplace/<affitor slug>. The slug links this listing to that Affitor program."
+            },
+            "commission": {
+              "$ref": "#/properties/commission"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
     },
     "program_age": {
       "type": [
@@ -370,6 +400,29 @@
       ],
       "format": "date",
       "description": "ISO date of last URL + data verification. Used for freshness / refresh cadence decisions."
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "paused",
+        "discontinued",
+        "no_program"
+      ],
+      "default": "active",
+      "description": "Whether the program accepts affiliates. discontinued (closed) and no_program (the brand runs no public program and no closure is on record) keep the page live to say so, with no terms. A credit-only referral reward is not a status: it is active, with the reward in commission and conditions. A no_program file sets no cookie_days, payout, signup_url, approval, approval_time or restrictions, and its commission is exactly the placeholder: type \"one-time\", rate \"none\", mode \"unknown\", value null, currency \"USD\", and no other key except a null duration or conditions."
+    },
+    "status_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "One sentence on the status, with its source and a short quote where there is one, e.g. 'Cursor closed its referral program on July 23, 2026: \"the referral discount program is officially closed as of July 23, 2026\" (forum.cursor.com/t/166990)'. last_verified_at is the date it was checked."
+    },
+    "claimed_by": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$",
+      "description": "Registrable domain (eTLD+1) whose owner verified this listing through the claim flow. Shown as 'Claimed by <domain>'; never an email address."
     }
   },
   "additionalProperties": false

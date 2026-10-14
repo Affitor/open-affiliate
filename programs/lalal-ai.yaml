@@ -5,27 +5,24 @@ category: AI
 tags: [ai, ai-audio, music, stem-separation, vocal-removal]
 
 commission:
-  type: one-time
-  rate: "30%"
-  mode: percentage
+  type: recurring
+  rate: "30% first month, then 20% for up to 6 months"
+  mode: tiered
   value: 30
   currency: USD
   duration: null
-  conditions: "30% commission on all purchases"
-
+  conditions: "30% on purchases in the first month after a referral, then 20% on ongoing subscription payments for up to 6 months."
 cookie_days: 180
 attribution: last-click
 tracking_method: cookie
-
 payout:
-  minimum: 50
+  minimum: 150
   currency: USD
   frequency: monthly
-  methods: [bank, paypal]
-
+  methods: [paypal]
 signup_url: https://www.lalal.ai/affiliate-program/
 approval: manual
-approval_time: "1-5 business days"
+approval_time: "24-48 hours"
 restrictions: null
 
 marketing_materials: true
@@ -64,7 +61,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

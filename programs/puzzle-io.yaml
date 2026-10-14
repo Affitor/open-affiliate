@@ -1,6 +1,6 @@
 name: Puzzle.io
 slug: puzzle-io
-url: https://Puzzle.io
+url: https://puzzle.io
 category: AI
 tags:
 - ai
@@ -25,7 +25,7 @@ payout:
   methods:
   - bank
   - paypal
-signup_url: https://Puzzle.io/partner
+signup_url: https://puzzle.io/partner
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

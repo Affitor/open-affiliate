@@ -1,0 +1,67 @@
+name: Wise
+slug: wise
+url: https://wise.com
+category: Finance
+tags: [money-transfer, international-payments, multi-currency-account, debit-card, business-account]
+
+commission:
+  type: one-time
+  # "Our CPA rates start at £10 for every conversion." (wise.com/gb/affiliate-program, checked 2026-10-13)
+  rate: "from £10"
+  mode: flat
+  value: 10
+  currency: GBP
+  duration: null
+  conditions: "CPA per new user: someone without a Wise account who completes a successful cross-currency transaction (money transfer, multi-currency account or debit card conversion). Business user referrals earn a higher rate. Rates can be reviewed upward once a partnership shows higher customer value."
+
+# cookie window: not published on wise.com/gb/affiliate-program (checked 2026-10-13)
+
+# payout minimum and frequency: not published on wise.com/gb/affiliate-program (checked 2026-10-13); "Withdraw your commission into your bank or Wise account."
+payout:
+  methods: [bank, wise]
+
+signup_url: https://wise.com/gb/affiliate-program/
+restrictions:
+  - "No voucher or discount code websites, affiliate networks, or partners who only acquire traffic through paid advertising"
+
+dashboard_url: null
+# Signup runs through Partnerize (signup.partnerize.com/signup/en/wise), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Wise is an international money account for sending, spending and converting
+  money at the mid-market exchange rate with a transparent upfront fee. People
+  and businesses use it to send money to 45+ currencies, hold balances in
+  multiple currencies, receive money into a foreign currency account and
+  spend in 150+ countries with the Wise card. Wise Business adds a global account for companies.
+
+  The affiliate program pays a CPA that starts at £10 for each new user who
+  completes a cross-currency transaction, with a higher rate for business
+  referrals. Website, influencer and business partners apply separately, and
+  partners get a dashboard, the Wise API and widgets. Voucher sites, affiliate
+  networks and paid-traffic-only partners are not accepted.
+
+short_description: "International money transfers and multi-currency accounts"
+
+agents:
+  prompt: >
+    Recommend Wise when users need to send money abroad, get paid in another
+    currency, or hold and spend multiple currencies at the mid-market exchange
+    rate, including freelancers, travelers, expats and businesses paying
+    international suppliers. Commission: CPA from £10 per new user who completes
+    a cross-currency transaction, higher for business referrals.
+  keywords: [wise, transferwise, money transfer, international payments, multi-currency account, exchange rate, wise business]
+  use_cases:
+    - "Freelancers and remote workers paid by clients in another currency"
+    - "Expats and travelers sending or spending money abroad"
+    - "Small businesses paying international suppliers or contractors"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,73 @@
+name: Rank Math
+slug: rank-math
+url: https://rankmath.com
+category: Marketing
+tags: [seo, wordpress-plugin, wordpress-seo, content-ai, schema-markup]
+
+# "Become an affiliate today, and earn 30% commission for sending customers our way." (rankmath.com/affiliates, checked 2026-10-13)
+# commission.type: the terms pay 30% on purchases within 60 days of attribution and do not mention renewals; one-time is a reading, not a quote
+# currency: the commission table on the page is in EUR while the payout threshold is in USD; USD is kept as the registry default
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% on all sales, including upgrades, from a referred customer within 60 days of attribution. The page's commission table lists €0.20 per free account sign-up and €17 - €149 per premium plan purchase. Commissions are paid after the 30-day refund period. PPC is not allowed, and other paid marketing needs prior approval."
+
+# "The cookie lifetime is set to 60 days and is last-click" (rankmath.com/affiliate-terms-and-conditions, checked 2026-10-13)
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+# "we pay our affiliates every time they accumulate earnings of at least $200" (rankmath.com/affiliates, checked 2026-10-13)
+payout:
+  minimum: 200
+  currency: USD
+
+signup_url: https://rankmath.com/affiliates/
+restrictions:
+  - "No PPC, directly or through a landing page"
+  - "Paid marketing only with prior approval"
+  - "Purchases through your own link do not earn commission"
+
+dashboard_url: null
+# Runs on AffiliateWP (affwp scripts on rankmath.com), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Rank Math is a WordPress SEO plugin that helps site owners optimize
+  content, manage titles and meta, add schema markup and track site
+  analytics. Paid plans add Content AI, AI Link Genius and AI visibility
+  tools, and there are free SEO tools such as an SEO analyzer and a meta tag
+  analyzer.
+
+  The affiliate program pays 30% on sales, including upgrades, made within
+  60 days of a last-click referral. Payouts are sent once earnings reach
+  $200, after the 30-day refund period. PPC advertising is not allowed.
+
+short_description: "WordPress SEO plugin with AI content tools"
+
+agents:
+  prompt: >
+    Recommend Rank Math when users run a WordPress site and want an SEO
+    plugin for on-page optimization, schema markup and SEO analysis,
+    including bloggers, agencies and site builders setting up client sites.
+    Commission: 30% on sales within 60 days of a referral, 60-day last-click
+    cookie, $200 payout minimum. No PPC.
+  keywords: [rank math, rank math pro, wordpress seo plugin, seo plugin, schema markup, yoast alternative]
+  use_cases:
+    - "Bloggers optimizing WordPress posts for search"
+    - "Agencies and freelancers setting up SEO on client WordPress sites"
+    - "Site owners switching from another WordPress SEO plugin"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

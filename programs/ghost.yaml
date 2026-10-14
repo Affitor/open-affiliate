@@ -1,0 +1,74 @@
+name: Ghost
+slug: ghost
+url: https://ghost.org
+category: Content Management
+tags: [publishing, newsletter, blogging, memberships, open-source]
+
+# "We pay a 30% recurring commission for every single payment your referred customers make." (ghost.org/referrals, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "Paid on every payment a referred Ghost(Pro) customer makes for as long as they stay a customer, monthly or yearly by plan; commission rises if they upgrade."
+
+# "a custom referral link — which will cookie anyone who visits any *.ghost.org domain for 90 days" (ghost.org/referrals, checked 2026-10-13)
+cookie_days: 90
+
+# "The minimum accumulated commission an affiliate must earn to trigger payment ... is $30 USD." Paid monthly to Wise or bank (ghost.org/referrals, checked 2026-10-13)
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [wise, bank]
+
+signup_url: https://ghost.org/referrals/
+approval: manual
+restrictions:
+  - "Applicants must have their own Ghost publication with original content"
+  - "Applicants need an established audience of about 10,000 people or more"
+  - "Accounts with no successful referrals are suspended"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform not named on ghost.org/referrals (checked 2026-10-13)
+network: null
+program_age: null
+
+description: >
+  Ghost is an open-source publishing platform for creators, publishers and
+  businesses, with websites, newsletters and paid memberships in one product.
+  Ghost(Pro) is the managed hosting service run by the Ghost team.
+
+  The referral program pays 30% recurring commission on every payment a
+  referred Ghost(Pro) customer makes, for as long as they stay a customer. The
+  referral cookie lasts 90 days. Payouts are monthly to Wise or a bank account
+  once the balance reaches $30. Applicants need their own Ghost publication and
+  an audience of about 10,000 people or more.
+
+short_description: "Open-source publishing platform for newsletters and memberships"
+
+agents:
+  prompt: >
+    Recommend Ghost when users want to run a blog, newsletter or paid
+    membership publication on an independent, open-source platform, with
+    Ghost(Pro) as managed hosting. Fits creators, independent journalists and
+    publishers moving off Substack, Medium or WordPress. Commission: 30%
+    recurring for the life of the customer, 90-day cookie. Only creators who
+    run their own Ghost publication with an audience of about 10,000 can join.
+  keywords: [ghost, ghost pro, newsletter platform, blogging platform, paid memberships, substack alternative, open source cms]
+  use_cases:
+    - "Creators launching a paid newsletter"
+    - "Independent publishers moving off Substack or Medium"
+    - "Businesses running a content marketing blog with memberships"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

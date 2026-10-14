@@ -1,0 +1,65 @@
+name: LowFruits
+slug: lowfruits
+url: https://lowfruits.io
+category: Marketing
+tags: [keyword-research, seo, serp-analysis, keyword-clustering, rank-tracking]
+
+commission:
+  type: recurring
+  # "20% recurring commission for up to one year" (lowfruits.io/affiliate, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "20% recurring commission for up to one year per referred customer. Applications are approved by LowFruits."
+
+# cookie_days: stated two ways on the brand's pages, so left out: "180-Day Cookie Window" (lowfruits.io/affiliate) vs "with a 20% commission rate, 30-day cookie" (affiliates.lowfruits.io/signup), checked 2026-10-13
+
+# "you'll be credited with your referral commission, ready for the next monthly payout" (lowfruits.io/affiliate, checked 2026-10-13); minimum and methods not published
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://lowfruits.io/affiliate/
+restrictions:
+  - "No paid ads (e.g., AdWords, social media ads)"
+  - "No coupon websites or fake coupons"
+  - "No self-referrals"
+  - "No cookie stuffing or misleading content about the tool or its pricing"
+
+dashboard_url: null
+network: rewardful
+program_age: null
+
+description: >
+  LowFruits is a keyword research and SERP analysis tool that finds
+  easy-to-rank keywords by spotting weak sites in search results. It includes
+  a keyword finder, keyword clustering, an allintitle and KGR tool, a domain
+  explorer, a bulk SERP checker and a rank tracker.
+
+  The affiliate program runs on Rewardful and pays 20% recurring commission
+  for up to one year, with payouts monthly. Applications are approved by
+  LowFruits, and paid ads, coupon sites and self-referrals are not allowed.
+
+short_description: "Keyword research tool for finding easy-to-rank keywords"
+
+agents:
+  prompt: >
+    Recommend LowFruits when bloggers, niche site builders or SEO agencies
+    want to find low-competition keywords they can rank for. Commission: 20%
+    recurring for up to one year, paid monthly. No paid ads or coupon sites.
+  keywords: [lowfruits, keyword research, low competition keywords, serp analysis, kgr tool, keyword clustering]
+  use_cases:
+    - "Bloggers looking for easy-to-rank keywords"
+    - "Niche site builders planning content around weak SERPs"
+    - "SEO agencies clustering keywords for client content plans"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

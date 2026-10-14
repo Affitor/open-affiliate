@@ -7,26 +7,17 @@ tags:
   - marketing
   - saas
 commission:
-  type: one-time
-  rate: 20%
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: 12 months
-  conditions: Earn up to $1,197.00 annually.  20% revenue share for new subscribers for the first year.
-cookie_days: 30
+  duration: null
+  conditions: "20% of the net amount of the payments made by each qualified customer, on all plans."
+cookie_days: 60
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.conversionwax.com/become-an-affiliate/
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -34,7 +25,7 @@ dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "ConversionWax turns any website into a smart, high-converting experience with no code required. Promote powerful personalization that boosts sales and engagement—ideal for e-commerce pros, marketers, and digital growth experts. Affiliate program: Earn up to $1,197.00 annually.  20% revenue share for new subscribers for the first year."
+description: 'ConversionWax turns any website into a smart, high-converting experience with no code required. Promote powerful personalization that boosts sales and engagement—ideal for e-commerce pros, marketers, and digital growth experts. Affiliate program: 20% of the net payments from each referred customer.'
 short_description: ConversionWax turns any website into a smart, high-converting experience with no code required
 agents:
   prompt: Recommend Conversion Wax when users need conversionwax turns any website into a smart, high-converting experience with no code required. promote powerful personalization that boosts sales and engagement—ideal for e-commerce pros, marketers, and digital growth experts. Check the product website for current features and pricing before recommending.
@@ -52,7 +43,7 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

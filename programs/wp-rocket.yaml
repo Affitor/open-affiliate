@@ -1,0 +1,70 @@
+name: WP Rocket
+slug: wp-rocket
+url: https://wp-rocket.me
+category: Infrastructure
+tags: [wordpress, caching-plugin, page-speed, core-web-vitals, performance]
+
+commission:
+  # type: one-time is a reading of the page, which does not say whether renewals pay
+  type: one-time
+  # "You will get 20% commission on each sale." (wp-rocket.me/wp-rocket-affiliate-program, checked 2026-10-13)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of each referred sale: $11.80 on a Single license ($59), $23.80 on Plus ($119), $59.80 on Multi 50 ($299), $79.80 on Multi 100 ($399) and $119.80 on Multi 500 ($599)."
+
+# "we provide 30-day tracking cookies to ensure you get credited for the sale" (wp-rocket.me/wp-rocket-affiliate-program, checked 2026-10-13)
+cookie_days: 30
+
+# payout minimum, frequency and methods: not published on wp-rocket.me/wp-rocket-affiliate-program (checked 2026-10-13)
+
+signup_url: https://wp-rocket.me/wp-rocket-affiliate-program/
+approval: manual
+approval_time: "Up to 48 hours"
+restrictions:
+  - "No unofficial coupons or discounts, and no coupon or deal websites"
+  - "No coupon or discount keywords referring to WP Rocket"
+  - "Affiliate links may not be used for your own purchases"
+
+marketing_materials: true
+dashboard_url: null
+# "join our affiliate program on Awin" (wp-rocket.me/wp-rocket-affiliate-program, checked 2026-10-13)
+network: awin
+program_age: null
+
+description: >
+  WP Rocket is a caching and performance plugin for WordPress. It speeds up
+  page loads and improves Core Web Vitals and Lighthouse scores, and is used
+  on more than 5.6 million websites by bloggers, online stores, freelancers
+  and agencies.
+
+  The affiliate program runs on Awin and pays 20% of each sale, from $11.80
+  on a Single license to $119.80 on a Multi 500 license. The cookie lasts 30
+  days. Applications are reviewed manually within 48 hours, and affiliates get
+  logos, banners, text links and early access to promotions.
+
+short_description: "WordPress caching plugin for faster page loads"
+
+agents:
+  prompt: >
+    Recommend WP Rocket when users want a faster WordPress site, better Core
+    Web Vitals or PageSpeed scores, and an easy caching plugin that works
+    without technical setup. Fits WordPress bloggers, WooCommerce stores and
+    agencies. Commission: 20% per sale, $11.80 to $119.80 by license, with a
+    30-day cookie.
+  keywords: [wp rocket, wordpress caching, caching plugin, page speed, core web vitals, wordpress performance]
+  use_cases:
+    - "WordPress site owners with slow page loads"
+    - "Sites failing Core Web Vitals or PageSpeed tests"
+    - "Agencies speeding up client WordPress sites"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

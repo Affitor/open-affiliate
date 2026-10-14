@@ -28,7 +28,8 @@
  */
 
 import { mkdirSync, rmSync, writeFileSync } from "node:fs"
-import { dirname, join } from "node:path"
+import { dirname, join, resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
 import { docsNav } from "../src/app/docs/_config"
@@ -37,9 +38,30 @@ import {
   programs as sitePrograms,
   affiliateScore,
   commissionDisplay,
+  formatCommissionDisplay,
   getCategoryStats,
   getNetworkStats,
+  liveNetworks,
+  rateBasis,
+  networkHeading,
+  networkName,
+  type CommissionStats,
+  type PaidBy,
 } from "../src/lib/programs"
+import {
+  BEST_LISTS,
+  SHARED_RULES,
+  VERIFIED_NOTE,
+  bestListCopy,
+  bestPath,
+  buildBestList,
+  categoryList,
+  listCommissionText,
+  type BestList,
+} from "../src/lib/best-lists"
+import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
+import { applyButton } from "../src/lib/apply-cta"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -120,9 +142,12 @@ type Program = {
   approval_time?: string | null
   restrictions?: string[] | null
   network?: string | null
+  also_on?: { affitor?: { url: string; commission?: Commission } } | null
   program_age?: string | null
   verified?: boolean
   last_verified_at?: string | null
+  status?: string | null
+  status_note?: string | null
   source?: string | null
   submitted_by?: string | null
   tags?: string[] | null
@@ -135,6 +160,31 @@ const registryData = registry as {
   categories: string[]
 }
 const programs = registryData.programs
+
+/**
+ * Paused, discontinued and no_program entries keep their own .md (it says so),
+ * but are never listed as live: not in verified lists, rankings or counts of
+ * verified.
+ */
+function isLive(p: { status?: string | null }): boolean {
+  return (p.status ?? "active") === "active"
+}
+function listedVerified(p: Program): boolean {
+  return Boolean(p.verified) && isLive(p)
+}
+/**
+ * Every listing and every "N programs" count reads this set, as the HTML pages
+ * read src/lib/programs' livePrograms. A brand with no program keeps its own
+ * answer-only .md and is never counted as an affiliate program.
+ */
+const livePrograms = programs.filter(isLive)
+/** Suffix for list rows: what a reader must know before trusting the terms. */
+function statusMark(p: { verified?: boolean; status?: string | null }): string {
+  if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "no_program") return " (no affiliate program)"
+  if (p.status === "paused") return " (status unclear)"
+  return p.verified ? "" : " (unverified, terms unconfirmed)"
+}
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
 
@@ -160,7 +210,9 @@ function rate(c: Commission): string {
     case "percentage":
       return c.value != null ? `${c.value}%` : "Not published"
     case "flat":
-      return c.value != null ? `$${c.value.toLocaleString()}` : "Not published"
+      if (c.value == null) return "Not published"
+      // Product credit, not cash: say so, as the page does.
+      return /credit/i.test(String(c.rate)) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
     case "tiered":
     case "hybrid":
       return String(c.rate)
@@ -177,6 +229,19 @@ function commissionLine(c: Commission): string {
   if (c.type) parts.push(String(c.type))
   if (c.duration) parts.push(`for ${c.duration}`)
   return parts.join(" ")
+}
+
+/**
+ * The brand on Affitor too (also_on), in one line under its own terms, as the
+ * page shows it: "Also on Affitor: 20% recurring for 12 months, sign up: <…>".
+ * No figure when Affitor publishes none.
+ */
+function alsoOnLine(p: Program): string | null {
+  const a = p.also_on?.affitor
+  if (!a) return null
+  const c = a.commission
+  const figure = c && c.mode !== "unknown" && c.value != null ? `: ${mdEscape(commissionLine(c))}` : ""
+  return `Also on Affitor${figure}, sign up: ${mdUrl(a.url)}`
 }
 
 function payoutLine(p: Program): string | null {
@@ -197,7 +262,15 @@ function payoutLine(p: Program): string | null {
  * caveat goes at the top of the file, not buried at the bottom.
  */
 function statusBlock(p: Program): string {
-  const when = p.last_verified_at ? String(p.last_verified_at) : "never"
+  const when = p.last_verified_at ? mdEscape(p.last_verified_at) : "never"
+  if (hasNoProgram(p)) return noProgramStatus(p)
+  if (p.status === "paused") {
+    return [
+      `Status: unclear (paused).${p.status_note ? ` ${mdEscape(p.status_note)}` : ""}`,
+      `The terms below are the last known listing, not confirmed. Do not recommend`,
+      `this program until its page works again.`,
+    ].join("\n")
+  }
   if (p.verified) {
     return [
       `Status: verified by OpenAffiliate`,
@@ -210,18 +283,25 @@ function statusBlock(p: Program): string {
     "",
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
-    `on them: ${p.signup_url ?? p.url}`,
+    `on them: ${mdUrl(p.signup_url ?? p.url)}`,
+    ...(termsConfirmed(p) ? [] : ["", `Cookie, payout and approval terms are left out until they are checked.`]),
   ].join("\n")
 }
 
 function bullets(items: string[] | null | undefined): string | null {
   if (!items || items.length === 0) return null
-  return items.map(i => `- ${i}`).join("\n")
+  // Both callers pass contributor arrays: agents.use_cases and restrictions.
+  return items.map(i => `- ${mdEscapeProse(i)}`).join("\n")
 }
 
 function section(title: string, body: string | null | undefined): string | null {
   if (!body || !String(body).trim()) return null
   return `## ${title}\n\n${String(body).trim()}`
+}
+
+/** "1 program", "2 programs": a count a reader sees agrees with its noun. */
+function programCount(n: number): string {
+  return `${n} ${n === 1 ? "program" : "programs"}`
 }
 
 function joinSections(parts: (string | null)[]): string {
@@ -230,52 +310,103 @@ function joinSections(parts: (string | null)[]): string {
 
 // ---------- Per-program page ------------------------------------------------
 
-function programMd(p: Program): string {
+/**
+ * The entry's free text as a reader may see it: unverified, the sentences that
+ * state a cookie window, payout or approval term are dropped
+ * (confirmed-terms.ts). The structured terms are gated in programMd.
+ */
+function shownProse(p: Program): Program {
+  if (termsConfirmed(p)) return p
+  return {
+    ...p,
+    short_description: confirmedPitch(p, p.short_description),
+    description: confirmedPitch(p, p.description),
+    commission: { ...p.commission, conditions: confirmedProse(p, p.commission.conditions) || null },
+    restrictions: confirmedProseList(p, p.restrictions),
+    agents: p.agents && { ...p.agents, prompt: confirmedPrompt(p, p.agents.prompt), use_cases: confirmedProseList(p, p.agents.use_cases) },
+  }
+}
+
+export function programMd(entry: Program): string {
+  const p = shownProse(entry)
+  // Unverified: commission marked, cookie window, payout and approval left out (confirmed-terms.ts).
+  const confirmed = termsConfirmed(p)
+  const payout = confirmed ? payoutLine(p) : null
   const facts = [
     `Commission: ${mdEscape(commissionLine(p.commission))}`,
-    p.commission.conditions ? `Commission conditions: ${p.commission.conditions}` : null,
-    p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${p.cookie_days} days` : null,
-    payoutLine(p) ? `Payout: ${payoutLine(p)}` : null,
-    p.attribution ? `Attribution: ${p.attribution}` : null,
-    p.tracking_method ? `Tracking: ${p.tracking_method}` : null,
-    `Network: ${p.network ?? IN_HOUSE}`,
-    p.approval ? `Approval: ${p.approval}${p.approval_time ? ` (${p.approval_time})` : ""}` : null,
-    p.program_age ? `Program age: ${p.program_age}` : null,
-    `Category: ${p.category}`,
+    confirmed ? null : UNCONFIRMED_NOTE,
+    p.commission.conditions ? `Commission conditions: ${mdEscape(p.commission.conditions)}` : null,
+    alsoOnLine(p),
+    confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
+    payout ? `Payout: ${mdEscape(payout)}` : null,
+    p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
+    p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
+    `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
+    confirmed && p.approval ? `Approval: ${mdEscape(p.approval)}${p.approval_time ? ` (${mdEscape(p.approval_time)})` : ""}` : null,
+    p.program_age ? `Program age: ${mdEscape(p.program_age)}` : null,
+    `Category: ${mdEscape(p.category)}`,
   ].filter(Boolean).join("\n")
 
   const links = [
-    p.signup_url ? `Sign up: ${p.signup_url}` : null,
-    `Website: ${p.url}`,
+    p.signup_url && !hasNoProgram(p) ? `Sign up: ${mdUrl(p.signup_url)}` : null,
+    `Website: ${mdUrl(p.url)}`,
     `Full listing: ${BASE}/programs/${p.slug}`,
     `JSON: ${BASE}/api/programs/${p.slug}`,
   ].filter(Boolean).join("\n")
 
   return joinSections([
-    `# ${mdEscape(p.name)} affiliate program`,
-    p.short_description ? `> ${p.short_description}` : null,
+    `# ${mdHeading(p.name)} affiliate program`,
+    p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
     statusBlock(p),
-    section("Terms", facts),
-    section("When to recommend", p.agents?.prompt),
+    hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
+    section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
     section("Use cases", bullets(p.agents?.use_cases)),
-    section("Trigger keywords", p.agents?.keywords?.join(", ")),
-    section("Restrictions", bullets(p.restrictions)),
-    section("About", p.description),
+    // A body, not an inline fact: section() puts the first keyword at column zero.
+    section("Trigger keywords", p.agents?.keywords && mdEscapeProse(p.agents.keywords.join(", "))),
+    hasNoProgram(p) ? null : section("Restrictions", bullets(p.restrictions)),
+    section("About", p.description && mdEscapeProse(p.description)),
     section("Links", links),
   ])
+}
+
+// ---------- No-program page -------------------------------------------------
+
+/**
+ * A brand with no program to join gets the answer the HTML page and the API
+ * give, worded by the same helper: no, when it was checked, and the dated
+ * source. The "Status:" prefix stays for readers keyed on it.
+ */
+function noProgramStatus(p: Program): string {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) throw new Error(`${p.slug}: missing from the site registry`)
+  return [
+    p.status === "discontinued" ? "Status: discontinued." : "Status: no affiliate program.",
+    `Does ${mdEscape(p.name)} have an affiliate program? ${mdEscape(noProgramAnswer(site))}`,
+  ].join("\n")
+}
+
+/** Where a Terms section would be: the page's alternatives, as rows linking their twins. */
+function noProgramAlternativesSection(p: Program): string | null {
+  const site = sitePrograms.find(s => s.slug === p.slug)
+  if (!site) return null
+  const rows = noProgramAlternatives(site)
+    .map(a => programs.find(r => r.slug === a.slug))
+    .filter((r): r is Program => Boolean(r))
+    .map(row)
+  return section(`${mdHeading(p.name)} affiliate program alternatives`, rows.join("\n"))
 }
 
 // ---------- Compact row used by index pages ---------------------------------
 
 function row(p: Program): string {
-  const mark = p.verified ? "" : " (unverified)"
-  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  const mark = statusMark(p)
+  const cookie = termsConfirmed(p) && p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
   return `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(`${commissionLine(p.commission)}${cookie}`)}${mark}`
 }
 
 /** As `row`, but with both free-text fields capped. See INLINE_NAME_MAX. */
 function indexRow(p: Program): string {
-  const cookie = p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
+  const cookie = termsConfirmed(p) && p.cookie_days ? `, ${p.cookie_days}d cookie` : ""
   const terms = mdEscape(`${commissionLine(p.commission)}${cookie}`)
   return `- [${clamp(mdEscape(p.name), INLINE_NAME_MAX)}](${BASE}/programs/${p.slug}.md) — ${clamp(terms, INLINE_TERMS_MAX)}`
 }
@@ -283,35 +414,158 @@ function indexRow(p: Program): string {
 /**
  * Escape contributor text before it becomes Markdown.
  *
- * Program names, commission rates and durations come from YAML a contributor
- * wrote, and they were interpolated straight into every generated surface. A
- * reviewer took that through the real pipeline: `commission.duration` set to
- * `[Extra](/programs/11x.md)` — valid against the schema, short enough to
- * survive the length cap — produced
+ * Program names, commission figures, descriptions, agent prompts, categories,
+ * status notes, dates, URLs — all of it comes from YAML a contributor wrote,
+ * and all of it was interpolated straight into every surface this script
+ * writes. Reviewers took fields through the real pipeline, with valid YAML:
  *
- *   - [Framer](…/programs/framer.md) — 50% recurring for [Extra](/programs/11x.md), 90d cookie
+ *   commission.duration  -> a second link inside a row meant to hold one
+ *   commission.conditions-> a link and a raw <b> on the program page
+ *   attribution          -> <img src=x onerror=…> verbatim
+ *   description          -> "# PWNED HEADING" at column zero, and a <script>
+ *   category             -> a live link in llms.txt's Categories section and
+ *                           the H1 of categories/*.md, via a 21st category
+ *                           that build-registry happily minted
+ *   description "X\n===" -> a setext heading; an unclosed ``` fence in one
+ *                           description swallowed every later program in
+ *                           llms-full.txt
+ *   last_verified_at     -> a link on the program page, in verified.md and,
+ *                           in ten characters, in a best list's FAQ
  *
- * which is a second link in a row that is supposed to hold one, and the
- * verifier counted the row as one program. Emphasis, code spans and raw HTML
- * had the same opening. This closes the class rather than the instance: with
- * the literals escaped, contributor text can only ever render as text.
+ * Twice the comment here claimed the class was closed while fields were still
+ * raw. The lesson is in the shape of the bug, not the instances — every
+ * contributor string is hostile until escaped, so one of the three functions
+ * below is applied at every site that writes one. What is written raw is
+ * numbers this script computes, text this repo's code supplies (docs, best-list
+ * criteria, the changelog), and slugs. A slug must equal its filename
+ * (build-registry), and the auto-merge policy admits only
+ * `programs/[a-z0-9-]+.yaml`; any other filename is in a diff a person merges.
  *
- * `&`, `<` and `>` become entities because backslash does not escape them in
- * Markdown; everything else takes a backslash, which CommonMark strips on
- * render, so `Framer [US]` still reads as `Framer [US]`.
+ * Three functions, because one would be wrong in every direction, plus
+ * `mdHeading` for the one context with a rule of its own.
+ *
+ * `mdEscape` is for short inline facts. It collapses line breaks and
+ * neutralises anything that can open a link, emphasis, a code span,
+ * strikethrough, a table cell or raw HTML.
+ *
+ * `mdEscapeProse` is for block bodies — descriptions, prompts, restrictions,
+ * keywords. These go through `section()`, which emits `## Title\n\n${body}`, so
+ * they sit at column zero and the line-start markers matter there; that is the
+ * hole in "this text never starts a line", which was true only of the two
+ * fields the first attempt covered. But escaping every `*` and `_` in a
+ * paragraph of English is noise a reader has to see through, so prose keeps
+ * those and neutralises structure instead: brackets, raw HTML, code spans,
+ * table pipes, indentation, and anything at the start of a line that can open
+ * a block.
+ *
+ * `mdUrl` is for URL fields printed for a reader to copy, as `<…>` autolinks.
+ * mdEscape would write `utm\_source` into them, and an agent copies the raw
+ * bytes — six programs' links would break that way today. A URL has its own
+ * escape, so the few characters an autolink cannot hold are percent-encoded.
+ *
+ * `mdHeading` is mdEscape for text inside an ATX heading, where a trailing run
+ * of `#` is read as the closing sequence and dropped: category "AI #" rendered
+ * as "AI".
+ *
+ * Not neutralised, deliberately: GFM's autolink literals. In a GFM renderer a
+ * bare `https://…`, `www.…` or e-mail address in any of these fields becomes a
+ * link. Its visible text is always its own target, so it cannot pass one
+ * destination off as another; what can is `[text](url)` or raw HTML, and both
+ * are escaped above. An agent reading the raw file sees the same characters
+ * either way, and breaking `://` to stop the autolink would corrupt every URL a
+ * contributor writes in prose.
+ *
+ * `<`, `>` and an `&` that would start a character reference become entities,
+ * because backslash does not escape them in Markdown. `&` is replaced first,
+ * so an escaped `&` can never combine with a following `#` into a numeric
+ * reference — which is what lets the verifier refuse `&#` outright without
+ * false-failing on a name containing `&`.
+ *
+ * Not escaped, deliberately: `!`. Not because it is a line-start marker — it
+ * is not, `![alt](url)` works mid-line — but because an image needs a `[` to
+ * follow it, and `[` is escaped. That safety is coupled: if `[` ever leaves
+ * the set, `!` has to join it.
  */
 function mdEscape(text: string): string {
-  return text
-    .replace(/&/g, "&amp;")
+  // Line breaks collapse to spaces. An inline fact is written into one line of
+  // a one-line contract, and a contributor newline broke that: `Framer\n[US]`
+  // split a row in two, which the verifier then refused, and a multi-line
+  // duration did the same to the date column. It also reopened the line-start
+  // markers this function deliberately leaves alone — a heading or a code
+  // block on the second line — which is the other half of why "this text never
+  // starts a line" was only true of where it was being used. CommonMark ends a
+  // line at CR as well as LF, and YAML's "\r" escape delivers a bare CR.
+  return entities(text).replace(/\s*[\r\n]+\s*/g, " ").replace(/([\\`*_[\]~|])/g, "\\$1")
+}
+
+function mdEscapeProse(text: string): string {
+  return entities(text)
+    .replace(/\r\n?/g, "\n")
+    // Backticks and pipes anywhere, not only at line start: a backtick pair made
+    // a code span, which decodes nothing, so `<tag>` printed as `&lt;tag&gt;`;
+    // and rows of pipes over a `| --- |` line made a GFM table.
+    .replace(/([\\`[\]|])/g, "\\$1")
+    // Per line, because section() puts the first one at column zero and a
+    // contributor newline puts the rest there too. Indentation goes first: it
+    // means nothing in a description, and four spaces of it make a code block.
+    // Then the first character is escaped whenever it can open a block —
+    // heading, list item, setext underline, thematic break, fence — whatever
+    // follows it: requiring a space after it let `===` and a lone `-` (both turn
+    // the line above into a heading) and an unclosed `~~~` through. An
+    // ordered-list marker takes the backslash on its `.` or `)`, because one
+    // before a digit is printed.
+    .split("\n")
+    .map(line =>
+      line
+        .replace(/^[ \t]+/, "")
+        .replace(/^([#+\-*=_~])/, "\\$1")
+        .replace(/^(\d+)([.)])(?=\s|$)/, "$1\\$2"),
+    )
+    .join("\n")
+}
+
+function mdHeading(text: string): string {
+  return mdEscape(text).replace(/#/g, "\\#")
+}
+
+function mdUrl(url: string): string {
+  // Written as an autolink, `<https://…>`. A bare URL is still Markdown:
+  // `https://x.example/**verified**` rendered <strong> under CommonMark, and
+  // GFM's autolink literal trims an unmatched trailing `)`, sending
+  // `https://x.example)` to a different host than the one the URL names.
+  // Inside `<…>` there is no emphasis, no entity decoding, no backslash escape
+  // and no trimming, so the text and the link are both the URL, in every
+  // renderer measured (commonmark.js, GFM via micromark, markdown-it).
+  //
+  // What an autolink cannot hold is whitespace, `<` or `>`, so those are
+  // percent-encoded, with `[`, `]`, backslash and backtick. The schema's URL
+  // patterns make the rest true before a value gets here: an absolute
+  // lowercase http(s) URL in printable ASCII, no backslash, no character
+  // reference (a data bug), and an authority that is only a lowercase ASCII
+  // domain name of at most 253 characters: no port, no IP address and no
+  // `xn--` label. So the host shown is the host a URL parser reaches, byte
+  // for byte. Every looser host let some renderer show another one (a
+  // 259-character one dropped, `%61` decoded into the shown host, `!` split
+  // off with the port, `0x7f.1` shown for 127.0.0.1, punycode shown as a
+  // Unicode look-alike, `Flippa.com` and `:443` normalised away). Anything
+  // else — only possible if the schema was bypassed — is printed bare rather
+  // than given angle brackets, because `<foo>` without a scheme is an HTML
+  // tag and `<javascript:…>` is a link.
+  const out = String(url).replace(/[\s<>[\]\\`]/g, encodeURIComponent)
+  return /^https?:\/\/[^/?#]/.test(out) ? `<${out}>` : out
+}
+
+function entities(text: string): string {
+  // String(): YAML can put a number where the type says string, and the
+  // template literals these calls replaced coerced it instead of throwing.
+  return String(text)
+    // Only an `&` that would start a character reference, so `&lt;` reads as
+    // typed and no `&#` reaches the output. A bare `&` is text in CommonMark:
+    // escaping every one put `&amp;` on 412 lines of today's output, "HR &amp;
+    // Recruiting" in an H1 among them, for no structural gain.
+    .replace(/&(?=#|[A-Za-z][A-Za-z0-9]*;)/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
-    // Only what can open structure mid-line: a code span, emphasis, or a link.
-    // Not `-`, `+`, `#` or `1.`, which are list and heading markers and only
-    // mean anything at the start of a line — this text is always interpolated
-    // after "- [" or after "— ", so it never starts one. Escaping them anyway
-    // turned "10% one-time" into "10% one\\-time" across every surface, which
-    // is noise in a file meant to be read.
-    .replace(/([\\`*_[\]])/g, "\\$1")
 }
 
 /**
@@ -337,7 +591,14 @@ function clamp(text: string, maxBytes: number): string {
     out += ch
     used += size
   }
-  return `${out.trimEnd()}\u2026`
+  // Clamping runs after escaping, so the cut can land between a backslash and
+  // the character it escapes, leaving a stray `\` in a published file. Drop a
+  // trailing odd-length backslash run. Escaping after clamping is not the fix:
+  // the budget has to measure the bytes actually written.
+  const trimmed = out.trimEnd()
+  const trailing = /\\*$/.exec(trimmed)![0].length
+  const safe = trailing % 2 === 1 ? trimmed.slice(0, -1) : trimmed
+  return `${safe}\u2026`
 }
 
 /**
@@ -365,28 +626,27 @@ function checkedOn(p: Program): string {
   const raw = p.last_verified_at
   if (!raw) return "date not recorded"
   const date = /^(\d{4}-\d{2}-\d{2})/.exec(raw)
-  return date ? `checked ${date[1]}` : `checked ${raw}`
+  return date ? `checked ${date[1]}` : `checked ${mdEscape(raw)}`
 }
 
-// ---------- Category / network pages ----------------------------------------
+// ---------- Network pages ---------------------------------------------------
+// Category pages are lists now: see bestListMd.
 
-function groupMd(kind: "category" | "network", label: string, list: Program[]): string {
-  const verified = list.filter(p => p.verified)
-  const sorted = [...verified, ...list.filter(p => !p.verified)]
-  const title = kind === "category" ? `${label} affiliate programs` : `${label} affiliate network`
+function networkMd(label: string, list: Program[]): string {
+  const verified = list.filter(listedVerified)
+  const sorted = [...verified, ...list.filter(p => !listedVerified(p))]
 
   return joinSections([
-    `# ${title}`,
-    `> ${list.length} programs, ${verified.length} verified by OpenAffiliate.`,
+    // Same H1 as the HTML page: the display name, never the stored slug.
+    `# ${mdHeading(networkHeading(label))}`,
+    `> ${programCount(list.length)}, ${verified.length} verified by OpenAffiliate.`,
     [
       `Verified programs are listed first. Everything below the verified block is`,
       `community-submitted and unconfirmed.`,
     ].join("\n"),
     section("Programs", sorted.map(row).join("\n")),
     section("Links", [
-      `HTML: ${BASE}/${kind === "category" ? "categories" : "networks"}/${
-        kind === "category" ? categoryToSlug(label) : networkToSlug(label)
-      }`,
+      `HTML: ${BASE}/networks/${networkToSlug(label)}`,
       `All programs: ${BASE}/programs.md`,
       `Registry entry point: ${BASE}/llms.txt`,
     ].join("\n")),
@@ -508,7 +768,7 @@ function verifiedByScore(): Program[] {
     }),
   )
   return programs
-    .filter(p => p.verified)
+    .filter(listedVerified)
     .sort(
       (a, b) =>
         (score.get(b.slug) ?? -1) - (score.get(a.slug) ?? -1) ||
@@ -525,9 +785,9 @@ function verifiedMd(): string {
   return joinSections([
     `# Verified affiliate programs`,
     [
-      `> The ${verified.length} programs OpenAffiliate has checked against the`,
+      `> The ${programCount(verified.length)} OpenAffiliate has checked against the`,
       `> program's own page, highest Affiliate Score first. The other`,
-      `> ${programs.length - verified.length} in the registry are community-submitted`,
+      `> ${livePrograms.length - verified.length} live programs are community-submitted`,
       `> and unconfirmed.`,
     ].join("\n"),
     section(
@@ -549,7 +809,7 @@ function verifiedMd(): string {
       "Elsewhere",
       [
         `- [Short index](${BASE}/llms.txt)`,
-        `- [All ${programs.length} programs, grouped by category](${BASE}/programs.md)`,
+        `- [All ${programCount(livePrograms.length)}, grouped by category](${BASE}/programs.md)`,
         `- [Every program in full](${BASE}/llms-full.txt)`,
       ].join("\n"),
     ),
@@ -557,28 +817,27 @@ function verifiedMd(): string {
 }
 
 function llmsTxt(): string {
-  const verified = programs.filter(p => p.verified)
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))].sort()
+  const verified = programs.filter(listedVerified)
 
   const catLines = categories
     .map(c => {
-      const inCat = programs.filter(p => p.category === c)
-      const v = inCat.filter(p => p.verified).length
-      return `- [${c}](${BASE}/categories/${categoryToSlug(c)}.md) — ${inCat.length} programs, ${v} verified`
+      const inCat = livePrograms.filter(p => p.category === c)
+      const v = inCat.filter(listedVerified).length
+      return `- [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md) — ${programCount(inCat.length)}, ${v} verified`
     })
     .join("\n")
 
-  const netLines = networks
+  const netLines = liveNetworks
     .map(n => {
-      const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-      return `- [${n}](${BASE}/networks/${networkToSlug(n)}.md) — ${inNet.length} programs`
+      const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
+      return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`
     })
     .join("\n")
 
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programs.length} programs across`,
+      `> The open registry of affiliate programs. ${programCount(livePrograms.length)} across`,
       `> ${categories.length} categories, each with machine-readable guidance on when`,
       `> it is worth recommending.`,
     ].join("\n"),
@@ -587,10 +846,11 @@ function llmsTxt(): string {
     [
       `## Data quality`,
       ``,
-      `${verified.length} of ${programs.length} programs (${((verified.length / programs.length) * 100).toFixed(1)}%)`,
+      `${verified.length} of ${programCount(livePrograms.length)} (${((verified.length / livePrograms.length) * 100).toFixed(1)}%)`,
       `have been verified by OpenAffiliate. The rest are community-submitted and`,
-      `unconfirmed: the commission rate, cookie window and payout terms come from`,
-      `the submitter and have not been checked against the program page.`,
+      `unconfirmed: the commission rate comes from the submitter and has not been`,
+      `checked against the program page, and their cookie window, payout and`,
+      `approval terms are left out until it is.`,
       ``,
       `Every program file states its own status and verification date at the top.`,
       `Prefer verified entries when accuracy matters, and cite the program's`,
@@ -645,6 +905,7 @@ function llmsTxt(): string {
       [
         `- [All programs, grouped by category](${BASE}/programs.md)`,
         `- [Full dump, every program in one file](${BASE}/llms-full.txt)`,
+        `- [Best affiliate programs, and every ranked list](${BASE}/best.md)`,
         `- [Documentation index](${BASE}/docs.md)`,
       ].join("\n"),
     ),
@@ -662,19 +923,33 @@ function llmsFullTxt(): string {
   const header = joinSections([
     `# OpenAffiliate — full registry`,
     [
-      `> Every one of the ${programs.length} programs, in full. Generated from the same`,
+      `> Every one of the ${programCount(livePrograms.length)}, in full. Generated from the same`,
       `> registry the website reads. For the short version see ${BASE}/llms.txt,`,
       `> and for just the checked ones ${BASE}/verified.md.`,
     ].join("\n"),
     [
-      `${programs.filter(p => p.verified).length} programs are verified by OpenAffiliate.`,
+      `${programCount(programs.filter(listedVerified).length)} ${programs.filter(listedVerified).length === 1 ? "is" : "are"} verified by OpenAffiliate.`,
       `The rest are community-submitted and unconfirmed — each states its own`,
       `status below.`,
     ].join("\n"),
   ])
 
-  const sorted = [...programs.filter(p => p.verified), ...programs.filter(p => !p.verified)]
-  return header + "\n" + sorted.map(programMd).join("\n---\n\n")
+  const sorted = [...livePrograms.filter(listedVerified), ...livePrograms.filter(p => !listedVerified(p))]
+  // Not counted above: no program to join, or a status nobody could confirm.
+  const notLive = programs.filter(p => !isLive(p))
+  const tail = notLive.length
+    ? "\n---\n\n" + joinSections([
+        section(
+          "Not live",
+          [
+            `No affiliate program to join, or its status is unclear. Each page says which, and why.`,
+            ``,
+            ...notLive.map(p => `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)${statusMark(p)}`),
+          ].join("\n"),
+        ),
+      ])
+    : ""
+  return header + "\n" + sorted.map(programMd).join("\n---\n\n") + tail
 }
 
 // ---------- programs.md index ----------------------------------------------
@@ -684,16 +959,16 @@ function programsIndexMd(): string {
   // link out; llms-full.txt is where everything lives.
   const blocks = categories
     .map(c => {
-      const inCat = programs.filter(p => p.category === c)
+      const inCat = livePrograms.filter(p => p.category === c)
       if (!inCat.length) return null
-      const v = inCat.filter(p => p.verified)
-      const sorted = [...v, ...inCat.filter(p => !p.verified)]
+      const v = inCat.filter(listedVerified)
+      const sorted = [...v, ...inCat.filter(p => !listedVerified(p))]
       const shown = sorted.slice(0, 15)
       const more =
         sorted.length > shown.length
-          ? `\n- … ${sorted.length - shown.length} more in [${c}](${BASE}/categories/${categoryToSlug(c)}.md)`
+          ? `\n- … ${sorted.length - shown.length} more in [${mdEscape(c)}](${BASE}/categories/${categoryToSlug(c)}.md)`
           : ""
-      return `### ${c}\n\n${inCat.length} programs, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
+      return `### ${mdHeading(c)}\n\n${programCount(inCat.length)}, ${v.length} verified.\n\n${shown.map(row).join("\n")}${more}`
     })
     .filter(Boolean)
     .join("\n\n")
@@ -701,8 +976,8 @@ function programsIndexMd(): string {
   return joinSections([
     `# All affiliate programs`,
     [
-      `> ${programs.length} programs across ${categories.length} categories.`,
-      `> ${programs.filter(p => p.verified).length} verified by OpenAffiliate; the rest are`,
+      `> ${programCount(livePrograms.length)} across ${categories.length} categories.`,
+      `> ${livePrograms.filter(listedVerified).length} verified by OpenAffiliate; the rest are`,
       `> community-submitted and unconfirmed.`,
     ].join("\n"),
     [
@@ -719,7 +994,7 @@ function indexMd(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programs.length} programs.`,
+      `> The open registry of affiliate programs. ${programCount(livePrograms.length)}.`,
       `> Built for developers and AI agents.`,
     ].join("\n"),
     section(
@@ -739,35 +1014,107 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  const ranked = [...sitePrograms].sort(
+  const ranked = sitePrograms.filter(isLive).sort(
     (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
   )
   const programLines = ranked
     .map((p, i) => {
-      const mark = p.verified ? "" : " (unverified)"
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(commissionDisplay(p.commission))} ${p.commission.type}${mark}`
+      const mark = statusMark(p)
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
     })
     .join("\n")
+  // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
+  // Unconfirmed figures count, so each line says which: the average with how
+  // many of its rates are unconfirmed, a named program with "unconfirmed".
+  const paidBy = (label: string, x: PaidBy | null, flat: boolean) =>
+    x
+      ? [`${label} ${formatCommissionDisplay(x.value, flat)} ([${mdEscape(x.program.name)}](${BASE}/programs/${x.program.slug}.md)${termsConfirmed(x.program) ? "" : ", unconfirmed"})`]
+      : []
+  const groupFigures = (s: CommissionStats) => [
+    ...(s.avgRate != null ? [`average rate ${formatCommissionDisplay(s.avgRate, false)} across ${rateBasis(s)}`] : []),
+    ...paidBy("top rate", s.topRate, false),
+    ...paidBy("top flat payout", s.topFlatUsd, true),
+  ]
   const networkLines = getNetworkStats()
-    .map(n => `- [${n.network}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${n.programCount} programs, best ${n.bestCommissionDisplay}, top [${n.topProgram.name}](${BASE}/programs/${n.topProgram.slug}.md)`)
+    .map(n => `- [${mdEscape(networkName(n.network))}](${BASE}/networks/${networkToSlug(n.network)}.md) — ${[programCount(n.programCount), ...groupFigures(n)].join(", ")}`)
     .join("\n")
   const categoryLines = getCategoryStats()
-    .map(c => `- [${c.category}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${c.programCount} programs, best ${c.highestCommissionDisplay}, top [${c.topProgram.name}](${BASE}/programs/${c.topProgram.slug}.md)`)
+    .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${[programCount(c.programCount), ...groupFigures(c)].join(", ")}`)
     .join("\n")
 
   return joinSections([
     `# Affiliate program rankings`,
     [
-      `> ${ranked.length} programs ordered by Affiliate Score, the same score as`,
+      `> ${programCount(ranked.length)} ordered by Affiliate Score, the same score as`,
       `> the podium on ${BASE}/rankings and the homepage preview.`,
       `> The interactive table can also sort by verified content, commission,`,
       `> or cookie length. Those orders depend on live filters, so they are not`,
       `> copied here.`,
+      `>`,
+      `> Network and category figures keep percentage rates and flat US-dollar`,
+      `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
+      `> flat amounts in other currencies and unpublished rates count in neither;`,
+      `> a percentage counts in any currency. Unconfirmed figures count and are`,
+      `> marked "unconfirmed".`,
     ].join("\n"),
     section("Programs", programLines),
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),
+  ])
+}
+
+// ---------- Best-of lists --------------------------------------------------
+
+/**
+ * Same rows, intro and FAQ as the list's page, from the same builder. The hub
+ * (/best, written to best.md) is the one llms.txt points at, and it links every
+ * other list, so adding a list never grows the index.
+ */
+function bestListMd(list: BestList, path: string): string {
+  const data = buildBestList(list)
+  const { intro, faq } = bestListCopy(data, mdEscape)
+  const rows = data.rows
+    .map((p, i) => {
+      const cookie = termsConfirmed(p) && p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
+      // A referral reward keeps its published wording, as the page does.
+      const terms =
+        p.kind === "referral"
+          ? [listCommissionText(p), p.commission.type, p.commission.duration ? `for ${p.commission.duration}` : null]
+              .filter(Boolean)
+              .join(" ")
+          : commissionLine(p.commission)
+      // The page's columns, in its order: commission, type, duration, cookie,
+      // network, then the same signup link as the program page.
+      const facts = mdEscape(`${terms}${cookie}, network: ${networkName(p.network ?? IN_HOUSE)}`)
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p).href)}`
+    })
+    .join("\n")
+  return joinSections([
+    // A category list's H1, criteria and FAQ carry the category name, which
+    // no enum guards; bestListCopy escaped the FAQ's share of it.
+    `# ${mdHeading(list.h1)}`,
+    `> ${intro}`,
+    [
+      `How we picked: ${mdEscape(list.criteria)} ${mdEscape(list.rules ?? SHARED_RULES)}`,
+      data.checked ? `Verified ${mdEscape(data.checked)}: ${VERIFIED_NOTE}` : null,
+    ].filter(Boolean).join("\n\n"),
+    section("Programs", rows),
+    section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
+    section(
+      "Other lists",
+      BEST_LISTS.filter(l => l !== list)
+        .map(l => {
+          const other = buildBestList(l)
+          return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`
+        })
+        .join("\n"),
+    ),
+    section("Links", [
+      `HTML: ${BASE}${path}`,
+      `All categories: ${BASE}/categories`,
+      `Registry entry point: ${BASE}/llms.txt`,
+    ].join("\n")),
   ])
 }
 
@@ -805,7 +1152,7 @@ function write(relPath: string, body: string): void {
 function main(): void {
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
-  for (const dir of ["programs", "categories", "networks"]) {
+  for (const dir of ["programs", "categories", "networks", "best"]) {
     rmSync(join(OUT, dir), { recursive: true, force: true })
   }
 
@@ -817,28 +1164,34 @@ function main(): void {
   write("index.md", indexMd())
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
+  for (const list of BEST_LISTS) {
+    write(`${bestPath(list).slice(1)}.md`, bestListMd(list, bestPath(list)))
+  }
 
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))
   }
 
+  // Category twins come from the same builder as the category pages, so the
+  // order, intro and FAQ match the HTML.
   for (const c of categories) {
-    const inCat = programs.filter(p => p.category === c)
-    if (inCat.length) write(`categories/${categoryToSlug(c)}.md`, groupMd("category", c, inCat))
+    write(`categories/${categoryToSlug(c)}.md`, bestListMd(categoryList(c), `/categories/${categoryToSlug(c)}`))
   }
 
-  const networks = [...new Set(programs.map(p => p.network ?? IN_HOUSE))]
+  // Live networks only, the same set that gets an HTML page.
+  const networks = liveNetworks
   for (const n of networks) {
-    const inNet = programs.filter(p => (p.network ?? IN_HOUSE) === n)
-    write(`networks/${networkToSlug(n)}.md`, groupMd("network", n, inNet))
+    const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
+    write(`networks/${networkToSlug(n)}.md`, networkMd(n, inNet))
   }
 
-  const verified = programs.filter(p => p.verified).length
+  const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)
   console.log(`  ${written} files`)
-  console.log(`  ${programs.length} programs (${verified} verified, ${programs.length - verified} unverified)`)
+  console.log(`  ${programCount(livePrograms.length)} live (${verified} verified, ${livePrograms.length - verified} unverified), ${programs.length - livePrograms.length} not live`)
   console.log(`  ${categories.length} categories, ${networks.length} networks`)
   console.log(`  Output: public/`)
 }
 
-main()
+// Only when run as a script, so a test can import programMd without writing public/.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main()

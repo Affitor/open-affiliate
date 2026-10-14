@@ -59,7 +59,7 @@ function OpportunityRow({ item }: { item: Opportunity }) {
           {item.commission}
         </span>
         <p className="text-[10px] text-muted-foreground">
-          {item.commissionType} &middot; {item.cookieDays}d cookie
+          {item.commissionType}{item.cookieDays != null && <> &middot; {item.cookieDays}d cookie</>}
         </p>
       </div>
     </Link>
@@ -136,6 +136,11 @@ function CategoryInsightsTable({ data }: { data: CategoryInsight[] }) {
                 </td>
                 <td className="px-3 py-2.5 text-right hidden lg:table-cell tabular-nums font-medium">
                   {cat.avgCommission}
+                  {cat.avgCommissionBasis && (
+                    <span className="block text-[10px] font-normal text-muted-foreground/70">
+                      across {cat.avgCommissionBasis}
+                    </span>
+                  )}
                 </td>
                 <td className="px-3 py-2.5 hidden lg:table-cell">
                   {cat.topProgram.slug ? (
@@ -150,6 +155,9 @@ function CategoryInsightsTable({ data }: { data: CategoryInsight[] }) {
           </tbody>
         </table>
       </div>
+      <p className="px-4 py-2 text-[10px] text-muted-foreground/60">
+        Avg Commission: the mean single percentage rate across the category&apos;s live programs; the line under it counts the rates and how many are unconfirmed.
+      </p>
     </section>
   )
 }

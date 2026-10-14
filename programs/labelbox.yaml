@@ -51,7 +51,9 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
+updated_at: "2026-10-12"
 last_verified_at: '2026-04-18'
+status: paused
+status_note: "Signup page returned 404 on 2026-10-12 (labelbox.com/partners)"
 kind: affiliate
 source: community

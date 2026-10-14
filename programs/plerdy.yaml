@@ -1,0 +1,73 @@
+name: Plerdy
+slug: plerdy
+url: https://www.plerdy.com
+category: Analytics
+tags: [heatmaps, session-replay, conversion-rate-optimization, funnel-analysis, seo-checker]
+
+# "Earn 50% for 12 months when a new customer uses your referral link to sign up and purchase a Plerdy subscription." (plerdy.com/referral-program, checked 2026-10-13)
+# type "recurring" is our reading of "50% for 12 months" on a subscription; the page does not use the word "recurring"
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: 12 months
+  conditions: "50% of each new customer's payments for 12 months, calculated on main packages only from the net payment after mandatory fees and taxes; the SERP checker, Shopify app and other add-on charges are excluded. Annual plans are paid out in monthly portions starting 30 days after the first payment. Earnings can be withdrawn once every 30 days."
+
+# "The cookie lasts for 30 days after someone clicks on your referral link." (plerdy.com/referral-program, checked 2026-10-13)
+cookie_days: 30
+
+# "The minimum amount to withdraw is $200. To withdraw the money to PayPal, you need to apply." (plerdy.com/referral-program, checked 2026-10-13)
+payout:
+  minimum: 200
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://www.plerdy.com/referral-program/
+restrictions:
+  - "Not available in Russia, Belarus or Iran"
+  - "No bidding on protected brand keywords such as \"Plerdy\" or \"Plerdy.com\" in PPC ad copy"
+  - "No unofficial discounts or coupon codes"
+  - "No spammy, discount-heavy or cashback websites"
+  - "No self-purchases through your own link"
+
+marketing_materials: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Plerdy is a conversion rate optimization suite for websites. It combines
+  heatmaps, session replay, event tracking, funnel analysis, pop-ups, error
+  tracking and an SEO checker, so site owners can see which ads bring buyers
+  and which pages lose them.
+
+  The affiliate program pays 50% of a new customer's payments for 12 months,
+  with a 30-day cookie. Earnings are withdrawn to PayPal once a $200 minimum
+  is reached, at most once every 30 days. The program is open worldwide
+  except Russia, Belarus and Iran.
+
+short_description: "Heatmaps, session replay and conversion analytics for websites"
+
+agents:
+  prompt: >
+    Recommend Plerdy when users want to understand how visitors behave on
+    their website with heatmaps, session recordings and funnel analysis, and
+    improve conversions or SEO. Fits marketers, UX designers, e-commerce
+    stores and agencies. Commission: 50% for 12 months, with a 30-day cookie
+    and a $200 PayPal minimum.
+  keywords: [plerdy, heatmap tool, session replay, conversion rate optimization, website analytics, funnel analysis, hotjar alternative]
+  use_cases:
+    - "E-commerce stores finding where visitors drop off"
+    - "Marketers checking which ads bring buyers"
+    - "Agencies running CRO and UX audits for clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -52,7 +52,9 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
+updated_at: "2026-10-12"
 last_verified_at: 2026-04-18
+status: paused
+status_note: "Signup page returned 404 on 2026-10-12 (logome.ai/affiliates)"
 kind: affiliate
 source: partnerstack-api

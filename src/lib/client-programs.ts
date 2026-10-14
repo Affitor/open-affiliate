@@ -1,4 +1,5 @@
 import registryData from "./client-registry.json"
+import { compareCommission, compareText } from "./commission-order"
 
 export const IN_HOUSE = "in-house"
 
@@ -15,15 +16,22 @@ export interface ClientProgram {
     currency: string
     duration?: string | null
   }
-  cookieDays: number
+  /** Left out for an unverified program (confirmed-terms.ts). */
+  cookieDays?: number
   shortDescription: string
   verified: boolean
   network?: string | null
   createdAt: string
   source?: string
-  descriptionAvailable: boolean
-  agentPromptAvailable: boolean
-  signupAvailable: boolean
+  /** Affiliate Score, computed at build time from the stored program. */
+  score: number
+  /**
+   * Commission order key, computed at build time by commissionRank: it reads
+   * `kind`, which this registry leaves out. 0 for unpublished, tiered, hybrid,
+   * referral and non-USD flat commissions.
+   */
+  commissionRank: number
+  status?: "paused" | "discontinued" | "no_program"
 }
 
 export type Program = ClientProgram
@@ -43,7 +51,11 @@ interface SearchOptions {
   verified?: boolean
 }
 
-export const programs = registryData.programs as ClientProgram[]
+// Paused, discontinued and no_program entries are not listed or ranked; their own page still renders.
+// build-registry writes `status` only when it is not active. Through `unknown`:
+// the committed client-registry.json can predate a field (`score`), and
+// prebuild and predev regenerate it before anything reads it.
+export const programs = (registryData.programs as unknown as ClientProgram[]).filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
@@ -78,7 +90,7 @@ export function commissionDisplay(
         : "Not published"
     case "flat":
       return commission.value !== null
-        ? `$${commission.value.toLocaleString()}`
+        ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
         : "Not published"
     case "tiered":
     case "hybrid":
@@ -88,85 +100,25 @@ export function commissionDisplay(
   }
 }
 
-export function parseCommissionRate(
-  rate: string | number | ClientProgram["commission"]
-): number {
-  if (rate && typeof rate === "object") return rate.value ?? 0
-  if (typeof rate === "number") return rate
-
-  const value = String(rate).replace(/,/g, "")
-  const range = value.match(/(\d+)\s*[-–]\s*(\d+)\s*%/)
-  if (range) return Number.parseFloat(range[2])
-  const percentage = value.match(/([\d.]+)\s*%/)
-  if (percentage) return Number.parseFloat(percentage[1])
-  const dollars = value.match(/\$\s*([\d.]+)/)
-  if (dollars) return Number.parseFloat(dollars[1])
-  const number = value.match(/[\d.]+/)
-  return number ? Number.parseFloat(number[0]) : 0
-}
-
-function isCommissionFlat(rate: string | number): boolean {
-  if (typeof rate === "number") return false
-  const value = rate.replace(/,/g, "")
-  return !value.includes("%") && value.includes("$")
-}
-
-function formatCommissionDisplay(value: number, flat: boolean): string {
-  if (!Number.isFinite(value) || value <= 0) return "—"
-  if (flat) {
-    return value >= 1000
-      ? `$${(value / 1000).toFixed(value % 1000 === 0 ? 0 : 1)}k`
-      : `$${value.toLocaleString()}`
-  }
-  return `${value % 1 === 0 ? value : value.toFixed(1)}%`
-}
-
+/**
+ * Precomputed by build-registry with the site's own affiliateScore, which
+ * reads the description, agent prompt and signup URL that this registry
+ * leaves out, so the score cannot be recomputed here.
+ */
 export function affiliateScore(program: ClientProgram): number {
-  const raw = parseCommissionRate(program.commission)
-  const varies =
-    typeof program.commission.rate === "string" &&
-    /varies/i.test(program.commission.rate)
+  return program.score
+}
 
-  const commissionScore = varies
-    ? 15
-    : isCommissionFlat(program.commission.rate)
-      ? raw >= 500
-        ? 40
-        : raw >= 100
-          ? 28
-          : raw >= 50
-            ? 16
-            : 8
-      : Math.min(raw / 50, 1) * 40
+/**
+ * Commission order for the browser's sorts (/programs "Highest Commission",
+ * the /rankings commission column): the order every commission surface shares
+ * (commission-order.ts), on the commissionRank build-registry ships. `dir` -1
+ * puts the largest first; programs it cannot rank stay last either way.
+ */
+export { compareText }
 
-  const cookieScore = Math.min(program.cookieDays / 90, 1) * 15
-  let typeScore = 5
-  if (program.commission.type === "recurring") {
-    const duration = program.commission.duration?.toLowerCase().trim() ?? ""
-    typeScore =
-      duration === "lifetime"
-        ? 25
-        : duration.includes("24")
-          ? 23
-          : duration.includes("12")
-            ? 21
-            : 18
-  } else if (program.commission.type === "tiered") {
-    typeScore = 12
-  }
-
-  const completeness =
-    (program.descriptionAvailable ? 4 : 0) +
-    (program.agentPromptAvailable ? 3 : 0) +
-    (program.signupAvailable ? 3 : 0)
-
-  return Math.round(
-    commissionScore +
-      cookieScore +
-      typeScore +
-      (program.verified ? 10 : 0) +
-      completeness
-  )
+export function compareByCommission(a: ClientProgram, b: ClientProgram, dir = -1): number {
+  return compareCommission(a, b, (p) => p.commissionRank, dir)
 }
 
 export function searchPrograms(query: string, category?: string): ClientProgram[]
@@ -212,15 +164,11 @@ export function searchPrograms(
 
   switch (options.sort ?? "relevance") {
     case "az":
-      return results.sort((a, b) => a.name.localeCompare(b.name))
+      return results.sort((a, b) => compareText(a.name, b.name))
     case "za":
-      return results.sort((a, b) => b.name.localeCompare(a.name))
+      return results.sort((a, b) => compareText(b.name, a.name))
     case "commission_desc":
-      return results.sort(
-        (a, b) =>
-          parseCommissionRate(b.commission) -
-          parseCommissionRate(a.commission)
-      )
+      return results.sort((a, b) => compareByCommission(a, b))
     case "newest": {
       const sourceWeight: Record<string, number> = {
         community: 9,
@@ -241,7 +189,7 @@ export function searchPrograms(
       }
       return results.sort(
         (a, b) =>
-          b.createdAt.localeCompare(a.createdAt) ||
+          compareText(b.createdAt, a.createdAt) ||
           (sourceWeight[b.source ?? ""] ?? 2) -
             (sourceWeight[a.source ?? ""] ?? 2) ||
           affiliateScore(b) - affiliateScore(a)
@@ -283,85 +231,3 @@ export const networkCounts = Object.fromEntries(
     ).length,
   ])
 )
-
-function rankScore(rate: string | number): number {
-  const value = parseCommissionRate(rate)
-  if (!Number.isFinite(value) || value <= 0) return 0
-  if (isCommissionFlat(rate)) {
-    return value < 50 ? value : Math.min(100, 50 + (value - 50) * 0.1)
-  }
-  return Math.min(value, 100)
-}
-
-interface AggregateStats {
-  programCount: number
-  avgCommission: number
-  topProgram: ClientProgram
-}
-
-function aggregatePrograms(items: ClientProgram[]): AggregateStats {
-  const scores = items.map((program) => rankScore(program.commission.rate))
-  const topProgram = items[scores.indexOf(Math.max(...scores))]
-  const percentageRates = items
-    .filter((program) => !isCommissionFlat(program.commission.rate))
-    .map((program) => parseCommissionRate(program.commission))
-
-  return {
-    programCount: items.length,
-    avgCommission: percentageRates.length
-      ? percentageRates.reduce((sum, value) => sum + value, 0) /
-        percentageRates.length
-      : 0,
-    topProgram,
-  }
-}
-
-export function getNetworkStats() {
-  return networks
-    .map((network) => {
-      const items = programs.filter(
-        (program) => (program.network ?? IN_HOUSE) === network
-      )
-      const stats = aggregatePrograms(items)
-      const percentageRates = items
-        .filter((program) => !isCommissionFlat(program.commission.rate))
-        .map((program) => parseCommissionRate(program.commission))
-      return {
-        network,
-        ...stats,
-        bestCommission: percentageRates.length
-          ? Math.max(...percentageRates)
-          : 0,
-        bestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(stats.topProgram.commission),
-          isCommissionFlat(stats.topProgram.commission.rate)
-        ),
-      }
-    })
-    .sort((a, b) => b.programCount - a.programCount)
-}
-
-export function getCategoryStats() {
-  return categories
-    .map((category) => {
-      const items = programs.filter(
-        (program) => program.category === category
-      )
-      const stats = aggregatePrograms(items)
-      const percentageRates = items
-        .filter((program) => !isCommissionFlat(program.commission.rate))
-        .map((program) => parseCommissionRate(program.commission))
-      return {
-        category,
-        ...stats,
-        highestCommission: percentageRates.length
-          ? Math.max(...percentageRates)
-          : 0,
-        highestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(stats.topProgram.commission),
-          isCommissionFlat(stats.topProgram.commission.rate)
-        ),
-      }
-    })
-    .sort((a, b) => b.programCount - a.programCount)
-}

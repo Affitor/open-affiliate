@@ -16,6 +16,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { FilterSelect } from "@/components/filter-select";
+import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 import {
   programs,
   categories,
@@ -29,6 +30,7 @@ import {
   type Program,
   commissionLabel,  commissionDisplay
 } from "@/lib/client-programs";
+import { networkName } from "@/lib/network-meta";
 import { track } from "@/lib/track";
 import { ImpressionTracker } from "@/components/impression-tracker";
 
@@ -105,7 +107,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d cookie
+          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
           {program.category}
@@ -155,7 +157,7 @@ function ProgramRowList({ program }: { program: Program }) {
           {commissionLabel(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-[11px]">
-          {program.cookieDays}d
+          {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
         </Badge>
         <span className="hidden lg:inline text-[11px] text-muted-foreground">
           {program.category}
@@ -391,21 +393,11 @@ function ProgramsContent() {
   ];
 
   // Network options with counts
-  const NETWORK_LABELS: Record<string, string> = {
-    "in-house": "In-house",
-    partnerstack: "PartnerStack",
-    impact: "Impact",
-    rewardful: "Rewardful",
-    "cj-affiliate": "CJ Affiliate",
-    firstpromoter: "FirstPromoter",
-    awin: "Awin",
-    dub: "Dub",
-  };
   const networkOptions = [
     { value: "", label: "All Networks" },
     ...networks.map((n) => ({
       value: n,
-      label: NETWORK_LABELS[n] ?? n.charAt(0).toUpperCase() + n.slice(1),
+      label: networkName(n),
       count: networkCounts[n] ?? 0,
     })),
   ];
@@ -561,7 +553,7 @@ function ProgramsContent() {
                 onClick={() => handleNetwork("")}
                 className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
-                {selectedNetwork}
+                {networkName(selectedNetwork)}
                 <X className="h-3 w-3" />
               </button>
             )}

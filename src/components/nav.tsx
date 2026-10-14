@@ -20,6 +20,7 @@ function GitHubIcon({ className }: { className?: string }) {
 // until its thumbnails and load time are good enough to send people to.
 const NAV_LINKS = [
   { label: "Programs", href: "/programs" },
+  { label: "Networks", href: "/networks" },
   { label: "Categories", href: "/categories" },
   { label: "Rankings", href: "/rankings" },
   { label: "Submit", href: "/submit" },

@@ -1,0 +1,12 @@
+{
+  "list_url": "https://api.affitor.com/api/marketplace/programs",
+  "marketplace": "https://affitor.com/marketplace/",
+  "max_pauses": 3,
+  "bot": "openaffiliate-sync[bot]",
+  "label": "affitor-sync",
+  "not_found": {
+    "success": false,
+    "data": null,
+    "message": "Program not found"
+  }
+}

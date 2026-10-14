@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import { Command } from "commander";
+import { approvalText, cookieCell, cookieText, payoutText } from "./format";
 
 const API_BASE = process.env.OPENAFFILIATE_API || "https://openaffiliate.dev";
 
@@ -10,9 +11,10 @@ interface ProgramSummary {
   shortDescription: string;
   category: string;
   commission: { type: string; rate: string };
-  cookieDays: number;
+  cookieDays?: number;
   verified: boolean;
   signupUrl?: string;
+  status?: "active" | "paused" | "discontinued" | "no_program";
 }
 
 interface ProgramFull extends ProgramSummary {
@@ -29,7 +31,9 @@ interface ProgramFull extends ProgramSummary {
   payoutMethods?: string[];
   network?: string;
   programAge?: string;
-  payout: { minimum: number; frequency: string };
+  payout?: { minimum?: number; frequency?: string };
+  /** Set instead of terms when the brand has no program to join. */
+  answer?: string;
 }
 
 
@@ -118,7 +122,7 @@ program
       ...programs.map((p) => [
         p.name,
         `${p.commission.rate} ${p.commission.type}`,
-        `${p.cookieDays}d`,
+        cookieCell(p),
         p.category,
         p.verified ? "✓" : "",
       ]),
@@ -140,16 +144,22 @@ program
       return;
     }
 
+    // A brand with no program comes back with an answer and no commission.
+    if (p.answer) {
+      console.log(`\n  ${p.name}\n  ${p.answer}\n  URL: ${p.url}\n`);
+      return;
+    }
+
     console.log(`
-  ${p.name}${p.verified ? " ✓" : ""}
+  ${p.name}${p.verified ? " ✓" : ""}${p.status && p.status !== "active" ? ` (${p.status})` : ""}
   ${p.shortDescription}
   ${"─".repeat(50)}
 
-  Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}
-  Cookie:      ${p.cookieDays} days
-  Payout:      $${p.payout.minimum} min / ${p.payout.frequency}
-  ${p.payoutMethods ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
-  ${p.approval ? `Approval:    ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : ""}
+  Commission:  ${commissionText(p.commission)} ${p.commission.type}${p.commissionDuration ? ` (${p.commissionDuration})` : ""}${p.verified ? "" : " (unconfirmed)"}
+  Cookie:      ${cookieText(p)}
+  Payout:      ${payoutText(p)}
+  ${p.payoutMethods?.length ? `Methods:     ${p.payoutMethods.join(", ")}` : ""}
+  Approval:    ${approvalText(p)}
   ${p.network ? `Network:     ${p.network}` : ""}
   URL:         ${p.url}
   ${p.signupUrl ? `Signup:      ${p.signupUrl}` : ""}
@@ -190,6 +200,10 @@ program
   .action(async (slug: string) => {
     const data = await fetchJSON(`/api/programs/${slug}`);
     const p = data as ProgramFull;
+    if (p.answer) {
+      console.error(`${p.name} has no affiliate program to add. ${p.answer}`);
+      process.exit(1);
+    }
 
     const fs = await import("fs");
     const entry: Record<string, unknown> = {

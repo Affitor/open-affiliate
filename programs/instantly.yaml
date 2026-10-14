@@ -63,7 +63,7 @@ agents:
     - "Startups doing outbound sales with AI-written emails"
     - "Lead gen professionals needing email warmup and deliverability"
 
-verified: true
+verified: false
 submitted_by: community
 created_at: "2026-04-17"
 updated_at: null

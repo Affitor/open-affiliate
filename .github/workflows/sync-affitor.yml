@@ -1,0 +1,178 @@
+name: Sync Affitor
+
+# Once a day, list the Affitor marketplace programs in programs/
+# (scripts/sync-affitor.ts) and open up to two pull requests:
+#   sync/affitor-YYYY-MM-DD      updates and pauses of existing listings, and
+#                                the also_on.affitor commission on brands' own
+#                                listings (refreshed, or removed with the program). The
+#                                affitor-sync lane of auto-merge.yml re-reads
+#                                every term from the Affitor API and merges it
+#                                once CI is green. Superseded by the next one.
+#   sync/affitor-new-YYYY-MM-DD  new listings. Never auto-merged: a person sets
+#                                category, description and agents block, then
+#                                reviews and merges. While one is open, no
+#                                other is opened and it is never touched.
+# Split, so term updates are never held up by new listings.
+#
+# The pull requests are opened with a token of the org's "OpenAffiliate Sync"
+# GitHub App, not GITHUB_TOKEN: the Affitor org forbids Actions from opening
+# pull requests, and a pull request opened with GITHUB_TOKEN would not run CI.
+#
+# Nothing here writes to main. The App token is minted only after the sync has
+# run, and dependencies install with lifecycle scripts off, so no package code
+# runs while the token exists.
+
+on:
+  schedule:
+    - cron: "0 14 * * *" # 14:00 UTC, 07:00 in San Francisco
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sync-affitor
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci --ignore-scripts
+
+      # Fails closed: an outage, a paged list, or more pauses than the config
+      # allows writes nothing and turns this run red for a person to read.
+      - name: Sync
+        shell: bash
+        run: npx tsx scripts/sync-affitor.ts | tee "$RUNNER_TEMP/sync-affitor.log"
+
+      - name: Check for changes
+        id: changes
+        shell: bash
+        run: |
+          if [ -n "$(git status --porcelain -- programs)" ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "programs/ already matches Affitor"
+          fi
+
+      - name: Mint the App token
+        if: steps.changes.outputs.changed == 'true'
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          app-id: ${{ secrets.OA_SYNC_APP_ID }}
+          private-key: ${{ secrets.OA_SYNC_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Open the pull requests
+        if: steps.changes.outputs.changed == 'true'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          APP_SLUG: ${{ steps.app-token.outputs.app-slug }}
+        run: |
+          day="$(date -u +%Y-%m-%d)"
+          label="$(node -p "require('./scripts/sync-affitor.config.json').label")"
+          bot="${APP_SLUG}[bot]"
+          bot_id="$(gh api "users/${bot}" --jq .id)"
+          remote="https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          log="$RUNNER_TEMP/sync-affitor.log"
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          base="$(git rev-parse HEAD)"
+          new_files="$(git ls-files --others --exclude-standard -- programs)"
+
+          gh label create "$label" --repo "$GITHUB_REPOSITORY" --force --color 0e8a16 \
+            --description "Daily Affitor sync; terms re-checked against the Affitor API before merge"
+
+          # The App's own open pull requests from this repository into main, one
+          # "number branch" per line. A fork can open a pull request from a branch
+          # with the same name, so a branch name alone proves nothing. Listed
+          # without search, which can lag behind a pull request just opened.
+          app_prs() {
+            gh pr list --repo "$GITHUB_REPOSITORY" --base main --state open --limit 200 \
+              --json number,headRefName,author,isCrossRepository \
+              --jq ".[] | select(.isCrossRepository == false and .author.login == \"app/$APP_SLUG\") | \"\(.number) \(.headRefName)\""
+          }
+
+          # Commit what is staged, push it to branch $1, and make sure the App's
+          # pull request for it is open. Sets $opened to its number, or fails the run.
+          publish() {
+            local branch="$1" title="$2" body="$3" url
+            git -c user.name="$bot" -c user.email="${bot_id}+${bot}@users.noreply.github.com" commit -q -m "$title"
+            # The bot's own branch: a second run on the same day replaces it.
+            git push -q --force "$remote" "HEAD:refs/heads/$branch"
+            opened="$(app_prs | awk -v b="$branch" '$2 == b && !n { print $1; n = 1 }')"
+            if [ -z "$opened" ]; then
+              url="$(gh pr create --repo "$GITHUB_REPOSITORY" --base main --head "$branch" \
+                --title "$title" --body-file "$body" --label "$label")"
+              opened="${url##*/}"
+              echo "opened pull request #$opened"
+            else
+              echo "updated pull request #$opened"
+            fi
+            [[ "$opened" =~ ^[0-9]+$ ]] || { echo "::error::no pull request is open for $branch"; exit 1; }
+          }
+
+          # Updates and pauses of existing listings: the auto-merge lane's to merge.
+          if ! git diff --quiet -- programs; then
+            branch="sync/affitor-$day"
+            git switch -q -c "$branch"
+            git add -u -- programs
+            {
+              echo "Daily sync from the Affitor marketplace API by \`scripts/sync-affitor.ts\`: updates and pauses of existing listings, and the Affitor line (also_on) on brands' own listings."
+              echo
+              echo '```'
+              grep -E '^(take-over|also-on|pause|unlink) ' "$log" | grep -v 'already up to date' || true
+              echo '```'
+              echo
+              echo "The \`$label\` lane of the auto-merge policy re-reads every term from the Affitor API and merges once CI is green. Anything it cannot confirm stays open for a person."
+              echo
+              echo "Run: $run_url"
+            } > "$RUNNER_TEMP/updates.md"
+            publish "$branch" "chore: sync Affitor terms $day" "$RUNNER_TEMP/updates.md"
+            # Only now that its replacement is open: the App's older updates pull
+            # requests are superseded, since this one is built on today's main.
+            app_prs | awk -v keep="$opened" '$2 ~ /^sync\/affitor-/ && $2 !~ /^sync\/affitor-new-/ && $1 != keep { print $1 }' |
+              while read -r number; do
+                gh pr close "$number" --repo "$GITHUB_REPOSITORY" --delete-branch --comment "Superseded by #$opened, the $day sync."
+              done
+            # Back to main's files; the new listings are untracked and stay.
+            git switch -q --detach "$base"
+          fi
+
+          # New listings: a person edits and merges them, so an open one is never touched.
+          if [ -n "$new_files" ]; then
+            open_new="$(app_prs | awk '$2 ~ /^sync\/affitor-new-/ { n++ } END { print n + 0 }')"
+            if [ "$open_new" != "0" ]; then
+              echo "a new-listings pull request is still open; it is left to the person editing it"
+            else
+              branch="sync/affitor-new-$day"
+              git switch -q -c "$branch"
+              git add -- programs
+              {
+                echo "New listings from the Affitor marketplace API by \`scripts/sync-affitor.ts\`."
+                echo
+                echo '```'
+                grep -E '^create ' "$log" || true
+                echo '```'
+                echo
+                echo "**Not auto-merged.** Each listing needs a hand category, description and agents block, then a person reviews and merges. Push the edits to this branch: while this pull request is open, the daily sync leaves it alone and opens no other one for new listings."
+                echo
+                echo "Run: $run_url"
+              } > "$RUNNER_TEMP/new.md"
+              publish "$branch" "chore: add new Affitor programs $day" "$RUNNER_TEMP/new.md"
+            fi
+          fi

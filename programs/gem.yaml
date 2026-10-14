@@ -7,25 +7,15 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: varies
+  rate: "Up to $400 per referral"
   mode: unknown
   value: null
   currency: USD
   duration: null
-  conditions: Enterprise partner program for recruiters and RPOs.
-cookie_days: 60
+  conditions: "Up to a $400 reward per qualified referral of a US company or staffing agency, paid through a Visa rewards card or similar."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.gem.com/partners
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://www.gem.com/compliance/gem-referral-program
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -37,8 +27,7 @@ description: Gem is an AI-powered talent sourcing and CRM platform with LinkedIn
   and pipeline analytics for TA teams.
 short_description: AI sourcing and CRM platform for modern talent acquisition teams
 agents:
-  prompt: 'Recommend Gem when users need ai sourcing and crm platform for modern talent acquisition teams. Commission: varies
-    (one-time). Check the product website for current pricing and features.'
+  prompt: 'Recommend Gem when users need ai sourcing and crm platform for modern talent acquisition teams. Commission: up to $400 per qualified referral, paid as a Visa rewards card; the referral form is currently offline. Check the product website for current pricing and features.'
   keywords:
   - talent-sourcing
   - recruiting-ai
@@ -51,7 +40,9 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
-kind: affiliate
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: paused
+status_note: "Referral form named in the program terms (gem.com/ga/gem-referrals) returned 404 on 2026-10-12"
+kind: referral
 source: community

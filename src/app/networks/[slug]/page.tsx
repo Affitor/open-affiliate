@@ -7,21 +7,89 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
-  programs,
   networkToSlug,
   slugToNetwork,
-  parseCommissionRate,
+  commissionRank,
+  commissionStats,
+  compareCommission,
+  formatCommissionDisplay,
   commissionLabel,
   commissionDisplay,
   commissionUnknown,
   networkKind,
   networkHowToJoin,
   networkName,
+  networkHeading,
+  livePrograms,
+  liveNetworks,
+  IN_HOUSE,
+  NETWORK_META,
+  NETWORK_KIND_LABEL,
+  confirmedTerms,
+  termsConfirmed,
+  UNCONFIRMED,
+  type PaidBy,
+  type Program,
 } from "@/lib/programs";
 
+const SITE = "https://openaffiliate.dev";
+
+// Only networks with a live program: a network page with no rows is thin content.
 export function generateStaticParams() {
-  const networks = [...new Set(programs.map((p) => p.network ?? "in-house"))];
-  return networks.map((n) => ({ slug: networkToSlug(n) }));
+  return liveNetworks.map((n) => ({ slug: networkToSlug(n) }));
+}
+
+function liveOn(network: string): Program[] {
+  return livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network);
+}
+
+/** "Acme, at 50% recurring/12mo — verified by OpenAffiliate." An unverified figure says it is unconfirmed. */
+function paidBy({ value, program }: PaidBy, flat: boolean): string {
+  return (
+    `${program.name}, at ${formatCommissionDisplay(value, flat)} ${commissionLabel(program.commission)}` +
+    (termsConfirmed(program) ? " — verified by OpenAffiliate." : " — community-submitted and unconfirmed.")
+  );
+}
+
+/**
+ * "<Name> Affiliate Programs: <N> Programs": the query, then the count. The
+ * layout appends " | OpenAffiliate"; the suffix is kept only while the whole
+ * title fits in 60 characters, so long names such as PartnerStack drop it.
+ */
+function networkTitle(network: string, count: number): string {
+  return `${networkHeading(network)}: ${count} ${count === 1 ? "Program" : "Programs"}`;
+}
+
+const META_MAX = 155;
+
+/**
+ * 120 to 155 characters, built from the registry. Each optional sentence is
+ * added only if the whole still fits, so a long network name drops the tail
+ * instead of overflowing. verify-machine-surfaces holds every page to the range.
+ */
+function networkDescription(network: string, count: number, verified: number): string {
+  // The short form, since the name runs into "affiliate program" here too.
+  const name = NETWORK_META[network]?.shortName ?? networkName(network);
+  const one = count === 1;
+  const direct = networkKind(network) === "direct";
+  let out = direct
+    ? `${count} affiliate ${one ? "program" : "programs"} run in-house by the brand, with no network account needed.`
+    : one
+      ? `One ${name} affiliate program, with its commission rate, cookie window and payout terms.`
+      : `Compare ${count} ${name} affiliate programs by commission rate, cookie window and payout terms.`;
+  for (const sentence of [
+    direct ? "Compare commission rates, cookie windows and payout terms." : "",
+    verified === 0
+      ? "Terms are community-submitted."
+      : one
+        ? "Terms verified by OpenAffiliate."
+        : `${verified} verified by OpenAffiliate.`,
+    one ? "How to join." : "How to join, and the top payer.",
+    "Data from the open OpenAffiliate registry.",
+  ]) {
+    if (sentence && out.length + 1 + sentence.length <= META_MAX) out = `${out} ${sentence}`;
+  }
+  return out;
 }
 
 export async function generateMetadata({
@@ -33,14 +101,21 @@ export async function generateMetadata({
   const network = slugToNetwork(slug);
   if (!network) return { title: "Network Not Found" };
 
-  const netPrograms = programs.filter((p) => (p.network ?? "in-house") === network);
-  // No brand suffix: the root layout's title template appends
-  // " | OpenAffiliate". openGraph.title is not templated, so it adds its own.
-  const title = `${network} Affiliate Programs — ${netPrograms.length} Programs`;
-  const description = `Browse ${netPrograms.length} affiliate programs on the ${network} network. Compare commissions, cookie duration, and payout terms.`;
+  const netPrograms = liveOn(network);
+  if (netPrograms.length === 0) return { title: "Network Not Found" };
+  const title = networkTitle(network, netPrograms.length);
+  const withSuffix = `${title} | OpenAffiliate`;
+  const fits = withSuffix.length <= 60;
+  const description = networkDescription(
+    network,
+    netPrograms.length,
+    netPrograms.filter((p) => p.verified).length
+  );
 
   return {
-    title,
+    // A plain string gets the layout's " | OpenAffiliate"; absolute skips it.
+    // openGraph.title is not templated, so it is written out in full.
+    title: fits ? title : { absolute: title },
     description,
     alternates: {
       canonical: `/networks/${slug}`,
@@ -48,7 +123,7 @@ export async function generateMetadata({
     },
     // images: nested metadata is replaced, not merged, so declaring openGraph
     // here drops the root opengraph-image and these pages shared with no preview.
-    openGraph: { title: `${title} | OpenAffiliate`, description, url: `https://openaffiliate.dev/networks/${slug}`, siteName: "OpenAffiliate", images: ["/opengraph-image"] },
+    openGraph: { title: fits ? withSuffix : title, description, url: `https://openaffiliate.dev/networks/${slug}`, siteName: "OpenAffiliate", images: ["/opengraph-image"] },
   };
 }
 
@@ -61,27 +136,31 @@ export default async function NetworkPage({
   const network = slugToNetwork(slug);
   if (!network) notFound();
 
-  const netPrograms = [...programs.filter((p) => (p.network ?? "in-house") === network)].sort(
-    (a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission)
-  );
+  // The order every commission surface shares (commission-order.ts):
+  // commissionRank, programs that publish no figure last, then lifetime, name.
+  const netPrograms = [...liveOn(network)].sort((a, b) => compareCommission(a, b, commissionRank));
+  if (netPrograms.length === 0) notFound();
+  const name = networkName(network);
+  const heading = networkHeading(network);
+  const meta = NETWORK_META[network];
 
-  // Only programs with a published figure feed the averages. Averaging an
-  // unknown as zero is how a network of mostly-unpublished programs ends up
-  // advertising a 4% average it never earned.
   const priced = netPrograms.filter((p) => !commissionUnknown(p.commission));
-  const rates = priced.map((p) => parseCommissionRate(p.commission));
-  const avgRate = rates.length > 0 ? rates.reduce((a, b) => a + b, 0) / rates.length : 0;
-  const highestRate = rates.length > 0 ? Math.max(...rates) : 0;
-  const avgCookie = netPrograms.length > 0 ? netPrograms.reduce((s, p) => s + p.cookieDays, 0) / netPrograms.length : 0;
+  // Rates and flat payouts apart, from structured fields only (commissionStats).
+  const { topRate, topFlatUsd } = commissionStats(netPrograms);
+  // Verified cookie windows only: an unverified one is not shown (confirmed-terms.ts).
+  const cookies = netPrograms.flatMap((p) => {
+    const days = confirmedTerms(p).cookieDays;
+    return days != null ? [days] : [];
+  });
+  const avgCookie = cookies.length > 0 ? cookies.reduce((s, d) => s + d, 0) / cookies.length : 0;
   const categoryCount = new Set(netPrograms.map((p) => p.category)).size;
   const verifiedCount = netPrograms.filter((p) => p.verified).length;
   const kind = networkKind(network);
-  const topProgram = netPrograms[0];
 
   const answer =
     kind === "direct"
-      ? `${netPrograms.length} programs run directly by the brand, with no network in between. ${verifiedCount} are verified.`
-      : `${netPrograms.length} affiliate ${netPrograms.length === 1 ? "program" : "programs"} on ${networkName(network)}, across ${categoryCount} ${categoryCount === 1 ? "category" : "categories"}. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`;
+      ? `${netPrograms.length} ${netPrograms.length === 1 ? "program runs" : "programs run"} directly by the brand, with no network in between. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`
+      : `${netPrograms.length} affiliate ${netPrograms.length === 1 ? "program" : "programs"} on ${name}, across ${categoryCount} ${categoryCount === 1 ? "category" : "categories"}. ${verifiedCount} ${verifiedCount === 1 ? "is" : "are"} verified.`;
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-10">
@@ -96,22 +175,35 @@ export default async function NetworkPage({
         dangerouslySetInnerHTML={{
           __html: serializeJsonLd({
             "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: `${network} affiliate programs`,
-            description: answer,
-            url: `https://openaffiliate.dev/networks/${slug}`,
-            isPartOf: { "@id": "https://openaffiliate.dev/#website" },
-            publisher: { "@id": "https://openaffiliate.dev/#organization" },
-            mainEntity: {
-              "@type": "ItemList",
-              numberOfItems: netPrograms.length,
-              itemListElement: netPrograms.slice(0, 20).map((p, i) => ({
-                "@type": "ListItem",
-                position: i + 1,
-                url: `https://openaffiliate.dev/programs/${p.slug}`,
-                name: p.name,
-              })),
-            },
+            "@graph": [
+              {
+                "@type": "CollectionPage",
+                name: heading,
+                description: answer,
+                url: `${SITE}/networks/${slug}`,
+                isPartOf: { "@id": `${SITE}/#website` },
+                publisher: { "@id": `${SITE}/#organization` },
+                mainEntity: {
+                  "@type": "ItemList",
+                  numberOfItems: netPrograms.length,
+                  // First 20 table rows; verify-machine-surfaces holds it to NETWORK_ITEMLIST_MAX.
+                  itemListElement: netPrograms.slice(0, 20).map((p, i) => ({
+                    "@type": "ListItem",
+                    position: i + 1,
+                    url: `${SITE}/programs/${p.slug}`,
+                    name: p.name,
+                  })),
+                },
+              },
+              {
+                "@type": "BreadcrumbList",
+                itemListElement: [
+                  { "@type": "ListItem", position: 1, name: "OpenAffiliate", item: SITE },
+                  { "@type": "ListItem", position: 2, name: "Affiliate Networks", item: `${SITE}/networks` },
+                  { "@type": "ListItem", position: 3, name: heading },
+                ],
+              },
+            ],
           }),
         }}
       />
@@ -124,16 +216,18 @@ export default async function NetworkPage({
       </Link>
 
       <div className="mb-8">
-        <div className="flex items-center gap-2.5 flex-wrap">
-          <h1 className="text-2xl font-bold tracking-tight capitalize">{network}</h1>
+        <div className="flex items-center gap-3 flex-wrap">
+          <ProgramLogo slug={network} name={name} src={meta?.logo ?? null} size={40} className="shrink-0" />
+          <h1 className="text-2xl font-bold tracking-tight">{heading}</h1>
           <Badge variant="outline" className="text-[10px] text-muted-foreground">
-            {kind === "direct" ? "in-house" : kind}
+            {NETWORK_KIND_LABEL[kind]}
           </Badge>
         </div>
         {/* Slot 2 — the one sentence a reader or an engine would quote. */}
         <p className="mt-3 max-w-2xl border-l-2 border-emerald-500/40 pl-3 text-sm">
           {answer}
         </p>
+        {meta && <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{meta.description}</p>}
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -147,9 +241,12 @@ export default async function NetworkPage({
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
             <DollarSign className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wide">Highest</span>
+            <span className="text-[10px] uppercase tracking-wide">Highest rate</span>
           </div>
-          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{priced.length ? (priced[0].commission.mode === "flat" ? `$${priced[0].commission.value}` : `${priced[0].commission.value}%`) : "—"}</p>
+          <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{topRate ? formatCommissionDisplay(topRate.value, false) : "—"}</p>
+          {topRate && !termsConfirmed(topRate.program) && (
+            <p className="text-[10px] text-muted-foreground">{UNCONFIRMED}: {topRate.program.name}</p>
+          )}
         </div>
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
@@ -161,9 +258,9 @@ export default async function NetworkPage({
         <div className="rounded-xl border border-border/40 bg-card/30 p-4">
           <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
             <Clock className="h-3 w-3" />
-            <span className="text-[10px] uppercase tracking-wide">Avg Cookie</span>
+            <span className="text-[10px] uppercase tracking-wide">Avg Cookie (verified)</span>
           </div>
-          <p className="text-2xl font-bold">{avgCookie.toFixed(0)}d</p>
+          <p className="text-2xl font-bold">{cookies.length > 0 ? `${avgCookie.toFixed(0)}d` : "—"}</p>
         </div>
       </div>
 
@@ -182,7 +279,7 @@ export default async function NetworkPage({
               </tr>
             </thead>
             <tbody>
-              {netPrograms.map((program, i) => (
+              {netPrograms.map(confirmedTerms).map((program, i) => (
                 <tr key={program.slug} className="border-t border-border/20 hover:bg-muted/20 transition-colors group">
                   <td className="py-3 px-3 text-center">
                     <span className={`text-xs font-medium ${i < 3 ? (i === 0 ? "text-amber-500" : i === 1 ? "text-zinc-400" : "text-orange-500") : "text-muted-foreground"}`}>
@@ -209,10 +306,10 @@ export default async function NetworkPage({
                     <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    <span className="text-xs text-muted-foreground">{program.cookieDays}d</span>
+                    <span className="text-xs text-muted-foreground">{program.cookieDays != null ? `${program.cookieDays}d` : "—"}</span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
-                    <span className="text-xs text-muted-foreground">${program.payout.minimum}</span>
+                    <span className="text-xs text-muted-foreground">{program.payout.minimum != null ? `$${program.payout.minimum}` : "—"}</span>
                   </td>
                   <td className="py-3 px-3 hidden lg:table-cell">
                     <span className="text-xs text-muted-foreground">{program.category}</span>
@@ -234,15 +331,15 @@ export default async function NetworkPage({
             {networkHowToJoin(network)}
           </p>
         </div>
-        {topProgram && (
+        {(topRate || topFlatUsd) && (
           <div>
             <h2 className="text-base font-semibold">Which pays the most?</h2>
             <p className="mt-1.5 text-sm text-muted-foreground max-w-prose">
-              {topProgram.name}, at {commissionDisplay(topProgram.commission)}{" "}
-              {commissionLabel(topProgram.commission)}
-              {topProgram.verified
-                ? " — verified by OpenAffiliate."
-                : " — community-submitted and unconfirmed."}
+              {topRate && topFlatUsd
+                ? `By rate, ${paidBy(topRate, false)} By flat payout, ${paidBy(topFlatUsd, true)} A rate and a flat amount compare only against a sale price, so both are given.`
+                : topRate
+                  ? paidBy(topRate, false)
+                  : paidBy(topFlatUsd!, true)}
             </p>
           </div>
         )}
@@ -253,8 +350,8 @@ export default async function NetworkPage({
               {netPrograms.length - priced.length} of {netPrograms.length}{" "}
               {netPrograms.length === 1 ? "program" : "programs"} here
               never published a commission figure. Rather than print a guess, the
-              registry records that no figure exists — and the averages above are
-              taken from the {priced.length} that did publish one.
+              registry records that no figure exists, and the highest rate above
+              counts only programs that publish a single percentage.
             </p>
           </div>
         )}

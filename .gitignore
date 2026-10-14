@@ -92,4 +92,5 @@ reports/
 /public/programs/
 /public/categories/
 /public/networks/
+/public/best/
 *.bak

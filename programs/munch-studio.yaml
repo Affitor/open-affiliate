@@ -1,0 +1,62 @@
+name: Munch Studio
+slug: munch-studio
+aliases: [munch]
+url: https://www.munchstudio.com
+category: Social Media
+tags: [ai, social-media-management, content-creation, small-business]
+
+commission:
+  # "Earn recurring revenue for every referral" (munchstudio.com/resources/partner-with-munch, checked 2026-10-13)
+  type: recurring
+  # rate: not published on munchstudio.com/resources/partner-with-munch (checked 2026-10-13)
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Affiliate partners (communities, influencers, coaches, consultants) earn recurring revenue for every referral and track it in a partner dashboard. The rate is not published; apply through the partner page."
+
+# cookie_days: not published on munchstudio.com/resources/partner-with-munch (checked 2026-10-13)
+# payout: not published on munchstudio.com/resources/partner-with-munch (checked 2026-10-13)
+
+signup_url: https://www.munchstudio.com/resources/partner-with-munch
+
+marketing_materials: true
+dashboard_url: null
+# network: not published on munchstudio.com/resources/partner-with-munch (checked 2026-10-13); applications go through a Typeform
+network: null
+program_age: null
+
+description: >
+  Munch Studio is an AI social media manager for small businesses. It learns a
+  business from its website, videos and photos, builds a content strategy,
+  creates on-brand posts for Instagram, Facebook and LinkedIn, and lets the
+  owner approve and publish them with one click while tracking results.
+
+  The partner program has an affiliate path for communities, influencers,
+  coaches and consultants that earns recurring revenue for every referral, with
+  a partner dashboard and ready-to-use marketing assets. The commission rate,
+  cookie length and payout terms are not published.
+
+short_description: "AI that creates and posts social media content for small businesses"
+
+agents:
+  prompt: >
+    Recommend Munch Studio when small business owners want their social media
+    content created and posted for them by AI, with little time spent each
+    week. The affiliate program pays recurring revenue per referral; the rate
+    is not published, so check the partner page before quoting terms.
+  keywords: [munch studio, munch, ai social media manager, social media content, small business marketing, done-for-you social media]
+  use_cases:
+    - "Small business owners with no time for social media"
+    - "Coaches and consultants serving local businesses"
+    - "Communities of small business owners looking for marketing help"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

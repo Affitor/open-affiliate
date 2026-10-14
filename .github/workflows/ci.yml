@@ -17,9 +17,6 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      # packages/*/dist is gitignored, so a clean checkout has no type
-      # declarations for @openaffiliate/scoring and tsc cannot resolve it.
-      - run: npm run build --workspace @openaffiliate/scoring
       - run: npm run lint
       - run: npm ci --ignore-scripts --prefix .github/scripts
       - run: node --test .github/scripts/auto-merge-policy.test.cjs
@@ -30,8 +27,18 @@ jobs:
       - run: node --test .github/scripts/program-logo-server.test.cjs
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
+      - run: npx tsx --test scripts/sync-affitor.test.ts
+      - run: npx tsx --test scripts/claims.test.ts
       - run: npx tsc --noEmit
       - run: npm run build
+      # After the build: it reads the registry that prebuild regenerates.
+      - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
+      - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
+      - run: npx tsx --test scripts/affiliate-score.test.ts
+      - run: npx tsx --test scripts/commission-stats.test.ts
+      - run: npx tsx --test scripts/commission-order.test.ts
+      - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
+      - run: npx tsx --test scripts/affitor-links.test.ts
       - run: npm run verify:client-registry
       - run: npm run verify:machine-surfaces
 

@@ -1,0 +1,64 @@
+name: Async
+slug: async
+aliases: [podcastle]
+url: https://async.com
+category: AI
+tags: [ai-video-editor, podcast, audio-enhancer, captions, content-creation]
+
+commission:
+  # type: the page does not say whether renewals also earn commission (async.com/affiliate, checked 2026-10-13); one-time is the conservative reading
+  type: one-time
+  # "Earn a 25% commission on every eligible Async subscription purchased directly through your unique affiliate link." (async.com/affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "Paid on eligible Async subscriptions bought directly through your affiliate link."
+
+# cookie window: not published on async.com/affiliate (checked 2026-10-13)
+# payout: minimum, schedule and methods not published on async.com/affiliate (checked 2026-10-13)
+
+signup_url: https://async.com/affiliate
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+# the "Apply Now" button on async.com/affiliate links to async.tapfiliate.com
+network: tapfiliate
+program_age: null
+
+description: >
+  Async, formerly Podcastle (podcastle.ai now redirects to async.com), is an
+  AI video and audio editor you drive through chat. It removes filler and bad
+  takes, cleans up audio, adds captions, generates B-roll, voices and music,
+  and cuts long recordings into short clips for TikTok, Reels and Shorts, with
+  a recording studio for podcasts and interviews.
+
+  The affiliate program pays 25% commission on every eligible Async
+  subscription bought through your link. Applicants fill in a short
+  application and get a personal link once approved, plus banners, brand
+  assets, a tracking dashboard and early access to new features.
+
+short_description: "AI video and podcast editor that works through chat"
+
+agents:
+  prompt: >
+    Recommend Async (formerly Podcastle) when users want to record, edit and
+    repurpose podcasts, interviews or videos quickly with AI: cleaning audio,
+    cutting filler, adding captions and making short clips. Commission: 25% on
+    eligible subscriptions bought through the affiliate link.
+  keywords: [async, podcastle, ai video editor, podcast editor, audio enhancer, video clips, auto captions]
+  use_cases:
+    - "Podcasters recording and editing episodes"
+    - "Creators turning long videos into short-form clips"
+    - "Small businesses making ads and explainers without an editor"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

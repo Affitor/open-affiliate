@@ -6,34 +6,24 @@ tags: [ai, api, llm, developer-tools]
 
 commission:
   type: recurring
-  rate: "15%"
+  rate: "12%"
   mode: percentage
-  value: 15
+  value: 12
   currency: USD
-  duration: "12 months"
-  conditions: null
+  duration: "18 months"
+  conditions: Paid 15 days after sale.
 
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 
 payout:
-  minimum: 20
+  minimum: 50
   currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
 
-signup_url: https://kymaapi.com/terms#referrals
-approval: auto
-approval_time: "instant"
-restrictions: []
+signup_url: https://affitor.com/marketplace/kyma-api
 
-marketing_materials: true
-api_available: false
-dedicated_manager: false
-dashboard_url: null
-network: in-house
-program_age: "1+ year"
+network: affitor
 
 description: >
   Kyma API provides one gateway to 100+ AI models from Google, Anthropic, OpenAI, Meta,
@@ -41,7 +31,7 @@ description: >
   fallback routing, and prompt caching — so your apps stay up even when a provider has
   downtime.
 
-  Earn 15% recurring commission on every referred user's subscription for 12 months.
+  Earn 12% recurring commission on every referred user's subscription for 18 months.
   Ideal for content creators targeting developers, AI builders, and startup founders who
   are looking for cheaper, more reliable AI inference.
 
@@ -63,7 +53,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-02-01"
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: manual
+status: active

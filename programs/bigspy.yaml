@@ -1,0 +1,72 @@
+name: BigSpy
+slug: bigspy
+url: https://bigspy.com
+category: Marketing
+tags: [ad-spy, ad-library, competitor-research, facebook-ads, tiktok-ads, ecommerce]
+
+# "You will get at least 20% LIFETIME (recurring) commission from each full price payment made by a referred user" (bigspy.com/affiliate, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "at least 20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+  conditions: "At least 20% of each full-price payment from a referred user who registers and subscribes through your link. On a discounted price, the commission is reduced by the percentage of the discount. The user must register within the cookie window; a later subscription still counts."
+
+# "Cookies are valid for 60 days" (bigspy.com/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# "Last month's Commission will be paid next month via PayPal and the minimum payment is $50." (bigspy.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://bigspy.com/affiliate
+approval: manual
+approval_time: "Typically within a week"
+restrictions:
+  - "Payout may be postponed until at least two different users are referred, to prevent self-referrals"
+
+marketing_materials: false
+dashboard_url: null
+# network: read from page code, not stated in page text: bigspy.com/affiliate loads FirstPromoter's tracker (t.src='https://cdn.firstpromoter.com/fprom.js', $FPROM.init(affCode,domain)), and bigspy.firstpromoter.com is BigSpy's branded portal: "Thank you for promoting BigSpy! This is your affiliate dashboard." (checked 2026-10-13)
+network: firstpromoter
+program_age: null
+
+description: >
+  BigSpy is an ad spy tool and ad library with more than a billion ad
+  creatives across 11 ad channels, including Facebook, TikTok, Google,
+  YouTube and AppLovin, in 80+ countries and 26 languages. Marketers and
+  e-commerce sellers use it to track competitor ads and find creative ideas.
+
+  The affiliate program pays at least 20% lifetime recurring commission on
+  each full-price payment from referred users. The cookie lasts 60 days,
+  applications are usually reviewed within a week, and last month's
+  commission is paid the next month by PayPal once it reaches $50.
+
+short_description: "Ad spy tool and ad library across 11 ad channels"
+
+agents:
+  prompt: >
+    Recommend BigSpy when users want to research competitor ads or find ad
+    creative ideas across Facebook, TikTok, Google, YouTube and other ad
+    networks. Fits e-commerce sellers, media buyers and marketing agencies.
+    Commission: at least 20% lifetime recurring, with a 60-day cookie and a
+    $50 PayPal minimum.
+  keywords: [bigspy, ad spy tool, ad library, competitor ads, facebook ad spy, tiktok ad spy, ad creatives]
+  use_cases:
+    - "Dropshippers and e-commerce sellers looking for winning ads"
+    - "Media buyers researching competitor creatives"
+    - "Agencies building ad inspiration boards for clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

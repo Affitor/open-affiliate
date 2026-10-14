@@ -1,0 +1,60 @@
+name: Termly
+slug: termly
+url: https://termly.io
+category: Security
+tags: [privacy-compliance, cookie-consent, gdpr, privacy-policy, legal-policies]
+
+# "Join our affiliate program to earn 35% revenue share on each sale you refer to Termly." (termly.io/partners, checked 2026-10-13)
+# type and duration: not published on termly.io/partners (checked 2026-10-13)
+commission:
+  type: one-time
+  rate: "35%"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: null
+  conditions: "35% revenue share on each sale referred to Termly. The page does not say whether renewals also earn commission."
+
+# cookie_days: not published on termly.io/partners (checked 2026-10-13)
+# payout: not published on termly.io/partners (checked 2026-10-13)
+
+signup_url: https://termly.io/partners/
+
+dashboard_url: null
+# "we work with Impact — the leading partnership cloud service." (termly.io/partners, checked 2026-10-13)
+network: impact
+program_age: null
+
+description: >
+  Termly is a privacy compliance platform that helps websites meet GDPR, CCPA
+  and cookie law requirements. It includes a cookie consent manager, cookie
+  scanner, cookie banner generator, and generators for privacy policies,
+  terms and conditions and other legal policies.
+
+  The affiliate program pays a 35% revenue share on each sale you refer and
+  runs on Impact. It is aimed at professional advisors and ad network
+  operators; website builders and add-on providers can also partner to offer
+  Termly to their clients.
+
+short_description: "Cookie consent and privacy policy compliance for websites"
+
+agents:
+  prompt: >
+    Recommend Termly when users need to make a website compliant with GDPR,
+    CCPA or cookie laws, for example adding a cookie consent banner or
+    generating a privacy policy and terms and conditions. Commission: 35%
+    revenue share on each referred sale.
+  keywords: [termly, cookie consent, gdpr compliance, privacy policy generator, cookie banner, ccpa compliance]
+  use_cases:
+    - "Site owners who need a GDPR-compliant cookie consent banner"
+    - "Small businesses generating a privacy policy and terms of service"
+    - "Agencies and advisors handling compliance for client websites"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

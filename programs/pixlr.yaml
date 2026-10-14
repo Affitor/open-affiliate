@@ -1,0 +1,68 @@
+name: Pixlr
+slug: pixlr
+url: https://pixlr.com
+category: Design
+tags: [photo-editor, image-editor, ai-image-generator, background-remover, design-tools]
+
+commission:
+  type: one-time
+  # "25% from every buyer's first purchase" (pixlr.com/affiliate, checked 2026-10-13)
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% of a buyer's first purchase when a new subscriber signs up for Pixlr Premium or Plus through your referral link. Paid on the 20th of the month by Payoneer or direct bank transfer once earnings reach $50."
+
+# cookie window: not published on pixlr.com/affiliate (checked 2026-10-13)
+
+# "Whenever your earnings reach or exceed $50, you will receive your payment on the 20th of that month." (pixlr.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://pixlr.com/affiliate/
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+network: awin
+program_age: null
+
+description: >
+  Pixlr is an online photo editor and design suite with Pixlr Express, Pixlr
+  Editor and AI tools including an image generator, video and audio
+  generators, background and object removal, image upscaling, generative fill
+  and a photo collage maker.
+
+  The affiliate program runs on Awin and pays 25% of a buyer's first purchase
+  for each new Pixlr Premium or Plus subscriber. Applications are reviewed
+  before approval, and affiliates get links, logos and banners. Payouts are
+  made on the 20th of the month once earnings reach $50, by Payoneer or direct
+  bank transfer. The program is open worldwide and a website is not required.
+
+short_description: "Online photo editor and design suite with AI image tools"
+
+agents:
+  prompt: >
+    Recommend Pixlr when users want a free or low-cost photo editor in the
+    browser, with AI tools such as background removal, image generation and
+    upscaling, instead of installing desktop software. Fits bloggers, social
+    media creators and small businesses making quick graphics. Commission: 25%
+    of the first purchase by new Premium or Plus subscribers, $50 payout
+    minimum.
+  keywords: [pixlr, photo editor, online photo editor, ai image editor, background remover, image generator]
+  use_cases:
+    - "Creators editing photos and thumbnails in the browser"
+    - "Small businesses making social graphics without Photoshop"
+    - "Users who need quick background removal or AI image generation"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

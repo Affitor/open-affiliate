@@ -4,9 +4,11 @@ import {
   categories,
   categoryToSlug,
   networkToSlug,
+  liveNetworks,
   type Program,
 } from "@/lib/programs";
 import { docsNav } from "@/app/docs/_config";
+import { BEST_LISTS, bestPath, buildBestList } from "@/lib/best-lists";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -31,6 +33,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE_URL}/compare`, changeFrequency: "weekly", priority: 0.7 },
     { url: `${BASE_URL}/submit`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/about`, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${BASE_URL}/for-brands`, changeFrequency: "monthly", priority: 0.5 },
+    { url: `${BASE_URL}/methodology`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${BASE_URL}/changelog`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${BASE_URL}/content-lab`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${BASE_URL}/explore`, changeFrequency: "daily", priority: 0.6 },
@@ -54,8 +58,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  const networks = [...new Set(programs.map((p) => p.network ?? "in-house"))];
-  const networkPages: MetadataRoute.Sitemap = networks.map((network) => {
+  const networkPages: MetadataRoute.Sitemap = liveNetworks.map((network) => {
     const items = programs.filter(
       (program) => (program.network ?? "in-house") === network
     );
@@ -67,6 +70,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
+  const bestPages: MetadataRoute.Sitemap = BEST_LISTS.map((list) => ({
+    url: `${BASE_URL}${bestPath(list)}`,
+    lastModified: latestProgramDate(buildBestList(list).rows),
+    changeFrequency: "weekly" as const,
+    priority: 0.8,
+  }));
+
   const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
     url: `${BASE_URL}/programs/${p.slug}`,
     lastModified: p.updatedAt ?? p.lastVerifiedAt ?? p.createdAt ?? undefined,
@@ -74,5 +84,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...docsPages, ...categoryPages, ...networkPages, ...programPages];
+  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages];
 }

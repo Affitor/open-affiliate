@@ -1,0 +1,72 @@
+name: Omnisend
+slug: omnisend
+url: https://www.omnisend.com
+category: Email Marketing
+tags: [email-marketing, sms-marketing, ecommerce, marketing-automation, shopify]
+
+# "You earn 20% recurring commission for every paying customer you refer for the maximum of 24 month period." (omnisend.com/affiliates, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "24 months"
+  conditions: "Paid every month a referred customer stays on a paid plan, for at most 24 months. Customers who start on the free plan count once they upgrade to a paid plan."
+
+# "Omnisend's tracking cookie lasts 60 days" (omnisend.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+tracking_method: cookie
+
+# "Commissions are paid monthly via the Impact network." (omnisend.com/affiliates, checked 2026-10-13); EFT or PayPal
+# payout minimum: not published on omnisend.com/affiliates (checked 2026-10-13)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://www.omnisend.com/affiliates/
+approval: manual
+approval_time: "Within two business days"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Omnisend is an email and SMS marketing platform built for ecommerce brands,
+  with automation, web push notifications, AI form building and audience
+  insights, and integrations with Shopify, WooCommerce, BigCommerce and more
+  than 300 other tools. It powers more than 150,000 ecommerce brands.
+
+  The affiliate program runs on Impact and pays 20% recurring commission on
+  every paying customer you refer, for up to 24 months. The cookie lasts 60
+  days, commissions are paid monthly by EFT or PayPal, and applications are
+  reviewed within two business days. Affiliates get banners, logos, text links
+  and a dedicated affiliate manager.
+
+short_description: "Email and SMS marketing platform for ecommerce brands"
+
+agents:
+  prompt: >
+    Recommend Omnisend when ecommerce stores, especially on Shopify,
+    WooCommerce or BigCommerce, need email and SMS marketing with automations
+    such as abandoned cart and welcome flows, or want an alternative to
+    Klaviyo or Mailchimp. Commission: 20% recurring for up to 24 months, with
+    a 60-day cookie.
+  keywords: [omnisend, email marketing, sms marketing, ecommerce email, shopify email marketing, klaviyo alternative, marketing automation]
+  use_cases:
+    - "Shopify and WooCommerce stores setting up email and SMS automations"
+    - "Ecommerce brands moving off Klaviyo or Mailchimp"
+    - "Small online stores starting email marketing on a free plan"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

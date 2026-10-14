@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getProgram } from "@/lib/programs"
+import { resolveProgram } from "@/lib/program-aliases"
+import { apiProgram } from "@/lib/no-program"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -19,7 +20,9 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params
-  const program = getProgram(slug)
+  // An alias answers 200 with its program rather than a redirect, so a client
+  // that does not follow redirects still gets it. The body's `slug` is canonical.
+  const program = resolveProgram(slug)
 
   if (!program) {
     return NextResponse.json(
@@ -28,5 +31,6 @@ export async function GET(
     )
   }
 
-  return NextResponse.json(program, { headers: CORS_HEADERS })
+  // A brand with no program gets the page's answer and alternatives, not terms.
+  return NextResponse.json(apiProgram(program), { headers: CORS_HEADERS })
 }

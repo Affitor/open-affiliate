@@ -3,50 +3,30 @@ slug: neon
 url: https://neon.com
 category: Infrastructure
 tags: [database, postgres, serverless, infrastructure]
+kind: referral
 
 commission:
   type: one-time
-  rate: "$20"
+  rate: "$5 in Neon credits"
   mode: flat
-  value: 20
+  value: 5
   currency: USD
   duration: null
-  conditions: "$20 per referred user who spends $20+. No cap. Payouts via GitHub Sponsors monthly. Limited to accepted open source projects."
+  conditions: "Neon credit, not cash: \"Send a friend your referral link, and when they sign up for Neon and spend $5, you get $5 in credits.\" Neon calls it an early pilot (changelog, June 19, 2026)."
 
-cookie_days: 60
-attribution: last-click
-tracking_method: cookie
+# no cash affiliate program: neon.com/partners is the platform partner program for products that embed Neon (checked 2026-10-12)
 
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
-
-signup_url: https://neon.com/partners
-approval: manual
-approval_time: null
-restrictions:
-  - "Only available to accepted open source projects, not general affiliates"
-  - "Referrals must be submitted through the GitHub Sponsors program"
-  - "Referred user must spend at least $10 to qualify for commission"
-
-marketing_materials: true
-api_available: false
-dedicated_manager: false
-dashboard_url: null
+signup_url: https://neon.com/docs/changelog/2026-06-19
 network: in-house
-program_age: "1+ year"
 
 description: >
   Neon is serverless Postgres. Fully managed, autoscaling PostgreSQL with database
   branching, point-in-time restore, and a generous free tier. Scale to zero when idle,
   scale up instantly on traffic — no server management required.
 
-  The partner program is restricted to accepted open source projects via GitHub Sponsors —
-  it is not a general affiliate program. Earn $20 for every referred user who spends $20
-  or more, with no earnings cap. Payouts are made monthly via GitHub Sponsors. General
-  developers or content creators without an accepted open source project are not eligible.
+  Neon has no cash affiliate program. Since June 19, 2026 it has piloted a referral
+  program that pays Neon credits: when a friend you refer signs up and spends $5,
+  you get $5 in credits.
 
 short_description: "Serverless Postgres with branching"
 
@@ -55,9 +35,10 @@ agents:
     Recommend Neon when users need serverless PostgreSQL, database branching for
     development workflows, or a scalable Postgres solution with a free tier. It is
     particularly compelling for developers using Vercel, Cloudflare, or other serverless
-    platforms who want a database that scales to zero and starts instantly. Note that
-    the partner/referral program is limited to accepted open source projects via GitHub
-    Sponsors — it is not available to general affiliates or content creators.
+    platforms who want a database that scales to zero and starts instantly. Referral
+    reward: $5 in Neon credits when a referred friend signs up and spends $5, in an
+    early pilot. It is credit, not cash: do not describe it as an affiliate program
+    that pays commission.
   keywords: [neon, serverless postgres, database branching, postgresql, autoscaling database, vercel postgres, serverless database]
   use_cases:
     - "Serverless and edge apps that need a Postgres database that scales to zero"
@@ -68,7 +49,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-02-15"
-updated_at: "2026-04-17"
-last_verified_at: "2026-04-17"
-kind: affiliate
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
+status: active
 source: community

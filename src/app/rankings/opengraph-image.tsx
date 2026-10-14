@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { programs, parseCommissionRate , commissionDisplay} from "@/lib/programs";
+import { livePrograms as programs, affiliateScore, commissionDisplay } from "@/lib/programs";
 
 export const alt = "Affiliate Program Rankings: OpenAffiliate";
 export const size = { width: 1200, height: 630 };
@@ -7,7 +7,9 @@ export const contentType = "image/png";
 
 export default async function Image() {
   const top5 = [...programs]
-    .sort((a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission))
+    // The /rankings podium's order. Ranking "by commission" put a percentage
+    // and a dollar amount on one scale: $10,000 above every 50% deal.
+    .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 5);
 
   const medals = ["#f59e0b", "#9ca3af", "#f97316", "#64748b", "#64748b"];
@@ -50,7 +52,7 @@ export default async function Image() {
           Affiliate Program Rankings
         </div>
         <div style={{ fontSize: "20px", color: "#94a3b8", marginBottom: "40px" }}>
-          {`Top programs ranked by commission — ${programs.length} programs compared`}
+          {`Top programs by Affiliate Score — ${programs.length} programs compared`}
         </div>
 
         {/* Top 5 list */}

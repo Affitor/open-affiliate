@@ -1,6 +1,8 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
+import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
 const OUTPUT_FILE = join(process.cwd(), "src", "lib", "registry.json")
@@ -19,6 +21,31 @@ const SIGNUP_URL_DEBT = new Set<string>(
       readFileSync(join(process.cwd(), "schema", "signup-url-debt.json"), "utf8")
     ) as { slugs: string[] }
   ).slugs
+)
+
+/**
+ * URL fields whose schema `pattern` admits only an absolute lowercase http(s)
+ * URL whose authority is only a lowercase ASCII domain name (no port, no IP
+ * address, no IDN), in printable ASCII without a backslash and without
+ * HTML character references (`&amp;`, `&#38;`, `&#x26;`).
+ * Read from the schema, so this build (CI's
+ * Validate Programs) and checkSchema in scripts/sync-affitor.ts enforce one
+ * rule. See the check in validateProgram.
+ */
+const URL_FIELDS = ["url", "signup_url", "dashboard_url"]
+const SCHEMA_PROPERTIES = (
+  JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8")) as {
+    properties: Record<string, { pattern?: string }>
+  }
+).properties
+
+/** Status values, read from the schema like the URL patterns above. */
+const STATUSES = (SCHEMA_PROPERTIES.status as { enum?: string[] }).enum ?? []
+
+/** also_on.affitor.url: an Affitor marketplace page, a subset of the URL allow-list. */
+const ALSO_ON_URL = new RegExp(
+  (SCHEMA_PROPERTIES.also_on as unknown as { properties: { affitor: { properties: { url: { pattern: string } } } } })
+    .properties.affitor.properties.url.pattern
 )
 
 const REQUIRED_FIELDS = [
@@ -89,6 +116,8 @@ interface YamlProgram {
   created_at?: string
   updated_at?: string
   last_verified_at?: string | null
+  status?: "active" | "paused" | "discontinued" | "no_program"
+  status_note?: string | null
 }
 
 function validateProgram(data: Record<string, unknown>, filename: string): void {
@@ -106,6 +135,21 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     )
   }
 
+  // An unknown status would read as active: a typo like "no-program" puts the
+  // page back in every list, with whatever terms the file still holds.
+  // A string, compared as is: `[no_program]` coerced to "no_program" and passed,
+  // while every reader compares with === and treated the entry as active.
+  if (data.status != null && (typeof data.status !== "string" || !STATUSES.includes(data.status))) {
+    throw new Error(`${filename}: status must be one of ${STATUSES.join(", ")} — got ${JSON.stringify(data.status)}`)
+  }
+  // A no_program file holds no terms and only the commission placeholder. The
+  // page, .md and API hide terms anyway; this keeps them out of the YAML that
+  // contributors and scripts read. Rules in scripts/program-rules.ts.
+  const noProgram = noProgramProblems(data)
+  if (noProgram.length) {
+    throw new Error(`${filename}: status is no_program, so it holds no terms: ${noProgram.join("; ")}`)
+  }
+
   const expectedSlug = basename(filename, ".yaml")
   if (data.slug !== expectedSlug) {
     throw new Error(
@@ -113,9 +157,71 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
     )
   }
 
+  // The Markdown twins print these URLs for agents and readers, and every
+  // looser rule let some Markdown renderer show or follow a different host
+  // than the URL names. Review found, in turn: `&amp;` decoded by CommonMark;
+  // an IPv6 host whose brackets the twins must encode; a backslash a URL
+  // parser treats as `/` but the twins encode; a 259-character host that
+  // markdown-it drops; and `%61` or `!` in a host, which markdown-it's URL
+  // parser splits so the shown host differs from the real one; numeric hosts
+  // (`2130706433`, `0x7f.1`, `1.2.3`) that a URL parser reads as 127.0.0.1 or
+  // 1.2.0.3; and punycode, which markdown-it shows decoded, so
+  // `xn--pple-43d.com` displays as a Cyrillic look-alike of apple.com. So the
+  // host is an allow-list: a lowercase domain name of at least two labels of
+  // letters, digits and hyphens whose last label starts with a letter, with no
+  // `xn--` label. The authority is nothing but that host, because what a
+  // parser does with the rest also differs from what is shown: it lowercases
+  // `Flippa.com` and drops a written default port such as `:443`. The whole
+  // URL is printable ASCII.
+  //
+  // IDN is refused outright (PR #170, review round 10), not handled. If a real
+  // brand ever only has an internationalised domain, a person should decide
+  // how to show it, rather than loosening this pattern.
+  for (const field of URL_FIELDS) {
+    const value = data[field]
+    const pattern = SCHEMA_PROPERTIES[field]?.pattern
+    if (typeof value === "string" && pattern && !new RegExp(pattern).test(value)) {
+      // Anything outside printable ASCII is shown as \u{…}, so an invisible
+      // character is visible in the error.
+      const shown = value.replace(/[^\x21-\x7E]/gu, (c) => `\\u{${c.codePointAt(0)!.toString(16)}}`)
+      throw new Error(
+        `${filename}: ${field} breaks a URL rule: "${shown}". A URL field must be an ` +
+          `absolute http:// or https:// URL (lowercase scheme) whose authority is a ` +
+          `lowercase domain name and nothing else: no port and no user@. The domain uses ` +
+          `only lowercase letters, digits, dots and hyphens (at most 253 characters; at ` +
+          `least two labels, each 1 to 63 characters, not starting or ending with a ` +
+          `hyphen; the last label starts with a letter), so no IP address, no IPv6 ` +
+          `literal and no percent-encoding in the host. Internationalised domains are not ` +
+          `accepted (no xn-- label); use the brand's ASCII domain. The whole URL must be ` +
+          `printable ASCII with no spaces or backslash, and contain no HTML character ` +
+          `reference (write "&", not "&amp;" or "&#38;").`
+      )
+    }
+  }
+
+  // also_on: a person links a brand's own listing to its Affitor program, and
+  // scripts/sync-affitor.ts keeps the commission there. The page and the .md
+  // twin print the url, so it must be a marketplace page. A listing that
+  // itself points at Affitor already shows those terms as its own.
+  if (data.also_on != null) {
+    const keys = (v: unknown) => (v && typeof v === "object" && !Array.isArray(v) ? Object.keys(v) : null)
+    const affitor = (data.also_on as { affitor?: { url?: unknown } }).affitor
+    if (
+      keys(data.also_on)?.join() !== "affitor" ||
+      !keys(affitor)?.every((k) => k === "url" || k === "commission") ||
+      typeof affitor?.url !== "string" ||
+      !ALSO_ON_URL.test(affitor.url)
+    ) {
+      throw new Error(`${filename}: also_on must be { affitor: { url: https://affitor.com/marketplace/<slug> } }, plus the commission the Affitor sync writes`)
+    }
+    if (data.network === "affitor" || /^https?:\/\/(?:www\.)?affitor\.com\//.test(String(data.signup_url ?? ""))) {
+      throw new Error(`${filename}: also_on.affitor is for a brand's own listing; this one already points at Affitor`)
+    }
+  }
+
   const commission = data.commission as Record<string, unknown> | undefined
   if (commission) {
-    const MODES = ["percentage", "flat", "tiered", "hybrid", "unknown"]
+    const MODES =["percentage", "flat", "tiered", "hybrid", "unknown"]
     if (!MODES.includes(String(commission.mode))) {
       throw new Error(
         `${filename}: commission.mode must be one of ${MODES.join(", ")} — got "${commission.mode}". ` +
@@ -161,7 +267,7 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   }
 }
 
-function buildRegistry(): void {
+async function buildRegistry(): Promise<void> {
   const yamlFiles = readdirSync(PROGRAMS_DIR)
     .filter((f) => f.endsWith(".yaml"))
     .sort()
@@ -176,6 +282,14 @@ function buildRegistry(): void {
       const data = parse(raw) as Record<string, unknown>
 
       validateProgram(data, filename)
+      // kind: affiliate with a figure that ranks, while the file's own text says
+      // gift card, voucher or store credit. Rule and its limits in program-rules.ts.
+      if (nonCashAffiliate(data)) {
+        throw new Error(
+          `kind is affiliate but the commission names a gift card, voucher or credit; set kind: referral, ` +
+            `or mode: unknown and value: null if it is not cash`
+        )
+      }
       programs.push(data as unknown as YamlProgram)
     } catch (err) {
       errors.push(`${filename}: ${(err as Error).message}`)
@@ -190,6 +304,15 @@ function buildRegistry(): void {
     process.exit(1)
   }
 
+  // Aliases that become URLs. Rule in program-rules.ts.
+  const { routes: aliases, shadowed, clashes } = aliasRoutes(programs)
+  for (const s of shadowed) console.warn(`[warn] ${s}`)
+  if (clashes.length > 0) {
+    console.error("Alias clashes (an alias points at one program; remove it from one file):")
+    for (const c of clashes) console.error(`  - ${c}`)
+    process.exit(1)
+  }
+
   // Sort alphabetically by name
   programs.sort((a, b) => a.name.localeCompare(b.name))
 
@@ -199,10 +322,20 @@ function buildRegistry(): void {
     generated_at: new Date().toISOString(),
     count: programs.length,
     categories,
+    aliases,
     programs,
   }
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
+
+  // The Affiliate Score reads fields the browser's copy leaves out (the
+  // description, agent prompt and signup URL). So the score ships precomputed,
+  // by the site's own affiliateScore over the registry.json just written:
+  // lists rank exactly as the server does. The commission order key ships
+  // the same way: it reads `kind`, which the browser's copy leaves out.
+  const site = await import("../src/lib/programs")
+  const scoreBySlug = new Map(site.programs.map((p) => [p.slug, site.affiliateScore(p)]))
+  const commissionRankBySlug = new Map(site.programs.map((p) => [p.slug, site.commissionRank(p)]))
 
   // Client-side catalog pages need filtering and comparison fields, not the
   // long descriptions, agent prompts, restrictions, or use cases in the full
@@ -226,15 +359,16 @@ function buildRegistry(): void {
         currency: p.commission.currency,
         duration: p.commission.duration,
       },
-      cookieDays: p.cookie_days,
-      shortDescription: p.short_description,
+      // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
+      cookieDays: termsConfirmed(p) ? p.cookie_days : undefined,
+      shortDescription: confirmedPitch(p, p.short_description),
       verified: p.verified ?? false,
       network: p.network ?? null,
       createdAt: p.created_at ?? "",
       source: p.source,
-      descriptionAvailable: p.description.length > 20,
-      agentPromptAvailable: p.agents.prompt.length > 10,
-      signupAvailable: Boolean(p.signup_url),
+      score: scoreBySlug.get(p.slug),
+      commissionRank: commissionRankBySlug.get(p.slug),
+      ...(p.status && p.status !== "active" ? { status: p.status } : {}),
     })),
   }
 
@@ -246,6 +380,7 @@ function buildRegistry(): void {
   console.log(`Registry built successfully:`)
   console.log(`  ${programs.length} programs loaded`)
   console.log(`  ${categories.length} categories: ${categories.join(", ")}`)
+  console.log(`  ${Object.keys(aliases).length} alias routes`)
   console.log(`  Output: src/lib/registry.json`)
   console.log(`  Client output: src/lib/client-registry.json`)
 
@@ -332,4 +467,7 @@ function buildLogoMap(): void {
   console.log(`  Logos: ${png} .png, ${Object.keys(map).length} mapped`)
 }
 
-buildRegistry()
+buildRegistry().catch((err) => {
+  console.error(err)
+  process.exit(1)
+})

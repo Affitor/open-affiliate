@@ -316,8 +316,14 @@ async function verifyProgram(program: ProgramYaml): Promise<VerifyResult> {
 // Programs that we know are valid but can't be auto-verified
 // (e.g. own products, JS-heavy pages, known false negatives)
 const SKIP_VERIFY: Record<string, string> = {
-  "kyma-api": "Own product — affiliate page not yet built",
   tailwindcss: "Partner page 404 — program unconfirmed, kept as unverified",
+  thryv: "www.thryv.com answers 403 to automated requests (checked 2026-10-13)",
+  siteground: "www.siteground.com answers 403 to Node fetch while curl gets 200 (checked 2026-10-13)",
+  fiverr: "www.fiverr.com answers 403 to Node fetch while curl with browser headers gets 200 (checked 2026-10-13)",
+  vidiq: "vidiq.com answers 429 to curl and Node fetch while a browser reads it (checked 2026-10-13)",
+  tubebuddy: "www.tubebuddy.com answers 502 to Node fetch while curl gets 200 (checked 2026-10-13)",
+  storylab: "storylab.ai times out intermittently on automated checks while the page reads fine (checked 2026-10-13)",
+  "walter-writes-ai": "walterwrites.ai answers a Cloudflare 403 to automated requests (checked 2026-10-13)",
 };
 
 // ── Main ──
@@ -371,6 +377,13 @@ async function main() {
     // Skip whitelisted programs
     if (SKIP_VERIFY[p.slug]) {
       console.log(`⏭️  skipped (${SKIP_VERIFY[p.slug]})`);
+      continue;
+    }
+
+    // A discontinued, paused or no_program entry is listed precisely because its
+    // page is gone or says no; a dead URL there is the recorded state, not a failure.
+    if (p.status === "discontinued" || p.status === "paused" || p.status === "no_program") {
+      console.log(`⏭️  skipped (status: ${p.status})`);
       continue;
     }
 

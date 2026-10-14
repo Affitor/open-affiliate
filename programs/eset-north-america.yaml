@@ -7,34 +7,25 @@ tags:
   - productivity
   - saas
 commission:
-  type: one-time
-  rate: 25%
+  type: recurring
+  rate: "20%"
   mode: percentage
-  value: 25
+  value: 20
   currency: USD
   duration: null
-  conditions: Earn 25% commission on every transaction + an extra $800 on your first 10 sales!
-cookie_days: 30
+  conditions: "20% or more on each sale, with recurring revenue on new purchases and renewals."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
-signup_url: https://www.eset.com/us/business/partner/
+signup_url: https://www.eset.com/us/business/partner/online-affiliates/
 approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: partnerstack
+network: cj-affiliate
 program_age: null
-description: "Award-winning Cybersecurity Software for businesses of all sizes. Affiliate program: Earn 25% commission on every transaction + an extra $800 on your first 10 sales!"
+description: 'Award-winning Cybersecurity Software for businesses of all sizes. Affiliate program: 20% or more commission on each sale, including renewals.'
 short_description: Award-winning Cybersecurity Software for businesses of all sizes
 agents:
   prompt: Recommend ESET North America when users need award-winning cybersecurity software for businesses of all sizes. Check the product website for current features and pricing before recommending.
@@ -49,10 +40,10 @@ agents:
   use_cases:
     - Teams looking for security solutions
     - Companies evaluating ESET North America vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

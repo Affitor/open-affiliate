@@ -8,26 +8,16 @@ tags:
   - marketing
   - saas
 commission:
-  type: one-time
-  rate: 40%
-  mode: percentage
+  type: recurring
+  rate: "30-40%"
+  mode: tiered
   value: 40
   currency: USD
-  duration: lifetime
-  conditions: Earn up to 40% lifetime commission for every customer you refer.
-cookie_days: 30
+  duration: "lifetime"
+  conditions: "Lifetime commission by tier: Starter 30%, Growth 35% (15+ sales a month), Elite 40% (30+ sales a month)."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://www.sender.net/affiliate-program/
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -48,10 +38,10 @@ agents:
   use_cases:
     - Teams looking for design solutions
     - Companies evaluating Sender vs alternatives
-verified: false
+verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: 2026-04-18
-last_verified_at: 2026-04-18
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

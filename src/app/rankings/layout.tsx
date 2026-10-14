@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { affiliateScore, programs } from "@/lib/programs";
+import { affiliateScore, livePrograms } from "@/lib/programs";
 import { serializeJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Affiliate Program Rankings: OpenAffiliate",
     description:
-      `Compare affiliate programs ranked by score and commission across ${programs.length} programs.`,
+      `Compare affiliate programs ranked by score and commission across ${livePrograms.length} programs.`,
     url: "https://openaffiliate.dev/rankings",
     siteName: "OpenAffiliate",
   },
@@ -26,7 +26,7 @@ export default function RankingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const ranked = [...programs]
+  const ranked = [...livePrograms]
     .sort((a, b) => affiliateScore(b) - affiliateScore(a))
     .slice(0, 20);
 
@@ -52,7 +52,7 @@ export default function RankingsLayout({
             publisher: { "@id": "https://openaffiliate.dev/#organization" },
             mainEntity: {
               "@type": "ItemList",
-              numberOfItems: programs.length,
+              numberOfItems: ranked.length,
               itemListElement: ranked.map((program, index) => ({
                 "@type": "ListItem",
                 position: index + 1,

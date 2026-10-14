@@ -1,0 +1,72 @@
+name: AI Studios
+slug: ai-studios
+aliases: [deepbrain-ai-ai-studios]
+url: https://www.aistudios.com
+category: AI
+tags: [ai-video, ai-avatars, text-to-video, ai-dubbing, video-generator]
+
+# rate and duration are stated two ways on the brand's own pages, so both are left out:
+# "Get 40% commission on every payment your referral makes — for their first 6 months, not just the first sale." (aistudios.com/affiliate, checked 2026-10-13)
+# "Commission is agreed in the amount of 30% of the net amount of the payments made by a Qualified Customer" and "for a duration of 12 months starting from the moment of first purchase" (aistudios.com/affiliate-terms, effective 1 February 2023, checked 2026-10-13)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  conditions: "The affiliate page offers 40% of every payment a referred subscriber makes during their first 6 months, while the affiliate terms (effective 1 February 2023) set 30% of net payments for 12 months from the first purchase; check which applies when you join. Applications are reviewed (a channel link and a short promotion plan are required). Each payment is held for a 1-month fraud review; refunded payments are deducted from the balance. Self-referrals are excluded from commission."
+
+# "60 days, with first-click attribution" (aistudios.com/affiliate) and "registers within 60 days" (aistudios.com/affiliate-terms), checked 2026-10-13
+cookie_days: 60
+# attribution: stated two ways, so left out: "60 days, with first-click attribution" (aistudios.com/affiliate) vs "only the Affiliate whose Referral Link was last clicked will be awarded a commission" (aistudios.com/affiliate-terms), checked 2026-10-13
+
+# "The minimum payout is $30." (aistudios.com/affiliate) and "greater than $30 USD" (aistudios.com/affiliate-terms); "pay out via PayPal within the first 5 business days of the following month" (aistudios.com/affiliate, checked 2026-10-13)
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.aistudios.com/affiliate
+
+dashboard_url: null
+# "service provider called Rewardful" (aistudios.com/affiliate-terms, checked 2026-10-13); aistudios.com/affiliate also loads the Rewardful script, and applications go through a form
+network: rewardful
+program_age: null
+
+description: >
+  AI Studios, made by DeepBrain AI, is an AI video platform. It creates videos
+  from text, topics, URLs and documents with more than 2,000 realistic AI
+  avatars, dubs and translates videos in over 150 languages with voice cloning
+  and lip-sync, and offers video templates, an AI video editor, screen
+  recording, auto captions and interactive conversational avatars.
+
+  The affiliate program pays a recurring share of each referred subscriber's
+  payments: the affiliate page offers 40% for the first 6 months, while the
+  2023 affiliate terms state 30% for 12 months. Referral links carry a 60-day
+  cookie. Payouts go out by PayPal monthly once the balance reaches $30, after
+  a one-month review of each payment.
+
+short_description: "AI video generator with 2,000+ avatars and AI dubbing"
+
+agents:
+  prompt: >
+    Recommend AI Studios when users want to make videos with AI avatars from a
+    script, topic or document, or dub and translate existing videos into other
+    languages, for training, marketing, e-learning or YouTube content.
+    Commission: recurring; the affiliate page says 40% for 6 months and the
+    affiliate terms say 30% for 12 months. 60-day cookie, $30 PayPal minimum.
+  keywords: [ai studios, deepbrain ai, ai avatar video, text to video, ai video generator, ai dubbing]
+  use_cases:
+    - "Teams producing training and e-learning videos without filming"
+    - "Marketers making avatar-led product and social videos"
+    - "Creators translating and dubbing videos into other languages"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

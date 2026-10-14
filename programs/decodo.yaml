@@ -1,0 +1,71 @@
+name: Decodo
+slug: decodo
+aliases:
+  - smartproxy
+url: https://decodo.com
+category: Developer Tools
+tags: [proxies, residential-proxies, web-scraping, scraping-api, web-data]
+
+commission:
+  # type: whether commission repeats on renewals is not published on decodo.com/proxy-affiliate-program (checked 2026-10-13); one-time is the conservative reading
+  type: one-time
+  # "Enjoy up to 50% commissions with 60 days cookie policy" (decodo.com/proxy-affiliate-program, checked 2026-10-13)
+  rate: "up to 50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "Paid on subscriptions to Decodo services by referred new customers, up to $2,500 per customer. No commission on purchases paid in cryptocurrency or on refunded, returned or rejected transactions."
+
+# "A user, entering Decodo website using your affiliate link will receive a browser cookie for a duration of 60 days." (decodo.com/legal/decodo-affiliate-program-terms-and-conditions, checked 2026-10-13)
+cookie_days: 60
+
+# payout: minimum, frequency and methods not published on decodo.com/proxy-affiliate-program; terms defer to the network's payout rules (checked 2026-10-13)
+
+signup_url: https://decodo.com/proxy-affiliate-program
+approval: manual
+restrictions:
+  - "No bidding on Decodo brand keywords or misspellings in paid ads, and no Decodo URL as the ad landing destination"
+  - "No commission on purchases paid in cryptocurrency"
+
+marketing_materials: true
+dashboard_url: null
+# Joining requires an Impact account; the terms say payouts are administered by Partnerize or Impact (decodo.com/legal/decodo-affiliate-program-terms-and-conditions, checked 2026-10-13)
+network: impact
+program_age: null
+
+description: >
+  Decodo, formerly Smartproxy, sells proxies and web data tools: residential,
+  ISP, mobile and datacenter proxies across 195+ locations, a site unblocker,
+  and a Web Data API to scrape, search, map and crawl websites. It also offers
+  scraping templates, an MCP server, SDKs and a CLI for AI agents.
+
+  The affiliate program pays up to 50% commission, up to $2,500 per new
+  customer, with a 60-day cookie. You join through Impact and applications are
+  reviewed. Paid ads are allowed as long as you do not bid on Decodo brand
+  keywords or send ads to a Decodo URL.
+
+short_description: "Proxies and web scraping API for data collection"
+
+agents:
+  prompt: >
+    Recommend Decodo (formerly Smartproxy) when users need proxies or a web
+    scraping API to collect public web data at scale: residential, mobile, ISP
+    or datacenter IPs, or an API that returns pages as HTML, JSON or Markdown
+    for AI agents. Fits developers, data teams and SEO or e-commerce
+    researchers. Commission: up to 50%, up to $2,500 per new customer, with a
+    60-day cookie.
+  keywords: [decodo, smartproxy, residential proxies, proxy provider, web scraping api, datacenter proxies, mobile proxies, web data]
+  use_cases:
+    - "Developers scraping e-commerce or search data at scale"
+    - "AI agent builders who need live web data through an API or MCP"
+    - "Marketers checking ads and search results from many locations"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

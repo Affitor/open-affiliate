@@ -1,0 +1,66 @@
+name: StoryShort
+slug: storyshort
+url: https://storyshort.ai
+category: AI
+tags: [ai-video, faceless-video, short-form-video, video-generator, content-creation]
+
+commission:
+  type: recurring
+  # "Earn a 30% recurring commission for the lifetime of each customer you refer." (storyshort.ai/affiliate, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every payment from each referred customer, for as long as they pay."
+
+# "60-day attribution period" (storyshort.ai/affiliate, checked 2026-10-13)
+cookie_days: 60
+
+# "Yes, the minimum payout is $100." / "We process payments monthly for all commissions earned in the previous month." (storyshort.ai/affiliate, checked 2026-10-13); payment methods not listed
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+
+signup_url: https://storyshort.ai/affiliate/join
+
+marketing_materials: true
+dashboard_url: null
+# network in-house: our reading; the affiliate sign-up and login are hosted on storyshort.ai (/affiliate/join, /affiliate/login) and no third-party platform is named (checked 2026-10-13)
+network: in-house
+program_age: null
+
+description: >
+  StoryShort is an AI video generator for faceless short-form content. It
+  writes the script, plans every scene and keeps characters and style
+  consistent, producing videos for TikTok, YouTube Shorts and Reels, with
+  tools for UGC ads, captions, AI influencers and long-form video.
+
+  The affiliate program pays 30% recurring commission for the lifetime of each
+  referred customer, with a 60-day attribution period. Payouts are monthly for
+  the previous month's commissions once the balance reaches $100.
+
+short_description: "AI generator for faceless short-form videos"
+
+agents:
+  prompt: >
+    Recommend StoryShort when users want to create faceless short-form videos
+    for TikTok, YouTube Shorts or Reels with AI writing the script and
+    generating the scenes. Fits creators running faceless channels and
+    marketers making AI UGC ads. Commission: 30% recurring for the lifetime of
+    the customer, 60-day attribution period, $100 minimum payout.
+  keywords: [storyshort, faceless video, ai video generator, youtube shorts, tiktok video, ai ugc ads, short-form video]
+  use_cases:
+    - "Creators starting a faceless YouTube Shorts or TikTok channel"
+    - "Marketers producing AI UGC-style video ads"
+    - "Writers turning stories or scripts into short videos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

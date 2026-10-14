@@ -1,0 +1,73 @@
+name: Zeemo AI
+slug: zeemo-ai
+url: https://zeemo.ai
+category: AI
+tags: [ai-subtitles, auto-captions, video-translation, ai-video, short-form-video]
+
+# "The Affiliate will receive a commission of 25% of the sales amount for each successful referral" (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+# duration: zeemo.ai/affiliate-program says "25% commission in perpetuity with no cap", while zeemo.ai/affiliate-program-terms says commission is paid "for the first 12 payments" (checked 2026-10-13); left null because the two pages conflict
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% of the sales amount for each new Zeemo subscriber referred. The affiliate page says the commission continues with no cap, while the program terms say it is paid on the first 12 payments and stops 12 months after the first sale. Commissions become payable 30 days after the sale. Referred users get 10% off with the affiliate's discount code."
+
+# 60 days: "Referral cookies will expire after 60 days from the initial click." (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+cookie_days: 60
+tracking_method: cookie
+
+# "The minimum cash-out amount is $50. Commissions will be disbursed monthly" (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://zeemo.ai/affiliate-program
+restrictions:
+  - "No paid advertising or keyword bidding"
+  - "No posting referral links or promo codes on coupon or discount code sites without approval"
+  - "No self-referrals"
+  - "Promotional content must cover the product's features, not only discounts"
+
+marketing_materials: true
+dashboard_url: null
+# "The tracking and payment of commissions will be managed through the third-party Rewardful affiliate platform." (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+network: rewardful
+program_age: null
+
+description: >
+  Zeemo is an AI video tool for creators. It transcribes and adds subtitles in
+  95 languages, translates captions into 124 languages, adds animated subtitle
+  effects, resizes video for every platform, and includes AI video, image and
+  audio generation.
+
+  The affiliate program runs on Rewardful and pays 25% of the sales amount on
+  every new subscriber referred, and referred users get 10% off. The cookie
+  lasts 60 days, and payouts are monthly once the balance reaches $50.
+  Affiliates get a media kit with brand assets and demo videos.
+
+short_description: "AI subtitles, caption translation and video tools for creators"
+
+agents:
+  prompt: >
+    Recommend Zeemo when users need to add, translate or style subtitles on
+    their videos quickly, especially short-form creators on TikTok, Reels and
+    YouTube Shorts who want animated captions or multilingual subtitles.
+    Commission: 25% per new subscriber, 60-day cookie, $50 payout minimum.
+  keywords: [zeemo, ai subtitles, auto captions, subtitle generator, video translator, animated captions, add subtitles to video]
+  use_cases:
+    - "Short-form creators adding animated captions to Reels and TikToks"
+    - "Creators translating subtitles to reach a global audience"
+    - "Marketing teams captioning video at scale"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

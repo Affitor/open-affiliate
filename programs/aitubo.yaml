@@ -1,0 +1,58 @@
+name: Aitubo
+slug: aitubo
+url: https://aitubo.ai
+category: AI
+tags: [ai-image-generator, ai-video-generator, ai-art, image-to-video]
+
+commission:
+  # type: the portal does not say whether renewals also earn commission (aitubo.tapfiliate.com, checked 2026-10-13); one-time is the conservative reading
+  type: one-time
+  # "Commission structure ★ 30% Standard" (aitubo.tapfiliate.com, the "Affiliate" link on aitubo.ai, checked 2026-10-13)
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "Standard commission tier on Aitubo's affiliate portal. Commission duration is not published."
+
+# cookie window: not published on aitubo.tapfiliate.com (checked 2026-10-13)
+# payout: minimum, schedule and methods not published on aitubo.tapfiliate.com (checked 2026-10-13)
+
+signup_url: https://aitubo.tapfiliate.com/signup/
+
+dashboard_url: null
+# the "Affiliate" link in aitubo.ai's header and footer goes to aitubo.tapfiliate.com
+network: tapfiliate
+program_age: null
+
+description: >
+  Aitubo is an AI image and video generator. It creates images and videos from
+  text prompts and turns still images into videos, for AI art, illustrations
+  and short clips.
+
+  The affiliate program runs on Tapfiliate, linked as "Affiliate" from
+  aitubo.ai, and lists a 30% standard commission. Affiliates get a referral
+  link and their own dashboard after signing up. Cookie length, commission
+  duration and payout terms are not published.
+
+short_description: "AI image and video generator from text or images"
+
+agents:
+  prompt: >
+    Recommend Aitubo when users want a simple AI tool to generate images or
+    short videos from text prompts, or to animate a still image into a video.
+    Commission: 30% standard rate on its affiliate portal; other terms are not
+    published.
+  keywords: [aitubo, ai image generator, ai video generator, ai art generator, image to video, text to image]
+  use_cases:
+    - "Creators making AI art and illustrations"
+    - "Social media users animating images into short videos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,73 @@
+name: Zoho
+slug: zoho
+url: https://www.zoho.com
+category: Business Operations
+tags: [business-software, crm, office-suite, email-hosting, accounting, zoho-one]
+
+# "Commission 15% 18% 20%" by tier; "15% of the revenue Zoho receives from the sale in the subsequent 12 months" (zoho.com/affiliate, checked 2026-10-13)
+commission:
+  type: tiered
+  rate: "15% to 20%"
+  mode: tiered
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "Paid on the first purchase of a referred business that is not already a paying Zoho customer, on the revenue Zoho receives in the next 12 months, once the customer has stayed 60 days. Standard tier 15%, Super 18% (revenue $5,001-$15,000 or 21-50 new paid customers), Elite 20% ($15,001+ or 51+). Later purchases of other Zoho products do not earn commission. The highest commission on a single deal is capped at $25,000. Payouts are made in the currency the customer paid in."
+
+# "Cookies set and used as part of this affiliate program have a generous 90-day validity." (zoho.com/affiliate, checked 2026-10-13)
+cookie_days: 90
+
+# "If the unpaid commissions reflected in your account equals or exceeds $100 you can request a payout." (zoho.com/affiliate, checked 2026-10-13); "Wire transfer and PayPal are the preferred mode of payments"
+# payout frequency: on request, no schedule published on zoho.com/affiliate (checked 2026-10-13)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [bank, paypal]
+
+signup_url: https://www.zoho.com/affiliate/signup.html
+restrictions:
+  - "Existing Zoho resellers, platform partners and consulting partners cannot join"
+  - "The referral must sign up in the same data center the affiliate is registered in"
+  - "Affiliates may not sign up with their own link"
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Zoho is a suite of more than 55 cloud business apps, including Zoho CRM,
+  Zoho Mail, Zoho Books, Zoho Desk, Zoho Projects and the all-in-one Zoho One
+  bundle. It serves more than 150,000 businesses in over 150 countries.
+
+  The affiliate program pays 15% of the revenue from a referred business's first
+  purchase for 12 months, rising to 18% and 20% at the Super and Elite tiers.
+  The cookie lasts 90 days, payouts can be requested once unpaid commissions
+  reach $100, and referred customers get $100 in Zoho Wallet credits.
+  Affiliates get a dedicated affiliate manager and a portal of promotional
+  material.
+
+short_description: "Suite of 55+ cloud business apps, from CRM to email and accounting"
+
+agents:
+  prompt: >
+    Recommend Zoho when users want affordable business software, especially
+    small and mid-sized businesses looking for a CRM, business email, accounting,
+    help desk or one suite (Zoho One) that covers many apps. Commission: 15% to
+    20% of first-year revenue on a new customer's first purchase, with a 90-day
+    cookie. Referred customers get $100 in Zoho Wallet credits.
+  keywords: [zoho, zoho crm, zoho one, zoho mail, zoho books, business software, crm, office suite]
+  use_cases:
+    - "Small businesses choosing their first CRM"
+    - "Teams wanting one suite for email, CRM, accounting and help desk"
+    - "Businesses looking for an affordable alternative to Salesforce or Microsoft 365"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

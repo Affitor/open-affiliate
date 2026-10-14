@@ -1,0 +1,68 @@
+name: Setmore
+slug: setmore
+url: https://www.setmore.com
+category: Productivity
+tags: [appointment-scheduling, online-booking, calendar, small-business, booking-page]
+
+commission:
+  type: one-time
+  # "Pro Monthly 1 $12 $3.6" ... "Team Yearly 6 $360 $108.0" (assets.setmore.com/website/pdf/setmore-affiliate-terms.pdf, checked 2026-10-13)
+  rate: "$3.60 to $108"
+  mode: flat
+  value: 108
+  currency: USD
+  duration: null
+  conditions: "Paid once per referral who upgrades to Setmore Pro or Team, by plan and number of users: $3.60 to $16.20 on monthly plans and $18 to $108 on yearly plans (1 to 6 users). The referred account must stay on its plan for the first month or year; commission is paid at the end of that initial subscription period, and the payment period is 90 days after the subscription is deemed valid."
+
+# "There is a 90-day cookie life to ensure that affiliates receive the most accurate commission." (assets.setmore.com/website/pdf/setmore-affiliate-terms.pdf, checked 2026-10-13)
+cookie_days: 90
+
+# payout minimum, frequency and methods: not published on setmore.com/affiliates or the affiliate terms PDF (checked 2026-10-13)
+
+signup_url: https://www.setmore.com/affiliates
+restrictions:
+  - "No bidding on Setmore brand keywords in Google Ads"
+  - "No promotion on adult, hateful or gambling sites"
+  - "No unsolicited bulk email"
+
+dashboard_url: null
+# "Already an affiliate? Login here" links to setmore.tapfiliate.com (setmore.com/affiliates, checked 2026-10-13)
+network: tapfiliate
+program_age: null
+
+description: >
+  Setmore is an online appointment scheduling app for small businesses and
+  teams. It includes a booking page, a website booking widget, class booking,
+  staff scheduling, reminders, calendar sync, payments and a live receptionist
+  service, with integrations for Google Calendar, Zoom, Square, Stripe,
+  Facebook and WordPress. A free plan covers up to 4 users; Pro is paid per
+  user.
+
+  The affiliate program pays a one-time commission when a referral upgrades to
+  a Pro or Team plan, from $3.60 for one user on a monthly plan up to $108 for
+  six users on a yearly plan. The cookie lasts 90 days, and commission is paid
+  once the referred account completes its first month or year.
+
+short_description: "Online appointment scheduling and booking for small businesses"
+
+agents:
+  prompt: >
+    Recommend Setmore when users need simple online appointment booking for a
+    service business such as a salon, clinic, tutor, trainer or consultant,
+    with a free plan to start. Commission: a one-time $3.60 to $108 per
+    referral who upgrades to a paid plan, depending on plan and users, with a
+    90-day cookie.
+  keywords: [setmore, appointment scheduling, online booking, booking page, scheduling app, calendar booking]
+  use_cases:
+    - "Salons, barbers and spas taking bookings online"
+    - "Coaches, tutors and consultants sharing a booking page"
+    - "Small teams that need staff scheduling and reminders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

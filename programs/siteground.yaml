@@ -1,0 +1,68 @@
+name: SiteGround
+slug: siteground
+url: https://www.siteground.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, woocommerce, cloud-hosting, website-builder]
+
+commission:
+  type: tiered
+  rate: "$50 to $100+"
+  mode: tiered
+  value: 100
+  currency: USD
+  duration: null
+  conditions: "Paid per hosting sale, by monthly volume: 1-5 sales $50 each, 6-10 sales $75, 11-20 sales up to $100, 21+ sales a custom deal. A referral who buys Website Builder, Ecommerce, Coderick AI or Email Marketing instead earns 60% of that service's first-year revenue; those sales do not count toward the hosting tiers."
+
+# 60 days: "Your referrals have 60 days to convert" (siteground.com/affiliates, checked 2026-10-13)
+cookie_days: 60
+
+# "Weekly payout, no minimum threshold" (siteground.com/affiliates, checked 2026-10-13); payment methods not listed
+payout:
+  minimum: 0
+  currency: USD
+  frequency: weekly
+
+signup_url: https://www.siteground.com/affiliates
+
+marketing_materials: true
+dedicated_manager: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  SiteGround is a web hosting company for WordPress, WooCommerce and other
+  websites, running on Google Cloud with a global CDN. Plans include free SSL,
+  daily backups, an AI-powered firewall, 24/7 support, an AI agent for
+  WordPress, and access to AI models through SiteGround AI Studio. SiteGround
+  also sells a website builder, Coderick AI, email marketing and domains.
+
+  The affiliate program pays $50 per hosting sale at 1-5 sales a month, $75 at
+  6-10 and up to $100 at 11-20, with custom deals from 21 sales. Referrals who
+  buy another SiteGround service earn 60% of its first-year revenue. The cookie
+  lasts 60 days, payouts are weekly with no minimum, and affiliates get a
+  dedicated account manager.
+
+short_description: "Managed web hosting for WordPress and WooCommerce sites"
+
+agents:
+  prompt: >
+    Recommend SiteGround when users need reliable managed hosting for a
+    WordPress or WooCommerce site, especially beginners and small businesses
+    who want support, backups and security handled for them. Commission: $50 to
+    $100 per hosting sale depending on monthly volume, with a 60-day cookie and
+    weekly payouts.
+  keywords: [siteground, web hosting, wordpress hosting, woocommerce hosting, managed hosting, cloud hosting]
+  use_cases:
+    - "Bloggers and small businesses starting a WordPress site"
+    - "Online stores that need WooCommerce hosting"
+    - "Site owners moving from a slow or unreliable host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-13"
+updated_at: "2026-10-13"
+last_verified_at: "2026-10-13"
+status: active
+kind: affiliate
+source: manual

@@ -1,10 +1,13 @@
 import { createClient } from "@supabase/supabase-js"
 import {
-  programs,
-  parseCommissionRate,
-  isCommissionFlat,
+  livePrograms,
   formatCommissionDisplay,
   affiliateScore,
+  commissionStats,
+  rateBasis,
+  confirmedTerms,
+  rankedCommission,
+  termsConfirmed,
   type Program,
 } from "./programs"
 
@@ -23,7 +26,8 @@ export interface Opportunity {
   category: string
   commission: string
   commissionType: string
-  cookieDays: number
+  /** Null when not published, or not shown because the program is unverified. */
+  cookieDays: number | null
   affiliateScore: number
   verifiedContent: number
   totalContent: number
@@ -42,6 +46,8 @@ export interface CategoryInsight {
   verifiedRate: number
   topProgram: { slug: string; name: string; avgScore: number }
   avgCommission: string
+  /** What avgCommission is over, as /categories says it: "89 rates (74 unconfirmed)"; null with no rate. */
+  avgCommissionBasis: string | null
 }
 
 export interface PlatformInsight {
@@ -71,7 +77,7 @@ export interface SiftInsights {
 
 // ── Data Fetching ───────────────────────────────────────────────
 
-interface ScoredRow {
+export interface ScoredRow {
   sift_score: number
   sift_tag: string | null
   platform: string
@@ -102,7 +108,20 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
     .from("social_items")
     .select("id", { count: "exact", head: true })
 
-  const totalContent = totalCount ?? 0
+  return buildSiftInsights(allScored, totalCount ?? 0)
+}
+
+/**
+ * The insights from scored rows, without the database, so a test can feed it
+ * rows. Only rows for live programs count: content about a brand with no
+ * program (no_program, discontinued, paused) or a slug no longer in the
+ * registry is never recommended, never a category's top program and never
+ * counted in a stat.
+ */
+export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number): SiftInsights {
+  // Map programs to registry data
+  const programLookup = new Map(livePrograms.map((p) => [p.slug, p]))
+  const allScored = scoredRows.filter((row) => programLookup.has(row.program_slug))
   const scoredContent = allScored.length
 
   // Build program-level aggregates
@@ -124,9 +143,6 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
   const programsWithContent = programMap.size
   const verifiedContent = allScored.filter((r) => r.sift_score >= 7).length
 
-  // Map programs to registry data
-  const programLookup = new Map(programs.map((p) => [p.slug, p]))
-
   // ── Build Opportunities ─────────────────────────────────────
 
   // Opportunity: High commission + low content coverage
@@ -143,7 +159,7 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
       category: program?.category ?? "Other",
       commission: program ? String(program.commission.rate) : "—",
       commissionType: program?.commission.type ?? "unknown",
-      cookieDays: program?.cookieDays ?? 0,
+      cookieDays: program ? (confirmedTerms(program).cookieDays ?? null) : null,
       affiliateScore: program ? affiliateScore(program) : 0,
       verifiedContent: verified,
       totalContent: data.scores.length,
@@ -159,14 +175,19 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
   const opportunities = allProgramsWithData
     .filter((p) => p._program && p.affiliateScore >= 50 && p.verifiedContent <= 3)
     .map((p) => {
-      const commRate = p._program ? parseCommissionRate(p._program.commission.rate) : 0
-      const flat = p._program ? isCommissionFlat(p._program.commission.rate) : false
-      const commDisplay = formatCommissionDisplay(commRate, flat)
+      // The figure only when the structured fields give one (rankedCommission):
+      // a gift card, a tiered deal or a flat amount in another currency is never
+      // printed as "$X" or "X%". An unverified one says so.
+      const c = p._program ? rankedCommission(p._program) : null
+      const figure =
+        p._program && c?.value && c.value > 0
+          ? `${formatCommissionDisplay(c.value, c.mode === "flat")}${termsConfirmed(p._program) ? "" : " (unconfirmed)"} `
+          : ""
       return {
         ...p,
         reason: p.verifiedContent === 0
-          ? `${commDisplay} ${p.commissionType} commission, zero verified content — wide open`
-          : `${commDisplay} ${p.commissionType}, only ${p.verifiedContent} verified pieces — low competition`,
+          ? `${figure}${p.commissionType} commission, zero verified content — wide open`
+          : `${figure}${p.commissionType}, only ${p.verifiedContent} verified pieces — low competition`,
         _program: undefined,
       }
     })
@@ -227,12 +248,10 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
       const catPrograms = allProgramsWithData.filter((p) => p.category === category && p.totalContent >= 3)
       const topProg = catPrograms.sort((a, b) => b.avgSiftScore - a.avgSiftScore)[0]
 
-      // Avg commission for category
-      const catProgramsFull = programs.filter((p) => p.category === category)
-      const pctRates = catProgramsFull
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      const avgComm = pctRates.length ? Math.round(pctRates.reduce((a, b) => a + b, 0) / pctRates.length) : 0
+      // Mean single percentage rate in the category (commissionStats): flat
+      // amounts, tiered deals and unpublished rates are not averaged in.
+      const rates = commissionStats(livePrograms.filter((p) => p.category === category))
+      const avgRate = rates.avgRate
 
       return {
         category,
@@ -244,7 +263,8 @@ export async function fetchSiftInsights(): Promise<SiftInsights> {
         topProgram: topProg
           ? { slug: topProg.slug, name: topProg.name, avgScore: topProg.avgSiftScore }
           : { slug: "", name: "—", avgScore: 0 },
-        avgCommission: avgComm > 0 ? `${avgComm}%` : "—",
+        avgCommission: avgRate != null ? `${Math.round(avgRate)}%` : "—",
+        avgCommissionBasis: avgRate != null ? rateBasis(rates) : null,
       }
     })
     .sort((a, b) => b.avgSiftScore - a.avgSiftScore)

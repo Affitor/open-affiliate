@@ -1,6 +1,8 @@
 import { createMcpHandler } from "mcp-handler";
 import { z } from "zod";
-import { programs, categories, getProgram } from "@/lib/programs";
+import { livePrograms, categories, confirmedPitch, termsConfirmed } from "@/lib/programs";
+import { resolveProgram } from "@/lib/program-aliases";
+import { apiProgram } from "@/lib/no-program";
 
 /**
  * The hosted MCP server, as route handlers.
@@ -146,7 +148,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       },
     },
     async (params) => {
-      let results = programs;
+      // Paused, discontinued and no_program entries stay reachable through get_program, which carries their status.
+      let results = livePrograms;
 
       if (params.category) {
         results = results.filter((p) => p.category === params.category);
@@ -174,7 +177,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         slug: p.slug,
         name: p.name,
         category: p.category,
-        shortDescription: p.shortDescription,
+        shortDescription: confirmedPitch(p, p.shortDescription),
         commission: {
           type: p.commission.type,
           // mode and value are what an agent should read. rate is the raw
@@ -186,7 +189,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
           rate: p.commission.rate,
           currency: p.commission.currency,
         },
-        cookieDays: p.cookieDays,
+        // Left out until the program's terms are verified, as in get_program.
+        cookieDays: termsConfirmed(p) ? p.cookieDays : undefined,
         verified: p.verified,
         signupUrl: p.signupUrl ?? p.url,
         // Agents cite what they can fetch, and the markdown twin is the
@@ -216,7 +220,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       },
     },
     async ({ slug }) => {
-      const program = getProgram(slug);
+      // Aliases (old names, spellings agents guess) resolve too; the result carries the canonical slug.
+      const program = resolveProgram(slug);
       if (!program) {
         return {
           content: [
@@ -230,7 +235,8 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
             type: "text" as const,
             text: JSON.stringify(
               {
-                ...program,
+                // A brand with no program gets the page's answer, not terms.
+                ...apiProgram(program),
                 markdownUrl: `https://openaffiliate.dev/programs/${program.slug}.md`,
               },
               null,
@@ -253,7 +259,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
     },
     async () => {
       const counts: Record<string, number> = {};
-      for (const p of programs) {
+      for (const p of livePrograms) {
         counts[p.category] = (counts[p.category] ?? 0) + 1;
       }
       const result = categories.map((name) => ({

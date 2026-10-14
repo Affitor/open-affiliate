@@ -1,4 +1,7 @@
 import registryData from "./registry.json"
+import { networkKind, networkName } from "./network-meta"
+import { commissionUnknown, compareCommission, compareText } from "./commission-order"
+import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
  * Fallback network for programs whose YAML omits `network`.
@@ -35,11 +38,11 @@ export interface Program {
     duration?: string | null
     conditions?: string | null
   }
-  cookieDays: number
+  cookieDays?: number
   payout: {
-    minimum: number
+    minimum?: number
     currency?: string
-    frequency: string
+    frequency?: string
     methods?: string[]
   }
   description: string
@@ -72,6 +75,22 @@ export interface Program {
   source?: string
   lastVerifiedAt?: string | null
   aliases?: string[]
+  /**
+   * "discontinued" (closed) and "no_program" (none found, no closure on record) keep the
+   * page live so it can answer "does X have an affiliate program?" truthfully.
+   */
+  status?: "active" | "paused" | "discontinued" | "no_program"
+  statusNote?: string | null
+  /** Registrable domain whose owner verified the listing (claim flow). */
+  claimedBy?: string | null
+  /**
+   * The same brand on Affitor too (schema `also_on`): its marketplace page, and
+   * the commission scripts/sync-affitor.ts copies from the Affitor API, absent
+   * when Affitor publishes none. One extra line on the page; never ranked.
+   */
+  alsoOn?: { affitor?: { url: string; commission?: Program["commission"] } } | null
+  /** Type of income program as the YAML states it; undefined when the file leaves it out. */
+  kind?: "affiliate" | "referral" | "creator-payout" | "revenue-share" | "cashback" | "partner-network"
 }
 
 // Map snake_case YAML fields to camelCase Program interface
@@ -121,9 +140,11 @@ function mapYamlToProgram(yaml: any): Program {
     attribution: yaml.attribution,
     trackingMethod: yaml.tracking_method,
     payoutMethods: yaml.payout?.methods ?? [],
-    marketingMaterials: yaml.marketing_materials ?? false,
-    apiAvailable: yaml.api_available ?? false,
-    dedicatedManager: yaml.dedicated_manager ?? false,
+    // Unstated stays undefined so the page shows nothing rather than a ✗ the
+    // source never said. A listing synced from Affitor omits all three.
+    marketingMaterials: yaml.marketing_materials,
+    apiAvailable: yaml.api_available,
+    dedicatedManager: yaml.dedicated_manager,
     dashboardUrl: yaml.dashboard_url ?? null,
     network: yaml.network ?? null,
     programAge: yaml.program_age ?? null,
@@ -132,15 +153,54 @@ function mapYamlToProgram(yaml: any): Program {
     source: yaml.source,
     lastVerifiedAt: yaml.last_verified_at ?? null,
     aliases: yaml.aliases ?? [],
+    status: yaml.status ?? "active",
+    statusNote: yaml.status_note ?? null,
+    claimedBy: yaml.claimed_by ?? null,
+    alsoOn: yaml.also_on ?? null,
+    kind: yaml.kind,
   }
 }
 
 export const programs: Program[] = (registryData.programs as unknown[]).map(mapYamlToProgram)
 
+/** Paused, discontinued and no_program entries keep their page (reachable by slug) but are never listed or ranked as live. */
+export function isLive(p: { status?: string | null }): boolean {
+  return (p.status ?? "active") === "active"
+}
+export const livePrograms: Program[] = programs.filter(isLive)
+
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): Program | undefined {
   return programs.find((p) => p.slug === slug)
+}
+
+export { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE }
+
+/**
+ * The program as a reader may see it: unconfirmed cookie window, payout and
+ * approval left out, along with the sentences of free text that state them
+ * (see confirmed-terms.ts). For display and API output only; affiliateScore
+ * and list ranking take the stored program.
+ */
+export function confirmedTerms(p: Program): Program {
+  if (termsConfirmed(p)) return p
+  const conditions = confirmedProse(p, p.commission.conditions) || null
+  return {
+    ...p,
+    commission: { ...p.commission, conditions },
+    commissionConditions: conditions,
+    cookieDays: undefined,
+    payout: {},
+    payoutMethods: undefined,
+    approval: undefined,
+    approvalTime: undefined,
+    description: confirmedPitch(p, p.description),
+    shortDescription: confirmedPitch(p, p.shortDescription),
+    agentPrompt: confirmedPrompt(p, p.agentPrompt),
+    agentUseCases: confirmedProseList(p, p.agentUseCases),
+    restrictions: confirmedProseList(p, p.restrictions),
+  }
 }
 
 /** Short label for commission type, e.g. "recurring/12mo", "rec/lifetime", "one-time" */
@@ -167,41 +227,6 @@ export interface SearchOptions {
 }
 
 /**
- * Parse commission rate string into a numeric percentage-equivalent.
- * - "30%" → 30
- * - "$1,000" → 1000 (flat fee, kept as-is — score handles conversion)
- * - "20-30%" → 30 (takes higher)
- * - "$5 per lead + 30%" → 30 (prefers percentage)
- * - "varies" → 0
- */
-export function parseCommissionRate(
-  rate: string | number | Program["commission"]
-): number {
-  // Prefer the typed value. The regexes below are what the registry used
-  // before commission was typed, and they had to guess: "175" could be
-  // percent or dollars, "varies" parsed to 0 and sorted like a real zero.
-  // They stay for any caller still passing a raw string.
-  if (rate && typeof rate === "object") {
-    return rate.value ?? 0
-  }
-  if (typeof rate === "number") return rate
-  const s = String(rate).replace(/,/g, "")
-  // Handle ranges like "20-30%" — take the higher value
-  const rangeMatch = s.match(/(\d+)\s*[-–]\s*(\d+)\s*%/)
-  if (rangeMatch) return parseFloat(rangeMatch[2])
-  // Compound rates: prefer percentage component ("$5 per lead + 30%")
-  const pctMatch = s.match(/([\d.]+)\s*%/)
-  if (pctMatch) return parseFloat(pctMatch[0])
-  // Flat fee: "$100", "$1000"
-  const dollarMatch = s.match(/\$\s*([\d.]+)/)
-  if (dollarMatch) return parseFloat(dollarMatch[1])
-  // Bare number
-  const numMatch = s.match(/[\d.]+/)
-  return numMatch ? parseFloat(numMatch[0]) : 0
-}
-
-/** Check if commission rate is a flat fee (dollar amount) vs percentage */
-/**
  * How a commission should be written for a reader.
  *
  * Every call site used to interpolate `commission.rate` directly, which is how
@@ -213,7 +238,8 @@ export function commissionDisplay(c: Program["commission"]): string {
     case "percentage":
       return c.value !== null ? `${c.value}%` : "Not published"
     case "flat":
-      return c.value !== null ? `$${c.value.toLocaleString()}` : "Not published"
+      if (c.value === null) return "Not published"
+      return isCreditReward(c) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
     case "tiered":
     case "hybrid":
       // A band or a two-part deal — the raw string carries nuance a single
@@ -225,26 +251,17 @@ export function commissionDisplay(c: Program["commission"]): string {
   }
 }
 
-/** True when there is no figure to compare on. */
-export function commissionUnknown(c: Program["commission"]): boolean {
-  return c.mode === "unknown" || c.value === null
+/** Reward paid as product credit, not cash (e.g. "$20 in Replit credits"). */
+export function isCreditReward(c: Program["commission"]): boolean {
+  return /credit/i.test(String(c.rate))
 }
 
-export function isCommissionFlat(rate: string | number): boolean {
-  if (typeof rate === "number") return false
-  const s = String(rate).replace(/,/g, "")
-  // If it has a percentage sign, it's not flat
-  if (s.includes("%")) return false
-  // If it has a dollar sign, it's flat
-  if (s.includes("$")) return true
-  return false
-}
+export { commissionUnknown, compareCommission }
 
 /**
- * Format a parsed commission value for display. A raw parsed number can
- * be either a percentage or a flat dollar fee — the `flat` flag tells
- * the renderer which suffix to use. Used by rankings and category stats
- * where we show aggregated best/avg values pulled from mixed rate types.
+ * Format a commission figure for display: `flat` for a US-dollar amount
+ * ("$150", "$1.5k"), otherwise a percentage ("30%", "12.5%"). Callers pass a
+ * figure from rankedCommission, so the unit is known, never guessed.
  */
 export function formatCommissionDisplay(value: number, flat: boolean): string {
   if (!isFinite(value) || value <= 0) return "—"
@@ -257,36 +274,53 @@ export function formatCommissionDisplay(value: number, flat: boolean): string {
 }
 
 /**
- * Affiliate Score (0–100)
+ * The commission a ranking may count, from structured fields only: a single
+ * percentage (mode "percentage"), or a flat amount in explicit US dollars
+ * (mode "flat", currency "USD"). Null for everything else: tiered, hybrid and
+ * unknown modes, a flat amount in another or no currency, and referral rewards
+ * (kind "referral": credit or gift cards). The rate text is never read.
+ * listScore (best-lists.ts) and affiliateScore both go through here, so a list
+ * and the Affiliate Score cannot disagree on what counts as cash.
+ */
+export function rankedCommission(p: Pick<Program, "commission" | "kind">): Program["commission"] | null {
+  const c = p.commission
+  if (p.kind === "referral") return null
+  if (c.mode === "percentage" || (c.mode === "flat" && c.currency === "USD")) return c
+  return null
+}
+
+/**
+ * Affiliate Score (0–100), from structured fields only: the rate text is
+ * never read, so rewording it cannot move a program.
  *
  * | Component          | Max | Formula                                               |
  * |--------------------|-----|-------------------------------------------------------|
- * | Commission value   |  40 | Percentage: min(rate/50,1)×40                         |
- * |                    |     | Flat fee: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
- * |                    |     | "varies": 15                                          |
- * | Cookie duration    |  15 | min(days/90,1) × 15                                  |
- * | Type + Duration    |  25 | one-time:5, tiered:12, hybrid:15                      |
+ * | Commission value   |  40 | rankedCommission only, otherwise 0                    |
+ * |                    |     | Percentage: min(value/50,1)×40                        |
+ * |                    |     | Flat USD: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
+ * | Cookie window      |  15 | min(days/90,1) × 15, once terms are confirmed; else 0 |
+ * | Type + Duration    |  25 | one-time:5, hybrid:5, tiered:12                       |
  * |                    |     | recurring:18, rec/12mo:21, rec/24mo:23, rec/lifetime:25|
  * | Verified           |  10 | 10 if verified                                        |
  * | Completeness       |  10 | +4 description, +3 agent prompt, +3 signup URL        |
  * | **Total**          | 100 |                                                       |
  */
 export function affiliateScore(p: Program): number {
-  const raw = parseCommissionRate(p.commission)
-  const isVaries = typeof p.commission.rate === "string" && /varies/i.test(p.commission.rate)
-
   // Commission value (max 40)
-  let commScore: number
-  if (isVaries) {
-    commScore = 15
-  } else if (isCommissionFlat(p.commission.rate)) {
-    commScore = raw >= 500 ? 40 : raw >= 100 ? 28 : raw >= 50 ? 16 : 8
-  } else {
-    commScore = Math.min(raw / 50, 1) * 40
+  const c = rankedCommission(p)
+  const value = c?.value ?? 0
+  let commScore = 0
+  if (c && Number.isFinite(value) && value > 0) {
+    commScore =
+      c.mode === "percentage"
+        ? Math.min(value / 50, 1) * 40
+        : value >= 500 ? 40 : value >= 100 ? 28 : value >= 50 ? 16 : 8
   }
 
-  // Cookie duration (max 15)
-  const cookieScore = Math.min(p.cookieDays / 90, 1) * 15
+  // Cookie window (max 15). An unverified program's stored window is usually
+  // an import default, and no surface shows it (confirmed-terms.ts), so it
+  // counts as unknown here too.
+  const cookieScore = termsConfirmed(p) ? Math.min((p.cookieDays ?? 0) / 90, 1) * 15 : 0
 
   // Type + Duration (max 25)
   let typeScore: number
@@ -321,7 +355,8 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
     ? { query: queryOrOptions, category }
     : queryOrOptions
 
-  let results = programs
+  // A copy: sorting livePrograms itself reordered it for every later caller.
+  let results = [...livePrograms]
 
   if (opts.category) {
     results = results.filter((p) => p.category === opts.category)
@@ -354,13 +389,14 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
   const sort = opts.sort ?? "relevance"
   switch (sort) {
     case "az":
-      results.sort((a, b) => a.name.localeCompare(b.name))
+      results.sort((a, b) => compareText(a.name, b.name))
       break
     case "za":
-      results.sort((a, b) => b.name.localeCompare(a.name))
+      results.sort((a, b) => compareText(b.name, a.name))
       break
     case "commission_desc":
-      results.sort((a, b) => parseCommissionRate(b.commission) - parseCommissionRate(a.commission))
+      // The order every commission surface shares (commission-order.ts).
+      results.sort((a, b) => compareCommission(a, b, commissionRank))
       break
     case "newest":
       // Many existing programs share a backfill date of 2026-04-18. To give
@@ -392,7 +428,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
           return map[s ?? ""] ?? 2
         }
         results.sort((a, b) => {
-          const byDate = (b.createdAt || "").localeCompare(a.createdAt || "")
+          const byDate = compareText(b.createdAt || "", a.createdAt || "")
           if (byDate !== 0) return byDate
           const bySource = sourceWeight(b.source) - sourceWeight(a.source)
           if (bySource !== 0) return bySource
@@ -430,6 +466,13 @@ export const categoryCounts: Record<string, number> = programs.reduce(
 
 export const networks = [...new Set(programs.map((p) => p.network ?? IN_HOUSE))].sort() as string[]
 
+/**
+ * Networks with at least one live program: the only ones that get a page, a
+ * Markdown twin or a sitemap entry. A network whose programs are all paused or
+ * discontinued would otherwise publish an empty page.
+ */
+export const liveNetworks = [...new Set(livePrograms.map((p) => p.network ?? IN_HOUSE))].sort() as string[]
+
 export const networkCounts: Record<string, number> = programs.reduce(
   (acc, p) => {
     const net = p.network ?? IN_HOUSE
@@ -447,57 +490,24 @@ export function slugToCategory(slug: string): string | undefined {
   return categories.find((c) => categoryToSlug(c) === slug)
 }
 
-/**
- * Marketplaces publish a directory you browse and apply through. Affiliate
- * software has none — the brand runs its own program on someone else's
- * infrastructure, so the only way in is through the brand.
- *
- * The distinction was invisible before: /networks/dub and
- * /networks/partnerstack looked like the same kind of page, and a reader
- * arriving at the first one had no way to learn there is nothing to browse.
- */
-export type NetworkKind = "marketplace" | "software" | "direct"
-
-export const NETWORK_KIND: Record<string, NetworkKind> = {
-  partnerstack: "marketplace",
-  impact: "marketplace",
-  awin: "marketplace",
-  "cj-affiliate": "marketplace",
-  rewardful: "software",
-  firstpromoter: "software",
-  tolt: "software",
-  dub: "software",
-  tapfiliate: "software",
-  lemonsqueezy: "software",
-  "in-house": "direct",
-}
-
-export function networkKind(network: string): NetworkKind {
-  return NETWORK_KIND[network] ?? "software"
-}
-
-/**
- * Display name for a network. Stored values are lowercase slugs, which read
- * as a typo mid-sentence — "dub is affiliate software" rather than "Dub is".
- * CSS capitalize cannot help inside a generated string.
- */
-export function networkName(network: string): string {
-  const SPECIAL: Record<string, string> = {
-    partnerstack: "PartnerStack",
-    firstpromoter: "FirstPromoter",
-    "cj-affiliate": "CJ Affiliate",
-    lemonsqueezy: "Lemon Squeezy",
-    "in-house": "In-house",
-  }
-  if (SPECIAL[network]) return SPECIAL[network]
-  return network
-    .split("-")
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(" ")
-}
+export {
+  NETWORK_META,
+  NETWORK_KIND_LABEL,
+  networkHeading,
+  networkKind,
+  networkName,
+  type NetworkKind,
+  type NetworkMeta,
+} from "./network-meta"
 
 /** One sentence explaining how a reader actually joins programs here. */
 export function networkHowToJoin(network: string): string {
+  // Affitor has no network-level application to pass: you sign up as a
+  // partner, then apply per program, approved instantly or by the brand
+  // (affitor.com/docs/partners).
+  if (network === "affitor") {
+    return "Affitor runs a marketplace: you create one partner account, then apply to each program inside it."
+  }
   const name = networkName(network)
   switch (networkKind(network)) {
     case "marketplace":
@@ -515,110 +525,168 @@ export function networkToSlug(network: string): string {
 }
 
 export function slugToNetwork(slug: string): string | undefined {
-  const networks = [...new Set(programs.map((p) => p.network ?? IN_HOUSE))]
-  return networks.find((n) => networkToSlug(n) === slug)
-}
-
-export interface NetworkStats {
-  network: string
-  programCount: number
-  avgCommission: number        // legacy — mean of percentage rates only
-  bestCommission: number       // legacy — max of percentage rates only
-  bestCommissionDisplay: string // formatted, covers both flat and percentage
-  topProgram: Program           // the program with the strongest commission
+  return liveNetworks.find((n) => networkToSlug(n) === slug)
 }
 
 /**
- * Rank programs within a network or category using a normalized score that
- * can compare a percentage rate against a flat-fee rate. Heuristic: treat
- * $1 ≈ 1pp up to a cap of 100 (so $500 flat ≈ a cap, preventing giant
- * referral bounties like $10,000 from dominating the "best" slot).
+ * Where a program sits when a list orders by commission, from rankedCommission
+ * only (0 when it gives nothing: unpublished, tiered, hybrid, referral, a flat
+ * amount in another currency). A percentage scores itself; a flat US-dollar
+ * amount scores $1 ≈ 1 point up to $50, then 0.1 per dollar ($550 = 100,
+ * $10,000 = 1,045). A heuristic that places a rate next to a flat fee: fine
+ * for an order, wrong for a "best" figure, which is why commissionStats never
+ * uses it.
+ *
+ * listScore (best-lists.ts) is this capped at 100, for filters such as
+ * high-paying's 30. Ordering on the uncapped value is ordering on listScore
+ * with ties at the cap going to the larger figure: $10,000 before $550.
  */
-function rankScore(rate: string | number): number {
-  const n = parseCommissionRate(rate)
-  if (!isFinite(n) || n <= 0) return 0
-  if (isCommissionFlat(rate)) {
-    // $1-$49 → 5-49, $50-$500 → 50-100, $500+ → 100 cap
-    if (n < 50) return n
-    return Math.min(100, 50 + (n - 50) * 0.1)
+export function commissionRank(p: Pick<Program, "commission" | "kind">): number {
+  const c = rankedCommission(p)
+  const n = c?.value ?? 0
+  if (!c || !Number.isFinite(n) || n <= 0) return 0
+  return c.mode === "flat" ? (n < 50 ? n : 50 + (n - 50) * 0.1) : n
+}
+
+/** A commission figure and the program that pays it. */
+export interface PaidBy {
+  value: number
+  program: Program
+}
+
+/**
+ * Commission figures for a group of programs (a network, a category), from
+ * rankedCommission only. A percentage and a dollar amount are never averaged
+ * or compared with each other: without the sale price there is no honest
+ * exchange rate between "30%" and "$150". So a group has a rate side and a
+ * flat side:
+ *   - avgRate, topRate: mean and highest single percentage rate;
+ *   - topFlatUsd: highest flat payout in US dollars.
+ * Credit and gift-card rewards, tiered and hybrid deals, flat amounts in
+ * another or no currency, and unpublished rates count on neither side (a
+ * tiered "up to $150" was shown as a 150% rate). A percentage counts in any
+ * currency. Each is null when nothing in the group counts. A tie goes to the
+ * verified program, then to the earlier one in the group.
+ *
+ * Unverified commissions count, as everywhere else on the site, so every
+ * surface that shows these figures says so: the average with rateBasis, a
+ * named top program with the "unconfirmed" marker when !termsConfirmed.
+ */
+export interface CommissionStats {
+  avgRate: number | null
+  /** The single rates the average is taken over, and how many are unconfirmed. */
+  rateCount: number
+  unconfirmedRates: number
+  topRate: PaidBy | null
+  topFlatUsd: PaidBy | null
+}
+
+export function commissionStats(progs: Program[]): CommissionStats {
+  const side = (mode: "percentage" | "flat"): PaidBy[] =>
+    progs.flatMap((program) => {
+      const c = rankedCommission(program)
+      const value = c?.value
+      return c?.mode === mode && typeof value === "number" && Number.isFinite(value) && value > 0 ? [{ value, program }] : []
+    })
+  const top = (paid: PaidBy[]): PaidBy | null =>
+    paid.reduce<PaidBy | null>(
+      (best, x) =>
+        !best || x.value > best.value || (x.value === best.value && x.program.verified && !best.program.verified) ? x : best,
+      null
+    )
+  const rates = side("percentage")
+  return {
+    avgRate: rates.length ? rates.reduce((sum, r) => sum + r.value, 0) / rates.length : null,
+    rateCount: rates.length,
+    unconfirmedRates: rates.filter((r) => !termsConfirmed(r.program)).length,
+    topRate: top(rates),
+    topFlatUsd: top(side("flat")),
   }
-  // Percentage: direct, capped at 100
-  return Math.min(n, 100)
+}
+
+/** What an average rate is taken over: "289 rates (214 unconfirmed)". */
+export function rateBasis(s: CommissionStats): string {
+  const n = s.rateCount
+  return `${n} ${n === 1 ? "rate" : "rates"}${s.unconfirmedRates > 0 ? ` (${s.unconfirmedRates} unconfirmed)` : ""}`
+}
+
+/** A figure on a /rankings networks or categories row, as the browser shows it. */
+export interface PaidFigure {
+  display: string
+  slug: string
+  name: string
+  /** The program's terms are not verified: shown with the UNCONFIRMED marker. */
+  unconfirmed: boolean
+}
+
+/**
+ * A /rankings networks or categories row, built on the server as display
+ * strings: the browser's copy of the registry has no `kind`, so it could not
+ * leave referral rewards out.
+ */
+export interface GroupRow {
+  /** The network id or the category name. */
+  name: string
+  programCount: number
+  /** Mean single percentage rate, "23.4%", or "—". */
+  avgRate: string
+  /** rateBasis, or null when no rate counts. */
+  avgBasis: string | null
+  topRate: PaidFigure | null
+  topFlatUsd: PaidFigure | null
+}
+
+export function groupRow(name: string, programCount: number, s: CommissionStats): GroupRow {
+  const figure = (x: PaidBy | null, flat: boolean): PaidFigure | null =>
+    x
+      ? {
+          display: formatCommissionDisplay(x.value, flat),
+          slug: x.program.slug,
+          name: x.program.name,
+          unconfirmed: !termsConfirmed(x.program),
+        }
+      : null
+  return {
+    name,
+    programCount,
+    avgRate: s.avgRate != null ? `${s.avgRate.toFixed(1)}%` : "—",
+    avgBasis: s.avgRate != null ? rateBasis(s) : null,
+    topRate: figure(s.topRate, false),
+    topFlatUsd: figure(s.topFlatUsd, true),
+  }
+}
+
+export interface NetworkStats extends CommissionStats {
+  network: string
+  programCount: number
 }
 
 export function getNetworkStats(): NetworkStats[] {
   const networkMap = new Map<string, Program[]>()
-  for (const p of programs) {
+  for (const p of livePrograms) {
     const net = p.network ?? IN_HOUSE
     if (!networkMap.has(net)) networkMap.set(net, [])
     networkMap.get(net)!.push(p)
   }
 
   return Array.from(networkMap.entries())
-    .map(([network, progs]) => {
-      const scores = progs.map((p) => rankScore(p.commission.rate))
-      const bestIdx = scores.indexOf(Math.max(...scores))
-      const topProgram = progs[bestIdx]
-      // Avg and bestCommission legacy: only consider percentage rates, so the
-      // displayed "X%" makes semantic sense. Flat-fee-only networks will show
-      // a conservative 0 for avg and use bestCommissionDisplay for UI.
-      const pctRates = progs
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      return {
-        network,
-        programCount: progs.length,
-        avgCommission: pctRates.length
-          ? pctRates.reduce((a, b) => a + b, 0) / pctRates.length
-          : 0,
-        bestCommission: pctRates.length ? Math.max(...pctRates) : 0,
-        bestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission),
-          isCommissionFlat(topProgram.commission.rate)
-        ),
-        topProgram,
-      }
-    })
+    .map(([network, progs]) => ({ network, programCount: progs.length, ...commissionStats(progs) }))
     .sort((a, b) => b.programCount - a.programCount)
 }
 
-export interface CategoryStats {
+export interface CategoryStats extends CommissionStats {
   category: string
   programCount: number
-  highestCommission: number        // legacy — max of percentage rates only
-  avgCommission: number             // legacy — mean of percentage rates only
-  highestCommissionDisplay: string  // formatted, covers both flat and percentage
-  topProgram: Program
 }
 
 export function getCategoryStats(): CategoryStats[] {
   const catMap = new Map<string, Program[]>()
-  for (const p of programs) {
+  for (const p of livePrograms) {
     if (!catMap.has(p.category)) catMap.set(p.category, [])
     catMap.get(p.category)!.push(p)
   }
 
   return Array.from(catMap.entries())
-    .map(([category, progs]) => {
-      const scores = progs.map((p) => rankScore(p.commission.rate))
-      const bestIdx = scores.indexOf(Math.max(...scores))
-      const topProgram = progs[bestIdx]
-      const pctRates = progs
-        .filter((p) => !isCommissionFlat(p.commission.rate))
-        .map((p) => parseCommissionRate(p.commission))
-      return {
-        category,
-        programCount: progs.length,
-        highestCommission: pctRates.length ? Math.max(...pctRates) : 0,
-        avgCommission: pctRates.length
-          ? pctRates.reduce((a, b) => a + b, 0) / pctRates.length
-          : 0,
-        highestCommissionDisplay: formatCommissionDisplay(
-          parseCommissionRate(topProgram.commission),
-          isCommissionFlat(topProgram.commission.rate)
-        ),
-        topProgram,
-      }
-    })
+    .map(([category, progs]) => ({ category, programCount: progs.length, ...commissionStats(progs) }))
     .sort((a, b) => b.programCount - a.programCount)
 }

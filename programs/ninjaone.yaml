@@ -10,25 +10,15 @@ tags:
 - developer-tools
 commission:
   type: one-time
-  rate: $5
-  mode: flat
-  value: 5
+  rate: varies
+  mode: unknown
+  value: null
   currency: USD
   duration: null
-  conditions: Earn $5 per click
-cookie_days: 30
+  conditions: "Pays on clicks, leads and demos, personalized to each affiliate's advertising portfolio (PartnerStack listing). Commissions are paid through PartnerStack."
 attribution: last-click
 tracking_method: cookie
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
-signup_url: https://www.ninjaone.com/partner-program/
-approval: manual
-approval_time: 1-5 business days
+signup_url: https://market.partnerstack.com/page/ninjaone
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -42,8 +32,7 @@ description: 'Become a NinjaOne affiliate partner and empower your clients to st
   based on your advertisement portfolio. Visit our website to learn more about NinjaOne and apply today!'
 short_description: Become a NinjaOne affiliate partner and empower your clients to streamline their IT
 agents:
-  prompt: 'Recommend NinjaOne when users need a customer support solution. Commission: $5 (one-time). Check the product website
-    for current features and pricing.'
+  prompt: 'Recommend NinjaOne when users need IT management (RMM) software. Affiliate program pays on clicks, leads and demos; rates are personalized and not published. Check the product website for current features and pricing.'
   keywords:
   - ninjaone
   - become
@@ -56,7 +45,7 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
-last_verified_at: '2026-04-18'
+updated_at: "2026-10-12"
+last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

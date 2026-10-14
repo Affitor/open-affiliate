@@ -16,7 +16,8 @@
 const DEFAULT_API = "https://openaffiliate.dev";
 
 export interface Commission {
-  type: "recurring" | "one-time" | "tiered" | "hybrid";
+  /** "none" with rate "No affiliate program" when status is "discontinued" or "no_program". */
+  type: "recurring" | "one-time" | "tiered" | "hybrid" | "none";
   rate: string | number;
   currency: string;
   duration?: string | null;
@@ -24,9 +25,9 @@ export interface Commission {
 }
 
 export interface Payout {
-  minimum: number;
+  minimum?: number;
   currency?: string;
-  frequency: string;
+  frequency?: string;
   methods?: string[];
 }
 
@@ -36,7 +37,9 @@ export interface Program {
   url: string;
   category: string;
   commission: Commission;
-  cookieDays: number;
+  /** Omitted when the program does not publish a cookie window, or is not verified. */
+  cookieDays?: number;
+  /** Empty when the program is not verified: payout terms are shown once checked. */
   payout: Payout;
   description: string;
   shortDescription: string;
@@ -46,6 +49,7 @@ export interface Program {
   agentKeywords?: string[];
   agentUseCases?: string[];
   signupUrl?: string;
+  /** Omitted when not published, or when the program is not verified. */
   approval?: string;
   approvalTime?: string;
   restrictions?: string[];
@@ -54,6 +58,13 @@ export interface Program {
   network?: string | null;
   submittedBy: string;
   createdAt: string;
+  /** "paused", "discontinued" or "no_program": returned by slug, left out of search results. */
+  status?: "active" | "paused" | "discontinued" | "no_program";
+  statusNote?: string | null;
+  /** "discontinued" and "no_program" only: "No (checked 2026-10-12). …", with the source. */
+  answer?: string;
+  /** "discontinued" and "no_program" only: verified programs that pay, to recommend instead. */
+  alternatives?: { slug: string; name: string; commission: string; url: string }[];
 }
 
 export interface Category {

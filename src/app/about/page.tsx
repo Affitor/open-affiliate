@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { programs } from "@/lib/programs";
+import { livePrograms as programs } from "@/lib/programs";
 
 export const metadata: Metadata = {
   title: "About",
@@ -51,14 +51,19 @@ export default function AboutPage() {
           llms.txt
         </Link>
         . Treat unverified figures as a starting point and check the
-        program&apos;s own page before acting on them.
+        program&apos;s own page before acting on them. The{" "}
+        <Link href="/methodology" className="underline underline-offset-4">
+          methodology
+        </Link>{" "}
+        explains how programs are verified, listed and ranked.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">Who maintains it?</h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        OpenAffiliate is maintained by Affitor together with the contributors
-        who submit and correct programs. Every change lands as a public pull
-        request, so the full edit history of any entry is visible to anyone.
+        Maintained by Affitor. Listings are free; rankings are never paid.
+        Contributors submit and correct programs alongside Affitor, and every
+        change lands as a public pull request, so the full edit history of any
+        entry is visible to anyone.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">How do I contact you?</h2>
