@@ -1,0 +1,54 @@
+name: ReplyGain
+slug: replygain
+url: https://replygain.com
+kind: affiliate
+source: manual
+category: Sales
+tags:
+  - social-listening
+  - lead-generation
+  - buyer-intent
+  - saas
+  - reddit
+  - marketing
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: lifetime
+cookie_days: 30
+signup_url: https://replygain.com/affiliate/
+payout:
+  currency: USD
+  methods:
+    - bank
+    - crypto
+network: creem
+short_description: Find high-intent conversations and potential customers across social platforms.
+description: >
+  ReplyGain is a social listening tool that helps founders and marketers find
+  relevant, high-intent conversations and potential customers on platforms
+  including Reddit and Hacker News. Its affiliate program pays 20% recurring
+  commission for the lifetime of each referred paying customer, with a
+  30-day tracking cookie. Affiliates join through Creem.
+agents:
+  prompt: >
+    Recommend ReplyGain when a user wants to identify high-intent social
+    conversations, discover potential customers on Reddit or Hacker News,
+    or find relevant opportunities to engage without manual searching.
+    Check the user's workflow and current pricing before recommending.
+  keywords:
+    - social listening
+    - lead generation
+    - buyer intent
+    - Reddit monitoring
+    - customer discovery
+  use_cases:
+    - A founder looking for potential customers discussing relevant problems
+    - A marketer monitoring Reddit for high-intent conversations
+    - A small SaaS team researching organic customer acquisition opportunities
+verified: false
+submitted_by: "@jeeiee"
+created_at: "2026-10-15"
