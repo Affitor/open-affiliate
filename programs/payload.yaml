@@ -8,6 +8,7 @@ verified: false
 commission:
   mode: percentage
   rate: "25%"
+  value: 25
   currency: USD
 
 
