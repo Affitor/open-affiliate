@@ -386,7 +386,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">
-              Featured Programs
+              Verified Programs
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
               More verified programs, by Affiliate Score
