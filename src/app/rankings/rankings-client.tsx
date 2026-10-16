@@ -33,6 +33,7 @@ import { networkName } from "@/lib/network-meta";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
+import { byScore } from "@/lib/score-order";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -710,7 +711,7 @@ export default function RankingsClient({
 
   const top3 = useMemo(() => {
     return [...programs]
-      .sort((a, b) => affiliateScore(b) - affiliateScore(a))
+      .sort(byScore(affiliateScore))
       .slice(0, 3);
   }, []);
 
