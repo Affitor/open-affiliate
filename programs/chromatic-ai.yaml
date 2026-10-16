@@ -6,9 +6,11 @@ verified: false
 
 commission:
   type: recurring
-  rate: 40%
+  rate: "40%"
   currency: USD
   mode: percentage
+  value: 40
+  duration: "12 months"
 cookie_days: 90
 
 payout:
