@@ -66,6 +66,9 @@ const PLAIN_ANCHORS = new Set([
   "src/components/explore-table.tsx | item.url", // social posts
   "src/components/social-listen.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
+  "src/app/page.tsx | `/programs/${p.slug}`", // homepage top-verified row, internal (N-2)
+  "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
+  "src/app/programs/page.tsx | `#letter-${g.letter === \"#\" ? \"other\" : g.letter}`", // directory jump links
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
 ])
