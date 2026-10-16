@@ -14,7 +14,6 @@ commission:
   currency: USD
   duration: 12 months
 cookie_days: 60
-attribution: last-click
 tracking_method: cookie
 payout:
   minimum: 10
