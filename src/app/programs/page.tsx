@@ -7,7 +7,9 @@ import { ProgramsView } from "./programs-view";
  * own Suspense), so its programs are not in the prerendered HTML. The A–Z
  * directory is a server-rendered sibling outside that Suspense: every live
  * program gets a plain link a crawler can follow. Plain <a>, not <Link>: no
- * hydration and no viewport prefetch of ~1,000 dynamic program pages.
+ * hydration and no viewport prefetch of ~1,000 dynamic program pages. No
+ * #letter jump links: a hash entry has no Next history state, so jump, open a
+ * program, Back left the program page on screen (measured on the preview).
  */
 export default function ProgramsPage() {
   const groups = directoryGroups(programs);
@@ -16,15 +18,10 @@ export default function ProgramsPage() {
       <ProgramsView />
       <section id="all-programs" aria-labelledby="all-programs-h" className="mx-auto max-w-6xl px-6 pb-16">
         <h2 id="all-programs-h" className="text-lg font-semibold tracking-tight">All affiliate programs A–Z</h2>
-        <nav aria-label="Jump to letter" className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground [&_a:hover]:text-foreground">
-          {groups.map((g) => (
-            <a key={g.letter} href={`#letter-${g.letter === "#" ? "other" : g.letter}`}>{g.letter.toUpperCase()}</a>
-          ))}
-        </nav>
         <div className="mt-6 space-y-6 text-sm text-muted-foreground [&_a:hover]:text-foreground [&_h3]:mb-2 [&_h3]:text-xs [&_h3]:font-semibold [&_h3]:uppercase [&_h3]:text-foreground [&_ul]:columns-2 sm:[&_ul]:columns-3 lg:[&_ul]:columns-4 [&_ul]:gap-6 [&_li]:break-inside-avoid [&_li]:py-0.5">
           {groups.map((g) => (
             <div key={g.letter}>
-              <h3 id={`letter-${g.letter === "#" ? "other" : g.letter}`}>{g.letter === "#" ? "0–9 and other" : g.letter.toUpperCase()}</h3>
+              <h3>{g.letter === "#" ? "0–9 and other" : g.letter.toUpperCase()}</h3>
               <ul>
                 {g.programs.map((p) => (
                   <li key={p.slug}>
