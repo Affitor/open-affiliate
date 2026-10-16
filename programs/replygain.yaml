@@ -21,7 +21,6 @@ commission:
 cookie_days: 30
 signup_url: https://replygain.com/affiliate/
 payout:
-  currency: USD
   methods:
     - bank
     - crypto
