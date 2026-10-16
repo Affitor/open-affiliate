@@ -71,28 +71,51 @@ test("programs-view never navigates through the router", () => {
   assert.match(view, /window\.history\.replaceState\(/)
 })
 
-// /programs carries the A–Z directory (~120 KB RSC): a <Link> to it must not
-// prefetch it from the viewport on every page (measured on the preview: the
-// homepage prefetch grew from 4.4 KB to 121 KB decoded).
-test("every <Link> to /programs opts out of prefetch", () => {
-  const files = ["src/components/nav.tsx", "src/app/layout.tsx", "src/app/page.tsx", "src/app/programs/[slug]/page.tsx", "src/app/compare/compare-view.tsx", "src/app/docs/features/page.tsx"]
+// /programs carries the A–Z directory (~120 KB RSC): a <Link> to it, with any
+// query or hash, must not prefetch it from the viewport (measured on the
+// preview: the homepage prefetch grew from 4.4 KB to 121 KB decoded).
+// Problems in one file's source: Links to /programs without the opt-out.
+function programsLinkProblems(text: string): { links: number; problems: string[] } {
+  const problems: string[] = []
   let links = 0
-  for (const file of files) {
-    const text = readFileSync(join(root, file), "utf8")
-    for (const m of text.matchAll(/<Link\b[^>]*>/g)) {
-      const tag = m[0]
-      if (tag.includes('href="/programs"')) {
-        links++
-        assert.match(tag, /prefetch=\{false\}/, `${file}: ${tag.slice(0, 80)}`)
-      } else if (/href=\{(href|f\.href)\}/.test(tag) && /href: "\/programs"/.test(text)) {
-        // A mapped link in a file whose list has /programs.
-        links++
-        assert.match(tag, /prefetch=\{(href|f\.href) === "\/programs" \? false : undefined\}/, `${file}: mapped link without the /programs opt-out`)
-      }
+  const listsPrograms = /href: "\/programs"/.test(text)
+  // `=>` inside an attribute (onClick) is not the end of the tag.
+  for (const m of text.matchAll(/<Link\b(?:=>|[^>])*>/g)) {
+    const tag = m[0]
+    const href = /href=(?:"([^"]*)"|\{`([^`]*)`\}|\{([\w.]+)\})/.exec(tag)
+    if (!href) continue
+    const literal = href[1] ?? href[2]
+    if (literal !== undefined) {
+      if (!/^\/programs(?:$|[?#])/.test(literal)) continue
+      links++
+      if (!/prefetch=\{false\}/.test(tag)) problems.push(tag.replace(/\s+/g, " ").slice(0, 90))
+    } else if (listsPrograms) {
+      // A mapped link (href={href}) in a file whose list has /programs.
+      links++
+      const v = href[3].replace(".", "\\.")
+      if (!new RegExp(`prefetch=\\{${v} === "/programs" \\? false : undefined\\}`).test(tag)) problems.push(`mapped ${href[3]} without the /programs opt-out`)
     }
   }
-  assert.ok(links >= 8, `found ${links} links`)
-  // Any other file linking /programs with a literal href must be listed above.
-  const all = execSync("grep -rl 'href=\"/programs\"' src", { cwd: root, encoding: "utf8" }).trim().split("\n")
-  for (const f of all) assert.ok(files.includes(f) || !/<Link\b[^>]*href="\/programs"/.test(readFileSync(join(root, f), "utf8")), `${f} links /programs and is not checked`)
+  return { links, problems }
+}
+
+test("every <Link> to /programs, in every source file, opts out of prefetch", () => {
+  const files = execSync("git ls-files 'src/*.tsx'", { cwd: root, encoding: "utf8" }).trim().split("\n")
+  let links = 0
+  for (const file of files) {
+    const r = programsLinkProblems(readFileSync(join(root, file), "utf8"))
+    links += r.links
+    assert.deepEqual(r.problems, [], file)
+  }
+  // nav ×2, footer ×2, homepage ×2, breadcrumb, compare, docs/features, rankings categories.
+  assert.ok(links >= 10, `found ${links} links`)
+  // The checker itself catches each shape it claims to.
+  for (const bad of [
+    '<Link href="/programs" className="x">',
+    '<Link href="/programs#all-programs">',
+    "<Link href={`/programs?category=${c}`} className=\"x\">",
+    '<Link onClick={() => go()} href="/programs?q=a">',
+  ]) assert.equal(programsLinkProblems(bad).problems.length, 1, bad)
+  assert.equal(programsLinkProblems('<Link href="/programs/vercel">').links, 0)
+  assert.equal(programsLinkProblems('const a = [{ href: "/programs" }]; <Link href={href} className="x">').problems.length, 1)
 })

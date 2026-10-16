@@ -667,6 +667,7 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
                 <td className="py-3 px-3">
                   <Link
                     href={`/programs?category=${encodeURIComponent(row.name)}`}
+                    prefetch={false}
                     className="text-sm font-medium hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     {row.name}

@@ -106,6 +106,7 @@ export default function FeaturesPage() {
               <Link
                 key={i.label}
                 href={i.href}
+                prefetch={i.href === "/programs" ? false : undefined}
                 className="rounded-lg border border-border/50 bg-muted/20 p-3 text-center hover:bg-muted/40 transition-colors"
               >
                 <p className="text-xs font-semibold">{i.label}</p>
