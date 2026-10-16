@@ -55,6 +55,7 @@ import {
   bestListCopy,
   bestPath,
   buildBestList,
+  freshnessLine,
   categoryList,
   listCommissionText,
   type BestList,
@@ -278,8 +279,10 @@ function statusBlock(p: Program): string {
     ].join("\n")
   }
   return [
+    // No date: an unverified entry's last_verified_at is a check that confirmed
+    // nothing, and "Last verified: <date>" read as verification. The facts
+    // below carry UNCONFIRMED_NOTE.
     `Status: unverified`,
-    `Last verified: ${when}`,
     "",
     `These figures are community-submitted and have not been confirmed by`,
     `OpenAffiliate. Check them against the program's own page before relying`,
@@ -859,6 +862,8 @@ function llmsTxt(): string {
     section(
       "Freshness",
       [
+        `${freshnessLine(sitePrograms)}.`,
+        ``,
         `This snapshot was generated ${generatedAt}.`,
         `Use the API or MCP tools below when you need the latest deployed data.`,
       ].join("\n"),
@@ -994,8 +999,8 @@ function indexMd(): string {
   return joinSections([
     `# OpenAffiliate`,
     [
-      `> The open registry of affiliate programs. ${programCount(livePrograms.length)}.`,
-      `> Built for developers and AI agents.`,
+      `> The open registry of affiliate programs. Built for developers and AI agents.`,
+      `> ${freshnessLine(sitePrograms)}.`,
     ].join("\n"),
     section(
       "Read this as an agent",
