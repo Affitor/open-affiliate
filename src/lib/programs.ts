@@ -186,8 +186,15 @@ export { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, te
 export function confirmedTerms(p: Program): Program {
   if (termsConfirmed(p)) return p
   const conditions = confirmedProse(p, p.commission.conditions) || null
+  // An unverified entry's last_verified_at is a check that confirmed nothing,
+  // and in a response next to its terms it reads as a verification date, so
+  // the key is left out (not null), like the other unconfirmed fields. A brand
+  // with no program keeps it: there it dates the status check its page states.
+  const noProgram = p.status === "no_program" || p.status === "discontinued"
+  const { lastVerifiedAt, ...rest } = p
   return {
-    ...p,
+    ...rest,
+    ...(noProgram ? { lastVerifiedAt } : {}),
     commission: { ...p.commission, conditions },
     commissionConditions: conditions,
     cookieDays: undefined,

@@ -92,7 +92,9 @@ export default function MethodologyPage() {
           Affiliate Score
         </Link>
         , which adds the cookie window, how long commission lasts and how
-        complete the listing is to the same commission. Programs that publish
+        complete the listing is to the same commission; the homepage&apos;s
+        rankings, featured and top verified programs use the same score.
+        Programs that publish
         no rate are left out of every /best list and placed last in their
         group on category pages.
       </p>

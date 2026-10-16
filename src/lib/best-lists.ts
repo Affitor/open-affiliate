@@ -77,6 +77,22 @@ export function verifiedDate(rows: Pick<Program, "verified" | "lastVerifiedAt">[
   )
 }
 
+/**
+ * The homepage freshness line, also in index.md and llms.txt: live programs,
+ * how many of them are verified, and verifiedDate over the live rows, so the
+ * date is never one an unverified or retired entry carries.
+ * "815 programs · 221 verified · last checked 2026-10-13".
+ */
+export function freshnessLine(rows: Pick<Program, "status" | "verified" | "lastVerifiedAt">[]): string {
+  const live = rows.filter((p) => (p.status ?? "active") === "active")
+  const checked = verifiedDate(live)
+  return [
+    `${live.length} programs`,
+    `${live.filter((p) => p.verified).length} verified`,
+    ...(checked ? [`last checked ${checked}`] : []),
+  ].join(" · ")
+}
+
 /** Shown with every list, because it describes the shared rules above. */
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
