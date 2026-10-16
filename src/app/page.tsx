@@ -15,6 +15,7 @@ import { ProgramLogo } from "@/components/program-logo";
 import { programs, livePrograms, categories, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
+import { homepageSets } from "@/lib/programs-directory";
 
 export const metadata: Metadata = {
   alternates: {
@@ -25,15 +26,12 @@ export const metadata: Metadata = {
   },
 };
 
-function RankingsPreview() {
-  const top5 = [...livePrograms]
-    .sort((a, b) => affiliateScore(b) - affiliateScore(a))
-    .slice(0, 5);
+function RankingsPreview({ top5 }: { top5: Program[] }) {
 
   const medals = ["text-amber-500 bg-amber-500/15", "text-zinc-400 bg-zinc-400/15", "text-orange-500 bg-orange-500/15"];
 
   return (
-    <section className="mx-auto max-w-6xl px-6 py-10">
+    <section id="home-rankings" className="mx-auto max-w-6xl px-6 py-10">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <ArrowUpDown className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
@@ -196,7 +194,9 @@ function ProgramCard({ program }: { program: (typeof programs)[0] }) {
 }
 
 export default function Home() {
-  const featured = livePrograms.slice(0, 6);
+  // Rankings top 5, then 6 Featured and 30 more verified programs by the same
+  // Affiliate Score order, none shown twice (homepageSets).
+  const { rankings, featured, row } = homepageSets(programs);
 
   return (
     <div>
@@ -243,6 +243,7 @@ export default function Home() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/programs"
+                  prefetch={false}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
                 >
                   Browse Programs
@@ -313,7 +314,7 @@ export default function Home() {
       </section>
 
       {/* Rankings Preview */}
-      <RankingsPreview />
+      <RankingsPreview top5={rankings} />
 
       {/* Social Proof + Stats */}
       <section className="relative border-y border-border/25">
@@ -381,18 +382,19 @@ export default function Home() {
       </section>
 
       {/* Featured Programs */}
-      <section className="mx-auto max-w-6xl px-6 py-10">
+      <section id="home-featured" className="mx-auto max-w-6xl px-6 py-10">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">
-              Featured Programs
+              Verified Programs
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Curated programs from the registry
+              More verified programs, by Affiliate Score
             </p>
           </div>
           <Link
             href="/programs"
+            prefetch={false}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
           >
             View all <ArrowRight className="h-3 w-3" />
@@ -404,6 +406,26 @@ export default function Home() {
             <ProgramCard key={program.slug} program={program} />
           ))}
         </div>
+      </section>
+
+      {/* Top verified programs: plain links, so each is in the raw HTML. */}
+      <section id="home-top-verified" className="mx-auto max-w-6xl px-6 pb-10">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-base font-semibold tracking-tight">Top verified programs by Affiliate Score</h2>
+          <Link
+            href="/docs/affiliate-score"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            How we score
+          </Link>
+        </div>
+        <ul className="columns-2 sm:columns-3 lg:columns-5 gap-6 text-sm text-muted-foreground [&_a:hover]:text-foreground [&_li]:py-0.5">
+          {row.map((p) => (
+            <li key={p.slug}>
+              <a href={`/programs/${p.slug}`}>{p.name}</a>
+            </li>
+          ))}
+        </ul>
       </section>
 
       {/* How it works */}

@@ -76,6 +76,7 @@ function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
+                    prefetch={href === "/programs" ? false : undefined}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {label}
@@ -108,6 +109,7 @@ function Footer() {
                   ) : (
                     <Link
                       href={href}
+                      prefetch={href === "/programs" ? false : undefined}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {label}

@@ -297,6 +297,7 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
               or{" "}
               <Link
                 href="/programs"
+                prefetch={false}
                 className="text-foreground hover:underline"
               >
                 search programs
