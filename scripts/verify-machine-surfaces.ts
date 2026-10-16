@@ -1258,10 +1258,10 @@ async function fetchAll(base: string, paths: string[], each: (path: string, body
 
 /**
  * gzip size cap for the /programs HTML, which carries the A–Z directory (N-2,
- * 2026-10-16): about 30 bytes gzip per live program on top of the page. The
- * first CI run on next start measured it (see the PR); the cap leaves room for
- * ~2,000 more programs. Past it, split the directory into per-letter pages
- * rather than raising the cap.
+ * 2026-10-16). Measured on next start in CI: 37,592 bytes gzip for 1,038 live
+ * programs (224,230 raw; 6,382 before the directory), about 30 bytes gzip per
+ * program. 60,000 leaves room for ~700 more programs. Past it, split the
+ * directory into per-letter pages rather than raising the cap.
  */
 const PROGRAMS_HTML_GZIP_BUDGET = 60_000;
 

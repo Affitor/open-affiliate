@@ -243,6 +243,7 @@ export default function Home() {
               <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <Link
                   href="/programs"
+                  prefetch={false}
                   className="inline-flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
                 >
                   Browse Programs
@@ -393,6 +394,7 @@ export default function Home() {
           </div>
           <Link
             href="/programs"
+            prefetch={false}
             className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
           >
             View all <ArrowRight className="h-3 w-3" />

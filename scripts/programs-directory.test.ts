@@ -4,7 +4,7 @@
  * `npm run build` in CI: `npx tsx --test scripts/programs-directory.test.ts`.
  */
 import assert from "node:assert/strict"
-import { spawnSync } from "node:child_process"
+import { execSync, spawnSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
@@ -69,4 +69,30 @@ test("programs-view never navigates through the router", () => {
   const view = readFileSync(join(root, "src/app/programs/programs-view.tsx"), "utf8")
   assert.doesNotMatch(view, /router\.(replace|push)|useRouter/)
   assert.match(view, /window\.history\.replaceState\(/)
+})
+
+// /programs carries the A–Z directory (~120 KB RSC): a <Link> to it must not
+// prefetch it from the viewport on every page (measured on the preview: the
+// homepage prefetch grew from 4.4 KB to 121 KB decoded).
+test("every <Link> to /programs opts out of prefetch", () => {
+  const files = ["src/components/nav.tsx", "src/app/layout.tsx", "src/app/page.tsx", "src/app/programs/[slug]/page.tsx", "src/app/compare/compare-view.tsx", "src/app/docs/features/page.tsx"]
+  let links = 0
+  for (const file of files) {
+    const text = readFileSync(join(root, file), "utf8")
+    for (const m of text.matchAll(/<Link\b[^>]*>/g)) {
+      const tag = m[0]
+      if (tag.includes('href="/programs"')) {
+        links++
+        assert.match(tag, /prefetch=\{false\}/, `${file}: ${tag.slice(0, 80)}`)
+      } else if (/href=\{(href|f\.href)\}/.test(tag) && /href: "\/programs"/.test(text)) {
+        // A mapped link in a file whose list has /programs.
+        links++
+        assert.match(tag, /prefetch=\{(href|f\.href) === "\/programs" \? false : undefined\}/, `${file}: mapped link without the /programs opt-out`)
+      }
+    }
+  }
+  assert.ok(links >= 8, `found ${links} links`)
+  // Any other file linking /programs with a literal href must be listed above.
+  const all = execSync("grep -rl 'href=\"/programs\"' src", { cwd: root, encoding: "utf8" }).trim().split("\n")
+  for (const f of all) assert.ok(files.includes(f) || !/<Link\b[^>]*href="\/programs"/.test(readFileSync(join(root, f), "utf8")), `${f} links /programs and is not checked`)
 })
