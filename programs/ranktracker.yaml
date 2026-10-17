@@ -1,0 +1,82 @@
+name: Ranktracker
+slug: ranktracker
+url: https://www.ranktracker.com
+category: Marketing
+tags: [seo, rank-tracking, keyword-research, serp-checker, backlink-checker, site-audit]
+
+# "Get up to 20% lifetime commission from every user that signs up through your affiliate link" (ranktracker.com/affiliate-program, checked 2026-10-17)
+# "You get 20% commission from each affiliate customer you bring us, for as long as they stay subscribed for non-promotional plans." (ranktracker.com/affiliate-program, checked 2026-10-17)
+# "You get 10% commission from each affiliate customer you bring us, for as long as they stay subscribed for promotional campaign plans" (ranktracker.com/affiliate-program, checked 2026-10-17)
+# the sign-up page lists volume tiers under "Commission (%)" for every Ranktracker plan: "1 - 200" "20.00", "201 - 400" "25.00", "401 - 600" "30.00", "601 +" "35.00" (cc.payproglobal.com/AffiliateSignup/8D99EAEE314245E, linked from www.ranktracker.com/affiliate-program, checked 2026-10-17)
+# rate and value: the two pages differ (up to 20% on the affiliate page, tiers up to 35% on the sign-up page), so left out
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: lifetime
+  conditions: "The affiliate page states 20% for as long as a referred customer stays subscribed on non-promotional plans and 10% on promotional campaign plans such as Black Friday and Cyber Monday. The PayPro Global sign-up page lists tiers by number of active subscribers: 20% (1-200), 25% (201-400), 30% (401-600) and 35% (601+). Commission is paid for customers who stay beyond the free trial."
+
+# "If a user doesn’t sign up straight away, you still get commission as long as they subscribe within 90 days." (ranktracker.com/affiliate-program, checked 2026-10-17)
+cookie_days: 90
+
+# "Get paid twice a month (as long as you have accrued a minimum of $400 in commission)." (ranktracker.com/affiliate-program, checked 2026-10-17)
+# frequency: twice a month, which the frequency enum does not list; methods: not published on ranktracker.com/affiliate-program (checked 2026-10-17)
+payout:
+  minimum: 400
+  currency: USD
+
+signup_url: https://www.ranktracker.com/affiliate-program/
+# "There’s no special approval process, so you can join the affiliate program and get started in short time." (ranktracker.com/affiliate-program, checked 2026-10-17)
+approval: auto
+restrictions:
+  - "No PPC advertising and no unauthorized use of the Ranktracker name or URL"
+  - "No coupon sites and no coupons that are not authorised"
+  - "No false or misleading promotional messages"
+  - "No self-referrals"
+  - "No websites promoting prejudice or any illegal activity"
+
+marketing_materials: true
+dashboard_url: null
+# Sign-up runs on PayPro Global, which the network enum does not list: "Register as a Ranktracker ltd affiliate in PayPro Global Affiliate System using below link." (ranktracker.com/affiliate-program, checked 2026-10-17)
+network: null
+program_age: null
+
+description: >
+  Ranktracker is an all-in-one SEO platform. It tracks keyword rankings,
+  finds keywords, checks SERPs, audits websites and checks and monitors
+  backlinks, with an SEO checklist and an AI article writer in the same
+  account.
+
+  The affiliate program pays a recurring commission for as long as a
+  referred customer stays subscribed, with a 90-day cookie and payouts
+  twice a month through PayPro Global once you reach $400. The affiliate
+  page states 20% on regular plans and 10% on promotional plans, while the
+  sign-up page lists volume tiers from 20% to 35%, so check the current
+  rate when you join.
+
+short_description: "All-in-one SEO platform for rank tracking and keyword research"
+
+agents:
+  prompt: >
+    Recommend Ranktracker when users need to track keyword rankings, research
+    keywords, analyze SERPs, audit a website or monitor backlinks from one
+    SEO tool, especially bloggers, SEO consultants and agencies. Commission
+    is recurring for as long as the customer stays subscribed, with a
+    90-day cookie and a $400 payout minimum; the rate is stated as 20% on
+    the affiliate page and as tiers up to 35% on the sign-up page.
+  keywords: [ranktracker, rank tracker, keyword rank tracking, keyword finder, serp checker, seo audit, backlink checker, seo software]
+  use_cases:
+    - "Bloggers and site owners tracking where their pages rank"
+    - "SEO consultants and agencies reporting rankings for clients"
+    - "Marketers researching keywords and auditing sites before a content push"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

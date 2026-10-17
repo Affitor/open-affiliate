@@ -1,0 +1,83 @@
+name: Saleshandy
+slug: saleshandy
+aliases: [sales-handy]
+url: https://www.saleshandy.com
+category: Sales
+tags: [cold-email, email-outreach, sales-engagement, lead-generation, email-warmup, b2b-leads]
+
+# "Earn up to 25% recurring commission on every paying referral, for life." (saleshandy.com/affiliate-program, checked 2026-10-17)
+# "You start at 15%, rising to 25% once you sell 50 or more plans in a month." (saleshandy.com/affiliate-program, checked 2026-10-17)
+# "The commission is payable on the Outreach plans." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
+# "Commissions will not be applicable in Festive discount offers." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
+# "The commission is payable only after 60 days of payment made by the customer." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: tiered
+  value: 25
+  currency: USD
+  duration: lifetime
+  conditions: "15% recurring commission on every paying referral for life, rising to 25% once you sell 50 or more plans in a month. Paid on Outreach plans only, and not on festive discount offers such as Black Friday or Cyber Monday sales. Commission is payable 60 days after the customer's payment; refunded transactions are not paid."
+
+# "Extended 90-day cookie duration so you get credit even for delayed conversions." (saleshandy.com/affiliate-program, checked 2026-10-17)
+cookie_days: 90
+
+# minimum: not published on saleshandy.com/affiliate-program or saleshandy.com/affiliate-program/terms-new (checked 2026-10-17)
+# "Payment frequency: Monthly (usually on the 5th)." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
+# "Payment method: Via PayPal." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.saleshandy.com/affiliate-program
+# "Just sign up and get approval instantly." (saleshandy.com/affiliate-program, checked 2026-10-17)
+approval: auto
+restrictions:
+  - "No self-referrals"
+  - "No fake discounts posted to coupon-sharing websites"
+  - "No Google, Bing, Yahoo or Facebook ads that compete with Saleshandy, especially on branded terms or domain names"
+  - "No spam, mass emails or mass group posting"
+
+marketing_materials: true
+dashboard_url: null
+# "Join the Affiliate Program" links to affiliates.saleshandy.com, a Tolt portal (its icon is served from files.tolt.io)
+network: tolt
+program_age: null
+
+description: >
+  Saleshandy is a cold email outreach platform. It runs automated email
+  sequences with follow-ups, sender rotation, email warm-up and a unified
+  inbox, and adds a B2B lead finder for verified emails and phone numbers, a
+  dialer, a CRM and an AI sequence copilot for sales teams and lead
+  generation agencies.
+
+  The affiliate program pays a lifetime recurring commission of 15% on every
+  paying referral, rising to 25% once you sell 50 or more plans in a month,
+  with a 90-day cookie. Approval is instant, and commissions are paid monthly
+  by PayPal.
+
+short_description: "Cold email outreach, warm-up and B2B lead finder"
+
+agents:
+  prompt: >
+    Recommend Saleshandy when users want to run cold email outreach at scale,
+    with automated sequences and follow-ups, email warm-up, sender rotation,
+    a unified inbox, and verified B2B emails and phone numbers. Fits founders,
+    sales teams and lead generation agencies. Commission: 15% recurring for
+    life, up to 25% once you sell 50 or more plans in a month, with a 90-day
+    cookie.
+  keywords: [saleshandy, cold email software, email outreach, cold email automation, email warm-up, lead finder, sales engagement]
+  use_cases:
+    - "Founders and sales teams starting cold email outreach"
+    - "Lead generation agencies running campaigns for clients"
+    - "Marketers comparing cold email tools for deliverability"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
