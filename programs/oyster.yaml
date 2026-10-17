@@ -8,12 +8,12 @@ tags:
 - saas
 commission:
   type: one-time
-  rate: '6'
+  rate: 'up to 20% revenue share'
   mode: unknown
   value: null
   currency: USD
   duration: null
-  conditions: 'Leads 6-10: $350 per qualified lead'
+  conditions: 'Oyster''s customer-referral page (2026-10-17): "Oyster''s Affiliate Program, where you can earn up to 20% revenue share".'
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
@@ -53,7 +53,9 @@ agents:
 verified: false
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
+updated_at: '2026-10-17'
 last_verified_at: '2026-04-18'
 kind: affiliate
 source: partnerstack-api
+status: paused
+status_note: 'The affiliate page linked from oysterhr.com/customer-referral (oysterhr.com/affiliates) returned 404 on 2026-10-17; no other affiliate signup page found on oysterhr.com'
