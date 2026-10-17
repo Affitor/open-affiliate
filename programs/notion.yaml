@@ -68,7 +68,9 @@ agents:
 verified: false
 submitted_by: community
 created_at: "2026-01-10"
-updated_at: "2026-04-17"
+updated_at: "2026-10-17"
 last_verified_at: "2026-04-17"
 kind: affiliate
 source: community
+status: paused
+status_note: 'notion.com/affiliates on 2026-10-17: "Program is currently not accepting new affiliates."'
