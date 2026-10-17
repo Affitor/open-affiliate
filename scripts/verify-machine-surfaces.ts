@@ -23,6 +23,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
+import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
@@ -94,29 +95,7 @@ for (const program of programs) {
     fail(`missing Markdown twin for ${program.slug}`);
   }
 }
-/**
- * llms.txt is fetched once and read whole, so it is kept small.
- *
- * Calling 10240 a budget was generous to it: the file had grown to 4 bytes
- * under this number, which makes it a line the file grew into rather than a
- * figure anyone derived. It is a deliberate choice to keep the index
- * skimmable — roughly 2.5k tokens — and llmstxt.org sets no limit at all.
- *
- * What changed is that the file no longer grows with the number of verified
- * programs: the index shows a bounded sample and links verified.md for the
- * rest. Three things still grow it, and they are debt, not claims:
- *
- *   - categories and networks are enumerated in full, measured at ~96 and ~76
- *     bytes a line. With ~3600 bytes of headroom that is roughly 37 more
- *     networks before this fires again, and neither enum is enforced by
- *     validateProgram, so the registry can introduce new values.
- *   - commission strings and durations have no length limit in the schema.
- *   - program names are capped in the index only (INLINE_NAME_MAX).
- *
- * So: bounded in the number of inline programs, not in bytes. If this fires,
- * move content to a linked surface rather than raising the number.
- */
-const LLMS_MAX_BYTES = 10240;
+// The cap and why it is 10240: scripts/llms-budget.ts.
 const llmsBytes = Buffer.byteLength(llms);
 if (llmsBytes > LLMS_MAX_BYTES) {
   fail(
