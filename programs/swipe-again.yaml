@@ -16,7 +16,6 @@ commission:
 cookie_days: 60
 tracking_method: cookie
 payout:
-  minimum: 10
   currency: USD
 signup_url: https://affitor.com/marketplace/swipe-again
 network: affitor
