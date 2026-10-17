@@ -53,6 +53,8 @@ export function Nav() {
               <Link
                 key={label}
                 href={href}
+                // /programs carries the A–Z directory: no viewport prefetch from every page.
+                prefetch={href === "/programs" ? false : undefined}
                 className={`text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
                 aria-current={pathname === href || (href !== "/" && pathname.startsWith(href)) ? "page" : undefined}
               >
@@ -102,6 +104,8 @@ export function Nav() {
               <Link
                 key={label}
                 href={href}
+                // /programs carries the A–Z directory: no viewport prefetch from every page.
+                prefetch={href === "/programs" ? false : undefined}
                 onClick={() => setMobileOpen(false)}
                 className={`py-2.5 text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
               >

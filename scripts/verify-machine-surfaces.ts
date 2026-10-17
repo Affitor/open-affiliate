@@ -28,6 +28,9 @@ import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, terms
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
+import { sectionProblems } from "./directory-checks";
+import { directoryGroups, homepageSets } from "../src/lib/programs-directory";
+import { gzipSync } from "node:zlib";
 import {
   commissionDisplay,
   categories,
@@ -1253,6 +1256,15 @@ async function fetchAll(base: string, paths: string[], each: (path: string, body
   );
 }
 
+/**
+ * gzip size cap for the /programs HTML, which carries the A–Z directory (N-2,
+ * 2026-10-16). Measured on next start in CI: 37,592 bytes gzip for 1,038 live
+ * programs (224,230 raw; 6,382 before the directory), about 30 bytes gzip per
+ * program. 60,000 leaves room for ~700 more programs. Past it, split the
+ * directory into per-letter pages rather than raising the cap.
+ */
+const PROGRAMS_HTML_GZIP_BUDGET = 60_000;
+
 async function checkServedPages(): Promise<string> {
   const port = await new Promise<number>((resolve, reject) => {
     const probe = createServer();
@@ -1401,6 +1413,40 @@ async function checkServedPages(): Promise<string> {
       const html = kept.get(off) ?? "";
       const plain = `<a href="https://affitor.com/marketplace/x?utm_source=openaffiliate&amp;utm_medium=apply&amp;utm_campaign=x">`;
       if (affitorAnchorProblems(html + plain).problems.length === 0) fail("the Affitor link check passed an untracked link");
+    }
+
+    // N-2: /programs links every live program in its server-rendered A–Z
+    // directory, in directory order, once each; the homepage's three program
+    // sections are homepageSets(), in order. Mutations of the fetched HTML
+    // must fail, so the checks read what they claim to.
+    {
+      const listHtml = await (await fetch(`${base}/programs`)).text();
+      const order = directoryGroups(programs).flatMap((g) => g.programs.map((p) => p.slug));
+      const dir = sectionProblems(listHtml, "all-programs", order, true);
+      if (dir.length) fail(`/programs ${dir.join("; ")}`);
+      const gz = gzipSync(listHtml).length;
+      if (gz > PROGRAMS_HTML_GZIP_BUDGET) fail(`/programs HTML is ${gz} bytes gzip; the budget is ${PROGRAMS_HTML_GZIP_BUDGET}`);
+      console.log(`[machine-surfaces] /programs links ${order.length} programs, ${listHtml.length} bytes raw, ${gz} gzip (budget ${PROGRAMS_HTML_GZIP_BUDGET})`);
+      const first = `<a href="/programs/${order[0]}">`;
+      const mutations: [string, string][] = [
+        ["without its directory", listHtml.replace('<section id="all-programs"', '<section id="gone"')],
+        ["with one program left out", listHtml.replace(new RegExp(`<a href="/programs/${order[1]}">[^<]*</a>`), "")],
+        ["with a program that is not live", listHtml.replace(first, `<a href="/programs/zz-not-a-live-program">x</a>${first}`)],
+        ["with a program twice", listHtml.replace(first, `${first}x</a>${first}`)],
+      ];
+      for (const [what, html] of mutations) {
+        if (sectionProblems(html, "all-programs", order, true).length === 0) fail(`the /programs directory check passed a page ${what}`);
+      }
+
+      const homeHtml = await (await fetch(`${base}/`)).text();
+      const sets = homepageSets(programs);
+      const slugs = (list: Program[]) => list.map((p) => p.slug);
+      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured], ["home-top-verified", sets.row]] as const) {
+        const problems = sectionProblems(homeHtml, id, slugs(list));
+        if (problems.length) fail(`/ ${problems.join("; ")}`);
+      }
+      const dropped = homeHtml.replace(new RegExp(`<a href="/programs/${sets.row[0].slug}">[^<]*</a>`), "");
+      if (sectionProblems(dropped, "home-top-verified", slugs(sets.row)).length === 0) fail("the homepage check passed a page with a top-verified link removed");
     }
 
     // REST: the list and one program of each kind, as served.

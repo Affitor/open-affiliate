@@ -297,6 +297,8 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
     return problems
   }
   for (const key of HIDDEN_API_KEYS) if (key in body) problems.push(`returns ${key} (${JSON.stringify(body[key])})`)
+  // A check date next to unconfirmed terms reads as verification (#212).
+  if ("lastVerifiedAt" in body) problems.push(`returns lastVerifiedAt (${JSON.stringify(body.lastVerifiedAt)})`)
   if (JSON.stringify(body.payout) !== "{}") problems.push(`returns payout ${JSON.stringify(body.payout)}`)
   const commission = (body.commission ?? {}) as Record<string, unknown>
   const prose: [string, unknown, "pitch" | "program"][] = [
