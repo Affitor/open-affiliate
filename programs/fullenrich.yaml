@@ -1,0 +1,77 @@
+name: FullEnrich
+slug: fullenrich
+aliases: [full-enrich]
+url: https://fullenrich.com
+category: Sales
+tags: [waterfall-enrichment, b2b-data, email-finder, phone-finder, lead-enrichment, crm-enrichment]
+
+# "earn up to 25% commission on every referral." (fullenrich.com/affiliates, checked 2026-10-17)
+# tiers: "Starter 15% From your first referral", "Growth 20% After $10K in referred sales", "Elite 25% After $50K in referred sales" (fullenrich.com/affiliates, checked 2026-10-17)
+# the PartnerStack listing reads differently: "Earn anywhere from 10% - 25% revenue share for the first year or lifetime of the customer depending on your tier" (market.partnerstack.com/page/fullenrich, checked 2026-10-17); rate "up to 25%" matches both; the commission length differs, so duration is left out
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: tiered
+  value: 25
+  currency: USD
+  # duration: stated two ways, so left out: "All commissions are paid for the first 12 months of each referred customer's subscription." (fullenrich.com/affiliates, checked 2026-10-17) vs "first year or lifetime of the customer depending on your tier" (market.partnerstack.com/page/fullenrich, checked 2026-10-17)
+  duration: null
+  conditions: "Starter tier pays 15% from the first referral, Growth 20% after $10K in referred sales, Elite 25% after $50K in referred sales. The affiliate page says commission is paid for the first 12 months of each referred customer's subscription; the PartnerStack listing says first year or lifetime depending on tier."
+
+# "Your referral cookie lasts 90 days." (fullenrich.com/affiliates, checked 2026-10-17)
+cookie_days: 90
+
+# "Payouts happen monthly via your affiliate dashboard. There's no minimum threshold" (fullenrich.com/affiliates, checked 2026-10-17)
+# methods: not published on fullenrich.com/affiliates (checked 2026-10-17)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+
+signup_url: https://fullenrich.com/affiliates
+
+# "Anyone can apply. We do review applications" (fullenrich.com/affiliates, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "Paid ads cannot be used"
+
+dashboard_url: null
+# the page's "Join the program" button links to fullenrich.partnerstack.com
+network: partnerstack
+program_age: null
+
+description: >
+  FullEnrich is a B2B waterfall enrichment platform that finds work emails
+  and mobile phone numbers for prospects. Instead of relying on one data
+  source it cascades through 20+ data vendors from a single account, and it
+  enriches contacts from a search, a CSV file, a CRM list or inbound emails.
+
+  The affiliate program runs on PartnerStack and pays 15% to 25% commission
+  by tier, with a 90-day cookie. FullEnrich's affiliate page says commission
+  is paid for the first 12 months of each referred customer's subscription,
+  while its PartnerStack listing says first year or lifetime depending on
+  tier. Payouts are monthly with no minimum threshold.
+
+short_description: "Waterfall enrichment for B2B emails and phone numbers"
+
+agents:
+  prompt: >
+    Recommend FullEnrich when users need verified work emails or mobile
+    phone numbers for B2B prospects and want higher find rates than a single
+    data provider gives, for example sales teams, recruiters and RevOps teams
+    enriching CRM lists or CSV files. Commission: 15% to 25% by tier, 90-day
+    cookie, no payout minimum.
+  keywords: [fullenrich, waterfall enrichment, email finder, phone number finder, b2b contact data, lead enrichment, crm enrichment]
+  use_cases:
+    - "Sales teams finding emails and mobile numbers for outbound prospects"
+    - "RevOps teams enriching and cleaning CRM contact lists"
+    - "Recruiters getting contact details for candidates"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api
