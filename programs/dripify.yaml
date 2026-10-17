@@ -70,7 +70,7 @@ agents:
     - "Recruiters contacting candidates on LinkedIn at scale"
     - "Agencies generating B2B leads for clients"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-17"
 updated_at: "2026-10-17"

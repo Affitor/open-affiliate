@@ -18,15 +18,12 @@ commission:
   value: 33
   currency: USD
   duration: "12 months"
-  conditions: "A share of each referred paying customer's first-year subscription revenue (Standard and Premium plans) by tier: 10% from day 1, 20% after more than 50 new subscribers referred, 33% after more than 100. Transcription revenue is not included. Revenue share is paid quarterly."
+  conditions: "A share of each referred paying customer's first-year subscription revenue (Standard and Premium plans) by tier: 10% from day 1, 20% after more than 50 new subscribers referred, 33% after more than 100. Transcription revenue is not included. Revenue share is paid quarterly by PayPal. The payout threshold is stated two ways: the terms pay once the accrued fee is $200 or more, while the FAQ says a smaller balance is held until the next quarter when it is greater than $100."
 
 # cookie_days: not published on sonix.ai/affiliates, sonix.ai/affiliates/faq or sonix.ai/affiliates/terms (checked 2026-10-17); the terms mention a "Cookie Period" without a length
-# "If the accrued Referral Fee is $200 or more, the payment will be processed via PayPal" (sonix.ai/affiliates/terms, checked 2026-10-17)
-# "Any money owed to you will be paid out every quarter (every three months) as your balance is at least $200." (sonix.ai/affiliates/faq, checked 2026-10-17)
-# the FAQ then says a smaller balance "will be held until the next quarter when your balance is greater than $100" (sonix.ai/affiliates/faq, checked 2026-10-17); the terms carry it forward "until the total reaches $200"
+# minimum: stated two ways, so left out: "If the accrued Referral Fee is $200 or more, the payment will be processed via PayPal" (sonix.ai/affiliates/terms, checked 2026-10-17) vs "it will be held until the next quarter when your balance is greater than $100" (sonix.ai/affiliates/faq, checked 2026-10-17)
 # "Payments will be delivered to you via PayPal in USD" (sonix.ai/affiliates/faq, checked 2026-10-17)
 payout:
-  minimum: 200
   currency: USD
   methods: [paypal]
 
@@ -55,7 +52,8 @@ description: >
   The affiliate program pays a share of each referred customer's first-year
   subscription revenue by tier: 10% from day one, 20% after more than 50 new
   subscribers and 33% after more than 100. Payouts go out quarterly by PayPal
-  once the balance reaches $200, and approved affiliates get a free Sonix
+  once the balance passes a threshold the terms and the FAQ state differently
+  ($200 or $100), and approved affiliates get a free Sonix
   Business account with no subscription fee.
 
 short_description: "AI transcription, translation and subtitles in 54+ languages"
@@ -66,8 +64,8 @@ agents:
     meetings, podcasts or videos, want transcripts translated, or need
     subtitles and captions, especially journalists, researchers, podcasters,
     legal and medical teams that need SOC 2 or HIPAA security. Commission: up
-    to 33% of first-year subscription revenue by tier (10%, 20%, 33%), $200
-    PayPal payout minimum.
+    to 33% of first-year subscription revenue by tier (10%, 20%, 33%), paid
+    quarterly by PayPal.
   keywords: [sonix, ai transcription, audio to text, video to text, transcript translation, subtitle generator, automatic captions]
   use_cases:
     - "Podcasters and journalists transcribing interviews"
