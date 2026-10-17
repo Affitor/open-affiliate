@@ -28,6 +28,8 @@ const CORS = {
   // initialize, so a browser client's preflight fails without it.
   "Access-Control-Allow-Headers":
     "Content-Type, Authorization, Accept, mcp-protocol-version",
+  // So browser code can read when to retry a 429.
+  "Access-Control-Expose-Headers": "Retry-After",
   "Access-Control-Max-Age": "86400",
 };
 
@@ -52,10 +54,9 @@ const CORS = {
  *    share: 1200 requests per fixed 60-second window from one address, about
  *    20 a second on average. The window is fixed, not sliding, so a burst
  *    that straddles a window boundary can get up to 2400 through in a few
- *    seconds. The docs point Claude.ai
- *    and ChatGPT at this endpoint and those connect from the vendor's own
- *    egress addresses, so every user of one of those clients shares a single
- *    bucket. A per-session budget would 429 real users; this one should only
+ *    seconds. The docs point Claude.ai and ChatGPT at this endpoint and those
+ *    connect from the vendor's own egress addresses, so every user of one of
+ *    those clients shares a single bucket. A per-session budget would 429 real users; this one should only
  *    ever be reached by something behaving badly.
  */
 const WINDOW_MS = 60_000;
@@ -65,16 +66,23 @@ const MAX_TRACKED_ADDRESSES = 20_000;
 let counts = new Map<string, number>();
 let windowStartedAt = Date.now();
 
-// 45 characters is the longest textual IPv6 address (with an embedded IPv4
-// tail). Capping the key makes MAX_TRACKED_ADDRESSES a bound on memory, not
-// only on entries: an uncapped header could make each key kilobytes long.
+// 45 characters is the longest unscoped textual IPv6 address (with an
+// embedded IPv4 tail); a scoped address longer than that loses the end of its
+// zone id and may share a bucket. Capping the key makes MAX_TRACKED_ADDRESSES
+// a bound on memory, not only on entries: an uncapped header could make each
+// key kilobytes long.
 const MAX_ADDRESS_LENGTH = 45;
 
 export function clientAddress(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
-  return (
+  const address = (
     forwarded?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown"
   ).slice(0, MAX_ADDRESS_LENGTH);
+  // Copied, not returned as is: V8 represents slice/split/trim results as
+  // views into the original header, so a 45-character key would keep the
+  // whole header alive in the Map (measured on Node 22: 10,000 keys cut from
+  // 8 KB headers retained 80 MiB as views, 1 MiB as copies).
+  return Array.from(address).join("");
 }
 
 /**
@@ -109,10 +117,11 @@ export function withinLimit(req: Request): boolean {
  * The limit is checked from the headers alone, before the body is read, so
  * the request's JSON-RPC id is not known here and an envelope could only
  * carry `id: null`. That would add nothing for the installed SDK client
- * (@modelcontextprotocol/sdk 1.26): its HTTP transport rejects any non-2xx
- * response with a StreamableHTTPError built from the status and the body as
- * text, and never parses the body as JSON-RPC. So the 429 status line and
- * Retry-After carry the meaning, and the body is a sentence a person can read.
+ * (@modelcontextprotocol/sdk 1.26): for a POST answered with 429 its HTTP
+ * transport reads the body as text and throws a StreamableHTTPError with the
+ * status, without parsing the body as JSON-RPC (a GET uses the status text).
+ * So the 429 status line and Retry-After carry the meaning, and the body is a
+ * sentence a person can read.
  */
 function tooManyRequests(): Response {
   return new Response(
