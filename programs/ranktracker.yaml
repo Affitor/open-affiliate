@@ -13,6 +13,7 @@ commission:
   type: recurring
   rate: "varies"
   mode: unknown
+  value: null
   currency: USD
   duration: lifetime
   conditions: "The affiliate page states 20% for as long as a referred customer stays subscribed on non-promotional plans and 10% on promotional campaign plans such as Black Friday and Cyber Monday. The PayPro Global sign-up page lists tiers by number of active subscribers: 20% (1-200), 25% (201-400), 30% (401-600) and 35% (601+). Commission is paid for customers who stay beyond the free trial."

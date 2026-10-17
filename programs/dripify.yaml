@@ -11,6 +11,7 @@ commission:
   type: recurring
   rate: "varies"
   mode: unknown
+  value: null
   currency: USD
   # duration: stated two ways, so left out: "Paid every month, forever" (dripify.com/affiliate-program, checked 2026-10-17) vs "Affiliate Lead attribution is limited to transactions occurring within thirty (30) days of the referred Customer’s registration date" (dripify.com/affiliate-terms-and-conditions, checked 2026-10-17)
   duration: null

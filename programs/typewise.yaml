@@ -11,6 +11,7 @@ commission:
   type: recurring
   rate: "varies"
   mode: unknown
+  value: null
   currency: USD
   duration: null
   conditions: "The PartnerStack listing states the rate two ways: a 20% recurring commission capped at $20,000 per referred customer in its headline, and 25.0% for every customer transaction in its offer structure. Confirm the current rate when you apply. Commission length is not published."
