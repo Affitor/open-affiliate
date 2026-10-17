@@ -24,7 +24,10 @@ import { apiProgram } from "@/lib/no-program";
 const CORS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, Accept",
+  // mcp-protocol-version: the SDK client sends it on every request after
+  // initialize, so a browser client's preflight fails without it.
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, Accept, mcp-protocol-version",
   "Access-Control-Max-Age": "86400",
 };
 
@@ -46,7 +49,10 @@ const CORS = {
  *    caller inventing one. Run this behind a proxy that passes the header
  *    through and the dimension becomes caller-controlled.
  * 3. Because of 2, the budget is set as a flood threshold rather than a fair
- *    share: 20 requests a second from one address. The docs point Claude.ai
+ *    share: 1200 requests per fixed 60-second window from one address, about
+ *    20 a second on average. The window is fixed, not sliding, so a burst
+ *    that straddles a window boundary can get up to 2400 through in a few
+ *    seconds. The docs point Claude.ai
  *    and ChatGPT at this endpoint and those connect from the vendor's own
  *    egress addresses, so every user of one of those clients shares a single
  *    bucket. A per-session budget would 429 real users; this one should only
@@ -59,11 +65,16 @@ const MAX_TRACKED_ADDRESSES = 20_000;
 let counts = new Map<string, number>();
 let windowStartedAt = Date.now();
 
-function clientAddress(req: Request): string {
+// 45 characters is the longest textual IPv6 address (with an embedded IPv4
+// tail). Capping the key makes MAX_TRACKED_ADDRESSES a bound on memory, not
+// only on entries: an uncapped header could make each key kilobytes long.
+const MAX_ADDRESS_LENGTH = 45;
+
+export function clientAddress(req: Request): string {
   const forwarded = req.headers.get("x-forwarded-for");
   return (
     forwarded?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown"
-  );
+  ).slice(0, MAX_ADDRESS_LENGTH);
 }
 
 /**
@@ -78,7 +89,7 @@ function clientAddress(req: Request): string {
  * able to rotate addresses fast enough to force that already defeats any
  * per-address limiter, so this trades no protection for a hard bound.
  */
-function withinLimit(req: Request): boolean {
+export function withinLimit(req: Request): boolean {
   const now = Date.now();
   if (now - windowStartedAt >= WINDOW_MS) {
     counts = new Map();
@@ -96,11 +107,12 @@ function withinLimit(req: Request): boolean {
  * Plain text, not a JSON-RPC error envelope.
  *
  * The limit is checked from the headers alone, before the body is read, so
- * the request's JSON-RPC id is not known here. An envelope carrying
- * `id: null` is worse than no envelope: a client following the spec reads it
- * as an error belonging to no request, never settles the call it is waiting
- * on, and hangs to its own timeout instead of failing on the status. The
- * status line and Retry-After are unambiguous.
+ * the request's JSON-RPC id is not known here and an envelope could only
+ * carry `id: null`. That would add nothing for the installed SDK client
+ * (@modelcontextprotocol/sdk 1.26): its HTTP transport rejects any non-2xx
+ * response with a StreamableHTTPError built from the status and the body as
+ * text, and never parses the body as JSON-RPC. So the 429 status line and
+ * Retry-After carry the meaning, and the body is a sentence a person can read.
  */
 function tooManyRequests(): Response {
   return new Response(
