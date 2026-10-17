@@ -819,7 +819,7 @@ function verifiedMd(): string {
   ])
 }
 
-function llmsTxt(): string {
+export function llmsTxt(): string {
   const verified = programs.filter(listedVerified)
 
   const catLines = categories
