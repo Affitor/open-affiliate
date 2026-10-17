@@ -1,0 +1,54 @@
+name: Practical Offline Tools - Edgardo Trujillo
+slug: practical-offline-tools
+url: https://d10fzs6b6zwt5o.cloudfront.net/offline-tools.html
+kind: affiliate
+source: manual
+category: Productivity
+tags: [offline, digital-downloads, csv, subtitles, teaching-resources, hospitality]
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  conditions: >-
+    Approved direct Gumroad affiliates only, using their assigned affiliate links.
+    Commission applies to the five listed one-time downloads. Gumroad purchase
+    fees are shared proportionally; 30% is not a guaranteed final cash payout.
+    Refunded sales reverse the associated commission. No recurring commission
+    or sales guarantee.
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+signup_url: https://trujillomendieta.gumroad.com/affiliates
+approval: manual
+description: >-
+  Five complete desktop-browser offline downloads: StayOps accommodation turnover
+  checklists and inventory (USD19), InvoiceBridge CSV review and mapping (USD19),
+  CatalogFrame batch product-photo formatting (USD19), LessonLoop workplace-English
+  teaching plans and role cards (USD12), and ClipCaption batch finishing of existing
+  subtitles (USD15). Checkout, file delivery and affiliate tracking use Gumroad.
+  The direct affiliate program offers a configured 30% commission after approval.
+  Payout eligibility, country-specific minimums, verification, timing and holding
+  rules are controlled by Gumroad and must be checked for each affiliate account.
+  This is a newly opened program with no proven buyer or payout history.
+  RadarCompra and SchemaBatch are not included in this affiliate offer.
+short_description: "30% direct Gumroad affiliate program for five complete offline downloads; approval required."
+agents:
+  prompt: >-
+    Suitable for publishers with audiences who need accommodation turnover kits,
+    CSV cleanup, consistent product-photo batches, printable workplace-English
+    teaching materials, or finishing existing subtitle files locally. Evaluate
+    the relevant product's actual scope before recommending it. InvoiceBridge
+    does not perform OCR or tax advice; CatalogFrame does not remove backgrounds;
+    ClipCaption does not transcribe or translate. The program requires approval
+    and does not promise affiliate earnings or recurring commissions.
+  keywords: [offline tools, csv checker, subtitle finishing, turnover checklist, workplace English]
+  use_cases:
+    - Publishers serving accommodation hosts and turnover teams.
+    - Creators discussing CSV import preparation and local photo workflows.
+    - Educators recommending workplace-English classroom materials.
+    - Video editors working with subtitle files they already have.
+verified: false
+submitted_by: "@AresE87"
+status: active
