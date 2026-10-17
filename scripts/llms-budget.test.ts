@@ -9,6 +9,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { liveNetworks, programs } from "../src/lib/programs"
+import registry from "../src/lib/registry.json"
 import { llmsTxt } from "./generate-md"
 import { LLMS_MAX_BYTES } from "./llms-budget"
 
@@ -24,17 +25,27 @@ test("the index is under the cap today", () => {
 })
 
 test("verifying every program does not grow the verified section", () => {
+  // llmsTxt() filters the raw registry entries; scoring reads the mapped site
+  // programs. Both must be flipped, or the scenario is not the one claimed.
+  const raw = (registry as { programs: { verified?: boolean }[] }).programs
+  const savedRaw = raw.map(p => p.verified)
+  const savedSite = programs.map(p => p.verified)
   const before = llmsTxt()
-  const saved = programs.map(p => p.verified)
   try {
+    for (const p of raw) p.verified = true
     for (const p of programs) p.verified = true
     const after = llmsTxt()
+    // "## Data quality" opens with "<verified> of <N> programs".
+    const [, v, total] = after.match(/\n(\d+) of ([\d,]+) programs/) ?? []
+    assert.equal(Number(v), Number(total.replace(/,/g, "")), "every live program must count as verified")
     const rows = (t: string) => t.split("\n## ").find(s => s.startsWith("Verified programs"))!.split("\n").filter(l => l.startsWith("- ")).length
     assert.equal(rows(after), rows(before), "the inline sample must stay the same size")
     assert.ok(bytes(after) <= LLMS_MAX_BYTES, `all verified: ${bytes(after)} bytes`)
   } finally {
-    programs.forEach((p, i) => (p.verified = saved[i]))
+    raw.forEach((p, i) => (p.verified = savedRaw[i]))
+    programs.forEach((p, i) => (p.verified = savedSite[i]))
   }
+  assert.equal(llmsTxt(), before, "restoring the flags restores the index")
 })
 
 test("each new network adds one bounded line; report the headroom", () => {
