@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-13T01:57:16.258Z",
-  "count": 760,
+  "generated_at": "2026-09-17T03:15:08.721Z",
+  "count": 761,
   "by_slug": [
     "11x",
     "15five",
@@ -94,6 +94,7 @@
     "bright-data",
     "brilliant",
     "browse-ai",
+    "browseract",
     "bruno",
     "bubble",
     "buddy-punch",
@@ -856,6 +857,7 @@
     "brightdata.com": "bright-data",
     "brilliant.org": "brilliant",
     "browse.ai": "browse-ai",
+    "browseract.com": "browseract",
     "usebruno.com": "bruno",
     "bubble.io": "bubble",
     "buddypunch.com": "buddy-punch",
@@ -1924,7 +1926,7 @@
     "partnerstack-api": "2026-04-18",
     "yc-directory": "2026-04-18",
     "rewardful": "2026-04-18",
-    "firstpromoter": "2026-04-18",
+    "firstpromoter": "2026-08-18",
     "manual": "2026-07-17",
     "dub": "2026-04-18",
     "impact": "2026-04-18"
@@ -2022,6 +2024,7 @@
     "bright-data": "2026-04-18",
     "brilliant": "2026-04-18",
     "browse-ai": "2026-04-17",
+    "browseract": "2026-08-18",
     "bruno": "2026-04-18",
     "bubble": "2026-04-18",
     "buddy-punch": "2026-04-17",
