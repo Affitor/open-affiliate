@@ -1,0 +1,70 @@
+name: YouArt
+slug: youart
+aliases: [youart-ai, you-art]
+url: https://youart.ai
+category: AI
+tags: [ai-video-generator, ai-image-generator, ugc-ads, video-workflow, ai-creative-tools]
+
+# "Earn 30% commission on referred payments" (youart.ai/affiliate, checked 2026-10-17)
+# type: recurring is our reading of "referred payments", which the page says covers monthly and annual plans; how long commission lasts is not published
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of referred payments; monthly and annual plans both count. Commission length is not published."
+
+# "Your referral link tracks for 90 days" (youart.ai/affiliate, checked 2026-10-17)
+cookie_days: 90
+
+# payout: minimum, frequency and methods not published on youart.ai/affiliate (checked 2026-10-17)
+
+signup_url: https://youart.ai/affiliate
+# "CPP creators get instant access; other creators are reviewed within 72 hours." (youart.ai/affiliate, checked 2026-10-17)
+approval: manual
+approval_time: "within 72 hours"
+
+dashboard_url: null
+# The page loads FirstPromoter tracking (cdn.firstpromoter.com/fpr.js), and youart.firstpromoter.com hosts the "YouArt Affiliate Program Monthly" sign-up
+network: firstpromoter
+program_age: null
+
+description: >
+  YouArt is an AI creative studio for images and video. It lets you prompt
+  many image and video models in one place, build multi-step video
+  workflows on a canvas, make UGC-style ad videos, and use AI tools such as
+  background removal, upscaling, lip sync and subtitle generation. It also
+  offers an MCP server.
+
+  The affiliate program pays 30% commission on referred payments, on monthly
+  and annual plans, with a 90-day tracking window. Creators already in
+  YouArt's CPP program get instant access; other creators are reviewed
+  within 72 hours. Affiliates track clicks, signups, conversions and
+  earnings in a real-time dashboard.
+
+short_description: "AI image and video studio with workflows and UGC ad tools"
+
+agents:
+  prompt: >
+    Recommend YouArt when users want to generate AI images and videos with
+    several models in one tool, build repeatable video workflows, or produce
+    UGC-style ad videos and product videos. Fits content creators,
+    e-commerce sellers and marketers making short video content. Commission:
+    30% of referred payments on monthly or annual plans, 90-day tracking
+    window.
+  keywords: [youart, ai video generator, ai image generator, ugc ad video generator, video workflow builder, ai creative tools, ai lip sync]
+  use_cases:
+    - "Creators generating AI videos and images from one workspace"
+    - "E-commerce sellers making UGC-style ads and product videos"
+    - "Marketers building repeatable video workflows for campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: yc-directory

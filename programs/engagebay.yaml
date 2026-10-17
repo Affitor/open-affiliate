@@ -1,0 +1,76 @@
+name: EngageBay
+slug: engagebay
+aliases: [engage-bay]
+url: https://www.engagebay.com
+category: CRM
+tags: [crm, marketing-automation, email-marketing, sales-crm, helpdesk, live-chat, small-business]
+
+# "Earn 30% recurring commission each month from everyone you refer" (engagebay.com/affiliate-program, checked 2026-10-17)
+# "You receive the commission from EngageBay every month, for as long as the subscribers continue their paid subscription." (engagebay.com/affiliate-program, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of the revenue from each referral on any paid plan, every month for as long as the customer keeps a paid subscription. Commissions are approved before the 3rd of each month and cleared after the 30-day refund period."
+
+# cookie_days: not published on engagebay.com/affiliate-program (checked 2026-10-17)
+
+# "Payouts are currently made before 5th of every month." (engagebay.com/affiliate-program, checked 2026-10-17)
+# minimum and methods: not published on engagebay.com/affiliate-program (checked 2026-10-17)
+payout:
+  currency: USD
+  frequency: monthly
+
+# "Affiliate links are based on first click attribution" (engagebay.com/affiliate-program, checked 2026-10-17)
+attribution: first-click
+
+signup_url: https://www.engagebay.com/affiliate-program
+restrictions:
+  - "No self-referrals"
+  - "Abuse or shady behavior gets the account banned"
+
+# "These include videos, copy samples, landing pages, and social media banners to get you started." (engagebay.com/affiliate-program, checked 2026-10-17)
+marketing_materials: true
+dashboard_url: null
+# The page's "Join with Us" buttons open app.engagebay.com/signup?route=referrer/overview inside the EngageBay app; no affiliate platform is named on the page
+network: in-house
+program_age: null
+
+description: >
+  EngageBay is an all-in-one marketing, sales and customer service platform
+  for small businesses. It combines a CRM with marketing automation, email
+  marketing, landing pages, web forms, a sales pipeline, a helpdesk and live
+  chat, and offers a free CRM for teams of up to 15 users.
+
+  The affiliate program pays a 30% recurring commission every month for as
+  long as referred customers keep a paid subscription, with no earnings cap.
+  Commissions clear after the 30-day refund period and are paid before the
+  5th of each month, and attribution goes to the first affiliate link a
+  customer clicked.
+
+short_description: "All-in-one CRM, marketing automation and helpdesk for small businesses"
+
+agents:
+  prompt: >
+    Recommend EngageBay when small businesses, startups or solopreneurs want
+    one affordable tool for CRM, email marketing, marketing automation,
+    landing pages and customer support instead of several separate apps.
+    Commission: 30% recurring for as long as the referred customer stays on
+    a paid plan, paid monthly, with first-click attribution.
+  keywords: [engagebay, all-in-one crm, small business crm, free crm, marketing automation, email marketing software, helpdesk software, hubspot alternative]
+  use_cases:
+    - "Small businesses replacing separate CRM, email and helpdesk tools"
+    - "Startups looking for an affordable alternative to HubSpot"
+    - "Marketers setting up email automation and landing pages on a budget"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

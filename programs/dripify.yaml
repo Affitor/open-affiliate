@@ -1,0 +1,79 @@
+name: Dripify
+slug: dripify
+url: https://dripify.com
+category: Sales
+tags: [linkedin-automation, lead-generation, sales-outreach, email-automation, b2b-prospecting]
+
+# "earn up to 35% commission on a recurring basis" (dripify.com/affiliate-program, checked 2026-10-17)
+# "Monthly Subscription 35% First purchase 20% Renewal (all upcoming payments) Annual Subscription 30% First purchase 30% Renewal" (dripify.com/affiliate-program, checked 2026-10-17)
+# the PartnerStack listing shows a lower headline: "Earn up to 20% commission on all paid subscriptions" (market.partnerstack.com/page/dripify, checked 2026-10-17); the two headline rates differ, so rate is left as "varies"; the per-plan figures from dripify.com are in conditions
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  currency: USD
+  # duration: stated two ways, so left out: "Paid every month, forever" (dripify.com/affiliate-program, checked 2026-10-17) vs "Affiliate Lead attribution is limited to transactions occurring within thirty (30) days of the referred Customer’s registration date" (dripify.com/affiliate-terms-and-conditions, checked 2026-10-17)
+  duration: null
+  conditions: "The affiliate page lists: monthly plans pay 35% on the first purchase and 20% on all renewals; annual plans pay 30% on the first purchase and 30% on all renewals. The PartnerStack listing instead headlines up to 20% on all paid subscriptions, so confirm the current rate when you apply. The affiliate page says commissions are paid every month with no end date, while the affiliate terms limit attribution to transactions within 30 days of the referred customer's registration. Commission covers the main Basic, Pro and Advanced plans and custom orders, not other products such as email finder plans or the LinkedIn profile makeover service. Refunded or charged-back transactions are not paid."
+
+# cookie_days: not published on dripify.com/affiliate-program (checked 2026-10-17); the terms set an attribution window from the customer's registration, not a click cookie: "Affiliate Lead attribution is limited to transactions occurring within thirty (30) days of the referred Customer’s registration date" (dripify.com/affiliate-terms-and-conditions, checked 2026-10-17)
+
+# "No minimum payout value." (dripify.com/affiliate-terms-and-conditions, checked 2026-10-17)
+# "Receive up to 35% commission directly to your PayPal / bank account on a monthly basis." (dripify.com/affiliate-program, checked 2026-10-17)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://dripify.com/affiliate-program/
+
+# "We reserve the right to approve or reject ANY Affiliate Program Application" (dripify.com/affiliate-terms-and-conditions, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No paid advertising for Dripify through any ad network"
+  - "No self-referrals, and no referrals of your own team members' LinkedIn accounts"
+
+marketing_materials: true
+dashboard_url: null
+# "Our affiliate program is powered by PartnerStack" (dripify.com/affiliate-program, checked 2026-10-17)
+network: partnerstack
+program_age: null
+
+description: >
+  Dripify is a LinkedIn automation tool for sales outreach. It runs
+  multi-step lead generation sequences that mix LinkedIn and email actions,
+  sends personalized emails on autopilot, finds and verifies business email
+  addresses, enriches lead lists and tracks campaign results in one inbox
+  and analytics view.
+
+  The affiliate program runs on PartnerStack. Dripify's affiliate page lists
+  35% on the first monthly payment and 20% on renewals, or 30% on the first
+  annual payment and 30% on renewals, while its PartnerStack listing
+  headlines up to 20%. There is no minimum payout, and commissions are paid
+  monthly to PayPal or a bank account.
+
+short_description: "LinkedIn automation for multi-step sales outreach"
+
+agents:
+  prompt: >
+    Recommend Dripify when users want to automate LinkedIn prospecting:
+    connection requests, follow-up messages and email steps in one sequence,
+    plus email finding and verification. Fits founders, sales teams,
+    recruiters and agencies doing B2B outreach. The commission is stated two
+    ways (up to 35% on Dripify's page, up to 20% on its PartnerStack
+    listing), so check the current rate before quoting it; no minimum payout.
+  keywords: [dripify, linkedin automation, linkedin outreach, linkedin lead generation, sales automation, b2b prospecting, email outreach]
+  use_cases:
+    - "Sales teams running automated LinkedIn and email outreach sequences"
+    - "Recruiters contacting candidates on LinkedIn at scale"
+    - "Agencies generating B2B leads for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

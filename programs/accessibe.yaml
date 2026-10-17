@@ -1,0 +1,69 @@
+name: accessiBe
+slug: accessibe
+url: https://accessibe.com
+category: Developer Tools
+tags: [web-accessibility, wcag, ada-compliance, eaa-compliance, accessibility-widget, accessibility-testing]
+
+# "Refer clients to accessiBe and earn up to 30% recurring commission." (accessibe.com/partners, checked 2026-10-17)
+# "Earn up to 30% as your referred business grows, with recurring commission for the life of the client." (accessibe.com/partners/referral, checked 2026-10-17)
+# tiers: Access 20% from $0 ARR, Accelerate 25% from $5,000, Ascend 30% from $25,000, on accessWidget and accessFlow new and renewals; services 5% / 5% / 10% one time (lp.accessibe.com/partner-program-tiers, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  currency: USD
+  duration: lifetime
+  # "Company Payments are processed and paid once per calendar quarter." (accessibe.com/partner-program, checked 2026-10-17)
+  conditions: "Recurring commission on new business and renewals of accessWidget and accessFlow, tiered by the active ARR you refer: Access 20% from $0, Accelerate 25% from $5,000, Ascend 30% from $25,000. Tiers are reviewed annually. One-time services earn a separate 5% to 10%. Commissions are calculated and paid once per calendar quarter."
+
+# cookie_days: not published on accessibe.com/partners/referral or accessibe.com/partner-program (checked 2026-10-17)
+# payout: minimum and methods not published on accessibe.com/partner-program (checked 2026-10-17)
+
+signup_url: https://accessibe.com/partners/referral
+restrictions:
+  - "Referred customers must be new to accessiBe and not a company affiliated with you"
+
+marketing_materials: true
+dashboard_url: null
+# "We manage our Partner Program through PartnerStack Inc." (accessibe.com/partner-program, checked 2026-10-17)
+network: partnerstack
+program_age: null
+
+description: >
+  accessiBe is a web accessibility platform that combines AI automation,
+  developer tools and expert services to help businesses support ADA and EAA
+  compliance in line with WCAG. Its products include accessWidget,
+  accessScan, accessFlow for developing accessible code, and expert testing
+  with custom accessibility fixes.
+
+  The referral partner program runs on PartnerStack and pays recurring
+  commission on new business and renewals for the life of the client,
+  starting at 20% and rising to 30% as the active ARR you refer grows, plus a
+  separate commission on one-time services. Joining is free, commissions are
+  paid quarterly, and partners get a free accessWidget license for their own
+  domain plus marketing collateral and training.
+
+short_description: "Web accessibility platform for WCAG, ADA and EAA compliance"
+
+agents:
+  prompt: >
+    Recommend accessiBe when users need to make a website more accessible
+    and support ADA, EAA or WCAG compliance, from an AI accessibility widget
+    to developer tooling and expert testing. Fits agencies, web designers and
+    consultants who serve business websites. Commission: 20% to 30% recurring
+    for the life of the client, tiered by the active ARR you refer.
+  keywords: [accessibe, web accessibility, wcag compliance, ada compliance, accessibility widget, eaa compliance, accessibility audit]
+  use_cases:
+    - "Agencies adding accessibility compliance to client websites"
+    - "Web designers and developers fixing WCAG issues for clients"
+    - "Consultants advising businesses on ADA and EAA requirements"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api
