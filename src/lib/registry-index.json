@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-09-13T01:57:16.258Z",
-  "count": 760,
+  "generated_at": "2026-09-17T03:15:08.017Z",
+  "count": 761,
   "by_slug": [
     "11x",
     "15five",
@@ -253,6 +253,7 @@
     "gamma",
     "gelato",
     "gem",
+    "get-noticed-ai",
     "getida",
     "getresponse",
     "getscreen-me",
@@ -1014,6 +1015,7 @@
     "gamma.app": "gamma",
     "gelato.com": "gelato",
     "gem.com": "gem",
+    "getnoticedai.com": "get-noticed-ai",
     "getida.com": "getida",
     "getresponse.com": "getresponse",
     "getscreen.me": "getscreen-me",
@@ -1648,6 +1650,7 @@
     "functional diagnostic nutrition": "functional-diagnostic-nutrition",
     "galileo ai": "galileo-ai",
     "galileo": "galileo-ai",
+    "get noticed ai": "get-noticed-ai",
     "getscreen.me": "getscreen-me",
     "glass health": "glass-health",
     "glass": "glass-health",
@@ -1920,7 +1923,7 @@
     "zonka feedback": "zonka-feedback"
   },
   "source_lastsync": {
-    "community": "2026-08-06",
+    "community": "2026-09-09",
     "partnerstack-api": "2026-04-18",
     "yc-directory": "2026-04-18",
     "rewardful": "2026-04-18",
@@ -2180,6 +2183,7 @@
     "gamma": "2026-04-17",
     "gelato": "2026-04-18",
     "gem": "2026-04-18",
+    "get-noticed-ai": "2026-09-09",
     "getida": "2026-04-18",
     "getresponse": "2026-04-18",
     "getscreen-me": "2026-04-17",
