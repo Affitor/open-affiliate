@@ -34,6 +34,8 @@ jobs:
       # After the build: it reads the registry that prebuild regenerates.
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
+      - run: npx tsx --test --test-force-exit scripts/mcp-route.test.ts
+      - run: npx tsx --test --test-force-exit scripts/llms-budget.test.ts
       - run: npx tsx --test scripts/affiliate-score.test.ts
       - run: npx tsx --test scripts/commission-stats.test.ts
       - run: npx tsx --test scripts/commission-order.test.ts
