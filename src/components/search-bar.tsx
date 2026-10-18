@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
+import { formatPercentage } from "@/lib/commission-mode";
 
 interface SearchResult {
   slug: string;
@@ -21,7 +22,7 @@ interface SearchResult {
 
 function commissionDisplay(commission: SearchResult["commission"]): string {
   if (commission.mode === "percentage" && commission.value !== null) {
-    return `${commission.value}%`;
+    return formatPercentage(commission.rate, commission.value);
   }
   if (commission.mode === "flat" && commission.value !== null) {
     return `$${commission.value.toLocaleString()}`;
