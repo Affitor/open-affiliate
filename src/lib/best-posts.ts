@@ -1,6 +1,7 @@
 import { getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
+import { isSameTeam } from "./same-team"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
 import { post as recurringAffiliatePrograms } from "../content/best/recurring-affiliate-programs"
@@ -54,10 +55,7 @@ export const MIN_POST_PROGRAMS = 5
 
 export const DISCLOSURE =
   "How we make money: some links on this page are tracked so we can see which programs readers choose. Rankings are never paid for."
-export const SAME_TEAM =
-  "Kyma API and Affitor are built by the team behind OpenAffiliate."
-/** Programs whose presence on a post adds the same-team line. */
-const SAME_TEAM_SLUGS = new Set(["kyma-api"])
+export { SAME_TEAM } from "./same-team"
 
 export function getPost(slug: string): BestPost | undefined {
   return POSTS.find((p) => p.slug === slug)
@@ -199,7 +197,7 @@ export function checkedRange(selection: PostSelection): [string, string] | null 
 }
 
 export function sameTeam(post: BestPost, selection: PostSelection): boolean {
-  return Boolean(post.affitor) || selection.shown.some(({ program }) => SAME_TEAM_SLUGS.has(program.slug))
+  return Boolean(post.affitor) || selection.shown.some(({ program }) => isSameTeam(program.slug))
 }
 
 /** The sentence under "How we chose" that states the freshness rule, from the constant. */

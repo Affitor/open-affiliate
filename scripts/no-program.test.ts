@@ -19,6 +19,7 @@ import { parse } from "yaml"
 import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
 import { buildFaq } from "../src/lib/program-seo"
 import { getProgram, isLive, programs } from "../src/lib/programs"
+import { SAME_TEAM_SLUGS } from "../src/lib/same-team"
 import { buildSiftInsights, type ScoredRow } from "../src/lib/sift-stats"
 import { noProgramProblems, nonCashAffiliate } from "./program-rules"
 import { mcpGetProgram, publishedCliAddCommission, publishedCliInfo, restGetProgram } from "./surface-test-helpers"
@@ -110,6 +111,22 @@ test("a gift card or credit reward is never an alternative", () => {
     // A probe in the same category with the same keywords: every candidate qualifies on category.
     const all = noProgramAlternatives({ ...reward, slug: `${slug}-probe` }, programs.length)
     assert.equal(all.some((a) => a.slug === slug), false, slug)
+  }
+})
+
+test("a program built by our own team is never an alternative", () => {
+  // /programs/openrouter showed Kyma API first with no same-team line (prod, 18/10).
+  for (const slug of SAME_TEAM_SLUGS) {
+    const own = getProgram(slug)
+    assert.ok(own, slug)
+    assert.ok(own.verified && isLive(own), `${slug}: the probe below proves nothing unless it would otherwise qualify`)
+    // A probe in the same category with the same keywords: without the filter it ranks first.
+    const all = noProgramAlternatives({ ...own, slug: `${slug}-probe` }, programs.length)
+    assert.ok(all.length > 0, slug)
+    assert.equal(all.some((a) => a.slug === slug), false, slug)
+  }
+  for (const p of noProgram) {
+    assert.equal(noProgramAlternatives(p, programs.length).some((a) => SAME_TEAM_SLUGS.has(a.slug)), false, p.slug)
   }
 })
 
