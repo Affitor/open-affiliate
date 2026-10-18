@@ -66,7 +66,6 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/page.tsx | `/programs/${program.slug}.md`", // machine strip: the .md twin, internal
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
   "src/components/explore-table.tsx | item.url", // social posts
-  "src/components/social-listen.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
   "src/app/page.tsx | `/programs/${p.slug}`", // homepage top-verified row, internal (N-2)
   "src/app/programs/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)

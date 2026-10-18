@@ -49,6 +49,7 @@ export const changelog: ChangelogEntry[] = [
       { tag: "fixed", text: "71 logos that were saved in the wrong format now load as standard PNG files." },
       { tag: "improved", text: "A shorter top bar: Programs, Networks and Categories. Submit, Docs and Rankings sit in the footer, and the GitHub button shows the star count." },
       { tag: "improved", text: "The web framework is updated to its latest patch release." },
+      { tag: "improved", text: "Rankings now list verified programs only, sorted by commission, how long it recurs, cookie length, payout minimum or the date the terms were checked. The social posts section on program pages is retired." },
     ],
   },
 ]

@@ -33,12 +33,6 @@ export default function RankingsLayout({
 
   return (
     <>
-      <link
-        rel="preload"
-        href="/api/sift-rankings"
-        as="fetch"
-        crossOrigin="anonymous"
-      />
       <script
         type="application/ld+json"
         suppressHydrationWarning
