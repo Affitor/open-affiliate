@@ -1167,6 +1167,7 @@ function checkNoProgramHtml(program: (typeof programs)[number], page: string, ht
     fail(`${page} links the signup URL of a brand with no program`);
   }
   if (/>Commission<\/h3>/.test(own)) fail(`${page} shows a Commission card for a brand with no program`);
+  if (/data-term="/.test(own)) fail(`${page} shows an earnings-card term row for a brand with no program`);
   for (const label of TERM_LABELS) {
     if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
   }
@@ -1310,6 +1311,10 @@ async function checkServedPages(): Promise<string> {
     const offHtml = kept.get(off)!;
     for (const [leak, extra] of [
       ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
+      ["a cookie row", `<div data-term="cookie" class="x"><dt class="y">Cookie</dt><dd class="z">${off.cookieDays} days</dd></div>`],
+      ["a payout row", `<div data-term="payout" class="x"><dt class="y">Payout</dt><dd class="z">Monthly, from a $${off.payout.minimum} minimum</dd></div>`],
+      ["an approval row", `<div data-term="approval" class="x"><dt class="y">Approval</dt><dd class="z">Reviewed by hand</dd></div>`],
+      ["a cookie window in its flow", `<span>${off.cookieDays}-day cookie</span>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],
       ["a cookie window in its JSON-LD", `<script type="application/ld+json">{"description":"Earn 30% with a 60-day cookie."}</script>`],
@@ -1326,12 +1331,16 @@ async function checkServedPages(): Promise<string> {
     // An optional field rendered empty instead of left out.
     const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
     if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
+    if (termsHtmlProblems(off, offHtml + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed empty commission conditions (earnings card)");
     const onHtml = kept.get(on)!;
-    if (termsHtmlProblems(on, onHtml.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
-      fail("the page terms check passed a verified page with its cookie badge removed");
+    if (termsHtmlProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
+      fail("the page terms check passed a verified page with its cookie window removed");
     }
-    if (termsHtmlProblems(on, onHtml.replaceAll(`>$${on.payout.minimum}</span>`, `>$${(on.payout.minimum ?? 0) + 1}</span>`)).length === 0) {
+    if (termsHtmlProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
+    }
+    if (termsHtmlProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
+      fail("the page terms check passed a verified page with its approval row removed");
     }
     // The also_on fixture on a served page: the page's markup for its line and
     // button passes; a page without them, or that markup on a program with no
