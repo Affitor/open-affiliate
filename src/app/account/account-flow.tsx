@@ -64,6 +64,8 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
 
   const load = useCallback(async () => {
     const acct = await fetchAccount();
+    // A release confirmation belongs to the account it was opened on.
+    setConfirmRelease(false);
     setAccount(acct);
     setStep(acct ? "account" : "email");
   }, []);
@@ -167,7 +169,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{account.domain} on OpenAffiliate</h1>
             <p className="text-sm text-muted-foreground mt-1">
               You manage every program on {account.domain}. Signed in as {account.you.email}.{" "}
-              <button className={quiet} onClick={() => void call("signout", {}, () => { setAccount(null); setStep("email"); })}>
+              <button className={quiet} onClick={() => void call("signout", {}, () => { setConfirmRelease(false); setAccount(null); setStep("email"); })}>
                 Sign out
               </button>
             </p>
