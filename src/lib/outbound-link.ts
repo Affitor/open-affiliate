@@ -10,12 +10,14 @@ import { isAffitorHref } from "@/lib/affitor-link"
 export type OutboundSurface = "program_page" | "list" | "compare" | "blog"
 
 /**
- * `url` with utm_source=openaffiliate, utm_medium=<surface>, utm_campaign=<slug>.
+ * `url` with utm_source=openaffiliate, utm_medium=<surface>, utm_campaign=<campaign>,
+ * and utm_content=<content> when given (a blog post links many programs: the
+ * post is the campaign, the program the content).
  * Returned unchanged: affitor.com links (affitorUrl tags those), a URL that
  * already carries any utm_* parameter (the brand's own tag wins), and anything
  * that is not an absolute http(s) URL.
  */
-export function outboundUrl(url: string, surface: OutboundSurface, slug: string): string {
+export function outboundUrl(url: string, surface: OutboundSurface, campaign: string, content?: string): string {
   let href: URL
   try {
     href = new URL(url)
@@ -27,6 +29,7 @@ export function outboundUrl(url: string, surface: OutboundSurface, slug: string)
   for (const key of href.searchParams.keys()) if (key.toLowerCase().startsWith("utm_")) return url
   href.searchParams.set("utm_source", "openaffiliate")
   href.searchParams.set("utm_medium", surface)
-  href.searchParams.set("utm_campaign", slug)
+  href.searchParams.set("utm_campaign", campaign)
+  if (content) href.searchParams.set("utm_content", content)
   return href.toString()
 }
