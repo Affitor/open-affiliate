@@ -93,7 +93,8 @@ export function BestPostView({
   });
   const related = post.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug));
   const month = monthChanges(list, range?.[1]);
-  const moreHref = post.category ? `/categories/${categoryToSlug(post.category)}` : "/programs";
+  // A post tied to a registry category links "more" to that category; a cross-category list has no such page.
+  const moreHref = post.category ? `/categories/${categoryToSlug(post.category)}` : null;
   type Change = { slug: string; name: string; d: string };
   const columns: { name: string; rows: Change[] }[] = month ? [{ name: "Added", rows: month.added }, { name: "Terms re-checked", rows: month.rechecked }] : [];
   const changeList = (rows: Change[]) => (
@@ -200,13 +201,15 @@ export function BestPostView({
               <h2 className="text-lg font-semibold">What changed this month</h2>
               <span className="text-meta text-muted-foreground">{shortDate(month.from)} to {shortDate(range![1])}</span>
             </div>
-            <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs in this category on OpenAffiliate, not only the ones above.</p>
+            <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs {post.category ? "in this category" : "that fit this list"} on OpenAffiliate, not only the ones above.</p>
             <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:gap-8">
               {columns.map(({ name, rows }) => (
                 <div key={name}>
                   <p className="oa-label">{name} · {rows.length}</p>
                   {changeList(rows)}
-                  {rows.length > 6 && <Link href={moreHref} className="mt-2 inline-block text-meta text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground">and {rows.length - 6} more</Link>}
+                  {rows.length > 6 && (moreHref
+                    ? <Link href={moreHref} className="mt-2 inline-block text-meta text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground">and {rows.length - 6} more</Link>
+                    : <p className="mt-2 text-meta text-muted-foreground">and {rows.length - 6} more</p>)}
                 </div>
               ))}
             </div>
