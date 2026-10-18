@@ -9,7 +9,7 @@ import { SAME_TEAM, SAME_TEAM_HREF, SAME_TEAM_LABEL, isSameTeam } from "@/lib/sa
  */
 export function SameTeamTag({ slug, inLink = false, className = "" }: { slug: string; inLink?: boolean; className?: string }) {
   if (!isSameTeam(slug)) return null
-  const cls = `text-[10px] font-normal text-muted-foreground whitespace-nowrap ${className}`
+  const cls = `text-xs font-normal text-muted-foreground whitespace-nowrap ${className}`
   return inLink ? (
     <span className={cls} title={SAME_TEAM}>
       {SAME_TEAM_LABEL}
