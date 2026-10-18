@@ -28,6 +28,8 @@ import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { outboundUrl } from "../src/lib/outbound-link";
+import { blogApplyHref } from "../src/lib/apply-cta";
+import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
 import { sectionProblems } from "./directory-checks";
@@ -564,7 +566,47 @@ function checkListPage(list: BestList, path: string): void {
   });
 }
 
-for (const list of BEST_LISTS) checkListPage(list, bestPath(list));
+/**
+ * An editorial post on a list URL: the blocks, in order, are postSelection's
+ * programs as of this build; the title counts them; the disclosure is there;
+ * every Apply link is blogApplyHref with the post's UTM; the twin carries the
+ * same programs and links.
+ */
+function checkPostPage(post: BestPost, selection: PostSelection, path: string): void {
+  const url = `${BASE_URL}${path}`;
+  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  const title = postTitle(post, selection);
+  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  if (post.description.length < 120 || post.description.length > 155) fail(`${path} description is ${post.description.length} characters; keep it 120 to 155`);
+  const htmlFile = `${path.slice(1)}.html`;
+  if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
+  const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  const want = selection.shown.map(({ program }) => program.slug);
+  const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not postSelection's ${JSON.stringify(want)}`);
+  if (!new RegExp(`<h1[^>]*>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h1>`).test(html)) fail(`${path} H1 is not "${title}"`);
+  if (!html.includes("data-post-disclosure")) fail(`${path} has no disclosure`);
+  for (const { program } of selection.shown) {
+    const href = blogApplyHref(program, post.slug).replaceAll("&", "&amp;");
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${href}"`));
+    if (!tag) fail(`${path} has no Apply link for ${program.slug} with the blog UTM`);
+    if (!tag.includes('rel="sponsored nofollow noopener"')) fail(`${path} Apply link for ${program.slug} is not rel="sponsored nofollow noopener"`);
+  }
+  const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
+  const md = readFileSync(mdFile, "utf8");
+  if (!md.startsWith(`# ${title}\n`)) fail(`${mdFile} does not start with the post title`);
+  for (const { program } of selection.shown) {
+    const autolink = `<${blogApplyHref(program, post.slug).replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
+    if (!md.includes(`/programs/${program.slug}.md)`) || !md.includes(autolink)) fail(`${mdFile} is missing ${program.slug} or its Apply link`);
+  }
+}
+
+for (const list of BEST_LISTS) {
+  const post = getPost(list.slug);
+  const selection = post ? postSelection(post) : null;
+  if (post && selection && postReady(selection)) checkPostPage(post, selection, bestPath(list));
+  else checkListPage(list, bestPath(list));
+}
 for (const category of categories) {
   checkListPage(categoryList(category), `/categories/${categoryToSlug(category)}`);
 }

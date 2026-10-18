@@ -62,7 +62,24 @@ import {
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
-import { applyButton } from "../src/lib/apply-cta"
+import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
+import {
+  DISCLOSURE,
+  SAME_TEAM,
+  checkedRange,
+  checkedText,
+  cookieText,
+  earnText,
+  getPost,
+  payoutText,
+  postFaq,
+  postReady,
+  postSelection,
+  postTitle,
+  sameTeam,
+  type BestPost,
+  type PostSelection,
+} from "../src/lib/best-posts"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1123,6 +1140,38 @@ function bestListMd(list: BestList, path: string): string {
   ])
 }
 
+/**
+ * The twin of an editorial post: the same programs as the page (postSelection
+ * as of the build), every figure from structured fields, each Apply link the
+ * page's blogApplyHref.
+ */
+function bestPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  const range = checkedRange(selection)
+  const rows = selection.shown
+    .map(({ program: p, copy }, i) => {
+      const facts = mdEscape(`you earn ${earnText(p)}, cookie: ${cookieText(p)}, payout: ${payoutText(p)}, terms checked ${checkedText(p)}`)
+      return [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${facts}, apply: ${mdUrl(blogApplyHref(p, post.slug))}`,
+        `   ${mdEscapeProse(copy.why)}${copy.notFor ? ` Not for: ${mdEscapeProse(copy.notFor)}` : ""}`,
+      ].join("\n")
+    })
+    .join("\n")
+  const faq = postFaq(post, selection, mdEscape)
+  return joinSections([
+    `# ${mdHeading(postTitle(post, selection))}`,
+    range ? `By the OpenAffiliate team · Terms checked between ${range[0]} and ${range[1]}` : null,
+    `> ${mdEscapeProse(post.intro)}`,
+    `${DISCLOSURE}${sameTeam(post, selection) ? ` ${SAME_TEAM}` : ""}`,
+    section("Programs", rows),
+    section(
+      "How we chose",
+      [mdEscapeProse(post.howWeChose), ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
+    ),
+    faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
+    section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ].filter((x): x is string => Boolean(x)))
+}
+
 const CHANGELOG_TAG: Record<string, string> = {
   new: "New",
   improved: "Improved",
@@ -1170,7 +1219,12 @@ function main(): void {
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
   for (const list of BEST_LISTS) {
-    write(`${bestPath(list).slice(1)}.md`, bestListMd(list, bestPath(list)))
+    const post = getPost(list.slug)
+    const selection = post ? postSelection(post) : null
+    write(
+      `${bestPath(list).slice(1)}.md`,
+      post && selection && postReady(selection) ? bestPostMd(post, selection, bestPath(list)) : bestListMd(list, bestPath(list)),
+    )
   }
 
   for (const p of programs) {
