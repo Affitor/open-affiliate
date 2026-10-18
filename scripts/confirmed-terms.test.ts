@@ -714,6 +714,14 @@ test("qualified percentage ceilings survive server, client and agent Markdown wi
   const plain = { ...verifiedBase.commission, mode: "percentage" as const, rate: "30%", value: 30 }
   assert.equal(commissionDisplay(plain), "30%")
   assert.equal(clientCommissionDisplay(plain), "30%")
+  for (const value of [1e-7, 1e21]) {
+    for (const rate of [value, String(value)]) {
+      const numeric = { ...plain, rate, value }
+      assert.equal(commissionDisplay(numeric), `${value}%`)
+      assert.equal(clientCommissionDisplay(numeric), `${value}%`)
+      assert.ok(programMd({ ...entry, commission: numeric }).includes(`Commission: ${value}%`))
+    }
+  }
   assert.equal(page.estimateInput(withCommission({ type: "recurring", mode: "percentage", value: 30, rate: "30%", currency: "USD", duration: "12 months" }))?.value, 30)
   for (const rate of ["30%", "up to 30%", "maximum 30%", "10–30%"]) {
     const missing = { ...plain, rate, value: null }
@@ -735,6 +743,12 @@ test("global search uses the same percentage rule while flat, tiered and unknown
     const commission = { ...verifiedBase.commission, mode: "percentage" as const, rate, value: rate === "30%" || rate === "30" ? 30 : 15 }
     assert.equal(searchDisplay(commission), commissionDisplay(commission), rate)
     assert.equal(searchDisplay({ ...commission, value: null }), "Not published")
+  }
+
+  for (const value of [1e-7, 1e21]) {
+    for (const rate of [value, String(value)]) {
+      assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "percentage", rate, value }), `${value}%`)
+    }
   }
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "flat", rate: "$20", value: 20 }), "$20")
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "tiered", rate: "10–20%", value: 20 }), "10–20%")

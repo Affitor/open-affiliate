@@ -67,8 +67,9 @@ export function parseCommissionMode(raw: string): ParsedCommission {
 /** Keep a percentage qualifier as stored; a missing value never becomes a claim. */
 export function formatPercentage(rate: string | number | null | undefined, value: number | null | undefined): string {
   if (value == null) return "Not published"
-  const stored = String(rate ?? "").trim()
-  return /\d/.test(stored) && !/^\d+(?:\.\d+)?\s*%?$/.test(stored)
+  if (typeof rate !== "string") return `${value}%`
+  const stored = rate.trim()
+  return /\d/.test(stored) && !/^[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?\s*%?$/i.test(stored)
     ? stored
     : `${value}%`
 }
