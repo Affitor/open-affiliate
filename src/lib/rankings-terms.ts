@@ -1,8 +1,10 @@
 /**
  * The terms the /rankings table shows beside the commission, shared by the
- * page, its JSON-LD and rankings.md so all three read the same way. Kept free
- * of imports so the client table can use it without pulling in the registry.
+ * page, its JSON-LD and rankings.md so all three read the same way. Imports
+ * only import-free modules, so the client table can use it without pulling in
+ * the registry.
  */
+import { compareText } from "./commission-order"
 
 /**
  * How long a commission keeps paying, in months: Infinity for lifetime, 0 when
@@ -35,4 +37,40 @@ export function payoutMinText(minimum: number | null | undefined, currency: stri
   if (minimum == null) return null
   if (minimum === 0) return "None"
   return !currency || currency === "USD" ? `$${minimum.toLocaleString("en-US")}` : `${minimum.toLocaleString("en-US")} ${currency}`
+}
+
+/**
+ * Which list a commission ranks in. A percentage and a dollar amount cannot be
+ * compared, so each has its own list; tiered, hybrid, unpublished, credit and
+ * non-USD rewards have no single figure and go in "other", A to Z.
+ */
+export type CommissionGroup = "percent" | "flat" | "other"
+
+export function commissionGroup(c: { mode: string; value: number | null; currency?: string | null; rate: string | number }): CommissionGroup {
+  if (c.value == null) return "other"
+  if (c.mode === "percentage") return "percent"
+  if (c.mode === "flat" && (!c.currency || c.currency === "USD") && !/credit/i.test(String(c.rate))) return "flat"
+  return "other"
+}
+
+/** Lifetime first, then the longest stated length, a recurring commission of unstated length, one-time, unknown. */
+function recurringKey(months: number | null | undefined): number {
+  return months === undefined ? -1 : months === null ? 0.5 : months
+}
+
+type Ranked = { name: string; slug: string; commission: { type: string; value: number | null; duration?: string | null } }
+
+/**
+ * Order inside the percent or flat list: the figure (`dir` -1 puts the largest
+ * first), then, whatever the direction, the commission that recurs longer,
+ * then the name.
+ */
+export function compareCommissionFigure(a: Ranked, b: Ranked, dir = -1): number {
+  const [x, y] = [a.commission.value ?? 0, b.commission.value ?? 0]
+  return (
+    (x === y ? 0 : (x < y ? -1 : 1) * dir) ||
+    recurringKey(recurringMonths(b.commission)) - recurringKey(recurringMonths(a.commission)) ||
+    compareText(a.name, b.name) ||
+    compareText(a.slug, b.slug)
+  )
 }

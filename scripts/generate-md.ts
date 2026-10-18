@@ -35,12 +35,11 @@ import registry from "../src/lib/registry.json"
 import { formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
-import { compareCommission } from "../src/lib/commission-order"
-import { payoutMinText, recurringMonths, recurringText } from "../src/lib/rankings-terms"
+import { compareText } from "../src/lib/commission-order"
+import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText, type CommissionGroup } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
   affiliateScore,
-  commissionRank,
   commissionDisplay,
   formatCommissionDisplay,
   getCategoryStats,
@@ -1045,9 +1044,13 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  // The HTML table's default order: verified programs by commission (compareCommission).
-  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified).sort((a, b) => compareCommission(a, b, commissionRank))
-  const programLines = ranked
+  // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
+  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified)
+  const inGroup = (g: CommissionGroup) => {
+    const list = ranked.filter((p) => commissionGroup(p.commission) === g)
+    return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
+  }
+  const programLines = (g: CommissionGroup) => inGroup(g)
     .map((p, i) => {
       const terms = [
         `${commissionDisplay(p.commission)} ${p.commission.type}`,
@@ -1082,9 +1085,11 @@ function rankingsMd(): string {
     `# Affiliate program rankings`,
     [
       `> ${ranked.length} verified programs, every figure checked on the brand's own`,
-      `> terms page, ordered by commission as on ${BASE}/rankings. The table there`,
-      `> can also sort by how long the commission recurs, cookie length, payout`,
-      `> minimum or check date.`,
+      `> terms page, in the three lists of ${BASE}/rankings: a percentage of the`,
+      `> sale and a flat US-dollar amount, each highest first (on a tie, the one`,
+      `> that recurs longer first), then tiered, hybrid, unpublished and other`,
+      `> rewards A to Z. The table there can also sort by how long the commission`,
+      `> recurs, cookie length, payout minimum or check date.`,
       `>`,
       `> Network and category figures keep percentage rates and flat US-dollar`,
       `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
@@ -1092,7 +1097,9 @@ function rankingsMd(): string {
       `> a percentage counts in any currency. Unconfirmed figures count and are`,
       `> marked "unconfirmed".`,
     ].join("\n"),
-    section("Programs", programLines),
+    section("Programs paying a percentage of the sale", programLines("percent")),
+    section("Programs paying a flat amount", programLines("flat")),
+    section("Tiered, hybrid and other commissions", programLines("other")),
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),

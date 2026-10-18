@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { commissionRank, livePrograms } from "@/lib/programs";
+import { livePrograms } from "@/lib/programs";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { compareCommission } from "@/lib/commission-order";
+import { commissionGroup, compareCommissionFigure } from "@/lib/rankings-terms";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Rankings: Highest Paying Programs",
@@ -27,10 +27,10 @@ export default function RankingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // The table's default order: verified programs by commission.
+  // The table's default view: verified programs paying a percentage, highest first.
   const ranked = livePrograms
-    .filter((p) => p.verified)
-    .sort((a, b) => compareCommission(a, b, commissionRank))
+    .filter((p) => p.verified && commissionGroup(p.commission) === "percent")
+    .sort((a, b) => compareCommissionFigure(a, b))
     .slice(0, 20);
 
   return (

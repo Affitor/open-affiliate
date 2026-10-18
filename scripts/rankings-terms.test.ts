@@ -4,7 +4,7 @@
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { payoutMinText, recurringMonths, recurringText } from "../src/lib/rankings-terms"
+import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText } from "../src/lib/rankings-terms"
 
 const months = (type: string, duration: string | null) => recurringMonths({ type, duration })
 
@@ -37,4 +37,24 @@ test("payout minimum", () => {
   assert.equal(payoutMinText(50, "USD"), "$50")
   assert.equal(payoutMinText(1000, undefined), "$1,000")
   assert.equal(payoutMinText(50, "EUR"), "50 EUR")
+})
+
+const c = (mode: string, value: number | null, extra: Record<string, unknown> = {}) => ({ mode, value, rate: "", ...extra })
+
+test("a percentage and a dollar amount never share a list", () => {
+  assert.equal(commissionGroup(c("percentage", 100)), "percent")
+  assert.equal(commissionGroup(c("flat", 5000, { currency: "USD" })), "flat")
+  assert.equal(commissionGroup(c("flat", 50, { currency: undefined })), "flat")
+  assert.equal(commissionGroup(c("flat", 50, { currency: "EUR" })), "other")
+  assert.equal(commissionGroup(c("flat", 10, { currency: "USD", rate: "$10 in Airtable credits" })), "other")
+  assert.equal(commissionGroup(c("tiered", 500)), "other")
+  assert.equal(commissionGroup(c("hybrid", 30)), "other")
+  assert.equal(commissionGroup(c("percentage", null)), "other")
+})
+
+test("same figure: the commission that recurs longer comes first, in both directions", () => {
+  const p = (name: string, value: number, type: string, duration: string | null) => ({ name, slug: name, commission: { type, value, duration } })
+  const list = [p("A", 30, "one-time", null), p("B", 30, "recurring", "12 months"), p("C", 30, "recurring", "lifetime"), p("D", 30, "recurring", null), p("E", 50, "one-time", null)]
+  assert.deepEqual([...list].sort((a, b) => compareCommissionFigure(a, b, -1)).map((x) => x.name), ["E", "C", "B", "D", "A"])
+  assert.deepEqual([...list].sort((a, b) => compareCommissionFigure(a, b, 1)).map((x) => x.name), ["C", "B", "D", "A", "E"])
 })

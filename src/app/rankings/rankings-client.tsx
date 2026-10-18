@@ -17,7 +17,6 @@ import {
   categories,
   commissionTypes,
   categoryCounts,
-  compareByCommission,
   compareText,
   type Program,
   commissionDisplay
@@ -26,7 +25,7 @@ import { networkName } from "@/lib/network-meta";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
-import { recurringMonths, recurringText } from "@/lib/rankings-terms";
+import { commissionGroup, compareCommissionFigure, recurringMonths, recurringText, type CommissionGroup } from "@/lib/rankings-terms";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -89,6 +88,7 @@ function SortHeader({
   activeDir,
   onSort,
   className,
+  sortable = true,
 }: {
   label: string;
   column: ColumnSort;
@@ -96,8 +96,16 @@ function SortHeader({
   activeDir: SortDir;
   onSort: (col: ColumnSort) => void;
   className?: string;
+  sortable?: boolean;
 }) {
   const isActive = activeColumn === column;
+  if (!sortable) {
+    return (
+      <th className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground ${className ?? ""}`}>
+        {label}
+      </th>
+    );
+  }
   return (
     <th
       aria-sort={isActive ? (activeDir === "desc" ? "descending" : "ascending") : "none"}
@@ -129,6 +137,7 @@ function SortHeader({
 
 interface Row {
   program: Program;
+  group: CommissionGroup;
   months: number | null | undefined;
   facts: TermFacts;
 }
@@ -144,9 +153,22 @@ function compareFigure(a: number | null | undefined, b: number | null | undefine
 
 const CELL_MUTED = "text-muted-foreground";
 
-function ProgramsTable({ items, filterKey }: { items: Row[]; filterKey: string }) {
-  const [sortCol, setSortCol] = useState<ColumnSort>("commission");
-  const [sortDir, setSortDir] = useState<SortDir>("desc");
+const GROUPS: { value: CommissionGroup; label: string }[] = [
+  { value: "percent", label: "Percentage of sale" },
+  { value: "flat", label: "Flat amount" },
+  { value: "other", label: "Tiered and other" },
+];
+
+const GROUP_NOTE: Record<CommissionGroup, string> = {
+  percent: "Programs that pay a percentage of each sale, highest first. When two pay the same, the one that recurs longer comes first.",
+  flat: "Programs that pay a fixed US-dollar amount per referral, highest first. When two pay the same, the one that recurs longer comes first.",
+  other: "Tiered, hybrid and unpublished rates, and rewards in credits or other currencies, have no single figure to compare, so this list runs A to Z.",
+};
+
+function ProgramsTable({ items, filterKey, group }: { items: Row[]; filterKey: string; group: CommissionGroup }) {
+  // Remounted per group (key): percent and flat open by commission, "other" A to Z.
+  const [sortCol, setSortCol] = useState<ColumnSort>(group === "other" ? "name" : "commission");
+  const [sortDir, setSortDir] = useState<SortDir>(group === "other" ? "asc" : "desc");
   const [pagination, setPagination] = useState({ filterKey, page: 0 });
   const page = pagination.filterKey === filterKey ? pagination.page : 0;
   const setPage = useCallback(
@@ -175,7 +197,7 @@ function ProgramsTable({ items, filterKey }: { items: Row[]; filterKey: string }
       const byName = compareText(a.program.name, b.program.name);
       switch (sortCol) {
         case "commission":
-          return compareByCommission(a.program, b.program, dir);
+          return compareCommissionFigure(a.program, b.program, dir);
         case "recurring":
           return compareFigure(a.months, b.months, dir) || byName;
         case "cookie":
@@ -210,7 +232,7 @@ function ProgramsTable({ items, filterKey }: { items: Row[]; filterKey: string }
     <div className="rounded-xl border border-border overflow-hidden">
       <div className="px-4 py-2.5 border-b border-border bg-sunk">
         <p className="text-xs text-muted-foreground">
-          Verified programs only: every figure is checked on the brand&apos;s own terms page. Sort by any column.
+          Verified programs only, every figure checked on the brand&apos;s own terms page. {GROUP_NOTE[group]}
         </p>
       </div>
       <div className="overflow-x-auto">
@@ -221,7 +243,7 @@ function ProgramsTable({ items, filterKey }: { items: Row[]; filterKey: string }
                 #
               </th>
               <SortHeader label="Program" column="name" {...head} className="text-left" />
-              <SortHeader label="Commission" column="commission" {...head} className="text-left" />
+              <SortHeader label="Commission" column="commission" {...head} className="text-left" sortable={group !== "other"} />
               <SortHeader label="Recurring" column="recurring" {...head} className="text-left hidden sm:table-cell" />
               <SortHeader label="Cookie" column="cookie" {...head} className="text-left hidden sm:table-cell" />
               <SortHeader label="Payout min" column="payout" {...head} className="text-left hidden md:table-cell" />
@@ -266,6 +288,8 @@ function ProgramsTable({ items, filterKey }: { items: Row[]; filterKey: string }
                     </span>
                     <span className="text-xs text-muted-foreground">
                       {COMMISSION_TYPE_LABELS[p.commission.type] ?? p.commission.type}
+                      {/* The Recurring column is hidden below sm; its length rides here instead. */}
+                      {item.months ? <span className="sm:hidden"> · {recurringText(item.months)}</span> : null}
                     </span>
                   </td>
                   <td className={`py-3 px-3 hidden sm:table-cell whitespace-nowrap text-sm ${item.months ? "" : CELL_MUTED}`}>
@@ -477,6 +501,7 @@ export default function RankingsClient({
   categoryRows: GroupRow[];
 }) {
   const [activeTab, setActiveTab] = useState<Tab>("programs");
+  const [group, setGroup] = useState<CommissionGroup>("percent");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -489,7 +514,7 @@ export default function RankingsClient({
     const bySlug = new Map(facts.map((f) => [f.slug, f]));
     return programs.flatMap((program) => {
       const f = program.verified ? bySlug.get(program.slug) : undefined;
-      return f ? [{ program, months: recurringMonths(program.commission), facts: f }] : [];
+      return f ? [{ program, group: commissionGroup(program.commission), months: recurringMonths(program.commission), facts: f }] : [];
     });
   }, [facts]);
 
@@ -587,6 +612,25 @@ export default function RankingsClient({
       {/* Filters (Programs tab only) */}
       {activeTab === "programs" && (
         <div className="space-y-3 mb-4">
+          {/* A percentage and a dollar amount cannot be ranked against each other: one list each. */}
+          <div role="group" aria-label="Commission paid as" className="flex flex-wrap gap-2">
+            {GROUPS.map((g) => (
+              <button
+                key={g.value}
+                type="button"
+                aria-pressed={group === g.value}
+                onClick={() => setGroup(g.value)}
+                className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                  group === g.value
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-line-strong"
+                }`}
+              >
+                {g.label}
+                <span className="ml-1.5 tabular-nums">{filteredRows.filter((r) => r.group === g.value).length}</span>
+              </button>
+            ))}
+          </div>
           {/* Search */}
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -645,8 +689,10 @@ export default function RankingsClient({
       {/* Table content */}
       {activeTab === "programs" && (
         <ProgramsTable
+          key={group}
+          group={group}
           filterKey={JSON.stringify([searchQuery, selectedCategory, selectedType])}
-          items={filteredRows}
+          items={filteredRows.filter((r) => r.group === group)}
         />
       )}
       {activeTab === "networks" && <NetworksTable rows={networkRows} />}
