@@ -26,7 +26,7 @@ import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirm
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
-import { SAME_TEAM, isSameTeam } from "@/lib/same-team";
+import { AFFITOR_SAME_TEAM, SAME_TEAM, isSameTeam } from "@/lib/same-team";
 import {
   answerParts,
   approvalText,
@@ -45,7 +45,7 @@ import {
 import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
-import { FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -144,6 +144,8 @@ export default async function ProgramPage({
   const claimable = !program.claimedBy && claimsEnabledFor(program);
   // Claim spec v4 §3: a program already on Affitor gets a chip instead of the offer line.
   const onAffitor = program.network === "affitor" || Boolean(alsoOn);
+  // A brand running its program elsewhere can move it to Affitor; not one already there, nor our own.
+  const canMoveToAffitor = !noProgram && !onAffitor && !isSameTeam(program.slug);
   const estimate = estimateInput(program);
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
@@ -509,6 +511,21 @@ export default async function ProgramPage({
                         Suggest an edit on GitHub
                       </a>
                     </p>
+                  )}
+                  {canMoveToAffitor && (
+                    <div className="space-y-1.5 border-t border-border pt-3">
+                      <AffitorLink
+                        href={affitorUrl("migrate", program.slug, AFFITOR_SWITCH)}
+                        source="migrate"
+                        slug={program.slug}
+                        cta="move"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border h-9 px-3.5 text-sm font-medium hover:bg-muted/50 transition-colors"
+                      >
+                        Move this program to Affitor
+                        <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                      </AffitorLink>
+                      <p className="text-xs text-muted-foreground">{AFFITOR_SAME_TEAM}</p>
+                    </div>
                   )}
                 </>
               )}
