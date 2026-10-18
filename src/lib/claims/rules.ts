@@ -124,7 +124,12 @@ export const TURNSTILE_HOSTNAMES: ReadonlySet<string> = new Set(["openaffiliate.
 const signupPattern = (programSchema.properties.signup_url as { pattern?: string }).pattern
 export const SIGNUP_URL_PATTERN: RegExp | null = signupPattern ? new RegExp(signupPattern, "u") : null
 
-/** Owner-submitted signup links: https only, a parseable absolute URI, and the schema's pattern. */
+/**
+ * Owner-submitted links: https only, a parseable absolute URI, and the
+ * schema's pattern. `url` and `signup_url` share one pattern in the schema,
+ * so the same rule serves signup links, a new program's website and the
+ * terms page an owner cites as proof.
+ */
 export function signupUrlAllowed(url: string, pattern: RegExp | null = SIGNUP_URL_PATTERN): boolean {
   if (!url.startsWith("https://")) return false
   try {
@@ -133,6 +138,18 @@ export function signupUrlAllowed(url: string, pattern: RegExp | null = SIGNUP_UR
     return false
   }
   return pattern ? pattern.test(url) : true
+}
+
+/**
+ * Where replies to claim mail go. OA_CLAIM_REPLY_TO switches it to the
+ * mailbox Sơn picks for OpenAffiliate (spec v4 Q3) without a code change;
+ * until then it is the address approved in the v1 pack. A value that is not
+ * one plain address is ignored.
+ */
+export const DEFAULT_REPLY_TO = "support@affitor.com"
+
+export function claimReplyTo(env: Record<string, string | undefined> = process.env): string {
+  return normalizeEmail(env.OA_CLAIM_REPLY_TO ?? "") ?? DEFAULT_REPLY_TO
 }
 
 /** True when this listing shows a claim button: pilot, claimable, and every secret set. */

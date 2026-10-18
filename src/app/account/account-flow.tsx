@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Turnstile } from "@/components/turnstile";
 import { AffitorLink } from "@/components/affitor-link";
 import { affitorUrl } from "@/lib/affitor-link";
+import { CATEGORIES, EMPTY_VALUES, newProgramFrom, type ProgramValues } from "@/lib/claims/form";
+import { EarnSection, PromoteSection, Section, fieldClass, type SetValue } from "@/components/claims/program-fields";
 
 type Stats = { views: number | null; clicks: number | null };
 interface Account {
@@ -15,7 +17,15 @@ interface Account {
   otherAccounts: { memberId: string; domain: string }[];
   programs: { slug: string; name: string; editable: boolean; stats: Stats }[];
   members: { id: string; email: string; addedAt: string; you: boolean }[];
-  changes: { slug: string; kind: string; status: string; prUrl: string | null; fields: string[]; sentAt: string }[];
+  changes: {
+    slug: string;
+    kind: string;
+    name: string | null;
+    status: string;
+    prUrl: string | null;
+    fields: string[];
+    sentAt: string;
+  }[];
 }
 type Step = "loading" | "email" | "code" | "account" | "released";
 
@@ -32,6 +42,24 @@ const STATUS: Record<string, string> = {
   applied: "Live",
   rejected: "Not applied",
   asked: "Needs your reply",
+};
+
+/** History names what changed in the page's words, not the YAML's. */
+const FIELD_NAMES: Record<string, string> = {
+  commission: "commission",
+  cookie_days: "cookie",
+  payout: "payout",
+  short_description: "one line",
+  description: "description",
+  use_cases: "audience",
+  signup_url: "signup link",
+  approval: "approval",
+  approval_time: "approval time",
+  restrictions: "rules",
+  marketing_materials: "marketing materials",
+  dedicated_manager: "dedicated manager",
+  status: "status",
+  status_note: "status note",
 };
 
 const date = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
@@ -61,9 +89,18 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
   const [error, setError] = useState("");
   const [note, setNote] = useState("");
   const [confirmRelease, setConfirmRelease] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [product, setProduct] = useState({ name: "", url: "", category: "SaaS" });
+  const [values, setValues] = useState<ProgramValues>(EMPTY_VALUES);
+  const [termsUrl, setTermsUrl] = useState("");
+  const [listed, setListed] = useState("");
+  const setValue: SetValue = (key, value) => setValues((v) => ({ ...v, [key]: value }));
 
   const load = useCallback(async () => {
     const acct = await fetchAccount();
+    // A release confirmation and a half-filled new program belong to the account they were opened on.
+    setConfirmRelease(false);
+    setAdding(false);
     setAccount(acct);
     setStep(acct ? "account" : "email");
   }, []);
@@ -84,6 +121,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
     setBusy(true);
     setError("");
     setNote("");
+    setListed("");
     try {
       const res = await fetch(`/api/claims/${action}`, {
         method: "POST",
@@ -92,7 +130,11 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
       });
       const data = await res.json().catch(() => ({}));
       if (res.ok) await onOk();
-      else setError(res.status === 503 ? "Accounts are not available right now." : (data.message ?? "Something went wrong. Try again."));
+      else {
+        setError(res.status === 503 ? "Accounts are not available right now." : (data.message ?? "Something went wrong. Try again."));
+        // "Already on OpenAffiliate": point at the listing to edit (a slug on this account's domain).
+        if (data.error === "already_listed" && typeof data.slug === "string" && /^[a-z0-9-]+$/.test(data.slug)) setListed(data.slug);
+      }
     } catch {
       setError("Network error. Try again.");
     } finally {
@@ -167,7 +209,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
             <h1 className="text-xl sm:text-2xl font-bold tracking-tight">{account.domain} on OpenAffiliate</h1>
             <p className="text-sm text-muted-foreground mt-1">
               You manage every program on {account.domain}. Signed in as {account.you.email}.{" "}
-              <button className={quiet} onClick={() => void call("signout", {}, () => { setAccount(null); setStep("email"); })}>
+              <button className={quiet} onClick={() => void call("signout", {}, () => { setConfirmRelease(false); setAdding(false); setAccount(null); setStep("email"); })}>
                 Sign out
               </button>
             </p>
@@ -215,7 +257,98 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
               </div>
             ))}
             <p className="text-xs text-muted-foreground">Numbers count visits to your OpenAffiliate pages and clicks on their apply button.</p>
+            {!adding && (
+              <button className={outline} onClick={() => setAdding(true)}>Add a program</button>
+            )}
           </section>
+
+          {adding && (
+            <form
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                void call(
+                  "program-new",
+                  { domain: account.domain, program: newProgramFrom(product, values), termsUrl: termsUrl.trim() },
+                  async () => {
+                    setProduct({ name: "", url: "", category: "SaaS" });
+                    setValues(EMPTY_VALUES);
+                    setTermsUrl("");
+                    await load();
+                    setNote("Sent for review. It shows under Changes.");
+                  },
+                );
+              }}
+            >
+              <div>
+                <h2 className="text-base font-semibold">Add a program from {account.domain}</h2>
+                <p className="text-sm text-muted-foreground mt-1">
+                  Same format as every page on OpenAffiliate. We check it against your terms page before it goes live. Up to
+                  3 a day.
+                </p>
+              </div>
+              <Section title="The product">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="new-name" className={label}>Product name</label>
+                    <Input id="new-name" required maxLength={80} value={product.name} onChange={(e) => setProduct((p) => ({ ...p, name: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label htmlFor="new-url" className={label}>Website</label>
+                    <Input
+                      id="new-url"
+                      type="url"
+                      required
+                      maxLength={500}
+                      placeholder={`https://${account.domain}`}
+                      value={product.url}
+                      onChange={(e) => setProduct((p) => ({ ...p, url: e.target.value }))}
+                    />
+                    <p className="text-xs text-muted-foreground mt-1.5">Must be on {account.domain}.</p>
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="new-category" className={label}>Category</label>
+                  <select id="new-category" className={fieldClass} value={product.category} onChange={(e) => setProduct((p) => ({ ...p, category: e.target.value }))}>
+                    {CATEGORIES.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+              </Section>
+              <PromoteSection id="new" values={values} set={setValue} />
+              <EarnSection id="new" values={values} set={setValue} termsUrl={termsUrl} setTermsUrl={setTermsUrl} termsRequired newProgram />
+              <Section title="How to join">
+                <div>
+                  <label htmlFor="new-signup" className={label}>Signup link (optional)</label>
+                  <Input id="new-signup" type="url" maxLength={500} placeholder="https://" value={values.signupUrl} onChange={(e) => setValue("signupUrl", e.target.value)} />
+                </div>
+              </Section>
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="submit"
+                  className={primary}
+                  disabled={
+                    busy ||
+                    !product.name.trim() ||
+                    !product.url.trim() ||
+                    !values.rate.trim() ||
+                    !values.shortDescription.trim() ||
+                    !values.description.trim() ||
+                    !termsUrl.trim()
+                  }
+                >
+                  Send for review
+                </button>
+                <button type="button" className={quiet} onClick={() => setAdding(false)}>Cancel</button>
+              </div>
+              {listed && (
+                <p className="text-sm">
+                  <Link href={`/programs/${listed}/claim`} className={quiet}>Edit that listing</Link>
+                </p>
+              )}
+            </form>
+          )}
 
           <section className="space-y-3">
             <h2 className="text-base font-semibold">Changes</h2>
@@ -226,7 +359,10 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
                 {account.changes.map((c, i) => (
                   <li key={i} className="py-3 flex flex-wrap items-center justify-between gap-2">
                     <span>
-                      {date(c.sentAt)} · {c.slug} · {c.kind === "new" ? "New program" : c.fields.join(", ") || "Edit"}
+                      {date(c.sentAt)} ·{" "}
+                      {c.kind === "new"
+                        ? `New program: ${c.name ?? c.slug}`
+                        : `${c.slug} · ${c.fields.map((f) => FIELD_NAMES[f] ?? f).join(", ") || "Edit"}`}
                     </span>
                     <span className="text-muted-foreground">
                       {STATUS[c.status] ?? c.status}

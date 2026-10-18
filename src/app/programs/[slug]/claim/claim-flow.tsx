@@ -5,22 +5,33 @@ import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
 import { Turnstile } from "@/components/turnstile";
 import { Input } from "@/components/ui/input";
-import { parseCommissionMode } from "@/lib/commission-mode";
 import { AffitorLink } from "@/components/affitor-link";
 import { affitorUrl } from "@/lib/affitor-link";
+import { changesFrom, touchesMoney, type ProgramValues } from "@/lib/claims/form";
+import {
+  EarnSection,
+  FitSection,
+  JoinSection,
+  PromoteSection,
+  RulesSection,
+  Section,
+  StatusSection,
+  type SetValue,
+} from "@/components/claims/program-fields";
 
-
-export interface ClaimTerms {
-  rate: string;
-  type: string;
-  duration: string;
-  cookieDays: string;
-  payoutMinimum: string;
-  signupUrl: string;
-  note: string;
-}
-
-type Step = "loading" | "email" | "code" | "dns" | "dns-record" | "manual" | "manual-sent" | "owner" | "saved" | "released";
+type Step =
+  | "loading"
+  | "email"
+  | "code"
+  | "dns"
+  | "dns-record"
+  | "manual"
+  | "manual-sent"
+  | "managed"
+  | "report"
+  | "owner"
+  | "saved"
+  | "released";
 type Stats = { views: number | null; clicks: number | null };
 
 const primary =
@@ -29,21 +40,6 @@ const quiet = "text-sm text-muted-foreground underline underline-offset-4 hover:
 const field =
   "w-full rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
 const label = "block text-xs font-medium text-muted-foreground mb-1.5";
-
-function preview(terms: ClaimTerms): string {
-  const parsed = parseCommissionMode(terms.rate);
-  const shown =
-    parsed.mode === "unknown"
-      ? "Not published (no number we can read)"
-      : parsed.mode === "percentage"
-        ? `${parsed.value}%`
-        : parsed.mode === "flat"
-          ? `$${parsed.value?.toLocaleString()}`
-          : terms.rate.trim();
-  return `${shown} ${terms.type}${terms.duration.trim() ? `, ${terms.duration.trim()}` : ""}`;
-}
-
-const optionalNumber = (value: string) => (value.trim() === "" ? null : Number(value));
 
 /** The owner session for this listing, or null (no cookie, released, or another domain). */
 async function fetchOwner(slug: string): Promise<{ stats: Stats | null } | null> {
@@ -61,13 +57,26 @@ export function ClaimFlow({
   name,
   domain,
   siteKey,
-  initialTerms,
+  initialValues,
+  synced,
+  onAffitor,
+  claimedBy,
+  replyTo,
 }: {
   slug: string;
   name: string;
   domain: string;
   siteKey: string;
-  initialTerms: ClaimTerms;
+  /** The listing as a reader sees it; an edit sends only what differs from this. */
+  initialValues: ProgramValues;
+  /** network: affitor: the daily sync owns the terms (spec v4 §5.2). */
+  synced: boolean;
+  /** Already on Affitor: no offer line (spec v4 §3). */
+  onAffitor: boolean;
+  /** The domain whose team manages this listing, per the registry. */
+  claimedBy: string | null;
+  /** Where replies to our mail go (OA_CLAIM_REPLY_TO). */
+  replyTo: string;
 }) {
   const [step, setStep] = useState<Step>("loading");
   const [email, setEmail] = useState("");
@@ -79,8 +88,20 @@ export function ClaimFlow({
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [stats, setStats] = useState<Stats | null>(null);
-  const [terms, setTerms] = useState(initialTerms);
+  const [values, setValues] = useState(initialValues);
+  const [termsUrl, setTermsUrl] = useState("");
+  const [editNote, setEditNote] = useState("");
 
+  const setValue: SetValue = (key, value) => setValues((v) => ({ ...v, [key]: value }));
+  const changes = changesFrom(initialValues, values);
+  const changed = Object.keys(changes).length > 0;
+  const money = touchesMoney(changes);
+
+  // Returning owners (cookie still valid) go straight to their panel; a
+  // "Report this page" link (#report) opens the report form; a page another
+  // team manages says so instead of offering a claim that would be refused.
+  const firstStep = (owner: boolean): Step =>
+    owner ? "owner" : window.location.hash === "#report" ? "report" : claimedBy ? "managed" : "email";
   const showOwner = (owner: { stats: Stats | null } | null) => {
     if (owner) setStats(owner.stats);
     setStep(owner ? "owner" : "email");
@@ -88,16 +109,17 @@ export function ClaimFlow({
   const loadSession = () => fetchOwner(slug).then(showOwner);
 
   useEffect(() => {
-    // Returning owners (cookie still valid) go straight to their panel.
     let live = true;
     fetchOwner(slug).then((owner) => {
       if (!live) return;
       if (owner) setStats(owner.stats);
-      setStep(owner ? "owner" : "email");
+      setStep(firstStep(Boolean(owner)));
     });
     return () => {
       live = false;
     };
+    // firstStep reads only props and the URL hash, both fixed for this page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   async function call(action: string, body: Record<string, unknown>, onOk: (data: Record<string, unknown>) => void) {
@@ -127,8 +149,6 @@ export function ClaimFlow({
     setError("");
     setStep(next);
   };
-  const set = (key: keyof ClaimTerms) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setTerms((t) => ({ ...t, [key]: e.target.value }));
 
   const emailField = (id: string, text: string, placeholder: string) => (
     <div>
@@ -243,30 +263,47 @@ export function ClaimFlow({
         </>
       )}
 
-      {step === "manual" && (
+      {step === "managed" && (
+        <>
+          <p className="text-sm">
+            This page is managed by the <strong>{claimedBy}</strong> team. Ask a teammate to add you from their account.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            <button type="button" className={quiet} onClick={() => go("manual")}>Ask for a manual review</button>
+            {" · "}
+            <button type="button" className={quiet} onClick={() => go("report")}>Report this page</button>
+          </p>
+        </>
+      )}
+
+      {(step === "manual" || step === "report") && (
         <form
           className="space-y-3"
           onSubmit={(e) => {
             e.preventDefault();
-            void call("manual", { email, note, turnstileToken: token }, () => go("manual-sent"));
+            void call("manual", { email, note, report: step === "report", turnstileToken: token }, () => go("manual-sent"));
           }}
         >
-          <p className="text-sm text-muted-foreground">Tell us how you are connected to {name}. A person replies within 2 days.</p>
+          <p className="text-sm text-muted-foreground">
+            {step === "report"
+              ? `Tell us what is wrong with the ${name} page: wrong terms, or the wrong team managing it. A person replies within 2 days.`
+              : `Tell us how you are connected to ${name}. A person replies within 2 days.`}
+          </p>
           {emailField("claim-manual-email", "Email", "you@example.com")}
           <div>
-            <label htmlFor="claim-note" className={label}>How you run this program</label>
+            <label htmlFor="claim-note" className={label}>{step === "report" ? "What is wrong" : "How you run this program"}</label>
             <textarea id="claim-note" className={field} rows={3} maxLength={1000} value={note} onChange={(e) => setNote(e.target.value)} />
           </div>
           <Turnstile key={widget} siteKey={siteKey} action="manual" onToken={setToken} />
           <div className="flex flex-wrap items-center gap-3">
-            <button type="submit" className={primary} disabled={busy || !token}>Ask for review</button>
-            <button type="button" className={quiet} onClick={() => go("email")}>Back</button>
+            <button type="submit" className={primary} disabled={busy || !token}>{step === "report" ? "Send report" : "Ask for review"}</button>
+            <button type="button" className={quiet} onClick={() => go(claimedBy ? "managed" : "email")}>Back</button>
           </div>
         </form>
       )}
 
       {step === "manual-sent" && (
-        <p className="text-sm">Thanks. We reply from support@affitor.com within 2 days.</p>
+        <p className="text-sm">Thanks. We reply from {replyTo} within 2 days.</p>
       )}
 
       {step === "owner" && (
@@ -274,7 +311,8 @@ export function ClaimFlow({
           <div>
             <h2 className="text-base font-semibold">Manage the {name} listing</h2>
             <p className="text-sm text-muted-foreground mt-1">
-              Verified for {domain}. A person checks every edit before the page changes, usually within 24 hours.
+              Verified for {domain}. Changes go live after we check them, usually within two business days. Name, website and
+              category: ask for a manual review.
             </p>
             <p className="text-sm mt-1">
               <Link href="/account" className={quiet}>Open your account</Link>
@@ -298,63 +336,44 @@ export function ClaimFlow({
             </dl>
           )}
           <form
-            className="space-y-3"
+            className="space-y-4"
             onSubmit={(e) => {
               e.preventDefault();
               void call(
-                "terms",
-                {
-                  terms: {
-                    rate: terms.rate,
-                    type: terms.type,
-                    duration: terms.duration.trim() || undefined,
-                    cookieDays: optionalNumber(terms.cookieDays),
-                    payoutMinimum: optionalNumber(terms.payoutMinimum),
-                    signupUrl: terms.signupUrl.trim() || undefined,
-                    note: terms.note.trim() || undefined,
-                  },
-                },
+                "edit",
+                { changes, termsUrl: termsUrl.trim() || undefined, note: editNote.trim() || undefined },
                 () => go("saved"),
               );
             }}
           >
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label htmlFor="t-rate" className={label}>Commission rate</label>
-                <Input id="t-rate" required maxLength={80} value={terms.rate} onChange={set("rate")} placeholder="30%" />
-              </div>
-              <div>
-                <label htmlFor="t-type" className={label}>Type</label>
-                <select id="t-type" className={field} value={terms.type} onChange={set("type")}>
-                  <option value="recurring">recurring</option>
-                  <option value="one-time">one-time</option>
-                  <option value="tiered">tiered</option>
-                  <option value="hybrid">hybrid</option>
-                </select>
-              </div>
-              <div>
-                <label htmlFor="t-duration" className={label}>Duration</label>
-                <Input id="t-duration" maxLength={60} value={terms.duration} onChange={set("duration")} placeholder="12 months" />
-              </div>
-              <div>
-                <label htmlFor="t-cookie" className={label}>Cookie days</label>
-                <Input id="t-cookie" type="number" min={0} max={3650} value={terms.cookieDays} onChange={set("cookieDays")} />
-              </div>
-              <div>
-                <label htmlFor="t-payout" className={label}>Minimum payout (USD)</label>
-                <Input id="t-payout" type="number" min={0} value={terms.payoutMinimum} onChange={set("payoutMinimum")} />
-              </div>
-              <div>
-                <label htmlFor="t-signup" className={label}>Affiliate signup link</label>
-                <Input id="t-signup" type="url" maxLength={500} value={terms.signupUrl} onChange={set("signupUrl")} placeholder="https://" />
-              </div>
-            </div>
+            {synced ? (
+              <Section title="What you earn">
+                <p className="text-sm text-muted-foreground">
+                  Edit these terms in your Affitor dashboard. OpenAffiliate updates daily.
+                </p>
+              </Section>
+            ) : (
+              <EarnSection id="edit" values={values} set={setValue} termsUrl={termsUrl} setTermsUrl={setTermsUrl} termsRequired={money} />
+            )}
+            <PromoteSection id="edit" values={values} set={setValue} />
+            <FitSection id="edit" values={values} set={setValue} />
+            {!synced && (
+              <>
+                <JoinSection id="edit" values={values} set={setValue} />
+                <RulesSection id="edit" values={values} set={setValue} />
+                <StatusSection id="edit" values={values} set={setValue} />
+              </>
+            )}
             <div>
-              <label htmlFor="t-note" className={label}>Anything else we should change</label>
-              <textarea id="t-note" className={field} rows={3} maxLength={1000} value={terms.note} onChange={set("note")} />
+              <label htmlFor="edit-note" className={label}>Anything else we should know (optional)</label>
+              <textarea id="edit-note" className={field} rows={2} maxLength={1000} value={editNote} onChange={(e) => setEditNote(e.target.value)} />
             </div>
-            <p className="text-xs text-muted-foreground">Your page will show: <span className="text-foreground">{preview(terms)}</span></p>
-            <button type="submit" className={primary} disabled={busy}>Save terms</button>
+            <div className="flex flex-wrap items-center gap-3">
+              <button type="submit" className={primary} disabled={busy || !changed || (money && !termsUrl.trim())}>
+                Save changes
+              </button>
+              {!changed && <span className="text-xs text-muted-foreground">Change a field to send it for review.</span>}
+            </div>
           </form>
           <button
             type="button"
@@ -373,16 +392,20 @@ export function ClaimFlow({
 
       {step === "saved" && (
         <>
-          <p className="text-sm">Thanks. We check your edits and update the page, usually within 24 hours.</p>
-          <div className="rounded-lg border border-border/50 bg-muted/20 p-4 space-y-3">
-            <p className="text-sm">Run this program on Affitor. Free until your first $10,000 in affiliate revenue, then 3.5%.</p>
-            <div className="flex flex-wrap items-center gap-3">
-              <AffitorLink href={affitorUrl("claim", slug)} source="claim" slug={slug} cta="launch" className={primary}>
-                Launch on Affitor
+          <p className="text-sm">
+            Thanks. We check your changes and update the page, usually within two business days. You can follow them in{" "}
+            <Link href="/account" className={quiet}>your account</Link>.
+          </p>
+          {/* Claim spec v4 §3: the offer line without a price, only for programs not already on Affitor. */}
+          {!onAffitor && (
+            <div className="rounded-lg border border-border/50 bg-muted/20 p-4 space-y-2">
+              <p className="text-sm">Works with the Affitor network.</p>
+              <AffitorLink href={affitorUrl("claim", slug)} source="claim" slug={slug} cta="launch" className={quiet}>
+                Run {name} on Affitor
               </AffitorLink>
-              <Link href={`/programs/${slug}`} className={quiet}>Not now</Link>
             </div>
-          </div>
+          )}
+          <Link href={`/programs/${slug}`} className={quiet}>Back to the listing</Link>
         </>
       )}
 

@@ -113,6 +113,18 @@ test("account tables (011) are service-role only: RLS on, no policies, anon/auth
   assert.doesNotMatch(sql, /SECURITY DEFINER/i)
 })
 
+test("012: the new claim_member_submit_edit is service-role only and replaces both old ones", () => {
+  const sql = fs.readFileSync(path.join(migrationsDir, "012_claim_edit_kinds.sql"), "utf8")
+  const fn = "claim_member_submit_edit\\(uuid, text, text, text, jsonb, int, int\\)"
+  assert.match(sql, new RegExp(`REVOKE ALL ON FUNCTION public\\.${fn} FROM PUBLIC, anon, authenticated;`, "i"))
+  assert.match(sql, new RegExp(`GRANT EXECUTE ON FUNCTION public\\.${fn} TO service_role;`, "i"))
+  assert.equal((sql.match(/SECURITY INVOKER/gi) ?? []).length, 1)
+  assert.doesNotMatch(sql, /SECURITY DEFINER/i)
+  // A changed argument list creates an overload; the old ones must go, not linger with their grants.
+  assert.match(sql, /DROP FUNCTION IF EXISTS public\.claim_submit_edit\(uuid, text, jsonb, int\);/i)
+  assert.match(sql, /DROP FUNCTION IF EXISTS public\.claim_member_submit_edit\(uuid, text, jsonb, int\);/i)
+})
+
 test("claim_submit_edit is callable by service_role only", () => {
   const sql = fs.readFileSync(path.join(migrationsDir, "010_claim_edit_quota.sql"), "utf8")
   assert.match(sql, /SECURITY INVOKER/i, "must run with the caller's rights")
