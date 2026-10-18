@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, BadgeCheck, Percent, Trophy, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { SameTeamTag } from "@/components/same-team-tag";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
@@ -188,6 +189,7 @@ export function BestListView({
                         <span className="text-sm font-medium block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {program.name}
                         </span>
+                        <SameTeamTag slug={program.slug} inLink className="block" />
                         {program.verified ? (
                           <Badge
                             variant="outline"
