@@ -1,6 +1,8 @@
 import { getCategoryStats, getNetworkStats, groupRow, livePrograms } from "@/lib/programs"
 import { payoutMinText } from "@/lib/rankings-terms"
 import { isSameTeam } from "@/lib/same-team"
+import { buildBoard, oasScores } from "@/lib/oas"
+import { OasLeaderboard } from "./oas-leaderboard"
 import RankingsClient, { type TermFacts } from "./rankings-client"
 
 export const revalidate = 3600
@@ -19,8 +21,10 @@ export default function RankingsPage() {
       payoutMinText: payoutMinText(p.payout.minimum, p.payout.currency),
       checked: (p.lastVerifiedAt ?? "").slice(0, 10),
     }))
+  const board = buildBoard(oasScores, livePrograms, new Date())
   return (
     <RankingsClient
+      oas={board.length > 0 ? <OasLeaderboard board={board} /> : null}
       facts={facts}
       unranked={unranked}
       networkRows={getNetworkStats().map((n) => groupRow(n.network, n.programCount, n))}

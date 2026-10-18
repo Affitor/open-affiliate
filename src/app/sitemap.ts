@@ -9,6 +9,7 @@ import {
 } from "@/lib/programs";
 import { docsNav } from "@/app/docs/_config";
 import { BEST_LISTS, bestPath, buildBestList, indexable } from "@/lib/best-lists";
+import { oasScores } from "@/lib/oas";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -84,5 +85,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages];
+  const slugs = new Set(programs.map((p) => p.slug));
+  const oasPages: MetadataRoute.Sitemap = oasScores
+    .filter((s) => slugs.has(s.slug))
+    .map((s) => ({
+      url: `${BASE_URL}/programs/${s.slug}/oas`,
+      lastModified: s.checked_at.slice(0, 10),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+
+  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages, ...oasPages];
 }

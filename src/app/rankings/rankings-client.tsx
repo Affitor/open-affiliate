@@ -493,11 +493,14 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
 // ── Main Page ───────────────────────────────────────────────────
 
 export default function RankingsClient({
+  oas,
   facts,
   unranked,
   networkRows,
   categoryRows,
 }: {
+  /** The OAS leaderboard, server-rendered; null while oas-scores.json is empty. */
+  oas: React.ReactNode | null;
   facts: TermFacts[];
   /** Verified programs our own team builds: listed here by name, never given a rank. */
   unranked: { slug: string; name: string }[];
@@ -592,6 +595,13 @@ export default function RankingsClient({
           how long it recurs, cookie length and payout minimum.
         </p>
       </div>
+
+      {oas && (
+        <>
+          {oas}
+          <h2 className="text-title font-semibold tracking-[-0.02em] mb-4">By what they pay</h2>
+        </>
+      )}
 
       {/* Tab bar */}
       <div className="flex items-center gap-1 rounded-lg border border-border bg-sunk p-1 mb-6 w-fit">
