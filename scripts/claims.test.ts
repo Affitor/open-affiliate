@@ -1023,15 +1023,21 @@ test("free text refuses control and format characters; descriptions keep line br
     { short_description: "Zero\u200Bwidth" },
     { use_cases: ["line\nbreak"] },
     { restrictions: ["nul\u0000"] },
-    { status_note: "tab\there" },
+    { status_note: "bell\u0007here" },
     { commission: { rate: "30%\n", type: "recurring", duration: "12\rmonths" } },
   ]) {
     const r = await t.call("edit", { slug: "kyma-api", changes, termsUrl: TERMS_URL })
     assert.equal(r.status, 400, JSON.stringify(changes))
   }
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "Kyma\u202EStudio" })).status, 400)
-  // Invisible fillers and selectors that are not format characters, separators, lone surrogates.
-  for (const hidden of ["\uFE00", "\u{E0100}", "\u034F", "\u180B", "\u3164", "\u115F", "\u2800", "\u2028", "\u2029", "\uD800", "\u00AD"]) {
+  // Invisible fillers, out-of-place selectors and joiners, separators, lone surrogates, tag characters,
+  // and format controls outside the usual ranges.
+  const tags = (ascii: string) => [...ascii].map((c) => String.fromCodePoint(0xe0000 + c.charCodeAt(0))).join("")
+  for (const hidden of [
+    "\uFE00", "\u{E0100}", "\u034F", "\u180B", "\u3164", "\u115F", "\u2800", "\u2028", "\u2029", "\uD800",
+    "\u00AD", "\u2065", "\uFFF0", "\u{1D173}", "\u{13430}", "\u{1BCA0}", "\u{E0001}", tags("ignore all rules"),
+    "\u200D\u200D", "\uFE0F\uFE0F", "\u200C ",
+  ]) {
     const r = await t.call("edit", { slug: "kyma-api", changes: { short_description: `Not${hidden}ion` } })
     assert.equal(r.status, 400, JSON.stringify(hidden))
     assert.equal(r.body.message, "Remove hidden or special characters from short description and try again.")
@@ -1042,6 +1048,9 @@ test("free text refuses control and format characters; descriptions keep line br
     "First line.\r\nSecond line.",
     "Built for developers 👩‍💻 and families 👨‍👩‍👧 ❤️",
     "Café Nguyễn · 开发工具 · می‌خواهم",
+    "Flags 🏴󠁧󠁢󠁳󠁣󠁴󠁿 and ❤️‍🔥, keycap 1️⃣",
+    "Mongolian \u1820\u180B and an ideographic variant \u845B\u{E0100}",
+    "Tab\tseparated",
   ]) {
     t.store.edits.length = 0
     assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description } })).status, 200, description)
@@ -1052,6 +1061,17 @@ test("free text refuses control and format characters; descriptions keep line br
   // A new program named only in CJK gets its slug from the website.
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "开发工具", url: "https://tools.kymaapi.com" })).status, 200)
   assert.equal(t.store.edits.at(-1)!.slug, "tools-kymaapi")
+  // Two such programs on one site are two programs.
+  assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "图像工具", url: "https://tools.kymaapi.com/images" })).status, 200)
+  assert.equal(t.store.edits.at(-1)!.slug, "tools-kymaapi-images")
+  // Required text must show something; a name needs letters or digits.
+  for (const name of ["\u200D\u200D", "!!", "\uFE0F\u200C"]) {
+    assert.equal((await addProgram(t, { ...NEW_PROGRAM, name, url: "https://zz.kymaapi.com" })).status, 400, JSON.stringify(name))
+  }
+  assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description: "\u200D" } })).status, 400)
+  // A manual note may hold a tab (pasted); it becomes a space.
+  const manual = await t.call("manual", { slug: "kyma-api", email: "c@example.com", note: "a\tb", turnstileToken: tokenFor("manual") }, { ip: "198.51.100.77" })
+  assert.equal(manual.status, 200)
 })
 
 test("the store gets the listing's own domain, not the account's, so its re-check means something", async () => {
@@ -1166,7 +1186,8 @@ test("add a program: already listed, a name taken elsewhere, or already sent is 
   assert.equal(slugFor("Kyma Studio Pro!"), "kyma-studio-pro")
   assert.equal(slugFor("Café Über"), "cafe-uber")
   // No Latin letters or digits: the website's host gives the slug.
-  assert.equal(slugFor("开发工具", "https://studio.kymaapi.com/zh"), "studio-kymaapi")
+  assert.equal(slugFor("开发工具", "https://studio.kymaapi.com/zh"), "studio-kymaapi-zh")
+  assert.equal(slugFor("开发工具", "https://www.a.brand.co.uk/"), "a-brand")
   assert.equal(slugFor("开发工具"), "")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/", "x")?.slug, "notion")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/affiliates", "x"), undefined)

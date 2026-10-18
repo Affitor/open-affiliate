@@ -1,4 +1,5 @@
 import { createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto"
+import { parse } from "tldts"
 import { z } from "zod"
 import { parseCommissionMode } from "@/lib/commission-mode"
 import type { Program } from "@/lib/programs"
@@ -597,28 +598,64 @@ const turnstileField = z.string().max(4096).optional()
 const ContactBody = z.object({ slug: slugField, email: z.string().max(320), turnstileToken: turnstileField })
 const VerifyBody = z.object({ slug: slugField, code: z.string().max(20) })
 const SlugBody = z.object({ slug: slugField })
-/** `report`: "Report this page" on a claimed listing, into the same manual queue. */
-// Free text a person reads in a review queue or a pull request: no control
-// characters, bidi controls, invisible fillers or selectors, line/paragraph
-// separators or lone surrogates, so what a reviewer sees is what was sent.
-// Joiners and emoji presentation selectors stay: 👩‍💻 needs U+200D, Persian
-// and Indic text need U+200C, ❤️ needs U+FE0F. Multi-line fields keep line
-// breaks; a browser's \r\n becomes \n first.
-const HIDDEN = [
-  "\\u0000-\\u0008\\u000B-\\u001F\\u007F-\\u009F\\u00AD\\u034F\\u061C\\u115F\\u1160\\u17B4\\u17B5\\u180B-\\u180F",
-  "\\u200B\\u200E\\u200F\\u2028-\\u202E\\u2060-\\u2064\\u2066-\\u206F\\u2800\\u3164\\uFE00-\\uFE0D\\uFEFF\\uFFA0\\uFFF9-\\uFFFB",
-  "\\u{E0100}-\\u{E01EF}\\p{Cs}",
-].join("")
-const ONE_LINE = new RegExp(`^[^${HIDDEN}\\t\\n\\r]*$`, "u")
-const MULTI_LINE = new RegExp(`^[^${HIDDEN}\\t\\r]*$`, "u")
-const HIDDEN_CHARACTER = "hidden_character"
-const textField = (max: number) => z.string().trim().max(max).regex(ONE_LINE, HIDDEN_CHARACTER)
-const proseField = (max: number, min = 0) =>
-  z.preprocess(
-    (v) => (typeof v === "string" ? v.replace(/\r\n?/g, "\n") : v),
-    z.string().trim().min(min).max(max).regex(MULTI_LINE, HIDDEN_CHARACTER),
-  )
+/**
+ * Free text a person reads in a review queue or a pull request, and an AI
+ * agent reads from the registry: nothing invisible may ride along. Refused:
+ * control and format characters, default-ignorable code points (tag
+ * characters, fillers), line/paragraph separators, lone surrogates. Allowed
+ * only where real text needs them, one per character: a variation selector
+ * after the character it varies (an ideographic one after an ideograph, a
+ * Mongolian one after Mongolian), a zero-width joiner between two visible
+ * characters (👩‍💻, ❤️‍🔥), a non-joiner between two letters (Persian, Indic),
+ * and tag characters only inside a subdivision flag (🏴󠁧󠁢󠁳󠁣󠁴󠁿). Multi-line fields
+ * keep line breaks; \r\n becomes \n and a tab becomes a space first.
+ */
+const EMOJI_TAG_SEQUENCE = /\u{1F3F4}[\u{E0020}-\u{E007E}]+\u{E007F}/gu
+const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800]/u
+const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
 
+/** True when every invisible code point is one text needs, in the place it needs it. */
+function plainText(multiLine: boolean) {
+  return (text: string): boolean => {
+    const chars = [...text.replace(EMOJI_TAG_SEQUENCE, "")]
+    return chars.every((c, i) => {
+      const before = chars[i - 1] ?? ""
+      const after = chars[i + 1] ?? ""
+      const cp = c.codePointAt(0)!
+      if (cp >= 0xe0100 && cp <= 0xe01ef) return /\p{Ideographic}/u.test(before)
+      if (cp >= 0x180b && cp <= 0x180f) return /\p{Script=Mongolian}/u.test(before)
+      // Emoji and text presentation (❤️) after any visible character; the other
+      // standardized variants never follow a Latin letter.
+      if (cp === 0xfe0e || cp === 0xfe0f) return VISIBLE.test(before)
+      if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !/[A-Za-z]/.test(before)
+      if (cp === 0x200d) return (VISIBLE.test(before) || before === "\uFE0F") && VISIBLE.test(after)
+      if (cp === 0x200c) return /[\p{L}\p{M}]/u.test(before) && /[\p{L}\p{M}]/u.test(after)
+      if (multiLine && c === "\n") return true
+      return !NEVER.test(c)
+    })
+  }
+}
+
+const HIDDEN_CHARACTER = "hidden_character"
+/** Required text must show something once invisible code points are set aside. */
+const showsSomething = (text: string) => text.length === 0 || /[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]/u.test(text)
+const normalizeText = (multiLine: boolean) => (v: unknown) =>
+  typeof v === "string" ? (multiLine ? v.replace(/\r\n?/g, "\n") : v).replace(/\t/g, " ") : v
+const freeText = (multiLine: boolean, max: number, min: number) =>
+  z.preprocess(
+    normalizeText(multiLine),
+    z
+      .string()
+      .trim()
+      .min(min)
+      .max(max)
+      .refine(plainText(multiLine), HIDDEN_CHARACTER)
+      .refine(showsSomething),
+  )
+const textField = (max: number, min = 0) => freeText(false, max, min)
+const proseField = (max: number, min = 0) => freeText(true, max, min)
+
+/** `report`: "Report this page" on a claimed listing, into the same manual queue. */
 const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), report: z.boolean().optional() })
 
 // Owner edits and new programs (spec v4 §5, §6). Every value a page or the
@@ -626,11 +663,11 @@ const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), repor
 // caps for a form, not the schema's (it has none except short_description).
 const S = programSchema.properties
 const enumOf = (values: readonly string[]) => z.enum(values as [string, ...string[]])
-const lineList = (count: number, each: number) => z.array(textField(each).min(1)).max(count)
+const lineList = (count: number, each: number) => z.array(textField(each, 1)).max(count)
 const CommissionInput = z
   .object({
     type: enumOf(S.commission.properties.type.enum),
-    rate: textField(80).min(1),
+    rate: textField(80, 1),
     // null clears the field.
     duration: textField(60).nullable().optional(),
     conditions: textField(300).nullable().optional(),
@@ -645,7 +682,7 @@ const PayoutInput = z
   })
   .strict()
 const cookieDaysInput = z.number().int().min(0).max(3650).nullable()
-const shortDescriptionInput = textField(S.short_description.maxLength).min(1)
+const shortDescriptionInput = textField(S.short_description.maxLength, 1)
 const descriptionInput = proseField(2000, 1)
 const urlInput = textField(500)
 
@@ -679,7 +716,8 @@ const NewProgramBody = z.object({
   domain: z.string().min(1).max(253),
   program: z
     .object({
-      name: textField(80).min(2),
+      // Letters or digits: a name of punctuation or invisible marks is no name.
+      name: textField(80, 2).refine((name) => /[\p{L}\p{N}]/u.test(name)),
       url: urlInput,
       category: enumOf(S.category.enum),
       commission: CommissionInput,
@@ -1055,17 +1093,22 @@ const SLUG_SHAPE = new RegExp(S.slug.pattern)
 /**
  * The slug a new program would get: the name, lowercased, words joined by
  * hyphens. A name with no Latin letters or digits ("开发工具") takes its
- * website's host instead (studio.kymaapi.com → studio-kymaapi).
+ * website instead (studio.kymaapi.com/a → studio-kymaapi-a).
  */
 export function slugFor(name: string, url?: string): string {
   const fromName = slugOf(name)
   if (fromName || !url) return fromName
+  // Subdomain, name and path, without the public suffix, so two pages on one
+  // site get two slugs: studio.kymaapi.com/a → studio-kymaapi-a.
+  const parsed = parse(url, { allowPrivateDomains: true })
+  let path = ""
   try {
-    const host = new URL(url).hostname.replace(/^www\./, "")
-    return slugOf(host.split(".").slice(0, -1).join(" "))
+    path = new URL(url).pathname
   } catch {
     return ""
   }
+  const host = [parsed.subdomain?.replace(/^www\.?/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")
+  return slugOf(`${host} ${path}`)
 }
 
 function slugOf(name: string): string {
