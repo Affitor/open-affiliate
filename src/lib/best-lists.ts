@@ -50,9 +50,27 @@ export interface BestList {
    * no row cap, and those that publish no rate listed last rather than left out.
    */
   directory?: boolean
+  /**
+   * A hub filters on one fact (commission type, payout, cookie). It is
+   * indexed only once it holds HUB_MIN_INDEXED verified programs; below that it
+   * stays up, noindex and out of the sitemap, and indexes itself as the
+   * registry grows.
+   */
+  hub?: boolean
 }
 
 export const MAX_ROWS = 50
+
+/** Verified programs a hub needs before search engines are asked to index it. */
+export const HUB_MIN_INDEXED = 10
+
+/** Bank hub: payout.methods values that mean a transfer to a bank account. Wise is its own method. */
+const BANK_METHODS = new Set(["bank", "wire", "ach", "sepa"])
+
+/** Payout methods as shown: an unverified program shows none (confirmed-terms.ts). */
+function paysBy(p: Program, match: (method: string) => boolean): boolean {
+  return (confirmedTerms(p).payoutMethods ?? []).some((m) => match(m.toLowerCase()))
+}
 
 /**
  * Follows "Verified <date>" on every list, page and twin alike. The date is
@@ -207,6 +225,66 @@ export const BEST_LISTS: BestList[] = [
     qualifies: (p) => [...p.tags, ...(p.agentKeywords ?? [])].some((t) => /\bseo\b/i.test(t)),
   },
   {
+    slug: "one-time-affiliate-programs",
+    title: "One-Time Commission Affiliate Programs",
+    h1: "One-Time Commission Affiliate Programs",
+    description:
+      "Affiliate programs that pay a one-time commission per sale or signup, ranked by payout, with verified terms first and the cookie window for each.",
+    summary: "list their commission as one-time",
+    criteria: "Programs whose commission is listed as one-time: paid once per sale, signup or customer.",
+    hub: true,
+    qualifies: (p) => p.commission.type === "one-time",
+  },
+  {
+    // Payout terms as shown: unverified programs carry none (confirmed-terms.ts).
+    slug: "no-minimum-payout-affiliate-programs",
+    title: "Affiliate Programs With No Minimum Payout",
+    h1: "Affiliate Programs With No Minimum Payout",
+    description:
+      "Affiliate programs with no minimum payout threshold, so every commission you earn is paid out. Ranked by commission, from terms we verified.",
+    summary: "set no minimum payout, going by verified terms",
+    criteria:
+      "Programs whose verified terms set the payout minimum at zero. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    qualifies: (p) => confirmedTerms(p).payout.minimum === 0,
+  },
+  {
+    slug: "paypal-affiliate-programs",
+    title: "Affiliate Programs That Pay via PayPal",
+    h1: "Affiliate Programs That Pay via PayPal",
+    description:
+      "Affiliate programs that pay commissions through PayPal, ranked by commission, with the cookie window and payout terms we verified for each.",
+    summary: "pay affiliates through PayPal, going by verified terms",
+    criteria:
+      "Programs whose verified payout terms list PayPal as a payout method. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    qualifies: (p) => paysBy(p, (m) => m === "paypal"),
+  },
+  {
+    slug: "bank-transfer-affiliate-programs",
+    title: "Affiliate Programs That Pay by Bank Transfer",
+    h1: "Affiliate Programs That Pay by Bank Transfer",
+    description:
+      "Affiliate programs that pay commissions by bank transfer, ranked by commission, with the cookie window and payout terms we verified for each.",
+    summary: "pay affiliates by bank transfer, going by verified terms",
+    criteria:
+      "Programs whose verified payout terms list a bank transfer (bank, wire, ACH or SEPA). Wise is counted separately. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    qualifies: (p) => paysBy(p, (m) => BANK_METHODS.has(m)),
+  },
+  {
+    slug: "long-cookie-affiliate-programs",
+    title: "Affiliate Programs With 90-Day+ Cookies",
+    h1: "Affiliate Programs With Long Cookie Windows",
+    description:
+      "Affiliate programs with a cookie window of 90 days or longer, so a reader who buys months later still counts. Ranked by commission, verified terms.",
+    summary: "give a cookie window of 90 days or longer, going by verified terms",
+    criteria:
+      "Programs whose verified terms give a cookie window of 90 days or longer. Cookie windows are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    qualifies: (p) => (confirmedTerms(p).cookieDays ?? 0) >= 90,
+  },
+  {
     // The filter behind the editorial post in src/content/best/ai-affiliate-programs.ts;
     // without enough fresh verified programs the page falls back to this list.
     slug: "ai-affiliate-programs",
@@ -225,6 +303,11 @@ export const BEST_INDEX = BEST_LISTS[0]
 
 export function bestPath(list: BestList): string {
   return list === BEST_INDEX ? "/best" : `/best/${list.slug}`
+}
+
+/** False for a hub with fewer than HUB_MIN_INDEXED verified programs: the page stays up, noindex, out of the sitemap. */
+export function indexable(list: BestList): boolean {
+  return !list.hub || buildBestList(list).verified.length >= HUB_MIN_INDEXED
 }
 
 /** A list at /best/<slug>; the hub has no such URL. */
