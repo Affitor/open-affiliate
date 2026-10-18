@@ -4,6 +4,7 @@ url: https://kymaapi.com
 category: AI
 tags: [ai, api, llm, developer-tools]
 
+# "12% recurring commission for 18 months on every customer you refer." (affitor.com/marketplace/kyma-api, checked 2026-10-18)
 commission:
   type: recurring
   rate: "12%"
@@ -11,31 +12,30 @@ commission:
   value: 12
   currency: USD
   duration: "18 months"
-  conditions: Paid 15 days after sale.
+  conditions: "Commissions clear a 15-day refund hold, then become payable once the $20 minimum is reached. Withdrawals require a request and team review; Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation."
 
+# "30-day attribution window, first-click" (affitor.com/marketplace/kyma-api, checked 2026-10-18)
 cookie_days: 30
-attribution: last-click
+attribution: first-click
 tracking_method: cookie
 
+# "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum." (affitor.com/marketplace/kyma-api, checked 2026-10-18)
 payout:
-  minimum: 50
+  minimum: 20
   currency: USD
+  methods: [wise, bank]
 
 signup_url: https://affitor.com/marketplace/kyma-api
 
 network: affitor
 
 description: >
-  Kyma API provides one gateway to 100+ AI models from Google, Anthropic, OpenAI, Meta,
-  Qwen and DeepSeek. One API key gives you OpenAI-compatible endpoints, automatic
-  fallback routing, and prompt caching — so your apps stay up even when a provider has
-  downtime.
+  Kyma API gives developers one account, API key and balance for AI models
+  across chat, reasoning, image, video and audio. Applications can switch
+  models through a shared API contract, with model-specific pricing and
+  compatible request formats.
 
-  Earn 12% recurring commission on every referred user's subscription for 18 months.
-  Ideal for content creators targeting developers, AI builders, and startup founders who
-  are looking for cheaper, more reliable AI inference.
-
-short_description: "Unified AI API gateway with 100+ models"
+short_description: "One API account for chat, reasoning, image, video and audio models"
 
 agents:
   prompt: >
@@ -53,8 +53,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-02-01"
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 kind: affiliate
 source: manual
 status: active
