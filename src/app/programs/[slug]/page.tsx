@@ -46,6 +46,7 @@ import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
 import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { getOasScore, oasValue } from "@/lib/oas";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -154,6 +155,8 @@ export default async function ProgramPage({
   const approval = approvalText(program);
   const cookie = cookieText(program);
   const hasAlternatives = getRelatedPrograms(program).length > 0;
+  // OAS sits in the header, away from the owner box and its "Move this program to Affitor" link.
+  const oas = getOasScore(slug);
 
   // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
   const statusTag = noProgram
@@ -266,6 +269,11 @@ export default async function ProgramPage({
             )}
             <ClaimChip program={program} />
             <Badge variant="outline" className="text-xs shrink-0 text-muted-foreground">{program.category}</Badge>
+            {oas && (
+              <Link href={`/programs/${slug}/oas`} className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs font-medium hover:bg-muted/50 transition-colors">
+                {oasValue(oas) == null ? "OAS · scoring in progress" : <>OAS <span className="font-mono ml-1">{oasValue(oas)}</span></>}
+              </Link>
+            )}
           </div>
         </div>
       </div>
