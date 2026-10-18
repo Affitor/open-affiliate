@@ -63,6 +63,8 @@ const PLAIN_ANCHORS = new Set([
   "src/app/explore/page.tsx | `/explore?${sp.toString()}`",
   "src/app/programs/[slug]/page.tsx | program.url", // the brand's own site; checked against the registry below
   "src/app/programs/[slug]/page.tsx | `https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`",
+  "src/app/programs/[slug]/page.tsx | `/programs/${program.slug}.md`", // machine strip: the .md twin, internal
+  "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
   "src/components/explore-table.tsx | item.url", // social posts
   "src/components/social-listen.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
@@ -70,6 +72,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
+  "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
 ])
 
 test("every computed anchor href is tracked or reviewed as not Affitor", () => {

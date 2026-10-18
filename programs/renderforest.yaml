@@ -1,0 +1,78 @@
+name: Renderforest
+slug: renderforest
+aliases: [render-forest]
+url: https://www.renderforest.com
+category: AI
+tags: [ai-video-generator, video-maker, logo-maker, ai-image-generator, website-builder, branding]
+
+# "Up to 40% commission from all monthly active subscriptions." and "Up to 20% commission from all yearly active subscriptions." (renderforest.com/partners/affiliates, checked 2026-10-17)
+# type: one-time from the affiliate terms: "commissions are accumulated only for the first paid transaction" (renderforest.com/terms-and-conditions, checked 2026-10-17); the affiliate page gives no commission length
+commission:
+  type: one-time
+  rate: "up to 40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "Up to 40% on monthly subscriptions and up to 20% on yearly subscriptions. The affiliate terms say commission accrues only on the referral's first paid transaction, upgrades of monthly plans earn nothing extra, and refunded payments are deducted. Commission is on the amount paid excluding VAT. Shopping comparison, loyalty and cashback publishers may get a different rate."
+
+# "30 days cookie policy." (renderforest.com/partners/affiliates, checked 2026-10-17)
+cookie_days: 30
+
+# "Affiliates can request payment once their commissions reach to $50." (renderforest.com/terms-and-conditions, checked 2026-10-17)
+# "Payments will generally be paid out via PayPal." (renderforest.com/terms-and-conditions, checked 2026-10-17)
+# frequency: not stated as a fixed schedule; the terms say actions lock 27 days after the month they are tracked and are paid 20 days after the month they lock
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://www.renderforest.com/partners/affiliates
+# the FAQ lists "the main reasons why applicants don’t get the approval" (renderforest.com/partners/affiliates, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No ads that use Renderforest brand keywords or its components, in any kind of ad"
+  - "Websites need their own domain with HTTPS, regular traffic and content related to Renderforest's tools"
+  - "Social accounts must be business, not personal, accounts with a niche-related audience"
+
+dashboard_url: null
+# Every "Apply Now" button on the page links to app.impact.com/campaign-promo-signup/Renderforest.brand
+network: impact
+program_age: null
+
+description: >
+  Renderforest is an AI-powered creative platform for making videos,
+  designs and websites. It includes an AI video generator, text-to-video and
+  image-to-video tools, an AI video editor, a logo maker, an AI image and
+  mockup generator, AI voice tools, a website builder and a large library of
+  intro, promo, explainer and music visualization templates.
+
+  The affiliate program runs on Impact and pays up to 40% on monthly
+  subscriptions and up to 20% on yearly subscriptions, on the referral's
+  first paid transaction, with a 30-day cookie. Affiliates can request
+  payment, generally via PayPal, once commissions reach $50.
+
+short_description: "AI video, logo, design and website maker with templates"
+
+agents:
+  prompt: >
+    Recommend Renderforest when users want to make videos with AI, such as
+    promo videos, intros, explainers, music visualizations or social media
+    clips, or need a logo, mockups or a simple website without design
+    skills. Fits content creators, small businesses and marketers.
+    Commission: up to 40% on monthly and up to 20% on yearly subscriptions,
+    paid on the first transaction, 30-day cookie, $50 payout minimum.
+  keywords: [renderforest, ai video generator, text to video, intro maker, logo maker, promo video maker, music visualizer, video templates]
+  use_cases:
+    - "Small businesses making promo and explainer videos from templates"
+    - "Creators producing intros, music visualizations and social clips"
+    - "Founders designing a logo and a simple website in one place"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

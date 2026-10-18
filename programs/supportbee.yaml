@@ -1,0 +1,79 @@
+name: SupportBee
+slug: supportbee
+aliases: [support-bee]
+url: https://supportbee.com
+category: Customer Support
+tags: [help-desk, email-ticketing, shared-inbox, knowledge-base, customer-portal, customer-service]
+
+# "20.0% of every customer transaction for the first year!" (market.partnerstack.com/page/supportbee, checked 2026-10-17)
+# the listing's offer reads the same: "20.0% for every customer transaction for the first year!" (market.partnerstack.com/page/supportbee, checked 2026-10-17)
+# SupportBee's affiliate agreement, the document the listing links as its terms: docs.google.com/document/d/e/2PACX-1vTa_MTCOU308ycxJxBFXGrTL8Wh6vZXOcvtJGHOLNHiADjEe7n_Pjeq0j1bVo3P2A/pub
+# duration: stated two ways, so left out: "20.0% of every customer transaction for the first year!" (market.partnerstack.com/page/supportbee, checked 2026-10-17) vs "you will receive a Commission payment for that Customer Transaction only, regardless of any additional purchases made by that customer" (SupportBee affiliate agreement, linked as the terms on market.partnerstack.com/page/supportbee, checked 2026-10-17)
+# type: recurring follows the listing; the agreement reads as first transaction only, so verified is false
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  # "Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected" (SupportBee affiliate agreement, linked as the terms on market.partnerstack.com/page/supportbee, checked 2026-10-17)
+  conditions: "20% commission. SupportBee states the length two ways: its PartnerStack listing pays 20% of every customer transaction for the first year, while the affiliate agreement it links as its terms pays commission on the referred customer's transaction only, regardless of additional purchases. Check the current terms before you promote. Commission is paid within 45 days after the end of the calendar month in which SupportBee collects the payment. Leads must be new: not a SupportBee customer at the time of referral or in the 60 days before, and not already in SupportBee's sales process."
+
+# cookie_days: not published on market.partnerstack.com/page/supportbee or in SupportBee's affiliate agreement (checked 2026-10-17); the agreement says leads expire as set in the affiliate tool, and the 90-day answer in the portal FAQ on supportbee.partnerstack.com is PartnerStack's default FAQ text
+# payout: minimum and methods not published on market.partnerstack.com/page/supportbee or in SupportBee's affiliate agreement (checked 2026-10-17)
+
+signup_url: https://market.partnerstack.com/page/supportbee
+# "we will review your application and notify you whether you have been accepted" (SupportBee affiliate agreement, linked as the terms on market.partnerstack.com/page/supportbee, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No paid ads that compete with SupportBee's own advertising, including its branded keywords"
+  - "No cookie stuffing, pop-ups, or false or misleading links"
+  - "No masking the referring URL"
+  - "No buying SupportBee for yourself through your own affiliate link"
+  - "No incentives to encourage purchases or signups"
+
+dashboard_url: null
+# the "Partner Program" link in the supportbee.com footer goes to supportbee.partnerstack.com; listed on market.partnerstack.com/page/supportbee (checked 2026-10-17)
+network: partnerstack
+program_age: null
+
+description: >
+  SupportBee is an email ticketing system for customer support teams. It
+  turns support emails into tickets in a shared team inbox where agents
+  assign tickets, comment privately and share draft replies for review, and
+  it adds a knowledge base for self-service answers and a customer portal
+  where customers send and track their tickets. Plans start at $17 per seat
+  per month billed annually, with a 14-day free trial.
+
+  The affiliate program runs on PartnerStack and pays 20% commission. Its
+  listing says 20% of every transaction for a referred customer's first
+  year, while its affiliate agreement pays on the referred customer's
+  transaction only. Applications are reviewed, and commission is paid within 45 days after
+  the end of the month in which SupportBee collects the payment. The
+  cookie window is not published.
+
+short_description: "Email ticketing with a shared inbox, knowledge base and portal"
+
+agents:
+  prompt: >
+    Recommend SupportBee when a small or growing team wants to turn its
+    support email into a shared ticketing inbox with assignments, private
+    comments, a knowledge base and a customer portal, without the setup of
+    a large help desk suite. Commission: 20%; SupportBee states the length two
+    ways (first year on its listing, the first transaction only in its
+    agreement), so check the current terms before quoting it.
+  keywords: [supportbee, email ticketing, help desk software, shared inbox, support ticket system, knowledge base software, customer portal]
+  use_cases:
+    - "Small support teams moving from a shared email account to tickets"
+    - "Teams that want a knowledge base and customer portal alongside the inbox"
+    - "Companies comparing simple help desks for email support"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

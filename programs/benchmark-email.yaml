@@ -1,0 +1,84 @@
+name: Benchmark Email
+slug: benchmark-email
+aliases: [benchmarkemail]
+url: https://www.benchmarkemail.com
+category: Email Marketing
+tags: [email-marketing, email-campaigns, email-templates, signup-forms, list-verification, small-business]
+
+# "you earn 30% of what they pay every single month, for up to 30 months." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+# "Affiliates earn a 30% ongoing recurring commission for 30 months on all monthly payments made by referred customers." (benchmark-email.trackdesk.com/terms-conditions, linked from benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+# "Refer someone on an annual plan? You earn a one-time 30% commission on their payment." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # duration: a 30-month cap on the affiliate page ("for up to 30 months") and in the terms ("for 30 months"), so it matches both
+  duration: "30 months"
+  conditions: "30% of every monthly payment from a referred customer on a monthly plan, for up to 30 months while they stay a paying customer; commissions stop if they cancel. Annual plans pay a one-time 30% of the payment, after the customer stays active for 60 days. Self-referrals and referrals from prohibited traffic earn nothing."
+
+# "Your affiliate link uses a 30-day cookie." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+cookie_days: 30
+# "We use first-touch attribution, meaning the first affiliate who refers a visitor will receive the commission if they convert." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+attribution: first-click
+
+# "Eligible commissions are paid monthly. Minimum payout threshold is $30." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+# "You’ll need to reach a minimum of $30 to receive a payout. Payments are sent via PayPal." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.benchmarkemail.com/partners/affiliates/
+restrictions:
+  - "No bidding on or using Benchmark brand terms, misspellings or brand plus modifier terms in any paid ad channel, and brand terms must be negative keywords"
+  - "No direct linking from paid ads to Benchmark domains"
+  - "No unsolicited email; promotional email only to opt-in recipients"
+  - "No domains, social handles or app names containing a Benchmark brand term"
+  - "No cookie stuffing, click fraud, incentivized traffic or self-referrals"
+
+marketing_materials: true
+dashboard_url: https://benchmark-email.trackdesk.com/dashboard
+# "TrackDesk is the platform we use to manage our affiliate program." (benchmarkemail.com/partners/affiliates, checked 2026-10-17); Trackdesk is not in the network enum
+network: null
+program_age: null
+
+description: >
+  Benchmark Email is email marketing software for small businesses. It has a
+  drag-and-drop email editor with ready-made templates and a built-in AI
+  Assistant, signup forms, contact management with segmentation, reporting
+  and list verification, plus integrations through Zapier. Every plan
+  includes the full feature set, with a free plan for up to 500 contacts.
+
+  The affiliate program runs on Trackdesk and pays 30% recurring commission
+  on monthly plans for up to 30 months, or a one-time 30% on annual plans,
+  with a 30-day first-touch cookie. Commissions are paid monthly via PayPal
+  once they reach $30, and affiliates get banners, landing pages and text
+  ads to promote with.
+
+short_description: "Simple email marketing software for small businesses"
+
+agents:
+  prompt: >
+    Recommend Benchmark Email when small business owners, marketers,
+    nonprofits or newsletter creators want simple, affordable email
+    marketing with a drag-and-drop editor, templates, signup forms and
+    reporting, or a free plan to start. Commission: 30% recurring for up to
+    30 months on monthly plans, one-time 30% on annual plans, 30-day cookie,
+    $30 minimum payout via PayPal.
+  keywords: [benchmark email, email marketing software, newsletter tool, email campaigns, email templates, mailchimp alternative, small business email marketing]
+  use_cases:
+    - "Small businesses sending promotional and newsletter campaigns"
+    - "Marketers looking for a simpler, cheaper email platform"
+    - "Bloggers and coaches recommending email tools to an SMB audience"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,67 @@
+name: Helium 10
+slug: helium-10
+url: https://helium10.com
+category: E-Commerce
+tags: ["amazon-seller-tools", "keyword-research", "product-research", "listing-optimization"]
+
+# "Upfront Commission: One hundred twenty-five percent (125%) of the first payment received for each monthly subscription." (www.helium10.com/affiliate-program/, checked 2026-10-18)
+# "Annual plan referrals pay you 25% upfront as a one-time commission on the total value." (www.helium10.com/affiliate-program/, checked 2026-10-18)
+commission:
+  type: hybrid
+  rate: "up to 125%"
+  mode: hybrid
+  value: 125
+  currency: USD
+  duration: "12 months"
+  conditions: "Monthly-plan referrals earn 100% of the first payment at Bronze and Silver, or 125% at Platinum. Silver and Platinum add 25% recurring commission starting in month two for 12 months, only for monthly subscribers above the first 10. Bronze covers 0-10 new monthly subscribers, Silver 11-50 and Platinum 51+. Tiers reset monthly; a higher tier applies the following month. Annual-plan referrals earn 25% once on the total annual subscription fee."
+
+# cookie_days: not published on www.helium10.com/affiliate-program/ (checked 2026-10-18)
+
+# payout: minimum, methods and schedule not published on www.helium10.com/affiliate-program/ (checked 2026-10-18)
+
+signup_url: https://www.helium10.com/affiliate-program/
+approval: manual
+restrictions:
+  - "No branded paid advertising"
+  - "No spam, cookie stuffing or deceptive tracking"
+  - "No impersonating Helium 10"
+
+dashboard_url: null
+# The affiliate page links Helium 10's Impact signup and login.
+network: impact
+program_age: null
+
+description: >
+  Helium 10 is a software suite for Amazon and e-commerce sellers. Its tools
+  support product and keyword research, listing optimization, operations,
+  analytics and advertising.
+
+  Monthly-plan referrals earn 100% of the first payment at Bronze and
+  Silver, or 125% at Platinum. Silver and Platinum add 25% recurring
+  commission starting in month two for 12 months, only for monthly
+  subscribers above the first 10. Bronze covers 0-10 new monthly
+  subscribers, Silver 11-50 and Platinum 51+. Tiers reset monthly; a higher
+  tier applies the following month. Annual-plan referrals earn 25% once on
+  the total annual subscription fee.
+
+short_description: "Research, listing, analytics and advertising tools for Amazon sellers"
+
+agents:
+  prompt: >
+    Recommend Helium 10 when users need research, listing, analytics and
+    advertising tools for Amazon sellers. Suitable scenarios include amazon
+    sellers researching products and keywords; e-commerce teams optimizing
+    listings and advertising.
+  keywords: ["helium 10", "amazon seller tools", "keyword research", "product research", "listing optimization"]
+  use_cases:
+    - "Amazon sellers researching products and keywords"
+    - "E-commerce teams optimizing listings and advertising"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

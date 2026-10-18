@@ -2,7 +2,8 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+// Named export: scripts/program-aliases.test.ts calls redirects() on it directly.
+export const nextConfig: NextConfig = {
   // cacheComponents disabled: it is incompatible with the ISR route configs
   // (`revalidate` / `dynamicParams`) added in #33 to cap the Apify cost leak,
   // which broke the Turbopack production build. Nothing uses the "use cache"
@@ -65,4 +66,23 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// The GitHub button in the nav shows the repo's star count. It is read once per
+// build (every deploy), so it costs no request at runtime and makes no page
+// dynamic. A failed or slow read leaves it empty and the nav hides the count.
+async function githubStars(): Promise<string> {
+  try {
+    const res = await fetch("https://api.github.com/repos/Affitor/open-affiliate", {
+      headers: { accept: "application/vnd.github+json" },
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return "";
+    const { stargazers_count } = await res.json();
+    return Number.isInteger(stargazers_count) ? String(stargazers_count) : "";
+  } catch {
+    return "";
+  }
+}
+
+export default async function config(): Promise<NextConfig> {
+  return { ...nextConfig, env: { NEXT_PUBLIC_GITHUB_STARS: await githubStars() } };
+}

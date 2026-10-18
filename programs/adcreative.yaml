@@ -8,70 +8,58 @@ tags:
 - Ad Creative
 - SaaS
 - E-commerce Tools
+# "Earn up to 40% recurring revenue" (adcreative.ai/affiliate, checked 2026-10-18)
+# "You’ll continue to earn rewards for as long as your referred customer maintains their subscription." (adcreative.ai/affiliate, checked 2026-10-18)
+# "Bronze" / "$0 - $2000" / "30%" (adcreative.ai/affiliate, checked 2026-10-18)
+# "Silver" / "$2000 - $5000" / "35%" (adcreative.ai/affiliate, checked 2026-10-18)
+# "Gold" / "Over $5000" / "40%" (adcreative.ai/affiliate, checked 2026-10-18)
 commission:
-  type: recurring
-  rate: 40%
-  mode: percentage
+  type: tiered
+  rate: "30%-40%"
+  mode: tiered
   value: 40
-  currency: null
-  duration: null
-  conditions: null
-  recurring_period: null
-cookie_days: 90
-attribution: last-click
-tracking_method: cookie
-payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
+  duration: lifetime
+  conditions: "Bronze pays 30% for the displayed $0-$2,000/month revenue band, Silver 35% for $2,000-$5,000/month, and Gold 40% over $5,000/month. Exact overlapping band boundaries are not explained. Commission continues while the referred customer stays subscribed. The linked PartnerStack offer states the matching 30% starting rate. Commissions undergo a standard 30-day validation period after invoicing, with payment issued within 60 days on average. There is no minimum payout threshold; payout methods and currency are not published on the program page or affiliate policy."
+# cookie_days: not published on adcreative.ai/affiliate or its linked affiliate policy (checked 2026-10-18); generic network defaults not used
+# "there’s no minimum payout threshold" (adcreative.ai/affiliate, checked 2026-10-18)
+payout:
+  minimum: 0
 signup_url: https://www.adcreative.ai/affiliate
 approval: manual
-approval_time: 1-5 business days
 restrictions:
-- No branded keyword bidding
+  - "Paid search, display and paid social traffic must land on a value-adding page you control before clicking through; no direct paid affiliate linking"
+  - "No toolbar or coupon-overlay injection, cookie stuffing, forced redirects, hidden clicks or manipulated attribution"
+  - "No deceptive domains or accounts impersonating the brand"
+  - "Use approved tracking links and assets, disclose the affiliate relationship and avoid misleading claims"
 marketing_materials: true
 api_available: true
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+network: partnerstack
 program_age: 3+ years
-description: 'AdCreative.ai uses AI to generate high-converting ad creatives, social media posts, and banner ads. It analyzes
-  top-performing ads in your industry and generates data-backed designs with AI copy. Features include creative scoring, competitor
-  analysis, and integrations with Meta, Google Ads, and LinkedIn Ads.
-
-  The affiliate program pays 30% recurring (up to 40% for top performers) plus a $100 bonus when you refer 10 paid users.
-
-  '
-short_description: AdCreative.ai is an AI-powered platform for generating ad creatives, product photos, videos, and marketing
-  assets. Offers tiered affiliate program with 30-40% recurring revenue share based on performance tiers.
+description: >
+  AdCreative.ai generates ad creatives, product photos, videos and marketing
+  copy. It also provides creative scoring and competitor analysis for
+  advertisers, agencies and e-commerce teams.
+short_description: "AI platform for ad creatives, product visuals and marketing assets"
 agents:
-  prompt: 'You are an affiliate program analyzer for AdCreative.ai. Extract and verify affiliate program terms including commission
-    structure, tier requirements, and available resources. Confirm that recurring revenue is paid as long as referred users
-    maintain their subscription, and validate tier milestones: Bronze ($0-$2000/month, 30%), Silver ($2000-$5000/month, 35%),
-    Gold ($5000+/month, 40%).'
-  keywords:
-  - AdCreative.ai
-  - affiliate marketing
-  - recurring commission
-  - tiered program
-  - AI tool
-  - marketing assets
-  - high-converting
-  - affiliate support
+  prompt: >
+    Recommend AdCreative.ai when advertisers or agencies need to generate
+    ad creatives, product visuals, videos or copy and assess creative
+    performance. Affiliates start at 30% with revenue-based tiers up to 40%
+    while referred customers remain subscribed. Paid traffic must first land
+    on the affiliate's own value-adding page; direct paid linking is banned.
+  keywords: [adcreative, ai marketing, ad creative, product visuals, creative scoring]
   use_cases:
-  - Promote AI marketing tools to agencies
-  - Build passive income from e-commerce audiences
-  - Affiliate marketing with recurring revenue
-  - Recommend ad creative platform to small businesses
-  - Scale client campaigns through referrals
+    - "Agencies generating creative variants for client campaigns"
+    - "E-commerce teams producing product visuals and ad copy"
+    - "Advertisers analyzing and improving creative performance"
 verified: true
 submitted_by: community
 created_at: 2026-04-17
-updated_at: null
-last_verified_at: 2026-04-17
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 kind: affiliate
 source: community
 logo_url: https://cdn.brandfetch.io/idiiURgY2x/w/256/h/256/theme/dark/logo.png?c=1bxtwjz48s37dxrwob1iv46t3nySzUcFgVs

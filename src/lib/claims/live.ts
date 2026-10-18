@@ -1,20 +1,37 @@
 import { Resolver } from "node:dns/promises"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
 import { claimEnvReady } from "./rules"
-import { MAX_ATTEMPTS, RETENTION_DAYS, type ClaimDeps, type ClaimProgram, type ClaimRow, type ClaimStore } from "./service"
+import {
+  MAIL_TEMPLATES,
+  MAX_ATTEMPTS,
+  RETENTION_DAYS,
+  type AddMemberResult,
+  type ClaimDeps,
+  type ClaimProgram,
+  type ClaimRow,
+  type ClaimStore,
+  type EditRow,
+  type MemberRow,
+  type SigninCodeRow,
+} from "./service"
 
 /**
- * affitor.com is the domain verified in the Resend account; openaffiliate.dev
- * is not.
+ * Claim mail comes from OpenAffiliate's own domain (Sơn, 17/10). The domain
+ * must be verified in Resend and OA_RESEND_API_KEY must be allowed to send
+ * from it before the flag goes on. Reply-to stays the address approved in the
+ * v1 pack until a monitored openaffiliate.dev inbox exists.
  */
-const CLAIM_FROM = "OpenAffiliate <claims@affitor.com>"
+const CLAIM_FROM = "OpenAffiliate <claims@openaffiliate.dev>"
 const CLAIM_REPLY_TO = "support@affitor.com"
+const ALLOWED_TEMPLATES: ReadonlySet<string> = new Set(MAIL_TEMPLATES)
 
 const DAY = 24 * 60 * 60 * 1000
 
 function supabaseStore(db: SupabaseClient): ClaimStore {
   const claims = () => db.from("program_claims")
   const events = () => db.from("claim_events")
+  const members = () => db.from("claim_members")
+  const signinCodes = () => db.from("claim_signin_codes")
   const check = <T extends { error: unknown }>(result: T): T => {
     if (result.error) throw result.error
     return result
@@ -64,35 +81,32 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       )
       return (data ?? []).length === 1
     },
-    async confirm(id, now) {
-      const result = await claims()
-        .update({ verified_at: now.toISOString(), status: "active" })
-        .eq("id", id)
-        .eq("status", "pending")
-        .is("verified_at", null)
-        .gt("expires_at", now.toISOString())
-        .select("id")
-      // program_claims_one_owner_per_domain
-      if (result.error?.code === "23505") return "conflict"
-      check(result)
-      return (result.data ?? []).length === 1 ? "ok" : "gone"
+    async confirm(id) {
+      // Migration 011: activation, member 1 and clearing the claim's copy of
+      // the address in one transaction (the database clock decides expiry).
+      const { data } = check(await db.rpc("claim_confirm", { p_claim_id: id }))
+      const out = data as { result?: unknown; member_id?: unknown } | null
+      if (out?.result === "ok" && typeof out.member_id === "string") return { result: "ok", memberId: out.member_id }
+      if (out?.result === "gone" || out?.result === "conflict") return { result: out.result }
+      throw Object.assign(new Error("claim_confirm returned an unexpected value"), { code: "unexpected_result" })
     },
-    async release(id) {
-      check(await claims().update({ status: "released", email: null }).eq("id", id))
+    async release(claimId, actorId) {
+      const { data } = check(await db.rpc("claim_release", { p_claim_id: claimId, p_actor: actorId }))
+      return data === true
     },
     async submitEdit(edit, dailyLimit) {
-      // Migration 010: lock the claim row, check the quota, insert the edit and
-      // its terms.submitted event, all in one transaction.
+      // Migration 011: lock the claim row, re-check the member, check the
+      // quota, insert the edit and its terms.submitted event, all at once.
       const { data } = check(
-        await db.rpc("claim_submit_edit", {
-          p_claim_id: edit.claim_id,
+        await db.rpc("claim_member_submit_edit", {
+          p_member_id: edit.member_id,
           p_slug: edit.slug,
           p_fields: edit.fields,
           p_daily_limit: dailyLimit,
         }),
       )
       if (data === "ok" || data === "quota" || data === "not_owner") return data
-      throw Object.assign(new Error("claim_submit_edit returned an unexpected value"), { code: "unexpected_result" })
+      throw Object.assign(new Error("claim_member_submit_edit returned an unexpected value"), { code: "unexpected_result" })
     },
     // Same cutoffs as the daily pg_cron job in migration 009; this covers a
     // database where pg_cron is not enabled.
@@ -100,6 +114,108 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       const before = (days: number) => new Date(now.getTime() - days * DAY).toISOString()
       check(await claims().delete().is("verified_at", null).lt("created_at", before(RETENTION_DAYS.unverifiedClaims)))
       check(await events().delete().lt("created_at", before(RETENTION_DAYS.events)))
+      check(await signinCodes().delete().lt("created_at", before(RETENTION_DAYS.signinCodes)))
+      check(await members().delete().eq("status", "removed").lt("removed_at", before(RETENTION_DAYS.removedMembers)))
+    },
+    async addMember(claimId, email, addedBy, max) {
+      // Migration 011: lock the claim row, check the cap, insert, all at once.
+      const { data } = check(
+        await db.rpc("claim_add_member", {
+          p_claim_id: claimId,
+          p_email: email.toLowerCase(),
+          p_added_by: addedBy,
+          p_max: max,
+        }),
+      )
+      const out = data as { result?: unknown; id?: unknown } | null
+      if (out?.result === "ok" && typeof out.id === "string") return { result: "ok", id: out.id }
+      if (out?.result === "full" || out?.result === "exists" || out?.result === "not_owner") {
+        return { result: out.result } as AddMemberResult
+      }
+      throw Object.assign(new Error("claim_add_member returned an unexpected value"), { code: "unexpected_result" })
+    },
+    async getMember(id) {
+      const { data } = check(await members().select("*").eq("id", id).maybeSingle())
+      return (data as MemberRow | null) ?? null
+    },
+    async findActiveMembers(email) {
+      // Member addresses are stored lowercase.
+      const { data } = check(
+        await members()
+          .select("*")
+          .eq("email", email.toLowerCase())
+          .eq("status", "active")
+          .order("created_at", { ascending: true })
+          .limit(20),
+      )
+      return (data ?? []) as MemberRow[]
+    },
+    async listMembers(claimId) {
+      const { data } = check(
+        await members().select("*").eq("claim_id", claimId).eq("status", "active").order("created_at", { ascending: true }),
+      )
+      return (data ?? []) as MemberRow[]
+    },
+    async removeMember(claimId, actorId, targetId) {
+      const { data } = check(
+        await db.rpc("claim_remove_member", { p_claim_id: claimId, p_actor: actorId, p_target: targetId }),
+      )
+      if (data === "ok" || data === "not_owner" || data === "self" || data === "not_found") return data
+      throw Object.assign(new Error("claim_remove_member returned an unexpected value"), { code: "unexpected_result" })
+    },
+    async addSigninCode(row) {
+      check(await signinCodes().insert(row))
+    },
+    async bindSigninCode(id, memberId, codeHash, now) {
+      const { data } = check(
+        await signinCodes()
+          .update({ member_id: memberId, code_hash: codeHash })
+          .eq("id", id)
+          .is("member_id", null)
+          .is("used_at", null)
+          .gt("expires_at", now.toISOString())
+          .select("id"),
+      )
+      return (data ?? []).length === 1
+    },
+    async getSigninCode(id) {
+      const { data } = check(await signinCodes().select("*").eq("id", id).maybeSingle())
+      return (data as SigninCodeRow | null) ?? null
+    },
+    async takeSigninAttempt(id, seen, now) {
+      const { data } = check(
+        await signinCodes()
+          .update({ attempts: seen + 1 })
+          .eq("id", id)
+          .eq("attempts", seen)
+          .lt("attempts", MAX_ATTEMPTS)
+          .is("used_at", null)
+          .gt("expires_at", now.toISOString())
+          .select("id"),
+      )
+      return (data ?? []).length === 1
+    },
+    async useSigninCode(id, now) {
+      const { data } = check(
+        await signinCodes()
+          .update({ used_at: now.toISOString() })
+          .eq("id", id)
+          .is("used_at", null)
+          .gt("expires_at", now.toISOString())
+          .select("id"),
+      )
+      return (data ?? []).length === 1
+    },
+    async listEdits(claimId) {
+      const { data } = check(
+        await db
+          .from("claim_edits")
+          .select("id, slug, kind, status, pr_url, fields, created_at")
+          .eq("claim_id", claimId)
+          .order("created_at", { ascending: false })
+          .limit(50),
+      )
+      return (data ?? []) as EditRow[]
     },
     async countProgramEvents(slug, type, since) {
       const { count, error } = await db
@@ -116,6 +232,8 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
 /** The real dependencies, or null when any claim secret is missing (routes answer 503). */
 export function liveClaimDeps(
   getProgram: (slug: string) => ClaimProgram | undefined,
+  programsOnDomain: (domain: string) => ClaimProgram[],
+  afterResponse: (task: () => Promise<void>) => void,
   env: Record<string, string | undefined> = process.env,
 ): ClaimDeps | null {
   if (!claimEnvReady(env)) return null
@@ -129,6 +247,8 @@ export function liveClaimDeps(
     secret: env.CLAIM_SIGNING_SECRET!,
     now: () => new Date(),
     getProgram,
+    programsOnDomain,
+    afterResponse,
     async verifyTurnstile(token, ip) {
       const form = new URLSearchParams({ secret: env.TURNSTILE_SECRET_KEY!, response: token })
       if (ip !== "unknown") form.set("remoteip", ip)
@@ -150,6 +270,12 @@ export function liveClaimDeps(
       }
     },
     async sendEmail(mail) {
+      // Only mail someone asked for. Outreach never goes through this sender
+      // (Resend's acceptable-use policy forbids it on this shared account).
+      if (!ALLOWED_TEMPLATES.has(mail.template)) {
+        console.error("claims: email refused, template not allowed")
+        return false
+      }
       try {
         const res = await fetch("https://api.resend.com/emails", {
           method: "POST",

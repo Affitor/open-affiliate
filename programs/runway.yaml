@@ -4,6 +4,7 @@ url: https://runway.com
 category: AI
 tags: [ai, ai-video, video-generation, creative, filmmaking]
 
+# "You earn $15 for every new subscriber who purchases a paid Runway plan with your code" (runway.com/affiliate-program, checked 2026-10-18)
 commission:
   type: one-time
   rate: "$15 per new subscriber"
@@ -11,14 +12,14 @@ commission:
   value: 15
   currency: USD
   duration: null
-  conditions: "Paid for every new subscriber who buys a paid Runway plan with your unique code; no cap. Your audience gets 25% off any plan."
+  conditions: "Earned for every new subscriber who buys a paid Runway plan with your unique code; no cap. Your audience gets 25% off any plan. Payouts go out on the first of every month through Stripe; bank-country eligibility is checked during application."
 
-# 0 = no cookie: attribution is by the partner's discount code at checkout (runway.com/affiliate-program, checked 2026-10-12)
-cookie_days: 0
-attribution: last-click
-tracking_method: server-side
-
-# payout minimum, schedule and methods: not published on runway.com/affiliate-program (checked 2026-10-12)
+# cookie_days: not published on runway.com/affiliate-program (checked 2026-10-18); discount-code attribution does not establish a zero-day window
+# "Payouts go out on the first of every month via Stripe." (runway.com/affiliate-program, checked 2026-10-18)
+# payout.minimum/currency: not published on runway.com/affiliate-program (checked 2026-10-18)
+payout:
+  frequency: monthly
+  methods: [stripe]
 
 signup_url: https://runway.com/affiliate-program
 approval: manual
@@ -65,8 +66,8 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
 source: community

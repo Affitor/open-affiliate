@@ -35,10 +35,10 @@ export const SESSION_TTL_MS = 7 * DAY
 /**
  * /privacy promises deletion within 30 days (unverified claims) and 12 months
  * (events). Rows older than these cutoffs are deleted by the daily pg_cron job
- * in migration 009 and by prune() on claim requests, so with a daily run every
+ * in migrations 009/011 and by prune() on claim requests, so with a daily run every
  * row is gone by day 30 / day 365. Keep the two in step with the migration.
  */
-export const RETENTION_DAYS = { unverifiedClaims: 29, events: 364 } as const
+export const RETENTION_DAYS = { unverifiedClaims: 29, events: 364, signinCodes: 1, removedMembers: 29 } as const
 /** Manual-review requests are never verified, so the retention prune removes them. */
 const MANUAL_TTL_MS = 30 * DAY
 export const MAX_ATTEMPTS = 5
@@ -60,7 +60,19 @@ export const LIMITS = {
   codesSiteDay: 100,
   manualPerEmailDay: 2,
   editsPerClaimDay: 10,
+  /**
+   * Sign-in requests per address per 24 hours, counted whether or not the
+   * address is on a team, and answered the same way either way.
+   */
+  signinPerEmailDay: 3,
+  /** Sign-in code emails per account per 24 hours. */
+  signinCodesPerAccountDay: 10,
+  /** Teammate additions per account per 24 hours (each sends one email). */
+  memberAddsPerAccountDay: 5,
 } as const
+
+/** People who may sign in to one account, the person who claimed included. */
+export const MAX_MEMBERS = 4
 
 export type ClaimMethod = "email" | "dns" | "manual"
 export type ClaimStatus = "pending" | "active" | "released" | "revoked" | "review"
@@ -103,6 +115,37 @@ export interface EventFilter {
   ip_hash?: string
 }
 
+export interface MemberRow {
+  id: string
+  claim_id: string
+  email: string | null
+  status: "active" | "removed"
+  added_by: string | null
+  created_at: string
+}
+
+export interface SigninCodeRow {
+  id: string
+  /** null when the address is on no team; such a row never verifies. */
+  member_id: string | null
+  code_hash: string
+  attempts: number
+  expires_at: string
+  used_at: string | null
+}
+
+export interface EditRow {
+  id: string
+  slug: string
+  kind: "edit" | "new"
+  status: string
+  pr_url: string | null
+  fields: Record<string, unknown>
+  created_at: string
+}
+
+export type AddMemberResult = { result: "ok"; id: string } | { result: "full" | "exists" | "not_owner" }
+
 export interface ClaimStore {
   addEvent(event: ClaimEvent): Promise<number>
   removeEvent(id: number): Promise<void>
@@ -117,33 +160,74 @@ export interface ClaimStore {
    */
   takeAttempt(id: string, seen: number, now: Date): Promise<boolean>
   /**
-   * Pending to active, exactly once: `verified_at IS NULL AND status =
-   * 'pending' AND expires_at > now`. "conflict" when the domain already has
-   * an active owner (unique index).
+   * Pending to active, exactly once (`verified_at IS NULL AND status =
+   * 'pending' AND expires_at > now`), in the same transaction as member 1
+   * (the claim's address) and clearing the claim's copy of that address
+   * (migration 011: claim_confirm). "conflict" when the domain already has an
+   * active owner.
    */
-  confirm(id: string, now: Date): Promise<"ok" | "gone" | "conflict">
-  /** Ends the claim and forgets the owner's address. */
-  release(id: string): Promise<void>
+  confirm(id: string, now: Date): Promise<{ result: "ok"; memberId: string } | { result: "gone" | "conflict" }>
   /**
-   * Queues an owner edit and its `terms.submitted` event, unless the claim
-   * already has `dailyLimit` edits in the last 24 hours or is no longer
-   * active. Quota check and both writes are one atomic step (migration 010:
-   * claim_submit_edit, under a per-claim row lock), so parallel submissions
-   * cannot pass the quota together.
+   * The actor releases the claim: every member removed, every address
+   * cleared. false when the actor is no longer an active member of an active
+   * claim. Claim row locked, actor re-checked (claim_release).
+   */
+  release(claimId: string, actorId: string): Promise<boolean>
+  /**
+   * Queues a member's edit and its `terms.submitted` event, unless the claim
+   * already has `dailyLimit` edits in the last 24 hours, or the member or the
+   * claim is no longer active. One atomic step under the claim row lock
+   * (claim_member_submit_edit), so parallel submissions cannot pass the quota
+   * together and a removed member cannot slip one in.
    */
   submitEdit(
-    edit: { claim_id: string; slug: string; fields: Record<string, unknown> },
+    edit: { member_id: string; slug: string; fields: Record<string, unknown> },
     dailyLimit: number,
   ): Promise<"ok" | "quota" | "not_owner">
   /** Unverified claims older than 30 days and events older than a year. */
   prune(now: Date): Promise<void>
   /** Program page events for the owner panel; null when unavailable (the panel hides it). */
   countProgramEvents(slug: string, type: string, since: Date): Promise<number | null>
+  /**
+   * `addedBy` adds an address to their team under the claim row lock
+   * (claim_add_member), so parallel adds cannot pass `max` together.
+   * "exists": already on this team. "not_owner": the adder is no longer an
+   * active member of an active claim.
+   */
+  addMember(claimId: string, email: string, addedBy: string, max: number): Promise<AddMemberResult>
+  getMember(id: string): Promise<MemberRow | null>
+  /** Every active membership of an address (case-insensitive), oldest first. */
+  findActiveMembers(email: string): Promise<MemberRow[]>
+  listMembers(claimId: string): Promise<MemberRow[]>
+  /**
+   * The actor removes a teammate, address cleared, under the claim row lock
+   * with the actor re-checked (claim_remove_member).
+   */
+  removeMember(claimId: string, actorId: string, targetId: string): Promise<"ok" | "not_owner" | "self" | "not_found">
+  addSigninCode(row: { id: string; member_id: string | null; code_hash: string; expires_at: string }): Promise<void>
+  /** Binds an unbound, unused, unexpired sign-in code row to a member and a real code, exactly once. */
+  bindSigninCode(id: string, memberId: string, codeHash: string, now: Date): Promise<boolean>
+  getSigninCode(id: string): Promise<SigninCodeRow | null>
+  /** Same compare-and-swap as takeAttempt, on an unused, unexpired sign-in code. */
+  takeSigninAttempt(id: string, seen: number, now: Date): Promise<boolean>
+  /** Marks a sign-in code used, exactly once. */
+  useSigninCode(id: string, now: Date): Promise<boolean>
+  /** Edits queued for a claim, newest first. */
+  listEdits(claimId: string): Promise<EditRow[]>
 }
 
 export type ClaimProgram = Pick<Program, "slug" | "name" | "url" | "signupUrl" | "commission">
 
+/**
+ * Every email the claim flow may send. Each is a reply to something the
+ * recipient (or their teammate) just did on the site. live.ts refuses any
+ * other template, so outreach can never go out through this sender.
+ */
+export const MAIL_TEMPLATES = ["claim-code", "signin-code", "member-added"] as const
+export type MailTemplate = (typeof MAIL_TEMPLATES)[number]
+
 export interface OutgoingEmail {
+  template: MailTemplate
   to: string
   subject: string
   text: string
@@ -158,17 +242,24 @@ export interface TurnstileResult {
 }
 
 /** One Turnstile action per step, so a token solved for one form cannot be spent on another. */
-export type TurnstileAction = "send-code" | "dns-start" | "manual"
+export type TurnstileAction = "send-code" | "dns-start" | "manual" | "signin"
 
 export interface ClaimDeps {
   store: ClaimStore
   secret: string
   now: () => Date
   getProgram: (slug: string) => ClaimProgram | undefined
+  /** Every listing whose website is on this registrable domain. */
+  programsOnDomain: (domain: string) => ClaimProgram[]
   /** siteverify's answer, or null when it could not be reached. */
   verifyTurnstile: (token: string, ip: string) => Promise<TurnstileResult | null>
   sendEmail: (mail: OutgoingEmail) => Promise<boolean>
   resolveTxt: (domain: string) => Promise<string[][]>
+  /**
+   * Runs work after the response is sent (Next's after()). Sign-in mail goes
+   * this way so a member's answer takes no longer than a stranger's.
+   */
+  afterResponse: (task: () => Promise<void>) => void
 }
 
 // ---------------------------------------------------------------- crypto
@@ -186,12 +277,19 @@ function same(a: string, b: string | null | undefined): boolean {
 
 const hashCode = (secret: string, claimId: string, code: string) => mac(secret, `code:${claimId}:${code}`)
 const hashDnsToken = (secret: string, claimId: string, token: string) => mac(secret, `dns:${claimId}:${token}`)
+const hashSigninCode = (secret: string, codeId: string, code: string) => mac(secret, `signin:${codeId}:${code}`)
 const hashIdentity = (secret: string, kind: "ip" | "email", value: string) => mac(secret, `${kind}:${value}`).slice(0, 32)
 
 // ---------------------------------------------------------------- cookies
 
+/**
+ * Holds a claim_members id. Only /api/claims reads it: /account is a static
+ * page that calls the API from the same site, so the cookie stays Strict and
+ * scoped to the API path.
+ */
 const SESSION_COOKIE = "oa_claim_session"
 const PENDING_COOKIE = "oa_claim_pending"
+const SIGNIN_PENDING_COOKIE = "oa_signin_pending"
 const COOKIE_ATTRS = "Path=/api/claims; HttpOnly; Secure; SameSite=Strict"
 
 function signedCookie(secret: string, name: string, id: string, now: Date, ttlMs: number): string {
@@ -261,6 +359,39 @@ export function codeEmail(brand: string, code: string): Pick<OutgoingEmail, "sub
     .map((line) => `<p>${line}</p>`)
     .join("\n")
   return { subject: `Your OpenAffiliate code: ${code}`, text, html }
+}
+
+const paragraphs = (lines: string[]) => lines.map((line) => `<p>${line}</p>`).join("\n")
+
+/** Sent only to an address that is on a team and just asked to sign in. */
+export function signinEmail(code: string): Pick<OutgoingEmail, "subject" | "text" | "html"> {
+  const codeLine = (shown: string) => `Your code to sign in to OpenAffiliate is ${shown}. Enter it on openaffiliate.dev within 10 minutes.`
+  const after = [
+    "If this wasn't you, ignore this email. Nobody can sign in without the code.",
+    "OpenAffiliate · openaffiliate.dev",
+  ]
+  return {
+    subject: `Your OpenAffiliate sign-in code: ${code}`,
+    text: ["Hi,", codeLine(code), ...after].join("\n\n"),
+    html: paragraphs(["Hi,", codeLine(`<strong>${code}</strong>`), ...after]),
+  }
+}
+
+/** Sent once to an address a teammate just added. Names nobody, links nowhere. */
+export function memberAddedEmail(domain: string): Pick<OutgoingEmail, "subject" | "text" | "html"> {
+  const lines = [
+    "Hi,",
+    `A teammate added you to the ${domain} team on OpenAffiliate, so you can update your company's affiliate program listings.`,
+    "Sign in at openaffiliate.dev/account with this address. There is no password: we email you a code each time.",
+    "If you don't know why you got this, reply and we'll remove you.",
+    "OpenAffiliate · openaffiliate.dev",
+  ]
+  return {
+    subject: `You were added to the ${domain} team on OpenAffiliate`,
+    text: lines.join("\n\n"),
+    // domain comes from tldts (letters, digits, dots, hyphens); escaped anyway.
+    html: paragraphs(lines.map(escapeHtml)),
+  }
 }
 
 // ---------------------------------------------------------------- shared steps
@@ -342,6 +473,8 @@ async function reserveCode(deps: ClaimDeps, who: Identity, claimId: string): Pro
     [{ since }, LIMITS.codesSiteDay, "We cannot send more codes today. Try again tomorrow."],
   ]
   const counts = await Promise.all(windows.map(([filter]) => deps.store.countEvents({ ...filter, type: "code.sent" })))
+  // The site-wide ceiling is one budget for claim and sign-in codes.
+  counts[windows.length - 1] += await deps.store.countEvents({ since, type: "signin.code_sent" })
   const over = windows.findIndex(([, cap], i) => counts[i] > cap)
   if (over === -1) return id
   await deps.store.removeEvent(id)
@@ -352,9 +485,13 @@ async function reserveCode(deps: ClaimDeps, who: Identity, claimId: string): Pro
 
 async function confirmClaim(deps: ClaimDeps, claim: ClaimRow): Promise<Response> {
   const now = deps.now()
+  // Activation and member 1 (the person who claimed) are one transaction.
   const result = await deps.store.confirm(claim.id, now)
-  if (result === "conflict") return alreadyClaimed()
-  if (result === "gone") return fail(410, "used_or_expired", "This has expired or was already used. Start again, or ask for a manual review.")
+  if (result.result !== "ok") {
+    return result.result === "conflict"
+      ? alreadyClaimed()
+      : fail(410, "used_or_expired", "This has expired or was already used. Start again, or ask for a manual review.")
+  }
   await deps.store.addEvent({
     type: "claim.confirmed",
     claim_id: claim.id,
@@ -363,7 +500,8 @@ async function confirmClaim(deps: ClaimDeps, claim: ClaimRow): Promise<Response>
     meta: { method: claim.method },
   })
   return reply(200, { ok: true, domain: claim.domain }, [
-    signedCookie(deps.secret, SESSION_COOKIE, claim.id, now, SESSION_TTL_MS),
+    // A code mailed to an address at the domain proves that mailbox; a DNS record does not.
+    sessionCookie(deps, result.memberId, claim.method === "email", now),
     clearCookie(PENDING_COOKIE),
   ])
 }
@@ -375,15 +513,47 @@ async function pendingClaim(req: Request, deps: ClaimDeps, slug: string, method:
   return claim && claim.slug === slug && claim.method === method ? claim : null
 }
 
-async function ownerOf(req: Request, deps: ClaimDeps, slug: string): Promise<{ claim: ClaimRow; target: Target } | null> {
+/**
+ * A session proven by a mailbox (an email claim, or a sign-in code) is marked
+ * inside the signed value; one proven only by a DNS record is not. A DNS
+ * record proves the domain, not the contact address typed next to it, so a
+ * DNS session never reaches other teams that address is on.
+ */
+const MAILBOX_MARK = "m_"
+
+function sessionCookie(deps: ClaimDeps, memberId: string, mailbox: boolean, now: Date): string {
+  return signedCookie(deps.secret, SESSION_COOKIE, `${mailbox ? MAILBOX_MARK : ""}${memberId}`, now, SESSION_TTL_MS)
+}
+
+/**
+ * The signed-in member and their account. Member and claim are re-read on
+ * every request, so removing a member, releasing or revoking the claim ends
+ * the session at once.
+ */
+async function accountOf(
+  req: Request,
+  deps: ClaimDeps,
+): Promise<{ member: MemberRow; claim: ClaimRow; mailbox: boolean } | null> {
+  const value = readSignedCookie(req, deps.secret, SESSION_COOKIE, deps.now())
+  if (!value) return null
+  const mailbox = value.startsWith(MAILBOX_MARK)
+  const member = await deps.store.getMember(mailbox ? value.slice(MAILBOX_MARK.length) : value)
+  if (!member || member.status !== "active") return null
+  const claim = await deps.store.getClaim(member.claim_id)
+  if (!claim || claim.status !== "active" || !claim.verified_at) return null
+  return { member, claim, mailbox }
+}
+
+async function ownerOf(
+  req: Request,
+  deps: ClaimDeps,
+  slug: string,
+): Promise<{ member: MemberRow; claim: ClaimRow; target: Target } | null> {
   const target = pilotTarget(deps, slug)
   if (!target) return null
-  const id = readSignedCookie(req, deps.secret, SESSION_COOKIE, deps.now())
-  if (!id) return null
-  const claim = await deps.store.getClaim(id)
-  // Checked on every request, so a release or a revoke ends the session at once.
-  if (!claim || claim.status !== "active" || !claim.verified_at || claim.domain !== target.domain) return null
-  return { claim, target }
+  const account = await accountOf(req, deps)
+  if (!account || account.claim.domain !== target.domain) return null
+  return { ...account, target }
 }
 
 // ---------------------------------------------------------------- actions
@@ -454,7 +624,12 @@ async function sendCode(req: Request, deps: ClaimDeps): Promise<Response> {
     status: "pending",
     note: null,
   })
-  const sent = await deps.sendEmail({ to: email, ...codeEmail(target.program.name, code), idempotencyKey: claimId })
+  const sent = await deps.sendEmail({
+    template: "claim-code",
+    to: email,
+    ...codeEmail(target.program.name, code),
+    idempotencyKey: claimId,
+  })
   if (!sent) {
     // The claim row stays unusable (nobody holds its code) and is pruned later.
     await deps.store.removeEvent(reservation)
@@ -641,7 +816,7 @@ async function submitTerms(req: Request, deps: ClaimDeps): Promise<Response> {
   // writes to the registry.
   const result = await deps.store.submitEdit(
     {
-      claim_id: owner.claim.id,
+      member_id: owner.member.id,
       slug: body.slug,
       fields: { ...terms, mode: derived.mode, value: derived.value, flags: editFlags(owner.target.program, terms) },
     },
@@ -652,14 +827,265 @@ async function submitTerms(req: Request, deps: ClaimDeps): Promise<Response> {
   return reply(200, { ok: true })
 }
 
+/** Ends the account: every member is signed out and the listings show as unclaimed again. */
 async function release(req: Request, deps: ClaimDeps): Promise<Response> {
-  const body = await readBody(req, SlugBody)
+  const body = await readBody(req, ReleaseBody)
   if (!body) return badRequest()
-  const owner = await ownerOf(req, deps, body.slug)
-  if (!owner) return fail(401, "not_owner", "Verify that you run this listing first.")
-  await deps.store.release(owner.claim.id)
-  await deps.store.addEvent({ type: "claim.released", claim_id: owner.claim.id, slug: body.slug, domain: owner.claim.domain })
+  const account = await accountOf(req, deps)
+  if (!account) return notSignedIn()
+  const { member, claim } = account
+  // The page names the account it shows (a slug on the claim page, a domain
+  // on /account); a session switched in another tab must not release a
+  // different one.
+  const expected = body.slug ? pilotTarget(deps, body.slug)?.domain : body.domain
+  if (expected !== claim.domain) return accountChanged()
+  if (!(await deps.store.release(claim.id, member.id))) return notSignedIn()
+  await deps.store.addEvent({ type: "claim.released", claim_id: claim.id, slug: claim.slug, domain: claim.domain })
   return reply(200, { ok: true }, [clearCookie(SESSION_COOKIE)])
+}
+
+// ---------------------------------------------------------------- account (v4)
+
+const notSignedIn = () => fail(401, "not_signed_in", "Sign in first.")
+const accountChanged = () => fail(409, "account_changed", "You are signed in to another account now. Reload this page.")
+const domainField = z.string().min(1).max(253)
+const SigninBody = z.object({ email: z.string().max(320), turnstileToken: turnstileField })
+const CodeBody = z.object({ code: z.string().max(20) })
+const ReleaseBody = z
+  .object({ slug: slugField.optional(), domain: domainField.optional() })
+  .refine((b) => Boolean(b.slug) !== Boolean(b.domain))
+const MemberEmailBody = z.object({ domain: domainField, email: z.string().max(320) })
+const MemberIdBody = z.object({ domain: domainField, memberId: z.string().uuid() })
+const SwitchBody = z.object({ memberId: z.string().uuid() })
+
+/**
+ * Step 1 of sign-in. Everything before the response is the same for any
+ * address: limits, a code row bound to nobody (the hash of a code nobody was
+ * given), the same body and cookie. Whether the address is on a team is
+ * looked up only after the response is sent; if it is, and the account's and
+ * the site's daily caps allow, the row is bound to the member and a real code
+ * is mailed. Status, body, cookie, timing and the next step therefore say
+ * nothing about membership.
+ */
+async function signinCode(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, SigninBody)
+  if (!body) return badRequest()
+  const email = normalizeEmail(body.email)
+  if (!email) return badEmail()
+  const turnstile = await turnstileFailure(req, deps, body.turnstileToken, "signin")
+  if (turnstile) return turnstile
+
+  const now = deps.now()
+  const emailHash = hashIdentity(deps.secret, "email", email.toLowerCase())
+  const ipHash = hashIdentity(deps.secret, "ip", clientIp(req))
+  await deps.store.addEvent({ type: "signin.requested", email_hash: emailHash, ip_hash: ipHash })
+  const [byIp, byEmail] = await Promise.all([
+    deps.store.countEvents({ type: "signin.requested", since: ago(now, HOUR), ip_hash: ipHash }),
+    deps.store.countEvents({ type: "signin.requested", since: ago(now, DAY), email_hash: emailHash }),
+  ])
+  if (byIp > LIMITS.requestsPerIpHour) return tooMany()
+  if (byEmail > LIMITS.signinPerEmailDay) {
+    return fail(429, "rate_limited", "Too many code requests for this address today. Use the newest code you received, or try again tomorrow.")
+  }
+  await deps.store.prune(now)
+
+  const codeId = randomUUID()
+  await deps.store.addSigninCode({
+    id: codeId,
+    member_id: null,
+    code_hash: hashSigninCode(deps.secret, codeId, randomBytes(16).toString("hex")),
+    expires_at: new Date(now.getTime() + CODE_TTL_MS).toISOString(),
+  })
+  deps.afterResponse(() => mailSigninCode(deps, email, codeId))
+  return reply(200, { ok: true }, [signedCookie(deps.secret, SIGNIN_PENDING_COOKIE, codeId, now, CODE_TTL_MS)])
+}
+
+/** After the response: bind the code row to the address's team and mail a real code, within the caps. */
+async function mailSigninCode(deps: ClaimDeps, email: string, codeId: string): Promise<void> {
+  // An address on several teams signs in to the oldest; the account page offers the others.
+  let target: { member: MemberRow; claim: ClaimRow } | null = null
+  for (const m of await deps.store.findActiveMembers(email)) {
+    const claim = await deps.store.getClaim(m.claim_id)
+    if (claim?.status === "active" && claim.verified_at) {
+      target = { member: m, claim }
+      break
+    }
+  }
+  const to = target?.member.email
+  if (!target || !to) return
+  const { member, claim } = target
+
+  const now = deps.now()
+  const since = ago(now, DAY)
+  const reservation = await deps.store.addEvent({ type: "signin.code_sent", claim_id: claim.id, domain: claim.domain })
+  const [forAccount, signinSite, claimSite] = await Promise.all([
+    deps.store.countEvents({ type: "signin.code_sent", since, claim_id: claim.id }),
+    deps.store.countEvents({ type: "signin.code_sent", since }),
+    deps.store.countEvents({ type: "code.sent", since }),
+  ])
+  const overSite = signinSite + claimSite > LIMITS.codesSiteDay
+  if (forAccount > LIMITS.signinCodesPerAccountDay || overSite) {
+    await deps.store.removeEvent(reservation)
+    if (overSite) await deps.store.addEvent({ type: "cap.reached", meta: { cap: LIMITS.codesSiteDay } })
+    return
+  }
+  const code = String(randomInt(0, 1_000_000)).padStart(6, "0")
+  if (!(await deps.store.bindSigninCode(codeId, member.id, hashSigninCode(deps.secret, codeId, code), now))) {
+    await deps.store.removeEvent(reservation)
+    return
+  }
+  const sent = await deps.sendEmail({ template: "signin-code", to, ...signinEmail(code), idempotencyKey: codeId })
+  // A failed send gives the quota back; the person asks again.
+  if (!sent) await deps.store.removeEvent(reservation)
+}
+
+/** Step 2 of sign-in: the code from the email, in the browser that asked for it. */
+async function signinVerify(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, CodeBody)
+  if (!body) return badRequest()
+  const code = body.code.replace(/\s/g, "")
+  if (!/^\d{6}$/.test(code)) return fail(400, "bad_code", "Enter the 6-digit code from the email.")
+  const id = readSignedCookie(req, deps.secret, SIGNIN_PENDING_COOKIE, deps.now())
+  const row = id ? await deps.store.getSigninCode(id) : null
+  if (!row) return fail(401, "no_pending_signin", "A code works only in the browser that asked for it, for 10 minutes. Ask for a new one.")
+
+  const now = deps.now()
+  if (row.used_at) return fail(410, "used_or_expired", "This code was already used. Ask for a new one.")
+  if (Date.parse(row.expires_at) <= now.getTime()) return fail(410, "used_or_expired", "This code has expired. Ask for a new one.")
+  if (row.attempts >= MAX_ATTEMPTS) return fail(429, "too_many_attempts", "Too many attempts. Ask for a new code.")
+  if (!(await deps.store.takeSigninAttempt(row.id, row.attempts, now))) return fail(409, "retry", "Try that code again.")
+  if (!same(hashSigninCode(deps.secret, row.id, code), row.code_hash) || !row.member_id) {
+    const left = MAX_ATTEMPTS - (row.attempts + 1)
+    return left > 0
+      ? fail(400, "wrong_code", `That code is not right. ${left} ${left === 1 ? "try" : "tries"} left.`, { attemptsLeft: left })
+      : fail(429, "too_many_attempts", "Too many attempts. Ask for a new code.", { attemptsLeft: 0 })
+  }
+
+  const member = await deps.store.getMember(row.member_id)
+  const claim = member?.status === "active" ? await deps.store.getClaim(member.claim_id) : null
+  if (!member || !claim || claim.status !== "active" || !claim.verified_at) {
+    return fail(410, "used_or_expired", "This account is no longer active.")
+  }
+  if (!(await deps.store.useSigninCode(row.id, now))) return fail(410, "used_or_expired", "This code was already used. Ask for a new one.")
+  await deps.store.addEvent({ type: "signin.ok", claim_id: claim.id, domain: claim.domain })
+  return reply(200, { ok: true, domain: claim.domain }, [
+    sessionCookie(deps, member.id, true, now),
+    clearCookie(SIGNIN_PENDING_COOKIE),
+  ])
+}
+
+async function signout(): Promise<Response> {
+  return reply(200, { ok: true }, [clearCookie(SESSION_COOKIE)])
+}
+
+/** Everything the account page shows. Members see their own team's addresses, nobody else's. */
+async function account(req: Request, deps: ClaimDeps): Promise<Response> {
+  const acct = await accountOf(req, deps)
+  if (!acct) return reply(200, { signedIn: false })
+  const { member, claim } = acct
+  const since = ago(deps.now(), 90 * DAY)
+  const listings = deps.programsOnDomain(claim.domain).slice(0, 50)
+  const [programs, members, edits, mine] = await Promise.all([
+    Promise.all(
+      listings.map(async (p) => {
+        const [views, clicks] = await Promise.all([
+          deps.store.countProgramEvents(p.slug, "program_view", since),
+          deps.store.countProgramEvents(p.slug, "outbound_click", since),
+        ])
+        return { slug: p.slug, name: p.name, editable: PILOT_SLUGS.has(p.slug), stats: { views, clicks } }
+      }),
+    ),
+    deps.store.listMembers(claim.id),
+    deps.store.listEdits(claim.id),
+    // Only a mailbox-proven session may see the other teams its address is on.
+    acct.mailbox && member.email ? deps.store.findActiveMembers(member.email) : Promise.resolve([] as MemberRow[]),
+  ])
+  // Other teams this same address is on (an agency, say): offered as a switch.
+  const otherAccounts: { memberId: string; domain: string }[] = []
+  for (const m of mine) {
+    if (m.id === member.id) continue
+    const c = await deps.store.getClaim(m.claim_id)
+    if (c?.status === "active" && c.verified_at) otherAccounts.push({ memberId: m.id, domain: c.domain })
+  }
+  return reply(200, {
+    signedIn: true,
+    domain: claim.domain,
+    you: { id: member.id, email: member.email },
+    maxMembers: MAX_MEMBERS,
+    otherAccounts,
+    programs,
+    members: members.map((m) => ({ id: m.id, email: m.email, addedAt: m.created_at, you: m.id === member.id })),
+    changes: edits.map((e) => ({
+      slug: e.slug,
+      kind: e.kind,
+      status: e.status,
+      prUrl: e.pr_url,
+      fields: Object.keys(e.fields).filter((k) => k !== "flags"),
+      sentAt: e.created_at,
+    })),
+  })
+}
+
+async function addTeammate(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, MemberEmailBody)
+  if (!body) return badRequest()
+  const acct = await accountOf(req, deps)
+  if (!acct) return notSignedIn()
+  const { member, claim } = acct
+  if (body.domain !== claim.domain) return accountChanged()
+  const email = normalizeEmail(body.email)
+  if (!email) return badEmail()
+  // Teammates are proven the same way as a claim: an address at the domain.
+  if (!emailMatchesDomain(email, claim.domain)) {
+    return fail(400, "domain_mismatch", `Teammates need an address at ${claim.domain}.`)
+  }
+  await deps.store.addEvent({ type: "member.add_requested", claim_id: claim.id, domain: claim.domain })
+  const adds = await deps.store.countEvents({ type: "member.add_requested", since: ago(deps.now(), DAY), claim_id: claim.id })
+  if (adds > LIMITS.memberAddsPerAccountDay) return tooMany()
+
+  const result = await deps.store.addMember(claim.id, email, member.id, MAX_MEMBERS)
+  if (result.result !== "ok") {
+    if (result.result === "not_owner") return notSignedIn()
+    if (result.result === "full") {
+      return fail(409, "team_full", `Your team is full (${MAX_MEMBERS} of ${MAX_MEMBERS}). Remove someone to add a new teammate.`)
+    }
+    // "exists" is per team (migration 011): it says nothing about other teams.
+    return fail(409, "already_member", "This address is already on your team.")
+  }
+  await deps.store.addEvent({ type: "member.added", claim_id: claim.id, domain: claim.domain })
+  // Best effort: the teammate can sign in whether or not this arrives.
+  await deps.sendEmail({ template: "member-added", to: email, ...memberAddedEmail(claim.domain), idempotencyKey: result.id })
+  return reply(200, { ok: true })
+}
+
+async function removeTeammate(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, MemberIdBody)
+  if (!body) return badRequest()
+  const acct = await accountOf(req, deps)
+  if (!acct) return notSignedIn()
+  if (body.domain !== acct.claim.domain) return accountChanged()
+  const result = await deps.store.removeMember(acct.claim.id, acct.member.id, body.memberId)
+  if (result === "self") return fail(400, "cannot_remove_self", "Ask a teammate to remove you, or release the listing.")
+  if (result === "not_owner") return notSignedIn()
+  if (result === "not_found") return fail(404, "not_found", "No such teammate.")
+  await deps.store.addEvent({ type: "member.removed", claim_id: acct.claim.id, domain: acct.claim.domain })
+  return reply(200, { ok: true })
+}
+
+/** Moves a mailbox-proven session to another team the same address is on. */
+async function switchAccount(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, SwitchBody)
+  if (!body) return badRequest()
+  const acct = await accountOf(req, deps)
+  if (!acct) return notSignedIn()
+  if (!acct.mailbox) return fail(403, "mailbox_unproven", "Sign in with your email to switch teams.")
+  const target = await deps.store.getMember(body.memberId)
+  const claim = target?.status === "active" ? await deps.store.getClaim(target.claim_id) : null
+  // Same person: the address that proved itself for this session.
+  if (!target || !claim || claim.status !== "active" || !claim.verified_at || !acct.member.email || target.email !== acct.member.email) {
+    return fail(404, "not_found", "No such account.")
+  }
+  return reply(200, { ok: true, domain: claim.domain }, [sessionCookie(deps, target.id, true, deps.now())])
 }
 
 const POST_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Response>> = {
@@ -670,9 +1096,15 @@ const POST_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Re
   manual: requestManual,
   terms: submitTerms,
   release,
+  "signin-code": signinCode,
+  "signin-verify": signinVerify,
+  signout,
+  "member-add": addTeammate,
+  "member-remove": removeTeammate,
+  "account-switch": switchAccount,
 }
 
-const GET_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Response>> = { session }
+const GET_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Response>> = { session, account }
 
 export async function handleClaim(action: string, req: Request, deps: ClaimDeps): Promise<Response> {
   const table = req.method === "GET" ? GET_ACTIONS : POST_ACTIONS

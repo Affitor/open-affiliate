@@ -4,7 +4,7 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, Star, X } from "lucide-react";
 import { SearchBar } from "@/components/search-bar";
 
 function GitHubIcon({ className }: { className?: string }) {
@@ -18,14 +18,16 @@ function GitHubIcon({ className }: { className?: string }) {
 // Explore is intentionally absent. The page still works at /explore and is
 // linked from content that points at it, but it is not promoted in the nav
 // until its thumbnails and load time are good enough to send people to.
+// Rankings, Submit and Docs live in the footer (Registry column).
 const NAV_LINKS = [
   { label: "Programs", href: "/programs" },
   { label: "Networks", href: "/networks" },
   { label: "Categories", href: "/categories" },
-  { label: "Rankings", href: "/rankings" },
-  { label: "Submit", href: "/submit" },
-  { label: "Docs", href: "/docs" },
 ];
+
+// Read from GitHub once per build in next.config.ts; empty when that read failed.
+const STARS = Number(process.env.NEXT_PUBLIC_GITHUB_STARS) || 0;
+const starsLabel = STARS >= 1000 ? `${(STARS / 1000).toFixed(1).replace(/\.0$/, "")}k` : String(STARS);
 
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -73,10 +75,17 @@ export function Nav() {
             href="https://github.com/Affitor/open-affiliate"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={STARS ? `GitHub, ${STARS} stars` : "GitHub"}
             className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <GitHubIcon className="h-4 w-4" />
             <span className="hidden sm:inline">GitHub</span>
+            {STARS > 0 && (
+              <span className="flex items-center gap-1 rounded-md border border-border/60 px-1.5 py-0.5 text-xs tabular-nums">
+                <Star className="h-3 w-3" aria-hidden="true" />
+                {starsLabel}
+              </span>
+            )}
           </a>
           {/* Mobile hamburger */}
           <button
