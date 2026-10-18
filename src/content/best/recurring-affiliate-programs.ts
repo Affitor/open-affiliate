@@ -12,7 +12,7 @@ export const post: BestPost = {
   description:
     "Recurring affiliate programs that keep paying while referrals stay subscribed: email, web, sales and dev tools, with terms checked on each brand's page.",
   intro:
-    "A recurring commission pays you again every time the customer you referred pays their bill, so one good referral can earn for months or for as long as they stay. That makes the length of the commission as important as the rate. Every program below lists its commission as recurring on its own terms page, and each block shows how long it lasts, or says when the brand does not publish a length, and the day we last checked it.",
+    "A recurring commission pays you again every time the customer you referred pays their bill, so one good referral can earn for months or for as long as they stay. That makes the length of the commission as important as the rate. Every program below lists its commission as recurring on its own terms page, and each block shows how long it lasts, or points you to the full terms when we have no length on record, and the day we last checked it.",
   programs: [
     {
       slug: "convertkit",

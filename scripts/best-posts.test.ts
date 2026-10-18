@@ -121,8 +121,10 @@ test("You earn reads naturally for the rate shapes the registry has", () => {
     [{ type: "recurring", mode: "percentage", value: 22, rate: "22%", duration: "12 months" }, "22% recurring for 12 months"],
     [{ type: "one-time", mode: "percentage", value: 30, rate: "30%" }, "30% one-time"],
     [{ type: "tiered", mode: "tiered", value: 40, rate: "30%-40%", duration: "lifetime" }, "30%-40% tiered, for life"],
-    // A recurring commission with no published length says so.
-    [{ type: "recurring", mode: "percentage", value: 25, rate: "25%" }, "25% recurring, length not published"],
+    // A recurring commission with no length on record points to the full terms.
+    [{ type: "recurring", mode: "percentage", value: 25, rate: "25%" }, "25% recurring, length: see full terms"],
+    // A trailing "+" ("or more") is not a two-part deal.
+    [{ type: "tiered", mode: "tiered", value: 100, rate: "$50 to $100+" }, "$50 to $100+, tiered"],
     // A rate that says more than its figure is shown as published; the type follows a comma.
     [{ type: "recurring", mode: "percentage", value: 50, rate: "Up to 50%", duration: "lifetime" }, "Up to 50%, recurring for life"],
     [{ type: "recurring", mode: "percentage", value: 25, rate: "25% of net revenue", duration: "12 months" }, "25% of net revenue, recurring for 12 months"],

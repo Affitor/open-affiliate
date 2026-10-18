@@ -143,7 +143,9 @@ export function postTitle(post: BestPost, selection: PostSelection, asOf: Date =
  *   as published and the type follows a comma.
  * - A rate that already says how it pays ("per", "recurring", "+", renewals, or a
  *   hybrid deal) gains no type word; one that already says "for …" gains no length.
- * - A recurring commission with no published length says so.
+ * - A recurring commission with no length on record points to the full terms
+ *   ("length: see full terms"): a null duration means our record has none, not
+ *   that the brand publishes none.
  */
 export function earnText(p: Program): string {
   const c = p.commission
@@ -152,18 +154,19 @@ export function earnText(p: Program): string {
   const norm = (x: string) => x.replace(/[\s,]/g, "").toLowerCase()
   const figure = stored && /[a-z]/i.test(stored) && norm(stored) !== norm(shown) ? stored : shown
   const wordy = /[a-z]/i.test(figure)
-  const saysHow = /\bper\b|one-time|recurring|renewal|\+/i.test(figure) || c.mode === "hybrid" || String(c.type) === "hybrid"
+  // A "+" between two parts ("$30 + 30%") says how it pays; a trailing "$100+" does not.
+  const saysHow = /\bper\b|one-time|recurring|renewal|\s\+\s/i.test(figure) || c.mode === "hybrid" || String(c.type) === "hybrid"
   const saysLength = /\bfor\b|lifetime|forever/i.test(figure)
   const length = saysLength
     ? null
     : c.duration
       ? c.duration === "lifetime" ? "for life" : `for ${c.duration}`
       : c.type === "recurring" && !saysHow
-        ? "length not published"
+        ? "length: see full terms"
         : null
   const typed = saysHow ? figure : wordy ? `${figure}, ${c.type}` : `${figure} ${c.type}`
   if (!length) return typed
-  // "20% recurring for life", but "25% recurring, length not published" and "30%-40% tiered, for life".
+  // "20% recurring for life", but "25% recurring, length: see full terms" and "30%-40% tiered, for life".
   return c.type === "recurring" && !saysHow && length.startsWith("for ") ? `${typed} ${length}` : `${typed}, ${length}`
 }
 
