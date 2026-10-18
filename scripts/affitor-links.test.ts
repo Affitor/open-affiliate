@@ -10,7 +10,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import { test } from "node:test"
-import { FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
+import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
@@ -37,6 +37,11 @@ function hasUtm(href: string, medium?: string): boolean {
 
 test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
   assert.ok(hasUtm(affitorUrl("for_brands", "for_brands"), "for_brands"))
+  // "Move this program to Affitor": the /switch URL Affitor confirmed, UTM only.
+  assert.equal(
+    affitorUrl("migrate", "jasper", AFFITOR_SWITCH),
+    "https://affitor.com/switch?utm_source=openaffiliate&utm_medium=migrate&utm_campaign=jasper",
+  )
   assert.ok(isAffitorHref("https://affitor.com/marketplace"))
   assert.ok(isAffitorHref("https://app.affitor.com/x"))
   assert.equal(isAffitorHref("https://notaffitor.com/"), false)
