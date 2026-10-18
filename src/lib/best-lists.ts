@@ -205,6 +205,29 @@ const LISTS: BestList[] = [
     qualifies: (p) => p.tags.includes("saas") && p.kind !== "referral",
   },
   {
+    // The filter behind src/content/best/lifetime-affiliate-programs.ts: a
+    // recurring commission whose duration says lifetime (isLifetime).
+    slug: "lifetime-affiliate-programs",
+    title: "Lifetime Commission Affiliate Programs",
+    h1: "Lifetime Commission Affiliate Programs",
+    description:
+      "Affiliate programs that pay a recurring commission for the lifetime of each customer you refer, ranked by rate, with verified terms listed first.",
+    summary: "pay a recurring commission for the lifetime of the customer",
+    criteria: "Programs whose commission is listed as recurring with a lifetime duration.",
+    qualifies: (p) => isLifetime(p),
+  },
+  {
+    // The filter behind src/content/best/marketing-affiliate-programs.ts.
+    slug: "marketing-affiliate-programs",
+    title: "Best Marketing Affiliate Programs, Ranked",
+    h1: "Marketing Affiliate Programs",
+    description:
+      "Marketing affiliate programs for SEO, social, email and ad tools, ranked by commission, with verified terms first and the cookie window for each.",
+    summary: "are marketing tools, going by their registry category",
+    criteria: "Programs listed in the Marketing category.",
+    qualifies: (p) => p.category === "Marketing",
+  },
+  {
     // No field records a sign-up fee or a purchase requirement. What is sourced
     // is automatic approval, on verified programs only; the criteria say so.
     slug: "free-affiliate-programs",
