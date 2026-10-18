@@ -44,7 +44,7 @@ function toCompare(stored: Program): CompareProgram {
     marketingMaterials: p.marketingMaterials,
     apiAvailable: p.apiAvailable,
     dedicatedManager: p.dedicatedManager,
-    applyHref: applyButton(p).href,
+    applyHref: applyButton(p, "compare").href,
   });
 }
 

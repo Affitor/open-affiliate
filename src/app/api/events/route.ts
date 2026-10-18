@@ -25,6 +25,9 @@ const ALLOWED_TYPES = [
   "category_view",
   "network_view",
   "compare",
+  // A blog post's Apply click. Its own type, because outbound_click counts the
+  // program page's apply clicks that claimed brands see (claims/service.ts).
+  "blog_apply_click",
 ];
 
 // POST /api/events — track an event

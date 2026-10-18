@@ -51,10 +51,13 @@ export function BestListView({
   list,
   path,
   parent,
+  picks,
 }: {
   list: BestList;
   path: string;
   parent: { name: string; href: string };
+  /** An editorial post on the same topic, linked under the intro. */
+  picks?: { href: string; label: string };
 }) {
   const data = buildBestList(list);
   const { intro, faq } = bestListCopy(data);
@@ -131,6 +134,12 @@ export function BestListView({
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{list.h1}</h1>
         <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{intro}</p>
+        {picks && (
+          <p data-list-picks className="text-sm mt-3 max-w-3xl">
+            <span className="font-medium">Our picks:</span>{" "}
+            <Link href={picks.href} className="underline underline-offset-4">{picks.label}</Link>
+          </p>
+        )}
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
         </p>
@@ -219,9 +228,9 @@ export function BestListView({
                     {networkName(program.network ?? IN_HOUSE)}
                   </td>
                   <td className="py-3 px-3 text-xs">
-                    {/* The program page's own apply link, so both send readers to the same place. */}
+                    {/* The program page's apply link with the list UTM, so both send readers to the same place. */}
                     <AffitorLink
-                      href={applyButton(program).href}
+                      href={applyButton(program, "list").href}
                       source="list"
                       slug={program.slug}
                       cta="sign_up"

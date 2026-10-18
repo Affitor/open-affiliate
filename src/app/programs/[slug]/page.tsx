@@ -26,6 +26,7 @@ import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, networkName } from "@/lib/program-seo";
 import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirmedTerms, networkHowToJoin, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
+import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
 import {
   answerParts,
@@ -137,7 +138,8 @@ export default async function ProgramPage({
   const figure = commissionFigure(program);
   const faq = buildFaq(program);
   const network = networkName(program);
-  const applyCta = applyButton(program);
+  const applyCta = applyButton(program, "program_page");
+  const visitHref = outboundUrl(program.url, "program_page", slug);
   // The brand on Affitor too: one line under its own terms, and a secondary button.
   const alsoOn = alsoOnAffitor(program);
   const claimable = !program.claimedBy && claimsEnabledFor(program);
@@ -369,7 +371,7 @@ export default async function ProgramPage({
             <H2>What {program.name} does</H2>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{productText(program)}</p>
             <p className="mt-3 text-sm">
-              <a href={program.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-foreground">
+              <a href={visitHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-foreground">
                 Visit {program.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>

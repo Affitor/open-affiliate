@@ -193,6 +193,18 @@ export const BEST_LISTS: BestList[] = [
     criteria: "Programs whose registry tags or keywords name SEO.",
     qualifies: (p) => [...p.tags, ...(p.agentKeywords ?? [])].some((t) => /\bseo\b/i.test(t)),
   },
+  {
+    // The filter behind the editorial post in src/content/best/ai-affiliate-programs.ts;
+    // without enough fresh verified programs the page falls back to this list.
+    slug: "ai-affiliate-programs",
+    title: "Best AI Affiliate Programs, Ranked",
+    h1: "AI Affiliate Programs",
+    description:
+      "The best AI affiliate programs for video, voice, writing and developer tools, ranked by commission, with verified terms first and the cookie for each.",
+    summary: "are AI tools, going by their registry category",
+    criteria: "Programs listed in the AI category.",
+    qualifies: (p) => p.category === "AI",
+  },
 ]
 
 /** The hub: "best affiliate programs" at /best, the parent of every other list. */

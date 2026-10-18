@@ -45,7 +45,7 @@ test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
 })
 
 test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () => {
-  const hrefs = programs.flatMap((p) => [applyButton(p).href, alsoOnAffitor(p)?.href]).filter(
+  const hrefs = programs.flatMap((p) => [applyButton(p, "program_page").href, alsoOnAffitor(p)?.href]).filter(
     (h): h is string => typeof h === "string" && isAffitorHref(h),
   )
   assert.ok(hrefs.length > 0, "no program links to affitor.com: the check would be vacuous")
@@ -61,7 +61,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/layout.tsx | href", // footer list: internal paths and GitHub
   "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
   "src/app/explore/page.tsx | `/explore?${sp.toString()}`",
-  "src/app/programs/[slug]/page.tsx | program.url", // the brand's own site; checked against the registry below
+  "src/app/programs/[slug]/page.tsx | visitHref", // the brand's own site (outboundUrl of program.url); checked against the registry below
   "src/app/programs/[slug]/page.tsx | `https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`",
   "src/app/programs/[slug]/page.tsx | `/programs/${program.slug}.md`", // machine strip: the .md twin, internal
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
@@ -72,6 +72,8 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
+  "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
+  "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
 ])
 
@@ -96,6 +98,9 @@ test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   for (const p of programs) assert.equal(isAffitorHref(p.url), false, `${p.slug}: program.url is on affitor.com but rendered as a plain link`)
   const trackLink = readFileSync(join(root, "src/app/programs/[slug]/track-view.tsx"), "utf8")
   assert.match(trackLink, /if \(isAffitorHref\(href\)\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "program_page", cta \} \}\)/)
+  const postApply = readFileSync(join(root, "src/components/post-apply-link.tsx"), "utf8")
+  assert.match(postApply, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "blog", cta: "apply", post \} \}\)/)
+  assert.match(postApply, /\[AFFITOR_ATTR\]: "blog"/)
   const affitorLink = readFileSync(join(root, "src/components/affitor-link.tsx"), "utf8")
   assert.match(affitorLink, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source, cta \} \}\)/)
 })
