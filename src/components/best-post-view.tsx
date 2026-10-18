@@ -11,6 +11,7 @@ import { applyButton, blogApplyHref } from "@/lib/apply-cta";
 import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
 import {
   DISCLOSURE,
+  FRESHNESS_RULE,
   SAME_TEAM,
   checkedRange,
   checkedText,
@@ -248,7 +249,7 @@ export function BestPostView({
 
       <section className="mt-10">
         <h2 className="text-lg font-semibold mb-3">How we chose</h2>
-        <p className="text-sm text-muted-foreground leading-relaxed">{post.howWeChose}</p>
+        <p className="text-sm text-muted-foreground leading-relaxed">{post.howWeChose} {FRESHNESS_RULE}</p>
         {(post.leftOut ?? []).map((l) => (
           <p key={l.name} className="text-sm text-muted-foreground mt-2">
             <span className="font-medium text-foreground">Left out: {l.name}</span>, {l.reason}

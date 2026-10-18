@@ -1,4 +1,4 @@
-import { bestListCopy, buildBestList, getBestList, listCommissionText, type BestList } from "./best-lists"
+import { getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
@@ -38,6 +38,8 @@ export interface BestPost {
   affitor?: { before: string; anchor: string; after: string }
   /** BestList slugs. */
   related: string[]
+  /** The registry category whose /categories page links to this post as "Our picks". */
+  category?: string
 }
 
 export const POSTS: BestPost[] = [aiAffiliatePrograms]
@@ -94,9 +96,34 @@ export function postSelection(post: BestPost, asOf: Date = new Date()): PostSele
   return { shown, dropped }
 }
 
+/** Days since the terms check; a missing or future date counts as never checked. */
 function termsAgeDays(p: Program, asOf: Date): number {
   const t = Date.parse(p.lastVerifiedAt ?? "")
-  return Number.isFinite(t) ? Math.floor((asOf.getTime() - t) / 86_400_000) : Infinity
+  if (!Number.isFinite(t) || t > asOf.getTime()) return Infinity
+  return Math.floor((asOf.getTime() - t) / 86_400_000)
+}
+
+const ready = new Map<string, { post: BestPost; selection: PostSelection } | null>()
+
+/**
+ * The post for a list slug when it has enough fresh verified programs as of
+ * this build, else null (the list renders). Computed once per build, so the
+ * dropped-program warnings print once.
+ */
+export function readyPost(slug: string): { post: BestPost; selection: PostSelection } | null {
+  if (ready.has(slug)) return ready.get(slug)!
+  const post = getPost(slug)
+  const selection = post ? postSelection(post) : null
+  for (const d of selection?.dropped ?? []) console.warn(`[best-post] ${slug}: ${d.slug} left out (${d.reason})`)
+  const value = post && selection && postReady(selection) ? { post, selection } : null
+  ready.set(slug, value)
+  return value
+}
+
+/** The ready post a category page links to as "Our picks", if any. */
+export function categoryPost(category: string): { post: BestPost; selection: PostSelection } | null {
+  const post = POSTS.find((p) => p.category === category)
+  return post ? readyPost(post.slug) : null
 }
 
 /** The post is published as a post only with enough programs; otherwise the list renders. */
@@ -116,7 +143,12 @@ export function postTitle(post: BestPost, selection: PostSelection, asOf: Date =
 export function earnText(p: Program): string {
   const c = p.commission
   const length = c.duration ? (c.duration === "lifetime" ? "for life" : `for ${c.duration}`) : null
-  const figure = listCommissionText(p)
+  // A stored rate that says more than the figure ("up to 30%", "10% of total
+  // contract value", a hybrid sentence) is shown as published, as the Apply button does.
+  const stored = String(c.rate ?? "").trim()
+  const shown = listCommissionText(p)
+  const norm = (x: string) => x.replace(/[\s,]/g, "").toLowerCase()
+  const figure = stored && /[a-z]/i.test(stored) && norm(stored) !== norm(shown) ? stored : shown
   if (c.mode === "hybrid") return [figure, length].filter(Boolean).join(", ")
   if (c.type === "recurring") return [`${figure} recurring`, length].filter(Boolean).join(" ")
   return [`${figure} ${c.type}`, length].filter(Boolean).join(", ")
@@ -130,7 +162,7 @@ export function payoutText(p: Program): string {
   const f = p.payout.frequency
   const parts = [
     f ? f[0].toUpperCase() + f.slice(1) : null,
-    p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null && (p.payout.currency ?? "USD") === "USD" ? `$${p.payout.minimum} minimum` : null,
+    p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null && p.payout.currency === "USD" ? `$${p.payout.minimum} minimum` : null,
   ].filter(Boolean)
   if (!parts.length) return "Not published"
   const text = parts.join(", ")
@@ -152,20 +184,47 @@ export function sameTeam(post: BestPost, selection: PostSelection): boolean {
   return Boolean(post.affitor) || selection.shown.some(({ program }) => SAME_TEAM_SLUGS.has(program.slug))
 }
 
+/** The sentence under "How we chose" that states the freshness rule, from the constant. */
+export const FRESHNESS_RULE = `Programs whose terms we have not re-checked in the last ${TERMS_MAX_AGE_DAYS} days are left out until we do.`
+
+function andList(items: string[]): string {
+  return items.length < 3 ? items.join(" and ") : `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`
+}
+
 /**
- * The data-driven FAQ over the programs shown: the list FAQ's commission and
- * cookie answers (bestListCopy over a list of exactly those programs), then the
- * post's own questions. The list FAQ's first answer (how many the registry
- * lists) and last (how the list is ranked) describe the list, not the post, so
- * they are not used; "How we chose" on the page says how the post picks.
+ * The data-driven FAQ: facts about the programs on this page only, from
+ * structured fields, no ranking (a "pays the most" answer cannot compare a
+ * single rate with a tiered or hybrid one). Then the post's own questions.
+ * `esc` wraps contributor text (names, rates) for the markdown twin.
  */
 export function postFaq(post: BestPost, selection: PostSelection, esc: (text: string) => string = (t) => t): Faq[] {
-  const list = postList(post)
-  if (!list) return post.faq ?? []
-  const shown = new Set(selection.shown.map(({ program }) => program.slug))
-  const subset: BestList = { ...list, slug: `post/${post.slug}`, qualifies: (p) => shown.has(p.slug), directory: true }
-  const fromData = bestListCopy(buildBestList(subset), esc).faq.slice(1, -1)
-  return [...fromData, ...(post.faq ?? [])]
+  const shown = selection.shown.map(({ program }) => program)
+  const faq: Faq[] = []
+  const recurring = shown.filter((p) => p.commission.type === "recurring")
+  const others = shown.filter((p) => p.commission.type !== "recurring")
+  if (recurring.length) {
+    faq.push({
+      q: "Which of these programs list a recurring commission?",
+      a:
+        `${andList(recurring.map((p) => `${esc(p.name)} (${esc(earnText(p))})`))} list their commission as recurring.` +
+        (others.length ? ` The others list theirs as ${andList([...new Set(others.map((p) => String(p.commission.type)))])}; each block gives the details.` : ""),
+    })
+  }
+  const withCookie = shown.filter((p) => p.cookieDays != null)
+  if (withCookie.length) {
+    faq.push({
+      q: "How long do cookies last on these programs?",
+      a: `${withCookie.length} of the ${shown.length} programs on this page publish a cookie window: ${andList(withCookie.map((p) => `${esc(p.name)} (${p.cookieDays} days)`))}. The others do not publish one.`,
+    })
+  }
+  const range = checkedRange(selection)
+  if (range) {
+    faq.push({
+      q: "When were these terms checked?",
+      a: `Each program's terms were checked on its own affiliate page between ${range[0]} and ${range[1]}; every block shows its own date. ${FRESHNESS_RULE}`,
+    })
+  }
+  return [...faq, ...(post.faq ?? [])]
 }
 
 /** Every copy string of a post, for the no-digit test. */

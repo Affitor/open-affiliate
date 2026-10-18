@@ -17,9 +17,9 @@ import {
 } from "../src/lib/best-posts"
 
 /**
- * The posts the plan marks for the one Affitor marketplace sentence
- * (.internal/research/2026-10-18-blog/PLAN.md, wave 1: 10 of 17). A post outside
- * this set may not carry it; add a slug here only when the plan changes.
+ * The posts the wave-1 plan marks for the one Affitor marketplace sentence
+ * (10 of 17). A post outside this set may not carry it; add a slug here only
+ * when the plan changes.
  */
 const AFFITOR_ALLOWED = new Set([
   "affiliate-programs",
@@ -52,8 +52,13 @@ test("every post sits on a list and names only programs the registry has", () =>
 
 test("copy carries no figures: every number on a post comes from the registry", () => {
   for (const post of POSTS) {
-    // "B2B" and "B2C" are words, not figures; any other digit fails.
-    for (const text of copyStrings(post)) assert.doesNotMatch(text.replace(/\bB2[BC]\b/g, ""), /\d/, `${post.slug}: a digit in copy: ${JSON.stringify(text)}`)
+    // "B2B" and "B2C" are words, not figures; any other digit, or a number
+    // spelled out, fails ("one" and "once" are ordinary words, so they pass).
+    const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|half|dozen)\b/i
+    for (const text of copyStrings(post)) {
+      assert.doesNotMatch(text.replace(/\bB2[BC]\b/g, ""), /\d/, `${post.slug}: a digit in copy: ${JSON.stringify(text)}`)
+      assert.doesNotMatch(text, NUMBER_WORDS, `${post.slug}: a spelled-out number in copy: ${JSON.stringify(text)}`)
+    }
     assert.ok(post.description.length >= 120 && post.description.length <= 155, `${post.slug}: description is ${post.description.length} characters`)
   }
 })

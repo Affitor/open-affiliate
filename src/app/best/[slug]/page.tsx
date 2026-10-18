@@ -4,19 +4,10 @@ import { TrackPageView } from "@/components/track-page-view";
 import { BestListView, bestListMetadata } from "@/components/best-list-view";
 import { BestPostView, bestPostMetadata } from "@/components/best-post-view";
 import { BEST_INDEX, BEST_LISTS, bestPath, getBestList } from "@/lib/best-lists";
-import { getPost, postReady, postSelection } from "@/lib/best-posts";
+import { readyPost } from "@/lib/best-posts";
 
 export function generateStaticParams() {
   return BEST_LISTS.filter((list) => list !== BEST_INDEX).map((list) => ({ slug: list.slug }));
-}
-
-/** The editorial post for this list when it has enough fresh verified programs; otherwise none. */
-function readyPost(slug: string) {
-  const post = getPost(slug);
-  if (!post) return null;
-  const selection = postSelection(post);
-  for (const d of selection.dropped) console.warn(`[best-post] ${post.slug}: ${d.slug} left out (${d.reason})`);
-  return postReady(selection) ? { post, selection } : null;
 }
 
 export async function generateMetadata({

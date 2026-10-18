@@ -592,9 +592,16 @@ function checkPostPage(post: BestPost, selection: PostSelection, path: string): 
     if (!tag) fail(`${path} has no Apply link for ${program.slug} with the blog UTM`);
     if (!tag.includes('rel="sponsored nofollow noopener"')) fail(`${path} Apply link for ${program.slug} is not rel="sponsored nofollow noopener"`);
   }
+  if (post.category) {
+    const catFile = `categories/${categoryToSlug(post.category)}.html`;
+    const cat = existsSync(join(BUILD_APP, catFile)) ? readFileSync(join(BUILD_APP, catFile), "utf8") : "";
+    if (!cat.includes("data-list-picks") || !cat.includes(`href="${path}"`)) fail(`${catFile} does not link its post ${path} as "Our picks"`);
+  }
   const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
   const md = readFileSync(mdFile, "utf8");
   if (!md.startsWith(`# ${title}\n`)) fail(`${mdFile} does not start with the post title`);
+  const twinOrder = [...md.matchAll(/^\d+\. \[[^\]\n]*\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\)/gm)].map((m) => m[1]);
+  if (twinOrder.join() !== want.join()) fail(`${mdFile} lists ${JSON.stringify(twinOrder)}, not postSelection's ${JSON.stringify(want)}`);
   for (const { program } of selection.shown) {
     const autolink = `<${blogApplyHref(program, post.slug).replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
     if (!md.includes(`/programs/${program.slug}.md)`) || !md.includes(autolink)) fail(`${mdFile} is missing ${program.slug} or its Apply link`);

@@ -65,6 +65,7 @@ import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, te
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
   DISCLOSURE,
+  FRESHNESS_RULE,
   SAME_TEAM,
   checkedRange,
   checkedText,
@@ -1165,7 +1166,7 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
     section("Programs", rows),
     section(
       "How we chose",
-      [mdEscapeProse(post.howWeChose), ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
+      [`${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`, ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
     ),
     faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
