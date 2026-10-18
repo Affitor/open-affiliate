@@ -5,7 +5,7 @@ import { ProgramLogo } from "@/components/program-logo";
 import { AffitorLink } from "@/components/affitor-link";
 import { PostApplyLink } from "@/components/post-apply-link";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { networkName, IN_HOUSE, livePrograms } from "@/lib/programs";
+import { networkName, IN_HOUSE, livePrograms, categoryToSlug } from "@/lib/programs";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
 import { applyButton, blogApplyHref } from "@/lib/apply-cta";
 import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
@@ -47,10 +47,10 @@ export function bestPostMetadata(post: BestPost, selection: PostSelection, path:
 const th = "oa-label py-2.5 px-3 text-left font-medium bg-sunk";
 const td = "py-3 px-3 text-sm text-foreground/80";
 
-/** Programs on this list added or re-checked in the 30 days before the post's newest check. */
+/** Programs on this list added or re-checked in the 30 days up to the post's newest check (inclusive). */
 function monthChanges(list: BestList, until: string | undefined) {
   if (!until) return null;
-  const from = new Date(Date.parse(`${until}T00:00:00Z`) - 30 * 86_400_000).toISOString().slice(0, 10);
+  const from = new Date(Date.parse(`${until}T00:00:00Z`) - 29 * 86_400_000).toISOString().slice(0, 10);
   const inWindow = (d?: string | null) => Boolean(d && d.slice(0, 10) >= from && d.slice(0, 10) <= until);
   const on = livePrograms.filter(list.qualifies);
   const newest = (a: { d: string }, b: { d: string }) => b.d.localeCompare(a.d);
@@ -59,7 +59,7 @@ function monthChanges(list: BestList, until: string | undefined) {
     total: on.length,
     added: on.filter((p) => inWindow(p.createdAt)).map((p) => ({ slug: p.slug, name: p.name, d: p.createdAt.slice(0, 10) })).sort(newest),
     // A re-check is a check after the day the program was added; the add-day check is not one.
-    rechecked: on.filter((p) => inWindow(p.lastVerifiedAt) && (p.lastVerifiedAt ?? "").slice(0, 10) > p.createdAt.slice(0, 10)).map((p) => ({ slug: p.slug, name: p.name, d: (p.lastVerifiedAt ?? "").slice(0, 10) })).sort(newest),
+    rechecked: on.filter((p) => p.verified && inWindow(p.lastVerifiedAt) && (p.lastVerifiedAt ?? "").slice(0, 10) > p.createdAt.slice(0, 10)).map((p) => ({ slug: p.slug, name: p.name, d: (p.lastVerifiedAt ?? "").slice(0, 10) })).sort(newest),
   };
 }
 
@@ -93,7 +93,10 @@ export function BestPostView({
   });
   const related = post.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug));
   const month = monthChanges(list, range?.[1]);
-  const changeList = (rows: { slug: string; name: string; d: string }[]) => (
+  const moreHref = post.category ? `/categories/${categoryToSlug(post.category)}` : "/programs";
+  type Change = { slug: string; name: string; d: string };
+  const columns: { name: string; rows: Change[] }[] = month ? [{ name: "Added", rows: month.added }, { name: "Terms re-checked", rows: month.rechecked }] : [];
+  const changeList = (rows: Change[]) => (
     <ul className="mt-2 border-t border-border">
       {rows.slice(0, 6).map((r) => (
         <li key={r.slug} className="flex justify-between gap-3 border-b border-border py-2 text-sm">
@@ -178,7 +181,7 @@ export function BestPostView({
               {picks.map(({ label, program }) => (
                 <li key={label} className="border-border border-t first:border-t-0 sm:[&:nth-child(2)]:border-t-0 sm:even:border-l sm:[&:last-child:nth-child(odd)]:col-span-2">
                   <a href={`#${program.slug}`} className="grid grid-cols-[36px_minmax(0,1fr)] gap-x-3 px-4 py-3.5 hover:bg-sunk transition-colors">
-                    <ProgramLogo slug={program.slug} name={program.name} size={36} className="row-span-3 shrink-0" />
+                    <span className="row-span-3" aria-hidden><ProgramLogo slug={program.slug} name={program.name} size={36} className="shrink-0" /></span>
                     <span className="text-xs text-muted-foreground">{label}</span>
                     <span className="font-semibold">{program.name}</span>
                     <span className="font-mono text-meta text-foreground/80">{earnText(program)}</span>
@@ -199,14 +202,11 @@ export function BestPostView({
             </div>
             <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs in this category on OpenAffiliate, not only the ones above.</p>
             <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:gap-8">
-              {[
-                ["Added", month.added],
-                ["Terms re-checked", month.rechecked],
-              ].map(([name, rows]) => (
-                <div key={name as string}>
-                  <p className="oa-label">{name as string} · {(rows as unknown[]).length}</p>
-                  {changeList(rows as { slug: string; name: string; d: string }[])}
-                  {(rows as unknown[]).length > 6 && <p className="text-meta text-muted-foreground mt-2">and {(rows as unknown[]).length - 6} more</p>}
+              {columns.map(({ name, rows }) => (
+                <div key={name}>
+                  <p className="oa-label">{name} · {rows.length}</p>
+                  {changeList(rows)}
+                  {rows.length > 6 && <Link href={moreHref} className="mt-2 inline-block text-meta text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground">and {rows.length - 6} more</Link>}
                 </div>
               ))}
             </div>
@@ -217,7 +217,7 @@ export function BestPostView({
       <section className="oa-band">
         <div className="mx-auto max-w-[760px]">
           <h2 className="text-lg font-semibold">Side by side</h2>
-          <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card">
+          <div className="mt-4 overflow-x-auto rounded-xl border border-border bg-card" tabIndex={0} aria-label="Programs side by side">
             <table className="w-full">
               <thead>
                 <tr className="border-b border-border">
@@ -231,12 +231,12 @@ export function BestPostView({
               <tbody>
                 {shown.map(({ program }) => (
                   <tr key={program.slug} className="border-t border-border hover:bg-sunk transition-colors">
-                    <td className="py-3 px-3">
+                    <th scope="row" className="py-3 px-3 text-left font-normal">
                       <Link href={`/programs/${program.slug}`} className="flex items-center gap-2 text-sm font-medium">
                         <ProgramLogo slug={program.slug} name={program.name} size={24} className="shrink-0" />
                         {program.name}
                       </Link>
-                    </td>
+                    </th>
                     <td className={td}>{earnText(program)}</td>
                     <td className={`${td} hidden sm:table-cell`}>{cookieText(program)}</td>
                     <td className={`${td} hidden sm:table-cell`}>{payoutText(program)}</td>
