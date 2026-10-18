@@ -4,6 +4,8 @@ import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
 import { post as recurringAffiliatePrograms } from "../content/best/recurring-affiliate-programs"
+import { post as saasAffiliatePrograms } from "../content/best/saas-affiliate-programs"
+import { post as beginnerAffiliatePrograms } from "../content/best/affiliate-programs-for-beginners"
 
 /**
  * Editorial posts on /best/<slug>. A post is a BestList (its filter, page URL,
@@ -43,7 +45,7 @@ export interface BestPost {
   category?: string
 }
 
-export const POSTS: BestPost[] = [aiAffiliatePrograms, recurringAffiliatePrograms]
+export const POSTS: BestPost[] = [aiAffiliatePrograms, recurringAffiliatePrograms, saasAffiliatePrograms, beginnerAffiliatePrograms]
 
 /** Terms older than this at build time keep a program out of a post until it is re-checked. */
 export const TERMS_MAX_AGE_DAYS = 90
