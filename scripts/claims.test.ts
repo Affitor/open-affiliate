@@ -236,7 +236,7 @@ class MemoryStore implements ClaimStore {
           e.claim_id === c.id &&
           e.kind === "new" &&
           ["pending", "asked"].includes(e.status) &&
-          (e.slug === input.slug || e.fields.page_key === input.fields.page_key),
+          (e.slug === input.slug || (e.fields.page_key != null && e.fields.page_key === input.fields.page_key)),
       )
     ) {
       return "already_sent" as const
@@ -871,6 +871,9 @@ test("edit flags: a cut of more than half, a signup link on another domain, a pr
   assert.deepEqual(editFlags(p, { commission: { rate: "5%" } }), ["commission_drop_over_50pct"])
   assert.deepEqual(editFlags(p, { signup_url: "https://kymaapi.com/partners" }), [])
   assert.deepEqual(editFlags(p, { signup_url: "https://affitor.com/marketplace/kyma-api" }), ["signup_domain_changed"])
+  // Clearing the signup link sends Apply to the website: flagged when that is another domain.
+  assert.deepEqual(editFlags(p, { signup_url: null }), [])
+  assert.deepEqual(editFlags({ ...p, signupUrl: "https://partners.dub.co/kyma" }, { signup_url: null }), ["signup_domain_changed"])
   assert.deepEqual(editFlags(p, { status: "active" }), [])
   assert.deepEqual(editFlags(p, { status: "paused" }), ["status_not_active"])
   assert.deepEqual(editFlags(p, { status: "discontinued" }), ["status_not_active"])
@@ -993,6 +996,8 @@ test("text that names another brand, or terms cited from another site, is flagge
   assert.deepEqual(brandsNamed("Works with Notion.", "kymaapi.com", catalog), ["Notion"])
   assert.deepEqual(brandsNamed("Works with Notion.", "notion.so", catalog), [])
   assert.deepEqual(brandsNamed("works with NOTION", "kymaapi.com", catalog), ["Notion"])
+  // Invisible code points inside a name do not hide it.
+  assert.deepEqual(brandsNamed("Cheaper than Not\u200Dion", "kymaapi.com", catalog), ["Notion"])
 })
 
 test("a new program's name is screened for other brands, and a signup link elsewhere is flagged", async () => {
@@ -1025,7 +1030,28 @@ test("free text refuses control and format characters; descriptions keep line br
     assert.equal(r.status, 400, JSON.stringify(changes))
   }
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "Kyma\u202EStudio" })).status, 400)
-  assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description: "First line.\nSecond line." } })).status, 200)
+  // Invisible fillers and selectors that are not format characters, separators, lone surrogates.
+  for (const hidden of ["\uFE00", "\u{E0100}", "\u034F", "\u180B", "\u3164", "\u115F", "\u2800", "\u2028", "\u2029", "\uD800", "\u00AD"]) {
+    const r = await t.call("edit", { slug: "kyma-api", changes: { short_description: `Not${hidden}ion` } })
+    assert.equal(r.status, 400, JSON.stringify(hidden))
+    assert.equal(r.body.message, "Remove hidden or special characters from short description and try again.")
+  }
+  // Legitimate text passes: line breaks (also \r\n), emoji sequences, accents, CJK, Persian.
+  for (const description of [
+    "First line.\nSecond line.",
+    "First line.\r\nSecond line.",
+    "Built for developers 👩‍💻 and families 👨‍👩‍👧 ❤️",
+    "Café Nguyễn · 开发工具 · می‌خواهم",
+  ]) {
+    t.store.edits.length = 0
+    assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description } })).status, 200, description)
+  }
+  assert.equal((t.store.edits[0].fields.changes as { description: string }).description.includes("\r"), false)
+  assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description: "First line.\r\nSecond." } })).status, 200)
+  assert.equal(((t.store.edits.at(-1)!.fields.changes) as { description: string }).description, "First line.\nSecond.")
+  // A new program named only in CJK gets its slug from the website.
+  assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "开发工具", url: "https://tools.kymaapi.com" })).status, 200)
+  assert.equal(t.store.edits.at(-1)!.slug, "tools-kymaapi")
 })
 
 test("the store gets the listing's own domain, not the account's, so its re-check means something", async () => {
@@ -1103,7 +1129,6 @@ test("add a program: another site, a link that is not https, a stale tab or no t
     [{ ...NEW_PROGRAM, url: "https://evil.io/kymaapi.com" }, {}, 400],
     [{ ...NEW_PROGRAM, url: "http://studio.kymaapi.com" }, {}, 400],
     [{ ...NEW_PROGRAM, signup_url: "javascript:alert(1)" }, {}, 400],
-    [{ ...NEW_PROGRAM, name: "!!" }, {}, 400],
     [{ ...NEW_PROGRAM, category: "Gambling" }, {}, 400],
     [{ ...NEW_PROGRAM, agents: { prompt: "x" } }, {}, 400],
     [{ ...NEW_PROGRAM, slug: "vercel" }, {}, 400],
@@ -1140,6 +1165,9 @@ test("add a program: already listed, a name taken elsewhere, or already sent is 
 
   assert.equal(slugFor("Kyma Studio Pro!"), "kyma-studio-pro")
   assert.equal(slugFor("Café Über"), "cafe-uber")
+  // No Latin letters or digits: the website's host gives the slug.
+  assert.equal(slugFor("开发工具", "https://studio.kymaapi.com/zh"), "studio-kymaapi")
+  assert.equal(slugFor("开发工具"), "")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/", "x")?.slug, "notion")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/affiliates", "x"), undefined)
 })

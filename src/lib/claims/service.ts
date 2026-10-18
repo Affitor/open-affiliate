@@ -439,10 +439,17 @@ async function readBody<T>(req: Request, schema: z.ZodType<T>): Promise<T | null
 async function readForm<T>(req: Request, schema: z.ZodType<T>): Promise<T | Response> {
   const parsed = schema.safeParse(await req.json().catch(() => null))
   if (parsed.success) return parsed.data
-  const path = parsed.error.issues[0]?.path ?? []
+  const issue = parsed.error.issues[0]
+  const path = issue?.path ?? []
   // The last named key: "changes.use_cases.3" reads as "use cases".
   const name = [...path].reverse().find((k) => typeof k === "string")
-  const message = name ? `Check ${String(name).replace(/_/g, " ")} and try again.` : "Check the form and try again."
+  const field = name ? String(name).replace(/_/g, " ") : ""
+  // Free text refused for a hidden or control character (often pasted) says so.
+  const message = !field
+    ? "Check the form and try again."
+    : issue?.message === HIDDEN_CHARACTER
+      ? `Remove hidden or special characters from ${field} and try again.`
+      : `Check ${field} and try again.`
   return fail(400, "bad_request", message, { field: path.join(".") })
 }
 
@@ -591,13 +598,26 @@ const ContactBody = z.object({ slug: slugField, email: z.string().max(320), turn
 const VerifyBody = z.object({ slug: slugField, code: z.string().max(20) })
 const SlugBody = z.object({ slug: slugField })
 /** `report`: "Report this page" on a claimed listing, into the same manual queue. */
-// Free text a person reads in a review queue or a pull request: no control or
-// format characters (bidi overrides, zero-width, NUL), so what a reviewer sees
-// is what was sent. Multi-line fields keep line breaks.
-const ONE_LINE = /^[^\p{Cc}\p{Cf}]*$/u
-const MULTI_LINE = /^[^\p{Cf}\u0000-\u0009\u000B-\u001F\u007F-\u009F]*$/u
-const textField = (max: number) => z.string().trim().max(max).regex(ONE_LINE)
-const proseField = (max: number) => z.string().trim().max(max).regex(MULTI_LINE)
+// Free text a person reads in a review queue or a pull request: no control
+// characters, bidi controls, invisible fillers or selectors, line/paragraph
+// separators or lone surrogates, so what a reviewer sees is what was sent.
+// Joiners and emoji presentation selectors stay: 👩‍💻 needs U+200D, Persian
+// and Indic text need U+200C, ❤️ needs U+FE0F. Multi-line fields keep line
+// breaks; a browser's \r\n becomes \n first.
+const HIDDEN = [
+  "\\u0000-\\u0008\\u000B-\\u001F\\u007F-\\u009F\\u00AD\\u034F\\u061C\\u115F\\u1160\\u17B4\\u17B5\\u180B-\\u180F",
+  "\\u200B\\u200E\\u200F\\u2028-\\u202E\\u2060-\\u2064\\u2066-\\u206F\\u2800\\u3164\\uFE00-\\uFE0D\\uFEFF\\uFFA0\\uFFF9-\\uFFFB",
+  "\\u{E0100}-\\u{E01EF}\\p{Cs}",
+].join("")
+const ONE_LINE = new RegExp(`^[^${HIDDEN}\\t\\n\\r]*$`, "u")
+const MULTI_LINE = new RegExp(`^[^${HIDDEN}\\t\\r]*$`, "u")
+const HIDDEN_CHARACTER = "hidden_character"
+const textField = (max: number) => z.string().trim().max(max).regex(ONE_LINE, HIDDEN_CHARACTER)
+const proseField = (max: number, min = 0) =>
+  z.preprocess(
+    (v) => (typeof v === "string" ? v.replace(/\r\n?/g, "\n") : v),
+    z.string().trim().min(min).max(max).regex(MULTI_LINE, HIDDEN_CHARACTER),
+  )
 
 const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), report: z.boolean().optional() })
 
@@ -626,7 +646,7 @@ const PayoutInput = z
   .strict()
 const cookieDaysInput = z.number().int().min(0).max(3650).nullable()
 const shortDescriptionInput = textField(S.short_description.maxLength).min(1)
-const descriptionInput = proseField(2000).min(1)
+const descriptionInput = proseField(2000, 1)
 const urlInput = textField(500)
 
 /** Spec v4 §5.1: what an owner may change on a listing. Keys are the YAML's. */
@@ -911,8 +931,10 @@ export function editFlags(
       flags.push("commission_drop_over_50pct")
     }
   }
-  if (changes.signup_url && registrableDomain(changes.signup_url) !== registrableDomain(program.signupUrl ?? program.url)) {
-    flags.push("signup_domain_changed")
+  // Where Apply leads after the change: a cleared signup link falls back to the website.
+  if (changes.signup_url !== undefined) {
+    const next = changes.signup_url ?? program.url
+    if (registrableDomain(next) !== registrableDomain(program.signupUrl ?? program.url)) flags.push("signup_domain_changed")
   }
   if (changes.status && changes.status !== "active") flags.push("status_not_active")
   return flags
@@ -920,8 +942,8 @@ export function editFlags(
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
-/** Compatibility forms folded (fullwidth letters, ligatures) and case dropped, for matching only. */
-const fold = (s: string) => s.normalize("NFKC").toLowerCase()
+/** Compatibility forms folded (fullwidth letters, ligatures), invisible code points and case dropped, for matching only. */
+const fold = (s: string) => s.normalize("NFKC").replace(/\p{Default_Ignorable_Code_Point}/gu, "").toLowerCase()
 
 /**
  * Other brands' names in an owner's text (spec v4 §5.4: a description that
@@ -1030,8 +1052,23 @@ async function submitEdit(req: Request, deps: ClaimDeps): Promise<Response> {
 
 const SLUG_SHAPE = new RegExp(S.slug.pattern)
 
-/** The slug a new program would get: the name, lowercased, words joined by hyphens. */
-export function slugFor(name: string): string {
+/**
+ * The slug a new program would get: the name, lowercased, words joined by
+ * hyphens. A name with no Latin letters or digits ("开发工具") takes its
+ * website's host instead (studio.kymaapi.com → studio-kymaapi).
+ */
+export function slugFor(name: string, url?: string): string {
+  const fromName = slugOf(name)
+  if (fromName || !url) return fromName
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "")
+    return slugOf(host.split(".").slice(0, -1).join(" "))
+  } catch {
+    return ""
+  }
+}
+
+function slugOf(name: string): string {
   return name
     .normalize("NFKD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -1079,7 +1116,7 @@ async function submitProgram(req: Request, deps: ClaimDeps): Promise<Response> {
   }
   if (program.signup_url !== undefined && !signupUrlAllowed(program.signup_url)) return badLink("your affiliate signup page")
   if (!signupUrlAllowed(body.termsUrl)) return badLink("the page that states your terms")
-  const slug = slugFor(program.name)
+  const slug = slugFor(program.name, program.url)
   if (!SLUG_SHAPE.test(slug)) return fail(400, "bad_name", "Use a name with letters or digits.")
 
   const listed = alreadyListed(deps.allPrograms(), program.url, slug)

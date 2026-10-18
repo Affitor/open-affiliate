@@ -77,7 +77,7 @@ export function valuesOf(p: Program): ProgramValues {
   }
 }
 
-const lines = (s: string) => s.split("\n").map((l) => l.trim()).filter(Boolean)
+const lines = (s: string) => s.split(/\r\n?|\n/).map((l) => l.trim()).filter(Boolean)
 const optionalNumber = (s: string) => (s.trim() === "" ? null : Number(s))
 /** An emptied optional field is sent as null: the apply step deletes the YAML key. */
 const optionalText = (s: string) => s.trim() || null
@@ -107,7 +107,7 @@ function normalized(v: ProgramValues): Record<string, unknown> {
     payout: payoutOf(v),
     cookie_days: optionalNumber(v.cookieDays),
     short_description: v.shortDescription.trim(),
-    description: v.description.trim(),
+    description: v.description.replace(/\r\n?/g, "\n").trim(),
     use_cases: lines(v.useCases),
     signup_url: optionalText(v.signupUrl),
     approval: v.approval || null,
@@ -148,7 +148,7 @@ export function newProgramFrom(
     category: product.category,
     commission: commissionOf(v),
     short_description: v.shortDescription.trim(),
-    description: v.description.trim(),
+    description: v.description.replace(/\r\n?/g, "\n").trim(),
     ...(v.signupUrl.trim() ? { signup_url: v.signupUrl.trim() } : {}),
     ...(v.cookieDays.trim() ? { cookie_days: optionalNumber(v.cookieDays) } : {}),
     ...(hasPayout ? { payout } : {}),

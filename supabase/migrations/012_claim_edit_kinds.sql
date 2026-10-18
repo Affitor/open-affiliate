@@ -21,6 +21,10 @@
 
 ALTER TABLE claim_edits
   ADD COLUMN IF NOT EXISTS member_id uuid REFERENCES claim_members (id) ON DELETE SET NULL;
+-- Removing a member (and the retention job) sets this to null: index it, and
+-- index the per-claim lookups the function below makes under the lock.
+CREATE INDEX IF NOT EXISTS claim_edits_member ON claim_edits (member_id);
+CREATE INDEX IF NOT EXISTS claim_edits_claim_created ON claim_edits (claim_id, created_at);
 
 DROP FUNCTION IF EXISTS public.claim_submit_edit(uuid, text, jsonb, int);
 DROP FUNCTION IF EXISTS public.claim_member_submit_edit(uuid, text, jsonb, int);
