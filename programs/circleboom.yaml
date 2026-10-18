@@ -6,21 +6,23 @@ tags: ["social-media-management", "social-publishing", "twitter-analytics", "con
 
 # "We share 20% of our gross revenue for the first year with our affiliates who lead the customer." (circleboom.com/affiliate-program, checked 2026-10-18)
 # duration: stated two ways, so left out: "We share 20% of our gross revenue for the first year" (circleboom.com/affiliate-program, checked 2026-10-18) vs "a 20% commission on the first payment within the first 1 month" (affiliate.circleboom.com/signup, checked 2026-10-18)
+# rate: stated two ways, so left out: "We share 20% of our gross revenue for the first year" (circleboom.com/affiliate-program, checked 2026-10-18) vs "Circleboom will give you 30% of all payments they make in the first year for every customer." (circleboom.com/affiliate-program-policy, checked 2026-10-18)
 commission:
   type: recurring
-  rate: "20%"
-  mode: percentage
-  value: 20
+  rate: "varies"
+  mode: unknown
+  value: null
   currency: USD
   duration: null
-  conditions: "Standard affiliates earn 20%; qualifying Elite affiliates are offered 25% and a $250 advance, with eligibility requiring at least 100,000 monthly website visits or a SimilarWeb global rank below 100,000. Commission length is disputed: the brand page says the first year, while the Rewardful signup portal says the first payment within the first month. The agreement requires customers to remain for 60 days before commission eligibility and schedules eligible payouts for the last week of each month through PayPal."
+  conditions: "Published rates conflict: the affiliate page and signup portal state 20%, while the program policy states 30%. The affiliate page separately advertises 25% and a $250 advance for eligible Elite affiliates. Commission length also conflicts: the page and policy say the first year, while the signup portal says the first payment within the first month. Confirm the applicable rate and length before promoting. The policy sets a $50 payout threshold; eligible commissions are paid through PayPal in the last week of each month, after the customer has remained active for more than 60 days."
 
 # "We use a 60-Day Cookie Window." (circleboom.com/affiliate-program, checked 2026-10-18)
 cookie_days: 60
 
 # "last week of each month." (circleboom.com/affiliate-program-terms-of-service, checked 2026-10-18)
-# payout.minimum: not published on circleboom.com/affiliate-program (checked 2026-10-18)
+# "a $50.00 threshold in revenue." (circleboom.com/affiliate-program-policy, checked 2026-10-18)
 payout:
+  minimum: 50
   currency: USD
   frequency: monthly
   methods: ["paypal"]
@@ -42,14 +44,15 @@ description: >
   alongside Twitter account analytics. It helps users manage social
   accounts, plan posts and understand their audiences.
 
-  Standard affiliates earn 20%; qualifying Elite affiliates are offered 25%
-  and a $250 advance, with eligibility requiring at least 100,000 monthly
-  website visits or a SimilarWeb global rank below 100,000. Commission
-  length is disputed: the brand page says the first year, while the
-  Rewardful signup portal says the first payment within the first month. The
-  agreement requires customers to remain for 60 days before commission
-  eligibility and schedules eligible payouts for the last week of each month
-  through PayPal.
+  Published rates conflict: the affiliate page and signup portal state 20%,
+  while the program policy states 30%. The affiliate page separately
+  advertises 25% and a $250 advance for eligible Elite affiliates.
+  Commission length also conflicts: the page and policy say the first year,
+  while the signup portal says the first payment within the first month.
+  Confirm the applicable rate and length before promoting. The policy sets a
+  $50 payout threshold; eligible commissions are paid through PayPal in the
+  last week of each month, after the customer has remained active for more
+  than 60 days.
 
 short_description: "Social media publishing, management and Twitter analytics"
 

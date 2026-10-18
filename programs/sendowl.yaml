@@ -13,7 +13,7 @@ commission:
   value: 50
   currency: USD
   duration: null
-  conditions: "50% of referred customers' SaaS fees. Commission length is disputed: the headline says the first year and the introduction says the next year, while the payment FAQ says as long as they are a SendOwl customer. Confirm the applicable length before promotion. Payouts are sent through PayPal on the seventh of each month."
+  conditions: "50% of referred customers' SaaS fees. Commission length is disputed: the headline says the first year and the introduction says the next year, while the payment FAQ says as long as they are a SendOwl customer. Confirm the applicable length before promotion. Payouts are sent through PayPal on the seventh of each month. Referral Scheme terms prohibit coupon, deal or discount sites, any pay-per-click advertising, and promotion on search engines or social media platforms."
 
 # "We use browser cookies to track the referral and the cookie lasts for 90 days." (www.sendowl.com/referral, checked 2026-10-18)
 cookie_days: 90
@@ -27,6 +27,13 @@ payout:
 
 signup_url: https://www.sendowl.com/referral
 
+# "you may not promote or advertise SendOwl on any coupon, deal or discount site, via any pay-per-click advertising" (www.sendowl.com/terms, checked 2026-10-18)
+restrictions:
+  - "No coupon, deal or discount sites"
+  - "No pay-per-click advertising"
+  - "Referral Scheme terms prohibit promotion on search engines or social media platforms"
+  - "Use of SendOwl branding requires prior written permission"
+
 dashboard_url: null
 # Referral links and referral statistics are managed within SendOwl account settings.
 network: in-house
@@ -37,11 +44,13 @@ description: >
   supports creators and businesses selling through their own websites and
   connects with commerce and payment platforms.
 
-  Affiliates earn 50% of referred customers' SaaS fees. Commission length is
-  disputed: the headline says the first year and the introduction says the
-  next year, while the payment FAQ says as long as they are a SendOwl
-  customer. Confirm the applicable length before promotion. Payouts are sent
-  through PayPal on the seventh of each month.
+  50% of referred customers' SaaS fees. Commission length is disputed: the
+  headline says the first year and the introduction says the next year,
+  while the payment FAQ says as long as they are a SendOwl customer. Confirm
+  the applicable length before promotion. Payouts are sent through PayPal on
+  the seventh of each month. Referral Scheme terms prohibit coupon, deal or
+  discount sites, any pay-per-click advertising, and promotion on search
+  engines or social media platforms.
 
 short_description: "Sell and deliver digital products and downloads"
 

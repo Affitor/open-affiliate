@@ -5,16 +5,15 @@ category: Business Operations
 tags: ["business-management", "crm", "project-management", "invoicing", "workflow-automation"]
 
 # "40%" (www.flowlu.com/affiliates/, checked 2026-10-18)
-# type: one-time is a conservative per-sale classification; the page does not publish recurrence.
+# "First month 40% then 20% recurring commission (total 12 months)" (flowlu.firstpromoter.com, checked 2026-10-18)
 commission:
-  type: one-time
+  type: recurring
   rate: "up to 40%"
   mode: percentage
   value: 40
   currency: USD
-  # duration: not published on www.flowlu.com/affiliates/ (checked 2026-10-18)
-  duration: null
-  conditions: "Referral partners earn up to 40% commission. Flowlu separately advertises a Solution Partner program with up to 50% commission plus service revenue; that separate program is not the referral rate. The referral page does not publish recurrence, payout minimum, methods or schedule."
+  duration: "12 months"
+  conditions: "Referral partners earn 40% in the first month, then 20% recurring commission for a total of 12 months, as stated on the linked FirstPromoter portal. The main page advertises the matching maximum of up to 40%. A separate Solution Partner program offers up to 50% plus service revenue; that is not the referral rate. Payout minimum, methods and schedule are not published on the readable affiliate page or the captured portal."
 
 # "We offer a 60-day cookie window" (www.flowlu.com/affiliates/, checked 2026-10-18)
 cookie_days: 60
@@ -33,10 +32,12 @@ description: >
   tools and workflow automation. It helps businesses organize client work
   and internal operations in one workspace.
 
-  Referral partners earn up to 40% commission. Flowlu separately advertises
-  a Solution Partner program with up to 50% commission plus service revenue;
-  that separate program is not the referral rate. The referral page does not
-  publish recurrence, payout minimum, methods or schedule.
+  Referral partners earn 40% in the first month, then 20% recurring
+  commission for a total of 12 months, as stated on the linked FirstPromoter
+  portal. The main page advertises the matching maximum of up to 40%. A
+  separate Solution Partner program offers up to 50% plus service revenue;
+  that is not the referral rate. Payout minimum, methods and schedule are
+  not published on the readable affiliate page or the captured portal.
 
 short_description: "CRM, projects, invoicing and workflow automation in one workspace"
 

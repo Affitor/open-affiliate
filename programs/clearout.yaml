@@ -14,7 +14,7 @@ commission:
   value: 10
   currency: USD
   duration: null
-  conditions: "10% commission. The public page and signup portal say the first transaction only, while the linked affiliate agreement says commissions apply throughout the customer relationship. Commission length is therefore unresolved. Payout minimum is also disputed: $50 on the public page and $5 in the agreement. The page says withdrawals on the fifteenth of each month, while the agreement says net 30 days. Confirm the current terms before promoting."
+  conditions: "Only paying Clearout customers are eligible to refer others. 10% commission. The public page and signup portal say the first transaction only, while the linked affiliate agreement says commissions apply throughout the customer relationship. Commission length is therefore unresolved. Payout minimum is also disputed: $50 on the public page and $5 in the agreement. The page says withdrawals on the fifteenth of each month, while the agreement says net 30 days. Confirm the current terms before promoting."
 
 # "Referral cookies last 30 days" (clearout.io/affiliates/, checked 2026-10-18)
 cookie_days: 30
@@ -23,7 +23,10 @@ cookie_days: 30
 
 signup_url: https://clearout.io/affiliates/
 approval: manual
+
+# "Only paying customers are eligible to refer others." (clearout.io/affiliates/, checked 2026-10-18)
 restrictions:
+  - "Only paying Clearout customers may refer others"
   - "No self-referrals"
   - "No unsolicited email"
   - "No deceptive traffic or advertising"
@@ -38,13 +41,14 @@ description: >
   It helps businesses check email lists, find business contacts and validate
   data collected through forms.
 
-  Affiliates earn 10% commission. The public page and signup portal say the
-  first transaction only, while the linked affiliate agreement says
-  commissions apply throughout the customer relationship. Commission length
-  is therefore unresolved. Payout minimum is also disputed: $50 on the
-  public page and $5 in the agreement. The page says withdrawals on the
-  fifteenth of each month, while the agreement says net 30 days. Confirm the
-  current terms before promoting.
+  Only paying Clearout customers are eligible to refer others. 10%
+  commission. The public page and signup portal say the first transaction
+  only, while the linked affiliate agreement says commissions apply
+  throughout the customer relationship. Commission length is therefore
+  unresolved. Payout minimum is also disputed: $50 on the public page and $5
+  in the agreement. The page says withdrawals on the fifteenth of each
+  month, while the agreement says net 30 days. Confirm the current terms
+  before promoting.
 
 short_description: "Email verification, email finding and lead-data validation"
 
@@ -54,7 +58,8 @@ agents:
     lead-data validation. Suitable scenarios include email marketers
     checking address lists before sending; sales teams finding and verifying
     business email addresses. Some published terms conflict; confirm the
-    current program conditions before quoting them.
+    current program conditions before quoting them. Only paying Clearout
+    customers are eligible to participate in its affiliate program.
   keywords: ["clearout", "email verification", "email finder", "lead data", "phone validation"]
   use_cases:
     - "Email marketers checking address lists before sending"

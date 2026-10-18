@@ -25,10 +25,15 @@ payout:
   methods: ["paypal"]
 
 signup_url: https://ontraport.com/partners
+
+# "Affiliates may not bid on Ontraport trademark terms on Google and Bing/Yahoo, including international versions." (ontraport.com/legal, checked 2026-10-18)
 restrictions:
   - "No self-referrals"
   - "No spam"
-  - "No bidding on Ontraport trademarks or misleading brand advertising"
+  - "No bidding on Ontraport trademarks or trademark-plus-term keywords on Google and Bing/Yahoo"
+  - "No direct-to-merchant linking on Google and Yahoo/Bing"
+  - "Do not use Ontraport domains in ad display URLs or impersonate an official ad"
+  - "Trademark bidding on other permitted platforms must follow the full PPC policy"
 
 dashboard_url: null
 # The brand provides its own Partner Center and referral tracking.

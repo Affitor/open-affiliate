@@ -27,8 +27,8 @@ signup_url: https://www.coupler.io/affiliate-program
 approval: manual
 
 dashboard_url: null
-# The signup button uses l.rw.rw; the publicly readable page does not name a tracking platform.
-network: null
+# The linked l.rw.rw signup redirects to Coupler.io on coupler.firstpromoter.com.
+network: firstpromoter
 program_age: null
 
 description: >

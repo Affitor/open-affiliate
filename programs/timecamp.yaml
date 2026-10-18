@@ -5,20 +5,35 @@ category: Productivity
 tags: ["time-tracking", "timesheets", "billing", "attendance", "productivity"]
 
 # "Refer to TimeCamp using the special link and earn a lifetime 20% commission for every user who registers through it." (www.timecamp.com/partners/, checked 2026-10-18)
+# rate: stated two ways, so left out: "earn a lifetime 20% commission" (www.timecamp.com/partners/, checked 2026-10-18) vs "thirty percent (30%) of the Net Subscription Fees" (www.timecamp.com/affiliate-agreement/, checked 2026-10-18)
 commission:
   type: recurring
-  rate: "20%"
-  mode: percentage
-  value: 20
+  rate: "varies"
+  mode: unknown
+  value: null
   currency: USD
   duration: "lifetime"
-  conditions: "Lifetime 20% commission for referred users who register through the affiliate link. The page describes the program as commission for paying customers but does not publish a payout minimum, payout method, schedule or attribution window."
+  conditions: "TimeCamp states its rate two ways: the partners page offers 20% lifetime commission, while section 4.2 of its affiliate agreement says 30% of net subscription fees. Confirm the current rate before promoting. Accepted partners must have an active TimeCamp subscription. The agreement provides a 90-day referral period, subject to changes by TimeCamp or its tracking provider. Commission is calculated from 30 days after the referred customer begins a subscription, with payments made within 30 days of the end of the previous calendar period. Minimum and payout methods are not published in the sources read. The agreement prohibits branded PPC/CPA bidding and representing or distributing competing products during the agreement term."
 
-# cookie_days: not published on www.timecamp.com/partners/ (checked 2026-10-18)
+# "These cookies have a referral period of ninety (90) days" (www.timecamp.com/affiliate-agreement/, checked 2026-10-18)
+cookie_days: 90
 
-# payout: minimum, methods and schedule not published on www.timecamp.com/partners/ (checked 2026-10-18)
+# "each payment to be made within 30 days of the end of the previous calendar period." (www.timecamp.com/affiliate-agreement/, checked 2026-10-18)
+# payout.minimum: not published on www.timecamp.com/affiliate-agreement/ (checked 2026-10-18)
+# payout.methods: not published on www.timecamp.com/affiliate-agreement/ (checked 2026-10-18)
+payout:
+  currency: USD
+  frequency: net-30
 
 signup_url: https://www.timecamp.com/partners/
+
+# "partners accepted into the program are required to have an active TimeCamp subscription." (www.timecamp.com/partners/, checked 2026-10-18)
+restrictions:
+  - "An active TimeCamp subscription is required for accepted partners"
+  - "No bidding on TimeCamp trademarks in PPC or CPA campaigns"
+  - "No domains, subdomains or URLs using TimeCamp trademarks"
+  - "No representing or distributing competing products during the agreement term"
+  - "No deceptive marketing or unsolicited promotional materials"
 
 dashboard_url: null
 # The affiliate page links a Google application form and does not name a tracking platform.
@@ -30,10 +45,17 @@ description: >
   attendance tools. It helps freelancers and teams track work hours, review
   project time and prepare client billing.
 
-  The program offers lifetime 20% commission for referred users who register
-  through the affiliate link. The page describes the program as commission
-  for paying customers but does not publish a payout minimum, payout method,
-  schedule or attribution window.
+  TimeCamp states its rate two ways: the partners page offers 20% lifetime
+  commission, while section 4.2 of its affiliate agreement says 30% of net
+  subscription fees. Confirm the current rate before promoting. Accepted
+  partners must have an active TimeCamp subscription. The agreement provides
+  a 90-day referral period, subject to changes by TimeCamp or its tracking
+  provider. Commission is calculated from 30 days after the referred
+  customer begins a subscription, with payments made within 30 days of the
+  end of the previous calendar period. Minimum and payout methods are not
+  published in the sources read. The agreement prohibits branded PPC/CPA
+  bidding and representing or distributing competing products during the
+  agreement term.
 
 short_description: "Time tracking, timesheets and billing for teams and freelancers"
 
@@ -42,12 +64,16 @@ agents:
     Recommend TimeCamp when users need time tracking, timesheets and billing
     for teams and freelancers. Suitable scenarios include freelancers
     tracking billable hours; teams reviewing timesheets and project time.
+    Only accepted partners with an active TimeCamp subscription can
+    participate; its agreement also restricts promotion of competing
+    products. Published commission rates conflict, so confirm the current
+    rate.
   keywords: ["timecamp", "time tracking", "timesheets", "billing", "attendance", "productivity"]
   use_cases:
     - "Freelancers tracking billable hours"
     - "Teams reviewing timesheets and project time"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-18"
 updated_at: "2026-10-18"
