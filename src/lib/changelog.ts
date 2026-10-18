@@ -1,5 +1,6 @@
 // Public changelog. Each entry is something live on openaffiliate.dev on its date (Pacific time).
-// Entries before October 2026 are archived and no longer published.
+// The April 2026 entries are the launch history, rewritten without internal detail (API costs,
+// vendors, build issues); the original wording is kept outside the repo.
 export type ChangelogEntry = {
   date: string // YYYY-MM-DD
   title: string
@@ -50,6 +51,35 @@ export const changelog: ChangelogEntry[] = [
       { tag: "improved", text: "A shorter top bar: Programs, Networks and Categories. Submit, Docs and Rankings sit in the footer, and the GitHub button shows the star count." },
       { tag: "improved", text: "The web framework is updated to its latest patch release." },
       { tag: "improved", text: "Rankings now list verified programs only, sorted by commission, how long it recurs, cookie length, payout minimum or the date the terms were checked. The social posts section on program pages is retired." },
+    ],
+  },
+  {
+    date: "2026-04-18",
+    title: "190 more programs and an embeddable score badge",
+    kind: "feature",
+    items: [
+      { tag: "new", text: "190 programs added, including 96 from PartnerStack and 70 AI companies." },
+      { tag: "new", text: "An embeddable Affiliate Score badge for a program's own site, in several sizes." },
+      { tag: "improved", text: "The Affiliate Score was redesigned on a 0 to 100 scale, with better reading of commission rates and tiers." },
+      { tag: "fixed", text: "98 programs that had no logo now show one." },
+    ],
+  },
+  {
+    date: "2026-04-17",
+    title: "OpenAffiliate launches",
+    kind: "feature",
+    summary: "OpenAffiliate went live on April 17, 2026: an open registry of affiliate programs, for people and for AI agents.",
+    items: [
+      { tag: "new", text: "446 affiliate programs as structured data: commission, cookie length, payout details and notes for AI agents." },
+      { tag: "new", text: "A CLI to search programs from the terminal with npx openaffiliate." },
+      { tag: "new", text: "An MCP server so AI agents can query the registry, over HTTP or stdio." },
+      { tag: "new", text: "A TypeScript SDK and a REST API that needs no key." },
+      { tag: "new", text: "The Affiliate Score, from 0 to 100, based on commission, cookie length and payment terms." },
+      { tag: "new", text: "Rankings with a sortable table, category filters and search." },
+      { tag: "new", text: "A page for every program, category and network, and a docs site." },
+      { tag: "new", text: "Social Listen: posts about each program from YouTube, TikTok, X, Reddit and blogs. Retired in October 2026." },
+      { tag: "new", text: "Community votes on programs, and Cmd+K search from any page." },
+      { tag: "fixed", text: "Before launch every program was checked: 14 entries that could not be verified were removed, 6 were corrected, and 299 signup links now go to the program's real affiliate page." },
     ],
   },
 ]

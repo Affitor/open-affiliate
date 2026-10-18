@@ -28,7 +28,7 @@ export default function ChangelogPage() {
       <header className="oa-band pt-14 pb-8">
         <p className="oa-label">Changelog</p>
         <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-2">What changed in OpenAffiliate</h1>
-        <p className="text-lg text-muted-foreground mt-2">New programs, corrected terms and new features, as they go live.</p>
+        <p className="text-lg text-muted-foreground mt-2">New programs, corrected terms and new features, as they go live. OpenAffiliate launched on <time dateTime="2026-04-17">April 17, 2026</time>.</p>
       </header>
 
       <section className="oa-band">
