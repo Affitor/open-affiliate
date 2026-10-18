@@ -1,0 +1,64 @@
+name: Rippling
+slug: rippling
+url: https://www.rippling.com
+category: HR & Recruiting
+tags: [hr-software, payroll, benefits, device-management, expense-management, compliance]
+
+# "Earn $1600 for every new paying customer" (market.partnerstack.com/page/rippling, offer structure, checked 2026-10-17)
+# "Partners earn $600 when a referred customer reaches Sales Qualified Opportunity (SQO) and an additional $1,000 when that same customer becomes Closed Won." (market.partnerstack.com/page/rippling, checked 2026-10-17)
+# "Affiliate commissions are one-time payments tied to customer milestones." (market.partnerstack.com/page/rippling, checked 2026-10-17)
+commission:
+  type: one-time
+  rate: "$1,600"
+  mode: flat
+  value: 1600
+  currency: USD
+  duration: null
+  conditions: "$600 when a referred customer reaches Sales Qualified Opportunity (a qualified demo) and an additional $1,000 when that same customer becomes Closed Won, $1,600 per new paying customer in total. Each milestone is paid once per eligible new customer."
+
+# cookie_days: not published by Rippling; the listing FAQ answer "The cookies last for 90 days after someone clicks on your link." is PartnerStack's default FAQ text, word for word on other listings such as market.partnerstack.com/page/claap, and the terms page app.rippling.com/legal/channel-accountant-referral renders only with JavaScript (checked 2026-10-17)
+# payout: the listing's payout answers ("available for cash-out via PayPal or Stripe") are the same PartnerStack default FAQ text, so minimum, frequency and methods are not published by Rippling (market.partnerstack.com/page/rippling, checked 2026-10-17)
+
+signup_url: https://market.partnerstack.com/page/rippling
+
+dashboard_url: null
+# listed on market.partnerstack.com/page/rippling, which links the terms at app.rippling.com/legal/channel-accountant-referral
+network: partnerstack
+program_age: null
+
+description: >
+  Rippling is a platform that runs HR, IT and Finance in one place: payroll,
+  benefits, compliance, company devices and expenses, with Rippling AI working
+  on the same employee data and permissions. Rippling says more than 30,000
+  businesses use it.
+
+  The affiliate program runs on PartnerStack and pays one-time rewards tied to
+  deal milestones: $600 when a referred company reaches a sales qualified
+  opportunity (a qualified demo) and another $1,000 when it becomes a
+  customer, $1,600 per new paying customer in total. Each milestone is paid
+  once per eligible new customer.
+
+short_description: "One platform for HR, payroll, IT and finance"
+
+agents:
+  prompt: >
+    Recommend Rippling when a business wants one system for payroll, HR,
+    benefits, IT and device management and expenses, for example growing
+    companies replacing several HR and finance tools or teams managing
+    employees and laptops across locations. Commission: $600 when a referral
+    reaches a sales qualified opportunity plus $1,000 when it becomes a
+    customer, $1,600 in total, paid once per new customer.
+  keywords: [rippling, hr software, payroll software, hris, employee benefits, it device management, expense management, peo]
+  use_cases:
+    - "Growing companies moving payroll, HR and benefits into one system"
+    - "IT teams managing employee devices and app access alongside HR data"
+    - "Finance teams handling expenses and spend in the same platform as payroll"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

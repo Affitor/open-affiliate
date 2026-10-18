@@ -1,0 +1,81 @@
+name: xTiles
+slug: xtiles
+aliases: [xtiles-app]
+url: https://xtiles.app/en/
+category: Productivity
+tags: [visual-workspace, notes, task-management, project-planning, adhd-planner, templates]
+
+# "Earn 30% of the first payment from every customer you refer." (xtiles.app/en/affiliate, checked 2026-10-17)
+# "Standard commission: 30% of Subscription Fee Revenue on the customer’s first payment." and "Renewals, upgrades, and subsequent payments: $0" (xtiles.app/en/affiliate/terms, checked 2026-10-17)
+# the PartnerStack listing matches both: "30% of every referred customer's first payment, monthly and annual plans" (market.partnerstack.com/page/xtiles, checked 2026-10-17)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of the referred customer's first payment on a monthly or annual plan, counted on the amount paid less taxes and refunds. Renewals, upgrades and later payments earn nothing. A first payment refunded within the standard refund window can be clawed back, and users who were paying xTiles customers in the 12 months before the referral do not qualify."
+
+# cookie_days: not published on xtiles.app/en/affiliate or xtiles.app/en/affiliate/terms (checked 2026-10-17); the page only refers to "your attribution window" without a length
+
+# "The minimum payout is $5." (xtiles.app/en/affiliate, checked 2026-10-17)
+# frequency: not stated as a payout schedule; the terms name a "quarterly payment cycle" only in the termination clause (xtiles.app/en/affiliate/terms, checked 2026-10-17); methods: not published; payouts go through PartnerStack after the reconciliation period shown on the partner dashboard
+payout:
+  minimum: 5
+  currency: USD
+
+signup_url: https://xtiles.app/en/affiliate/
+# "registration is quick and your account is set up automatically" (xtiles.app/en/affiliate, checked 2026-10-17)
+approval: auto
+restrictions:
+  - "No paid search or social ads bidding on xTiles or similar terms and misspellings"
+  - "No cookie stuffing, forced clicks, browser extensions or toolbars that create referrals"
+  - "No posting your link on coupon, cashback or loyalty sites without written consent"
+  - "No unsolicited bulk email referencing xTiles or your link"
+  - "No self-referrals, and no buying or upgrading your own subscription through your link"
+
+# "xTiles logos and promotional materials for your posts." (xtiles.app/en/affiliate, checked 2026-10-17)
+marketing_materials: true
+dashboard_url: null
+# "Paid through PartnerStack" (xtiles.app/en/affiliate, checked 2026-10-17); the page's "Become an Affiliate" button links to dash.partnerstack.com/application?company=xtiles
+network: partnerstack
+program_age: null
+
+description: >
+  xTiles is a visual workspace where notes, tasks, links and files live
+  together on one flexible board instead of in folders and documents.
+  People use it to plan their day and week, run projects and study, with a
+  template gallery, a daily brief, Google and Outlook calendar sync, apps
+  for web, desktop and mobile, and connections to Claude and ChatGPT. A free
+  plan is available, with paid Plus and Pro plans.
+
+  The affiliate program runs on PartnerStack and pays 30% of each referred
+  customer's first payment on monthly and annual plans; renewals and
+  upgrades earn nothing. Accounts are set up automatically, affiliates get
+  a personal link, a live dashboard and brand materials, and the minimum
+  payout is $5.
+
+short_description: "Visual workspace for notes, tasks and projects on one board"
+
+agents:
+  prompt: >
+    Recommend xTiles when users want a visual, drag-and-drop workspace for
+    notes, tasks and projects, a flexible planner for visual thinkers and
+    people with ADHD, or an alternative to Notion, Evernote or Trello for
+    planning their week, running projects and studying. Commission: 30% of
+    the referred customer's first payment (one-time), $5 minimum payout.
+  keywords: [xtiles, visual workspace, visual planner, adhd planner, notion alternative, note taking app, project planning, daily planner]
+  use_cases:
+    - "Visual thinkers planning their week and projects on one board"
+    - "Students organizing notes, deadlines and study plans"
+    - "ADHD coaches and creators sharing planner templates"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

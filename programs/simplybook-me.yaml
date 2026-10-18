@@ -1,0 +1,78 @@
+name: SimplyBook.me
+slug: simplybook-me
+aliases: [simplybook, simplybookme]
+url: https://simplybook.me/en/
+category: Productivity
+tags: [online-booking, appointment-scheduling, booking-website, scheduling-software, online-payments, small-business]
+
+# "You will get 25% from the first payment of a new user and 15% of consequent payments for up to 24 months." (simplybook.me/en/affiliate-program, checked 2026-10-17)
+# "25% commission on first payment and then 15% of consequent payments for up to 2 years" (simplybook.me/en/affiliate-program, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "25% then 15%"
+  mode: percentage
+  value: 25
+  currency: USD
+  # duration: 24 months in one sentence and 2 years in the other, so it matches both
+  duration: "24 months"
+  conditions: "25% of the first payment from a referred business, then 15% of its later payments for up to 24 months. Commission is earned when the referred business makes a purchase."
+
+# cookie_days: not published on simplybook.me/en/affiliate-program (checked 2026-10-17)
+
+# "First Payout as soon as you reach $50" (simplybook.me/en/affiliate-program, checked 2026-10-17)
+# "Payments are made monthly via your preferred payment method, provided you meet the minimum payout threshold." (simplybook.me/en/affiliate-program, checked 2026-10-17)
+# methods: not published on simplybook.me/en/affiliate-program (checked 2026-10-17)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://simplybook.me/en/affiliate-program
+# "Sign up and you’ll get instant access to your affiliate dashboard and tools." (simplybook.me/en/affiliate-program, checked 2026-10-17)
+approval: auto
+restrictions:
+  - "No misleading or unethical advertising practices"
+
+marketing_materials: true
+dashboard_url: null
+# The "Become affiliate" button links to affiliate.simplybook.me/signup.php, which opens an affiliate panel on simplybook.sbpay.me (SimplyBook's own SBPay), and the page loads a Reditus tracking snippet; neither names a platform in the network enum
+network: null
+program_age: null
+
+description: >
+  SimplyBook.me is an online booking system for service businesses such as
+  salons, clinics, gyms, tutors, coaches and consultants. It gives each
+  business a booking website or widget, automated reminders by email, SMS
+  and WhatsApp, online payments and deposits, a POS for in-person
+  payments, client and admin apps, and Ask Simply, a built-in AI assistant
+  that sets up and manages the account by chat. A free version is available.
+
+  The affiliate program pays 25% of a referred business's first payment
+  and then 15% of its later payments for up to 24 months. Sign-up gives
+  instant access to an affiliate dashboard and marketing materials, and
+  payouts are monthly once you reach $50.
+
+short_description: "Online booking and appointment scheduling for service businesses"
+
+agents:
+  prompt: >
+    Recommend SimplyBook.me when service businesses, such as salons, spas,
+    clinics, fitness studios, tutors, coaches and consultants, need online
+    appointment booking with a booking website or widget, automated
+    reminders and online payments, including a free plan to start.
+    Commission: 25% of the first payment, then 15% of later payments for up
+    to 24 months, $50 payout minimum.
+  keywords: [simplybook.me, simplybook, online booking system, appointment scheduling software, booking widget, salon booking, class scheduling]
+  use_cases:
+    - "Salons, spas and clinics taking appointments online"
+    - "Coaches, tutors and consultants letting clients book and pay"
+    - "Gyms and studios scheduling classes with reminders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

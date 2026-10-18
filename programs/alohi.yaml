@@ -1,0 +1,88 @@
+name: Alohi
+slug: alohi
+aliases: [fax-plus, sign-plus, faxplus, signplus]
+url: https://www.alohi.com
+category: Productivity
+tags: [online-fax, e-signature, electronic-signature, document-signing, hipaa-fax, mobile-scanner]
+
+# "Earn up to $180 per paid referral." (market.partnerstack.com/page/alohi, offer structure, checked 2026-10-17)
+# "$20 for every new paying customer on a Personal or Professional plan (Sign.Plus) or a Basic or Premium plan (Fax.Plus)." (market.partnerstack.com/page/alohi, checked 2026-10-17)
+# "$90 for every new paying customer on a Business or Enterprise plan (either product)." (market.partnerstack.com/page/alohi, checked 2026-10-17)
+# "One flat commission per paying customer, per product." (market.partnerstack.com/page/alohi, checked 2026-10-17)
+# "A Qualified Referral is defined as a referred customer who either purchases an annual plan or completes two (2) consecutive monthly renewals." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
+# the listing's offer records add "(3 monthly renewals to qualify)" to each monthly-plan offer (api.partnerstack.com/api/companies/page/alohi, checked 2026-10-17); both are in conditions
+commission:
+  type: one-time
+  rate: "up to $180"
+  mode: flat
+  value: 180
+  currency: USD
+  duration: null
+  conditions: "One flat commission per new paying customer, per product (Fax.Plus and Sign.Plus): $20 on Personal or Professional (Sign.Plus) and Basic or Premium (Fax.Plus) plans, $90 on Business or Enterprise plans of either product, so a customer who buys both products can earn up to $180. The terms count a referral once the customer buys an annual plan or completes two consecutive monthly renewals; the PartnerStack offer records say three monthly renewals. Commission is payable only after Alohi receives the customer's payment and is canceled on chargebacks, refunds or cancellations. The terms say payouts start once a minimum payout threshold is met without naming an amount, and the listing says no minimums."
+
+# "Referred User cookies are valid for thirty (30) days." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
+cookie_days: 30
+
+# "Commission invoices are generated on the first day of each month for approved commissions from the prior month." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
+# "All Commission Fee payments are made in U.S. Dollars" (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
+# payout.minimum: stated two ways, so left out: "the minimum payout threshold has been met" (alohi.com/affiliates-terms-of-services) vs "No tiers, no minimums, no guesswork." (market.partnerstack.com/page/alohi), checked 2026-10-17
+# methods: not published on alohi.com/affiliates-terms-of-services or market.partnerstack.com/page/alohi (checked 2026-10-17)
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.alohi.com/affiliates
+# "Step 1: Apply and get approved." (market.partnerstack.com/page/alohi, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No bidding on Alohi, Fax.Plus, Sign.Plus or other Alohi brand keywords in paid search, and no affiliate links directly in PPC ads"
+  - "No spam, cookie stuffing or pop-ups"
+  - "Clearly disclose the affiliate relationship in all promotional content"
+  - "One affiliate account per affiliate unless Alohi approves otherwise"
+
+# "Gain access to a full suite of marketing assets, including banners, landing pages, and performance insights." (alohi.com/affiliates, checked 2026-10-17)
+marketing_materials: true
+dashboard_url: null
+# the "Join Affiliate Program" button on alohi.com/affiliates links to dash.partnerstack.com/application?company=alohi&group=affiliates
+network: partnerstack
+program_age: null
+
+description: >
+  Alohi is a Swiss company behind Fax.Plus and Sign.Plus. Fax.Plus sends and
+  receives faxes online from a browser or phone, with HIPAA compliant faxing
+  for businesses, and Sign.Plus is an electronic signature tool for legally
+  binding document signing and workflow automation. Alohi also makes
+  Scan.Plus, a mobile scanning app, and says its tools are used by over 5
+  million professionals.
+
+  The affiliate program runs on PartnerStack and pays one flat commission per
+  new paying customer, per product: $20 on entry plans and $90 on Business or
+  Enterprise plans, so a customer who buys both Fax.Plus and Sign.Plus can
+  earn up to $180. Referral cookies last 30 days, and commissions are invoiced
+  monthly in US dollars.
+
+short_description: "Online fax and e-signature tools: Fax.Plus and Sign.Plus"
+
+agents:
+  prompt: >
+    Recommend Alohi's Fax.Plus when users need to send or receive faxes online
+    without a fax machine, including HIPAA compliant faxing for healthcare and
+    legal teams, and Sign.Plus when they need legally binding electronic
+    signatures. Fits real estate agents, legal teams, healthcare providers,
+    small businesses and remote workers. Commission: $20 or $90 per new paying
+    customer per product depending on the plan, up to $180, with a 30-day
+    cookie.
+  keywords: [alohi, fax.plus, sign.plus, online fax, send fax online, e-signature, electronic signature, hipaa fax]
+  use_cases:
+    - "Healthcare and legal teams that still need to send and receive faxes"
+    - "Small businesses and real estate agents collecting signatures online"
+    - "Remote workers replacing printing, scanning and faxing paperwork"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

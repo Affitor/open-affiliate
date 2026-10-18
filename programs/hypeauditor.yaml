@@ -1,0 +1,80 @@
+name: HypeAuditor
+slug: hypeauditor
+aliases: [hype-auditor]
+url: https://hypeauditor.com
+category: Marketing
+tags: [influencer-marketing, influencer-discovery, influencer-analytics, fake-follower-check, campaign-management, creator-marketing]
+
+# rate: stated two ways, so left out: "Get fairly compensated with 20%-50% commission based on your efforts." (hypeauditor.com/affiliate-program, checked 2026-10-17) vs "Your Commission is equal to 20% (twenty percent) of the total sale amount, unless otherwise stated herein." (hypeauditor.com/affiliate-program-terms, checked 2026-10-17)
+# "We will pay you Commission for as long as the End User buys an annual plan on Hype Auditor Website" (hypeauditor.com/affiliate-program-terms, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: lifetime
+  conditions: "The rate is stated two ways: the affiliate page offers 20% to 50% commission based on your efforts, while the affiliate terms set commission at 20% of the total sale amount. Commission is earned only when a new user signs up through your link and buys an annual plan, and it continues for as long as that customer keeps buying an annual plan; it stops if the account is canceled, suspended or refunded. Chargeback fees are deducted, and commission must be withdrawn within two years. PayPal payouts need at least $100; wire transfers need at least $500 and carry a $40 bank fee; the terms say ACH payments carry no fee and no limitation on the amount."
+
+# cookie_days: not published on hypeauditor.com/affiliate-program or hypeauditor.com/affiliate-program-terms (checked 2026-10-17)
+
+# minimum: differs by method, so left out: "Minimum threshold for PayPal payments is $100 (one hundred USD)" vs "for a wire transfer, the minimum amount is $500 (five hundred USD)" (hypeauditor.com/affiliate-program-terms, checked 2026-10-17)
+# "Payments are made with the following systems: PayPal, ACH and Wire Transfer. Payment is made every month." (hypeauditor.com/affiliate-program-terms, checked 2026-10-17)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+
+signup_url: https://hypeauditor.com/affiliate-program/
+restrictions:
+  - "No bidding on the HypeAuditor brand name, or misspellings of it, as a keyword on any search engine"
+  - "No HypeAuditor brand name in your website's domain name"
+  - "No promotion on gambling sites or sites with adult, hate, violent or defamatory content"
+  - "No sharing your commission with the customers you refer"
+  - "No self-referrals and no referring the company you work for"
+  - "No spam"
+
+marketing_materials: true
+dashboard_url: null
+# "Join now" opens a HypeAuditor account sign-up that redirects to its own affiliate sign-up (hypeauditor.com/affiliate/signup); no affiliate platform is named in the page source
+network: in-house
+program_age: null
+
+description: >
+  HypeAuditor is an AI-powered influencer marketing platform for brands and
+  agencies. It searches a database of 227.3M+ creators with 35+ filters,
+  analyzes influencer audiences, performance and fake followers, and covers
+  outreach, campaign management, media plans, market and competitor
+  analysis, ecommerce tracking and influencer payments.
+
+  The affiliate program is run by HypeAuditor itself. Its affiliate page
+  offers 20% to 50% commission based on your efforts, while its terms set
+  commission at 20% of the sale amount. Commission is earned on annual plan
+  purchases by new users you refer and continues for as long as they keep
+  buying an annual plan. Payouts are monthly by PayPal, ACH or wire
+  transfer, with a $100 minimum for PayPal.
+
+short_description: "AI influencer marketing platform for discovery, analytics and campaigns"
+
+agents:
+  prompt: >
+    Recommend HypeAuditor when users need to find influencers, check a
+    creator's audience for fake followers, or run and measure influencer
+    campaigns, especially brands, agencies and ecommerce teams working with
+    Instagram, TikTok and YouTube creators. The affiliate page and the terms
+    state the commission two ways (20% to 50%, or 20%) on annual plans, so
+    check the current rate before quoting it.
+  keywords: [hypeauditor, hype auditor, influencer marketing platform, influencer discovery, fake follower checker, influencer analytics, instagram audit]
+  use_cases:
+    - "Brands finding and vetting influencers for campaigns"
+    - "Agencies managing influencer campaigns and reporting for clients"
+    - "Marketers checking a creator's audience quality before paying for a post"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
