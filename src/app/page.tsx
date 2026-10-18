@@ -58,7 +58,7 @@ export default function Home() {
               Affiliate programs worth promoting, with terms you can check.
             </h1>
             <p className="text-lg leading-relaxed text-foreground/80 mt-5 max-w-[600px]">
-              What each program pays, how long its cookie lasts and when it pays out, checked against the brand&apos;s own terms page. Open data for people and for AI agents.
+              What a program pays, how long its cookie lasts and when it pays out, with {checked.toLocaleString("en-US")} programs checked against the brand&apos;s own terms page. Open data for people and for AI agents.
             </p>
             <p className="text-meta text-muted-foreground tabular-nums mt-3" data-freshness>
               {freshnessLine(programs)}
@@ -131,7 +131,7 @@ export default function Home() {
                 <div className="min-w-0">
                   <h3 className="flex items-center gap-1.5 truncate text-sm font-semibold">
                     {program.name}
-                    {program.verified && <Check className="size-3.5 shrink-0 text-good" aria-label="Verified" />}
+                    {program.verified && <Check className="size-3.5 shrink-0 text-good" role="img" aria-label="Verified" />}
                   </h3>
                   <p className="truncate text-meta text-muted-foreground">{confirmedPitch(program, program.shortDescription)}</p>
                 </div>
@@ -186,7 +186,7 @@ export default function Home() {
           <div>
             <h2 className="text-lg font-semibold">Building an agent?</h2>
             <p className="text-sm text-muted-foreground mt-1">The same registry over MCP, a REST API, a CLI and a Markdown page per program.</p>
-            <p className="mt-3 overflow-x-auto whitespace-nowrap rounded-lg border border-border bg-sunk px-3 py-2 font-mono text-meta">claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp</p>
+            <p tabIndex={0} aria-label="MCP install command" className="mt-3 overflow-x-auto whitespace-nowrap rounded-lg border border-border bg-sunk px-3 py-2 font-mono text-meta">claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp</p>
           </div>
         </div>
       </section>
