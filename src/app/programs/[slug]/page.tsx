@@ -473,6 +473,12 @@ export default async function ProgramPage({
                     {onAffitor && <Badge variant="outline" className="text-xs text-muted-foreground">Runs on Affitor</Badge>}
                   </div>
                   <p className="text-sm text-muted-foreground">{program.name}&apos;s team keeps this page up to date. Every change is reviewed before it goes live.</p>
+                  {/* Claim spec v4 §7.2: a dispute goes to the manual review queue. */}
+                  {claimsEnabledFor(program) && (
+                    <Link href={`/programs/${program.slug}/claim#report`} className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground">
+                      Report this page
+                    </Link>
+                  )}
                 </>
               ) : (
                 <>

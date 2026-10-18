@@ -4,8 +4,8 @@ import { liveClaimDeps } from "@/lib/claims/live"
 import { registrableDomain } from "@/lib/claims/rules"
 import { claimDisabledResponse, handleClaim, type ClaimProgram } from "@/lib/claims/service"
 
-// POST /api/claims/{send-code|verify|dns-start|dns-check|manual|terms|release
-//                   |signin-code|signin-verify|signout|member-add|member-remove}
+// POST /api/claims/{send-code|verify|dns-start|dns-check|manual|edit|program-new|release
+//                   |signin-code|signin-verify|signout|member-add|member-remove|account-switch}
 // GET  /api/claims/session?slug=   /api/claims/account
 // 503 "claims not enabled" until every claim secret is set (src/lib/claims/rules.ts).
 
@@ -30,7 +30,7 @@ function programsOnDomain(domain: string): ClaimProgram[] {
 
 async function run(req: Request, { params }: Context): Promise<Response> {
   const { action } = await params
-  const deps = liveClaimDeps(getProgram, programsOnDomain, (task) => after(task))
+  const deps = liveClaimDeps(getProgram, programsOnDomain, () => programs, (task) => after(task))
   if (!deps) return claimDisabledResponse()
   return handleClaim(action, req, deps)
 }

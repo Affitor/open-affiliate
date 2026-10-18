@@ -1,6 +1,6 @@
 import { Resolver } from "node:dns/promises"
 import { createClient, type SupabaseClient } from "@supabase/supabase-js"
-import { claimEnvReady } from "./rules"
+import { claimEnvReady, claimReplyTo } from "./rules"
 import {
   MAIL_TEMPLATES,
   MAX_ATTEMPTS,
@@ -18,11 +18,10 @@ import {
 /**
  * Claim mail comes from OpenAffiliate's own domain (Sơn, 17/10). The domain
  * must be verified in Resend and OA_RESEND_API_KEY must be allowed to send
- * from it before the flag goes on. Reply-to stays the address approved in the
- * v1 pack until a monitored openaffiliate.dev inbox exists.
+ * from it before the flag goes on. Reply-to comes from OA_CLAIM_REPLY_TO
+ * (claimReplyTo in rules.ts).
  */
 const CLAIM_FROM = "OpenAffiliate <claims@openaffiliate.dev>"
-const CLAIM_REPLY_TO = "support@affitor.com"
 const ALLOWED_TEMPLATES: ReadonlySet<string> = new Set(MAIL_TEMPLATES)
 
 const DAY = 24 * 60 * 60 * 1000
@@ -94,18 +93,21 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       const { data } = check(await db.rpc("claim_release", { p_claim_id: claimId, p_actor: actorId }))
       return data === true
     },
-    async submitEdit(edit, dailyLimit) {
-      // Migration 011: lock the claim row, re-check the member, check the
-      // quota, insert the edit and its terms.submitted event, all at once.
+    async submitEdit(edit, limits) {
+      // Migration 012: lock the claim row, re-check the member and the
+      // domain, check both quotas, insert the change and its event, all at once.
       const { data } = check(
         await db.rpc("claim_member_submit_edit", {
           p_member_id: edit.member_id,
           p_slug: edit.slug,
+          p_domain: edit.domain,
+          p_kind: edit.kind,
           p_fields: edit.fields,
-          p_daily_limit: dailyLimit,
+          p_daily_limit: limits.perDay,
+          p_new_limit: limits.newPerDay,
         }),
       )
-      if (data === "ok" || data === "quota" || data === "not_owner") return data
+      if (data === "ok" || data === "quota" || data === "quota_new" || data === "not_owner") return data
       throw Object.assign(new Error("claim_member_submit_edit returned an unexpected value"), { code: "unexpected_result" })
     },
     // Same cutoffs as the daily pg_cron job in migration 009; this covers a
@@ -233,6 +235,7 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
 export function liveClaimDeps(
   getProgram: (slug: string) => ClaimProgram | undefined,
   programsOnDomain: (domain: string) => ClaimProgram[],
+  allPrograms: () => readonly ClaimProgram[],
   afterResponse: (task: () => Promise<void>) => void,
   env: Record<string, string | undefined> = process.env,
 ): ClaimDeps | null {
@@ -241,6 +244,7 @@ export function liveClaimDeps(
     auth: { persistSession: false },
   })
   const resolver = new Resolver({ timeout: 3000, tries: 2 })
+  const replyTo = claimReplyTo(env)
 
   return {
     store: supabaseStore(db),
@@ -248,6 +252,7 @@ export function liveClaimDeps(
     now: () => new Date(),
     getProgram,
     programsOnDomain,
+    allPrograms,
     afterResponse,
     async verifyTurnstile(token, ip) {
       const form = new URLSearchParams({ secret: env.TURNSTILE_SECRET_KEY!, response: token })
@@ -288,7 +293,7 @@ export function liveClaimDeps(
           body: JSON.stringify({
             from: CLAIM_FROM,
             to: [mail.to],
-            reply_to: CLAIM_REPLY_TO,
+            reply_to: replyTo,
             subject: mail.subject,
             text: mail.text,
             html: mail.html,
