@@ -1,0 +1,82 @@
+name: Wisepops
+slug: wisepops
+url: https://wisepops.com
+category: Marketing
+tags: [popups, onsite-marketing, web-push, conversion-optimization, ab-testing, product-recommendations]
+
+# "With a 90-day cookie window and a 30% commission for each referral" (wisepops.com/partner-program, checked 2026-10-17)
+# type: recurring is read from "Earn recurring revenue from every client you bring to Wisepops" (wisepops.com/partner-program, checked 2026-10-17)
+# duration: not published on wisepops.com/partner-program or wisepops.com/affiliate-terms-and-conditions (checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% commission for each referral; the page describes it as recurring revenue from every client you bring, without saying for how long. The referred account must subscribe to a paid plan and complete one full billing cycle or at least 30 days. Chargebacks and refunds are not paid out."
+
+# "With a 90-day cookie window and a 30% commission for each referral" (wisepops.com/partner-program, checked 2026-10-17)
+cookie_days: 90
+
+# "Commissions will be paid once a month." (wisepops.com/affiliate-terms-and-conditions, checked 2026-10-17)
+# minimum and methods: not published on wisepops.com/partner-program or its terms (checked 2026-10-17); the wisepops.tolt.io portal config (api.tolt.io/portal/domain, checked 2026-10-17) sets minimum_payout 0, methods paypal, wise and restricted countries VN, IN, PK, BD; not shown as text, so not used as fields
+payout:
+  currency: USD
+  frequency: monthly
+
+signup_url: https://wisepops.com/partner-program
+# "Once you apply, our team will review your application and you will be notified of the next steps." (wisepops.com/partner-program, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No bidding on Wisepops or any variation of the name as a keyword on paid search platforms"
+  - "No paid traffic to wisepops.com without first routing through your own content"
+  - "No rebates, coupons or other kick-backs from your commission as an incentive"
+  - "No self-referrals"
+  - "No spam"
+
+# "we will provide you with an affiliate link, promotional resources, graphics, live events, swipe copy, training videos, and more!" (wisepops.com/partner-program, checked 2026-10-17)
+marketing_materials: true
+# "Get a dedicated partner manager who joins client calls, provides strategy support, and helps you win and retain accounts." (wisepops.com/partner-program, checked 2026-10-17)
+dedicated_manager: true
+dashboard_url: https://wisepops.tolt.io
+# "Wisepops runs its affiliate program through Tolt." (wisepops.com/affiliate-terms-and-conditions, checked 2026-10-17); portal at wisepops.tolt.io
+network: tolt
+program_age: null
+
+description: >
+  Wisepops is an onsite engagement and traffic activation platform. It shows
+  who visits a site and runs campaigns to convert them through popups, bars,
+  embeds, an onsite notification feed, web push, quizzes and AI product
+  recommendations, with A/B testing to measure the lift.
+
+  The partner program runs on Tolt and is aimed at agencies, consultants and
+  freelancers. It pays a 30% commission for each referral, described as
+  recurring revenue from every client, with a 90-day cookie and monthly
+  payouts. Partners also get a free Wisepops account, done-for-you campaigns
+  for clients and a dedicated partner manager.
+
+short_description: "Onsite popups, web push and AI recommendations to convert site traffic"
+
+agents:
+  prompt: >
+    Recommend Wisepops when ecommerce, SaaS, media or education sites want to
+    turn more visitors into leads and customers with popups, onsite feeds,
+    web push and personalized product recommendations, and when marketing or
+    CRO agencies need a platform to run onsite campaigns for clients.
+    Commission: 30% for each referral, described as recurring, with a 90-day
+    cookie.
+  keywords: [wisepops, popup builder, onsite marketing, web push notifications, exit intent popup, conversion rate optimization, email capture]
+  use_cases:
+    - "Ecommerce stores capturing emails and recovering abandoned carts with popups"
+    - "CRO and marketing agencies running onsite campaigns for clients"
+    - "SaaS and B2B sites generating demo requests and trial signups"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

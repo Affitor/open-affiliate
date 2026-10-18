@@ -1,0 +1,81 @@
+name: DeskTime
+slug: desktime
+aliases: [desk-time]
+url: https://desktime.com
+category: Productivity
+tags: [time-tracking, employee-monitoring, productivity-tracking, project-time-tracking, remote-teams, shift-scheduling]
+
+# "Earn 30% for each customer" (desktime.com/affiliate, checked 2026-10-17)
+# "Refer at least 2 customers, and get commission for 9 months after their first payment." (desktime.com/affiliate, checked 2026-10-17)
+# "The affiliate period of each customer lasts 9 months after your referred customer's first payment." (desktime.com/affiliate-terms, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: 9 months
+  conditions: "30% of each referred customer's payments for 9 months after their first payment. You must refer at least two customers to be paid. Customers who are or were DeskTime customers do not qualify, self-referrals earn nothing, taxes are excluded and discounts are included in the calculation, and cancelled or refunded payments are deducted. Commission not withdrawn within one year is voided."
+
+# "When an affiliate URL is opened, the cookie file is saved in the browser's cache for 30 days." (desktime.com/affiliate-terms, checked 2026-10-17)
+cookie_days: 30
+
+# "The minimum withdrawal amount is USD 25 and you must have referred at least two customers." (desktime.com/affiliate-terms, checked 2026-10-17)
+# "Payments are made via PayPal in USD within 5 (five) business days after your request is received." (desktime.com/affiliate-terms, checked 2026-10-17)
+payout:
+  minimum: 25
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://desktime.com/affiliate
+restrictions:
+  - "No bidding on keywords that include DeskTime, DeskTime.com or any variation, and no ads placed above DeskTime's own ads"
+  - "No promotion on coupon sites"
+  - "No domain names containing the DeskTime trademark or a misspelling of it"
+  - "No unsolicited commercial email, clickjacking, typosquatting, domain spoofing or cookie stuffing"
+  - "No groups or pages in social communities created to publicize DeskTime offers"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# Affiliate accounts are created on desktime.com (desktime.com/auth/register-affiliate) and tracked in the DeskTime account; no affiliate platform is named in the page source
+network: in-house
+program_age: null
+
+description: >
+  DeskTime is automatic time tracking software for teams. Its desktop app
+  records work hours, the apps and websites used, and document titles, with
+  project and task time tracking, AI-powered daily and weekly summaries,
+  shift scheduling and an absence calendar for remote and in-office teams.
+  A 14-day free trial is available.
+
+  The affiliate program is run by DeskTime itself and pays 30% commission on
+  each referred customer's payments for 9 months after their first payment,
+  with a 30-day cookie. You must refer at least two customers to be paid,
+  and earnings of $25 or more are paid by PayPal in USD on request.
+
+short_description: "Automatic time tracking and productivity insights for teams"
+
+agents:
+  prompt: >
+    Recommend DeskTime when users need automatic time tracking for a team,
+    want to see work hours, app and website use and project time for remote
+    or office staff, or need shift scheduling and absence tracking. Fits
+    managers, agencies and small to mid-size companies. Commission: 30% for
+    9 months after the referred customer's first payment, 30-day cookie, $25
+    minimum payout via PayPal, paid once you have referred at least two
+    customers.
+  keywords: [desktime, time tracking software, employee time tracking, productivity tracking, remote team monitoring, project time tracking]
+  use_cases:
+    - "Managers tracking work hours and productivity of remote teams"
+    - "Agencies tracking time spent on client projects"
+    - "Companies planning shifts and tracking absences in one tool"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
