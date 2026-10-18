@@ -74,6 +74,8 @@ for (const fullProgram of fullPrograms) {
     source: fullProgram.source,
     score: fullAffiliateScore(fullProgram),
     commissionRank: fullCommissionRank(fullProgram),
+    payoutMethods: termsConfirmed(fullProgram) && fullProgram.payoutMethods?.length ? fullProgram.payoutMethods : undefined,
+    payoutMinimum: termsConfirmed(fullProgram) ? fullProgram.payout.minimum : undefined,
   }
   const normalizedClientProgram = {
     ...clientProgram,
@@ -134,7 +136,7 @@ for (const row of (JSON.parse(raw.toString("utf8")) as { programs: Record<string
   const full = fullBySlug.get(String(row.slug))
   if (!full) fail(`client row ${String(row.slug)} is not in the registry`)
   if (termsConfirmed(full)) continue
-  for (const key of ["cookieDays", "cookie_days", "payout", "payoutMethods", "approval", "approvalTime"]) {
+  for (const key of ["cookieDays", "cookie_days", "payout", "payoutMethods", "payoutMinimum", "approval", "approvalTime"]) {
     if (key in row) fail(`unverified ${full.slug} ships ${key} to the browser`)
   }
   if (row.shortDescription !== confirmedPitch(full, full.shortDescription)) {
