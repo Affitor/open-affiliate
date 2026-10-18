@@ -320,7 +320,7 @@ export default async function ProgramPage({
                   </TrackLink>
                 </div>
               )}
-              {paused && (
+              {paused && hasAlternatives && (
                 <a href="#alternatives" className="mt-5 flex items-center justify-center gap-2 rounded-lg border border-border h-11 text-sm font-medium hover:bg-muted/50 transition-colors">
                   See alternatives <ArrowRight className="h-4 w-4" />
                 </a>

@@ -1164,25 +1164,27 @@ function pausedJoinLabel(html: string): string | null {
   return JOIN_LABELS.find((label) => own.includes(label)) ?? null;
 }
 
-function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+/** What a no-program page must not show: problems, so the check can also be fed a mutated page. */
+function noProgramHtmlProblems(program: (typeof programs)[number], html: string): string[] {
+  const problems: string[] = [];
+  // Only other programs' names (links) are cut; the comparison table's other cells stay checked.
   const own = html
     .replace(/<script[\s\S]*?<\/script>/g, " ")
     .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
   for (const label of JOIN_LABELS) {
-    if (own.includes(label)) fail(`${page} shows a join button ("${label}") for a brand with no program`);
+    if (own.includes(label)) problems.push(`shows a join button ("${label}") for a brand with no program`);
   }
-  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
-    fail(`${page} links the signup URL of a brand with no program`);
-  }
-  if (/>Commission<\/h3>/.test(own)) fail(`${page} shows a Commission card for a brand with no program`);
-  if (/data-term="/.test(own)) fail(`${page} shows an earnings-card term row for a brand with no program`);
+  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) problems.push("links the signup URL of a brand with no program");
+  if (/>Commission<\/h3>/.test(own)) problems.push("shows a Commission card for a brand with no program");
+  if (/data-term="/.test(own)) problems.push("shows an earnings-card term row for a brand with no program");
   for (const label of TERM_LABELS) {
-    if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
+    if (own.includes(label)) problems.push(`shows "${label}" for a brand with no program`);
   }
-  if (/\b\d+d cookie\b|\b\d+-day cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
+  if (/\b\d+d cookie\b|\b\d+-day cookie\b/.test(own)) problems.push("shows a cookie window for a brand with no program");
+  // A no-program file stores the placeholder commission (value null, schema), so this rarely runs.
   if (program.commission.value != null) {
     const figure = commissionDisplay(program.commission);
-    if (own.includes(figure)) fail(`${page} shows its stored commission (${figure}) for a brand with no program`);
+    if (own.includes(figure)) problems.push(`shows its stored commission (${figure}) for a brand with no program`);
   }
 
   const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
@@ -1192,8 +1194,14 @@ function checkNoProgramHtml(program: (typeof programs)[number], page: string, ht
   const answer = first?.acceptedAnswer?.text ?? "";
   const start = noAnswerStart(program);
   if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(start)) {
-    fail(`${page} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
+    problems.push(`FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
   }
+  return problems;
+}
+
+function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+  const problems = noProgramHtmlProblems(program, html);
+  if (problems.length) fail(`${page} ${problems.join("; ")}`);
 }
 
 /**
@@ -1279,11 +1287,30 @@ async function checkServedPages(): Promise<string> {
       if (await fetch(`${base}/robots.txt`).then((r) => r.ok, () => false)) break;
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
+    const noProgramHtml = new Map<(typeof programs)[number], string>();
     for (const program of noProgramPages) {
       const page = `/programs/${program.slug}`;
       const res = await fetch(`${base}${page}`);
       if (res.status !== 200) fail(`${page} answered ${res.status}`);
-      checkNoProgramHtml(program, page, await res.text());
+      const html = await res.text();
+      checkNoProgramHtml(program, page, html);
+      noProgramHtml.set(program, html);
+    }
+    // Non-vacuity: what the comparison table could carry, put inside it, still fails.
+    {
+      const [np, html] = [...noProgramHtml][0];
+      const inTable = (extra: string) => html.replace(/(<table data-compare[^>]*>)/, `$1<tbody><tr><td>${extra}</td></tr></tbody>`);
+      if (!/<table data-compare/.test(html)) fail(`${np.slug}: no comparison table to probe the no-program check with`);
+      for (const [what, extra] of [
+        ["a join button", "Apply &amp; earn 20%"],
+        ["the signup URL", `<a href="${np.signupUrl ?? "https://example.com/signup"}">x</a>`],
+        ["a cookie window", "60-day cookie"],
+        ["a term row", `<span data-term="approval">Automatic</span>`],
+      ] as const) {
+        const mutated = inTable(extra);
+        const fixture = what === "the signup URL" && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
+        if (noProgramHtmlProblems(fixture, mutated).length === 0) fail(`the no-program check passed ${np.slug} with ${what} inside its comparison table`);
+      }
     }
     const probed = await checkAliasRedirects(base);
     console.log(`[machine-surfaces] verified ${probed} aliases (page, .md and API) as served by next start`);
@@ -1334,6 +1361,7 @@ async function checkServedPages(): Promise<string> {
       ["a cookie window in its flow", `<span>${off.cookieDays}-day cookie</span>`],
       ["an approval step in its flow", `<span data-term="step-approval" class="x">Reviewed by hand approval on PartnerStack</span>`],
       ["a payout step in its flow", `<span data-term="step-payout" class="x">Monthly</span>`],
+      ["an untagged approval step in its flow", `<span class="x">Reviewed by hand approval on PartnerStack</span>`],
       ["a payout step in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ "data-term": "step-payout", children: "Monthly" }))}])</script>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],

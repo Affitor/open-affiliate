@@ -148,9 +148,10 @@ function jsonLdStrings(html: string): string[] {
 }
 
 /**
- * The program's own markup: no comments, and no cards linking other programs
- * (related programs show their own commission). Scripts stay, with the RSC
- * payload's escaped quotes read as plain quotes.
+ * The program's own markup: no comments, and no links to other programs (the
+ * comparison table names them in links; their commission sits in the cells
+ * next to the link and states no cookie, payout or approval). Scripts stay,
+ * with the RSC payload's escaped quotes read as plain quotes.
  */
 function ownHtml(html: string): string {
   return html
@@ -176,6 +177,8 @@ const TERM_MARKUP: [string, RegExp][] = [
   // The earnings card since the human-first page (2026-10-17): one data-term row per term.
   ["an earnings-card term row or flow step", /data-term="(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"|"data-term":"(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"/],
   ["a Payout or Paid by label", /"(?:Payout|Paid by)"/],
+  // The flow step's approval words even without their data-term.
+  ["an approval step", /\b(?:Automatic|Reviewed by hand|By invitation) approval\b/],
 ]
 
 /** /programs/<slug> as served. */

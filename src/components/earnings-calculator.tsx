@@ -45,6 +45,11 @@ export function EarningsCalculator({ input }: { input: EstimateInput }) {
             setCustomers(Number(e.target.value));
             setTouched(true);
           }}
+          // Pressing the slider at its current value also counts as entering it; tabbing past does not.
+          onPointerDown={() => setTouched(true)}
+          onKeyDown={(e) => {
+            if (/^(Arrow|Home|End|Page)/.test(e.key)) setTouched(true);
+          }}
           className="w-full accent-foreground"
         />
       </label>

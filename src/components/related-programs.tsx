@@ -56,7 +56,8 @@ function TermsChip({ verified }: { verified: boolean }) {
  * The program next to similar ones, as a table (Program, Commission, Lasts,
  * Terms). Each other program's name links to its page. Commission, duration
  * and the verified flag only: no cookie window, payout or approval, so an
- * unverified page shows none of another program's terms either.
+ * unverified page shows none of another program's terms either. data-compare
+ * marks the table for the page checks' probes.
  */
 export function ProgramCompare({ current, title }: { current: Program; title: string }) {
   const related = getRelatedPrograms(current)
@@ -68,7 +69,7 @@ export function ProgramCompare({ current, title }: { current: Program; title: st
   return (
     <div>
       <h2 className="text-lg font-semibold tracking-tight mb-4">{title}</h2>
-      <table className="w-full text-sm border-collapse">
+      <table data-compare className="w-full text-sm border-collapse">
         <thead>
           <tr className="border-b border-border text-left text-xs text-muted-foreground">
             <th scope="col" className="pb-2 pr-3 font-normal">Program</th>
