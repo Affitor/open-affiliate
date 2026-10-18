@@ -72,8 +72,11 @@ export default function PrivacyPage() {
           A verified claim stays while your team manages the listing. When you release it, we remove every
           teammate&apos;s email address.
         </li>
-        <li>When a teammate is removed, we remove their email address at once.</li>
-        <li>Sign-in codes are deleted within a day.</li>
+        <li>
+          When a teammate is removed, we remove their email address at once; the record that they were on the
+          team, without the address, is deleted within 30 days.
+        </li>
+        <li>Sign-in codes are deleted within two days.</li>
         <li>Activity records, which hold only hashes, are deleted within 12 months.</li>
       </ul>
 

@@ -81,41 +81,32 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       )
       return (data ?? []).length === 1
     },
-    async confirm(id, now) {
-      const result = await claims()
-        .update({ verified_at: now.toISOString(), status: "active" })
-        .eq("id", id)
-        .eq("status", "pending")
-        .is("verified_at", null)
-        .gt("expires_at", now.toISOString())
-        .select("id")
-      // program_claims_one_owner_per_domain
-      if (result.error?.code === "23505") return "conflict"
-      check(result)
-      return (result.data ?? []).length === 1 ? "ok" : "gone"
+    async confirm(id) {
+      // Migration 011: activation, member 1 and clearing the claim's copy of
+      // the address in one transaction (the database clock decides expiry).
+      const { data } = check(await db.rpc("claim_confirm", { p_claim_id: id }))
+      const out = data as { result?: unknown; member_id?: unknown } | null
+      if (out?.result === "ok" && typeof out.member_id === "string") return { result: "ok", memberId: out.member_id }
+      if (out?.result === "gone" || out?.result === "conflict") return { result: out.result }
+      throw Object.assign(new Error("claim_confirm returned an unexpected value"), { code: "unexpected_result" })
     },
-    async release(id) {
-      check(await claims().update({ status: "released", email: null }).eq("id", id))
-      check(
-        await members()
-          .update({ status: "removed", email: null, removed_at: new Date().toISOString() })
-          .eq("claim_id", id)
-          .eq("status", "active"),
-      )
+    async release(claimId, actorId) {
+      const { data } = check(await db.rpc("claim_release", { p_claim_id: claimId, p_actor: actorId }))
+      return data === true
     },
     async submitEdit(edit, dailyLimit) {
-      // Migration 010: lock the claim row, check the quota, insert the edit and
-      // its terms.submitted event, all in one transaction.
+      // Migration 011: lock the claim row, re-check the member, check the
+      // quota, insert the edit and its terms.submitted event, all at once.
       const { data } = check(
-        await db.rpc("claim_submit_edit", {
-          p_claim_id: edit.claim_id,
+        await db.rpc("claim_member_submit_edit", {
+          p_member_id: edit.member_id,
           p_slug: edit.slug,
           p_fields: edit.fields,
           p_daily_limit: dailyLimit,
         }),
       )
       if (data === "ok" || data === "quota" || data === "not_owner") return data
-      throw Object.assign(new Error("claim_submit_edit returned an unexpected value"), { code: "unexpected_result" })
+      throw Object.assign(new Error("claim_member_submit_edit returned an unexpected value"), { code: "unexpected_result" })
     },
     // Same cutoffs as the daily pg_cron job in migration 009; this covers a
     // database where pg_cron is not enabled.
@@ -147,11 +138,17 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       const { data } = check(await members().select("*").eq("id", id).maybeSingle())
       return (data as MemberRow | null) ?? null
     },
-    async findActiveMember(email) {
-      // Member addresses are stored lowercase; the unique index on
-      // lower(email) allows at most one active row.
-      const { data } = check(await members().select("*").eq("email", email.toLowerCase()).eq("status", "active").limit(1))
-      return ((data ?? [])[0] as MemberRow | undefined) ?? null
+    async findActiveMembers(email) {
+      // Member addresses are stored lowercase.
+      const { data } = check(
+        await members()
+          .select("*")
+          .eq("email", email.toLowerCase())
+          .eq("status", "active")
+          .order("created_at", { ascending: true })
+          .limit(20),
+      )
+      return (data ?? []) as MemberRow[]
     },
     async listMembers(claimId) {
       const { data } = check(
@@ -159,19 +156,27 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
       )
       return (data ?? []) as MemberRow[]
     },
-    async removeMember(id, claimId) {
+    async removeMember(claimId, actorId, targetId) {
       const { data } = check(
-        await members()
-          .update({ status: "removed", email: null, removed_at: new Date().toISOString() })
-          .eq("id", id)
-          .eq("claim_id", claimId)
-          .eq("status", "active")
-          .select("id"),
+        await db.rpc("claim_remove_member", { p_claim_id: claimId, p_actor: actorId, p_target: targetId }),
       )
-      return (data ?? []).length === 1
+      if (data === "ok" || data === "not_owner" || data === "self" || data === "not_found") return data
+      throw Object.assign(new Error("claim_remove_member returned an unexpected value"), { code: "unexpected_result" })
     },
     async addSigninCode(row) {
       check(await signinCodes().insert(row))
+    },
+    async bindSigninCode(id, memberId, codeHash, now) {
+      const { data } = check(
+        await signinCodes()
+          .update({ member_id: memberId, code_hash: codeHash })
+          .eq("id", id)
+          .is("member_id", null)
+          .is("used_at", null)
+          .gt("expires_at", now.toISOString())
+          .select("id"),
+      )
+      return (data ?? []).length === 1
     },
     async getSigninCode(id) {
       const { data } = check(await signinCodes().select("*").eq("id", id).maybeSingle())

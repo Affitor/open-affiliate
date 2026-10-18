@@ -108,31 +108,40 @@ class MemoryStore implements ClaimStore {
     c.attempts = seen + 1
     return true
   }
+  /** Synchronous body, so atomic like claim_confirm in migration 011. */
   async confirm(id: string, now: Date) {
     const c = this.claims.get(id)
-    if (!c || c.status !== "pending" || c.verified_at || Date.parse(c.expires_at) <= now.getTime()) return "gone" as const
-    if (await this.hasActiveOwner(c.domain)) return "conflict" as const
-    c.verified_at = now.toISOString()
-    c.status = "active"
-    return "ok" as const
+    if (!c || c.status !== "pending" || c.verified_at || !c.email || Date.parse(c.expires_at) <= now.getTime()) return { result: "gone" as const }
+    if ([...this.claims.values()].some((x) => x.domain === c.domain && x.status === "active")) return { result: "conflict" as const }
+    const email = c.email.toLowerCase()
+    Object.assign(c, { verified_at: now.toISOString(), status: "active", email: null })
+    const memberId = randomUUID()
+    this.members.set(memberId, { id: memberId, claim_id: id, email, status: "active", added_by: null, created_at: now.toISOString() })
+    return { result: "ok" as const, memberId }
   }
-  async release(id: string) {
-    const c = this.claims.get(id)
-    if (c) Object.assign(c, { status: "released", email: null })
+  activeMember(id: string, claimId?: string) {
+    const m = this.members.get(id)
+    return m && m.status === "active" && (claimId === undefined || m.claim_id === claimId) ? m : undefined
+  }
+  /** Synchronous body, so atomic like claim_release in migration 011. */
+  async release(claimId: string, actorId: string) {
+    const c = this.claims.get(claimId)
+    if (!c || c.status !== "active" || !this.activeMember(actorId, claimId)) return false
+    Object.assign(c, { status: "released", email: null })
     for (const m of this.members.values()) {
-      if (m.claim_id === id && m.status === "active") Object.assign(m, { status: "removed", email: null })
+      if (m.claim_id === claimId && m.status === "active") Object.assign(m, { status: "removed", email: null })
     }
+    return true
   }
   members = new Map<string, MemberRow>()
   codes = new Map<string, SigninCodeRow>()
   /** Synchronous body, so atomic like claim_add_member in migration 011. */
-  async addMember(claimId: string, email: string, addedBy: string | null, max: number): Promise<AddMemberResult> {
+  async addMember(claimId: string, email: string, addedBy: string, max: number): Promise<AddMemberResult> {
     const c = this.claims.get(claimId)
-    if (!c || c.status !== "active" || !c.verified_at) return { result: "not_owner" }
-    const active = [...this.members.values()].filter((m) => m.status === "active")
-    if (addedBy && !active.some((m) => m.id === addedBy && m.claim_id === claimId)) return { result: "not_owner" }
-    if (active.filter((m) => m.claim_id === claimId).length >= max) return { result: "full" }
-    if (active.some((m) => m.email === email.toLowerCase())) return { result: "exists" }
+    if (!c || c.status !== "active" || !c.verified_at || !this.activeMember(addedBy, claimId)) return { result: "not_owner" }
+    const team = [...this.members.values()].filter((m) => m.status === "active" && m.claim_id === claimId)
+    if (team.length >= max) return { result: "full" }
+    if (team.some((m) => m.email === email.toLowerCase())) return { result: "exists" }
     const id = randomUUID()
     this.members.set(id, { id, claim_id: claimId, email: email.toLowerCase(), status: "active", added_by: addedBy, created_at: this.clock().toISOString() })
     return { result: "ok", id }
@@ -141,21 +150,30 @@ class MemoryStore implements ClaimStore {
     const m = this.members.get(id)
     return m ? { ...m } : null
   }
-  async findActiveMember(email: string) {
-    const m = [...this.members.values()].find((x) => x.status === "active" && x.email === email.toLowerCase())
-    return m ? { ...m } : null
+  async findActiveMembers(email: string) {
+    return [...this.members.values()].filter((x) => x.status === "active" && x.email === email.toLowerCase()).map((m) => ({ ...m }))
   }
   async listMembers(claimId: string) {
     return [...this.members.values()].filter((m) => m.claim_id === claimId && m.status === "active").map((m) => ({ ...m }))
   }
-  async removeMember(id: string, claimId: string) {
-    const m = this.members.get(id)
-    if (!m || m.claim_id !== claimId || m.status !== "active") return false
+  /** Synchronous body, so atomic like claim_remove_member in migration 011. */
+  async removeMember(claimId: string, actorId: string, targetId: string) {
+    const c = this.claims.get(claimId)
+    if (!c || c.status !== "active" || !this.activeMember(actorId, claimId)) return "not_owner" as const
+    if (actorId === targetId) return "self" as const
+    const m = this.activeMember(targetId, claimId)
+    if (!m) return "not_found" as const
     Object.assign(m, { status: "removed", email: null })
-    return true
+    return "ok" as const
   }
   async addSigninCode(row: { id: string; member_id: string | null; code_hash: string; expires_at: string }) {
     this.codes.set(row.id, { ...row, attempts: 0, used_at: null })
+  }
+  async bindSigninCode(id: string, memberId: string, codeHash: string, now: Date) {
+    const c = this.codes.get(id)
+    if (!c || c.member_id || c.used_at || Date.parse(c.expires_at) <= now.getTime()) return false
+    Object.assign(c, { member_id: memberId, code_hash: codeHash })
+    return true
   }
   async getSigninCode(id: string) {
     const c = this.codes.get(id)
@@ -181,9 +199,12 @@ class MemoryStore implements ClaimStore {
       .reverse()
   }
   /** Synchronous body, so atomic like the claim_submit_edit function in migration 010. */
-  async submitEdit(edit: { claim_id: string; slug: string; fields: Record<string, unknown> }, dailyLimit: number) {
-    const c = this.claims.get(edit.claim_id)
-    if (!c || c.status !== "active" || !c.verified_at) return "not_owner" as const
+  /** Synchronous body, so atomic like claim_member_submit_edit in migration 011. */
+  async submitEdit(input: { member_id: string; slug: string; fields: Record<string, unknown> }, dailyLimit: number) {
+    const member = this.activeMember(input.member_id)
+    const c = member ? this.claims.get(member.claim_id) : undefined
+    if (!member || !c || c.status !== "active" || !c.verified_at) return "not_owner" as const
+    const edit = { claim_id: c.id, slug: input.slug, fields: input.fields }
     const since = this.clock().getTime() - 24 * 60 * 60_000
     if (this.edits.filter((e) => e.claim_id === edit.claim_id && e.at > since).length >= dailyLimit) return "quota" as const
     this.edits.push({ ...edit, at: this.clock().getTime() })
@@ -745,7 +766,8 @@ test("an edit that lands after a release is refused by the store, not queued", a
   const realGet = t.store.getClaim.bind(t.store)
   t.store.getClaim = async (id: string) => {
     const row = await realGet(id)
-    await t.store.release(id)
+    const actor = [...t.store.members.values()].find((m) => m.claim_id === id && m.status === "active")
+    if (actor) await t.store.release(id, actor.id)
     return row
   }
   const r = await t.call("terms", { slug: "kyma-api", terms: { rate: "20%", type: "recurring" } })
@@ -990,27 +1012,67 @@ test("release signs every member out and forgets every address", async () => {
   assert.equal(t.sent.length, before)
 })
 
-test("one address, one team: a DNS claimer already on another team is refused and the claim undone", async () => {
+async function dnsClaim(t: ReturnType<typeof setup>, slug: string, domain: string, email: string, ip: string) {
+  const jar = new Map<string, string>()
+  const dns = await t.call("dns-start", { slug, email, turnstileToken: tokenFor("dns-start") }, { cookies: jar, ip })
+  assert.equal(dns.status, 200)
+  t.txt[domain] = [[String(dns.body.record)]]
+  const r = await t.call("dns-check", { slug }, { cookies: jar, ip })
+  return { r, jar }
+}
+
+test("one address on two teams: claiming a second domain works, and sign-in can switch between them", async () => {
   const t = setup()
   await owner(t)
-  const dns = await t.call(
-    "dns-start",
-    { slug: "build-to-own-replay", email: "me@kymaapi.com", turnstileToken: tokenFor("dns-start") },
-    { cookies: new Map(t.jar), ip: "198.51.100.60" },
-  )
-  assert.equal(dns.status, 200)
-  t.txt["build2own.dev"] = [[String(dns.body.record)]]
-  const pending = new Map(t.jar)
-  for (const c of dns.res.headers.getSetCookie()) {
-    const [pair] = c.split("; ")
-    const [name, ...value] = pair.split("=")
-    pending.set(name, value.join("="))
-  }
-  const r = await t.call("dns-check", { slug: "build-to-own-replay" }, { cookies: pending, ip: "198.51.100.60" })
-  assert.equal(r.status, 409)
-  assert.equal(r.body.error, "address_on_another_team")
-  const b2o = [...t.store.claims.values()].find((c) => c.domain === "build2own.dev")!
-  assert.equal(b2o.status, "released")
+  // The same person proves build2own.dev by DNS with their kymaapi.com address.
+  const { r, jar } = await dnsClaim(t, "build-to-own-replay", "build2own.dev", "me@kymaapi.com", "198.51.100.60")
+  assert.equal(r.status, 200, "no cross-team refusal: it would tell a domain owner whether an address is on some team")
+  const acct = await t.call("account", null, { method: "GET", cookies: jar })
+  assert.equal(acct.body.domain, "build2own.dev")
+  const others = acct.body.otherAccounts as { memberId: string; domain: string }[]
+  assert.deepEqual(others.map((o) => o.domain), ["kymaapi.com"])
+  assert.equal((await t.call("account-switch", { memberId: others[0].memberId }, { cookies: jar })).status, 200)
+  assert.equal((await t.call("account", null, { method: "GET", cookies: jar })).body.domain, "kymaapi.com")
+  // Switching needs the same address: another team's member id is refused.
+  const ann = await t.call("member-add", { email: "ann@kymaapi.com" }, { cookies: jar })
+  assert.equal(ann.status, 200)
+  const annId = (await t.store.findActiveMembers("ann@kymaapi.com"))[0].id
+  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: new Map() })).status, 401, "no session, no switch")
+  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: jar })).status, 404, "another person's membership")
+})
+
+test("a claim's own copy of the address is cleared at confirm; members hold the only copy", async () => {
+  const t = setup()
+  await owner(t)
+  const claim = [...t.store.claims.values()][0]
+  assert.equal(claim.status, "active")
+  assert.equal(claim.email, null)
+  assert.deepEqual([...t.store.members.values()].map((m) => m.email), ["me@kymaapi.com"])
+})
+
+test("two members removing each other at once: exactly one wins, the team keeps a member", async () => {
+  const t = setup()
+  await owner(t)
+  const ownerJar = new Map(t.jar)
+  await t.call("member-add", { email: "ann@kymaapi.com" })
+  const annJar = new Map<string, string>()
+  await signinRequest(t, "ann@kymaapi.com", { cookies: annJar, ip: "198.51.100.70" })
+  await t.call("signin-verify", { code: signinCodeOf(t.sent.filter((m) => m.template === "signin-code").at(-1)!) }, { cookies: annJar })
+  const ids = Object.fromEntries([...t.store.members.values()].map((m) => [m.email, m.id]))
+  const [a, b] = await Promise.all([
+    t.call("member-remove", { memberId: ids["ann@kymaapi.com"] }, { cookies: ownerJar }),
+    t.call("member-remove", { memberId: ids["me@kymaapi.com"] }, { cookies: annJar }),
+  ])
+  assert.deepEqual([a.status, b.status].sort(), [200, 401])
+  assert.equal((await t.store.listMembers([...t.store.claims.keys()][0])).length, 1)
+})
+
+test("the site-wide ceiling is one budget for claim and sign-in codes", async () => {
+  const t = setup()
+  for (let i = 0; i < LIMITS.codesSiteDay; i++) await t.store.addEvent({ type: "signin.code_sent", claim_id: "x", domain: "x.io" })
+  const r = await sendCode(t, "me@kymaapi.com")
+  assert.equal(r.status, 429)
+  assert.equal(t.sent.length, 0)
 })
 
 test("only allow-listed templates leave the live sender; the template is set on every mail", async () => {
@@ -1061,18 +1123,38 @@ test("a member's sign-in answer does not wait for the mail; a failed send gives 
   assert.equal(t.store.count("signin.code_sent"), 0, "reservation withdrawn after the failed send")
 })
 
-test("adding an address that is on another team does not say so; one already on yours does", async () => {
+test("adding an address works whether or not it is on another team; only your own team says 'already'", async () => {
   const t = setup()
   await owner(t)
   await t.call("member-add", { email: "ann@kymaapi.com" })
   const again = await t.call("member-add", { email: "ANN@kymaapi.com" })
   assert.equal(again.body.error, "already_member")
-  // Another account holds this address (as a DNS claim's contact would).
-  const otherClaim = randomUUID()
-  t.store.claims.set(otherClaim, { ...[...t.store.claims.values()][0], id: otherClaim, domain: "build2own.dev", slug: "build-to-own-replay" })
-  await t.store.addMember(otherClaim, "bo@kymaapi.com", null, MAX_MEMBERS)
-  const elsewhere = await t.call("member-add", { email: "bo@kymaapi.com" })
-  assert.equal(elsewhere.status, 409)
-  assert.equal(elsewhere.body.error, "cannot_add")
-  assert.equal(String(elsewhere.body.message).includes("team"), false, "no hint of another team")
+  // bo@kymaapi.com is DNS member 1 of build2own.dev; adding them to kymaapi.com still just works.
+  await dnsClaim(t, "build-to-own-replay", "build2own.dev", "bo@kymaapi.com", "198.51.100.80")
+  assert.equal((await t.call("member-add", { email: "bo@kymaapi.com" })).status, 200)
+})
+
+test("sign-in looks nothing up about the address before the response is sent", async () => {
+  const t = setup()
+  await owner(t)
+  let lookups = 0
+  const real = t.store.findActiveMembers.bind(t.store)
+  t.store.findActiveMembers = async (email: string) => {
+    lookups++
+    return real(email)
+  }
+  const tasks: (() => Promise<void>)[] = []
+  const deps = { ...t.deps, afterResponse: (task: () => Promise<void>) => void tasks.push(task) }
+  const req = new Request("https://openaffiliate.dev/api/claims/signin-code", {
+    method: "POST",
+    headers: { "content-type": "application/json", "x-forwarded-for": "198.51.100.90" },
+    body: JSON.stringify({ email: "me@kymaapi.com", turnstileToken: tokenFor("signin") }),
+  })
+  const before = t.sent.length
+  assert.equal((await handleClaim("signin-code", req, deps)).status, 200)
+  assert.equal(lookups, 0, "no membership lookup on the response path")
+  assert.equal(t.sent.length, before, "no mail on the response path")
+  for (const task of tasks) await task()
+  assert.equal(lookups, 1)
+  assert.equal(t.sent.length, before + 1)
 })

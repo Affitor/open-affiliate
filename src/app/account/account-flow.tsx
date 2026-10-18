@@ -12,6 +12,7 @@ interface Account {
   domain: string;
   you: { id: string; email: string };
   maxMembers: number;
+  otherAccounts: { memberId: string; domain: string }[];
   programs: { slug: string; name: string; editable: boolean; stats: Stats }[];
   members: { id: string; email: string; addedAt: string; you: boolean }[];
   changes: { slug: string; kind: string; status: string; prUrl: string | null; fields: string[]; sentAt: string }[];
@@ -170,6 +171,19 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
                 Sign out
               </button>
             </p>
+            {account.otherAccounts.length > 0 && (
+              <p className="text-sm text-muted-foreground mt-1">
+                Also on your teams:{" "}
+                {account.otherAccounts.map((o, i) => (
+                  <span key={o.memberId}>
+                    {i > 0 && ", "}
+                    <button className={quiet} disabled={busy} onClick={() => void call("account-switch", { memberId: o.memberId }, load)}>
+                      {o.domain}
+                    </button>
+                  </span>
+                ))}
+              </p>
+            )}
           </div>
 
           <section className="space-y-3">
