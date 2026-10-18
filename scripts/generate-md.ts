@@ -35,6 +35,8 @@ import registry from "../src/lib/registry.json"
 import { formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
+import { compareText } from "../src/lib/commission-order"
+import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText, type CommissionGroup } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
   affiliateScore,
@@ -767,7 +769,7 @@ function docsMd(): string {
       [
         `- [Entry point](${BASE}/llms.txt)`,
         `- [All programs by category](${BASE}/programs.md)`,
-        `- [Rankings by Affiliate Score](${BASE}/rankings.md)`,
+        `- [Rankings of verified programs by commission](${BASE}/rankings.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [Full dump](${BASE}/llms-full.txt)`,
         `- Any program, category or network page, with .md appended`,
@@ -1042,13 +1044,25 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  const ranked = sitePrograms.filter(isLive).sort(
-    (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
-  )
-  const programLines = ranked
+  // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
+  // Our own programs are listed but never ranked (SAME_TEAM_SLUGS), as on the HTML page.
+  const verified = sitePrograms.filter((p) => isLive(p) && p.verified)
+  const ranked = verified.filter((p) => !isSameTeam(p.slug))
+  const unranked = verified.filter((p) => isSameTeam(p.slug))
+  const inGroup = (g: CommissionGroup) => {
+    const list = ranked.filter((p) => commissionGroup(p.commission) === g)
+    return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
+  }
+  const programLines = (g: CommissionGroup) => inGroup(g)
     .map((p, i) => {
-      const mark = statusMark(p)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
+      const terms = [
+        `${commissionDisplay(p.commission)} ${p.commission.type}`,
+        `recurring: ${recurringText(recurringMonths(p.commission)).toLowerCase()}`,
+        `cookie: ${p.cookieDays != null ? `${p.cookieDays} days` : "not published"}`,
+        `payout minimum: ${(payoutMinText(p.payout.minimum, p.payout.currency) ?? "not published").toLowerCase()}`,
+        ...(p.lastVerifiedAt ? [`checked ${p.lastVerifiedAt.slice(0, 10)}`] : []),
+      ]
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(terms.join(", "))}`
     })
     .join("\n")
   // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
@@ -1073,11 +1087,12 @@ function rankingsMd(): string {
   return joinSections([
     `# Affiliate program rankings`,
     [
-      `> ${programCount(ranked.length)} ordered by Affiliate Score, the same score as`,
-      `> the podium on ${BASE}/rankings and the homepage preview.`,
-      `> The interactive table can also sort by verified content, commission,`,
-      `> or cookie length. Those orders depend on live filters, so they are not`,
-      `> copied here.`,
+      `> ${ranked.length} verified programs, every figure checked on the brand's own`,
+      `> terms page, in the three lists of ${BASE}/rankings: a percentage of the`,
+      `> sale and a flat US-dollar amount, each highest first (on a tie, the one`,
+      `> that recurs longer first), then tiered, hybrid, unpublished and other`,
+      `> rewards A to Z. The table there can also sort by how long the commission`,
+      `> recurs, cookie length, payout minimum or check date.`,
       `>`,
       `> Network and category figures keep percentage rates and flat US-dollar`,
       `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
@@ -1085,7 +1100,10 @@ function rankingsMd(): string {
       `> a percentage counts in any currency. Unconfirmed figures count and are`,
       `> marked "unconfirmed".`,
     ].join("\n"),
-    section("Programs", programLines),
+    section("Programs paying a percentage of the sale", programLines("percent")),
+    section("Programs paying a flat amount", programLines("flat")),
+    section("Tiered, hybrid and other commissions", programLines("other")),
+    unranked.length ? `Not ranked: ${unranked.map((p) => `[${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) (${SAME_TEAM_LABEL})`).join(", ")}.` : null,
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),

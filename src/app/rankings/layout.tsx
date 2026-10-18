@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
-import { affiliateScore, livePrograms } from "@/lib/programs";
+import { livePrograms } from "@/lib/programs";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { byScore } from "@/lib/score-order";
+import { commissionGroup, compareCommissionFigure } from "@/lib/rankings-terms";
+import { isSameTeam } from "@/lib/same-team";
 
 export const metadata: Metadata = {
   title: "Affiliate Program Rankings: Highest Paying Programs",
   description:
-    "Compare the highest-paying affiliate programs ranked by commission rate. Browse rankings by program, network, or category.",
+    "Verified affiliate programs ranked by what they pay: commission, how long it recurs, cookie length and payout minimum. Browse by program, network or category.",
   openGraph: {
     title: "Affiliate Program Rankings: OpenAffiliate",
     description:
-      `Compare affiliate programs ranked by score and commission across ${livePrograms.length} programs.`,
+      `${livePrograms.filter((p) => p.verified && !isSameTeam(p.slug)).length} verified affiliate programs ranked by commission, cookie and payout.`,
     url: "https://openaffiliate.dev/rankings",
     siteName: "OpenAffiliate",
   },
@@ -27,18 +28,14 @@ export default function RankingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const ranked = [...livePrograms]
-    .sort(byScore(affiliateScore))
+  // The table's default view: verified programs paying a percentage, highest first.
+  const ranked = livePrograms
+    .filter((p) => p.verified && !isSameTeam(p.slug) && commissionGroup(p.commission) === "percent")
+    .sort((a, b) => compareCommissionFigure(a, b))
     .slice(0, 20);
 
   return (
     <>
-      <link
-        rel="preload"
-        href="/api/sift-rankings"
-        as="fetch"
-        crossOrigin="anonymous"
-      />
       <script
         type="application/ld+json"
         suppressHydrationWarning

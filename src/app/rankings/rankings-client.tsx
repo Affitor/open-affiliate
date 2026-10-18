@@ -3,18 +3,12 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import {
-  Trophy,
-  Medal,
-  Award,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
-  CheckCircle2,
-  ExternalLink,
   Search,
   X,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { FilterSelect } from "@/components/filter-select";
 import { track } from "@/lib/track";
@@ -23,17 +17,16 @@ import {
   categories,
   commissionTypes,
   categoryCounts,
-  compareByCommission,
   compareText,
   type Program,
-  commissionLabel,
-  affiliateScore,  commissionDisplay
+  commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
+import { SAME_TEAM_LABEL } from "@/lib/same-team";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
-import { byScore } from "@/lib/score-order";
+import { commissionGroup, compareCommissionFigure, recurringMonths, recurringText, type CommissionGroup } from "@/lib/rankings-terms";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -44,60 +37,13 @@ const COMMISSION_TYPE_LABELS: Record<string, string> = {
   hybrid: "Hybrid",
 };
 
-const PLATFORM_OPTIONS = [
-  { value: "", label: "All Platforms" },
-  { value: "youtube", label: "YouTube" },
-  { value: "tiktok", label: "TikTok" },
-  { value: "reddit", label: "Reddit" },
-  { value: "blog", label: "Blog" },
-];
-
-const FORMAT_OPTIONS = [
-  { value: "", label: "All Formats" },
-  { value: "review", label: "Review" },
-  { value: "tutorial", label: "Tutorial" },
-  { value: "comparison", label: "Comparison" },
-  { value: "affiliate_content", label: "Affiliate Content" },
-  { value: "related", label: "Related" },
-];
-
-// ── Content data from API ───────────────────────────────────────
-
-interface ContentData {
+/** Terms the browser registry leaves out, sent by the server for each verified program. */
+export interface TermFacts {
   slug: string;
-  verifiedContent: number;
-  totalContent: number;
-  avgSiftScore: number;
-  topTag: string;
-  topPlatform: string;
-}
-
-function mapContent(items: ContentData[]): Map<string, ContentData> {
-  const map = new Map<string, ContentData>();
-  for (const item of items) {
-    map.set(item.slug, item);
-  }
-  return map;
-}
-
-function useContentData(initial: ContentData[]) {
-  const [data, setData] = useState<Map<string, ContentData>>(() =>
-    mapContent(initial)
-  );
-  const [loaded, setLoaded] = useState(() => initial.length > 0);
-
-  useEffect(() => {
-    if (initial.length > 0) return;
-    fetch("/api/sift-rankings")
-      .then((r) => r.json())
-      .then((items: ContentData[]) => {
-        setData(mapContent(items));
-        setLoaded(true);
-      })
-      .catch(() => setLoaded(true));
-  }, [initial.length]);
-
-  return { data, loaded };
+  payoutMin: number | null;
+  payoutMinText: string | null;
+  /** "2026-10-13", the date the terms were last checked. */
+  checked: string;
 }
 
 // ── Shared components ───────────────────────────────────────────
@@ -131,88 +77,9 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-function TopThreeCards({ top3 }: { top3: Program[] }) {
-  const medals = [
-    {
-      icon: Trophy,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "1st",
-    },
-    {
-      icon: Medal,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "2nd",
-    },
-    {
-      icon: Award,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "3rd",
-    },
-  ];
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      {top3.map((program, i) => {
-        const m = medals[i];
-        return (
-          <Link
-            key={program.slug}
-            href={`/programs/${program.slug}`}
-            className={`group relative rounded-xl border ${m.border} ${m.bg} p-5 transition-all hover:shadow-lg hover:scale-[1.01]`}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <m.icon className={`h-4 w-4 ${m.text}`} />
-              <span className={`text-xs font-semibold ${m.text}`}>
-                {m.label}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <ProgramLogo
-                slug={program.slug}
-                name={program.name}
-                size={40}
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold truncate">
-                    {program.name}
-                  </h3>
-                  {program.verified && (
-                    <Badge
-                      variant="outline"
-                      className="text-xs px-1.5 py-0 border-good-line bg-good-bg text-good shrink-0"
-                    >
-                      verified
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                  {program.shortDescription}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <Badge className="font-mono text-xs bg-card text-foreground border-line-strong">
-                {commissionDisplay(program.commission)}{" "}
-                {commissionLabel(program.commission)}
-              </Badge>
-            </div>
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Sort header ─────────────────────────────────────────────────
 
-type ColumnSort = "commission" | "verified" | "avg" | "total" | "name";
+type ColumnSort = "name" | "commission" | "recurring" | "cookie" | "payout" | "checked";
 type SortDir = "asc" | "desc";
 
 function SortHeader({
@@ -222,6 +89,7 @@ function SortHeader({
   activeDir,
   onSort,
   className,
+  sortable = true,
 }: {
   label: string;
   column: ColumnSort;
@@ -229,56 +97,79 @@ function SortHeader({
   activeDir: SortDir;
   onSort: (col: ColumnSort) => void;
   className?: string;
+  sortable?: boolean;
 }) {
   const isActive = activeColumn === column;
+  if (!sortable) {
+    return (
+      <th className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground ${className ?? ""}`}>
+        {label}
+      </th>
+    );
+  }
   return (
     <th
-      className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] cursor-pointer select-none transition-colors hover:text-foreground ${
-        isActive ? "text-foreground" : "text-muted-foreground"
-      } ${className ?? ""}`}
-      onClick={() => onSort(column)}
+      aria-sort={isActive ? (activeDir === "desc" ? "descending" : "ascending") : "none"}
+      className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] ${className ?? ""}`}
     >
-      <span className="inline-flex items-center gap-1">
+      <button
+        type="button"
+        onClick={() => onSort(column)}
+        className={`inline-flex items-center gap-1 uppercase tracking-[0.08em] transition-colors hover:text-foreground ${
+          isActive ? "text-foreground" : "text-muted-foreground"
+        }`}
+      >
         {label}
         {isActive ? (
           activeDir === "desc" ? (
-            <ArrowDown className="h-3 w-3" />
+            <ArrowDown className="h-3 w-3" aria-hidden />
           ) : (
-            <ArrowUp className="h-3 w-3" />
+            <ArrowUp className="h-3 w-3" aria-hidden />
           )
         ) : (
-          <ArrowUpDown className="h-2.5 w-2.5 opacity-30" />
+          <ArrowUpDown className="h-2.5 w-2.5 opacity-30" aria-hidden />
         )}
-      </span>
+      </button>
     </th>
   );
 }
 
-// ── Merged Programs Table ───────────────────────────────────────
+// ── Verified Programs Table ─────────────────────────────────────
 
-interface MergedProgram {
+interface Row {
   program: Program;
-  verifiedContent: number;
-  totalContent: number;
-  avgSiftScore: number;
-  topTag: string;
-  topPlatform: string;
+  group: CommissionGroup;
+  months: number | null | undefined;
+  facts: TermFacts;
 }
 
 /** Rows rendered before the reader asks for the rest. */
 const DEFAULT_VISIBLE = 50;
 
-function ProgramsTable({
-  items,
-  contentLoaded,
-  filterKey,
-}: {
-  items: MergedProgram[];
-  contentLoaded: boolean;
-  filterKey: string;
-}) {
-  const [sortCol, setSortCol] = useState<ColumnSort>("verified");
-  const [sortDir, setSortDir] = useState<SortDir>("desc");
+/** Numbers in `dir` order, a missing figure last either way. */
+function compareFigure(a: number | null | undefined, b: number | null | undefined, dir: number): number {
+  if (a == null || b == null) return Number(a == null) - Number(b == null);
+  return a === b ? 0 : (a < b ? -1 : 1) * dir;
+}
+
+const CELL_MUTED = "text-muted-foreground";
+
+const GROUPS: { value: CommissionGroup; label: string }[] = [
+  { value: "percent", label: "Percentage of sale" },
+  { value: "flat", label: "Flat amount" },
+  { value: "other", label: "Tiered and other" },
+];
+
+const GROUP_NOTE: Record<CommissionGroup, string> = {
+  percent: "Programs that pay a percentage of each sale, highest first. When two pay the same, the one that recurs longer comes first.",
+  flat: "Programs that pay a fixed US-dollar amount per referral, highest first. When two pay the same, the one that recurs longer comes first.",
+  other: "Tiered, hybrid and unpublished rates, and rewards in credits or other currencies, have no single figure to compare, so this list runs A to Z.",
+};
+
+function ProgramsTable({ items, filterKey, group }: { items: Row[]; filterKey: string; group: CommissionGroup }) {
+  // Remounted per group (key): percent and flat open by commission, "other" A to Z.
+  const [sortCol, setSortCol] = useState<ColumnSort>(group === "other" ? "name" : "commission");
+  const [sortDir, setSortDir] = useState<SortDir>(group === "other" ? "asc" : "desc");
   const [pagination, setPagination] = useState({ filterKey, page: 0 });
   const page = pagination.filterKey === filterKey ? pagination.page : 0;
   const setPage = useCallback(
@@ -293,7 +184,8 @@ function ProgramsTable({
         setSortDir((d) => (d === "desc" ? "asc" : "desc"));
       } else {
         setSortCol(col);
-        setSortDir(col === "name" ? "asc" : "desc");
+        // A low payout minimum is the better one, so it starts low to high.
+        setSortDir(col === "name" || col === "payout" ? "asc" : "desc");
       }
     },
     [sortCol, setPage]
@@ -303,27 +195,27 @@ function ProgramsTable({
     const list = [...items];
     const dir = sortDir === "desc" ? -1 : 1;
     list.sort((a, b) => {
+      const byName = compareText(a.program.name, b.program.name);
       switch (sortCol) {
         case "commission":
-          return compareByCommission(a.program, b.program, dir);
-        case "verified":
-          return (a.verifiedContent - b.verifiedContent) * dir;
-        case "avg":
-          return (a.avgSiftScore - b.avgSiftScore) * dir;
-        case "total":
-          return (a.totalContent - b.totalContent) * dir;
-        case "name":
-          return compareText(a.program.name, b.program.name) * dir;
+          return compareCommissionFigure(a.program, b.program, dir);
+        case "recurring":
+          return compareFigure(a.months, b.months, dir) || byName;
+        case "cookie":
+          return compareFigure(a.program.cookieDays, b.program.cookieDays, dir) || byName;
+        case "payout":
+          return compareFigure(a.facts.payoutMin, b.facts.payoutMin, dir) || byName;
+        case "checked":
+          return compareFigure(a.facts.checked ? Date.parse(a.facts.checked) : null, b.facts.checked ? Date.parse(b.facts.checked) : null, dir) || byName;
         default:
-          return 0;
+          return byName * dir;
       }
     });
     return list;
   }, [items, sortCol, sortDir]);
 
-  // Keep every interaction bounded to 50 rows. The old "Show all" button
-  // brought all 760 stateful logo rows back in one render, preserving the
-  // exact long task that the original 50-row optimization was meant to remove.
+  // Keep every interaction bounded to 50 rows: rendering every stateful logo
+  // row at once is the long task the 50-row page exists to avoid.
   const pageCount = Math.max(1, Math.ceil(sorted.length / DEFAULT_VISIBLE));
   const activePage = Math.min(page, pageCount - 1);
   const visible = useMemo(
@@ -335,85 +227,46 @@ function ProgramsTable({
     [sorted, activePage]
   );
 
+  const head = { activeColumn: sortCol, activeDir: sortDir, onSort: handleSort };
+
   return (
-    <div className="rounded-xl border border-border/40 overflow-hidden">
-      <div className="px-4 py-2.5 border-b border-border/20 bg-muted/10">
+    <div className="rounded-xl border border-border overflow-hidden">
+      <div className="px-4 py-2.5 border-b border-border bg-sunk">
         <p className="text-xs text-muted-foreground">
-          Content data from AI-scored reviews, tutorials, and affiliate posts across YouTube, TikTok, Reddit, and blogs.{" "}
-          <Link href="/docs/sift-scoring" className="underline hover:text-foreground">How scoring works</Link>
+          Verified programs only, every figure checked on the brand&apos;s own terms page. {GROUP_NOTE[group]}
         </p>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-border/40 bg-muted/30">
+            <tr className="border-b border-border bg-sunk">
               <th className="w-10 py-3 px-3 text-center font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em]">
                 #
               </th>
-              <SortHeader
-                label="Program"
-                column="name"
-                activeColumn={sortCol}
-                activeDir={sortDir}
-                onSort={handleSort}
-                className="text-left"
-              />
-              <SortHeader
-                label="Commission"
-                column="commission"
-                activeColumn={sortCol}
-                activeDir={sortDir}
-                onSort={handleSort}
-                className="hidden sm:table-cell"
-              />
-              <SortHeader
-                label="Reviews"
-                column="verified"
-                activeColumn={sortCol}
-                activeDir={sortDir}
-                onSort={handleSort}
-                className="text-center"
-              />
-              <SortHeader
-                label="Quality"
-                column="avg"
-                activeColumn={sortCol}
-                activeDir={sortDir}
-                onSort={handleSort}
-                className="text-center hidden sm:table-cell"
-              />
-              <SortHeader
-                label="Posts"
-                column="total"
-                activeColumn={sortCol}
-                activeDir={sortDir}
-                onSort={handleSort}
-                className="text-center hidden sm:table-cell"
-              />
-              <th className="py-3 px-3 text-left font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em] hidden md:table-cell">
-                Format
-              </th>
-              <th className="py-3 px-3 text-left font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em] hidden md:table-cell">
-                Platform
-              </th>
+              <SortHeader label="Program" column="name" {...head} className="text-left" />
+              <SortHeader label="Commission" column="commission" {...head} className="text-left" sortable={group !== "other"} />
+              <SortHeader label="Recurring" column="recurring" {...head} className="text-left hidden sm:table-cell" />
+              <SortHeader label="Cookie" column="cookie" {...head} className="text-left hidden sm:table-cell" />
+              <SortHeader label="Payout min" column="payout" {...head} className="text-left hidden md:table-cell" />
+              <SortHeader label="Checked" column="checked" {...head} className="text-left hidden md:table-cell" />
             </tr>
           </thead>
           <tbody>
             {visible.map((item, i) => {
               const p = item.program;
-              const hasContent = item.totalContent > 0;
               return (
                 <tr
                   key={p.slug}
-                  className="border-t border-border/20 hover:bg-muted/20 transition-colors group"
+                  className="border-t border-border hover:bg-sunk transition-colors group"
                 >
                   <td className="py-3 px-3 text-center">
                     <RankBadge rank={activePage * DEFAULT_VISIBLE + i + 1} />
                   </td>
-                  <td className="py-3 px-3">
+                  {/* w-full + max-w-0: the name column takes the room left and truncates, so Commission stays on screen at 390px. */}
+                  <td className="w-full max-w-0 py-3 px-3">
                     <Link
                       href={`/programs/${p.slug}`}
-                      className="flex items-center gap-3"
+                      className="flex min-w-0 items-center gap-3"
                     >
                       <ProgramLogo
                         slug={p.slug}
@@ -422,68 +275,35 @@ function ProgramsTable({
                         className="shrink-0"
                       />
                       <div className="min-w-0">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-medium truncate group-hover:underline underline-offset-4 transition-colors">
-                            {p.name}
-                          </span>
-                          {p.verified && (
-                            <CheckCircle2 className="h-3.5 w-3.5 text-good shrink-0" />
-                          )}
-                        </div>
-                        <span className="text-xs text-muted-foreground">
-                          {p.category}
-                          <span className="mx-1 text-border">&middot;</span>
-                          {COMMISSION_TYPE_LABELS[p.commission.type] ??
-                            p.commission.type}
+                        <span className="block text-sm font-medium truncate group-hover:underline underline-offset-4 transition-colors">
+                          {p.name}
                         </span>
+                        <span className="block truncate text-xs text-muted-foreground">{p.category}</span>
                       </div>
                     </Link>
                   </td>
-                  <td className="py-3 px-3 hidden sm:table-cell">
-                    <span className="font-mono text-sm font-medium text-foreground line-clamp-2">
+                  <td className="py-3 px-3">
+                    {/* Tiered and hybrid rates are sentences ("50% for six months, then 25% for life"): two lines at most. */}
+                    <span className="block w-max max-w-[128px] sm:max-w-[220px] line-clamp-2 font-mono text-sm font-medium text-foreground" title={commissionDisplay(p.commission)}>
                       {commissionDisplay(p.commission)}
                     </span>
-                  </td>
-                  <td className="py-3 px-3 text-center">
-                    {contentLoaded ? (
-                      <span
-                        className={`font-mono text-sm tabular-nums ${item.verifiedContent >= 3 ? "text-foreground" : "text-muted-foreground"}`}
-                      >
-                        {hasContent ? item.verifiedContent : "—"}
-                      </span>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">...</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    {contentLoaded && hasContent ? (
-                      <span
-                        className="inline-flex items-center rounded-sm border border-line-strong px-1.5 py-0.5 font-mono text-xs font-medium tabular-nums"
-                      >
-                        {item.avgSiftScore}
-                      </span>
-                    ) : contentLoaded ? (
-                      <span className="text-xs text-muted-foreground">—</span>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">...</span>
-                    )}
-                  </td>
-                  <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    <span className="text-xs text-muted-foreground tabular-nums">
-                      {hasContent ? item.totalContent : "—"}
+                    <span className="text-xs text-muted-foreground">
+                      {COMMISSION_TYPE_LABELS[p.commission.type] ?? p.commission.type}
+                      {/* The Recurring column is hidden below sm; its length rides here instead. */}
+                      {item.months ? <span className="sm:hidden"> · {recurringText(item.months)}</span> : null}
                     </span>
                   </td>
-                  <td className="py-3 px-3 hidden md:table-cell">
-                    <span className="text-xs text-muted-foreground capitalize">
-                      {hasContent
-                        ? item.topTag.replace(/_/g, " ")
-                        : "—"}
-                    </span>
+                  <td className={`py-3 px-3 hidden sm:table-cell whitespace-nowrap text-sm ${item.months ? "" : CELL_MUTED}`}>
+                    {recurringText(item.months)}
                   </td>
-                  <td className="py-3 px-3 hidden md:table-cell">
-                    <span className="text-xs text-muted-foreground capitalize">
-                      {hasContent ? item.topPlatform : "—"}
-                    </span>
+                  <td className={`py-3 px-3 hidden sm:table-cell whitespace-nowrap font-mono text-sm tabular-nums ${p.cookieDays != null ? "" : CELL_MUTED}`}>
+                    {p.cookieDays != null ? `${p.cookieDays} days` : "Not published"}
+                  </td>
+                  <td className={`py-3 px-3 hidden md:table-cell whitespace-nowrap font-mono text-sm tabular-nums ${item.facts.payoutMinText ? "" : CELL_MUTED}`}>
+                    {item.facts.payoutMinText ?? "Not published"}
+                  </td>
+                  <td className="py-3 px-3 hidden md:table-cell whitespace-nowrap font-mono text-xs tabular-nums text-muted-foreground">
+                    {item.facts.checked ? <time dateTime={item.facts.checked}>{item.facts.checked}</time> : "—"}
                   </td>
                 </tr>
               );
@@ -494,12 +314,12 @@ function ProgramsTable({
       {sorted.length === 0 && (
         <div className="text-center py-12">
           <p className="text-sm text-muted-foreground">
-            No programs match your filters.
+            No verified programs match your filters.
           </p>
         </div>
       )}
       {sorted.length > DEFAULT_VISIBLE && (
-        <div className="border-t border-border/20 px-4 py-3 flex items-center justify-center gap-4">
+        <div className="border-t border-border px-4 py-3 flex items-center justify-center gap-4">
           <button
             onClick={() => setPage(Math.max(0, activePage - 1))}
             disabled={activePage === 0}
@@ -521,16 +341,17 @@ function ProgramsTable({
           </button>
         </div>
       )}
-      <div className="px-4 py-3 border-t border-border/20 flex items-center justify-between">
+      <div className="px-4 py-3 border-t border-border flex items-center justify-between">
         <span className="text-xs text-muted-foreground">
           showing {sorted.length === 0 ? 0 : activePage * DEFAULT_VISIBLE + 1}-
-          {activePage * DEFAULT_VISIBLE + visible.length} of {sorted.length} programs
+          {activePage * DEFAULT_VISIBLE + visible.length} of {sorted.length} verified programs
         </span>
         <Link
-          href="/explore"
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+          href="/programs"
+          prefetch={false}
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          Explore all content <ExternalLink className="h-2.5 w-2.5" />
+          All programs
         </Link>
       </div>
     </div>
@@ -672,52 +493,37 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
 // ── Main Page ───────────────────────────────────────────────────
 
 export default function RankingsClient({
-  initialContent = [],
+  facts,
+  unranked,
   networkRows,
   categoryRows,
 }: {
-  initialContent?: ContentData[];
+  facts: TermFacts[];
+  /** Verified programs our own team builds: listed here by name, never given a rank. */
+  unranked: { slug: string; name: string }[];
   networkRows: GroupRow[];
   categoryRows: GroupRow[];
 }) {
   const [activeTab, setActiveTab] = useState<Tab>("programs");
+  const [group, setGroup] = useState<CommissionGroup>("percent");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedType, setSelectedType] = useState("");
-  const [selectedPlatform, setSelectedPlatform] = useState("");
-  const [selectedFormat, setSelectedFormat] = useState("");
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [hasContentOnly, setHasContentOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const { data: contentData, loaded: contentLoaded } =
-    useContentData(initialContent);
 
   useEffect(() => {
     track("page_view");
   }, []);
 
-  const top3 = useMemo(() => {
-    return [...programs]
-      .sort(byScore(affiliateScore))
-      .slice(0, 3);
-  }, []);
-
-  const mergedPrograms: MergedProgram[] = useMemo(() => {
-    return programs.map((p) => {
-      const content = contentData.get(p.slug);
-      return {
-        program: p,
-        verifiedContent: content?.verifiedContent ?? 0,
-        totalContent: content?.totalContent ?? 0,
-        avgSiftScore: content?.avgSiftScore ?? 0,
-        topTag: content?.topTag ?? "",
-        topPlatform: content?.topPlatform ?? "",
-      };
+  const rows: Row[] = useMemo(() => {
+    const bySlug = new Map(facts.map((f) => [f.slug, f]));
+    return programs.flatMap((program) => {
+      const f = program.verified ? bySlug.get(program.slug) : undefined;
+      return f ? [{ program, group: commissionGroup(program.commission), months: recurringMonths(program.commission), facts: f }] : [];
     });
-  }, [contentData]);
+  }, [facts]);
 
-  const filteredPrograms = useMemo(() => {
-    let result = mergedPrograms;
+  const filteredRows = useMemo(() => {
+    let result = rows;
 
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -736,47 +542,15 @@ export default function RankingsClient({
         (m) => m.program.commission.type === selectedType
       );
     }
-    if (verifiedOnly) {
-      result = result.filter((m) => m.program.verified);
-    }
-    if (hasContentOnly) {
-      result = result.filter((m) => m.totalContent >= 3);
-    }
-    if (selectedPlatform) {
-      result = result.filter((m) => m.topPlatform === selectedPlatform);
-    }
-    if (selectedFormat) {
-      result = result.filter((m) => m.topTag === selectedFormat);
-    }
 
     return result;
-  }, [
-    mergedPrograms,
-    searchQuery,
-    selectedCategory,
-    selectedType,
-    verifiedOnly,
-    hasContentOnly,
-    selectedPlatform,
-    selectedFormat,
-  ]);
+  }, [rows, searchQuery, selectedCategory, selectedType]);
 
-  const hasFilters =
-    selectedCategory ||
-    selectedType ||
-    selectedPlatform ||
-    selectedFormat ||
-    verifiedOnly ||
-    hasContentOnly ||
-    searchQuery;
+  const hasFilters = selectedCategory || selectedType || searchQuery;
 
   const clearFilters = () => {
     setSelectedCategory("");
     setSelectedType("");
-    setSelectedPlatform("");
-    setSelectedFormat("");
-    setVerifiedOnly(false);
-    setHasContentOnly(false);
     setSearchQuery("");
   };
 
@@ -798,7 +572,7 @@ export default function RankingsClient({
   ];
 
   const tabs: { value: Tab; label: string; count: number }[] = [
-    { value: "programs", label: "Programs", count: programs.length },
+    { value: "programs", label: "Programs", count: rows.length },
     { value: "networks", label: "Networks", count: networkRows.length },
     { value: "categories", label: "Categories", count: categories.length },
   ];
@@ -814,16 +588,13 @@ export default function RankingsClient({
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          {programs.length} programs ranked by content performance and
-          commission across {categories.length} categories
+          {rows.length} verified programs, sorted by what they pay: commission,
+          how long it recurs, cookie length and payout minimum.
         </p>
       </div>
 
-      {/* Top 3 */}
-      <TopThreeCards top3={top3} />
-
       {/* Tab bar */}
-      <div className="flex items-center gap-1 rounded-lg border border-border/50 bg-muted/20 p-1 mb-6 w-fit">
+      <div className="flex items-center gap-1 rounded-lg border border-border bg-sunk p-1 mb-6 w-fit">
         {tabs.map((tab) => (
           <button
             key={tab.value}
@@ -845,19 +616,40 @@ export default function RankingsClient({
       {/* Filters (Programs tab only) */}
       {activeTab === "programs" && (
         <div className="space-y-3 mb-4">
+          {/* A percentage and a dollar amount cannot be ranked against each other: one list each. */}
+          <div role="group" aria-label="Commission paid as" className="flex flex-wrap gap-2">
+            {GROUPS.map((g) => (
+              <button
+                key={g.value}
+                type="button"
+                aria-pressed={group === g.value}
+                onClick={() => setGroup(g.value)}
+                className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
+                  group === g.value
+                    ? "border-foreground bg-foreground text-background"
+                    : "border-border bg-card text-muted-foreground hover:text-foreground hover:border-line-strong"
+                }`}
+              >
+                {g.label}
+                <span className="ml-1.5 tabular-nums">{filteredRows.filter((r) => r.group === g.value).length}</span>
+              </button>
+            ))}
+          </div>
           {/* Search */}
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
             <input
               type="text"
-              placeholder="Search programs..."
+              placeholder="Search verified programs..."
+              aria-label="Search verified programs"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-border/50 bg-card/50 pl-9 pr-8 py-2 text-xs font-medium text-foreground placeholder:text-muted-foreground hover:border-border focus:outline-none focus:border-border transition-colors"
+              className="w-full rounded-lg border border-border bg-card pl-9 pr-8 py-2 text-xs font-medium text-foreground placeholder:text-muted-foreground hover:border-line-strong focus:outline-none focus:border-line-strong transition-colors"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
+                aria-label="Clear search"
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
               >
                 <X className="h-3 w-3" />
@@ -879,47 +671,12 @@ export default function RankingsClient({
               onChange={setSelectedType}
               options={typeOptions}
             />
-            <FilterSelect
-              label="Platform"
-              value={selectedPlatform}
-              onChange={setSelectedPlatform}
-              options={PLATFORM_OPTIONS}
-            />
-            <FilterSelect
-              label="Format"
-              value={selectedFormat}
-              onChange={setSelectedFormat}
-              options={FORMAT_OPTIONS}
-            />
-
-            <button
-              onClick={() => setVerifiedOnly(!verifiedOnly)}
-              className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-                verifiedOnly
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border/50 bg-card/50 text-muted-foreground hover:border-border"
-              }`}
-            >
-              <CheckCircle2 className="h-3 w-3 inline mr-1" />
-              Verified
-            </button>
-
-            <button
-              onClick={() => setHasContentOnly(!hasContentOnly)}
-              className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-                hasContentOnly
-                  ? "border-blue-500/50 bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                  : "border-border/50 bg-card/50 text-muted-foreground hover:border-border"
-              }`}
-            >
-              Has Content
-            </button>
 
             {hasFilters && (
               <>
                 <div className="flex-1" />
                 <span className="text-xs text-muted-foreground">
-                  {filteredPrograms.length} of {programs.length}
+                  {filteredRows.length} of {rows.length}
                 </span>
                 <button
                   onClick={clearFilters}
@@ -936,18 +693,23 @@ export default function RankingsClient({
       {/* Table content */}
       {activeTab === "programs" && (
         <ProgramsTable
-          filterKey={JSON.stringify([
-            searchQuery,
-            selectedCategory,
-            selectedType,
-            selectedPlatform,
-            selectedFormat,
-            verifiedOnly,
-            hasContentOnly,
-          ])}
-          items={filteredPrograms}
-          contentLoaded={contentLoaded}
+          key={group}
+          group={group}
+          filterKey={JSON.stringify([searchQuery, selectedCategory, selectedType])}
+          items={filteredRows.filter((r) => r.group === group)}
         />
+      )}
+      {activeTab === "programs" && unranked.length > 0 && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          Not ranked:{" "}
+          {unranked.map((p, i) => (
+            <span key={p.slug}>
+              {i > 0 && ", "}
+              <Link href={`/programs/${p.slug}`} className="underline underline-offset-2 hover:text-foreground">{p.name}</Link>
+            </span>
+          ))}{" "}
+          ({SAME_TEAM_LABEL}).
+        </p>
       )}
       {activeTab === "networks" && <NetworksTable rows={networkRows} />}
       {activeTab === "categories" && <CategoriesTable rows={categoryRows} />}

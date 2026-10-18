@@ -1,4 +1,3 @@
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -19,7 +18,6 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { ProgramCompare, getRelatedPrograms } from "@/components/related-programs";
-import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { EarningsCalculator } from "@/components/earnings-calculator";
 import { serializeJsonLd } from "@/lib/json-ld";
@@ -434,13 +432,6 @@ export default async function ProgramPage({
                 ))}
               </ul>}
             </section>
-          )}
-
-          {/* Social Listen */}
-          {!noProgram && (
-            <Suspense fallback={<div className="animate-pulse h-48 rounded-xl bg-muted/30" />}>
-              <SocialListenLoader slug={slug} />
-            </Suspense>
           )}
 
           {estimate && (
