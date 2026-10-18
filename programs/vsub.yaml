@@ -39,12 +39,6 @@ description: >
   text into scenes, narrates it and draws every frame with a template cloned
   from a video you choose. It also offers an API and an MCP server.
 
-  The affiliate program pays 30% of every subscription payment, including every
-  renewal, for as long as the referred customer stays subscribed. There is no
-  application: every account gets a referral link. A click is credited for 30
-  days, and payouts go out by PayPal on the 15th of each month once the
-  cleared balance is over $50. The program is open to content creators only.
-
 short_description: "AI tool that turns scripts into illustrated videos"
 
 agents:
@@ -63,7 +57,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
