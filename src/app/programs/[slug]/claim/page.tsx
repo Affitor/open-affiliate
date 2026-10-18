@@ -3,7 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { confirmedTerms, getProgram } from "@/lib/programs";
-import { PILOT_SLUGS, claimsEnabledFor, registrableDomain } from "@/lib/claims/rules";
+import { PILOT_SLUGS, claimReplyTo, claimsEnabledFor, registrableDomain } from "@/lib/claims/rules";
+import { valuesOf } from "@/lib/claims/form";
+import { alsoOnAffitor } from "@/lib/apply-cta";
 import { ClaimFlow } from "./claim-flow";
 
 // Pilot listings only; every other slug is a 404 without rendering.
@@ -31,7 +33,7 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
   const domain = registrableDomain(program.url);
   if (!domain) notFound();
   // Unverified: hidden terms start blank, so the owner enters the real ones
-  // instead of confirming an import default.
+  // instead of confirming an import default; an edit sends only what differs.
   const shown = confirmedTerms(program);
 
   return (
@@ -53,15 +55,11 @@ export default async function ClaimPage({ params }: { params: Promise<{ slug: st
         name={program.name}
         domain={domain}
         siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? ""}
-        initialTerms={{
-          rate: String(program.commission.rate ?? ""),
-          type: program.commission.type,
-          duration: program.commission.duration ?? "",
-          cookieDays: shown.cookieDays == null ? "" : String(shown.cookieDays),
-          payoutMinimum: shown.payout.minimum == null ? "" : String(shown.payout.minimum),
-          signupUrl: program.signupUrl ?? "",
-          note: "",
-        }}
+        initialValues={valuesOf(shown)}
+        synced={program.network === "affitor"}
+        onAffitor={program.network === "affitor" || Boolean(alsoOnAffitor(program))}
+        claimedBy={program.claimedBy ?? null}
+        replyTo={claimReplyTo()}
       />
       <p className="text-xs text-muted-foreground mt-4">
         We keep your email address only to confirm you run this listing and to reach you about your edits.{" "}
