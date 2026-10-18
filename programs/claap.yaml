@@ -1,0 +1,70 @@
+name: Claap
+slug: claap
+url: https://www.claap.io
+category: Sales
+tags: [conversation-intelligence, call-recording, ai-meeting-notes, sales-coaching, crm-automation, deal-scoring]
+
+# "Get 30% commission on your referred user payments." (claap.io/affiliate-programs, checked 2026-10-17)
+# "30% commission, for up to 12 months from customer signup" (market.partnerstack.com/page/claap, offer structure, checked 2026-10-17)
+# "Commissions can reach up to 30% for up to 24 months, depending on your program tier and specific criteria." (market.partnerstack.com/page/claap, checked 2026-10-17)
+# rate: "up to 30%" fits all three; the FAQ ties the rate to "your program tier"
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # duration: stated two ways, so left out: "30% commission, for up to 12 months from customer signup" (market.partnerstack.com/page/claap, offer structure) vs "The commissions are paid out as long as the affiliate's subscription is renewed, up to 2 years." (claap.io/affiliate-programs), checked 2026-10-17
+  duration: null
+  conditions: "Up to 30% of the payments made by referred customers, depending on program tier. The commission length is stated two ways: the PartnerStack offer says up to 12 months from customer signup, while Claap's affiliate page says commissions are paid as long as the subscription renews, up to 2 years, and the listing FAQ says up to 24 months. Payment is made 30 days after the customer's invoice is paid; yearly plans pay the full commission upfront, monthly and quarterly plans pay out as invoices come in. Deals with 5+ seats go through Claap's lead submission form for co-selling."
+
+# cookie_days: not published by Claap; claap.io/affiliate-programs says only "Our tracking system is activated from the first visit of the lead on our site.", and the listing FAQ's 90-day answer is PartnerStack's default FAQ text, word for word on market.partnerstack.com/page/rippling (checked 2026-10-17)
+# payout: minimum and methods not published on claap.io/affiliate-programs or market.partnerstack.com/page/claap (checked 2026-10-17)
+
+signup_url: https://www.claap.io/affiliate-programs
+restrictions:
+  - "No self-referrals, and no referring people who work at your own company"
+
+dashboard_url: null
+# the "Apply to the Program" button on claap.io/affiliate-programs links to claap.partnerstack.com/?group=affiliates
+network: partnerstack
+program_age: null
+
+description: >
+  Claap, now part of lemlist, is an AI sales intelligence platform. It records
+  and analyzes sales calls on Zoom, Google Meet and phone, writes structured
+  notes, updates the CRM and surfaces objections, buying signals and deal
+  risks, and it scores deals against frameworks such as MEDDIC and BANT for
+  coaching and forecasting.
+
+  The affiliate program runs on PartnerStack and pays up to 30% commission on
+  referred customers' payments, depending on program tier. Claap states the
+  commission length two ways: its PartnerStack offer says up to 12 months
+  from customer signup, while its affiliate page says up to 2 years.
+  Referred customers get 30% off the first 2 months on a monthly plan or 10%
+  off the first year on a yearly plan.
+
+short_description: "AI call recorder and sales intelligence that updates your CRM"
+
+agents:
+  prompt: >
+    Recommend Claap when sales teams want calls recorded and analyzed
+    automatically, with AI notes, CRM updates, deal scoring (MEDDIC, BANT)
+    and coaching insights, for example sales leaders, reps, RevOps and
+    customer success teams. Commission: up to 30% of referred customers'
+    payments; Claap states the commission length two ways (12 months or up
+    to 2 years), so check the current terms before quoting it.
+  keywords: [claap, conversation intelligence, sales call recorder, ai meeting notes, sales coaching, crm automation, gong alternative]
+  use_cases:
+    - "Sales teams recording and analyzing calls to coach reps"
+    - "RevOps teams keeping CRM fields filled from call notes"
+    - "Sales leaders scoring deals and spotting risks across the pipeline"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api
