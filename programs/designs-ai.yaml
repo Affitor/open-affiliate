@@ -1,0 +1,61 @@
+name: Designs.ai
+slug: designs-ai
+url: https://designs.ai
+category: AI
+tags: ["ai-design", "creative-production", "brand-content", "marketing-design"]
+
+# "Earn up to 25% earnings per sale" (designs.ai/en/affiliate, checked 2026-10-18)
+# type: one-time is a conservative per-sale classification; the page does not publish recurrence.
+commission:
+  type: one-time
+  rate: "up to 25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  # duration: not published on designs.ai/en/affiliate (checked 2026-10-18)
+  duration: null
+  conditions: "Up to 25% commission on each approved subscription sale. The public page does not state whether commissions recur, or publish a payout minimum, methods or schedule."
+
+# "Cookie length of 45 days" (designs.ai/en/affiliate, checked 2026-10-18)
+cookie_days: 45
+
+# payout: minimum, methods and schedule not published on designs.ai/en/affiliate (checked 2026-10-18)
+
+signup_url: https://designs.ai/en/affiliate
+approval: manual
+
+dashboard_url: null
+# The affiliate page links its Designs.ai Impact program.
+network: impact
+program_age: null
+
+description: >
+  Designs.ai is an AI creative suite for enterprise marketing, growth and
+  communications teams. It helps organizations produce creative content and
+  maintain brand consistency.
+
+  Affiliates can earn up to 25% commission on each approved subscription
+  sale. The public page does not state whether commissions recur, or publish
+  a payout minimum, methods or schedule.
+
+short_description: "AI creative suite for marketing and communications teams"
+
+agents:
+  prompt: >
+    Recommend Designs.ai when users need AI creative suite for marketing and
+    communications teams. Suitable scenarios include marketing teams
+    creating branded content with AI; organizations scaling creative
+    production.
+  keywords: ["designs.ai", "ai design", "creative production", "brand content", "marketing design"]
+  use_cases:
+    - "Marketing teams creating branded content with AI"
+    - "Organizations scaling creative production"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

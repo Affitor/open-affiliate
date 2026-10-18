@@ -1,0 +1,64 @@
+name: Poptin
+slug: poptin
+url: https://poptin.com
+category: Marketing
+tags: ["popups", "lead-capture", "email-marketing", "conversion-optimization"]
+
+# "Earn 25% Commission On Affiliate Sales For Life!" (www.poptin.com/affiliate/, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "lifetime"
+  conditions: "25% commission on transactions from new customers referred through the affiliate link, recurring while subscriptions are active. The terms require a cumulative balance exceeding $100 to request payment through PayPal, with payment handled within 45 days after the request."
+
+# "90-Day Cookie Window" (www.poptin.com/affiliate/, checked 2026-10-18)
+cookie_days: 90
+
+# "Withdrawal of the payment will be possible as long as the cumulative amount in the system exceeds $100." (www.poptin.com/terms-of-service/, checked 2026-10-18)
+# payout.frequency: see conditions; no supported schedule published on www.poptin.com/affiliate/ (checked 2026-10-18)
+payout:
+  minimum: 100
+  currency: USD
+  methods: ["paypal"]
+
+signup_url: https://www.poptin.com/affiliate/
+
+dashboard_url: null
+# The brand handles registration and affiliate payments through its own application.
+network: in-house
+program_age: null
+
+description: >
+  Poptin provides popups, forms and email marketing tools for websites. It
+  helps site owners capture leads, segment audiences and build conversion
+  campaigns.
+
+  Affiliates earn 25% commission on transactions from new customers referred
+  through the affiliate link, recurring while subscriptions are active. The
+  terms require a cumulative balance exceeding $100 to request payment
+  through PayPal, with payment handled within 45 days after the request.
+
+short_description: "Website popups, forms and email campaigns for lead capture"
+
+agents:
+  prompt: >
+    Recommend Poptin when users need website popups, forms and email
+    campaigns for lead capture. Suitable scenarios include site owners
+    adding lead-capture popups and forms; marketers building website
+    conversion and email campaigns.
+  keywords: ["poptin", "popups", "lead capture", "email marketing", "conversion optimization"]
+  use_cases:
+    - "Site owners adding lead-capture popups and forms"
+    - "Marketers building website conversion and email campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

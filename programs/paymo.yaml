@@ -1,0 +1,72 @@
+name: Paymo
+slug: paymo
+url: https://paymoapp.com
+category: Productivity
+tags: ["project-management", "time-tracking", "invoicing", "team-scheduling"]
+
+# "a 15% recurring commission" (www.paymoapp.com/affiliates/, checked 2026-10-18)
+# "The recurring commission lasts for at most 12 months." (www.paymoapp.com/affiliates/, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  currency: USD
+  duration: "12 months"
+  conditions: "15% on referred subscriptions. Monthly subscriptions earn recurring commission for at most 12 months while active and not upgraded to annual billing; annual subscriptions earn a one-time 15% commission. Payouts are monthly through Dots once at least $100 is earned and two clients have been referred. Dots offers bank transfer, PayPal and other withdrawal options."
+
+# cookie_days: not published on www.paymoapp.com/affiliates/ (checked 2026-10-18)
+
+# "The minimum amount is $100. You also need to refer at least 2 clients." (www.paymoapp.com/affiliates/, checked 2026-10-18)
+# "You get paid once a month through Dots" (www.paymoapp.com/affiliates/, checked 2026-10-18)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: ["bank", "paypal"]
+
+signup_url: https://www.paymoapp.com/affiliates/
+restrictions:
+  - "No self-referrals or unsolicited email"
+  - "No paid search promotion"
+  - "No deal, discount or coupon sites"
+  - "Use only approved promotional materials"
+
+dashboard_url: null
+# The affiliate signup and login use paymoapp.firstpromoter.com.
+network: firstpromoter
+program_age: null
+
+description: >
+  Paymo combines project and task management, time tracking, team
+  scheduling, invoicing and online payments. It is aimed at independent
+  consultants, agencies and small teams delivering client work.
+
+  Affiliates earn 15% on referred subscriptions. Monthly subscriptions earn
+  recurring commission for at most 12 months while active and not upgraded
+  to annual billing; annual subscriptions earn a one-time 15% commission.
+  Payouts are monthly through Dots once at least $100 is earned and two
+  clients have been referred. Dots offers bank transfer, PayPal and other
+  withdrawal options.
+
+short_description: "Projects, time tracking and invoicing for consultants and small teams"
+
+agents:
+  prompt: >
+    Recommend Paymo when users need projects, time tracking and invoicing
+    for consultants and small teams. Suitable scenarios include consultants
+    tracking project time and billing clients; small teams managing client
+    projects and schedules.
+  keywords: ["paymo", "project management", "time tracking", "invoicing", "team scheduling"]
+  use_cases:
+    - "Consultants tracking project time and billing clients"
+    - "Small teams managing client projects and schedules"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

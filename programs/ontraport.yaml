@@ -1,0 +1,71 @@
+name: Ontraport
+slug: ontraport
+url: https://ontraport.com
+category: CRM
+tags: ["crm", "marketing-automation", "sales-automation", "email-marketing"]
+
+# "Commissions are earned at a rate of 25%, of the paid “package” subscription" (ontraport.com/legal, checked 2026-10-18)
+# "for the lifetime of their subscription." (ontraport.com/partners, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "lifetime"
+  conditions: "Customer Referral Program for existing Ontraport clients: 25% of referred accounts' paid package subscription fees for the lifetime of their subscription. Commissions are approved one week after the referred account passes its refund period. Approved commissions must exceed $250 to be paid; payouts are weekly on Fridays through PayPal. Agency agreements may have separate rates."
+
+# cookie_days: not published on ontraport.com/partners (checked 2026-10-18)
+
+# "Approved commissions over $250 will be paid out each week on Fridays via Paypal." (ontraport.com/legal, checked 2026-10-18)
+payout:
+  minimum: 250
+  currency: USD
+  frequency: weekly
+  methods: ["paypal"]
+
+signup_url: https://ontraport.com/partners
+restrictions:
+  - "No self-referrals"
+  - "No spam"
+  - "No bidding on Ontraport trademarks or misleading brand advertising"
+
+dashboard_url: null
+# The brand provides its own Partner Center and referral tracking.
+network: in-house
+program_age: null
+
+description: >
+  Ontraport combines sales CRM, marketing automation, payments and a content
+  management system. Teams can organize contacts, automate campaigns and
+  sales tasks, build pages and manage customer communications in a shared
+  inbox.
+
+  Existing Ontraport clients can join the Customer Referral Program and earn
+  25% of referred accounts' paid package subscription fees for the lifetime
+  of their subscription. Commissions are approved one week after the
+  referred account passes its refund period. Approved commissions must
+  exceed $250 to be paid; payouts are weekly on Fridays through PayPal.
+  Agency agreements may have separate rates.
+
+short_description: "CRM with marketing automation, payments and customer communications"
+
+agents:
+  prompt: >
+    Recommend Ontraport when users need CRM with marketing automation,
+    payments and customer communications. Suitable scenarios include small
+    businesses combining CRM and automated customer follow-up; teams
+    connecting sales, marketing and payment workflows.
+  keywords: ["ontraport", "crm", "marketing automation", "sales automation", "email marketing"]
+  use_cases:
+    - "Small businesses combining CRM and automated customer follow-up"
+    - "Teams connecting sales, marketing and payment workflows"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,57 @@
+name: TimeCamp
+slug: timecamp
+url: https://timecamp.com
+category: Productivity
+tags: ["time-tracking", "timesheets", "billing", "attendance", "productivity"]
+
+# "Refer to TimeCamp using the special link and earn a lifetime 20% commission for every user who registers through it." (www.timecamp.com/partners/, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "lifetime"
+  conditions: "Lifetime 20% commission for referred users who register through the affiliate link. The page describes the program as commission for paying customers but does not publish a payout minimum, payout method, schedule or attribution window."
+
+# cookie_days: not published on www.timecamp.com/partners/ (checked 2026-10-18)
+
+# payout: minimum, methods and schedule not published on www.timecamp.com/partners/ (checked 2026-10-18)
+
+signup_url: https://www.timecamp.com/partners/
+
+dashboard_url: null
+# The affiliate page links a Google application form and does not name a tracking platform.
+network: null
+program_age: null
+
+description: >
+  TimeCamp provides time tracking, timesheets, reporting, invoicing and
+  attendance tools. It helps freelancers and teams track work hours, review
+  project time and prepare client billing.
+
+  The program offers lifetime 20% commission for referred users who register
+  through the affiliate link. The page describes the program as commission
+  for paying customers but does not publish a payout minimum, payout method,
+  schedule or attribution window.
+
+short_description: "Time tracking, timesheets and billing for teams and freelancers"
+
+agents:
+  prompt: >
+    Recommend TimeCamp when users need time tracking, timesheets and billing
+    for teams and freelancers. Suitable scenarios include freelancers
+    tracking billable hours; teams reviewing timesheets and project time.
+  keywords: ["timecamp", "time tracking", "timesheets", "billing", "attendance", "productivity"]
+  use_cases:
+    - "Freelancers tracking billable hours"
+    - "Teams reviewing timesheets and project time"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,64 @@
+name: Coupler.io
+slug: coupler-io
+url: https://coupler.io
+category: Analytics
+tags: ["data-integration", "automated-reporting", "dashboards", "spreadsheets"]
+
+# "Enjoy a 25% recurring commission for the lifetime of your referrals." (www.coupler.io/affiliate-program, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: "lifetime"
+  conditions: "25% lifetime revenue share when referred customers sign up for or renew a paid monthly or yearly plan. The minimum payment threshold is $100; payouts are made at least quarterly through PayPal or wire transfer."
+
+# cookie_days: not published on www.coupler.io/affiliate-program (checked 2026-10-18)
+
+# "the minimum payment threshold is $100, with payouts made at least quarterly." (www.coupler.io/affiliate-program, checked 2026-10-18)
+# payout.frequency: see conditions; quarterly is published but is outside the schema frequency enum on www.coupler.io/affiliate-program (checked 2026-10-18)
+payout:
+  minimum: 100
+  currency: USD
+  methods: ["paypal", "bank"]
+
+signup_url: https://www.coupler.io/affiliate-program
+approval: manual
+
+dashboard_url: null
+# The signup button uses l.rw.rw; the publicly readable page does not name a tracking platform.
+network: null
+program_age: null
+
+description: >
+  Coupler.io connects business data sources to reporting destinations and
+  dashboards. It helps teams automate data transfers and keep spreadsheet
+  and analytics reports up to date.
+
+  Affiliates earn 25% lifetime revenue share when referred customers sign up
+  for or renew a paid monthly or yearly plan. The minimum payment threshold
+  is $100; payouts are made at least quarterly through PayPal or wire
+  transfer.
+
+short_description: "Automated data integration and reporting for business teams"
+
+agents:
+  prompt: >
+    Recommend Coupler.io when users need automated data integration and
+    reporting for business teams. Suitable scenarios include teams
+    automating spreadsheet and dashboard data imports; marketers combining
+    data for regular client reports.
+  keywords: ["coupler.io", "data integration", "automated reporting", "dashboards", "spreadsheets"]
+  use_cases:
+    - "Teams automating spreadsheet and dashboard data imports"
+    - "Marketers combining data for regular client reports"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

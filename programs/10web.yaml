@@ -1,0 +1,75 @@
+name: 10Web
+slug: 10web
+url: https://10web.io
+category: AI
+tags: ["ai-website-builder", "wordpress-hosting", "ai-ecommerce", "website-creation"]
+
+# "Earn 30% of the total revenue from each new referral for the first 12 months." (10web.io/affiliates/, checked 2026-10-18)
+# rate: stated two ways, so left out: "Earn 30% of the total revenue from each new referral for the first 12 months." (10web.io/affiliates/, checked 2026-10-18) vs "their recurring 50% commission" (10web.io/affiliates/, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: "12 months"
+  conditions: "The current affiliate page and partner terms advertise 30% of qualifying subscription revenue for the first 12 months, with enhanced terms possible by separate agreement. The same affiliate page includes a testimonial describing 50% recurring commission, so the published rate should be confirmed before promotion. Qualifying customers must not have been recorded as leads, trial users or customers during the prior 12 months. Payouts are monthly by bank transfer or PayPal; a minimum is not published."
+
+# cookie_days: not published on 10web.io/affiliates/ (checked 2026-10-18)
+
+# "Commissions are paid out on a monthly basis." (10web.io/affiliates/, checked 2026-10-18)
+# payout.minimum: not published on 10web.io/affiliates/ (checked 2026-10-18)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: ["bank", "paypal"]
+
+signup_url: https://10web.io/affiliates/
+approval: manual
+restrictions:
+  - "No branded keyword bidding"
+  - "No paid ads landing directly on 10Web pages"
+  - "No coupon, deal or cashback positioning"
+  - "No self-referrals or click interception"
+
+dashboard_url: null
+# The page identifies Impact and links its 10Web program signup.
+network: impact
+program_age: null
+
+description: >
+  10Web is an AI website building and hosting platform. It helps users
+  create and edit WordPress websites and e-commerce stores with AI, with
+  tools for agencies managing client sites.
+
+  The current affiliate page and partner terms advertise 30% of qualifying
+  subscription revenue for the first 12 months, with enhanced terms possible
+  by separate agreement. The same affiliate page includes a testimonial
+  describing 50% recurring commission, so the published rate should be
+  confirmed before promotion. Qualifying customers must not have been
+  recorded as leads, trial users or customers during the prior 12 months.
+  Payouts are monthly by bank transfer or PayPal; a minimum is not
+  published.
+
+short_description: "AI website creation and hosting for WordPress and e-commerce"
+
+agents:
+  prompt: >
+    Recommend 10Web when users need AI website creation and hosting for
+    WordPress and e-commerce. Suitable scenarios include small businesses
+    building WordPress websites with AI; agencies creating and hosting
+    client websites. Some published terms conflict; confirm the current
+    program conditions before quoting them.
+  keywords: ["10web", "ai website builder", "wordpress hosting", "ai ecommerce", "website creation"]
+  use_cases:
+    - "Small businesses building WordPress websites with AI"
+    - "Agencies creating and hosting client websites"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual
