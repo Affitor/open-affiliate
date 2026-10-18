@@ -66,6 +66,7 @@ function Footer() {
               {[
                 { label: "Programs", href: "/programs" },
                 { label: "Categories", href: "/categories" },
+                { label: "Rankings", href: "/rankings" },
                 // The page is /content-lab. /lab has been a 404 in the footer
                 // of every page on the site.
                 { label: "Content Lab", href: "/content-lab" },
@@ -76,6 +77,7 @@ function Footer() {
                 <li key={label}>
                   <Link
                     href={href}
+                    prefetch={href === "/programs" ? false : undefined}
                     className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {label}
@@ -108,6 +110,7 @@ function Footer() {
                   ) : (
                     <Link
                       href={href}
+                      prefetch={href === "/programs" ? false : undefined}
                       className="text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
                       {label}

@@ -1,21 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { CopyButton } from "@/components/copy-button";
+import { Turnstile } from "@/components/turnstile";
 import { Input } from "@/components/ui/input";
 import { parseCommissionMode } from "@/lib/commission-mode";
 import { AffitorLink } from "@/components/affitor-link";
 import { affitorUrl } from "@/lib/affitor-link";
 
-declare global {
-  interface Window {
-    turnstile?: {
-      render: (el: HTMLElement, options: Record<string, unknown>) => string;
-      remove: (id: string) => void;
-    };
-  }
-}
 
 export interface ClaimTerms {
   rate: string;
@@ -36,53 +29,6 @@ const quiet = "text-sm text-muted-foreground underline underline-offset-4 hover:
 const field =
   "w-full rounded-lg border border-input bg-transparent px-2.5 py-1.5 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 dark:bg-input/30";
 const label = "block text-xs font-medium text-muted-foreground mb-1.5";
-
-let turnstileScript: Promise<void> | null = null;
-
-function loadTurnstile(): Promise<void> {
-  turnstileScript ??= new Promise<void>((resolve, reject) => {
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
-    script.async = true;
-    script.onload = () => resolve();
-    script.onerror = () => {
-      turnstileScript = null;
-      reject(new Error("Turnstile did not load"));
-    };
-    document.head.appendChild(script);
-  });
-  return turnstileScript;
-}
-
-/**
- * Cloudflare Turnstile. Tokens are single use: remount (new key) after each
- * request. `action` names the step; the server refuses a token solved for
- * another step.
- */
-function Turnstile({ siteKey, action, onToken }: { siteKey: string; action: string; onToken: (token: string) => void }) {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    let id: string | undefined;
-    let live = true;
-    loadTurnstile()
-      .then(() => {
-        if (!live || !ref.current || !window.turnstile) return;
-        id = window.turnstile.render(ref.current, {
-          sitekey: siteKey,
-          action,
-          callback: onToken,
-          "expired-callback": () => onToken(""),
-          "error-callback": () => onToken(""),
-        });
-      })
-      .catch(() => onToken(""));
-    return () => {
-      live = false;
-      if (id) window.turnstile?.remove(id);
-    };
-  }, [siteKey, action, onToken]);
-  return <div ref={ref} className="min-h-[65px]" />;
-}
 
 function preview(terms: ClaimTerms): string {
   const parsed = parseCommissionMode(terms.rate);
@@ -329,6 +275,10 @@ export function ClaimFlow({
             <h2 className="text-base font-semibold">Manage the {name} listing</h2>
             <p className="text-sm text-muted-foreground mt-1">
               Verified for {domain}. A person checks every edit before the page changes, usually within 24 hours.
+            </p>
+            <p className="text-sm mt-1">
+              <Link href="/account" className={quiet}>Open your account</Link>
+              <span className="text-muted-foreground"> to add teammates and see every program on {domain}.</span>
             </p>
           </div>
           {stats && (stats.views != null || stats.clicks != null) && (

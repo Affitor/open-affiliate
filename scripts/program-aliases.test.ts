@@ -16,7 +16,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import { pathToFileURL } from "node:url"
 import { NextRequest } from "next/server"
-import nextConfig from "../next.config"
+import { nextConfig } from "../next.config"
 import { GET as restGet } from "../src/app/api/programs/[slug]/route"
 import { createMcpRoute } from "../src/lib/mcp-route"
 import { programs } from "../src/lib/programs"
@@ -96,8 +96,8 @@ test("next.config refuses a registry.json with no alias map instead of shipping 
     const config = pathToFileURL(join(process.cwd(), "next.config.ts")).href
     const run = spawnSync(
       process.execPath,
-      // tsx loads next.config.ts as CommonJS here, so its default export arrives one level down.
-      ["--import", loader, "--input-type=module", "-e", `import m from ${JSON.stringify(config)}; await (m.default ?? m).redirects()`],
+      // tsx loads next.config.ts as CommonJS here, so its exports arrive one level down.
+      ["--import", loader, "--input-type=module", "-e", `import m from ${JSON.stringify(config)}; await (m.nextConfig ?? m.default.nextConfig).redirects()`],
       { cwd: dir, encoding: "utf8" }
     )
     assert.notEqual(run.status, 0, "redirects() resolved with a registry.json that has no aliases")

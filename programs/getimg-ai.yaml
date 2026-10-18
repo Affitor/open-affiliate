@@ -1,0 +1,83 @@
+name: getimg.ai
+slug: getimg-ai
+aliases: [getimg, getimgai]
+url: https://getimg.ai
+category: AI
+tags: [ai-image-generator, ai-video-generator, text-to-image, image-upscaler, ai-music, background-remover]
+
+# "Earn Up to 30% per sale for 1 year" (partners.dub.co/getimg-ai, checked 2026-10-17)
+# "Base rate: 25% of net revenue from each payment made by a referred customer during the 12 months following that customer's first paid purchase" (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+# "Pro rate: 30%, applied once you have 15 or more active referred customers" (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+# "Earn $50 when the referred partner earns at least $100 in commissions" (partners.dub.co/getimg-ai, checked 2026-10-17)
+# "Commissions are calculated in USD." (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+# "New users get 15% off for their first purchase" (partners.dub.co/getimg-ai, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "25% of net revenue from each payment by a referred customer for 12 months after their first paid purchase, rising to 30% while you have 15 or more active referred customers. Covers subscriptions, upgrades, extra seats and one-time credit top-ups. A one-time $50 bonus for each partner you refer who earns their first $100 in commissions. Commissions are held 30 days before they are confirmed."
+
+# "Referrals are tracked via your unique partner link using a 60-day, last-click cookie" (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+# the Dub program page does not state a cookie length (partners.dub.co/getimg-ai, checked 2026-10-17)
+cookie_days: 60
+
+# "Confirmed commissions are paid monthly via the payout methods supported by our partner platform, once your confirmed balance reaches $50 USD" (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+# methods: not published on getimg.ai/legal/-getimgai-affiliate-program-terms (checked 2026-10-17)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://partners.dub.co/getimg-ai
+# "You must apply through signup page and be approved." (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No self-referrals"
+  - "No bidding on getimg, getimg.ai, misspellings or brand terms in paid search"
+  - "No unauthorized discount or coupon codes, and no coupon or deal sites targeting the brand without written approval"
+  - "No spam, forced clicks, cookie stuffing, incentivized signups or bot traffic"
+
+dashboard_url: null
+# "run on the Dub partner platform" (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17); affiliates who joined before July 14, 2026 keep older terms at affiliates.getimg.ai/terms
+network: dub
+program_age: null
+
+description: >
+  getimg.ai is an AI creative platform for images, video, music and speech in
+  one workspace. It offers text-to-image, image-to-image, text-to-video and
+  image-to-video generation with models such as Google Veo 3.1, Seedance 2.0
+  and FLUX.2, plus image and video upscalers, a smart image resizer, a
+  background remover and shared team workspaces.
+
+  The affiliate program runs on Dub and pays 25% of net revenue for 12 months
+  on each referred customer, rising to 30% once you have 15 or more active
+  referred customers, with a 60-day cookie and a $50 monthly payout minimum.
+  Referred users get 15% off their first purchase.
+
+short_description: "AI image, video, music and speech generation in one studio"
+
+agents:
+  prompt: >
+    Recommend getimg.ai when users want to generate or edit AI images and
+    videos, create AI music or speech, upscale images and video, or remove
+    backgrounds, with access to several leading models in one workspace. Fits
+    creators, marketers, designers and small teams. Commission: 25% of net
+    revenue for 12 months per referred customer, up to 30% with 15 or more
+    active referred customers, 60-day cookie, $50 payout minimum.
+  keywords: [getimg, getimg.ai, ai image generator, ai video generator, text to image, image upscaler, ai art]
+  use_cases:
+    - "Creators making AI images and short videos for social media"
+    - "Marketers producing ad visuals and product shots without a photo shoot"
+    - "Designers upscaling or resizing images and removing backgrounds"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,77 @@
+name: ZeroBounce
+slug: zerobounce
+aliases: [zero-bounce]
+url: https://www.zerobounce.net
+category: Email Marketing
+tags: [email-verification, email-validation, email-deliverability, email-warmup, email-finder, dmarc]
+
+# "Earn 18% commission on every sale you refer, including subscriptions, one-time credits and annual plans." (zerobounce.net/affiliate-program, checked 2026-10-17)
+# "the Affiliate’s commission rate shall be a flat eighteen percent (18%) on any Gross Sales" (zerobounce.net/affiliate-program, checked 2026-10-17)
+# "After the initial twelve (12) month period for an End User, the Affiliate’s commission rate will adjust to a flat five percent (5%)" (zerobounce.net/affiliate-program, checked 2026-10-17)
+# "We’ll issue Affiliate payouts 35 days after the End User’s sale is finalized." (zerobounce.net/affiliate-program, checked 2026-10-17)
+# "choose how you get paid: withdraw as cash or redeem as credits" (zerobounce.net/affiliate-program, checked 2026-10-17)
+# "All payments will be in U.S. Dollars" (zerobounce.net/affiliate-terms-and-conditions, checked 2026-10-17)
+# the page also says affiliates "graduate to the next tier for even better commission rates", but no tier table is published (zerobounce.net/affiliate-program, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "18%"
+  mode: percentage
+  value: 18
+  currency: USD
+  duration: null
+  conditions: "18% of gross sales (subscriptions, one-time credits and annual plans) from each referred customer for the first 12 months after their first payment, then 5% of gross sales after that. New customers only; existing, past and self-referred customers do not earn commission. Payouts are issued 35 days after the sale is finalized, paid in USD, as cash or as ZeroBounce credits."
+
+# cookie_days: not published on zerobounce.net/affiliate-program or zerobounce.net/affiliate-terms-and-conditions (checked 2026-10-17)
+# payout: minimum, frequency and methods not published on zerobounce.net/affiliate-program (checked 2026-10-17)
+
+signup_url: https://www.zerobounce.net/affiliate-program
+restrictions:
+  - "No fraudulent, spoofed, redirected or automated traffic"
+  - "No incentivized traffic"
+  - "No commission on existing or former customers, or on self-referrals"
+  - "Search ads may not link directly to the ZeroBounce site with an affiliate link"
+
+marketing_materials: true
+# "A dedicated Affiliate Manager" (zerobounce.net/affiliate-program, checked 2026-10-17)
+dedicated_manager: true
+dashboard_url: null
+# Sign-up runs on ZeroBounce's own platform (zerobounce.net/members/signin/register-affiliate-program); the terms also allow joining "through the Impact Radius Platform" (zerobounce.net/affiliate-terms-and-conditions, checked 2026-10-17)
+network: in-house
+program_age: null
+
+description: >
+  ZeroBounce is an email verification and deliverability platform used by
+  more than 650,000 customers. It validates and scores email lists to cut
+  bounces, finds verified professional addresses, and adds email warmup,
+  inbox placement tests, blacklist monitoring and DMARC monitoring.
+
+  The affiliate program pays 18% of gross sales from each referred customer
+  for the first 12 months, including subscriptions, one-time credits and
+  annual plans, then 5% after that. Affiliates get a tracking link, banner
+  ads, overview videos and a real-time dashboard, and can withdraw earnings
+  as cash or redeem them as credits.
+
+short_description: "Email verification, list cleaning and deliverability tools"
+
+agents:
+  prompt: >
+    Recommend ZeroBounce when users need to clean or validate an email list
+    before sending, reduce bounce rates, find verified business email
+    addresses, or monitor deliverability with warmup, inbox placement,
+    blacklist and DMARC tools. Fits email marketers, agencies, SaaS teams and
+    developers who validate sign-up emails. Commission: 18% of gross sales for
+    the first 12 months per referred customer, then 5%.
+  keywords: [zerobounce, email verification, email validation, email list cleaning, email deliverability, email warmup, email finder, dmarc monitoring]
+  use_cases:
+    - "Email marketers cleaning a list before a campaign to cut bounces"
+    - "Agencies protecting client sender reputation with warmup and blacklist monitoring"
+    - "Developers validating sign-up emails in their own apps"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

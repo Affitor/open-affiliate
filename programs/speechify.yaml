@@ -5,6 +5,8 @@ category: AI
 tags:
 - ai
 - saas
+# "earn 30% of every sale you refer" (speechify.com/affiliates, checked 2026-10-18)
+# Renewal commissions and their duration are not published on speechify.com/affiliates (checked 2026-10-18).
 commission:
   type: one-time
   rate: "30%"
@@ -12,11 +14,16 @@ commission:
   value: 30
   currency: USD
   duration: null
-  conditions: "Earn 30% of every sale you refer. The page states 30-day cookies but its FAQ counts purchases within 60 days of the click; it does not say whether renewals pay."
-attribution: last-click
+  conditions: "Earn 30% of every sale you refer. The headline states 30-day cookies, while the FAQ qualifies paid-plan purchases within 60 days of clicking the affiliate link; the transaction must not be canceled, refunded, or flagged as fraudulent. The page does not say whether renewals pay. Confirm the conflicting window before promoting."
+# cookie_days: stated two ways, so left out: "30 day cookies included" vs "within 60 days of clicking your affiliate link" (speechify.com/affiliates, checked 2026-10-18)
+# attribution: first-click/last-click priority is not published on speechify.com/affiliates or its linked terms/privacy pages (checked 2026-10-18)
+# payout: minimum, frequency and methods are not published on those pages (checked 2026-10-18)
 tracking_method: cookie
 signup_url: https://speechify.com/affiliates
-restrictions: null
+restrictions:
+- "No Craigslist promotion, incentivized traffic, or call centers"
+- "No brand bidding without approval"
+- "No misleading or malicious content"
 marketing_materials: true
 api_available: true
 dedicated_manager: false
@@ -37,10 +44,10 @@ agents:
   use_cases:
   - Students listening to study material
   - Professionals consuming docs audio
-verified: true
+verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 kind: affiliate
 source: community

@@ -18,8 +18,17 @@ import type { Program } from "../src/lib/programs"
 /** Fields the API leaves out for an unverified program; `payout` stays as {}. */
 export const HIDDEN_API_KEYS = ["cookieDays", "payoutMethods", "approval", "approvalTime"] as const
 
-const COOKIE_BADGE = /\b\d+d cookie\b/
-const APPROVAL_LABEL: Record<string, string> = { auto: "Automatic", manual: "Manual review", "invite-only": "Invite only" }
+const COOKIE_BADGE = /\b\d+d cookie\b|\b\d+-day cookie\b/
+/** The approval words of the earnings card (src/lib/program-page.ts APPROVAL_WORDS). */
+const APPROVAL_ROW: Record<string, string> = { auto: "Automatic", manual: "Reviewed by hand", "invite-only": "By invitation" }
+
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+/** The value cell of an earnings-card row (`data-term="cookie"` …), or null when the row is absent. */
+function termRow(own: string, term: string, label: string): string | null {
+  const m = new RegExp(`data-term="${term}"[^>]*><dt[^>]*>${escapeRe(label)}</dt><dd[^>]*>([\\s\\S]*?)</dd>`).exec(own)
+  return m ? decodeEntities(m[1]) : null
+}
 /** A term field serialized as data: a key with a value, quoted (JSON) or not (a JS object literal). */
 const SERIALIZED_TERM = /["']?\b(?:cookieDays|cookie_days|payoutMethods|approvalTime|approval_time)\b["']?\s*:\s*(?!null\b|undefined\b|void\b)["'\d[]/
 const SLUG_KEY = /["']?\bslug\b["']?\s*:\s*["']([a-z0-9-]+)["']/g
@@ -139,9 +148,10 @@ function jsonLdStrings(html: string): string[] {
 }
 
 /**
- * The program's own markup: no comments, and no cards linking other programs
- * (related programs show their own commission). Scripts stay, with the RSC
- * payload's escaped quotes read as plain quotes.
+ * The program's own markup: no comments, and no links to other programs (the
+ * comparison table names them in links; their commission sits in the cells
+ * next to the link and states no cookie, payout or approval). Scripts stay,
+ * with the RSC payload's escaped quotes read as plain quotes.
  */
 function ownHtml(html: string): string {
   return html
@@ -164,6 +174,11 @@ const TERM_MARKUP: [string, RegExp][] = [
   ["an approval badge", /(?:<\/svg>|")(?:Automatic|Manual review|Invite only)(?:<\/div>|")/],
   ["an Approval or Approval time field", />Approval(?: time)?<\/p>|"Approval(?: time)?"/],
   ["a serialized term field", SERIALIZED_TERM],
+  // The earnings card since the human-first page (2026-10-17): one data-term row per term.
+  ["an earnings-card term row or flow step", /data-term="(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"|"data-term":"(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"/],
+  ["a Payout or Paid by label", /"(?:Payout|Paid by)"/],
+  // The flow step's approval words even without their data-term.
+  ["an approval step", /\b(?:Automatic|Reviewed by hand|By invitation) approval\b/],
 ]
 
 /** /programs/<slug> as served. */
@@ -172,26 +187,26 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   const blocks = visibleBlocks(html)
   const marked = blocks.includes(UNCONFIRMED_NOTE)
   const problems: string[] = []
+  // An optional field the filter empties is left out, not rendered empty: on every page.
+  if (/<p class="[^"]*border-t border-border\/30 pt-2"><\/p>|<p data-term="conditions"[^>]*><\/p>/.test(own)) problems.push("renders empty commission conditions")
   if (termsConfirmed(p)) {
     if (marked) problems.push("marks verified terms unconfirmed")
+    // Each earnings-card row must read exactly as the stored fields say, nothing added.
     if (p.cookieDays != null) {
-      const badge = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays}d cookie`
-      const row = p.cookieDays === 0 ? "None (code-based)" : `${p.cookieDays} days`
-      if (!own.includes(`</svg>${badge}</div>`) || !own.includes(`</svg>Cookie</span><span class="text-sm font-semibold">${row}</span>`)) {
-        problems.push(`does not show its cookie window (${p.cookieDays} days)`)
-      }
+      const want = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
+      if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
-    if (p.payout.minimum != null && !own.includes(`</svg>Min payout</span><span class="text-sm font-semibold">$${p.payout.minimum}</span>`)) {
-      problems.push(`does not show its minimum payout ($${p.payout.minimum})`)
+    const frequency = p.payout.frequency ? p.payout.frequency.charAt(0).toUpperCase() + p.payout.frequency.slice(1) : null
+    const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
+    const minimum = min && !frequency ? min.charAt(0).toUpperCase() + min.slice(1) : min
+    const payout = [frequency, minimum].filter(Boolean).join(", ")
+    if (payout && termRow(own, "payout", "Payout") !== payout) {
+      problems.push(`does not show its payout ("${payout}": frequency ${p.payout.frequency ?? "none"}, minimum ${p.payout.minimum ?? "none"})`)
     }
-    if (p.payout.frequency && !own.includes(`</svg>Frequency</span><span class="text-sm font-semibold"><span class="capitalize">${p.payout.frequency}</span></span>`)) {
-      problems.push(`does not show its payout frequency (${p.payout.frequency})`)
-    }
-    const label = p.approval ? APPROVAL_LABEL[p.approval] : undefined
-    if (label && !own.includes(`</svg>${label}</div>`)) problems.push(`does not show its approval (${label})`)
-    // How to Join, where the approval time shows, is not rendered for a paused program.
-    if (p.approvalTime && p.status !== "paused" && !own.includes(`>Approval time</p><p class="text-sm font-medium">${p.approvalTime}</p>`)) {
-      problems.push(`does not show its approval time (${p.approvalTime})`)
+    const label = p.approval ? APPROVAL_ROW[p.approval] : undefined
+    const approval = label ? `${label}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : (p.approvalTime ?? null)
+    if (approval && termRow(own, "approval", "Approval") !== approval) {
+      problems.push(`does not show its approval and approval time ("${approval}")`)
     }
     return problems
   }
@@ -214,9 +229,7 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   }
   const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
-  // An optional field the filter empties is left out, not rendered empty.
-  if (/<p class="[^"]*border-t border-border\/30 pt-2"><\/p>/.test(own)) problems.push("renders empty commission conditions")
-  for (const label of [">Restrictions</h2>", ">Use cases:</p>"]) {
+  for (const label of [">Restrictions</h2>", ">Use cases:</p>", ">Rules before you promote</h2>"]) {
     const at = own.indexOf(label)
     if (at === -1) continue
     const list = own.slice(at, own.indexOf("</ul>", at) + 5)
@@ -297,6 +310,8 @@ export function termsApiProblems(p: Program, body: Record<string, unknown>): str
     return problems
   }
   for (const key of HIDDEN_API_KEYS) if (key in body) problems.push(`returns ${key} (${JSON.stringify(body[key])})`)
+  // A check date next to unconfirmed terms reads as verification (#212).
+  if ("lastVerifiedAt" in body) problems.push(`returns lastVerifiedAt (${JSON.stringify(body.lastVerifiedAt)})`)
   if (JSON.stringify(body.payout) !== "{}") problems.push(`returns payout ${JSON.stringify(body.payout)}`)
   const commission = (body.commission ?? {}) as Record<string, unknown>
   const prose: [string, unknown, "pitch" | "program"][] = [

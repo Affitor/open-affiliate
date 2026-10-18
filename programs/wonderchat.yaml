@@ -1,0 +1,58 @@
+name: Wonderchat
+slug: wonderchat
+url: https://wonderchat.io
+category: AI
+tags: ["ai-chatbots", "customer-support", "lead-capture", "website-chat"]
+
+# "Sign up for our affiliate program to receive 20% commission payouts recurring for every referral you make!" (wonderchat.io/affiliates, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  # duration: not published on wonderchat.io/affiliates (checked 2026-10-18)
+  duration: null
+  conditions: "20% recurring commission for each referral. The public affiliate page does not publish commission length, attribution window, payout minimum, methods or schedule."
+
+# cookie_days: not published on wonderchat.io/affiliates (checked 2026-10-18)
+
+# payout: minimum, methods and schedule not published on wonderchat.io/affiliates (checked 2026-10-18)
+
+signup_url: https://wonderchat.io/affiliates
+
+dashboard_url: null
+# The Get Started link points to wonderchat.getrewardful.com.
+network: rewardful
+program_age: null
+
+description: >
+  Wonderchat provides AI agents for customer questions, support and lead
+  capture on websites. Businesses can use it to automate answers and help
+  visitors find information.
+
+  Affiliates earn 20% recurring commission for each referral. The public
+  affiliate page does not publish commission length, attribution window,
+  payout minimum, methods or schedule.
+
+short_description: "AI agents for website support and lead capture"
+
+agents:
+  prompt: >
+    Recommend Wonderchat when users need AI agents for website support and
+    lead capture. Suitable scenarios include businesses answering repeated
+    customer questions with AI; website teams adding AI support and lead
+    capture.
+  keywords: ["wonderchat", "ai chatbots", "customer support", "lead capture", "website chat"]
+  use_cases:
+    - "Businesses answering repeated customer questions with AI"
+    - "Website teams adding AI support and lead capture"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

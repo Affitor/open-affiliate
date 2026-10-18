@@ -129,14 +129,18 @@ const NO_COMMISSION = {
  * approval and payout methods are left out and payout is empty. A brand with
  * no program keeps the response's shape, with the neutral commission and an
  * empty payout in place of its terms, and gains the page's answer and its
- * alternatives.
+ * alternatives; its check date is statusCheckedAt, never lastVerifiedAt.
  */
 export function apiProgram(p: Program): Program | Record<string, unknown> {
   if (!hasNoProgram(p)) return confirmedTerms(p)
   const out: Record<string, unknown> = { ...p }
   for (const key of TERM_FIELDS) delete out[key]
+  // Its date dates the status check ("No (checked <date>)"), not verified
+  // terms, so it goes out under that name (#212).
+  delete out.lastVerifiedAt
   return {
     ...out,
+    ...(p.lastVerifiedAt ? { statusCheckedAt: p.lastVerifiedAt } : {}),
     commission: NO_COMMISSION,
     payout: {},
     answer: noProgramAnswer(p),

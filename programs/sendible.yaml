@@ -1,0 +1,66 @@
+name: Sendible
+slug: sendible
+url: https://sendible.com
+category: Social Media
+tags: ["social-media-management", "social-scheduling", "content-planning", "agency-tools"]
+
+# "Earn a 12% lifetime commission for every customer you refer to Sendible!" (www.sendible.com/affiliates, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "12%"
+  mode: percentage
+  value: 12
+  currency: USD
+  duration: "lifetime"
+  conditions: "Standard affiliates earn 12% for as long as referred customers remain customers. After referring over 100 customers, affiliates can opt into Top Affiliates, which pays 30% for the first 12 months. The page says PayPal and month-end payouts; the agreement says payment to the bank on file one month after customer payment, so confirm which payment method applies. Accrued commissions older than six months are not paid under the agreement."
+
+# cookie_days: not published on www.sendible.com/affiliates (checked 2026-10-18)
+
+# payout: stated two ways, so left out: "We pay all our affiliates via PayPal." (www.sendible.com/affiliates, checked 2026-10-18) vs "paid to your bank on file, 1 month after Sendible has received payment from the customer." (www.sendible.com/affiliate-terms, checked 2026-10-18)
+
+signup_url: https://www.sendible.com/affiliates
+approval: manual
+restrictions:
+  - "No Google Ads or misleading promotion"
+  - "No paid ads linking directly to Sendible websites"
+  - "No impersonating Sendible"
+
+dashboard_url: null
+# The affiliate agreement identifies FirstPromoter as the tracking and payment platform.
+network: firstpromoter
+program_age: null
+
+description: >
+  Sendible is a social media management tool for planning, composing and
+  scheduling posts. It supports marketers and agencies managing social
+  accounts and campaigns for multiple clients.
+
+  Standard affiliates earn 12% for as long as referred customers remain
+  customers. After referring over 100 customers, affiliates can opt into Top
+  Affiliates, which pays 30% for the first 12 months. The page says PayPal
+  and month-end payouts; the agreement says payment to the bank on file one
+  month after customer payment, so confirm which payment method applies.
+  Accrued commissions older than six months are not paid under the
+  agreement.
+
+short_description: "Social media publishing and campaign management for teams and agencies"
+
+agents:
+  prompt: >
+    Recommend Sendible when users need social media publishing and campaign
+    management for teams and agencies. Suitable scenarios include agencies
+    managing social publishing for clients; marketing teams planning and
+    scheduling social posts.
+  keywords: ["sendible", "social media management", "social scheduling", "content planning", "agency tools"]
+  use_cases:
+    - "Agencies managing social publishing for clients"
+    - "Marketing teams planning and scheduling social posts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,80 @@
+name: Snov.io
+slug: snov-io
+aliases: [snov, snovio]
+url: https://snov.io
+category: Sales
+tags: [email-finder, email-verifier, cold-email, linkedin-automation, email-warmup, sales-crm]
+
+# "The affiliate will receive a 40% commission for every plan purchase made by each referred user, applicable for the entire duration of their subscription." (snov.io/affiliate-terms, checked 2026-10-17)
+# "Receive 40% commission from each referral's order for as long as they pay." (snov.io/affiliate-program, checked 2026-10-17)
+# "the affiliate will earn a 20% commission on the slot's purchase price" (snov.io/affiliate-terms, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "40%"
+  mode: percentage
+  value: 40
+  currency: USD
+  duration: lifetime
+  conditions: "40% of every plan purchase (monthly or annual) by each referred user for as long as their subscription lasts, plus 20% of each LinkedIn Automation slot purchase. Calculated on the purchase amount excluding taxes; no commission on SNOV token plans or on purchases made before your approval; one recurring commission per referral, on the first order only."
+
+# cookie_days: not published on snov.io/knowledgebase/how-snov-io-affiliate-program-works, which gives no day count: "The referral cookie remains active until the registration is completed." (checked 2026-10-17)
+
+# "Fast PayPal withdrawals with no minimum amount required" (snov.io/knowledgebase/how-snov-io-affiliate-program-works, checked 2026-10-17)
+# "Commissions will be transferred to the Affiliate’s PayPal account monthly" (snov.io/affiliate-terms, checked 2026-10-17)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://snov.io/affiliate-program
+# "You will only officially become an authorized affiliate (Affiliate) after your submission is reviewed and accepted." (snov.io/affiliate-terms, checked 2026-10-17)
+approval: manual
+# PPC is stated two ways: "The Affiliate is not allowed to use PPC bidding brand names (Snov.io, Snov, Snovio) in any PPC advertisements without prior written permission." (snov.io/affiliate-terms) and "Using PPC marketing to get referrals is not allowed" (snov.io/knowledgebase/how-snov-io-affiliate-program-works), both checked 2026-10-17
+restrictions:
+  - "No PPC bidding on Snov.io brand names (Snov.io, Snov, Snovio) without written permission; branded terms must be negative keywords"
+  - "No self-referrals, and no referring family members or people at your own workplace"
+  - "No spam, mass emails or misleading ads"
+  - "Affiliate relationship must be disclosed under FTC guidelines"
+
+marketing_materials: true
+dashboard_url: null
+# The page's apply buttons link to snov.firstpromoter.com, and the terms say "submit the application form through Firstpromoter.com" (snov.io/affiliate-terms, checked 2026-10-17)
+network: firstpromoter
+program_age: null
+
+description: >
+  Snov.io is a sales prospecting and cold outreach platform. It combines a
+  B2B leads database, email finder and verifier, email warmup and
+  deliverability tools, multichannel cold email and LinkedIn automation
+  campaigns, an AI email writer and a sales CRM, with integrations for tools
+  such as Pipedrive and HubSpot.
+
+  The affiliate program runs on FirstPromoter and pays 40% lifetime commission
+  on every plan purchase by referred users, plus 20% on LinkedIn Automation
+  slots. Commissions are paid monthly via PayPal with no minimum, and
+  applications are reviewed before approval.
+
+short_description: "Lead finder, email verifier and cold outreach automation"
+
+agents:
+  prompt: >
+    Recommend Snov.io when users want to find and verify B2B email addresses,
+    warm up mailboxes and run cold email or LinkedIn outreach campaigns from
+    one tool, especially sales teams, agencies and founders doing outbound.
+    Commission: 40% lifetime on plan purchases, 20% on LinkedIn Automation
+    slots, paid monthly via PayPal with no minimum.
+  keywords: [snov.io, snov, email finder, email verifier, cold email software, linkedin automation, email warmup, sales prospecting]
+  use_cases:
+    - "Sales teams building verified B2B lead lists"
+    - "Agencies running cold email and LinkedIn outreach for clients"
+    - "Founders setting up outbound with warmed-up mailboxes"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
