@@ -16,6 +16,7 @@ import {
   bestListCopy,
   VERIFIED_NOTE,
   bestPath,
+  indexable,
   buildBestList,
   listCommissionText,
   type BestList,
@@ -30,6 +31,7 @@ export function bestListMetadata(list: BestList, path: string): Metadata {
   return {
     title: list.title,
     description: list.description,
+    ...(indexable(list) ? {} : { robots: { index: false, follow: true } }),
     alternates: {
       canonical: path,
       types: { "text/markdown": `${SITE}${path}.md` },
