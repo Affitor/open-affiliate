@@ -112,3 +112,20 @@ test("every Apply link on a post carries the blog UTM for that post and program"
   const kyma = getProgram("kyma-api")
   if (kyma && kyma.network === "affitor" && isLive(kyma)) assert.ok(isAffitorHref(blogApplyHref(kyma, "x")))
 })
+
+test("You earn reads naturally for the rate shapes the registry has", () => {
+  const p = (commission: Record<string, unknown>) => ({ commission: { currency: "USD", ...commission }, kind: "affiliate" }) as never
+  // A published rate that already says how it pays keeps its words and gains no type word.
+  assert.equal(earnText(p({ type: "one-time", mode: "flat", value: 15, rate: "$15 per new subscriber" })), "$15 per new subscriber")
+  // A qualified recurring rate stays as published.
+  assert.equal(earnText(p({ type: "recurring", mode: "percentage", value: 50, rate: "Up to 50%", duration: "lifetime" })), "Up to 50%, recurring for life")
+  assert.equal(earnText(p({ type: "recurring", mode: "percentage", value: 25, rate: "25% of net revenue", duration: "12 months" })), "25% of net revenue, recurring for 12 months")
+  // A plain rate gets its type and length.
+  assert.equal(earnText(p({ type: "recurring", mode: "percentage", value: 20, rate: "20%", duration: "lifetime" })), "20% recurring for life")
+  assert.equal(earnText(p({ type: "one-time", mode: "percentage", value: 30, rate: "30%" })), "30% one-time")
+  // A hybrid sentence gains only the length.
+  assert.equal(
+    earnText(p({ type: "recurring", mode: "hybrid", value: null, rate: "40% recurring + $1/signup", duration: "12 months" })),
+    "40% recurring + $1/signup, for 12 months",
+  )
+})

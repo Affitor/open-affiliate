@@ -3,6 +3,7 @@ import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
+import { post as recurringAffiliatePrograms } from "../content/best/recurring-affiliate-programs"
 
 /**
  * Editorial posts on /best/<slug>. A post is a BestList (its filter, page URL,
@@ -42,7 +43,7 @@ export interface BestPost {
   category?: string
 }
 
-export const POSTS: BestPost[] = [aiAffiliatePrograms]
+export const POSTS: BestPost[] = [aiAffiliatePrograms, recurringAffiliatePrograms]
 
 /** Terms older than this at build time keep a program out of a post until it is re-checked. */
 export const TERMS_MAX_AGE_DAYS = 90
@@ -148,9 +149,14 @@ export function earnText(p: Program): string {
   const stored = String(c.rate ?? "").trim()
   const shown = listCommissionText(p)
   const norm = (x: string) => x.replace(/[\s,]/g, "").toLowerCase()
-  const figure = stored && /[a-z]/i.test(stored) && norm(stored) !== norm(shown) ? stored : shown
-  if (c.mode === "hybrid") return [figure, length].filter(Boolean).join(", ")
-  if (c.type === "recurring") return [`${figure} recurring`, length].filter(Boolean).join(" ")
+  const qualified = Boolean(stored) && /[a-z]/i.test(stored) && norm(stored) !== norm(shown)
+  const figure = qualified ? stored : shown
+  // A hybrid sentence, or a published rate that already says how it pays
+  // ("$15 per new subscriber"), gains only the length, not a type word.
+  if (c.mode === "hybrid" || (qualified && /\bper\b|one-time|recurring|first|then/i.test(stored)) || String(c.type) === "hybrid")
+    return [figure, length].filter(Boolean).join(", ")
+  if (c.type === "recurring")
+    return qualified ? [`${figure}, recurring`, length].filter(Boolean).join(" ") : [`${figure} recurring`, length].filter(Boolean).join(" ")
   return [`${figure} ${c.type}`, length].filter(Boolean).join(", ")
 }
 
