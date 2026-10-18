@@ -7,6 +7,7 @@ tags:
 - marketing
 - analytics
 - saas
+# "Get 50% of all payments for 12 months! (up to $2400💰)" (market.partnerstack.com/page/similarweb, checked 2026-10-18)
 commission:
   type: recurring
   rate: "50%"
@@ -14,7 +15,7 @@ commission:
   value: 50
   currency: USD
   duration: "12 months"
-  conditions: "50% of all payments for 12 months for every new customer who buys the self-serve plan on the website (PartnerStack listing)."
+  conditions: "50% of all payments for 12 months for every new customer who buys the self-serve plan on the website. The PartnerStack marketplace offer advertises an upper commission cap of $2,400, without explaining the exact scope of that cap."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/similarweb
@@ -46,6 +47,6 @@ verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
 updated_at: "2026-10-18"
-last_verified_at: "2026-10-12"
+last_verified_at: "2026-10-18"
 kind: affiliate
 source: partnerstack-api
