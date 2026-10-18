@@ -6,8 +6,7 @@ import { AFFITOR_ATTR, AFFITOR_CLICK, isAffitorHref, type AffitorSource } from "
 /**
  * A link that records AFFITOR_CLICK when `href` is on affitor.com, so a link
  * that goes to Affitor for some programs and to the brand for others (Join,
- * Sign up) can use it too. Build an Affitor `href` with affitorUrl(). Any other
- * http(s) href records outbound_click with the same source and cta.
+ * Sign up) can use it too. Build an Affitor `href` with affitorUrl().
  */
 export function AffitorLink({
   href,
@@ -35,8 +34,6 @@ export function AffitorLink({
       className={className}
       onClick={() => {
         if (affitor) track(AFFITOR_CLICK, { slug, metadata: { source, cta } });
-        // A brand's own site: the same click count the program page's TrackLink records.
-        else if (/^https?:\/\//.test(href)) track("outbound_click", { slug, metadata: { source, cta } });
       }}
     >
       {children}

@@ -27,6 +27,7 @@ import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
+import { outboundUrl } from "../src/lib/outbound-link";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
 import { sectionProblems } from "./directory-checks";
@@ -1305,11 +1306,13 @@ async function checkServedPages(): Promise<string> {
       for (const [what, extra] of [
         ["a join button", "Apply &amp; earn 20%"],
         ["the signup URL", `<a href="${np.signupUrl ?? "https://example.com/signup"}">x</a>`],
+        // A rendered link carries the outbound UTM after the stored URL; the prefix match must still catch it.
+        ["the tagged signup URL", `<a href="${outboundUrl(np.signupUrl ?? "https://example.com/signup", "list", np.slug).replaceAll("&", "&amp;")}">x</a>`],
         ["a cookie window", "60-day cookie"],
         ["a term row", `<span data-term="approval">Automatic</span>`],
       ] as const) {
         const mutated = inTable(extra);
-        const fixture = what === "the signup URL" && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
+        const fixture = what.endsWith("signup URL") && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
         if (noProgramHtmlProblems(fixture, mutated).length === 0) fail(`the no-program check passed ${np.slug} with ${what} inside its comparison table`);
       }
     }
