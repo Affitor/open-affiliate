@@ -1156,6 +1156,14 @@ console.log(
 const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
 const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
 
+/** A join button on a paused page: its own markup, other programs' cards cut out. */
+function pausedJoinLabel(html: string): string | null {
+  const own = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
+  return JOIN_LABELS.find((label) => own.includes(label)) ?? null;
+}
+
 function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
   const own = html
     .replace(/<script[\s\S]*?<\/script>/g, " ")
@@ -1171,7 +1179,7 @@ function checkNoProgramHtml(program: (typeof programs)[number], page: string, ht
   for (const label of TERM_LABELS) {
     if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
   }
-  if (/\b\d+d cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
+  if (/\b\d+d cookie\b|\b\d+-day cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
   if (program.commission.value != null) {
     const figure = commissionDisplay(program.commission);
     if (own.includes(figure)) fail(`${page} shows its stored commission (${figure}) for a brand with no program`);
@@ -1284,6 +1292,10 @@ async function checkServedPages(): Promise<string> {
     const storesAll = (p: Program) => (p.cookieDays ?? 0) > 0 && p.payout.minimum != null && Boolean(p.approval);
     const off = termsPages.find((p) => !termsConfirmed(p) && storesAll(p));
     const on = termsPages.find((p) => termsConfirmed(p) && storesAll(p));
+    // A verified program with an approval time, and a paused one, for the checks below.
+    const onTime = termsPages.find((p) => termsConfirmed(p) && p.approval && p.approvalTime && p.payout.frequency);
+    const pausedPage = termsPages.find((p) => p.status === "paused");
+    if (!onTime || !pausedPage) fail("the page checks need a verified program with approval, approval time and payout frequency, and a paused program");
     if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
     const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
     // An unverified program whose stored prose has a sentence the filter drops
@@ -1305,7 +1317,12 @@ async function checkServedPages(): Promise<string> {
       const affitor = affitorAnchorProblems(html);
       if (affitor.problems.length) fail(`${page} ${affitor.problems.join("; ")}`);
       affitorOnProgramPages += affitor.tracked;
-      if (program === off || program === on || program === dropped.p || program === alsoOnBase) kept.set(program, html);
+      // A paused program shows its last known terms but no join button.
+      if (program.status === "paused") {
+        const join = pausedJoinLabel(html);
+        if (join) fail(`${page} shows a join button ("${join}") for a paused program`);
+      }
+      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
@@ -1315,6 +1332,9 @@ async function checkServedPages(): Promise<string> {
       ["a payout row", `<div data-term="payout" class="x"><dt class="y">Payout</dt><dd class="z">Monthly, from a $${off.payout.minimum} minimum</dd></div>`],
       ["an approval row", `<div data-term="approval" class="x"><dt class="y">Approval</dt><dd class="z">Reviewed by hand</dd></div>`],
       ["a cookie window in its flow", `<span>${off.cookieDays}-day cookie</span>`],
+      ["an approval step in its flow", `<span data-term="step-approval" class="x">Reviewed by hand approval on PartnerStack</span>`],
+      ["a payout step in its flow", `<span data-term="step-payout" class="x">Monthly</span>`],
+      ["a payout step in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ "data-term": "step-payout", children: "Monthly" }))}])</script>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],
       ["a cookie window in its JSON-LD", `<script type="application/ld+json">{"description":"Earn 30% with a 60-day cookie."}</script>`],
@@ -1331,7 +1351,8 @@ async function checkServedPages(): Promise<string> {
     // An optional field rendered empty instead of left out.
     const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
     if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
-    if (termsHtmlProblems(off, offHtml + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed empty commission conditions (earnings card)");
+    // On a verified page a conditions row is allowed, so only the empty-row rule can catch this one.
+    if (termsHtmlProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
     const onHtml = kept.get(on)!;
     if (termsHtmlProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
       fail("the page terms check passed a verified page with its cookie window removed");
@@ -1341,6 +1362,21 @@ async function checkServedPages(): Promise<string> {
     }
     if (termsHtmlProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
       fail("the page terms check passed a verified page with its approval row removed");
+    }
+    // Rows that say more, or other, than the stored fields: the comparison is exact, not a prefix.
+    const rowValue = (html: string, term: string, edit: (v: string) => string) =>
+      html.replace(new RegExp(`(data-term="${term}"[^>]*><dt[^>]*>[^<]*</dt><dd[^>]*>)([^<]*)(</dd>)`), (_m, a, v, b) => a + edit(v) + b);
+    const timeHtml = kept.get(onTime)!;
+    for (const [what, html] of [
+      ["extra words after its payout", rowValue(timeHtml, "payout", (v) => `${v} or later`)],
+      ["a different payout frequency", rowValue(timeHtml, "payout", (v) => `${v.charAt(0)}x${v.slice(1)}`)],
+      ["extra words after its approval", rowValue(timeHtml, "approval", (v) => `${v} or automatically`)],
+      ["its approval time removed", rowValue(timeHtml, "approval", (v) => v.replace(` (${onTime.approvalTime})`, ""))],
+    ] as const) {
+      if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
+    }
+    if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
+      fail("the paused-page check passed a paused page with a join button");
     }
     // The also_on fixture on a served page: the page's markup for its line and
     // button passes; a page without them, or that markup on a program with no

@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { ProgramCompare } from "@/components/related-programs";
+import { ProgramCompare, getRelatedPrograms } from "@/components/related-programs";
 import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { EarningsCalculator } from "@/components/earnings-calculator";
@@ -108,9 +108,9 @@ function readableDate(iso?: string | null): string {
   return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}` : (iso ?? "");
 }
 
-function H2({ children, id }: { children: React.ReactNode; id?: string }) {
+function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 id={id} className="text-lg font-semibold tracking-tight mb-4 scroll-mt-20">
+    <h2 className="text-lg font-semibold tracking-tight mb-4">
       {children}
     </h2>
   );
@@ -149,7 +149,8 @@ export default async function ProgramPage({
   const payout = payoutText(program);
   const methods = payoutMethods(program);
   const approval = approvalText(program);
-  const cookie = cookieText(program, state);
+  const cookie = cookieText(program);
+  const hasAlternatives = getRelatedPrograms(program).length > 0;
 
   // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
   const statusTag = noProgram
@@ -170,12 +171,14 @@ export default async function ProgramPage({
   if (!noProgram) facts.push({ term: "network", label: "Join through", value: joinThrough(program, network) });
   if (!noProgram && program.marketingMaterials === true) facts.push({ term: "marketing", label: "Marketing kit", value: "Provided" });
 
-  const flow: { icon: React.ReactNode; title: string; detail: string }[] = noProgram || paused
+  // Step details that repeat a term carry data-term too, so the page check sees them (step-*).
+  const flow: { icon: React.ReactNode; title: string; detail: string; term?: string }[] = noProgram || paused
     ? []
     : [
         {
           icon: <UserCheck className="h-4 w-4" />,
           title: "Apply",
+          term: program.approval && APPROVAL_WORDS[program.approval] ? "step-approval" : undefined,
           detail: program.approval && APPROVAL_WORDS[program.approval]
             ? `${APPROVAL_WORDS[program.approval]} approval${program.network && program.network !== IN_HOUSE && network ? ` on ${network}` : ""}`
             : program.network && program.network !== IN_HOUSE && network ? `Through ${network}` : `On ${(program.signupUrl ?? program.url).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}`,
@@ -183,14 +186,15 @@ export default async function ProgramPage({
         {
           icon: <MousePointerClick className="h-4 w-4" />,
           title: "Share your link",
+          term: verified && program.cookieDays ? "step-cookie" : undefined,
           detail: verified && program.cookieDays ? `${program.cookieDays}-day cookie` : "Wherever your audience is",
         },
         {
           icon: <CreditCard className="h-4 w-4" />,
-          title: "Customer pays",
+          title: "Your referral converts",
           detail: !figure ? "Commission not published" : !verified ? "Terms not confirmed yet" : figure.kind === "varies" ? "Rate varies, see the fine print" : `You earn ${figureText(figure)}`,
         },
-        { icon: <Wallet className="h-4 w-4" />, title: "You get paid", detail: payout ?? "Per the program's terms" },
+        { icon: <Wallet className="h-4 w-4" />, title: "You get paid", term: payout ? "step-payout" : undefined, detail: payout ?? "Per the program's terms" },
       ];
 
   const panelLabel = noProgram ? "Affiliate program" : !figure ? "Commission" : verified ? "You earn" : paused ? "Last known terms" : "Submitted terms · unconfirmed";
@@ -281,9 +285,11 @@ export default async function ProgramPage({
             <>
               <p className="text-3xl font-semibold tracking-tight mt-2">None</p>
               <p className="text-sm text-muted-foreground mt-1">{noProgramHeadline(program)}.</p>
-              <a href="#alternatives" className="mt-5 flex items-center justify-center gap-2 rounded-lg bg-foreground text-background h-11 text-sm font-medium hover:bg-foreground/90 transition-colors">
-                See programs that pay <ArrowRight className="h-4 w-4" />
-              </a>
+              {hasAlternatives && (
+                <a href="#alternatives" className="mt-5 flex items-center justify-center gap-2 rounded-lg bg-foreground text-background h-11 text-sm font-medium hover:bg-foreground/90 transition-colors">
+                  See programs that pay <ArrowRight className="h-4 w-4" />
+                </a>
+              )}
             </>
           ) : (
             <>
@@ -374,8 +380,8 @@ export default async function ProgramPage({
             <section>
               <H2>What people use it for</H2>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {cases.map((c) => (
-                  <li key={c} className="flex gap-2.5 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm">
+                {cases.map((c, i) => (
+                  <li key={i} className="flex gap-2.5 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm">
                     <Check className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
                     <span>{c}</span>
                   </li>
@@ -394,7 +400,7 @@ export default async function ProgramPage({
                     <span className="relative z-10 grid place-items-center h-[34px] w-[34px] shrink-0 rounded-full border border-border bg-card">{s.icon}</span>
                     <span className="block">
                       <span className="block text-sm font-medium sm:mt-3">{s.title}</span>
-                      <span className="block text-sm text-muted-foreground">{s.detail}</span>
+                      <span data-term={s.term} className="block text-sm text-muted-foreground">{s.detail}</span>
                     </span>
                   </li>
                 ))}
@@ -470,7 +476,7 @@ export default async function ProgramPage({
                 </>
               ) : (
                 <>
-                  <p className="text-sm font-semibold">Is this your program?</p>
+                  <p className="text-sm font-semibold">{noProgram ? `Is this your company?` : "Is this your program?"}</p>
                   {claimable ? (
                     <>
                       <p className="text-sm text-muted-foreground">Claim this page to keep your terms up to date and add more programs.</p>
@@ -490,7 +496,7 @@ export default async function ProgramPage({
                     </>
                   ) : (
                     <p className="text-sm text-muted-foreground">
-                      This listing is community-maintained. Found outdated terms?{" "}
+                      This listing is community-maintained. {noProgram ? "Started a program, or found something outdated?" : "Found outdated terms?"}{" "}
                       <a href={`https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`} className="text-foreground underline underline-offset-4">
                         Suggest an edit on GitHub
                       </a>
@@ -536,7 +542,7 @@ export default async function ProgramPage({
       {/* Phone: the next step stays on screen. */}
       <div className="md:hidden fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-border bg-background/95 backdrop-blur px-4 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))]">
         {noProgram || paused ? (
-          <a href="#alternatives" className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border h-11 text-sm font-medium">
+          hasAlternatives && <a href="#alternatives" className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border h-11 text-sm font-medium">
             {noProgram ? "See programs that pay" : "See alternatives"} <ArrowRight className="h-4 w-4" />
           </a>
         ) : (

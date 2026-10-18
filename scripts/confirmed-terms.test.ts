@@ -620,7 +620,7 @@ test("program page: an unverified answer never states its commission as checked"
     if (page.pageState(p) === "paused") assert.match(text, /may have closed/, p.slug)
     else assert.match(text, /not yet checked|not published and the listing is not verified/, p.slug)
     assert.equal(page.estimateInput(p), null, `${p.slug} offers an estimate on unconfirmed terms`)
-    assert.equal(page.cookieText(p, page.pageState(p)), null, p.slug)
+    assert.equal(page.cookieText(p), null, p.slug)
   }
 })
 
@@ -646,4 +646,31 @@ test("program page: earnings estimate only where the duration reads as a span", 
   assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "percentage", value: 10, rate: "10%" }))?.recurring, false)
   assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", value: 20, rate: "$20 in credits" })), null)
   assert.deepEqual(page.payoutMethods({ ...verifiedBase, payoutMethods: ["paypal", "bank"] }), ["PayPal", "Bank transfer"])
+})
+
+test("program page: stored earning event kept, estimate only on a plain USD figure, approval time alone shown", () => {
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", value: 75, rate: "$75 per qualified lead", currency: "USD" })), { big: "$75 per qualified lead", rest: "", kind: "text" })
+  assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", value: 500, rate: "$20–$500", currency: "USD" })), null, "a range is not a fixed amount")
+  assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", value: 10, rate: "£10", currency: "GBP" })), null, "not US dollars")
+  assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", value: 100, rate: "$100 Amazon gift card", currency: "USD" })), null, "a gift card is not cash")
+  assert.ok(page.estimateInput(withCommission({ type: "one-time", mode: "flat", value: 1000, rate: "$1,000", currency: "USD" })), "a plain amount with a thousands separator")
+  assert.equal(page.approvalText({ ...verifiedBase, approval: undefined, approvalTime: "1-2 business days" }), "1-2 business days")
+  assert.equal(page.approvalText({ ...verifiedBase, approval: "manual", approvalTime: "48 hours" }), "Reviewed by hand (48 hours)")
+})
+
+test("program page: a qualified rate is shown as stored, never as a bare figure or an estimate (registry)", () => {
+  const live = (slug: string) => confirmedTerms(getProgram(slug)!)
+  for (const slug of ["dreamhost", "aircall-inc", "sevdesk", "elementor"]) {
+    const p = live(slug)
+    assert.equal(page.estimateInput(p), null, `${slug} gets an estimate`)
+    const f = page.commissionFigure(p)!
+    assert.equal(f.big, String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
+  }
+  const a = page.answerParts(live("dreamhost"), "")
+  assert.equal(a.before + a.strong + a.after, "DreamHost's commission: $15 to $1,000.")
+  // A rate that already says for how long does not get the duration again.
+  assert.equal(page.commissionFigure(withCommission({ type: "recurring", mode: "hybrid", value: null, rate: "$50 + 20% for the first year", duration: "12 months" }))?.rest, "")
+  // Credits keep "per referral"; a bare stored number keeps the parsed figure.
+  assert.equal(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", value: 10, rate: "$10 in Airtable credits" }))?.rest, "per referral")
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "recurring", mode: "percentage", value: 25, rate: "25", duration: "12 months" })), { big: "25%", rest: "recurring for 12 months", kind: "number" })
 })

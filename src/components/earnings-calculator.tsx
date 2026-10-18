@@ -8,14 +8,15 @@ const money = (x: number) => `$${Math.round(x).toLocaleString("en-US")}`;
 /**
  * What a reader could earn with their own numbers. Only the commission itself
  * reaches the browser (estimateInput), never a cookie, payout or approval term.
- * Empty until the reader enters a price, so no figure reads as a promise.
+ * Empty until the reader moves the slider or enters a price, so no figure reads as a promise.
  */
 export function EarningsCalculator({ input }: { input: EstimateInput }) {
   const [customers, setCustomers] = useState(5);
   const [price, setPrice] = useState("");
+  const [touched, setTouched] = useState(false);
   const flat = input.mode === "flat";
   const amount = Number(price);
-  const per = flat ? input.value : amount > 0 ? (amount * input.value) / 100 : null;
+  const per = flat ? (touched ? input.value : null) : amount > 0 ? (amount * input.value) / 100 : null;
   const at = Math.min(12, input.months);
   let monthly: number | null = null;
   let yearOne: number | null = null;
@@ -40,7 +41,10 @@ export function EarningsCalculator({ input }: { input: EstimateInput }) {
           min={1}
           max={50}
           value={customers}
-          onChange={(e) => setCustomers(Number(e.target.value))}
+          onChange={(e) => {
+            setCustomers(Number(e.target.value));
+            setTouched(true);
+          }}
           className="w-full accent-foreground"
         />
       </label>
@@ -58,7 +62,7 @@ export function EarningsCalculator({ input }: { input: EstimateInput }) {
           />
         </label>
       )}
-      <div className="flex flex-wrap gap-8">
+      <div className="flex flex-wrap gap-8" aria-live="polite">
         <div>
           <p className="text-xs text-muted-foreground">{input.recurring ? `Per month, at month ${at}` : "Per month"}</p>
           <p className="text-2xl font-semibold tracking-tight tabular-nums">{monthly == null ? "—" : money(monthly)}</p>

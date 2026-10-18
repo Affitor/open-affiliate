@@ -27,7 +27,7 @@ const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 /** The value cell of an earnings-card row (`data-term="cookie"` …), or null when the row is absent. */
 function termRow(own: string, term: string, label: string): string | null {
   const m = new RegExp(`data-term="${term}"[^>]*><dt[^>]*>${escapeRe(label)}</dt><dd[^>]*>([\\s\\S]*?)</dd>`).exec(own)
-  return m ? m[1] : null
+  return m ? decodeEntities(m[1]) : null
 }
 /** A term field serialized as data: a key with a value, quoted (JSON) or not (a JS object literal). */
 const SERIALIZED_TERM = /["']?\b(?:cookieDays|cookie_days|payoutMethods|approvalTime|approval_time)\b["']?\s*:\s*(?!null\b|undefined\b|void\b)["'\d[]/
@@ -174,7 +174,7 @@ const TERM_MARKUP: [string, RegExp][] = [
   ["an Approval or Approval time field", />Approval(?: time)?<\/p>|"Approval(?: time)?"/],
   ["a serialized term field", SERIALIZED_TERM],
   // The earnings card since the human-first page (2026-10-17): one data-term row per term.
-  ["an earnings-card term row", /data-term="(?:cookie|payout|paid-by|approval|conditions)"|"data-term":"(?:cookie|payout|paid-by|approval|conditions)"/],
+  ["an earnings-card term row or flow step", /data-term="(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"|"data-term":"(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"/],
   ["a Payout or Paid by label", /"(?:Payout|Paid by)"/],
 ]
 
@@ -184,24 +184,25 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   const blocks = visibleBlocks(html)
   const marked = blocks.includes(UNCONFIRMED_NOTE)
   const problems: string[] = []
+  // An optional field the filter empties is left out, not rendered empty: on every page.
+  if (/<p class="[^"]*border-t border-border\/30 pt-2"><\/p>|<p data-term="conditions"[^>]*><\/p>/.test(own)) problems.push("renders empty commission conditions")
   if (termsConfirmed(p)) {
     if (marked) problems.push("marks verified terms unconfirmed")
+    // Each earnings-card row must read exactly as the stored fields say, nothing added.
     if (p.cookieDays != null) {
       const want = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
       if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
-    const payout = termRow(own, "payout", "Payout")
-    if (p.payout.minimum != null && !payout?.includes(`$${p.payout.minimum} minimum`)) {
-      problems.push(`does not show its minimum payout ($${p.payout.minimum})`)
-    }
-    if (p.payout.frequency && !payout?.toLowerCase().startsWith(p.payout.frequency.toLowerCase())) {
-      problems.push(`does not show its payout frequency (${p.payout.frequency})`)
+    const frequency = p.payout.frequency ? p.payout.frequency.charAt(0).toUpperCase() + p.payout.frequency.slice(1) : null
+    const minimum = p.payout.minimum != null ? `${frequency ? "from" : "From"} a $${p.payout.minimum} minimum` : null
+    const payout = [frequency, minimum].filter(Boolean).join(", ")
+    if (payout && termRow(own, "payout", "Payout") !== payout) {
+      problems.push(`does not show its payout ("${payout}": frequency ${p.payout.frequency ?? "none"}, minimum ${p.payout.minimum ?? "none"})`)
     }
     const label = p.approval ? APPROVAL_ROW[p.approval] : undefined
-    const approval = termRow(own, "approval", "Approval")
-    if (label && !approval?.startsWith(label)) problems.push(`does not show its approval (${label})`)
-    if (label && p.approvalTime && !approval?.includes(`(${p.approvalTime})`)) {
-      problems.push(`does not show its approval time (${p.approvalTime})`)
+    const approval = label ? `${label}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : (p.approvalTime ?? null)
+    if (approval && termRow(own, "approval", "Approval") !== approval) {
+      problems.push(`does not show its approval and approval time ("${approval}")`)
     }
     return problems
   }
@@ -224,8 +225,6 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   }
   const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
-  // An optional field the filter empties is left out, not rendered empty.
-  if (/<p class="[^"]*border-t border-border\/30 pt-2"><\/p>|<p data-term="conditions"[^>]*><\/p>/.test(own)) problems.push("renders empty commission conditions")
   for (const label of [">Restrictions</h2>", ">Use cases:</p>", ">Rules before you promote</h2>"]) {
     const at = own.indexOf(label)
     if (at === -1) continue

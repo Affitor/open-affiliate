@@ -52,55 +52,63 @@ function TermsChip({ verified }: { verified: boolean }) {
   )
 }
 
-const GRID = "grid grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,0.7fr)_auto] items-center gap-3"
-
 /**
- * The program next to similar ones. Each other program is one link to its
- * page: its terms stay inside that anchor, which is how the page checks tell
- * them from this program's own (scripts/unconfirmed-checks.ts).
+ * The program next to similar ones, as a table (Program, Commission, Lasts,
+ * Terms). Each other program's name links to its page. Commission, duration
+ * and the verified flag only: no cookie window, payout or approval, so an
+ * unverified page shows none of another program's terms either.
  */
 export function ProgramCompare({ current, title }: { current: Program; title: string }) {
   const related = getRelatedPrograms(current)
   if (related.length === 0) return null
   const own = !hasNoProgram(current)
   const ownState = pageState(current)
+  const cell = "py-3 pr-3 align-middle"
 
   return (
     <div>
       <h2 className="text-lg font-semibold tracking-tight mb-4">{title}</h2>
-      <div className="text-sm">
-        <div className={`${GRID} pb-2 border-b border-border text-xs text-muted-foreground`}>
-          <span>Program</span>
-          <span>Commission</span>
-          <span className="hidden sm:block">Lasts</span>
-          <span>Terms</span>
-        </div>
-        {own && (
-          <div className={`${GRID} py-3 border-b border-border bg-card shadow-[inset_3px_0_0_var(--foreground)] pl-3`}>
-            <span className="flex items-center gap-2.5 font-medium min-w-0">
-              <ProgramLogo slug={current.slug} name={current.name} size={28} className="shrink-0 rounded-md" />
-              <span className="truncate">{current.name}</span>
-            </span>
-            <span>
-              {commissionCell(current)}
-              {ownState !== "verified" && commissionFigure(current) && <span className="text-xs text-muted-foreground"> (unconfirmed)</span>}
-            </span>
-            <span className="hidden sm:block">{lastsCell(current)}</span>
-            <TermsChip verified={ownState === "verified"} />
-          </div>
-        )}
-        {related.map((p) => (
-          <Link key={p.slug} href={`/programs/${p.slug}`} className={`${GRID} py-3 border-b border-border hover:bg-muted/40 transition-colors`}>
-            <span className="flex items-center gap-2.5 font-medium min-w-0">
-              <ProgramLogo slug={p.slug} name={p.name} size={28} className="shrink-0 rounded-md" />
-              <span className="truncate">{p.name}</span>
-            </span>
-            <span>{commissionCell(p)}</span>
-            <span className="hidden sm:block">{lastsCell(p)}</span>
-            <TermsChip verified={pageState(p) === "verified"} />
-          </Link>
-        ))}
-      </div>
+      <table className="w-full text-sm border-collapse">
+        <thead>
+          <tr className="border-b border-border text-left text-xs text-muted-foreground">
+            <th scope="col" className="pb-2 pr-3 font-normal">Program</th>
+            <th scope="col" className="pb-2 pr-3 font-normal">Commission</th>
+            <th scope="col" className="pb-2 pr-3 font-normal hidden sm:table-cell">Lasts</th>
+            <th scope="col" className="pb-2 font-normal">Terms</th>
+          </tr>
+        </thead>
+        <tbody>
+          {own && (
+            <tr className="border-b border-border bg-card">
+              <th scope="row" className={`${cell} pl-3 shadow-[inset_3px_0_0_var(--foreground)] text-left font-medium`}>
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <ProgramLogo slug={current.slug} name={current.name} size={28} className="shrink-0 rounded-md" />
+                  <span className="truncate">{current.name}</span>
+                </div>
+              </th>
+              <td className={cell}>
+                {commissionCell(current)}
+                {ownState !== "verified" && commissionFigure(current) && <span className="text-xs text-muted-foreground"> (unconfirmed)</span>}
+              </td>
+              <td className={`${cell} hidden sm:table-cell`}>{lastsCell(current)}</td>
+              <td className="py-3"><TermsChip verified={ownState === "verified"} /></td>
+            </tr>
+          )}
+          {related.map((p) => (
+            <tr key={p.slug} className="border-b border-border hover:bg-muted/40 transition-colors">
+              <th scope="row" className={`${cell} text-left font-medium`}>
+                <Link href={`/programs/${p.slug}`} className="flex items-center gap-2.5 min-w-0 hover:underline underline-offset-4">
+                  <ProgramLogo slug={p.slug} name={p.name} size={28} className="shrink-0 rounded-md" />
+                  <span className="truncate">{p.name}</span>
+                </Link>
+              </th>
+              <td className={cell}>{commissionCell(p)}</td>
+              <td className={`${cell} hidden sm:table-cell`}>{lastsCell(p)}</td>
+              <td className="py-3"><TermsChip verified={pageState(p) === "verified"} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }

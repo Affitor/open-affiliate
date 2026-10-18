@@ -1,5 +1,5 @@
 import { IN_HOUSE, commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
-import { confirmedProse, proseSentences, termsConfirmed } from "@/lib/confirmed-terms"
+import { proseSentences, statesTerms, termsConfirmed } from "@/lib/confirmed-terms"
 import { hasNoProgram } from "@/lib/no-program"
 import { isPaused } from "@/lib/program-seo"
 
@@ -33,6 +33,9 @@ export interface Figure {
 
 const durationWords = (d: string) => (d.trim().toLowerCase() === "lifetime" ? "for life" : `for ${d}`)
 
+/** The stored rate says for how long, so the duration field is not repeated after it. */
+const SAYS_DURATION = /\b(months?|years?|lifetime|life|renewals?|first (payment|purchase|transaction))\b/i
+
 export function commissionFigure(p: Program): Figure | null {
   if (hasNoProgram(p)) return null
   const c = p.commission
@@ -43,12 +46,29 @@ export function commissionFigure(p: Program): Figure | null {
     return { big: text, rest: "", kind: "text" }
   }
   const recurring = c.type === "recurring"
-  const duration = c.duration ? durationWords(String(c.duration)) : ""
+  const stored = String(c.rate ?? "").trim()
+  const display = commissionDisplay(c)
+  const saysDuration = SAYS_DURATION.test(stored)
+  const duration = c.duration && !saysDuration ? durationWords(String(c.duration)) : ""
+  // The stored rate qualifies the figure ("up to 30%", "$15 to $1,000", "25% of net revenue",
+  // "$75 per qualified lead"): show it as written. A bare number ("25") says less than the figure.
+  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, display) === false) {
+    const rest = recurring
+      ? (saysDuration ? "" : duration ? `recurring ${duration}` : /recurr/i.test(stored) ? "" : "recurring")
+      : isCreditReward(c) && !/\bper\b/i.test(stored) ? "per referral" : ""
+    return { big: stored, rest, kind: "text" }
+  }
   let rest: string
-  if (c.mode === "hybrid") rest = duration || (recurring ? "recurring" : "")
+  if (c.mode === "hybrid") rest = duration || (recurring && !saysDuration ? "recurring" : "")
   else if (recurring) rest = duration ? `recurring ${duration}` : "recurring"
   else rest = isCreditReward(c) ? "per referral" : "per sale"
-  return { big: commissionDisplay(c), rest, kind: "number" }
+  return { big: display, rest, kind: "number" }
+}
+
+/** True when the stored rate is the displayed figure, written another way ("$1000" for "$1,000"). */
+function sameFigure(stored: string, display: string): boolean {
+  const norm = (x: string) => x.replace(/[\s,]/g, "").replace(/\.0+(?=\D|$)/, "").toLowerCase()
+  return norm(stored) === norm(display)
 }
 
 /** "22% recurring for 12 months", or the text alone. */
@@ -97,14 +117,17 @@ export function payoutMethods(p: Program): string[] {
 
 export const APPROVAL_WORDS: Record<string, string> = { auto: "Automatic", manual: "Reviewed by hand", "invite-only": "By invitation" }
 
+/** "Automatic (instant)"; the approval time alone when no approval kind is stored. */
 export function approvalText(p: Program): string | null {
-  if (!p.approval || !APPROVAL_WORDS[p.approval]) return null
-  return `${APPROVAL_WORDS[p.approval]}${p.approvalTime ? ` (${p.approvalTime})` : ""}`
+  const words = p.approval ? APPROVAL_WORDS[p.approval] : undefined
+  if (words) return `${words}${p.approvalTime ? ` (${p.approvalTime})` : ""}`
+  return p.approvalTime ? p.approvalTime : null
 }
 
 /** Cookie row text for a verified program; null for an unverified one (confirmedTerms removed it). */
-export function cookieText(p: Program, state: PageState): string | null {
-  if (state !== "verified") return null
+export function cookieText(p: Program): string | null {
+  // Same rule as payout and approval: only confirmed terms (confirmedTerms removed the rest).
+  if (!termsConfirmed(p) || hasNoProgram(p)) return null
   if (p.cookieDays == null) return "Not published"
   return p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
 }
@@ -130,8 +153,10 @@ export function isDealSentence(text: string): boolean {
  * is left. Expects a program already run through confirmedTerms().
  */
 export function productText(p: Program): string {
-  const kept = proseSentences(confirmedProse(p, p.description))
-    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence))
+  // p.description is already filtered for an unverified program (confirmedTerms, pitch rules).
+  // Sentences stating a term are left out on every page: the earnings card carries them.
+  const kept = proseSentences(p.description)
+    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence) && !statesTerms(s.sentence, "pitch"))
     .map((s) => s.sentence + s.after)
     .join("")
     .trim()
@@ -165,10 +190,20 @@ export interface EstimateInput {
   label: string
 }
 
+/**
+ * The stored rate must be exactly the figure ("22%", "$100"), in US dollars: a range
+ * ("$20–$500"), a gift card, a tier or another currency is not a fixed cash amount
+ * the estimate could multiply.
+ */
+function plainRate(c: Program["commission"]): boolean {
+  const norm = (s: string) => s.replace(/[\s,]/g, "").toLowerCase()
+  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(commissionDisplay(c))
+}
+
 export function estimateInput(p: Program): EstimateInput | null {
   if (pageState(p) !== "verified") return null
   const c = p.commission
-  if (c.value == null || (c.mode !== "percentage" && c.mode !== "flat") || isCreditReward(c)) return null
+  if (c.value == null || (c.mode !== "percentage" && c.mode !== "flat") || isCreditReward(c) || !plainRate(c)) return null
   const recurring = c.type === "recurring"
   if (recurring && c.mode === "flat") return null
   const months = recurring ? durationMonths(c.duration) : 1
