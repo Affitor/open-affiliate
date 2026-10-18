@@ -368,6 +368,9 @@ async function buildRegistry(): Promise<void> {
       source: p.source,
       score: scoreBySlug.get(p.slug),
       commissionRank: commissionRankBySlug.get(p.slug),
+      // The /programs payout filters; like the cookie, only for confirmed terms.
+      payoutMethods: termsConfirmed(p) && p.payout?.methods?.length ? p.payout.methods : undefined,
+      payoutMinimum: termsConfirmed(p) ? p.payout?.minimum : undefined,
       ...(p.status && p.status !== "active" ? { status: p.status } : {}),
     })),
   }
