@@ -1,10 +1,9 @@
 {
-  "total": 187,
+  "total": 184,
   "files": {
     "src/app/about/page.tsx": 1,
     "src/app/account/account-flow.tsx": 8,
     "src/app/categories/page.tsx": 5,
-    "src/app/changelog/page.tsx": 3,
     "src/app/compare/compare-view.tsx": 8,
     "src/app/content-lab/page.tsx": 3,
     "src/app/docs/api/page.tsx": 1,

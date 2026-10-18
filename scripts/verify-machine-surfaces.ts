@@ -28,6 +28,7 @@ import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { outboundUrl } from "../src/lib/outbound-link";
+import { changelog } from "../src/lib/changelog";
 import { blogApplyHref } from "../src/lib/apply-cta";
 import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
 import { programMd } from "./generate-md";
@@ -311,7 +312,7 @@ if (!requireText("index.md").includes(`${BASE_URL}/llms.txt`)) {
 if (!requireText("rankings.md").includes(`${BASE_URL}/programs/`)) {
   fail("rankings.md does not link program pages");
 }
-if (!requireText("changelog.md").includes("April 18, 2026")) {
+if (!requireText("changelog.md").includes(changelog[0].title)) {
   fail("changelog.md is missing the latest entry");
 }
 

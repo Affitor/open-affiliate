@@ -1185,7 +1185,9 @@ function changelogMd(): string {
     const items = entry.items
       .map(item => `- ${CHANGELOG_TAG[item.tag] ?? item.tag}: ${item.text}`)
       .join("\n")
-    return `## ${entry.date} — ${entry.title}\n\n${items}`
+    const summary = entry.summary ? `${entry.summary}\n\n` : ""
+    const link = entry.link ? `\n\n${entry.link.label}: ${BASE}${entry.link.href}` : ""
+    return `## ${entry.date} · ${entry.title}\n\n${summary}${items}${link}`
   })
   return joinSections([
     `# Changelog`,
