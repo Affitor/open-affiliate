@@ -12,7 +12,7 @@ export const post: BestPost = {
   description:
     "Recurring affiliate programs that keep paying while referrals stay subscribed: email, web, sales and dev tools, with terms checked on each brand's page.",
   intro:
-    "A recurring commission pays you again every time the customer you referred pays their bill, so one good referral can earn for months or for as long as they stay. That makes the length of the commission as important as the rate. Every program below lists its commission as recurring on its own terms page, and each block shows how long it lasts and the day we last checked it.",
+    "A recurring commission pays you again every time the customer you referred pays their bill, so one good referral can earn for months or for as long as they stay. That makes the length of the commission as important as the rate. Every program below lists its commission as recurring on its own terms page, and each block shows how long it lasts, or says when the brand does not publish a length, and the day we last checked it.",
   programs: [
     {
       slug: "convertkit",
@@ -29,12 +29,12 @@ export const post: BestPost = {
     {
       slug: "waalaxy",
       bestFor: "Best for sales and LinkedIn outreach audiences",
-      why: "Waalaxy automates LinkedIn and email outreach for lead generation. Its commission keeps paying for as long as your referral pays, which is rare among sales tools.",
+      why: "Waalaxy automates LinkedIn and email outreach for lead generation. Its commission keeps paying for as long as your referral pays.",
     },
     {
       slug: "ticket-tailor",
       bestFor: "Best for event organizers",
-      why: "Ticket Tailor sells tickets for events of every size with simple, low pricing. Its commission is a share of the fees your referral pays for as long as they remain a user, so it suits content for event creators and venues.",
+      why: "Ticket Tailor makes selling tickets easy and affordable for event creators. Its commission is a share of the fees your referral pays for as long as they remain a user, so it suits content for people who run events.",
     },
     {
       slug: "better-stack",
@@ -44,18 +44,18 @@ export const post: BestPost = {
     {
       slug: "fathom-analytics",
       bestFor: "Best for privacy-minded site owners",
-      why: "Fathom is a privacy-first, cookie-free alternative to Google Analytics, popular with site owners who want simple dashboards. Your audience also gets a discount on their first invoice.",
+      why: "Fathom is a privacy-first, cookie-free alternative to Google Analytics, for site owners who want fast dashboards and simple pricing. Your audience also gets a discount on their first invoice.",
       notFor: "Anyone who is not a Fathom customer: the program is open to paying customers only.",
     },
     {
       slug: "landbot",
       bestFor: "Best for chatbot and lead capture content",
-      why: "Landbot builds chatbots for websites and WhatsApp to capture leads, answer support questions and run surveys. Its commission recurs on all plans for a fixed period.",
+      why: "Landbot builds chatbots for websites and WhatsApp to capture leads, answer support questions and run surveys. Its commission recurs on all plans for up to a set period.",
     },
     {
       slug: "krispcall-communications-inc",
       bestFor: "Best for business phone audiences",
-      why: "KrispCall is a cloud phone system that brings calls, SMS, voicemail and virtual numbers into one app. Its commission covers subscriptions and renewals, which suits small business and remote team content.",
+      why: "KrispCall is a cloud phone system that brings calls, SMS, voicemail and virtual numbers into one app. Its commission covers subscriptions and renewals, which suits business communications content.",
     },
     {
       slug: "surveysparrow",
@@ -65,8 +65,8 @@ export const post: BestPost = {
     {
       slug: "raycast",
       bestFor: "Best for Mac power users",
-      why: "Raycast is a productivity launcher for macOS built for developers. Its commission recurs on every Pro subscription payment, and your referrals get a discount when they sign up.",
-      notFor: "Readers on Windows: Raycast is a Mac app, and its payouts are in pounds sterling.",
+      why: "Raycast is a productivity launcher for macOS built for developers. Its commission recurs on every Pro subscription payment and is paid in pounds sterling through Wise, and your referrals get a discount when they sign up.",
+      notFor: "Readers on Windows: Raycast is a Mac app.",
     },
     {
       slug: "kyma-api",

@@ -137,27 +137,34 @@ export function postTitle(post: BestPost, selection: PostSelection, asOf: Date =
 }
 
 /**
- * "25% recurring for 12 months", "$15 one-time", "30%-40% tiered, for life":
- * the figure from structured fields plus its type and length. A hybrid rate is
- * already a sentence ("40% recurring + $1/signup …"), so it gains only the length.
+ * "25% recurring for 12 months", "$15 per new subscriber", "30%-40% tiered, for life":
+ * the published figure plus its type and length, from structured fields.
+ * - A rate that says more than its figure ("up to 30%", "25% then 15%") is shown
+ *   as published and the type follows a comma.
+ * - A rate that already says how it pays ("per", "recurring", "+", renewals, or a
+ *   hybrid deal) gains no type word; one that already says "for …" gains no length.
+ * - A recurring commission with no published length says so.
  */
 export function earnText(p: Program): string {
   const c = p.commission
-  const length = c.duration ? (c.duration === "lifetime" ? "for life" : `for ${c.duration}`) : null
-  // A stored rate that says more than the figure ("up to 30%", "10% of total
-  // contract value", a hybrid sentence) is shown as published, as the Apply button does.
   const stored = String(c.rate ?? "").trim()
   const shown = listCommissionText(p)
   const norm = (x: string) => x.replace(/[\s,]/g, "").toLowerCase()
-  const qualified = Boolean(stored) && /[a-z]/i.test(stored) && norm(stored) !== norm(shown)
-  const figure = qualified ? stored : shown
-  // A hybrid sentence, or a published rate that already says how it pays
-  // ("$15 per new subscriber"), gains only the length, not a type word.
-  if (c.mode === "hybrid" || (qualified && /\bper\b|one-time|recurring|first|then/i.test(stored)) || String(c.type) === "hybrid")
-    return [figure, length].filter(Boolean).join(", ")
-  if (c.type === "recurring")
-    return qualified ? [`${figure}, recurring`, length].filter(Boolean).join(" ") : [`${figure} recurring`, length].filter(Boolean).join(" ")
-  return [`${figure} ${c.type}`, length].filter(Boolean).join(", ")
+  const figure = stored && /[a-z]/i.test(stored) && norm(stored) !== norm(shown) ? stored : shown
+  const wordy = /[a-z]/i.test(figure)
+  const saysHow = /\bper\b|one-time|recurring|renewal|\+/i.test(figure) || c.mode === "hybrid" || String(c.type) === "hybrid"
+  const saysLength = /\bfor\b|lifetime|forever/i.test(figure)
+  const length = saysLength
+    ? null
+    : c.duration
+      ? c.duration === "lifetime" ? "for life" : `for ${c.duration}`
+      : c.type === "recurring" && !saysHow
+        ? "length not published"
+        : null
+  const typed = saysHow ? figure : wordy ? `${figure}, ${c.type}` : `${figure} ${c.type}`
+  if (!length) return typed
+  // "20% recurring for life", but "25% recurring, length not published" and "30%-40% tiered, for life".
+  return c.type === "recurring" && !saysHow && length.startsWith("for ") ? `${typed} ${length}` : `${typed}, ${length}`
 }
 
 export function cookieText(p: Program): string {
