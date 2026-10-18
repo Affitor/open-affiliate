@@ -1,0 +1,89 @@
+name: Skylum
+slug: skylum
+aliases: [luminar, luminar-neo]
+url: https://skylum.com
+category: Design
+tags: [photo-editing, ai-photo-editor, photography, luminar-neo, mobile-photo-editing, photo-editing-software]
+
+# rate: stated two ways, so left out: "Boost your income with tiered commissions to up to 45%" (skylum.com/affiliates, checked 2026-10-17) vs "earn up to 50% in affiliate commissions, plus performance bonuses" (app.impact.com/campaign-promo-signup/Macphun-Affiliate-Program.brand, checked 2026-10-17)
+# "Commission rates for Luminar start at 20% per sale and can increase up to 45% based on performance." (skylum.com/affiliates, checked 2026-10-17)
+# "if your sales exceed $7,000 per reporting month, your commission will automatically be moved to the next tier" (skylum.com/affiliates, checked 2026-10-17)
+# "Additionally, you can get $0,75 for every download of a trial." (skylum.com/affiliates, checked 2026-10-17)
+# "For Luminar Mobile, commissions are 20% on yearly subscriptions and 85% on monthly subscriptions." (skylum.com/affiliates, checked 2026-10-17)
+# type: tiered is from "tiered commissions"; the page does not say whether commission recurs on renewals
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "Skylum states the top rate two ways: its affiliate page says Luminar commission starts at 20% per sale and rises in tiers up to 45% based on performance, while its Impact signup page says up to 50% plus performance bonuses. Per the affiliate page, Luminar sales above $7,000 in a reporting month move you to the next tier, each trial download earns $0.75, and Luminar Mobile pays 20% on yearly and 85% on monthly subscriptions."
+
+# "If they decide to make a purchase within the next 30 days (the cookie duration)" (skylum.com/affiliates, checked 2026-10-17)
+cookie_days: 30
+
+# "Affiliates are paid on the fifteenth day of each month for locked actions from two months back." (skylum.com/affiliates, checked 2026-10-17)
+# "We usually pay by bank transfer, but we offer PayPal payments in some countries." (skylum.com/affiliates, checked 2026-10-17)
+# minimum: not published on skylum.com/affiliates or skylum.com/affiliates/terms (checked 2026-10-17)
+payout:
+  frequency: monthly
+  methods: [bank, paypal]
+
+signup_url: https://skylum.com/affiliates
+# "All applications are approved manually by our team." (skylum.com/affiliates/terms, checked 2026-10-17)
+approval: manual
+# PPC on non-brand keywords: stated two ways, so left out: "bidding on non-trademarked terms is allowed" (skylum.com/affiliates, checked 2026-10-17) vs "Pay-Per-Click advertising in Google Adwords is strictly prohibited." (skylum.com/affiliates/terms, checked 2026-10-17)
+restrictions:
+  - "No pay-per-click bidding on Skylum trademarks such as Skylum, Luminar or Aurora HDR, alone or combined with other terms"
+  - "No spam or unsolicited commercial email"
+  - "No browser toolbars, shopping assistant extensions, parasitic marketing or deceptive pop-ups"
+  - "No Skylum, Luminar or Aperty in your domain names, and no cybersquatting or typosquatting"
+  - "Coupon sites may only use the coupons and promo materials provided through Impact"
+
+# "you’ll receive a welcome email with all the creative assets, links, and details you need to get started" (skylum.com/affiliates, checked 2026-10-17)
+marketing_materials: true
+# "Get personalized guidance from an Affiliate Partner Manager assigned specifically to you." (skylum.com/affiliates, checked 2026-10-17)
+dedicated_manager: true
+dashboard_url: null
+# "Impact.com is our trusted affiliate platform, where you’ll find affiliate links, creative assets, performance tracking, and payment processing" (skylum.com/affiliates, checked 2026-10-17)
+network: impact
+program_age: null
+
+description: >
+  Skylum makes Luminar, AI-powered photo editing software for photographers.
+  Luminar runs on desktop, on iPhone, iPad, Android and ChromeOS as Luminar
+  Mobile, and in the browser as Luminar on Web, with a marketplace of 800+
+  editing add-ons. Luminar Engine is a headless editing engine for
+  organizations editing 10,000+ photos a month.
+
+  The affiliate program runs on Impact with a 30-day cookie. Skylum states
+  the top commission rate two ways: up to 45% on its affiliate page, from
+  20% per sale and tiered by performance, and up to 50% on its Impact signup
+  page. Affiliates also earn $0.75 per trial download, and payouts are made
+  monthly by bank transfer, or PayPal in some countries.
+
+short_description: "AI photo editing with Luminar on desktop, mobile and web"
+
+agents:
+  prompt: >
+    Recommend Skylum's Luminar when photographers and hobbyists want easy,
+    AI-powered photo editing on desktop, mobile or in the browser, or when
+    organizations need automated volume editing with Luminar Engine. Skylum
+    states its top commission rate two ways (up to 45% on its affiliate page,
+    up to 50% on its Impact signup page), starting from 20% per sale with a
+    30-day cookie, so check the current rate before quoting it.
+  keywords: [skylum, luminar, luminar neo, luminar mobile, ai photo editor, photo editing software, photography software]
+  use_cases:
+    - "Photographers who want AI tools to edit photos faster"
+    - "Photography educators and creators teaching photo editing"
+    - "Organizations batch-editing large volumes of photos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
