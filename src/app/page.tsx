@@ -1,18 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
-import {
-  ArrowRight,
-  Terminal,
-  GitFork,
-  Search,
-  Code,
-  GitPullRequest,
-  ArrowUpDown,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, livePrograms, categories, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
+import { programs, livePrograms, categories, categoryToSlug, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
 import { homepageSets } from "@/lib/programs-directory";
@@ -26,400 +17,138 @@ export const metadata: Metadata = {
   },
 };
 
-function RankingsPreview({ top5 }: { top5: Program[] }) {
-
-  const medals = ["text-amber-500 bg-amber-500/15", "text-zinc-400 bg-zinc-400/15", "text-orange-500 bg-orange-500/15"];
-
+function SectionHead({ title, note, href, link }: { title: string; note?: string; href: string; link: string }) {
   return (
-    <section id="home-rankings" className="mx-auto max-w-6xl px-6 py-10">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-2">
-          <ArrowUpDown className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">
-              Rankings
-            </h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
-              Top programs by Affiliate Score
-            </p>
-          </div>
-        </div>
-        <Link
-          href="/rankings"
-          className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-        >
-          View all <ArrowRight className="h-3 w-3" />
-        </Link>
+    <div className="mb-4 flex items-end justify-between gap-4">
+      <div>
+        <h2 className="text-lg font-semibold">{title}</h2>
+        {note && <p className="text-meta text-muted-foreground mt-0.5">{note}</p>}
       </div>
-
-      <div className="rounded-xl border border-border/40 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-border/40 bg-muted/30">
-              <th className="w-12 py-2.5 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                #
-              </th>
-              <th className="py-2.5 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Program
-              </th>
-              <th className="w-28 py-2.5 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Commission
-              </th>
-              <th className="w-20 py-2.5 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">
-                Cookie
-              </th>
-              <th className="w-28 py-2.5 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">
-                Category
-              </th>
-              <th className="w-16 py-2.5 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
-                Score
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {top5.map((program, i) => (
-              <tr
-                key={program.slug}
-                className="border-t border-border/20 hover:bg-muted/20 transition-colors group"
-              >
-                <td className="py-2.5 px-3 text-center">
-                  <span
-                    className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-xs font-bold ${
-                      i < 3 ? medals[i] : "text-muted-foreground"
-                    }`}
-                  >
-                    {i + 1}
-                  </span>
-                </td>
-                <td className="py-2.5 px-3">
-                  <Link
-                    href={`/programs/${program.slug}`}
-                    className="flex items-center gap-2.5"
-                  >
-                    <ProgramLogo
-                      slug={program.slug}
-                      name={program.name}
-                      size={28}
-                      className="shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <span className="text-sm font-medium truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                        {program.name}
-                      </span>
-                      {program.verified && (
-                        <Badge
-                          variant="outline"
-                          className="ml-1.5 text-[9px] px-1 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                        >
-                          verified
-                        </Badge>
-                      )}
-                    </div>
-                  </Link>
-                </td>
-                <td className="py-2.5 px-3 hidden sm:table-cell">
-                  <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                    {commissionDisplay(program.commission)}
-                  </span>
-                  <span className="text-[10px] text-muted-foreground ml-1">
-                    {commissionLabel(program.commission, true)}
-                  </span>
-                </td>
-                <td className="py-2.5 px-3 text-center hidden sm:table-cell">
-                  <span className="text-xs text-muted-foreground">
-                    {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
-                  </span>
-                </td>
-                <td className="py-2.5 px-3 hidden md:table-cell">
-                  <span className="text-xs text-muted-foreground">
-                    {program.category}
-                  </span>
-                </td>
-                <td className="py-2.5 px-3 text-center">
-                  <span className="inline-flex items-center justify-center h-6 w-9 rounded-md bg-emerald-500/10 text-xs font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
-                    {affiliateScore(program)}
-                  </span>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <Link href={href} prefetch={false} className="inline-flex items-center gap-1 text-meta text-muted-foreground hover:text-foreground transition-colors">
+        {link} <ArrowRight className="size-3" aria-hidden />
+      </Link>
+    </div>
   );
 }
 
-function ProgramCard({ program }: { program: (typeof programs)[0] }) {
-  return (
-    <Link
-      href={`/programs/${program.slug}`}
-      className="group flex flex-col gap-3 rounded-xl border border-border/50 bg-card/50 p-5 transition-all hover:border-emerald-500/30 hover:bg-card hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <ProgramLogo slug={program.slug} name={program.name} size={40} />
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="text-sm font-semibold">{program.name}</h3>
-              {program.verified && (
-                <Badge
-                  variant="outline"
-                  className="text-[10px] px-1.5 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400"
-                >
-                  verified
-                </Badge>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              {confirmedPitch(program, program.shortDescription)}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 flex-wrap">
-        <Badge variant="secondary" className="text-[11px]">
-          {commissionDisplay(program.commission)}{" "}
-          {program.commission.type}
-        </Badge>
-        <Badge variant="outline" className="text-[11px]">
-          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
-        </Badge>
-        <Badge variant="outline" className="text-[11px]">
-          {program.category}
-        </Badge>
-      </div>
-    </Link>
-  );
+function cookieShort(program: Program): string {
+  if (!termsConfirmed(program)) return UNCONFIRMED;
+  return program.cookieDays != null ? `${program.cookieDays}-day cookie` : "Cookie not published";
 }
 
 export default function Home() {
-  // Rankings top 5, then 6 Featured and 30 more verified programs by the same
-  // Affiliate Score order, none shown twice (homepageSets).
+  // Rankings top 5, then 6 verified programs and 30 more by the same Affiliate
+  // Score order, none shown twice (homepageSets).
   const { rankings, featured, row } = homepageSets(programs);
+  const checked = livePrograms.filter(termsConfirmed).length;
+  const byCategory = categories
+    .map((name) => ({ name, slug: categoryToSlug(name), count: livePrograms.filter((p) => p.category === name).length }))
+    .filter((c) => c.count > 0)
+    .sort((a, b) => b.count - a.count);
 
   return (
-    <div>
+    <div className="oa-frame">
       <TrackPageView />
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(34,197,94,0.06),transparent_60%)]" />
-        <div className="mx-auto max-w-6xl px-6 py-14 md:py-20 relative">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-            {/* Left */}
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <Badge
-                  variant="outline"
-                  className="text-xs px-2.5 py-1 border-border/60"
-                >
-                  <GitFork className="h-3 w-3 mr-1" />
-                  Open Source
-                </Badge>
-                <Badge
-                  variant="outline"
-                  className="text-xs px-2.5 py-1 border-border/60"
-                >
-                  {livePrograms.length} programs
-                </Badge>
-              </div>
 
-              <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
-                The open registry
-                <br />
-                of{" "}
-                <span className="text-emerald-600 dark:text-emerald-400">affiliate</span>
-                <br />
-                programs.
-              </h1>
-              <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-md">
-                Discover, compare, and integrate affiliate programs. Built for
-                developers and AI agents. Community-contributed.
-              </p>
-              <p className="mt-3 text-sm text-muted-foreground tabular-nums" data-freshness>
-                {freshnessLine(programs)}
-              </p>
-
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <Link
-                  href="/programs"
-                  prefetch={false}
-                  className="inline-flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
-                >
-                  Browse Programs
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/docs"
-                  className="inline-flex items-center justify-center gap-2 rounded-lg border border-border/60 px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
-                >
-                  <Terminal className="h-4 w-4" />
-                  View Docs
-                </Link>
-              </div>
-            </div>
-
-            {/* Right — Terminal mockup */}
-            <div className="hidden lg:block">
-              <div className="rounded-xl border border-border/60 bg-card overflow-hidden shadow-xl dark:border-border/50 dark:bg-zinc-950 dark:shadow-2xl">
-                {/* Title bar */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-border/40 bg-muted/60 dark:bg-zinc-900/80">
-                  <span className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                  <span className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                  <span className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-                  <span className="ml-3 text-xs text-muted-foreground font-mono">
-                    openaffiliate
-                  </span>
-                </div>
-                {/* Terminal body */}
-                <div className="p-5 font-mono text-sm leading-relaxed">
-                  <p className="text-muted-foreground">
-                    <span className="text-emerald-600 dark:text-emerald-400">$</span>{" "}
-                    <span className="text-foreground">
-                      npx openaffiliate search &quot;email&quot;
-                    </span>
-                  </p>
-                  <div className="mt-4 text-muted-foreground/60 text-xs">
-                    <div className="grid grid-cols-[1fr_auto_auto] gap-x-6 mb-2 pb-2 border-b border-border/30 text-muted-foreground">
-                      <span>Name</span>
-                      <span>Commission</span>
-                      <span>Cookie</span>
-                    </div>
-                    <div className="grid grid-cols-[1fr_auto_auto] gap-x-6 py-1.5">
-                      <span className="text-foreground/80">ConvertKit</span>
-                      <span className="text-emerald-600/80 dark:text-emerald-400/80">50% rec</span>
-                      <span>90d</span>
-                    </div>
-                    <div className="grid grid-cols-[1fr_auto_auto] gap-x-6 py-1.5">
-                      <span className="text-foreground/80">Postmark</span>
-                      <span className="text-emerald-600/80 dark:text-emerald-400/80">$100/ref</span>
-                      <span>30d</span>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-muted-foreground/50 text-xs">
-                    Found 2 programs.{" "}
-                    <span className="text-muted-foreground">
-                      Run with --json for API output.
-                    </span>
-                  </p>
-                  <p className="mt-3 text-muted-foreground">
-                    <span className="text-emerald-600 dark:text-emerald-400">$</span>{" "}
-                    <span className="animate-pulse">_</span>
-                  </p>
-                </div>
-              </div>
+      <section className="oa-band py-14 md:py-20" data-scale="marketing">
+        <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-14">
+          <div>
+            <p className="oa-label">The open registry of affiliate programs</p>
+            <h1 className="text-hero-sm md:text-hero font-semibold tracking-[-0.035em] mt-4 max-w-[760px]">
+              Affiliate programs worth promoting, with terms you can check.
+            </h1>
+            <p className="text-lg leading-relaxed text-foreground/80 mt-5 max-w-[600px]">
+              What each program pays, how long its cookie lasts and when it pays out, checked against the brand&apos;s own terms page. Open data for people and for AI agents.
+            </p>
+            <p className="text-meta text-muted-foreground tabular-nums mt-3" data-freshness>
+              {freshnessLine(programs)}
+            </p>
+            <div className="mt-7 flex flex-wrap gap-2">
+              <Link
+                href="/programs"
+                prefetch={false}
+                className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+              >
+                Browse programs <ArrowRight className="size-4" aria-hidden />
+              </Link>
+              <Link
+                href="/docs"
+                className="inline-flex h-10 items-center rounded-lg border border-line-strong bg-card px-4 text-sm font-medium hover:bg-sunk transition-colors"
+              >
+                Docs and API
+              </Link>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Rankings Preview */}
-      <RankingsPreview top5={rankings} />
-
-      {/* Social Proof + Stats */}
-      <section className="relative border-y border-border/25">
-        <div className="absolute inset-0 bg-gradient-to-b from-muted/5 to-transparent pointer-events-none" />
-        <div className="relative mx-auto max-w-6xl px-6 py-0">
-          {/* Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-border/25">
+          <dl className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card" aria-label="Registry today">
             {[
-              { value: livePrograms.length.toString(), label: "Programs", sub: "and growing" },
-              { value: categories.length.toString(), label: "Categories", sub: "fully indexed" },
-              { value: "100%", label: "Open Source", sub: "MIT licensed" },
-            ].map((stat) => (
-              <div
-                key={stat.label}
-                className="flex flex-col items-center justify-center gap-1 py-8 sm:py-10 px-6 text-center"
-              >
-                <span className="text-4xl sm:text-[2.75rem] font-bold leading-none tracking-tight tabular-nums text-foreground">
-                  {stat.value}
-                </span>
-                <span className="text-[11px] font-medium uppercase tracking-widest text-muted-foreground/70 mt-1">
-                  {stat.label}
-                </span>
-                <span className="text-[11px] text-muted-foreground/35 tracking-wide">
-                  {stat.sub}
-                </span>
+              ["Programs", livePrograms.length.toLocaleString("en-US")],
+              ["Terms checked", checked.toLocaleString("en-US")],
+              ["Categories", byCategory.length.toString()],
+              ["Paid placement", "None"],
+            ].map(([dt, dd], i) => (
+              <div key={dt} className={`px-4 py-4 ${i % 2 ? "border-l border-border" : ""} ${i > 1 ? "border-t border-border" : ""}`}>
+                <dt className="oa-label">{dt}</dt>
+                <dd className="font-mono text-title font-medium tracking-tight mt-1.5 tabular-nums">{dd}</dd>
               </div>
             ))}
-          </div>
-
-          {/* Tools */}
-          <div className="border-t border-border/25" />
-          <div className="flex items-center justify-between py-4">
-            <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/35 font-medium whitespace-nowrap">
-              Works with
-            </span>
-            <div className="hidden sm:flex items-center gap-5">
-              {[
-                { name: "Claude", icon: "◆" },
-                { name: "Cursor", icon: "◈" },
-                { name: "Windsurf", icon: "◇" },
-                { name: "Copilot", icon: "○" },
-                { name: "CLI", icon: "›_" },
-                { name: "MCP", icon: "⬡" },
-              ].map((tool, i, arr) => (
-                <span key={tool.name} className="flex items-center gap-5">
-                  <span className="group flex items-center gap-1.5 cursor-default">
-                    <span className="text-[10px] text-muted-foreground/25 group-hover:text-emerald-600/70 dark:group-hover:text-emerald-500/60 transition-colors duration-300 font-mono">
-                      {tool.icon}
-                    </span>
-                    <span className="text-[11px] text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors duration-300 tracking-wide">
-                      {tool.name}
-                    </span>
-                  </span>
-                  {i < arr.length - 1 && (
-                    <span className="text-border/40 text-[10px]">/</span>
-                  )}
-                </span>
-              ))}
-            </div>
-            <span className="sm:hidden text-[11px] text-muted-foreground/40 tracking-wide">
-              Claude · Cursor · Windsurf + 3 more
-            </span>
-          </div>
+          </dl>
         </div>
       </section>
 
-      {/* Featured Programs */}
-      <section id="home-featured" className="mx-auto max-w-6xl px-6 py-10">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-xl font-semibold tracking-tight">
-              Verified Programs
-            </h2>
-            <p className="text-sm text-muted-foreground mt-1">
-              More verified programs, by Affiliate Score
-            </p>
-          </div>
-          <Link
-            href="/programs"
-            prefetch={false}
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1"
-          >
-            View all <ArrowRight className="h-3 w-3" />
-          </Link>
-        </div>
+      <section id="home-rankings" className="oa-band">
+        <SectionHead title="Rankings" note="Top programs by Affiliate Score" href="/rankings" link="All rankings" />
+        <ol className="overflow-hidden rounded-xl border border-border bg-card">
+          {rankings.map((program, i) => (
+            <li key={program.slug} className="border-t border-border first:border-t-0">
+              <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
+                <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
+                <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
+                <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
+                <span className="hidden font-mono text-meta sm:block">
+                  {commissionDisplay(program.commission)} <span className="text-muted-foreground">{commissionLabel(program.commission, true)}</span>
+                </span>
+                <span className="hidden text-meta text-muted-foreground sm:block">{program.category}</span>
+                <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title="Affiliate Score">
+                  {affiliateScore(program)}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ol>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <section id="home-featured" className="oa-band">
+        <SectionHead title="Verified programs" note="Terms checked on the brand's own page, by Affiliate Score" href="/programs" link="All programs" />
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((program) => (
-            <ProgramCard key={program.slug} program={program} />
+            <Link
+              key={program.slug}
+              href={`/programs/${program.slug}`}
+              className="flex min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-4 hover:bg-sunk transition-colors"
+            >
+              <div className="flex min-w-0 items-center gap-3">
+                <ProgramLogo slug={program.slug} name={program.name} size={36} className="shrink-0" />
+                <div className="min-w-0">
+                  <h3 className="flex items-center gap-1.5 truncate text-sm font-semibold">
+                    {program.name}
+                    {program.verified && <Check className="size-3.5 shrink-0 text-good" aria-label="Verified" />}
+                  </h3>
+                  <p className="truncate text-meta text-muted-foreground">{confirmedPitch(program, program.shortDescription)}</p>
+                </div>
+              </div>
+              <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
+                <span className="truncate font-mono text-meta">{commissionDisplay(program.commission)} {program.commission.type}</span>
+                <span className="shrink-0 text-xs text-muted-foreground">{cookieShort(program)}</span>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
 
       {/* Top verified programs: plain links, so each is in the raw HTML. */}
-      <section id="home-top-verified" className="mx-auto max-w-6xl px-6 pb-10">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold tracking-tight">Top verified programs by Affiliate Score</h2>
-          <Link
-            href="/docs/affiliate-score"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            How we score
-          </Link>
-        </div>
-        <ul className="columns-2 sm:columns-3 lg:columns-5 gap-6 text-sm text-muted-foreground [&_a:hover]:text-foreground [&_li]:py-0.5">
+      <section id="home-top-verified" className="oa-band">
+        <SectionHead title="More verified programs" note="The next 30 by Affiliate Score" href="/docs/affiliate-score" link="How we score" />
+        <ul className="columns-2 gap-6 text-sm text-foreground/80 sm:columns-3 lg:columns-5 [&_a:hover]:text-foreground [&_a:hover]:underline [&_li]:py-1">
           {row.map((p) => (
             <li key={p.slug}>
               <a href={`/programs/${p.slug}`}>{p.name}</a>
@@ -428,81 +157,36 @@ export default function Home() {
         </ul>
       </section>
 
-      {/* How it works */}
-      <section className="border-t border-border/40 bg-muted/10">
-        <div className="mx-auto max-w-6xl px-6 py-10">
-          <h2 className="text-xl font-semibold tracking-tight mb-6">
-            How it works
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                step: "01",
-                icon: Search,
-                title: "Browse or search",
-                desc: "Find affiliate programs by category, commission rate, or keyword. Use the web UI, CLI, or MCP connector.",
-              },
-              {
-                step: "02",
-                icon: Code,
-                title: "Integrate",
-                desc: "Each program includes AGENTS.md with integration instructions for AI agents, plus standard affiliate links for humans.",
-              },
-              {
-                step: "03",
-                icon: GitPullRequest,
-                title: "Contribute",
-                desc: "Submit new programs via GitHub PR. Add a YAML file to the registry, community reviews and merges.",
-              },
-            ].map((item) => (
-              <div
-                key={item.step}
-                className="flex flex-col gap-4 rounded-xl border border-border/40 bg-card/30 p-6"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-muted">
-                    <item.icon className="h-4 w-4 text-muted-foreground" />
-                  </div>
-                  <span className="text-xs font-mono text-muted-foreground/60">
-                    {item.step}
-                  </span>
-                </div>
-                <h3 className="text-base font-semibold">{item.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
+      <section className="oa-band">
+        <SectionHead title={`${byCategory.length} categories`} href="/networks" link="Browse by network" />
+        <nav aria-label="Categories" className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card md:grid-cols-4">
+          {byCategory.map((c) => (
+            <Link
+              key={c.slug}
+              href={`/categories/${c.slug}`}
+              className="-ml-px -mt-px flex justify-between gap-2 border-l border-t border-border px-4 py-3 text-sm hover:bg-sunk transition-colors"
+            >
+              <span className="truncate">{c.name}</span>
+              <span className="font-mono text-meta text-muted-foreground">{c.count}</span>
+            </Link>
+          ))}
+        </nav>
       </section>
 
-      {/* CTA */}
-      <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="relative rounded-xl p-px bg-gradient-to-br from-border/60 via-emerald-500/20 to-border/60">
-          <div className="rounded-[11px] bg-card/40 p-8 md:p-12 text-center">
-            <h2 className="text-2xl font-bold tracking-tight">
-              Add your program
-            </h2>
-            <p className="text-sm text-muted-foreground mt-2 max-w-md mx-auto">
-              Submit your affiliate program to the registry. Open a PR on GitHub
-              or use the submission form.
-            </p>
-            <div className="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
-              <Link
-                href="/submit"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-5 py-2.5 text-sm font-medium hover:bg-foreground/90 transition-colors"
-              >
-                Submit Program
-              </Link>
-              <a
-                href="https://github.com/Affitor/open-affiliate"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-border/60 px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors"
-              >
-                <GitFork className="h-4 w-4" />
-                Open a PR
-              </a>
+      <section className="oa-band">
+        <div className="grid grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-2">
+          <div>
+            <h2 className="text-lg font-semibold">Run a program?</h2>
+            <p className="text-sm text-muted-foreground mt-1">Add it to the registry: open a pull request on GitHub or use the form.</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <Link href="/submit" className="inline-flex h-8 items-center rounded-lg border border-line-strong bg-card px-3 text-meta font-medium hover:bg-sunk transition-colors">Submit a program</Link>
+              <a href="https://github.com/Affitor/open-affiliate" className="inline-flex h-8 items-center rounded-lg border border-line-strong bg-card px-3 text-meta font-medium hover:bg-sunk transition-colors">Open a pull request</a>
             </div>
+          </div>
+          <div>
+            <h2 className="text-lg font-semibold">Building an agent?</h2>
+            <p className="text-sm text-muted-foreground mt-1">The same registry over MCP, a REST API, a CLI and a Markdown page per program.</p>
+            <p className="mt-3 overflow-x-auto whitespace-nowrap rounded-lg border border-border bg-sunk px-3 py-2 font-mono text-meta">claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp</p>
           </div>
         </div>
       </section>
