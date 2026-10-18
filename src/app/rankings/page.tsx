@@ -1,14 +1,8 @@
 import { getCategoryStats, getNetworkStats, groupRow, livePrograms } from "@/lib/programs"
+import { payoutMinText } from "@/lib/rankings-terms"
 import RankingsClient, { type TermFacts } from "./rankings-client"
 
 export const revalidate = 3600
-
-/** "$50", "None" for a zero minimum, null when the program does not publish one. */
-function payoutMinText(minimum: number | undefined, currency: string | undefined): string | null {
-  if (minimum == null) return null
-  if (minimum === 0) return "None"
-  return !currency || currency === "USD" ? `$${minimum.toLocaleString("en-US")}` : `${minimum.toLocaleString("en-US")} ${currency}`
-}
 
 export default function RankingsPage() {
   // Payout minimum and check date are not in the browser registry, so the

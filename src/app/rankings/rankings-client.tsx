@@ -3,16 +3,12 @@
 import { useState, useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
 import {
-  Trophy,
-  Medal,
-  Award,
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
   Search,
   X,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { FilterSelect } from "@/components/filter-select";
 import { track } from "@/lib/track";
@@ -24,14 +20,13 @@ import {
   compareByCommission,
   compareText,
   type Program,
-  commissionLabel,
-  affiliateScore,  commissionDisplay
+  commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
-import { byScore } from "@/lib/score-order";
+import { recurringMonths, recurringText } from "@/lib/rankings-terms";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -49,28 +44,6 @@ export interface TermFacts {
   payoutMinText: string | null;
   /** "2026-10-13", the date the terms were last checked. */
   checked: string;
-}
-
-/**
- * How long a commission keeps paying, in months: Infinity for lifetime, 0 when
- * it pays once, null when a recurring commission does not say how long, and
- * undefined for a tiered or hybrid one that does not say whether it recurs.
- */
-function recurringMonths(c: Program["commission"]): number | null | undefined {
-  const d = (c.duration ?? "").toLowerCase();
-  if (c.type === "one-time") return 0;
-  if (/lifetime/.test(d)) return Infinity;
-  const n = d.match(/(\d+)\s*(month|year|day)/);
-  if (n) return n[2] === "year" ? Number(n[1]) * 12 : n[2] === "day" ? Math.round(Number(n[1]) / 30) : Number(n[1]);
-  return c.type === "recurring" ? null : undefined;
-}
-
-function recurringText(months: number | null | undefined): string {
-  if (months === undefined) return "—";
-  if (months === null) return "Length not published";
-  if (months === 0) return "No";
-  if (months === Infinity) return "Lifetime";
-  return months >= 24 && months % 12 === 0 ? `${months / 12} years` : `${months} months`;
 }
 
 // ── Shared components ───────────────────────────────────────────
@@ -104,85 +77,6 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-function TopThreeCards({ top3 }: { top3: Program[] }) {
-  const medals = [
-    {
-      icon: Trophy,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "1st",
-    },
-    {
-      icon: Medal,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "2nd",
-    },
-    {
-      icon: Award,
-      border: "border-border",
-      bg: "bg-card",
-      text: "text-foreground",
-      label: "3rd",
-    },
-  ];
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-      {top3.map((program, i) => {
-        const m = medals[i];
-        return (
-          <Link
-            key={program.slug}
-            href={`/programs/${program.slug}`}
-            className={`group relative rounded-xl border ${m.border} ${m.bg} p-5 transition-all hover:shadow-lg hover:scale-[1.01]`}
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <m.icon className={`h-4 w-4 ${m.text}`} />
-              <span className={`text-xs font-semibold ${m.text}`}>
-                {m.label}
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <ProgramLogo
-                slug={program.slug}
-                name={program.name}
-                size={40}
-              />
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-semibold truncate">
-                    {program.name}
-                  </h3>
-                  {program.verified && (
-                    <Badge
-                      variant="outline"
-                      className="text-xs px-1.5 py-0 border-good-line bg-good-bg text-good shrink-0"
-                    >
-                      verified
-                    </Badge>
-                  )}
-                </div>
-                <p className="text-xs text-muted-foreground mt-0.5 truncate">
-                  {program.shortDescription}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <Badge className="font-mono text-xs bg-card text-foreground border-line-strong">
-                {commissionDisplay(program.commission)}{" "}
-                {commissionLabel(program.commission)}
-              </Badge>
-            </div>
-          </Link>
-        );
-      })}
-    </div>
-  );
-}
-
 // ── Sort header ─────────────────────────────────────────────────
 
 type ColumnSort = "name" | "commission" | "recurring" | "cookie" | "payout" | "checked";
@@ -206,7 +100,7 @@ function SortHeader({
   const isActive = activeColumn === column;
   return (
     <th
-      aria-sort={isActive ? (activeDir === "desc" ? "descending" : "ascending") : undefined}
+      aria-sort={isActive ? (activeDir === "desc" ? "descending" : "ascending") : "none"}
       className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] ${className ?? ""}`}
     >
       <button
@@ -591,12 +485,6 @@ export default function RankingsClient({
     track("page_view");
   }, []);
 
-  const top3 = useMemo(() => {
-    return [...programs]
-      .sort(byScore(affiliateScore))
-      .slice(0, 3);
-  }, []);
-
   const rows: Row[] = useMemo(() => {
     const bySlug = new Map(facts.map((f) => [f.slug, f]));
     return programs.flatMap((program) => {
@@ -675,9 +563,6 @@ export default function RankingsClient({
           how long it recurs, cookie length and payout minimum.
         </p>
       </div>
-
-      {/* Top 3 */}
-      <TopThreeCards top3={top3} />
 
       {/* Tab bar */}
       <div className="flex items-center gap-1 rounded-lg border border-border bg-sunk p-1 mb-6 w-fit">

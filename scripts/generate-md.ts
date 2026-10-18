@@ -35,9 +35,12 @@ import registry from "../src/lib/registry.json"
 import { formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
+import { compareCommission } from "../src/lib/commission-order"
+import { payoutMinText, recurringMonths, recurringText } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
   affiliateScore,
+  commissionRank,
   commissionDisplay,
   formatCommissionDisplay,
   getCategoryStats,
@@ -767,7 +770,7 @@ function docsMd(): string {
       [
         `- [Entry point](${BASE}/llms.txt)`,
         `- [All programs by category](${BASE}/programs.md)`,
-        `- [Rankings by Affiliate Score](${BASE}/rankings.md)`,
+        `- [Rankings of verified programs by commission](${BASE}/rankings.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [Full dump](${BASE}/llms-full.txt)`,
         `- Any program, category or network page, with .md appended`,
@@ -1042,13 +1045,18 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  const ranked = sitePrograms.filter(isLive).sort(
-    (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
-  )
+  // The HTML table's default order: verified programs by commission (compareCommission).
+  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified).sort((a, b) => compareCommission(a, b, commissionRank))
   const programLines = ranked
     .map((p, i) => {
-      const mark = statusMark(p)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
+      const terms = [
+        `${commissionDisplay(p.commission)} ${p.commission.type}`,
+        `recurring: ${recurringText(recurringMonths(p.commission)).toLowerCase()}`,
+        `cookie: ${p.cookieDays != null ? `${p.cookieDays} days` : "not published"}`,
+        `payout minimum: ${(payoutMinText(p.payout.minimum, p.payout.currency) ?? "not published").toLowerCase()}`,
+        ...(p.lastVerifiedAt ? [`checked ${p.lastVerifiedAt.slice(0, 10)}`] : []),
+      ]
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(terms.join(", "))}`
     })
     .join("\n")
   // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
@@ -1073,11 +1081,10 @@ function rankingsMd(): string {
   return joinSections([
     `# Affiliate program rankings`,
     [
-      `> ${programCount(ranked.length)} ordered by Affiliate Score, the same score as`,
-      `> the podium on ${BASE}/rankings and the homepage preview.`,
-      `> The interactive table can also sort by verified content, commission,`,
-      `> or cookie length. Those orders depend on live filters, so they are not`,
-      `> copied here.`,
+      `> ${ranked.length} verified programs, every figure checked on the brand's own`,
+      `> terms page, ordered by commission as on ${BASE}/rankings. The table there`,
+      `> can also sort by how long the commission recurs, cookie length, payout`,
+      `> minimum or check date.`,
       `>`,
       `> Network and category figures keep percentage rates and flat US-dollar`,
       `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
