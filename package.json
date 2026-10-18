@@ -24,7 +24,8 @@
     "sync:public": "npx tsx scripts/sync-to-public.ts",
     "sync:public:dry": "npx tsx scripts/sync-to-public.ts --dry-run",
     "backfill:social": "npx tsx scripts/backfill-social.ts",
-    "md:build": "npx tsx scripts/generate-md.ts"
+    "md:build": "npx tsx scripts/generate-md.ts",
+    "check:type-scale": "npx tsx scripts/check-type-scale.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.0",
