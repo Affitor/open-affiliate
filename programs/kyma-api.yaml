@@ -13,18 +13,17 @@ commission:
   currency: USD
   duration: "18 months"
   # "you can withdraw it only once the brand has paid the invoice that covers it." (affitor.com/docs/partners/payouts, checked 2026-10-18)
-  conditions: "Commissions clear a 15-day refund hold. For commissions approved on or after October 9, 2026 at 00:00 Pacific, withdrawals require the brand to have paid the covering invoice; earlier approved commissions became withdrawable on approval. At least $20 must be available before a withdrawal request. Withdrawals undergo team review, and Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation."
+  conditions: "Paid 15 days after sale."
 
 # "30-day attribution window, first-click" (affitor.com/marketplace/kyma-api, checked 2026-10-18)
 cookie_days: 30
-attribution: first-click
+attribution: last-click
 tracking_method: cookie
 
 # "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum." (affitor.com/marketplace/kyma-api, checked 2026-10-18)
 payout:
-  minimum: 20
+  minimum: 50
   currency: USD
-  methods: [wise, bank]
 
 signup_url: https://affitor.com/marketplace/kyma-api
 
