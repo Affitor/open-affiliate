@@ -500,7 +500,8 @@ async function confirmClaim(deps: ClaimDeps, claim: ClaimRow): Promise<Response>
     meta: { method: claim.method },
   })
   return reply(200, { ok: true, domain: claim.domain }, [
-    signedCookie(deps.secret, SESSION_COOKIE, result.memberId, now, SESSION_TTL_MS),
+    // A code mailed to an address at the domain proves that mailbox; a DNS record does not.
+    sessionCookie(deps, result.memberId, claim.method === "email", now),
     clearCookie(PENDING_COOKIE),
   ])
 }
@@ -513,18 +514,34 @@ async function pendingClaim(req: Request, deps: ClaimDeps, slug: string, method:
 }
 
 /**
+ * A session proven by a mailbox (an email claim, or a sign-in code) is marked
+ * inside the signed value; one proven only by a DNS record is not. A DNS
+ * record proves the domain, not the contact address typed next to it, so a
+ * DNS session never reaches other teams that address is on.
+ */
+const MAILBOX_MARK = "m_"
+
+function sessionCookie(deps: ClaimDeps, memberId: string, mailbox: boolean, now: Date): string {
+  return signedCookie(deps.secret, SESSION_COOKIE, `${mailbox ? MAILBOX_MARK : ""}${memberId}`, now, SESSION_TTL_MS)
+}
+
+/**
  * The signed-in member and their account. Member and claim are re-read on
  * every request, so removing a member, releasing or revoking the claim ends
  * the session at once.
  */
-async function accountOf(req: Request, deps: ClaimDeps): Promise<{ member: MemberRow; claim: ClaimRow } | null> {
-  const id = readSignedCookie(req, deps.secret, SESSION_COOKIE, deps.now())
-  if (!id) return null
-  const member = await deps.store.getMember(id)
+async function accountOf(
+  req: Request,
+  deps: ClaimDeps,
+): Promise<{ member: MemberRow; claim: ClaimRow; mailbox: boolean } | null> {
+  const value = readSignedCookie(req, deps.secret, SESSION_COOKIE, deps.now())
+  if (!value) return null
+  const mailbox = value.startsWith(MAILBOX_MARK)
+  const member = await deps.store.getMember(mailbox ? value.slice(MAILBOX_MARK.length) : value)
   if (!member || member.status !== "active") return null
   const claim = await deps.store.getClaim(member.claim_id)
   if (!claim || claim.status !== "active" || !claim.verified_at) return null
-  return { member, claim }
+  return { member, claim, mailbox }
 }
 
 async function ownerOf(
@@ -812,9 +829,16 @@ async function submitTerms(req: Request, deps: ClaimDeps): Promise<Response> {
 
 /** Ends the account: every member is signed out and the listings show as unclaimed again. */
 async function release(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readBody(req, ReleaseBody)
+  if (!body) return badRequest()
   const account = await accountOf(req, deps)
   if (!account) return notSignedIn()
   const { member, claim } = account
+  // The page names the account it shows (a slug on the claim page, a domain
+  // on /account); a session switched in another tab must not release a
+  // different one.
+  const expected = body.slug ? pilotTarget(deps, body.slug)?.domain : body.domain
+  if (expected !== claim.domain) return accountChanged()
   if (!(await deps.store.release(claim.id, member.id))) return notSignedIn()
   await deps.store.addEvent({ type: "claim.released", claim_id: claim.id, slug: claim.slug, domain: claim.domain })
   return reply(200, { ok: true }, [clearCookie(SESSION_COOKIE)])
@@ -823,10 +847,16 @@ async function release(req: Request, deps: ClaimDeps): Promise<Response> {
 // ---------------------------------------------------------------- account (v4)
 
 const notSignedIn = () => fail(401, "not_signed_in", "Sign in first.")
+const accountChanged = () => fail(409, "account_changed", "You are signed in to another account now. Reload this page.")
+const domainField = z.string().min(1).max(253)
 const SigninBody = z.object({ email: z.string().max(320), turnstileToken: turnstileField })
 const CodeBody = z.object({ code: z.string().max(20) })
-const MemberEmailBody = z.object({ email: z.string().max(320) })
-const MemberIdBody = z.object({ memberId: z.string().uuid() })
+const ReleaseBody = z
+  .object({ slug: slugField.optional(), domain: domainField.optional() })
+  .refine((b) => Boolean(b.slug) !== Boolean(b.domain))
+const MemberEmailBody = z.object({ domain: domainField, email: z.string().max(320) })
+const MemberIdBody = z.object({ domain: domainField, memberId: z.string().uuid() })
+const SwitchBody = z.object({ memberId: z.string().uuid() })
 
 /**
  * Step 1 of sign-in. Everything before the response is the same for any
@@ -939,7 +969,7 @@ async function signinVerify(req: Request, deps: ClaimDeps): Promise<Response> {
   if (!(await deps.store.useSigninCode(row.id, now))) return fail(410, "used_or_expired", "This code was already used. Ask for a new one.")
   await deps.store.addEvent({ type: "signin.ok", claim_id: claim.id, domain: claim.domain })
   return reply(200, { ok: true, domain: claim.domain }, [
-    signedCookie(deps.secret, SESSION_COOKIE, member.id, now, SESSION_TTL_MS),
+    sessionCookie(deps, member.id, true, now),
     clearCookie(SIGNIN_PENDING_COOKIE),
   ])
 }
@@ -967,7 +997,8 @@ async function account(req: Request, deps: ClaimDeps): Promise<Response> {
     ),
     deps.store.listMembers(claim.id),
     deps.store.listEdits(claim.id),
-    member.email ? deps.store.findActiveMembers(member.email) : Promise.resolve([] as MemberRow[]),
+    // Only a mailbox-proven session may see the other teams its address is on.
+    acct.mailbox && member.email ? deps.store.findActiveMembers(member.email) : Promise.resolve([] as MemberRow[]),
   ])
   // Other teams this same address is on (an agency, say): offered as a switch.
   const otherAccounts: { memberId: string; domain: string }[] = []
@@ -1001,6 +1032,7 @@ async function addTeammate(req: Request, deps: ClaimDeps): Promise<Response> {
   const acct = await accountOf(req, deps)
   if (!acct) return notSignedIn()
   const { member, claim } = acct
+  if (body.domain !== claim.domain) return accountChanged()
   const email = normalizeEmail(body.email)
   if (!email) return badEmail()
   // Teammates are proven the same way as a claim: an address at the domain.
@@ -1031,6 +1063,7 @@ async function removeTeammate(req: Request, deps: ClaimDeps): Promise<Response> 
   if (!body) return badRequest()
   const acct = await accountOf(req, deps)
   if (!acct) return notSignedIn()
+  if (body.domain !== acct.claim.domain) return accountChanged()
   const result = await deps.store.removeMember(acct.claim.id, acct.member.id, body.memberId)
   if (result === "self") return fail(400, "cannot_remove_self", "Ask a teammate to remove you, or release the listing.")
   if (result === "not_owner") return notSignedIn()
@@ -1039,19 +1072,20 @@ async function removeTeammate(req: Request, deps: ClaimDeps): Promise<Response> 
   return reply(200, { ok: true })
 }
 
-/** Moves the session to another team the same address is on. */
+/** Moves a mailbox-proven session to another team the same address is on. */
 async function switchAccount(req: Request, deps: ClaimDeps): Promise<Response> {
-  const body = await readBody(req, MemberIdBody)
+  const body = await readBody(req, SwitchBody)
   if (!body) return badRequest()
   const acct = await accountOf(req, deps)
   if (!acct) return notSignedIn()
+  if (!acct.mailbox) return fail(403, "mailbox_unproven", "Sign in with your email to switch teams.")
   const target = await deps.store.getMember(body.memberId)
   const claim = target?.status === "active" ? await deps.store.getClaim(target.claim_id) : null
   // Same person: the address that proved itself for this session.
   if (!target || !claim || claim.status !== "active" || !claim.verified_at || !acct.member.email || target.email !== acct.member.email) {
     return fail(404, "not_found", "No such account.")
   }
-  return reply(200, { ok: true, domain: claim.domain }, [signedCookie(deps.secret, SESSION_COOKIE, target.id, deps.now(), SESSION_TTL_MS)])
+  return reply(200, { ok: true, domain: claim.domain }, [sessionCookie(deps, target.id, true, deps.now())])
 }
 
 const POST_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Response>> = {

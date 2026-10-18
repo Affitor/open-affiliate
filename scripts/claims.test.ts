@@ -961,10 +961,10 @@ test("sign-in codes: five wrong guesses lock the code; an expired code fails", a
 test("teammates: same-domain addresses only, up to the cap, each gets one notice", async () => {
   const t = setup()
   await owner(t)
-  assert.equal((await t.call("member-add", { email: "pal@gmail.com" })).status, 400)
-  assert.equal((await t.call("member-add", { email: "pal@mail.kymaapi.com" })).status, 400, "subdomain refused like a claim")
-  for (const name of ["ann", "bo", "cy"]) assert.equal((await t.call("member-add", { email: `${name}@kymaapi.com` })).status, 200, name)
-  const full = await t.call("member-add", { email: "dee@kymaapi.com" })
+  assert.equal((await t.call("member-add", { domain: "kymaapi.com", email: "pal@gmail.com" })).status, 400)
+  assert.equal((await t.call("member-add", { domain: "kymaapi.com", email: "pal@mail.kymaapi.com" })).status, 400, "subdomain refused like a claim")
+  for (const name of ["ann", "bo", "cy"]) assert.equal((await t.call("member-add", { domain: "kymaapi.com", email: `${name}@kymaapi.com` })).status, 200, name)
+  const full = await t.call("member-add", { domain: "kymaapi.com", email: "dee@kymaapi.com" })
   assert.equal(full.status, 409)
   assert.equal(full.body.error, "team_full")
   assert.equal((await t.store.listMembers([...t.store.claims.keys()][0])).length, MAX_MEMBERS)
@@ -977,7 +977,7 @@ test("a teammate signs in with their own address; removing them ends their sessi
   const t = setup()
   await owner(t)
   const ownerJar = new Map(t.jar)
-  await t.call("member-add", { email: "ann@kymaapi.com" })
+  await t.call("member-add", { domain: "kymaapi.com", email: "ann@kymaapi.com" })
   const annJar = new Map<string, string>()
   await signinRequest(t, "ann@kymaapi.com", { cookies: annJar, ip: "198.51.100.40" })
   const annMail = t.sent.filter((m) => m.template === "signin-code").at(-1)!
@@ -987,8 +987,8 @@ test("a teammate signs in with their own address; removing them ends their sessi
   assert.equal(acct.body.signedIn, true)
   const annId = (acct.body.members as { id: string; you: boolean }[]).find((m) => m.you)!.id
 
-  assert.equal((await t.call("member-remove", { memberId: annId }, { cookies: annJar })).status, 400, "cannot remove yourself")
-  assert.equal((await t.call("member-remove", { memberId: annId }, { cookies: ownerJar })).status, 200)
+  assert.equal((await t.call("member-remove", { domain: "kymaapi.com", memberId: annId }, { cookies: annJar })).status, 400, "cannot remove yourself")
+  assert.equal((await t.call("member-remove", { domain: "kymaapi.com", memberId: annId }, { cookies: ownerJar })).status, 200)
   assert.deepEqual((await t.call("account", null, { method: "GET", cookies: annJar })).body, { signedIn: false })
   assert.equal((await t.call("terms", { slug: "kyma-api", terms: { rate: "20%", type: "recurring" } }, { cookies: annJar })).status, 401)
   const removed = (await t.store.getMember(annId))!
@@ -999,8 +999,8 @@ test("release signs every member out and forgets every address", async () => {
   const t = setup()
   await owner(t)
   const ownerJar = new Map(t.jar)
-  await t.call("member-add", { email: "ann@kymaapi.com" })
-  assert.equal((await t.call("release", {}, { cookies: ownerJar })).status, 200)
+  await t.call("member-add", { domain: "kymaapi.com", email: "ann@kymaapi.com" })
+  assert.equal((await t.call("release", { domain: "kymaapi.com" }, { cookies: ownerJar })).status, 200)
   for (const m of t.store.members.values()) {
     assert.equal(m.status, "removed")
     assert.equal(m.email, null)
@@ -1021,24 +1021,71 @@ async function dnsClaim(t: ReturnType<typeof setup>, slug: string, domain: strin
   return { r, jar }
 }
 
-test("one address on two teams: claiming a second domain works, and sign-in can switch between them", async () => {
+test("one address on two teams: a mailbox-proven session can switch, a DNS session cannot", async () => {
   const t = setup()
   await owner(t)
   // The same person proves build2own.dev by DNS with their kymaapi.com address.
   const { r, jar } = await dnsClaim(t, "build-to-own-replay", "build2own.dev", "me@kymaapi.com", "198.51.100.60")
   assert.equal(r.status, 200, "no cross-team refusal: it would tell a domain owner whether an address is on some team")
-  const acct = await t.call("account", null, { method: "GET", cookies: jar })
-  assert.equal(acct.body.domain, "build2own.dev")
-  const others = acct.body.otherAccounts as { memberId: string; domain: string }[]
-  assert.deepEqual(others.map((o) => o.domain), ["kymaapi.com"])
-  assert.equal((await t.call("account-switch", { memberId: others[0].memberId }, { cookies: jar })).status, 200)
-  assert.equal((await t.call("account", null, { method: "GET", cookies: jar })).body.domain, "kymaapi.com")
-  // Switching needs the same address: another team's member id is refused.
-  const ann = await t.call("member-add", { email: "ann@kymaapi.com" }, { cookies: jar })
-  assert.equal(ann.status, 200)
-  const annId = (await t.store.findActiveMembers("ann@kymaapi.com"))[0].id
-  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: new Map() })).status, 401, "no session, no switch")
-  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: jar })).status, 404, "another person's membership")
+  const dnsView = await t.call("account", null, { method: "GET", cookies: jar })
+  assert.equal(dnsView.body.domain, "build2own.dev")
+  assert.deepEqual(dnsView.body.otherAccounts, [], "a DNS record proves the domain, not the address")
+  const kymaMember = [...t.store.members.values()].find((m) => m.email === "me@kymaapi.com" && m.claim_id !== [...t.store.claims.values()].find((c) => c.domain === "build2own.dev")!.id)!
+  assert.equal((await t.call("account-switch", { memberId: kymaMember.id }, { cookies: jar })).status, 403)
+  // Signing in with the address proves the mailbox: now both teams are reachable.
+  const fresh = new Map<string, string>()
+  await signinRequest(t, "me@kymaapi.com", { cookies: fresh, ip: "198.51.100.62" })
+  assert.equal((await t.call("signin-verify", { code: signinCodeOf(t.sent.filter((m) => m.template === "signin-code").at(-1)!) }, { cookies: fresh })).status, 200)
+  const view = await t.call("account", null, { method: "GET", cookies: fresh })
+  assert.equal(view.body.domain, "kymaapi.com", "sign-in goes to the oldest team")
+  const others = view.body.otherAccounts as { memberId: string; domain: string }[]
+  assert.deepEqual(others.map((o) => o.domain), ["build2own.dev"])
+  assert.equal((await t.call("account-switch", { memberId: others[0].memberId }, { cookies: fresh })).status, 200)
+  assert.equal((await t.call("account", null, { method: "GET", cookies: fresh })).body.domain, "build2own.dev")
+  // Switching needs the same address: another person's membership is refused.
+  await t.call("member-add", { domain: "build2own.dev", email: "ann@build2own.dev" }, { cookies: fresh })
+  const annId = (await t.store.findActiveMembers("ann@build2own.dev"))[0].id
+  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: fresh })).status, 404)
+  assert.equal((await t.call("account-switch", { memberId: annId }, { cookies: new Map() })).status, 401)
+})
+
+test("DNS proof of one domain cannot reach a victim's team through their address", async () => {
+  const t = setup()
+  await owner(t) // victim: me@kymaapi.com runs the kymaapi.com team
+  const victimMember = [...t.store.members.values()][0]
+  // Attacker controls build2own.dev's DNS and types the victim's address as contact.
+  const { r, jar } = await dnsClaim(t, "build-to-own-replay", "build2own.dev", "me@kymaapi.com", "198.51.100.70")
+  assert.equal(r.status, 200)
+  const view = await t.call("account", null, { method: "GET", cookies: jar })
+  assert.deepEqual(view.body.otherAccounts, [])
+  assert.equal(JSON.stringify(view.body).includes(victimMember.id), false, "the victim's membership id never reaches the attacker")
+  assert.equal((await t.call("account-switch", { memberId: victimMember.id }, { cookies: jar })).status, 403)
+  for (const [action, body] of [
+    ["member-remove", { domain: "kymaapi.com", memberId: victimMember.id }],
+    ["release", { domain: "kymaapi.com" }],
+    ["terms", { slug: "kyma-api", terms: { rate: "1%", type: "recurring" } }],
+  ] as const) {
+    assert.notEqual((await t.call(action, body, { cookies: jar })).status, 200, action)
+  }
+  assert.equal([...t.store.claims.values()].find((c) => c.domain === "kymaapi.com")!.status, "active")
+  assert.equal(t.store.edits.length, 0)
+})
+
+test("a page acting on the account it shows: a session switched in another tab is refused, not redirected", async () => {
+  const t = setup()
+  await owner(t)
+  // The session now belongs to kymaapi.com; a stale tab still thinks it shows build2own.dev.
+  for (const [action, body] of [
+    ["release", { domain: "build2own.dev" }],
+    ["release", { slug: "build-to-own-replay" }],
+    ["member-add", { domain: "build2own.dev", email: "x@kymaapi.com" }],
+  ] as const) {
+    const r = await t.call(action, body)
+    assert.equal(r.status, 409, action)
+    assert.equal(r.body.error, "account_changed")
+  }
+  assert.equal([...t.store.claims.values()][0].status, "active")
+  assert.equal((await t.call("release", {})).status, 400, "release must name the account")
 })
 
 test("a claim's own copy of the address is cleared at confirm; members hold the only copy", async () => {
@@ -1054,14 +1101,14 @@ test("two members removing each other at once: exactly one wins, the team keeps 
   const t = setup()
   await owner(t)
   const ownerJar = new Map(t.jar)
-  await t.call("member-add", { email: "ann@kymaapi.com" })
+  await t.call("member-add", { domain: "kymaapi.com", email: "ann@kymaapi.com" })
   const annJar = new Map<string, string>()
   await signinRequest(t, "ann@kymaapi.com", { cookies: annJar, ip: "198.51.100.70" })
   await t.call("signin-verify", { code: signinCodeOf(t.sent.filter((m) => m.template === "signin-code").at(-1)!) }, { cookies: annJar })
   const ids = Object.fromEntries([...t.store.members.values()].map((m) => [m.email, m.id]))
   const [a, b] = await Promise.all([
-    t.call("member-remove", { memberId: ids["ann@kymaapi.com"] }, { cookies: ownerJar }),
-    t.call("member-remove", { memberId: ids["me@kymaapi.com"] }, { cookies: annJar }),
+    t.call("member-remove", { domain: "kymaapi.com", memberId: ids["ann@kymaapi.com"] }, { cookies: ownerJar }),
+    t.call("member-remove", { domain: "kymaapi.com", memberId: ids["me@kymaapi.com"] }, { cookies: annJar }),
   ])
   assert.deepEqual([a.status, b.status].sort(), [200, 401])
   assert.equal((await t.store.listMembers([...t.store.claims.keys()][0])).length, 1)
@@ -1081,7 +1128,7 @@ test("only allow-listed templates leave the live sender; the template is set on 
   t.jar.clear()
   await signinRequest(t, "me@kymaapi.com")
   await t.call("signin-verify", { code: signinCodeOf(t.sent.at(-1)!) })
-  await t.call("member-add", { email: "ann@kymaapi.com" })
+  await t.call("member-add", { domain: "kymaapi.com", email: "ann@kymaapi.com" })
   for (const m of t.sent) assert.ok((MAIL_TEMPLATES as readonly string[]).includes(m.template), m.template)
 
   const deps = liveClaimDeps(() => undefined, () => [], () => {}, FULL_ENV)!
@@ -1126,12 +1173,12 @@ test("a member's sign-in answer does not wait for the mail; a failed send gives 
 test("adding an address works whether or not it is on another team; only your own team says 'already'", async () => {
   const t = setup()
   await owner(t)
-  await t.call("member-add", { email: "ann@kymaapi.com" })
-  const again = await t.call("member-add", { email: "ANN@kymaapi.com" })
+  await t.call("member-add", { domain: "kymaapi.com", email: "ann@kymaapi.com" })
+  const again = await t.call("member-add", { domain: "kymaapi.com", email: "ANN@kymaapi.com" })
   assert.equal(again.body.error, "already_member")
   // bo@kymaapi.com is DNS member 1 of build2own.dev; adding them to kymaapi.com still just works.
   await dnsClaim(t, "build-to-own-replay", "build2own.dev", "bo@kymaapi.com", "198.51.100.80")
-  assert.equal((await t.call("member-add", { email: "bo@kymaapi.com" })).status, 200)
+  assert.equal((await t.call("member-add", { domain: "kymaapi.com", email: "bo@kymaapi.com" })).status, 200)
 })
 
 test("sign-in looks nothing up about the address before the response is sent", async () => {

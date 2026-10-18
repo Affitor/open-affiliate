@@ -259,7 +259,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
                       className={quiet}
                       disabled={busy}
                       aria-label={`Remove ${m.email}`}
-                      onClick={() => void call("member-remove", { memberId: m.id }, load)}
+                      onClick={() => void call("member-remove", { domain: account.domain, memberId: m.id }, load)}
                     >
                       Remove
                     </button>
@@ -283,7 +283,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
                   className={outline}
                   disabled={busy || !teammate.trim()}
                   onClick={() =>
-                    void call("member-add", { email: teammate }, async () => {
+                    void call("member-add", { domain: account.domain, email: teammate }, async () => {
                       setTeammate("");
                       setNote("Added. They can sign in with their own address.");
                       await load();
@@ -325,7 +325,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
             </p>
             {confirmRelease ? (
               <div className="flex flex-wrap items-center gap-3">
-                <button className={primary} disabled={busy} onClick={() => void call("release", {}, () => { setAccount(null); setStep("released"); })}>
+                <button className={primary} disabled={busy} onClick={() => void call("release", { domain: account.domain }, () => { setAccount(null); setStep("released"); })}>
                   Release
                 </button>
                 <button className={quiet} onClick={() => setConfirmRelease(false)}>Cancel</button>
