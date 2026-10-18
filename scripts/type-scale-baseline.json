@@ -1,5 +1,5 @@
 {
-  "total": 141,
+  "total": 124,
   "files": {
     "src/app/about/page.tsx": 1,
     "src/app/account/account-flow.tsx": 8,
@@ -24,7 +24,6 @@
     "src/app/programs/[slug]/claim/claim-flow.tsx": 2,
     "src/app/programs/[slug]/claim/page.tsx": 2,
     "src/app/programs/programs-view.tsx": 17,
-    "src/app/rankings/rankings-client.tsx": 17,
     "src/app/submit/page.tsx": 2,
     "src/components/best-list-view.tsx": 7,
     "src/components/code-block.tsx": 1,

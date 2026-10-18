@@ -105,21 +105,21 @@ function useContentData(initial: ContentData[]) {
 function RankBadge({ rank }: { rank: number }) {
   if (rank === 1) {
     return (
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-amber-500/15 text-amber-500 text-xs font-bold">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line-strong font-mono text-xs font-semibold text-foreground">
         1
       </span>
     );
   }
   if (rank === 2) {
     return (
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-zinc-400/15 text-zinc-400 text-xs font-bold">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line-strong font-mono text-xs font-semibold text-foreground">
         2
       </span>
     );
   }
   if (rank === 3) {
     return (
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-orange-500/15 text-orange-500 text-xs font-bold">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full border border-line-strong font-mono text-xs font-semibold text-foreground">
         3
       </span>
     );
@@ -135,23 +135,23 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
   const medals = [
     {
       icon: Trophy,
-      border: "border-amber-500/30",
-      bg: "bg-amber-500/5",
-      text: "text-amber-500",
+      border: "border-border",
+      bg: "bg-card",
+      text: "text-foreground",
       label: "1st",
     },
     {
       icon: Medal,
-      border: "border-zinc-400/30",
-      bg: "bg-zinc-400/5",
-      text: "text-zinc-400",
+      border: "border-border",
+      bg: "bg-card",
+      text: "text-foreground",
       label: "2nd",
     },
     {
       icon: Award,
-      border: "border-orange-500/30",
-      bg: "bg-orange-500/5",
-      text: "text-orange-500",
+      border: "border-border",
+      bg: "bg-card",
+      text: "text-foreground",
       label: "3rd",
     },
   ];
@@ -186,7 +186,7 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
                   {program.verified && (
                     <Badge
                       variant="outline"
-                      className="text-[10px] px-1.5 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
+                      className="text-xs px-1.5 py-0 border-good-line bg-good-bg text-good shrink-0"
                     >
                       verified
                     </Badge>
@@ -198,7 +198,7 @@ function TopThreeCards({ top3 }: { top3: Program[] }) {
               </div>
             </div>
             <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
+              <Badge className="font-mono text-xs bg-card text-foreground border-line-strong">
                 {commissionDisplay(program.commission)}{" "}
                 {commissionLabel(program.commission)}
               </Badge>
@@ -233,7 +233,7 @@ function SortHeader({
   const isActive = activeColumn === column;
   return (
     <th
-      className={`py-3 px-3 text-[11px] font-medium uppercase tracking-wide cursor-pointer select-none transition-colors hover:text-foreground ${
+      className={`py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] cursor-pointer select-none transition-colors hover:text-foreground ${
         isActive ? "text-foreground" : "text-muted-foreground"
       } ${className ?? ""}`}
       onClick={() => onSort(column)}
@@ -338,7 +338,7 @@ function ProgramsTable({
   return (
     <div className="rounded-xl border border-border/40 overflow-hidden">
       <div className="px-4 py-2.5 border-b border-border/20 bg-muted/10">
-        <p className="text-[10px] text-muted-foreground/70">
+        <p className="text-xs text-muted-foreground/70">
           Content data from AI-scored reviews, tutorials, and affiliate posts across YouTube, TikTok, Reddit, and blogs.{" "}
           <Link href="/docs/sift-scoring" className="underline hover:text-foreground">How scoring works</Link>
         </p>
@@ -347,7 +347,7 @@ function ProgramsTable({
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b border-border/40 bg-muted/30">
-              <th className="w-10 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">
+              <th className="w-10 py-3 px-3 text-center font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em]">
                 #
               </th>
               <SortHeader
@@ -390,10 +390,10 @@ function ProgramsTable({
                 onSort={handleSort}
                 className="text-center hidden sm:table-cell"
               />
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">
+              <th className="py-3 px-3 text-left font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em] hidden md:table-cell">
                 Format
               </th>
-              <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">
+              <th className="py-3 px-3 text-left font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em] hidden md:table-cell">
                 Platform
               </th>
             </tr>
@@ -423,11 +423,11 @@ function ProgramsTable({
                       />
                       <div className="min-w-0">
                         <div className="flex items-center gap-1.5">
-                          <span className="text-sm font-medium truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                          <span className="text-sm font-medium truncate group-hover:underline underline-offset-4 transition-colors">
                             {p.name}
                           </span>
                           {p.verified && (
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                            <CheckCircle2 className="h-3.5 w-3.5 text-good shrink-0" />
                           )}
                         </div>
                         <span className="text-xs text-muted-foreground">
@@ -440,20 +440,14 @@ function ProgramsTable({
                     </Link>
                   </td>
                   <td className="py-3 px-3 hidden sm:table-cell">
-                    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 line-clamp-2">
+                    <span className="font-mono text-sm font-medium text-foreground line-clamp-2">
                       {commissionDisplay(p.commission)}
                     </span>
                   </td>
                   <td className="py-3 px-3 text-center">
                     {contentLoaded ? (
                       <span
-                        className={`text-sm font-semibold tabular-nums ${
-                          item.verifiedContent >= 10
-                            ? "text-emerald-600 dark:text-emerald-400"
-                            : item.verifiedContent >= 3
-                              ? "text-amber-600 dark:text-amber-400"
-                              : "text-muted-foreground"
-                        }`}
+                        className={`font-mono text-sm tabular-nums ${item.verifiedContent >= 3 ? "text-foreground" : "text-muted-foreground"}`}
                       >
                         {hasContent ? item.verifiedContent : "—"}
                       </span>
@@ -464,20 +458,12 @@ function ProgramsTable({
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
                     {contentLoaded && hasContent ? (
                       <span
-                        className={`inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-medium tabular-nums ${
-                          item.avgSiftScore >= 7
-                            ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-                            : item.avgSiftScore >= 5
-                              ? "bg-amber-500/10 text-amber-600 dark:text-amber-400"
-                              : item.avgSiftScore >= 3
-                                ? "bg-orange-500/10 text-orange-600 dark:text-orange-400"
-                                : "bg-red-500/10 text-red-500"
-                        }`}
+                        className="inline-flex items-center rounded-sm border border-line-strong px-1.5 py-0.5 font-mono text-xs font-medium tabular-nums"
                       >
                         {item.avgSiftScore}
                       </span>
                     ) : contentLoaded ? (
-                      <span className="text-[10px] text-muted-foreground/30">—</span>
+                      <span className="text-xs text-muted-foreground/30">—</span>
                     ) : (
                       <span className="text-xs text-muted-foreground/30">...</span>
                     )}
@@ -536,13 +522,13 @@ function ProgramsTable({
         </div>
       )}
       <div className="px-4 py-3 border-t border-border/20 flex items-center justify-between">
-        <span className="text-[10px] text-muted-foreground/60">
+        <span className="text-xs text-muted-foreground/60">
           showing {sorted.length === 0 ? 0 : activePage * DEFAULT_VISIBLE + 1}-
           {activePage * DEFAULT_VISIBLE + visible.length} of {sorted.length} programs
         </span>
         <Link
           href="/explore"
-          className="text-[10px] text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
+          className="text-xs text-muted-foreground hover:text-foreground transition-colors inline-flex items-center gap-1"
         >
           Explore all content <ExternalLink className="h-2.5 w-2.5" />
         </Link>
@@ -556,7 +542,7 @@ function ProgramsTable({
 // Rows come from groupRow (src/lib/programs.ts): percentage rates and flat
 // US-dollar payouts in separate columns, unconfirmed figures marked.
 
-const GROUP_HEAD = "py-3 px-3 text-[11px] font-medium text-muted-foreground uppercase tracking-wide";
+const GROUP_HEAD = "py-3 px-3 font-mono text-xs font-medium text-muted-foreground uppercase tracking-[0.08em]";
 
 function GroupHead({ label }: { label: string }) {
   return (
@@ -580,15 +566,15 @@ function PaidCell({ paid, className }: { paid: PaidFigure | null; className: str
         <Link
           href={`/programs/${paid.slug}`}
           onClick={(e) => e.stopPropagation()}
-          className="flex items-center gap-2 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+          className="flex items-center gap-2 hover:underline underline-offset-4 transition-colors"
         >
-          <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums">
+          <span className="font-mono text-sm font-medium text-foreground tabular-nums">
             {paid.display}
           </span>
           <ProgramLogo slug={paid.slug} name={paid.name} size={20} />
           <span className="text-xs font-medium truncate">{paid.name}</span>
           {paid.unconfirmed && (
-            <span className="text-[10px] text-muted-foreground shrink-0">{UNCONFIRMED}</span>
+            <span className="text-xs text-muted-foreground shrink-0">{UNCONFIRMED}</span>
           )}
         </Link>
       ) : (
@@ -607,7 +593,7 @@ function GroupCells({ row }: { row: GroupRow }) {
       <td className="py-3 px-3 text-center hidden sm:table-cell">
         <span className="text-sm text-muted-foreground tabular-nums">{row.avgRate}</span>
         {row.avgBasis && (
-          <span className="block text-[10px] leading-tight text-muted-foreground/70">{row.avgBasis}</span>
+          <span className="block text-xs leading-tight text-muted-foreground/70">{row.avgBasis}</span>
         )}
       </td>
       <PaidCell paid={row.topRate} className="hidden sm:table-cell" />
@@ -635,7 +621,7 @@ function NetworksTable({ rows }: { rows: GroupRow[] }) {
                   <RankBadge rank={i + 1} />
                 </td>
                 <td className="py-3 px-3">
-                  <span className="text-sm font-medium group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                  <span className="text-sm font-medium group-hover:underline underline-offset-4 transition-colors">
                     {networkName(row.name)}
                   </span>
                 </td>
@@ -668,7 +654,7 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
                   <Link
                     href={`/programs?category=${encodeURIComponent(row.name)}`}
                     prefetch={false}
-                    className="text-sm font-medium hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                    className="text-sm font-medium hover:underline underline-offset-4 transition-colors"
                   >
                     {row.name}
                   </Link>
@@ -818,12 +804,12 @@ export default function RankingsClient({
   ];
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10">
+    <div className="oa-frame px-4 py-10 sm:px-12">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-2">
-          <ArrowUpDown className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-          <h1 className="text-2xl font-bold tracking-tight">
+          <ArrowUpDown className="h-5 w-5 text-muted-foreground" />
+          <h1 className="text-title md:text-display font-semibold tracking-[-0.03em]">
             Affiliate Program Rankings
           </h1>
         </div>
@@ -849,7 +835,7 @@ export default function RankingsClient({
             }`}
           >
             {tab.label}
-            <span className="ml-1.5 text-[10px] text-muted-foreground/60">
+            <span className="ml-1.5 text-xs text-muted-foreground/60">
               {tab.count}
             </span>
           </button>
@@ -910,7 +896,7 @@ export default function RankingsClient({
               onClick={() => setVerifiedOnly(!verifiedOnly)}
               className={`rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
                 verifiedOnly
-                  ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                  ? "border-primary bg-primary text-primary-foreground"
                   : "border-border/50 bg-card/50 text-muted-foreground hover:border-border"
               }`}
             >
@@ -937,7 +923,7 @@ export default function RankingsClient({
                 </span>
                 <button
                   onClick={clearFilters}
-                  className="text-[11px] text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
                 >
                   Clear all
                 </button>
