@@ -9,8 +9,9 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { isLive, programs, type Program } from "../src/lib/programs"
-import { programs as clientPrograms } from "../src/lib/client-programs"
+import { commissionUnknown, getProgram, isLive, programs, type Program } from "../src/lib/programs"
+import { programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
+import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 
 const root = join(__dirname, "..")
 const flat = (groups: ReturnType<typeof directoryGroups>) => groups.flatMap((g) => g.programs.map((p) => p.slug))
@@ -119,3 +120,28 @@ test("every <Link> to /programs, in every source file, opts out of prefetch", ()
   assert.equal(programsLinkProblems('<Link href="/programs/vercel">').links, 0)
   assert.equal(programsLinkProblems('const a = [{ href: "/programs" }]; <Link href={href} className="x">').problems.length, 1)
 })
+
+// The /programs payout and cookie filters and the hub lists read the same
+// facts (payout-filters.ts), so a hub and the filter it links to agree.
+test("each hub's /programs filter returns the hub's programs and only confirmed terms", () => {
+  const options: Record<string, Parameters<typeof searchPrograms>[0]> = {
+    "payout=paypal": { payout: "paypal" },
+    "payout=bank": { payout: "bank" },
+    "minpayout=0": { noMinimum: true },
+    "cookie=90": { longCookie: true },
+  }
+  const hubs = BEST_LISTS.filter((l) => l.filter && options[l.filter])
+  assert.equal(hubs.length, Object.keys(options).length)
+  for (const list of hubs) {
+    const client = new Set(searchPrograms(options[list.filter!]).map((p) => p.slug))
+    const hub = buildBestList(list).verified.map((p) => p.slug)
+    for (const slug of hub) assert.ok(client.has(slug), `${list.slug}: ${slug} missing from /programs?${list.filter}`)
+    for (const slug of client) {
+      const p = getProgram(slug)!
+      assert.ok(p.verified, `${list.filter}: unverified ${slug}`)
+      // The hub ranks only programs that publish a commission; the filter lists them all.
+      assert.ok(hub.includes(slug) || commissionUnknown(p.commission), `${list.filter}: ${slug} is not on ${list.slug}`)
+    }
+  }
+})
+

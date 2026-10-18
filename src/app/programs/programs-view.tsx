@@ -33,6 +33,7 @@ import {
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
 import { track } from "@/lib/track";
+import { LONG_COOKIE_DAYS, type PayoutMethodFilter } from "@/lib/payout-filters";
 import { ImpressionTracker } from "@/components/impression-tracker";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
@@ -51,6 +52,22 @@ const COMMISSION_TYPE_LABELS: Record<string, string> = {
   tiered: "Tiered",
   hybrid: "Hybrid",
 };
+
+/** Payout and cookie filters: the facts the hub lists filter on (payout-filters.ts). */
+const PAYOUT_OPTIONS = [
+  { value: "", label: "Any Payout Method" },
+  { value: "paypal", label: "PayPal" },
+  { value: "bank", label: "Bank Transfer" },
+];
+const MIN_PAYOUT_OPTIONS = [
+  { value: "", label: "Any Minimum" },
+  { value: "0", label: "No Minimum Payout" },
+];
+const COOKIE_OPTIONS = [
+  { value: "", label: "Any Cookie" },
+  { value: String(LONG_COOKIE_DAYS), label: `${LONG_COOKIE_DAYS}+ Day Cookie` },
+];
+const optionValue = (options: { value: string }[], v: string | null) => (options.some((o) => o.value === v) ? v! : "");
 
 type ViewMode = "grid" | "list";
 
@@ -228,6 +245,9 @@ function ProgramsContent() {
   const [selectedNetwork, setSelectedNetwork] = useState(
     searchParams.get("network") ?? ""
   );
+  const [selectedPayout, setSelectedPayout] = useState(optionValue(PAYOUT_OPTIONS, searchParams.get("payout")));
+  const [minPayout, setMinPayout] = useState(optionValue(MIN_PAYOUT_OPTIONS, searchParams.get("minpayout")));
+  const [cookie, setCookie] = useState(optionValue(COOKIE_OPTIONS, searchParams.get("cookie")));
   const [sort, setSort] = useState<SortOption>(
     (searchParams.get("sort") as SortOption) ?? "relevance"
   );
@@ -275,10 +295,13 @@ function ProgramsContent() {
       category: selectedCategory,
       type: selectedType,
       network: selectedNetwork,
+      payout: selectedPayout,
+      minpayout: minPayout,
+      cookie,
       sort: sort === "relevance" ? "" : sort,
       size: pageSize === 25 ? "" : String(pageSize),
     }),
-    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, pageSize]
   );
 
   const setPage = useCallback(
@@ -293,12 +316,15 @@ function ProgramsContent() {
   );
 
   const updateFilters = useCallback(
-    (updates: Partial<{ q: string; category: string; type: string; network: string; sort: string }>) => {
+    (updates: Partial<{ q: string; category: string; type: string; network: string; payout: string; minpayout: string; cookie: string; sort: string }>) => {
       const next = {
         q: updates.q ?? query,
         category: updates.category ?? selectedCategory,
         type: updates.type ?? selectedType,
         network: updates.network ?? selectedNetwork,
+        payout: updates.payout ?? selectedPayout,
+        minpayout: updates.minpayout ?? minPayout,
+        cookie: updates.cookie ?? cookie,
         sort: updates.sort ?? sort,
         // Keep the reader's page-size choice; drop page, since a changed
         // filter makes the old page number meaningless.
@@ -308,7 +334,7 @@ function ProgramsContent() {
       if (next.sort === "relevance") next.sort = "";
       syncUrl(next);
     },
-    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize, syncUrl]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, pageSize, syncUrl]
   );
 
   const filtered = useMemo(
@@ -318,10 +344,13 @@ function ProgramsContent() {
         category: selectedCategory || undefined,
         commissionType: selectedType || undefined,
         network: selectedNetwork || undefined,
+        payout: (selectedPayout || undefined) as PayoutMethodFilter | undefined,
+        noMinimum: minPayout === "0" || undefined,
+        longCookie: cookie !== "" || undefined,
         sort,
         verified: verifiedOnly || undefined,
       }),
-    [query, selectedCategory, selectedType, selectedNetwork, sort, verifiedOnly]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, verifiedOnly]
   );
 
   // Debounced search tracking
@@ -366,17 +395,41 @@ function ProgramsContent() {
     updateFilters({ network: net });
     if (net) track("filter", { metadata: { filter: "network", value: net } });
   };
+  const handlePayout = (v: string) => {
+    setSelectedPayout(v);
+    updateFilters({ payout: v });
+    if (v) track("filter", { metadata: { filter: "payout", value: v } });
+  };
+  const handleMinPayout = (v: string) => {
+    setMinPayout(v);
+    updateFilters({ minpayout: v });
+    if (v) track("filter", { metadata: { filter: "minpayout", value: v } });
+  };
+  const handleCookie = (v: string) => {
+    setCookie(v);
+    updateFilters({ cookie: v });
+    if (v) track("filter", { metadata: { filter: "cookie", value: v } });
+  };
   const clearAll = () => {
     setQuery("");
     setSelectedCategory("");
     setSelectedType("");
     setSelectedNetwork("");
+    setSelectedPayout("");
+    setMinPayout("");
+    setCookie("");
     setVerifiedOnly(false);
     setSort("relevance");
     syncUrl({});
   };
 
-  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork || verifiedOnly);
+  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork || selectedPayout || minPayout || cookie || verifiedOnly);
+  // One chip per payout or cookie filter that is on, labelled as in its select.
+  const termChips = [
+    { value: selectedPayout, options: PAYOUT_OPTIONS, clear: () => handlePayout("") },
+    { value: minPayout, options: MIN_PAYOUT_OPTIONS, clear: () => handleMinPayout("") },
+    { value: cookie, options: COOKIE_OPTIONS, clear: () => handleCookie("") },
+  ].filter((c) => c.value);
 
   // Category options with counts
   const categoryOptions = [
@@ -467,6 +520,9 @@ function ProgramsContent() {
           onChange={handleNetwork}
           options={networkOptions}
         />
+        <FilterSelect label="Payout Method" value={selectedPayout} onChange={handlePayout} options={PAYOUT_OPTIONS} />
+        <FilterSelect label="Minimum Payout" value={minPayout} onChange={handleMinPayout} options={MIN_PAYOUT_OPTIONS} />
+        <FilterSelect label="Cookie Window" value={cookie} onChange={handleCookie} options={COOKIE_OPTIONS} />
         <FilterSelect
           label="Sort"
           value={sort}
@@ -564,6 +620,16 @@ function ProgramsContent() {
                 <X className="h-3 w-3" />
               </button>
             )}
+            {termChips.map((c) => (
+              <button
+                key={c.options[0].label}
+                onClick={c.clear}
+                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                {c.options.find((o) => o.value === c.value)?.label}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
             <button
               onClick={clearAll}
               className="text-[11px] text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
