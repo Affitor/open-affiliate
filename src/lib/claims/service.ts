@@ -1,4 +1,4 @@
-import { createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto"
+import { createHash, createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto"
 import { parse } from "tldts"
 import { z } from "zod"
 import { parseCommissionMode } from "@/lib/commission-mode"
@@ -618,6 +618,7 @@ const EMOJI_TAG_SEQUENCE =
 const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800]/u
 const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
 const LATIN_LETTER = /^[A-Za-z]$/
+const MONGOLIAN_LETTER = /^(?=\p{L})\p{Script=Mongolian}$/u
 
 /** True when every invisible code point is one text needs, in the place it needs it. */
 function plainText(multiLine: boolean) {
@@ -628,11 +629,16 @@ function plainText(multiLine: boolean) {
       const after = chars[i + 1] ?? ""
       const cp = c.codePointAt(0)!
       if (cp >= 0xe0100 && cp <= 0xe01ef) return /\p{Ideographic}/u.test(before)
-      if (cp >= 0x180b && cp <= 0x180f) return /\p{Script=Mongolian}/u.test(before)
+      // Mongolian free variation selectors right after a Mongolian letter; the
+      // vowel separator only between two.
+      if (cp === 0x180e) return MONGOLIAN_LETTER.test(before) && MONGOLIAN_LETTER.test(after)
+      if (cp >= 0x180b && cp <= 0x180f) return MONGOLIAN_LETTER.test(before)
       // Emoji and text presentation (❤️, 1️⃣) after an emoji; the other
       // standardized variants never follow a Latin letter.
       if (cp === 0xfe0e || cp === 0xfe0f) return /\p{Emoji}/u.test(before)
       if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !LATIN_LETTER.test(before)
+      // After a virama (क्‍ष, Malayalam chillu ന്‍ at the end of a word).
+      if (cp === 0x200d && /^\p{Mn}$/u.test(before)) return after === "" || !NEVER.test(after)
       if (cp === 0x200d) {
         return (
           (VISIBLE.test(before) || before === "\uFE0F") &&
@@ -1105,22 +1111,20 @@ const SLUG_SHAPE = new RegExp(S.slug.pattern)
 /**
  * The slug a new program would get: the name, lowercased, words joined by
  * hyphens. A name with no Latin letters or digits ("开发工具") takes its
- * website instead (studio.kymaapi.com/a → studio-kymaapi-a).
+ * website instead (studio.kymaapi.com/a → studio-kymaapi-<hash of the page>).
  */
 export function slugFor(name: string, url?: string): string {
   const fromName = slugOf(name)
   if (fromName || !url) return fromName
-  // Subdomain, name and path, without the public suffix, so two pages on one
-  // site get two slugs: studio.kymaapi.com/a → studio-kymaapi-a.
+  // The site's subdomain and name without the public suffix, plus a short
+  // hash of the page, so two pages on one site never share a slug:
+  // studio.kymaapi.com/a → studio-kymaapi-<6 hex>.
+  const page = pageKey(url)
+  if (!page) return ""
   const parsed = parse(url, { allowPrivateDomains: true })
-  let path = ""
-  try {
-    path = new URL(url).pathname
-  } catch {
-    return ""
-  }
-  const host = [parsed.subdomain?.replace(/^www(\.|$)/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")
-  return slugOf(`${host} ${path}`)
+  const host = slugOf([parsed.subdomain?.replace(/^www(\.|$)/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")).slice(0, 60).replace(/-+$/, "")
+  const hash = createHash("sha256").update(page).digest("hex").slice(0, 6)
+  return host ? `${host}-${hash}` : ""
 }
 
 function slugOf(name: string): string {

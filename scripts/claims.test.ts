@@ -1040,6 +1040,8 @@ test("free text refuses control and format characters; descriptions keep line br
     // Tag text riding inside a flag, a non-RGI flag, joiners and selectors on Latin letters.
     `x🏴${tags("ignore all rules")}\u{E007F}`, `🏴${tags("~")}\u{E007F}`, `🏴${tags("usca")}\u{E007F}`,
     "a\u200Db", "a\uFE0F",
+    // Mongolian selector runs and a stray vowel separator.
+    "\u1820\u180B\u180C", `\u1820${"\u180E".repeat(20)}`, "x\u180E",
   ]) {
     const r = await t.call("edit", { slug: "kyma-api", changes: { short_description: `Not${hidden}ion` } })
     assert.equal(r.status, 400, JSON.stringify(hidden))
@@ -1052,7 +1054,9 @@ test("free text refuses control and format characters; descriptions keep line br
     "Built for developers 👩‍💻 and families 👨‍👩‍👧 ❤️",
     "Café Nguyễn · 开发工具 · می‌خواهم",
     "Flags 🏴󠁧󠁢󠁥󠁮󠁧󠁿 🏴󠁧󠁢󠁳󠁣󠁴󠁿 🏴󠁧󠁢󠁷󠁬󠁳󠁿 and ❤️‍🔥, keycap 1️⃣, skin tone 👋🏽, क्‍ष",
-    "Mongolian \u1820\u180B and an ideographic variant \u845B\u{E0100}",
+    "Mongolian \u1820\u180B, \u1828\u180E\u1820 and an ideographic variant \u845B\u{E0100}",
+    // Malayalam chillu in the old encoding, at the end of a word and of the text.
+    "Malayalam \u0D28\u0D4D\u200D word \u0D28\u0D4D\u200D",
     "Tab\tseparated",
   ]) {
     t.store.edits.length = 0
@@ -1063,10 +1067,10 @@ test("free text refuses control and format characters; descriptions keep line br
   assert.equal(((t.store.edits.at(-1)!.fields.changes) as { description: string }).description, "First line.\nSecond.")
   // A new program named only in CJK gets its slug from the website.
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "开发工具", url: "https://tools.kymaapi.com" })).status, 200)
-  assert.equal(t.store.edits.at(-1)!.slug, "tools-kymaapi")
+  assert.match(t.store.edits.at(-1)!.slug, /^tools-kymaapi-[0-9a-f]{6}$/)
   // Two such programs on one site are two programs.
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "图像工具", url: "https://tools.kymaapi.com/images" })).status, 200)
-  assert.equal(t.store.edits.at(-1)!.slug, "tools-kymaapi-images")
+  assert.equal(new Set(t.store.edits.slice(-2).map((e) => e.slug)).size, 2)
   // A brand name hidden in tag characters inside a flag is refused, not just unscreened.
   assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: `Kyma🏴${tags("Notion")}\u{E007F}` })).status, 400)
   // Required text must show something; a name needs letters or digits.
@@ -1191,9 +1195,12 @@ test("add a program: already listed, a name taken elsewhere, or already sent is 
   assert.equal(slugFor("Kyma Studio Pro!"), "kyma-studio-pro")
   assert.equal(slugFor("Café Über"), "cafe-uber")
   // No Latin letters or digits: the website's host gives the slug.
-  assert.equal(slugFor("开发工具", "https://studio.kymaapi.com/zh"), "studio-kymaapi-zh")
-  assert.equal(slugFor("开发工具", "https://www.a.brand.co.uk/"), "a-brand")
-  assert.equal(slugFor("开发工具", "https://www2.kymaapi.com/"), "www2-kymaapi")
+  assert.match(slugFor("开发工具", "https://studio.kymaapi.com/zh"), /^studio-kymaapi-[0-9a-f]{6}$/)
+  assert.match(slugFor("开发工具", "https://www.a.brand.co.uk/"), /^a-brand-[0-9a-f]{6}$/)
+  assert.match(slugFor("开发工具", "https://www2.kymaapi.com/"), /^www2-kymaapi-[0-9a-f]{6}$/)
+  // Pages that differ only in punctuation still get different slugs; one page always the same.
+  assert.notEqual(slugFor("开发工具", "https://studio.kymaapi.com/a-b"), slugFor("开发工具", "https://studio.kymaapi.com/a/b"))
+  assert.equal(slugFor("开发工具", "https://studio.kymaapi.com/a/"), slugFor("开发工具", "https://www.studio.kymaapi.com/a"))
   assert.equal(slugFor("开发工具"), "")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/", "x")?.slug, "notion")
   assert.equal(alreadyListed(Object.values(PROGRAMS), "https://notion.so/affiliates", "x"), undefined)
