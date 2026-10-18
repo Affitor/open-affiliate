@@ -1,3 +1,4 @@
+import { formatPercentage } from "./commission-mode"
 import registryData from "./client-registry.json"
 import { compareCommission, compareText } from "./commission-order"
 
@@ -85,9 +86,7 @@ export function commissionDisplay(
 ): string {
   switch (commission.mode) {
     case "percentage":
-      return commission.value !== null
-        ? `${commission.value}%`
-        : "Not published"
+      return formatPercentage(commission.rate, commission.value)
     case "flat":
       return commission.value !== null
         ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
