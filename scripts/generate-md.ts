@@ -32,6 +32,7 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
+import { formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
 import {
@@ -227,7 +228,7 @@ const IN_HOUSE = "in-house"
 function rate(c: Commission): string {
   switch (c.mode) {
     case "percentage":
-      return c.value != null ? `${c.value}%` : "Not published"
+      return formatPercentage(c.rate, c.value)
     case "flat":
       if (c.value == null) return "Not published"
       // Product credit, not cash: say so, as the page does.

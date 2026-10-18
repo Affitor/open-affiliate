@@ -15,6 +15,10 @@
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
+import { readFileSync } from "node:fs"
+import { runInNewContext } from "node:vm"
+import ts from "typescript"
+import { formatPercentage } from "../src/lib/commission-mode"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
 import {
@@ -27,8 +31,9 @@ import {
   proseSentences,
   statesTerms,
 } from "../src/lib/confirmed-terms"
-import { confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
+import { commissionDisplay, confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import * as page from "../src/lib/program-page"
+import { commissionDisplay as clientCommissionDisplay } from "../src/lib/client-programs"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
 import { chunkScan, termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
@@ -691,4 +696,70 @@ test("program page follow-up r2: caps written after the amount or in the descrip
   assert.doesNotMatch(page.productText(live("vsub")), /no application/i)
   assert.doesNotMatch(page.productText(live("wix")), /\$300 monthly threshold/)
   assert.match(page.productText(live("cookieyes")), /scans sites for cookies/)
+})
+
+
+test("qualified percentage ceilings survive server, client and agent Markdown without becoming fixed earnings", () => {
+  const entry = registry.programs.find((p) => p.slug === "planday")! as Parameters<typeof programMd>[0]
+  for (const rate of ["up to 15%", "maximum 15%", "10–15%", "15% per qualified sale", "up to 15 percent", "maximum 15"]) {
+    const commission = { ...verifiedBase.commission, type: "recurring" as const, mode: "percentage" as const, rate, value: 15, duration: "12 months" }
+    assert.equal(commissionDisplay(commission), rate)
+    assert.equal(clientCommissionDisplay(commission), rate)
+    const md = programMd({ ...entry, verified: false, commission })
+    assert.ok(md.includes(`Commission: ${rate} recurring`), rate)
+    assert.equal(page.estimateInput({ ...verifiedBase, commission }), null, `${rate} must not enable the fixed-rate estimator`)
+    assert.equal(page.commissionFigure({ ...verifiedBase, commission })?.big, rate)
+    assert.equal(page.commissionFigure({ ...verifiedBase, commission })?.kind, "text")
+  }
+  const plain = { ...verifiedBase.commission, mode: "percentage" as const, rate: "30%", value: 30 }
+  assert.equal(commissionDisplay(plain), "30%")
+  assert.equal(clientCommissionDisplay(plain), "30%")
+  for (const value of [1e-7, 1e21]) {
+    for (const rate of [value, String(value)]) {
+      const numeric = { ...plain, rate, value }
+      assert.equal(commissionDisplay(numeric), `${value}%`)
+      assert.equal(clientCommissionDisplay(numeric), `${value}%`)
+      assert.ok(programMd({ ...entry, commission: numeric }).includes(`Commission: ${value}%`))
+    }
+  }
+  for (const [rate, value] of [[".5", 0.5], ["1.", 1], [".5e2", 50], ["-.5", -0.5], ["+1.", 1], [" .5 % ", 0.5], ["1.e-2%", 0.01]] as const) {
+    const numeric = { ...plain, rate, value }
+    assert.equal(commissionDisplay(numeric), `${value}%`)
+    assert.equal(clientCommissionDisplay(numeric), `${value}%`)
+    assert.ok(programMd({ ...entry, commission: numeric }).includes(`Commission: ${value}%`))
+  }
+  assert.equal(page.estimateInput(withCommission({ type: "recurring", mode: "percentage", value: 30, rate: "30%", currency: "USD", duration: "12 months" }))?.value, 30)
+  for (const rate of ["30%", "up to 30%", "maximum 30%", "10–30%"]) {
+    const missing = { ...plain, rate, value: null }
+    assert.equal(commissionDisplay(missing), "Not published")
+    assert.equal(clientCommissionDisplay(missing), "Not published")
+    assert.ok(programMd({ ...entry, commission: missing }).includes("Commission: Not published"))
+  }
+})
+
+
+test("global search uses the same percentage rule while flat, tiered and unknown displays stay unchanged", () => {
+  const source = ts.createSourceFile("search-bar.tsx", readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+  const declaration = source.statements.find((node): node is ts.FunctionDeclaration => ts.isFunctionDeclaration(node) && node.name?.text === "commissionDisplay")!
+  assert.ok(declaration)
+  const printed = ts.createPrinter().printNode(ts.EmitHint.Unspecified, declaration, source)
+  const js = ts.transpileModule(printed, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText
+  const searchDisplay = runInNewContext(`${js}; commissionDisplay`, { formatPercentage }) as typeof clientCommissionDisplay
+  for (const rate of ["up to 15%", "maximum 15%", "10–15%", "45% to 55%", "15% per qualified sale", "up to 15 percent", "maximum 15", "30%", "30"]) {
+    const commission = { ...verifiedBase.commission, mode: "percentage" as const, rate, value: rate === "30%" || rate === "30" ? 30 : 15 }
+    assert.equal(searchDisplay(commission), commissionDisplay(commission), rate)
+    assert.equal(searchDisplay({ ...commission, value: null }), "Not published")
+  }
+
+  for (const value of [1e-7, 1e21]) {
+    for (const rate of [value, String(value)]) {
+      assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "percentage", rate, value }), `${value}%`)
+    }
+  }
+  for (const [rate, value] of [[".5", 0.5], ["1.", 1], [".5e2", 50], ["-.5", -0.5], ["+1.", 1], [" .5 % ", 0.5], ["1.e-2%", 0.01]] as const) {
+    assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "percentage", rate, value }), `${value}%`)
+  }
+  assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "flat", rate: "$20", value: 20 }), "$20")
+  assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "tiered", rate: "10–20%", value: 20 }), "10–20%")
+  assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "unknown", rate: "varies", value: null }), "Not published")
 })

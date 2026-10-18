@@ -57,11 +57,12 @@ export function commissionFigure(p: Program): Figure | null {
   const recurring = c.type === "recurring"
   const stored = String(c.rate ?? "").trim()
   const display = commissionDisplay(c)
+  const numericFigure = c.mode === "percentage" && c.value != null ? `${c.value}%` : display
   const saysDuration = SAYS_DURATION.test(stored)
   const duration = c.duration && !saysDuration ? durationWords(String(c.duration)) : ""
   // The stored rate qualifies the figure ("up to 30%", "$15 to $1,000", "25% of net revenue",
   // "$75 per qualified lead"): show it as written. A bare number ("25") says less than the figure.
-  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, display) === false) {
+  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, numericFigure) === false) {
     const rest = recurring
       ? (saysDuration ? "" : duration ? `recurring ${duration}` : /recurr/i.test(stored) ? "" : "recurring")
       : isCreditReward(c) && !/\bper\b/i.test(stored) ? "per referral" : ""
@@ -215,7 +216,8 @@ export interface EstimateInput {
  */
 function plainRate(c: Program["commission"]): boolean {
   const norm = (s: string) => s.replace(/[\s,]/g, "").toLowerCase()
-  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(commissionDisplay(c))
+  const numericFigure = c.mode === "percentage" && c.value != null ? `${c.value}%` : commissionDisplay(c)
+  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(numericFigure)
 }
 
 /**

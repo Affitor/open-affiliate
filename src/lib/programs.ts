@@ -1,3 +1,4 @@
+import { formatPercentage } from "./commission-mode"
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
 import { commissionUnknown, compareCommission, compareText } from "./commission-order"
@@ -243,7 +244,7 @@ export interface SearchOptions {
 export function commissionDisplay(c: Program["commission"]): string {
   switch (c.mode) {
     case "percentage":
-      return c.value !== null ? `${c.value}%` : "Not published"
+      return formatPercentage(c.rate, c.value)
     case "flat":
       if (c.value === null) return "Not published"
       return isCreditReward(c) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
