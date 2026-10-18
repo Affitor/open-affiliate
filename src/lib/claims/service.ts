@@ -187,12 +187,13 @@ export interface ClaimStore {
    * (claim_member_submit_edit, migration 012), so parallel submissions cannot
    * pass the quota together, a removed member cannot slip one in, and a
    * listing on another domain cannot be queued under this account even if a
-   * caller skipped its own check.
+   * caller skipped its own check. A new program is refused ("already_sent")
+   * while one with the same slug or `fields.page_key` waits for review.
    */
   submitEdit(
     edit: { member_id: string; slug: string; domain: string; kind: EditKind; fields: Record<string, unknown> },
     limits: { perDay: number; newPerDay: number },
-  ): Promise<"ok" | "quota" | "quota_new" | "not_owner">
+  ): Promise<"ok" | "quota" | "quota_new" | "already_sent" | "not_owner">
   /** Unverified claims older than 30 days and events older than a year. */
   prune(now: Date): Promise<void>
   /** Program page events for the owner panel; null when unavailable (the panel hides it). */
@@ -590,21 +591,29 @@ const ContactBody = z.object({ slug: slugField, email: z.string().max(320), turn
 const VerifyBody = z.object({ slug: slugField, code: z.string().max(20) })
 const SlugBody = z.object({ slug: slugField })
 /** `report`: "Report this page" on a claimed listing, into the same manual queue. */
-const ManualBody = ContactBody.extend({ note: z.string().max(1000).optional(), report: z.boolean().optional() })
+// Free text a person reads in a review queue or a pull request: no control or
+// format characters (bidi overrides, zero-width, NUL), so what a reviewer sees
+// is what was sent. Multi-line fields keep line breaks.
+const ONE_LINE = /^[^\p{Cc}\p{Cf}]*$/u
+const MULTI_LINE = /^[^\p{Cf}\u0000-\u0009\u000B-\u001F\u007F-\u009F]*$/u
+const textField = (max: number) => z.string().trim().max(max).regex(ONE_LINE)
+const proseField = (max: number) => z.string().trim().max(max).regex(MULTI_LINE)
+
+const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), report: z.boolean().optional() })
 
 // Owner edits and new programs (spec v4 §5, §6). Every value a page or the
 // YAML can hold is checked here against the schema's own enums; lengths are
 // caps for a form, not the schema's (it has none except short_description).
 const S = programSchema.properties
 const enumOf = (values: readonly string[]) => z.enum(values as [string, ...string[]])
-const textField = (max: number) => z.string().trim().max(max)
-const lineList = (count: number, each: number) => z.array(z.string().trim().min(1).max(each)).max(count)
+const lineList = (count: number, each: number) => z.array(textField(each).min(1)).max(count)
 const CommissionInput = z
   .object({
     type: enumOf(S.commission.properties.type.enum),
     rate: textField(80).min(1),
-    duration: textField(60).optional(),
-    conditions: textField(300).optional(),
+    // null clears the field.
+    duration: textField(60).nullable().optional(),
+    conditions: textField(300).nullable().optional(),
   })
   .strict()
 const PayoutInput = z
@@ -617,7 +626,7 @@ const PayoutInput = z
   .strict()
 const cookieDaysInput = z.number().int().min(0).max(3650).nullable()
 const shortDescriptionInput = textField(S.short_description.maxLength).min(1)
-const descriptionInput = textField(2000).min(1)
+const descriptionInput = proseField(2000).min(1)
 const urlInput = textField(500)
 
 /** Spec v4 §5.1: what an owner may change on a listing. Keys are the YAML's. */
@@ -629,20 +638,21 @@ const EditChanges = z
     short_description: shortDescriptionInput.optional(),
     description: descriptionInput.optional(),
     use_cases: lineList(8, 200).optional(),
-    signup_url: urlInput.optional(),
-    approval: enumOf(S.approval.enum).optional(),
-    approval_time: textField(60).optional(),
+    // null clears an optional field (the apply step deletes the YAML key).
+    signup_url: urlInput.nullable().optional(),
+    approval: enumOf(S.approval.enum).nullable().optional(),
+    approval_time: textField(60).nullable().optional(),
     restrictions: lineList(15, 300).optional(),
     marketing_materials: z.boolean().optional(),
     dedicated_manager: z.boolean().optional(),
     // no_program is OpenAffiliate's finding, never an owner's.
     status: z.enum(["active", "paused", "discontinued"]).optional(),
-    status_note: textField(300).optional(),
+    status_note: textField(300).nullable().optional(),
   })
   .strict()
 type EditChanges = z.infer<typeof EditChanges>
 
-const EditBody = z.object({ slug: slugField, changes: EditChanges, termsUrl: urlInput.optional(), note: textField(1000).optional() })
+const EditBody = z.object({ slug: slugField, changes: EditChanges, termsUrl: urlInput.optional(), note: proseField(1000).optional() })
 
 /** Spec v4 §6: the schema's required fields minus agents, plus terms. */
 const NewProgramBody = z.object({
@@ -661,7 +671,7 @@ const NewProgramBody = z.object({
     })
     .strict(),
   termsUrl: urlInput,
-  note: textField(1000).optional(),
+  note: proseField(1000).optional(),
 })
 
 /** Changing any of these needs a public page that states the new terms (spec v4 §5.3). */
@@ -865,8 +875,9 @@ async function requestManual(req: Request, deps: ClaimDeps): Promise<Response> {
     code_hash: null,
     expires_at: new Date(now.getTime() + MANUAL_TTL_MS).toISOString(),
     status: "review",
-    // One queue for people: a report on a claimed page reads as one there.
-    note: `${body.report ? "[report] " : ""}${body.note?.trim() ?? ""}`.trim() || null,
+    // One queue for people. The marker is always set here, never taken from
+    // the visitor's text, so a claim request cannot pass for a report or back.
+    note: `${body.report ? "[report]" : "[claim]"} ${body.note?.trim() ?? ""}`.trim(),
   })
   return reply(200, { ok: true })
 }
@@ -890,7 +901,7 @@ async function session(req: Request, deps: ClaimDeps): Promise<Response> {
  */
 export function editFlags(
   program: ClaimProgram,
-  changes: { commission?: { rate: string }; signup_url?: string; status?: string },
+  changes: { commission?: { rate: string }; signup_url?: string | null; status?: string },
 ): string[] {
   const flags: string[] = []
   if (changes.commission) {
@@ -909,23 +920,29 @@ export function editFlags(
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
+/** Compatibility forms folded (fullwidth letters, ligatures) and case dropped, for matching only. */
+const fold = (s: string) => s.normalize("NFKC").toLowerCase()
+
 /**
  * Other brands' names in an owner's text (spec v4 §5.4: a description that
  * names another brand goes back to the owner first). Names of listings on
- * other domains, case-sensitive, whole words, four characters or more so a
- * name like "Box" does not match a sentence.
+ * other domains, any case, whole words, four characters or more so a name
+ * like "Box" does not match a sentence. It flags for a reviewer; a common
+ * word that is also a brand ("Linear") costs a look, not a refusal.
  */
 export function brandsNamed(text: string, ownDomain: string, catalog: readonly ClaimProgram[]): string[] {
+  const folded = fold(text)
   const found = new Set<string>()
   for (const p of catalog) {
-    if (p.name.length < 4 || !text.includes(p.name) || registrableDomain(p.url) === ownDomain) continue
-    if (new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(p.name)}(?![\\p{L}\\p{N}])`, "u").test(text)) found.add(p.name)
+    const name = fold(p.name)
+    if (name.length < 4 || !folded.includes(name) || registrableDomain(p.url) === ownDomain) continue
+    if (new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(name)}(?![\\p{L}\\p{N}])`, "u").test(folded)) found.add(p.name)
   }
   return [...found].sort()
 }
 
 /** Flags every owner submission shares: other brands named, terms cited from another site. */
-function sharedFlags(deps: ClaimDeps, domain: string, prose: (string | undefined)[], termsUrl?: string) {
+function sharedFlags(deps: ClaimDeps, domain: string, prose: (string | null | undefined)[], termsUrl?: string) {
   const mentions = brandsNamed(prose.filter(Boolean).join("\n"), domain, deps.allPrograms())
   const flags = mentions.length ? ["names_other_brand"] : []
   // The reviewer then checks the network listing or other page it points at.
@@ -946,6 +963,7 @@ async function queue(
     newPerDay: LIMITS.newProgramsPerClaimDay,
   })
   if (result === "not_owner") return notOwner()
+  if (result === "already_sent") return fail(409, "already_sent", "You already sent this program. It is waiting for review.")
   if (result === "quota_new") {
     return fail(429, "rate_limited", `You can add ${LIMITS.newProgramsPerClaimDay} programs a day. Try again tomorrow.`)
   }
@@ -969,18 +987,28 @@ async function submitEdit(req: Request, deps: ClaimDeps): Promise<Response> {
   if (owner.target.program.network === "affitor" && keys.some((k) => !AFFITOR_EDITABLE.has(k))) {
     return fail(400, "synced_field", "Edit these terms in your Affitor dashboard. OpenAffiliate updates daily.")
   }
-  if (changes.signup_url !== undefined && !signupUrlAllowed(changes.signup_url)) return badLink("your affiliate signup page")
+  if (changes.signup_url != null && !signupUrlAllowed(changes.signup_url)) return badLink("your affiliate signup page")
   const money = keys.some((k) => (MONEY_KEYS as readonly string[]).includes(k))
   if (money && !body.termsUrl) {
     return fail(400, "terms_url_required", "Add a link to the public page that states these terms.")
   }
   if (body.termsUrl && !signupUrlAllowed(body.termsUrl)) return badLink("the page that states your terms")
 
-  const domain = owner.claim.domain
+  // The listing's own domain, from the registry: the store re-checks it
+  // against the account under the claim lock.
+  const domain = owner.target.domain
   const shared = sharedFlags(
     deps,
     domain,
-    [changes.short_description, changes.description, ...(changes.use_cases ?? [])],
+    [
+      changes.short_description,
+      changes.description,
+      ...(changes.use_cases ?? []),
+      ...(changes.restrictions ?? []),
+      changes.commission?.conditions,
+      changes.status_note,
+      body.note,
+    ],
     body.termsUrl,
   )
   const derived = changes.commission ? parseCommissionMode(changes.commission.rate) : null
@@ -1060,25 +1088,30 @@ async function submitProgram(req: Request, deps: ClaimDeps): Promise<Response> {
       ? fail(409, "already_listed", "This program is already on OpenAffiliate. Edit it instead.", { slug: listed.slug })
       : fail(409, "name_taken", "Another program on OpenAffiliate has this name. Add your company name to it.")
   }
-  const waiting = (await deps.store.listEdits(claim.id)).some(
-    (e) => e.kind === "new" && e.slug === slug && (e.status === "pending" || e.status === "asked"),
+  const shared = sharedFlags(
+    deps,
+    claim.domain,
+    [program.name, program.short_description, program.description, program.commission.conditions, body.note],
+    body.termsUrl,
   )
-  if (waiting) return fail(409, "already_sent", "You already sent this program. It is waiting for review.")
-
-  const shared = sharedFlags(deps, claim.domain, [program.short_description, program.description], body.termsUrl)
+  const flags = [...shared.flags]
+  if (program.signup_url && registrableDomain(program.signup_url) !== claim.domain) flags.push("signup_domain_changed")
   const derived = parseCommissionMode(program.commission.rate)
+  // The store refuses a second waiting submission of the same slug or page
+  // (page_key), under the claim lock, so parallel sends cannot both queue.
   return queue(deps, {
     member_id: member.id,
     slug,
-    domain: claim.domain,
+    domain: registrableDomain(program.url)!,
     kind: "new",
     fields: {
       program,
+      page_key: pageKey(program.url),
       terms_url: body.termsUrl,
       ...(body.note ? { note: body.note } : {}),
       mode: derived.mode,
       value: derived.value,
-      flags: shared.flags,
+      flags,
       ...(shared.mentions.length ? { mentions: shared.mentions } : {}),
     },
   })

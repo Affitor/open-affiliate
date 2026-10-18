@@ -79,12 +79,14 @@ export function valuesOf(p: Program): ProgramValues {
 
 const lines = (s: string) => s.split("\n").map((l) => l.trim()).filter(Boolean)
 const optionalNumber = (s: string) => (s.trim() === "" ? null : Number(s))
+/** An emptied optional field is sent as null: the apply step deletes the YAML key. */
+const optionalText = (s: string) => s.trim() || null
 
 const commissionOf = (v: ProgramValues) => ({
   type: v.type,
   rate: v.rate.trim(),
-  duration: v.duration.trim(),
-  conditions: v.conditions.trim(),
+  duration: optionalText(v.duration),
+  conditions: optionalText(v.conditions),
 })
 
 const payoutOf = (v: ProgramValues) => ({
@@ -94,31 +96,38 @@ const payoutOf = (v: ProgramValues) => ({
   methods: v.methods,
 })
 
-/** Groups the YAML holds as one object: change any part and the whole group goes, so the reviewer sees it together. */
-const GROUPS: Record<string, (keyof ProgramValues)[]> = {
-  commission: ["type", "rate", "duration", "conditions"],
-  payout: ["payoutMinimum", "currency", "frequency", "methods"],
+/**
+ * Every field as the API takes it, under the YAML's keys. Commission and
+ * payout are one object each: change any part and the whole group goes, so
+ * the reviewer sees it together.
+ */
+function normalized(v: ProgramValues): Record<string, unknown> {
+  return {
+    commission: commissionOf(v),
+    payout: payoutOf(v),
+    cookie_days: optionalNumber(v.cookieDays),
+    short_description: v.shortDescription.trim(),
+    description: v.description.trim(),
+    use_cases: lines(v.useCases),
+    signup_url: optionalText(v.signupUrl),
+    approval: v.approval || null,
+    approval_time: optionalText(v.approvalTime),
+    restrictions: lines(v.restrictions),
+    marketing_materials: v.marketingMaterials,
+    dedicated_manager: v.dedicatedManager,
+    status: v.status,
+    status_note: optionalText(v.statusNote),
+  }
 }
 
-/** The changes an edit sends: only what differs from where the form started, under the YAML's keys. */
+/**
+ * The changes an edit sends: only fields whose normalized value differs from
+ * where the form started, so spaces or blank lines alone send nothing.
+ */
 export function changesFrom(initial: ProgramValues, current: ProgramValues): Record<string, unknown> {
-  const differs = (k: keyof ProgramValues) => JSON.stringify(initial[k]) !== JSON.stringify(current[k])
-  const out: Record<string, unknown> = {}
-  if (GROUPS.commission.some(differs)) out.commission = commissionOf(current)
-  if (GROUPS.payout.some(differs)) out.payout = payoutOf(current)
-  if (differs("cookieDays")) out.cookie_days = optionalNumber(current.cookieDays)
-  if (differs("shortDescription")) out.short_description = current.shortDescription.trim()
-  if (differs("description")) out.description = current.description.trim()
-  if (differs("useCases")) out.use_cases = lines(current.useCases)
-  if (differs("signupUrl")) out.signup_url = current.signupUrl.trim()
-  if (differs("approval") && current.approval) out.approval = current.approval
-  if (differs("approvalTime")) out.approval_time = current.approvalTime.trim()
-  if (differs("restrictions")) out.restrictions = lines(current.restrictions)
-  if (differs("marketingMaterials")) out.marketing_materials = current.marketingMaterials
-  if (differs("dedicatedManager")) out.dedicated_manager = current.dedicatedManager
-  if (differs("status")) out.status = current.status
-  if (differs("statusNote")) out.status_note = current.statusNote.trim()
-  return out
+  const before = normalized(initial)
+  const after = normalized(current)
+  return Object.fromEntries(Object.entries(after).filter(([key, value]) => JSON.stringify(value) !== JSON.stringify(before[key])))
 }
 
 /** True when the changes touch what affiliates earn, so a terms page is required. */

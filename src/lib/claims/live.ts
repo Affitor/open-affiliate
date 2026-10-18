@@ -107,7 +107,7 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
           p_new_limit: limits.newPerDay,
         }),
       )
-      if (data === "ok" || data === "quota" || data === "quota_new" || data === "not_owner") return data
+      if (data === "ok" || data === "quota" || data === "quota_new" || data === "already_sent" || data === "not_owner") return data
       throw Object.assign(new Error("claim_member_submit_edit returned an unexpected value"), { code: "unexpected_result" })
     },
     // Same cutoffs as the daily pg_cron job in migration 009; this covers a

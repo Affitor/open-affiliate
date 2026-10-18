@@ -89,7 +89,7 @@ type StoredEvent = ClaimEvent & { id: number; at: number }
 class MemoryStore implements ClaimStore {
   claims = new Map<string, ClaimRow>()
   events: StoredEvent[] = []
-  edits: { claim_id: string; slug: string; kind: EditKind; fields: Record<string, unknown>; at: number; status: string }[] = []
+  edits: { claim_id: string; member_id: string; slug: string; kind: EditKind; fields: Record<string, unknown>; at: number; status: string }[] = []
   failNextAddEvent = false
   private seq = 1
   constructor(private clock: () => Date) {}
@@ -229,9 +229,21 @@ class MemoryStore implements ClaimStore {
     if (!member || !c || c.status !== "active" || !c.verified_at || c.domain !== input.domain) return "not_owner" as const
     const since = this.clock().getTime() - 24 * 60 * 60_000
     const recent = this.edits.filter((e) => e.claim_id === c.id && e.at > since)
+    if (
+      input.kind === "new" &&
+      this.edits.some(
+        (e) =>
+          e.claim_id === c.id &&
+          e.kind === "new" &&
+          ["pending", "asked"].includes(e.status) &&
+          (e.slug === input.slug || e.fields.page_key === input.fields.page_key),
+      )
+    ) {
+      return "already_sent" as const
+    }
     if (recent.length >= limits.perDay) return "quota" as const
     if (input.kind === "new" && recent.filter((e) => e.kind === "new").length >= limits.newPerDay) return "quota_new" as const
-    this.edits.push({ claim_id: c.id, slug: input.slug, kind: input.kind, fields: input.fields, at: this.clock().getTime(), status: "pending" })
+    this.edits.push({ claim_id: c.id, member_id: member.id, slug: input.slug, kind: input.kind, fields: input.fields, at: this.clock().getTime(), status: "pending" })
     const type = input.kind === "new" ? "program.submitted" : "edit.submitted"
     this.events.push({ id: this.seq++, type, claim_id: c.id, slug: input.slug, domain: c.domain, at: this.clock().getTime() })
     return "ok" as const
@@ -959,14 +971,79 @@ test("text that names another brand, or terms cited from another site, is flagge
   await t.call("edit", { slug: "kyma-api", changes: { description: "Cheaper than Notion for teams. Ship it in a Box." } })
   assert.deepEqual(t.store.edits[0].fields.flags, ["names_other_brand"])
   assert.deepEqual(t.store.edits[0].fields.mentions, ["Notion"])
+  // Any case, fullwidth letters, and every free-text field, not only the description.
+  for (const changes of [
+    { description: "Cheaper than NOTION." },
+    { description: "cheaper than notion." },
+    { description: "Cheaper than Ｎｏｔｉｏｎ." },
+    { restrictions: ["Do not compare us with notion"] },
+    { status_note: "Moved to Notion" },
+  ]) {
+    t.store.edits.length = 0
+    assert.equal((await t.call("edit", { slug: "kyma-api", changes })).status, 200, JSON.stringify(changes))
+    assert.deepEqual(t.store.edits[0].fields.mentions, ["Notion"], JSON.stringify(changes))
+  }
+  t.store.edits.length = 0
   await t.call("edit", { slug: "kyma-api", changes: { cookie_days: 30 }, termsUrl: "https://partnerstack.com/kyma" })
-  assert.deepEqual(t.store.edits[1].fields.flags, ["terms_url_off_domain"])
+  assert.deepEqual(t.store.edits[0].fields.flags, ["terms_url_off_domain"])
 
   // Own domain, short names, other words that contain a name: not flagged.
   const catalog = Object.values(PROGRAMS)
   assert.deepEqual(brandsNamed("Kyma API beats every Box. Notions and NotionAI are words.", "kymaapi.com", catalog), [])
   assert.deepEqual(brandsNamed("Works with Notion.", "kymaapi.com", catalog), ["Notion"])
   assert.deepEqual(brandsNamed("Works with Notion.", "notion.so", catalog), [])
+  assert.deepEqual(brandsNamed("works with NOTION", "kymaapi.com", catalog), ["Notion"])
+})
+
+test("a new program's name is screened for other brands, and a signup link elsewhere is flagged", async () => {
+  const t = setup()
+  await owner(t)
+  assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "Notion Sync", signup_url: "https://partners.dub.co/kyma" })).status, 200)
+  assert.deepEqual(t.store.edits[0].fields.flags, ["names_other_brand", "signup_domain_changed"])
+})
+
+test("two identical new programs sent at once queue one", async () => {
+  const t = setup()
+  await owner(t)
+  const results = await Promise.all(Array.from({ length: 3 }, () => addProgram(t)))
+  assert.deepEqual(results.map((r) => r.status).sort(), [200, 409, 409])
+  assert.equal(t.store.edits.length, 1)
+})
+
+test("free text refuses control and format characters; descriptions keep line breaks", async () => {
+  const t = setup()
+  await owner(t)
+  for (const changes of [
+    { description: "Safe\u202Etext" },
+    { short_description: "Zero\u200Bwidth" },
+    { use_cases: ["line\nbreak"] },
+    { restrictions: ["nul\u0000"] },
+    { status_note: "tab\there" },
+    { commission: { rate: "30%\n", type: "recurring", duration: "12\rmonths" } },
+  ]) {
+    const r = await t.call("edit", { slug: "kyma-api", changes, termsUrl: TERMS_URL })
+    assert.equal(r.status, 400, JSON.stringify(changes))
+  }
+  assert.equal((await addProgram(t, { ...NEW_PROGRAM, name: "Kyma\u202EStudio" })).status, 400)
+  assert.equal((await t.call("edit", { slug: "kyma-api", changes: { description: "First line.\nSecond line." } })).status, 200)
+})
+
+test("the store gets the listing's own domain, not the account's, so its re-check means something", async () => {
+  const t = setup()
+  await owner(t)
+  const seen: string[] = []
+  const real = t.store.submitEdit.bind(t.store)
+  t.store.submitEdit = async (edit, limits) => {
+    seen.push(edit.domain)
+    return real(edit, limits)
+  }
+  await t.call("edit", { slug: "kyma-api", changes: { description: "x" } })
+  await addProgram(t, { ...NEW_PROGRAM, url: "https://studio.kymaapi.com" })
+  assert.deepEqual(seen, ["kymaapi.com", "kymaapi.com"])
+  // Called with a listing on another domain, the store refuses.
+  const member = [...t.store.members.values()][0]
+  const limits = { perDay: 10, newPerDay: 3 }
+  assert.equal(await real({ member_id: member.id, slug: "vercel", domain: "vercel.com", kind: "edit", fields: {} }, limits), "not_owner")
 })
 
 test("the store refuses a change for a listing on another domain, whatever the caller checked", async () => {
@@ -1004,6 +1081,8 @@ test("add a program: on the account's domain, queued as kind new with its slug",
   assert.equal(row.kind, "new")
   assert.equal(row.slug, "kyma-studio")
   assert.deepEqual(row.fields.program, NEW_PROGRAM)
+  assert.equal(row.fields.page_key, "studio.kymaapi.com")
+  assert.equal(row.member_id, [...t.store.members.values()][0].id, "who sent it is recorded")
   assert.equal(row.fields.terms_url, TERMS_URL)
   assert.equal(row.fields.mode, "percentage")
   assert.equal(row.fields.value, 25)
@@ -1054,6 +1133,10 @@ test("add a program: already listed, a name taken elsewhere, or already sent is 
   const again = await addProgram(t, { ...NEW_PROGRAM, url: "https://studio.kymaapi.com/v2" })
   assert.equal(again.status, 409)
   assert.equal(again.body.error, "already_sent")
+  // The same page under another name is the same program.
+  const renamed = await addProgram(t, { ...NEW_PROGRAM, name: "Studio by Kyma", url: "https://www.studio.kymaapi.com/" })
+  assert.equal(renamed.body.error, "already_sent")
+  assert.equal(t.store.edits.length, 1, "neither refusal spent the quota")
 
   assert.equal(slugFor("Kyma Studio Pro!"), "kyma-studio-pro")
   assert.equal(slugFor("Café Über"), "cafe-uber")
@@ -1089,6 +1172,9 @@ test("Report this page goes to the manual queue, marked as a report", async () =
   assert.equal(row.status, "review")
   assert.equal(row.note, "[report] This is our program, not theirs.")
   assert.equal(t.sent.length, 0, "a report mails nobody")
+  // The marker is ours: a claim request whose text starts with "[report]" still reads as a claim.
+  await t.call("manual", { slug: "kyma-api", email: "b@example.com", note: "[report] urgent", turnstileToken: tokenFor("manual") }, { ip: "198.51.100.9" })
+  assert.equal([...t.store.claims.values()][1].note, "[claim] [report] urgent")
 })
 
 test("reply-to: OA_CLAIM_REPLY_TO when it is one plain address, else the approved default", async () => {
@@ -1505,12 +1591,14 @@ test("form choices are the schema's own values", () => {
 test("the edit form sends only what changed, whole groups for commission and payout, and the API takes it", async () => {
   const initial = { ...EMPTY_VALUES, rate: "12%", duration: "18 months", description: "Old pitch.", useCases: "devs", currency: "USD" }
   assert.deepEqual(changesFrom(initial, initial), {})
+  // Spaces and blank lines alone are not a change.
+  assert.deepEqual(changesFrom(initial, { ...initial, description: " Old pitch. ", useCases: "devs\n\n", rate: " 12% " }), {})
   const text = changesFrom(initial, { ...initial, description: " New pitch. ", useCases: "devs\n\n agencies " })
   assert.deepEqual(text, { description: "New pitch.", use_cases: ["devs", "agencies"] })
   assert.equal(touchesMoney(text), false)
   const money = changesFrom(initial, { ...initial, rate: "15%", methods: ["paypal"], cookieDays: "45" })
   assert.deepEqual(money, {
-    commission: { type: "recurring", rate: "15%", duration: "18 months", conditions: "" },
+    commission: { type: "recurring", rate: "15%", duration: "18 months", conditions: null },
     payout: { minimum: null, currency: "USD", frequency: null, methods: ["paypal"] },
     cookie_days: 45,
   })
@@ -1519,10 +1607,14 @@ test("the edit form sends only what changed, whole groups for commission and pay
   assert.deepEqual(changesFrom({ ...initial, cookieDays: "30" }, initial), { cookie_days: null })
   const flags = changesFrom(initial, { ...initial, marketingMaterials: true, status: "paused", approval: "manual" })
   assert.deepEqual(flags, { marketing_materials: true, status: "paused", approval: "manual" })
+  // Emptying an optional field sends null, which the API takes as "remove it".
+  const filled = { ...initial, approval: "manual", approvalTime: "2 days", signupUrl: "https://kymaapi.com/join", statusNote: "x" }
+  const cleared = changesFrom(filled, { ...filled, approval: "", approvalTime: " ", signupUrl: "", statusNote: "" })
+  assert.deepEqual(cleared, { signup_url: null, approval: null, approval_time: null, status_note: null })
 
   const t = setup()
   await owner(t)
-  for (const changes of [text, money, flags]) {
+  for (const changes of [text, money, flags, cleared]) {
     assert.equal((await t.call("edit", { slug: "kyma-api", changes, termsUrl: TERMS_URL })).status, 200, JSON.stringify(changes))
   }
 })
@@ -1534,7 +1626,7 @@ test("the add-a-program form leaves out empty optional parts, and the API takes 
     name: "Kyma Studio",
     url: "https://studio.kymaapi.com",
     category: "AI",
-    commission: { type: "recurring", rate: "25%", duration: "", conditions: "" },
+    commission: { type: "recurring", rate: "25%", duration: null, conditions: null },
     short_description: "Studio",
     description: "A studio.",
   })
