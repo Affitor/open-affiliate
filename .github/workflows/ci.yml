@@ -29,6 +29,8 @@ jobs:
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
       - run: npx tsx --test scripts/claims.test.ts
+      - run: npx tsx --test scripts/check-type-scale.test.ts
+      - run: npm run check:type-scale
       - run: npx tsc --noEmit
       - run: npm run build
       # After the build: it reads the registry that prebuild regenerates.
