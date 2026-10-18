@@ -338,7 +338,7 @@ function ProgramsTable({
   return (
     <div className="rounded-xl border border-border/40 overflow-hidden">
       <div className="px-4 py-2.5 border-b border-border/20 bg-muted/10">
-        <p className="text-xs text-muted-foreground/70">
+        <p className="text-xs text-muted-foreground">
           Content data from AI-scored reviews, tutorials, and affiliate posts across YouTube, TikTok, Reddit, and blogs.{" "}
           <Link href="/docs/sift-scoring" className="underline hover:text-foreground">How scoring works</Link>
         </p>
@@ -452,7 +452,7 @@ function ProgramsTable({
                         {hasContent ? item.verifiedContent : "—"}
                       </span>
                     ) : (
-                      <span className="text-xs text-muted-foreground/30">...</span>
+                      <span className="text-xs text-muted-foreground">...</span>
                     )}
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
@@ -463,9 +463,9 @@ function ProgramsTable({
                         {item.avgSiftScore}
                       </span>
                     ) : contentLoaded ? (
-                      <span className="text-xs text-muted-foreground/30">—</span>
+                      <span className="text-xs text-muted-foreground">—</span>
                     ) : (
-                      <span className="text-xs text-muted-foreground/30">...</span>
+                      <span className="text-xs text-muted-foreground">...</span>
                     )}
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
@@ -522,7 +522,7 @@ function ProgramsTable({
         </div>
       )}
       <div className="px-4 py-3 border-t border-border/20 flex items-center justify-between">
-        <span className="text-xs text-muted-foreground/60">
+        <span className="text-xs text-muted-foreground">
           showing {sorted.length === 0 ? 0 : activePage * DEFAULT_VISIBLE + 1}-
           {activePage * DEFAULT_VISIBLE + visible.length} of {sorted.length} programs
         </span>
@@ -593,7 +593,7 @@ function GroupCells({ row }: { row: GroupRow }) {
       <td className="py-3 px-3 text-center hidden sm:table-cell">
         <span className="text-sm text-muted-foreground tabular-nums">{row.avgRate}</span>
         {row.avgBasis && (
-          <span className="block text-xs leading-tight text-muted-foreground/70">{row.avgBasis}</span>
+          <span className="block text-xs leading-tight text-muted-foreground">{row.avgBasis}</span>
         )}
       </td>
       <PaidCell paid={row.topRate} className="hidden sm:table-cell" />
@@ -835,7 +835,7 @@ export default function RankingsClient({
             }`}
           >
             {tab.label}
-            <span className="ml-1.5 text-xs text-muted-foreground/60">
+            <span className="ml-1.5 text-xs text-muted-foreground">
               {tab.count}
             </span>
           </button>
@@ -853,7 +853,7 @@ export default function RankingsClient({
               placeholder="Search programs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-border/50 bg-card/50 pl-9 pr-8 py-2 text-xs font-medium text-foreground placeholder:text-muted-foreground/50 hover:border-border focus:outline-none focus:border-border transition-colors"
+              className="w-full rounded-lg border border-border/50 bg-card/50 pl-9 pr-8 py-2 text-xs font-medium text-foreground placeholder:text-muted-foreground hover:border-border focus:outline-none focus:border-border transition-colors"
             />
             {searchQuery && (
               <button
