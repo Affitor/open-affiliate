@@ -44,11 +44,11 @@ function lastsCell(p: Program): string {
 
 function TermsChip({ verified }: { verified: boolean }) {
   return verified ? (
-    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-600/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-800 dark:text-emerald-400">
+    <span className="inline-flex items-center gap-1 rounded-full border border-good-line bg-good-bg px-2 py-0.5 text-xs text-good">
       <Check className="h-3 w-3" /> Verified
     </span>
   ) : (
-    <span className="inline-flex rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground">Not verified</span>
+    <span className="inline-flex rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">Not verified</span>
   )
 }
 
