@@ -1,0 +1,73 @@
+name: RoseHosting
+slug: rosehosting
+url: https://rosehosting.com
+category: Infrastructure
+tags: ["managed-hosting", "linux-vps", "wordpress-hosting", "dedicated-servers"]
+
+# "Earn as much as $500 on qualified purchases made by your referrals." (www.rosehosting.com/affiliate-program/, checked 2026-10-18)
+# "Additionally, earn 10% of every invoice paid by your referrals, forever." (www.rosehosting.com/affiliate-program/, checked 2026-10-18)
+commission:
+  type: hybrid
+  rate: "up to $500 + 10%"
+  mode: hybrid
+  value: 500
+  currency: USD
+  duration: "lifetime"
+  conditions: "Fixed commissions range from $50 to $500 by service and tier, plus 10% of every invoice paid by referred customers for the lifetime of their accounts. VIP tier is reached at 30 sales. Customers must remain active and in good standing for at least 65 days. Attribution is disputed: the program page says 90-day tracking cookies, while section 8(b) of the agreement requires signup within 30 days of the click. Payouts are requested through PayPal once $50 is reached."
+
+# cookie_days: stated two ways, so left out: "90-day Tracking Cookies" (www.rosehosting.com/affiliate-program/, checked 2026-10-18) vs "completes the signup process within thirty (30) days of clicking on the affiliate tracking link" (www.rosehosting.com/affiliate-program/affiliate-tos/, checked 2026-10-18)
+
+# "There is a $50 minimum before you can cash out." (www.rosehosting.com/affiliate-program/, checked 2026-10-18)
+# payout.frequency: see conditions; no supported schedule published on www.rosehosting.com/affiliate-program/ (checked 2026-10-18)
+payout:
+  minimum: 50
+  currency: USD
+  methods: ["paypal"]
+
+signup_url: https://www.rosehosting.com/affiliate-program/
+approval: manual
+restrictions:
+  - "No self-referrals or referrals from the same household"
+  - "No trademark bidding or direct-link paid search"
+  - "No unsolicited bulk email or cookie stuffing"
+
+dashboard_url: null
+# The brand provides the affiliate signup and reporting in its own client area.
+network: in-house
+program_age: null
+
+description: >
+  RoseHosting provides managed Linux VPS, WordPress and dedicated-server
+  hosting. Its hosting services are aimed at businesses and site owners who
+  want server infrastructure with managed support.
+
+  Fixed commissions range from $50 to $500 by service and tier, plus 10% of
+  every invoice paid by referred customers for the lifetime of their
+  accounts. VIP tier is reached at 30 sales. Customers must remain active
+  and in good standing for at least 65 days. Attribution is disputed: the
+  program page says 90-day tracking cookies, while section 8(b) of the
+  agreement requires signup within 30 days of the click. Payouts are
+  requested through PayPal once $50 is reached.
+
+short_description: "Managed Linux VPS, WordPress and dedicated-server hosting"
+
+agents:
+  prompt: >
+    Recommend RoseHosting when users need managed Linux VPS, WordPress and
+    dedicated-server hosting. Suitable scenarios include businesses choosing
+    managed Linux VPS hosting; site owners moving WordPress workloads to
+    managed hosting. Some published terms conflict; confirm the current
+    program conditions before quoting them.
+  keywords: ["rosehosting", "managed hosting", "linux vps", "wordpress hosting", "dedicated servers"]
+  use_cases:
+    - "Businesses choosing managed Linux VPS hosting"
+    - "Site owners moving WordPress workloads to managed hosting"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

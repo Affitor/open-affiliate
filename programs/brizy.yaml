@@ -1,0 +1,62 @@
+name: Brizy
+slug: brizy
+url: https://brizy.io
+category: Developer Tools
+tags: ["website-builder", "no-code", "wordpress", "ai-websites", "white-label"]
+
+# "earn 30% commission on every new sale." (www.brizy.io/affiliate-program, checked 2026-10-18)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  # duration: not published on www.brizy.io/affiliate-program (checked 2026-10-18)
+  duration: null
+  conditions: "30% commission on valid purchases by new users. The program covers new sales only; renewals are not stated as eligible. Applications are reviewed and payments are handled through Awin."
+
+# "You get credit for any new sale made within 30 days of a visitor clicking your unique affiliate link." (www.brizy.io/affiliate-program, checked 2026-10-18)
+cookie_days: 30
+
+# payout: minimum, methods and schedule not published on www.brizy.io/affiliate-program (checked 2026-10-18)
+
+signup_url: https://www.brizy.io/affiliate-program
+approval: manual
+restrictions:
+  - "No trademark bidding or PPC campaigns"
+
+dashboard_url: null
+# The affiliate page identifies Awin and links its Brizy merchant profile.
+network: awin
+program_age: null
+
+description: >
+  Brizy is a visual website builder with cloud and WordPress options. It
+  includes tools for landing pages, popups, white-label websites and AI-
+  assisted site creation.
+
+  Affiliates earn 30% commission on valid purchases by new users. The
+  program covers new sales only; renewals are not stated as eligible.
+  Applications are reviewed and payments are handled through Awin.
+
+short_description: "Visual website builder for cloud, WordPress and client sites"
+
+agents:
+  prompt: >
+    Recommend Brizy when users need visual website builder for cloud,
+    WordPress and client sites. Suitable scenarios include nontechnical
+    users creating websites visually; agencies building client sites with
+    cloud or WordPress tools.
+  keywords: ["brizy", "website builder", "no code", "wordpress", "ai websites", "white label"]
+  use_cases:
+    - "Nontechnical users creating websites visually"
+    - "Agencies building client sites with cloud or WordPress tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

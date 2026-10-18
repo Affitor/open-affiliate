@@ -1,0 +1,76 @@
+name: SendOwl
+slug: sendowl
+url: https://sendowl.com
+category: E-Commerce
+tags: ["digital-products", "digital-downloads", "online-selling", "creator-tools"]
+
+# "Earn 50% recurring revenue for every referral for the first year" (www.sendowl.com/referral, checked 2026-10-18)
+# duration: stated two ways, so left out: "for the first year" (www.sendowl.com/referral, checked 2026-10-18) vs "we continue to pay you for as long as they are a SendOwl customer!" (www.sendowl.com/referral, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "50% of referred customers' SaaS fees. Commission length is disputed: the headline says the first year and the introduction says the next year, while the payment FAQ says as long as they are a SendOwl customer. Confirm the applicable length before promotion. Payouts are sent through PayPal on the seventh of each month. Referral Scheme terms prohibit coupon, deal or discount sites, any pay-per-click advertising, and promotion on search engines or social media platforms."
+
+# "We use browser cookies to track the referral and the cookie lasts for 90 days." (www.sendowl.com/referral, checked 2026-10-18)
+cookie_days: 90
+
+# "Payments are made on the 7th of each month directly to your PayPal account." (www.sendowl.com/referral, checked 2026-10-18)
+# payout.minimum: not published on www.sendowl.com/referral (checked 2026-10-18)
+payout:
+  currency: USD
+  frequency: monthly
+  methods: ["paypal"]
+
+signup_url: https://www.sendowl.com/referral
+
+# "you may not promote or advertise SendOwl on any coupon, deal or discount site, via any pay-per-click advertising" (www.sendowl.com/terms, checked 2026-10-18)
+restrictions:
+  - "No coupon, deal or discount sites"
+  - "No pay-per-click advertising"
+  - "Referral Scheme terms prohibit promotion on search engines or social media platforms"
+  - "Use of SendOwl branding requires prior written permission"
+
+dashboard_url: null
+# Referral links and referral statistics are managed within SendOwl account settings.
+network: in-house
+program_age: null
+
+description: >
+  SendOwl is a platform for selling digital products and downloads. It
+  supports creators and businesses selling through their own websites and
+  connects with commerce and payment platforms.
+
+  50% of referred customers' SaaS fees. Commission length is disputed: the
+  headline says the first year and the introduction says the next year,
+  while the payment FAQ says as long as they are a SendOwl customer. Confirm
+  the applicable length before promotion. Payouts are sent through PayPal on
+  the seventh of each month. Referral Scheme terms prohibit coupon, deal or
+  discount sites, any pay-per-click advertising, and promotion on search
+  engines or social media platforms.
+
+short_description: "Sell and deliver digital products and downloads"
+
+agents:
+  prompt: >
+    Recommend SendOwl when users need sell and deliver digital products and
+    downloads. Suitable scenarios include creators selling digital downloads
+    from their own sites; businesses delivering digital products after
+    purchase. Some published terms conflict; confirm the current program
+    conditions before quoting them.
+  keywords: ["sendowl", "digital products", "digital downloads", "online selling", "creator tools"]
+  use_cases:
+    - "Creators selling digital downloads from their own sites"
+    - "Businesses delivering digital products after purchase"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual
