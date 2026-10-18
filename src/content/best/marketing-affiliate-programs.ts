@@ -77,7 +77,7 @@ export const post: BestPost = {
     { label: "Best for social media", slug: "later" },
   ],
   howWeChose:
-    "We started from the programs in the Marketing category of the OpenAffiliate registry whose terms we verified in the last few months, then our editors picked a mix across SEO, email, social, ads, onsite and funnel tools and ordered them by commission as the registry records it. Lifetime and first-year deals sit side by side here, so check how long each one pays.",
+    "We started from the programs in the Marketing category of the OpenAffiliate registry whose terms we verified in the last few months, then our editors picked a mix across SEO, email, social, ads, onsite and funnel tools and ordered them by commission as the registry records it. Deals of different lengths sit side by side here, so check how long each one pays.",
   related: ["seo-affiliate-programs", "marketing-recurring-affiliate-programs", "recurring-affiliate-programs"],
   category: "Marketing",
 }

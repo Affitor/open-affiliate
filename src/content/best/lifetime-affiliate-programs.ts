@@ -22,7 +22,7 @@ export const post: BestPost = {
     {
       slug: "snov-io",
       bestFor: "Best for sales and outbound content",
-      why: "Snov.io is a sales prospecting and cold outreach platform with a B2B leads database, an email finder and verifier, email warmup, cold email and LinkedIn campaigns, and a sales CRM. It pays a share of every plan purchase, monthly or annual, for as long as the subscription lasts, plus a smaller share of LinkedIn Automation slots, paid monthly via PayPal with no minimum. Applications are reviewed before approval.",
+      why: "Snov.io is a sales prospecting and cold outreach platform with a B2B leads database, an email finder and verifier, email warmup, cold email and LinkedIn campaigns, and a sales CRM. It pays a share of the plan a referred user buys, monthly or annual, for as long as that subscription lasts, plus a smaller share of LinkedIn Automation slots, paid monthly via PayPal with no minimum. Each referral earns one recurring commission, on their first order only, and applications are reviewed before approval.",
       notFor: "Brand-name PPC: bidding on Snov.io brand names needs written permission, and branded terms must be negative keywords.",
     },
     {
@@ -47,7 +47,7 @@ export const post: BestPost = {
       slug: "ghost",
       bestFor: "Best for newsletter and publishing audiences",
       why: "Ghost is an open-source publishing platform with websites, newsletters and paid memberships in one product, and Ghost(Pro) is its managed hosting. Its referral program pays on every payment a referred Ghost(Pro) customer makes for as long as they stay, and the commission rises if they upgrade.",
-      notFor: "New or small sites: applicants need their own Ghost publication with original content and an established audience.",
+      notFor: "New or small sites: applicants need their own Ghost publication with original content and a large established audience.",
     },
     {
       slug: "helpcrunch",
