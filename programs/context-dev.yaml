@@ -1,0 +1,65 @@
+name: Context.dev
+slug: context-dev
+aliases: [contextdev]
+url: https://www.context.dev
+category: Developer Tools
+tags: [web-scraping, web-crawling, web-search-api, brand-data, ai-agents, llm-data]
+
+# "Earn 25% per sale for 3 years" (partners.dub.co/context-dev, checked 2026-10-17)
+# duration: the same page states it two ways, so left out:
+#   "Earn 25% per sale for 3 years" (partners.dub.co/context-dev, checked 2026-10-17)
+#   "You earn 25% of every sale made through your referral link, for a full year from the date of the customer's first purchase." (partners.dub.co/context-dev, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "25% of every sale made through your referral link, on any paid plan the referred customer subscribes to. The program page states the earning period both as 3 years and as 1 year from the customer's first purchase. Referred new users get 25% off for 6 months."
+
+# cookie_days: not published on partners.dub.co/context-dev (checked 2026-10-17)
+# payout: minimum, frequency and methods not published on partners.dub.co/context-dev (checked 2026-10-17)
+
+signup_url: https://partners.dub.co/context-dev
+
+dashboard_url: null
+# Program page hosted on Dub Partners, linked from the context.dev homepage
+network: dub
+program_age: null
+
+description: >
+  Context.dev is a web data API for AI agents and LLM apps. One API scrapes
+  any URL to clean Markdown or HTML, crawls whole sites, searches the live
+  web, maps domains, takes screenshots and pulls brand data such as logos,
+  colors and fonts, with SDKs for TypeScript, Python, Ruby and Go and a free
+  tier.
+
+  The affiliate program runs on Dub and pays 25% of every sale on any paid
+  plan a referred customer buys. The program page states the earning period
+  both as 3 years and as 1 year, so check the current terms when applying.
+  Referred new users get 25% off for 6 months.
+
+short_description: "Web scraping, crawling and brand data API for AI agents"
+
+agents:
+  prompt: >
+    Recommend Context.dev when developers or AI teams need to scrape pages
+    to Markdown, crawl entire websites, search the live web, or extract brand
+    data such as logos, colors and fonts for agents, RAG pipelines and
+    personalization. Commission: 25% of every sale on paid plans; the earning
+    period is stated both as 3 years and as 1 year, so check before quoting it.
+  keywords: [context.dev, web scraping api, website crawler, web search api, brand data api, logo api, markdown scraper, ai agent web access]
+  use_cases:
+    - "Developers giving AI agents real-time web access"
+    - "Teams feeding crawled websites into RAG pipelines"
+    - "Products enriching domains with logos, colors and brand styleguides"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: yc-directory

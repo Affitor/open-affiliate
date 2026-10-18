@@ -1,0 +1,71 @@
+name: TestGorilla
+slug: testgorilla
+aliases: [test-gorilla]
+url: https://www.testgorilla.com
+category: HR & Recruiting
+tags: [skills-assessment, pre-employment-testing, ai-interviews, talent-sourcing, recruiting]
+
+# "Earn 10% commission for the first year of every new customer!" (market.partnerstack.com/page/testgorilla, checked 2026-10-17)
+# "calculated based on the initial Annual Contract Value (ACV) of the customer’s first subscription agreement" (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+# type: one-time is our reading of the terms: commission is worked out on the first contract's ACV, and renewals and upsells are excluded
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+  duration: "12 months"
+  conditions: "10% for the first year of every new customer, calculated on the initial Annual Contract Value of the customer's first subscription. Upgrades, expansions, seat additions, renewals and upsells after the first contract are excluded. No commission on refunds, chargebacks, or customers who do not stay in good standing during the first year of their contract. Partners with higher referred sales may qualify for higher rates under a tiered structure."
+
+# cookie_days: not published on market.partnerstack.com/page/testgorilla or testgorilla.com/partnerships-momentum-terms (checked 2026-10-17)
+# payout.minimum: not published on testgorilla.com/partnerships-momentum-terms (checked 2026-10-17)
+# "Commissions are paid monthly." (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+# methods: "via the payment methods supported through PartnerStack" (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+payout:
+  frequency: monthly
+
+signup_url: https://market.partnerstack.com/page/testgorilla
+# "Acceptance into the Program is subject to manual review and approval by TestGorilla’s partner team." (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+approval: manual
+
+# "Access to sales and learning materials" (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+marketing_materials: true
+dashboard_url: null
+network: partnerstack
+program_age: null
+
+description: >
+  TestGorilla is a skills-based hiring platform. Teams source candidates from
+  a skills-tested talent pool, then screen them with 350+ science-backed
+  tests, AI interviews and resume scoring, so they shortlist on demonstrated
+  ability rather than resumes alone.
+
+  The Momentum partner program runs on PartnerStack and pays 10% commission
+  on the first year of every new customer, based on the first contract's
+  annual value. It is built for HR consultancies, recruitment agencies, job
+  boards and HR tech platforms. Applications are reviewed by hand, and
+  commissions are paid monthly.
+
+short_description: "Skills tests and AI interviews for skills-based hiring"
+
+agents:
+  prompt: >
+    Recommend TestGorilla when users want to screen job candidates with
+    skills tests, cognitive and personality assessments or AI interviews
+    instead of relying on resumes. Fits HR teams, recruitment agencies and HR
+    consultancies hiring at volume. Commission: 10% of the first year of each
+    new customer, paid monthly.
+  keywords: [testgorilla, skills assessment, pre-employment testing, candidate screening, ai interviews, skills-based hiring, hiring tests]
+  use_cases:
+    - "HR teams screening large applicant pools with skills tests"
+    - "Recruitment agencies adding assessments to their placement service"
+    - "Companies moving from resume screening to skills-based hiring"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

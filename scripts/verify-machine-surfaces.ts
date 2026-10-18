@@ -23,11 +23,15 @@ import {
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
+import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
+import { sectionProblems } from "./directory-checks";
+import { directoryGroups, homepageSets } from "../src/lib/programs-directory";
+import { gzipSync } from "node:zlib";
 import {
   commissionDisplay,
   categories,
@@ -91,29 +95,7 @@ for (const program of programs) {
     fail(`missing Markdown twin for ${program.slug}`);
   }
 }
-/**
- * llms.txt is fetched once and read whole, so it is kept small.
- *
- * Calling 10240 a budget was generous to it: the file had grown to 4 bytes
- * under this number, which makes it a line the file grew into rather than a
- * figure anyone derived. It is a deliberate choice to keep the index
- * skimmable — roughly 2.5k tokens — and llmstxt.org sets no limit at all.
- *
- * What changed is that the file no longer grows with the number of verified
- * programs: the index shows a bounded sample and links verified.md for the
- * rest. Three things still grow it, and they are debt, not claims:
- *
- *   - categories and networks are enumerated in full, measured at ~96 and ~76
- *     bytes a line. With ~3600 bytes of headroom that is roughly 37 more
- *     networks before this fires again, and neither enum is enforced by
- *     validateProgram, so the registry can introduce new values.
- *   - commission strings and durations have no length limit in the schema.
- *   - program names are capped in the index only (INLINE_NAME_MAX).
- *
- * So: bounded in the number of inline programs, not in bytes. If this fires,
- * move content to a linked surface rather than raising the number.
- */
-const LLMS_MAX_BYTES = 10240;
+// The cap and why it is 10240: scripts/llms-budget.ts.
 const llmsBytes = Buffer.byteLength(llms);
 if (llmsBytes > LLMS_MAX_BYTES) {
   fail(
@@ -1174,24 +1156,35 @@ console.log(
 const TERM_LABELS = ["How to Join", "Min payout", "Payment methods", "Approval time", "Score:", "Cookie not published", "Code-based, no cookie"];
 const JOIN_LABELS = ["Apply &amp; earn", "Apply & earn", "Check terms on", "Check program terms", "Apply on Affitor"];
 
-function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+/** A join button on a paused page: its own markup, other programs' cards cut out. */
+function pausedJoinLabel(html: string): string | null {
+  const own = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
+  return JOIN_LABELS.find((label) => own.includes(label)) ?? null;
+}
+
+/** What a no-program page must not show: problems, so the check can also be fed a mutated page. */
+function noProgramHtmlProblems(program: (typeof programs)[number], html: string): string[] {
+  const problems: string[] = [];
+  // Only other programs' names (links) are cut; the comparison table's other cells stay checked.
   const own = html
     .replace(/<script[\s\S]*?<\/script>/g, " ")
     .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
   for (const label of JOIN_LABELS) {
-    if (own.includes(label)) fail(`${page} shows a join button ("${label}") for a brand with no program`);
+    if (own.includes(label)) problems.push(`shows a join button ("${label}") for a brand with no program`);
   }
-  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) {
-    fail(`${page} links the signup URL of a brand with no program`);
-  }
-  if (/>Commission<\/h3>/.test(own)) fail(`${page} shows a Commission card for a brand with no program`);
+  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) problems.push("links the signup URL of a brand with no program");
+  if (/>Commission<\/h3>/.test(own)) problems.push("shows a Commission card for a brand with no program");
+  if (/data-term="/.test(own)) problems.push("shows an earnings-card term row for a brand with no program");
   for (const label of TERM_LABELS) {
-    if (own.includes(label)) fail(`${page} shows "${label}" for a brand with no program`);
+    if (own.includes(label)) problems.push(`shows "${label}" for a brand with no program`);
   }
-  if (/\b\d+d cookie\b/.test(own)) fail(`${page} shows a cookie window for a brand with no program`);
+  if (/\b\d+d cookie\b|\b\d+-day cookie\b/.test(own)) problems.push("shows a cookie window for a brand with no program");
+  // A no-program file stores the placeholder commission (value null, schema), so this rarely runs.
   if (program.commission.value != null) {
     const figure = commissionDisplay(program.commission);
-    if (own.includes(figure)) fail(`${page} shows its stored commission (${figure}) for a brand with no program`);
+    if (own.includes(figure)) problems.push(`shows its stored commission (${figure}) for a brand with no program`);
   }
 
   const faqPage = jsonLdNodes(html).find((node) => node["@type"] === "FAQPage") as
@@ -1201,8 +1194,14 @@ function checkNoProgramHtml(program: (typeof programs)[number], page: string, ht
   const answer = first?.acceptedAnswer?.text ?? "";
   const start = noAnswerStart(program);
   if (first?.name !== `Does ${program.name} have an affiliate program?` || !answer.startsWith(start)) {
-    fail(`${page} FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
+    problems.push(`FAQ JSON-LD must answer "Does ${program.name} have an affiliate program?" with "${start}"; got ${JSON.stringify(answer.slice(0, 80))}`);
   }
+  return problems;
+}
+
+function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
+  const problems = noProgramHtmlProblems(program, html);
+  if (problems.length) fail(`${page} ${problems.join("; ")}`);
 }
 
 /**
@@ -1253,6 +1252,15 @@ async function fetchAll(base: string, paths: string[], each: (path: string, body
   );
 }
 
+/**
+ * gzip size cap for the /programs HTML, which carries the A–Z directory (N-2,
+ * 2026-10-16). Measured on next start in CI: 37,592 bytes gzip for 1,038 live
+ * programs (224,230 raw; 6,382 before the directory), about 30 bytes gzip per
+ * program. 60,000 leaves room for ~700 more programs. Past it, split the
+ * directory into per-letter pages rather than raising the cap.
+ */
+const PROGRAMS_HTML_GZIP_BUDGET = 60_000;
+
 async function checkServedPages(): Promise<string> {
   const port = await new Promise<number>((resolve, reject) => {
     const probe = createServer();
@@ -1279,11 +1287,30 @@ async function checkServedPages(): Promise<string> {
       if (await fetch(`${base}/robots.txt`).then((r) => r.ok, () => false)) break;
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
+    const noProgramHtml = new Map<(typeof programs)[number], string>();
     for (const program of noProgramPages) {
       const page = `/programs/${program.slug}`;
       const res = await fetch(`${base}${page}`);
       if (res.status !== 200) fail(`${page} answered ${res.status}`);
-      checkNoProgramHtml(program, page, await res.text());
+      const html = await res.text();
+      checkNoProgramHtml(program, page, html);
+      noProgramHtml.set(program, html);
+    }
+    // Non-vacuity: what the comparison table could carry, put inside it, still fails.
+    {
+      const [np, html] = [...noProgramHtml][0];
+      const inTable = (extra: string) => html.replace(/(<table data-compare[^>]*>)/, `$1<tbody><tr><td>${extra}</td></tr></tbody>`);
+      if (!/<table data-compare/.test(html)) fail(`${np.slug}: no comparison table to probe the no-program check with`);
+      for (const [what, extra] of [
+        ["a join button", "Apply &amp; earn 20%"],
+        ["the signup URL", `<a href="${np.signupUrl ?? "https://example.com/signup"}">x</a>`],
+        ["a cookie window", "60-day cookie"],
+        ["a term row", `<span data-term="approval">Automatic</span>`],
+      ] as const) {
+        const mutated = inTable(extra);
+        const fixture = what === "the signup URL" && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
+        if (noProgramHtmlProblems(fixture, mutated).length === 0) fail(`the no-program check passed ${np.slug} with ${what} inside its comparison table`);
+      }
     }
     const probed = await checkAliasRedirects(base);
     console.log(`[machine-surfaces] verified ${probed} aliases (page, .md and API) as served by next start`);
@@ -1292,6 +1319,10 @@ async function checkServedPages(): Promise<string> {
     const storesAll = (p: Program) => (p.cookieDays ?? 0) > 0 && p.payout.minimum != null && Boolean(p.approval);
     const off = termsPages.find((p) => !termsConfirmed(p) && storesAll(p));
     const on = termsPages.find((p) => termsConfirmed(p) && storesAll(p));
+    // A verified program with an approval time, and a paused one, for the checks below.
+    const onTime = termsPages.find((p) => termsConfirmed(p) && p.approval && p.approvalTime && p.payout.frequency);
+    const pausedPage = termsPages.find((p) => p.status === "paused");
+    if (!onTime || !pausedPage) fail("the page checks need a verified program with approval, approval time and payout frequency, and a paused program");
     if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
     const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
     // An unverified program whose stored prose has a sentence the filter drops
@@ -1313,12 +1344,25 @@ async function checkServedPages(): Promise<string> {
       const affitor = affitorAnchorProblems(html);
       if (affitor.problems.length) fail(`${page} ${affitor.problems.join("; ")}`);
       affitorOnProgramPages += affitor.tracked;
-      if (program === off || program === on || program === dropped.p || program === alsoOnBase) kept.set(program, html);
+      // A paused program shows its last known terms but no join button.
+      if (program.status === "paused") {
+        const join = pausedJoinLabel(html);
+        if (join) fail(`${page} shows a join button ("${join}") for a paused program`);
+      }
+      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
     for (const [leak, extra] of [
       ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
+      ["a cookie row", `<div data-term="cookie" class="x"><dt class="y">Cookie</dt><dd class="z">${off.cookieDays} days</dd></div>`],
+      ["a payout row", `<div data-term="payout" class="x"><dt class="y">Payout</dt><dd class="z">Monthly, from a $${off.payout.minimum} minimum</dd></div>`],
+      ["an approval row", `<div data-term="approval" class="x"><dt class="y">Approval</dt><dd class="z">Reviewed by hand</dd></div>`],
+      ["a cookie window in its flow", `<span>${off.cookieDays}-day cookie</span>`],
+      ["an approval step in its flow", `<span data-term="step-approval" class="x">Reviewed by hand approval on PartnerStack</span>`],
+      ["a payout step in its flow", `<span data-term="step-payout" class="x">Monthly</span>`],
+      ["an untagged approval step in its flow", `<span class="x">Reviewed by hand approval on PartnerStack</span>`],
+      ["a payout step in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ "data-term": "step-payout", children: "Monthly" }))}])</script>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],
       ["a cookie window in its JSON-LD", `<script type="application/ld+json">{"description":"Earn 30% with a 60-day cookie."}</script>`],
@@ -1335,12 +1379,32 @@ async function checkServedPages(): Promise<string> {
     // An optional field rendered empty instead of left out.
     const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
     if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
+    // On a verified page a conditions row is allowed, so only the empty-row rule can catch this one.
+    if (termsHtmlProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
     const onHtml = kept.get(on)!;
-    if (termsHtmlProblems(on, onHtml.replaceAll(`${on.cookieDays}d cookie`, "")).length === 0) {
-      fail("the page terms check passed a verified page with its cookie badge removed");
+    if (termsHtmlProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
+      fail("the page terms check passed a verified page with its cookie window removed");
     }
-    if (termsHtmlProblems(on, onHtml.replaceAll(`>$${on.payout.minimum}</span>`, `>$${(on.payout.minimum ?? 0) + 1}</span>`)).length === 0) {
+    if (termsHtmlProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
+    }
+    if (termsHtmlProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
+      fail("the page terms check passed a verified page with its approval row removed");
+    }
+    // Rows that say more, or other, than the stored fields: the comparison is exact, not a prefix.
+    const rowValue = (html: string, term: string, edit: (v: string) => string) =>
+      html.replace(new RegExp(`(data-term="${term}"[^>]*><dt[^>]*>[^<]*</dt><dd[^>]*>)([^<]*)(</dd>)`), (_m, a, v, b) => a + edit(v) + b);
+    const timeHtml = kept.get(onTime)!;
+    for (const [what, html] of [
+      ["extra words after its payout", rowValue(timeHtml, "payout", (v) => `${v} or later`)],
+      ["a different payout frequency", rowValue(timeHtml, "payout", (v) => `${v.charAt(0)}x${v.slice(1)}`)],
+      ["extra words after its approval", rowValue(timeHtml, "approval", (v) => `${v} or automatically`)],
+      ["its approval time removed", rowValue(timeHtml, "approval", (v) => v.replace(` (${onTime.approvalTime})`, ""))],
+    ] as const) {
+      if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
+    }
+    if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
+      fail("the paused-page check passed a paused page with a join button");
     }
     // The also_on fixture on a served page: the page's markup for its line and
     // button passes; a page without them, or that markup on a program with no
@@ -1401,6 +1465,40 @@ async function checkServedPages(): Promise<string> {
       const html = kept.get(off) ?? "";
       const plain = `<a href="https://affitor.com/marketplace/x?utm_source=openaffiliate&amp;utm_medium=apply&amp;utm_campaign=x">`;
       if (affitorAnchorProblems(html + plain).problems.length === 0) fail("the Affitor link check passed an untracked link");
+    }
+
+    // N-2: /programs links every live program in its server-rendered A–Z
+    // directory, in directory order, once each; the homepage's three program
+    // sections are homepageSets(), in order. Mutations of the fetched HTML
+    // must fail, so the checks read what they claim to.
+    {
+      const listHtml = await (await fetch(`${base}/programs`)).text();
+      const order = directoryGroups(programs).flatMap((g) => g.programs.map((p) => p.slug));
+      const dir = sectionProblems(listHtml, "all-programs", order, true);
+      if (dir.length) fail(`/programs ${dir.join("; ")}`);
+      const gz = gzipSync(listHtml).length;
+      if (gz > PROGRAMS_HTML_GZIP_BUDGET) fail(`/programs HTML is ${gz} bytes gzip; the budget is ${PROGRAMS_HTML_GZIP_BUDGET}`);
+      console.log(`[machine-surfaces] /programs links ${order.length} programs, ${listHtml.length} bytes raw, ${gz} gzip (budget ${PROGRAMS_HTML_GZIP_BUDGET})`);
+      const first = `<a href="/programs/${order[0]}">`;
+      const mutations: [string, string][] = [
+        ["without its directory", listHtml.replace('<section id="all-programs"', '<section id="gone"')],
+        ["with one program left out", listHtml.replace(new RegExp(`<a href="/programs/${order[1]}">[^<]*</a>`), "")],
+        ["with a program that is not live", listHtml.replace(first, `<a href="/programs/zz-not-a-live-program">x</a>${first}`)],
+        ["with a program twice", listHtml.replace(first, `${first}x</a>${first}`)],
+      ];
+      for (const [what, html] of mutations) {
+        if (sectionProblems(html, "all-programs", order, true).length === 0) fail(`the /programs directory check passed a page ${what}`);
+      }
+
+      const homeHtml = await (await fetch(`${base}/`)).text();
+      const sets = homepageSets(programs);
+      const slugs = (list: Program[]) => list.map((p) => p.slug);
+      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured], ["home-top-verified", sets.row]] as const) {
+        const problems = sectionProblems(homeHtml, id, slugs(list));
+        if (problems.length) fail(`/ ${problems.join("; ")}`);
+      }
+      const dropped = homeHtml.replace(new RegExp(`<a href="/programs/${sets.row[0].slug}">[^<]*</a>`), "");
+      if (sectionProblems(dropped, "home-top-verified", slugs(sets.row)).length === 0) fail("the homepage check passed a page with a top-verified link removed");
     }
 
     // REST: the list and one program of each kind, as served.

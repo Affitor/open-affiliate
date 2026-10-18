@@ -110,7 +110,7 @@ export function buildFaq(p: Program): Faq[] {
     return [
       {
         q: `Does ${name} have an affiliate program?`,
-        a: `${noProgramAnswer(p)}${noProgramAlternatives(p).length ? " The programs listed below pay commission for promoting similar products." : ""}`,
+        a: `${noProgramAnswer(p)}${noProgramAlternatives(p).length ? " The programs on this page pay commission for promoting similar products." : ""}`,
       },
     ]
   }

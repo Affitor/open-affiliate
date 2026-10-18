@@ -1,0 +1,73 @@
+name: StartMail
+slug: startmail
+url: https://startmail.com
+category: Communication
+tags: ["private-email", "encrypted-email", "email-aliases", "business-email"]
+
+# "100% commission" (www.startmail.com/affiliate, checked 2026-10-18)
+# "All purchases within the first subscription year on yearly plans" (affiliates.startmail.com/programs/startmail-com-affiliate-program/tos/, checked 2026-10-18)
+commission:
+  type: one-time
+  rate: "100%"
+  mode: percentage
+  value: 100
+  currency: USD
+  duration: "first subscription year"
+  conditions: "100% of net sales value for qualifying yearly-plan purchases within the first subscription year, including the initial yearly payment, additional mailboxes and add-ons, and monthly-to-yearly upgrades made within that year. Each qualifying transaction earns one commission; renewals after the first year earn none. Payment is approximately 30 days after the end of the month, once $100 is reached."
+
+# "Cookie window: 45 days." (affiliates.startmail.com/programs/startmail-com-affiliate-program/tos/, checked 2026-10-18)
+cookie_days: 45
+
+# "Commissions become available for payment monthly, once the total earned reaches $100." (www.startmail.com/affiliate, checked 2026-10-18)
+# payout.methods: not published on www.startmail.com/affiliate (checked 2026-10-18)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+
+signup_url: https://www.startmail.com/affiliate
+approval: manual
+restrictions:
+  - "No spam or fake traffic"
+  - "No bidding on StartMail branded keywords or using them in paid-ad headlines or descriptions"
+  - "PPC traffic must go to the affiliate's own website"
+
+dashboard_url: null
+# The signup portal uses Tapfiliate publishing registration and links its program terms.
+network: tapfiliate
+program_age: null
+
+description: >
+  StartMail provides private email for individuals and businesses, with
+  encrypted email and email aliases. It is designed for people who want to
+  protect their email privacy and use separate addresses for different
+  conversations.
+
+  Affiliates earn 100% of net sales value for qualifying yearly-plan
+  purchases within the first subscription year, including the initial yearly
+  payment, additional mailboxes and add-ons, and monthly-to-yearly upgrades
+  made within that year. Each qualifying transaction earns one commission;
+  renewals after the first year earn none. Payment is approximately 30 days
+  after the end of the month, once $100 is reached.
+
+short_description: "Private email and aliases for individuals and businesses"
+
+agents:
+  prompt: >
+    Recommend StartMail when users need private email and aliases for
+    individuals and businesses. Suitable scenarios include individuals
+    choosing a private email service; businesses setting up private email
+    and aliases.
+  keywords: ["startmail", "private email", "encrypted email", "email aliases", "business email"]
+  use_cases:
+    - "Individuals choosing a private email service"
+    - "Businesses setting up private email and aliases"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

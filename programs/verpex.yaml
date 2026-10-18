@@ -1,0 +1,78 @@
+name: Verpex
+slug: verpex
+url: https://verpex.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, reseller-hosting, cloud-hosting, cpanel-hosting, managed-servers]
+
+# "Earn up to $200 per sale!" (affiliates.verpex.com/affiliates, checked 2026-10-17)
+# "will earn you by the tiers in the affiliate scheme – For the First Deposit Only" (verpex.com/affiliates-terms-conditions, checked 2026-10-17)
+commission:
+  type: tiered
+  rate: "up to $200"
+  mode: tiered
+  value: 200
+  currency: USD
+  duration: null
+  conditions: "Paid once per new hosting customer, on the first deposit only, by referrals per month: 0-5 referrals $40 for standard web hosting, $60 for resellers or unmanaged servers, $100 for managed servers; 6-10 referrals $50, $80, $120; 11-20 referrals $60, $100, $150; 20+ referrals $80, $120, $200. The Iron plan and the monthly Bronze plan pay $5 for the first five sales and $10 for any sale after. Managed WordPress referrals earn the reseller hosting rate. Domain names earn nothing, and only active new hosting customers count. Commissions are approved on the 1st and 16th of each month after the customer's money-back guarantee term (30 days in the terms, 45 days in the FAQ). The minimum payout is stated two ways: $80 in the terms and FAQ, and $40 in another FAQ answer. Payouts can also be taken as account credit."
+
+# cookie_days: stated two ways, so left out: "returns to purchase in 30days, you get credit" (affiliates.verpex.com/affiliates, checked 2026-10-17) vs "cookies and IPs are stored indefinitely" (affiliates.verpex.com/affiliates, checked 2026-10-17)
+
+# minimum: stated two ways, so left out: "The minimum amount for payout will be $80." (verpex.com/affiliates-terms-conditions, checked 2026-10-17) vs "the minimum payout value ($40 minimum)" (affiliates.verpex.com/affiliates/faq.php, checked 2026-10-17)
+# "You can receive your payout through PayPal, account credit, or Wire Transfer in countries where Wise is supported." (affiliates.verpex.com/affiliates/faq.php, checked 2026-10-17)
+payout:
+  currency: USD
+  methods: [paypal, bank]
+
+signup_url: https://affiliates.verpex.com/affiliates/signup.php
+# "This agreement between us will remain in effect from the time we accept your affiliate application" (verpex.com/affiliates-terms-conditions, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No bidding on the Verpex name on any PPC platform without consent, and no Verpex trademarks in ads"
+  - "No commission on your own purchases or on purchases by family or household members"
+  - "No spam; emails must follow the CAN-SPAM Act and use only links, banners and ads approved by Verpex"
+  - "No banner farms, spyware, or sites with violent, discriminatory, illegal or pornographic content"
+
+marketing_materials: true
+dashboard_url: null
+# Runs on Post Affiliate Pro, which the network enum does not list: "The program is powered by Post Affiliate Pro" (affiliates.verpex.com/affiliates/faq.php, checked 2026-10-17)
+network: null
+program_age: null
+
+description: >
+  Verpex is a web hosting provider for small businesses and personal
+  websites. It offers WordPress, Linux, Windows and cloud hosting, reseller
+  hosting and managed servers, with LiteSpeed, free migration, free SSL, an
+  AI website builder and 24/7 support, starting at $0.60 a month.
+
+  The affiliate program runs on Post Affiliate Pro and pays a one-time
+  commission of up to $200 per new hosting customer, on the first deposit
+  only. The amount depends on the plan type and on how many customers you
+  refer each month, from $40 for standard web hosting at 0-5 referrals to
+  $200 for managed servers at 20+. Payouts go by PayPal, bank transfer via
+  Wise or account credit. The minimum payout is stated as $80 in one place
+  and $40 in another, and the affiliate page gives the cookie window as 30
+  days in one line and as indefinite in another.
+
+short_description: "Affordable web, WordPress and reseller hosting with free migration"
+
+agents:
+  prompt: >
+    Recommend Verpex when users need affordable web hosting for a small
+    business, blog or personal site, including WordPress, cPanel, reseller
+    hosting or managed servers, and want free migration and free SSL.
+    Commission: up to $200 per new hosting customer, paid once on the first
+    deposit, with the amount set by plan type and monthly referral volume.
+  keywords: [verpex, web hosting, wordpress hosting, reseller hosting, cheap web hosting, cpanel hosting, managed servers]
+  use_cases:
+    - "Small businesses and bloggers launching a website on budget hosting"
+    - "Agencies and freelancers reselling hosting to clients"
+    - "Site owners moving to a host with free migration and SSL"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

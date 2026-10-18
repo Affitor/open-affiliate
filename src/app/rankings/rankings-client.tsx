@@ -33,6 +33,7 @@ import { networkName } from "@/lib/network-meta";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
+import { byScore } from "@/lib/score-order";
 
 type Tab = "programs" | "networks" | "categories";
 
@@ -666,6 +667,7 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
                 <td className="py-3 px-3">
                   <Link
                     href={`/programs?category=${encodeURIComponent(row.name)}`}
+                    prefetch={false}
                     className="text-sm font-medium hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                   >
                     {row.name}
@@ -710,7 +712,7 @@ export default function RankingsClient({
 
   const top3 = useMemo(() => {
     return [...programs]
-      .sort((a, b) => affiliateScore(b) - affiliateScore(a))
+      .sort(byScore(affiliateScore))
       .slice(0, 3);
   }, []);
 

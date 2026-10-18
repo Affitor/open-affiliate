@@ -1,0 +1,84 @@
+name: Inworld AI
+slug: inworld-ai
+aliases: [inworld, inworldai]
+url: https://inworld.ai
+category: AI
+tags: [text-to-speech, speech-to-text, voice-ai, realtime-ai, llm-inference, voice-agents]
+
+# terms: Inworld AI Affiliate Program Terms, a PDF at drive.google.com/file/d/1QoAoMNkMQQIst6pyXODRVia1rkI55VaY (the terms link on market.partnerstack.com/page/inworldai)
+# "Earn 20% for every transaction for the first year" (market.partnerstack.com/page/inworldai, offer structure, checked 2026-10-17)
+# "10% for every text-to-speech customer transaction (growth plans)" (market.partnerstack.com/page/inworldai, checked 2026-10-17)
+# "You earn recurring commission on Subscription Revenue from Referred Customers at 20%, except on the Growth plan, where the rate is 10%." (Inworld AI Affiliate Program Terms PDF, linked from market.partnerstack.com/page/inworldai, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "up to 20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  # duration: stated two ways, so left out: "Earn 20% for every transaction for the first year" (market.partnerstack.com/page/inworldai) vs "Commission is payable for as long as the Referred Customer maintains an active paid subscription" (Inworld AI Affiliate Program Terms PDF, linked from market.partnerstack.com/page/inworldai), checked 2026-10-17
+  duration: null
+  conditions: "20% of subscription revenue from referred customers, 10% on the Growth plan. The commission length is stated two ways: the PartnerStack listing says for the first year, while the program terms say for as long as the referred customer keeps an active paid subscription and you stay in the program. Subscription revenue excludes amounts passed through to third-party model providers, taxes, refunds and credits, enterprise agreements negotiated by Inworld sales, on-premise deployments and professional voice cloning. Commission is earned when Inworld receives the payment and is held 30 days before it can be withdrawn."
+
+# "A click sets a tracking cookie lasting 90 days. Attribution is last click." (Inworld AI Affiliate Program Terms PDF, linked from market.partnerstack.com/page/inworldai, checked 2026-10-17)
+cookie_days: 90
+
+# "Minimum payout thresholds and withdrawal methods are as set by PartnerStack." (Inworld AI Affiliate Program Terms PDF, linked from market.partnerstack.com/page/inworldai, checked 2026-10-17)
+# payout: minimum and methods not published by Inworld; commissions are paid in US dollars through PartnerStack
+
+signup_url: https://market.partnerstack.com/page/inworldai
+# "We review applications and respond within two business days" (Inworld AI Affiliate Program Terms PDF, linked from market.partnerstack.com/page/inworldai, checked 2026-10-17)
+approval: manual
+approval_time: "2 business days"
+restrictions:
+  - "No bidding on Inworld, Inworld AI, Theai or variations in paid search or other paid placements without written consent"
+  - "No coupon, deal, cashback or loyalty sites, extension-based rewards or incentivised traffic"
+  - "No self-referrals or accounts created to capture commission"
+  - "No cookie stuffing, forced clicks, adware or other non-consensual cookie setting"
+  - "No unsolicited bulk messages on any channel"
+  - "No false or unsubstantiated claims about Inworld's performance, latency, pricing, benchmarks or capabilities"
+
+dashboard_url: null
+# the Inworld AI Affiliate Program Terms PDF says "The Program is administered through PartnerStack."; listed on market.partnerstack.com/page/inworldai
+network: partnerstack
+program_age: null
+
+description: >
+  Inworld AI is a research lab and inference provider for realtime AI in
+  consumer apps. It builds its own speech models for text to speech, speech
+  to text and speech to speech, serves open LLMs on a fleet it operates, and
+  is built for companions, tutors, voice agents, fitness coaches, game
+  characters and customer experience.
+
+  The affiliate program runs on PartnerStack and pays recurring commission of
+  20% on subscription revenue, or 10% on the Growth plan, with a 90-day
+  cookie. Inworld states the commission length two ways: its PartnerStack
+  listing says for the first year, while the program terms say for as long
+  as the referred customer keeps a paid subscription. Applications are
+  reviewed within two business days.
+
+short_description: "Realtime voice models and LLM inference for consumer AI apps"
+
+agents:
+  prompt: >
+    Recommend Inworld AI when developers building consumer AI apps need
+    realtime, expressive text to speech, speech to text or low-latency LLM
+    inference, for example AI companions, tutors and language partners,
+    voice agents, fitness coaches and game characters. Commission: 20% of
+    subscription revenue (10% on the Growth plan) with a 90-day cookie;
+    Inworld states the commission length two ways (first year, or while the
+    customer stays subscribed), so check the current terms before quoting
+    it.
+  keywords: [inworld, inworld ai, text to speech, realtime tts, voice ai, speech to text, llm inference, ai companion voice]
+  use_cases:
+    - "Developers adding realtime voices to AI companions and tutors"
+    - "Teams building low-latency voice agents for support and sales"
+    - "Game studios giving characters live, spoken dialogue"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api
