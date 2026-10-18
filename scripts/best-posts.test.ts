@@ -112,3 +112,28 @@ test("every Apply link on a post carries the blog UTM for that post and program"
   const kyma = getProgram("kyma-api")
   if (kyma && kyma.network === "affitor" && isLive(kyma)) assert.ok(isAffitorHref(blogApplyHref(kyma, "x")))
 })
+
+test("You earn reads naturally for the rate shapes the registry has", () => {
+  const p = (commission: Record<string, unknown>) => ({ commission: { currency: "USD", ...commission }, kind: "affiliate" }) as never
+  const cases: [Record<string, unknown>, string][] = [
+    // Plain rates get their type and length.
+    [{ type: "recurring", mode: "percentage", value: 20, rate: "20%", duration: "lifetime" }, "20% recurring for life"],
+    [{ type: "recurring", mode: "percentage", value: 22, rate: "22%", duration: "12 months" }, "22% recurring for 12 months"],
+    [{ type: "one-time", mode: "percentage", value: 30, rate: "30%" }, "30% one-time"],
+    [{ type: "tiered", mode: "tiered", value: 40, rate: "30%-40%", duration: "lifetime" }, "30%-40% tiered, for life"],
+    // A recurring commission with no length on record points to the full terms.
+    [{ type: "recurring", mode: "percentage", value: 25, rate: "25%" }, "25% recurring, length: see full terms"],
+    // A trailing "+" ("or more") is not a two-part deal.
+    [{ type: "tiered", mode: "tiered", value: 100, rate: "$50 to $100+" }, "$50 to $100+, tiered"],
+    // A rate that says more than its figure is shown as published; the type follows a comma.
+    [{ type: "recurring", mode: "percentage", value: 50, rate: "Up to 50%", duration: "lifetime" }, "Up to 50%, recurring for life"],
+    [{ type: "recurring", mode: "percentage", value: 25, rate: "25% of net revenue", duration: "12 months" }, "25% of net revenue, recurring for 12 months"],
+    [{ type: "recurring", mode: "percentage", value: 25, rate: "25% then 15%", duration: "24 months" }, "25% then 15%, recurring for 24 months"],
+    // A rate that already says "for …" gains no length; one that says how it pays gains no type word.
+    [{ type: "recurring", mode: "percentage", value: 20, rate: "20% for one year", duration: "12 months" }, "20% for one year, recurring"],
+    [{ type: "one-time", mode: "flat", value: 15, rate: "$15 per new subscriber" }, "$15 per new subscriber"],
+    [{ type: "recurring", mode: "hybrid", value: null, rate: "40% recurring + $1/signup", duration: "12 months" }, "40% recurring + $1/signup, for 12 months"],
+    [{ type: "hybrid", mode: "percentage", value: 30, rate: "30%" }, "30%"],
+  ]
+  for (const [commission, want] of cases) assert.equal(earnText(p(commission)), want, JSON.stringify(commission))
+})
