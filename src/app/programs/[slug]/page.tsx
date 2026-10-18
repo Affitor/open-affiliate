@@ -297,7 +297,7 @@ export default async function ProgramPage({
             <>
               {figure ? (
                 <p className="mt-1.5">
-                  <span className={`block font-mono font-medium tracking-[-0.03em] ${figure.kind === "number" ? "text-display" : "text-title"}`}>{figure.big}</span>
+                  <span className={`block tracking-[-0.03em] ${figure.kind === "number" ? "font-mono font-medium text-display" : "font-semibold text-title"}`}>{figure.big}</span>
                   {figure.rest && <span className="block text-muted-foreground mt-1">{figure.rest}</span>}
                 </p>
               ) : (
