@@ -1090,9 +1090,9 @@ function bestListMd(list: BestList, path: string): string {
               .join(" ")
           : commissionLine(p.commission)
       // The page's columns, in its order: commission, type, duration, cookie,
-      // network, then the same signup link as the program page.
+      // network, then the program page's apply link with the list UTM, as the page shows it.
       const facts = mdEscape(`${terms}${cookie}, network: ${networkName(p.network ?? IN_HOUSE)}`)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p).href)}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p, "list").href)}`
     })
     .join("\n")
   return joinSections([
