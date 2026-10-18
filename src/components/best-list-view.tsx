@@ -51,10 +51,13 @@ export function BestListView({
   list,
   path,
   parent,
+  picks,
 }: {
   list: BestList;
   path: string;
   parent: { name: string; href: string };
+  /** An editorial post on the same topic, linked under the intro. */
+  picks?: { href: string; label: string };
 }) {
   const data = buildBestList(list);
   const { intro, faq } = bestListCopy(data);
@@ -131,6 +134,12 @@ export function BestListView({
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{list.h1}</h1>
         <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{intro}</p>
+        {picks && (
+          <p data-list-picks className="text-sm mt-3 max-w-3xl">
+            <span className="font-medium">Our picks:</span>{" "}
+            <Link href={picks.href} className="underline underline-offset-4">{picks.label}</Link>
+          </p>
+        )}
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
         </p>

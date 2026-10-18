@@ -55,6 +55,20 @@ export function applyButton(program: Program, surface: OutboundSurface): { label
   }
 }
 
+/**
+ * A blog post's Apply link: utm_medium=blog, utm_campaign=<post slug>,
+ * utm_content=<program slug>. A live Affitor program keeps its Affitor link,
+ * tagged the same way through affitorUrl.
+ */
+export function blogApplyHref(program: Program, post: string): string {
+  if (program.network === "affitor" && isLive(program) && program.signupUrl) {
+    const href = new URL(affitorUrl("blog", post, program.signupUrl))
+    href.searchParams.set("utm_content", program.slug)
+    return href.toString()
+  }
+  return outboundUrl(program.signupUrl ?? program.url, "blog", post, program.slug)
+}
+
 /** An Affitor marketplace link with the apply UTM, which the YAML never stores. */
 function affitorHref(url: string, slug: string): string {
   return affitorUrl("apply", slug, url)

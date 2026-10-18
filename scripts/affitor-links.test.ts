@@ -72,6 +72,8 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
+  "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
+  "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
 ])
 
@@ -96,6 +98,9 @@ test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   for (const p of programs) assert.equal(isAffitorHref(p.url), false, `${p.slug}: program.url is on affitor.com but rendered as a plain link`)
   const trackLink = readFileSync(join(root, "src/app/programs/[slug]/track-view.tsx"), "utf8")
   assert.match(trackLink, /if \(isAffitorHref\(href\)\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "program_page", cta \} \}\)/)
+  const postApply = readFileSync(join(root, "src/components/post-apply-link.tsx"), "utf8")
+  assert.match(postApply, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "blog", cta: "apply", post \} \}\)/)
+  assert.match(postApply, /\[AFFITOR_ATTR\]: "blog"/)
   const affitorLink = readFileSync(join(root, "src/components/affitor-link.tsx"), "utf8")
   assert.match(affitorLink, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source, cta \} \}\)/)
 })
