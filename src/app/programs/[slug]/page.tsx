@@ -413,7 +413,7 @@ export default async function ProgramPage({
           {!noProgram && ((program.restrictions?.length ?? 0) > 0 || (verified && program.commissionConditions)) && (
             <section>
               <H2>Rules before you promote</H2>
-              {/* The card keeps the figure, the facts and Apply; the long commission terms live here (product owner, 18/10). */}
+              {/* The card keeps the figure, the facts and Apply; the long commission terms live here. */}
               {verified && program.commissionConditions && (
                 <details className="group mb-4 rounded-xl border border-border bg-card">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
@@ -423,14 +423,14 @@ export default async function ProgramPage({
                   <p data-term="conditions" className="border-t border-border px-4 py-3 text-sm leading-relaxed text-foreground/80">{program.commissionConditions}</p>
                 </details>
               )}
-              <ul className="space-y-2.5">
+              {(program.restrictions?.length ?? 0) > 0 && <ul className="space-y-2.5">
                 {(program.restrictions ?? []).map((r, i) => (
                   <li key={i} className="flex gap-2.5 text-sm">
                     <Info className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
                     <span>{r}</span>
                   </li>
                 ))}
-              </ul>
+              </ul>}
             </section>
           )}
 
