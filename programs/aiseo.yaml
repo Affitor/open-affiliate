@@ -11,7 +11,8 @@ commission:
   mode: percentage
   value: 30
   currency: USD
-  duration: null
+  # "Enjoy monthly commissions as long as your referrals remain subscribed." (aiseo.ai/affiliate, checked 2026-10-18)
+  duration: lifetime
   conditions: "30% of each sale, paid monthly for as long as the referral stays subscribed. The page headline also says \"up to 48%\" without saying how a higher rate is earned. A separate influencer program pays $1 per 1,000 video views, from 15,000 views."
 
 # cookie_days: not published on aiseo.ai/affiliate (checked 2026-10-13)
@@ -53,8 +54,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
 source: manual
