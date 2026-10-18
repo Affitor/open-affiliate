@@ -5,6 +5,7 @@ import { TrackPageView } from "@/components/track-page-view";
 import { ArrowLeft, ArrowRight, DollarSign, Clock, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { SameTeamTag } from "@/components/same-team-tag";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
   networkToSlug,
@@ -293,6 +294,7 @@ export default async function NetworkPage({
                         <span className="text-sm font-medium truncate block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {program.name}
                         </span>
+                        <SameTeamTag slug={program.slug} inLink className="block" />
                         {program.verified && (
                           <Badge variant="outline" className="text-[9px] px-1 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 mt-0.5">verified</Badge>
                         )}

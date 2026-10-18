@@ -1,6 +1,8 @@
 import { programs } from "@/lib/programs";
 import { directoryGroups } from "@/lib/programs-directory";
 import { ProgramsView } from "./programs-view";
+import { SameTeamTag } from "@/components/same-team-tag";
+import { isSameTeam } from "@/lib/same-team";
 
 /**
  * The interactive list renders in the browser (it reads the URL inside its
@@ -25,7 +27,7 @@ export default function ProgramsPage() {
               <ul>
                 {g.programs.map((p) => (
                   <li key={p.slug}>
-                    <a href={`/programs/${p.slug}`}>{p.name}</a>
+                    <DirectoryEntry slug={p.slug} name={p.name} />
                   </li>
                 ))}
               </ul>
@@ -34,5 +36,21 @@ export default function ProgramsPage() {
         </div>
       </section>
     </>
+  );
+}
+
+/**
+ * One A–Z link. Its own component so the page payload carries only what it
+ * renders: a tag slot in every row added a null to each of the 1,100 entries.
+ */
+function DirectoryEntry({ slug, name }: { slug: string; name: string }) {
+  const link = <a href={`/programs/${slug}`}>{name}</a>;
+  return isSameTeam(slug) ? (
+    <>
+      {link}
+      <SameTeamTag slug={slug} className="ml-1" />
+    </>
+  ) : (
+    link
   );
 }

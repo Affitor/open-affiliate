@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { SameTeamTag } from "@/components/same-team-tag";
 import { FilterSelect } from "@/components/filter-select";
 import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 import {
@@ -83,6 +84,7 @@ function ProgramCardGrid({ program }: { program: Program }) {
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <h3 className="text-sm font-semibold truncate">{program.name}</h3>
+            <SameTeamTag slug={program.slug} inLink className="shrink-0" />
             {program.verified && (
               <Badge
                 variant="outline"
@@ -134,6 +136,7 @@ function ProgramRowList({ program }: { program: Program }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
           <h3 className="text-sm font-semibold truncate">{program.name}</h3>
+          <SameTeamTag slug={program.slug} inLink className="shrink-0" />
           {program.verified && (
             <Badge
               variant="outline"
