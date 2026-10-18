@@ -92,6 +92,21 @@ test("claim tables are service-role only: RLS on, no policies, anon/authenticate
   )
 })
 
+test("account tables (011) are service-role only: RLS on, no policies, anon/authenticated revoked", () => {
+  const sql = fs.readFileSync(path.join(migrationsDir, "011_claim_accounts.sql"), "utf8")
+  for (const table of ["claim_members", "claim_signin_codes"]) {
+    assert.deepEqual(byTable[table] ?? [], [], `${table} must have no policies`)
+    assert.match(sql, new RegExp(`ALTER TABLE ${table} ENABLE ROW LEVEL SECURITY;`, "i"), `${table} must enable RLS`)
+  }
+  assert.match(sql, /REVOKE ALL ON claim_members, claim_signin_codes FROM anon, authenticated;/i)
+  assert.match(sql, /SECURITY INVOKER/i)
+  assert.match(
+    sql,
+    /REVOKE ALL ON FUNCTION public\.claim_add_member\(uuid, text, uuid, int\) FROM PUBLIC, anon, authenticated;/i,
+  )
+  assert.match(sql, /GRANT EXECUTE ON FUNCTION public\.claim_add_member\(uuid, text, uuid, int\) TO service_role;/i)
+})
+
 test("claim_submit_edit is callable by service_role only", () => {
   const sql = fs.readFileSync(path.join(migrationsDir, "010_claim_edit_quota.sql"), "utf8")
   assert.match(sql, /SECURITY INVOKER/i, "must run with the caller's rights")
