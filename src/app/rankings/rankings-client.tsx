@@ -22,6 +22,7 @@ import {
   commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
+import { SAME_TEAM_LABEL } from "@/lib/same-team";
 import { UNCONFIRMED } from "@/lib/confirmed-terms";
 // Types only: the rows are built on the server (groupRow), never the registry.
 import type { GroupRow, PaidFigure } from "@/lib/programs";
@@ -493,10 +494,13 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
 
 export default function RankingsClient({
   facts,
+  unranked,
   networkRows,
   categoryRows,
 }: {
   facts: TermFacts[];
+  /** Verified programs our own team builds: listed here by name, never given a rank. */
+  unranked: { slug: string; name: string }[];
   networkRows: GroupRow[];
   categoryRows: GroupRow[];
 }) {
@@ -694,6 +698,18 @@ export default function RankingsClient({
           filterKey={JSON.stringify([searchQuery, selectedCategory, selectedType])}
           items={filteredRows.filter((r) => r.group === group)}
         />
+      )}
+      {activeTab === "programs" && unranked.length > 0 && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          Not ranked:{" "}
+          {unranked.map((p, i) => (
+            <span key={p.slug}>
+              {i > 0 && ", "}
+              <Link href={`/programs/${p.slug}`} className="underline underline-offset-2 hover:text-foreground">{p.name}</Link>
+            </span>
+          ))}{" "}
+          ({SAME_TEAM_LABEL}).
+        </p>
       )}
       {activeTab === "networks" && <NetworksTable rows={networkRows} />}
       {activeTab === "categories" && <CategoriesTable rows={categoryRows} />}

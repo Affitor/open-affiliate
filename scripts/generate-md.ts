@@ -1045,7 +1045,10 @@ function indexMd(): string {
 
 function rankingsMd(): string {
   // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
-  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified)
+  // Our own programs are listed but never ranked (SAME_TEAM_SLUGS), as on the HTML page.
+  const verified = sitePrograms.filter((p) => isLive(p) && p.verified)
+  const ranked = verified.filter((p) => !isSameTeam(p.slug))
+  const unranked = verified.filter((p) => isSameTeam(p.slug))
   const inGroup = (g: CommissionGroup) => {
     const list = ranked.filter((p) => commissionGroup(p.commission) === g)
     return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
@@ -1100,6 +1103,7 @@ function rankingsMd(): string {
     section("Programs paying a percentage of the sale", programLines("percent")),
     section("Programs paying a flat amount", programLines("flat")),
     section("Tiered, hybrid and other commissions", programLines("other")),
+    unranked.length ? `Not ranked: ${unranked.map((p) => `[${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) (${SAME_TEAM_LABEL})`).join(", ")}.` : null,
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),
