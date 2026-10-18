@@ -13,7 +13,7 @@ commission:
   value: 100
   currency: USD
   duration: "first subscription year"
-  conditions: "100% of net sales value for qualified transactions during the first year: yearly subscriptions, additional mailboxes or add-ons purchased during the first subscription year, and monthly-to-yearly upgrades while the subscription is younger than one year. Commissions become available for payment monthly once total earnings reach $100."
+  conditions: "100% of net sales value for qualified transactions during the first year. Yearly subscriptions and additional mailboxes or add-ons during the first subscription year qualify. Upgrades to yearly plans from monthly plans qualify while the subscription is younger than one year. Commissions become available for payment monthly once total earnings reach $100."
 
 # cookie_days: not published on www.startmail.com/affiliate (checked 2026-10-18); linked portal terms could not be reverified.
 
@@ -28,7 +28,7 @@ signup_url: https://www.startmail.com/affiliate
 approval: manual
 restrictions:
   - "No spam or fake traffic"
-  - "No bidding on StartMail branded keywords or using them in paid-ad headlines or descriptions"
+  - "No bidding on StartMail branded keywords or using them in PPC headlines or descriptions"
   - "PPC traffic must go to the affiliate's own website"
   - "No illegal, deceptive or misleading marketing, or materials that violate brand guidelines"
   - "No promotion on adult or gambling websites"
