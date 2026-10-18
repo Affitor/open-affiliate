@@ -605,14 +605,19 @@ const SlugBody = z.object({ slug: slugField })
  * characters, fillers), line/paragraph separators, lone surrogates. Allowed
  * only where real text needs them, one per character: a variation selector
  * after the character it varies (an ideographic one after an ideograph, a
- * Mongolian one after Mongolian), a zero-width joiner between two visible
- * characters (👩‍💻, ❤️‍🔥), a non-joiner between two letters (Persian, Indic),
- * and tag characters only inside a subdivision flag (🏴󠁧󠁢󠁳󠁣󠁴󠁿). Multi-line fields
+ * Mongolian one after Mongolian, emoji presentation after an emoji), a
+ * zero-width joiner between two visible characters that are not Latin letters
+ * (👩‍💻, ❤️‍🔥, Indic conjuncts), a non-joiner between two letters (Persian, Indic),
+ * and tag characters only inside the England, Scotland or Wales flag. Multi-line fields
  * keep line breaks; \r\n becomes \n and a tab becomes a space first.
  */
-const EMOJI_TAG_SEQUENCE = /\u{1F3F4}[\u{E0020}-\u{E007E}]+\u{E007F}/gu
+// The three subdivision flags in Unicode's recommended set (England,
+// Scotland, Wales). Any other run of tag characters could spell hidden text.
+const EMOJI_TAG_SEQUENCE =
+  /\u{1F3F4}\u{E0067}\u{E0062}(?:\u{E0065}\u{E006E}\u{E0067}|\u{E0073}\u{E0063}\u{E0074}|\u{E0077}\u{E006C}\u{E0073})\u{E007F}/gu
 const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800]/u
 const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
+const LATIN_LETTER = /^[A-Za-z]$/
 
 /** True when every invisible code point is one text needs, in the place it needs it. */
 function plainText(multiLine: boolean) {
@@ -624,11 +629,18 @@ function plainText(multiLine: boolean) {
       const cp = c.codePointAt(0)!
       if (cp >= 0xe0100 && cp <= 0xe01ef) return /\p{Ideographic}/u.test(before)
       if (cp >= 0x180b && cp <= 0x180f) return /\p{Script=Mongolian}/u.test(before)
-      // Emoji and text presentation (❤️) after any visible character; the other
+      // Emoji and text presentation (❤️, 1️⃣) after an emoji; the other
       // standardized variants never follow a Latin letter.
-      if (cp === 0xfe0e || cp === 0xfe0f) return VISIBLE.test(before)
-      if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !/[A-Za-z]/.test(before)
-      if (cp === 0x200d) return (VISIBLE.test(before) || before === "\uFE0F") && VISIBLE.test(after)
+      if (cp === 0xfe0e || cp === 0xfe0f) return /\p{Emoji}/u.test(before)
+      if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !LATIN_LETTER.test(before)
+      if (cp === 0x200d) {
+        return (
+          (VISIBLE.test(before) || before === "\uFE0F") &&
+          VISIBLE.test(after) &&
+          !LATIN_LETTER.test(before) &&
+          !LATIN_LETTER.test(after)
+        )
+      }
       if (cp === 0x200c) return /[\p{L}\p{M}]/u.test(before) && /[\p{L}\p{M}]/u.test(after)
       if (multiLine && c === "\n") return true
       return !NEVER.test(c)
@@ -1107,7 +1119,7 @@ export function slugFor(name: string, url?: string): string {
   } catch {
     return ""
   }
-  const host = [parsed.subdomain?.replace(/^www\.?/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")
+  const host = [parsed.subdomain?.replace(/^www(\.|$)/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")
   return slugOf(`${host} ${path}`)
 }
 
