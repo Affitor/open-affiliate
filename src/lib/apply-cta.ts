@@ -20,6 +20,11 @@ export function applyEarnLabel(commission: Program["commission"]): string {
   if (isCreditReward(commission)) return `${prefix} credits`
   const shown = commissionDisplay(commission)
   if (!shown || shown === "Not published") return prefix
+  // A stored rate that qualifies the figure ("$15 to $1,000", "up to 30%") would be
+  // overstated by "Apply & earn $1,000": no number then. A bare "25" is the figure.
+  const stored = String(commission.rate ?? "").trim()
+  const norm = (x: string) => x.replace(/[\s,]/g, "").replace(/\.0+(?=\D|$)/, "").toLowerCase()
+  if (stored && !/^\d+(\.\d+)?$/.test(stored) && norm(stored) !== norm(shown)) return prefix
   const label = `${prefix} ${shown}`
   if (/[—–]/.test(label) || ctaWordCount(label) > 4) return prefix
   return label

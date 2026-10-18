@@ -105,7 +105,10 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 export function payoutText(p: Program): string | null {
   const parts: string[] = []
   if (p.payout?.frequency) parts.push(capitalize(p.payout.frequency))
-  if (p.payout?.minimum != null) parts.push(`${parts.length ? "from" : "From"} a $${p.payout.minimum} minimum`)
+  if (p.payout?.minimum != null) {
+    const min = p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
+    parts.push(parts.length ? min : min.charAt(0).toUpperCase() + min.slice(1))
+  }
   return parts.length ? parts.join(", ") : null
 }
 
