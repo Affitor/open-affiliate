@@ -14,9 +14,9 @@ commission:
   mode: tiered
   value: 15
   currency: EUR
-  # duration: entry tier length; tiers differ: "5 years from subscription start per customer" (Silver and Gold) and "Lifetime of the customer’s subscription" (Platinum) (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
+  # duration: varies by tier, so left out: "5 years from subscription start per customer" (Silver and Gold) and "Lifetime of the customer’s subscription" (Platinum) (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
   # the listing's offers block gives the entry-tier length and points to the contract: "Receive commission for all signed customers for 5 years.*" and "*Full details can be read in your contract." (market.partnerstack.com/page/planday, checked 2026-10-17)
-  duration: "5 years"
+  duration: null
   conditions: "Tiered by referred revenue in euros over the preceding rolling 90 days, reviewed monthly: Silver (under €1,000) pays 10% for 5 years from each customer's subscription start, Gold (€1,000 to €9,999) 12% for 5 years, Platinum (€10,000 and up) 15% for the lifetime of the customer's subscription. A tier change applies to all referred customers, new and existing. Commission is a share of net subscription fees Planday actually receives, excluding setup, SMS and other one-time fees, and is paid monthly in euros once the period's commission reaches €50. Referrals must be submitted through the PartnerStack lead form with your affiliate code, and you must be able to document each lead's consent to be contacted. The listing also describes a separate referral-partner offer paid for the customer's first year."
 
 # cookie_days: not published in Planday's affiliate agreement (checked 2026-10-17); the 90-day cookie answer in the listing FAQ on market.partnerstack.com/page/planday is PartnerStack's default FAQ text, the same as on other programs' portals, so it is not read as Planday's term
@@ -77,8 +77,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-18"
-last_verified_at: "2026-10-18"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api

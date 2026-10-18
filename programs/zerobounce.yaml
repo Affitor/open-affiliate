@@ -18,8 +18,7 @@ commission:
   mode: percentage
   value: 18
   currency: USD
-  # the 18% runs for the first 12 months; "After the initial twelve (12) month period for an End User, the Affiliate's commission rate will adjust to a flat five percent (5%)" (zerobounce.net/affiliate-program, checked 2026-10-18) — the 5% tail is in conditions
-  duration: "12 months"
+  duration: null
   conditions: "18% of gross sales (subscriptions, one-time credits and annual plans) from each referred customer for the first 12 months after their first payment, then 5% of gross sales after that. New customers only; existing, past and self-referred customers do not earn commission. Payouts are issued 35 days after the sale is finalized, paid in USD, as cash or as ZeroBounce credits."
 
 # cookie_days: not published on zerobounce.net/affiliate-program or zerobounce.net/affiliate-terms-and-conditions (checked 2026-10-17)
@@ -71,8 +70,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-18"
-last_verified_at: "2026-10-18"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: manual
