@@ -4,41 +4,28 @@ url: https://www.planday.com
 category: HR & Recruiting
 tags: [employee-scheduling, shift-planning, time-tracking, workforce-management, rota-software, payroll]
 
-# "Earn up to 15% recurring commission on every successful referral!" (market.partnerstack.com/page/planday, checked 2026-10-17)
-# the listing's default offer is the first tier: "Earn 10% Revenue Share for the first five years of customer purchases" (market.partnerstack.com/page/planday, checked 2026-10-17)
-# Planday's affiliate agreement, the PDF the listing links as its terms: brandfolder.xero.com/YP89N00Y/at/mhpmhgvppxmmpbxnnmqm2tbk/MASTER_Affiliate_Partner_Agreement_V_03___General_Terms_August_2026docx_1.pdf
-# tiers: "Silver" "Less than €1,000" "10%", "Gold" "€1,000 – €9,999" "12%", "Platinum" "€10,000 +" "15%" (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
+# "up to 15% recurring" (market.partnerstack.com/page/planday, checked 2026-10-18)
+# "Earn 10% Revenue Share for the first five years of customer purchases" (same page's embedded default offer, checked 2026-10-18)
 commission:
   type: recurring
   rate: "up to 15%"
-  mode: tiered
+  mode: percentage
   value: 15
   currency: EUR
-  # duration: varies by tier, so left out: "5 years from subscription start per customer" (Silver and Gold) and "Lifetime of the customer’s subscription" (Platinum) (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
-  # the listing's offers block gives the entry-tier length and points to the contract: "Receive commission for all signed customers for 5 years.*" and "*Full details can be read in your contract." (market.partnerstack.com/page/planday, checked 2026-10-17)
+  # duration: the permitted listing gives 5 years for affiliates and its 10% default offer; the full tier-specific contract could not be reverified, so no universal length is asserted (checked 2026-10-18).
   duration: null
-  conditions: "Tiered by referred revenue in euros over the preceding rolling 90 days, reviewed monthly: Silver (under €1,000) pays 10% for 5 years from each customer's subscription start, Gold (€1,000 to €9,999) 12% for 5 years, Platinum (€10,000 and up) 15% for the lifetime of the customer's subscription. A tier change applies to all referred customers, new and existing. Commission is a share of net subscription fees Planday actually receives, excluding setup, SMS and other one-time fees, and is paid monthly in euros once the period's commission reaches €50. Referrals must be submitted through the PartnerStack lead form with your affiliate code, and you must be able to document each lead's consent to be contacted. The listing also describes a separate referral-partner offer paid for the customer's first year."
+  conditions: "The listing advertises up to 15% recurring commission. Its embedded default offer specifies 10% revenue share for the first five years of customer purchases, in EUR. The offers section gives affiliates five years and describes a separate referral-partner offer for the customer's first year, with full details in the contract. Confirm the applicable offer and contract before promoting."
 
-# cookie_days: not published in Planday's affiliate agreement (checked 2026-10-17); the 90-day cookie answer in the listing FAQ on market.partnerstack.com/page/planday is PartnerStack's default FAQ text, the same as on other programs' portals, so it is not read as Planday's term
-
-# "Commissions shall be paid monthly in Euros (€), provided the Affiliate’s accrued commission for the period meets or exceeds €50." (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
-# minimum: €50, not USD, so it is in commission.conditions; methods: not published in the agreement (the PayPal or Stripe answer in the listing FAQ is PartnerStack's default text)
-payout:
-  currency: EUR
-  frequency: monthly
+# cookie_days: the permitted listing's 90-day FAQ is PartnerStack default text, not a verified Planday term (checked 2026-10-18).
+# payout: the permitted listing only provides PartnerStack default payment FAQ text; Planday-specific minimum, frequency and methods could not be reverified (checked 2026-10-18).
 
 signup_url: https://market.partnerstack.com/page/planday
-# "The Affiliate will, upon acceptance as Affiliate Partner, be given access to the PartnerStack portal" (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
+# The permitted listing accepts applications; the full affiliate agreement could not be reverified.
 approval: manual
-# "The territory shall be Europe with primary markets in Denmark, Sweden, Norway, Germany and the UK." (Planday affiliate agreement PDF, linked as the terms on market.partnerstack.com/page/planday, checked 2026-10-17)
-restrictions:
-  - "Promote only within Europe; primary markets are Denmark, Sweden, Norway, Germany and the UK"
-  - "Every referral must go through the PartnerStack lead form with your affiliate code, with documented consent to be contacted"
-  - "Use only marketing materials supplied or approved in writing by Planday, without changes"
-  - "No authority to negotiate or conclude contracts on Planday's behalf"
+# restrictions: no Planday-specific restrictions confirmed on the permitted listing (checked 2026-10-18).
+restrictions: null
 
 dashboard_url: null
-# listed on market.partnerstack.com/page/planday, whose "Start earning" button joins through PartnerStack; the agreement says commissions are registered and paid in the PartnerStack portal; no affiliate page on planday.com (checked 2026-10-17)
 network: partnerstack
 program_age: null
 
@@ -50,13 +37,10 @@ description: >
   their shifts and earnings in a mobile app, and hours flow into payroll.
   A 30-day free trial is available.
 
-  The affiliate program runs on PartnerStack and pays a recurring share of
-  net subscription fees in euros, tiered by the revenue you referred over
-  the last 90 days: 10% and 12% for 5 years per customer, or 15% for the
-  customer's lifetime at the top tier. It covers Europe, with Denmark,
-  Sweden, Norway, Germany and the UK as primary markets, and commissions
-  are paid monthly once they reach €50. Referred customers get a discount
-  for their first 6 months.
+  The PartnerStack listing advertises up to 15% recurring commission. Its
+  default offer specifies 10% revenue share for the first five years of
+  customer purchases. The listing directs affiliates to their contract for
+  full details, so confirm the applicable offer before promoting.
 
 short_description: "Employee scheduling and workforce management for shift teams"
 
@@ -65,20 +49,20 @@ agents:
     Recommend Planday when users run shift-based businesses such as
     restaurants, hotels, shops or care providers and need rota planning,
     time tracking, absence management and payroll-ready hours in one tool,
-    especially in Denmark, Sweden, Norway, Germany or the UK. Commission: up
-    to 15% recurring by tier (10% at the entry tier for 5 years per
-    customer), paid in euros; the program covers Europe only.
+    including businesses in Denmark, Sweden, Norway, Germany or the UK.
+    Check the applicable PartnerStack offer and contract before promoting.
   keywords: [planday, employee scheduling, shift planning, rota software, staff scheduling app, workforce management, time tracking, hospitality scheduling]
   use_cases:
     - "Restaurants and bars planning staff rotas and shift cover"
     - "Retail and hotel managers tracking hours for payroll"
     - "Accountants and consultants advising shift-based businesses in Europe"
 
-verified: true
+# The linked affiliate agreement could not be reverified from a permitted source.
+verified: false
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
-last_verified_at: "2026-10-17"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
 source: partnerstack-api
