@@ -57,6 +57,11 @@ export interface BestList {
    * registry grows.
    */
   hub?: boolean
+  /**
+   * The registry category a list belongs to. Other list pages link to a scoped
+   * list only from its own category, so per-category lists do not crowd every page.
+   */
+  scope?: string
 }
 
 export const MAX_ROWS = 50
@@ -115,7 +120,7 @@ export function freshnessLine(rows: Pick<Program, "status" | "verified" | "lastV
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
 
-export const BEST_LISTS: BestList[] = [
+const LISTS: BestList[] = [
   {
     // The hub answers "best affiliate programs" at /best; the slug is only its id.
     slug: "affiliate-programs",
@@ -298,6 +303,48 @@ export const BEST_LISTS: BestList[] = [
   },
 ]
 
+/** Commission types that get a list per category. */
+const CATEGORY_TYPES = [
+  { type: "recurring", label: "Recurring", pays: "a recurring commission" },
+  { type: "one-time", label: "One-Time", pays: "a one-time commission" },
+] as const
+
+/**
+ * "<Category> recurring affiliate programs": one list per category and
+ * commission type, made only where HUB_MIN_INDEXED verified programs with a
+ * published commission qualify. A combination below that gets no page at all,
+ * and its page appears by itself once the registry reaches it.
+ */
+function categoryTypeLists(): BestList[] {
+  const taken = new Set(LISTS.map((l) => l.slug))
+  const categories = [...new Set(livePrograms.map((p) => p.category))].sort()
+  return categories.flatMap((category) =>
+    CATEGORY_TYPES.flatMap(({ type, label, pays }) => {
+      const qualifies = (p: Program) => p.category === category && p.commission.type === type
+      const slug = `${categoryToSlug(category)}-${type}-affiliate-programs`
+      const verified = livePrograms.filter((p) => p.verified && !commissionUnknown(p.commission) && qualifies(p)).length
+      if (verified < HUB_MIN_INDEXED || taken.has(slug)) return []
+      const h1 = `${category} ${label} Affiliate Programs`
+      return [
+        {
+          slug,
+          // 44 characters at most, 60 with the layout's suffix.
+          title: [h1, `${category} ${label} Affiliates`].find((t) => t.length <= 44) ?? h1,
+          h1,
+          description: `${category} affiliate programs that pay ${pays}, ranked by commission, with verified terms first and the cookie window for each.`,
+          summary: `are in the ${category} category and list their commission as ${type}`,
+          criteria: `Programs in the ${category} category whose commission is listed as ${type}.`,
+          hub: true,
+          scope: category,
+          qualifies,
+        },
+      ]
+    })
+  )
+}
+
+export const BEST_LISTS: BestList[] = [...LISTS, ...categoryTypeLists()]
+
 /** The hub: "best affiliate programs" at /best, the parent of every other list. */
 export const BEST_INDEX = BEST_LISTS[0]
 
@@ -308,6 +355,11 @@ export function bestPath(list: BestList): string {
 /** False for a hub with fewer than HUB_MIN_INDEXED verified programs: the page stays up, noindex, out of the sitemap. */
 export function indexable(list: BestList): boolean {
   return !list.hub || buildBestList(list).verified.length >= HUB_MIN_INDEXED
+}
+
+/** The lists a list page links to: every unscoped list, and the scoped ones of its own category. */
+export function otherLists(list: BestList): BestList[] {
+  return BEST_LISTS.filter((l) => l.slug !== list.slug && (!l.scope || l.scope === list.scope))
 }
 
 /** A list at /best/<slug>; the hub has no such URL. */
@@ -346,6 +398,7 @@ export function categoryList(category: string): BestList {
       "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are listed last.",
     qualifies: (p) => p.category === category,
     directory: true,
+    scope: category,
   }
 }
 
