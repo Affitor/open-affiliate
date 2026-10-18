@@ -11,7 +11,7 @@ commission:
   value: 20
   currency: USD
   duration: null
-  conditions: "photoroom.com/affiliates (2026-10-18): \"Affiliates earn 20% commission on eligible Photoroom subscription plans, including monthly and yearly Max, and Ultra plans, plus the yearly Pro plan.\" Payout, threshold and approval terms are sent through Awin only after approval, so they are not listed here."
+  conditions: "photoroom.com/affiliates (2026-10-18): \"Affiliates earn 20% commission on eligible Photoroom subscription plans, including monthly and yearly Max, and Ultra plans, plus the yearly Pro plan.\" Once approved, affiliates receive program terms through Awin. The public affiliate page does not specify payout minimum, frequency, methods or approval turnaround."
 
 cookie_days: 30
 attribution: last-click

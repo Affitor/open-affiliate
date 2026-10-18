@@ -11,7 +11,7 @@ commission:
   value: 30
   currency: USD
   duration: lifetime
-  conditions: "scalenut.com/affiliate (2026-10-18) says two things: the headline promises \"a 30%–50% recurring commission for life\", while the details give 30% (\"You'll receive a 30% commission each month they continue renewing\") and 40% on the Premium tier (\"just refer 50 and we'll consider upgrading your account\"). No published rule explains 50%. Payouts: Net-30, on the last day of the month once commissions due exceed $50, via PayPal."
+  conditions: "scalenut.com/affiliate (2026-10-18) says two things: the headline promises \"a 30%–50% recurring commission for life\", while the details give 30% (\"You'll receive a 30% commission each month they continue renewing\") and 40% on the Premium tier (\"just refer 50 and we'll consider upgrading your account\"). No published rule explains 50%. Payouts: Net-30, on the last day of the month via PayPal, once commissions due pass $50 (the FAQ says both \"exceed $50\" and \"at least $50\", so exactly $50 is unclear)."
 
 cookie_days: 60
 attribution: last-click
