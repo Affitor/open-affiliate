@@ -1060,3 +1060,19 @@ test("a member's sign-in answer does not wait for the mail; a failed send gives 
   assert.equal(r.status, 200, "same answer as a stranger even though the mail failed")
   assert.equal(t.store.count("signin.code_sent"), 0, "reservation withdrawn after the failed send")
 })
+
+test("adding an address that is on another team does not say so; one already on yours does", async () => {
+  const t = setup()
+  await owner(t)
+  await t.call("member-add", { email: "ann@kymaapi.com" })
+  const again = await t.call("member-add", { email: "ANN@kymaapi.com" })
+  assert.equal(again.body.error, "already_member")
+  // Another account holds this address (as a DNS claim's contact would).
+  const otherClaim = randomUUID()
+  t.store.claims.set(otherClaim, { ...[...t.store.claims.values()][0], id: otherClaim, domain: "build2own.dev", slug: "build-to-own-replay" })
+  await t.store.addMember(otherClaim, "bo@kymaapi.com", null, MAX_MEMBERS)
+  const elsewhere = await t.call("member-add", { email: "bo@kymaapi.com" })
+  assert.equal(elsewhere.status, 409)
+  assert.equal(elsewhere.body.error, "cannot_add")
+  assert.equal(String(elsewhere.body.message).includes("team"), false, "no hint of another team")
+})

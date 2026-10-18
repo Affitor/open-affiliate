@@ -43,10 +43,12 @@ CREATE INDEX IF NOT EXISTS claim_signin_codes_created ON claim_signin_codes (cre
 ALTER TABLE claim_edits
   ADD COLUMN IF NOT EXISTS kind text NOT NULL DEFAULT 'edit' CHECK (kind IN ('edit', 'new'));
 
--- Member 1 for claims confirmed before this migration. Member addresses are
--- stored lowercase (live.ts looks them up that way).
-INSERT INTO claim_members (claim_id, email)
-SELECT c.id, lower(c.email)
+-- Member 1 for claims confirmed before this migration. The member id is the
+-- claim id, so a session cookie issued before this migration (it held the
+-- claim id) still finds its member. Member addresses are stored lowercase
+-- (live.ts looks them up that way).
+INSERT INTO claim_members (id, claim_id, email)
+SELECT c.id, c.id, lower(c.email)
 FROM program_claims c
 WHERE c.status = 'active'
   AND c.email IS NOT NULL

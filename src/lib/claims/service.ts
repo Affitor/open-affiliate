@@ -992,7 +992,11 @@ async function addTeammate(req: Request, deps: ClaimDeps): Promise<Response> {
     if (result.result === "full") {
       return fail(409, "team_full", `Your team is full (${MAX_MEMBERS} of ${MAX_MEMBERS}). Remove someone to add a new teammate.`)
     }
-    return fail(409, "already_member", "This address is already on a team.")
+    // Say so only when it is this team; another team's membership stays private.
+    const ours = (await deps.store.listMembers(claim.id)).some((m) => m.email === email.toLowerCase())
+    return ours
+      ? fail(409, "already_member", "This address is already on your team.")
+      : fail(409, "cannot_add", "This address can't be added. Check it, or try another one.")
   }
   await deps.store.addEvent({ type: "member.added", claim_id: claim.id, domain: claim.domain })
   // Best effort: the teammate can sign in whether or not this arrives.

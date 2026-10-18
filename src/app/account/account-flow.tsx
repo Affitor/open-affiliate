@@ -35,6 +35,9 @@ const STATUS: Record<string, string> = {
 
 const date = (iso: string) => new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
+/** A change's public record is a pull request on the registry repo; anything else is not linked. */
+const PR_URL = /^https:\/\/github\.com\/Affitor\/open-affiliate\/pull\/\d+$/;
+
 async function fetchAccount(): Promise<Account | null> {
   try {
     const res = await fetch("/api/claims/account");
@@ -213,7 +216,7 @@ export function AccountFlow({ siteKey }: { siteKey: string }) {
                     </span>
                     <span className="text-muted-foreground">
                       {STATUS[c.status] ?? c.status}
-                      {c.prUrl && (
+                      {c.prUrl && PR_URL.test(c.prUrl) && (
                         <>
                           {" · "}
                           <a href={c.prUrl} className={quiet} target="_blank" rel="noreferrer">Public record</a>

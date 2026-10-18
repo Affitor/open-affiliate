@@ -70,6 +70,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
+  "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
 ])
 
 test("every computed anchor href is tracked or reviewed as not Affitor", () => {
