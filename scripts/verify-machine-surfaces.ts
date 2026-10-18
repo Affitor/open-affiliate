@@ -1167,6 +1167,8 @@ function pausedJoinLabel(html: string): string | null {
 function checkNoProgramHtml(program: (typeof programs)[number], page: string, html: string): void {
   const own = html
     .replace(/<script[\s\S]*?<\/script>/g, " ")
+    // The comparison table (data-compare) lists other programs with their own figures.
+    .replace(/<table data-compare[\s\S]*?<\/table>/g, " ")
     .replace(/<a [^>]*href="\/programs\/[a-z0-9-]+"[^>]*>[\s\S]*?<\/a>/g, " ");
   for (const label of JOIN_LABELS) {
     if (own.includes(label)) fail(`${page} shows a join button ("${label}") for a brand with no program`);
@@ -1334,6 +1336,7 @@ async function checkServedPages(): Promise<string> {
       ["a cookie window in its flow", `<span>${off.cookieDays}-day cookie</span>`],
       ["an approval step in its flow", `<span data-term="step-approval" class="x">Reviewed by hand approval on PartnerStack</span>`],
       ["a payout step in its flow", `<span data-term="step-payout" class="x">Monthly</span>`],
+      ["an untagged approval step in its flow", `<span class="x">Reviewed by hand approval on PartnerStack</span>`],
       ["a payout step in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ "data-term": "step-payout", children: "Monthly" }))}])</script>`],
       ["a minimum payout row", `<span><svg></svg>Min payout</span><span class="text-sm font-semibold">$${off.payout.minimum}</span>`],
       ["payout and approval in prose", `<p>Payouts are monthly with a $50 minimum. Applications are reviewed by hand.</p>`],

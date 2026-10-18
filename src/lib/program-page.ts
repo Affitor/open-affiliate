@@ -1,5 +1,5 @@
 import { IN_HOUSE, commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
-import { proseSentences, statesTerms, termsConfirmed } from "@/lib/confirmed-terms"
+import { namesTerm, proseSentences, termsConfirmed } from "@/lib/confirmed-terms"
 import { hasNoProgram } from "@/lib/no-program"
 import { isPaused } from "@/lib/program-seo"
 
@@ -31,7 +31,16 @@ export interface Figure {
   kind: "number" | "text" | "varies"
 }
 
-const durationWords = (d: string) => (d.trim().toLowerCase() === "lifetime" ? "for life" : `for ${d}`)
+/** The duration field in words after "recurring": "for 12 months", "for life", or the stored phrase as it reads. */
+function durationWords(raw: string): string {
+  const d = raw.trim()
+  const lower = d.charAt(0).toLowerCase() + d.slice(1)
+  if (/^lifetime$/i.test(d)) return "for life"
+  if (/^\d/.test(d)) return `for ${d}`
+  if (/^(for|while|until|up to|on|during)\b/i.test(d)) return lower
+  if (/^lifetime\b/i.test(d)) return `for the ${lower}`
+  return `(${d})`
+}
 
 /** The stored rate says for how long, so the duration field is not repeated after it. */
 const SAYS_DURATION = /\b(months?|years?|lifetime|life|renewals?|first (payment|purchase|transaction))\b/i
@@ -60,7 +69,7 @@ export function commissionFigure(p: Program): Figure | null {
   }
   let rest: string
   if (c.mode === "hybrid") rest = duration || (recurring && !saysDuration ? "recurring" : "")
-  else if (recurring) rest = duration ? `recurring ${duration}` : "recurring"
+  else if (recurring) rest = duration ? `recurring ${duration}` : saysDuration ? "" : "recurring"
   else rest = isCreditReward(c) ? "per referral" : "per sale"
   return { big: display, rest, kind: "number" }
 }
@@ -144,7 +153,7 @@ export function joinThrough(p: Program, network: string | null): string {
  * terms, so the product text leaves them out. A bare "%" is not enough: "automates
  * 70% of customer interactions" is product text.
  */
-const DEAL = /\b(affiliates?|commissions?|payouts?|partners get|earn|earns|earnings(?![- ]call)|per referral|referred (customers?|users?|subscriptions?|sales?)|referral (fees?|commissions?|bonus(es)?|rewards?)|(strong|high|great) conversion rates?)\b/i
+const DEAL = /\b(affiliates?|commissions?|payouts?|partners get|earn|earns|earnings(?![- ]call)|per referral|referred (customers?|users?|subscriptions?|sales?)|referral (fees?|commissions?|bonus(es)?|rewards?)|(strong|high|great) conversion rates?|apply (at|through|via|on))\b/i
 
 export function isDealSentence(text: string): boolean {
   return DEAL.test(text)
@@ -157,9 +166,10 @@ export function isDealSentence(text: string): boolean {
  */
 export function productText(p: Program): string {
   // p.description is already filtered for an unverified program (confirmedTerms, pitch rules).
-  // Sentences stating a term are left out on every page: the earnings card carries them.
+  // Sentences stating a term ("The cookie lasts 45 days.") are left out on every page: the
+  // earnings card carries them. namesTerm, not statesTerms: a cookie-consent product may say "cookie".
   const kept = proseSentences(p.description)
-    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence) && !statesTerms(s.sentence, "pitch"))
+    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence) && !namesTerm(s.sentence))
     .map((s) => s.sentence + s.after)
     .join("")
     .trim()
@@ -203,10 +213,14 @@ function plainRate(c: Program["commission"]): boolean {
   return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(commissionDisplay(c))
 }
 
+/** Conditions that put a number on a ceiling ("capped at $400 per sale"): the estimate would ignore it. */
+const CAPPED = /\bcap(?:ped|s)?\s+(?:at|of)\s+[$€£]?\d|\bmax(?:imum)?\s+(?:of\s+)?[$€£]\d|\bup to\s+[$€£]\d|\blimited to\s+[$€£]?\d/i
+
 export function estimateInput(p: Program): EstimateInput | null {
   if (pageState(p) !== "verified") return null
   const c = p.commission
   if (c.value == null || (c.mode !== "percentage" && c.mode !== "flat") || isCreditReward(c) || !plainRate(c)) return null
+  if (CAPPED.test(p.commissionConditions ?? "")) return null
   const recurring = c.type === "recurring"
   if (recurring && c.mode === "flat") return null
   const months = recurring ? durationMonths(c.duration) : 1
