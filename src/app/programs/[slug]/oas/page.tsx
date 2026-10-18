@@ -5,6 +5,7 @@ import { Check, ChevronDown, Clock, ExternalLink, Info, Minus, Star } from "luci
 import { ProgramLogo } from "@/components/program-logo";
 import { categoryToSlug, getProgram, IN_HOUSE, livePrograms } from "@/lib/programs";
 import { networkName } from "@/lib/network-meta";
+import { isAffitorHref } from "@/lib/affitor-link";
 import {
   buildBoard,
   categoryRank,
@@ -70,6 +71,16 @@ function groupsOf(score: OasScore, part: Part): Group[] {
   });
 }
 
+/**
+ * A page the reviewer read. Affitor pages (programs on the Affitor network) stay
+ * plain text: every affitor.com link on the site carries UTM and a click event,
+ * and evidence is not a referral.
+ */
+function evidenceLink(url: string, label: React.ReactNode, className: string) {
+  if (!/^https?:\/\//.test(url) || isAffitorHref(url)) return <span className="text-muted-foreground">{typeof label === "string" ? label : url}</span>;
+  return <a href={url} target="_blank" rel="noopener nofollow" className={className}>{label}</a>;
+}
+
 const STATE_TAG: Record<OasCheck["state"], string | null> = { met: null, not_met: "Not met", not_public: "Not public", checking: "Checking" };
 
 function StateIcon({ state }: { state: OasCheck["state"] }) {
@@ -117,7 +128,7 @@ function CheckRow({ c, date, scored }: { c: OasCheck; date: string; scored: bool
             <p>Checked {readableDate(date)}:</p>
             <ul className="mt-0.5">
               {urls.map((u) => (
-                <li key={u} className="break-all"><a href={u} target="_blank" rel="noopener nofollow" className="underline underline-offset-2 hover:text-foreground">{u}</a></li>
+                <li key={u} className="break-all">{evidenceLink(u, u, "underline underline-offset-2 hover:text-foreground")}</li>
               ))}
             </ul>
           </div>
@@ -137,10 +148,10 @@ function CheckRow({ c, date, scored }: { c: OasCheck; date: string; scored: bool
             {c.state === "met" ? c.points : fixable ? <span className="text-muted-foreground">+{def.max}</span> : null}
           </span>
         )}
-        {c.state === "met" && c.url && (
-          <a href={checkedUrls(c)[0]} target="_blank" rel="noopener nofollow" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
-            Source <ExternalLink className="h-3 w-3" aria-hidden />
-          </a>
+        {c.state === "met" && c.url && evidenceLink(
+          checkedUrls(c)[0],
+          <>Source <ExternalLink className="h-3 w-3" aria-hidden /></>,
+          "inline-flex items-center gap-1 text-muted-foreground hover:text-foreground",
         )}
       </div>
     </div>
