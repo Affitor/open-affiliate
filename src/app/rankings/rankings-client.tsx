@@ -591,8 +591,9 @@ export default function RankingsClient({
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
-          {rows.length} verified programs, sorted by what they pay: commission,
-          how long it recurs, cookie length and payout minimum.
+          {oas ? "Programs ranked by OAS, and " : ""}{rows.length} verified programs
+          sorted by what they pay: commission, how long it recurs, cookie
+          length and payout minimum.
         </p>
       </div>
 

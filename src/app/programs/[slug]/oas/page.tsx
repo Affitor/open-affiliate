@@ -125,7 +125,7 @@ function CheckRow({ c, date, scored }: { c: OasCheck; date: string; scored: bool
         )}
         {c.state === "not_met" && urls.length > 0 && (
           <div className="text-xs text-muted-foreground mt-1.5">
-            <p>Checked {readableDate(date)}:</p>
+            <p>Pages read on {readableDate(date)}:</p>
             <ul className="mt-0.5">
               {urls.map((u) => (
                 <li key={u} className="break-all">{evidenceLink(u, u, "underline underline-offset-2 hover:text-foreground")}</li>
@@ -286,7 +286,8 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
       {fixes.length > 0 && (
         <details className="group mt-10 rounded-xl border border-border bg-card">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 sm:px-5 py-3.5 font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
-            {fixes.length} ways to add up to {recoverable} points
+            {/* No point total while scoring: it would read as a score. */}
+            {scored ? `${fixes.length} ways to add up to ${recoverable} points` : `${fixes.length} ways to add points`}
             <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
           </summary>
           <p className="border-t border-border px-4 sm:px-5 py-2.5 text-meta text-muted-foreground">Biggest first. A term that is not on a public page counts once it is published.</p>

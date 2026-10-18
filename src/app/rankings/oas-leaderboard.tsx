@@ -4,10 +4,10 @@ import { TEAM_DISCLOSURE, UNRANKED_TEXT, type BoardRow } from "@/lib/oas";
 
 const TOP = 5;
 
-function Row({ r }: { r: BoardRow }) {
+function Row({ r, rank }: { r: BoardRow; rank: number | null }) {
   return (
     <li className="grid grid-cols-[24px_minmax(0,1fr)_auto] items-center gap-3 py-2.5 border-b border-border">
-      <span className="font-mono text-meta text-muted-foreground">{r.rank ?? "–"}</span>
+      <span className="font-mono text-meta text-muted-foreground">{rank ?? "–"}</span>
       <Link href={`/programs/${r.program.slug}/oas`} className="flex min-w-0 items-center gap-2.5 hover:underline underline-offset-2">
         <ProgramLogo slug={r.program.slug} name={r.program.name} size={24} className="shrink-0 rounded-md border border-border bg-white" />
         <span className="truncate">{r.program.name}</span>
@@ -55,7 +55,8 @@ export function OasLeaderboard({ board }: { board: BoardRow[] }) {
                 <h3 className="oa-label">{c.name}</h3>
                 <span className="oa-label">{c.ranked.length} ranked</span>
               </div>
-              <ol>{rows.map((r) => <Row key={r.program.slug} r={r} />)}</ol>
+              {/* Rank within the category: equal OAS share it, as on the report. */}
+              <ol>{rows.map((r) => <Row key={r.program.slug} r={r} rank={r.rank == null ? null : c.ranked.findIndex((x) => x.oas === r.oas) + 1} />)}</ol>
               {c.ranked.length < TOP && <p className="text-meta text-muted-foreground mt-2">Fewer than {TOP} ranked, so no &ldquo;top {TOP}&rdquo; claim yet.</p>}
             </div>
           );
