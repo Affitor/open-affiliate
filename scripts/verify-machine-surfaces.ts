@@ -20,6 +20,7 @@ import {
   listCommissionText,
   flatUsdPayout,
   verifiedDate,
+  indexable,
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
@@ -433,7 +434,10 @@ function sameRows(surface: string, got: string[], want: string[]): void {
  */
 function checkListPage(list: BestList, path: string): void {
   const url = `${BASE_URL}${path}`;
-  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  // A hub below HUB_MIN_INDEXED verified programs is noindex, so it stays out of the sitemap.
+  const indexed = indexable(list);
+  if (indexed && !sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  if (!indexed && sitemapUrlSet.has(url)) fail(`sitemap lists ${url}, a noindex hub`);
   const title = `${list.title} | OpenAffiliate`;
   if (title.length > 60 || /[–—]/.test(title)) {
     fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
@@ -464,6 +468,9 @@ function checkListPage(list: BestList, path: string): void {
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (html.includes('<meta name="robots" content="noindex') === indexed) {
+    fail(`${htmlFile} must ${indexed ? "not carry" : "carry"} a noindex robots meta`);
+  }
   const tbodyStart = html.indexOf("<tbody>");
   const tbodyEnd = html.indexOf("</tbody>", tbodyStart);
   if (tbodyStart === -1 || tbodyEnd === -1) fail(`${htmlFile} has no table body`);

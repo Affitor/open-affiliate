@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_LISTS } from "../src/lib/best-lists"
+import { BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, getBestList, indexable } from "../src/lib/best-lists"
+import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
 import { isAffitorHref } from "../src/lib/affitor-link"
 import { getProgram, isLive } from "../src/lib/programs"
@@ -137,3 +138,37 @@ test("You earn reads naturally for the rate shapes the registry has", () => {
   ]
   for (const [commission, want] of cases) assert.equal(earnText(p(commission)), want, JSON.stringify(commission))
 })
+
+// ---------- Hub lists (P3) ----------------------------------------------------
+
+const TERMS_HUBS = ["no-minimum-payout-affiliate-programs", "paypal-affiliate-programs", "bank-transfer-affiliate-programs", "long-cookie-affiliate-programs"]
+
+test("a hub that filters on payout or cookie lists verified programs only", () => {
+  // Unverified programs show no payout or cookie (confirmed-terms.ts), so a hub cannot claim one.
+  for (const slug of TERMS_HUBS) {
+    const list = getBestList(slug)
+    assert.ok(list?.hub, slug)
+    const { rows } = buildBestList(list)
+    assert.ok(rows.length > 0, slug)
+    assert.ok(rows.every((p) => p.verified), slug)
+  }
+})
+
+test("the bank hub never counts a program paid only by Wise, PayPal or other methods", () => {
+  const { rows } = buildBestList(getBestList("bank-transfer-affiliate-programs")!)
+  for (const p of rows) assert.ok((p.payoutMethods ?? []).some((m) => ["bank", "wire", "ach", "sepa"].includes(m.toLowerCase())), p.slug)
+})
+
+test("a hub below the threshold is noindex and out of the sitemap; every other list is in it", () => {
+  const urls = new Set(sitemap().map((e) => e.url))
+  for (const list of BEST_LISTS) {
+    const url = `https://openaffiliate.dev${bestPath(list)}`
+    const small = Boolean(list.hub) && buildBestList(list).verified.length < HUB_MIN_INDEXED
+    assert.equal(indexable(list), !small, list.slug)
+    assert.equal(urls.has(url), !small, url)
+  }
+  // The registry today has a hub on each side of the line, so both branches run.
+  assert.ok(BEST_LISTS.some((l) => l.hub && !indexable(l)))
+  assert.ok(BEST_LISTS.some((l) => l.hub && indexable(l)))
+})
+
