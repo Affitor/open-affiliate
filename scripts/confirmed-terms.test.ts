@@ -674,3 +674,21 @@ test("program page: a qualified rate is shown as stored, never as a bare figure 
   assert.equal(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", value: 10, rate: "$10 in Airtable credits" }))?.rest, "per referral")
   assert.deepEqual(page.commissionFigure(withCommission({ type: "recurring", mode: "percentage", value: 25, rate: "25", duration: "12 months" })), { big: "25%", rest: "recurring for 12 months", kind: "number" })
 })
+
+test("program page follow-up: caps in the conditions, duration phrases, cookie products (registry)", () => {
+  const live = (slug: string) => confirmedTerms(getProgram(slug)!)
+  for (const slug of ["hosting-com", "oxylabs"]) assert.equal(page.estimateInput(live(slug)), null, `${slug}: the estimate would ignore its cap`)
+  assert.ok(page.estimateInput(live("cookieyes")), "\"No cap on monthly earnings\" is not a cap")
+  assert.equal(page.commissionFigure(live("repostit"))?.rest, "recurring for as long as the referred customer stays active")
+  assert.equal(page.commissionFigure(live("notify-me"))?.rest, "", "a tiered rate that says for how long gets nothing after it")
+  assert.match(page.productText(live("cookieyes")), /scans sites for cookies/)
+  assert.doesNotMatch(page.productText(withCommission({}, { description: "A form builder. The cookie lasts 45 days. Apply at partners.example.com." })), /cookie lasts|Apply at/)
+})
+
+test("program page follow-up r2: caps written after the amount or in the description; term sentences stay out", () => {
+  const live = (slug: string) => confirmedTerms(getProgram(slug)!)
+  for (const slug of ["pcloud", "similarweb"]) assert.equal(page.estimateInput(live(slug)), null, `${slug}: the estimate would ignore its cap`)
+  assert.doesNotMatch(page.productText(live("vsub")), /no application/i)
+  assert.doesNotMatch(page.productText(live("wix")), /\$300 monthly threshold/)
+  assert.match(page.productText(live("cookieyes")), /scans sites for cookies/)
+})
