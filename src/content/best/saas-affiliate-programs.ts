@@ -13,13 +13,12 @@ export const post: BestPost = {
   description:
     "The best SaaS and software affiliate programs for marketing, security, finance, sales and support tools, with terms checked on each brand's own page.",
   intro:
-    "Software is one of the easiest things to recommend as an affiliate: your readers already pay for tools, and a tool that works stays in their stack. SaaS programs pay in very different ways, though. Some pay a flat amount per customer, some a share of the first payment, and some keep paying on every renewal. Every program below is tagged SaaS in the OpenAffiliate registry, and each block shows how it pays, as published on the brand's own terms, and the day we last checked it.",
+    "Software is one of the easiest things to recommend as an affiliate: your readers already pay for tools, and a tool that works stays in their stack. SaaS programs pay in very different ways, though. Some pay a flat amount per customer, some a share of the first payment, and some keep paying on every renewal. Every program below is tagged SaaS in the OpenAffiliate registry, and each block shows how it pays, as published in the program's own terms or network listing, and the day we last checked it.",
   programs: [
     {
       slug: "similarweb",
       bestFor: "Best for marketing and SEO audiences",
       why: "Similarweb gives website traffic data and competitive intelligence, an easy fit for marketing and SEO content. Its commission is paid on all payments for the first year from each new customer who buys a self-serve plan on the website. The PartnerStack listing also mentions a commission cap without saying what it covers.",
-      notFor: "Enterprise deals: the commission covers self-serve plans bought on the website.",
     },
     {
       slug: "1password",
@@ -51,12 +50,12 @@ export const post: BestPost = {
     {
       slug: "idrive",
       bestFor: "Best for backup and tech help content",
-      why: "IDrive backs up PCs, Macs, iPhones, Android and other mobile devices into one account for one fee. Its referral partner program pays a recurring commission on IDrive cloud backup and the other products its terms name, paid quarterly.",
+      why: "IDrive backs up PCs, Macs, iPhones, Android and other mobile devices into one account for one fee. Its referral partner program pays a recurring commission on IDrive cloud backup and the other products its terms name.",
     },
     {
       slug: "vwo",
       bestFor: "Best for conversion and growth marketers",
-      why: "VWO is an A/B testing tool for experimentation and conversion rate optimization. It pays a share of every payment a referred customer makes, and the program runs on PartnerStack now that VWO is part of Wingify.",
+      why: "VWO is an A/B testing tool for experimentation and conversion rate optimization. It pays a share of every payment a referred customer makes. VWO is now part of Wingify, and the program runs on PartnerStack.",
     },
     {
       slug: "cloudtalk",
@@ -89,7 +88,7 @@ export const post: BestPost = {
     { label: "Best for sales teams", slug: "cloudtalk" },
   ],
   howWeChose:
-    "We started from the programs tagged SaaS in the OpenAffiliate registry whose terms we have verified on the brand's own page, then our editors picked a mix across marketing, security, finance, sales and support tools, starting with the programs readers find us for in Google search, and left out the ones our AI and recurring posts already cover. Commission size is shown, not scored: a flat payout per customer and a share of every renewal are different deals, so check how each one pays.",
+    "We started from the programs tagged SaaS in the OpenAffiliate registry whose terms we have verified on the brand's own page, then our editors picked and ordered a mix across marketing, security, finance, sales and support tools, starting with the programs readers find us for in Google search, and left out the ones our AI and recurring posts already cover. Commission size is shown, not scored: a flat payout per customer and a share of every renewal are different deals, so check how each one pays.",
   affitor: {
     before: "Seerist is listed on the ",
     anchor: "Affitor marketplace",

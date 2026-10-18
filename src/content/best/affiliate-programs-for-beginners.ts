@@ -12,7 +12,7 @@ export const post: BestPost = {
   description:
     "Affiliate programs for beginners that approve you automatically, so you can start the day you sign up, with terms checked on each brand's own page.",
   intro:
-    "When you are new to affiliate marketing, the first hurdle is often the application: a program that reviews every applicant can take days to answer, or turn you down. The programs below skip that step. Each one approves new affiliates automatically on its own terms, so you can get your link the day you sign up. Each block shows the cookie window, the payout minimum where the program publishes one, and the day we last checked the terms.",
+    "When you are new to affiliate marketing, the first hurdle is often the application: a program that reviews every applicant can take days to answer, or turn you down. The programs below skip that step. Each one approves new affiliates automatically on its own terms, so you can get your link the day you sign up. Each block shows the cookie window and the payout minimum where the program publishes them, and the day we last checked the terms.",
   programs: [
     {
       slug: "se-ranking",
@@ -29,7 +29,7 @@ export const post: BestPost = {
     {
       slug: "saleshandy",
       bestFor: "Best for sales and cold email audiences",
-      why: "Saleshandy is a cold email outreach platform with automated sequences, email warm-up, sender rotation and a B2B lead finder, built for founders, sales teams and lead generation agencies. Approval is instant, and the commission keeps paying for life, at a higher rate once you sell more plans in a month.",
+      why: "Saleshandy is a cold email outreach platform with automated sequences, email warm-up, sender rotation and a B2B lead finder, built for founders, sales teams and lead generation agencies. Approval is instant, and the commission keeps paying for life, at a higher rate once your plan sales in a month pass the program's threshold.",
       notFor: "Black Friday deal posts: festive discount offers earn no commission.",
     },
     {
@@ -37,12 +37,6 @@ export const post: BestPost = {
       bestFor: "Best for developer and web agency audiences",
       why: "UptimeRobot monitors websites, ports, cron jobs and SSL certificates and alerts you when something goes down. There is no approval step: you switch the program on in a free UptimeRobot account and start sharing your link, and it pays on every monthly or annual payment for as long as the user stays subscribed.",
       notFor: "Coupon sites, and PPC ads that link straight to UptimeRobot: neither is allowed.",
-    },
-    {
-      slug: "cookieyes",
-      bestFor: "Best for WordPress, Shopify and agency audiences",
-      why: "CookieYes adds a cookie consent banner to websites and helps them comply with GDPR, CCPA and other privacy laws, on WordPress, Shopify, Wix and other platforms. Its commission recurs for a fixed period from the day the customer creates their account, and most applicants are approved instantly.",
-      notFor: "Posts without a disclaimer: content about CookieYes must say it is not legal advice.",
     },
     {
       slug: "simplybook-me",
@@ -80,7 +74,7 @@ export const post: BestPost = {
     { label: "Best for small businesses", slug: "simplybook-me" },
   ],
   howWeChose:
-    "We started from the programs in the OpenAffiliate registry whose verified terms say they approve new affiliates automatically and do not set a high payout minimum, then our editors picked a mix across SEO, AI, sales, developer and small business tools that a new site or channel can promote. Approval is only the first step: read the rules in each block, because some programs do not pay on search or paid ad traffic.",
+    "We started from the programs in the OpenAffiliate registry whose verified terms say they approve new affiliates automatically and do not set a high payout minimum, then our editors picked and ordered a mix across SEO, AI, sales, developer and small business tools that a new site or channel can promote. Approval is only the first step: read the rules in each block, because some programs do not pay on search or paid ad traffic.",
   affitor: {
     before: "If you would rather apply to many SaaS programs from one account, the ",
     anchor: "Affitor marketplace",
