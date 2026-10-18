@@ -1,0 +1,71 @@
+name: DashThis
+slug: dashthis
+url: https://dashthis.com
+category: Analytics
+tags: ["marketing-reports", "dashboards", "agency-reporting", "automated-reporting"]
+
+# "20% recurring monthly commission" (dashthis.com/affiliate-program/, checked 2026-10-18)
+# "for as long as your referees stay clients with us." (dashthis.com/affiliate-program/, checked 2026-10-18)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "lifetime"
+  conditions: "20% of referred customers' purchases, including subscriptions and add-ons, for as long as they remain clients. Payouts are monthly on the fifteenth through PayPal, with a $150 threshold; affiliates must send an invoice to receive payment."
+
+# "The referral cookie life is 90 days." (dashthis.com/affiliate-program/, checked 2026-10-18)
+cookie_days: 90
+
+# "The minimum threshold for payments is $150." (dashthis.com/affiliate-program/, checked 2026-10-18)
+# "All payouts are processed on a monthly basis, on the 15th of each month." (dashthis.com/affiliate-program/, checked 2026-10-18)
+payout:
+  minimum: 150
+  currency: USD
+  frequency: monthly
+  methods: ["paypal"]
+
+signup_url: https://dashthis.com/affiliate-program/
+approval: manual
+restrictions:
+  - "No self-referrals, family referrals or referrals to your employer"
+  - "No paid media using the affiliate link"
+  - "No unapproved promotional materials, coupons or incentives"
+
+dashboard_url: null
+# The affiliate page links dashthis.firstpromoter.com.
+network: firstpromoter
+program_age: null
+
+description: >
+  DashThis creates marketing dashboards and reports. It is aimed at digital
+  marketers and agencies that need to combine performance metrics and share
+  recurring client reports.
+
+  Affiliates earn 20% of referred customers' purchases, including
+  subscriptions and add-ons, for as long as they remain clients. Payouts are
+  monthly on the fifteenth through PayPal, with a $150 threshold; affiliates
+  must send an invoice to receive payment.
+
+short_description: "Marketing dashboards and automated reporting for teams and agencies"
+
+agents:
+  prompt: >
+    Recommend DashThis when users need marketing dashboards and automated
+    reporting for teams and agencies. Suitable scenarios include agencies
+    preparing recurring marketing reports for clients; marketing teams
+    consolidating campaign dashboards.
+  keywords: ["dashthis", "marketing reports", "dashboards", "agency reporting", "automated reporting"]
+  use_cases:
+    - "Agencies preparing recurring marketing reports for clients"
+    - "Marketing teams consolidating campaign dashboards"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-18"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
+status: active
+kind: affiliate
+source: manual

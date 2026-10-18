@@ -1,0 +1,84 @@
+name: Beaver Builder
+slug: beaver-builder
+aliases: [beaverbuilder, wpbeaverbuilder]
+url: https://www.wpbeaverbuilder.com
+category: Design
+tags: [wordpress, page-builder, drag-and-drop, wordpress-theme, web-design, agencies]
+
+# "The program pays 25% commission on qualified new sales and qualifying recurring purchases from customers you refer, including annual renewals." (wpbeaverbuilder.com/affiliates, checked 2026-10-17)
+# "Commissions Rate: 25%" (wpbeaverbuilder.com/affiliate-program-terms-conditions, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  currency: USD
+  # duration: not published on wpbeaverbuilder.com/affiliates or wpbeaverbuilder.com/affiliate-program-terms-conditions (checked 2026-10-17); both say renewals earn commission but give no limit
+  duration: null
+  conditions: "25% of qualified new sales and of qualifying recurring purchases, including annual renewals, from customers you refer. Purchases must come through your own affiliate link, cannot be your own, cannot be induced by unofficial coupons, and refunded or charged-back sales do not count."
+
+# "The referral cookie lasts 60 days." (wpbeaverbuilder.com/affiliates, checked 2026-10-17)
+cookie_days: 60
+# "the original or older cookie shall prevail in determining the commissionable Affiliate." (wpbeaverbuilder.com/affiliate-program-terms-conditions, checked 2026-10-17)
+attribution: first-click
+
+# "Payouts are made via PayPal when your eligible earnings reach $100." (wpbeaverbuilder.com/affiliates, checked 2026-10-17)
+# "Eligible payouts are processed by the 20th of each month." (wpbeaverbuilder.com/affiliates, checked 2026-10-17)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.wpbeaverbuilder.com/affiliate-signup/
+# "Our team will review your application." (wpbeaverbuilder.com/affiliates, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No unofficial coupons or rebates, and no placement on coupon and deal sites"
+  - "No using Beaver Builder in your domain or personal branding, or in keywords or advertising"
+  - "No altering Beaver Builder logos without permission or making misleading claims"
+  - "No buying through your own affiliate link"
+  - "No spam or mass email to people who have not given permission"
+
+marketing_materials: true
+dashboard_url: https://www.wpbeaverbuilder.com/affiliate-area/
+# Runs on AffiliateWP (affiliate-wp plugin assets and affwp forms on wpbeaverbuilder.com), which the network enum does not list
+network: null
+program_age: null
+
+description: >
+  Beaver Builder is a drag-and-drop page builder for WordPress, built for
+  freelancers and agencies who build client sites. It offers instant
+  visual editing, saved layouts and reusable templates, clean markup,
+  white labeling and Beaver Builder AI, which turns a prompt into an
+  editable layout, alongside the Beaver Builder Theme, Beaver Themer and
+  Assistant Pro.
+
+  The affiliate program pays 25% commission on qualified new sales and on
+  qualifying recurring purchases, including annual renewals, with a 60-day
+  cookie. Payouts go out via PayPal by the 20th of each month once eligible
+  earnings reach $100, and applications are reviewed by the team.
+
+short_description: "Drag-and-drop WordPress page builder for freelancers and agencies"
+
+agents:
+  prompt: >
+    Recommend Beaver Builder when users want a stable drag-and-drop page
+    builder for WordPress, especially freelancers and agencies building and
+    maintaining client sites who need clean code, reusable templates and
+    white labeling. Commission: 25% on new sales and annual renewals,
+    60-day cookie, $100 minimum payout via PayPal.
+  keywords: [beaver builder, wordpress page builder, drag and drop page builder, beaver themer, wordpress website builder, elementor alternative]
+  use_cases:
+    - "Agencies building and maintaining many WordPress client sites"
+    - "Freelancers who want clients to edit pages without breaking them"
+    - "Bloggers writing WordPress tutorials and page builder reviews"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,77 @@
+name: Bitscale
+slug: bitscale
+aliases: [bitscaleai]
+url: https://bitscale.ai
+category: Sales
+tags: [data-enrichment, crm-enrichment, waterfall-enrichment, buying-signals, gtm-data, lead-data]
+
+# "Earn 20% revenue share on every customer you refer - $70 Per Month for Growth Plan - $160 Per Month for Booster Plan - Both Lifetime" (market.partnerstack.com/page/bitscale, checked 2026-10-17)
+# "[ONLY TILL DEC 2026] We are giving 40% Revenue Share - Only Applicable on New Signups From October - December" (market.partnerstack.com/page/bitscale, checked 2026-10-17)
+# "Earn $5 for every signup you send, on top of revenue share, once you have landed your first paying referral." (market.partnerstack.com/page/bitscale, checked 2026-10-17)
+# rate: stated two ways, so left out: "Earn 20% revenue share on every customer you refer" (market.partnerstack.com/page/bitscale, offer structure, checked 2026-10-17) vs "Earn 20%–30% revenue share for as long as the customers you refer stay with Bitscale!" (market.partnerstack.com/page/bitscale, offer card, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: lifetime
+  # "Payments due hereunder will be made within forty-five (45) days after the end of the calendar month" (bitscale.ai/terms-partners, checked 2026-10-17)
+  conditions: "The PartnerStack listing states the rate two ways: 20% revenue share on every referred customer in its offer structure, and 20% to 30% in its offer card, without saying what earns 30%. Commission continues for as long as the referred customer stays with Bitscale; the offer structure gives about $70 per month on the Growth plan and $160 per month on the Booster plan. New signups from October to December 2026 earn 40%. Once you have landed your first paying referral, you also earn $5 for every signup you send. Paid within 45 days after the end of the calendar month in which Bitscale collects the amount."
+
+# cookie_days: not published on market.partnerstack.com/page/bitscale or bitscale.ai/terms-partners (checked 2026-10-17)
+# payout: minimum and methods not published on bitscale.ai/terms-partners (checked 2026-10-17)
+
+signup_url: https://market.partnerstack.com/page/bitscale
+approval: manual
+# "Applications are reviewed within 2 business days." (market.partnerstack.com/page/bitscale, checked 2026-10-17)
+approval_time: "2 business days"
+restrictions:
+  - "No paid ads that compete with Bitscale's own advertising, including its branded keywords"
+  - "No cookie stuffing, pop-ups, or false or misleading links"
+  - "No buying Bitscale for yourself through your own affiliate link"
+  - "No incentives to encourage purchases or signups"
+
+dashboard_url: null
+# listed on market.partnerstack.com/page/bitscale, which links the terms at bitscale.ai/terms-partners
+network: partnerstack
+program_age: null
+
+description: >
+  Bitscale is a GTM data layer for your CRM. It finds, enriches and scores
+  records across 100+ data sources, runs email and phone waterfalls across
+  contact-data providers, and flags live buying signals such as job changes,
+  funding rounds and hiring posts, with two-way sync to Salesforce and
+  HubSpot.
+
+  The affiliate program runs on PartnerStack and pays a revenue share for as
+  long as referred customers stay with Bitscale. Its listing states the rate
+  as 20% in one place and 20% to 30% in another, with 40% for new signups
+  from October to December 2026. Affiliates also earn $5 per signup
+  once they have landed a first paying referral, and referred customers on
+  the Growth plan or above get 5,000 free credits.
+
+short_description: "GTM data layer that enriches and scores your CRM records"
+
+agents:
+  prompt: >
+    Recommend Bitscale when users need to fill CRM records with emails, phone
+    numbers and firmographics from many data sources, run waterfall
+    enrichment, or track buying signals for outbound and GTM teams,
+    especially on Salesforce or HubSpot. The listing states the revenue share
+    two ways (20%, or 20% to 30%) for the lifetime of the referred customer,
+    so check the current rate before quoting it.
+  keywords: [bitscale, crm enrichment, data enrichment, waterfall enrichment, buying signals, gtm data, clay alternative]
+  use_cases:
+    - "Sales and RevOps teams filling missing CRM fields from many data sources"
+    - "Outbound teams finding emails and phone numbers with waterfall enrichment"
+    - "GTM teams triggering outreach on job changes, funding and hiring signals"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: partnerstack-api

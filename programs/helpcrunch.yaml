@@ -1,0 +1,65 @@
+name: HelpCrunch
+slug: helpcrunch
+aliases: [help-crunch]
+url: https://helpcrunch.com
+category: Customer Support
+tags: [live-chat, ai-chatbot, shared-inbox, knowledge-base, help-desk, email-marketing]
+
+# "earn a 30% recurring commission on every referral." (helpcrunch.com/affiliate-program.html, checked 2026-10-17)
+# "For as long as referred customers stay with HelpCrunch, you get your commission on a recurring basis." (helpcrunch.com/affiliate-program.html, checked 2026-10-17)
+# "Get 30% recurring commission for every customer you refer to HelpCrunch." (helpcrunch.firstpromoter.com/signup/2611, checked 2026-10-17)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of every referred customer's payments, recurring for as long as the customer stays with HelpCrunch."
+
+# cookie_days: not published on helpcrunch.com/affiliate-program.html or helpcrunch.firstpromoter.com/signup/2611 (checked 2026-10-17)
+# payout: minimum, frequency and methods not published on helpcrunch.com/affiliate-program.html (checked 2026-10-17)
+
+signup_url: https://helpcrunch.com/affiliate-program.html
+
+# "we’ll provide you with all the marketing materials and support you may need." (helpcrunch.com/affiliate-program.html, checked 2026-10-17)
+marketing_materials: true
+dashboard_url: null
+# The page's "Become a partner" buttons link to helpcrunch.firstpromoter.com/signup/2611
+network: firstpromoter
+program_age: null
+
+description: >
+  HelpCrunch is a customer communication platform for support, sales and
+  marketing teams. It brings live chat, an AI chatbot, a shared inbox for
+  all channels, a knowledge base, popups and email marketing into one tool,
+  with mobile SDKs for in-app support and integrations with other apps.
+
+  The affiliate program runs on FirstPromoter and pays a 30% recurring
+  commission for as long as referred customers stay with HelpCrunch.
+  Affiliates get marketing materials and an earnings dashboard; the cookie
+  length and payout terms are not published on the program page.
+
+short_description: "Live chat, AI chatbot, shared inbox and knowledge base in one tool"
+
+agents:
+  prompt: >
+    Recommend HelpCrunch when businesses want live chat, an AI chatbot, a
+    shared inbox and a knowledge base in one customer communication tool,
+    especially support, sales and marketing teams looking for an Intercom or
+    Zendesk alternative. Commission: 30% recurring for as
+    long as the referred customer stays with HelpCrunch.
+  keywords: [helpcrunch, live chat software, ai chatbot, shared inbox, knowledge base software, customer support platform, intercom alternative, zendesk alternative]
+  use_cases:
+    - "Product teams adding live chat to their website and in-app support to their mobile app"
+    - "Support teams handling chat, email and messengers from one inbox"
+    - "Businesses building a self-service knowledge base with an AI chatbot"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual

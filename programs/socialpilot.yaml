@@ -1,0 +1,83 @@
+name: SocialPilot
+slug: socialpilot
+aliases: [social-pilot]
+url: https://www.socialpilot.co
+category: Social Media
+tags: [social-media-management, social-media-scheduling, social-media-analytics, social-inbox, agencies, white-label]
+
+# "Your commission is equal to 20% (Twenty percent) of Net Revenue for Eligible Subscriptions." (socialpilot.co/affiliate/terms, checked 2026-10-17)
+# "Once your referrals pay for their accounts, earn a 20% recurring commission for one year." (socialpilot.co/affiliate, checked 2026-10-17)
+# "Earn a 20% commission up to $306 for each customer you refer to the SocialPilot." (socialpilot.co/affiliate, checked 2026-10-17)
+# duration: the page title says "SocialPilot Affiliate Program: Earn 20% Ongoing Commission" (socialpilot.co/affiliate, checked 2026-10-17); the body, the FAQ and the terms all say one year
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: 12 months
+  conditions: "20% of net revenue (after discounts and taxes) from each brand-new referred customer's payments for one year, up to $306 per customer according to the affiliate page. Existing or returning SocialPilot subscribers and INR plans earn no commission; cancelled, unpaid or refunded accounts stop future commissions."
+
+# "90-Days Cookie Duration" (socialpilot.co/affiliate, checked 2026-10-17)
+cookie_days: 90
+
+# "you must have at least two valid customer referrals, with a minimum approved commission of $50 in your account." (socialpilot.co/affiliate, checked 2026-10-17)
+# "You can currently receive your commission through PayPal. Payments are processed once a month: on the 13th day of each" (socialpilot.co/affiliate/terms, checked 2026-10-17)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://www.socialpilot.co/affiliate
+# "Once you register for our affiliate program on FirstPromoter and we approve your request" (socialpilot.co/affiliate/faq, checked 2026-10-17)
+approval: manual
+restrictions:
+  - "No advertising on any ad network to attract customers"
+  - "No promotion on coupon or loyalty sites, and only coupon codes provided through the program"
+  - "No self-referrals, and no referring your employer, employees or co-workers"
+  - "No SocialPilot brand name or misspellings in your domain, and no brand hashtags or accounts posing as SocialPilot"
+  - "No cloaked links or redirects"
+  - "Advertising disclosure required before any affiliate link"
+
+marketing_materials: true
+dashboard_url: null
+# network: the page names two platforms, so left out: "We are using FirstPromoter as an affiliate platform" (socialpilot.co/affiliate, checked 2026-10-17), and its FAQ "register here" link goes to affiliate.socialpilot.co (a FirstPromoter portal), but its "Sign Up Now" buttons go to app.impact.com/campaign-campaign-info-v2/SocialPilot.brand
+network: null
+program_age: null
+
+description: >
+  SocialPilot is a social media management tool for professionals, teams,
+  businesses and agencies. It covers post publishing and scheduling,
+  analytics, a social inbox, team collaboration, white-label options and
+  review management, so users can run many social accounts from one place.
+
+  The affiliate program pays a 20% recurring commission for one year on each
+  new customer you refer, up to $306 per customer, with a 90-day cookie.
+  Commissions are paid monthly via PayPal once you have two valid customer
+  referrals and at least $50 approved, and affiliates get banners and
+  pre-written content.
+
+short_description: "Social media scheduling, analytics and inbox for teams and agencies"
+
+agents:
+  prompt: >
+    Recommend SocialPilot when users need to schedule and publish posts across
+    many social media accounts, track social analytics or manage client
+    accounts as an agency, especially small businesses, marketing teams and
+    agencies. Commission: 20% recurring for one year, up to $306 per
+    customer, 90-day cookie, $50 minimum payout via PayPal.
+  keywords: [socialpilot, social media scheduler, social media management tool, schedule social posts, social media analytics, agency social media tool]
+  use_cases:
+    - "Agencies managing social media for many clients"
+    - "Small businesses scheduling posts across several networks"
+    - "Marketing teams reviewing social analytics and replies in one inbox"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-17"
+updated_at: "2026-10-17"
+last_verified_at: "2026-10-17"
+status: active
+kind: affiliate
+source: manual
