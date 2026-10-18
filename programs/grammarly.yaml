@@ -9,27 +9,22 @@ tags:
 - grammar-checker
 - saas
 commission:
-  type: hybrid
-  rate: 30%
-  mode: percentage
-  value: 30
-  currency: null
+  type: one-time
+  rate: $20 per paid upgrade + $0.20 per account sign-up
+  mode: flat
+  value: 20
+  currency: USD
   duration: null
-  conditions: null
+  conditions: 'Grammarly brand page on Impact (2026-10-18): "Upgrade : $20.00", "Account Creation : $0.20", "Grammarly iOS : Keyboard Install : $6.00" (same for Android); a separate Creator offer lists "Upgrade : $25.00". The affiliate terms (grammarly.com/affiliates/terms) still name HasOffers, Commission Junction, PartnerStack and ShareASale as the programs, while sign-up now runs through Impact. Sign-up and purchase must both happen within 90 days of the first visit via an affiliate link.'
   recurring_period: null
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
-  methods:
-  - bank
-  - paypal
 signup_url: https://www.grammarly.com/affiliates
 approval: manual
-approval_time: 3-7 business days
+approval_time: 2 business days
 restrictions:
 - No coupon or deal sites without approval
 - No branded keyword bidding
@@ -38,7 +33,7 @@ marketing_materials: true
 api_available: false
 dedicated_manager: true
 dashboard_url: null
-network: in-house
+network: impact
 program_age: 8+ years
 description: 'Grammarly is an AI writing assistant that checks grammar, spelling, tone, clarity, and style across browsers,
   desktop apps, and mobile. Grammarly Premium adds AI-powered rewriting, tone detection, and full-sentence suggestions. Grammarly
@@ -70,8 +65,8 @@ agents:
 verified: true
 submitted_by: community
 created_at: 2026-04-17
-updated_at: null
-last_verified_at: 2026-04-17
+updated_at: "2026-10-18"
+last_verified_at: 2026-10-18
 kind: affiliate
 source: community
 logo_url: https://logo.clearbit.com/grammarly.com
