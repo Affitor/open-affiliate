@@ -56,8 +56,10 @@ function monthChanges(list: BestList, until: string | undefined) {
   const newest = (a: { d: string }, b: { d: string }) => b.d.localeCompare(a.d);
   return {
     from,
+    total: on.length,
     added: on.filter((p) => inWindow(p.createdAt)).map((p) => ({ slug: p.slug, name: p.name, d: p.createdAt.slice(0, 10) })).sort(newest),
-    rechecked: on.filter((p) => inWindow(p.lastVerifiedAt)).map((p) => ({ slug: p.slug, name: p.name, d: (p.lastVerifiedAt ?? "").slice(0, 10) })).sort(newest),
+    // A re-check is a check after the day the program was added; the add-day check is not one.
+    rechecked: on.filter((p) => inWindow(p.lastVerifiedAt) && (p.lastVerifiedAt ?? "").slice(0, 10) > p.createdAt.slice(0, 10)).map((p) => ({ slug: p.slug, name: p.name, d: (p.lastVerifiedAt ?? "").slice(0, 10) })).sort(newest),
   };
 }
 
@@ -158,7 +160,7 @@ export function BestPostView({
           </Link>
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-4">{title}</h1>
           <p className="text-meta text-muted-foreground mt-3">
-            By the OpenAffiliate team{range && <> · Terms checked between {range[0]} and {range[1]}</>}
+            By the OpenAffiliate team{range && <> · Terms checked between <span className="whitespace-nowrap">{range[0]}</span> and <span className="whitespace-nowrap">{range[1]}</span></>}
           </p>
           <p className="text-lg leading-relaxed text-foreground/80 mt-5">{post.intro}</p>
           <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
@@ -174,7 +176,7 @@ export function BestPostView({
             <h2 className="text-lg font-semibold">Quick picks</h2>
             <ul className="mt-4 grid overflow-hidden rounded-xl border border-border bg-card sm:grid-cols-2">
               {picks.map(({ label, program }) => (
-                <li key={label} className="border-border border-t first:border-t-0 sm:[&:nth-child(2)]:border-t-0 sm:even:border-l">
+                <li key={label} className="border-border border-t first:border-t-0 sm:[&:nth-child(2)]:border-t-0 sm:even:border-l sm:[&:last-child:nth-child(odd)]:col-span-2">
                   <a href={`#${program.slug}`} className="grid grid-cols-[36px_minmax(0,1fr)] gap-x-3 px-4 py-3.5 hover:bg-sunk transition-colors">
                     <ProgramLogo slug={program.slug} name={program.name} size={36} className="row-span-3 shrink-0" />
                     <span className="text-xs text-muted-foreground">{label}</span>
@@ -195,6 +197,7 @@ export function BestPostView({
               <h2 className="text-lg font-semibold">What changed this month</h2>
               <span className="text-meta text-muted-foreground">{shortDate(month.from)} to {shortDate(range![1])}</span>
             </div>
+            <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs in this category on OpenAffiliate, not only the ones above.</p>
             <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:gap-8">
               {[
                 ["Added", month.added],
@@ -220,9 +223,9 @@ export function BestPostView({
                 <tr className="border-b border-border">
                   <th className={th}>Program</th>
                   <th className={th}>You earn</th>
-                  <th className={th}>Cookie</th>
-                  <th className={th}>Payout</th>
-                  <th className={th}>Terms checked</th>
+                  <th className={`${th} hidden sm:table-cell`}>Cookie</th>
+                  <th className={`${th} hidden sm:table-cell`}>Payout</th>
+                  <th className={`${th} hidden whitespace-nowrap sm:table-cell`}>Terms checked</th>
                 </tr>
               </thead>
               <tbody>
@@ -235,9 +238,9 @@ export function BestPostView({
                       </Link>
                     </td>
                     <td className={td}>{earnText(program)}</td>
-                    <td className={td}>{cookieText(program)}</td>
-                    <td className={td}>{payoutText(program)}</td>
-                    <td className={`${td} whitespace-nowrap font-mono text-meta`}>{checkedText(program)}</td>
+                    <td className={`${td} hidden sm:table-cell`}>{cookieText(program)}</td>
+                    <td className={`${td} hidden sm:table-cell`}>{payoutText(program)}</td>
+                    <td className={`${td} hidden whitespace-nowrap font-mono text-meta sm:table-cell`}>{checkedText(program)}</td>
                   </tr>
                 ))}
               </tbody>
