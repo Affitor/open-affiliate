@@ -5,7 +5,7 @@ category: HR & Recruiting
 tags: [employee-scheduling, shift-planning, time-tracking, workforce-management, rota-software, payroll]
 
 # "up to 15% recurring" (market.partnerstack.com/page/planday, checked 2026-10-18)
-# "Earn 10% Revenue Share for the first five years of customer purchases" (same page's embedded default offer, checked 2026-10-18)
+# "Earn 10% Revenue Share for the first five years of customer purchases" (market.partnerstack.com/page/planday, embedded default offer, checked 2026-10-18)
 commission:
   type: recurring
   rate: "up to 15%"
