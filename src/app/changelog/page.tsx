@@ -24,10 +24,10 @@ function formatDate(iso: string): string {
 
 export default function ChangelogPage() {
   return (
-    <main className="oa-frame">
+    <div className="oa-frame">
       <header className="oa-band pt-14 pb-8">
         <p className="oa-label">Changelog</p>
-        <h1 className="text-display font-semibold tracking-tight mt-2">What changed in OpenAffiliate</h1>
+        <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-2">What changed in OpenAffiliate</h1>
         <p className="text-lg text-muted-foreground mt-2">New programs, corrected terms and new features, as they go live.</p>
       </header>
 
@@ -41,7 +41,7 @@ export default function ChangelogPage() {
             <div className="md:sticky md:top-20 md:self-start flex flex-wrap items-center gap-2 md:block">
               <time dateTime={entry.date} className="font-mono text-meta font-medium">{formatDate(entry.date)}</time>
               <p className="md:mt-2">
-                <span className="inline-flex h-[22px] items-center rounded-md border border-line-strong px-2 text-xs text-muted-foreground">{KIND_LABEL[entry.kind]}</span>
+                <span className="inline-flex h-[22px] items-center rounded-sm border border-line-strong px-2 text-xs text-muted-foreground">{KIND_LABEL[entry.kind]}</span>
               </p>
             </div>
             <div>
@@ -69,6 +69,6 @@ export default function ChangelogPage() {
           </article>
         ))}
       </section>
-    </main>
+    </div>
   );
 }

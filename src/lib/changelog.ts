@@ -1,5 +1,5 @@
 // Public changelog. Each entry is something live on openaffiliate.dev on its date (Pacific time).
-// The April 2026 entries were archived on 18/10/2026 (product owner: "archive old"); they are not public.
+// Entries before October 2026 are archived and no longer published.
 export type ChangelogEntry = {
   date: string // YYYY-MM-DD
   title: string
@@ -21,9 +21,8 @@ export const changelog: ChangelogEntry[] = [
     summary: "Read a short, hand-written guide for a category before you pick a program.",
     link: { href: "/best/ai-affiliate-programs", label: "Read the AI post" },
     items: [
-      { tag: "new", text: "The 10 best AI affiliate programs in 2026, at /best/ai-affiliate-programs." },
+      { tag: "new", text: "The best AI affiliate programs in 2026, at /best/ai-affiliate-programs." },
       { tag: "new", text: "The best recurring affiliate programs, at /best/recurring-affiliate-programs." },
-      { tag: "improved", text: "Lists without a post still render as before." },
     ],
   },
   {
@@ -44,7 +43,7 @@ export const changelog: ChangelogEntry[] = [
     title: "Improvements, Oct 12 to 18",
     kind: "improvements",
     items: [
-      { tag: "new", text: "New programs every day, each money field quoted from the brand's own terms or its program platform." },
+      { tag: "new", text: "Since Oct 17, new SaaS and AI programs are added every day, each money field quoted from the brand's own terms or its program platform." },
       { tag: "improved", text: "Links to a brand's own site now carry utm_source=openaffiliate, so the brand can see the visits we send in its own analytics." },
       { tag: "fixed", text: "Terms corrected after re-checking the brands' own pages, including Jasper (now marked as not open to independent affiliates), AdCreative.ai, Runway, Speechify, Photoroom, Scalenut and Grammarly." },
       { tag: "fixed", text: "71 logos that were saved in the wrong format now load as standard PNG files." },
