@@ -684,3 +684,11 @@ test("program page follow-up: caps in the conditions, duration phrases, cookie p
   assert.match(page.productText(live("cookieyes")), /scans sites for cookies/)
   assert.doesNotMatch(page.productText(withCommission({}, { description: "A form builder. The cookie lasts 45 days. Apply at partners.example.com." })), /cookie lasts|Apply at/)
 })
+
+test("program page follow-up r2: caps written after the amount or in the description; term sentences stay out", () => {
+  const live = (slug: string) => confirmedTerms(getProgram(slug)!)
+  for (const slug of ["pcloud", "similarweb"]) assert.equal(page.estimateInput(live(slug)), null, `${slug}: the estimate would ignore its cap`)
+  assert.doesNotMatch(page.productText(live("vsub")), /no application/i)
+  assert.doesNotMatch(page.productText(live("wix")), /\$300 monthly threshold/)
+  assert.match(page.productText(live("cookieyes")), /scans sites for cookies/)
+})

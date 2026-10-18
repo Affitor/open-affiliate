@@ -1,5 +1,5 @@
 import { IN_HOUSE, commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
-import { namesTerm, proseSentences, termsConfirmed } from "@/lib/confirmed-terms"
+import { namesTerm, proseSentences, statesTerms, termsConfirmed } from "@/lib/confirmed-terms"
 import { hasNoProgram } from "@/lib/no-program"
 import { isPaused } from "@/lib/program-seo"
 
@@ -167,13 +167,18 @@ export function isDealSentence(text: string): boolean {
 export function productText(p: Program): string {
   // p.description is already filtered for an unverified program (confirmedTerms, pitch rules).
   // Sentences stating a term ("The cookie lasts 45 days.") are left out on every page: the
-  // earnings card carries them. namesTerm, not statesTerms: a cookie-consent product may say "cookie".
+  // earnings card carries them. statesTerms alone would also drop a cookie-consent product's
+  // own sentences ("scans sites for cookies"), so a sentence about cookies needs namesTerm.
   const kept = proseSentences(p.description)
-    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence) && !namesTerm(s.sentence))
+    .filter((s) => s.sentence.trim() && !isDealSentence(s.sentence) && !statesTermForReader(s.sentence))
     .map((s) => s.sentence + s.after)
     .join("")
     .trim()
   return kept || p.shortDescription
+}
+
+function statesTermForReader(sentence: string): boolean {
+  return namesTerm(sentence) || (statesTerms(sentence, "pitch") && !/\bcookies?\b/i.test(sentence))
 }
 
 /** Use cases as "what people use it for": the ones about the deal itself are left out. */
@@ -213,14 +218,17 @@ function plainRate(c: Program["commission"]): boolean {
   return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(commissionDisplay(c))
 }
 
-/** Conditions that put a number on a ceiling ("capped at $400 per sale"): the estimate would ignore it. */
-const CAPPED = /\bcap(?:ped|s)?\s+(?:at|of)\s+[$€£]?\d|\bmax(?:imum)?\s+(?:of\s+)?[$€£]\d|\bup to\s+[$€£]\d|\blimited to\s+[$€£]?\d/i
+/**
+ * Text that puts a number on a ceiling ("capped at $400 per sale", "up to 300 USD per sale"):
+ * the estimate would ignore it. Read in the conditions, the description and the agent notes.
+ */
+const CAPPED = /\bcap(?:ped|s)?\s+(?:at|of)\s+[$€£]?\s?\d|\bmax(?:imum)?\s+(?:of\s+)?[$€£]\s?\d|\bup to\s+[$€£]\s?\d|\bup to\s+\d[\d,.]*\s*(?:usd|eur|gbp)\b|\blimited to\s+[$€£]?\s?\d/i
 
 export function estimateInput(p: Program): EstimateInput | null {
   if (pageState(p) !== "verified") return null
   const c = p.commission
   if (c.value == null || (c.mode !== "percentage" && c.mode !== "flat") || isCreditReward(c) || !plainRate(c)) return null
-  if (CAPPED.test(p.commissionConditions ?? "")) return null
+  if ([p.commissionConditions, p.description, p.agentPrompt].some((t) => CAPPED.test(t ?? ""))) return null
   const recurring = c.type === "recurring"
   if (recurring && c.mode === "flat") return null
   const months = recurring ? durationMonths(c.duration) : 1

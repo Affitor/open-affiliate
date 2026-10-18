@@ -57,7 +57,7 @@ function TermsChip({ verified }: { verified: boolean }) {
  * Terms). Each other program's name links to its page. Commission, duration
  * and the verified flag only: no cookie window, payout or approval, so an
  * unverified page shows none of another program's terms either. data-compare
- * lets the no-program page check skip other programs' figures.
+ * marks the table for the page checks' probes.
  */
 export function ProgramCompare({ current, title }: { current: Program; title: string }) {
   const related = getRelatedPrograms(current)
