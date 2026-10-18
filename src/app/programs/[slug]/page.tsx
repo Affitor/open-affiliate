@@ -218,7 +218,7 @@ export default async function ProgramPage({
     : "flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-4 h-11 text-sm font-medium hover:bg-foreground/90 transition-colors w-full";
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 sm:pt-8 pb-28 md:pb-12">
+    <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 sm:pt-8 pb-12">
       <TrackView slug={slug} />
 
       {/* JSON-LD */}
@@ -537,27 +537,6 @@ export default async function ProgramPage({
             <Link href="/docs/mcp" className="font-mono underline underline-offset-4 hover:text-foreground">MCP server</Link>
           </div>
         </div>
-      </div>
-
-      {/* Phone: the next step stays on screen. */}
-      <div className="md:hidden fixed inset-x-0 bottom-0 z-40 flex items-center gap-3 border-t border-border bg-background/95 backdrop-blur px-4 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))]">
-        {noProgram || paused ? (
-          hasAlternatives && <a href="#alternatives" className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-border h-11 text-sm font-medium">
-            {noProgram ? "See programs that pay" : "See alternatives"} <ArrowRight className="h-4 w-4" />
-          </a>
-        ) : (
-          <>
-            {figure && (
-              <p className="min-w-0 flex-1 leading-tight">
-                <span className={`block font-semibold truncate ${figure.kind === "number" ? "text-sm" : "text-xs"}`}>{figure.big}</span>
-                <span className="block text-xs text-muted-foreground truncate">{unconfirmed ? `unconfirmed${figure.rest ? " · " : ""}` : ""}{figure.rest}</span>
-              </p>
-            )}
-            <TrackLink href={applyCta.href} slug={slug} cta="apply" className={`${applyClass.replace(" w-full", "")} ${figure ? "shrink-0 px-4" : "flex-1"} whitespace-nowrap`}>
-              {applyCta.label}
-            </TrackLink>
-          </>
-        )}
       </div>
     </div>
   );
