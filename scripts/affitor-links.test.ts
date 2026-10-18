@@ -69,7 +69,7 @@ const PLAIN_ANCHORS = new Set([
   "src/components/social-listen.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
   "src/app/page.tsx | `/programs/${p.slug}`", // homepage top-verified row, internal (N-2)
-  "src/app/programs/page.tsx | `/programs/${p.slug}`", // A–Z directory, internal (N-2)
+  "src/app/programs/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page

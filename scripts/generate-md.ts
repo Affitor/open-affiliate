@@ -62,6 +62,7 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { isSameTeam, SAME_TEAM_LABEL } from "../src/lib/same-team"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -199,11 +200,12 @@ function listedVerified(p: Program): boolean {
  */
 const livePrograms = programs.filter(isLive)
 /** Suffix for list rows: what a reader must know before trusting the terms. */
-function statusMark(p: { verified?: boolean; status?: string | null }): string {
-  if (p.status === "discontinued") return " (discontinued)"
-  if (p.status === "no_program") return " (no affiliate program)"
-  if (p.status === "paused") return " (status unclear)"
-  return p.verified ? "" : " (unverified, terms unconfirmed)"
+function statusMark(p: { slug: string; verified?: boolean; status?: string | null }): string {
+  const team = isSameTeam(p.slug) ? ` (${SAME_TEAM_LABEL})` : ""
+  if (p.status === "discontinued") return `${team} (discontinued)`
+  if (p.status === "no_program") return `${team} (no affiliate program)`
+  if (p.status === "paused") return `${team} (status unclear)`
+  return p.verified ? team : `${team} (unverified, terms unconfirmed)`
 }
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
@@ -379,6 +381,7 @@ export function programMd(entry: Program): string {
   return joinSections([
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
+    isSameTeam(p.slug) ? SAME_TEAM : null,
     statusBlock(p),
     hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),

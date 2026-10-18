@@ -3,6 +3,7 @@ import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
 import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
+import { SameTeamTag } from "@/components/same-team-tag";
 import { programs, livePrograms, categories, categoryToSlug, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
@@ -103,7 +104,7 @@ export default function Home() {
               <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
                 <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
-                <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
+                <span className="min-w-0 truncate text-sm font-medium">{program.name}<SameTeamTag slug={program.slug} inLink className="ml-1" /></span>
                 <span className="hidden font-mono text-meta sm:block">
                   {commissionDisplay(program.commission)} <span className="text-muted-foreground">{commissionLabel(program.commission, true)}</span>
                 </span>
@@ -132,6 +133,7 @@ export default function Home() {
                   <h3 className="flex items-center gap-1.5 truncate text-sm font-semibold">
                     {program.name}
                     {program.verified && <Check className="size-3.5 shrink-0 text-good" role="img" aria-label="Verified" />}
+                    <SameTeamTag slug={program.slug} inLink />
                   </h3>
                   <p className="truncate text-meta text-muted-foreground">{confirmedPitch(program, program.shortDescription)}</p>
                 </div>
@@ -151,7 +153,7 @@ export default function Home() {
         <ul className="columns-2 gap-6 text-sm text-foreground/80 sm:columns-3 lg:columns-5 [&_a:hover]:text-foreground [&_a:hover]:underline [&_li]:py-1">
           {row.map((p) => (
             <li key={p.slug}>
-              <a href={`/programs/${p.slug}`}>{p.name}</a>
+              <a href={`/programs/${p.slug}`}>{p.name}</a><SameTeamTag slug={p.slug} className="ml-1" />
             </li>
           ))}
         </ul>
