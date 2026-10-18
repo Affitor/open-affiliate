@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { changelog } from "@/lib/changelog";
 
 export const metadata: Metadata = {
   title: "Changelog",
-  description: "What's new in OpenAffiliate. New features, improvements, and fixes.",
+  description: "What changed in OpenAffiliate: new features, corrected terms and fixes, as they go live.",
   alternates: {
     canonical: "/changelog",
     types: {
@@ -14,71 +15,60 @@ export const metadata: Metadata = {
   },
 };
 
-const TAG_STYLES: Record<string, { bg: string; text: string; label: string }> = {
-  new: { bg: "bg-emerald-500/10", text: "text-emerald-600 dark:text-emerald-400", label: "New" },
-  improved: { bg: "bg-blue-500/10", text: "text-blue-600 dark:text-blue-400", label: "Improved" },
-  fixed: { bg: "bg-amber-500/10", text: "text-amber-600 dark:text-amber-400", label: "Fixed" },
-};
+const TAG_LABEL = { new: "New", improved: "Improved", fixed: "Fixed" } as const;
+const KIND_LABEL = { feature: "Feature", improvements: "Improvements" } as const;
 
-function TagBadge({ tag }: { tag: string }) {
-  const style = TAG_STYLES[tag] ?? TAG_STYLES.new;
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${style.bg} ${style.text}`}>
-      {style.label}
-    </span>
-  );
+function formatDate(iso: string): string {
+  return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
 }
 
 export default function ChangelogPage() {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-16">
-      <header className="mb-16">
-        <Link href="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors mb-4 inline-block">
-          &larr; Back to OpenAffiliate
-        </Link>
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight mt-2">Changelog</h1>
-        <p className="text-lg text-muted-foreground mt-3">
-          New features, improvements, and fixes shipped to OpenAffiliate.
-        </p>
+    <div className="oa-frame">
+      <header className="oa-band pt-14 pb-8">
+        <p className="oa-label">Changelog</p>
+        <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-2">What changed in OpenAffiliate</h1>
+        <p className="text-lg text-muted-foreground mt-2">New programs, corrected terms and new features, as they go live.</p>
       </header>
 
-      <div className="space-y-0">
+      <section className="oa-band">
         {changelog.map((entry, i) => (
-          <article key={entry.date} className="relative pl-8 pb-16 last:pb-0">
-            {/* Timeline line */}
-            {i < changelog.length - 1 && (
-              <div className="absolute left-[7px] top-[28px] bottom-0 w-px bg-border" />
-            )}
-            {/* Timeline dot */}
-            <div className="absolute left-0 top-[6px] w-[15px] h-[15px] rounded-full border-2 border-emerald-500 bg-background" />
-
-            <time className="text-sm font-medium text-muted-foreground">{entry.date}</time>
-            <h2 className="text-xl font-semibold mt-1 mb-6">{entry.title}</h2>
-
-            {entry.image && (
-              <div className="mb-8 rounded-xl overflow-hidden border border-border/60 shadow-sm">
-                <Image
-                  src={entry.image.src}
-                  alt={entry.image.alt}
-                  width={1280}
-                  height={900}
-                  className="w-full h-auto"
-                  priority={i === 0}
-                />
-              </div>
-            )}
-
-            <ul className="space-y-3">
-              {entry.items.map((item, j) => (
-                <li key={j} className="flex gap-3 items-start">
-                  <TagBadge tag={item.tag} />
-                  <span className="text-sm text-muted-foreground leading-relaxed">{item.text}</span>
-                </li>
-              ))}
-            </ul>
+          <article
+            key={`${entry.date}-${entry.title}`}
+            id={entry.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")}
+            className="grid gap-3 py-12 first:pt-2 border-t border-border first:border-t-0 md:grid-cols-[200px_minmax(0,680px)] md:gap-12"
+          >
+            <div className="md:sticky md:top-20 md:self-start flex flex-wrap items-center gap-2 md:block">
+              <time dateTime={entry.date} className="font-mono text-meta font-medium">{formatDate(entry.date)}</time>
+              <p className="md:mt-2">
+                <span className="inline-flex h-[22px] items-center rounded-sm border border-line-strong px-2 text-xs text-muted-foreground">{KIND_LABEL[entry.kind]}</span>
+              </p>
+            </div>
+            <div>
+              <h2 className="text-title font-semibold tracking-tight">{entry.title}</h2>
+              {entry.summary && <p className="text-base leading-relaxed text-foreground/80 mt-3">{entry.summary}</p>}
+              {entry.image && (
+                <div className="mt-5 overflow-hidden rounded-xl border border-border">
+                  <Image src={entry.image.src} alt={entry.image.alt} width={1280} height={900} className="h-auto w-full" priority={i === 0} />
+                </div>
+              )}
+              <ul className="mt-4 grid gap-3">
+                {entry.items.map((item) => (
+                  <li key={item.text} className="grid grid-cols-[76px_minmax(0,1fr)] gap-3 text-base leading-relaxed text-foreground/80">
+                    <span className="oa-label pt-1">{TAG_LABEL[item.tag]}</span>
+                    <span>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              {entry.link && (
+                <Link href={entry.link.href} className="mt-5 inline-flex items-center gap-1.5 text-sm font-medium underline underline-offset-4 decoration-border hover:decoration-foreground">
+                  {entry.link.label} <ArrowRight className="size-3.5" aria-hidden />
+                </Link>
+              )}
+            </div>
           </article>
         ))}
-      </div>
+      </section>
     </div>
   );
 }
