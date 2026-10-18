@@ -129,3 +129,10 @@ test("a brand also on Affitor keeps its own button and gains one Affitor line an
   assert.equal(alsoOnAffitor(program({})), null)
   assert.equal(alsoOnAffitor(program({ alsoOn: null })), null)
 })
+
+test("a stored rate that qualifies the figure gets no number in the button", () => {
+  assert.equal(applyEarnLabel(commission({ mode: "flat", type: "one-time", value: 1000, rate: "$15 to $1,000" })), "Apply & earn")
+  assert.equal(applyEarnLabel(commission({ mode: "percentage", value: 30, rate: "up to 30%" })), "Apply & earn")
+  assert.equal(applyEarnLabel(commission({ mode: "percentage", value: 25, rate: "25" })), "Apply & earn 25%")
+  assert.equal(applyEarnLabel(commission({ mode: "flat", type: "one-time", value: 1000, rate: "$1000" })), "Apply & earn $1,000")
+})
