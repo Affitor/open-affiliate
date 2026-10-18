@@ -10,13 +10,13 @@ import { applyButton } from "@/lib/apply-cta";
 import { AffitorLink } from "@/components/affitor-link";
 import {
   BEST_INDEX,
-  BEST_LISTS,
   MIN_SAMPLE,
   SHARED_RULES,
   bestListCopy,
   VERIFIED_NOTE,
   bestPath,
   indexable,
+  otherLists,
   buildBestList,
   listCommissionText,
   type BestList,
@@ -264,7 +264,7 @@ export function BestListView({
       </div>
 
       <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3">
-        {BEST_LISTS.filter((l) => bestPath(l) !== path).map((l) => (
+        {otherLists(list).map((l) => (
           <Link
             key={l.slug}
             href={bestPath(l)}

@@ -55,6 +55,7 @@ import {
   VERIFIED_NOTE,
   bestListCopy,
   bestPath,
+  otherLists,
   buildBestList,
   freshnessLine,
   categoryList,
@@ -1130,7 +1131,7 @@ function bestListMd(list: BestList, path: string): string {
     section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
     section(
       "Other lists",
-      BEST_LISTS.filter(l => l !== list)
+      otherLists(list)
         .map(l => {
           const other = buildBestList(l)
           return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`

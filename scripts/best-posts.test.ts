@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, getBestList, indexable } from "../src/lib/best-lists"
+import { BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
+import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
 import { isAffitorHref } from "../src/lib/affitor-link"
@@ -170,5 +171,34 @@ test("a hub below the threshold is noindex and out of the sitemap; every other l
   // The registry today has a hub on each side of the line, so both branches run.
   assert.ok(BEST_LISTS.some((l) => l.hub && !indexable(l)))
   assert.ok(BEST_LISTS.some((l) => l.hub && indexable(l)))
+})
+
+test("every category and commission type with enough verified programs gets a list, and no other does", () => {
+  const scoped = BEST_LISTS.filter((l) => l.scope)
+  const want = new Set<string>()
+  for (const category of new Set(livePrograms.map((p) => p.category))) {
+    for (const type of ["recurring", "one-time"]) {
+      const n = livePrograms.filter((p) => p.verified && !commissionUnknown(p.commission) && p.category === category && p.commission.type === type).length
+      if (n >= HUB_MIN_INDEXED) want.add(`${category}|${type}`)
+    }
+  }
+  assert.ok(want.size > 0)
+  assert.equal(scoped.length, want.size)
+  for (const list of scoped) {
+    assert.ok(list.hub && indexable(list), list.slug)
+    const { rows } = buildBestList(list)
+    const type = rows[0].commission.type
+    assert.ok(want.has(`${list.scope}|${type}`), list.slug)
+    assert.ok(rows.every((p) => p.category === list.scope && p.commission.type === type), list.slug)
+  }
+})
+
+test("a per-category list is linked from its own category only", () => {
+  const scoped = BEST_LISTS.find((l) => l.scope)!
+  const unscoped = getBestList("recurring-affiliate-programs")!
+  assert.equal(otherLists(unscoped).includes(scoped), false)
+  assert.ok(otherLists(categoryList(scoped.scope!)).includes(scoped))
+  assert.ok(otherLists(scoped).every((l) => !l.scope || l.scope === scoped.scope))
+  assert.ok(otherLists(scoped).includes(unscoped))
 })
 
