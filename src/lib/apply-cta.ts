@@ -1,6 +1,7 @@
 import { commissionDisplay, commissionLabel, commissionUnknown, isCreditReward, isLive, type Program } from "@/lib/programs"
 import { isUnverified } from "@/lib/program-seo"
 import { affitorUrl } from "@/lib/affitor-link"
+import { outboundUrl, type OutboundSurface } from "@/lib/outbound-link"
 
 /** Whitespace-separated tokens. "&" counts, so the signed cap stays at 4. */
 export function ctaWordCount(label: string): number {
@@ -42,14 +43,15 @@ export function checkTermsLabel(brand: string): string {
  * A live program on the Affitor marketplace is joined on Affitor, so the
  * button says where it goes. The UTM is added here, at render time: the YAML
  * keeps the plain marketplace link that scripts/sync-affitor.ts compares on.
+ * Any other brand link gets the openaffiliate UTM for `surface` (outboundUrl).
  */
-export function applyButton(program: Program): { label: string; href: string } {
+export function applyButton(program: Program, surface: OutboundSurface): { label: string; href: string } {
   if (program.network === "affitor" && isLive(program) && program.signupUrl) {
     return { label: "Apply on Affitor", href: affitorHref(program.signupUrl, program.slug) }
   }
   return {
     label: isUnverified(program) ? checkTermsLabel(program.name) : applyEarnLabel(program.commission),
-    href: program.signupUrl ?? program.url,
+    href: outboundUrl(program.signupUrl ?? program.url, surface, program.slug),
   }
 }
 

@@ -221,7 +221,7 @@ export function BestListView({
                   <td className="py-3 px-3 text-xs">
                     {/* The program page's own apply link, so both send readers to the same place. */}
                     <AffitorLink
-                      href={applyButton(program).href}
+                      href={applyButton(program, "list").href}
                       source="list"
                       slug={program.slug}
                       cta="sign_up"

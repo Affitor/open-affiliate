@@ -1,6 +1,7 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { alsoOnAffitor, applyButton, applyEarnLabel, checkTermsLabel, ctaWordCount } from "../src/lib/apply-cta"
+import { outboundUrl } from "../src/lib/outbound-link"
 import type { Program } from "../src/lib/programs"
 
 function commission(partial: Partial<Program["commission"]>): Program["commission"] {
@@ -73,7 +74,7 @@ function program(partial: Partial<Program>): Program {
 }
 
 test("a live Affitor program applies on Affitor, with UTM added at render time", () => {
-  const cta = applyButton(program({}))
+  const cta = applyButton(program({}), "program_page")
   assert.equal(cta.label, "Apply on Affitor")
   assert.ok(ctaWordCount(cta.label) <= 4)
   assert.equal(
@@ -85,24 +86,25 @@ test("a live Affitor program applies on Affitor, with UTM added at render time",
 test("the campaign is the OA slug, not the Affitor marketplace slug", () => {
   const cta = applyButton(
     program({ slug: "jobholler", signupUrl: "https://affitor.com/marketplace/jobholler-partner-program" }),
+    "program_page",
   )
   assert.equal(new URL(cta.href).pathname, "/marketplace/jobholler-partner-program")
   assert.equal(new URL(cta.href).searchParams.get("utm_campaign"), "jobholler")
 })
 
 test("a paused Affitor program keeps the plain link and the ordinary label", () => {
-  const cta = applyButton(program({ status: "paused" }))
+  const cta = applyButton(program({ status: "paused" }), "program_page")
   assert.equal(cta.href, "https://affitor.com/marketplace/citegraph")
   assert.notEqual(cta.label, "Apply on Affitor")
 })
 
 test("other networks keep their signup link and label untouched", () => {
-  const cta = applyButton(program({ network: "in-house", signupUrl: "https://landerlab.io/affiliates" }))
+  const cta = applyButton(program({ network: "in-house", signupUrl: "https://landerlab.io/affiliates" }), "program_page")
   assert.equal(cta.label, "Apply & earn 20%")
-  assert.equal(cta.href, "https://landerlab.io/affiliates")
-  const noSignup = applyButton(program({ network: "in-house", signupUrl: undefined, verified: false }))
+  assert.equal(cta.href, "https://landerlab.io/affiliates?utm_source=openaffiliate&utm_medium=program_page&utm_campaign=citegraph")
+  const noSignup = applyButton(program({ network: "in-house", signupUrl: undefined, verified: false }), "list")
   assert.equal(noSignup.label, "Check terms on CiteGraph")
-  assert.equal(noSignup.href, "https://www.citegraph.app")
+  assert.equal(noSignup.href, "https://www.citegraph.app/?utm_source=openaffiliate&utm_medium=list&utm_campaign=citegraph")
 })
 
 test("a brand also on Affitor keeps its own button and gains one Affitor line and a secondary button", () => {
@@ -121,7 +123,10 @@ test("a brand also on Affitor keeps its own button and gains one Affitor line an
     href: `${url}?utm_source=openaffiliate&utm_medium=apply&utm_campaign=landerlab`,
   })
   assert.ok(ctaWordCount(alsoOnAffitor(own)!.label) <= 4)
-  assert.deepEqual(applyButton(own), { label: "Apply & earn 30%", href: "https://landerlab.io/affiliates" })
+  assert.deepEqual(applyButton(own, "compare"), {
+    label: "Apply & earn 30%",
+    href: "https://landerlab.io/affiliates?utm_source=openaffiliate&utm_medium=compare&utm_campaign=landerlab",
+  })
   // No figure when Affitor publishes none, or none that reads as a number.
   assert.equal(alsoOnAffitor({ ...own, alsoOn: { affitor: { url } } })!.line, "Also on Affitor")
   const unknown = commission({ mode: "unknown", value: null, rate: "varies" })
@@ -135,4 +140,23 @@ test("a stored rate that qualifies the figure gets no number in the button", () 
   assert.equal(applyEarnLabel(commission({ mode: "percentage", value: 30, rate: "up to 30%" })), "Apply & earn")
   assert.equal(applyEarnLabel(commission({ mode: "percentage", value: 25, rate: "25" })), "Apply & earn 25%")
   assert.equal(applyEarnLabel(commission({ mode: "flat", type: "one-time", value: 1000, rate: "$1000" })), "Apply & earn $1,000")
+})
+
+test("outbound brand links get the openaffiliate UTM once, at render time", () => {
+  assert.equal(
+    outboundUrl("https://hunter.io/affiliate-program", "blog", "hunter"),
+    "https://hunter.io/affiliate-program?utm_source=openaffiliate&utm_medium=blog&utm_campaign=hunter",
+  )
+  // Existing query and fragment stay; the UTM is appended.
+  assert.equal(
+    outboundUrl("https://dash.partnerstack.com/application?company=alohi&group=affiliates#apply", "list", "alohi"),
+    "https://dash.partnerstack.com/application?company=alohi&group=affiliates&utm_source=openaffiliate&utm_medium=list&utm_campaign=alohi#apply",
+  )
+  // A brand's own utm_* wins: no double tagging, whatever the case.
+  const tagged = "https://example.com/join?UTM_Source=partner&ref=1"
+  assert.equal(outboundUrl(tagged, "program_page", "x"), tagged)
+  // Affitor links keep affitorUrl's tag; non-http and unparsable stay as they are.
+  assert.equal(outboundUrl("https://affitor.com/marketplace/x", "list", "x"), "https://affitor.com/marketplace/x")
+  assert.equal(outboundUrl("mailto:hello@inspectlet.com", "program_page", "inspectlet"), "mailto:hello@inspectlet.com")
+  assert.equal(outboundUrl("not a url", "program_page", "x"), "not a url")
 })

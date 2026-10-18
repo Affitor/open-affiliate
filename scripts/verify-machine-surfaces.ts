@@ -550,11 +550,11 @@ function checkListPage(list: BestList, path: string): void {
   if (pageDates !== expectedDate) fail(`${htmlFile} says "Verified ${pageDates}"; the verified rows give "${expectedDate}"`);
   if (mdDates !== expectedDate) fail(`${mdFile} says "Verified ${mdDates}"; the verified rows give "${expectedDate}"`);
 
-  // Each row's signup link is the program page's apply link, on both surfaces.
+  // Each row's signup link is the apply link with the list UTM, on both surfaces.
   // The twin prints it as mdUrl does: an autolink with the few characters
   // Markdown would read as structure percent-encoded.
   rows.forEach((p, i) => {
-    const href = applyButton(p).href;
+    const href = applyButton(p, "list").href;
     const shownHref = decodeEntities(/<a href="([^"]*)"[^>]*>Sign up<\/a>/.exec(tableTrs[i] ?? "")?.[1] ?? "");
     if (shownHref !== href) fail(`${htmlFile} links ${p.slug} to ${JSON.stringify(shownHref)}, not ${href}`);
     const line = mdLines.find((l) => l.includes(`/programs/${p.slug}.md) — `)) ?? "";
@@ -1174,7 +1174,8 @@ function noProgramHtmlProblems(program: (typeof programs)[number], html: string)
   for (const label of JOIN_LABELS) {
     if (own.includes(label)) problems.push(`shows a join button ("${label}") for a brand with no program`);
   }
-  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) problems.push("links the signup URL of a brand with no program");
+  // Prefix match: a rendered signup link may carry the outbound UTM after the stored URL.
+  if (program.signupUrl && own.includes(`href="${program.signupUrl.replaceAll("&", "&amp;")}`)) problems.push("links the signup URL of a brand with no program");
   if (/>Commission<\/h3>/.test(own)) problems.push("shows a Commission card for a brand with no program");
   if (/data-term="/.test(own)) problems.push("shows an earnings-card term row for a brand with no program");
   for (const label of TERM_LABELS) {

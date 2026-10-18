@@ -45,7 +45,7 @@ test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
 })
 
 test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () => {
-  const hrefs = programs.flatMap((p) => [applyButton(p).href, alsoOnAffitor(p)?.href]).filter(
+  const hrefs = programs.flatMap((p) => [applyButton(p, "program_page").href, alsoOnAffitor(p)?.href]).filter(
     (h): h is string => typeof h === "string" && isAffitorHref(h),
   )
   assert.ok(hrefs.length > 0, "no program links to affitor.com: the check would be vacuous")
@@ -61,7 +61,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/layout.tsx | href", // footer list: internal paths and GitHub
   "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
   "src/app/explore/page.tsx | `/explore?${sp.toString()}`",
-  "src/app/programs/[slug]/page.tsx | program.url", // the brand's own site; checked against the registry below
+  "src/app/programs/[slug]/page.tsx | visitHref", // the brand's own site (outboundUrl of program.url); checked against the registry below
   "src/app/programs/[slug]/page.tsx | `https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`",
   "src/app/programs/[slug]/page.tsx | `/programs/${program.slug}.md`", // machine strip: the .md twin, internal
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
