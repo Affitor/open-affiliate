@@ -69,7 +69,7 @@ export function formatPercentage(rate: string | number | null | undefined, value
   if (value == null) return "Not published"
   if (typeof rate !== "string") return `${value}%`
   const stored = rate.trim()
-  return /\d/.test(stored) && !/^[+-]?\d+(?:\.\d+)?(?:e[+-]?\d+)?\s*%?$/i.test(stored)
+  return /\d/.test(stored) && !/^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?\s*%?$/i.test(stored)
     ? stored
     : `${value}%`
 }
