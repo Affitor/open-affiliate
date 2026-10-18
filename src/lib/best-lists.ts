@@ -169,6 +169,19 @@ export const BEST_LISTS: BestList[] = [
     qualifies: (p) => p.tags.includes("saas") && p.commission.type === "recurring" && p.kind !== "referral",
   },
   {
+    // The filter behind src/content/best/saas-affiliate-programs.ts: the "saas"
+    // tag and kind, any commission type, so flat and first-payment deals count.
+    slug: "saas-affiliate-programs",
+    title: "Best SaaS Affiliate Programs, Ranked",
+    h1: "SaaS Affiliate Programs",
+    description:
+      "SaaS and software affiliate programs ranked by commission, flat, first-payment and recurring, with the cookie and signup link for each, verified first.",
+    summary: "are SaaS products, going by their registry tags",
+    criteria:
+      "Programs tagged SaaS in the registry, whatever their commission type. Referral rewards paid in credit or gift cards are left out.",
+    qualifies: (p) => p.tags.includes("saas") && p.kind !== "referral",
+  },
+  {
     // No field records a sign-up fee or a purchase requirement. What is sourced
     // is automatic approval, on verified programs only; the criteria say so.
     slug: "free-affiliate-programs",
