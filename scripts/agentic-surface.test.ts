@@ -84,12 +84,18 @@ test("OpenAPI describes only the three existing read-only REST operations", asyn
   assert.equal(validators.ProgramSearch({ ...body, total: "wrong type" }), false)
 })
 
-test("bad queries and unknown slugs have structured JSON errors", async () => {
-  for (const query of ["limit=-1", "limit=1.5", "limit=1x", "limit=", "offset=NaN", "offset=9007199254740992", "verified=yes", "include_description=1", "sort=bad", "type=bad", "q=a&q=b"]) {
+test("unknown query values are ignored (older clients keep working); unknown slugs have JSON errors", async () => {
+  // Legacy values sent by published skills/CLIs: sort=top|trending|new|stars, verified=1.
+  for (const query of ["limit=-1", "limit=1.5", "limit=1x", "limit=", "offset=NaN", "offset=-1", "verified=yes", "verified=1", "include_description=1", "sort=bad", "sort=top", "sort=trending", "sort=new", "sort=stars", "sort=constructor", "sort=__proto__", "sort=toString", "q=a&q=b"]) {
     const response = list(new NextRequest(`http://localhost/api/programs?${query}`))
-    assert.equal(response.status, 400, query)
-    assert.equal(response.headers.get("cache-control"), "no-store")
-    validate("Error", await response.json())
+    assert.equal(response.status, 200, query)
+    validate("ProgramSearch", await response.json())
+  }
+  const legacyNew = await list(new NextRequest("http://localhost/api/programs?sort=new&limit=1")).json()
+  assert.equal(legacyNew.filters.sort, "newest")
+  for (const inherited of ["constructor", "__proto__", "toString"]) {
+    const body = await list(new NextRequest(`http://localhost/api/programs?sort=${inherited}&limit=1`)).json()
+    assert.equal(body.filters.sort, "relevance", inherited)
   }
   const missing = await detail(new NextRequest("http://localhost/api/programs/not-an-actual-program"), { params: Promise.resolve({ slug: "not-an-actual-program" }) })
   assert.equal(missing.status, 404)
@@ -133,7 +139,7 @@ test("live HTTP responses conform to published OpenAPI with either Accept header
       assert.match(response.headers.get("content-type") ?? "", /application\/json/)
       validate(schema, await response.json())
     }
-    for (const [path, status] of [["/api/programs?limit=bad", 400], ["/api/programs/not-an-actual-program", 404], ["/api/does-not-exist", 404], ["/api/programs/vercel/unknown", 404]]) {
+    for (const [path, status] of [["/api/programs/not-an-actual-program", 404], ["/api/does-not-exist", 404], ["/api/programs/vercel/unknown", 404]]) {
       const response = await get(String(path), accept)
       assert.equal(response.status, status)
       assert.match(response.headers.get("content-type") ?? "", /application\/json/)

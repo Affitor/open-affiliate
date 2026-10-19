@@ -15,6 +15,8 @@ import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { affitorAnchorProblems } from "./affitor-checks"
+import { renderToStaticMarkup } from "react-dom/server"
+import { AffitorLink } from "../src/components/affitor-link"
 
 const root = join(__dirname, "..")
 
@@ -47,6 +49,17 @@ test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
   assert.equal(isAffitorHref("https://notaffitor.com/"), false)
   assert.equal(isAffitorHref("https://affitor.com.evil.example/"), false)
   assert.equal(isAffitorHref("/for-brands"), false)
+})
+
+test("the footer maintainer links to Affitor with footer attribution and no nofollow", () => {
+  const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8")
+  assert.match(layout, /Maintained by <AffitorLink href=\{affitorUrl\("footer"\)\} source="footer" cta="maintainer"[^>]*>Affitor<\/AffitorLink>\. Listings are free; rankings are never paid\./)
+  const href = affitorUrl("footer")
+  assert.equal(href, "https://affitor.com/?utm_source=openaffiliate&utm_medium=footer")
+  const html = renderToStaticMarkup(AffitorLink({ href, source: "footer", cta: "maintainer", children: "Affitor" }))
+  assert.match(html, /<a [^>]*href="https:\/\/affitor\.com\/\?utm_source=openaffiliate&amp;utm_medium=footer"[^>]*>Affitor<\/a>/)
+  assert.doesNotMatch(html, /nofollow/)
+  assert.deepEqual(affitorAnchorProblems(html), { problems: [], tracked: 1 })
 })
 
 test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () => {
