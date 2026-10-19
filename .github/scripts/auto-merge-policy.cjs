@@ -332,10 +332,9 @@ function affitorNotFound(body, config) {
 }
 
 const ABSENT = Symbol("absent")
+// approval and payout.frequency are the data lane's (scripts/sync-affitor.ts).
 const UNPUBLISHED = [
-  "approval",
   "approval_time",
-  "restrictions",
   "marketing_materials",
   "api_available",
   "dedicated_manager",
@@ -361,7 +360,14 @@ const isRecord = (value) =>
  * scripts/sync-affitor.ts. scripts/sync-affitor.test.ts runs this lane on
  * the sync's own output, so a drift between the two fails a test.
  */
-function affitorOwnedFields(program, marketplace) {
+/** Mirrors networkRestrictions() in scripts/sync-affitor.ts: the brand's items, then the network's. */
+function networkRestrictions(current) {
+  const network = AFFITOR_SYNC.network_terms.restrictions
+  const own = Array.isArray(current) ? current.filter((r) => !network.includes(r)) : []
+  return [...own, ...network]
+}
+
+function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
   const policy = program.default_policy ?? {}
   const numbers = {
     commission_rate: policy.commission_rate,
@@ -412,13 +418,13 @@ function affitorOwnedFields(program, marketplace) {
     tracking_method: "cookie",
     "payout.minimum": program.payout_threshold ?? ABSENT,
     "payout.currency": "USD",
-    "payout.frequency": ABSENT,
-    "payout.methods": ABSENT,
+    "payout.methods": AFFITOR_SYNC.network_terms.payout_methods,
     signup_url: marketplace + program.slug,
     network: "affitor",
     verified: true,
     status: "active",
     status_note: ABSENT,
+    restrictions: networkRestrictions(baseRestrictions),
     ...Object.fromEntries(UNPUBLISHED.map((key) => [key, ABSENT])),
   }
 }
@@ -713,7 +719,7 @@ async function evaluateAffitorSyncPolicy({
       if (data.is_platform_program) {
         reasons.push(`${slug} is Affitor's own platform program: ${name}`)
       }
-      const owned = affitorOwnedFields(data, config.marketplace)
+      const owned = affitorOwnedFields(data, config.marketplace, base === null ? null : valueAt(base, ["restrictions"]))
       const expected = alsoOn ? alsoOnOwnedFields(owned) : owned
       if (typeof expected === "string") {
         reasons.push(`Affitor's terms for ${slug} are unusable (${expected}): ${name}`)
@@ -721,7 +727,8 @@ async function evaluateAffitorSyncPolicy({
       }
       for (const [path, value] of Object.entries(expected)) {
         const actual = valueAt(program, ownedPath(path))
-        if (actual !== value) {
+        // Lists (payout.methods, restrictions) compare item by item, in order.
+        if (actual !== value && !(Array.isArray(value) && JSON.stringify(actual) === JSON.stringify(value))) {
           reasons.push(`${path} is ${show(actual)}, Affitor says ${show(value)}: ${name}`)
         }
       }

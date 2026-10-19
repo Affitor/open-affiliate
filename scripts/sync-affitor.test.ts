@@ -12,6 +12,7 @@ import {
   brandName,
   checkReadBack,
   checkSchema,
+  networkRestrictions,
   httpJson,
   run,
   slugify,
@@ -20,6 +21,7 @@ import {
   type FetchJson,
 } from "./sync-affitor"
 import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
+import config from "./sync-affitor.config.json"
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
 const TODAY = "2026-10-12"
@@ -306,8 +308,12 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(k.status, "active")
   assert.equal(k.signup_url, "https://affitor.com/marketplace/kyma-api")
   assert.equal(k.commission.conditions, "Paid 15 days after sale.")
-  assert.deepEqual(k.payout, { minimum: 50, currency: "USD" })
-  for (const gone of ["approval", "approval_time", "program_age", "marketing_materials"]) assert.equal(gone in k, false)
+  // Affitor's network terms, linked from every listing: Wise or bank, and its prohibited activities.
+  // approval and payout.frequency are the data lane's, read from the listing's own wording: kept.
+  assert.deepEqual(k.payout, { minimum: 50, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
+  assert.equal(k.approval, "auto")
+  assert.deepEqual(k.restrictions, config.network_terms.restrictions)
+  for (const gone of ["approval_time", "program_age", "marketing_materials"]) assert.equal(gone in k, false)
   assert.equal(k.updated_at, TODAY)
   assert.equal(k.last_verified_at, TODAY)
   assert.equal(k.created_at, "2026-02-01")
@@ -608,6 +614,25 @@ test("a listing missing from the list is paused only when its detail says the pr
   assert.deepEqual(snapshot(d), files)
 })
 
+test("Affitor's prohibited activities follow the brand's own restrictions, each once, in order", () => {
+  const network = config.network_terms.restrictions
+  assert.deepEqual(networkRestrictions(undefined), network)
+  assert.deepEqual(networkRestrictions(null), network)
+  assert.deepEqual(networkRestrictions(["No coupon sites"]), ["No coupon sites", ...network])
+  // Already merged, or the network's items moved ahead of the brand's: the same list.
+  assert.deepEqual(networkRestrictions(["No coupon sites", ...network]), ["No coupon sites", ...network])
+  assert.deepEqual(networkRestrictions([...network, "No coupon sites"]), ["No coupon sites", ...network])
+})
+
+test("a take-over keeps the brand's restrictions ahead of the network's, and a second run writes nothing", async () => {
+  const dir = dirWith({ "kyma-api.yaml": KYMA.replace("approval: auto\n", "approval: auto\nrestrictions:\n  - No coupon sites\n") })
+  await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS), skip: {} })
+  const k = parse(readFileSync(join(dir, "kyma-api.yaml"), "utf8"))
+  assert.deepEqual(k.restrictions, ["No coupon sites", ...config.network_terms.restrictions])
+  const again = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(ROWS), skip: {} })
+  assert.deepEqual(again.written.filter((f) => f.endsWith("kyma-api.yaml")), [])
+})
+
 test("every value written is checked against the schema", () => {
   const ok: Edit[] = [
     [["cookie_days"], 90],
@@ -643,6 +668,11 @@ test("every value written is checked against the schema", () => {
   assert.throws(() => checkSchema([[["slug"], "Not A Slug"]], "x.yaml"), /pattern/)
   assert.throws(() => checkSchema([[["verified"], "true"]], "x.yaml"), /not boolean/)
   assert.throws(() => checkSchema([[["nonsense"], 1]], "x.yaml"), /not in the schema/)
+  // Lists: the list where the schema allows one, then every item.
+  assert.doesNotThrow(() => checkSchema([[["payout", "methods"], ["wise", "bank"]], [["restrictions"], ["No spam"]]], "x.yaml"))
+  assert.throws(() => checkSchema([[["payout", "methods"], ["wise", "venmo"]]], "x.yaml"), /payout\.methods \[1\] is "venmo", not one of the schema's values/)
+  assert.throws(() => checkSchema([[["restrictions"], ["No spam", 7]]], "x.yaml"), /restrictions \[1\] is 7, not string/)
+  assert.throws(() => checkSchema([[["approval"], ["auto"]]], "x.yaml"), /approval is \["auto"\], not string/)
 })
 
 test("an OA listing matched by two Affitor programs is taken over once; the second is a conflict", async () => {
