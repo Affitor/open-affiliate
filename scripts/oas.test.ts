@@ -245,7 +245,9 @@ test("the registry's own YAML: read raw, a null restrictions is Not published (s
   const bySlug = new Map(raw.map((p) => [p.slug, p]))
   for (const s of scored) {
     const t8 = s.checks.find((c) => c.id === "T8")!
-    if (t8.state !== "checking") assert.equal(t8.state, Array.isArray(bySlug.get(s.slug)!.restrictions) ? "met" : "not_public", s.slug)
+    const p = bySlug.get(s.slug)!
+    const disagree = (p.conflicts ?? []).some((c) => c.field === "restrictions")
+    if (t8.state !== "checking") assert.equal(t8.state, disagree ? "not_met" : Array.isArray(p.restrictions) ? "met" : "not_public", s.slug)
     if (s.oas != null) assert.equal(s.oas, round1(partEarned(s, "transparency") + partEarned(s, "partner_value")), s.slug)
   }
 })

@@ -28,6 +28,10 @@ approval: manual
 approval_time: null
 restrictions: null
 
+conflicts:
+  - field: commission.rate
+    quote: "scalenut.com/affiliate headline: \"a 30%–50% recurring commission for life\". Same page, details: \"You'll receive a 30% commission each month they continue renewing\", 40% on the Premium tier, and no rule for 50%. Checked 2026-10-18."
+
 marketing_materials: true
 api_available: false
 dedicated_manager: false
