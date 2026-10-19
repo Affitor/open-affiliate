@@ -62,10 +62,12 @@ agents:
     - "Small businesses generating marketing copy without a copywriter"
     - "Marketers brainstorming content and video ideas"
 
+not_published:
+  payout.frequency: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

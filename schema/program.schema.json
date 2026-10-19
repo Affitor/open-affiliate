@@ -4,6 +4,7 @@
   "description": "Schema for affiliate program YAML files in the OpenAffiliate registry",
   "type": "object",
   "required": [
+    "created_at",
     "name",
     "slug",
     "url",
@@ -112,9 +113,29 @@
       "required": [
         "type",
         "rate",
-        "mode",
-        "currency"
+        "mode"
       ],
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "flat"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "required": [
+          "currency"
+        ],
+        "properties": {
+          "currency": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "properties": {
         "type": {
           "type": "string",
@@ -133,8 +154,11 @@
           "description": "Exactly what the source said, e.g. \"30%\", \"$5 per lead + 30%\", \"varies\". Kept verbatim; read mode and value instead."
         },
         "currency": {
-          "type": "string",
-          "default": "USD"
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 4217 code of a flat amount (\"USD\", \"EUR\"); required when mode is flat. A percentage may leave it out or null: brands rarely name one, and a missing currency is never read as USD."
         },
         "duration": {
           "type": [
@@ -236,6 +260,10 @@
               "stripe"
             ]
           }
+        },
+        "conditions": {
+          "type": "string",
+          "description": "When a commission becomes payable, in the terms' own words: a hold or validation period, a payout cycle, a withdrawal rule. Shown with the payout once the terms are verified."
         }
       }
     },
@@ -446,6 +474,20 @@
             "description": "What each page says, with where, e.g. 'Terms: 60-day cookie; PartnerStack listing: 90 days.'"
           }
         }
+      }
+    },
+    "not_published": {
+      "type": "object",
+      "description": "Terms the brand does not publish, each with the date its pages were read (YYYY-MM-DD). Written by the data lane after reading the program's pages; only then does OAS score the term as Not published. A term that is absent with no marker here has not been checked, and OAS does not assess it.",
+      "additionalProperties": false,
+      "properties": {
+          "commission.duration": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "cookie_days": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.minimum": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.methods": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.frequency": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "approval": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "restrictions": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
       }
     },
     "claimed_by": {

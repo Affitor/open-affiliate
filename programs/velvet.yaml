@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once Velvet approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/velvet-affiliate-program, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/velvet-affiliate-program
 network: affitor
 
@@ -51,7 +53,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

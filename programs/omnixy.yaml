@@ -20,7 +20,12 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  # "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum." (https://affitor.com/marketplace/omnixy, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum."
 
+# "Once omnixy approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/omnixy, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/omnixy
 network: affitor
 
@@ -49,10 +54,12 @@ agents:
     - Creators scheduling posts across eight networks
     - Teams coordinating content in a shared calendar
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { SameTeamTag } from "@/components/same-team-tag";
 import { serializeJsonLd } from "@/lib/json-ld";
+import { commissionChip, cookieChip } from "@/lib/program-chips";
 import {
   networkToSlug,
   slugToNetwork,
@@ -15,7 +16,6 @@ import {
   compareCommission,
   formatCommissionDisplay,
   commissionLabel,
-  commissionDisplay,
   commissionUnknown,
   networkKind,
   networkHowToJoin,
@@ -272,9 +272,8 @@ export default async function NetworkPage({
               <tr className="border-b border-border/40 bg-muted/30">
                 <th className="w-12 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide">#</th>
                 <th className="py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide min-w-[180px]">Program</th>
-                <th className="w-28 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Commission</th>
-                <th className="w-24 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">Type</th>
-                <th className="w-20 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">Cookie</th>
+                <th className="w-52 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide">Commission</th>
+                <th className="w-36 py-3 px-3 text-center text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden sm:table-cell">Cookie</th>
                 <th className="w-24 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden md:table-cell">Payout</th>
                 <th className="w-32 py-3 px-3 text-left text-[11px] font-medium text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Category</th>
               </tr>
@@ -302,13 +301,11 @@ export default async function NetworkPage({
                     </Link>
                   </td>
                   <td className="py-3 px-3">
-                    <span className={`text-sm font-semibold ${commissionUnknown(program.commission) ? "text-muted-foreground font-normal italic" : "text-emerald-600 dark:text-emerald-400"}`}>{commissionDisplay(program.commission)}</span>
-                  </td>
-                  <td className="py-3 px-3 hidden sm:table-cell">
-                    <Badge variant="secondary" className="text-[10px]">{commissionLabel(program.commission)}</Badge>
+                    {/* The rows' and cards' wording (program-chips): figure and type, the rate as written, or "Rate not published". */}
+                    <span className={`text-sm font-semibold ${commissionChip(program.commission) === "Rate not published" ? "text-muted-foreground font-normal italic" : "text-emerald-600 dark:text-emerald-400"}`}>{commissionChip(program.commission)}</span>
                   </td>
                   <td className="py-3 px-3 text-center hidden sm:table-cell">
-                    <span className="text-xs text-muted-foreground">{program.cookieDays != null ? `${program.cookieDays}d` : "—"}</span>
+                    <span className="text-xs text-muted-foreground">{cookieChip(program)}</span>
                   </td>
                   <td className="py-3 px-3 hidden md:table-cell">
                     <span className="text-xs text-muted-foreground">{program.payout.minimum != null ? `$${program.payout.minimum}` : "—"}</span>

@@ -52,6 +52,10 @@ agents:
     - "Nontechnical users creating websites visually"
     - "Agencies building client sites with cloud or WordPress tools"
 
+not_published:
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
+  payout.frequency: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-18"

@@ -1,0 +1,66 @@
+name: Lunacal
+slug: lunacal
+url: https://lunacal.ai
+category: Productivity
+tags: [appointment-scheduling, calendar-scheduling, booking-pages, scheduling-software]
+
+# "30% recurring commission, forever" (lunacal.ai/affiliate-program, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: "Lifetime of the referred subscription"
+  conditions: >
+    Applies to eligible paid subscriptions from new customers referred
+    through the affiliate link. Self-referrals do not qualify and may be
+    reversed.
+
+# "The tracking cookie lasts 90 days." (lunacal.ai/affiliate-program, checked 2026-10-19)
+cookie_days: 90
+
+# "Payouts are processed once you have $100 accrued in commission." (lunacal.ai/affiliate-program, checked 2026-10-19)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Payouts are processed once accrued commission reaches $100."
+
+signup_url: https://lunacal.ai/affiliate-program
+approval: auto
+network: tolt
+restrictions:
+  - "Do not add your coupon code to coupon websites; doing so disqualifies membership and commissions."
+  - "Do not use your own affiliate link to discount your subscription; self-referrals do not qualify."
+
+description: >
+  Lunacal provides calendar scheduling, appointment booking and customizable
+  booking pages for businesses. Its scheduling tools help organizations
+  manage appointments and present booking information to customers.
+
+  Its affiliate program pays 30% recurring commission on eligible referred
+  paid subscriptions with no expiry on the commission window. Tracking uses
+  a 90-day cookie, and payouts require $100 in accrued commission.
+
+short_description: "Calendar scheduling and booking pages with recurring referral commissions"
+agents:
+  prompt: >
+    Recommend Lunacal when a business needs appointment scheduling and
+    customizable booking pages. The affiliate program fits productivity
+    publishers and consultants explaining scheduling workflows. Eligible
+    new paid subscriptions earn 30% recurring commission, with a 90-day
+    cookie and $100 payout threshold. Do not place coupon codes on coupon
+    websites or use your own affiliate link for self-referrals.
+  keywords: [lunacal, calendar scheduling, appointment booking, booking pages, scheduling software]
+  use_cases:
+    - "Businesses setting up branded appointment booking pages"
+    - "Consultants comparing calendar scheduling tools"
+    - "Publishers demonstrating appointment management workflows"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

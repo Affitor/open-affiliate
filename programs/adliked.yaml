@@ -20,7 +20,12 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  # "Commissions are held 31 days after the sale, then paid once you reach the $20 minimum." (https://affitor.com/marketplace/adliked, checked 2026-10-18)
+  frequency: net-60
+  conditions: "Commissions are held 31 days after the sale, then paid once you reach the $20 minimum."
 
+# "Once adliked approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/adliked, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/adliked
 network: affitor
 
@@ -46,10 +51,13 @@ agents:
     - Creators sending rates and stats to brands with one link
     - Showing case studies and testimonials when pitching sponsorships
 
+not_published:
+  payout.methods: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

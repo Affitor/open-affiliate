@@ -30,6 +30,25 @@ signup_url: https://donorbox.org/affiliate-partner-program
 approval: manual
 approval_time: "Usually 2-3 business days"
 
+restrictions:
+  # "Use of LinkedIn Ads, Meta Ads, Twitter Ads, TikTok ads, and other similar display advertising platforms are allowed. It is required that you contact the Donorbox Team before running any paid campaigns" (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "Contact the Donorbox team before running any paid campaigns"
+  # "All creatives and copy must be approved by the Donorbox team for running ad campaigns on the above advertising platforms." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "All creatives and copy for ad campaigns on those platforms must be approved by the Donorbox team"
+  # "Use of Donorbox’s logo, brand name or brand related keywords on any ad-related creatives is strictly prohibited without prior approval by the Donorbox team." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "No Donorbox logo, brand name or brand-related keywords on ad creatives without prior approval by the Donorbox team"
+  # "Use of Google Ads is strictly prohibited without any exceptions." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "Google Ads is prohibited, without exceptions"
+  # "The use of practices that conflict with Donorbox’s marketing efforts cannot be used." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "Practices that conflict with Donorbox's marketing efforts cannot be used"
+  # "Misrepresenting or inaccurately describing Donorbox services, products, brand, or trademark." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "No misrepresenting or inaccurately describing Donorbox services, products, brand or trademark"
+  # "Misleading Users and prospective Users in a manner which implies the inclusion of any product, service, or experience beyond that expressly depicted on Donorbox’s website." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "No misleading users or prospective users into implying any product, service or experience beyond what Donorbox's website depicts"
+  # "Abusing our Affiliate Program or using any fraudulent practices to drive User Conversions or gain commission." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "No abusing the Affiliate Program or fraudulent practices to drive conversions or gain commission"
+  # "We strictly prohibit the Conversion of an entity who you know is not a legitimate prospective Donorbox customer." (https://donorbox.org/explore/affiliate-terms, checked 2026-10-18)
+  - "No converting an entity you know is not a legitimate prospective Donorbox customer"
 marketing_materials: true
 dashboard_url: https://donorbox.tapfiliate.com
 network: tapfiliate
@@ -66,7 +85,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

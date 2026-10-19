@@ -14,10 +14,22 @@ commission:
   currency: USD
   duration: lifetime
   conditions: "Up to 50% of your referrals' payments, paid for as long as the referral pays. Payments within 15 working days."
+# "a tracking cookie is added to their chrome session for 365 days" (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
+cookie_days: 365
 attribution: last-click
 tracking_method: cookie
+payout:
+  # "Commission payments are made via Paypal, our partner Stripe or bank transfer, depending on the payment methods available in your country." (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
+  methods: [paypal, stripe, bank]
+  # "Payments within 15 working days" (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Payments within 15 working days"
+
 signup_url: https://www.waalaxy.com/affiliate-program
-restrictions: null
+# "Self-referrals, including sharing your affiliate link with employees of your own company or using it for your own accounts, are strictly prohibited." (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
+restrictions:
+  - "No self-referrals, including sharing your link with employees of your own company or using it for your own accounts"
+  - "No paid advertisements to promote Waalaxy or drive traffic to your affiliate link"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -37,10 +49,13 @@ agents:
   use_cases:
     - Teams looking for sales solutions
     - Companies evaluating Waalaxy vs alternatives
+not_published:
+  payout.minimum: "2026-10-18"
+  approval: "2026-10-18"
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

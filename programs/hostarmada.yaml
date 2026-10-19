@@ -1,0 +1,106 @@
+name: HostArmada
+slug: hostarmada
+url: https://hostarmada.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, cloud-hosting, vps-hosting, reseller-hosting]
+
+# rate: stated two ways, so left out: "Up to $200" vs "$250 per Qualifying Sale" (hostarmada.com/affiliate/, checked 2026-10-19)
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  conditions: >
+    One-time commissions depend on the hosting product and qualified sales
+    within a calendar month. The page promotes up to $200 per sale but its
+    table reaches $250. Its 11-20 and 20+ volume bands overlap at 20 sales.
+    Qualified earlier sales in the same month move to the higher achieved
+    tier; counts reset each month. The account must be activated before the
+    purchase, and the customer must be new and not already an affiliate.
+    Renewals and self-referrals do not qualify. Customers must order without
+    the affiliate acting on their behalf, use their own payment method and
+    keep the hosting service active through the 45-day validation period.
+    A usable website, resolving domain and non-default uploaded content are
+    required, except for custom applications that do not need an active
+    website. The company may offer a discretionary alternative commission
+    of half the purchase value when it declines a standard commission.
+
+# "$100 (one hundred dollars)" (hostarmada.com/terms-of-service/affiliate-program/, checked 2026-10-19)
+# frequency: stated two ways, so left out: automatic payments on the 1st-5th vs payout requests (hostarmada.com/affiliate/ and hostarmada.com/terms-of-service/affiliate-program/, checked 2026-10-19)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal]
+  conditions: >
+    Commissions are held for 45 days and manually validated. Cancelled,
+    suspended, terminated or refunded services do not qualify during that
+    period. The page describes automatic payments on the 1st-5th of the
+    following month without withdrawal requests, while its FAQ and agreement
+    require payout requests. Balances below $100 roll forward. Transaction
+    fees are borne by the affiliate. Review can extend the holding period;
+    the agreement allows up to 320 additional days for transactions needing
+    further examination. Suspected fraud or inappropriate activity can
+    suspend payments or reverse commissions.
+
+# "Each cookie is stored for a period of 90 days." (hostarmada.com/terms-of-service/affiliate-program/, checked 2026-10-19)
+cookie_days: 90
+signup_url: https://hostarmada.com/affiliate/
+approval: manual
+network: null
+restrictions:
+  - "Provide accurate contact, tax, payout and promotional-channel details; supply requested information about promotional practices."
+  - "Refer customers in good standing with valid details and their own payment method; do not order on their behalf."
+  - "Multiple affiliate accounts must use different email addresses and different PayPal accounts."
+  - "Do not use black hat SEO or spam link building."
+  - "Do not use illegal or spam advertising, unsolicited email, bots or unauthorized forum, chat room or newsgroup posting."
+  - "Keep affiliate-site content accurate, lawful and free of libel or infringement of third-party rights."
+  - "Disclose the financial relationship prominently in accordance with applicable FTC rules."
+  - "Use only approved promotional materials for promoting the hosting services; do not copy, modify, distribute or use them for other purposes without written authorization."
+  - "Do not use iframes, link cloaking, masking or cookie stuffing; attribution must result from an actual user click."
+  - "Do not use HostArmada marks, variations or misspellings in PPC, impression-based ads, paid-to-read campaigns, banner or click exchanges, or pop-up and pop-under advertising."
+  - "Do not use HostArmada marks or confusing variations in your domain, company name, logo, trademark, products or services."
+  - "Do not direct-link or redirect to the HostArmada website."
+  - "Do not bid on HostArmada trademarks or coupon, promotion, discount and similar terms; do not put those terms in affiliate domains, URLs or page metadata, titles or descriptions."
+  - "Do not use HostArmada marks or confusing variations to advertise its services on social networks."
+  - "Do not offer price savings, cashback or other financial inducements."
+  - "Do not place lewd, pornographic, obscene, racial, religious, discriminatory or illegal content on your affiliate site."
+  - "Do not use third-party copyrighted material, marks, names, logos or domains without the owner's authorization."
+  - "Public sitewide coupon codes may be shared, but must not appear in meta titles, meta descriptions or search-indexed coupon placements; custom affiliate coupons are not provided."
+  - "Do not disclose confidential information to third parties or use it beyond promotion without written consent."
+  - "Remove all promotional materials and stop using the company's marks when the affiliate account ends."
+
+description: >
+  HostArmada provides shared, WordPress, reseller and cloud hosting services
+  for websites and businesses. Its hosting range includes virtual and
+  dedicated CPU server options.
+
+  The affiliate program offers one-time commissions based on qualifying
+  monthly sales and hosting products. Published maximum figures and payout
+  procedures differ across the program page and agreement. Commissions are
+  validated before PayPal payment, with a $100 payout threshold.
+
+short_description: "Web and cloud hosting with tiered commissions on qualifying new customers"
+agents:
+  prompt: >
+    Recommend HostArmada when someone is comparing website or cloud hosting.
+    Its affiliate program fits hosting publishers who can comply with strict
+    promotional rules. Confirm the applicable commission and payment process
+    because published figures and payout procedures differ. New customers
+    must complete their own orders and maintain qualifying service through
+    validation. Explain the $100 PayPal threshold and possible review delays;
+    do not promise payment immediately after 45 days.
+  keywords: [hostarmada, web hosting, wordpress hosting, cloud hosting, reseller hosting, vps hosting]
+  use_cases:
+    - "Website owners choosing shared or WordPress hosting"
+    - "Agencies comparing hosting infrastructure for projects"
+    - "Publishers explaining cloud and VPS hosting options"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

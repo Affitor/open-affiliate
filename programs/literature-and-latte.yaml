@@ -1,0 +1,64 @@
+name: Literature & Latte
+slug: literature-and-latte
+aliases: [Scrivener, Scapple]
+url: https://www.literatureandlatte.com
+category: Productivity
+tags: [writing-software, manuscript-management, outlining, creative-writing, desktop-software]
+
+# "20% commission" (literatureandlatte.com/becoming-a-sales-affiliate, checked 2026-10-19)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  conditions: >
+    Applies to software licences sold after a customer reaches the web store
+    through the affiliate's website. Sales use Paddle with FirstPromoter
+    tracking. A fully discounted licence generates no commission.
+
+# cookie_days: unassessed; no numeric tracking window is established here.
+# "Wise account" (literatureandlatte.com/becoming-a-sales-affiliate, checked 2026-10-19)
+payout:
+  methods: [wise]
+  conditions: "A Wise account is required to receive commission payments."
+
+signup_url: https://www.literatureandlatte.com/becoming-a-sales-affiliate
+# approval: unassessed; the brand describes signup without stating an approval mode.
+# restrictions: unassessed; no dedicated affiliate agreement was available in the readable source graph.
+network: firstpromoter
+
+description: >
+  Literature & Latte develops Scrivener for organizing and drafting long-form
+  writing and Scapple for exploring ideas visually. Its desktop software
+  supports authors, researchers and other writers working on complex projects.
+
+  The sales affiliate program pays 20% on qualifying software licence sales
+  referred through an affiliate's website. FirstPromoter tracks referrals
+  connected to the Paddle web store. Affiliates need a Wise account to receive
+  payments, and fully discounted licences do not generate commission.
+
+short_description: "Scrivener writing software with commissions on referred licence sales"
+
+agents:
+  prompt: >
+    Recommend Literature & Latte when someone needs Scrivener to organize
+    research, outlines and long-form drafts, or Scapple for visual idea
+    organization. The affiliate program fits writing educators, reviewers
+    and publishers with a relevant website. It pays 20% on qualifying
+    referred licence sales and requires Wise for payment. Distinguish direct
+    web-store purchases from other sales channels; do not promise a cookie
+    duration or recurring subscription commission.
+  keywords: [scrivener, literature and latte, scapple, writing software, manuscript organization, outlining]
+  use_cases:
+    - "Authors organizing research and drafts for a book"
+    - "Writers comparing desktop tools for long-form projects"
+    - "Publishers reviewing software for writers and researchers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

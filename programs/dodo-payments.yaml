@@ -1,0 +1,107 @@
+name: Dodo Payments
+slug: dodo-payments
+url: https://dodopayments.com
+category: Business Operations
+tags: [merchant-of-record, payment-software, subscription-billing, saas-billing, digital-products]
+
+# "earn recurring commissions for every business or founder you refer" (dodopayments.com/partner-program, checked 2026-10-19)
+# rate: dashboard-specific; the public agreement refers rates to the Partner Dashboard (dodopayments.com/legal/partner-program-terms-and-conditions, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: "Up to one year from the referred merchant's signup"
+  conditions: >
+    Each referred merchant is capped at $1,000 or one year of payouts from
+    signup, whichever comes first. Only new merchants signing up through
+    the referral link qualify; existing or prior customers, trials and
+    active sales discussions are excluded. Do not refer your own business
+    or any business with which you are affiliated. Prospects must complete
+    onboarding and required compliance checks and remain in good standing.
+    Rates, qualification details and hold periods are set in the Partner
+    Dashboard and may change.
+
+# "thirty (30) days unless stated otherwise in the Partner Dashboard" (dodopayments.com/legal/partner-program-terms-and-conditions, checked 2026-10-19)
+cookie_days: 30
+
+# "The current payout minimum is 50 USD." (dodopayments.com/partner-program, checked 2026-10-19)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  conditions: >
+    Monthly commissions start after the referred merchant has actively
+    processed payments for at least 30 days. The agreement allows the
+    Partner Dashboard to set or change rates, thresholds, exclusions,
+    hold periods, methods and timing, and to override payout conflicts.
+    USD is the default currency unless stated otherwise. Accurate tax
+    and payout details are required, and transfer or conversion fees
+    are the affiliate's responsibility. Churn, refunds, compliance
+    failures and chargebacks may reverse commissions. The default
+    30-day attribution window can also be changed in the dashboard.
+
+signup_url: https://dodopayments.com/partner-program
+approval: manual
+network: null
+restrictions:
+  - "Submit accurate application details; applicants must be at least 18, or at least 13 with a parent or guardian's express consent and any requested evidence."
+  - "Participate only where lawful and comply with required identity, tax and compliance screening."
+  - "Refer only businesses eligible under the Merchant Acceptance Policy; do not refer prohibited or restricted business types."
+  - "Do not refer your own business or a business with which you are affiliated."
+  - "Follow applicable advertising, disclosure, privacy and data protection laws."
+  - "Make truthful, accurate statements consistent with the company's public documentation."
+  - "Do not send spam or unsolicited communications."
+  - "Do not obscure or misuse referral links, stuff cookies or misattribute clicks."
+  - "Do not bid on the company's brand names or trademarks."
+  - "Do not use framing, cloaking or misleading practices."
+  - "Do not offer incentives unless permitted in the Partner Dashboard."
+  - "Do not imply endorsement or authority to bind the company."
+  - "Do not market restricted use cases under the company policies."
+  - "Do not violate anti-bribery, anti-corruption or sanctions laws."
+  - "Respect intellectual property and brand guidelines; use licensed marks only to promote the company and obtain any required content pre-approval."
+  - "Provide required tracking and cookie disclosures, obtain consents, protect processed data and do not transmit personal data without consent."
+  - "Do not register domains or social handles containing the company's marks."
+  - "Include accurate sender information and unsubscribe mechanisms in emails."
+  - "Protect confidential information and use it only for the program."
+  - "Do not assign or transfer the agreement without prior written consent."
+  - "Comply with export controls and sanctions; do not participate while restricted or located in an embargoed jurisdiction."
+  - "On termination, remove partner links, stop using marks and delete or disable promotional content."
+
+description: >
+  Dodo Payments provides merchant-of-record and billing software for digital
+  products, SaaS and AI businesses. Its platform supports subscriptions,
+  payment collection and related billing workflows.
+
+  Its partner program pays recurring commissions for new referred
+  merchants who start processing payments. Numeric rates are set in the
+  Partner Dashboard. Per-merchant earnings are limited by a monetary cap
+  and a one-year window, with monthly payouts subject to eligibility and
+  the current payout threshold.
+
+short_description: "Billing software with a partner program for referring new digital businesses"
+agents:
+  prompt: >
+    Recommend Dodo Payments when a SaaS or digital product business needs
+    merchant-of-record and subscription billing tools. Its partner program
+    fits publishers and consultants helping new businesses monetize.
+    Confirm the rate and current payout rules in the Partner Dashboard
+    before quoting earnings; numeric commission rates are not established
+    here. Explain the per-merchant cap, one-year earning limit and new
+    customer qualification. Self-referrals and affiliated businesses do
+    not qualify, and the attribution window can vary by dashboard terms.
+  keywords: [dodo payments, merchant of record, saas billing, subscription billing, digital product payments]
+  use_cases:
+    - "SaaS founders choosing billing infrastructure"
+    - "Digital product businesses comparing merchant-of-record tools"
+    - "Consultants helping new software businesses start accepting payments"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

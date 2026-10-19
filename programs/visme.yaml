@@ -24,6 +24,13 @@ payout:
   frequency: monthly
   methods: [paypal]
 
+# "You are not permitted to drive any Affiliate traffic to Visme from search engines (including, without limitation, Google and Bing) via any paid search, pay-per-click, pay-per-impre" (https://www.visme.co/terms_conditions_partners/, checked 2026-10-18)
+restrictions:
+  - "No paid search, pay-per-click or similar campaigns on search engines to drive affiliate traffic to Visme, including bidding on any keywords (branded or non-branded)"
+  - "No cash backs, rewards or other incentives to obtain the sale without prior approval"
+  - "No coupons, vouchers, discount codes or added value offers without prior approval"
+  - "No spam advertising such as unsolicited email or unauthorized placing of the link in forums, newsgroups or message boards"
+  - "No referring yourself; no commission on your own accounts"
 signup_url: https://www.visme.co/partners/
 approval: manual
 # "we typically approve applications within 3 business days" (visme.co/partners, checked 2026-10-13)
@@ -64,7 +71,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

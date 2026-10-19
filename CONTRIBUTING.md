@@ -32,7 +32,7 @@ tags: [keyword1, keyword2]
 commission:
   type: recurring # recurring | one-time | tiered | hybrid
   rate: "25%"
-  currency: USD
+  currency: USD # required for a flat amount ("$50", "€20"); a percentage may leave it out
   duration: "12 months"
 
 cookie_days: 30

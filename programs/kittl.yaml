@@ -16,6 +16,12 @@ commission:
   conditions: "30% to start, growing to 50% with more referrals, on everything a referral pays in their first 3 months or on their first annual payment."
 attribution: last-click
 tracking_method: cookie
+# "We review every application within a few days." (https://www.kittl.com/partners/affiliates, checked 2026-10-18)
+approval: manual
+payout:
+  # "Get paid monthly Real money, not platform credit - paid out every month." (https://www.kittl.com/partners/affiliates, checked 2026-10-18)
+  frequency: monthly
+
 signup_url: https://www.kittl.com/partners/affiliates
 restrictions: null
 marketing_materials: true
@@ -38,10 +44,15 @@ agents:
   use_cases:
   - Merch creators designing apparel
   - Small businesses building brand assets
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

@@ -22,9 +22,36 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [paypal, wise, bank]
+  methods:
+  - paypal
+  - wise
+  - bank
+  conditions: Payouts are monthly through PayPal, Wise or bank transfer after submission of the required W-9 or W-8BEN tax documentation. Fraud reviews, disputes or discrepancies may delay or suspend payment for up to 90 days. Payment disputes must be submitted within 60 days; records become final after 12 months unless formally disputed.
 signup_url: https://www.salesmessage.com/partners
-restrictions: null
+restrictions:
+- Maintain an active partner account with accurate payment, tax and enrollment information.
+- Referrals must be net-new; active leads, open opportunities and current or former paying customers do not qualify, subject to the agreement’s dormant-contact exception.
+- Existing contacts qualify for reactivation only after at least 180 days without meaningful engagement, without another valid partner claim and without active Salesmsg sales work or an open opportunity during dormancy.
+- No cookie stuffing, forced or incentivized clicks, self-referrals or Salesmsg branded-search bidding; attribution can be reduced, reassigned or reversed.
+- Follow applicable federal, state and local laws, including CAN-SPAM, TCPA, GDPR and CCPA where applicable.
+- Notify Salesmsg before handling protected health information and execute a BAA first; follow applicable HIPAA requirements.
+- Use reasonable industry-standard security controls for access to Salesmsg systems, data and customer information.
+- Ensure your data collection, referral and marketing practices follow data-protection law and Salesmsg’s privacy policy.
+- Use pre-approved Salesmsg logos, marks and marketing assets; other use requires written authorization.
+- No Salesmsg trademark bidding in PPC, paid search or other paid advertising.
+- Do not impersonate Salesmsg or misrepresent affiliation or program status.
+- Brand use in domains, social handles or advertisements requires explicit written permission.
+- Do not use Expert badges, designations or certification marks without current Expert Agency status.
+- No spam, cookie stuffing, redirect manipulation or deceptive advertising.
+- Do not promote through channels with adult, violent, hateful, discriminatory or otherwise unlawful content.
+- Do not register domains or social accounts incorporating Salesmsg trademarks.
+- Do not misrepresent program terms, commissions, certification or Expert Agency status to prospects or others.
+- No activity that violates laws or regulations in connection with program participation.
+- Referral affiliates have no resale, white-label or sublicensing rights; those rights are limited to expressly authorized Certified Expert Agencies.
+- Use confidential information only to perform the agreement and protect it during the agreement and for three years afterward; protect trade secrets while they remain trade secrets, subject to the stated disclosure exceptions.
+- On termination, stop brand use, remove referral links and promotional materials, and return or delete Salesmsg confidential information.
+- Do not bind Salesmsg contractually or make representations on its behalf.
+- Website graphics, buttons and text may not be copied, displayed, transmitted or reproduced beyond permitted personal use without Salesmsg’s express written permission; retain proprietary notices on permitted downloads.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -51,7 +78,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

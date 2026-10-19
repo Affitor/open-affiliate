@@ -1,8 +1,9 @@
 /**
- * Per-file rules build-registry applies, kept pure and free of imports so
- * scripts/no-program.test.ts can run them: importing build-registry itself
- * builds the registry.
+ * Per-file rules build-registry applies, kept pure (the one import,
+ * confirmed-terms, has none of its own) so scripts/no-program.test.ts can run
+ * them: importing build-registry itself builds the registry.
  */
+import { proseSentences, statesTerms, termsConfirmed } from "../src/lib/confirmed-terms"
 
 /** A no_program file sets none of these: a brand with no program has no terms. */
 export const NO_PROGRAM_FORBIDDEN = ["cookie_days", "payout", "signup_url", "approval", "approval_time", "restrictions"]
@@ -111,4 +112,50 @@ export function aliasRoutes(programs: readonly { slug: string; aliases?: unknown
     shadowed,
     clashes,
   }
+}
+
+/** The terms a `not_published` marker may name (schema: not_published.properties). */
+export const NOT_PUBLISHED_FIELDS = ["commission.duration", "cookie_days", "payout.minimum", "payout.methods", "payout.frequency", "approval", "restrictions"]
+
+/**
+ * A `not_published` marker makes OAS score the term Not published, so a typo
+ * must fail the build rather than leave the term unassessed: a map of known
+ * term names to real YYYY-MM-DD dates, nothing else.
+ */
+export function notPublishedProblems(data: Record<string, unknown>): string[] {
+  const marker = data.not_published
+  if (marker === undefined) return []
+  if (marker === null || typeof marker !== "object" || Array.isArray(marker)) return ["not_published must be a map of term to date"]
+  const problems: string[] = []
+  for (const [field, date] of Object.entries(marker)) {
+    if (!NOT_PUBLISHED_FIELDS.includes(field)) problems.push(`not_published names an unknown term "${field}" (one of ${NOT_PUBLISHED_FIELDS.join(", ")})`)
+    const ok = typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) === date
+    if (!ok) problems.push(`not_published.${field} must be a real date written YYYY-MM-DD, got ${JSON.stringify(date)}`)
+  }
+  return problems
+}
+
+/**
+ * commission.rate and commission.duration (and the also_on Affitor
+ * commission's) are shown verbatim on every surface: page, API, MCP, .md,
+ * list chips. For an unverified program confirmedTerms withholds cookie,
+ * payout and approval terms and drops every free-text sentence that states
+ * one (statesTerms); the rate and duration get the same rule here, at data
+ * entry, so no such sentence is stored where it would be shown. A verified
+ * program withholds nothing. Rephrase rather than drop: "100% of the first
+ * charge", not "first payment".
+ */
+export function commissionTermProblems(data: Record<string, unknown>): string[] {
+  if (termsConfirmed(data as { verified?: boolean | null })) return []
+  const alsoOn = (data.also_on as { affitor?: { commission?: unknown } } | null | undefined)?.affitor?.commission
+  const problems: string[] = []
+  for (const [where, commission] of [["commission", data.commission], ["also_on.affitor.commission", alsoOn]] as const) {
+    for (const field of ["rate", "duration"]) {
+      const value = (commission as Record<string, unknown> | null | undefined)?.[field]
+      if (value == null) continue
+      const sentence = proseSentences(String(value)).find((s) => statesTerms(s.sentence, "program"))
+      if (sentence) problems.push(`${where}.${field} states a cookie, payout or approval term, which an unverified program withholds: ${JSON.stringify(value)}`)
+    }
+  }
+  return problems
 }

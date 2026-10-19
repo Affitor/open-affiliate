@@ -19,7 +19,7 @@ export interface Commission {
   /** "none" with rate "No affiliate program" when status is "discontinued" or "no_program". */
   type: "recurring" | "one-time" | "tiered" | "hybrid" | "none";
   rate: string | number;
-  currency: string;
+  currency: string | null;
   duration?: string | null;
   conditions?: string | null;
 }
@@ -29,6 +29,8 @@ export interface Payout {
   currency?: string;
   frequency?: string;
   methods?: string[];
+  /** When a commission becomes payable, in the terms' own words. */
+  conditions?: string;
 }
 
 export interface Program {

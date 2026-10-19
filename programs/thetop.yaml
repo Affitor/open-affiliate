@@ -18,7 +18,26 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/thetop
-restrictions: null
+# Scoped restrictions from https://thetop.com/tteterms (checked 2026-10-19).
+restrictions:
+  - "TheTop customers must not, or permit any third party to, sublicense, resell, rent, lease or supply its Dashboard, Engine or other defined Services to third parties or operate them as a service bureau."
+  - "TheTop customers must not, or permit any third party to, reverse engineer, decompile or try to derive source code, models, prompts, routing or memory logic, or classifiers from the Services, except where applicable law prohibits the restriction."
+  - "TheTop customers must not, or permit any third party to, use the Services, outputs, benchmarks or performance data to build, train or assist a competing product or service."
+  - "TheTop customers must not, or permit any third party to, publish or disclose benchmarks, performance results or comparative tests of the Services without prior written consent."
+  - "TheTop customers must not, or permit any third party to, scrape, crawl or systematically extract data from the defined Dashboard, Engine or related Services."
+  - "TheTop customers must not, or permit any third party to, interfere with or bypass security, rate limits, metering or access controls of the Services."
+  - "TheTop customers must not, or permit any third party to, probe, scan or test vulnerabilities in the Services without prior written consent."
+  - "TheTop customers must not, or permit any third party to, share individual credentials or allow access to the Services by people other than Authorized Users."
+  - "TheTop customers must not, or permit any third party to, introduce malicious code into the Services."
+  - "TheTop customers must not, or permit any third party to, remove or alter proprietary notices on the Services."
+  - "TheTop customers must not, or permit any third party to, use the Services contrary to an AI provider's terms."
+  - "TheTop customers must not, or permit any third party to, use the Services for unlawful, harmful or infringing purposes."
+  - "TheTop customers must not, or permit any third party to, use the Services in activities where failure could cause death, personal injury or severe physical or environmental damage, or as the sole basis for decisions with legal or similarly significant effects on individuals."
+  - "Do not submit or route specially regulated data through TheTop Services unless TheTop agrees in writing to that data category, including PHI, payment-card data, government identifiers, classified or export-controlled technical data, biometrics or children's data."
+  - "Do not use TheTop Dashboard as the sole basis for hiring, dismissal, promotion, discipline, compensation or similar personnel decisions."
+  - "Do not modify TheTop Installed Components, distribute them outside your organization or use them for anything other than connecting to the Services."
+  - "While TheTop Engine is active, do not route traffic outside its Gateway to reduce routed AI spend and evade Engine fees."
+  - "Do not use TheTop Services in a way that would cause a legal violation; customers and Authorized Users must not be located in or nationals of comprehensively US-sanctioned jurisdictions or appear on a US restricted-party list."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -44,7 +63,15 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+
+# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
+not_published:
+  cookie_days: "2026-10-19"
+  payout.minimum: "2026-10-19"
+  payout.methods: "2026-10-19"
+  payout.frequency: "2026-10-19"
+  approval: "2026-10-19"

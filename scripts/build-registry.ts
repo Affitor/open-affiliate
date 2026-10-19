@@ -1,7 +1,8 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
-import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { aliasRoutes, commissionTermProblems, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
+import { createdAtProblems } from "./created-at-rules"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
@@ -57,6 +58,7 @@ const REQUIRED_FIELDS = [
   "description",
   "short_description",
   "agents",
+  "created_at",
 ]
 
 type ProgramKind =
@@ -121,6 +123,8 @@ interface YamlProgram {
 }
 
 function validateProgram(data: Record<string, unknown>, filename: string): void {
+  const dates = createdAtProblems(data)
+  if (dates.length) throw new Error(`${filename}: ${dates.join("; ")}`)
   for (const field of REQUIRED_FIELDS) {
     if (data[field] === undefined || data[field] === null) {
       throw new Error(`Missing required field "${field}" in ${filename}`)
@@ -145,6 +149,16 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // A no_program file holds no terms and only the commission placeholder. The
   // page, .md and API hide terms anyway; this keeps them out of the YAML that
   // contributors and scripts read. Rules in scripts/program-rules.ts.
+  const markers = notPublishedProblems(data)
+  if (markers.length) {
+    throw new Error(markers.join("; "))
+  }
+  // The rate and duration are shown verbatim: an unverified one states no withheld term.
+  const commissionTerms = commissionTermProblems(data)
+  if (commissionTerms.length) {
+    throw new Error(commissionTerms.join("; "))
+  }
+
   const noProgram = noProgramProblems(data)
   if (noProgram.length) {
     throw new Error(`${filename}: status is no_program, so it holds no terms: ${noProgram.join("; ")}`)
@@ -356,7 +370,7 @@ async function buildRegistry(): Promise<void> {
         rate: p.commission.rate,
         mode: p.commission.mode,
         value: p.commission.value,
-        currency: p.commission.currency,
+        currency: p.commission.currency ?? null,
         duration: p.commission.duration,
       },
       // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
