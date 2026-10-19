@@ -51,16 +51,16 @@ async function getJson(path: () => string, signal?: AbortSignal): Promise<unknow
   } catch {
     return failed("INVALID_RESPONSE", `The API answered HTTP ${response.status} without JSON.`, "Retry shortly; /openapi.json describes every response.")
   }
-  // An HTTP error keeps the API's own error body only when it has the full shape;
-  // anything else (a proxy's 502 JSON, null, a partial error) becomes HTTP_ERROR.
-  if (response.ok || isApiError(body)) return body
-  return failed("HTTP_ERROR", `The API answered HTTP ${response.status}.`, "Retry shortly; /openapi.json describes every response.")
-}
-
-function isApiError(body: unknown): boolean {
-  const error = (body as { error?: unknown } | null)?.error
-  return typeof error === "object" && error !== null &&
-    ["code", "message", "hint"].every((key) => typeof (error as Record<string, unknown>)[key] === "string")
+  if (response.ok) return body
+  // An HTTP error is always rebuilt, never passed through, so it has exactly the
+  // three fields: the API's own code, message and hint when all are strings,
+  // HTTP_ERROR otherwise (a proxy's 502 JSON, null, a partial error).
+  const error = (body as { error?: Record<string, unknown> } | null)?.error
+  const { code, message, hint } = error ?? {}
+  const text = (value: unknown): value is string => typeof value === "string" && value !== ""
+  return text(code) && text(message) && text(hint)
+    ? { error: { code, message, hint } }
+    : failed("HTTP_ERROR", `The API answered HTTP ${response.status}.`, "Retry shortly; /openapi.json describes every response.")
 }
 
 // Read-only, and program text is contributor-submitted: treat it as untrusted.

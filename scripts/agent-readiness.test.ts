@@ -118,7 +118,9 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
     const tools = [[searchTool, { q: "x" }], [getTool, { slug: "vercel" }], [listTool, {}]] as const
     // The full openapi Error shape: code, message and an actionable hint, nothing else.
     const code = async (run: () => Promise<unknown>) => {
-      const { error } = (await run()) as { error: Record<string, string> }
+      const result = (await run()) as { error: Record<string, string> }
+      assert.deepEqual(Object.keys(result), ["error"])
+      const { error } = result
       assert.deepEqual(Object.keys(error), ["code", "message", "hint"])
       for (const value of Object.values(error)) assert.ok(typeof value === "string" && value.length > 0)
       return error.code
@@ -137,9 +139,17 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
     cancel.abort()
     assert.equal(await code(() => pending), "ABORTED")
     // An HTTP error whose JSON is not the API's error shape is normalised too.
-    for (const body of [{ error: "Bad Gateway" }, null, {}, { error: { code: "X", message: "partial" } }]) {
+    for (const body of [{ error: "Bad Gateway" }, null, {}, { error: { code: "X", message: "partial" } }, { error: { code: "", message: "empty", hint: "" } }]) {
       globalThis.fetch = (async () => Response.json(body, { status: 502 })) as typeof fetch
       for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "HTTP_ERROR", `${tool.name} ${JSON.stringify(body)}`)
+    }
+    // An API error with extra fields, at the root or inside error, keeps only the three.
+    for (const body of [
+      { error: { code: "UPSTREAM", message: "Bad gateway.", hint: "Retry." }, upstream: true },
+      { error: { code: "UPSTREAM", message: "Bad gateway.", hint: "Retry.", debug: "stack" } },
+    ]) {
+      globalThis.fetch = (async () => Response.json(body, { status: 502 })) as typeof fetch
+      for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "UPSTREAM", tool.name)
     }
     // A 404 keeps the API's own error body.
     globalThis.fetch = (async () => Response.json({ error: { code: "NOT_FOUND", message: "Program not found.", hint: "Search first." } }, { status: 404 })) as typeof fetch
