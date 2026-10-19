@@ -8,6 +8,19 @@ import { ImpressionTracker } from "@/components/impression-tracker"
 import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms"
 import { affiliateScore, commissionDisplay, commissionLabel, type Program } from "@/lib/client-programs"
 
+/** "30% recurring/12mo"; the type alone says nothing without a rate, so an unpublished rate is just that. */
+function commissionChip(c: Program["commission"]): string {
+  const figure = commissionDisplay(c)
+  return figure === "Not published" ? "Rate not published" : `${figure} ${commissionLabel(c)}`
+}
+
+/** The cookie as the program page states it; unconfirmed until the terms are checked. */
+function cookieChip(p: Program): string {
+  if (!termsConfirmed(p)) return UNCONFIRMED
+  if (p.cookieDays == null) return "Cookie not published"
+  return p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays}d cookie`
+}
+
 export function ProgramCardGrid({ program }: { program: Program }) {
   return (
     <div
@@ -40,11 +53,10 @@ export function ProgramCardGrid({ program }: { program: Program }) {
           Score: {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-xs">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
+          {commissionChip(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-xs">
-          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
+          {cookieChip(program)}
         </Badge>
         <Badge variant="outline" className="text-xs">
           {program.category}
@@ -92,11 +104,10 @@ export function ProgramRowList({ program }: { program: Program }) {
           {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-xs">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
+          {commissionChip(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-xs">
-          {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+          {cookieChip(program)}
         </Badge>
         <span className="hidden lg:inline text-xs text-muted-foreground">
           {program.category}
