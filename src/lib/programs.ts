@@ -35,7 +35,7 @@ export interface Program {
     mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
     /** Percent, or currency amount when flat. Null when mode is unknown. */
     value: number | null
-    currency: string
+    currency: string | null
     duration?: string | null
     conditions?: string | null
   }
@@ -113,7 +113,7 @@ function mapYamlToProgram(yaml: any): Program {
       // said how to read the figure, which is exactly what unknown means.
       mode: yaml.commission.mode ?? "unknown",
       value: yaml.commission.value ?? null,
-      currency: yaml.commission.currency,
+      currency: yaml.commission.currency ?? null,
       duration: yaml.commission.duration ?? null,
       conditions: yaml.commission.conditions ?? null,
     },
