@@ -26,6 +26,8 @@ payout:
   currency: USD
   methods: [wise, bank]
 
+# "Apply on Affitor. Once Kyma API approves you" (https://affitor.com/marketplace/kyma-api, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/kyma-api
 
 network: affitor
@@ -51,6 +53,8 @@ agents:
     - "Applications that need automatic failover if a model provider goes down"
     - "Developers migrating from OpenAI who want provider flexibility"
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-02-01"

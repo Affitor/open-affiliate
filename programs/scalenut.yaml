@@ -26,7 +26,10 @@ payout:
 signup_url: https://www.scalenut.com/affiliate
 approval: manual
 approval_time: null
-restrictions: null
+# "Self-referrals, or trying to get a discount on your own purchase, are not allowed in our referral program." (https://www.scalenut.com/affiliate, checked 2026-10-18)
+restrictions:
+  - "No self-referrals, including trying to get a discount on your own purchase"
+  - "No paid-search strategy based on Scalenut's trademarks or brand names; when running paid search ads on Google or Bing, negative keywords for Scalenut brand terms are compulsory"
 
 marketing_materials: true
 api_available: false

@@ -9,9 +9,12 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, programs, type Program } from "../src/lib/programs"
+import { commissionDisplay as commissionDisplayServer, commissionUnknown, confirmedTerms, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, networkToSlug, programs, type Program } from "../src/lib/programs"
+import { commissionFigure } from "../src/lib/program-page"
+import { hasNoProgram } from "../src/lib/no-program"
 import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
+import { llmsTxt } from "./generate-md"
 
 const root = join(__dirname, "..")
 const flat = (groups: ReturnType<typeof directoryGroups>) => groups.flatMap((g) => g.programs.map((p) => p.slug))
@@ -158,17 +161,52 @@ test("each hub's /programs filter returns the hub's programs and only confirmed 
 
 test("program row and card chips: no type after an unpublished rate, cookie only once terms are checked", () => {
   const c = (mode: string, value: number | null, rate: string | number, type = "recurring", duration: string | null = "12 months") =>
-    commissionChip({ type, rate, mode, value, currency: "USD", duration } as Parameters<typeof commissionChip>[0])
+    commissionChip({ type, rate, mode, value, duration })
   assert.equal(c("unknown", null, "none"), "Rate not published")
-  assert.equal(c("percentage", null, "varies"), "Rate not published")
-  assert.equal(c("flat", null, "varies", "one-time", null), "Rate not published")
+  assert.equal(c("percentage", null, "varies"), "Rate varies")
+  assert.equal(c("flat", null, "Varies", "one-time", null), "Rate varies")
+  assert.equal(c("unknown", null, "25"), "Rate not published")
+  assert.equal(c("unknown", null, "N/A"), "Rate not published")
+  // A reward with no figure to parse reads as written, as on the program page (Vanta, Attio).
+  assert.equal(c("unknown", null, "$500 Visa gift card per referral", "one-time", null), "$500 Visa gift card per referral")
+  assert.equal(c("percentage", null, "up to 20% revenue share"), "up to 20% revenue share")
+  assert.equal(c("percentage", 30, "30%", "recurring", "lifetime"), "30% recurring/lifetime")
+  assert.equal(commissionChip({ type: "recurring", rate: "30%", mode: "percentage", value: 30, duration: "lifetime" }, true), "30% rec/lifetime")
   assert.equal(c("percentage", 30, "30%"), "30% recurring/12mo")
   assert.equal(c("flat", 50, "$50", "one-time", null), "$50 one-time")
-  assert.equal(c("tiered", null, "10-30%", "tiered", null), "10-30% tiered")
+  assert.equal(c("tiered", null, "10-30%", "tiered", null), "10-30%")
+  assert.equal(c("tiered", 30, "10-30%", "tiered", null), "10-30% tiered")
+  // Tiered or hybrid with nothing to read falls back too, as on the program page.
+  assert.equal(c("tiered", null, "none", "one-time", null), "Rate not published")
+  assert.equal(c("hybrid", null, "25", "one-time", null), "Rate not published")
+  assert.equal(c("hybrid", null, "varies", "one-time", null), "Rate varies")
   for (const cookieDays of [undefined, 0, 30]) assert.equal(cookieChip({ verified: false, cookieDays }), "Unconfirmed")
   assert.equal(cookieChip({ verified: true, cookieDays: undefined }), "Cookie not published")
   assert.equal(cookieChip({ verified: true, cookieDays: 0 }), "Code-based, no cookie")
   assert.equal(cookieChip({ verified: true, cookieDays: 30 }), "30d cookie")
   // Every live row: no "Not published" followed by a commission type.
   for (const p of clientPrograms) assert.doesNotMatch(commissionChip(p.commission), /^Not published/, p.slug)
+})
+
+test("a chip makes the program page's choice for every program, verified or not: the figure, the rate as written, Rate varies or Rate not published", () => {
+  for (const stored of programs) {
+    const p = confirmedTerms(stored)
+    const figure = commissionFigure(p)
+    if (!figure) continue // no_program: no page figure, and never listed
+    const chip = commissionChip(p.commission)
+    if (figure.kind === "varies") assert.equal(chip, "Rate varies", p.slug)
+    // No figure to read: the rate as written, word for word.
+    else if (commissionUnknown(p.commission)) assert.equal(chip, figure.big, p.slug)
+    // A figure: the same figure. The page may write the stored qualifier out ("$75 per qualified lead"); the chip keeps it short.
+    else assert.ok(chip.startsWith(commissionDisplayServer(p.commission)) && !chip.startsWith("Rate "), `${p.slug}: chip "${chip}", page "${figure.big}"`)
+  }
+  for (const p of programs.filter((x) => !hasNoProgram(x) && !commissionFigure(confirmedTerms(x)))) assert.equal(commissionChip(p.commission), "Rate not published", p.slug)
+})
+
+test("llms.txt lists networks A to Z by display name, in-house last, as the homepage band", () => {
+  const listed = [...llmsTxt().matchAll(/\]\(https:\/\/openaffiliate\.dev\/networks\/([a-z0-9-]+)\.md\)/g)].map((m) => m[1])
+  const expected = [...liveNetworks]
+    .sort((a, b) => Number(a === IN_HOUSE) - Number(b === IN_HOUSE) || networkName(a).localeCompare(networkName(b), "en", { sensitivity: "base" }))
+    .map(networkToSlug)
+  assert.deepEqual(listed, expected)
 })

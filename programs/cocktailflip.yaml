@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Apply on Affitor. Once CocktailFlip approves you" (https://affitor.com/marketplace/cocktailflip, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/cocktailflip
 network: affitor
 
@@ -44,10 +46,12 @@ agents:
     - "Couples looking for a date-night activity at home"
     - "Adults hosting a cocktail party for friends"
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 kind: affiliate
 source: affitor-api

@@ -13,6 +13,8 @@ commission:
   duration: lifetime
   conditions: "20% for each customer's first 3 months, then 30% with no time limit, up to $2,500 per customer (Starter, 0-49 active customers) or $5,000 (Performer, 50+). Payout needs 3 referred customers and $100."
 
+# "Tracking of the potential Referred Customer is performed by cookies lasting 45 days." (https://docs.apify.com/legal/affiliate-program-terms-and-conditions, checked 2026-10-18)
+cookie_days: 45
 attribution: last-click
 tracking_method: cookie
 
@@ -64,7 +66,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

@@ -15,10 +15,11 @@
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { readFileSync } from "node:fs"
-import { runInNewContext } from "node:vm"
-import ts from "typescript"
-import { formatPercentage } from "../src/lib/commission-mode"
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { spawnSync } from "node:child_process"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
 import {
@@ -34,8 +35,10 @@ import {
 import { commissionDisplay, confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import * as page from "../src/lib/program-page"
 import { commissionDisplay as clientCommissionDisplay } from "../src/lib/client-programs"
+import { commissionChip, commissionDisplay as chipCommissionDisplay } from "../src/lib/program-chips"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
+import { commissionTermProblems } from "./program-rules"
 import { chunkScan, termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
 import {
   mcpCall,
@@ -739,12 +742,17 @@ test("qualified percentage ceilings survive server, client and agent Markdown wi
 
 
 test("global search uses the same percentage rule while flat, tiered and unknown displays stay unchanged", () => {
-  const source = ts.createSourceFile("search-bar.tsx", readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
-  const declaration = source.statements.find((node): node is ts.FunctionDeclaration => ts.isFunctionDeclaration(node) && node.name?.text === "commissionDisplay")!
-  assert.ok(declaration)
-  const printed = ts.createPrinter().printNode(ts.EmitHint.Unspecified, declaration, source)
-  const js = ts.transpileModule(printed, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText
-  const searchDisplay = runInNewContext(`${js}; commissionDisplay`, { formatPercentage }) as typeof clientCommissionDisplay
+  // The search bar keeps no copy of its own: it reads the shared chip helpers.
+  const searchBar = readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8")
+  assert.match(searchBar, /import \{ commissionChip \} from "@\/lib\/program-chips"/)
+  assert.doesNotMatch(searchBar, /function commission(Display|Label)\b/)
+  // It renders the shared chip for each /api/programs row.
+  assert.match(searchBar, /\{commissionChip\(p\.commission\)\} · \{p\.category\}/)
+  const unknown = { ...verifiedBase.commission, mode: "unknown" as const, value: null }
+  assert.equal(commissionChip({ ...unknown, rate: "varies" }), "Rate varies")
+  assert.equal(commissionChip({ ...unknown, rate: "none" }), "Rate not published")
+  assert.equal(commissionChip({ ...unknown, rate: "$500 Visa gift card per referral" }), "$500 Visa gift card per referral")
+  const searchDisplay = chipCommissionDisplay
   for (const rate of ["up to 15%", "maximum 15%", "10–15%", "45% to 55%", "15% per qualified sale", "up to 15 percent", "maximum 15", "30%", "30"]) {
     const commission = { ...verifiedBase.commission, mode: "percentage" as const, rate, value: rate === "30%" || rate === "30" ? 30 : 15 }
     assert.equal(searchDisplay(commission), commissionDisplay(commission), rate)
@@ -785,4 +793,40 @@ test("payout conditions reach REST, MCP and the .md twin for a verified program,
   const md = programMd({ ...entry, payout: { ...entry.payout, conditions: odd } })
   assert.deepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, md), [])
   assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
+})
+
+test("an unverified program's commission.rate and duration state no withheld term: build-registry refuses one, every program passes", () => {
+  const off = (commission: Record<string, unknown>, extra: Record<string, unknown> = {}) => commissionTermProblems({ verified: false, commission, ...extra })
+  for (const leak of [
+    "20% per referral; 90-day cookie; monthly payouts",
+    "20% per referral; commissions deposited monthly",
+    "20% per referral; approval required",
+    "20% per referral; cookie: 3 months",
+    "20% per sale; commissions sent monthly",
+    "20% per sale; payable after 30 days",
+    "20%; applications reviewed within 48 hours",
+    "$50 per sale, paid monthly via PayPal",
+    "20% net 30",
+  ]) assert.equal(off({ rate: leak }).length, 1, leak)
+  for (const duration of ["45-day tracking", "while partner status is approved", "paid monthly"]) assert.equal(off({ rate: "20%", duration }).length, 1, duration)
+  // The Affitor commission an also_on line shows is held to the same rule.
+  assert.equal(off({ rate: "20%" }, { also_on: { affitor: { url: "https://x", commission: { rate: "20%; 90-day cookie", duration: "paid monthly" } } } }).length, 2)
+  // The commission itself passes, however it is worded.
+  for (const ok of ["100% of the first charge + 25% recurring", "25% of the first paid transaction", "$500 Visa gift card per referral", "up to 30% for 12 months", "$50 per qualified bank account opened", "at least 20% commission"]) {
+    assert.deepEqual(off({ rate: ok, duration: "12 months" }), [], ok)
+  }
+  // A verified program withholds nothing, so its rate is its own words.
+  assert.deepEqual(commissionTermProblems({ verified: true, commission: { rate: "30% (Pro, Team monthly), 15% (Team annual)" } }), [])
+  for (const p of registry.programs as unknown as Record<string, unknown>[]) assert.deepEqual(commissionTermProblems(p), [], String(p.slug))
+
+  // build-registry itself refuses the file (not only the rule): run it on a one-program copy.
+  const dir = mkdtempSync(join(tmpdir(), "oa-guard-"))
+  for (const d of ["programs", "schema", "src/lib", "public/logos"]) mkdirSync(join(dir, d), { recursive: true })
+  for (const f of ["program.schema.json", "signup-url-debt.json"]) copyFileSync(new URL(`../schema/${f}`, import.meta.url), join(dir, "schema", f))
+  const yaml = readFileSync(new URL("../programs/openfate.yaml", import.meta.url), "utf8")
+  writeFileSync(join(dir, "programs", "openfate.yaml"), yaml.replace(/  duration: null\n/, '  duration: "while partner status is approved"\n'))
+  const run = spawnSync(fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url)), [fileURLToPath(new URL("./build-registry.ts", import.meta.url))], { cwd: dir, encoding: "utf8" })
+  rmSync(dir, { recursive: true, force: true })
+  assert.notEqual(run.status, 0, "build-registry accepted a withheld term in commission.duration")
+  assert.match(run.stdout + run.stderr, /commission\.duration states a cookie, payout or approval term/)
 })
