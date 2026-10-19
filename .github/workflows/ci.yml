@@ -29,6 +29,7 @@ jobs:
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
+      - run: npx tsx --test scripts/verify-programs.test.ts
       - run: npx tsx --test scripts/claims.test.ts
       - run: npx tsx --test scripts/check-type-scale.test.ts
       - run: npm run check:type-scale
@@ -77,11 +78,6 @@ jobs:
       - name: Verify program URLs (changed files)
         if: github.event_name == 'pull_request'
         run: npm run verify:changed
-
-      - name: Verify all program URLs (weekly)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npm run verify
-        continue-on-error: true
 
       - name: Upload verification report
         if: always()
