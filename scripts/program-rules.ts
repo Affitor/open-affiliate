@@ -173,24 +173,34 @@ const digits = (text: string) =>
   )
 /** Currency signs and codes, numbers, words, and single marks, as separate tokens. */
 const TOKEN = /[$€£¥₹]|\d+(?:\.\d+)?|[A-Za-z]+|[^\sA-Za-z\d]/g
-const JOIN = new Set([",", "-", "–", "or", "and", "to"])
+const JOIN = new Set([",", "-", "–", "/", "or", "and", "to"])
 /** A number right after one of these is an amount ("$100", "USD 100") or a date ("May 31"), never days. */
 const notCount = (token: string | undefined) =>
   token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*$/i.test(token))
-/** "at the end of the third month following" waits about 30 days a month; "through (the end of) the third month" is a duration, not a wait. */
+/**
+ * "paid / made at the end of the third month following" waits about 30 days
+ * a month. Without the payment verb ("through the end of", "stop at the end
+ * of") it is a duration, not a wait.
+ */
 const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
-const MONTHS_AFTER = new RegExp(String.raw`\bat\s+the\s+end\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
+const MONTHS_AFTER = new RegExp(String.raw`\b(?:paid|made|issued|sent|payable)\s+(?:out\s+)?at\s+the\s+end\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
 /**
  * A count whose own words name a refund, return, cancellation or the cookie
  * ("refunds are issued within 60", "customers can request refunds within
- * 60", "the cookie lasts 60") is not a payout wait. Its own words: the last
- * 40 characters before "days", back to a comma or semicolon that is not part
- * of a list of numbers.
+ * 60", "the cookie lasts 60") is not a payout wait. Its own words: back to
+ * the nearest comma or semicolon that is not part of a list of numbers,
+ * within 200 characters (one pass, however long the text).
  */
 const NOT_PAYOUT = /\b(?:refund|return|chargeback|cancel|cookie|click)/i
-const leadOf = (before: string) => before.slice(-40).split(/[,;](?!\s*\d)/).pop() ?? ""
-/** "2026-05-31", "05/31/2026", "05/31": a date, not a count ("35-40" stays a range). */
-const DATE = /\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\b/g
+const leadOf = (before: string) => before.slice(-200).split(/[,;](?!\s*\d)/).pop() ?? ""
+/**
+ * "2026-05-31", "05-31", "05/31/2026", "5/31": a date, not a count. A real
+ * month and day only, so "35-40" and "60/90" stay ranges; a dash date needs
+ * a zero-padded month ("10-15" is a range).
+ */
+const MONTH = String.raw`(?:0?[1-9]|1[0-2])`
+const DAY = String.raw`(?:0?[1-9]|[12]\d|3[01])`
+const DATE = new RegExp(String.raw`\b\d{4}-\d{1,2}-\d{1,2}\b|\b0[1-9]-${DAY}\b|\b${MONTH}\/${DAY}(?:\/\d{2,4})?\b`, "g")
 
 /**
  * The wait a "days after" names: the largest number of the count written
