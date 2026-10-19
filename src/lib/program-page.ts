@@ -1,6 +1,7 @@
 import { IN_HOUSE, commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
 import { namesTerm, proseSentences, statesTerms, termsConfirmed } from "@/lib/confirmed-terms"
 import { hasNoProgram } from "@/lib/no-program"
+import { frequencyLabel } from "@/lib/claims/form"
 import { isPaused } from "@/lib/program-seo"
 
 /**
@@ -114,7 +115,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 /** "Monthly, from a $50 minimum"; null when neither is stored. */
 export function payoutText(p: Program): string | null {
   const parts: string[] = []
-  if (p.payout?.frequency) parts.push(capitalize(p.payout.frequency))
+  if (p.payout?.frequency) parts.push(frequencyLabel(p.payout.frequency))
   if (p.payout?.minimum != null) {
     const min = p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
     parts.push(parts.length ? min : min.charAt(0).toUpperCase() + min.slice(1))

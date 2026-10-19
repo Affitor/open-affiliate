@@ -22,6 +22,7 @@ tracking_method: cookie
 # "supports different payment methods – PayPal, Bank / Wire Transfer, WebMoney" (affiliates.templatemonster.com/affiliates, checked 2026-10-13)
 payout:
   currency: USD
+  frequency: on-request
   methods: [paypal, bank]
 
 signup_url: https://affiliates.templatemonster.com/affiliates/

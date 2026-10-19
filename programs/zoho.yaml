@@ -22,6 +22,7 @@ cookie_days: 90
 payout:
   minimum: 100
   currency: USD
+  frequency: on-request
   methods: [bank, paypal]
 
 signup_url: https://www.zoho.com/affiliate/signup.html
