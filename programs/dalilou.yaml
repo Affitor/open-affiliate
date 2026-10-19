@@ -20,18 +20,27 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  methods:
+    - wise
+    - bank
 
 # "Participation in the Program is subject to approval by Dalilou." (https://dalilou.com/affiliate-terms/, checked 2026-10-18)
 approval: manual
 # "Self-referrals intended to obtain commission on the partner’s own Dalilou subscription." (https://dalilou.com/affiliate-terms/, checked 2026-10-18)
 restrictions:
-  - "No self-referrals intended to obtain commission on the partner's own Dalilou subscription"
-  - "No cookie stuffing or forced referral tracking"
-  - "No unsolicited bulk commercial communications or spam"
-  - "No promoting unauthorized discount codes, coupons or offers"
-  - "No unauthorized cashback or financial incentive schemes using Dalilou referral links"
-  - "No bidding on paid-search keywords containing Dalilou (or misspellings/variations) unless Dalilou gives prior written authorization"
-  - "No registering domains, social identities or ad accounts intended to imitate or cause confusion with Dalilou"
+  - No self-referrals intended to obtain commission on the partner's own Dalilou subscription
+  - No cookie stuffing or forced referral tracking
+  - No unsolicited bulk commercial communications or spam
+  - No promoting unauthorized discount codes, coupons or offers
+  - No unauthorized cashback or financial incentive schemes using Dalilou referral links
+  - No bidding on paid-search keywords containing Dalilou (or misspellings/variations) unless Dalilou gives prior written authorization
+  - No registering domains, social identities or ad accounts intended to imitate or cause confusion with Dalilou
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
 signup_url: https://affitor.com/marketplace/dalilou
 network: affitor
 
@@ -62,8 +71,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-18"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active

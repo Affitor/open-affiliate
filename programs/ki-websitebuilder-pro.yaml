@@ -20,6 +20,9 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  methods:
+    - wise
+    - bank
 
 # "Apply on Affitor. Once KI Websitebuilder Pro approves you" (https://affitor.com/marketplace/ki-websitebuilder-pro, checked 2026-10-18)
 approval: manual
@@ -55,8 +58,15 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-18"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active
+restrictions:
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
