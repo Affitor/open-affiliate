@@ -21,6 +21,8 @@ payout:
   currency: USD
   frequency: monthly
 
+# "After a quick approval on our end, you’ll get access to our affiliate platform and receive everything you need to get started." (https://lowfruits.io/affiliate/, checked 2026-10-18)
+approval: manual
 signup_url: https://lowfruits.io/affiliate/
 restrictions:
   - "No paid ads (e.g., AdWords, social media ads)"
@@ -55,10 +57,16 @@ agents:
     - "Niche site builders planning content around weak SERPs"
     - "SEO agencies clustering keywords for client content plans"
 
+conflicts:
+  - field: cookie_days
+    quote: "lowfruits.io/affiliate: \"180-Day Cookie Window\". affiliates.lowfruits.io/signup: \"with a 20% commission rate, 30-day cookie\". Checked 2026-10-18."
+not_published:
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
