@@ -2,6 +2,7 @@
 
 import { useState, useMemo, Suspense, useEffect } from "react";
 import { track } from "@/lib/track";
+import { frequencyLabel } from "@/lib/claims/form";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -485,9 +486,9 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                     {selected.map((p) => (
                       <td
                         key={p.slug}
-                        className="py-3 px-4 text-center text-sm capitalize"
+                        className="py-3 px-4 text-center text-sm"
                       >
-                        {p.payoutFrequency ?? "—"}
+                        {p.payoutFrequency ? frequencyLabel(p.payoutFrequency) : "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

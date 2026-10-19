@@ -9,6 +9,7 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
+import type { OasScore } from "../src/lib/oas"
 import { commissionDisplay as commissionDisplayServer, commissionUnknown, confirmedTerms, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, networkToSlug, programs, type Program } from "../src/lib/programs"
 import { commissionFigure } from "../src/lib/program-page"
 import { hasNoProgram } from "../src/lib/no-program"
@@ -85,6 +86,29 @@ test("homepage networks: every live network once, A to Z by display name ignorin
   assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en")))
   assert.equal(list[0].network, "affitor")
   assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
+})
+
+test("homepage Rankings: the OAS top 5 once scores exist, Affiliate Score before", () => {
+  assert.equal(homepageSets(programs, []).by, "affiliate-score")
+  const live = programs.filter((p) => isLive(p) && p.verified).slice(0, 7)
+  const scores: OasScore[] = live.map((p, i) => ({
+    slug: p.slug, version: "v1", oas: 90 - i, transparency: 60, partner_value: 30 - i, checked_at: "2026-10-13", page_url: "https://x.example/a",
+    checks: [{ id: "T1", state: "met", max: 12, points: 12 }],
+  }))
+  const sets = homepageSets(programs, scores, new Date("2026-10-20T00:00:00Z"))
+  assert.equal(sets.by, "oas")
+  assert.deepEqual(sets.rankings.map((p) => p.slug), live.slice(0, 5).map((p) => p.slug))
+  assert.deepEqual(sets.ranks, [1, 2, 3, 4, 5])
+  const tied = homepageSets(programs, scores.map((s) => ({ ...s, oas: 100 })), new Date("2026-10-20T00:00:00Z"))
+  assert.deepEqual(tied.ranks, [1, 1, 1, 1, 1], "equal OAS share a rank, as on the leaderboard")
+  // The top program's review reaches 90 days tomorrow: the leaderboard still ranks it, the homepage
+  // already leaves it out, and the others keep the leaderboard's ranks (2-6).
+  const expiring = scores.map((s, i) => (i === 0 ? { ...s, checked_at: "2026-07-23" } : s))
+  const near = homepageSets(programs, expiring, new Date("2026-10-20T00:00:00Z"))
+  assert.deepEqual(near.rankings.map((p) => p.slug), live.slice(1, 6).map((p) => p.slug))
+  assert.deepEqual(near.ranks, [2, 3, 4, 5, 6])
+  const all = [...sets.rankings, ...sets.featured].map((p) => p.slug)
+  assert.equal(new Set(all).size, all.length, "none shown twice")
 })
 
 // CI keeps "typing and paging make no RSC request": the list syncs the URL

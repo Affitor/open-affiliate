@@ -7,6 +7,8 @@
  * Pure functions take the scores and programs as arguments so the tests run on
  * fixtures.
  */
+import { compareText } from "./commission-order"
+export { GRADE_BANDS, oasGrade, type OasGrade } from "./oas-grade"
 import scoresFile from "./oas-scores.json"
 
 /** not_public reads "Not published"; held_out is a check v1 does not assess (it never blocks a score). */
@@ -107,10 +109,101 @@ export const AGREE_FIX = "Make your pages state the same term, or say on the aff
 export const NOT_ASSESSED = "Not assessed in v1"
 
 /** The fix shown under a check: agree the pages, publish the term, or change it. */
+/**
+ * A partner check whose term is not published: publishing the term is not enough, its value
+ * has to clear the bar too, so the fix says both (the paired transparency check says publish).
+ */
+const PUBLISH_AT_BAR: Record<string, string> = {
+  V1: "Publish a cookie or attribution window of 60 days or more, or say that it never expires.",
+  V2: "Publish a minimum payout of USD 50 or less, or say there is none.",
+  V3: "Publish a payout schedule of at least once a month.",
+}
+/** What the paired transparency check's fix also earns, when its value clears the partner check's bar. */
+const BAR: Record<string, string> = { V1: "if it is 60 days or more", V2: "if it is USD 50 or less", V3: "if payment is at least monthly" }
+
 export function improveText(c: OasCheck): string {
   if (c.conflict) return AGREE_FIX
-  if (c.state === "not_public") return CHECKS[PAIRS[c.id] ?? c.id].fix
+  if (c.state === "not_public") return PUBLISH_AT_BAR[c.id] ?? CHECKS[c.id].fix
   return CHECKS[c.id]?.fix ?? ""
+}
+
+/**
+ * The report's one line, from the two parts rather than the total: a program can publish every
+ * term (Transparency full) and still miss a partner term. null while scoring.
+ */
+export function verdictText(score: OasScore, today: Date = new Date()): string | null {
+  if (oasValue(score, today) == null) return null
+  const t = partEarned(score, "transparency"), v = partEarned(score, "partner_value")
+  if (t >= PART_MAX.transparency && v >= PART_MAX.partner_value) return "Every term published, partner terms met"
+  if (t >= PART_MAX.transparency) return "Every term published, partner terms to improve"
+  return "Terms to publish"
+}
+
+export interface FixItem {
+  id: string
+  label: string
+  group: string
+  fix: string
+  /** Points this check adds. */
+  points: number
+  /** The paired partner check's points, when the same term would also clear its bar: "+10 more if it is USD 50 or less". */
+  extra: string | null
+  /** points plus the paired check's, for ordering. */
+  total: number
+}
+
+/**
+ * "Fix these gaps first": every check not met or not published, biggest first. A partner check
+ * whose term is not published, or whose pages disagree, joins its transparency check as one
+ * item, so the brand reads one action with the partner points stated as conditional on the bar,
+ * instead of the same action twice promising both.
+ */
+export function fixItems(score: OasScore): FixItem[] {
+  // A partner check joins its transparency check when one action serves both: publish the
+  // term, or make the pages agree on it. Either way the partner points need the bar too.
+  const joins = (c: OasCheck) => c.state === "not_public" || Boolean(c.conflict)
+  const open = score.checks.filter((c) => c.state === "not_met" || c.state === "not_public")
+  const openById = new Map(open.map((c) => [c.id, c]))
+  return open
+    .filter((c) => !(PAIRS[c.id] && joins(c) && openById.has(PAIRS[c.id])))
+    .map((c) => {
+      const v = Object.keys(PAIRS).find((k) => PAIRS[k] === c.id && openById.has(k) && joins(openById.get(k)!))
+      const vc = v ? openById.get(v)! : null
+      return {
+        id: c.id,
+        label: CHECKS[c.id].label,
+        group: CHECKS[c.id].group,
+        fix: improveText(c),
+        points: round1(c.max),
+        extra: vc ? `+${round1(vc.max)} more ${BAR[vc.id]}` : null,
+        total: round1(c.max + (vc?.max ?? 0)),
+      }
+    })
+    .sort((a, b) => b.total - a.total || (a.id < b.id ? -1 : 1))
+}
+
+/**
+ * The Markdown a brand copies to its team or its AI agent (Prompt to improve): what to publish,
+ * where, and how to ask for a re-check. While scoring, the terms not read yet.
+ */
+export function improvePrompt(p: { name: string; slug: string }, score: OasScore, today: Date = new Date()): string {
+  const value = oasValue(score, today)
+  const items = fixItems(score)
+  const waiting = score.checks.filter((c) => c.state === "checking")
+  if (!items.length && !waiting.length) return ""
+  const where = score.page_url ?? "its affiliate page"
+  const lines = items.length
+    ? items.map((f, i) => `${i + 1}. ${f.label}: ${f.fix} (+${f.points}${f.extra ? `, ${f.extra}` : ""})`)
+    : waiting.map((c, i) => `${i + 1}. ${CHECKS[c.id].label}: not read yet. If ${where} states it, nothing to do; if not: ${CHECKS[c.id].fix.charAt(0).toLowerCase()}${CHECKS[c.id].fix.slice(1)}`)
+  return [
+    `# Raise ${p.name}'s OpenAffiliate Score (OAS ${value ?? "in progress"}${value == null ? "" : "/100"})`,
+    "",
+    `OpenAffiliate reads ${p.name}'s affiliate terms from ${where}. Publish these on that page, in plain words:`,
+    "",
+    ...lines,
+    "",
+    `Then ask OpenAffiliate to check again: https://openaffiliate.dev/programs/${p.slug}/oas (Report an error).`,
+  ].join("\n")
 }
 
 export function round1(n: number): number {
@@ -137,7 +230,10 @@ export function partEarned(s: OasScore, part: Part): number {
   return round1(s.checks.filter((c) => CHECKS[c.id]?.part === part).reduce((a, c) => a + c.points, 0))
 }
 
-/** Why a scored program has no rank. */
+/**
+ * Why a scored program has no rank. Only the score itself decides: every program,
+ * whoever runs it and on whatever network, is ranked by the same rules.
+ */
 export type Unranked = "checking" | "no-apply-link"
 
 export interface ProgramRef {
@@ -169,14 +265,16 @@ export interface BoardRow {
   unranked: Unranked | null
 }
 
-/** Every scored program that is in the registry, ranked first (OAS high to low, then slug). */
+/** Every scored program that is in the registry, ranked first (OAS high to low, then name A to Z). */
 export function buildBoard(scores: OasScore[], programs: ProgramRef[], today: Date): BoardRow[] {
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const rows: BoardRow[] = scores.flatMap((s) => {
     const program = bySlug.get(s.slug)
     return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, today) }] : []
   })
-  const ranked = rows.filter((r) => !r.unranked).sort((a, b) => b.oas! - a.oas! || (a.program.slug < b.program.slug ? -1 : 1))
+  const ranked = rows
+    .filter((r) => !r.unranked)
+    .sort((a, b) => b.oas! - a.oas! || compareText(a.program.name, b.program.name) || (a.program.slug < b.program.slug ? -1 : 1))
   ranked.forEach((r, i) => (r.rank = i > 0 && ranked[i - 1].oas === r.oas ? ranked[i - 1].rank : i + 1))
   return [...ranked, ...rows.filter((r) => r.unranked)]
 }

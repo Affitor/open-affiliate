@@ -492,11 +492,13 @@ function CategoriesTable({ rows }: { rows: GroupRow[] }) {
 // ── Main Page ───────────────────────────────────────────────────
 
 export default function RankingsClient({
+  title = "Affiliate Program Rankings",
   oas,
   facts,
   networkRows,
   categoryRows,
 }: {
+  title?: string;
   /** The OAS leaderboard, server-rendered; null while oas-scores.json is empty. */
   oas: React.ReactNode | null;
   facts: TermFacts[];
@@ -583,7 +585,7 @@ export default function RankingsClient({
         <div className="flex items-center gap-2 mb-2">
           <ArrowUpDown className="h-5 w-5 text-muted-foreground" />
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em]">
-            Affiliate Program Rankings
+            {title}
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
