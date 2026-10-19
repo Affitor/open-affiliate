@@ -21,6 +21,13 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once Riley approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/riley-ai, checked 2026-10-18)
+approval: manual
+# "Rules: no paid search bidding on the Riley brand name, no spam, and no claims Riley doesn't make (Riley never quotes prices or books jobs without the owner's OK)." (https://affitor.com/marketplace/riley-ai, checked 2026-10-18)
+restrictions:
+  - "No paid search bidding on the Riley brand name"
+  - "No spam"
+  - "No claims Riley doesn't make (Riley never quotes prices or books jobs without the owner's OK)"
 signup_url: https://affitor.com/marketplace/riley-ai
 network: affitor
 
@@ -53,7 +60,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api
