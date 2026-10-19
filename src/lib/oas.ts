@@ -8,7 +8,6 @@
  * fixtures.
  */
 import scoresFile from "./oas-scores.json"
-import { isSameTeam } from "./same-team"
 
 /** not_public reads "Not published"; held_out is a check v1 does not assess (it never blocks a score). */
 export type CheckState = "met" | "not_met" | "not_public" | "checking" | "held_out"
@@ -138,8 +137,8 @@ export function partEarned(s: OasScore, part: Part): number {
   return round1(s.checks.filter((c) => CHECKS[c.id]?.part === part).reduce((a, c) => a + c.points, 0))
 }
 
-/** Why a scored program has no rank. Same team first: it holds even when the score is complete. */
-export type Unranked = "same-team" | "affitor" | "checking" | "no-apply-link"
+/** Why a scored program has no rank. */
+export type Unranked = "checking" | "no-apply-link"
 
 export interface ProgramRef {
   slug: string
@@ -149,21 +148,17 @@ export interface ProgramRef {
 }
 
 export function unrankedReason(s: OasScore, p: ProgramRef, today: Date): Unranked | null {
-  if (isSameTeam(p.slug)) return "same-team"
-  if (p.network === "affitor") return "affitor"
   if (oasValue(s, today) == null) return "checking"
   if (!s.page_url) return "no-apply-link"
   return null
 }
 
 export const UNRANKED_TEXT: Record<Unranked, string> = {
-  "same-team": "Same team as OpenAffiliate · not ranked",
-  affitor: "Runs on Affitor (same team as OpenAffiliate) · not ranked",
   checking: "Scoring in progress",
   "no-apply-link": "Not ranked: no public application link",
 }
 
-export const TEAM_DISCLOSURE = "OpenAffiliate is run by the same team as Affitor."
+export const TEAM_DISCLOSURE = "OpenAffiliate is maintained by Affitor."
 
 export interface BoardRow {
   program: ProgramRef
