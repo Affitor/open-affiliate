@@ -25,10 +25,14 @@ import {
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
+import { NOT_PUBLISHED_FIELDS, notPublishedProblems } from "./program-rules"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
-/** A verified program that meets every check unless `over` changes it. */
+/** Every term marked Not published by the data lane: an absent field then scores Not published. */
+const MARKED = Object.fromEntries(["commission.duration", "cookie_days", "payout.minimum", "payout.methods", "payout.frequency", "approval", "restrictions"].map((f) => [f, "2026-10-14"]))
+
+/** A verified program that meets every check unless `over` changes it; absent terms are marked Not published. */
 function yaml(slug: string, over: Partial<ProgramYaml> = {}): ProgramYaml {
   return {
     slug,
@@ -42,6 +46,7 @@ function yaml(slug: string, over: Partial<ProgramYaml> = {}): ProgramYaml {
     payout: { minimum: 50, currency: "USD", frequency: "monthly", methods: ["paypal"] },
     approval: "auto",
     restrictions: ["No brand bidding"],
+    not_published: MARKED,
     ...over,
   }
 }
@@ -237,7 +242,48 @@ test("rank line: #1 always, others only with 5 or more ranked", () => {
   assert.equal(rankText(null), null)
 })
 
-test("the registry's own YAML: read raw, a null restrictions is Not published (spec 7b.1)", () => {
+test("v1.1: an absent term is Not published only with a marker; unmarked it is not assessed for that program", () => {
+  const marked = scoreProgram(yaml("p", { restrictions: null, not_published: { restrictions: "2026-10-15" } }), TODAY)
+  const t8 = marked.checks.find((c) => c.id === "T8")!
+  assert.deepEqual([t8.state, t8.checked, t8.points], ["not_public", "2026-10-15", 0])
+  assert.equal(marked.transparency, 64)
+
+  const unmarked = scoreProgram(yaml("p", { restrictions: null, not_published: null }), TODAY)
+  assert.equal(states(unmarked).T8, "held_out")
+  assert.deepEqual([unmarked.transparency, unmarked.oas], [70, 100], "an unchecked term costs nothing")
+
+  // An unmarked absent cookie holds out T3 and V1 together; Partner value spreads over V2 and V3.
+  const cookie = scoreProgram(yaml("p", { cookie_days: undefined, not_published: {} }), TODAY)
+  assert.deepEqual([states(cookie).T3, states(cookie).V1], ["held_out", "held_out"])
+  assert.equal(cookie.checks.find((c) => c.id === "V2")!.max, 15)
+  assert.deepEqual([cookie.transparency, cookie.partner_value], [70, 30])
+
+  // A marker for another field does not mark this one.
+  assert.equal(states(scoreProgram(yaml("p", { approval: undefined, not_published: { cookie_days: "2026-10-15" } }), TODAY)).T7, "held_out")
+
+  // Nothing marked and cookie, minimum and schedule all absent: Partner value has nothing assessed, so Scoring in progress.
+  const bare = scoreProgram(yaml("p", { cookie_days: undefined, payout: { methods: ["paypal"] }, not_published: null }), TODAY)
+  assert.deepEqual([states(bare).V1, states(bare).V2, states(bare).V3], ["checking", "checking", "checking"])
+  assert.equal(oasValue(bare), null)
+
+  // Stated terms ignore markers; a conflict still fails the check.
+  assert.equal(state({ not_published: { cookie_days: "2026-10-15" } }, "T3"), "met")
+  assert.equal(state({ cookie_days: undefined, conflicts: [{ field: "cookie_days", quote: "30 vs 90 days" }], not_published: null }, "T3"), "not_met")
+})
+
+test("v1.1 markers are validated at build: known terms, real dates, a map", () => {
+  const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
+  assert.deepEqual(Object.keys(schema.properties.not_published.properties).sort(), [...NOT_PUBLISHED_FIELDS].sort(), "the rule and the schema name the same terms")
+  assert.deepEqual(notPublishedProblems({}), [])
+  assert.deepEqual(notPublishedProblems({ not_published: { "payout.methods": "2026-10-15", approval: "2026-10-15" } }), [])
+  assert.equal(notPublishedProblems({ not_published: { "payout.metods": "2026-10-15" } }).length, 1, "a typo fails instead of leaving the term unassessed")
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: "not-a-date" } }).length, 1)
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: "2026-02-30" } }).length, 1)
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: 20261015 } }).length, 1)
+  for (const scalar of ["2026-10-15", null, ["cookie_days"]]) assert.equal(notPublishedProblems({ not_published: scalar }).length, 1, JSON.stringify(scalar))
+})
+
+test("the registry's own YAML: read raw; an absent term is Not published only with its marker (spec 7b.1, v1.1)", () => {
   const dir = join(process.cwd(), "programs")
   const raw = readdirSync(dir).filter((f) => f.endsWith(".yaml")).map((f) => parse(readFileSync(join(dir, f), "utf8")) as ProgramYaml)
   const scored = scoreAll(raw, new Date())
@@ -245,7 +291,8 @@ test("the registry's own YAML: read raw, a null restrictions is Not published (s
   const bySlug = new Map(raw.map((p) => [p.slug, p]))
   for (const s of scored) {
     const t8 = s.checks.find((c) => c.id === "T8")!
-    if (t8.state !== "checking") assert.equal(t8.state, Array.isArray(bySlug.get(s.slug)!.restrictions) ? "met" : "not_public", s.slug)
+    const p = bySlug.get(s.slug)!
+    if (t8.state !== "checking") assert.equal(t8.state, Array.isArray(p.restrictions) ? "met" : p.not_published?.restrictions ? "not_public" : "held_out", s.slug)
     if (s.oas != null) assert.equal(s.oas, round1(partEarned(s, "transparency") + partEarned(s, "partner_value")), s.slug)
   }
 })

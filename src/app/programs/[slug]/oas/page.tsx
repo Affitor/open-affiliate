@@ -101,7 +101,7 @@ function Bar({ earned, max }: { earned: number; max: number }) {
 
 function CheckRow({ c, date, pageUrl, scored }: { c: OasCheck; date: string; pageUrl: string | null; scored: boolean }) {
   const def = CHECKS[c.id];
-  const tag = c.state === "not_public" ? `Not published (checked ${readableDate(date)})` : STATE_TAG[c.state];
+  const tag = c.state === "not_public" ? `Not published (checked ${readableDate(c.checked ?? date)})` : STATE_TAG[c.state];
   const fixable = c.state === "not_met" || c.state === "not_public";
   return (
     <div className="grid grid-cols-[18px_minmax(0,1fr)] sm:grid-cols-[18px_minmax(0,1fr)_auto] gap-x-3.5 gap-y-1 py-3.5 border-t border-border first:border-t-0">
@@ -116,7 +116,7 @@ function CheckRow({ c, date, pageUrl, scored }: { c: OasCheck; date: string; pag
         {c.state === "checking" && (
           <p className="text-sm text-foreground/80 mt-0.5">We could not finish this check yet. This is on our side, and nothing is counted against the program meanwhile.</p>
         )}
-        {c.state === "held_out" && <p className="text-sm text-foreground/80 mt-0.5">Its points count toward the other checks in this part.</p>}
+        {c.state === "held_out" && <p className="text-sm text-foreground/80 mt-0.5">Its points count toward the other checks in this part, so it costs the program nothing.</p>}
         {(c.state === "met" || c.state === "not_met") && pageUrl && (
           <p className="text-xs text-muted-foreground mt-1.5">
             {evidenceLink(pageUrl, <>Page checked <ExternalLink className="h-3 w-3" aria-hidden /></>, "inline-flex items-center gap-1 underline underline-offset-2 hover:text-foreground")} · {readableDate(date)}

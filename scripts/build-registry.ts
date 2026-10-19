@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
-import { aliasRoutes, noProgramProblems, nonCashAffiliate } from "./program-rules"
+import { aliasRoutes, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
@@ -145,6 +145,11 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   // A no_program file holds no terms and only the commission placeholder. The
   // page, .md and API hide terms anyway; this keeps them out of the YAML that
   // contributors and scripts read. Rules in scripts/program-rules.ts.
+  const markers = notPublishedProblems(data)
+  if (markers.length) {
+    throw new Error(markers.join("; "))
+  }
+
   const noProgram = noProgramProblems(data)
   if (noProgram.length) {
     throw new Error(`${filename}: status is no_program, so it holds no terms: ${noProgram.join("; ")}`)
