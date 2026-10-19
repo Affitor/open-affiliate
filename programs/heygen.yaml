@@ -28,7 +28,7 @@ restrictions:
 - Original video content only; no SEO/blog-only promotion, paid search, or self-referrals
 conflicts:
   - field: payout.minimum
-    quote: "heygen.com/geniverse/social-creator-program: \"Minimum payout $100.\" Locale pages heygen.com/ja-jp/affiliate-program and /es-es/affiliate-program: $30 (\"El importe mínimo de pago es de 30 $\"). Checked 2026-10-18."
+    quote: "heygen.com/geniverse/social-creator-program: \"Minimum payout $100.\" Its locale versions heygen.com/ja-jp/affiliate-program and /es-es/affiliate-program (the English /affiliate-program redirects to the Social Creator page): $30 (\"El importe mínimo de pago es de 30 $\"). Checked 2026-10-18."
   - field: restrictions
     quote: "heygen.com/geniverse/social-creator-program: \"Original video content only — no SEO/blog-only promotion\". heygen.com/es-es/affiliate-program allows \"entradas de blog, boletines o comunidades\" (blog posts, newsletters, communities). Checked 2026-10-18."
 marketing_materials: true

@@ -30,7 +30,7 @@ restrictions:
 
 conflicts:
   - field: restrictions
-    quote: "jogg.ai/affiliate-program: \"Paid advertising of any kind, including search ads ... is strictly prohibited.\" jogg.ai/terms: \"If you are running search ads on Google or Bing, you must set negative keywords for “joggai”, “JoggAI”, and “jogg.ai”\", so non-branded search ads read as allowed. Checked 2026-10-18."
+    quote: "jogg.ai/affiliate-program: \"Paid advertising of any kind, including search ads ... is strictly prohibited.\" jogg.ai/terms: \"If you are running search ads on Google or Bing, you must set negative keywords for “joggai”, “JoggAI”, and “jogg.ai”\", setting a condition for search ads rather than banning them. Checked 2026-10-18."
 
 marketing_materials: true
 dashboard_url: null
