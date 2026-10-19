@@ -25,7 +25,7 @@ export const openapi = {
     "/api/programs": {
       get: {
         operationId: "searchPrograms", summary: "Search affiliate programs",
-        description: "Search active programs. Returns a programs array, total before pagination and applied filters. Unverified terms are omitted or empty. Nothing in the query is rejected, so older clients keep working: unknown parameters are ignored (tracking parameters are fine), a repeated parameter uses its first value, an unknown sort falls back to relevance (legacy sort=new means newest), a non-boolean verified does not filter, a malformed limit or offset counts as 0, and an unknown type or category simply matches nothing.",
+        description: "Search active programs. Returns a programs array, total before pagination and applied filters. Unverified terms are omitted or empty. Nothing in the query is rejected, so older clients keep working: unknown parameters are ignored (tracking parameters are fine), a repeated parameter uses its first value, an unknown sort falls back to relevance (legacy sort=new means newest), a non-boolean verified does not filter, limit and offset are read as a leading integer (so 1x reads as 1; text with no leading digits or a negative offset counts as 0), and an unknown type or category simply matches nothing.",
         parameters: [
           parameter("q", "Search keywords. Empty means all active programs.", { type: "string", default: "" }),
           parameter("category", "Category name, matched exactly (case-sensitive). Unknown categories return an empty list.", string),
