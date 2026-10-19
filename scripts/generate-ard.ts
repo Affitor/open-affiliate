@@ -6,13 +6,17 @@ const BASE = "https://openaffiliate.dev"
 
 /**
  * Agentic Resource Discovery catalog (https://agenticresourcediscovery.org/spec/, v0.91 §5.1):
- * one entry per agent surface this site serves. Reads the agent-skills index, so it runs after
+ * one entry per agent surface this site serves. ARD itself needs only entries; specVersion
+ * and host come from the AI Catalog Standard it builds on (https://ai-catalog.io/specification/),
+ * which requires specVersion in Major.Minor form. Reads the agent-skills index, so it runs after
  * generateSkills. The MCP entry embeds the MCP Registry server.json inline, so it cannot drift.
  */
 export function ardCatalog(root: string) {
   const server = JSON.parse(readFileSync(join(root, "packages/mcp/server.json"), "utf8"))
   const [skill] = JSON.parse(readFileSync(join(root, "public/.well-known/agent-skills/index.json"), "utf8")).skills
   return {
+    specVersion: "1.0",
+    host: { displayName: "OpenAffiliate", identifier: "openaffiliate.dev", documentationUrl: `${BASE}/docs/mcp` },
     entries: [
       {
         identifier: "urn:air:openaffiliate.dev:mcp:openaffiliate",

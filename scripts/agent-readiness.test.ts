@@ -13,7 +13,10 @@ const BASE = "https://openaffiliate.dev"
 test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   const served = JSON.parse(readFileSync("public/.well-known/ard.json", "utf8"))
   assert.deepEqual(served, ardCatalog(process.cwd()), "public/.well-known/ard.json is stale: run npm run md:build")
-  assert.deepEqual(Object.keys(served), ["entries"])
+  // AI Catalog root (ai-catalog.io): Major.Minor specVersion, host, entries.
+  assert.deepEqual(Object.keys(served), ["specVersion", "host", "entries"])
+  assert.match(served.specVersion, /^\d+\.\d+$/)
+  assert.equal(served.host.displayName, "OpenAffiliate")
   const ids = new Set<string>()
   for (const entry of served.entries) {
     assert.match(entry.identifier, /^urn:air:openaffiliate\.dev:[a-z0-9-]+:[a-z0-9-]+$/)
@@ -54,8 +57,12 @@ test("every /api response carries the API-Version the OpenAPI document declares"
   assert.deepEqual(rules[0], { source: "/api/:path*", headers: [{ key: "API-Version", value: version }] })
   for (const path of Object.values(openapi.paths)) {
     for (const response of Object.values(path.get.responses)) {
-      assert.deepEqual(response.headers, { "API-Version": { $ref: "#/components/headers/APIVersion" } })
+      assert.deepEqual(response.headers, Object.fromEntries(["API-Version", "Deprecation", "Sunset"].map((name) => [name, { $ref: `#/components/headers/${name.replace("-", "")}` }])))
     }
+  }
+  for (const [name, rfc] of [["Deprecation", "RFC 9745"], ["Sunset", "RFC 8594"]]) {
+    const header = (openapi.components.headers as Record<string, { description: string }>)[name]
+    assert.ok(header?.description.startsWith(rfc), name)
   }
   for (const text of ["API-Version", "Deprecation header (RFC 9745)", "Sunset header (RFC 8594)", "at least 90 days"]) {
     assert.ok(openapi.info.description.includes(text), text)
