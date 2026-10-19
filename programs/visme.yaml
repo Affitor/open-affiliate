@@ -18,10 +18,12 @@ commission:
 cookie_days: 60
 
 # "direct payments into your PayPal account each month you earn at least $150" (visme.co/partners, checked 2026-10-13)
+# "As a rule, this month’s commissions will be paid 45 days after this month ends." (www.visme.co/terms_conditions_partners/, checked 2026-10-19) — 45 days after month end → net-60 (backfill rule #1)
 payout:
   minimum: 150
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "As a rule, this month’s commissions will be paid 45 days after this month ends."
   methods: [paypal]
 
 # "You are not permitted to drive any Affiliate traffic to Visme from search engines (including, without limitation, Google and Bing) via any paid search, pay-per-click, pay-per-impre" (https://www.visme.co/terms_conditions_partners/, checked 2026-10-18)
@@ -71,7 +73,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

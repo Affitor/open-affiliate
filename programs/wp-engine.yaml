@@ -6,7 +6,7 @@ tags: [web-hosting, wordpress-hosting, managed-hosting, woocommerce, headless-wo
 
 commission:
   type: one-time
-  # "you will earn $100 on Lite plan purchases and for all other plans, $200 minimum or equal to the first month's payment, whichever is higher" (wpengine.com/affiliate-program, checked 2026-10-13)
+  # "you will earn $100 on Lite plan purchases and for all other plans, $200 minimum or equal to the first month’s payment, whichever is higher" (wpengine.com/affiliate-program, checked 2026-10-13)
   rate: "$100 to $200+"
   mode: flat
   value: 200

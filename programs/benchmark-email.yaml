@@ -25,10 +25,12 @@ attribution: first-click
 
 # "Eligible commissions are paid monthly. Minimum payout threshold is $30." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
 # "You’ll need to reach a minimum of $30 to receive a payout. Payments are sent via PayPal." (benchmarkemail.com/partners/affiliates, checked 2026-10-17)
+# "Paid after 60-day hold. Eligible commissions are paid monthly." (www.benchmarkemail.com/partners/affiliates/, checked 2026-10-19) — 60-day hold → net-60 (backfill rule #1)
 payout:
   minimum: 30
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "Paid after 60-day hold. Eligible commissions are paid monthly."
   methods: [paypal]
 
 # "Sign up for the affiliate program. Once approved, you'll get a unique tracking link and access to your personal dashboard in TrackDesk." (https://www.benchmarkemail.com/partners/affiliates/, checked 2026-10-18)
@@ -79,7 +81,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

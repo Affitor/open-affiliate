@@ -17,10 +17,11 @@ cookie_days: 60
 attribution: last-click
 tracking_method: cookie
 
+# "Payment has passed the first 75 days after the sale was made. Commissions remain in a pending state for at least 75 days to allow for refund processing and fraud review before they become payable" (www.mixo.io/terms-affiliate, checked 2026-10-19) — over 60 days → no frequency (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  conditions: "Payment has passed the first 75 days after the sale was made. Commissions remain in a pending state for at least 75 days to allow for refund processing and fraud review before they become payable"
   # "Payments will generally be paid out monthly (first week of the month) via PayPal" (https://www.mixo.io/terms-affiliate, checked 2026-10-18)
   methods: [paypal]
 
@@ -71,7 +72,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-04-17"
 kind: affiliate
 source: community
