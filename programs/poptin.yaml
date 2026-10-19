@@ -23,6 +23,8 @@ payout:
   minimum: 100
   currency: USD
   methods: ["paypal"]
+  # "the User will be able to request payment through the Affiliate Program page." (https://help.poptin.com/en/article/affiliate-program-terms-and-conditions-1gvl7k4/, checked 2026-10-18)
+  frequency: on-request
 
 signup_url: https://www.poptin.com/affiliate/
 

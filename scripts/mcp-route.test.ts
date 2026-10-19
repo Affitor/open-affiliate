@@ -176,7 +176,65 @@ function validates(tool: Tool, result: CallToolResult) {
   assert.equal(validate({}).valid, false)
 }
 
+/** Check nested objects, array items and nullable/union branches too. */
+function assertPropertyDescriptions(schema: unknown, path: string): void {
+  if (!schema || typeof schema !== "object") return
+  const node = schema as Record<string, unknown>
+  if (node.properties) {
+    for (const [name, property] of Object.entries(node.properties as Record<string, Record<string, unknown>>)) {
+      assert.equal(typeof property.description, "string", `${path}.${name} needs a description`)
+      assert.ok((property.description as string).trim(), `${path}.${name} has an empty description`)
+    }
+  }
+  for (const [key, value] of Object.entries(node)) {
+    if (Array.isArray(value)) value.forEach((item, index) => assertPropertyDescriptions(item, `${path}.${key}[${index}]`))
+    else assertPropertyDescriptions(value, `${path}.${key}`)
+  }
+}
+
+function inputDescription(tool: Tool, name: string): string {
+  const property = tool.inputSchema.properties?.[name] as { description?: unknown } | undefined
+  assert.ok(typeof property?.description === "string", `${tool.name}.${name} needs a description`)
+  return property.description
+}
+
 for (const base of ["", "/api"]) {
+  test(`${base}/mcp documents real, case-sensitive category names and slug discovery`, async () => {
+    const rpc = rpcClient(base)
+    const { tools } = await rpc("tools/list", {}, ListToolsResultSchema)
+    const search = tools.find((tool) => tool.name === "search_programs")!
+    const description = inputDescription(search, "category")
+    assert.match(description, /exact category name.*list_categories/)
+    assert.match(description, /case-sensitive/)
+    const examples = [...description.matchAll(/'([^']+)'/g)].map((match) => match[1])
+    assert.equal(examples.length, 2, "Document two real category examples")
+    const listed = await rpc("tools/call", { name: "list_categories", arguments: {} }, CallToolResultSchema)
+    const listedCategories = textContent(listed) as { name: string; count: number }[]
+    for (const example of examples) {
+      const category = listedCategories.find((entry) => entry.name === example)
+      assert.ok(category, `Category example is not returned by list_categories: ${example}`)
+      assert.ok(category.count > 0, `Category example has no active programs: ${example}`)
+      for (const name of [example, example.toLowerCase(), example.toLowerCase().replaceAll(" ", "-")]) {
+        const result = await rpc("tools/call", { name: "search_programs", arguments: { category: name } }, CallToolResultSchema)
+        const matches = result.structuredContent!.programs as { category: string }[]
+        assert.equal(matches.length, name === example ? category.count : 0)
+        assert.ok(matches.every((program) => program.category === name))
+      }
+    }
+    const slugDescription = inputDescription(tools.find((tool) => tool.name === "get_program")!, "slug")
+    assert.match(slugDescription, /slug.*search_programs/)
+    assert.match(slugDescription, /program URL/)
+    assert.match(slugDescription, /[Aa]liases resolve/)
+  })
+
+  test(`${base}/mcp describes every output-schema property, including nested terms and alternatives`, async () => {
+    const { tools } = await rpcClient(base)("tools/list", {}, ListToolsResultSchema)
+    for (const tool of tools) {
+      assert.ok(tool.outputSchema)
+      assertPropertyDescriptions(tool.outputSchema, tool.name)
+    }
+  })
+
   test(`${base}/mcp initializes with metadata and instructions, advertises schemas and one readable resource`, async () => {
     const rpc = rpcClient(base)
     const initialized = await rpc("initialize", {
@@ -186,7 +244,7 @@ for (const base of ["", "/api"]) {
     }, InitializeResultSchema)
     assert.equal(initialized.protocolVersion, "2025-06-18")
     assert.equal(initialized.serverInfo.name, "openaffiliate")
-    assert.equal(initialized.serverInfo.version, "0.1.1")
+    assert.equal(initialized.serverInfo.version, "0.1.2")
     assert.equal(initialized.serverInfo.title, "OpenAffiliate")
     assert.equal(initialized.serverInfo.websiteUrl, "https://openaffiliate.dev")
     assert.match(initialized.serverInfo.description ?? "", /public, read-only registry/)
@@ -301,7 +359,7 @@ test("stdio mirrors server/tool titles and all four hints, with aligned patch ve
   const manifest = JSON.parse(readFileSync("packages/mcp/package.json", "utf8"))
   const registry = JSON.parse(readFileSync("packages/mcp/server.json", "utf8"))
   const lock = JSON.parse(readFileSync("package-lock.json", "utf8"))
-  assert.equal(manifest.version, "0.0.4")
+  assert.equal(manifest.version, "0.0.5")
   assert.equal(registry.version, manifest.version)
   assert.equal(registry.packages[0].version, manifest.version)
   assert.equal(lock.packages["packages/mcp"].version, manifest.version)
@@ -320,5 +378,13 @@ test("stdio mirrors server/tool titles and all four hints, with aligned patch ve
   for (const tool of tools) {
     assert.equal(tool.title, TITLES[tool.name as keyof typeof TITLES])
     assert.deepEqual(tool.annotations, HINTS)
+  }
+  const hosted = await rpcClient("")("tools/list", {}, ListToolsResultSchema)
+  for (const [name, inputs] of [["search_programs", ["category", "commission_type", "verified_only"]], ["get_program", ["slug"]]] as const) {
+    const stdio = tools.find((tool) => tool.name === name)!
+    const http = hosted.tools.find((tool) => tool.name === name)!
+    for (const input of inputs) {
+      assert.equal(inputDescription(stdio, input), inputDescription(http, input), `${name}.${input} documentation must match across transports`)
+    }
   }
 })

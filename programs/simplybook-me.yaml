@@ -68,10 +68,13 @@ agents:
     - "Coaches, tutors and consultants letting clients book and pay"
     - "Gyms and studios scheduling classes with reminders"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

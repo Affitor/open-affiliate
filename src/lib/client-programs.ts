@@ -1,4 +1,5 @@
 import { formatPercentage } from "./commission-mode"
+import { termsConfirmed, UNCONFIRMED } from "./confirmed-terms"
 import registryData from "./client-registry.json"
 import { compareCommission, compareText } from "./commission-order"
 import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
@@ -66,7 +67,8 @@ interface SearchOptions {
 // build-registry writes `status` only when it is not active. Through `unknown`:
 // the committed client-registry.json can predate a field (`score`), and
 // prebuild and predev regenerate it before anything reads it.
-export const programs = (registryData.programs as unknown as ClientProgram[]).filter((p) => !p.status)
+export const allPrograms = registryData.programs as unknown as ClientProgram[]
+export const programs = allPrograms.filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
@@ -107,6 +109,19 @@ export function commissionDisplay(
     default:
       return "Not published"
   }
+}
+
+/** "30% recurring/12mo"; the type alone says nothing without a rate, so an unpublished rate is just that. */
+export function commissionChip(c: ClientProgram["commission"]): string {
+  const figure = commissionDisplay(c)
+  return figure === "Not published" ? "Rate not published" : `${figure} ${commissionLabel(c)}`
+}
+
+/** The cookie as the program page states it; unconfirmed until the terms are checked. */
+export function cookieChip(p: Pick<ClientProgram, "verified" | "cookieDays">): string {
+  if (!termsConfirmed(p)) return UNCONFIRMED
+  if (p.cookieDays == null) return "Cookie not published"
+  return p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays}d cookie`
 }
 
 /**

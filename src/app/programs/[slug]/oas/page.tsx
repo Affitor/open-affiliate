@@ -243,7 +243,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
           ) : (
             <>
               <p className="text-title font-semibold tracking-tight mt-2">Scoring in progress</p>
-              <p className="text-sm text-muted-foreground mt-1.5">We are verifying its terms again. The score appears when we finish; nothing is counted against {program.name} meanwhile.</p>
+              <p className="text-sm text-muted-foreground mt-1.5">Some of its terms are not checked yet. The score appears once every check is assessed; nothing is counted against {program.name} meanwhile.</p>
             </>
           )}
           {rankLine ? (
@@ -296,7 +296,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
       <div className="mt-10 border-t border-border pt-6 text-meta text-muted-foreground max-w-3xl space-y-2">
         <p>
-          Transparency: 8 checks, 70 points. Partner value: 3 checks, 30 points. OAS is one fixed number, computed from the terms OpenAffiliate verified on the program&rsquo;s own page. Each check is Met, Not met, or Not published (0 points until published); while terms are being verified again the report says Scoring in progress. Not scored: commission size, recurring or one-time, network, popularity, claiming, or any payment to OpenAffiliate.
+          Transparency: 8 checks, 70 points. Partner value: 3 checks, 30 points. OAS is one fixed number, computed from the terms OpenAffiliate verified on the program&rsquo;s own page. Each check is Met, Not met, or Not published (0 points until published); a score appears only once every check is assessed, and until then the report says Scoring in progress. Not scored: commission size, recurring or one-time, network, popularity, claiming, or any payment to OpenAffiliate.
         </p>
         <p>{TEAM_DISCLOSURE} Found a mistake? <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>.</p>
       </div>

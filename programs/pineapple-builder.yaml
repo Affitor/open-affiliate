@@ -22,7 +22,16 @@ payout:
   minimum: 50
   currency: USD
   methods: [paypal, bank]
+  # "Request a payout when your approved balance reaches $50." (https://www.pineapplebuilder.com/affiliates, checked 2026-10-18)
+  frequency: on-request
 
+# "Applications reviewed. Links and codes provided after approval." (https://www.pineapplebuilder.com/affiliates, checked 2026-10-18)
+approval: manual
+# "No self-referrals or spam." (https://www.pineapplebuilder.com/affiliates, checked 2026-10-18)
+restrictions:
+  - "No self-referrals"
+  - "No spam"
+  - "Always disclose your affiliate relationship"
 signup_url: https://www.pineapplebuilder.com/affiliates
 
 dashboard_url: null
@@ -60,7 +69,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

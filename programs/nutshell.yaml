@@ -43,7 +43,19 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  minimum: 5
+  currency: USD
+  frequency: net-60
+  methods:
+  - paypal
+  - stripe
+  - bank
+  conditions: Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected by the Company. The brand-linked PartnerStack payout guide requires at least $5 USD after fees and names PayPal, Stripe or direct deposit. The brand guide separately describes monthly processing and availability approximately one to two months after a purchase; company payment and processing delays apply.
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'

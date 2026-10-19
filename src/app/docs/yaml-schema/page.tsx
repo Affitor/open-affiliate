@@ -42,6 +42,7 @@ payout:
   currency: USD
   frequency: monthly
   methods: [bank, paypal, crypto]
+  conditions: "Paid 30 days after the customer's first payment"
 
 description: >
   What your product does and what the affiliate program offers.

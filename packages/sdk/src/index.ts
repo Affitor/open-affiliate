@@ -29,6 +29,8 @@ export interface Payout {
   currency?: string;
   frequency?: string;
   methods?: string[];
+  /** When a commission becomes payable, in the terms' own words. */
+  conditions?: string;
 }
 
 export interface Program {

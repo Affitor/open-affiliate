@@ -49,7 +49,7 @@ const READ_ONLY_ANNOTATIONS = {
 const server = new McpServer({
   name: "openaffiliate",
   title: "OpenAffiliate",
-  version: "0.0.4",
+  version: "0.0.5",
 });
 
 server.registerTool(
@@ -61,15 +61,15 @@ server.registerTool(
       "Search affiliate programs by keyword, category, or commission type",
     inputSchema: {
       query: z.string().optional().describe("Search keyword"),
-      category: z.string().optional().describe("Filter by category"),
+      category: z.string().optional().describe("Filter by exact category name as returned by list_categories (case-sensitive, not a slug), e.g. 'AI', 'Email Marketing'"),
       commission_type: z
         .enum(["recurring", "one-time", "tiered"])
         .optional()
-        .describe("Filter by commission type"),
+        .describe("Filter by payment structure: recurring = paid on each renewal within the commission duration; one-time = paid once per qualifying referral; tiered = commission varies by performance level. Omit to include all types, including hybrid"),
       verified_only: z
         .boolean()
         .optional()
-        .describe("Only return verified programs"),
+        .describe("When true, return only programs whose terms were checked on the brand's own program page. False or omitted includes unverified programs with unconfirmed terms"),
     },
   },
   async ({ query, category, commission_type, verified_only }) => {
@@ -99,7 +99,7 @@ server.registerTool(
     description:
       "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
     inputSchema: {
-      slug: z.string().describe("Program slug (e.g. 'stripe', 'vercel')"),
+      slug: z.string().describe("Use the slug from search_programs results or the final segment of a program URL (e.g. /programs/vercel). Aliases resolve to the canonical program"),
     },
   },
   async ({ slug }) => {
