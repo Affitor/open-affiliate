@@ -17,15 +17,18 @@ commission:
 # "Tracking cookies last 45 days." (donorbox.org/affiliate-terms, checked 2026-10-13)
 cookie_days: 45
 
-# Terms §4.4 also says "We do not enforce any payout thresholds."; the program page and §4.1 state $50, which is kept (donorbox.org/affiliate-terms, checked 2026-10-13)
+# Minimum withheld: affiliate terms 4.1 says $50, while 4.4 says no thresholds (brand capture 2026-10-19).
 # "The minimum commission payout is $50." and "The Affiliate Program only supports PayPal" (donorbox.org/affiliate-terms, checked 2026-10-13)
 # "we'll pay out your commission within 10 days of receiving your client's monthly Donorbox fees" (donorbox.org/affiliate-partner-program, checked 2026-10-13)
 payout:
-  minimum: 50
+  conditions: "The affiliate terms disagree on the minimum: section 4.1 says \"The minimum commission payout is $50.\" Section 4.4 says \"We do not enforce any payout thresholds.\" Confirm the applicable threshold before relying on either statement."
   currency: USD
   frequency: monthly
   methods: [paypal]
 
+conflicts:
+  - field: payout.minimum
+    quote: "https://donorbox.org/explore/affiliate-terms \u00a74.1: \"The minimum commission payout is $50.\" Same document \u00a74.4: \"We do not enforce any payout thresholds.\" Captured 2026-10-19."
 signup_url: https://donorbox.org/affiliate-partner-program
 approval: manual
 approval_time: "Usually 2-3 business days"
@@ -64,7 +67,7 @@ description: >
   Donorbox fees for its first three years, covering platform, add-on and
   integration fees but not Donorbox Premium. The cookie lasts 45 days.
   Applications are reviewed manually, usually within 2-3 business days, and
-  commissions are paid in USD via PayPal once you reach $50.
+  commissions are paid in USD via PayPal; the terms disagree on whether a payout minimum applies.
 
 short_description: "Online fundraising and donation platform for nonprofits"
 
@@ -75,7 +78,7 @@ agents:
     peer-to-peer campaigns. Fits nonprofit consultants, web designers,
     agencies and creators with a nonprofit audience. Commission: 15% of the
     referred organization's Donorbox fees for three years, 45-day cookie,
-    $50 minimum payout via PayPal.
+    PayPal payouts with a minimum disputed within the affiliate terms.
   keywords: [donorbox, donation platform, nonprofit fundraising, online donations, recurring donations, donation form]
   use_cases:
     - "Nonprofits adding a donation form to their website"
@@ -85,7 +88,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

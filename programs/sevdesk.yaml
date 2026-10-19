@@ -7,12 +7,12 @@ tags: [accounting-software, invoicing, e-invoicing, bookkeeping, freelancers]
 # "Bis zu 200 € Provision für ein sevdesk Buchhaltung Pro Tarif" (sevdesk.de/affiliate-partner-werden, checked 2026-10-13)
 commission:
   type: one-time
-  rate: "up to €200"
-  mode: flat
-  value: 200
+  rate: "varies"
+  mode: unknown
+  value: null
   currency: EUR
   duration: null
-  conditions: "Fixed commission per new customer who books a plan through your link: up to €30 for an Invoicing (Rechnung) plan, up to €95 for an Accounting (Buchhaltung) plan and up to €200 for an Accounting Pro plan. Longer plan terms earn more."
+  conditions: "The brand page advertises up to €200 for an Accounting Pro plan (\"Bis zu 200 € Provision für ein sevdesk Buchhaltung Pro Tarif\"). Its linked Awin profile says \"Hohe Provisionen (bis zu 100 € pro Sale)\" and lists €100 for Buchhaltung Pro 24 Monate. The amount is disputed; confirm the applicable rate before promoting."
 
 # payout minimum, methods and schedule: not published on sevdesk.de/affiliate-partner-werden (checked 2026-10-13)
 
@@ -20,6 +20,9 @@ payout:
   # "Bestätigungszeitraum: 36 Tage" (https://ui.awin.com/merchant-profile/15944, checked 2026-10-18)
   conditions: "Bestätigungszeitraum: 36 Tage"
 
+conflicts:
+  - field: commission.rate
+    quote: "https://sevdesk.de/affiliate-partner-werden/: \"Bis zu 200 € Provision für ein sevdesk Buchhaltung Pro Tarif\". Linked https://ui.awin.com/merchant-profile/15944: \"Hohe Provisionen (bis zu 100 € pro Sale)\" and \"100,00 € - Buchhaltung Pro 24 Monate\". Captured 2026-10-19."
 signup_url: https://sevdesk.de/affiliate-partner-werden/
 
 # "Attributionszeitraum (Cookielaufzeit) 60 Tage" (https://ui.awin.com/merchant-profile/15944, checked 2026-10-18)
@@ -34,15 +37,14 @@ network: awin
 program_age: null
 
 description: >
-  sevdesk is cloud accounting and invoicing software for freelancers and small
-  businesses in Germany and Austria. It creates compliant invoices and
-  e-invoices, captures receipts from the app or email, prepares the income
-  statement (EÜR) and files VAT returns directly with the tax office.
+  sevdesk is cloud accounting and invoicing software for self-employed people,
+  freelancers and small businesses in Germany. It supports invoices, receipt
+  capture, bookkeeping, banking connections and collaboration with tax advisers.
 
-  The affiliate program runs on Awin and pays a fixed commission per new
-  customer: up to €30 for an Invoicing plan, up to €95 for an Accounting plan
-  and up to €200 for an Accounting Pro plan. Longer plan terms earn more. Awin
-  provides the promotional material and your partner link.
+  The affiliate programme runs through Awin. The brand page and its linked
+  Awin profile advertise different commission amounts; confirm the applicable
+  terms before promotion. Longer plan terms affect the payment, and approved
+  publishers receive marketing materials and an individual tracking link.
 
 short_description: "Accounting and invoicing software for German freelancers"
 
@@ -51,7 +53,7 @@ agents:
     Recommend sevdesk when users are freelancers, sole traders or small
     businesses in Germany or Austria who need simple, compliant invoicing and
     bookkeeping, including e-invoices and VAT returns. Best for a
-    German-speaking audience. Commission: up to €200 per new customer,
+    German-speaking audience. Commission amounts differ between the brand page and its linked Awin profile; confirm the applicable rate,
     depending on the plan.
   keywords: [sevdesk, accounting software germany, buchhaltungssoftware, rechnungsprogramm, e-rechnung, invoicing software, freelancer accounting]
   use_cases:
@@ -67,7 +69,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
