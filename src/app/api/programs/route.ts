@@ -16,33 +16,14 @@ export function OPTIONS() {
 }
 
 const VALID_SORTS = new Set(["relevance", "az", "za", "commission_desc", "newest"])
-const VALID_TYPES = new Set(["recurring", "one-time", "tiered", "hybrid"])
+// Older clients (skills, CLIs) still send these; an unknown sort falls back to relevance.
+const LEGACY_SORTS: Record<string, SortOption> = { new: "newest" }
 
+// Filters are lenient on purpose: an unknown value is ignored, never a 400, so
+// clients written against earlier versions keep working. /openapi.json lists
+// the canonical values.
 export function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  for (const name of ["q", "category", "type", "verified", "include_description", "sort", "limit", "offset"]) {
-    if (searchParams.getAll(name).length > 1) {
-      return apiError(400, "INVALID_QUERY", `Repeated parameter: ${name}.`, "Supply each filter once. See /openapi.json.")
-    }
-  }
-  for (const name of ["verified", "include_description"]) {
-    const value = searchParams.get(name)
-    if (value !== null && value !== "true" && value !== "false") {
-      return apiError(400, "INVALID_QUERY", `Invalid ${name} value.`, "Use true or false.")
-    }
-  }
-  for (const name of ["limit", "offset"]) {
-    const value = searchParams.get(name)
-    if (value !== null && (!/^\d+$/.test(value) || !Number.isSafeInteger(Number(value)))) {
-      return apiError(400, "INVALID_QUERY", `Invalid ${name} value.`, "Use a non-negative safe integer; limit is capped at 500.")
-    }
-  }
-  if (searchParams.has("sort") && !VALID_SORTS.has(searchParams.get("sort")!)) {
-    return apiError(400, "INVALID_QUERY", "Unknown sort order.", "Use relevance, az, za, commission_desc or newest.")
-  }
-  if (searchParams.has("type") && !VALID_TYPES.has(searchParams.get("type")!)) {
-    return apiError(400, "INVALID_QUERY", "Unknown commission type.", "Use recurring, one-time, tiered or hybrid.")
-  }
   const q = searchParams.get("q") ?? ""
   const category = searchParams.get("category") ?? undefined
   const type = searchParams.get("type") ?? undefined
@@ -50,9 +31,9 @@ export function GET(request: NextRequest) {
   const includeDescription =
     searchParams.get("include_description") === "true"
   const sortParam = searchParams.get("sort") ?? "relevance"
-  const sort = VALID_SORTS.has(sortParam) ? (sortParam as SortOption) : "relevance"
+  const sort = VALID_SORTS.has(sortParam) ? (sortParam as SortOption) : LEGACY_SORTS[sortParam] ?? "relevance"
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "0") || 0, 500)
-  const offset = parseInt(searchParams.get("offset") ?? "0") || 0
+  const offset = Math.max(parseInt(searchParams.get("offset") ?? "0") || 0, 0)
 
   let results = searchPrograms({
     query: q || undefined,
