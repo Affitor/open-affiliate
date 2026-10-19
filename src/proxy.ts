@@ -1,4 +1,5 @@
-import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server"
+import { type NextFetchEvent, type NextRequest } from "next/server"
+import { negotiateMarkdown } from "./lib/agentic-surface"
 
 // Counts every hit on /api/*, cached or not, as a PostHog `api_request`
 // event. The route handlers cannot do this themselves: responses sit in the
@@ -8,13 +9,13 @@ import { type NextFetchEvent, type NextRequest, NextResponse } from "next/server
 // /mcp is listed beside /api/* because it is the canonical MCP endpoint and
 // clients are being migrated onto it — left out, `api_request` for MCP would
 // drift to zero as that migration worked, with nothing appearing broken.
-export const config = { matcher: ["/api/:path*", "/mcp"] }
+export const config = { matcher: ["/((?!_next/|_ph/).*)"] }
 
 const POSTHOG_URL = "https://us.i.posthog.com/i/v0/e/"
 
 export function proxy(request: NextRequest, event: NextFetchEvent) {
   const key = process.env.NEXT_PUBLIC_POSTHOG_KEY
-  if (key) {
+  if (key && (request.nextUrl.pathname.startsWith("/api/") || request.nextUrl.pathname === "/mcp")) {
     const { pathname, searchParams } = request.nextUrl
     const userAgent = request.headers.get("user-agent") ?? ""
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? ""
@@ -45,5 +46,5 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
         .catch(() => {})
     )
   }
-  return NextResponse.next()
+  return negotiateMarkdown(request)
 }

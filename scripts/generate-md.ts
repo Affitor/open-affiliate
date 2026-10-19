@@ -27,7 +27,7 @@
  * Usage: npx tsx scripts/generate-md.ts
  */
 
-import { mkdirSync, rmSync, writeFileSync } from "node:fs"
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -873,6 +873,13 @@ export function llmsTxt(): string {
       `> ${categories.length} categories, each with machine-readable guidance on when`,
       `> it is worth recommending.`,
     ].join("\n"),
+    section("When to use OpenAffiliate", [
+      `- Find affiliate programs for a product or niche; compare commission, cookie and payout terms before recommending one.`,
+      `- Read a program's agentPrompt, restrictions and verification date before recommending it. Cite its program page and link its signup URL for applications.`,
+      `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories).`,
+      `- Use REST: GET /api/programs, GET /api/programs/{slug}, GET /api/categories. [OpenAPI 3.1 schema](${BASE}/openapi.json).`,
+      `- Fetch /index.md or append .md to a program, category or network URL. Pages with a Markdown twin also accept Accept: text/markdown.`,
+    ].join("\n")),
     // Stated up front, not buried. An agent weighting this surface deserves to
     // know how much of it has actually been checked.
     [
@@ -1287,6 +1294,28 @@ function main(): void {
     const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
     write(`networks/${networkToSlug(n)}.md`, networkMd(n, inNet))
   }
+
+  // Proxy needs only paths, not registry data or Markdown bodies in its bundle.
+  // Discover HTML routes from source so unsupported pages retain their HTML response.
+  const app = join(process.cwd(), "src/app")
+  const appFiles = readdirSync(app, { recursive: true }).map(String)
+  const publicFiles = readdirSync(OUT, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => join(entry.parentPath, entry.name).slice(OUT.length))
+  const html = appFiles
+    .filter((path) => path.endsWith("page.tsx"))
+    .map((path) => "/" + path.replace(/(^|\/)page\.tsx$/, "").replace(/\/$/, ""))
+  const handlers = appFiles.filter((path) => path.endsWith("route.ts"))
+    .map((path) => "/" + path.replace(/(^|\/)route\.ts$/, ""))
+  // Next's file-based metadata endpoints are not route.ts files.
+  handlers.push("/robots.txt", "/sitemap.xml", "/favicon.ico", "/opengraph-image", "/programs/[slug]/opengraph-image")
+  const manifest = {
+    markdown: publicFiles.filter((path) => path.endsWith(".md")).sort(),
+    html: html.sort(),
+    assets: publicFiles.filter((path) => !path.endsWith(".md")).sort(),
+    handlers: handlers.sort(),
+  }
+  writeFileSync(join(process.cwd(), "src/lib/agentic-paths.json"), JSON.stringify(manifest, null, 2) + "\n")
 
   const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)
