@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { commissionUnknown, getProgram, isLive, programs, type Program } from "../src/lib/programs"
+import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networksByProgramCount, programs, type Program } from "../src/lib/programs"
 import { programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 
@@ -56,12 +56,21 @@ test("the order is the same under another locale", () => {
   assert.equal(tr.stdout, en.stdout)
 })
 
-test("homepage sets: 5, 6 and 30, disjoint, featured and row verified and live", () => {
-  const { rankings, featured, row } = homepageSets(programs)
-  assert.deepEqual([rankings.length, featured.length, row.length], [5, 6, 30])
-  const all = [...rankings, ...featured, ...row].map((p) => p.slug)
+test("homepage sets: 5 and 6, disjoint, featured verified and live", () => {
+  const { rankings, featured } = homepageSets(programs)
+  assert.deepEqual([rankings.length, featured.length], [5, 6])
+  const all = [...rankings, ...featured].map((p) => p.slug)
   assert.equal(new Set(all).size, all.length)
-  for (const p of [...featured, ...row] as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+  for (const p of featured as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+})
+
+test("homepage networks: every live network once, most programs first, in-house last (as on /networks)", () => {
+  const list = networksByProgramCount()
+  assert.deepEqual(list.map((n) => n.network).sort(), [...liveNetworks].sort())
+  assert.equal(list.at(-1)!.network, IN_HOUSE)
+  const counts = list.slice(0, -1).map((n) => n.programs.length)
+  assert.deepEqual(counts, [...counts].sort((a, b) => b - a))
+  assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
 })
 
 // CI keeps "typing and paging make no RSC request": the list syncs the URL

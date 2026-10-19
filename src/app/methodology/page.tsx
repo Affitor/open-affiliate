@@ -119,8 +119,10 @@ export default function MethodologyPage() {
             {checkList("transparency")}. Partner value: {checkList("partner_value")}.
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
-            A term the program does not publish scores 0 and is marked Not
-            published, with the date we checked; a rate published as
+            A term we read the program&apos;s pages for and did not find scores
+            0 and is marked Not published, with the date we checked. A term we
+            have not checked yet is not assessed: its points count toward the
+            other checks, so it costs the program nothing. A rate published as
             &ldquo;varies&rdquo;, with no number, does not meet the commission
             check. When two of the brand&apos;s own pages disagree on a term,
             that check is not met until they agree. Each report links the page

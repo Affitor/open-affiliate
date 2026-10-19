@@ -72,7 +72,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
   "src/components/explore-table.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
-  "src/app/page.tsx | `/programs/${p.slug}`", // homepage top-verified row, internal (N-2)
+  "src/app/page.tsx | `/networks/${networkToSlug(network)}`", // homepage networks band, internal (N-2)
   "src/app/programs/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",

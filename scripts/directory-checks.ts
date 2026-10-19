@@ -10,23 +10,23 @@ function section(html: string, id: string): string | null {
   return end < 0 ? null : html.slice(start, end)
 }
 
-/** Program slugs linked in a section, in page order, each once. */
-export function linkedSlugs(html: string, id: string): string[] | null {
+/** Slugs linked under /<base>/ (programs, or networks) in a section, in page order, each once. */
+export function linkedSlugs(html: string, id: string, base = "programs"): string[] | null {
   const body = section(html, id)
   if (body === null) return null
   const seen: string[] = []
-  for (const m of body.matchAll(/<a\b[^>]*?\shref="\/programs\/([a-z0-9-]+)"/g)) if (!seen.includes(m[1])) seen.push(m[1])
+  for (const m of body.matchAll(new RegExp(`<a\\b[^>]*?\\shref="\\/${base}\\/([a-z0-9-]+)"`, "g"))) if (!seen.includes(m[1])) seen.push(m[1])
   return seen
 }
 
 /** Raw anchor count in a section, duplicates included (the directory lists each program once). */
-export function anchorCount(html: string, id: string): number {
-  return [...(section(html, id) ?? "").matchAll(/<a\b[^>]*?\shref="\/programs\/[a-z0-9-]+"/g)].length
+export function anchorCount(html: string, id: string, base = "programs"): number {
+  return [...(section(html, id) ?? "").matchAll(new RegExp(`<a\\b[^>]*?\\shref="\\/${base}\\/[a-z0-9-]+"`, "g"))].length
 }
 
 /** Problems with a section's links against the expected slugs, in order. */
-export function sectionProblems(html: string, id: string, expected: string[], exactCount = false): string[] {
-  const got = linkedSlugs(html, id)
+export function sectionProblems(html: string, id: string, expected: string[], exactCount = false, base = "programs"): string[] {
+  const got = linkedSlugs(html, id, base)
   if (got === null) return [`no <section id="${id}">`]
   const problems: string[] = []
   if (got.join(",") !== expected.join(",")) {
@@ -34,6 +34,6 @@ export function sectionProblems(html: string, id: string, expected: string[], ex
     const extra = got.filter((s) => !expected.includes(s))
     problems.push(`#${id} links ${got.length}, expected ${expected.length} in order (missing ${missing.slice(0, 3).join(" ") || "none"}, extra ${extra.slice(0, 3).join(" ") || "none"})`)
   }
-  if (exactCount && anchorCount(html, id) !== expected.length) problems.push(`#${id} has ${anchorCount(html, id)} program anchors for ${expected.length} programs`)
+  if (exactCount && anchorCount(html, id, base) !== expected.length) problems.push(`#${id} has ${anchorCount(html, id, base)} ${base.slice(0, -1)} anchors for ${expected.length} ${base}`)
   return problems
 }

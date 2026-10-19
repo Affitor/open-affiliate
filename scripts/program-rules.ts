@@ -112,3 +112,24 @@ export function aliasRoutes(programs: readonly { slug: string; aliases?: unknown
     clashes,
   }
 }
+
+/** The terms a `not_published` marker may name (schema: not_published.properties). */
+export const NOT_PUBLISHED_FIELDS = ["commission.duration", "cookie_days", "payout.minimum", "payout.methods", "payout.frequency", "approval", "restrictions"]
+
+/**
+ * A `not_published` marker makes OAS score the term Not published, so a typo
+ * must fail the build rather than leave the term unassessed: a map of known
+ * term names to real YYYY-MM-DD dates, nothing else.
+ */
+export function notPublishedProblems(data: Record<string, unknown>): string[] {
+  const marker = data.not_published
+  if (marker === undefined) return []
+  if (marker === null || typeof marker !== "object" || Array.isArray(marker)) return ["not_published must be a map of term to date"]
+  const problems: string[] = []
+  for (const [field, date] of Object.entries(marker)) {
+    if (!NOT_PUBLISHED_FIELDS.includes(field)) problems.push(`not_published names an unknown term "${field}" (one of ${NOT_PUBLISHED_FIELDS.join(", ")})`)
+    const ok = typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) === date
+    if (!ok) problems.push(`not_published.${field} must be a real date written YYYY-MM-DD, got ${JSON.stringify(date)}`)
+  }
+  return problems
+}
