@@ -2,11 +2,6 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
-import { NextRequest } from "next/server"
-import { GET as list } from "../src/app/api/programs/route"
-import { GET as detail } from "../src/app/api/programs/[slug]/route"
-import { GET as categories } from "../src/app/api/categories/route"
-import { GET as missing } from "../src/app/api/[...path]/route"
 import { openapi } from "../src/lib/openapi"
 import { registerWebMcpTools, WEBMCP_TOOLS, type WebMcpTool } from "../src/lib/webmcp"
 import { nextConfig } from "../next.config"
@@ -50,17 +45,13 @@ test("discovery files are served with CORS", async () => {
   assert.deepEqual(rule?.headers, [{ key: "Access-Control-Allow-Origin", value: "*" }])
 })
 
-test("every REST response carries the API-Version the OpenAPI document declares", async () => {
+test("every /api response carries the API-Version the OpenAPI document declares", async () => {
   const version = openapi.components.headers.APIVersion.schema.const
   assert.equal(version, "1")
-  const responses = [
-    list(new NextRequest("http://localhost/api/programs?limit=1")),
-    await detail(new NextRequest("http://localhost/api/programs/vercel"), { params: Promise.resolve({ slug: "vercel" }) }),
-    await detail(new NextRequest("http://localhost/api/programs/not-a-program"), { params: Promise.resolve({ slug: "not-a-program" }) }),
-    categories(),
-    missing(),
-  ]
-  for (const response of responses) assert.equal(response.headers.get("API-Version"), version, response.url)
+  // One config rule, so 405s, OPTIONS, badges and error bodies get it too, not only the routes that remember to.
+  const rules = (await nextConfig.headers!()).filter((r) => r.headers.some((h) => h.key === "API-Version"))
+  assert.equal(rules.length, 1)
+  assert.deepEqual(rules[0], { source: "/api/:path*", headers: [{ key: "API-Version", value: version }] })
   for (const path of Object.values(openapi.paths)) {
     for (const response of Object.values(path.get.responses)) {
       assert.deepEqual(response.headers, { "API-Version": { $ref: "#/components/headers/APIVersion" } })
@@ -106,7 +97,11 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
     }
 
     const requests: string[] = []
-    globalThis.fetch = (async (url: string) => { requests.push(url); return Response.json({ ok: true }) }) as typeof fetch
+    globalThis.fetch = (async (url: string, init?: RequestInit) => {
+      assert.equal(init?.method, "GET", "tools are read-only")
+      requests.push(url)
+      return Response.json({ ok: true })
+    }) as typeof fetch
     const [searchTool, getTool, listTool] = onDocument.map((r) => r.tool)
     assert.deepEqual(await searchTool.execute({ q: "email", type: "recurring", verified: true, category: "" }), { ok: true })
     await searchTool.execute({ limit: 0 })
@@ -119,12 +114,58 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
       "/api/categories",
     ])
 
+    // Every failure resolves with the API's { error } shape; execute never throws or rejects.
+    const tools = [[searchTool, { q: "x" }], [getTool, { slug: "vercel" }], [listTool, {}]] as const
+    const code = async (run: () => Promise<unknown>) => ((await run()) as { error: { code: string } }).error.code
+    globalThis.fetch = (async () => { throw new TypeError("Failed to fetch") }) as typeof fetch
+    for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "NETWORK_ERROR", tool.name)
+    globalThis.fetch = (async () => new Response("<html>Bad gateway</html>", { status: 502 })) as typeof fetch
+    for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "INVALID_RESPONSE", tool.name)
+    assert.equal(await code(() => getTool.execute({ slug: "\uD800" })), "INVALID_INPUT")
+    assert.equal(await code(() => searchTool.execute(null as unknown as Record<string, unknown>)), "INVALID_INPUT")
+    globalThis.fetch = ((_url: string, init?: RequestInit) => new Promise((_resolve, reject) => {
+      init?.signal?.addEventListener("abort", () => reject(new DOMException("aborted", "AbortError")))
+    })) as typeof fetch
+    const cancel = new AbortController()
+    const pending = listTool.execute({}, { signal: cancel.signal })
+    cancel.abort()
+    assert.equal(await code(() => pending), "ABORTED")
+    // A 404 keeps the API's own error body.
+    globalThis.fetch = (async () => Response.json({ error: { code: "NOT_FOUND" } }, { status: 404 })) as typeof fetch
+    assert.equal(await code(() => getTool.execute({ slug: "not-a-program" })), "NOT_FOUND")
+
     // Fallback: no document.modelContext.
     stubBrowser({}, { modelContext: context(onNavigator) })
     registerWebMcpTools(signal)
     assert.equal(onNavigator.length, 3)
   } finally {
     globalThis.fetch = savedFetch
+    delete (globalThis as { document?: unknown }).document
+    if (savedNavigator) Object.defineProperty(globalThis, "navigator", savedNavigator)
+  }
+})
+
+test("aborting the signal unregisters every tool", () => {
+  const savedNavigator = Object.getOwnPropertyDescriptor(globalThis, "navigator")
+  try {
+    // Spec behaviour: a tool registered with { signal } is removed when that signal aborts.
+    const live = new Map<string, WebMcpTool>()
+    stubBrowser({
+      modelContext: {
+        registerTool(tool: WebMcpTool, { signal }: { signal: AbortSignal }) {
+          live.set(tool.name, tool)
+          signal.addEventListener("abort", () => live.delete(tool.name))
+        },
+      },
+    }, {})
+    const controller = new AbortController()
+    registerWebMcpTools(controller.signal)
+    assert.equal(live.size, 3)
+    controller.abort()
+    assert.equal(live.size, 0)
+    // The component aborts its controller on unmount.
+    assert.match(readFileSync("src/components/webmcp-tools.tsx", "utf8"), /registerWebMcpTools\(controller\.signal\)\s+return \(\) => controller\.abort\(\)/)
+  } finally {
     delete (globalThis as { document?: unknown }).document
     if (savedNavigator) Object.defineProperty(globalThis, "navigator", savedNavigator)
   }

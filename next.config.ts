@@ -54,8 +54,14 @@ export const nextConfig: NextConfig = {
   },
   // Discovery files (ARD catalog, agent-skills index) are fetched by agents and
   // crawlers from other origins; ARD's publishing guide asks for CORS.
+  // API-Version is set here, not per route, so every /api response carries it,
+  // including 405s for unsupported methods, OPTIONS and the badge. Policy:
+  // info.description in src/lib/openapi.ts.
   async headers() {
-    return [{ source: "/.well-known/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] }];
+    return [
+      { source: "/.well-known/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] },
+      { source: "/api/:path*", headers: [{ key: "API-Version", value: "1" }] },
+    ];
   },
   async rewrites() {
     return [

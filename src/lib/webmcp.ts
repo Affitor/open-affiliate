@@ -20,9 +20,32 @@ declare global {
   interface Navigator { modelContext?: ModelContext }
 }
 
-async function getJson(path: string, signal?: AbortSignal): Promise<unknown> {
-  const response = await fetch(path, { headers: { Accept: "application/json" }, signal })
-  return response.json()
+/**
+ * GETs a same-origin API path and resolves with its JSON (an API error body
+ * included). Every failure resolves with the API's own { error } shape instead
+ * of throwing, so an agent always gets a readable result: bad input, a dropped
+ * connection, a cancelled call, or a response that is not JSON.
+ */
+async function getJson(path: () => string, signal?: AbortSignal): Promise<unknown> {
+  const failed = (code: string, message: string) =>
+    ({ error: signal?.aborted ? { code: "ABORTED", message: "The call was cancelled." } : { code, message } })
+  let url: string
+  try {
+    url = path()
+  } catch {
+    return failed("INVALID_INPUT", "The input could not be turned into a request.")
+  }
+  let response: Response
+  try {
+    response = await fetch(url, { method: "GET", headers: { Accept: "application/json" }, signal })
+  } catch {
+    return failed("NETWORK_ERROR", "Could not reach the OpenAffiliate API.")
+  }
+  try {
+    return await response.json()
+  } catch {
+    return failed("INVALID_RESPONSE", `The API answered HTTP ${response.status} without JSON.`)
+  }
 }
 
 // Read-only, and program text is contributor-submitted: treat it as untrusted.
@@ -45,15 +68,18 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
       },
     },
     annotations,
-    execute({ q, category, type, verified, limit }, options) {
-      const params = new URLSearchParams()
-      for (const [key, value] of Object.entries({ q, category, type })) {
-        if (typeof value === "string" && value) params.set(key, value)
-      }
-      if (verified === true) params.set("verified", "true")
-      // The API reads limit 0 as "everything" (over a thousand programs); an agent gets a page.
-      params.set("limit", String(Number.isInteger(limit) && (limit as number) > 0 ? limit : SEARCH_LIMIT))
-      return getJson(`/api/programs?${params}`, options?.signal)
+    execute(input, options) {
+      return getJson(() => {
+        const { q, category, type, verified, limit } = input
+        const params = new URLSearchParams()
+        for (const [key, value] of Object.entries({ q, category, type })) {
+          if (typeof value === "string" && value) params.set(key, value)
+        }
+        if (verified === true) params.set("verified", "true")
+        // The API reads limit 0 as "everything" (over a thousand programs); an agent gets a page.
+        params.set("limit", String(Number.isInteger(limit) && (limit as number) > 0 ? limit : SEARCH_LIMIT))
+        return `/api/programs?${params}`
+      }, options?.signal)
     },
   },
   {
@@ -66,8 +92,9 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
       required: ["slug"],
     },
     annotations,
-    execute({ slug }, options) {
-      return getJson(`/api/programs/${encodeURIComponent(String(slug ?? ""))}`, options?.signal)
+    execute(input, options) {
+      // encodeURIComponent throws on a lone surrogate; getJson turns that into INVALID_INPUT.
+      return getJson(() => `/api/programs/${encodeURIComponent(String(input.slug ?? ""))}`, options?.signal)
     },
   },
   {
@@ -77,7 +104,7 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
     inputSchema: { type: "object", properties: {} },
     annotations,
     execute(_input, options) {
-      return getJson("/api/categories", options?.signal)
+      return getJson(() => "/api/categories", options?.signal)
     },
   },
 ]
