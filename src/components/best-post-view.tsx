@@ -1,3 +1,4 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
@@ -12,7 +13,6 @@ import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
-  SAME_TEAM,
   checkedRange,
   checkedText,
   cookieText,
@@ -20,7 +20,6 @@ import {
   payoutText,
   postFaq,
   postTitle,
-  sameTeam,
   type BestPost,
   type PostSelection,
 } from "@/lib/best-posts";
@@ -169,7 +168,6 @@ export function BestPostView({
           <p className="text-lg leading-relaxed text-foreground/80 mt-5">{post.intro}</p>
           <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
             {DISCLOSURE}
-            {sameTeam(post, selection) && <> {SAME_TEAM}</>}
           </p>
         </div>
       </header>
@@ -324,14 +322,9 @@ export function BestPostView({
           {faq.length > 0 && (
             <>
               <h2 className="text-lg font-semibold mt-10">FAQ</h2>
-              <dl className="mt-2 border-t border-border">
-                {faq.map((f) => (
-                  <div key={f.q} className="border-b border-border py-3.5">
-                    <dt className="text-base font-medium">{f.q}</dt>
-                    <dd className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{f.a}</dd>
-                  </div>
-                ))}
-              </dl>
+              <div className="mt-2">
+                <FaqAccordion items={faq} />
+              </div>
             </>
           )}
         </div>

@@ -1,0 +1,13 @@
+{
+  "note": "Programs whose payout.frequency names a cadence (monthly, twice-monthly, ...) while their commission or payout conditions state a wait over 30 days. Frozen on 2026-10-19 so the rule holds for everything new. This list may shrink, never grow: remove a slug when its file is fixed. scripts/oas.test.ts fails once expires has passed.",
+  "frozen_at": "2026-10-19",
+  "expires": "2026-10-26",
+  "slugs": [
+    "clickfunnels",
+    "greengeeks",
+    "hunter",
+    "strikingly",
+    "taskade",
+    "thematic"
+  ]
+}

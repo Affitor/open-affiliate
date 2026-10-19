@@ -1,7 +1,6 @@
 import { getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
-import { isSameTeam } from "./same-team"
 import { frequencyLabel } from "./claims/form"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
@@ -69,7 +68,6 @@ export const MIN_POST_PROGRAMS = 5
 
 export const DISCLOSURE =
   "How we make money: some links on this page are tracked so we can see which programs readers choose. Rankings are never paid for."
-export { SAME_TEAM } from "./same-team"
 
 export function getPost(slug: string): BestPost | undefined {
   return POSTS.find((p) => p.slug === slug)
@@ -208,10 +206,6 @@ export function checkedText(p: Program): string {
 export function checkedRange(selection: PostSelection): [string, string] | null {
   const dates = selection.shown.map(({ program }) => checkedText(program)).filter(Boolean).sort()
   return dates.length ? [dates[0], dates.at(-1)!] : null
-}
-
-export function sameTeam(post: BestPost, selection: PostSelection): boolean {
-  return Boolean(post.affitor) || selection.shown.some(({ program }) => isSameTeam(program.slug))
 }
 
 /** The sentence under "How we chose" that states the freshness rule, from the constant. */

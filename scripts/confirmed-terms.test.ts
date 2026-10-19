@@ -672,7 +672,7 @@ test("program page: a qualified rate is shown as stored, never as a bare figure 
     const p = live(slug)
     assert.equal(page.estimateInput(p), null, `${slug} gets an estimate`)
     const f = page.commissionFigure(p)!
-    assert.equal(f.big, String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
+    assert.equal(f.big, p.commission.rate === "varies" ? "Rate varies" : String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
   }
   const a = page.answerParts(live("dreamhost"), "")
   assert.equal(a.before + a.strong + a.after, "DreamHost's commission: $15 to $1,000.")
@@ -879,7 +879,7 @@ test("an unverified program's commission.rate and duration state no withheld ter
   // build-registry itself refuses the file (not only the rule): run it on a one-program copy.
   const dir = mkdtempSync(join(tmpdir(), "oa-guard-"))
   for (const d of ["programs", "schema", "src/lib", "public/logos"]) mkdirSync(join(dir, d), { recursive: true })
-  for (const f of ["program.schema.json", "signup-url-debt.json"]) copyFileSync(new URL(`../schema/${f}`, import.meta.url), join(dir, "schema", f))
+  for (const f of ["program.schema.json", "signup-url-debt.json", "payout-lag-debt.json"]) copyFileSync(new URL(`../schema/${f}`, import.meta.url), join(dir, "schema", f))
   const yaml = readFileSync(new URL("../programs/openfate.yaml", import.meta.url), "utf8")
   writeFileSync(join(dir, "programs", "openfate.yaml"), yaml.replace(/  duration: null\n/, '  duration: "while partner status is approved"\n'))
   const run = spawnSync(fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url)), [fileURLToPath(new URL("./build-registry.ts", import.meta.url))], { cwd: dir, encoding: "utf8" })

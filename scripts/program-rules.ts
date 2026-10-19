@@ -159,3 +159,128 @@ export function commissionTermProblems(data: Record<string, unknown>): string[] 
   }
   return problems
 }
+
+/** Frequencies that name a payment cadence and no waiting period. */
+const CADENCES = new Set(["daily", "weekly", "bi-weekly", "twice-monthly", "monthly"])
+const DAYS_AFTER = /\bdays?\s+(?:after|following)\b/gi
+const UNITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+const NUMBER_WORD = new RegExp(String.raw`\b(?:(${TENS.slice(2).join("|")})(?:[\s-](${UNITS.slice(1, 10).join("|")}))?|(${UNITS.join("|")}))\b`, "gi")
+/** "sixty" → "60", "forty-five" → "45", "fifteen" → "15". */
+const digits = (text: string) =>
+  text.replace(NUMBER_WORD, (_, tens?: string, unit?: string, small?: string) =>
+    String(small ? UNITS.indexOf(small.toLowerCase()) : TENS.indexOf(tens!.toLowerCase()) * 10 + (unit ? UNITS.indexOf(unit.toLowerCase()) : 0)),
+  )
+/** Currency signs and codes, numbers, words, and single marks, as separate tokens. */
+const TOKEN = /[$€£¥₹]|\d+(?:\.\d+)?|[A-Za-z]+|[^\sA-Za-z\d]/g
+const JOIN = new Set([",", "-", "–", "/", "or", "and", "to"])
+/** A number right after one of these is an amount ("$100", "USD 100") or a date ("May 31"), never days. */
+const notCount = (token: string | undefined) =>
+  token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*$/i.test(token))
+/**
+ * "paid / made at the end of the third month following" waits about 30 days
+ * a month. Without the payment verb ("through the end of", "stop at the end
+ * of") it is a duration, not a wait.
+ */
+const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
+const MONTHS_AFTER = new RegExp(String.raw`\b(?:paid|made|issued|sent|payable)\s+(?:out\s+)?at\s+the\s+end\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
+/**
+ * A wait whose clause names a refund, return, cancellation or the cookie
+ * before it ("refunds are issued within 60", "customers may request a
+ * refund, for any reason, within 60", "the cookie lasts 60") is not a
+ * payout wait. Precision over recall: "after the refund period, commissions
+ * are paid 45 days after" is skipped too. The clause runs back to the last
+ * semicolon, at most 200 characters (one pass, however long the text).
+ */
+const NOT_PAYOUT = /\b(?:refund(?:s|ed|ing)?|return(?:s|ed|ing)?|chargebacks?|cancel\w*|cookies?|clicks?)\b/i
+const leadOf = (before: string) => before.slice(-200)
+/**
+ * "2026-05-31", "05-31", "on 10-31", "05/31/2026", "5/31": a date, not a
+ * count. A real month and day only, so "35-40" and "60/90" stay ranges; a
+ * dash date needs a zero-padded month or "on/by/before/until" in front
+ * ("10-15 days" is a range).
+ */
+const MONTH = String.raw`(?:0?[1-9]|1[0-2])`
+const DAY = String.raw`(?:0?[1-9]|[12]\d|3[01])`
+const DATE = new RegExp(
+  String.raw`\b\d{4}-\d{1,2}-\d{1,2}\b|\b0[1-9]-${DAY}\b|(?<=\b(?:on|by|before|until)\s+)${MONTH}-${DAY}\b|\b${MONTH}\/${DAY}(?:\/\d{2,4})?\b`,
+  "gi",
+)
+
+/**
+ * The wait a "days after" names: the largest number of the count written
+ * right before it, read token by token backwards: "45", "forty-five (45)",
+ * "35-40 business", "120, 60, or 10", "120,60 or 10". A number after a
+ * currency sign or code ("$100", "USD 1,500") is an amount and one after a
+ * month ("May 31") a date; either, like a decimal or any other word, ends
+ * the count. 0 when no count precedes. Linear: one pass over at most 200
+ * characters.
+ */
+function waitBefore(text: string): number {
+  // "$1,500": a thousands group is one number, so its last digits are not a count.
+  const tokens = digits(text.slice(-200)).replace(DATE, " date ").replace(/(\d),(?=\d{3}(?!\d))/g, "$1").match(TOKEN) ?? []
+  if (/^(?:business|calendar)$/i.test(tokens.at(-1) ?? "")) tokens.pop()
+  let wait = 0
+  let counted = false
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    const t = tokens[i]
+    // Up to three digits: "2026" in "May 31, 2026, 30 days" is a year.
+    if (/^\d{1,3}$/.test(t) && !notCount(tokens[i - 1])) {
+      wait = Math.max(wait, Number(t))
+      counted = true
+    } else if (!(t === "(" || t === ")" || (counted && JOIN.has(t.toLowerCase())))) {
+      break
+    }
+  }
+  return wait
+}
+
+/**
+ * The longest wait one clause states: "N days after/following", or "at the
+ * end of the Nth month following" at 30 days a month. A count about a
+ * refund, return or the cookie states none.
+ */
+function clauseWait(clause: string): number {
+  // A loop, not Math.max(...): a long text must not overflow the stack.
+  let wait = 0
+  for (const m of clause.matchAll(DAYS_AFTER)) {
+    const before = clause.slice(0, m.index)
+    if (!NOT_PAYOUT.test(leadOf(before))) wait = Math.max(wait, waitBefore(before))
+  }
+  for (const m of clause.matchAll(MONTHS_AFTER)) {
+    if (NOT_PAYOUT.test(leadOf(clause.slice(0, m.index)))) continue
+    const word = ORDINALS.indexOf(m[1].toLowerCase())
+    wait = Math.max(wait, 30 * (word >= 0 ? word + 2 : Number(m[1][0])))
+  }
+  return wait
+}
+
+/**
+ * A commission paid N days after the sale, the customer's payment or the end
+ * of the month waits N days, whatever the batch cadence: up to 30 days is
+ * net-30, 31 to 60 is net-60. A file whose conditions state a longer wait
+ * while `payout.frequency` names a cadence scores the brand on the batch and
+ * hides the wait; a 30-program accuracy check found it in hunter, vyond and
+ * credit-repair-cloud. One problem per sentence, quoted. Files that predate
+ * the rule are listed in schema/payout-lag-debt.json.
+ */
+export function payoutLagProblems(data: Record<string, unknown>): string[] {
+  const payout = (data.payout ?? {}) as Record<string, unknown>
+  const frequency = payout.frequency
+  if (typeof frequency !== "string" || !CADENCES.has(frequency)) return []
+  const commission = (data.commission ?? {}) as Record<string, unknown>
+  const problems: string[] = []
+  for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
+    if (typeof text !== "string") continue
+    for (const { sentence } of proseSentences(text)) {
+      const days = sentence.split(";").reduce((most, clause) => Math.max(most, clauseWait(clause)), 0)
+      if (days > 30) {
+        problems.push(
+          `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +
+            `up to 30 days is net-30, 31-60 is net-60, and a conflict records pages that disagree`
+        )
+      }
+    }
+  }
+  return problems
+}

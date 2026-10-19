@@ -27,9 +27,10 @@
  * Usage: npx tsx scripts/generate-md.ts
  */
 
-import { mkdirSync, rmSync, writeFileSync } from "node:fs"
+import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { generateSkills } from "./generate-skills"
 
 import registry from "../src/lib/registry.json"
 import { formatFlat, formatPercentage } from "../src/lib/commission-mode"
@@ -66,14 +67,12 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
-import { isSameTeam, SAME_TEAM_LABEL } from "../src/lib/same-team"
 import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
-  SAME_TEAM,
   checkedRange,
   checkedText,
   cookieText,
@@ -84,7 +83,6 @@ import {
   postReady,
   postSelection,
   postTitle,
-  sameTeam,
   type BestPost,
   type PostSelection,
 } from "../src/lib/best-posts"
@@ -206,11 +204,10 @@ function listedVerified(p: Program): boolean {
 const livePrograms = programs.filter(isLive)
 /** Suffix for list rows: what a reader must know before trusting the terms. */
 function statusMark(p: { slug: string; verified?: boolean; status?: string | null }): string {
-  const team = isSameTeam(p.slug) ? ` (${SAME_TEAM_LABEL})` : ""
-  if (p.status === "discontinued") return `${team} (discontinued)`
-  if (p.status === "no_program") return `${team} (no affiliate program)`
-  if (p.status === "paused") return `${team} (status unclear)`
-  return p.verified ? team : `${team} (unverified, terms unconfirmed)`
+  if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "no_program") return " (no affiliate program)"
+  if (p.status === "paused") return " (status unclear)"
+  return p.verified ? "" : " (unverified, terms unconfirmed)"
 }
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
@@ -386,7 +383,6 @@ export function programMd(entry: Program): string {
   return joinSections([
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
-    isSameTeam(p.slug) ? SAME_TEAM : null,
     statusBlock(p),
     hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
@@ -873,6 +869,14 @@ export function llmsTxt(): string {
       `> ${categories.length} categories, each with machine-readable guidance on when`,
       `> it is worth recommending.`,
     ].join("\n"),
+    section("When to use OpenAffiliate", [
+      `- Find affiliate programs for a product or niche; compare commission, cookie and payout terms before recommending one.`,
+      `- Read a program's agentPrompt, restrictions and verification date before recommending it. Cite its program page and link its signup URL for applications.`,
+      `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories).`,
+      `- Follow the [OpenAffiliate skill](${BASE}/skill/SKILL.md); discover it through the [agent-skills index](${BASE}/.well-known/agent-skills/index.json).`,
+      `- Use REST: GET /api/programs, GET /api/programs/{slug}, GET /api/categories. [OpenAPI 3.1 schema](${BASE}/openapi.json).`,
+      `- Fetch /index.md or append .md to a program, category or network URL. Pages with a Markdown twin also accept Accept: text/markdown.`,
+    ].join("\n")),
     // Stated up front, not buried. An agent weighting this surface deserves to
     // know how much of it has actually been checked.
     [
@@ -1049,10 +1053,7 @@ function indexMd(): string {
 
 function rankingsMd(): string {
   // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
-  // Our own programs are listed but never ranked (SAME_TEAM_SLUGS), as on the HTML page.
-  const verified = sitePrograms.filter((p) => isLive(p) && p.verified)
-  const ranked = verified.filter((p) => !isSameTeam(p.slug))
-  const unranked = verified.filter((p) => isSameTeam(p.slug))
+  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified)
   const inGroup = (g: CommissionGroup) => {
     const list = ranked.filter((p) => commissionGroup(p.commission) === g)
     return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
@@ -1121,7 +1122,6 @@ function rankingsMd(): string {
     section("Programs paying a percentage of the sale", programLines("percent")),
     section("Programs paying a flat amount", programLines("flat")),
     section("Tiered, hybrid and other commissions", programLines("other")),
-    unranked.length ? `Not ranked: ${unranked.map((p) => `[${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) (${SAME_TEAM_LABEL})`).join(", ")}.` : null,
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),
@@ -1203,7 +1203,7 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
     `# ${mdHeading(postTitle(post, selection))}`,
     range ? `By the OpenAffiliate team · Terms checked between ${range[0]} and ${range[1]}` : null,
     `> ${mdEscapeProse(post.intro)}`,
-    `${DISCLOSURE}${sameTeam(post, selection) ? ` ${SAME_TEAM}` : ""}`,
+    DISCLOSURE,
     section("Programs", rows),
     section(
       "How we chose",
@@ -1248,6 +1248,7 @@ function write(relPath: string, body: string): void {
 }
 
 function main(): void {
+  generateSkills(process.cwd())
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
   for (const dir of ["programs", "categories", "networks", "best"]) {
@@ -1287,6 +1288,28 @@ function main(): void {
     const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
     write(`networks/${networkToSlug(n)}.md`, networkMd(n, inNet))
   }
+
+  // Proxy needs only paths, not registry data or Markdown bodies in its bundle.
+  // Discover HTML routes from source so unsupported pages retain their HTML response.
+  const app = join(process.cwd(), "src/app")
+  const appFiles = readdirSync(app, { recursive: true }).map(String)
+  const publicFiles = readdirSync(OUT, { recursive: true, withFileTypes: true })
+    .filter((entry) => entry.isFile())
+    .map((entry) => join(entry.parentPath, entry.name).slice(OUT.length))
+  const html = appFiles
+    .filter((path) => path.endsWith("page.tsx"))
+    .map((path) => "/" + path.replace(/(^|\/)page\.tsx$/, "").replace(/\/$/, ""))
+  const handlers = appFiles.filter((path) => path.endsWith("route.ts"))
+    .map((path) => "/" + path.replace(/(^|\/)route\.ts$/, ""))
+  // Next's file-based metadata endpoints are not route.ts files.
+  handlers.push("/robots.txt", "/sitemap.xml", "/favicon.ico", "/opengraph-image", "/programs/[slug]/opengraph-image")
+  const manifest = {
+    markdown: publicFiles.filter((path) => path.endsWith(".md")).sort(),
+    html: html.sort(),
+    assets: publicFiles.filter((path) => !path.endsWith(".md")).sort(),
+    handlers: handlers.sort(),
+  }
+  writeFileSync(join(process.cwd(), "src/lib/agentic-paths.json"), JSON.stringify(manifest, null, 2) + "\n")
 
   const verified = programs.filter(listedVerified).length
   console.log(`Markdown surface generated:`)

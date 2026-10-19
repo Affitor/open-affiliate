@@ -19,7 +19,7 @@ commission:
 payout:
   minimum: 5
   currency: USD
-  frequency: monthly
+  # Schedule left unassessed: the published end-of-third-following-month payment lag exceeds sixty days and has no matching enum. No absence marker.
   conditions: Commission payments will be made at the end of the third month following the date upon which the commission is earned.
 signup_url: https://elevenlabs.io/affiliates
 approval: auto
@@ -69,7 +69,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 status: active
 kind: affiliate

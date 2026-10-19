@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
+import { AffitorLink } from "@/components/affitor-link";
+import { affitorUrl } from "@/lib/affitor-link";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -185,7 +187,7 @@ function Footer() {
           <ThemeToggle />
         </div>
         <p className="mt-4 text-xs text-muted-foreground/80">
-          Maintained by Affitor. Listings are free; rankings are never paid.
+          Maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="hover:underline">Affitor</AffitorLink>. Listings are free; rankings are never paid.
         </p>
       </div>
     </footer>

@@ -6,7 +6,7 @@
     "packages/*"
   ],
   "scripts": {
-    "predev": "npm run registry:build",
+    "predev": "npm run registry:build && npm run md:build",
     "dev": "next dev",
     "prebuild": "npx tsx scripts/build-registry.ts && npx tsx scripts/build-oas.ts && npx tsx scripts/generate-md.ts",
     "build": "next build",
@@ -54,6 +54,7 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "ajv": "^8.20.0",
     "eslint": "^9",
     "eslint-config-next": "16.4.2",
     "tailwindcss": "^4",
