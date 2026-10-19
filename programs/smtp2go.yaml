@@ -19,8 +19,23 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
+  methods:
+  - paypal
+  - stripe
+  conditions: The affiliate page describes monthly PayPal or Stripe withdrawals, verified and available in the month after the commission is earned; its example releases February earnings on March 16.
 signup_url: https://affiliates.smtp2go.com/
-restrictions: null
+restrictions:
+- Do not use PPC advertising to promote SMTP2GO directly.
+- No coupon websites or websites claiming service discounts or promo codes.
+- Do not purchase an SMTP2GO account for your own use through your affiliate account.
+- No unsolicited email; comply with CAN-SPAM.
+- No promotion or links from adult, gambling or offensive websites.
+- Do not promote on websites with inappropriate content.
+- No promotion on Reddit or other public forums.
+- Do not register or use domains containing smtp2go or similar wording.
+- Do not disparage or misrepresent SMTP2GO or use scam claims as a marketing tactic.
+- Do not bid on or seek rights in SMTP2GO copyrights, service marks or trademarks.
+- Do not frame SMTP2GO sales pages or its website on your domain using iframes or similar methods.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -43,7 +58,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.minimum: '2026-10-18'
+  approval: '2026-10-18'

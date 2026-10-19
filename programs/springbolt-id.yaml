@@ -45,7 +45,14 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 90
+payout:
+  methods:
+  - paypal
+  - stripe
+  frequency: monthly
+  conditions: Monthly PayPal or Stripe withdrawals are verified and available in the month after commissions are earned; the program listing illustrates February earnings as available on March 16. Unspecified alternatives may be available in regions without PayPal.

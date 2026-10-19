@@ -18,7 +18,26 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/quartile
-restrictions: null
+restrictions:
+- Act only as a finder; do not negotiate, execute agreements, give warranties or otherwise bind Quartile.
+- Use Quartile names, approved marks and promotional assets only as licensed for the agreement; other use needs prior written consent.
+- You and your employees, contractors, agents and subcontractors must comply with applicable laws, rules and industry standards.
+- Do not make unapproved statements about Quartile, services, prices, capabilities or terms, or overstate your relationship.
+- During the agreement and for 12 months after it ends, do not directly or indirectly solicit or induce any then-current Quartile customer, including eligible referrals, to reduce, terminate or transfer business or buy competing services.
+- During the agreement and for 12 months afterward, do not directly or indirectly recruit, solicit, hire or attempt to hire Quartile employees or contractors involved in the agreement without written consent; general public job solicitations that otherwise comply are excepted.
+- Protect confidential information, use it only to perform the agreement, and do not disclose it without consent except as legally required; disclosed-to personnel must have equally protective written duties.
+- Return or destroy confidential information when the agreement ends and certify destruction if requested.
+- Do not assign, delegate or transfer agreement rights or duties without Quartile’s prior written consent.
+- No self-referrals, including controlled or commonly controlled entities, affiliates, principals, officers, directors, employees or immediate family members; commissions may be withheld or recovered.
+- Submit referrals in good faith based on a reasonable belief in genuine interest; do not make false, misleading or deceptive claims, and comply with anti-bribery, anti-corruption and privacy law.
+- Register prospects through Quartile’s designated process before introductions or solicitation; registration and later conversion approval are required.
+- Known prospects, CRM records, active discussions with Quartile or its affiliates or representatives can be rejected.
+- Referrals introduced before registration can be rejected.
+- Quartile-sourced prospects and those introduced by another referral source, reseller, partner or channel can be rejected.
+- Prospects must meet current eligibility, minimum-revenue and product-fit requirements; an unanswered registration is denied.
+- The agreement prohibits coupon, discount and other passcodes and uses CRM tracking; the public listing separately advertises a 40% discount offer, so do not assume unrestricted code use.
+- Quartile may terminate after 180 consecutive days without approved active registrations or active eligible customers.
+- Stop using Quartile names, marks and IP when the agreement ends.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -42,7 +61,18 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 90
+payout:
+  frequency: net-30
+  methods:
+  - bank
+  - paypal
+  - stripe
+  conditions: The agreement provides for wire transfer within 30 days after Quartile receives the corresponding sales revenue. The program listing separately describes monthly PayPal or Stripe withdrawals, verified and available in the following month, with February earnings illustrated as available on March 16. Deal-size and revenue eligibility thresholds also apply.
+not_published:
+  payout.minimum: '2026-10-18'
+  approval: '2026-10-18'

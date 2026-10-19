@@ -17,7 +17,19 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/teikametricsinc
-restrictions: null
+restrictions:
+- Referrers must be PartnerStack partners.
+- The referred company must be legally distinct from your current employer and any employer from the prior five years.
+- Do not refer your own company; self-referrals are ineligible.
+- Referrals must be new customers, excluding both current and previous Teikametrics customers.
+- Exclude companies that had active sales discussions during the prior six months.
+- Exclude companies currently in an opportunity or contract negotiation.
+- A new annual contract is required; upsells and renewals do not qualify.
+- Referrer earnings are capped at $30,000 per year.
+- When accessing the Teikametrics platform, do not access data or accounts without authorization.
+- Do not probe platform or network vulnerabilities or bypass security or authentication without authorization.
+- Do not access the platform without authorization or contrary to its terms or applicable law.
+- Do not use automated tools to access or copy platform data, deep-link platform features or bypass its access controls; do not interfere with platform operation. This applies to the software platform, distinct from the public corporate site.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -40,7 +52,14 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  conditions: Referral rewards become eligible after a new customer signs an eligible annual contract, pays the first invoice and remains an active paying customer in good standing for 90 days from the contract start. Referrer earnings are capped at $30,000 per year.
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  approval: '2026-10-18'
