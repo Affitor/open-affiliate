@@ -174,24 +174,34 @@ const digits = (text: string) =>
 /** Currency signs and codes, numbers, words, and single marks, as separate tokens. */
 const TOKEN = /[$€£¥₹]|\d+(?:\.\d+)?|[A-Za-z]+|[^\sA-Za-z\d]/g
 const JOIN = new Set([",", "-", "–", "or", "and", "to"])
-const amountMark = (token: string | undefined) => token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token))
+/** A number right after one of these is an amount ("$100", "USD 100") or a date ("May 31"), never days. */
+const notCount = (token: string | undefined) =>
+  token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*$/.test(token))
+/** "the end of the third month following" waits about 30 days a month. */
+const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
+const MONTHS_AFTER = new RegExp(String.raw`\b(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
+/** A clause about refunds, returns or the cookie, with no payment word, states no payout wait. */
+const NOT_PAYOUT = /\b(?:refund|return|chargeback|cancel|cookie|click)/i
+const PAYMENT = /\b(?:pa(?:id|y\w*)|held|hold\w*|sent|issued|released|disburs\w*|lock\w*|review\w*)\b/i
 
 /**
  * The wait a "days after" names: the largest number of the count written
  * right before it, read token by token backwards: "45", "forty-five (45)",
  * "35-40 business", "120, 60, or 10", "120,60 or 10". A number after a
- * currency sign or code ("$100", "USD 100") is an amount, and like a decimal
- * or any other word it ends the count. 0 when no count precedes. Linear: one
- * pass over at most 200 characters.
+ * currency sign or code ("$100", "USD 1,500") is an amount and one after a
+ * month ("May 31") a date; either, like a decimal or any other word, ends
+ * the count. 0 when no count precedes. Linear: one pass over at most 200
+ * characters.
  */
 function waitBefore(text: string): number {
-  const tokens = digits(text.slice(-200)).match(TOKEN) ?? []
+  // "$1,500": a thousands group is one number, so its last digits are not a count.
+  const tokens = digits(text.slice(-200)).replace(/(\d),(?=\d{3}(?!\d))/g, "$1").match(TOKEN) ?? []
   if (/^(?:business|calendar)$/i.test(tokens.at(-1) ?? "")) tokens.pop()
   let wait = 0
   let counted = false
   for (let i = tokens.length - 1; i >= 0; i--) {
     const t = tokens[i]
-    if (/^\d+$/.test(t) && !amountMark(tokens[i - 1])) {
+    if (/^\d+$/.test(t) && !notCount(tokens[i - 1])) {
       wait = Math.max(wait, Number(t))
       counted = true
     } else if (!(t === "(" || t === ")" || (counted && JOIN.has(t.toLowerCase())))) {
@@ -199,6 +209,22 @@ function waitBefore(text: string): number {
     }
   }
   return wait
+}
+
+/**
+ * The longest wait one clause states: "N days after/following", or "the
+ * Nth month following" at 30 days a month. A clause about refunds, returns
+ * or the cookie that names no payment ("refunds are accepted up to 60 days
+ * after purchase") states none.
+ */
+function clauseWait(clause: string): number {
+  if (NOT_PAYOUT.test(clause) && !PAYMENT.test(clause)) return 0
+  const days = [...clause.matchAll(DAYS_AFTER)].map((m) => waitBefore(clause.slice(0, m.index)))
+  const months = [...clause.matchAll(MONTHS_AFTER)].map((m) => {
+    const word = ORDINALS.indexOf(m[1].toLowerCase())
+    return 30 * (word >= 0 ? word + 2 : Number(m[1][0]))
+  })
+  return Math.max(0, ...days, ...months)
 }
 
 /**
@@ -219,7 +245,7 @@ export function payoutLagProblems(data: Record<string, unknown>): string[] {
   for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
     if (typeof text !== "string") continue
     for (const { sentence } of proseSentences(text)) {
-      const days = Math.max(0, ...[...sentence.matchAll(DAYS_AFTER)].map((m) => waitBefore(sentence.slice(0, m.index))))
+      const days = Math.max(0, ...sentence.split(";").map(clauseWait))
       if (days > 30) {
         problems.push(
           `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +

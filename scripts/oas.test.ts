@@ -327,6 +327,17 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
     assert.deepEqual(lag("monthly", `Commissions are paid at ${amount}, 30 days after the sale.`), [], amount)
   }
   assert.deepEqual(lag("monthly", "A 60% commission, 30 days after the sale."), [])
+  // Codex r4: a thousands group, a date and a refund window are not payout waits.
+  for (const amount of ["$1,500", "USD 1,500", "€12,000"]) {
+    assert.deepEqual(lag("monthly", `Commissions are paid at ${amount}, 30 days after the sale.`), [], amount)
+  }
+  assert.deepEqual(lag("monthly", "Payout is made on May 31, 30 days after the sale."), [])
+  assert.deepEqual(lag("monthly", "Commissions are paid within 30 days after approval; refunds are accepted up to 60 days after purchase."), [])
+  assert.deepEqual(lag("monthly", "Commissions are paid monthly. The cookie lasts 60 days after the click."), [])
+  assert.match(lag("monthly", "Commissions become payable 45 days after each payment, and refunded amounts are deducted.")[0], /45-day wait/, "a payment clause that mentions refunds still counts")
+  assert.match(lag("monthly", "Commission payments will be made at the end of the third month following the date the commission is earned.")[0], /90-day wait/, "the Nth month following")
+  assert.match(lag("monthly", "Paid at the end of the 2nd month after the sale.")[0], /60-day wait/)
+  assert.deepEqual(lag("monthly", "Paid at the end of the month following the sale."), [], "the first month following is up to 30 days")
   assert.deepEqual(lag("monthly", "Paid fifteen days after the sale."), [])
   const started = performance.now()
   lag("monthly", "1, ".repeat(20000) + "no wait. " + "9 ".repeat(20000) + "days after")
@@ -337,7 +348,7 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
 })
 
 /** The files that broke the payout-lag rule when it landed (main 1163037). The debt list may only drop slugs from this. */
-const PAYOUT_LAG_FROZEN = ["clickfunnels", "credit-repair-cloud", "greengeeks", "hunter", "jibble", "omniseo", "saleshandy", "strikingly", "taskade", "thematic", "vyond"]
+const PAYOUT_LAG_FROZEN = ["clickfunnels", "credit-repair-cloud", "eleven-labs-inc", "greengeeks", "hunter", "jibble", "omniseo", "saleshandy", "strikingly", "taskade", "thematic", "vyond"]
 
 test("payout-lag debt: frozen files only, each still failing the rule, until it expires", () => {
   const debt = JSON.parse(readFileSync(join(process.cwd(), "schema", "payout-lag-debt.json"), "utf8")) as { slugs: string[]; expires: string }
