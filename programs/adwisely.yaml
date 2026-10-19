@@ -20,7 +20,14 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://help.adwisely.com/en/articles/12783248-adwisely-affiliate-program
-restrictions: null
+# "Self-referrals are not permitted." (help.adwisely.com/en/articles/12783248-adwisely-affiliate-program, checked 2026-10-18)
+# "100+ orders in the last 90 days" (same page, checked 2026-10-18)
+restrictions:
+  - "Referred Shopify stores must have at least 100 orders in the last 90 days and install Adwisely through the unique referral link"
+  - "Clients must remain subscribed and pay for Adwisely to qualify for payouts"
+  - "Manual referrals require approval and a clear, detailed explanation for the missing referral link"
+  - "No self-referrals"
+# cookie_days, payout.minimum, payout.methods, payout.frequency and approval: not assessed; the linked deck and PartnerStack portal are robots-blocked (checked 2026-10-18).
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -43,7 +50,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

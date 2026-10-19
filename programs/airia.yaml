@@ -12,11 +12,20 @@ commission:
   value: 10
   currency: USD
   duration: "12 months"
-  conditions: "10% on new software sales for the first year (PartnerStack listing). The extra 20% bonus ran only through March 2026."
+  conditions: "10% of a referred customer's monthly software subscription fees for up to the first 12 months; execution, token and consumption fees are excluded. A registered lead must be accepted by Airia, subscribe within 90 days and remain subscribed for at least 90 days. Refunds may reduce or reverse referral fees. The extra 20% PartnerStack listing bonus ran only through March 2026."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/airia
-restrictions: null
+# "Our partnerships team reviews every submission" (airia.com/partners/, checked 2026-10-18)
+approval: manual
+# "prior written consent before posting each Publication" (airia.com/legal/PartnerStack-PTC.pdf, section 3.1, checked 2026-10-18)
+restrictions:
+  - "Register proposed customers with Airia; leads contacted by Airia, submitted by another partner, or already a customer, partner or supplier within the previous six months are rejected"
+  - "Accepted leads must subscribe within 90 days and retain their subscription for at least 90 days"
+  - "Obtain prior written consent for each promotion using Airia marks and follow its branding guidelines"
+  - "Do not make unauthorized statements or commitments on Airia's behalf or offer discounts or special terms"
+# cookie_days: not assessed; the PDF's 90-day registered-lead window is not a stated cookie lifetime.
+# payout: not assessed; the PDF refers to a generic PartnerStack payout overview, not brand-specific rails or a numeric minimum.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -39,7 +48,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
