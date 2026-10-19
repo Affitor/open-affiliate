@@ -780,4 +780,9 @@ test("payout conditions reach REST, MCP and the .md twin for a verified program,
   assert.equal(off.includes(text), false)
   assert.deepEqual(termsMdProblems({ ...p, verified: false }, off), [])
   assert.deepEqual(confirmedTerms({ ...p, verified: false }).payout, {})
+  // The .md check reads the line as generate-md writes it: line breaks collapsed, < > & as entities.
+  const odd = "Paid after <30 days> & the\nrefund window *ends*."
+  const md = programMd({ ...entry, payout: { ...entry.payout, conditions: odd } })
+  assert.deepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, md), [])
+  assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
 })

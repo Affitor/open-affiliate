@@ -1384,6 +1384,8 @@ async function checkServedPages(): Promise<string> {
     // A verified program with an approval time, and a paused one, for the checks below.
     const onTime = termsPages.find((p) => termsConfirmed(p) && p.approval && p.approvalTime && p.payout.frequency);
     const pausedPage = termsPages.find((p) => p.status === "paused");
+    const withConditions = termsPages.find((p) => termsConfirmed(p) && p.payout.conditions);
+    if (!withConditions) fail("the page checks need a verified program with payout conditions");
     if (!onTime || !pausedPage) fail("the page checks need a verified program with approval, approval time and payout frequency, and a paused program");
     if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
     const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
@@ -1411,7 +1413,7 @@ async function checkServedPages(): Promise<string> {
         const join = pausedJoinLabel(html);
         if (join) fail(`${page} shows a join button ("${join}") for a paused program`);
       }
-      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage) kept.set(program, html);
+      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
@@ -1465,6 +1467,12 @@ async function checkServedPages(): Promise<string> {
     ] as const) {
       if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
     }
+    // Payout conditions: required as stored on a verified page, found anywhere on an unverified one.
+    const conditionsHtml = kept.get(withConditions)!.replace(/<p data-term="payout-conditions"[^>]*>[\s\S]*?<\/p>/, "");
+    if (termsHtmlProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
+    const offConditions = { ...off, payout: { ...off.payout, conditions: withConditions.payout.conditions } };
+    const conditionsFlight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ payout: { conditions: withConditions.payout.conditions } }))}])</script>`;
+    if (termsHtmlProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
     if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
       fail("the paused-page check passed a paused page with a join button");
     }

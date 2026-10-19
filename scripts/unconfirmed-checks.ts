@@ -209,9 +209,8 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
     if (approval && termRow(own, "approval", "Approval") !== approval) {
       problems.push(`does not show its approval and approval time ("${approval}")`)
     }
-    // Under "From click to payout", which a paused page leaves out.
     const conditions = /<p data-term="payout-conditions"[^>]*>([\s\S]*?)<\/p>/.exec(own)?.[1]
-    if (p.payout.conditions && (p.status ?? "active") === "active" && (conditions == null || decodeEntities(conditions) !== p.payout.conditions)) {
+    if (p.payout.conditions && (conditions == null || decodeEntities(conditions) !== p.payout.conditions)) {
       problems.push("does not show its payout conditions")
     }
     return problems
@@ -235,6 +234,10 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   }
   const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
+  // Read whole, not by sentence: "paid 60 days after the transaction" names no term word.
+  if (p.payout.conditions && [...blocks, ...flight].map(squash).join("\n").includes(squash(p.payout.conditions))) {
+    problems.push("carries its payout conditions")
+  }
   for (const label of [">Restrictions</h2>", ">Use cases:</p>", ">Rules before you promote</h2>"]) {
     const at = own.indexOf(label)
     if (at === -1) continue
@@ -273,7 +276,9 @@ export function termsMdProblems(p: Program, md: string): string[] {
       .filter(Boolean)
       .join(", ")
     if (payout && line("Payout: ") !== `Payout: ${payout}`) problems.push(`does not show its payout (${payout})`)
-    if (p.payout.conditions && line("Payout conditions: ") !== `Payout conditions: ${p.payout.conditions}`) problems.push("does not show its payout conditions")
+    // As generate-md writes an inline fact: line breaks collapsed, < > & as entities.
+    const conditions = p.payout.conditions?.replace(/\s*[\r\n]+\s*/g, " ")
+    if (conditions && decodeEntities(line("Payout conditions: ") ?? "") !== `Payout conditions: ${conditions}`) problems.push("does not show its payout conditions")
     const approval = p.approval ? `Approval: ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : null
     if (approval && line("Approval: ") !== approval) problems.push(`does not show its approval (${approval})`)
     return problems
