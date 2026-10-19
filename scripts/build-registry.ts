@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
 import { aliasRoutes, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
+import { createdAtProblems } from "./created-at-rules"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
 const PROGRAMS_DIR = join(process.cwd(), "programs")
@@ -57,6 +58,7 @@ const REQUIRED_FIELDS = [
   "description",
   "short_description",
   "agents",
+  "created_at",
 ]
 
 type ProgramKind =
@@ -121,6 +123,8 @@ interface YamlProgram {
 }
 
 function validateProgram(data: Record<string, unknown>, filename: string): void {
+  const dates = createdAtProblems(data)
+  if (dates.length) throw new Error(`${filename}: ${dates.join("; ")}`)
   for (const field of REQUIRED_FIELDS) {
     if (data[field] === undefined || data[field] === null) {
       throw new Error(`Missing required field "${field}" in ${filename}`)

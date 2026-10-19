@@ -1,3 +1,4 @@
+import { SaveButton } from "@/components/save-button";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -293,6 +294,7 @@ export default async function ProgramPage({
             </div>
           )}
           <h2 id="earn-heading" className="oa-label">{panelLabel}</h2>
+          {(noProgram || paused) && <div className="mt-5"><SaveButton slug={program.slug} name={program.name} /></div>}
           {noProgram ? (
             <>
               <p className="text-display font-semibold tracking-tight mt-2">None</p>
@@ -322,11 +324,12 @@ export default async function ProgramPage({
                 </dl>
               )}
               {!paused && (
-                <div className="mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
+                  <SaveButton slug={program.slug} name={program.name} />
                 </div>
               )}
               {paused && hasAlternatives && (
