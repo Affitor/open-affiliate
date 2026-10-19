@@ -15,8 +15,9 @@ commission:
     40% recurring commission on each new referred subscriber after 100, until 1,000.
     50% recurring commission on each new referred subscriber after 1,000.
     The higher rate applies only to new subscribers after each threshold. Earlier referred subscribers keep the rate that applied when they first subscribed, including on renewals, while the subscription remains active.
-    Commission is calculated on net subscription revenue after the 15% Apple App Store or Google Play store fee. Refunds and similar adjustments can still reduce commission. Commissions become payable only after Apple or Google remits the related subscription revenue and a 30-day hold has cleared for that commission (including renewals). Eligible commissions are then paid monthly, subject to the $50 minimum.
-cookie_days: 90
+    Commission is calculated on net subscription revenue after the 15% Apple App Store or Google Play store fee. Refunds and similar adjustments can still reduce commission.
+    Each commission is subject to a 30-day hold after the qualifying paid subscription event (including renewals). Eligible commissions are then paid monthly, subject to the $50 minimum.
+  cookie_days: 90
 
 payout:
   minimum: 50
@@ -26,7 +27,7 @@ short_description: "PrayBefore is a Christian app that helps people build daily 
 description: |
   PrayBefore is a Christian prayer and Bible app that helps people build a consistent daily prayer habit and put God before digital distractions.
 
-  Its core feature, Prayer Lock, helps users reduce distracting phone use by locking selected apps until they pray. The app also includes Bible content, prayer journaling, prayer insights, and other tools for building a stronger prayer routine.
+  Its core feature helps users reduce distracting phone use by locking selected apps until they pray. The app also includes Bible content, prayer journaling, prayer insights, and other tools for building a stronger prayer routine.
 
   Approved affiliates can earn recurring commission on referred paid subscriptions, with rates of 30%, then 40%, then 50% based on the number of referred subscribers. The rate that applies when a subscriber joins stays on that subscriber’s renewals while the subscription remains active.
 
