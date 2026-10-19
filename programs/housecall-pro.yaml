@@ -28,7 +28,32 @@ payout:
 signup_url: https://www.housecallpro.com/paid-affiliates/
 approval: manual
 approval_time: a few days
-restrictions: null
+# Restrictions assessed 2026-10-19 from brand-published captures dated 2026-10-18; https://docs.google.com/document/d/1hbdzhRnI-ROMbl1jVuF5iKBGZrpjemIJbt2PXkjbbAw/edit?tab=t.0
+restrictions:
+  - "Refer genuine home-service businesses only in the United States or Canada, using accurate contact information and genuine intent to be contacted"
+  - "Do not submit fabricated, incomplete or intentionally incorrect leads"
+  - "Do not complete a lead or trial form on behalf of the identified person"
+  - "Do not encourage prospective customers to give inaccurate or false information"
+  - "Do not use bots, scripts or other automated lead-generation tools, iframe manipulation, hidden frames or deceptive techniques to generate unintentional clicks or submissions"
+  - "Do not participate in or promote Housecall Pro through get-paid-fast referral groups or schemes seeking non-genuine leads for financial gain"
+  - "Existing active Housecall Pro accounts, add-on purchases, enrollments canceled within thirty-one days, failed initial payments and enrollments more than ninety days after referral do not qualify for enrollment commissions"
+  - "Use promotional materials only to promote and link to Housecall Pro; no changes without prior written consent"
+  - "Demo accounts are for personal education only; do not share, copy, display or publicly provide them to third parties"
+  - "Obtain necessary intellectual property permissions; do not publish infringing material"
+  - "Promotional properties must not be subject to existing or threatened intellectual property infringement claims or reasons to expect such claims"
+  - "No promotional properties containing or associated with sexually explicit, obscene or pornographic material"
+  - "No promotional properties containing or associated with offensive, profane, hateful, threatening, harmful, defamatory, libelous, harassing or discriminatory material"
+  - "No promotional properties containing or associated with graphically violent material"
+  - "No promotional properties soliciting unlawful behavior"
+  - "Do not claim ownership of supplied promotional materials or their intellectual property"
+  - "No ads directing to your own site or through any affiliate link that compete with Housecall Pro advertising, including but not limited to branded keywords"
+  - "Do not deliver referrals through mechanisms other than an intended referral, including bots, iframes or hidden frames"
+  - "Do not incentivize referrals"
+  - "Disclose the affiliate relationship and compensation under FTC endorsement rules"
+  - "Lead exhaustion above 35% may cause termination and exhausted-lead payout clawbacks; exhausted statuses include bad contact information, do not call, not target prospect and not yet interested"
+  - "Clearly tell your network that Housecall Pro supports only the United States and Canada; more than three out-of-region referrals end earning eligibility"
+  - "Do not bind Housecall Pro to agreements or represent yourself as its agent"
+  - "Do not misrepresent Housecall Pro or its services"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
