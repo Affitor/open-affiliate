@@ -84,12 +84,16 @@ function sameFigure(stored: string, display: string): boolean {
 
 /**
  * True when the stored rate of a flat amount is that amount and nothing else, under
- * any currency mark ("$100" for an AUD 100, "100 EUR"): the figure, written in the
+ * a currency mark ("$100" for an AUD 100, "100 EUR"): the figure, written in the
  * program's currency, says the same. A qualifier ("up to €200", "from £10") is kept.
  */
 function bareAmount(stored: string, c: Program["commission"]): boolean {
-  const amount = stored.replace(/[\s,]/g, "").match(/^(?:[a-z]{1,3})?[$€£¥₹]?(\d+(?:\.\d+)?)(?:[a-z]{3})?$/i)
-  return c.mode === "flat" && Boolean(c.currency) && amount != null && Number(amount[1]) === c.value
+  const code = c.currency?.trim().toUpperCase()
+  if (c.mode !== "flat" || !code || !/^[A-Z]{3}$/.test(code)) return false
+  // Only a currency mark may stand beside the number: a bare symbol or the program's own code.
+  const mark = `(?:[$€£¥₹]|${code})`
+  const amount = stored.replace(/[\s,]/g, "").match(new RegExp(`^(?:${mark})?(\\d+(?:\\.\\d+)?)(?:${code})?$`))
+  return amount != null && Number(amount[1]) === c.value
 }
 
 /** "22% recurring for 12 months", or the text alone. */

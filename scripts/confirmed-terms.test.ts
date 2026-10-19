@@ -797,6 +797,16 @@ test("a flat commission reads in the program's own currency, and with none the r
   // A bare amount under another mark is the figure in the program's currency; a qualifier stays as written.
   assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$100", value: 100, currency: "AUD" })), { big: "A$100", rest: "per sale", kind: "number" })
   assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "up to €200", value: 200, currency: "EUR" })), { big: "up to €200", rest: "", kind: "text" })
+  for (const [rate, currency, big] of [["100 EUR", "EUR", "€100"], ["USD 100", "USD", "$100"], ["CA$100", "CAD", "CA$100"], ["$100.50", "AUD", "A$100.5"]] as const) {
+    assert.equal(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate, value: Number(rate.replace(/[^\d.]/g, "")), currency }))?.big, big, rate)
+  }
+  // Any other word beside the amount is a qualifier, kept as written.
+  for (const currency of ["USD", "AUD"]) {
+    for (const rate of ["max $100", "MAX $100", "up$100", "UP$100", "per $100", "100 per", "foo100", "$100 cap", "USD 100", "EUR 100", "US$100"]) {
+      if (currency === "USD" && rate === "USD 100") continue
+      assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate, value: 100, currency })), { big: rate, rest: "", kind: "text" }, `${rate} ${currency}`)
+    }
+  }
   assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$25", value: 25, currency: null })), { big: "$25", rest: "per sale", kind: "number" })
   // The estimate multiplies US dollars only: a flat amount with no currency is not one.
   assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", rate: "$250", value: 250, currency: "USD" }))?.value, 250)
