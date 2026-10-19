@@ -21,12 +21,18 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly
-  methods: [bank, paypal]
+  # "Monthly payouts, processed via Stripe or PayPal." (https://www.zebracat.ai/affiliate, checked 2026-10-18); no bank transfer named
+  methods: [paypal, stripe]
 
 signup_url: https://www.zebracat.ai/affiliate
 approval: manual
 approval_time: "1-3 business days"
-restrictions: null
+# "No paid ads or discount/promo code sites. Violations lead to suspension." (https://www.zebracat.ai/affiliate, checked 2026-10-18)
+restrictions:
+  - "No paid ads"
+  - "No discount or promo code sites"
+  - "No paid bidding on \"Zebracat\" or brand misspellings"
+  - "No spam"
 
 marketing_materials: true
 api_available: false
@@ -64,7 +70,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
+updated_at: "2026-10-18"
 last_verified_at: "2026-04-17"
 kind: affiliate
 source: community

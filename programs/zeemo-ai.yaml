@@ -20,11 +20,15 @@ cookie_days: 60
 tracking_method: cookie
 
 # "The minimum cash-out amount is $50. Commissions will be disbursed monthly" (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+# "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days." (zeemo.ai/affiliate-program-terms, checked 2026-10-19) — 30 days after the sale → net-30 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
+  conditions: "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days."
 
+# "Once you are approved, you will receive an follow up email with your personal inviting link from us." (https://zeemo.ai/affiliate-program, checked 2026-10-18)
+approval: manual
 signup_url: https://zeemo.ai/affiliate-program
 restrictions:
   - "No paid advertising or keyword bidding"
@@ -32,6 +36,9 @@ restrictions:
   - "No self-referrals"
   - "Promotional content must cover the product's features, not only discounts"
 
+conflicts:
+  - field: commission.duration
+    quote: "zeemo.ai/affiliate-program: \"Refer to earn 25% commission in perpetuity with no cap\". zeemo.ai/affiliate-program-terms: \"Commissions will be paid for the first 12 payments resulting from referred customers and will cease 12 months after the first sale.\" Checked 2026-10-18."
 marketing_materials: true
 dashboard_url: null
 # "The tracking and payment of commissions will be managed through the third-party Rewardful affiliate platform." (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
@@ -63,10 +70,12 @@ agents:
     - "Creators translating subtitles to reach a global audience"
     - "Marketing teams captioning video at scale"
 
+not_published:
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

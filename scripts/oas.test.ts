@@ -26,7 +26,7 @@ import {
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
-import { NOT_PUBLISHED_FIELDS, notPublishedProblems } from "./program-rules"
+import { NOT_PUBLISHED_FIELDS, notPublishedProblems, payoutLagProblems } from "./program-rules"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
@@ -203,7 +203,7 @@ test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
 
-test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply link and stale are not ranked", () => {
+test("ranking: ties share a rank and every network ranks alike; scoring, no apply link and stale get no rank", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
   const scores = [
     score("top"),
@@ -221,16 +221,17 @@ test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply l
   const board = buildBoard(scores, programs, TODAY)
   const by = Object.fromEntries(board.map((r) => [r.program.slug, r]))
   assert.equal(board.length, 9)
-  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["top", 1], ["tie-a", 2], ["tie-b", 2], ["third", 4]])
-  assert.equal(by["kyma-api"].unranked, "same-team")
-  assert.equal(by["kyma-api"].oas, 100, "same team is scored with the same rules")
-  assert.equal(by["on-affitor"].unranked, "affitor")
+  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["kyma-api", 1], ["on-affitor", 1], ["top", 1], ["tie-a", 4], ["tie-b", 4], ["third", 6]])
+  // Kyma API and programs on the Affitor network rank like any other (Sơn 19/10: the team tag is gone).
+  assert.equal(by["kyma-api"].unranked, null)
+  assert.equal(by["on-affitor"].unranked, null)
   assert.equal(by["scoring"].unranked, "checking")
   assert.equal(by["no-apply"].unranked, "no-apply-link")
   assert.equal(by["stale"].unranked, "checking")
   assert.equal(by["stale"].oas, null)
-  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 2, of: 3, category: "AI" })
-  assert.equal(categoryRank(board, "kyma-api"), null)
+  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 4, of: 5, category: "AI" })
+  assert.deepEqual(categoryRank(board, "kyma-api"), { rank: 1, of: 5, category: "AI" })
+  assert.equal(categoryRank(board, "scoring"), null)
 })
 
 test("rank line: #1 always, others only with 5 or more ranked", () => {
@@ -299,6 +300,107 @@ test("v1.1 markers are validated at build: known terms, real dates, a map", () =
   for (const scalar of ["2026-10-15", null, ["cookie_days"]]) assert.equal(notPublishedProblems({ not_published: scalar }).length, 1, JSON.stringify(scalar))
 })
 
+test("a cadence beside a stated wait over 30 days fails the build: up to 30 days is net-30, 31-60 net-60", () => {
+  const lag = (frequency: string, conditions: string, where: "payout" | "commission" = "commission") =>
+    payoutLagProblems(where === "payout" ? { payout: { frequency, conditions } } : { payout: { frequency }, commission: { conditions } })
+  const hit = lag("monthly", "Paid monthly. Commissions are paid 60 days after the qualifying purchase.")
+  assert.equal(hit.length, 1)
+  assert.match(hit[0], /payout\.frequency is monthly, but commission\.conditions states a 60-day wait \("Commissions are paid 60 days after the qualifying purchase\."\)/)
+  assert.match(lag("monthly", "Payment within 45 days after the end of the calendar month.", "payout")[0], /payout\.conditions states a 45-day wait/)
+  assert.match(lag("twice-monthly", "Commissions are sent 35-40 days after the end of the month.")[0], /40-day wait/, "a range waits its upper number")
+  assert.match(lag("monthly", "Payments will be made within forty-five (45) days after the end of the month.")[0], /45-day wait/, "a number in brackets")
+  assert.match(lag("monthly", "It is reviewed for 120, 60 or 10 days after the trial.")[0], /120-day wait/, "a list waits its largest number")
+  assert.match(lag("monthly", "It is reviewed for 120, 60, or 10 days after the trial.")[0], /120-day wait/, "with an Oxford comma")
+  assert.match(lag("monthly", "Paid 45 business days following the sale.")[0], /45-day wait/)
+  assert.match(lag("monthly", "Commissions are paid 120,60 or 10 days after the sale.")[0], /120-day wait/, "a list without spaces")
+  assert.match(lag("monthly", "Commissions are paid 60 or 0 days after the sale.")[0], /60-day wait/, "a zero does not end the list")
+  assert.match(lag("monthly", "Paid within sixty calendar days after the month ends.")[0], /60-day wait/, "a number in words")
+  assert.match(lag("monthly", "Paid within forty-five days after the month ends.")[0], /45-day wait/)
+  for (const f of ["weekly", "bi-weekly", "daily"]) assert.equal(lag(f, "Paid 31 business days following the sale.").length, 1, f)
+  assert.equal(lag("monthly", "Paid 31 days after sale. Held 45 days after the refund window.").length, 2, "one problem per sentence")
+  // Not a cadence, or no wait over 30 days, or no wait at all.
+  for (const f of ["net-30", "net-60", "quarterly", "on-request"]) assert.deepEqual(lag(f, "Paid 60 days after the sale."), [], f)
+  assert.deepEqual(lag("monthly", "Paid 30 days after the end of the month."), [])
+  assert.deepEqual(lag("monthly", "Release 2.45 days after launch."), [], "a decimal is not a wait")
+  assert.deepEqual(lag("monthly", "Commissions are paid at $100, 30 days after the sale."), [], "an amount is not a wait")
+  assert.deepEqual(lag("monthly", "Paid at $100 or 30 days after the sale."), [])
+  for (const amount of ["USD 100", "$ 100", "US$100", "€100", "100 USD"]) {
+    assert.deepEqual(lag("monthly", `Commissions are paid at ${amount}, 30 days after the sale.`), [], amount)
+  }
+  assert.deepEqual(lag("monthly", "A 60% commission, 30 days after the sale."), [])
+  // Codex r4: a thousands group, a date and a refund window are not payout waits.
+  for (const amount of ["$1,500", "USD 1,500", "€12,000"]) {
+    assert.deepEqual(lag("monthly", `Commissions are paid at ${amount}, 30 days after the sale.`), [], amount)
+  }
+  assert.deepEqual(lag("monthly", "Payout is made on May 31, 30 days after the sale."), [])
+  assert.deepEqual(lag("monthly", "Commissions are paid within 30 days after approval; refunds are accepted up to 60 days after purchase."), [])
+  assert.deepEqual(lag("monthly", "Commissions are paid monthly. The cookie lasts 60 days after the click."), [])
+  assert.match(lag("monthly", "Commissions become payable 45 days after each payment, and refunded amounts are deducted.")[0], /45-day wait/, "a payment clause that mentions refunds still counts")
+  assert.match(lag("monthly", "Commission payments will be made at the end of the third month following the date the commission is earned.")[0], /90-day wait/, "the Nth month following")
+  assert.match(lag("monthly", "Paid at the end of the 2nd month after the sale.")[0], /60-day wait/)
+  assert.deepEqual(lag("monthly", "Paid at the end of the month following the sale."), [], "the first month following is up to 30 days")
+  // Codex r5.
+  assert.deepEqual(lag("monthly", "Commissions are paid within 30 days after approval; refunds are accepted up to 60 days after payment."), [])
+  assert.deepEqual(lag("monthly", "Paid within 30 days after approval; refund requests must be sent within 60 days after purchase."), [])
+  assert.deepEqual(lag("monthly", "Commissions are paid monthly for sales made through the third month following signup."), [], "a duration, not a wait")
+  assert.deepEqual(lag("monthly", "Payout is made on May 31, 2026, 30 days after the sale."), [], "a year is not days")
+  assert.deepEqual(lag("monthly", "Payout is made on MARCH 31, 30 days after the sale."), [])
+  // Codex r6.
+  for (const text of [
+    "Commissions are paid within 30 days after approval; refunds are issued within 60 days after purchase.",
+    "Commissions are paid within 30 days after approval; refunds are paid within 60 days after purchase.",
+    "Commissions are paid monthly, and customers can request refunds within 60 days after purchase.",
+    "Commissions are paid monthly through the end of the third month following signup.",
+    "Commissions are paid monthly until the end of the third month following signup.",
+    "Payout is made on 2026-05-31, 30 days after the sale.",
+    "Payout is made on 05/31, 30 days after the sale.",
+  ]) assert.deepEqual(lag("monthly", text), [], text)
+  assert.deepEqual(lag("monthly", "After the refund period, commissions are paid 45 days after the sale."), [], "precision over recall: a refund word earlier in the clause skips it")
+  // Codex r7.
+  for (const text of [
+    "Commissions are paid monthly; refund requests are accepted for up to 60 days after purchase.",
+    "Commissions are paid monthly and stop at the end of the third month following signup.",
+    "Payout is made on 05-31, 30 days after the sale.",
+  ]) assert.deepEqual(lag("monthly", text), [], text)
+  // Codex r8.
+  for (const text of [
+    "Commissions are paid monthly; customers may request a refund, for any reason, within 60 days after purchase.",
+    "Payout is made on 10-31, 30 days after the sale.",
+    "Commissions are paid monthly; refunds are issued at the end of the second month following cancellation.",
+  ]) assert.deepEqual(lag("monthly", text), [], text)
+  assert.match(lag("monthly", "Paid on all ClickFunnels plans as long as the account stays in good status for 45 days after the sale.")[0], /45-day wait/, "a brand name is not the word click")
+  assert.match(lag("monthly", "Paid 60/90 days after the sale.")[0], /90-day wait/, "a slash range is not a date")
+  assert.match(lag("monthly", "Commissions are sent 10-15 or 45 days after the sale.")[0], /45-day wait/, "10-15 is a range")
+  for (const text of ["Payouts are monthly;" + ";".repeat(140000), "Paid 30 days after sale, ".repeat(140000)]) {
+    assert.deepEqual(lag("monthly", text), [], "a long text is read without overflowing the stack")
+  }
+  assert.deepEqual(lag("monthly", "Paid fifteen days after the sale."), [])
+  const started = performance.now()
+  lag("monthly", "1, ".repeat(20000) + "no wait. " + "9 ".repeat(20000) + "days after")
+  assert.ok(performance.now() - started < 500, "a long list is read in one pass")
+  assert.deepEqual(lag("monthly", "Customers must stay subscribed for 90 days. A 60-day cookie."), [])
+  assert.deepEqual(payoutLagProblems({}), [])
+  assert.deepEqual(payoutLagProblems({ payout: { frequency: "monthly", conditions: null } }), [])
+})
+
+/** The files that broke the payout-lag rule when it landed (main 1163037). The debt list may only drop slugs from this. */
+const PAYOUT_LAG_FROZEN = ["clickfunnels", "credit-repair-cloud", "eleven-labs-inc", "greengeeks", "hunter", "jibble", "omniseo", "saleshandy", "strikingly", "taskade", "thematic", "vyond"]
+
+test("payout-lag debt: frozen files only, each still failing the rule, until it expires", () => {
+  const debt = JSON.parse(readFileSync(join(process.cwd(), "schema", "payout-lag-debt.json"), "utf8")) as { slugs: string[]; expires: string }
+  const dir = join(process.cwd(), "programs")
+  const failing = readdirSync(dir)
+    .filter((f) => f.endsWith(".yaml"))
+    .map((f) => parse(readFileSync(join(dir, f), "utf8")) as Record<string, unknown>)
+    .filter((p) => payoutLagProblems(p).length > 0)
+    .map((p) => String(p.slug))
+  assert.deepEqual(debt.slugs.filter((s) => !failing.includes(s)), [], "a fixed file leaves the list")
+  assert.deepEqual(debt.slugs.filter((s) => !PAYOUT_LAG_FROZEN.includes(s)), [], "only files frozen when the rule landed; a new one is fixed, not listed")
+  if (debt.slugs.length > 0) {
+    assert.ok(new Date().toISOString().slice(0, 10) <= debt.expires, `payout-lag-debt.json expired on ${debt.expires}: fix ${debt.slugs.join(", ")}`)
+  }
+})
+
 test("the registry's own YAML: read raw; an absent term is Not published only with its marker (spec 7b.1, v1.1)", () => {
   const dir = join(process.cwd(), "programs")
   const raw = readdirSync(dir).filter((f) => f.endsWith(".yaml")).map((f) => parse(readFileSync(join(dir, f), "utf8")) as ProgramYaml)
@@ -308,7 +410,10 @@ test("the registry's own YAML: read raw; an absent term is Not published only wi
   for (const s of scored) {
     const t8 = s.checks.find((c) => c.id === "T8")!
     const p = bySlug.get(s.slug)!
-    assert.equal(t8.state, Array.isArray(p.restrictions) && !isStale(p.last_verified_at, new Date()) ? "met" : p.not_published?.restrictions && !isStale(p.last_verified_at, new Date()) ? "not_public" : "checking", s.slug)
+    const fresh = !isStale(p.last_verified_at, new Date())
+    // Same as scoreProgram: the last entry for a field wins, and only a non-empty quote counts.
+    const disagree = Boolean(new Map((p.conflicts ?? []).map((c) => [c.field, c.quote])).get("restrictions"))
+    assert.equal(t8.state, !fresh ? "checking" : disagree ? "not_met" : Array.isArray(p.restrictions) ? "met" : p.not_published?.restrictions ? "not_public" : "checking", s.slug)
     if (s.oas != null) assert.equal(s.oas, round1(partEarned(s, "transparency") + partEarned(s, "partner_value")), s.slug)
   }
 })

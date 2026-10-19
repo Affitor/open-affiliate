@@ -1,9 +1,10 @@
-import { formatPercentage } from "./commission-mode"
 import registryData from "./client-registry.json"
 import { compareCommission, compareText } from "./commission-order"
 import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
 
 export const IN_HOUSE = "in-house"
+
+export { commissionChip, commissionDisplay, commissionLabel, cookieChip } from "./program-chips"
 
 export interface ClientProgram {
   slug: string
@@ -15,7 +16,7 @@ export interface ClientProgram {
     rate: string | number
     mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
     value: number | null
-    currency: string
+    currency: string | null
     duration?: string | null
   }
   /** Left out for an unverified program (confirmed-terms.ts). */
@@ -72,42 +73,6 @@ export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
   return programs.find((program) => program.slug === slug)
-}
-
-export function commissionLabel(
-  commission: ClientProgram["commission"],
-  short = false
-): string {
-  const type =
-    commission.type === "recurring"
-      ? short
-        ? "rec"
-        : "recurring"
-      : commission.type
-  if (commission.type !== "recurring" || !commission.duration) return type
-
-  const duration = commission.duration.toLowerCase().trim()
-  if (duration === "lifetime") return `${type}/lifetime`
-  const months = duration.match(/^(\d+)\s*months?$/)
-  return months ? `${type}/${months[1]}mo` : `${type}/${duration}`
-}
-
-export function commissionDisplay(
-  commission: ClientProgram["commission"]
-): string {
-  switch (commission.mode) {
-    case "percentage":
-      return formatPercentage(commission.rate, commission.value)
-    case "flat":
-      return commission.value !== null
-        ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
-        : "Not published"
-    case "tiered":
-    case "hybrid":
-      return String(commission.rate)
-    default:
-      return "Not published"
-  }
 }
 
 /**

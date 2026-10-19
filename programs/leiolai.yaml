@@ -20,7 +20,27 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  methods:
+    - wise
+    - bank
 
+# "Applications are approved automatically." (https://affitor.com/marketplace/leiolai, checked 2026-10-18)
+approval: auto
+# "Do not promote Leiolai on pornographic or adult-entertainment websites, apps, or advertising networks." (https://affitor.com/marketplace/leiolai, checked 2026-10-18)
+restrictions:
+  - No promoting Leiolai on pornographic or adult-entertainment websites, apps or advertising networks
+  - No pornography, sexually explicit material, graphic gore or shock imagery in promotions
+  - No scams, phishing, malware, impersonation, fabricated reviews, misleading product claims or promises of guaranteed income or results
+  - No self-referrals, spam, unsolicited bulk messages, bots, fake clicks, cookie stuffing, or incentivized or fraudulent traffic
+  - No bidding on Leiolai or Entlegnant brand keywords and no registering misleading brand-lookalike domains
+  - Clearly disclose the commission relationship beside the recommendation and referral link (in video/audio, also in the content itself)
+  - Do not imply being a Leiolai employee, its official account, or authorized to speak for the company
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
 signup_url: https://affitor.com/marketplace/leiolai
 network: affitor
 
@@ -47,8 +67,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active

@@ -20,7 +20,15 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  # "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum." (https://affitor.com/marketplace/bankstatementtoexcel, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum."
+  methods:
+    - wise
+    - bank
 
+# "Once bankstatementtoexcel approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/bankstatementtoexcel, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/bankstatementtoexcel
 network: affitor
 
@@ -45,11 +53,21 @@ agents:
     - "Small business owners preparing statements for tax filing"
     - "Freelancers importing transactions into QuickBooks or Xero"
 
+not_published:
+  payout.methods: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active
+restrictions:
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines

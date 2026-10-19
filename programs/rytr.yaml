@@ -61,10 +61,12 @@ agents:
     - "Content creators generating social media and email copy"
     - "Non-English speakers writing in 30+ languages with AI"
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
+updated_at: "2026-10-18"
 last_verified_at: "2026-04-17"
 kind: affiliate
 source: community

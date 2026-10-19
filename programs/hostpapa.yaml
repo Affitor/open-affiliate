@@ -17,10 +17,12 @@ commission:
 # cookie_days: left out; hostpapa.com/affiliates lists "30-Day Cookie Duration" but its FAQ says "The affiliate cookies have a 60-day lifespan." (checked 2026-10-13)
 
 # "You can request a payout via PayPal once you reach your minimum threshold of $100."; "We pay all affiliate partners via PayPal or wire transfer." (hostpapa.com/affiliates, checked 2026-10-13)
+# "Once the 30-day period has passed and provided that you have reached the minimum threshold required in your affiliate account (see the next question), you will be paid approximately 45 days after the initial purchase date." (www.hostpapa.com/about-hostpapa/affiliates/, checked 2026-10-19) — 45 days after purchase → net-60 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "Once the 30-day period has passed and provided that you have reached the minimum threshold required in your affiliate account (see the next question), you will be paid approximately 45 days after the initial purchase date."
   methods: [paypal, bank]
 
 signup_url: https://www.hostpapa.com/affiliates/
@@ -30,6 +32,9 @@ restrictions:
   - "No bidding on HostPapa brand terms, domains or misspellings in search ads"
   - "No self-referrals"
 
+conflicts:
+  - field: cookie_days
+    quote: "hostpapa.com/about-hostpapa/affiliates says both \"30-Day Cookie Duration\" (feature list) and \"The affiliate cookies have a 60-day lifespan.\" (FAQ). Checked 2026-10-18."
 marketing_materials: true
 dedicated_manager: true
 dashboard_url: null
@@ -63,10 +68,12 @@ agents:
     - "Bloggers starting a WordPress site"
     - "Site owners who want hosting, domain and email in one place"
 
+not_published:
+  commission.duration: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

@@ -1,3 +1,4 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
@@ -123,7 +124,7 @@ export default function NetworksPage() {
   const { cards, inHouse, intro, faq } = networksData();
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10">
+    <div className="oa-frame">
       <TrackPageView />
       <script
         type="application/ld+json"
@@ -170,64 +171,57 @@ export default function NetworksPage() {
         }}
       />
 
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Affiliate Networks</h1>
-        {/* The answer first: what a network is and how the registry splits across them. */}
-        <p className="mt-3 max-w-3xl border-l-2 border-emerald-500/40 pl-3 text-sm">{intro}</p>
-      </div>
+      <header className="oa-band !py-8 md:!py-10">
+        <p className="oa-label">Directory</p>
+        <h1 className="mt-2 text-title md:text-display font-semibold tracking-[-0.03em]">Affiliate Networks</h1>
+        <p className="mt-1 font-mono text-meta text-muted-foreground tabular-nums">{cards.length} networks · {inHouse} {inHouse === 1 ? "program" : "programs"} in-house</p>
+      </header>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {cards.map((net) => {
-          const name = networkName(net.network);
-          const meta = NETWORK_META[net.network];
-          return (
-            <Link
-              key={net.network}
-              href={`/networks/${networkToSlug(net.network)}`}
-              className="group flex flex-col rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
-            >
-              <div className="flex items-center gap-3">
-                <ProgramLogo slug={net.network} name={name} src={meta?.logo ?? null} size={40} className="shrink-0" />
-                <div className="min-w-0 flex-1">
-                  <h2 className="text-sm font-semibold truncate group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
-                    {name}
-                  </h2>
-                  <p className="text-xs text-muted-foreground">
+      <section className="oa-band" aria-label="Networks">
+        <ul className="border-t border-border">
+          {cards.map((net) => {
+            const name = networkName(net.network);
+            const meta = NETWORK_META[net.network];
+            return (
+              <li key={net.network} className="border-b border-border">
+                <Link
+                  href={`/networks/${networkToSlug(net.network)}`}
+                  className="group grid grid-cols-[32px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-1 py-3 hover:bg-sunk transition-colors md:grid-cols-[32px_minmax(0,1fr)_110px_190px]"
+                >
+                  <ProgramLogo slug={net.network} name={name} src={meta?.logo ?? null} size={32} className="shrink-0" />
+                  <div className="min-w-0">
+                    <h2 className="text-sm font-semibold group-hover:underline">{name}</h2>
+                    {meta && <p className="line-clamp-2 text-meta text-muted-foreground md:line-clamp-none md:truncate">{meta.description}</p>}
+                  </div>
+                  <span className="hidden md:block">
+                    <Badge variant="outline" className="rounded-[5px] text-xs font-normal text-muted-foreground">{NETWORK_KIND_LABEL[networkKind(net.network)]}</Badge>
+                  </span>
+                  <span className="col-start-2 font-mono text-xs text-muted-foreground tabular-nums md:col-start-auto md:text-right">
                     {`${net.programCount} ${net.programCount === 1 ? "program" : "programs"} · ${net.verified} verified`}
-                  </p>
-                </div>
-                <Badge variant="outline" className="text-[10px] shrink-0">
-                  {NETWORK_KIND_LABEL[networkKind(net.network)]}
-                </Badge>
-              </div>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
-              {meta && <p className="mt-3 text-xs text-muted-foreground leading-relaxed">{meta.description}</p>}
-            </Link>
-          );
-        })}
-      </div>
+        {inHouse > 0 && (
+          <Link
+            href={`/networks/${networkToSlug(IN_HOUSE)}`}
+            className="mt-4 inline-flex items-center gap-1.5 text-sm underline decoration-line-strong underline-offset-4 hover:decoration-current"
+          >
+            {`${inHouse} ${inHouse === 1 ? "program runs" : "programs run"} in-house, with no network`}{" "}
+            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+          </Link>
+        )}
+      </section>
 
-      {inHouse > 0 && (
-        <Link
-          href={`/networks/${networkToSlug(IN_HOUSE)}`}
-          className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          {`${inHouse} ${inHouse === 1 ? "program runs" : "programs run"} in-house, with no network`}{" "}
-          <ArrowRight className="h-3.5 w-3.5" />
-        </Link>
-      )}
-
-      <div className="mt-10 max-w-3xl">
-        <h2 className="text-base font-semibold mb-3">Affiliate networks FAQ</h2>
-        <dl className="space-y-4">
-          {faq.map((f) => (
-            <div key={f.q}>
-              <dt className="text-sm font-medium">{f.q}</dt>
-              <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+      <section className="oa-band" aria-labelledby="networks-faq-h">
+        <div className="max-w-3xl">
+          <h2 id="networks-faq-h" className="text-lg font-semibold mb-3">Affiliate networks FAQ</h2>
+          <FaqAccordion items={faq} />
+        </div>
+      </section>
     </div>
   );
 }

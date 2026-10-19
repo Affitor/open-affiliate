@@ -24,6 +24,7 @@ commission:
 payout:
   minimum: 5
   currency: USD
+  conditions: "Commissions become withdrawable after the reconciliation period shown in the partner dashboard, subject to the $5 minimum. Payouts require any required KYC/KYB verification to be completed and maintained. xTiles may withhold amounts already paid for orders later refunded or cancelled. Termination for convenience takes effect at the end of the current quarterly payment cycle; this clause does not establish a general quarterly withdrawal schedule. Eligible commissions accrued before effective termination remain payable under the payment clause, while referrals not yet eligible at termination are not payable."
 
 signup_url: https://xtiles.app/en/affiliate/
 # "registration is quick and your account is set up automatically" (xtiles.app/en/affiliate, checked 2026-10-17)
@@ -74,8 +75,12 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+
+not_published:
+  cookie_days: "2026-10-19"
+  payout.methods: "2026-10-19"

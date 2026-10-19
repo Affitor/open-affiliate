@@ -18,12 +18,16 @@ commission:
 # cookie window: not published on hosting.com/about/affiliate-program or terms.hosting.com/affiliate-policy (checked 2026-10-13)
 
 # "A $100 commission threshold needs to be met before payments are made." Paid on the 15th via PayPal, bank on request (hosting.com/about/affiliate-program, checked 2026-10-13)
+# "All commissions are approved after 45 days provided the customer remains active, and the sale complies with our affiliate policy." (hosting.com/about/affiliate-program/, checked 2026-10-19) — 45 days after the sale → net-60 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "All commissions are approved after 45 days provided the customer remains active, and the sale complies with our affiliate policy."
   methods: [paypal, bank]
 
+# "Complete your affiliate application and wait for approval." (https://hosting.com/about/affiliate-program/, checked 2026-10-18)
+approval: manual
 signup_url: https://hosting.com/about/affiliate-program/
 restrictions:
   - "No bidding on the hosting.com brand name, its variations or misspellings in PPC"
@@ -64,7 +68,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

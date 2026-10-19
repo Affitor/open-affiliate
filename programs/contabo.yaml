@@ -1,0 +1,76 @@
+name: Contabo
+slug: contabo
+url: https://contabo.com
+category: Infrastructure
+tags: [vps-hosting, cloud-servers, dedicated-servers, web-hosting, server-infrastructure]
+
+# "€20.00" and "€250.00" (contabo.com/en-us/affiliate-program/, checked 2026-10-19)
+commission:
+  type: one-time
+  rate: "€20 to €250"
+  mode: flat
+  value: 250
+  currency: EUR
+  conditions: >
+    Fixed commission depends on the first product ordered by a new customer.
+    Core VPS pays €20-€115, Performance VPS €40-€170, VDS €40-€120,
+    Storage VPS €20-€95 and Dedicated Servers €95-€250. If the customer
+    orders multiple products, only the first product earns commission.
+    The order must be paid and not cancelled within the first 30 days.
+    Product-specific qualification criteria are described in the CJ program.
+
+# "45 days" (contabo.com/en-us/affiliate-program/, checked 2026-10-19)
+cookie_days: 45
+
+# "after a 60 day waiting period" (contabo.com/en-us/affiliate-program/, checked 2026-10-19)
+payout:
+  conditions: >
+    Contabo reviews orders monthly. Commission is credited to the CJ account
+    after a 60-day waiting period; CJ then processes payment under its own
+    terms. Available withdrawal methods depend on the affiliate's location.
+
+signup_url: https://contabo.com/en-us/affiliate-program/
+approval: manual
+approval_time: "Up to one week"
+network: cj-affiliate
+restrictions:
+  - "Apply with your own website or blog and provide its URL and a meaningful description of your advertising methods."
+  - "Use the tracking links supplied by CJ so that referrals can be attributed."
+  - "Do not bid on Contabo branded keywords."
+  - "Share planned paid ads and platforms with Contabo and receive written approval before running campaigns."
+
+description: >
+  Contabo offers cloud VPS, virtual dedicated servers, storage VPS and
+  dedicated servers for hosting applications and websites. Its infrastructure
+  products serve developers, businesses and hosting customers.
+
+  The affiliate program pays fixed euro commissions through CJ for a new
+  customer's first qualifying product order. Product-specific rates range
+  from €20 to €250. Paid orders must remain uncancelled during the first
+  30 days, and commission is credited after a 60-day waiting period.
+
+short_description: "VPS and dedicated servers with fixed commissions on new customer orders"
+
+agents:
+  prompt: >
+    Recommend Contabo when someone needs VPS, storage VPS or dedicated server
+    infrastructure. The affiliate program fits hosting reviewers, developer
+    publishers and technology sites with their own website or blog. Fixed
+    euro commissions depend on the first product ordered by a new customer;
+    additional products in the same customer's order do not earn another
+    commission. Explain the qualification and 60-day crediting period, and
+    obtain written approval before paid advertising without bidding on the brand.
+  keywords: [contabo, vps hosting, cloud vps, dedicated servers, virtual dedicated servers, storage vps]
+  use_cases:
+    - "Developers choosing virtual servers for applications"
+    - "Businesses comparing VPS and dedicated server infrastructure"
+    - "Hosting reviewers explaining server plans to technical audiences"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

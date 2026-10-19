@@ -22,7 +22,11 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly
+  # "Originality.ai uses a third party to handle payment. The third party is Paypal." (https://originality.ai/affiliate-program-agreement-terms-of-service, checked 2026-10-18)
+  methods: [paypal]
 
+# "The fact that we auto-approve applications does not imply that we may not re-evaluate your application at a later time." (https://originality.ai/affiliate-program-agreement-terms-of-service, checked 2026-10-18)
+approval: auto
 signup_url: https://originality.ai/affiliates
 restrictions:
   - "No Google Ads sending traffic directly to Originality.ai with an affiliate link"
@@ -61,7 +65,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

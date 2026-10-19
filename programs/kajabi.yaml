@@ -15,8 +15,10 @@ commission:
 
 # cookie window and payout minimum: not published in Kajabi's Partner Program help articles or agreement (checked 2026-10-12)
 
+# "When signups occur, there is a 60-day hold starting on the date of the referral's payment. Then, once the 60 days have passed, the commission is paid out on the next 25th of the month (or the next business day if the 25th falls on a weekend or holiday)." (help.kajabi.com/en/articles/17175735-become-a-kajabi-partner, checked 2026-10-19) — 60 days after payment → net-60 (backfill rule #1)
 payout:
-  frequency: monthly
+  frequency: net-60
+  conditions: "When signups occur, there is a 60-day hold starting on the date of the referral's payment. Then, once the 60 days have passed, the commission is paid out on the next 25th of the month (or the next business day if the 25th falls on a weekend or holiday)."
   methods: [paypal]
 
 signup_url: https://help.kajabi.com/en/articles/17175735-become-a-kajabi-partner
@@ -59,10 +61,13 @@ agents:
     - "Creators moving courses, community and email onto one platform"
     - "Experts selling coaching sessions and digital downloads"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 status: active
 kind: affiliate

@@ -19,10 +19,12 @@ commission:
 cookie_days: 60
 
 # "pay out at the start of each month via PayPal or bank transfer. The minimum payout is $50." (makeugc.ai/affiliate, checked 2026-10-13); commissions become available 30 days after the payment clears
+# "Commissions become available 30 days after the referred payment clears, then pay out at the start of each month via PayPal or bank transfer." (makeugc.ai/affiliate, checked 2026-10-19) — 30 days after payment → net-30 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
+  conditions: "Commissions become available 30 days after the referred payment clears, then pay out at the start of each month via PayPal or bank transfer."
   methods: [paypal, bank]
 
 signup_url: https://makeugc.ai/affiliate
@@ -64,7 +66,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

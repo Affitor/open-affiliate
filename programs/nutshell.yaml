@@ -19,7 +19,40 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.nutshell.com/partner-program
-restrictions: null
+# Restrictions assessed 2026-10-19 from brand-published captures dated 2026-10-18; https://www.nutshell.com/partner-agreement
+restrictions:
+  - "Competitors of the company or its affiliates cannot participate"
+  - "Do not use your own affiliate link to buy Nutshell products for yourself"
+  - "A transaction does not qualify if its customer pays you referral compensation directly or participates in another Nutshell partner program"
+  - "A transaction does not qualify where referral compensation is legally prohibited or limited, or where the customer objects to or prohibits it or excludes it from payments"
+  - "Do not obtain commissions through fraud, misuse of links or partner tools, program-policy violations or other conduct breaching the spirit of the program"
+  - "Only accepted new customers qualify; existing customers or active sales prospects during the prior sixty days are excluded"
+  - "Do not distribute or resell Nutshell services, bind Nutshell or make unauthorized representations or warranties"
+  - "Use only approved, unaltered trademark images in connection with the partner program"
+  - "Do not use trademarks in misleading or disparaging ways"
+  - "Do not imply Nutshell endorses, sponsors or approves your products or services"
+  - "Do not use trademarks with obscene, indecent or unlawful topics or materials"
+  - "Disclose the affiliate relationship and provide accurate promotional websites and domains"
+  - "No advertising using Nutshell brand terms, variants, sign-up, trial, login, pricing or account terms"
+  - "No advertising competing with, duplicating or reasonably increasing the cost of Nutshell campaigns, even without an affiliate link"
+  - "No affiliate links directly in any ads, including otherwise permitted non-branded advertising"
+  - "No cookie stuffing or pop-ups"
+  - "No false or misleading links"
+  - "Do not mask referring URL information"
+  - "Do not deliver leads other than through an intended consumer; no phonebook or personal-data compilations, fake redirects, automation devices, robots, iframes or hidden frames"
+  - "Do not offer incentives for purchases or sign-ups"
+  - "No deceptive, misleading, illegal or unethical marketing; comply with anti-spam, export and sanctions requirements"
+  - "Do not attack, question or contest company intellectual property ownership during the agreement or afterwards"
+  - "Do not remove, alter or conceal company copyright or proprietary notices"
+  - "Do not use language or display company intellectual property in ways suggesting it belongs to you"
+  - "Complete payment and tax requirements or commissions may be forfeited after six months"
+  - "Do not sublicense, resell or otherwise distribute the company services or licensed rights to customers, end users or other distributors"
+  - "Use services, company marks and marketing materials in line with company standards; do not sell, use, distribute or disclose them without company approval"
+  - "Stop using trademarks immediately on company request"
+  - "After termination or expiration, stop using and delete the affiliate tool and remove company trademarks and program references from websites and collateral"
+  - "Obtain sufficient rights and permissions to provide lead data for company sales and marketing and to grant use of your marks; do not participate in conflict with existing agreements"
+  - "Ensure third parties performing sales or referrals on your behalf comply with applicable laws; do not export, re-export, transfer or permit use of products by prohibited countries or individuals"
+  - "Do not assign or transfer the agreement, including through merger, reorganization, asset sale or change of control, without prior written consent"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -43,7 +76,19 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  minimum: 5
+  currency: USD
+  frequency: net-60
+  methods:
+  - paypal
+  - stripe
+  - bank
+  conditions: Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected by the Company. The brand-linked PartnerStack payout guide requires at least $5 USD after fees and names PayPal, Stripe or direct deposit. The brand guide separately describes monthly processing and availability approximately one to two months after a purchase; company payment and processing delays apply.
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'

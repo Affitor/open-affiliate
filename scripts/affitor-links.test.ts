@@ -15,6 +15,8 @@ import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { affitorAnchorProblems } from "./affitor-checks"
+import { renderToStaticMarkup } from "react-dom/server"
+import { AffitorLink } from "../src/components/affitor-link"
 
 const root = join(__dirname, "..")
 
@@ -49,6 +51,17 @@ test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
   assert.equal(isAffitorHref("/for-brands"), false)
 })
 
+test("the footer maintainer links to Affitor with footer attribution and no nofollow", () => {
+  const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8")
+  assert.match(layout, /OpenAffiliate is maintained by <AffitorLink href=\{affitorUrl\("footer"\)\} source="footer" cta="maintainer"[^>]*>Affitor<\/AffitorLink>\. Listings are free; rankings are never paid\./)
+  const href = affitorUrl("footer")
+  assert.equal(href, "https://affitor.com/?utm_source=openaffiliate&utm_medium=footer")
+  const html = renderToStaticMarkup(AffitorLink({ href, source: "footer", cta: "maintainer", children: "Affitor" }))
+  assert.match(html, /<a [^>]*href="https:\/\/affitor\.com\/\?utm_source=openaffiliate&amp;utm_medium=footer"[^>]*>Affitor<\/a>/)
+  assert.doesNotMatch(html, /nofollow/)
+  assert.deepEqual(affitorAnchorProblems(html), { problems: [], tracked: 1 })
+})
+
 test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () => {
   const hrefs = programs.flatMap((p) => [applyButton(p, "program_page").href, alsoOnAffitor(p)?.href]).filter(
     (h): h is string => typeof h === "string" && isAffitorHref(h),
@@ -72,8 +85,9 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
   "src/components/explore-table.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
+  "src/app/programs/a-z/letter-bar.tsx | `#${id}`", // A–Z letter jump: an anchor on the same page
   "src/app/page.tsx | `/networks/${networkToSlug(network)}`", // homepage networks band, internal (N-2)
-  "src/app/programs/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
+  "src/app/programs/a-z/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page

@@ -14,17 +14,64 @@ commission:
   value: 20
   currency: USD
   duration: "up to 2 years"
-  conditions: "20% recurring commission on all plans, for up to 2 years. Paid monthly through PartnerStack to Stripe or PayPal."
+  conditions: "20% recurring commission on all plans, for up to 2 years. Paid monthly through PartnerStack to Stripe or PayPal. Application approval may be automatic at Landbot's discretion under section 3.3, while the marketing page asks applicants to wait for approval. The existing approval classification is retained with this qualification; no absence marker is used for a published policy."
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [stripe, paypal]
+  methods:
+  - stripe
+  - paypal
+  conditions: Section 7.3 publishes a $25 withdrawal threshold, while section 4.2 calls $50 the minimum when describing forfeiture of abandoned balances. Both statements are retained without selecting a numeric minimum. Commissions become available on the 13th of the following month, with a seven-day refund delay and initial account-age requirement of one month and thirteen days.
 signup_url: https://landbot.io/affiliates
 approval: manual
-restrictions: null
+# Restrictions assessed 2026-10-19 from brand-published captures dated 2026-10-18; https://landbot.io/affiliate-terms
+restrictions:
+  - "No adult content, nudity or excessively suggestive or sexual terms, images or activities on promotional websites, services or correspondence"
+  - "No violent, obscene, defamatory, libelous, slanderous or unlawful content"
+  - "No hate speech directed at individuals or groups based on race, sex, creed, origin, religion, marital status, sexual orientation, gender identity or language"
+  - "Do not infringe or assist infringement of copyright, trademarks or other intellectual property, or violations of law"
+  - "Do not use Landbot or variations and misspellings in domain names or PPC keywords"
+  - "No political or religious agendas or known associations with hate, criminal or terrorist activities"
+  - "No gambling, including casinos, sports books, bingo or poker"
+  - "No software downloads that could divert commission from other partners"
+  - "Do not impersonate the Landbot website, business or legal representatives; standalone Landbot promotion websites need prior written approval"
+  - "No rebates, coupons or promised commission kickbacks; bonuses or bundles need prior permission"
+  - "No false claims, nonexistent discounts or misleading traffic-generation strategies"
+  - "Do not promote special deals in ways that contradict the Partner Program Manager’s arrangement"
+  - "Do not set partner cookies through pop-ups, pop-unders, iframes, frames or other actions without the user’s explicit interest and clearly marked click for the particular deal"
+  - "Discount, cashback and coupon websites cannot participate"
+  - "Do not display partner discounts publicly; a non-coupon, non-cashback, non-discount website may display a coupon or discount only with prior manager consent and must show its details before setting a partner cookie"
+  - "No click-to-see-deal prompts when no deal exists, or prompts that open Landbot or set a cookie before showing the deal"
+  - "No bidding on Landbot coupon or discount phrases, including misspellings or similar variations"
+  - "Use non-misleading referral text, clearly identify commercial intent and do not disguise advertising as consumer recommendations"
+  - "Keep promotional information and pricing current"
+  - "Only one affiliate account is allowed, although it may contain multiple domains"
+  - "No self-referrals by yourself, immediate family or your employer"
+  - "Do not create another affiliate account after termination under section 5.2"
+  - "Obtain prior permission for paid advertising and promotional uses that require approval"
+  - "Use authorized marketing links and materials"
+  - "Comply with privacy requirements and do not send spam or conceal the sender’s identity"
+  - "Do not use the other party’s proprietary materials in disparaging, misleading, abusive, obscene or otherwise negative ways"
+  - "Participants must be at least eighteen or the local age of majority, whichever is greater, and have legal authority to enter the agreement"
+  - "Use the supplied referral links for promotional materials; referrals without a link require prior written approval"
+  - "No unsolicited commercial email, posts to non-commercial newsgroups or cross-posting to multiple newsgroups"
+  - "Identify yourself and contact details in direct marketing; obtain required data-processing consent and provide recipients an opt-out"
+  - "Promote in newsgroups only when commercial messages are welcome; clearly represent yourself and your websites as independent from Landbot"
+  - "No PPC campaigns directing traffic straight to Landbot through a referral link, and no doorway pages in promotional activities"
+  - "Do not transmit interstitials, parasiteware, parasitic marketing, shopping-assistance applications, toolbar installations or add-ons, shopping wallets or deceptive pop-ups/pop-unders from the referral click until the referral has fully exited Landbot"
+  - "Do not overwrite affiliate or non-affiliate tracking cookies without a customer-initiated qualifying click"
+  - "Do not intercept searches to redirect traffic or set or overwrite tracking cookies"
+  - "Do not set tracking cookies by loading Landbot in iframes, hidden links or automatic pop-ups"
+  - "Do not use applications that target text for contextual marketing on websites not wholly owned by the application owner"
+  - "Do not use applications that remove, replace or block the visibility of partner banners with other banners on websites not wholly owned by the application owner"
+  - "Do not use or disclose confidential information without the disclosing party’s express written permission"
+  - "Do not make offers, representations or statements implying authority to bind Landbot"
+  - "Do not assign rights or obligations without express written consent, except as permitted for a transfer of substantially all business or assets"
+  - "Promotional email or messages may go only to existing customers or subscribers with an opt-out and in compliance with applicable law"
+  - "Make Landbot-requested website or referral-link corrections within a reasonable time, no later than thirty days"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -48,7 +95,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

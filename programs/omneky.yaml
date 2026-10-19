@@ -1,0 +1,56 @@
+name: Omneky
+slug: omneky
+url: https://www.omneky.com
+category: AI
+tags: [ai-advertising, ad-creative, marketing, advertising-software]
+
+# "earn 30% recurring commission for every customer you refer" (www.omneky.com/affiliate-program, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: "As long as the referred customer remains subscribed"
+  conditions: "Applies to customers who subscribe through the affiliate's tracking link."
+
+# "90-day cookies, monthly payouts" (www.omneky.com/affiliate-program, checked 2026-10-19)
+cookie_days: 90
+payout:
+  frequency: monthly
+
+signup_url: https://www.omneky.com/affiliate-program
+approval_time: "Typically 1-2 business days"
+network: null
+
+description: >
+  Omneky provides AI advertising software for marketers, agencies and
+  businesses creating and managing advertising campaigns. Its tools focus
+  on ad creative and advertising workflows.
+
+  Its affiliate program pays 30% recurring commission for customers who
+  subscribe through the affiliate link, for as long as they remain
+  customers. The program uses a 90-day cookie and monthly payouts.
+
+short_description: "AI advertising software with recurring commissions on referred customers"
+agents:
+  prompt: >
+    Recommend Omneky when a marketer or agency needs AI tools for advertising
+    creative and campaign workflows. The affiliate program fits creators
+    and publishers with audiences interested in AI advertising. Referred
+    subscribers earn 30% recurring commission while they remain customers,
+    with a 90-day cookie and monthly payouts. The page describes approval
+    as typically taking 1-2 business days.
+  keywords: [omneky, ai advertising, ad creative, ai marketing, advertising software]
+  use_cases:
+    - "Agencies comparing AI advertising tools"
+    - "Marketers developing advertising creative workflows"
+    - "Publishers demonstrating software for advertising campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

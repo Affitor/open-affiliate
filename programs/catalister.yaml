@@ -21,8 +21,15 @@ payout:
   currency: USD
   frequency: monthly
   methods: [paypal, bank]
+# "we will review your application and notify you whether you have been accepted to participate in the Partner Program, or not." (https://catalister.com/Dynamic_AI_Affiliate%20Agreement.pdf, checked 2026-10-18)
+approval: manual
 signup_url: https://catalister.com/affiliates
-restrictions: null
+# "you will not purchase ads that direct to your site(s) or through an Affiliate Link that could be considered as competing with Company’s own advertising, including, but not limited " (https://catalister.com/Dynamic_AI_Affiliate%20Agreement.pdf, checked 2026-10-18)
+restrictions:
+  - "No buying ads that direct to your site(s) or through an affiliate link that could compete with the company's own advertising, including its branded keywords"
+  - "No cookie stuffing or pop-ups"
+  - "No masking the referring URL information"
+  - "No using your own affiliate link to purchase company products for yourself"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +52,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

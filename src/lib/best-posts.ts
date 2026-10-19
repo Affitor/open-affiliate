@@ -1,7 +1,6 @@
 import { getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
-import { isSameTeam } from "./same-team"
 import { frequencyLabel } from "./claims/form"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
@@ -10,6 +9,8 @@ import { post as saasAffiliatePrograms } from "../content/best/saas-affiliate-pr
 import { post as beginnerAffiliatePrograms } from "../content/best/affiliate-programs-for-beginners"
 import { post as freeAffiliatePrograms } from "../content/best/free-affiliate-programs"
 import { post as highPayingAffiliatePrograms } from "../content/best/high-paying-affiliate-programs"
+import { post as lifetimeAffiliatePrograms } from "../content/best/lifetime-affiliate-programs"
+import { post as marketingAffiliatePrograms } from "../content/best/marketing-affiliate-programs"
 
 /**
  * Editorial posts on /best/<slug>. A post is a BestList (its filter, page URL,
@@ -45,7 +46,7 @@ export interface BestPost {
   affitor?: { before: string; anchor: string; after: string }
   /** BestList slugs. */
   related: string[]
-  /** The registry category whose /categories page links to this post as "Our picks". */
+  /** The registry category whose /categories page links to this post under "Posts about". */
   category?: string
 }
 
@@ -56,6 +57,8 @@ export const POSTS: BestPost[] = [
   beginnerAffiliatePrograms,
   freeAffiliatePrograms,
   highPayingAffiliatePrograms,
+  lifetimeAffiliatePrograms,
+  marketingAffiliatePrograms,
 ]
 
 /** Terms older than this at build time keep a program out of a post until it is re-checked. */
@@ -65,7 +68,6 @@ export const MIN_POST_PROGRAMS = 5
 
 export const DISCLOSURE =
   "How we make money: some links on this page are tracked so we can see which programs readers choose. Rankings are never paid for."
-export { SAME_TEAM } from "./same-team"
 
 export function getPost(slug: string): BestPost | undefined {
   return POSTS.find((p) => p.slug === slug)
@@ -129,12 +131,6 @@ export function readyPost(slug: string): { post: BestPost; selection: PostSelect
   const value = post && selection && postReady(selection) ? { post, selection } : null
   ready.set(slug, value)
   return value
-}
-
-/** The ready post a category page links to as "Our picks", if any. */
-export function categoryPost(category: string): { post: BestPost; selection: PostSelection } | null {
-  const post = POSTS.find((p) => p.category === category)
-  return post ? readyPost(post.slug) : null
 }
 
 /** The post is published as a post only with enough programs; otherwise the list renders. */
@@ -204,10 +200,6 @@ export function checkedText(p: Program): string {
 export function checkedRange(selection: PostSelection): [string, string] | null {
   const dates = selection.shown.map(({ program }) => checkedText(program)).filter(Boolean).sort()
   return dates.length ? [dates[0], dates.at(-1)!] : null
-}
-
-export function sameTeam(post: BestPost, selection: PostSelection): boolean {
-  return Boolean(post.affitor) || selection.shown.some(({ program }) => isSameTeam(program.slug))
 }
 
 /** The sentence under "How we chose" that states the freshness rule, from the constant. */

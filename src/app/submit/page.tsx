@@ -65,7 +65,6 @@ verified: false
 commission:
   type: ${form.commissionType}
   rate: ${form.commissionRate}
-  currency: USD
 cookie_days: ${form.cookieDays}
 
 payout:

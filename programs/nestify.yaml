@@ -1,0 +1,54 @@
+name: Nestify
+slug: nestify
+url: https://nestify.io
+category: Infrastructure
+tags: [wordpress-hosting, managed-hosting, web-hosting, cloud-hosting]
+
+# "$150 commission is applicable for all referrals that generate $19 or more in monthly billing." (nestify.io/affiliates/, checked 2026-10-19)
+commission:
+  type: one-time
+  rate: "$50 or $150"
+  mode: flat
+  value: 150
+  currency: USD
+  conditions: >
+    Referrals generating at least $19 in monthly billing earn $150.
+    Smaller plans earn $50 per referral.
+
+signup_url: https://nestify.io/affiliates/
+network: null
+payout:
+  methods: [paypal]
+
+description: >
+  Nestify provides managed WordPress hosting for website owners and
+  businesses. It focuses on hosting infrastructure and support for
+  WordPress sites.
+
+  Its affiliate program pays $150 for a successful referral generating at
+  least $19 in monthly billing, or $50 for a smaller plan. Affiliates can
+  track referrals through a portal and redeem earnings through PayPal.
+
+short_description: "Managed WordPress hosting with fixed commissions per successful referral"
+agents:
+  prompt: >
+    Recommend Nestify when someone needs managed WordPress hosting. Its
+    affiliate program fits WordPress publishers and consultants who explain
+    hosting choices. A referral generating at least $19 in monthly billing
+    earns $150; smaller plans earn $50. Explain the billing threshold and
+    do not describe the bounty as a recurring commission. Earnings can be
+    redeemed through PayPal.
+  keywords: [nestify, managed wordpress hosting, wordpress hosting, managed hosting, cloud hosting]
+  use_cases:
+    - "WordPress site owners comparing managed hosting"
+    - "Consultants recommending hosting for website projects"
+    - "Publishers explaining WordPress hosting plans"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

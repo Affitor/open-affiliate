@@ -29,6 +29,27 @@ signup_url: https://market.partnerstack.com/page/testgorilla
 approval: manual
 
 # "Access to sales and learning materials" (testgorilla.com/partnerships-momentum-terms, checked 2026-10-17)
+# Scoped restrictions from https://www.testgorilla.com/terms/ (checked 2026-10-19).
+restrictions:
+  - "When using TestGorilla assessment or sourcing Services, do not duplicate them or their documentation, except for internal use."
+  - "Do not modify, translate, decompile, reverse engineer, disassemble or adapt TestGorilla Services or try to derive their software source code."
+  - "Do not use, transfer, transmit, export or re-export TestGorilla Services in violation of applicable law, rules or regulations."
+  - "Do not develop software or a service derived from TestGorilla Services that is materially similar in function or competes with them."
+  - "Do not bypass, hack or breach TestGorilla Services security or access or use the Services with or without automated tools such as scraping, crawling or spidering."
+  - "Do not remove, change or obscure identification, proprietary notices or rights restrictions in TestGorilla Services or their components."
+  - "Do not supply unlawful or injurious material through TestGorilla Services, including material contrary to law, public order or public morality, or malware or other harmful code or technology."
+  - "Do not aid or assist third parties with any prohibited use of TestGorilla Services."
+  - "Do not lease, resell, sublicense, assign, distribute, publish, transfer or otherwise give TestGorilla Services to third parties other than Candidates, unless the Agreement expressly permits it."
+  - "Only individuals aged sixteen or older may use TestGorilla Services."
+  - "Do not use TestGorilla Services to assess candidates for unlawful, unsafe, offensive, discriminatory or inappropriate jobs."
+  - "Do not use TestGorilla Services to request candidate information that could be used to discriminate against them."
+  - "Use approved TestGorilla marketing materials only for Momentum programme purposes under its limited, revocable license."
+  - "Do not disclose non-public Momentum programme information to third parties without written consent; comply with applicable data-protection law."
+  - "Do not engage in fraud, misconduct or reputational harm in the Momentum programme or violate its rules."
+  - "After Momentum programme termination, stop using TestGorilla branding."
+  - "Provide truthful, accurate information when applying to and participating in the Momentum programme."
+  - "Do not assign Momentum programme rights without TestGorilla's prior consent."
+
 marketing_materials: true
 dashboard_url: null
 network: partnerstack
@@ -64,8 +85,14 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+
+# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
+not_published:
+  cookie_days: "2026-10-19"
+  payout.minimum: "2026-10-19"
+  payout.methods: "2026-10-19"

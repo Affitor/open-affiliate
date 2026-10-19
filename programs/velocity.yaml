@@ -20,7 +20,25 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  # "Commissions are held 30 days after the sale, then paid once you reach the $20 minimum." (https://affitor.com/marketplace/velocity, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Commissions are held 30 days after the sale, then paid once you reach the $20 minimum."
+  methods:
+    - wise
+    - bank
 
+# "Once Velocity approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/velocity, checked 2026-10-18)
+approval: manual
+# "Self-referrals, referrals between accounts or devices controlled by the same person or entity, referrals using false, misleading, duplicate, or stolen identities, referrals generated through spam, unauthorized advertising, cookie stuffing, malware, bots, or any other manipulative or prohibited method are strictly prohibited and will not earn commissions." (https://velocity.fairarena.app/terms, checked 2026-10-18)
+restrictions:
+  - Self-referrals and referrals between accounts or devices controlled by the same person or entity are prohibited and earn no commissions
+  - Referrals generated through spam, unauthorized advertising, cookie stuffing, malware, bots, or other manipulative or prohibited methods are prohibited and earn no commissions
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
 signup_url: https://affitor.com/marketplace/velocity
 network: affitor
 
@@ -50,8 +68,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active

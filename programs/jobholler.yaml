@@ -20,7 +20,12 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  methods:
+    - wise
+    - bank
 
+# "Free to join and approval is instant." (https://affitor.com/marketplace/jobholler-partner-program, checked 2026-10-18)
+approval: auto
 signup_url: https://affitor.com/marketplace/jobholler-partner-program
 network: affitor
 
@@ -47,11 +52,20 @@ agents:
     - Home-service shops that want night and weekend calls answered
     - Owners who want caller details emailed for a fast callback
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
-last_verified_at: "2026-10-12"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
 kind: affiliate
 source: affitor-api
 status: active
+restrictions:
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines

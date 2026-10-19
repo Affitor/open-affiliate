@@ -21,10 +21,10 @@ tracking_method: cookie
 cookie_days: 90
 
 # "The minimum payout balance is $50, and payments are processed through PayPal"; paid on the first of each month (taskade.com/blog/affiliate-partnership-program, checked 2026-10-13)
+# payout.frequency: commission.conditions says payments come at least 60 days after conversion (2026-10-13), which rules out a plain monthly value; taskade.com/blog/affiliate-partnership-program and partners.taskade.com no longer state the schedule (checked 2026-10-19), so no value is set (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
   methods: [paypal]
 
 signup_url: https://partners.taskade.com/signup
@@ -65,7 +65,7 @@ agents:
 verified: false
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

@@ -60,6 +60,12 @@ import config from "./sync-affitor.config.json"
 import skipList from "../data/affitor-sync-skip.json"
 
 const LIST_URL = config.list_url
+/**
+ * What Affitor's own terms and payout docs say for every program on the
+ * network; each marketplace listing links both. `source` in the config names
+ * the pages and the date they were read. Change them there, never in a YAML.
+ */
+const NETWORK = config.network_terms
 const MARKETPLACE = config.marketplace
 const SKIP_FILE = "data/affitor-sync-skip.json"
 
@@ -344,11 +350,14 @@ function termsOf(l: Listing): Record<string, unknown> {
 const DELETE = Symbol("delete")
 export type Edit = [path: string[], value: unknown]
 
-/** Published by Affitor nowhere, so a verified listing may not show them: empty over wrong. */
+/**
+ * Published by Affitor nowhere, so a verified listing may not show them:
+ * empty over wrong. `approval` and `payout.frequency` are not here and not
+ * owned: the data lane reads them from each listing's own wording ("Once X
+ * approves you", "held 31 days after the sale"), and the sync leaves them.
+ */
 const UNPUBLISHED = [
-  "approval",
   "approval_time",
-  "restrictions",
   "marketing_materials",
   "api_available",
   "dedicated_manager",
@@ -356,8 +365,22 @@ const UNPUBLISHED = [
   "program_age",
 ]
 
-/** Every field the sync owns, at the value Affitor states. Dates are set separately, only on change. */
-function ownedFields(p: AffitorProgram, t: Terms): Edit[] {
+/**
+ * Affitor's prohibited activities apply on every program, after any the
+ * brand adds, which the data lane writes from the brand's own terms: the
+ * brand's items keep their order, the network's follow, each once.
+ */
+export function networkRestrictions(current: unknown): unknown[] {
+  const own = Array.isArray(current) ? current.filter((r) => !NETWORK.restrictions.includes(r)) : []
+  return [...own, ...NETWORK.restrictions]
+}
+
+/**
+ * Every field the sync owns, at the value Affitor states; `restrictions` is
+ * the listing's current list, which the network's items are added to. Dates
+ * are set separately, only on change.
+ */
+function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null): Edit[] {
   return [
     [["commission", "type"], t.type],
     [["commission", "rate"], t.rate],
@@ -371,13 +394,13 @@ function ownedFields(p: AffitorProgram, t: Terms): Edit[] {
     [["tracking_method"], "cookie"],
     [["payout", "minimum"], p.payout_threshold ?? DELETE],
     [["payout", "currency"], "USD"],
-    [["payout", "frequency"], DELETE],
-    [["payout", "methods"], DELETE],
+    [["payout", "methods"], NETWORK.payout_methods],
     [["signup_url"], MARKETPLACE + p.slug],
     [["network"], "affitor"],
     [["verified"], true],
     [["status"], "active"],
     [["status_note"], DELETE],
+    [["restrictions"], networkRestrictions(restrictions)],
     ...UNPUBLISHED.map((k): Edit => [[k], DELETE]),
   ]
 }
@@ -402,15 +425,23 @@ function alsoOnFields(t: Terms | null): Edit[] {
   ]
 }
 
+/** The value at `path`, a list as an array. */
+function valueIn(doc: Document, path: string[]): unknown {
+  const node = doc.getIn(path, true)
+  return isNode(node) ? node.toJSON() : (node ?? null)
+}
+
+/** Scalars by identity; a list (methods, restrictions) by its items in order. */
+const same = (a: unknown, b: unknown) => a === b || (Array.isArray(a) && Array.isArray(b) && JSON.stringify(a) === JSON.stringify(b))
+
 function applyEdits(doc: Document, edits: Edit[], diffs: Diff[]): void {
   for (const [path, value] of edits) {
-    const node = doc.getIn(path, true)
-    const from = isNode(node) ? node.toJSON() : (node ?? null)
+    const from = valueIn(doc, path)
     if (value === DELETE) {
       if (!doc.hasIn(path)) continue
       doc.deleteIn(path)
       diffs.push({ field: path.join("."), from, to: null })
-    } else if (!doc.hasIn(path) || from !== value) {
+    } else if (!doc.hasIn(path) || !same(from, value)) {
       doc.setIn(path, value)
       diffs.push({ field: path.join("."), from, to: value })
     }
@@ -466,8 +497,10 @@ export function checkReadBack(text: string, edits: Edit[], file: string): void {
   const doc = parseDocument(text)
   if (doc.errors.length) throw new Error(`${file}: rendered YAML does not parse (${doc.errors[0].message})`)
   for (const [path, value] of edits) {
-    if (value === DELETE ? !doc.hasIn(path) : doc.getIn(path) === value) continue
-    throw new Error(`${file}: ${path.join(".")} reads back as ${JSON.stringify(doc.getIn(path))}, not as written`)
+    if (value === DELETE ? !doc.hasIn(path) : doc.hasIn(path) && same(valueIn(doc, path), value)) continue
+    // A list reads back as its items: show them, not the node.
+    const got = valueIn(doc, path)
+    throw new Error(`${file}: ${path.join(".")} reads back as ${JSON.stringify(got)}, not as written`)
   }
 }
 
@@ -478,6 +511,7 @@ interface SchemaRule {
   maxLength?: number
   pattern?: string
   properties?: Record<string, SchemaRule>
+  items?: SchemaRule
   $ref?: string
 }
 
@@ -495,29 +529,38 @@ const TYPES: Record<string, (v: unknown) => boolean> = {
   integer: (v) => Number.isInteger(v),
   boolean: (v) => typeof v === "boolean",
   null: (v) => v === null,
+  array: (v) => Array.isArray(v),
 }
 
 /**
  * Check every value the sync writes against schema/program.schema.json:
- * type, enum, minimum, maxLength and pattern. The repo's build validates
- * only a few fields, so a wrong type would otherwise reach a verified page.
+ * type, enum, minimum, maxLength and pattern, and for a list each item
+ * against `items`. The repo's build validates only a few fields, so a wrong
+ * type would otherwise reach a verified page.
  */
 export function checkSchema(edits: Edit[], file: string): void {
   for (const [path, value] of edits) {
     if (value === DELETE) continue
     let rule: SchemaRule | undefined = schema()
     for (const key of path) rule = deref(rule?.properties?.[key])
-    const bad = (why: string) => new Error(`${file}: ${path.join(".")} ${why}`)
-    if (!rule) throw bad("is not in the schema")
-    const types = rule.type === undefined ? [] : [rule.type].flat()
-    if (types.length && !types.some((t) => TYPES[t]?.(value))) throw bad(`is ${JSON.stringify(value)}, not ${types.join(" or ")}`)
-    if (rule.enum && !rule.enum.includes(value)) throw bad(`is ${JSON.stringify(value)}, not one of the schema's values`)
-    if (typeof value === "number" && rule.minimum !== undefined && value < rule.minimum) throw bad(`is below ${rule.minimum}`)
-    if (typeof value === "string" && rule.maxLength !== undefined && value.length > rule.maxLength) {
-      throw bad(`is longer than ${rule.maxLength} characters`)
-    }
-    if (typeof value === "string" && rule.pattern && !new RegExp(rule.pattern).test(value)) throw bad("does not match the schema pattern")
+    checkValue(rule, value, (why) => new Error(`${file}: ${path.join(".")} ${why}`))
   }
+}
+
+function checkValue(rule: SchemaRule | undefined, value: unknown, bad: (why: string) => Error): void {
+  if (!rule) throw bad("is not in the schema")
+  const types = rule.type === undefined ? [] : [rule.type].flat()
+  if (types.length && !types.some((t) => TYPES[t]?.(value))) throw bad(`is ${JSON.stringify(value)}, not ${types.join(" or ")}`)
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => checkValue(rule.items, item, (why) => bad(`[${i}] ${why}`)))
+    return
+  }
+  if (rule.enum && !rule.enum.includes(value)) throw bad(`is ${JSON.stringify(value)}, not one of the schema's values`)
+  if (typeof value === "number" && rule.minimum !== undefined && value < rule.minimum) throw bad(`is below ${rule.minimum}`)
+  if (typeof value === "string" && rule.maxLength !== undefined && value.length > rule.maxLength) {
+    throw bad(`is longer than ${rule.maxLength} characters`)
+  }
+  if (typeof value === "string" && rule.pattern && !new RegExp(rule.pattern).test(value)) throw bad("does not match the schema pattern")
 }
 
 /** Every scalar in a parsed listing, as [path, value]; lists are skipped. */
@@ -954,7 +997,7 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
     if (entry.action === "take-over" && program && terms && listing) {
       const { text, diffs } = edit(
         readFileSync(listing.path, "utf8"),
-        ownedFields(program, terms),
+        ownedFields(program, terms, listing.data.restrictions),
         [
           [["updated_at"], o.today],
           [["last_verified_at"], o.today],
@@ -1015,9 +1058,13 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
   return { entries, written: dryRun ? [] : writes.map(([path]) => path) }
 }
 
-/** The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a program exists or not. */
-export async function httpJson(url: string): Promise<unknown> {
-  const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) })
+/**
+ * The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a
+ * program exists or not. It never redirects, so a redirect is refused rather
+ * than followed: no hop can reach a host in schema/blocked-hosts.json.
+ */
+export async function httpJson(url: string, fetchImpl: typeof fetch = fetch): Promise<unknown> {
+  const res = await fetchImpl(url, { headers: { accept: "application/json" }, redirect: "error", signal: AbortSignal.timeout(20_000) })
   if (res.status !== 200) throw new Error(`${url} answered ${res.status}`)
   return res.json()
 }

@@ -12,16 +12,27 @@ commission:
   value: 50
   currency: USD
   duration: "lifetime"
-  conditions: "50% of what the merchant pays for their first six months, then 25% for as long as they stay subscribed."
+  conditions: "50% of what the merchant pays for their first six months, then 25% for as long as they stay subscribed. The main page also markets BigCommerce, but the linked program terms restrict qualifying referrals to Shopify stores meeting their published eligibility criteria. The seven-day product trial is not a tracking-cookie duration."
 attribution: last-click
 tracking_method: cookie
 payout:
   minimum: 100
   currency: USD
   frequency: monthly
-  methods: [paypal]
+  methods:
+  - paypal
+  conditions: Payouts are issued via PayPal on the 24th of every month. Commissions are released 30 days after a successful transaction (to account for refunds or cancellations). The minimum payout threshold is $100.
 signup_url: https://notify-me.io/affiliate-program
-restrictions: null
+# Restrictions assessed 2026-10-19 from brand-published captures dated 2026-10-18; https://notify-me.io/affilate-program-terms
+restrictions:
+  - "Operate a valid business, agency or independent referral channel"
+  - "Refer only acceptable Shopify stores meeting at least two of the four published requirements"
+  - "The eligibility criteria are six months active on a Shopify plan; Basic plan or higher; ten products including two out of stock; or $500 revenue in the previous quarter"
+  - "No fraud, misrepresentation or abuse of the program"
+  - "No spam, misleading claims or unauthorized paid advertising, including brand-keyword bidding"
+  - "Do not refer stores that fail the eligibility requirements"
+  - "Comply with applicable anti-spam, advertising, FTC endorsement and privacy requirements"
+  - "Do not disclose nonpublic program details, promotional codes or partner resources without prior written consent"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -44,7 +55,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  cookie_days: '2026-10-18'
+  approval: '2026-10-18'

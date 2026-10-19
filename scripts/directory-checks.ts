@@ -1,5 +1,5 @@
 /**
- * Served-HTML checks for N-2: the /programs A–Z directory and the homepage
+ * Served-HTML checks for N-2: the /programs/a-z A–Z directory and the homepage
  * program sections, read inside their own <section id>, anchors matched by
  * their href attribute among any others (<Link> also writes class).
  */

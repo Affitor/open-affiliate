@@ -63,6 +63,9 @@ agents:
     - "Content creators generating video from text or image prompts"
     - "Artists exploring AI-generated motion and video art"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: "2026-04-17"

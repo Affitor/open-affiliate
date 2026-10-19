@@ -15,10 +15,11 @@
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { readFileSync } from "node:fs"
-import { runInNewContext } from "node:vm"
-import ts from "typescript"
-import { formatPercentage } from "../src/lib/commission-mode"
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { spawnSync } from "node:child_process"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
 import {
@@ -34,8 +35,10 @@ import {
 import { commissionDisplay, confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import * as page from "../src/lib/program-page"
 import { commissionDisplay as clientCommissionDisplay } from "../src/lib/client-programs"
+import { commissionChip, commissionDisplay as chipCommissionDisplay } from "../src/lib/program-chips"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
+import { commissionTermProblems } from "./program-rules"
 import { chunkScan, termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
 import {
   mcpCall,
@@ -669,7 +672,7 @@ test("program page: a qualified rate is shown as stored, never as a bare figure 
     const p = live(slug)
     assert.equal(page.estimateInput(p), null, `${slug} gets an estimate`)
     const f = page.commissionFigure(p)!
-    assert.equal(f.big, String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
+    assert.equal(f.big, p.commission.rate === "varies" ? "Rate varies" : String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
   }
   const a = page.answerParts(live("dreamhost"), "")
   assert.equal(a.before + a.strong + a.after, "DreamHost's commission: $15 to $1,000.")
@@ -739,12 +742,17 @@ test("qualified percentage ceilings survive server, client and agent Markdown wi
 
 
 test("global search uses the same percentage rule while flat, tiered and unknown displays stay unchanged", () => {
-  const source = ts.createSourceFile("search-bar.tsx", readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
-  const declaration = source.statements.find((node): node is ts.FunctionDeclaration => ts.isFunctionDeclaration(node) && node.name?.text === "commissionDisplay")!
-  assert.ok(declaration)
-  const printed = ts.createPrinter().printNode(ts.EmitHint.Unspecified, declaration, source)
-  const js = ts.transpileModule(printed, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText
-  const searchDisplay = runInNewContext(`${js}; commissionDisplay`, { formatPercentage }) as typeof clientCommissionDisplay
+  // The search bar keeps no copy of its own: it reads the shared chip helpers.
+  const searchBar = readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8")
+  assert.match(searchBar, /import \{ commissionChip \} from "@\/lib\/program-chips"/)
+  assert.doesNotMatch(searchBar, /function commission(Display|Label)\b/)
+  // It renders the shared chip for each /api/programs row.
+  assert.match(searchBar, /\{commissionChip\(p\.commission\)\} · \{p\.category\}/)
+  const unknown = { ...verifiedBase.commission, mode: "unknown" as const, value: null }
+  assert.equal(commissionChip({ ...unknown, rate: "varies" }), "Rate varies")
+  assert.equal(commissionChip({ ...unknown, rate: "none" }), "Rate not published")
+  assert.equal(commissionChip({ ...unknown, rate: "$500 Visa gift card per referral" }), "$500 Visa gift card per referral")
+  const searchDisplay = chipCommissionDisplay
   for (const rate of ["up to 15%", "maximum 15%", "10–15%", "45% to 55%", "15% per qualified sale", "up to 15 percent", "maximum 15", "30%", "30"]) {
     const commission = { ...verifiedBase.commission, mode: "percentage" as const, rate, value: rate === "30%" || rate === "30" ? 30 : 15 }
     assert.equal(searchDisplay(commission), commissionDisplay(commission), rate)
@@ -762,6 +770,63 @@ test("global search uses the same percentage rule while flat, tiered and unknown
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "flat", rate: "$20", value: 20 }), "$20")
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "tiered", rate: "10–20%", value: 20 }), "10–20%")
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "unknown", rate: "varies", value: null }), "Not published")
+})
+
+test("a flat commission reads in the program's own currency, and with none the rate as the source wrote it", () => {
+  const entry = registry.programs.find((p) => p.slug === "planday")! as Parameters<typeof programMd>[0]
+  const cases: [{ rate: string; value: number; currency: string | null }, string][] = [
+    [{ rate: "€20 to €250", value: 250, currency: "EUR" }, "€250"],
+    [{ rate: "from £10", value: 10, currency: "GBP" }, "£10"],
+    [{ rate: "$100", value: 100, currency: "AUD" }, "A$100"],
+    [{ rate: "$25", value: 25, currency: "USD" }, "$25"],
+    [{ rate: "$1,500", value: 1500, currency: "USD" }, "$1,500"],
+    [{ rate: "$20 in Replit credits", value: 20, currency: "USD" }, "$20 in credits"],
+    [{ rate: "€20 to €250", value: 250, currency: null }, "€20 to €250"],
+    [{ rate: "$25", value: 25, currency: null }, "$25"],
+  ]
+  for (const [c, want] of cases) {
+    const commission = { ...verifiedBase.commission, type: "one-time" as const, mode: "flat" as const, duration: null, ...c }
+    const label = `${c.rate} ${c.currency}`
+    assert.equal(commissionDisplay(commission), want, label)
+    assert.equal(clientCommissionDisplay(commission), want, label)
+    assert.equal(commissionChip(commission), `${want} one-time`, label)
+    assert.ok(programMd({ ...entry, commission }).split("\n").includes(`Commission: ${want} one-time`), label)
+  }
+  // A stored "€250" is the figure in euros, not a qualifier beside a dollar figure.
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "€250", value: 250, currency: "EUR" })), { big: "€250", rest: "per sale", kind: "number" })
+  // A bare amount under another mark is the figure in the program's currency; a qualifier stays as written.
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$100", value: 100, currency: "AUD" })), { big: "A$100", rest: "per sale", kind: "number" })
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "up to €200", value: 200, currency: "EUR" })), { big: "up to €200", rest: "", kind: "text" })
+  for (const [rate, currency, big] of [["100 EUR", "EUR", "€100"], ["USD 100", "USD", "$100"], ["CA$100", "CAD", "CA$100"], ["$100.50", "AUD", "A$100.5"]] as const) {
+    assert.equal(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate, value: Number(rate.replace(/[^\d.]/g, "")), currency }))?.big, big, rate)
+  }
+  // Any other word beside the amount is a qualifier, kept as written.
+  for (const currency of ["USD", "AUD"]) {
+    for (const rate of ["max $100", "MAX $100", "up$100", "UP$100", "per $100", "100 per", "foo100", "$100 cap", "USD 100", "EUR 100", "US$100"]) {
+      if (currency === "USD" && rate === "USD 100") continue
+      assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate, value: 100, currency })), { big: rate, rest: "", kind: "text" }, `${rate} ${currency}`)
+    }
+  }
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$25", value: 25, currency: null })), { big: "$25", rest: "per sale", kind: "number" })
+  // The estimate multiplies US dollars only: a flat amount with no currency is not one.
+  assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", rate: "$250", value: 250, currency: "USD" }))?.value, 250)
+  for (const [rate, currency] of [["€20 to €250", null], ["$250", null], ["€250", "EUR"], ["$250", "AUD"]] as const) {
+    assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", rate, value: 250, currency })), null, `${rate} ${currency}`)
+  }
+  // Every flat commission in the registry outside US dollars: no bare dollar figure on any surface.
+  const entries = registry.programs as unknown as Parameters<typeof programMd>[0][]
+  // The schema requires a currency for a flat amount: every listing names one.
+  assert.deepEqual(entries.filter((e) => e.commission?.mode === "flat" && !e.commission.currency).map((e) => e.slug), [])
+  const foreign = programs.filter((p) => p.commission.mode === "flat" && p.commission.value != null && p.commission.currency !== "USD")
+  assert.ok(foreign.length > 0)
+  for (const p of foreign) {
+    const dollars = `$${p.commission.value!.toLocaleString()}`
+    const shown = p.commission.currency ? commissionDisplay(p.commission) : String(p.commission.rate)
+    assert.equal(commissionDisplay(p.commission), shown, p.slug)
+    assert.equal(clientCommissionDisplay(p.commission), shown, p.slug)
+    if (p.commission.currency) assert.notEqual(shown, dollars, p.slug)
+    assert.ok(programMd(entries.find((e) => e.slug === p.slug)!).includes(`Commission: ${shown}`), p.slug)
+  }
 })
 
 test("payout conditions reach REST, MCP and the .md twin for a verified program, and nothing for an unverified one", async () => {
@@ -785,4 +850,40 @@ test("payout conditions reach REST, MCP and the .md twin for a verified program,
   const md = programMd({ ...entry, payout: { ...entry.payout, conditions: odd } })
   assert.deepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, md), [])
   assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
+})
+
+test("an unverified program's commission.rate and duration state no withheld term: build-registry refuses one, every program passes", () => {
+  const off = (commission: Record<string, unknown>, extra: Record<string, unknown> = {}) => commissionTermProblems({ verified: false, commission, ...extra })
+  for (const leak of [
+    "20% per referral; 90-day cookie; monthly payouts",
+    "20% per referral; commissions deposited monthly",
+    "20% per referral; approval required",
+    "20% per referral; cookie: 3 months",
+    "20% per sale; commissions sent monthly",
+    "20% per sale; payable after 30 days",
+    "20%; applications reviewed within 48 hours",
+    "$50 per sale, paid monthly via PayPal",
+    "20% net 30",
+  ]) assert.equal(off({ rate: leak }).length, 1, leak)
+  for (const duration of ["45-day tracking", "while partner status is approved", "paid monthly"]) assert.equal(off({ rate: "20%", duration }).length, 1, duration)
+  // The Affitor commission an also_on line shows is held to the same rule.
+  assert.equal(off({ rate: "20%" }, { also_on: { affitor: { url: "https://x", commission: { rate: "20%; 90-day cookie", duration: "paid monthly" } } } }).length, 2)
+  // The commission itself passes, however it is worded.
+  for (const ok of ["100% of the first charge + 25% recurring", "25% of the first paid transaction", "$500 Visa gift card per referral", "up to 30% for 12 months", "$50 per qualified bank account opened", "at least 20% commission"]) {
+    assert.deepEqual(off({ rate: ok, duration: "12 months" }), [], ok)
+  }
+  // A verified program withholds nothing, so its rate is its own words.
+  assert.deepEqual(commissionTermProblems({ verified: true, commission: { rate: "30% (Pro, Team monthly), 15% (Team annual)" } }), [])
+  for (const p of registry.programs as unknown as Record<string, unknown>[]) assert.deepEqual(commissionTermProblems(p), [], String(p.slug))
+
+  // build-registry itself refuses the file (not only the rule): run it on a one-program copy.
+  const dir = mkdtempSync(join(tmpdir(), "oa-guard-"))
+  for (const d of ["programs", "schema", "src/lib", "public/logos"]) mkdirSync(join(dir, d), { recursive: true })
+  for (const f of ["program.schema.json", "signup-url-debt.json", "payout-lag-debt.json"]) copyFileSync(new URL(`../schema/${f}`, import.meta.url), join(dir, "schema", f))
+  const yaml = readFileSync(new URL("../programs/openfate.yaml", import.meta.url), "utf8")
+  writeFileSync(join(dir, "programs", "openfate.yaml"), yaml.replace(/  duration: null\n/, '  duration: "while partner status is approved"\n'))
+  const run = spawnSync(fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url)), [fileURLToPath(new URL("./build-registry.ts", import.meta.url))], { cwd: dir, encoding: "utf8" })
+  rmSync(dir, { recursive: true, force: true })
+  assert.notEqual(run.status, 0, "build-registry accepted a withheld term in commission.duration")
+  assert.match(run.stdout + run.stderr, /commission\.duration states a cookie, payout or approval term/)
 })

@@ -113,9 +113,29 @@
       "required": [
         "type",
         "rate",
-        "mode",
-        "currency"
+        "mode"
       ],
+      "if": {
+        "properties": {
+          "mode": {
+            "const": "flat"
+          }
+        },
+        "required": [
+          "mode"
+        ]
+      },
+      "then": {
+        "required": [
+          "currency"
+        ],
+        "properties": {
+          "currency": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
       "properties": {
         "type": {
           "type": "string",
@@ -134,8 +154,11 @@
           "description": "Exactly what the source said, e.g. \"30%\", \"$5 per lead + 30%\", \"varies\". Kept verbatim; read mode and value instead."
         },
         "currency": {
-          "type": "string",
-          "default": "USD"
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ISO 4217 code of a flat amount (\"USD\", \"EUR\"); required when mode is flat. A percentage may leave it out or null: brands rarely name one, and a missing currency is never read as USD."
         },
         "duration": {
           "type": [

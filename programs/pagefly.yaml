@@ -1,0 +1,71 @@
+name: PageFly
+slug: pagefly
+url: https://pagefly.io
+category: E-Commerce
+tags: [shopify, page-builder, landing-pages, store-design, e-commerce]
+
+# "50% commission for the 1st month and 30% for the 2nd and following months." (pagefly.io/pages/affiliate, checked 2026-10-19)
+commission:
+  type: hybrid
+  rate: "50% + 30%"
+  mode: hybrid
+  value: 50
+  duration: "Lifetime while the referred merchant uses PageFly"
+  conditions: >
+    New referred users earn 50% commission in the first month and 30%
+    from the second month onward. VIP partners may qualify for higher
+    individually arranged rates.
+
+# "paid monthly via PayPal" (partners.pagefly.io/register, linked from pagefly.io/pages/affiliate, checked 2026-10-19)
+payout:
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://pagefly.io/pages/affiliate
+network: null
+
+# Service-use and affiliate rules: pagefly.io/pages/terms-of-service, Prohibited use (checked 2026-10-19).
+restrictions:
+  - "Do not use the PageFly Service for an unlawful purpose or in violation of applicable law."
+  - "When using PageFly, do not violate third-party rights or encourage others to do so, including intellectual property rights."
+  - "Do not disable or bypass PageFly security features that restrict access to or copying of Service content."
+  - "Do not reverse engineer PageFly or try to discover Service source code, except where applicable law expressly permits that activity."
+  - "Do not upload or distribute viruses, adware, spyware, worms or other malicious code through the PageFly Service."
+  - "Do not send unsolicited offers or advertisements to other users of the PageFly Service."
+  - "Do not collect personal information about PageFly users or third parties through the Service without consent."
+  - "Do not disrupt the PageFly Service, other users' enjoyment of it, or networks, equipment and servers used to provide it."
+  - "Do not commit fraud through PageFly, including impersonation, false affiliation claims or access to another Service account without permission."
+  - "Do not sell or otherwise transfer access or rights granted by PageFly's terms, its Materials, or the ability to view, access or use those Materials."
+  - "Do not attempt prohibited acts in the PageFly Service, allow others to perform them, or help another person perform them."
+
+description: >
+  PageFly is a Shopify page builder for creating and customizing store
+  pages. It helps merchants design landing pages and other layouts for
+  their online stores.
+
+  Its affiliate program pays 50% commission for the first month of a new
+  referred user, followed by 30% from the second month onward while the
+  merchant uses PageFly. Payments are sent monthly through PayPal.
+
+short_description: "Shopify page building with first-month and ongoing referral commissions"
+agents:
+  prompt: >
+    Recommend PageFly when a Shopify merchant wants to build and customize
+    store pages. The affiliate program fits Shopify educators, agencies and
+    publishers who demonstrate store design. Explain that the commission is
+    50% for the first month and 30% from the second month onward; do not
+    describe every month as earning 50%. Payouts are monthly through PayPal.
+  keywords: [pagefly, shopify page builder, shopify landing pages, shopify store design, e-commerce pages]
+  use_cases:
+    - "Shopify merchants building landing pages"
+    - "Agencies demonstrating custom store layouts"
+    - "Publishers comparing Shopify page builders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

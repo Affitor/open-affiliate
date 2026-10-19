@@ -16,16 +16,23 @@ commission:
 cookie_days: 30
 attribution: last-click
 tracking_method: cookie
+# "Commissions clear a 60-day period to account for refunds, chargebacks, and subscription validation. … Once eligible, commissions are paid within the first 3 days of each month." (www.heygen.com/geniverse/social-creator-program, checked 2026-10-19) — 60 days before payout → net-60 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "Commissions clear a 60-day period to account for refunds, chargebacks, and subscription validation. … Once eligible, commissions are paid within the first 3 days of each month."
   methods: [paypal]
 signup_url: https://www.heygen.com/geniverse/social-creator-program
 approval: manual
 restrictions:
 - Open to creators with 5K+ followers on at least one platform
 - Original video content only; no SEO/blog-only promotion, paid search, or self-referrals
+conflicts:
+  - field: payout.minimum
+    quote: "heygen.com/geniverse/social-creator-program: \"Minimum payout $100.\" Its locale versions heygen.com/ja-jp/affiliate-program and /es-es/affiliate-program (the English /affiliate-program redirects to the Social Creator page): $30 (\"El importe mínimo de pago es de 30 $\"). Checked 2026-10-18."
+  - field: restrictions
+    quote: "heygen.com/geniverse/social-creator-program: \"Original video content only — no SEO/blog-only promotion\". heygen.com/es-es/affiliate-program allows \"entradas de blog, boletines o comunidades\" (blog posts, newsletters, communities). Checked 2026-10-18."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -50,7 +57,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

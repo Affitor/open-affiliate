@@ -6,7 +6,7 @@ tags: [web-hosting, wordpress-hosting, managed-hosting, woocommerce, headless-wo
 
 commission:
   type: one-time
-  # "you will earn $100 on Lite plan purchases and for all other plans, $200 minimum or equal to the first month's payment, whichever is higher" (wpengine.com/affiliate-program, checked 2026-10-13)
+  # "you will earn $100 on Lite plan purchases and for all other plans, $200 minimum or equal to the first month’s payment, whichever is higher" (wpengine.com/affiliate-program, checked 2026-10-13)
   rate: "$100 to $200+"
   mode: flat
   value: 200
@@ -19,9 +19,10 @@ cookie_days: 180
 
 # payout minimum and methods: not published on wpengine.com/affiliate-program (checked 2026-10-13)
 # "Commissions are paid on or around the 20th of the month after the referral reaches 62 days of age" (wpengine.com/affiliate-program, checked 2026-10-13)
+# "Commissions are paid on or around the 20th of the month after the referral reaches 62 days of age, as long as the referral remains in good standing." (wpengine.com/affiliate-program/, checked 2026-10-19) — over 60 days → no frequency (backfill rule #1)
 payout:
   currency: USD
-  frequency: monthly
+  conditions: "Commissions are paid on or around the 20th of the month after the referral reaches 62 days of age, as long as the referral remains in good standing."
 
 signup_url: https://wpengine.com/affiliate-program/
 approval: manual
@@ -64,10 +65,13 @@ agents:
     - "Agencies hosting many client WordPress sites"
     - "Online stores that need fast WooCommerce hosting"
 
+not_published:
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

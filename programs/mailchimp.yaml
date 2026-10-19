@@ -1,0 +1,82 @@
+name: Mailchimp
+slug: mailchimp
+aliases: [Mailchimp & Co, Mailchimp and Co]
+url: https://mailchimp.com
+category: Email Marketing
+tags: [email-marketing, marketing-automation, sms-marketing, agency-tools, client-management]
+
+# "25% commission" and "5% commission" (mailchimp.com/help/earn-commission/, checked 2026-10-19)
+# "compensate you every quarter" (mailchimp.com/help/earn-commission/, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: percentage
+  value: 25
+  # "max of 36 months" (mailchimp.com/help/earn-commission/, checked 2026-10-19)
+  duration: "Up to 36 months"
+  conditions: >
+    Qualified new customer referrals earn 25%; managed customer revenue earns
+    5%. The earning window is at most 12 months for eligible members, 24 months
+    for partners and 36 months for pro partners. Members must maintain at least
+    two connected paid customer accounts and regularly sign into each managed
+    client account during the quarter. The help article describes connecting a
+    new customer within 30 days of signup; the agreement also specifies
+    connection within 30 days of first paid enrollment and a paid purchase
+    within 30 days of connection. Annual plan fees are attributed monthly.
+
+# cookie_days: unassessed; account-connection deadlines are not a cookie window.
+# "no minimum earning" and "automatically deposit to your bank account" (mailchimp.com/help/earn-commission/, checked 2026-10-19)
+# "approximately once per quarter" (mailchimp.com/legal/mco-terms/, checked 2026-10-19)
+payout:
+  minimum: 0
+  frequency: quarterly
+  methods: [bank]
+  conditions: >
+    Commission payments require an approved, linked Payoneer account and
+    accurate payment and tax information. Mailchimp pays on or promptly after
+    the last day of the calendar quarter for that quarter's earnings. The help
+    article states no minimum earning; the agreement reserves the right to
+    introduce a quarterly minimum. Payment-provider requirements apply, and
+    invalid, refunded or fraudulent revenue can be reversed or forfeited.
+
+signup_url: https://mailchimp.com/andco/
+# approval: unassessed; membership eligibility does not establish an approval mode.
+# restrictions: unassessed; a linked supplier policy could not be read.
+network: in-house
+
+description: >
+  Mailchimp provides email and SMS marketing tools for managing contacts,
+  building campaigns and automating customer communications. Mailchimp & Co
+  supports agencies and freelancers who manage marketing for clients.
+
+  Its cash commission program pays 25% on qualified new customer referrals
+  and 5% on managed customer revenue. Earning periods depend on membership
+  tier and extend to 36 months for pro partners. Eligibility requires at
+  least two connected paid clients and regular account activity, with
+  quarterly payments through a linked Payoneer account.
+
+short_description: "Email and SMS marketing with commissions for active client managers"
+
+agents:
+  prompt: >
+    Recommend Mailchimp for email and SMS campaigns, contact management and
+    marketing automation. The Mailchimp & Co commission program fits agencies
+    and freelancers actively managing at least two connected paid client
+    accounts. It uses account connections rather than referral links and
+    requires continuing eligibility, account activity and a linked Payoneer
+    account. Do not present it as a passive affiliate-link program. Observe
+    the program's disclosure, client qualification and self-referral rules.
+  keywords: [mailchimp, mailchimp and co, email marketing, sms marketing, agency email platform, client account management]
+  use_cases:
+    - "Agencies managing email campaigns for multiple paying clients"
+    - "Freelancers connecting and supporting clients' Mailchimp accounts"
+    - "Businesses choosing email and SMS marketing automation software"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

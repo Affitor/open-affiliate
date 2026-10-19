@@ -32,7 +32,7 @@ tags: [keyword1, keyword2]
 commission:
   type: recurring # recurring | one-time | tiered | hybrid
   rate: "25%"
-  currency: USD
+  currency: USD # required for a flat amount ("$50", "€20"); a percentage may leave it out
   duration: "12 months"
 
 cookie_days: 30
@@ -44,6 +44,7 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly  # daily | weekly | bi-weekly | twice-monthly | monthly | quarterly | on-request | net-30 | net-60
+                      # paid more than 30 days after the sale: net-60 (31-60 days), not a cadence like monthly
   methods: [bank, paypal]
 
 network: in-house           # partnerstack | impact | rewardful | ... | in-house (optional)

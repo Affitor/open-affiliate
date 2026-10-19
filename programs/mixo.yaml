@@ -17,16 +17,26 @@ cookie_days: 60
 attribution: last-click
 tracking_method: cookie
 
+# "Payment has passed the first 75 days after the sale was made. Commissions remain in a pending state for at least 75 days to allow for refund processing and fraud review before they become payable" (www.mixo.io/terms-affiliate, checked 2026-10-19) — over 60 days → no frequency (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
+  conditions: "Payment has passed the first 75 days after the sale was made. Commissions remain in a pending state for at least 75 days to allow for refund processing and fraud review before they become payable"
+  # "Payments will generally be paid out monthly (first week of the month) via PayPal" (https://www.mixo.io/terms-affiliate, checked 2026-10-18)
+  methods: [paypal]
 
 signup_url: https://www.mixo.io/affiliates/
-approval: auto
-approval_time: "Instant"
-restrictions: null
+# "We review all applications manually." "Most applications are reviewed within 2-3 business days." (https://www.mixo.io/affiliates/, checked 2026-10-18)
+approval: manual
+approval_time: "2-3 business days"
+# "Coupon, deal, or cashback sites ✕ Self-referrals or referring your own accounts ✕ Paid traffic arbitrage or incentivised signups ✕ Automated, bulk, or misleading traffic sources" (https://www.mixo.io/affiliates/, checked 2026-10-18)
+restrictions:
+  - "No coupon, deal, or cashback sites"
+  - "No self-referrals or referring your own accounts"
+  - "No paid traffic arbitrage or incentivised signups"
+  - "No automated, bulk, or misleading traffic sources"
+  - "No bidding on Mixo branded terms or competitors' trademarked terms in PPC campaigns"
+  - "PPC campaigns must go to your own landing pages, not to Mixo pages"
 
 marketing_materials: true
 api_available: false
@@ -41,8 +51,8 @@ description: >
   and get a professional site with copy, images, and email collection
   in seconds. Built for idea validation, MVPs, and quick launches.
 
-  The affiliate program pays 20% recurring for 12 months with instant
-  approval via Rewardful.
+  The affiliate program pays 20% recurring for 12 months. Applications
+  are reviewed manually, most within 2-3 business days.
 
 short_description: "AI landing page builder from ideas"
 
@@ -62,7 +72,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: null
+updated_at: "2026-10-19"
 last_verified_at: "2026-04-17"
 kind: affiliate
 source: community

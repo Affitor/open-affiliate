@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, useMemo, useCallback, useEffect } from "react";
+import { Suspense, useState, useMemo, useCallback, useEffect, useRef } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   ChevronLeft,
@@ -10,6 +10,7 @@ import {
   X,
   Search,
   ShieldCheck,
+  SlidersHorizontal,
 } from "lucide-react";
 import { ProgramCardGrid, ProgramRowList } from "@/components/program-card";
 import { FilterSelect } from "@/components/filter-select";
@@ -89,27 +90,22 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
 // the swap shifts nothing that is on screen.
 function ProgramsSkeleton() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-10 min-h-dvh">
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Programs</h1>
-        <div className="mt-2 h-4 w-72 animate-pulse rounded bg-muted/30" />
+    <div className="min-h-dvh">
+      <div className="oa-band !py-8 md:!py-10">
+        <p className="oa-label">Directory</p>
+        <div className="mt-2 h-8 w-72 max-w-full animate-pulse rounded bg-sunk md:h-10" />
+        <div className="mt-2 h-4 w-24 animate-pulse rounded bg-sunk" />
       </div>
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        {[176, 96, 136, 96, 72, 96].map((w, i) => (
-          <div
-            key={i}
-            className="h-9 animate-pulse rounded-lg bg-muted/30"
-            style={{ width: w }}
-          />
-        ))}
+      <div className="oa-band !py-4">
+        <div className="h-10 animate-pulse rounded-lg bg-sunk md:h-8" />
       </div>
-      <div className="space-y-2">
-        {Array.from({ length: 12 }, (_, i) => (
-          <div
-            key={i}
-            className="h-16 animate-pulse rounded-lg bg-muted/30"
-          />
-        ))}
+      <div className="oa-band !pt-5">
+        <div className="mb-3 h-4 w-28 animate-pulse rounded bg-sunk" />
+        <div className="overflow-hidden rounded-xl border border-border bg-card">
+          {Array.from({ length: 12 }, (_, i) => (
+            <div key={i} className="h-[57px] border-b border-border last:border-b-0" />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -145,6 +141,8 @@ function ProgramsContent() {
   );
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [view, setView] = usePersistedView();
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const closeSheet = useCallback(() => setSheetOpen(false), []);
 
   // Pagination lives in the URL, not in React state.
   //
@@ -367,277 +365,386 @@ function ProgramsContent() {
     return Array.from({ length: end - adjusted + 1 }, (_, i) => adjusted + i);
   }, [totalPages, currentPage]);
 
+  // Every active filter as one removable chip, in the order of the filter row.
+  const activeChips: { key: string; label: string; clear: () => void }[] = [
+    ...(query ? [{ key: "q", label: `“${query}”`, clear: () => handleSearch("") }] : []),
+    ...(selectedCategory ? [{ key: "category", label: selectedCategory, clear: () => handleCategory("") }] : []),
+    ...(selectedType ? [{ key: "type", label: COMMISSION_TYPE_LABELS[selectedType] ?? selectedType, clear: () => handleType("") }] : []),
+    ...(selectedNetwork ? [{ key: "network", label: networkName(selectedNetwork), clear: () => handleNetwork("") }] : []),
+    ...termChips.map((c) => ({ key: c.options[0].label, label: c.options.find((o) => o.value === c.value)?.label ?? c.value, clear: c.clear })),
+    ...(verifiedOnly ? [{ key: "verified", label: "Verified", clear: () => setVerifiedOnly(false) }] : []),
+  ];
+  // The Filters button counts what the sheet holds: everything but the search box.
+  const filterCount = activeChips.filter((c) => c.key !== "q").length + (sort !== "relevance" ? 1 : 0);
+  const verifiedTotal = programs.filter((p) => p.verified).length;
+
   return (
     // min-h-dvh as on the skeleton: a short filtered list does not pull the
-    // A–Z directory below up into view.
-    <div className="mx-auto max-w-6xl px-6 py-10 min-h-dvh">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-2xl font-bold tracking-tight">Programs</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          {programs.length} affiliate programs — curated, verified, and
-          agent-ready
-        </p>
-      </div>
+    // footer up into view while the list is still loading.
+    <div className="min-h-dvh">
+      <header className="oa-band !py-8 md:!py-10">
+        <p className="oa-label">Directory</p>
+        <h1 className="mt-2 text-title md:text-display font-semibold tracking-[-0.03em]">{programs.length.toLocaleString("en-US")} affiliate programs</h1>
+        <p className="mt-1 font-mono text-meta text-muted-foreground tabular-nums">{verifiedTotal.toLocaleString("en-US")} verified</p>
+      </header>
 
-
-      {/* Filter toolbar */}
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        {/* Search input */}
-        <div className="relative">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => handleSearch(e.target.value)}
-            placeholder="Search programs..."
-            className="rounded-lg border border-border/50 bg-card/50 pl-8 pr-3 py-2 text-xs w-44 focus:outline-none focus:border-border transition-colors placeholder:text-muted-foreground/60"
-          />
-        </div>
-        <FilterSelect
-          label="Category"
-          value={selectedCategory}
-          onChange={handleCategory}
-          options={categoryOptions}
-        />
-        <FilterSelect
-          label="Commission Type"
-          value={selectedType}
-          onChange={handleType}
-          options={typeOptions}
-        />
-        <FilterSelect
-          label="Network"
-          value={selectedNetwork}
-          onChange={handleNetwork}
-          options={networkOptions}
-        />
-        <FilterSelect label="Payout Method" value={selectedPayout} onChange={handlePayout} options={PAYOUT_OPTIONS} />
-        <FilterSelect label="Minimum Payout" value={minPayout} onChange={handleMinPayout} options={MIN_PAYOUT_OPTIONS} />
-        <FilterSelect label="Cookie Window" value={cookie} onChange={handleCookie} options={COOKIE_OPTIONS} />
-        <FilterSelect
-          label="Sort"
-          value={sort}
-          onChange={handleSort}
-          options={sortOptions}
-        />
-
-        {/* Verified toggle */}
-        <button
-          onClick={() => { setVerifiedOnly(!verifiedOnly); setPage(1); }}
-          className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium transition-colors ${
-            verifiedOnly
-              ? "border-emerald-500/50 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
-              : "border-border/50 bg-card/50 text-muted-foreground hover:border-border"
-          }`}
-        >
-          <ShieldCheck className="h-3.5 w-3.5" />
-          Verified
-        </button>
-
-        {/* Spacer */}
-        <div className="flex-1" />
-
-        {/* View toggle */}
-        <div className="flex items-center rounded-lg border border-border/50 overflow-hidden">
+      <div className="oa-band !py-4">
+        {/* One search on this page: the nav hides its own here. */}
+        <div className="flex items-center gap-2 md:items-start">
+          <label className="relative flex-1 md:flex-none">
+            <span className="sr-only">Search programs</span>
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search programs"
+              className="h-10 w-full rounded-lg border border-line-strong bg-card pl-9 pr-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-foreground/40 md:h-8 md:w-60 md:text-meta"
+            />
+          </label>
+          {/* Phones: one button opens every filter in a bottom sheet. */}
           <button
-            onClick={() => setView("list")}
-            className={`flex items-center justify-center h-8 w-8 transition-colors ${
-              view === "list"
-                ? "bg-muted text-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-            }`}
-            aria-label="List view"
+            id="filters-button"
+            type="button"
+            onClick={() => setSheetOpen(true)}
+            aria-haspopup="dialog"
+            aria-expanded={sheetOpen}
+            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-line-strong bg-card px-3 text-sm font-medium md:hidden"
           >
-            <List className="h-3.5 w-3.5" />
+            <SlidersHorizontal className="h-4 w-4" aria-hidden />
+            Filters
+            {filterCount > 0 && <span className="grid h-5 min-w-5 place-items-center rounded-full bg-foreground px-1 font-mono text-xs text-background">{filterCount}</span>}
           </button>
-          <button
-            onClick={() => setView("grid")}
-            className={`flex items-center justify-center h-8 w-8 transition-colors ${
-              view === "grid"
-                ? "bg-muted text-foreground"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-            }`}
-            aria-label="Grid view"
-          >
-            <LayoutGrid className="h-3.5 w-3.5" />
-          </button>
+          {/* Desktop: the filter row. */}
+          <div className="hidden flex-1 flex-wrap items-center gap-2 md:flex">
+            <FilterSelect label="Category" value={selectedCategory} onChange={handleCategory} options={categoryOptions} />
+            <FilterSelect label="Commission Type" value={selectedType} onChange={handleType} options={typeOptions} />
+            <FilterSelect label="Network" value={selectedNetwork} onChange={handleNetwork} options={networkOptions} />
+            <FilterSelect label="Payout Method" value={selectedPayout} onChange={handlePayout} options={PAYOUT_OPTIONS} />
+            <FilterSelect label="Minimum Payout" value={minPayout} onChange={handleMinPayout} options={MIN_PAYOUT_OPTIONS} />
+            <FilterSelect label="Cookie Window" value={cookie} onChange={handleCookie} options={COOKIE_OPTIONS} />
+            <button
+              type="button"
+              aria-pressed={verifiedOnly}
+              onClick={() => { setVerifiedOnly(!verifiedOnly); setPage(1); }}
+              className={`inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-meta font-medium transition-colors ${
+                verifiedOnly ? "border-good-line bg-good-bg text-good" : "border-line-strong bg-card text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+              Verified
+            </button>
+            <div className="flex-1" />
+            <FilterSelect label="Sort" value={sort} onChange={handleSort} options={sortOptions} />
+            <div className="flex items-center overflow-hidden rounded-lg border border-line-strong">
+              {(["list", "grid"] as const).map((v) => (
+                <button
+                  key={v}
+                  type="button"
+                  onClick={() => setView(v)}
+                  aria-label={v === "list" ? "List view" : "Grid view"}
+                  aria-pressed={view === v}
+                  className={`flex h-8 w-8 items-center justify-center transition-colors ${view === v ? "bg-sunk text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  {v === "list" ? <List className="h-3.5 w-3.5" /> : <LayoutGrid className="h-3.5 w-3.5" />}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Active filters + results count */}
-      <div className="flex items-center gap-2 flex-wrap mb-6">
-        <span className="text-xs text-muted-foreground">
-          {filtered.length === programs.length
-            ? `${filtered.length} programs`
-            : `${filtered.length} of ${programs.length} programs`}
-        </span>
-
-        {hasActiveFilters && (
-          <>
-            <span className="text-border">|</span>
-            {query && (
+        {activeChips.length > 0 && (
+          <div className="mt-2 flex items-center gap-1.5 overflow-x-auto [scrollbar-width:none] md:flex-wrap">
+            {activeChips.map((c) => (
               <button
-                onClick={() => handleSearch("")}
-                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                &ldquo;{query}&rdquo;
-                <X className="h-3 w-3" />
-              </button>
-            )}
-            {selectedCategory && (
-              <button
-                onClick={() => handleCategory("")}
-                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                {selectedCategory}
-                <X className="h-3 w-3" />
-              </button>
-            )}
-            {selectedType && (
-              <button
-                onClick={() => handleType("")}
-                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                {COMMISSION_TYPE_LABELS[selectedType] ?? selectedType}
-                <X className="h-3 w-3" />
-              </button>
-            )}
-            {selectedNetwork && (
-              <button
-                onClick={() => handleNetwork("")}
-                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-[11px] text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
-              >
-                {networkName(selectedNetwork)}
-                <X className="h-3 w-3" />
-              </button>
-            )}
-            {termChips.map((c) => (
-              <button
-                key={c.options[0].label}
+                key={c.key}
+                type="button"
                 onClick={c.clear}
-                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+                aria-label={`Remove filter ${c.label}`}
+                className="inline-flex h-[26px] shrink-0 items-center gap-1 rounded-md border border-line-strong bg-card px-2 text-xs text-foreground/80 hover:text-foreground"
               >
-                {c.options.find((o) => o.value === c.value)?.label}
-                <X className="h-3 w-3" />
+                {c.label}
+                <X className="h-3 w-3" aria-hidden />
               </button>
             ))}
-            <button
-              onClick={clearAll}
-              className="text-[11px] text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"
-            >
+            <button type="button" onClick={clearAll} className="shrink-0 px-1 text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground">
               Clear all
-            </button>
-          </>
-        )}
-      </div>
-
-      {/* Results */}
-      {paginated.length === 0 ? (
-        <div className="text-center py-16">
-          <p className="text-sm text-muted-foreground">
-            No programs found. Try a different search or category.
-          </p>
-          {hasActiveFilters && (
-            <button
-              onClick={clearAll}
-              className="mt-3 text-xs text-muted-foreground hover:text-foreground transition-colors underline"
-            >
-              Clear all filters
-            </button>
-          )}
-        </div>
-      ) : view === "grid" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {paginated.map((program) => (
-            <ProgramCardGrid key={program.slug} program={program} />
-          ))}
-        </div>
-      ) : (
-        <div className="space-y-2">
-          {paginated.map((program) => (
-            <ProgramRowList key={program.slug} program={program} />
-          ))}
-        </div>
-      )}
-
-      {/* Pagination + page size */}
-      <div className="flex flex-col items-center gap-3 mt-8">
-        {totalPages > 1 && (
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage <= 1}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border/40 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30 disabled:pointer-events-none"
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </button>
-            {pageRange[0] > 1 && (
-              <>
-                <button
-                  onClick={() => setPage(1)}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                >
-                  1
-                </button>
-                {pageRange[0] > 2 && (
-                  <span className="text-xs text-muted-foreground/50 px-1">&hellip;</span>
-                )}
-              </>
-            )}
-            {pageRange.map((p) => (
-              <button
-                key={p}
-                onClick={() => setPage(p)}
-                className={`flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium transition-colors ${
-                  p === currentPage
-                    ? "bg-muted text-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-            {pageRange[pageRange.length - 1] < totalPages && (
-              <>
-                {pageRange[pageRange.length - 1] < totalPages - 1 && (
-                  <span className="text-xs text-muted-foreground/50 px-1">&hellip;</span>
-                )}
-                <button
-                  onClick={() => setPage(totalPages)}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
-                >
-                  {totalPages}
-                </button>
-              </>
-            )}
-            <button
-              onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage >= totalPages}
-              className="flex h-8 w-8 items-center justify-center rounded-lg border border-border/40 text-muted-foreground hover:text-foreground hover:bg-muted transition-colors disabled:opacity-30 disabled:pointer-events-none"
-            >
-              <ChevronRight className="h-4 w-4" />
             </button>
           </div>
         )}
-        <div className="flex items-center gap-1">
-          <span className="text-xs text-muted-foreground mr-1">Show</span>
-          {PAGE_SIZE_OPTIONS.map((size) => (
-            <button
-              key={size}
-              onClick={() => handlePageSize(size)}
-              className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
-                pageSize === size
-                  ? "bg-muted text-foreground"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {size}
-            </button>
-          ))}
-        </div>
       </div>
 
+      <section className="oa-band !pt-5" aria-label="Programs">
+        <p className="mb-3 font-mono text-xs text-muted-foreground tabular-nums" aria-live="polite">
+          {filtered.length === programs.length ? `${filtered.length.toLocaleString("en-US")} programs` : `${filtered.length.toLocaleString("en-US")} of ${programs.length.toLocaleString("en-US")} programs`}
+        </p>
+
+        {paginated.length === 0 ? (
+          <div className="rounded-xl border border-border bg-card py-16 text-center">
+            <p className="text-sm text-muted-foreground">No programs found. Try a different search or category.</p>
+            {hasActiveFilters && (
+              <button type="button" onClick={clearAll} className="mt-3 text-xs text-muted-foreground underline hover:text-foreground">
+                Clear all filters
+              </button>
+            )}
+          </div>
+        ) : view === "grid" ? (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+            {paginated.map((program) => (
+              <ProgramCardGrid key={program.slug} program={program} />
+            ))}
+          </div>
+        ) : (
+          <div className="overflow-hidden rounded-xl border border-border bg-card [&>div:last-child]:border-b-0">
+            <div className="hidden grid-cols-[32px_minmax(0,1fr)_130px_minmax(0,190px)_136px_44px_36px] gap-3 border-b border-border bg-sunk px-3 py-2 md:grid" aria-hidden>
+              <span className="oa-label col-span-2">Program</span>
+              <span className="oa-label">Category</span>
+              <span className="oa-label">Commission</span>
+              <span className="oa-label">Cookie</span>
+              <span className="oa-label">Score</span>
+              <span />
+            </div>
+            {paginated.map((program) => (
+              <ProgramRowList key={program.slug} program={program} />
+            ))}
+          </div>
+        )}
+
+        {/* Pagination + page size */}
+        <div className="mt-6 flex flex-col items-center gap-3">
+          {totalPages > 1 && (
+            <nav className="flex items-center gap-1" aria-label="Pages">
+              <button
+                type="button"
+                onClick={() => setPage(Math.max(1, currentPage - 1))}
+                disabled={currentPage <= 1}
+                aria-label="Previous page"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-line-strong text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              {pageRange[0] > 1 && (
+                <>
+                  <button type="button" onClick={() => setPage(1)} className="flex h-8 w-8 items-center justify-center rounded-lg font-mono text-xs text-muted-foreground hover:bg-sunk hover:text-foreground">1</button>
+                  {pageRange[0] > 2 && <span className="px-1 text-xs text-muted-foreground">&hellip;</span>}
+                </>
+              )}
+              {pageRange.map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPage(p)}
+                  aria-current={p === currentPage ? "page" : undefined}
+                  className={`flex h-8 w-8 items-center justify-center rounded-lg font-mono text-xs transition-colors ${
+                    p === currentPage ? "border border-line-strong bg-card text-foreground" : "text-muted-foreground hover:bg-sunk hover:text-foreground"
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+              {pageRange[pageRange.length - 1] < totalPages && (
+                <>
+                  {pageRange[pageRange.length - 1] < totalPages - 1 && <span className="px-1 text-xs text-muted-foreground">&hellip;</span>}
+                  <button type="button" onClick={() => setPage(totalPages)} className="flex h-8 w-8 items-center justify-center rounded-lg font-mono text-xs text-muted-foreground hover:bg-sunk hover:text-foreground">{totalPages}</button>
+                </>
+              )}
+              <button
+                type="button"
+                onClick={() => setPage(Math.min(totalPages, currentPage + 1))}
+                disabled={currentPage >= totalPages}
+                aria-label="Next page"
+                className="flex h-8 w-8 items-center justify-center rounded-lg border border-line-strong text-muted-foreground hover:text-foreground disabled:pointer-events-none disabled:opacity-30"
+              >
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </nav>
+          )}
+          <div className="flex items-center gap-1">
+            <span className="mr-1 text-xs text-muted-foreground">Show</span>
+            {PAGE_SIZE_OPTIONS.map((size) => (
+              <button
+                key={size}
+                type="button"
+                onClick={() => handlePageSize(size)}
+                aria-pressed={pageSize === size}
+                className={`rounded px-2 py-0.5 font-mono text-xs transition-colors ${pageSize === size ? "bg-sunk text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {sheetOpen && (
+        <FilterSheet
+          onClose={closeSheet}
+          resultCount={filtered.length}
+          onClear={clearAll}
+          sort={sort}
+          onSort={handleSort}
+          type={selectedType}
+          onType={handleType}
+          verifiedOnly={verifiedOnly}
+          onVerified={(v) => { setVerifiedOnly(v); setPage(1); }}
+          category={selectedCategory}
+          onCategory={handleCategory}
+          network={selectedNetwork}
+          onNetwork={handleNetwork}
+          networkOptions={networkOptions}
+          payout={selectedPayout}
+          onPayout={handlePayout}
+          minPayout={minPayout}
+          onMinPayout={handleMinPayout}
+          cookie={cookie}
+          onCookie={handleCookie}
+        />
+      )}
     </div>
+  );
+}
+
+/** A pressed-state chip for the sheet: one tap sets or clears a value. */
+function SheetChip({ pressed, onClick, children }: { pressed: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={pressed}
+      onClick={onClick}
+      className={`inline-flex h-8 items-center gap-1.5 rounded-lg border px-2.5 text-meta transition-colors ${
+        pressed ? "border-foreground bg-card text-foreground font-medium" : "border-line-strong bg-card text-foreground/80"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function SheetGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <fieldset className="border-t border-border py-3">
+      <legend className="sr-only">{label}</legend>
+      <p className="oa-label mb-2" aria-hidden>{label}</p>
+      <div className="flex flex-wrap gap-1.5">{children}</div>
+    </fieldset>
+  );
+}
+
+/**
+ * Phones: every filter in a bottom sheet (redesign r3, D4). Filters apply as
+ * they are tapped; the button only closes the sheet. Escape and the scrim close
+ * it too, focus moves into it on open and back to the page on close.
+ */
+function FilterSheet(props: {
+  onClose: () => void;
+  resultCount: number;
+  onClear: () => void;
+  sort: SortOption;
+  onSort: (v: string) => void;
+  type: string;
+  onType: (v: string) => void;
+  verifiedOnly: boolean;
+  onVerified: (v: boolean) => void;
+  category: string;
+  onCategory: (v: string) => void;
+  network: string;
+  onNetwork: (v: string) => void;
+  networkOptions: { value: string; label: string; count?: number }[];
+  payout: string;
+  onPayout: (v: string) => void;
+  minPayout: string;
+  onMinPayout: (v: string) => void;
+  cookie: string;
+  onCookie: (v: string) => void;
+}) {
+  // A native modal dialog: showModal() keeps keyboard focus inside and makes the page behind
+  // inert; Escape arrives as "cancel". Opened once on mount, so a filter change (a re-render
+  // with new props) never moves focus. The latest onClose is read through a ref.
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const onCloseRef = useRef(props.onClose);
+  useEffect(() => { onCloseRef.current = props.onClose; }, [props.onClose]);
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    // Focus goes back to the Filters button: a tap does not always focus it (Safari).
+    const opener = document.getElementById("filters-button");
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (!dialog.open) dialog.showModal();
+    const onCancel = (e: Event) => { e.preventDefault(); onCloseRef.current(); };
+    dialog.addEventListener("cancel", onCancel);
+    // md+ hides the sheet (md:hidden): close it then, or the page would stay inert and locked
+    // with no visible way out (a phone turned to landscape, a window widened).
+    const wide = window.matchMedia("(min-width: 768px)");
+    const onWide = () => { if (wide.matches) onCloseRef.current(); };
+    wide.addEventListener("change", onWide);
+    onWide();
+    return () => {
+      wide.removeEventListener("change", onWide);
+      dialog.removeEventListener("cancel", onCancel);
+      if (dialog.open) dialog.close();
+      document.body.style.overflow = overflow;
+      opener?.focus();
+    };
+  }, []);
+  const onClose = props.onClose;
+  const toggle = (current: string, value: string, set: (v: string) => void) => set(current === value ? "" : value);
+
+  return (
+    <dialog
+        ref={dialogRef}
+        aria-labelledby="filter-sheet-title"
+        // A click on the backdrop lands on the dialog element itself.
+        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        className="md:hidden fixed inset-x-0 bottom-0 top-auto m-0 flex max-h-[85dvh] w-full max-w-none flex-col rounded-t-[14px] border-0 border-t border-line-strong bg-card p-0 text-foreground shadow-[0_-12px_40px_rgb(0_0_0/0.18)] backdrop:bg-black/35 focus:outline-none [&:not([open])]:hidden"
+      >
+        <div className="mx-auto mt-3 h-1 w-9 rounded-full bg-line-strong" aria-hidden />
+        <div className="flex items-center justify-between px-4 pt-2 pb-3">
+          <h2 id="filter-sheet-title" className="text-lg font-semibold">Filters</h2>
+          <button type="button" onClick={onClose} aria-label="Close filters" className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground hover:text-foreground">
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        <div className="flex-1 overflow-y-auto px-4">
+          <SheetGroup label="Sort by">
+            {SORT_OPTIONS.map((o) => (
+              <SheetChip key={o.value} pressed={props.sort === o.value} onClick={() => props.onSort(o.value)}>{o.label}</SheetChip>
+            ))}
+          </SheetGroup>
+          <SheetGroup label="Commission">
+            {commissionTypes.map((t) => (
+              <SheetChip key={t} pressed={props.type === t} onClick={() => toggle(props.type, t, props.onType)}>{COMMISSION_TYPE_LABELS[t] ?? t}</SheetChip>
+            ))}
+          </SheetGroup>
+          <SheetGroup label="Terms">
+            <SheetChip pressed={props.verifiedOnly} onClick={() => props.onVerified(!props.verifiedOnly)}>Verified</SheetChip>
+            {PAYOUT_OPTIONS.slice(1).map((o) => (
+              <SheetChip key={o.value} pressed={props.payout === o.value} onClick={() => toggle(props.payout, o.value, props.onPayout)}>{o.label}</SheetChip>
+            ))}
+            {MIN_PAYOUT_OPTIONS.slice(1).map((o) => (
+              <SheetChip key={o.value} pressed={props.minPayout === o.value} onClick={() => toggle(props.minPayout, o.value, props.onMinPayout)}>{o.label}</SheetChip>
+            ))}
+            {COOKIE_OPTIONS.slice(1).map((o) => (
+              <SheetChip key={o.value} pressed={props.cookie === o.value} onClick={() => toggle(props.cookie, o.value, props.onCookie)}>{o.label}</SheetChip>
+            ))}
+          </SheetGroup>
+          <SheetGroup label="Network">
+            <FilterSelect label="Network" value={props.network} onChange={props.onNetwork} options={props.networkOptions} className="w-full [&_select]:h-10 [&_select]:w-full [&_select]:text-sm" />
+          </SheetGroup>
+          <SheetGroup label="Category">
+            {categories.map((cat) => (
+              <SheetChip key={cat} pressed={props.category === cat} onClick={() => toggle(props.category, cat, props.onCategory)}>
+                {cat} <span className="font-mono text-xs text-muted-foreground">{categoryCounts[cat] ?? 0}</span>
+              </SheetChip>
+            ))}
+          </SheetGroup>
+        </div>
+        <div className="flex gap-2 border-t border-border px-4 pt-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
+          <button type="button" onClick={props.onClear} className="h-11 rounded-lg border border-line-strong px-4 text-sm font-medium">Clear all</button>
+          <button type="button" onClick={onClose} className="h-11 flex-1 rounded-lg bg-foreground text-sm font-medium text-background">
+            Show {props.resultCount.toLocaleString("en-US")} programs
+          </button>
+        </div>
+    </dialog>
   );
 }

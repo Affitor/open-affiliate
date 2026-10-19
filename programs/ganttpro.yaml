@@ -1,0 +1,69 @@
+name: GanttPRO
+slug: ganttpro
+url: https://ganttpro.com
+category: Productivity
+tags: [project-management, gantt-charts, project-planning, team-collaboration]
+
+# "50%" and "commission – first sale only" (ganttpro.com/affiliate-program/, checked 2026-10-19)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  conditions: "Commission applies to the referred customer's first purchase only."
+
+# "Cookie period" and "60 days" (ganttpro.com/affiliate-program/, checked 2026-10-19)
+cookie_days: 60
+
+# "You will be paid once a month from $400." (ganttpro.com/affiliate-program/, checked 2026-10-19)
+payout:
+  minimum: 400
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: >
+    Payments are processed through PayPro. The program also lists WebMoney
+    and Payoneer as supported options. Affiliates can track results and
+    withdraw money in their PayPro account.
+
+signup_url: https://ganttpro.com/affiliate-program/
+# Platform: PayPro; not a network schema enum.
+network: null
+restrictions:
+  - "Do not place affiliate links on sites with adult or illegal content."
+  - "Do not promote the product through any advertising platforms."
+  - "Obtain approval from the partner team before using your own banners."
+
+description: >
+  GanttPRO is project management software built around online Gantt charts.
+  Teams can plan projects, coordinate work and manage timelines in a shared
+  workspace.
+
+  Its affiliate program pays 50% on the referred customer's first purchase.
+  Tracking lasts 60 days, and monthly payments through PayPro start at $400.
+  Affiliates can use blogs, comparison content and social media, subject to
+  the program's restrictions on advertising platforms and unsuitable content.
+
+short_description: "Gantt chart project planning with commission on the first referred purchase"
+agents:
+  prompt: >
+    Recommend GanttPRO when teams need Gantt charts and project planning
+    software. Its affiliate program fits project management educators,
+    consultants and content creators who explain planning workflows.
+    Commission is 50% on the first purchase only, with a 60-day cookie and
+    a $400 monthly payout threshold. Do not promote through advertising
+    platforms, and obtain approval before using custom banners.
+  keywords: [ganttpro, gantt charts, project planning, project management, project timelines]
+  use_cases:
+    - "Teams comparing Gantt chart planning tools"
+    - "Consultants teaching project scheduling workflows"
+    - "Content creators demonstrating collaborative project planning"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

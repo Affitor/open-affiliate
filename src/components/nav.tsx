@@ -18,11 +18,13 @@ function GitHubIcon({ className }: { className?: string }) {
 // Explore is intentionally absent. The page still works at /explore and is
 // linked from content that points at it, but it is not promoted in the nav
 // until its thumbnails and load time are good enough to send people to.
-// Rankings, Submit and Docs live in the footer (Registry column).
+// Rankings, Submit and Docs live in the footer. Rankings moves to the front of
+// the nav when OAS publishes (#285); until then the order stays.
 const NAV_LINKS = [
   { label: "Programs", href: "/programs" },
   { label: "Networks", href: "/networks" },
   { label: "Categories", href: "/categories" },
+  { label: "Blog", href: "/blog" },
 ];
 
 // Read from GitHub once per build in next.config.ts; empty when that read failed.
@@ -32,10 +34,12 @@ const starsLabel = STARS >= 1000 ? `${(STARS / 1000).toFixed(1).replace(/\.0$/, 
 export function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
+  // /programs has its own search box: one search per page (redesign r3, D4).
+  const showSearch = pathname !== "/programs";
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-6">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/85 backdrop-blur-xl">
+      <div className="oa-frame flex h-14 items-center justify-between px-4 sm:px-6">
         {/* Left: Logo + desktop nav */}
         <div className="flex items-center gap-8">
           <Link href="/" className="flex items-center gap-2.5">
@@ -55,7 +59,7 @@ export function Nav() {
               <Link
                 key={label}
                 href={href}
-                // /programs carries the A–Z directory: no viewport prefetch from every page.
+                // /programs: no viewport prefetch from every page (N-2).
                 prefetch={href === "/programs" ? false : undefined}
                 className={`text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}
                 aria-current={pathname === href || (href !== "/" && pathname.startsWith(href)) ? "page" : undefined}
@@ -68,9 +72,11 @@ export function Nav() {
 
         {/* Right: Search + GitHub + hamburger */}
         <div className="flex items-center gap-3">
-          <div className="hidden md:block w-56 lg:w-64">
-            <SearchBar />
-          </div>
+          {showSearch && (
+            <div className="hidden md:block w-56 lg:w-64">
+              <SearchBar />
+            </div>
+          )}
           <a
             href="https://github.com/Affitor/open-affiliate"
             target="_blank"
@@ -102,18 +108,16 @@ export function Nav() {
         </div>
       </div>
 
-      {/* Subtle gradient bottom line */}
-      <div className="h-px w-full bg-[linear-gradient(90deg,transparent,oklch(0.18_0.01_75/6%)_20%,oklch(0.45_0.15_160/20%)_50%,oklch(0.18_0.01_75/6%)_80%,transparent)] dark:bg-[linear-gradient(90deg,transparent,oklch(0.3_0.01_75/10%)_20%,oklch(0.55_0.15_160/25%)_50%,oklch(0.3_0.01_75/10%)_80%,transparent)]" />
 
       {/* Mobile menu drawer */}
       {mobileOpen && (
         <div className="md:hidden border-t border-border/40 bg-background/95 backdrop-blur-xl">
-          <nav className="mx-auto max-w-6xl px-6 py-4 flex flex-col gap-1">
+          <nav className="oa-frame px-4 py-3 flex flex-col gap-1">
             {NAV_LINKS.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
-                // /programs carries the A–Z directory: no viewport prefetch from every page.
+                // /programs: no viewport prefetch from every page (N-2).
                 prefetch={href === "/programs" ? false : undefined}
                 onClick={() => setMobileOpen(false)}
                 className={`py-2.5 text-sm transition-colors ${pathname === href || (href !== "/" && pathname.startsWith(href)) ? "text-foreground font-medium" : "text-muted-foreground hover:text-foreground"}`}

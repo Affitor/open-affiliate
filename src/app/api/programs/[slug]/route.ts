@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { resolveProgram } from "@/lib/program-aliases"
 import { apiProgram } from "@/lib/no-program"
+import { apiError } from "@/lib/api-error"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -25,10 +26,7 @@ export async function GET(
   const program = resolveProgram(slug)
 
   if (!program) {
-    return NextResponse.json(
-      { error: "Program not found" },
-      { status: 404, headers: CORS_HEADERS }
-    )
+    return apiError(404, "PROGRAM_NOT_FOUND", "Program not found.", "Search /api/programs?q=your-product to find a canonical slug.")
   }
 
   // A brand with no program gets the page's answer and alternatives, not terms.

@@ -19,13 +19,15 @@ commission:
 # "The cookie length is 30 days." (hunter.io/affiliate-program, checked 2026-10-17)
 cookie_days: 30
 
-# "The commissions are then due when the Affiliate's balance reaches a minimum of 100 USD." (hunter.io/affiliate-program, checked 2026-10-17)
+# "The commissions are then due when the Affiliate’s balance reaches a minimum of 100 USD." (hunter.io/affiliate-program, checked 2026-10-17)
 # "The commissions due are paid via PayPal on the first week of each month." (hunter.io/affiliate-program, checked 2026-10-17)
+# "To give time for refunds, the commissions are payable 45 days after the payment made by a customer." (hunter.io/affiliate-program/terms, checked 2026-10-19) — 31–60 days after payment → net-60 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-60
   methods: [paypal]
+  conditions: "To give time for refunds, the commissions are payable 45 days after the payment made by a customer. The commissions are then due when the Affiliate’s balance reaches a minimum of 100 USD. The commissions due are paid out via PayPal on the first week of each month."
 
 signup_url: https://hunter.io/affiliate-program
 # "All applications are manually reviewed by our team" and "You can expect us to get back to you within a week of your application." (hunter.io/affiliate-program, checked 2026-10-17)
@@ -73,7 +75,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
