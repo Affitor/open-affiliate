@@ -116,7 +116,7 @@ function CheckRow({ c, date, pageUrl, scored }: { c: OasCheck; date: string; pag
         {c.state === "checking" && (
           <p className="text-sm text-foreground/80 mt-0.5">We could not finish this check yet. This is on our side, and nothing is counted against the program meanwhile.</p>
         )}
-        {c.state === "held_out" && <p className="text-sm text-foreground/80 mt-0.5">Not checked on the program&rsquo;s pages yet. Its points count toward the other checks in this part, so it costs nothing.</p>}
+        {c.state === "held_out" && <p className="text-sm text-foreground/80 mt-0.5">Its points count toward the other checks in this part, so it costs the program nothing.</p>}
         {(c.state === "met" || c.state === "not_met") && pageUrl && (
           <p className="text-xs text-muted-foreground mt-1.5">
             {evidenceLink(pageUrl, <>Page checked <ExternalLink className="h-3 w-3" aria-hidden /></>, "inline-flex items-center gap-1 underline underline-offset-2 hover:text-foreground")} · {readableDate(date)}

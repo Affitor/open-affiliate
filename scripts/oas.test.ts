@@ -25,6 +25,7 @@ import {
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
+import { NOT_PUBLISHED_FIELDS, notPublishedProblems } from "./program-rules"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
@@ -268,6 +269,18 @@ test("v1.1: an absent term is Not published only with a marker; unmarked it is n
   // Stated terms ignore markers; a conflict still fails the check.
   assert.equal(state({ not_published: { cookie_days: "2026-10-15" } }, "T3"), "met")
   assert.equal(state({ cookie_days: undefined, conflicts: [{ field: "cookie_days", quote: "30 vs 90 days" }], not_published: null }, "T3"), "not_met")
+})
+
+test("v1.1 markers are validated at build: known terms, real dates, a map", () => {
+  const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
+  assert.deepEqual(Object.keys(schema.properties.not_published.properties).sort(), [...NOT_PUBLISHED_FIELDS].sort(), "the rule and the schema name the same terms")
+  assert.deepEqual(notPublishedProblems({}), [])
+  assert.deepEqual(notPublishedProblems({ not_published: { "payout.methods": "2026-10-15", approval: "2026-10-15" } }), [])
+  assert.equal(notPublishedProblems({ not_published: { "payout.metods": "2026-10-15" } }).length, 1, "a typo fails instead of leaving the term unassessed")
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: "not-a-date" } }).length, 1)
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: "2026-02-30" } }).length, 1)
+  assert.equal(notPublishedProblems({ not_published: { cookie_days: 20261015 } }).length, 1)
+  for (const scalar of ["2026-10-15", null, ["cookie_days"]]) assert.equal(notPublishedProblems({ not_published: scalar }).length, 1, JSON.stringify(scalar))
 })
 
 test("the registry's own YAML: read raw; an absent term is Not published only with its marker (spec 7b.1, v1.1)", () => {
