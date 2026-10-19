@@ -2,7 +2,8 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
-import { NextRequest } from "next/server"
+import { NextRequest, type NextFetchEvent } from "next/server"
+import { proxy } from "../src/proxy"
 import { GET as list, OPTIONS as listOptions } from "../src/app/api/programs/route"
 import { GET as detail } from "../src/app/api/programs/[slug]/route"
 import { GET as categories } from "../src/app/api/categories/route"
@@ -49,31 +50,32 @@ test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   assert.match(readFileSync("src/app/layout.tsx", "utf8"), /rel="ard" href="\/\.well-known\/ard\.json"/)
 })
 
-test("API-Version request header: 1 or absent is served, anything else is a 400", async () => {
-  const slug = { params: Promise.resolve({ slug: "vercel" }) }
-  const call = (version?: string) => {
-    const headers = version === undefined ? undefined : { "API-Version": version }
-    return Promise.all([
-      list(new NextRequest("http://localhost/api/programs?limit=1", { headers })),
-      detail(new NextRequest("http://localhost/api/programs/vercel", { headers }), slug),
-      categories(new NextRequest("http://localhost/api/categories", { headers })),
-    ])
-  }
-  for (const version of [undefined, "1"]) {
-    for (const response of await call(version)) {
-      assert.equal(response.status, 200, `${response.url} ${version}`)
-      assert.equal(response.headers.get("Vary"), "API-Version")
-    }
-  }
-  for (const version of ["2", "0", "1.0", "v1", ""]) {
-    for (const response of await call(version)) {
-      assert.equal(response.status, 400, `API-Version ${JSON.stringify(version)}`)
+test("API-Version request header: 1 or absent is served, anything else is a 400 before the cache", async () => {
+  // The proxy runs before the CDN cache, which does not key on this header (a cached
+  // 200 was served for API-Version: 2 on the preview when the routes checked it).
+  const event = { waitUntil() {} } as unknown as NextFetchEvent
+  const rest = ["/api/programs?limit=1", "/api/programs/vercel", "/api/categories"]
+  const call = (path: string, version?: string) =>
+    proxy(new NextRequest(`http://localhost${path}`, { headers: version === undefined ? undefined : { "API-Version": version } }), event)
+  for (const path of rest) {
+    for (const version of [undefined, "1"]) assert.notEqual(call(path, version)?.status, 400, `${path} ${version}`)
+    for (const version of ["2", "0", "1.0", "v1", ""]) {
+      const response = call(path, version)!
+      assert.equal(response.status, 400, `${path} API-Version ${JSON.stringify(version)}`)
       assert.equal(response.headers.get("Cache-Control"), "no-store")
       const body = await response.json()
       assert.deepEqual(Object.keys(body.error), ["code", "message", "hint"])
       assert.equal(body.error.code, "UNSUPPORTED_API_VERSION")
     }
   }
+  // Only the versioned REST API: MCP, badges and pages ignore the header.
+  for (const path of ["/api/mcp", "/mcp", "/api/badge/vercel.svg", "/programs/vercel", "/api/programs/vercel/extra"]) {
+    assert.notEqual(call(path, "2")?.status, 400, path)
+  }
+  // The routes themselves still answer when the proxy lets a request through.
+  assert.equal(list(new NextRequest("http://localhost/api/programs?limit=1")).status, 200)
+  assert.equal((await detail(new NextRequest("http://localhost/api/programs/vercel"), { params: Promise.resolve({ slug: "vercel" }) })).status, 200)
+  assert.equal(categories().status, 200)
   // Browsers may send the header cross-origin.
   assert.match(listOptions().headers.get("Access-Control-Allow-Headers") ?? "", /\bAPI-Version\b/)
   for (const route of ["programs/route.ts", "programs/[slug]/route.ts", "categories/route.ts"]) {

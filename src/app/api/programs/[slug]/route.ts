@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { resolveProgram } from "@/lib/program-aliases"
 import { apiProgram } from "@/lib/no-program"
-import { apiError, unsupportedApiVersion } from "@/lib/api-error"
+import { apiError } from "@/lib/api-error"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -10,8 +10,6 @@ const CORS_HEADERS = {
   "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
   "CDN-Cache-Control": "public, s-maxage=3600",
   "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
-  // A cached answer must not be reused for a request pinning another version.
-  "Vary": "API-Version",
 }
 
 export function OPTIONS() {
@@ -19,11 +17,9 @@ export function OPTIONS() {
 }
 
 export async function GET(
-  request: NextRequest,
+  _request: NextRequest,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const unsupported = unsupportedApiVersion(request)
-  if (unsupported) return unsupported
   const { slug } = await params
   // An alias answers 200 with its program rather than a redirect, so a client
   // that does not follow redirects still gets it. The body's `slug` is canonical.
