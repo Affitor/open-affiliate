@@ -67,10 +67,14 @@ agents:
     - "Agencies protecting client sender reputation with warmup and blacklist monitoring"
     - "Developers validating sign-up emails in their own apps"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  approval: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

@@ -17,6 +17,8 @@ commission:
 # cookie_days: not published on wordai.com/affiliate (checked 2026-10-13)
 # payout: minimum, frequency and methods not published on wordai.com/affiliate (checked 2026-10-13)
 
+# "You will automatically get your affiliate link when you create your account." (https://wordai.com/affiliate, checked 2026-10-18)
+approval: auto
 signup_url: https://wordai.com/affiliate
 
 # "Ready-to-use PPC ads, banners, and more" (wordai.com/affiliate, checked 2026-10-13)
@@ -51,10 +53,16 @@ agents:
     - "SEO teams producing unique variations of content"
     - "Marketers turning one draft into several versions"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
+  payout.frequency: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
