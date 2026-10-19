@@ -603,7 +603,7 @@ function checkPostPage(post: BestPost, selection: PostSelection, path: string): 
   if (post.category) {
     const catFile = `categories/${categoryToSlug(post.category)}.html`;
     const cat = existsSync(join(BUILD_APP, catFile)) ? readFileSync(join(BUILD_APP, catFile), "utf8") : "";
-    if (!cat.includes("data-list-picks") || !cat.includes(`href="${path}"`)) fail(`${catFile} does not link its post ${path} as "Our picks"`);
+    if (!cat.includes("data-list-picks") || !cat.includes(`href="${path}"`)) fail(`${catFile} does not link its post ${path} in its "Posts about" block`);
   }
   const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
   const md = readFileSync(mdFile, "utf8");
@@ -1312,11 +1312,12 @@ async function fetchAll(base: string, paths: string[], each: (path: string, body
 }
 
 /**
- * gzip size cap for the /programs HTML, which carries the A–Z directory (N-2,
- * 2026-10-16). Measured on next start in CI: 37,592 bytes gzip for 1,038 live
- * programs (224,230 raw; 6,382 before the directory), about 30 bytes gzip per
- * program. 60,000 leaves room for ~700 more programs. Past it, split the
- * directory into per-letter pages rather than raising the cap.
+ * gzip size cap for the /programs/a-z HTML, the A–Z directory (N-2,
+ * 2026-10-16; moved off /programs in redesign r3, 2026-10-19). Measured on next
+ * start in CI when it lived on /programs: 37,592 bytes gzip for 1,038 live
+ * programs, about 30 bytes gzip per program. 60,000 leaves room for ~700 more
+ * programs. Past it, split the directory into per-letter pages rather than
+ * raising the cap.
  */
 const PROGRAMS_HTML_GZIP_BUDGET = 60_000;
 
@@ -1536,18 +1537,20 @@ async function checkServedPages(): Promise<string> {
       if (affitorAnchorProblems(html + plain).problems.length === 0) fail("the Affitor link check passed an untracked link");
     }
 
-    // N-2: /programs links every live program in its server-rendered A–Z
-    // directory, in directory order, once each; the homepage's three program
-    // sections are homepageSets(), in order. Mutations of the fetched HTML
-    // must fail, so the checks read what they claim to.
+    // N-2: /programs/a-z links every live program in its server-rendered A–Z
+    // directory, in directory order, once each, and /programs links to it; the
+    // homepage's three program sections are homepageSets(), in order.
+    // Mutations of the fetched HTML must fail, so the checks read what they claim to.
     {
-      const listHtml = await (await fetch(`${base}/programs`)).text();
+      const programsHtml = await (await fetch(`${base}/programs`)).text();
+      if (!/<a\b[^>]*\shref="\/programs\/a-z"/.test(programsHtml)) fail("/programs does not link /programs/a-z");
+      const listHtml = await (await fetch(`${base}/programs/a-z`)).text();
       const order = directoryGroups(programs).flatMap((g) => g.programs.map((p) => p.slug));
       const dir = sectionProblems(listHtml, "all-programs", order, true);
-      if (dir.length) fail(`/programs ${dir.join("; ")}`);
+      if (dir.length) fail(`/programs/a-z ${dir.join("; ")}`);
       const gz = gzipSync(listHtml).length;
-      if (gz > PROGRAMS_HTML_GZIP_BUDGET) fail(`/programs HTML is ${gz} bytes gzip; the budget is ${PROGRAMS_HTML_GZIP_BUDGET}`);
-      console.log(`[machine-surfaces] /programs links ${order.length} programs, ${listHtml.length} bytes raw, ${gz} gzip (budget ${PROGRAMS_HTML_GZIP_BUDGET})`);
+      if (gz > PROGRAMS_HTML_GZIP_BUDGET) fail(`/programs/a-z HTML is ${gz} bytes gzip; the budget is ${PROGRAMS_HTML_GZIP_BUDGET}`);
+      console.log(`[machine-surfaces] /programs/a-z links ${order.length} programs, ${listHtml.length} bytes raw, ${gz} gzip (budget ${PROGRAMS_HTML_GZIP_BUDGET})`);
       const first = `<a href="/programs/${order[0]}">`;
       const mutations: [string, string][] = [
         ["without its directory", listHtml.replace('<section id="all-programs"', '<section id="gone"')],
@@ -1556,7 +1559,7 @@ async function checkServedPages(): Promise<string> {
         ["with a program twice", listHtml.replace(first, `${first}x</a>${first}`)],
       ];
       for (const [what, html] of mutations) {
-        if (sectionProblems(html, "all-programs", order, true).length === 0) fail(`the /programs directory check passed a page ${what}`);
+        if (sectionProblems(html, "all-programs", order, true).length === 0) fail(`the /programs/a-z directory check passed a page ${what}`);
       }
 
       const homeHtml = await (await fetch(`${base}/`)).text();

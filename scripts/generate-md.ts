@@ -67,6 +67,8 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { blogEntries, type BlogEntry } from "../src/lib/blog"
+import { directoryGroups } from "../src/lib/programs-directory"
 import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
@@ -944,6 +946,8 @@ export function llmsTxt(): string {
         `- [All programs, grouped by category](${BASE}/programs.md)`,
         `- [Full dump, every program in one file](${BASE}/llms-full.txt)`,
         `- [Best affiliate programs, and every ranked list](${BASE}/best.md)`,
+        `- [Blog: guides and ranked lists, newest first](${BASE}/blog.md)`,
+        `- [All programs A to Z](${BASE}/programs/a-z.md)`,
         `- [Documentation index](${BASE}/docs.md)`,
       ].join("\n"),
     ),
@@ -1026,6 +1030,37 @@ function programsIndexMd(): string {
   ])
 }
 
+// ---------- /blog and /programs/a-z (redesign r3) ---------------------------
+
+/** The /blog index: the same entries, in the same order, as the page (blog.ts). */
+export function blogMd(): string {
+  const { posts, lists } = blogEntries()
+  const row = (e: BlogEntry, meta: string) => `- [${mdEscape(e.title)}](${BASE}${e.href}.md) — ${meta}`
+  return joinSections([
+    `# Guides and ranked lists`,
+    `> ${posts.length} posts and ${lists.length} ranked lists, newest first. Every figure comes from the registry; each list is rebuilt from it at every build.`,
+    section("Posts", posts.map(e => row(e, `${e.programs} picks${e.date ? `, checked ${e.date}` : ""}`)).join("\n")),
+    section("Ranked lists", lists.map(e => row(e, `${programCount(e.programs)}, ${e.verified} verified${e.date ? `, last checked ${e.date}` : ""}`)).join("\n")),
+    section("Links", [`HTML: ${BASE}/blog`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ])
+}
+
+/** /programs/a-z: every live program by name, in the page's directory order. */
+export function programsAzMd(): string {
+  const groups = directoryGroups(sitePrograms)
+  return joinSections([
+    `# All affiliate programs A to Z`,
+    `> ${programCount(livePrograms.length)}, by name. Grouped by category with terms: ${BASE}/programs.md`,
+    ...groups.map(g =>
+      section(
+        g.letter === "#" ? "0-9 and other" : g.letter.toUpperCase(),
+        g.programs.map(p => `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)`).join("\n"),
+      ),
+    ),
+    section("Links", [`HTML: ${BASE}/programs/a-z`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ])
+}
+
 // ---------- Pages that were HTML-only ---------------------------------------
 
 function indexMd(): string {
@@ -1043,6 +1078,7 @@ function indexMd(): string {
         `- [All programs](${BASE}/programs.md)`,
         `- [Verified programs](${BASE}/verified.md)`,
         `- [Rankings](${BASE}/rankings.md)`,
+        `- [Blog](${BASE}/blog.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [One program](${BASE}/programs/vercel.md)`,
         `- HTML home: ${BASE}/`,
@@ -1263,6 +1299,7 @@ function main(): void {
   write("index.md", indexMd())
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
+  write("blog.md", blogMd())
   for (const list of BEST_LISTS) {
     const post = getPost(list.slug)
     const selection = post ? postSelection(post) : null
@@ -1275,6 +1312,8 @@ function main(): void {
   for (const p of programs) {
     write(`programs/${p.slug}.md`, programMd(p))
   }
+  // After the program twins: programs/ is cleared above, and no program has the slug "a-z".
+  write("programs/a-z.md", programsAzMd())
 
   // Category twins come from the same builder as the category pages, so the
   // order, intro and FAQ match the HTML.

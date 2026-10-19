@@ -18,7 +18,7 @@ export function SavedPrograms() {
       {items.length ? (
         <>
           <p className="mb-4 text-xs text-muted-foreground">{items.length} saved · newest saved first</p>
-          <div className="space-y-3">
+          <div className="border-t border-border">
             {items.map(({ slug }) => {
               const program = bySlug.get(slug)
               if (program && !program.status) return <ProgramRowList key={slug} program={program} />

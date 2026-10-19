@@ -2,7 +2,7 @@ import { affiliateScore, isLive, type Program } from "./programs"
 import { byScore } from "./score-order"
 
 /**
- * The A–Z directory on /programs, server-rendered so every live program has a
+ * The A–Z directory on /programs/a-z, server-rendered so every live program has a
  * link in the page's raw HTML. Sort key: the name with accents removed
  * (NFD, combining marks dropped) and ASCII-lowercased, compared by code unit,
  * slug on ties: the same on every machine, unlike localeCompare.

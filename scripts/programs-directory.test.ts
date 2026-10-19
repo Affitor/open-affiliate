@@ -94,9 +94,10 @@ test("programs-view never navigates through the router", () => {
   assert.match(view, /window\.history\.replaceState\(/)
 })
 
-// /programs carries the A–Z directory (~120 KB RSC): a <Link> to it, with any
-// query or hash, must not prefetch it from the viewport (measured on the
-// preview: the homepage prefetch grew from 4.4 KB to 121 KB decoded).
+// /programs carried the A–Z directory (~120 KB RSC) until redesign r3 moved it
+// to /programs/a-z: a <Link> to /programs, with any query or hash, still must
+// not prefetch it from the viewport (measured on the preview: the homepage
+// prefetch grew from 4.4 KB to 121 KB decoded). Links to /programs/a-z opt out too.
 // Problems in one file's source: Links to /programs without the opt-out.
 function programsLinkProblems(text: string): { links: number; problems: string[] } {
   const problems: string[] = []
@@ -116,7 +117,10 @@ function programsLinkProblems(text: string): { links: number; problems: string[]
       // A mapped link (href={href}) in a file whose list has /programs.
       links++
       const v = href[3].replace(".", "\\.")
-      if (!new RegExp(`prefetch=\\{${v} === "/programs" \\? false : undefined\\}`).test(tag)) problems.push(`mapped ${href[3]} without the /programs opt-out`)
+      // Either the inline test, or a NO_PREFETCH set declared in the same file that holds "/programs".
+      const inline = new RegExp(`prefetch=\\{${v} === "/programs" \\? false : undefined\\}`).test(tag)
+      const viaSet = new RegExp(`prefetch=\\{NO_PREFETCH\\.has\\(${v}\\) \\? false : undefined\\}`).test(tag) && /const NO_PREFETCH = new Set\(\[[^\]]*"\/programs"/.test(text)
+      if (!inline && !viaSet) problems.push(`mapped ${href[3]} without the /programs opt-out`)
     }
   }
   return { links, problems }
@@ -141,6 +145,8 @@ test("every <Link> to /programs, in every source file, opts out of prefetch", ()
   ]) assert.equal(programsLinkProblems(bad).problems.length, 1, bad)
   assert.equal(programsLinkProblems('<Link href="/programs/vercel">').links, 0)
   assert.equal(programsLinkProblems('const a = [{ href: "/programs" }]; <Link href={href} className="x">').problems.length, 1)
+  assert.equal(programsLinkProblems('const a = [{ href: "/programs" }]; <Link href={href} prefetch={NO_PREFETCH.has(href) ? false : undefined}>').problems.length, 1, "a set that is not declared")
+  assert.equal(programsLinkProblems('const NO_PREFETCH = new Set(["/programs"]); const a = [{ href: "/programs" }]; <Link href={href} prefetch={NO_PREFETCH.has(href) ? false : undefined}>').problems.length, 0)
 })
 
 // The /programs payout and cookie filters and the hub lists read the same

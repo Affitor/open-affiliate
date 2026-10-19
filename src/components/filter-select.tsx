@@ -26,7 +26,7 @@ export function FilterSelect({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="appearance-none cursor-pointer rounded-lg border border-border/50 bg-card/50 pl-3 pr-8 py-2 text-xs font-medium text-foreground hover:border-border hover:bg-card/80 focus:outline-none focus:border-border transition-colors"
+        className="h-8 appearance-none cursor-pointer rounded-lg border border-line-strong bg-card pl-2.5 pr-8 text-meta text-foreground hover:bg-sunk focus:outline-none focus-visible:outline-2 focus-visible:outline-ring transition-colors"
         aria-label={label}
       >
         {options.map((opt) => (

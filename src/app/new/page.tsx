@@ -36,7 +36,7 @@ export default function NewPage() {
       {days.length ? days.map((day) => (
         <section key={day} className="mt-9" aria-label={`Added ${day}`}>
           <h2 className="mb-3 border-b border-border pb-3 text-sm font-semibold"><time dateTime={day}>{new Date(`${day}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" })}</time></h2>
-          <div className="space-y-3">
+          <div>
             {rows.filter((r) => r.day === day).map(({ program }) => <ProgramRowList key={program.slug} program={program} />)}
           </div>
         </section>
