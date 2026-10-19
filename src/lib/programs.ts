@@ -671,7 +671,7 @@ export interface NetworkStats extends CommissionStats {
 
 /**
  * Live networks with their live programs, most programs first (name on ties),
- * in-house last since it is no network: the order of /networks and the homepage.
+ * in-house last since it is no network: the order of the /networks intro and FAQ.
  */
 export function networksByProgramCount(): { network: string; programs: Program[] }[] {
   return liveNetworks
