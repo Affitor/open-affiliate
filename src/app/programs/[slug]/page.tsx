@@ -27,7 +27,6 @@ import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirm
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
-import { AFFITOR_SAME_TEAM, SAME_TEAM, isSameTeam } from "@/lib/same-team";
 import {
   answerParts,
   approvalText,
@@ -147,7 +146,7 @@ export default async function ProgramPage({
   // Claim spec v4 §3: a program already on Affitor gets a chip instead of the offer line.
   const onAffitor = program.network === "affitor" || Boolean(alsoOn);
   // A brand running its program elsewhere can move it to Affitor; not one already there, nor our own.
-  const canMoveToAffitor = !noProgram && !onAffitor && !isSameTeam(program.slug);
+  const canMoveToAffitor = !noProgram && !onAffitor;
   const estimate = estimateInput(program);
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
@@ -255,7 +254,6 @@ export default async function ProgramPage({
         <div className="min-w-0">
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em]">{program.name} affiliate program</h1>
           <p className="text-base sm:text-lg text-foreground/80 mt-1.5">{program.shortDescription}</p>
-          {isSameTeam(program.slug) && <p className="text-sm text-muted-foreground mt-1.5">{SAME_TEAM}</p>}
           <div className="flex flex-wrap items-center gap-2 mt-3">
             {verified && (
               <Badge variant="outline" className="text-xs border-good-line bg-good-bg text-good shrink-0">
@@ -544,7 +542,6 @@ export default async function ProgramPage({
                         Move this program to Affitor
                         <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                       </AffitorLink>
-                      <p className="text-xs text-muted-foreground">{AFFITOR_SAME_TEAM}</p>
                     </div>
                   )}
                 </>

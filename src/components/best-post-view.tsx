@@ -12,7 +12,6 @@ import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
-  SAME_TEAM,
   checkedRange,
   checkedText,
   cookieText,
@@ -20,7 +19,6 @@ import {
   payoutText,
   postFaq,
   postTitle,
-  sameTeam,
   type BestPost,
   type PostSelection,
 } from "@/lib/best-posts";
@@ -169,7 +167,6 @@ export function BestPostView({
           <p className="text-lg leading-relaxed text-foreground/80 mt-5">{post.intro}</p>
           <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
             {DISCLOSURE}
-            {sameTeam(post, selection) && <> {SAME_TEAM}</>}
           </p>
         </div>
       </header>

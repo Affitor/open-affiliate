@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { Check, ChevronDown, Clock, ExternalLink, Info, Minus, Star } from "lucide-react";
+import { Check, ChevronDown, Clock, ExternalLink, Minus, Star } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
 import { categoryToSlug, getProgram, IN_HOUSE, livePrograms } from "@/lib/programs";
 import { networkName } from "@/lib/network-meta";
@@ -260,10 +260,6 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
           </a>
         </aside>
       </div>
-
-      {(unranked === "same-team" || unranked === "affitor") && (
-        <p className="flex items-start gap-1.5 text-sm text-muted-foreground mt-6"><Info className="h-4 w-4 mt-0.5 shrink-0" aria-hidden />{UNRANKED_TEXT[unranked]}. Scored with the same rules as every program.</p>
-      )}
 
       {fixes.length > 0 && (
         <details className="group mt-10 rounded-xl border border-border bg-card">

@@ -66,14 +66,12 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
-import { isSameTeam, SAME_TEAM_LABEL } from "../src/lib/same-team"
 import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
-  SAME_TEAM,
   checkedRange,
   checkedText,
   cookieText,
@@ -84,7 +82,6 @@ import {
   postReady,
   postSelection,
   postTitle,
-  sameTeam,
   type BestPost,
   type PostSelection,
 } from "../src/lib/best-posts"
@@ -206,11 +203,10 @@ function listedVerified(p: Program): boolean {
 const livePrograms = programs.filter(isLive)
 /** Suffix for list rows: what a reader must know before trusting the terms. */
 function statusMark(p: { slug: string; verified?: boolean; status?: string | null }): string {
-  const team = isSameTeam(p.slug) ? ` (${SAME_TEAM_LABEL})` : ""
-  if (p.status === "discontinued") return `${team} (discontinued)`
-  if (p.status === "no_program") return `${team} (no affiliate program)`
-  if (p.status === "paused") return `${team} (status unclear)`
-  return p.verified ? team : `${team} (unverified, terms unconfirmed)`
+  if (p.status === "discontinued") return " (discontinued)"
+  if (p.status === "no_program") return " (no affiliate program)"
+  if (p.status === "paused") return " (status unclear)"
+  return p.verified ? "" : " (unverified, terms unconfirmed)"
 }
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
@@ -386,7 +382,6 @@ export function programMd(entry: Program): string {
   return joinSections([
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
-    isSameTeam(p.slug) ? SAME_TEAM : null,
     statusBlock(p),
     hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
@@ -1056,10 +1051,7 @@ function indexMd(): string {
 
 function rankingsMd(): string {
   // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
-  // Our own programs are listed but never ranked (SAME_TEAM_SLUGS), as on the HTML page.
-  const verified = sitePrograms.filter((p) => isLive(p) && p.verified)
-  const ranked = verified.filter((p) => !isSameTeam(p.slug))
-  const unranked = verified.filter((p) => isSameTeam(p.slug))
+  const ranked = sitePrograms.filter((p) => isLive(p) && p.verified)
   const inGroup = (g: CommissionGroup) => {
     const list = ranked.filter((p) => commissionGroup(p.commission) === g)
     return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
@@ -1128,7 +1120,6 @@ function rankingsMd(): string {
     section("Programs paying a percentage of the sale", programLines("percent")),
     section("Programs paying a flat amount", programLines("flat")),
     section("Tiered, hybrid and other commissions", programLines("other")),
-    unranked.length ? `Not ranked: ${unranked.map((p) => `[${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) (${SAME_TEAM_LABEL})`).join(", ")}.` : null,
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),
@@ -1210,7 +1201,7 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
     `# ${mdHeading(postTitle(post, selection))}`,
     range ? `By the OpenAffiliate team · Terms checked between ${range[0]} and ${range[1]}` : null,
     `> ${mdEscapeProse(post.intro)}`,
-    `${DISCLOSURE}${sameTeam(post, selection) ? ` ${SAME_TEAM}` : ""}`,
+    DISCLOSURE,
     section("Programs", rows),
     section(
       "How we chose",

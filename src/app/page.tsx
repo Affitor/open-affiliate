@@ -3,7 +3,6 @@ import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
 import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { SameTeamTag } from "@/components/same-team-tag";
 import { programs, livePrograms, categories, categoryToSlug, affiliateScore, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
@@ -108,7 +107,7 @@ export default function Home() {
               <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
                 <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
-                <span className="min-w-0 truncate text-sm font-medium">{program.name}<SameTeamTag slug={program.slug} inLink className="ml-1" /></span>
+                <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
                 <span className="hidden truncate font-mono text-meta sm:block">
                   {commissionChip(program.commission, true)}
                 </span>
@@ -137,7 +136,6 @@ export default function Home() {
                   <h3 className="flex items-center gap-1.5 truncate text-sm font-semibold">
                     {program.name}
                     {program.verified && <Check className="size-3.5 shrink-0 text-good" role="img" aria-label="Verified" />}
-                    <SameTeamTag slug={program.slug} inLink />
                   </h3>
                   <p className="truncate text-meta text-muted-foreground">{confirmedPitch(program, program.shortDescription)}</p>
                 </div>
