@@ -16,7 +16,7 @@ export interface ClientProgram {
     rate: string | number
     mode: "percentage" | "flat" | "tiered" | "hybrid" | "unknown"
     value: number | null
-    currency: string
+    currency: string | null
     duration?: string | null
   }
   /** Left out for an unverified program (confirmed-terms.ts). */

@@ -370,7 +370,7 @@ async function buildRegistry(): Promise<void> {
         rate: p.commission.rate,
         mode: p.commission.mode,
         value: p.commission.value,
-        currency: p.commission.currency,
+        currency: p.commission.currency ?? null,
         duration: p.commission.duration,
       },
       // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
