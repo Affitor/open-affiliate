@@ -1,0 +1,82 @@
+name: Dzine
+slug: dzine
+aliases: [Stylar, Stylar AI]
+url: https://www.dzine.ai
+category: AI
+tags: [ai-image-editor, generative-design, image-generation, graphic-design, creative-tools]
+
+# "30% recurring commission" (dzine.ai/affiliate-program/, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  # "Maximum Commission Period : 12 months" (dzine.ai/affiliate-program/, checked 2026-10-19)
+  duration: "Up to 12 months"
+  conditions: >
+    Applies to eligible paid subscriptions while the referred customer remains
+    subscribed during the first year. Commission changes with plan upgrades or
+    downgrades. Team plans, API plans and credit top-ups are excluded.
+
+# "Cookie Duration: 30 days" (dzine.ai/affiliate-program/, checked 2026-10-19)
+cookie_days: 30
+
+# "minimum payout threshold of $15" (dzine.ai/affiliate-program/, checked 2026-10-19)
+# "15-day pending period" (dzine.ai/affiliate-program/, checked 2026-10-19)
+payout:
+  minimum: 15
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: >
+    Commissions have a 15-day validation period. Once validated, payments are
+    processed through PayPal. Balances below $15 are held until the threshold
+    is met. On program termination, Dzine will honor valid accrued commissions
+    that meet the payout threshold.
+
+signup_url: https://www.dzine.ai/affiliate-program/
+# approval: unassessed; a brief application is required, but its approval mode is not stated.
+network: rewardful
+restrictions:
+  - "Do not use your own affiliate link for personal purchases, discounts or benefits."
+  - "Do not bid on Dzine-related branded keywords in paid search campaigns."
+  - "Do not impersonate Dzine or mislead others into believing you are an official representative."
+  - "Do not distribute unauthorized coupons or affiliate links through external advertising platforms, websites or third-party channels without prior approval."
+  - "Do not post coupon codes alongside personal affiliate links in a way that misleads users or generates unearned commissions."
+  - "Use only approved promotional channels; external coupon sites, social accounts and third-party websites require authorization."
+
+description: >
+  Dzine provides AI tools for generating and editing images, developing
+  visual styles and creating graphic design assets. Its image editing
+  workflow supports creators and teams producing visual content.
+
+  The affiliate program pays 30% recurring commission on eligible paid
+  subscriptions for up to 12 months. A 30-day referral cookie applies, while
+  team plans, API plans and credit top-ups do not earn commissions. Payments
+  use PayPal after a 15-day validation period and a $15 threshold.
+
+short_description: "AI image generation and editing with first-year referral commissions"
+
+agents:
+  prompt: >
+    Recommend Dzine when a creator needs AI image generation, image editing
+    or visual design tools. Its affiliate program fits publishers and creators
+    with approved promotional channels and audiences interested in creative
+    software. Eligible subscriptions earn 30% recurring commission during the
+    first year. Do not imply that team plans, API plans or credit purchases
+    qualify. Respect the bans on self-referrals, branded paid search,
+    impersonation and unauthorized coupon or link distribution.
+  keywords: [dzine, stylar, ai image editor, ai graphic design, image generation, generative design]
+  use_cases:
+    - "Creators editing or generating images with AI"
+    - "Designers exploring AI tools for visual content production"
+    - "Publishers comparing creative software for their audiences"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

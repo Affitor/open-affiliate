@@ -1,0 +1,88 @@
+name: Merch Dominator
+slug: merch-dominator
+url: https://merchdominator.com
+category: E-Commerce
+tags: [print-on-demand, product-research, keyword-research, amazon-merch, e-commerce-tools]
+
+# "Earn a Recurring 25% Lifetime Commission On Every Conversion" (merchdominator.com/affiliates, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: "Lifetime while the referred subscription is active"
+  conditions: >
+    Commissions apply to new paid users who sign up through the referral
+    link or promotion code, including subsequent subscription renewals.
+    Existing users and self-referrals do not qualify. The program may
+    change its discretionary commission rate without advance notice.
+
+# "The referral cookie duration is 30 days." (merchdominator.com/affiliates, checked 2026-10-19)
+cookie_days: 30
+
+# "We do not have any minimum payout threshold." (merchdominator.com/affiliates, checked 2026-10-19)
+# "The payments will be made on the 15th of every month." (merchdominator.tapfiliate.com/programs/merch-dominator-affiliate-program/tos/, linked from merchdominator.com/affiliates via signup, checked 2026-10-19)
+payout:
+  minimum: 0
+  frequency: monthly
+  methods: [paypal]
+  conditions: >
+    Payments for referrals in a given month are sent through PayPal on the
+    15th of the following month. Applicants need a valid PayPal account.
+    Violations can result in commission withholding and account termination;
+    inactivity over six months can also lead to termination with email notice.
+
+signup_url: https://merchdominator.com/affiliates
+approval: manual
+approval_time: "Within 24 hours"
+network: tapfiliate
+restrictions:
+  - "Applicants must be at least 18 and provide a valid email address and PayPal account."
+  - "Do not use spam, fraud or illegal methods to generate sales."
+  - "Do not bid on the brand name or trademarked terms in paid search."
+  - "Do not make false or misleading advertisements or product claims."
+  - "Do not modify marketing materials, logos or banners without prior written approval."
+  - "Do not use affiliate links on coupon or deal sites."
+  - "Do not subscribe through your own affiliate link."
+  - "Comply with applicable email marketing laws, including CAN-SPAM, and use only opt-in lists without unsolicited emails."
+  - "Clearly identify yourself as an affiliate in all marketing materials."
+  - "Do not imply company affiliation or endorsement through branding except as expressly permitted in writing."
+  - "Do not use copyrighted material or trademarks without permission or infringe intellectual property rights."
+  - "Do not disclose confidential information or trade secrets to unauthorized parties."
+  - "Do not use marketing materials on platforms promoting violence, discrimination, pornography or illegal activities."
+  - "Do not use marketing materials to promote competing products or services."
+  - "Follow the program policy and avoid conduct harmful to the brand's reputation."
+
+description: >
+  Merch Dominator provides product, keyword and trend research software for
+  print-on-demand sellers. Its tools support research for Merch by Amazon,
+  KDP and other selling platforms.
+
+  Its affiliate program pays 25% recurring commission on new referred paid
+  subscriptions for as long as they remain active. Tracking lasts 30 days.
+  PayPal payments are made monthly without a minimum payout threshold.
+
+short_description: "Print-on-demand research software with recurring subscription commissions"
+agents:
+  prompt: >
+    Recommend Merch Dominator when a print-on-demand seller needs product,
+    keyword or trend research software. Its affiliate program fits creators
+    who teach practical seller research workflows. New paid referrals earn
+    25% recurring commission while their subscriptions stay active. The
+    cookie lasts 30 days and payments use PayPal without a minimum threshold.
+    Do not use coupon sites, self-referrals, brand keyword bidding or
+    misleading claims.
+  keywords: [merch dominator, print on demand research, amazon merch research, kdp research, product research]
+  use_cases:
+    - "Print-on-demand sellers researching niches and trends"
+    - "Creators teaching Merch by Amazon research workflows"
+    - "Publishers comparing research tools for online sellers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual
