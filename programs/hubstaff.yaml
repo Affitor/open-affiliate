@@ -21,8 +21,9 @@ cookie_days: 120
 # payout minimum and methods: not published on hubstaff.com/affiliate-terms (checked 2026-10-17)
 # "will continue to pay out future commission payments on a monthly basis" (hubstaff.com/affiliate-terms, checked 2026-10-17)
 payout:
+  conditions: "Hubstaff will withhold commissions for a period of three (3) months on all referrals. Once the three-month period ends, Hubstaff will pay out all accrued commissions for that referral and will continue to pay out future commission payments on a monthly basis."
   currency: USD
-  frequency: monthly
+  # Schedule left unassessed: commissions are withheld for three months before monthly processing; the lag exceeds sixty days. No absence marker.
 
 signup_url: https://hubstaff.com/affiliate
 
@@ -69,7 +70,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
