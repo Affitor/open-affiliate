@@ -163,25 +163,40 @@ export function commissionTermProblems(data: Record<string, unknown>): string[] 
 /** Frequencies that name a payment cadence and no waiting period. */
 const CADENCES = new Set(["daily", "weekly", "bi-weekly", "twice-monthly", "monthly"])
 const DAYS_AFTER = /\bdays?\s+(?:after|following)\b/gi
-/** One count: "45", "(45)", "35-40", "120," — never "$100" or "2.45". */
-const COUNT = /^\(?(\d+)(?:[-–](\d+))?\)?,?$/
-const JOIN = new Set(["or", "and", "to", "-", "–"])
+const UNITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+const NUMBER_WORD = new RegExp(String.raw`\b(?:(${TENS.slice(2).join("|")})(?:[\s-](${UNITS.slice(1, 10).join("|")}))?|(${UNITS.join("|")}))\b`, "gi")
+/** "sixty" → "60", "forty-five" → "45", "fifteen" → "15". */
+const digits = (text: string) =>
+  text.replace(NUMBER_WORD, (_, tens?: string, unit?: string, small?: string) =>
+    String(small ? UNITS.indexOf(small.toLowerCase()) : TENS.indexOf(tens!.toLowerCase()) * 10 + (unit ? UNITS.indexOf(unit.toLowerCase()) : 0)),
+  )
+/** Currency signs and codes, numbers, words, and single marks, as separate tokens. */
+const TOKEN = /[$€£¥₹]|\d+(?:\.\d+)?|[A-Za-z]+|[^\sA-Za-z\d]/g
+const JOIN = new Set([",", "-", "–", "or", "and", "to"])
+const amountMark = (token: string | undefined) => token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token))
 
 /**
  * The wait a "days after" names: the largest number of the count written
- * right before it, read word by word backwards: "45", "forty-five (45)",
- * "35-40 business", "120, 60, or 10". A word that is no count or joining
- * word ends it, so an amount ("$100, 30 days") is never read as days. 0 when
- * no count precedes. Linear: one pass over at most 200 characters.
+ * right before it, read token by token backwards: "45", "forty-five (45)",
+ * "35-40 business", "120, 60, or 10", "120,60 or 10". A number after a
+ * currency sign or code ("$100", "USD 100") is an amount, and like a decimal
+ * or any other word it ends the count. 0 when no count precedes. Linear: one
+ * pass over at most 200 characters.
  */
 function waitBefore(text: string): number {
-  const words = text.slice(-200).trimEnd().split(/\s+/)
-  if (/^(?:business|calendar)$/i.test(words.at(-1) ?? "")) words.pop()
+  const tokens = digits(text.slice(-200)).match(TOKEN) ?? []
+  if (/^(?:business|calendar)$/i.test(tokens.at(-1) ?? "")) tokens.pop()
   let wait = 0
-  for (let i = words.length - 1; i >= 0; i--) {
-    const count = COUNT.exec(words[i])
-    if (count) wait = Math.max(wait, Number(count[1]), Number(count[2] ?? 0))
-    else if (!(wait > 0 && JOIN.has(words[i].toLowerCase()))) break
+  let counted = false
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    const t = tokens[i]
+    if (/^\d+$/.test(t) && !amountMark(tokens[i - 1])) {
+      wait = Math.max(wait, Number(t))
+      counted = true
+    } else if (!(t === "(" || t === ")" || (counted && JOIN.has(t.toLowerCase())))) {
+      break
+    }
   }
   return wait
 }

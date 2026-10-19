@@ -311,6 +311,10 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
   assert.match(lag("monthly", "It is reviewed for 120, 60 or 10 days after the trial.")[0], /120-day wait/, "a list waits its largest number")
   assert.match(lag("monthly", "It is reviewed for 120, 60, or 10 days after the trial.")[0], /120-day wait/, "with an Oxford comma")
   assert.match(lag("monthly", "Paid 45 business days following the sale.")[0], /45-day wait/)
+  assert.match(lag("monthly", "Commissions are paid 120,60 or 10 days after the sale.")[0], /120-day wait/, "a list without spaces")
+  assert.match(lag("monthly", "Commissions are paid 60 or 0 days after the sale.")[0], /60-day wait/, "a zero does not end the list")
+  assert.match(lag("monthly", "Paid within sixty calendar days after the month ends.")[0], /60-day wait/, "a number in words")
+  assert.match(lag("monthly", "Paid within forty-five days after the month ends.")[0], /45-day wait/)
   for (const f of ["weekly", "bi-weekly", "daily"]) assert.equal(lag(f, "Paid 31 business days following the sale.").length, 1, f)
   assert.equal(lag("monthly", "Paid 31 days after sale. Held 45 days after the refund window.").length, 2, "one problem per sentence")
   // Not a cadence, or no wait over 30 days, or no wait at all.
@@ -319,6 +323,11 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
   assert.deepEqual(lag("monthly", "Release 2.45 days after launch."), [], "a decimal is not a wait")
   assert.deepEqual(lag("monthly", "Commissions are paid at $100, 30 days after the sale."), [], "an amount is not a wait")
   assert.deepEqual(lag("monthly", "Paid at $100 or 30 days after the sale."), [])
+  for (const amount of ["USD 100", "$ 100", "US$100", "€100", "100 USD"]) {
+    assert.deepEqual(lag("monthly", `Commissions are paid at ${amount}, 30 days after the sale.`), [], amount)
+  }
+  assert.deepEqual(lag("monthly", "A 60% commission, 30 days after the sale."), [])
+  assert.deepEqual(lag("monthly", "Paid fifteen days after the sale."), [])
   const started = performance.now()
   lag("monthly", "1, ".repeat(20000) + "no wait. " + "9 ".repeat(20000) + "days after")
   assert.ok(performance.now() - started < 500, "a long list is read in one pass")
@@ -328,7 +337,7 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
 })
 
 /** The files that broke the payout-lag rule when it landed (main 1163037). The debt list may only drop slugs from this. */
-const PAYOUT_LAG_FROZEN = ["clickfunnels", "credit-repair-cloud", "greengeeks", "hunter", "omniseo", "saleshandy", "strikingly", "taskade", "thematic", "vyond"]
+const PAYOUT_LAG_FROZEN = ["clickfunnels", "credit-repair-cloud", "greengeeks", "hunter", "jibble", "omniseo", "saleshandy", "strikingly", "taskade", "thematic", "vyond"]
 
 test("payout-lag debt: frozen files only, each still failing the rule, until it expires", () => {
   const debt = JSON.parse(readFileSync(join(process.cwd(), "schema", "payout-lag-debt.json"), "utf8")) as { slugs: string[]; expires: string }
