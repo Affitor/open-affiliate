@@ -1,3 +1,4 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
@@ -321,14 +322,9 @@ export function BestPostView({
           {faq.length > 0 && (
             <>
               <h2 className="text-lg font-semibold mt-10">FAQ</h2>
-              <dl className="mt-2 border-t border-border">
-                {faq.map((f) => (
-                  <div key={f.q} className="border-b border-border py-3.5">
-                    <dt className="text-base font-medium">{f.q}</dt>
-                    <dd className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{f.a}</dd>
-                  </div>
-                ))}
-              </dl>
+              <div className="mt-2">
+                <FaqAccordion items={faq} />
+              </div>
             </>
           )}
         </div>

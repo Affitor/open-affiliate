@@ -15,6 +15,14 @@ import { hasNoProgram } from "../src/lib/no-program"
 import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 import { llmsTxt } from "./generate-md"
+import { createElement } from "react"
+import { renderToStaticMarkup } from "react-dom/server"
+import NetworksPage from "../src/app/networks/page"
+import CategoryPage from "../src/app/categories/[slug]/page"
+import ProgramPage from "../src/app/programs/[slug]/page"
+import { BestPostView } from "../src/components/best-post-view"
+import { FaqAccordion } from "../src/components/faq-accordion"
+import { POSTS, postList, postSelection } from "../src/lib/best-posts"
 
 const root = join(__dirname, "..")
 const flat = (groups: ReturnType<typeof directoryGroups>) => groups.flatMap((g) => g.programs.map((p) => p.slug))
@@ -209,4 +217,64 @@ test("llms.txt lists networks A to Z by display name, in-house last, as the home
     .sort((a, b) => Number(a === IN_HOUSE) - Number(b === IN_HOUSE) || networkName(a).localeCompare(networkName(b), "en", { sensitivity: "base" }))
     .map(networkToSlug)
   assert.deepEqual(listed, expected)
+})
+
+// Compare server-rendered FAQ text with the page's own machine-readable answers.
+function assertFaqAccordion(html: string) {
+  const nodes = [...html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)]
+    .flatMap((m) => {
+      const data = JSON.parse(m[1])
+      return data["@graph"] ?? [data]
+    })
+  const faq = nodes.find((node) => node["@type"] === "FAQPage")
+  assert.ok(faq?.mainEntity.length > 0, "a real FAQ must be present")
+  const escaped = (text: string) => renderToStaticMarkup(createElement("span", null, text)).slice(6, -7)
+  const details = [...html.matchAll(/<details\b([^>]*)>([\s\S]*?)<\/details>/g)]
+    .filter(([, , body]) => faq.mainEntity.some((item: { name: string }) => body.includes(`<span>${escaped(item.name)}</span>`)))
+  assert.equal(details.length, faq.mainEntity.length)
+  details.forEach(([, attrs, body], i) => {
+    assert.doesNotMatch(attrs, /\bopen(?:\s|=|$)/, "every FAQ starts closed")
+    assert.match(body, /^<summary\b/, "native summary is the first child")
+    assert.equal(/<summary[^>]*><span>([\s\S]*?)<\/span>/.exec(body)?.[1], escaped(faq.mainEntity[i].name))
+    assert.equal(/<\/summary><p[^>]*>([\s\S]*?)<\/p>/.exec(body)?.[1], escaped(faq.mainEntity[i].acceptedAnswer.text))
+  })
+}
+
+test("networks keeps cards, in-house link and FAQ JSON-LD, without the visible intro", () => {
+  const html = renderToStaticMarkup(createElement(NetworksPage))
+  assertFaqAccordion(html)
+  const visible = html.replace(/<script\b[^>]*>[\s\S]*?<\/script>/g, "")
+  assert.doesNotMatch(visible, /An affiliate network connects brands/)
+  assert.match(visible, /<h1[^>]*>Affiliate Networks<\/h1>/)
+  assert.match(visible, /href="\/networks\/in-house"/)
+  assert.match(visible, /href="\/networks\/affitor"/)
+  assert.match(html, /An affiliate network connects brands/, "accurate JSON-LD description is preserved")
+})
+
+test("category pages use closed native FAQ accordions matching JSON-LD", async () => {
+  assertFaqAccordion(renderToStaticMarkup(await CategoryPage({ params: Promise.resolve({ slug: "ai" }) })))
+})
+
+test("program FAQs use the shared accordion and preserve JSON-LD answers", async () => {
+  const program = programs.find((p) => p.verified && isLive(p))!
+  assert.ok(program)
+  assertFaqAccordion(renderToStaticMarkup(await ProgramPage({ params: Promise.resolve({ slug: program.slug }) })))
+})
+
+test("best-of post FAQs use the shared accordion and preserve JSON-LD answers", () => {
+  const post = POSTS[0]
+  const list = postList(post)!
+  assert.ok(list)
+  assertFaqAccordion(renderToStaticMarkup(createElement(BestPostView, {
+    post, list, selection: postSelection(post), path: `/best/${post.slug}`,
+    parent: { name: "Categories", href: "/categories" },
+  })))
+})
+
+test("the shared FAQ renders text safely without client JavaScript", () => {
+  const html = renderToStaticMarkup(createElement(FaqAccordion, { items: [{ q: "A & B <script>?", a: '<img src=x onerror="alert(1)">' }] }))
+  assert.match(html, /A &amp; B &lt;script&gt;\?/)
+  assert.match(html, /&lt;img/)
+  assert.doesNotMatch(html, /<script|<img|\bopen=/)
+  assert.doesNotMatch(readFileSync(join(root, "src/components/faq-accordion.tsx"), "utf8"), /use client|onClick|onKeyDown/)
 })
