@@ -20,6 +20,9 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  # "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum." (https://affitor.com/marketplace/appshotter, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Commissions are held 15 days after the sale, then paid once you reach the $20 minimum."
 
 # "Once AppShotter approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/appshotter, checked 2026-10-18)
 approval: manual
