@@ -794,8 +794,19 @@ test("a flat commission reads in the program's own currency, and with none the r
   }
   // A stored "€250" is the figure in euros, not a qualifier beside a dollar figure.
   assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "€250", value: 250, currency: "EUR" })), { big: "€250", rest: "per sale", kind: "number" })
+  // A bare amount under another mark is the figure in the program's currency; a qualifier stays as written.
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$100", value: 100, currency: "AUD" })), { big: "A$100", rest: "per sale", kind: "number" })
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "up to €200", value: 200, currency: "EUR" })), { big: "up to €200", rest: "", kind: "text" })
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "$25", value: 25, currency: null })), { big: "$25", rest: "per sale", kind: "number" })
+  // The estimate multiplies US dollars only: a flat amount with no currency is not one.
+  assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", rate: "$250", value: 250, currency: "USD" }))?.value, 250)
+  for (const [rate, currency] of [["€20 to €250", null], ["$250", null], ["€250", "EUR"], ["$250", "AUD"]] as const) {
+    assert.equal(page.estimateInput(withCommission({ type: "one-time", mode: "flat", rate, value: 250, currency })), null, `${rate} ${currency}`)
+  }
   // Every flat commission in the registry outside US dollars: no bare dollar figure on any surface.
   const entries = registry.programs as unknown as Parameters<typeof programMd>[0][]
+  // The schema requires a currency for a flat amount: every listing names one.
+  assert.deepEqual(entries.filter((e) => e.commission?.mode === "flat" && !e.commission.currency).map((e) => e.slug), [])
   const foreign = programs.filter((p) => p.commission.mode === "flat" && p.commission.value != null && p.commission.currency !== "USD")
   assert.ok(foreign.length > 0)
   for (const p of foreign) {
