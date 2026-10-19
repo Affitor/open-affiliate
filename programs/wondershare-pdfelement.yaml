@@ -55,7 +55,9 @@ restrictions:
   # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
   - "No framing or hotlinking to the Wondershare website or images other than your own without prior written consent"
   # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
-  - "No unlawful, infringing, fraudulent, misleading, defamatory, obscene, abusive, violent or otherwise offensive content or activity"
+  - "No site content or features, shown or hidden, that are unlawful, infringing, invasive, immoral, fraudulent, misleading, discriminatory, defamatory, obscene, abusive, violent or otherwise offensive, and no advocating or facilitating such activity"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No affiliate whose reputation or site could tarnish or reflect badly on Wondershare or its trademarks, including known involvement in unlawful, infringing, invasive, immoral, fraudulent, misleading, discriminatory, defamatory, obscene, abusive, violent or otherwise offensive activity"
 marketing_materials: true
 dedicated_manager: true
 dashboard_url: null

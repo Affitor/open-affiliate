@@ -21,6 +21,8 @@ approval: manual
 restrictions:
   # paraphrased from https://www.eset.com/us/business/partner/online-affiliates/ (checked 2026-10-18)
   - "No bidding in PPC campaigns on ESET's trademarked terms or variations or common misspellings (ESET, NOD32, ESET NOD32, NOD 32, Smart Security, ThreatSense)"
+  # paraphrased from https://www.eset.com/us/business/partner/online-affiliates/ (checked 2026-10-18)
+  - "Your website must not carry illegal, offensive, questionable or low-quality content, or link to sites that do"
 # paraphrased from https://www.eset.com/us/business/partner/online-affiliates/ (checked 2026-10-18)
 cookie_days: 45
 marketing_materials: true
