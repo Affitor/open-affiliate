@@ -62,10 +62,13 @@ agents:
     - "Educators turning lessons into illustrated videos"
     - "Writers turning scripts into long-form animated videos"
 
+not_published:
+  commission.duration: "2026-10-18"
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

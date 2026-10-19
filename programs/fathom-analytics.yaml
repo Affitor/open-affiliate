@@ -22,10 +22,10 @@ payout:
   minimum: 200
   currency: USD
   methods: [wise]
-  # "Request a payout whenever you like from your Partners dashboard" (https://usefathom.com/affiliates, checked 2026-10-19)
+  # "Request a payout whenever you like from your Partners dashboard" (https://usefathom.com/affiliates, checked 2026-10-18)
   frequency: on-request
 signup_url: https://usefathom.com/affiliates
-# "Paid Search Policy: Affiliates MAY NOT bid on company name, product name +, or misspelled keywords ("Fathom", "Fathom Analytics") for the purpose of PPC on the search engines" (https://usefathom.com/legal/affiliate-terms, checked 2026-10-19)
+# "Paid Search Policy: Affiliates MAY NOT bid on company name, product name +, or misspelled keywords ("Fathom", "Fathom Analytics") for the purpose of PPC on the search engines" (https://usefathom.com/legal/affiliate-terms, checked 2026-10-18)
 restrictions:
   - "No self-referrals"
   - "No coupon, deal, loyalty, cash-back, rewards or virtual mall websites"
@@ -54,10 +54,13 @@ agents:
   use_cases:
   - Sites wanting GA alternatives
   - Privacy-focused teams tracking essentials
+not_published:
+  commission.duration: "2026-10-18"
+  approval: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-19"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

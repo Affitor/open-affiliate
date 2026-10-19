@@ -66,6 +66,8 @@ agents:
     - "Small businesses combining CRM and automated customer follow-up"
     - "Teams connecting sales, marketing and payment workflows"
 
+not_published:
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-18"

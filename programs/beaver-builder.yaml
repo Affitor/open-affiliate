@@ -74,10 +74,12 @@ agents:
     - "Freelancers who want clients to edit pages without breaking them"
     - "Bloggers writing WordPress tutorials and page builder reviews"
 
+not_published:
+  commission.duration: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

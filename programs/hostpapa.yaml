@@ -32,7 +32,7 @@ restrictions:
 
 conflicts:
   - field: cookie_days
-    quote: "hostpapa.com/about-hostpapa/affiliates says both \"30-Day Cookie Duration\" (feature list) and \"The affiliate cookies have a 60-day lifespan.\" (FAQ). Checked 2026-10-19."
+    quote: "hostpapa.com/about-hostpapa/affiliates says both \"30-Day Cookie Duration\" (feature list) and \"The affiliate cookies have a 60-day lifespan.\" (FAQ). Checked 2026-10-18."
 marketing_materials: true
 dedicated_manager: true
 dashboard_url: null
@@ -66,10 +66,12 @@ agents:
     - "Bloggers starting a WordPress site"
     - "Site owners who want hosting, domain and email in one place"
 
+not_published:
+  commission.duration: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-19"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

@@ -20,12 +20,12 @@ tracking_method: cookie
 payout:
   minimum: 200
   currency: USD
-  # "When do you pay commissions Monthly on Net 30 terms once payments from the client are received and cleared." (https://ninjapromo.io/referral-program, checked 2026-10-19)
+  # "When do you pay commissions Monthly on Net 30 terms once payments from the client are received and cleared." (https://ninjapromo.io/referral-program, checked 2026-10-18)
   frequency: net-30
-# "Apply for a direct partnership agreement. Approval in 1–2 business days" (https://ninjapromo.io/referral-program, checked 2026-10-19)
+# "Apply for a direct partnership agreement. Approval in 1–2 business days" (https://ninjapromo.io/referral-program, checked 2026-10-18)
 approval: manual
 signup_url: https://ninjapromo.io/referral-program
-# "Can I run ads on NinjaPromo keywords No unless approved in writing. Do you accept coupon or incentivized traffic No." (https://ninjapromo.io/referral-program, checked 2026-10-19)
+# "Can I run ads on NinjaPromo keywords No unless approved in writing. Do you accept coupon or incentivized traffic No." (https://ninjapromo.io/referral-program, checked 2026-10-18)
 restrictions:
   - "No ads on Ninja Promo keywords unless approved in writing"
   - "No coupon or incentivized traffic"
@@ -50,10 +50,13 @@ agents:
   use_cases:
     - Teams looking for design solutions
     - Companies evaluating Ninja Promo vs alternatives
+not_published:
+  cookie_days: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-19"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
