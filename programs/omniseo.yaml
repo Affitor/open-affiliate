@@ -25,7 +25,7 @@ payout:
   conditions: Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected by the Company. The affiliate page separately advertises monthly PayPal or Stripe payouts in the following month; both descriptions are retained.
 signup_url: https://omniseo.com/affiliates/
 restrictions:
-- Competitors cannot participate; no self-referrals, cookie stuffing, deceptive pop-ups or links, masked referrers, fake redirects, personal-data lead compilations or incentivized leads
+- Competitors cannot participate; no self-referrals, cookie stuffing, pop-ups, false or misleading links, masked referrers, fake redirects, personal-data lead compilations or incentivized leads
 - No advertising competing with OmniSEO campaigns, including branded keywords; disclose the affiliate relationship and actual promotional properties
 - No deceptive, misleading or unethical marketing, unauthorized claims or materials, spam, or sanctions and export violations
 marketing_materials: true
