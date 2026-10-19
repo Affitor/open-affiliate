@@ -1,3 +1,4 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import { SaveButton } from "@/components/save-button";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -471,17 +472,7 @@ export default async function ProgramPage({
           {faq.length > 0 && (
             <section>
               <H2>{program.name} affiliate program FAQ</H2>
-              <div className="border-t border-border">
-                {faq.map((f) => (
-                  <details key={f.q} className="group border-b border-border py-3.5">
-                    <summary className="flex cursor-pointer list-none items-center justify-between gap-3 text-sm font-medium [&::-webkit-details-marker]:hidden">
-                      <span>{f.q}</span>
-                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <p className="text-sm text-muted-foreground mt-2">{f.a}</p>
-                  </details>
-                ))}
-              </div>
+              <FaqAccordion items={faq} />
             </section>
           )}
 

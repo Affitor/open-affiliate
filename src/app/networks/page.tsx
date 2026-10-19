@@ -1,3 +1,4 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
@@ -172,8 +173,6 @@ export default function NetworksPage() {
 
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">Affiliate Networks</h1>
-        {/* The answer first: what a network is and how the registry splits across them. */}
-        <p className="mt-3 max-w-3xl border-l-2 border-emerald-500/40 pl-3 text-sm">{intro}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -219,14 +218,7 @@ export default function NetworksPage() {
 
       <div className="mt-10 max-w-3xl">
         <h2 className="text-base font-semibold mb-3">Affiliate networks FAQ</h2>
-        <dl className="space-y-4">
-          {faq.map((f) => (
-            <div key={f.q}>
-              <dt className="text-sm font-medium">{f.q}</dt>
-              <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
-            </div>
-          ))}
-        </dl>
+        <FaqAccordion items={faq} />
       </div>
     </div>
   );
