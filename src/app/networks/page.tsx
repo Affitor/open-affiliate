@@ -6,8 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import {
-  livePrograms,
-  liveNetworks,
+  networksByProgramCount,
   networkToSlug,
   networkName,
   networkHeading,
@@ -40,12 +39,11 @@ function listNames(names: string[]): string {
  * find a network by name. verify-machine-surfaces uses the same two rules.
  */
 function networksData() {
-  const stats = liveNetworks
-    .map((network) => {
-      const list = livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network);
-      return { network, programCount: list.length, verified: list.filter((p) => p.verified).length };
-    })
-    .sort((a, b) => b.programCount - a.programCount || a.network.localeCompare(b.network));
+  const stats = networksByProgramCount().map(({ network, programs }) => ({
+    network,
+    programCount: programs.length,
+    verified: programs.filter((p) => p.verified).length,
+  }));
   const networks = stats.filter((n) => n.network !== IN_HOUSE);
   const cards = [...networks].sort((a, b) =>
     networkName(a.network).localeCompare(networkName(b.network), "en", { sensitivity: "base" })

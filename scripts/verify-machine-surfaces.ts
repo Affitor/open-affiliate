@@ -42,6 +42,7 @@ import {
   categories,
   categoryToSlug,
   networkToSlug,
+  networksByProgramCount,
   programs,
   isLive,
   liveNetworks,
@@ -1554,12 +1555,16 @@ async function checkServedPages(): Promise<string> {
       const homeHtml = await (await fetch(`${base}/`)).text();
       const sets = homepageSets(programs);
       const slugs = (list: Program[]) => list.map((p) => p.slug);
-      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured], ["home-top-verified", sets.row]] as const) {
+      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured]] as const) {
         const problems = sectionProblems(homeHtml, id, slugs(list));
         if (problems.length) fail(`/ ${problems.join("; ")}`);
       }
-      const dropped = homeHtml.replace(new RegExp(`<a href="/programs/${sets.row[0].slug}">[^<]*</a>`), "");
-      if (sectionProblems(dropped, "home-top-verified", slugs(sets.row)).length === 0) fail("the homepage check passed a page with a top-verified link removed");
+      // The networks band: every live network as a plain link, in /networks order.
+      const networkSlugs = networksByProgramCount().map((n) => networkToSlug(n.network));
+      const nets = sectionProblems(homeHtml, "home-networks", networkSlugs, true, "networks");
+      if (nets.length) fail(`/ ${nets.join("; ")}`);
+      const dropped = homeHtml.replace(new RegExp(`<a href="/networks/${networkSlugs[0]}"[^>]*>[^<]*</a>`), "");
+      if (sectionProblems(dropped, "home-networks", networkSlugs, true, "networks").length === 0) fail("the homepage check passed a page with a network link removed");
     }
 
     // REST: the list and one program of each kind, as served.

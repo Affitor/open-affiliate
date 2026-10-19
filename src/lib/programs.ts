@@ -669,6 +669,20 @@ export interface NetworkStats extends CommissionStats {
   programCount: number
 }
 
+/**
+ * Live networks with their live programs, most programs first (name on ties),
+ * in-house last since it is no network: the order of /networks and the homepage.
+ */
+export function networksByProgramCount(): { network: string; programs: Program[] }[] {
+  return liveNetworks
+    .map((network) => ({ network, programs: livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network) }))
+    .sort((a, b) =>
+      Number(a.network === IN_HOUSE) - Number(b.network === IN_HOUSE) ||
+      b.programs.length - a.programs.length ||
+      a.network.localeCompare(b.network),
+    )
+}
+
 export function getNetworkStats(): NetworkStats[] {
   const networkMap = new Map<string, Program[]>()
   for (const p of livePrograms) {
