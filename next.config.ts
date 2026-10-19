@@ -52,6 +52,11 @@ export const nextConfig: NextConfig = {
       ),
     ];
   },
+  // Discovery files (ARD catalog, agent-skills index) are fetched by agents and
+  // crawlers from other origins; ARD's publishing guide asks for CORS.
+  async headers() {
+    return [{ source: "/.well-known/:path*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }] }];
+  },
   async rewrites() {
     return [
       {

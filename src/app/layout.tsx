@@ -7,6 +7,7 @@ import { affitorUrl } from "@/lib/affitor-link";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WebMcpTools } from "@/components/webmcp-tools";
 import { serializeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
@@ -182,6 +183,40 @@ const SITE_JSON_LD = {
         "query-input": "required name=search_term_string",
       },
     },
+    // The registry itself, and the two ways to query it. Only what is served:
+    // the data is MIT licensed (/about), the API and MCP are free and keyless.
+    {
+      "@type": "Dataset",
+      "@id": "https://openaffiliate.dev/#dataset",
+      name: "OpenAffiliate registry of affiliate programs",
+      description:
+        // Names no cookie, payout or approval term: this graph is on every unverified
+        // program page too, whose JSON-LD scripts/unconfirmed-checks.ts scans for one.
+        "Affiliate programs with their commission terms, verification dates and recommendation guidance for AI agents. One YAML file per program, community-maintained.",
+      url: "https://openaffiliate.dev/programs",
+      license: "https://opensource.org/licenses/MIT",
+      isAccessibleForFree: true,
+      creator: { "@id": "https://openaffiliate.dev/#organization" },
+      publisher: { "@id": "https://openaffiliate.dev/#organization" },
+      distribution: [
+        { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://openaffiliate.dev/api/programs" },
+        { "@type": "DataDownload", encodingFormat: "text/plain", contentUrl: "https://openaffiliate.dev/llms-full.txt" },
+      ],
+    },
+    {
+      "@type": ["WebAPI", "Service"],
+      "@id": "https://openaffiliate.dev/#api",
+      name: "OpenAffiliate API",
+      description:
+        "Read-only REST API and MCP server for searching the registry and reading program terms. No authentication or API key.",
+      url: "https://openaffiliate.dev/docs/api",
+      documentation: "https://openaffiliate.dev/openapi.json",
+      provider: { "@id": "https://openaffiliate.dev/#organization" },
+      availableChannel: [
+        { "@type": "ServiceChannel", name: "REST API", serviceUrl: "https://openaffiliate.dev/api/programs" },
+        { "@type": "ServiceChannel", name: "MCP server", serviceUrl: "https://openaffiliate.dev/mcp" },
+      ],
+    },
   ],
 };
 
@@ -198,6 +233,7 @@ export default function RootLayout({
     >
       <head>
         <link rel="describedby" href="/llms.txt" type="text/plain" />
+        <link rel="ard" href="/.well-known/ard.json" type="application/json" />
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -212,6 +248,7 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </PostHogProvider>
+        <WebMcpTools />
       </body>
     </html>
   );

@@ -9,6 +9,8 @@ const CORS_HEADERS = {
   "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
   "CDN-Cache-Control": "public, s-maxage=3600",
   "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+  // Versioning and deprecation policy: info.description in src/lib/openapi.ts.
+  "API-Version": "1",
 }
 
 export function OPTIONS() {

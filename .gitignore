@@ -95,5 +95,6 @@ reports/
 /public/best/
 /public/skill/SKILL.md
 /public/.well-known/agent-skills/
+/public/.well-known/ard.json
 /.Codex-lock/
 *.bak
