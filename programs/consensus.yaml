@@ -17,7 +17,14 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/consensus
-restrictions: null
+restrictions:
+  - Obtain approval and disclose all promotional properties, traffic sources and methods accurately
+  - All paid advertising requires prior written approval; no brand bidding, brand terms in ad copy or display URLs, direct paid affiliate traffic, or competition with Consensus advertising
+  - No self-referrals for yourself, your organization or related parties; only genuine new, tracked and accepted customers qualify
+  - No cookie stuffing, forced clicks, hidden frames, automatic redirects, fake traffic, attribution overwriting or concealed referring sources
+  - No unauthorized cashback, rewards, discounts, coupons, extensions, sub-affiliates or publisher networks
+  - No spam, impersonation, misleading claims or guaranteed academic, medical, scientific or financial outcomes; do not present Consensus as professional advice
+  - Use approved materials and clearly disclose the financial relationship near each endorsement; cooperate with compliance requests within three business days
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -42,7 +49,13 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  payout.frequency: '2026-10-18'
