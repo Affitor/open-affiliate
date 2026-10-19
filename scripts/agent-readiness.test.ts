@@ -1,6 +1,8 @@
 /** Run after npm run build (or md:build): the ARD test reads the generated public/.well-known/ard.json. */
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { dirname, join } from "node:path"
 import { test } from "node:test"
 import { NextRequest, type NextFetchEvent } from "next/server"
 import { proxy } from "../src/proxy"
@@ -10,7 +12,7 @@ import { GET as categories } from "../src/app/api/categories/route"
 import { openapi } from "../src/lib/openapi"
 import { registerWebMcpTools, WEBMCP_TOOLS, type WebMcpTool } from "../src/lib/webmcp"
 import { nextConfig } from "../next.config"
-import { ardCatalog, CATALOG_PATHS } from "./generate-ard"
+import { ardCatalog, CATALOG_PATHS, generateArd } from "./generate-ard"
 import { llmsTxt } from "./generate-md"
 
 const BASE = "https://openaffiliate.dev"
@@ -21,6 +23,18 @@ test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   // ai-catalog.json is the same document at the AI Catalog Standard's own path.
   assert.deepEqual(CATALOG_PATHS, ["public/.well-known/ard.json", "public/.well-known/ai-catalog.json"])
   assert.equal(readFileSync(CATALOG_PATHS[1], "utf8"), readFileSync(CATALOG_PATHS[0], "utf8"))
+  // The generator itself writes both files (into a scratch root holding only its inputs).
+  const scratch = mkdtempSync(join(tmpdir(), "ard-"))
+  try {
+    for (const input of ["packages/mcp/server.json", "public/.well-known/agent-skills/index.json"]) {
+      mkdirSync(dirname(join(scratch, input)), { recursive: true })
+      copyFileSync(input, join(scratch, input))
+    }
+    generateArd(scratch)
+    for (const path of CATALOG_PATHS) assert.deepEqual(JSON.parse(readFileSync(join(scratch, path), "utf8")), ardCatalog(scratch), path)
+  } finally {
+    rmSync(scratch, { recursive: true, force: true })
+  }
   // AI Catalog root (ai-catalog.io): Major.Minor specVersion, host, entries.
   assert.deepEqual(Object.keys(served), ["specVersion", "host", "entries"])
   assert.match(served.specVersion, /^\d+\.\d+$/)
@@ -54,7 +68,7 @@ test("API-Version request header: 1 or absent is served, anything else is a 400 
   // The proxy runs before the CDN cache, which does not key on this header (a cached
   // 200 was served for API-Version: 2 on the preview when the routes checked it).
   const event = { waitUntil() {} } as unknown as NextFetchEvent
-  const rest = ["/api/programs?limit=1", "/api/programs/vercel", "/api/categories"]
+  const rest = ["/api/programs?limit=1", "/api/programs/vercel", "/api/categories", "/api/programs/", "/api/programs/vercel/", "/api/categories/"]
   const call = (path: string, version?: string) =>
     proxy(new NextRequest(`http://localhost${path}`, { headers: version === undefined ? undefined : { "API-Version": version } }), event)
   for (const path of rest) {
@@ -63,6 +77,7 @@ test("API-Version request header: 1 or absent is served, anything else is a 400 
       const response = call(path, version)!
       assert.equal(response.status, 400, `${path} API-Version ${JSON.stringify(version)}`)
       assert.equal(response.headers.get("Cache-Control"), "no-store")
+      assert.equal(response.headers.get("Access-Control-Allow-Origin"), "*")
       const body = await response.json()
       assert.deepEqual(Object.keys(body.error), ["code", "message", "hint"])
       assert.equal(body.error.code, "UNSUPPORTED_API_VERSION")

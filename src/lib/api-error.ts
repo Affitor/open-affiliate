@@ -11,7 +11,8 @@ export function apiError(status: number, code: string, message: string, hint: st
 // Leaving it out means the current version; any other value is refused, never
 // answered as 1. Checked in src/proxy.ts, before the CDN cache: the cache does
 // not key on this header, so a route handler would never see a cached hit.
-const REST_PATH = /^\/api\/(programs(\/[^/]+)?|categories)$/
+// Trailing slash included: skipTrailingSlashRedirect serves /api/categories/ too.
+const REST_PATH = /^\/api\/(programs(\/[^/]+)?|categories)\/?$/
 
 export function unsupportedApiVersion(request: Request) {
   const version = request.headers.get("API-Version")
