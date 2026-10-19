@@ -14,7 +14,7 @@ commission:
   value: 25
   currency: USD
   duration: "lifetime"
-  conditions: "25% of every monthly payment for as long as the referred customer stays subscribed to a paid Atria plan. Payouts are monthly through PayPal or direct deposit, with no minimum threshold."
+  conditions: "25% of every monthly payment for as long as the referred customer stays subscribed to a paid Atria plan. Payouts are monthly through PayPal or direct deposit, with no minimum threshold. The current program agreement requires review of every application and excludes competitors. It defers the referral window to the private PartnerStack offer without publishing a number; the public program listing does not supply one."
 attribution: last-click
 tracking_method: cookie
 # "Monthly payouts via PayPal or direct deposit. No minimum threshold." (www.tryatria.com/affiliate, checked 2026-10-18)
@@ -23,7 +23,15 @@ payout:
   frequency: monthly
   methods: [paypal, bank]
 signup_url: https://www.tryatria.com/affiliate
-restrictions: null
+restrictions:
+  - Every application is reviewed; competitors cannot join; one account per person or business and accurate promotional-channel information are required
+  - No self-referrals, controlled or employer accounts, existing customers in the previous 60 days, or customers in an active Atria sales conversation
+  - No brand-keyword bidding or brand-search impressions through automated targeting, brand-based audiences, brand ad copy, impersonation, or confusingly similar domains and profiles
+  - Generic non-brand paid search may link directly to Atria only after notifying Atria before launch and adding the required broad-match negative keywords
+  - Provide requested paid-search CSV reports and any requested read-only ad-account access before the next payout; commissions may be held until supplied
+  - No cookie stuffing, pop-ups, hidden frames, fake redirects, bots, concealed traffic sources, bought or scraped personal-data lists, or unapproved cash, discount or other incentives
+  - Use unmodified supplied assets, disclose the relationship, avoid spam and misleading claims, and do not make commitments for Atria
+  - Complete payment-account and tax requirements within six months of a customer payment or permanently forfeit that customer commission
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -50,3 +58,6 @@ updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'
