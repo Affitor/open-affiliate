@@ -1,3 +1,4 @@
+import { SaveButton } from "@/components/save-button";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -151,6 +152,9 @@ export default async function ProgramPage({
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
   const payout = payoutText(program);
+  // When a commission becomes payable; confirmedTerms left it out of an unverified program.
+  // Under the payout steps, or under the Payout row on a paused page, which has no steps.
+  const payoutConditions = program.payout.conditions;
   const methods = payoutMethods(program);
   const approval = approvalText(program);
   const cookie = cookieText(program);
@@ -293,6 +297,7 @@ export default async function ProgramPage({
             </div>
           )}
           <h2 id="earn-heading" className="oa-label">{panelLabel}</h2>
+          {(noProgram || paused) && <div className="mt-5"><SaveButton slug={program.slug} name={program.name} /></div>}
           {noProgram ? (
             <>
               <p className="text-display font-semibold tracking-tight mt-2">None</p>
@@ -321,12 +326,16 @@ export default async function ProgramPage({
                   ))}
                 </dl>
               )}
+              {paused && payoutConditions && (
+                <p data-term="payout-conditions" className="text-xs text-muted-foreground leading-relaxed mt-3">{payoutConditions}</p>
+              )}
               {!paused && (
-                <div className="mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
+                  <SaveButton slug={program.slug} name={program.name} />
                 </div>
               )}
               {paused && hasAlternatives && (
@@ -414,6 +423,9 @@ export default async function ProgramPage({
                   </li>
                 ))}
               </ol>
+              {payoutConditions && (
+                <p data-term="payout-conditions" className="text-sm leading-relaxed text-foreground/80 mt-4">{payoutConditions}</p>
+              )}
               {program.network && program.network !== IN_HOUSE && (
                 <p className="text-xs text-muted-foreground mt-4">{networkHowToJoin(program.network)}</p>
               )}

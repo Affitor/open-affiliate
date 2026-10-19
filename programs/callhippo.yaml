@@ -15,12 +15,14 @@ commission:
   value: 20
   currency: USD
   duration: "lifetime"
-  conditions: "20% recurring lifetime commission on every qualifying referral."
+  conditions: "20% recurring lifetime commission on every qualifying referral. The brand FAQ states monthly payouts, typically around the 7th, through PayPal or bank transfer. A missed-link referral may be considered after the team reviews prior referral proof."
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 signup_url: https://callhippo.com/affiliate-program/
-restrictions: null
+restrictions:
+  - No CallHippo brand or product keywords, including Call Hippo and Callhippo pricing, in paid advertising
+  - No self-referral commissions, including purchases for yourself or a friend; use the separate referral program for friends
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -43,7 +45,15 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: monthly
+  methods:
+    - paypal
+    - bank
+not_published:
+  payout.minimum: '2026-10-18'
+  approval: '2026-10-18'

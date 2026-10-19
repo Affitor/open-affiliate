@@ -9,8 +9,8 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { commissionUnknown, getProgram, isLive, programs, type Program } from "../src/lib/programs"
-import { programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
+import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, programs, type Program } from "../src/lib/programs"
+import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 
 const root = join(__dirname, "..")
@@ -56,12 +56,22 @@ test("the order is the same under another locale", () => {
   assert.equal(tr.stdout, en.stdout)
 })
 
-test("homepage sets: 5, 6 and 30, disjoint, featured and row verified and live", () => {
-  const { rankings, featured, row } = homepageSets(programs)
-  assert.deepEqual([rankings.length, featured.length, row.length], [5, 6, 30])
-  const all = [...rankings, ...featured, ...row].map((p) => p.slug)
+test("homepage sets: 5 and 6, disjoint, featured verified and live", () => {
+  const { rankings, featured } = homepageSets(programs)
+  assert.deepEqual([rankings.length, featured.length], [5, 6])
+  const all = [...rankings, ...featured].map((p) => p.slug)
   assert.equal(new Set(all).size, all.length)
-  for (const p of [...featured, ...row] as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+  for (const p of featured as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+})
+
+test("homepage networks: every live network once, A to Z by display name ignoring case, in-house last (the /networks grid)", () => {
+  const list = networksByName()
+  assert.deepEqual(list.map((n) => n.network).sort(), [...liveNetworks].sort())
+  assert.equal(list.at(-1)!.network, IN_HOUSE)
+  const names = list.slice(0, -1).map((n) => networkName(n.network).toLowerCase())
+  assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en")))
+  assert.equal(list[0].network, "affitor")
+  assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
 })
 
 // CI keeps "typing and paging make no RSC request": the list syncs the URL
@@ -145,3 +155,20 @@ test("each hub's /programs filter returns the hub's programs and only confirmed 
   }
 })
 
+
+test("program row and card chips: no type after an unpublished rate, cookie only once terms are checked", () => {
+  const c = (mode: string, value: number | null, rate: string | number, type = "recurring", duration: string | null = "12 months") =>
+    commissionChip({ type, rate, mode, value, currency: "USD", duration } as Parameters<typeof commissionChip>[0])
+  assert.equal(c("unknown", null, "none"), "Rate not published")
+  assert.equal(c("percentage", null, "varies"), "Rate not published")
+  assert.equal(c("flat", null, "varies", "one-time", null), "Rate not published")
+  assert.equal(c("percentage", 30, "30%"), "30% recurring/12mo")
+  assert.equal(c("flat", 50, "$50", "one-time", null), "$50 one-time")
+  assert.equal(c("tiered", null, "10-30%", "tiered", null), "10-30% tiered")
+  for (const cookieDays of [undefined, 0, 30]) assert.equal(cookieChip({ verified: false, cookieDays }), "Unconfirmed")
+  assert.equal(cookieChip({ verified: true, cookieDays: undefined }), "Cookie not published")
+  assert.equal(cookieChip({ verified: true, cookieDays: 0 }), "Code-based, no cookie")
+  assert.equal(cookieChip({ verified: true, cookieDays: 30 }), "30d cookie")
+  // Every live row: no "Not published" followed by a commission type.
+  for (const p of clientPrograms) assert.doesNotMatch(commissionChip(p.commission), /^Not published/, p.slug)
+})

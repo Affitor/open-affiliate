@@ -120,9 +120,10 @@ export default function MethodologyPage() {
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             A term we read the program&apos;s pages for and did not find scores
-            0 and is marked Not published, with the date we checked. A term we
-            have not checked yet is not assessed: its points count toward the
-            other checks, so it costs the program nothing. A rate published as
+            0 and is marked Not published, with the date we checked. A program
+            gets a number only once every check is assessed; until then it shows
+            Scoring in progress, so a term we have not checked yet neither costs
+            it points nor gives it free ones. A rate published as
             &ldquo;varies&rdquo;, with no number, does not meet the commission
             check. When two of the brand&apos;s own pages disagree on a term,
             that check is not met until they agree. Each report links the page

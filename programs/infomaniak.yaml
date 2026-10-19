@@ -22,6 +22,8 @@ payout:
   currency: CHF
   frequency: monthly
   methods: [paypal]
+  # "Earnings are paid automatically at the end of each month if the amount is equal to or greater than CHF 50.00." (https://www.infomaniak.com/en/membership, checked 2026-10-18)
+  minimum: 50
 
 signup_url: https://www.infomaniak.com/en/membership
 restrictions:
@@ -59,10 +61,13 @@ agents:
     - "Users looking for a privacy-friendly cloud storage alternative"
     - "Site owners comparing web hosts in Switzerland and Europe"
 
+not_published:
+  commission.duration: "2026-10-18"
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
