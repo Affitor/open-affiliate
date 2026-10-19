@@ -17,8 +17,9 @@ commission:
 # cookie window: not published on strikingly.com/affiliate-program (checked 2026-10-13)
 
 # "Your approved commissions will be paid to you in a monthly batch basis!" (strikingly.com/affiliate-program, checked 2026-10-13); minimum not published
+# "After the trial ends and he/she gets charged successfully, you will get a pending commission - The pending commission will be reviewed in 120 (Two-year), 60 (Yearly) or 10 days (Monthly) - Your approved commissions will be paid to you in a monthly batch basis!" (www.strikingly.com/affiliate-program, checked 2026-10-19) — the hold depends on the plan (10, 60 or 120 days), which one frequency value cannot hold, so frequency is omitted (backfill rule #1)
 payout:
-  frequency: monthly
+  conditions: "After the trial ends and he/she gets charged successfully, you will get a pending commission - The pending commission will be reviewed in 120 (Two-year), 60 (Yearly) or 10 days (Monthly) - Your approved commissions will be paid to you in a monthly batch basis!"
 
 # "Take 10 seconds to register there and claim your unique referral link immediately!" (https://www.strikingly.com/affiliate-program, checked 2026-10-18)
 approval: auto
@@ -65,7 +66,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

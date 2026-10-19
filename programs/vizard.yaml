@@ -18,12 +18,12 @@ commission:
 cookie_days: 60
 
 # "The minimum cash-out amount is $50. Commissions will be disbursed monthly" (vizard.ai/affliate-program-agreement.html, checked 2026-10-13); payment methods not listed
-# "Commissions will be considered due and payable 30 days after the referred sale is completed. Commissions will be disbursed monthly, with occasional delays of a few days." (vizard.ai/affliate-program-agreement.html, checked 2026-10-19) — 30 days after the sale → net-30 (backfill rule #1)
+# "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days." (vizard.ai/affliate-program-agreement.html, checked 2026-10-19) — 30 days after the sale → net-30 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
   frequency: net-30
-  conditions: "Commissions will be considered due and payable 30 days after the referred sale is completed. Commissions will be disbursed monthly, with occasional delays of a few days."
+  conditions: "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days."
 
 signup_url: https://vizard.ai/affiliate
 restrictions:

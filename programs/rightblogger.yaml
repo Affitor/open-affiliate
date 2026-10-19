@@ -21,12 +21,12 @@ attribution: last-click
 tracking_method: cookie
 
 # "The minimum payout is $5.00." and "Payments are processed on or around the 1st of each month." (rightblogger.com/affiliates, checked 2026-10-13); "Payouts via PayPal only."
-# "Commissions take 30 days to lock. All commissions lock after new paying customers cross our 30-day refund window. Payments are processed on or around the 1st of each month." (rightblogger.com/affiliates, checked 2026-10-19) — 30 days after payment → net-30 (backfill rule #1)
+# "Commissions take 30 days to lock. All commissions lock after new paying customers cross our 30-day refund window. … Payments are processed on or around the 1st of each month." (rightblogger.com/affiliates, checked 2026-10-19) — 30 days after payment → net-30 (backfill rule #1)
 payout:
   minimum: 5
   currency: USD
   frequency: net-30
-  conditions: "Commissions take 30 days to lock. All commissions lock after new paying customers cross our 30-day refund window. Payments are processed on or around the 1st of each month."
+  conditions: "Commissions take 30 days to lock. All commissions lock after new paying customers cross our 30-day refund window. … Payments are processed on or around the 1st of each month."
   methods: [paypal]
 
 # "We review every application." (https://rightblogger.com/affiliates, checked 2026-10-18)
