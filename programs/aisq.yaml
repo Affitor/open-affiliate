@@ -16,11 +16,26 @@ commission:
   value: 300
   currency: USD
   duration: null
-  conditions: "$300 flat per successful AISQ Meteor referral on PartnerStack; the client must keep an active subscription for at least 30 days. A separate Awin program pays $200 per Meteor sale."
+  conditions: "$300 flat per successful AISQ Meteor referral on PartnerStack; the client must keep an active subscription for at least 30 days. The brand's PartnerStack terms say commissions are paid 60 days after the transaction; its listing describes a 60-day validation period followed by the PartnerStack payout cycle, with withdrawal typically available the following month. A separate Awin program pays $200 per Meteor sale; its attribution window does not establish the window for this PartnerStack track."
 attribution: last-click
 tracking_method: cookie
-signup_url: https://aisq.com/affiliate/
-restrictions: null
+# The general affiliate page now routes Meteor applicants to Awin; this listing and its linked brand terms describe the $300 PartnerStack track.
+signup_url: https://market.partnerstack.com/page/aisq
+# "All applications are carefully reviewed before approval." (aisq.com/terms-of-use-aisq-partnerstack/, checked 2026-10-18)
+approval: manual
+# "Cashback platforms" / "without a valid tracking link" (aisq.com/terms-of-use-aisq-partnerstack/, sections 6-9, checked 2026-10-18)
+restrictions:
+  - "Affiliates must be at least 18, have a valid PartnerStack account and accurately identify their website, channels and promotional methods"
+  - "Refer new agency customers through the unique PartnerStack link; self-referrals and manual attribution without a valid link are not eligible"
+  - "The client must stay subscribed for at least 30 days; canceled, refunded, reversed, duplicate or fraudulent orders do not qualify"
+  - "Do not bid on brand misspellings or brand-plus-keyword combinations; exact-brand paid search and direct linking are permitted subject to the program's advertising rules"
+  - "No cashback platforms or promotion on adult, gambling or age-restricted websites"
+  - "No spam, fake coupons, unauthorized discounts, false lifetime deals, misleading claims or impersonating AISQ or its employees"
+  - "No spyware, adware, cookie stuffing, forced clicks, hidden redirects or artificial traffic or commissions"
+  - "Use the name AISQ Meteor and approved brand assets; changes to trademarks or marketing materials require prior written permission"
+  - "Do not present potential partner earnings as guaranteed outcomes"
+# cookie_days, payout.minimum and payout.methods: not assessed for this PartnerStack track; no Awin cookie or generic network defaults are reused.
+# payout.frequency: not mapped; the stated 60 days starts at the transaction, whereas schema net-60 starts after the earning month, and the listing describes an additional withdrawal cycle.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -44,7 +59,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
