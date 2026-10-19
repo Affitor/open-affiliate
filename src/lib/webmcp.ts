@@ -45,11 +45,22 @@ async function getJson(path: () => string, signal?: AbortSignal): Promise<unknow
   } catch {
     return failed("NETWORK_ERROR", "Could not reach the OpenAffiliate API.", "Retry shortly; the same tools are served by the MCP server at /mcp.")
   }
+  let body: unknown
   try {
-    return await response.json()
+    body = await response.json()
   } catch {
     return failed("INVALID_RESPONSE", `The API answered HTTP ${response.status} without JSON.`, "Retry shortly; /openapi.json describes every response.")
   }
+  // An HTTP error keeps the API's own error body only when it has the full shape;
+  // anything else (a proxy's 502 JSON, null, a partial error) becomes HTTP_ERROR.
+  if (response.ok || isApiError(body)) return body
+  return failed("HTTP_ERROR", `The API answered HTTP ${response.status}.`, "Retry shortly; /openapi.json describes every response.")
+}
+
+function isApiError(body: unknown): boolean {
+  const error = (body as { error?: unknown } | null)?.error
+  return typeof error === "object" && error !== null &&
+    ["code", "message", "hint"].every((key) => typeof (error as Record<string, unknown>)[key] === "string")
 }
 
 // Read-only, and program text is contributor-submitted: treat it as untrusted.

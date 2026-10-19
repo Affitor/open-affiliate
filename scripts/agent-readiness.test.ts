@@ -136,6 +136,11 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
     const pending = listTool.execute({}, { signal: cancel.signal })
     cancel.abort()
     assert.equal(await code(() => pending), "ABORTED")
+    // An HTTP error whose JSON is not the API's error shape is normalised too.
+    for (const body of [{ error: "Bad Gateway" }, null, {}, { error: { code: "X", message: "partial" } }]) {
+      globalThis.fetch = (async () => Response.json(body, { status: 502 })) as typeof fetch
+      for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "HTTP_ERROR", `${tool.name} ${JSON.stringify(body)}`)
+    }
     // A 404 keeps the API's own error body.
     globalThis.fetch = (async () => Response.json({ error: { code: "NOT_FOUND", message: "Program not found.", hint: "Search first." } }, { status: 404 })) as typeof fetch
     assert.equal(await code(() => getTool.execute({ slug: "not-a-program" })), "NOT_FOUND")
