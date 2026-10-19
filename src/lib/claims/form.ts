@@ -165,11 +165,21 @@ export const COMMISSION_TYPES: [string, string][] = [
 ]
 export const FREQUENCIES: [string, string][] = [
   ["", "Not stated"],
+  ["daily", "Daily"],
   ["weekly", "Weekly"],
+  ["bi-weekly", "Every two weeks"],
+  ["twice-monthly", "Twice a month"],
   ["monthly", "Monthly"],
+  ["quarterly", "Quarterly"],
+  ["on-request", "On request"],
   ["net-30", "Net 30"],
   ["net-60", "Net 60"],
 ]
+
+/** "On request" for on-request; the stored value when it has no label. */
+export function frequencyLabel(f: string): string {
+  return FREQUENCIES.find(([v]) => v === f)?.[1] ?? f
+}
 export const PAYOUT_METHODS: [string, string][] = [
   ["paypal", "PayPal"],
   ["bank", "Bank"],

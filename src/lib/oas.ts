@@ -1,33 +1,41 @@
 /**
- * OAS, the OpenAffiliate Score (rubric v0.2): Transparency 70 + Partner value 30,
- * one fixed number per program, read from public pages only. Scores live in one
- * file, oas-scores.json; while it is empty no surface shows OAS, the report route
- * is a 404 and /rankings stays the commission table. Pure functions take the
- * scores and programs as arguments so the tests run on fixtures.
+ * OAS, the OpenAffiliate Score: Transparency 70 + Partner value 30, one fixed
+ * number per program, computed from the terms OpenAffiliate verified on the
+ * program's own page (scorer: oas-v1.ts). Scores live in one generated file,
+ * oas-scores.json (scripts/build-oas.ts); while it is empty no surface shows
+ * OAS, the report route is a 404 and /rankings stays the commission table.
+ * Pure functions take the scores and programs as arguments so the tests run on
+ * fixtures.
  */
 import scoresFile from "./oas-scores.json"
 import { isSameTeam } from "./same-team"
 
-export type CheckState = "met" | "not_met" | "not_public" | "checking"
+/** not_public reads "Not published"; held_out is a check v1 does not assess (it never blocks a score). */
+export type CheckState = "met" | "not_met" | "not_public" | "checking" | "held_out"
 
 export interface OasCheck {
   id: string
   state: CheckState
-  /** Points earned: the check's full weight when met, else 0. */
+  /** The check's weight for this program: its catalog points, scaled up when a check in its part is held out. Unrounded. */
+  max: number
+  /** max when met, else 0. */
   points: number
-  /** Source of a met check; for a Not met check, the pages read (older files join them with " ; "). */
-  url?: string | null
-  quote?: string | null
-  checked_urls?: string[]
+  /** What the verified terms say, e.g. "60 days"; absent when the fact is not published. */
+  fact?: string | null
+  /** Two of the brand's pages disagree on this term; the quote shows both. */
+  conflict?: string | null
 }
 
 export interface OasScore {
   slug: string
+  version: string
   oas: number | null
   transparency: number | null
   partner_value: number | null
-  /** ISO time of the review. */
+  /** The date the program's terms were verified (last_verified_at). */
   checked_at: string
+  /** The page the terms were checked on: the program's signup_url. */
+  page_url: string | null
   checks: OasCheck[]
 }
 
@@ -47,111 +55,89 @@ export interface CheckDef {
   group: string
   part: Part
   max: number
-  /** What the brand can publish to meet it. */
+  /** The YAML term the check reads; a conflict on it fails the check. */
+  field: string
+  /** What the brand can publish or change to meet it. */
   fix: string
 }
+
+export const OAS_VERSION = "v1"
+
+/** Terms verified longer ago than this show Scoring in progress until they are verified again. */
+export const STALE_DAYS = 90
 
 export const PART_MAX: Record<Part, number> = { transparency: 70, partner_value: 30 }
 
 export const GROUPS: CheckGroup[] = [
-  { key: "R", part: "transparency", name: "Reward terms", about: "What earns a reward, how much, for how long, and when it can be reversed.", ids: ["R1", "R2", "R3", "R4", "R5"] },
-  { key: "P", part: "transparency", name: "Payout", about: "When and how affiliates get paid, and what it costs them.", ids: ["P1", "P2", "P3", "P4", "P5"] },
-  { key: "A", part: "transparency", name: "Attribution & rules", about: "How a referral is credited and what promotion is allowed.", ids: ["A1", "A2", "A3", "A4", "A5"] },
-  { key: "E", part: "transparency", name: "Joining & support", about: "How to apply, who can join, and where to get help.", ids: ["E1", "E2", "E3", "E4", "E5"] },
-  { key: "I", part: "transparency", name: "Identity & policy", about: "Who runs the program and how its terms are governed.", ids: ["I1", "I2", "I3", "I4", "I5"] },
-  { key: "V1", part: "partner_value", name: "Protection", about: "Notice before terms change, and earned commission kept if the partnership ends.", ids: ["V1a", "V1b"] },
-  { key: "V2", part: "partner_value", name: "Getting paid", about: "A minimum at or below the category, paid within 60 days, a usable payout route.", ids: ["V2", "V3", "V4"] },
-  { key: "V5", part: "partner_value", name: "Tracking", about: "A tracking window at or above the category median, with clear priority.", ids: ["V5"] },
-  { key: "V6", part: "partner_value", name: "Getting started", about: "A public promotion aid and a guide to the first tracked referral.", ids: ["V6a", "V6b"] },
-  { key: "V7", part: "partner_value", name: "Support & response", about: "A partner team, its hours or response time, and an application deadline.", ids: ["V7a", "V7b", "V8"] },
+  { key: "commission", part: "transparency", name: "Commission", about: "What a referral earns and for how long.", ids: ["T1", "T2"] },
+  { key: "tracking", part: "transparency", name: "Tracking", about: "How long a click stays credited to the affiliate.", ids: ["T3"] },
+  { key: "payout", part: "transparency", name: "Payout", about: "The minimum, the methods and the schedule of payments.", ids: ["T4", "T5", "T6"] },
+  { key: "joining", part: "transparency", name: "Joining & rules", about: "How applications are approved and what promotion is allowed.", ids: ["T7", "T8"] },
+  { key: "partner", part: "partner_value", name: "Partner terms", about: "Three terms that protect the affiliate: a long tracking window, a low minimum, and regular payment.", ids: ["V1", "V2", "V3"] },
 ]
 
-// Transparency weights are rubric v0.1 per section (6/5/4/3/2) × 0.7; partner value weights are v0.2's own.
-const T_MAX: Record<string, number> = { R: 4.2, P: 3.5, A: 2.8, E: 2.1, I: 1.4 }
-const V_MAX: Record<string, number> = { V1a: 3, V1b: 3, V2: 3, V3: 3, V4: 2, V5: 4, V6a: 2, V6b: 3, V7a: 2, V7b: 2, V8: 3 }
-
-const DEFS: [string, string, string][] = [
-  ["R1", "Reward event defined", "Explain what earns a reward and whether the offer is standard or agreed individually."],
-  ["R2", "Reward is calculable", "Publish the rate and calculation basis, or explain how an individual written offer defines them."],
-  ["R3", "Duration and renewals", "Say whether rewards happen once or recur, and when recurring rewards stop."],
-  ["R4", "Caps, exclusions, tiers", "List caps, excluded products and tier rules; state when none apply."],
-  ["R5", "Refunds and reversals", "Explain when an earned reward can be reversed and how affiliates are informed."],
-  ["P1", "Payout schedule", "State when commissions become payable and when payments are sent."],
-  ["P2", "Minimum threshold", "Publish the payout minimum, or say there is no threshold."],
-  ["P3", "Methods, currencies, fees", "List payment methods, supported currencies and fees affiliates may bear."],
-  ["P4", "Countries, tax, identity", "Explain where payouts are available and what tax or identity steps are required."],
-  ["P5", "Payout disputes", "Give affiliates a clear route to question a missing or reversed payment."],
-  ["A1", "Attribution method", "Explain how a referral is connected to the affiliate, including non-cookie methods."],
-  ["A2", "Attribution window", "State how long a referral remains eligible, or why the program has no such window."],
-  ["A3", "Competing referrals", "Explain who receives credit when multiple referrals or a coupon are involved."],
-  ["A4", "Promotion rules", "Publish the promotion rules before an affiliate applies."],
-  ["A5", "Abuse and disclosure", "Explain prohibited abuse and require honest, clearly disclosed promotion."],
-  ["E1", "Working application link", "Repair the application link and make its destination clearly identify your program."],
-  ["E2", "Who can apply", "Explain eligibility and how applications are evaluated."],
-  ["E3", "Terms readable before applying", "Let prospective affiliates read baseline obligations before giving you their information."],
-  ["E4", "Getting-started guide", "Publish a short guide covering first referral and where attribution or commission reports appear."],
-  ["E5", "Partner support channel", "Provide a monitored partner contact or help form."],
-  ["I1", "Official program link", "Link the program from your official domain so affiliates can establish who operates it."],
-  ["I2", "Responsible operator", "Identify who is responsible for the agreement and how to contact them."],
-  ["I3", "Privacy policy", "Link a privacy policy covering affiliate application and program data."],
-  ["I4", "Change notices", "Explain how partners learn about term changes and their effective date."],
-  ["I5", "Termination terms", "Explain what happens to pending commissions when a partnership ends."],
-  ["V1a", "Notice before terms change", "Give at least 7 days' notice before an adverse change, apply it to new referrals only, and keep rewards already earned."],
-  ["V1b", "Earned commission kept on exit", "State that valid earned commissions are paid when a partnership ends, even below the usual minimum."],
-  ["V2", "Minimum at or below category", "Drop the payout minimum, or set it at or below the category median."],
-  ["V3", "Paid within 60 days", "Publish the longest time from a qualifying sale to payment, including any hold, and keep it to 60 days or less."],
-  ["V4", "Electronic payout, fees public", "Offer an electronic payout route and publish its currency and fees, or say it is fee-free."],
-  ["V5", "Tracking window vs category", "Use a tracking window at or above the category median, or none that expires, and say who gets credit when referrals compete."],
-  ["V6a", "Public promotion aid", "Link a current public promotion aid for this program: copy, examples, a brief or a brand kit."],
-  ["V6b", "Starter guide and reports", "Publish how the first referral is tracked and where partners see attribution and commission reports."],
-  ["V7a", "Partner support team", "Name a partner support team with its own contact route."],
-  ["V7b", "Support hours or response time", "Publish partner support hours or a maximum response time."],
-  ["V8", "Application decision deadline", "Publish when applicants hear back, or say applications are accepted automatically."],
+const DEFS: [id: string, label: string, max: number, field: string, fix: string][] = [
+  ["T1", "Commission stated", 12, "commission.rate", "Publish the commission as a number: a rate or an amount."],
+  ["T2", "How long commission lasts", 10, "commission.duration", "Say how long commission is paid: a number of months, or for the customer's lifetime."],
+  ["T3", "Cookie or attribution window", 10, "cookie_days", "Publish the cookie or attribution window in days, or say that it never expires."],
+  ["T4", "Minimum payout", 10, "payout.minimum", "Publish the minimum payout, or say there is none."],
+  ["T5", "Payout methods", 8, "payout.methods", "List the ways affiliates can be paid."],
+  ["T6", "Payout schedule", 8, "payout.frequency", "Say when payouts are sent: weekly, monthly, on request, or net 30."],
+  ["T7", "How joining works", 6, "approval", "Say how applications are approved: automatically or after a review."],
+  ["T8", "Promotion rules", 6, "restrictions", "Publish the promotion rules, or say there are none."],
+  ["V1", "Cookie of 60 days or more", 10, "cookie_days", "Keep a referral credited for 60 days or more, or for the customer's lifetime."],
+  ["V2", "Minimum payout of USD 50 or less", 10, "payout.minimum", "Lower the minimum payout to USD 50 or less, or drop it."],
+  ["V3", "Paid at least monthly", 10, "payout.frequency", "Pay affiliates at least once a month."],
 ]
 
 export const CHECKS: Record<string, CheckDef> = Object.fromEntries(
-  DEFS.map(([id, label, fix]) => {
+  DEFS.map(([id, label, max, field, fix]) => {
     const g = GROUPS.find((x) => x.ids.includes(id))!
-    return [id, { id, label, fix, group: g.name, part: g.part, max: g.part === "transparency" ? T_MAX[g.key] : V_MAX[id] }]
+    return [id, { id, label, max, field, fix, group: g.name, part: g.part }]
   }),
 )
 
-export const PUBLISH_FIX = "Publish this on a public page an affiliate can read before applying, and link it from the affiliate page."
-export const AGREE_FIX = "Make the public pages say the same thing, or state which terms apply to this program, on the affiliate page."
+export const CHECK_IDS: string[] = GROUPS.flatMap((g) => g.ids)
 
-/** Two public pages that disagree count as Not met; the fix is to make them agree. */
-export function isConflict(c: OasCheck): boolean {
-  return c.state === "not_met" && /^conflict\b/i.test(c.quote ?? "")
-}
+/** A Partner value check and the Transparency check that publishes the same term. */
+export const PAIRS: Record<string, string> = { V1: "T3", V2: "T4", V3: "T6" }
 
+export const AGREE_FIX = "Make your pages state the same term, or say on the affiliate page which one applies."
+export const NOT_ASSESSED = "Not assessed in v1"
+
+/** The fix shown under a check: agree the pages, publish the term, or change it. */
 export function improveText(c: OasCheck): string {
-  if (c.state === "not_public") return PUBLISH_FIX
-  if (isConflict(c)) return AGREE_FIX
+  if (c.conflict) return AGREE_FIX
+  if (c.state === "not_public") return CHECKS[PAIRS[c.id] ?? c.id].fix
   return CHECKS[c.id]?.fix ?? ""
-}
-
-/** The pages read for a check, from checked_urls or the " ; "-joined url. */
-export function checkedUrls(c: OasCheck): string[] {
-  if (c.checked_urls?.length) return c.checked_urls
-  return (c.url ?? "").split(/\s*;\s*/).filter(Boolean)
 }
 
 export function round1(n: number): number {
   return Math.round(n * 10) / 10
 }
 
-/** OAS, or null while any check is still Checking ("Scoring in progress"). */
-export function oasValue(s: OasScore): number | null {
-  if (s.oas == null || s.checks.some((c) => c.state === "checking")) return null
+/**
+ * OAS, or null ("Scoring in progress") while any check is still Checking or the
+ * terms were verified more than STALE_DAYS ago. Freshness is checked when read,
+ * not only when the file is built, so a score expires between deploys too.
+ * Held-out checks never block it.
+ */
+export function oasValue(s: OasScore, today: Date = new Date()): number | null {
+  if (s.oas == null || s.checks.some((c) => c.state === "checking") || isStale(s.checked_at, today)) return null
   return s.oas
 }
 
+/** Terms verified more than STALE_DAYS before today, or never. */
+export function isStale(checkedAt: string | null | undefined, today: Date): boolean {
+  return !checkedAt || today.getTime() - Date.parse(checkedAt) > STALE_DAYS * 864e5
+}
+
 export function partEarned(s: OasScore, part: Part): number {
-  return round1(s.checks.filter((c) => CHECKS[c.id]?.part === part).reduce((a, c) => a + (c.state === "met" ? c.points : 0), 0))
+  return round1(s.checks.filter((c) => CHECKS[c.id]?.part === part).reduce((a, c) => a + c.points, 0))
 }
 
 /** Why a scored program has no rank. Same team first: it holds even when the score is complete. */
-export type Unranked = "same-team" | "affitor" | "checking" | "no-apply-link" | "stale"
+export type Unranked = "same-team" | "affitor" | "checking" | "no-apply-link"
 
 export interface ProgramRef {
   slug: string
@@ -160,14 +146,11 @@ export interface ProgramRef {
   network?: string | null
 }
 
-export const STALE_DAYS = 90
-
 export function unrankedReason(s: OasScore, p: ProgramRef, today: Date): Unranked | null {
   if (isSameTeam(p.slug)) return "same-team"
   if (p.network === "affitor") return "affitor"
-  if (oasValue(s) == null) return "checking"
-  if (s.checks.find((c) => c.id === "E1")?.state !== "met") return "no-apply-link"
-  if (today.getTime() - Date.parse(s.checked_at) > STALE_DAYS * 864e5) return "stale"
+  if (oasValue(s, today) == null) return "checking"
+  if (!s.page_url) return "no-apply-link"
   return null
 }
 
@@ -175,8 +158,7 @@ export const UNRANKED_TEXT: Record<Unranked, string> = {
   "same-team": "Same team as OpenAffiliate · not ranked",
   affitor: "Runs on Affitor (same team as OpenAffiliate) · not ranked",
   checking: "Scoring in progress",
-  "no-apply-link": "Not ranked: the application link did not work when we checked",
-  stale: `Not ranked: last reviewed more than ${STALE_DAYS} days ago`,
+  "no-apply-link": "Not ranked: no public application link",
 }
 
 export const TEAM_DISCLOSURE = "OpenAffiliate is run by the same team as Affitor."
@@ -195,7 +177,7 @@ export function buildBoard(scores: OasScore[], programs: ProgramRef[], today: Da
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const rows: BoardRow[] = scores.flatMap((s) => {
     const program = bySlug.get(s.slug)
-    return program ? [{ program, score: s, oas: oasValue(s), rank: null, unranked: unrankedReason(s, program, today) }] : []
+    return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, program, today) }] : []
   })
   const ranked = rows.filter((r) => !r.unranked).sort((a, b) => b.oas! - a.oas! || (a.program.slug < b.program.slug ? -1 : 1))
   ranked.forEach((r, i) => (r.rank = i > 0 && ranked[i - 1].oas === r.oas ? ranked[i - 1].rank : i + 1))

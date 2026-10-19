@@ -43,7 +43,7 @@ approval_time: "instant"
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly  # weekly | monthly | net-30 | net-60
+  frequency: monthly  # daily | weekly | bi-weekly | twice-monthly | monthly | quarterly | on-request | net-30 | net-60
   methods: [bank, paypal]
 
 network: in-house           # partnerstack | impact | rewardful | ... | in-house (optional)

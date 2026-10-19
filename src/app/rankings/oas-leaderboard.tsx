@@ -38,12 +38,12 @@ export function OasLeaderboard({ board }: { board: BoardRow[] }) {
       <p className="oa-label">OAS leaderboard</p>
       <h2 id="oas-h" className="text-title font-semibold tracking-[-0.02em] mt-1.5">Ranked by OAS</h2>
       <p className="text-sm text-muted-foreground mt-1.5 max-w-2xl">
-        OAS, the OpenAffiliate Score: how clearly a program publishes its terms and protects its partners, from public pages only. Nobody pays to rank.
+        OAS, the OpenAffiliate Score: how clearly a program publishes its terms and protects its partners, from the terms we verified on its own page. Nobody pays to rank.
       </p>
       <dl className="mt-5 inline-grid grid-cols-3 rounded-xl border border-border bg-card divide-x divide-border">
         <div className="px-4 py-3"><dt className="oa-label">Ranked</dt><dd className="font-mono text-subtitle mt-0.5">{ranked.length}</dd></div>
         <div className="px-4 py-3"><dt className="oa-label">Scoring in progress</dt><dd className="font-mono text-subtitle mt-0.5">{scoring.length}</dd></div>
-        <div className="px-4 py-3"><dt className="oa-label">Last review</dt><dd className="font-mono text-subtitle mt-0.5">{new Date(latest).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}</dd></div>
+        <div className="px-4 py-3"><dt className="oa-label">Last verified</dt><dd className="font-mono text-subtitle mt-0.5">{new Date(latest).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })}</dd></div>
       </dl>
 
       <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:grid-cols-3 mt-8">
@@ -79,7 +79,7 @@ export function OasLeaderboard({ board }: { board: BoardRow[] }) {
       )}
 
       <p className="text-meta text-muted-foreground mt-6 max-w-3xl">
-        Ranking needs every check assessed, a working application link and a review in the last 90 days; equal scores share a rank. A term that is not on a public page scores 0 until it is published. Not scored: commission size, recurring or one-time, popularity or payment to OpenAffiliate. {TEAM_DISCLOSURE}
+        Ranking needs a score, a public application link and terms verified in the last 90 days; equal scores share a rank. A term that is not published scores 0 until it is. Not scored: commission size, recurring or one-time, popularity or payment to OpenAffiliate. {TEAM_DISCLOSURE}
       </p>
     </section>
   );

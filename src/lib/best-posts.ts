@@ -2,6 +2,7 @@ import { getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import { isSameTeam } from "./same-team"
+import { frequencyLabel } from "./claims/form"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
 import { post as recurringAffiliatePrograms } from "../content/best/recurring-affiliate-programs"
@@ -186,7 +187,7 @@ export function cookieText(p: Program): string {
 export function payoutText(p: Program): string {
   const f = p.payout.frequency
   const parts = [
-    f ? f[0].toUpperCase() + f.slice(1) : null,
+    f ? frequencyLabel(f) : null,
     p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null && p.payout.currency === "USD" ? `$${p.payout.minimum} minimum` : null,
   ].filter(Boolean)
   if (!parts.length) return "Not published"

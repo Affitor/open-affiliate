@@ -20,10 +20,11 @@ cookie_days: 120
 
 # attribution left out: the affiliate page says "First cookie, first claim" while the terms say "last-click attribution" (seranking.com/affiliate.html and seranking.com/legal/affiliate.html, checked 2026-10-13)
 
-# "Receive commission payouts twice a month through PayPal once you reach the minimum threshold of $50." (seranking.com/affiliate.html, checked 2026-10-13); twice-monthly has no frequency value, so frequency is left out
+# "Receive commission payouts twice a month through PayPal once you reach the minimum threshold of $50." (seranking.com/affiliate.html, checked 2026-10-13)
 payout:
   minimum: 50
   currency: USD
+  frequency: twice-monthly
   methods: [paypal]
 
 signup_url: https://seranking.com/affiliate.html

@@ -23,6 +23,7 @@ cookie_days: 30
 payout:
   minimum: 10
   currency: USD
+  frequency: on-request
 
 signup_url: https://aiktp.com/affiliate
 restrictions:

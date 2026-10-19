@@ -14,6 +14,7 @@
  */
 import { namesTerm, proseSentences, statesTerms, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import type { Program } from "../src/lib/programs"
+import { frequencyLabel } from "../src/lib/claims/form"
 
 /** Fields the API leaves out for an unverified program; `payout` stays as {}. */
 export const HIDDEN_API_KEYS = ["cookieDays", "payoutMethods", "approval", "approvalTime"] as const
@@ -196,7 +197,7 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
       const want = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
       if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
-    const frequency = p.payout.frequency ? p.payout.frequency.charAt(0).toUpperCase() + p.payout.frequency.slice(1) : null
+    const frequency = p.payout.frequency ? frequencyLabel(p.payout.frequency) : null
     const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
     const minimum = min && !frequency ? min.charAt(0).toUpperCase() + min.slice(1) : min
     const payout = [frequency, minimum].filter(Boolean).join(", ")
