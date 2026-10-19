@@ -8,6 +8,7 @@ import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
 import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
+import { blogEntries } from "@/lib/blog";
 
 export const metadata: Metadata = {
   alternates: {
@@ -44,6 +45,9 @@ export default function Home() {
   const networks = networksByName();
   const networkCount = networks.filter((n) => n.network !== IN_HOUSE).length;
   const checked = livePrograms.filter(termsConfirmed).length;
+  // The five newest posts, topped up with ranked lists when there are fewer posts.
+  const blog = blogEntries();
+  const fromBlog = [...blog.posts, ...blog.lists].slice(0, 5);
   const byCategory = categories
     .map((name) => ({ name, slug: categoryToSlug(name), count: livePrograms.filter((p) => p.category === name).length }))
     .filter((c) => c.count > 0)
@@ -60,10 +64,8 @@ export default function Home() {
             <h1 className="text-hero-sm md:text-hero font-semibold tracking-[-0.035em] mt-4 max-w-[760px]">
               Affiliate programs worth promoting, with terms you can check.
             </h1>
-            <p className="text-lg leading-relaxed text-foreground/80 mt-5 max-w-[600px]">
-              What a program pays, how long its cookie lasts and when it pays out, with {checked.toLocaleString("en-US")} programs checked against the brand&apos;s own terms page. Open data for people and for AI agents.
-            </p>
-            <p className="text-meta text-muted-foreground tabular-nums mt-3" data-freshness>
+            {/* One short line under the title (redesign r3): the registry's own numbers. */}
+            <p className="font-mono text-meta text-muted-foreground tabular-nums mt-4" data-freshness>
               {freshnessLine(programs)}
             </p>
             <div className="mt-7 flex flex-wrap gap-2">
@@ -101,10 +103,10 @@ export default function Home() {
 
       <section id="home-rankings" className="oa-band">
         <SectionHead title="Rankings" note="Top programs by Affiliate Score" href="/rankings" link="All rankings" />
-        <ol className="overflow-hidden rounded-xl border border-border bg-card">
+        <ol className="border-t border-line-strong">
           {rankings.map((program, i) => (
-            <li key={program.slug} className="border-t border-border first:border-t-0">
-              <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
+            <li key={program.slug} className="border-b border-border">
+              <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-1 py-2.5 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
                 <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
                 <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
@@ -165,18 +167,32 @@ export default function Home() {
 
       <section className="oa-band">
         <SectionHead title={`${byCategory.length} categories`} href="/categories" link="All categories" />
-        <nav aria-label="Categories" className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card md:grid-cols-4">
+        <nav aria-label="Categories" className="grid grid-cols-2 gap-x-6 md:grid-cols-4 md:gap-x-8">
           {byCategory.map((c) => (
             <Link
               key={c.slug}
               href={`/categories/${c.slug}`}
-              className="-ml-px -mt-px flex justify-between gap-2 border-l border-t border-border px-4 py-3 text-sm hover:bg-sunk transition-colors"
+              className="flex justify-between gap-2 border-b border-border px-1 py-2.5 text-sm hover:bg-sunk transition-colors"
             >
               <span className="truncate">{c.name}</span>
               <span className="font-mono text-meta text-muted-foreground">{c.count}</span>
             </Link>
           ))}
         </nav>
+      </section>
+
+      <section id="home-blog" className="oa-band">
+        <SectionHead title="From the blog" href="/blog" link="All posts" />
+        <ul className="border-t border-line-strong">
+          {fromBlog.map((e) => (
+            <li key={e.href} className="border-b border-border">
+              <Link href={e.href} className="flex items-baseline justify-between gap-4 px-1 py-2.5 text-sm hover:bg-sunk transition-colors">
+                <span className="min-w-0 truncate">{e.title}</span>
+                <time dateTime={e.date ?? undefined} className="shrink-0 font-mono text-xs text-muted-foreground">{e.date ?? ""}</time>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </section>
 
       <section className="oa-band">

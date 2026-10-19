@@ -46,7 +46,7 @@ export interface BestPost {
   affitor?: { before: string; anchor: string; after: string }
   /** BestList slugs. */
   related: string[]
-  /** The registry category whose /categories page links to this post as "Our picks". */
+  /** The registry category whose /categories page links to this post under "Posts about". */
   category?: string
 }
 
@@ -131,12 +131,6 @@ export function readyPost(slug: string): { post: BestPost; selection: PostSelect
   const value = post && selection && postReady(selection) ? { post, selection } : null
   ready.set(slug, value)
   return value
-}
-
-/** The ready post a category page links to as "Our picks", if any. */
-export function categoryPost(category: string): { post: BestPost; selection: PostSelection } | null {
-  const post = POSTS.find((p) => p.category === category)
-  return post ? readyPost(post.slug) : null
 }
 
 /** The post is published as a post only with enough programs; otherwise the list renders. */

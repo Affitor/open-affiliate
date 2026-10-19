@@ -110,9 +110,10 @@ function readableDate(iso?: string | null): string {
   return m ? `${MONTHS[Number(m[2]) - 1]} ${Number(m[3])}, ${m[1]}` : (iso ?? "");
 }
 
+/** Section head: the mono label over a hairline (redesign r3). */
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="text-lg font-semibold tracking-tight mb-4">
+    <h2 className="oa-label mb-3 border-b border-line-strong pb-2">
       {children}
     </h2>
   );
@@ -159,7 +160,8 @@ export default async function ProgramPage({
   const approval = approvalText(program);
   const cookie = cookieText(program);
   const hasAlternatives = getRelatedPrograms(program).length > 0;
-  // OAS sits in the header, away from the owner box and its "Move this program to Affitor" link.
+  // OAS sits below the program's own content (Sơn 19/10: program first), above the owner box.
+  // getOasScore is empty while OAS_PUBLISHED is false, so nothing renders until then.
   const oas = getOasScore(slug);
 
   // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
@@ -272,11 +274,6 @@ export default async function ProgramPage({
             )}
             <ClaimChip program={program} />
             <Badge variant="outline" className="text-xs shrink-0 text-muted-foreground">{program.category}</Badge>
-            {oas && (
-              <Link href={`/programs/${slug}/oas`} className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs font-medium hover:bg-muted/50 transition-colors">
-                {oasValue(oas) == null ? "OAS · scoring in progress" : <>OAS <span className="font-mono ml-1">{oasValue(oas)}</span></>}
-              </Link>
-            )}
           </div>
         </div>
       </div>
@@ -321,7 +318,7 @@ export default async function ProgramPage({
               {facts.length > 0 && (
                 <dl className="mt-5 border-t border-border">
                   {facts.map((f) => (
-                    <div key={f.term} data-term={f.term} className="flex justify-between gap-4 py-2.5 border-b border-border text-sm"><dt className="text-muted-foreground">{f.label}</dt><dd className="text-right font-medium">{f.value}</dd></div>
+                    <div key={f.term} data-term={f.term} className="flex justify-between gap-4 py-2 border-b border-border text-sm"><dt className="text-muted-foreground">{f.label}</dt><dd className={`text-right font-medium tabular-nums ${f.term === "cookie" ? "font-mono text-meta" : ""}`}>{f.value}</dd></div>
                   ))}
                 </dl>
               )}
@@ -396,10 +393,10 @@ export default async function ProgramPage({
           {!noProgram && cases.length > 0 && (
             <section>
               <H2>What people use it for</H2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 sm:gap-x-8">
                 {cases.map((c, i) => (
-                  <li key={i} className="flex gap-2.5 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm">
-                    <Check className="h-4 w-4 mt-0.5 shrink-0 text-good" />
+                  <li key={i} className="flex gap-2.5 border-b border-border py-2.5 text-sm">
+                    <Check className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
                     <span>{c}</span>
                   </li>
                 ))}
@@ -436,7 +433,7 @@ export default async function ProgramPage({
               <H2>Rules before you promote</H2>
               {/* The card keeps the figure, the facts and Apply; the long commission terms live here. */}
               {verified && program.commissionConditions && (
-                <details className="group mb-4 rounded-xl border border-border bg-card">
+                <details className="group mb-3 rounded-lg border border-border bg-card">
                   <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
                     How the commission works
                     <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
@@ -444,9 +441,9 @@ export default async function ProgramPage({
                   <p data-term="conditions" className="border-t border-border px-4 py-3 text-sm leading-relaxed text-foreground/80">{program.commissionConditions}</p>
                 </details>
               )}
-              {(program.restrictions?.length ?? 0) > 0 && <ul className="space-y-2.5">
+              {(program.restrictions?.length ?? 0) > 0 && <ul>
                 {(program.restrictions ?? []).map((r, i) => (
-                  <li key={i} className="flex gap-2.5 text-sm">
+                  <li key={i} className="flex gap-2.5 border-b border-border py-2.5 text-sm">
                     <Info className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
                     <span>{r}</span>
                   </li>
@@ -471,14 +468,28 @@ export default async function ProgramPage({
           {/* FAQ: answered only from the fields above; mirrors the FAQPage JSON-LD */}
           {faq.length > 0 && (
             <section>
-              <H2>{program.name} affiliate program FAQ</H2>
+              <h2 className="text-lg font-semibold tracking-tight mb-3">{program.name} affiliate program FAQ</h2>
               <FaqAccordion items={faq} />
+            </section>
+          )}
+
+          {/* The OAS embed, under the program's own content. Renders only once OAS is published. */}
+          {oas && (
+            <section aria-labelledby="oas-heading" className="rounded-xl border border-border bg-card p-5">
+              <h2 id="oas-heading" className="oa-label">OAS · OpenAffiliate Score</h2>
+              <p className="mt-2 font-mono text-display font-medium tabular-nums">
+                {oasValue(oas) == null ? "Scoring in progress" : <>{oasValue(oas)}<span className="ml-1 text-sm text-muted-foreground">/100</span></>}
+              </p>
+              <p className="mt-1 text-meta text-muted-foreground">How clearly {program.name} publishes its terms, from public pages only. Not how much it pays.</p>
+              <Link href={`/programs/${slug}/oas`} className="mt-3 inline-flex items-center gap-1 text-sm underline decoration-line-strong underline-offset-4 hover:decoration-current">
+                Full report <ArrowRight className="size-3.5" aria-hidden />
+              </Link>
             </section>
           )}
 
           {/* Owner box: claim where the flow is on, otherwise an edit on GitHub; then the brand-side CTA. */}
           <section className="space-y-4">
-            <div className="rounded-2xl border border-border/60 bg-card p-5 space-y-3">
+            <div className="rounded-xl border border-border bg-card p-5 space-y-3">
               {program.claimedBy ? (
                 <>
                   <div className="flex flex-wrap items-center gap-2">

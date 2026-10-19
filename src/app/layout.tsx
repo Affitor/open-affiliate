@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Image from "next/image";
 import Link from "next/link";
 import { Nav } from "@/components/nav";
 import { AffitorLink } from "@/components/affitor-link";
@@ -54,141 +53,85 @@ export const metadata: Metadata = {
 };
 
 
+// Four columns (redesign r3, 19/10). /programs and the A–Z page carry the whole
+// registry: no viewport prefetch from every page's footer.
+const NO_PREFETCH = new Set(["/programs", "/programs/a-z"]);
+const FOOTER_COLUMNS: { title: string; links: { label: string; href: string }[] }[] = [
+  {
+    title: "Registry",
+    links: [
+      { label: "Rankings", href: "/rankings" },
+      { label: "Programs", href: "/programs" },
+      { label: "All programs A–Z", href: "/programs/a-z" },
+      { label: "Networks", href: "/networks" },
+      { label: "Categories", href: "/categories" },
+      // Not in the r3 mock, kept: the footer was the only link to a reader's saved list.
+      { label: "Saved", href: "/saved" },
+    ],
+  },
+  {
+    title: "Read",
+    links: [
+      { label: "Blog", href: "/blog" },
+      { label: "Methodology", href: "/methodology" },
+      { label: "Changelog", href: "/changelog" },
+    ],
+  },
+  {
+    title: "Developers",
+    links: [
+      { label: "API", href: "/docs/api" },
+      { label: "MCP", href: "/docs/mcp" },
+      { label: "CLI", href: "/docs/cli" },
+      { label: "llms.txt", href: "/llms.txt" },
+    ],
+  },
+  {
+    title: "Community",
+    links: [
+      { label: "Submit", href: "/submit" },
+      { label: "GitHub", href: "https://github.com/Affitor/open-affiliate" },
+      { label: "About", href: "/about" },
+    ],
+  },
+];
+
 function Footer() {
   return (
-    <footer className="mt-auto border-t border-border/40">
-      <div className="mx-auto max-w-6xl px-6 py-12">
-        {/* Mega footer columns */}
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 mb-12">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-4">
-              Registry
-            </p>
-            <ul className="space-y-2.5">
-              {[
-                { label: "Programs", href: "/programs" },
-                { label: "Saved programs", href: "/saved" },
-                { label: "New programs", href: "/new" },
-                { label: "RSS feed", href: "/new.xml" },
-                { label: "Categories", href: "/categories" },
-                { label: "Rankings", href: "/rankings" },
-                // The page is /content-lab. /lab has been a 404 in the footer
-                // of every page on the site.
-                { label: "Content Lab", href: "/content-lab" },
-                { label: "Submit", href: "/submit" },
-                { label: "Docs", href: "/docs" },
-                { label: "Changelog", href: "/changelog" },
-              ].map(({ label, href }) => (
-                <li key={label}>
-                  <Link
-                    href={href}
-                    prefetch={href === "/programs" ? false : undefined}
-                    className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-4">
-              Developers
-            </p>
-            <ul className="space-y-2.5">
-              {[
-                { label: "CLI", href: "/docs/cli" },
-                { label: "MCP", href: "/docs/mcp" },
-                { label: "API", href: "/docs/api" },
-                { label: "GitHub", href: "https://github.com/Affitor/open-affiliate", external: true },
-              ].map(({ label, href, external }) => (
-                <li key={label}>
-                  {external ? (
-                    <a
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {label}
-                    </a>
-                  ) : (
-                    <Link
-                      href={href}
-                      prefetch={href === "/programs" ? false : undefined}
-                      className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                    >
-                      {label}
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground/60 mb-4">
-              Community
-            </p>
-            <ul className="space-y-2.5">
-              <li>
-                <a
-                  href="https://github.com/Affitor/open-affiliate"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li>
-                <Link
-                  href="/feedback"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Feedback
-                </Link>
-              </li>
-              {/* An About page reachable from every page is what turns an
-                  anonymous domain into an identifiable publisher. */}
-              <li>
-                <Link
-                  href="/about"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  About &amp; Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/methodology"
-                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Methodology
-                </Link>
-              </li>
-            </ul>
+    <footer className="mt-auto">
+      <div className="oa-frame border-t border-border px-4 pt-10 pb-8 text-meta text-muted-foreground sm:px-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 md:grid-cols-4">
+          {FOOTER_COLUMNS.map((col) => (
+            <div key={col.title}>
+              <p className="oa-label mb-3">{col.title}</p>
+              <ul>
+                {col.links.map(({ label, href }) => (
+                  <li key={label}>
+                    {/* External and non-page targets (GitHub, llms.txt) are plain anchors. */}
+                    {href.startsWith("/") && href !== "/llms.txt" ? (
+                      <Link href={href} prefetch={NO_PREFETCH.has(href) ? false : undefined} className="block py-1 text-foreground/80 hover:text-foreground transition-colors">
+                        {label}
+                      </Link>
+                    ) : (
+                      <a href={href} className="block py-1 text-foreground/80 hover:text-foreground transition-colors">
+                        {label}
+                      </a>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border pt-4">
+          <p>
+            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
+          </p>
+          <div className="flex items-center gap-4">
+            <span>Open source · MIT</span>
+            <ThemeToggle />
           </div>
         </div>
-
-        {/* Bottom bar */}
-        <div className="border-t border-border/40 pt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-2">
-            <Image
-              src="/logo.svg"
-              alt="OpenAffiliate"
-              width={20}
-              height={20}
-              className="rounded"
-            />
-            <span className="text-xs text-muted-foreground">
-              OpenAffiliate. Open source, community-driven.
-            </span>
-          </div>
-          <ThemeToggle />
-        </div>
-        <p className="mt-4 text-xs text-muted-foreground/80">
-          Maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="hover:underline">Affitor</AffitorLink>. Listings are free; rankings are never paid.
-        </p>
       </div>
     </footer>
   );
@@ -265,7 +208,7 @@ export default function RootLayout({
         <PostHogProvider>
           <ThemeProvider>
             <Nav />
-            <main className="flex-1 dot-grid">{children}</main>
+            <main className="flex-1">{children}</main>
             <Footer />
           </ThemeProvider>
         </PostHogProvider>
