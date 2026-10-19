@@ -17,8 +17,10 @@ commission:
 # cookie window: not published on jotform.com/partnership/affiliate (checked 2026-10-13)
 
 # "you will receive a monthly commission payout for the first year"; paid via a Tremendous reward to your PayPal email (jotform.com/partnership/affiliate, checked 2026-10-13); minimum not published
+# "We have a 60-day rule for commission payments. In other words, the client you’ve brought to us needs to complete 60 days as a paid client before you become eligible to earn commissions from that sale/lead." (www.jotform.com/partnership/affiliate/, checked 2026-10-19) — 60 days after the sale → net-60 (backfill rule #1)
 payout:
-  frequency: monthly
+  frequency: net-60
+  conditions: "We have a 60-day rule for commission payments. In other words, the client you’ve brought to us needs to complete 60 days as a paid client before you become eligible to earn commissions from that sale/lead."
   methods: [paypal]
 
 signup_url: https://www.jotform.com/partnership/affiliate/
@@ -63,7 +65,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

@@ -22,10 +22,12 @@ attribution: last-click
 tracking_method: cookie
 
 # "Payouts go out monthly through Tolt via PayPal, Wise or another method Tolt supports, once your balance reaches $50." (vid.ai/affiliate, checked 2026-10-13)
+# "Commissions become payable 30 days after each payment, once the refund window has passed. Payouts go out monthly through Tolt via PayPal, Wise or another method Tolt supports, once your balance reaches $50." (vid.ai/affiliate, checked 2026-10-19) — 30 days after payment → net-30 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
+  conditions: "Commissions become payable 30 days after each payment, once the refund window has passed. Payouts go out monthly through Tolt via PayPal, Wise or another method Tolt supports, once your balance reaches $50."
   methods: [paypal, wise]
 
 signup_url: https://vid.ai/affiliate
@@ -69,7 +71,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

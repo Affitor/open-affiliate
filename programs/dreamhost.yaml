@@ -17,10 +17,11 @@ commission:
 # "No Minimum Payout ... Payments are sent by direct bank transfer every month" (dreamhost.com/affiliates, checked 2026-10-13)
 # "completes the signup process within thirty (30) days of clicking on the affiliate tracking link" (https://www.dreamhost.com/legal/tune-terms-and-conditions/, checked 2026-10-18)
 cookie_days: 30
+# "Payouts have a holding period of 97 days. As long as your referral does not cancel or miss a payment, your commission will be approved within the 97 days of them signing up." (www.dreamhost.com/affiliates/, checked 2026-10-19) — over 60 days → no frequency (backfill rule #1)
 payout:
   minimum: 0
   currency: USD
-  frequency: monthly
+  conditions: "Payouts have a holding period of 97 days. As long as your referral does not cancel or miss a payment, your commission will be approved within the 97 days of them signing up."
   methods: [bank]
 
 # "you are prohibited from (1) outranking DreamHosts’s internal paid search ad on any keywords, (2) purchasing or bidding on any DreamHost branded keywords" (https://www.dreamhost.com/legal/tune-terms-and-conditions/, checked 2026-10-18)
@@ -67,7 +68,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
