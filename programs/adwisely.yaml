@@ -23,7 +23,7 @@ signup_url: https://help.adwisely.com/en/articles/12783248-adwisely-affiliate-pr
 # "Self-referrals are not permitted." (help.adwisely.com/en/articles/12783248-adwisely-affiliate-program, checked 2026-10-18)
 # "100+ orders in the last 90 days" (same page, checked 2026-10-18)
 restrictions:
-  - "Referred Shopify stores must have at least 100 orders in the last 90 days and install Adwisely through the unique referral link"
+  - "Referred Shopify stores must have at least 100 orders in the last 90 days and install Adwisely through the unique referral link for automatic referral eligibility"
   - "Clients must remain subscribed and pay for Adwisely to qualify for payouts"
   - "Manual referrals require approval and a clear, detailed explanation for the missing referral link"
   - "No self-referrals"
