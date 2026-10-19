@@ -18,7 +18,8 @@ commission:
 cookie_days: 60
 tracking_method: cookie
 
-# payout minimum and schedule: not published on affiliates.templatemonster.com/affiliates (checked 2026-10-13)
+# payout minimum: not published on affiliates.templatemonster.com/affiliates (checked 2026-10-13)
+# frequency on-request: "Payment is on request after identity verification" (the payment terms quoted in commission.conditions, checked 2026-10-13); no fixed schedule is published
 # "supports different payment methods – PayPal, Bank / Wire Transfer, WebMoney" (affiliates.templatemonster.com/affiliates, checked 2026-10-13)
 payout:
   currency: USD

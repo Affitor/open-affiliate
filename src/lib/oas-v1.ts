@@ -123,7 +123,8 @@ export function scoreProgram(p: ProgramYaml, today: Date, heldOut: string[] = HE
   for (const part of Object.keys(PART_MAX) as Part[]) {
     const ids = CHECK_IDS.filter((id) => CHECKS[id].part === part)
     // Nothing left to assess in this part for this program (e.g. T3, T4 and T6 held out, and none of
-    // their terms stated): that is our gap, so the part is Checking and the score in progress.
+    // their terms stated): the program is Scoring in progress, with no number. It is our gap, so it
+    // never costs the brand points, and spreading the part elsewhere would break the 70/30 split.
     if (ids.every((id) => states.get(id)!.state === "held_out")) {
       for (const id of ids) states.set(id, { id, state: "checking", max: 0, points: 0 })
     }
