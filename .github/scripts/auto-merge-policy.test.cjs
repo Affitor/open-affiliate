@@ -607,6 +607,12 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
   })
   assert.match(brandDropped.reasons.join("\n"), /restrictions is \[.*\], Affitor says \["No coupon sites",.*\]: programs\/alpha\.yaml/)
 
+  // An item the schema refuses, carried over from the base, is blocked like the sync blocks it (Codex PR318 r1).
+  const numberBase = withBrand(syncedYaml("alpha"), [123])
+  const numberHead = withBrand(syncedYaml("alpha", { rate: 25, date: "2026-10-13" }), [123, ...network])
+  const numbered = await evaluateSync({ files: [modified("alpha", numberBase, numberHead), SYNC_FILES[1]] })
+  assert.match(numbered.reasons.join("\n"), /restrictions holds an item that is not a string: programs\/alpha\.yaml/)
+
   // A pause Affitor does not confirm: the program is still listed.
   const notGone = await evaluateSync({ fetchJson: affitorApi([...SYNC_API, affitorProgram("gone")]) })
   assert.match(notGone.reasons.join("\n"), /does not confirm gone left/)

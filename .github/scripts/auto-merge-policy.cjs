@@ -616,6 +616,12 @@ async function evaluateAffitorSyncPolicy({
     if (hasAnchors(file.content)) {
       reasons.push(`uses a YAML anchor or alias: ${name}`)
     }
+    // The schema's items rule, as the sync's checkSchema applies it: the
+    // brand's restrictions are carried over, so a bad one would ride along.
+    const restrictions = valueAt(program, ["restrictions"])
+    if (Array.isArray(restrictions) && !restrictions.every((r) => typeof r === "string")) {
+      reasons.push(`restrictions holds an item that is not a string: ${name}`)
+    }
     let slug, baseSlug, pause
     if (alsoOn) {
       // The link is the person's: the sync keeps it, or removes the whole
