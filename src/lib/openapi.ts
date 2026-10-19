@@ -13,10 +13,14 @@ const commission = object({
   value: { type: ["number", "null"] }, currency: nullableString,
   duration: nullableString, conditions: nullableString,
 }, ["type", "rate", "mode", "value", "currency"])
-// Every response of the REST API carries API-Version (see info.description).
-const response = (description: string, schema: unknown) => ({
-  description, headers: { "API-Version": { $ref: "#/components/headers/APIVersion" } }, content: { "application/json": { schema } },
-})
+// Every response of the REST API carries API-Version, and Deprecation and Sunset
+// once what it serves is deprecated (see info.description).
+const headers = {
+  "API-Version": { $ref: "#/components/headers/APIVersion" },
+  Deprecation: { $ref: "#/components/headers/Deprecation" },
+  Sunset: { $ref: "#/components/headers/Sunset" },
+}
+const response = (description: string, schema: unknown) => ({ description, headers, content: { "application/json": { schema } } })
 const parameter = (name: string, description: string, schema: unknown) => ({ name, in: "query", required: false, description, schema })
 
 export const openapi = {
@@ -63,6 +67,14 @@ export const openapi = {
   components: {
     headers: {
       APIVersion: { description: "Major version of this API. Breaking changes ship only under a new value.", schema: { type: "string", const: "1" } },
+      Deprecation: {
+        description: "RFC 9745. Sent only once the endpoint, or a parameter or field it serves, is deprecated: the deprecation date as a structured-field Date (e.g. @1767225600). Sent at least 90 days before Sunset. Nothing is deprecated today.",
+        schema: { type: "string", pattern: "^@-?[0-9]+$" },
+      },
+      Sunset: {
+        description: "RFC 8594. Sent with Deprecation: the HTTP-date after which the deprecated endpoint, parameter or field stops working (e.g. Thu, 01 Apr 2027 00:00:00 GMT).",
+        schema: { type: "string" },
+      },
     },
     schemas: {
       Commission: commission,
