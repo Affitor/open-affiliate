@@ -36,6 +36,7 @@ jobs:
       - run: npx tsc --noEmit
       - run: npm run build
       - run: npx tsx --test scripts/agentic-surface.test.ts
+      - run: npx tsx --test scripts/agent-skills.test.ts
       # After the build: it reads the registry that prebuild regenerates.
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts

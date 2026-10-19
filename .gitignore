@@ -93,4 +93,7 @@ reports/
 /public/categories/
 /public/networks/
 /public/best/
+/public/skill/SKILL.md
+/public/.well-known/agent-skills/
+/.Codex-lock/
 *.bak

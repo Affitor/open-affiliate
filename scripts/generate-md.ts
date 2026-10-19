@@ -30,6 +30,7 @@
 import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs"
 import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
+import { generateSkills } from "./generate-skills"
 
 import registry from "../src/lib/registry.json"
 import { formatFlat, formatPercentage } from "../src/lib/commission-mode"
@@ -872,6 +873,7 @@ export function llmsTxt(): string {
       `- Find affiliate programs for a product or niche; compare commission, cookie and payout terms before recommending one.`,
       `- Read a program's agentPrompt, restrictions and verification date before recommending it. Cite its program page and link its signup URL for applications.`,
       `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories).`,
+      `- Follow the [OpenAffiliate skill](${BASE}/skill/SKILL.md); discover it through the [agent-skills index](${BASE}/.well-known/agent-skills/index.json).`,
       `- Use REST: GET /api/programs, GET /api/programs/{slug}, GET /api/categories. [OpenAPI 3.1 schema](${BASE}/openapi.json).`,
       `- Fetch /index.md or append .md to a program, category or network URL. Pages with a Markdown twin also accept Accept: text/markdown.`,
     ].join("\n")),
@@ -1246,6 +1248,7 @@ function write(relPath: string, body: string): void {
 }
 
 function main(): void {
+  generateSkills(process.cwd())
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
   for (const dir of ["programs", "categories", "networks", "best"]) {
