@@ -37,9 +37,10 @@ network: awin
 program_age: null
 
 description: >
-  sevdesk is cloud accounting and invoicing software for self-employed people,
-  freelancers and small businesses in Germany. It supports invoices, receipt
-  capture, bookkeeping, banking connections and collaboration with tax advisers.
+  sevdesk is cloud accounting and invoicing software for freelancers and small
+  businesses in Germany and Austria. It creates compliant invoices and
+  e-invoices, captures receipts from the app or email, prepares the income
+  statement (EÜR) and files VAT returns directly with the tax office.
 
   The affiliate programme runs through Awin. The brand page and its linked
   Awin profile advertise different commission amounts; confirm the applicable

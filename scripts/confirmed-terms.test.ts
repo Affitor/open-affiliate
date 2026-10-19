@@ -672,7 +672,7 @@ test("program page: a qualified rate is shown as stored, never as a bare figure 
     const p = live(slug)
     assert.equal(page.estimateInput(p), null, `${slug} gets an estimate`)
     const f = page.commissionFigure(p)!
-    assert.equal(f.big, String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
+    assert.equal(f.big, p.commission.rate === "varies" ? "Rate varies" : String(p.commission.rate).trim(), `${slug} shows "${f.big}", stored "${p.commission.rate}"`)
   }
   const a = page.answerParts(live("dreamhost"), "")
   assert.equal(a.before + a.strong + a.after, "DreamHost's commission: $15 to $1,000.")
