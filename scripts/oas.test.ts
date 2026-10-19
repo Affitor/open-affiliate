@@ -26,7 +26,7 @@ import {
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
-import { NOT_PUBLISHED_FIELDS, notPublishedProblems } from "./program-rules"
+import { NOT_PUBLISHED_FIELDS, notPublishedProblems, payoutLagProblems } from "./program-rules"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
@@ -297,6 +297,37 @@ test("v1.1 markers are validated at build: known terms, real dates, a map", () =
   assert.equal(notPublishedProblems({ not_published: { cookie_days: "2026-02-30" } }).length, 1)
   assert.equal(notPublishedProblems({ not_published: { cookie_days: 20261015 } }).length, 1)
   for (const scalar of ["2026-10-15", null, ["cookie_days"]]) assert.equal(notPublishedProblems({ not_published: scalar }).length, 1, JSON.stringify(scalar))
+})
+
+test("a cadence beside a stated wait over 30 days fails the build: up to 30 days is net-30, 31-60 net-60", () => {
+  const lag = (frequency: string, conditions: string, where: "payout" | "commission" = "commission") =>
+    payoutLagProblems(where === "payout" ? { payout: { frequency, conditions } } : { payout: { frequency }, commission: { conditions } })
+  const hit = lag("monthly", "Paid monthly. Commissions are paid 60 days after the qualifying purchase.")
+  assert.equal(hit.length, 1)
+  assert.match(hit[0], /payout\.frequency is monthly, but commission\.conditions states a 60-day wait \("Commissions are paid 60 days after the qualifying purchase\."\)/)
+  assert.match(lag("monthly", "Payment within 45 days after the end of the calendar month.", "payout")[0], /payout\.conditions states a 45-day wait/)
+  assert.match(lag("twice-monthly", "Commissions are sent 35-40 days after the end of the month.")[0], /40-day wait/, "a range waits its upper number")
+  for (const f of ["weekly", "bi-weekly", "daily"]) assert.equal(lag(f, "Paid 31 business days following the sale.").length, 1, f)
+  assert.equal(lag("monthly", "Paid 31 days after sale. Held 45 days after the refund window.").length, 2, "one problem per sentence")
+  // Not a cadence, or no wait over 30 days, or no wait at all.
+  for (const f of ["net-30", "net-60", "quarterly", "on-request"]) assert.deepEqual(lag(f, "Paid 60 days after the sale."), [], f)
+  assert.deepEqual(lag("monthly", "Paid 30 days after the end of the month."), [])
+  assert.deepEqual(lag("monthly", "Customers must stay subscribed for 90 days. A 60-day cookie."), [])
+  assert.deepEqual(payoutLagProblems({}), [])
+  assert.deepEqual(payoutLagProblems({ payout: { frequency: "monthly", conditions: null } }), [])
+})
+
+test("payout-lag debt: frozen files only, each still failing the rule, until it expires", () => {
+  const debt = JSON.parse(readFileSync(join(process.cwd(), "schema", "payout-lag-debt.json"), "utf8")) as { slugs: string[]; expires: string }
+  const dir = join(process.cwd(), "programs")
+  const failing = readdirSync(dir)
+    .filter((f) => f.endsWith(".yaml"))
+    .map((f) => parse(readFileSync(join(dir, f), "utf8")) as Record<string, unknown>)
+    .filter((p) => payoutLagProblems(p).length > 0)
+    .map((p) => String(p.slug))
+  assert.deepEqual(debt.slugs.filter((s) => !failing.includes(s)), [], "a fixed file leaves the list")
+  assert.ok(debt.slugs.length <= 8, "the list never grows")
+  assert.ok(new Date().toISOString().slice(0, 10) <= debt.expires, `payout-lag-debt.json expired on ${debt.expires}: fix ${debt.slugs.join(", ")}`)
 })
 
 test("the registry's own YAML: read raw; an absent term is Not published only with its marker (spec 7b.1, v1.1)", () => {

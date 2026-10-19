@@ -159,3 +159,38 @@ export function commissionTermProblems(data: Record<string, unknown>): string[] 
   }
   return problems
 }
+
+/** Frequencies that name a payment cadence and no waiting period. */
+const CADENCES = new Set(["daily", "weekly", "bi-weekly", "twice-monthly", "monthly"])
+/** "45 days after", "35-40 business days following": the upper number is the lag. */
+const LAG = /\b(\d+)\s+(?:business\s+|calendar\s+)?days?\s+(?:after|following)\b/gi
+
+/**
+ * A commission paid N days after the sale, the customer's payment or the end
+ * of the month waits N days, whatever the batch cadence: up to 30 days is
+ * net-30, 31 to 60 is net-60. A file whose conditions state a longer wait
+ * while `payout.frequency` names a cadence scores the brand on the batch and
+ * hides the wait; a 30-program accuracy check found it in hunter, vyond and
+ * credit-repair-cloud. One problem per sentence, quoted. Files that predate
+ * the rule are listed in schema/payout-lag-debt.json.
+ */
+export function payoutLagProblems(data: Record<string, unknown>): string[] {
+  const payout = (data.payout ?? {}) as Record<string, unknown>
+  const frequency = payout.frequency
+  if (typeof frequency !== "string" || !CADENCES.has(frequency)) return []
+  const commission = (data.commission ?? {}) as Record<string, unknown>
+  const problems: string[] = []
+  for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
+    if (typeof text !== "string") continue
+    for (const { sentence } of proseSentences(text)) {
+      const days = Math.max(0, ...[...sentence.matchAll(LAG)].map((m) => Number(m[1])))
+      if (days > 30) {
+        problems.push(
+          `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +
+            `up to 30 days is net-30, 31-60 is net-60, and a conflict records pages that disagree`
+        )
+      }
+    }
+  }
+  return problems
+}
