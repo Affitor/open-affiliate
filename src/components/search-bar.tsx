@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Search } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { formatPercentage } from "@/lib/commission-mode";
+import { commissionChip } from "@/lib/program-chips";
 
 interface SearchResult {
   slug: string;
@@ -18,29 +18,6 @@ interface SearchResult {
     rate: string | number;
     duration?: string | null;
   };
-}
-
-function commissionDisplay(commission: SearchResult["commission"]): string {
-  if (commission.mode === "percentage" && commission.value !== null) {
-    return formatPercentage(commission.rate, commission.value);
-  }
-  if (commission.mode === "flat" && commission.value !== null) {
-    return `$${commission.value.toLocaleString()}`;
-  }
-  if (commission.mode === "tiered" || commission.mode === "hybrid") {
-    return String(commission.rate);
-  }
-  return "Not published";
-}
-
-function commissionLabel(commission: SearchResult["commission"]): string {
-  if (commission.type !== "recurring" || !commission.duration) {
-    return commission.type;
-  }
-  const duration = commission.duration.toLowerCase().trim();
-  if (duration === "lifetime") return "recurring/lifetime";
-  const months = duration.match(/^(\d+)\s*months?$/);
-  return months ? `recurring/${months[1]}mo` : `recurring/${duration}`;
 }
 
 export function SearchBar() {
@@ -180,7 +157,7 @@ export function SearchBar() {
               <div className="min-w-0 flex-1">
                 <span className="text-sm font-medium">{p.name}</span>
                 <p className="text-xs text-muted-foreground truncate">
-                  {commissionDisplay(p.commission)} {commissionLabel(p.commission)} · {p.category}
+                  {commissionChip(p.commission)} · {p.category}
                 </p>
               </div>
             </Link>

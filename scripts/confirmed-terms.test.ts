@@ -20,9 +20,6 @@ import { spawnSync } from "node:child_process"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { runInNewContext } from "node:vm"
-import ts from "typescript"
-import { formatPercentage } from "../src/lib/commission-mode"
 import { approvalText, cookieCell, cookieText, payoutText } from "../packages/cli/src/format"
 import registry from "../src/lib/registry.json"
 import {
@@ -38,6 +35,7 @@ import {
 import { commissionDisplay, confirmedTerms, getProgram, isLive, programs, termsConfirmed, type Program } from "../src/lib/programs"
 import * as page from "../src/lib/program-page"
 import { commissionDisplay as clientCommissionDisplay } from "../src/lib/client-programs"
+import { commissionChip, commissionDisplay as chipCommissionDisplay } from "../src/lib/program-chips"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
 import { commissionTermProblems } from "./program-rules"
@@ -744,12 +742,17 @@ test("qualified percentage ceilings survive server, client and agent Markdown wi
 
 
 test("global search uses the same percentage rule while flat, tiered and unknown displays stay unchanged", () => {
-  const source = ts.createSourceFile("search-bar.tsx", readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8"), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
-  const declaration = source.statements.find((node): node is ts.FunctionDeclaration => ts.isFunctionDeclaration(node) && node.name?.text === "commissionDisplay")!
-  assert.ok(declaration)
-  const printed = ts.createPrinter().printNode(ts.EmitHint.Unspecified, declaration, source)
-  const js = ts.transpileModule(printed, { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.CommonJS } }).outputText
-  const searchDisplay = runInNewContext(`${js}; commissionDisplay`, { formatPercentage }) as typeof clientCommissionDisplay
+  // The search bar keeps no copy of its own: it reads the shared chip helpers.
+  const searchBar = readFileSync(new URL("../src/components/search-bar.tsx", import.meta.url), "utf8")
+  assert.match(searchBar, /import \{ commissionChip \} from "@\/lib\/program-chips"/)
+  assert.doesNotMatch(searchBar, /function commission(Display|Label)\b/)
+  // It renders the shared chip for each /api/programs row.
+  assert.match(searchBar, /\{commissionChip\(p\.commission\)\} · \{p\.category\}/)
+  const unknown = { ...verifiedBase.commission, mode: "unknown" as const, value: null }
+  assert.equal(commissionChip({ ...unknown, rate: "varies" }), "Rate varies")
+  assert.equal(commissionChip({ ...unknown, rate: "none" }), "Rate not published")
+  assert.equal(commissionChip({ ...unknown, rate: "$500 Visa gift card per referral" }), "$500 Visa gift card per referral")
+  const searchDisplay = chipCommissionDisplay
   for (const rate of ["up to 15%", "maximum 15%", "10–15%", "45% to 55%", "15% per qualified sale", "up to 15 percent", "maximum 15", "30%", "30"]) {
     const commission = { ...verifiedBase.commission, mode: "percentage" as const, rate, value: rate === "30%" || rate === "30" ? 30 : 15 }
     assert.equal(searchDisplay(commission), commissionDisplay(commission), rate)
