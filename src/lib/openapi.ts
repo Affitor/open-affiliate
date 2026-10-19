@@ -36,7 +36,7 @@ export const openapi = {
           parameter("limit", "Maximum results, capped at 500. Zero or omission means all remaining results.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
           parameter("offset", "Skip this many results before applying limit.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
         ],
-        responses: { "200": response("Matching active programs.", ref("ProgramSearch")), "400": response("Invalid query parameter.", ref("Error")) },
+        responses: { "200": response("Matching active programs. Unknown filter values are ignored: an unknown sort falls back to relevance (legacy sort=new means newest).", ref("ProgramSearch")) },
       },
     },
     "/api/programs/{slug}": {
