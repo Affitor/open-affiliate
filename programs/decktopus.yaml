@@ -20,8 +20,16 @@ payout:
   currency: USD
   frequency: monthly
   methods: [paypal]
+# "The fact that we auto-approve applications does not imply that we may not re-evaluate your application at a later time." (https://affiliate.decktopus.com/terms, checked 2026-10-18)
+approval: auto
 signup_url: https://affiliate.decktopus.com/signup
-restrictions: null
+# "In addition, you may not advertise in any way that effectively conceals or misrepresents your identity, your domain name, or your return email address." (https://affiliate.decktopus.com/terms, checked 2026-10-18)
+restrictions:
+  - "No spamming or unsolicited commercial email (UCE) advertising"
+  - "No advertising that conceals or misrepresents your identity, domain name or return email address"
+  - "No pay-per-click bidding on Decktopus brand keywords and misspellings unless traffic goes to your own site first; search ads need negative keywords for the brand terms"
+  - "No parasiteware, interstitials or deceptive pop-ups/pop-unders between a qualifying click and exiting the Decktopus site"
+  - "You must clearly represent yourself and your sites as independent from Decktopus.com"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -42,10 +50,13 @@ agents:
   use_cases:
   - Founders pitching quickly
   - Consultants generating client decks
+not_published:
+  commission.duration: "2026-10-18"
+  payout.minimum: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

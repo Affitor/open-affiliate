@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once bankstatementtoexcel approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/bankstatementtoexcel, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/bankstatementtoexcel
 network: affitor
 
@@ -45,10 +47,13 @@ agents:
     - "Small business owners preparing statements for tax filing"
     - "Freelancers importing transactions into QuickBooks or Xero"
 
+not_published:
+  payout.methods: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 kind: affiliate
 source: affitor-api

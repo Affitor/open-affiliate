@@ -21,6 +21,8 @@ payout:
   minimum: 10
   currency: USD
 
+# "Once Build to Own Replay approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/build-to-own-replay, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/build-to-own-replay
 network: affitor
 
@@ -46,10 +48,13 @@ agents:
     - Business owners automating repetitive work with AI
     - People with a product idea who are not developers
 
+not_published:
+  payout.methods: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api
