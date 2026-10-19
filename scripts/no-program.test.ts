@@ -12,6 +12,7 @@
  * would otherwise stay alive after the last test.
  */
 import assert from "node:assert/strict"
+import { spawnSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
@@ -19,7 +20,6 @@ import { parse } from "yaml"
 import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
 import { buildFaq } from "../src/lib/program-seo"
 import { getProgram, isLive, programs } from "../src/lib/programs"
-import { SAME_TEAM, SAME_TEAM_SLUGS } from "../src/lib/same-team"
 import { getRelatedPrograms } from "../src/components/related-programs"
 import registry from "../src/lib/registry.json"
 import { programMd } from "./generate-md"
@@ -117,40 +117,22 @@ test("a gift card or credit reward is never an alternative", () => {
   }
 })
 
-test("a program built by our own team is never an alternative", () => {
-  // /programs/openrouter showed Kyma API first with no same-team line (prod, 18/10).
-  for (const slug of SAME_TEAM_SLUGS) {
-    const own = getProgram(slug)
-    assert.ok(own, slug)
-    assert.ok(own.verified && isLive(own), `${slug}: the probe below proves nothing unless it would otherwise qualify`)
-    // A probe in the same category with the same keywords: without the filter it ranks first.
-    const all = noProgramAlternatives({ ...own, slug: `${slug}-probe` }, programs.length)
-    assert.ok(all.length > 0, slug)
-    assert.equal(all.some((a) => a.slug === slug), false, slug)
-  }
-  for (const p of noProgram) {
-    assert.equal(noProgramAlternatives(p, programs.length).some((a) => SAME_TEAM_SLUGS.has(a.slug)), false, p.slug)
-  }
-})
-
-test("no live program page suggests a same-team program under How X compares", () => {
-  // /programs/shortcut-chat suggested Kyma API with no same-team line (18/10).
-  for (const p of programs.filter(isLive)) {
-    const related = getRelatedPrograms(p, programs.length)
-    assert.equal(related.some((r) => SAME_TEAM_SLUGS.has(r.slug)), false, p.slug)
-  }
-})
-
-test("a same-team program's .md states the same-team sentence; others do not", () => {
+test("Kyma API is suggested like any program: no same-team exclusion or line (Sơn 19/10)", () => {
+  const kyma = getProgram("kyma-api")
+  assert.ok(kyma && kyma.verified && isLive(kyma), "the probe below proves nothing unless Kyma would qualify")
+  // A probe in Kyma's category with its keywords: Kyma is now a candidate like any other.
+  assert.ok(noProgramAlternatives({ ...kyma, slug: "kyma-api-probe" }, programs.length).some((a) => a.slug === "kyma-api"))
+  assert.ok(programs.filter(isLive).some((p) => getRelatedPrograms(p, programs.length).some((r) => r.slug === "kyma-api")))
   type Entry = Parameters<typeof programMd>[0]
-  const entries = registry.programs as Entry[]
-  for (const slug of SAME_TEAM_SLUGS) {
-    const entry = entries.find((p) => p.slug === slug)
-    assert.ok(entry, slug)
-    assert.ok(programMd(entry).includes(SAME_TEAM), slug)
-  }
-  const other = entries.find((p) => !SAME_TEAM_SLUGS.has(p.slug) && (p.status ?? "active") === "active")!
-  assert.equal(programMd(other).includes(SAME_TEAM), false)
+  const entry = (registry.programs as Entry[]).find((p) => p.slug === "kyma-api")!
+  assert.doesNotMatch(programMd(entry), /same team/i)
+})
+
+test("no source file marks a program as same team", () => {
+  // git grep exits 1 when nothing matches, 0 with matches: both are answers, anything else is not.
+  const grep = spawnSync("git", ["grep", "-n", "-i", "-E", "same[ -]?team|isSameTeam", "--", "src", "scripts", ":!scripts/no-program.test.ts"], { encoding: "utf8", cwd: join(__dirname, "..") })
+  assert.ok(grep.status === 0 || grep.status === 1, grep.stderr)
+  assert.equal(grep.stdout.trim(), "")
 })
 
 test("a category with no qualifying program gets no alternatives", () => {

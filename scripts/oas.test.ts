@@ -203,7 +203,7 @@ test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
 
-test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply link and stale are not ranked", () => {
+test("ranking: ties share a rank; Kyma and the Affitor network rank like any program; scoring, no apply link and stale are not ranked", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
   const scores = [
     score("top"),
@@ -221,16 +221,17 @@ test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply l
   const board = buildBoard(scores, programs, TODAY)
   const by = Object.fromEntries(board.map((r) => [r.program.slug, r]))
   assert.equal(board.length, 9)
-  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["top", 1], ["tie-a", 2], ["tie-b", 2], ["third", 4]])
-  assert.equal(by["kyma-api"].unranked, "same-team")
-  assert.equal(by["kyma-api"].oas, 100, "same team is scored with the same rules")
-  assert.equal(by["on-affitor"].unranked, "affitor")
+  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["kyma-api", 1], ["on-affitor", 1], ["top", 1], ["tie-a", 4], ["tie-b", 4], ["third", 6]])
+  // Kyma API and programs on the Affitor network rank like any other (Sơn 19/10: the team tag is gone).
+  assert.equal(by["kyma-api"].unranked, null)
+  assert.equal(by["on-affitor"].unranked, null)
   assert.equal(by["scoring"].unranked, "checking")
   assert.equal(by["no-apply"].unranked, "no-apply-link")
   assert.equal(by["stale"].unranked, "checking")
   assert.equal(by["stale"].oas, null)
-  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 2, of: 3, category: "AI" })
-  assert.equal(categoryRank(board, "kyma-api"), null)
+  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 4, of: 5, category: "AI" })
+  assert.deepEqual(categoryRank(board, "kyma-api"), { rank: 1, of: 5, category: "AI" })
+  assert.equal(categoryRank(board, "scoring"), null)
 })
 
 test("rank line: #1 always, others only with 5 or more ranked", () => {

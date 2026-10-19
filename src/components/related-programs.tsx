@@ -4,13 +4,11 @@ import { ProgramLogo } from "@/components/program-logo"
 import { programs, affiliateScore, isLive, type Program } from "@/lib/programs"
 import { hasNoProgram, keywordWords as words, noProgramAlternatives } from "@/lib/no-program"
 import { commissionFigure, pageState } from "@/lib/program-page"
-import { isSameTeam } from "@/lib/same-team"
 
 export function getRelatedPrograms(current: Program, limit = 4): Program[] {
   // A page that answers "no program" points only at verified programs that pay.
   if (hasNoProgram(current)) return noProgramAlternatives(current, limit)
-  // A suggestion carries no same-team line, so our own programs are never one.
-  const candidates = programs.filter((p) => p.slug !== current.slug && !isSameTeam(p.slug) && isLive(p))
+  const candidates = programs.filter((p) => p.slug !== current.slug && isLive(p))
   const currentWords = words(current.agentKeywords ?? [])
 
   const scored = candidates.map((p) => {
