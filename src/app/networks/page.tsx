@@ -9,6 +9,7 @@ import {
   networksByProgramCount,
   networkToSlug,
   networkName,
+  byNetworkName,
   networkHeading,
   networkKind,
   IN_HOUSE,
@@ -45,9 +46,7 @@ function networksData() {
     verified: programs.filter((p) => p.verified).length,
   }));
   const networks = stats.filter((n) => n.network !== IN_HOUSE);
-  const cards = [...networks].sort((a, b) =>
-    networkName(a.network).localeCompare(networkName(b.network), "en", { sensitivity: "base" })
-  );
+  const cards = [...networks].sort((a, b) => byNetworkName(a.network, b.network));
   const inHouse = stats.find((n) => n.network === IN_HOUSE)?.programCount ?? 0;
   const total = stats.reduce((sum, n) => sum + n.programCount, 0);
   const networked = total - inHouse;

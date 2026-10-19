@@ -217,6 +217,7 @@ const programOutputSchema = {
     currency: z.string().optional().describe("Currency code for payout.minimum; omitted when unspecified or terms are withheld"),
     frequency: z.string().optional().describe("Payout schedule, such as monthly or net-30; omitted when unspecified or terms are withheld"),
     methods: z.array(z.string()).optional().describe("Payout methods, such as paypal or bank-transfer; empty when none are stored, omitted when terms are withheld"),
+    conditions: z.string().optional().describe("When a commission becomes payable, in the terms' own words (hold period, payout cycle, withdrawal rule); omitted when unspecified or terms are withheld"),
   }).describe("Published payout terms; empty when terms are unverified or no program exists"),
   description: z.string().describe("Full product and program description; unverified cookie, payout and approval claims are withheld"),
   shortDescription: z.string().describe("Brief product summary; unverified cookie, payout and approval claims are withheld"),

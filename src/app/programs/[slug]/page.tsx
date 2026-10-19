@@ -152,6 +152,9 @@ export default async function ProgramPage({
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
   const payout = payoutText(program);
+  // When a commission becomes payable; confirmedTerms left it out of an unverified program.
+  // Under the payout steps, or under the Payout row on a paused page, which has no steps.
+  const payoutConditions = program.payout.conditions;
   const methods = payoutMethods(program);
   const approval = approvalText(program);
   const cookie = cookieText(program);
@@ -323,6 +326,9 @@ export default async function ProgramPage({
                   ))}
                 </dl>
               )}
+              {paused && payoutConditions && (
+                <p data-term="payout-conditions" className="text-xs text-muted-foreground leading-relaxed mt-3">{payoutConditions}</p>
+              )}
               {!paused && (
                 <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
@@ -417,6 +423,9 @@ export default async function ProgramPage({
                   </li>
                 ))}
               </ol>
+              {payoutConditions && (
+                <p data-term="payout-conditions" className="text-sm leading-relaxed text-foreground/80 mt-4">{payoutConditions}</p>
+              )}
               {program.network && program.network !== IN_HOUSE && (
                 <p className="text-xs text-muted-foreground mt-4">{networkHowToJoin(program.network)}</p>
               )}
