@@ -5,7 +5,7 @@ import { apiError } from "@/lib/api-error"
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, API-Version",
   "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
   "CDN-Cache-Control": "public, s-maxage=3600",
   "Vercel-CDN-Cache-Control": "public, s-maxage=3600",

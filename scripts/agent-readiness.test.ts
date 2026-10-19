@@ -1,11 +1,18 @@
 /** Run after npm run build (or md:build): the ARD test reads the generated public/.well-known/ard.json. */
 import assert from "node:assert/strict"
-import { readFileSync } from "node:fs"
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { dirname, join } from "node:path"
 import { test } from "node:test"
+import { NextRequest, type NextFetchEvent } from "next/server"
+import { proxy } from "../src/proxy"
+import { GET as list, OPTIONS as listOptions } from "../src/app/api/programs/route"
+import { GET as detail } from "../src/app/api/programs/[slug]/route"
+import { GET as categories } from "../src/app/api/categories/route"
 import { openapi } from "../src/lib/openapi"
 import { registerWebMcpTools, WEBMCP_TOOLS, type WebMcpTool } from "../src/lib/webmcp"
 import { nextConfig } from "../next.config"
-import { ardCatalog } from "./generate-ard"
+import { ardCatalog, CATALOG_PATHS, generateArd } from "./generate-ard"
 import { llmsTxt } from "./generate-md"
 
 const BASE = "https://openaffiliate.dev"
@@ -13,6 +20,21 @@ const BASE = "https://openaffiliate.dev"
 test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   const served = JSON.parse(readFileSync("public/.well-known/ard.json", "utf8"))
   assert.deepEqual(served, ardCatalog(process.cwd()), "public/.well-known/ard.json is stale: run npm run md:build")
+  // ai-catalog.json is the same document at the AI Catalog Standard's own path.
+  assert.deepEqual(CATALOG_PATHS, ["public/.well-known/ard.json", "public/.well-known/ai-catalog.json"])
+  assert.equal(readFileSync(CATALOG_PATHS[1], "utf8"), readFileSync(CATALOG_PATHS[0], "utf8"))
+  // The generator itself writes both files (into a scratch root holding only its inputs).
+  const scratch = mkdtempSync(join(tmpdir(), "ard-"))
+  try {
+    for (const input of ["packages/mcp/server.json", "public/.well-known/agent-skills/index.json"]) {
+      mkdirSync(dirname(join(scratch, input)), { recursive: true })
+      copyFileSync(input, join(scratch, input))
+    }
+    generateArd(scratch)
+    for (const path of CATALOG_PATHS) assert.deepEqual(JSON.parse(readFileSync(join(scratch, path), "utf8")), ardCatalog(scratch), path)
+  } finally {
+    rmSync(scratch, { recursive: true, force: true })
+  }
   // AI Catalog root (ai-catalog.io): Major.Minor specVersion, host, entries.
   assert.deepEqual(Object.keys(served), ["specVersion", "host", "entries"])
   assert.match(served.specVersion, /^\d+\.\d+$/)
@@ -40,6 +62,47 @@ test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   assert.equal(byType["text/plain"].url, `${BASE}/llms.txt`)
   assert.ok(llmsTxt().includes(`${BASE}/.well-known/ard.json`))
   assert.match(readFileSync("src/app/layout.tsx", "utf8"), /rel="ard" href="\/\.well-known\/ard\.json"/)
+})
+
+test("API-Version request header: 1 or absent is served, anything else is a 400 before the cache", async () => {
+  // The proxy runs before the CDN cache, which does not key on this header (a cached
+  // 200 was served for API-Version: 2 on the preview when the routes checked it).
+  const event = { waitUntil() {} } as unknown as NextFetchEvent
+  const rest = ["/api/programs?limit=1", "/api/programs/vercel", "/api/categories", "/api/programs/", "/api/programs/vercel/", "/api/categories/"]
+  const call = (path: string, version?: string) =>
+    proxy(new NextRequest(`http://localhost${path}`, { headers: version === undefined ? undefined : { "API-Version": version } }), event)
+  for (const path of rest) {
+    for (const version of [undefined, "1"]) assert.notEqual(call(path, version)?.status, 400, `${path} ${version}`)
+    for (const version of ["2", "0", "1.0", "v1", ""]) {
+      const response = call(path, version)!
+      assert.equal(response.status, 400, `${path} API-Version ${JSON.stringify(version)}`)
+      assert.equal(response.headers.get("Cache-Control"), "no-store")
+      assert.equal(response.headers.get("Access-Control-Allow-Origin"), "*")
+      const body = await response.json()
+      assert.deepEqual(Object.keys(body.error), ["code", "message", "hint"])
+      assert.equal(body.error.code, "UNSUPPORTED_API_VERSION")
+    }
+  }
+  // Only the versioned REST API: MCP, badges and pages ignore the header.
+  for (const path of ["/api/mcp", "/mcp", "/api/badge/vercel.svg", "/programs/vercel", "/api/programs/vercel/extra"]) {
+    assert.notEqual(call(path, "2")?.status, 400, path)
+  }
+  // The routes themselves still answer when the proxy lets a request through.
+  assert.equal(list(new NextRequest("http://localhost/api/programs?limit=1")).status, 200)
+  assert.equal((await detail(new NextRequest("http://localhost/api/programs/vercel"), { params: Promise.resolve({ slug: "vercel" }) })).status, 200)
+  assert.equal(categories().status, 200)
+  // Browsers may send the header cross-origin.
+  assert.match(listOptions().headers.get("Access-Control-Allow-Headers") ?? "", /\bAPI-Version\b/)
+  for (const route of ["programs/route.ts", "programs/[slug]/route.ts", "categories/route.ts"]) {
+    assert.match(readFileSync(`src/app/api/${route}`, "utf8"), /"Access-Control-Allow-Headers": "Content-Type, API-Version"/, route)
+  }
+  // Declared on every operation, with the 400 it can cause.
+  for (const [path, item] of Object.entries(openapi.paths)) {
+    const header = (item.get.parameters as { name: string; in: string; schema: { enum?: string[] } }[]).find((p) => p.in === "header")
+    assert.equal(header?.name, "API-Version", path)
+    assert.deepEqual(header?.schema.enum, [openapi.components.headers.APIVersion.schema.const], path)
+    assert.ok("400" in item.get.responses, path)
+  }
 })
 
 test("discovery files are served with CORS", async () => {

@@ -1,5 +1,6 @@
 import { type NextFetchEvent, type NextRequest } from "next/server"
 import { negotiateMarkdown } from "./lib/agentic-surface"
+import { unsupportedApiVersion } from "./lib/api-error"
 
 // Counts every hit on /api/*, cached or not, as a PostHog `api_request`
 // event. The route handlers cannot do this themselves: responses sit in the
@@ -46,5 +47,5 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
         .catch(() => {})
     )
   }
-  return negotiateMarkdown(request)
+  return unsupportedApiVersion(request) ?? negotiateMarkdown(request)
 }
