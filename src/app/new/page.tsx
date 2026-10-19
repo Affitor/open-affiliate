@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Rss } from "lucide-react"
 import { programs } from "@/lib/programs"
-import { newPrograms } from "@/lib/new-programs"
+import { newPrograms, newProgramFeed } from "@/lib/new-programs"
 import { ProgramRowList } from "@/components/program-card"
 import { allPrograms } from "@/lib/client-programs"
 
@@ -14,7 +14,9 @@ export const metadata: Metadata = {
 }
 
 export default function NewPage() {
-  const recent = newPrograms(programs)
+  const now = new Date()
+  const recent = newProgramFeed(programs, now)
+  const total = newPrograms(programs, now).length
   const clientBySlug = new Map(allPrograms.map((p) => [p.slug, p]))
   const days = [...new Set(recent.map((p) => p.createdAt))]
   return (
@@ -25,7 +27,7 @@ export default function NewPage() {
         <Link href="/new.xml" prefetch={false} className="inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-card px-3 text-sm font-medium hover:bg-sunk"><Rss className="size-4" aria-hidden />RSS feed</Link>
       </div>
       <p className="mt-3 max-w-xl text-sm text-muted-foreground">Programs added in the last 30 days, newest first. These dates mark when a listing joined OpenAffiliate.</p>
-      <p className="mt-2 text-xs text-muted-foreground">{recent.length} programs · RSS includes the latest 50</p>
+      <p className="mt-2 text-xs text-muted-foreground">{total} programs added in the last 30 days · Showing the newest {recent.length}</p>
       {days.length ? days.map((day) => (
         <section key={day} className="mt-9" aria-label={`Added ${day}`}>
           <h2 className="mb-3 border-b border-border pb-3 text-sm font-semibold"><time dateTime={day}>{new Date(`${day}T00:00:00Z`).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric", timeZone: "UTC" })}</time></h2>

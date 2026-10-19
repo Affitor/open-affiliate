@@ -1,7 +1,7 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
-import { newPrograms, newProgramsRss } from "../src/lib/new-programs"
+import { newPrograms, newProgramFeed, newProgramsRss } from "../src/lib/new-programs"
 import { programs, type Program } from "../src/lib/programs"
 
 const now = new Date("2026-10-18T12:00:00Z")
@@ -11,6 +11,8 @@ test("RSS caps at 50; every guid is its program URL, XML escaped", () => {
   const input = Array.from({ length: 70 }, (_, i) => fixture(i))
   const rss = newProgramsRss(input, now)
   assert.equal((rss.match(/<item>/g) ?? []).length, 50)
+  assert.equal(newProgramFeed(input, now).length, 50)
+  assert.deepEqual(newProgramFeed(input, now).map((p) => `https://openaffiliate.dev/programs/${p.slug}`), [...rss.matchAll(/<guid isPermaLink="true">([^<]+)<\/guid>/g)].map((m) => m[1]))
   const guids = [...rss.matchAll(/<guid isPermaLink="true">([^<]+)<\/guid>/g)].map((m) => m[1])
   assert.deepEqual(guids, newPrograms(input, now).slice(0, 50).map((p) => `https://openaffiliate.dev/programs/${p.slug}`))
   assert.match(rss, /&amp; &lt;more&gt;/)

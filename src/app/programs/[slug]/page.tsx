@@ -254,7 +254,6 @@ export default async function ProgramPage({
           <p className="text-base sm:text-lg text-foreground/80 mt-1.5">{program.shortDescription}</p>
           {isSameTeam(program.slug) && <p className="text-sm text-muted-foreground mt-1.5">{SAME_TEAM}</p>}
           <div className="flex flex-wrap items-center gap-2 mt-3">
-            <SaveButton slug={program.slug} name={program.name} />
             {verified && (
               <Badge variant="outline" className="text-xs border-good-line bg-good-bg text-good shrink-0">
                 <Check className="h-3 w-3 mr-1" />
@@ -295,6 +294,7 @@ export default async function ProgramPage({
             </div>
           )}
           <h2 id="earn-heading" className="oa-label">{panelLabel}</h2>
+          {(noProgram || paused) && <div className="mt-5"><SaveButton slug={program.slug} name={program.name} /></div>}
           {noProgram ? (
             <>
               <p className="text-display font-semibold tracking-tight mt-2">None</p>
@@ -324,11 +324,12 @@ export default async function ProgramPage({
                 </dl>
               )}
               {!paused && (
-                <div className="mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
+                  <SaveButton slug={program.slug} name={program.name} />
                 </div>
               )}
               {paused && hasAlternatives && (

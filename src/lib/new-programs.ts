@@ -14,12 +14,17 @@ export function newPrograms(programs: Program[], now = new Date()): Program[] {
     .map(confirmedTerms)
 }
 
+/** The exact same, newest-first selection on /new and /new.xml. */
+export function newProgramFeed(programs: Program[], now = new Date()): Program[] {
+  return newPrograms(programs, now).slice(0, RSS_LIMIT)
+}
+
 function xml(text: string): string {
   return text.replace(/[<>&"']/g, (c) => ({ "<": "&lt;", ">": "&gt;", "&": "&amp;", '"': "&quot;", "'": "&apos;" })[c]!)
 }
 
 export function newProgramsRss(programs: Program[], now = new Date()): string {
-  const items = newPrograms(programs, now).slice(0, RSS_LIMIT)
+  const items = newProgramFeed(programs, now)
   return `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel>
 <title>New on OpenAffiliate</title><link>${REGISTRY_URL}/new</link>

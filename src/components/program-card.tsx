@@ -14,7 +14,7 @@ export function ProgramCardGrid({ program }: { program: Program }) {
       className="group relative flex flex-col gap-3 rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
     >
       <ImpressionTracker slug={program.slug} />
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-3 pr-10">
         <ProgramLogo slug={program.slug} name={program.name} size={40} />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
@@ -51,7 +51,7 @@ export function ProgramCardGrid({ program }: { program: Program }) {
         </Badge>
       </div>
       <Link href={`/programs/${program.slug}`} className="absolute inset-0 z-10 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"><span className="sr-only">View {program.name} program</span></Link>
-      <div className="ml-auto"><SaveButton slug={program.slug} name={program.name} /></div>
+      <div className="absolute right-4 top-4 z-20"><SaveButton slug={program.slug} name={program.name} iconOnly /></div>
     </div>
   );
 }
