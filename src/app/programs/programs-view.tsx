@@ -673,7 +673,14 @@ function FilterSheet(props: {
     if (!dialog.open) dialog.showModal();
     const onCancel = (e: Event) => { e.preventDefault(); onCloseRef.current(); };
     dialog.addEventListener("cancel", onCancel);
+    // md+ hides the sheet (md:hidden): close it then, or the page would stay inert and locked
+    // with no visible way out (a phone turned to landscape, a window widened).
+    const wide = window.matchMedia("(min-width: 768px)");
+    const onWide = () => { if (wide.matches) onCloseRef.current(); };
+    wide.addEventListener("change", onWide);
+    onWide();
     return () => {
+      wide.removeEventListener("change", onWide);
       dialog.removeEventListener("cancel", onCancel);
       if (dialog.open) dialog.close();
       document.body.style.overflow = overflow;
