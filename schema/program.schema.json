@@ -4,6 +4,7 @@
   "description": "Schema for affiliate program YAML files in the OpenAffiliate registry",
   "type": "object",
   "required": [
+    "created_at",
     "name",
     "slug",
     "url",

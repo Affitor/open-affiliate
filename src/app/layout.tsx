@@ -65,6 +65,9 @@ function Footer() {
             <ul className="space-y-2.5">
               {[
                 { label: "Programs", href: "/programs" },
+                { label: "Saved programs", href: "/saved" },
+                { label: "New programs", href: "/new" },
+                { label: "RSS feed", href: "/new.xml" },
                 { label: "Categories", href: "/categories" },
                 { label: "Rankings", href: "/rankings" },
                 // The page is /content-lab. /lab has been a 404 in the footer

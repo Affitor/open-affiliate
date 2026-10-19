@@ -66,7 +66,8 @@ interface SearchOptions {
 // build-registry writes `status` only when it is not active. Through `unknown`:
 // the committed client-registry.json can predate a field (`score`), and
 // prebuild and predev regenerate it before anything reads it.
-export const programs = (registryData.programs as unknown as ClientProgram[]).filter((p) => !p.status)
+export const allPrograms = registryData.programs as unknown as ClientProgram[]
+export const programs = allPrograms.filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {

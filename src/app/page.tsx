@@ -80,6 +80,7 @@ export default function Home() {
               >
                 Docs and API
               </Link>
+              <Link href="/new" className="inline-flex h-10 items-center rounded-lg border border-line-strong bg-card px-4 text-sm font-medium hover:bg-sunk transition-colors">New programs</Link>
             </div>
           </div>
           <dl className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card" aria-label="Registry today">
