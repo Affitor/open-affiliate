@@ -21,12 +21,37 @@ attribution: last-click
 tracking_method: cookie
 payout:
   currency: USD
-  frequency: monthly
   methods: [paypal, stripe]
+  conditions: "The programme FAQ says payment is received 32 days after the customer signs up, accounting for the 31-day cancellation period on annual plans. It separately says monthly-plan payments are processed after the seven-day cancellation period, starting on day eight. The monthly-plan statement gives a starting point rather than a payment deadline."
+
 signup_url: https://www.iconosquare.com/affiliate-program
 approval: manual
 approval_time: "5-7 business days"
-restrictions: null
+# Scoped restrictions from https://www.iconosquare.com/terms-of-use (checked 2026-10-19).
+restrictions:
+  - "To apply as an Iconosquare affiliate, maintain a website or social media page that you update regularly."
+  - "Do not promote Iconosquare through paid search, including Google Ads."
+  - "Do not promote Iconosquare on discount or coupon websites."
+  - "Users of Iconosquare Services must provide accurate, complete and truthful information and keep it current."
+  - "Users must meet the prerequisites for Iconosquare Services."
+  - "Users must comply with the Iconosquare Services terms and applicable law."
+  - "Users must respect Iconosquare's image and reputation."
+  - "Users must not harm Iconosquare."
+  - "Do not modify or alter Iconosquare Services, in whole or in part."
+  - "Do not restrict use of Iconosquare Services or falsify their notices or elements."
+  - "Do not spread or try to spread viruses or other harmful elements through Iconosquare Services."
+  - "Do not hack systems or alter content unlawfully through Iconosquare Services, or send numerous unsolicited messages through them."
+  - "Do not remove content from Iconosquare Services or their databases, including through automated programs."
+  - "Do not disclose your Iconosquare Services password to another person."
+  - "Do not use Iconosquare Services unlawfully or infringe third-party rights, including intellectual property and privacy."
+  - "Do not try to bypass, disable or disrupt security features, content-use or copying controls, or other restrictions on Iconosquare Services and their accessible content."
+  - "Do not distribute Iconosquare Services or their content on another medium without prior written consent."
+  - "Under the Iconosquare user license, do not copy, modify, create derivatives of, reverse engineer, disassemble or otherwise seek source code for the Website, Application, Services, related software or intellectual property; retain any exceptions provided by law. Do not sell, assign, sublicense or otherwise transfer rights to them."
+  - "Do not modify Iconosquare's Website, Application, Services or software, or use modified versions to gain unauthorized access; access the Services only through the Website or Application."
+  - "Do not modify, lease, borrow, sell, distribute or create derivatives of protected or confidential content in Iconosquare Services without advance express authorization."
+  - "Do not export, extract or scrape Iconosquare-developed Application content for use outside its Services through similar tools or products."
+  - "Customers subscribing to Iconosquare Services must have legal capacity and authority to bind their company and must not be competitors or subscribe to compete, act fraudulently or prejudice Iconosquare."
+  - "Iconosquare subscription customers must not create misleading identities or impersonate another person or entity when registering an account."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -49,7 +74,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

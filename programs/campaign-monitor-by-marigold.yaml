@@ -20,7 +20,70 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://dash.partnerstack.com/application?company=campaignmonitor&group=affiliatepartner
-restrictions: null
+# Scoped restrictions from https://www.campaignmonitor.com/policies/#acceptable-use-policy (checked 2026-10-19).
+restrictions:
+  - "For Campaign Monitor Services, customers must not, or permit users or third parties to, misrepresent an organization, impersonate real or fictitious people or organizations, or disguise a message's sender, origin, authorization, affiliation, purpose or nature through misleading identity, headers, domains, authentication or content, except where the restriction is prohibited by law."
+  - "Customers must not, or permit users or third parties to, access or use Campaign Monitor Services beyond the rights granted by its agreement and AUP, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, host images or content on Campaign Monitor servers for purposes outside permitted Service use, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, store or transmit malicious code through Campaign Monitor Services, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, disrupt Service integrity or performance or third-party data within it, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, excessively burden Campaign Monitor Service bandwidth, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, gain unauthorized access to Campaign Monitor Services, systems or networks or exceed the scope of their order, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, probe, scan, test vulnerabilities or penetration-test Campaign Monitor Services, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services to facilitate illegal activity or violate law, including ecommerce, intellectual-property, defamation and privacy law, except where prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services to compete with the Services or the company, except where prohibited by law."
+  - "Customers must not, or permit third parties to, sell, resell, rent or lease Campaign Monitor Services without express written permission."
+  - "Customers must not, or permit third parties to, remove or alter Service trademarks, logos, copyright notices or other proprietary labels."
+  - "Customers must not, or permit third parties to, copy, frame or mirror Campaign Monitor Services or their content except for permitted internal business use."
+  - "Customers must not, or permit third parties to, create derivative works of Campaign Monitor Services."
+  - "Customers must not, or permit third parties to, reverse engineer, reverse assemble, decompile or seek the source code, object code, underlying structure or algorithms of Campaign Monitor Services or related software, documentation or data."
+  - "Customers must not, or permit third parties to, access Campaign Monitor Services to build competitors, reproduce their features or graphics, monitor availability, performance or functionality, benchmark them or conduct competitive activities."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services for content concerning minors under eighteen, pornography, nudity, adult novelties or escorts; debt collection, credit repair, online-money or work-from-home schemes, payday lenders, lead generation, affiliate or multilevel marketing or Ponzi schemes; personal-data sales, list brokers or rentals; illegal goods or software; violence against governments, organizations, groups or people, including weapons; or other content the company considers inappropriate, except where the restriction is prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services for tobacco or related content without written approval, except where the restriction is prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services for defamatory, libelous, offensive, hateful, bigoted, prejudiced, racist, profane, obscene, lewd, threatening, excessively violent, harassing, false, misleading, fraudulent or otherwise objectionable content, except where the restriction is prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services for content materially breaching industry standards or applicable carrier guidelines, except where the restriction is prohibited by law."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Services for content violating company instructions, law, third-party rights or third-party terms, except where the restriction is prohibited by law."
+  - "Customers must not transmit, request, submit, store, include or give Campaign Monitor access to sensitive personal information through its Services, or permit users to do so, including HIPAA health data, GLBA nonpublic financial data, under-thirteen child data, payment-card data, GDPR special-category data, government identifiers, financial accounts, medical, employment or criminal records, insurance or passport identifiers and other highly sensitive identifiers."
+  - "Do not share Campaign Monitor user credentials between individuals, exceed ordered user counts or documented limits, or use the Services in a way that harms usability for the company, its affiliates or other customers; credentials may be reassigned to replace a former user."
+  - "Do not use externally purchased, rented, loaned, brokered, scraped, harvested, generated, programmatically collected, appended, co-promotion, affiliate or similar email addresses in Campaign Monitor Email Services unless each recipient has valid informed permission specific to the sender, channel and purpose; do not trade email lists or bypass permission requirements."
+  - "Do not use Campaign Monitor Email Services for deceptive or evasive unsolicited cold email, including misleading domains, rotating accounts, false personalization, artificial engagement, warm-up simulations or evasion of limits, blocklists or filters; do not misleadingly disguise bulk mail as individual communication."
+  - "Use truthful, authorized sender identities and controlled, authenticated sending domains in Campaign Monitor Email Services; do not obscure identity or use misleading or obfuscated domains to defeat accountability, investigation or recipient trust."
+  - "Send Campaign Monitor SMS messages only to recipients who have lawfully consented and not opted out; provide proof of consent when requested."
+  - "Do not, or encourage or allow users to, transfer, resell, lease, license or independently supply Campaign Monitor SMS Services to third parties unless agreed in writing."
+  - "Do not, or encourage or allow users to, change an approved SMS short-code use without amending the carrier application or obtaining new carrier approval."
+  - "Do not, or encourage or allow users to, use Campaign Monitor SMS Services to access or provide access to emergency services."
+  - "Do not, or encourage or allow users to, use Campaign Monitor SMS Services in material breach of industry standards, CTIA or Mobile Marketing Association rules or carrier requirements."
+  - "Do not, or encourage or allow users to, use Campaign Monitor SMS Services for unsolicited or harassing calls, texts, voicemail or faxes."
+  - "Do not, or encourage or allow users to, use Campaign Monitor SMS Services to harvest personal contact information without explicit consent or under false pretenses."
+  - "Do not, or encourage or allow users to, use Campaign Monitor SMS Services to evade unwanted-message controls, including spreading similar messages across numbers."
+  - "Do not input or upload personal data into Campaign Monitor Generative AI Services."
+  - "Customers must not, or permit users or third parties to, use Campaign Monitor Generative AI Services to create or facilitate unsolicited, non-permission-based, deceptive, misleading or abusive electronic messaging, disguise bulk messages as individual messages, falsify personalization, obscure commercial intent or evade filtering, rate limits, reputation systems, complaints, suppression, unsubscribe rules or anti-abuse monitoring."
+  - "Under Campaign Monitor's Anti-Spam Policy, do not mail distribution addresses, addresses copied or scraped from the internet or otherwise programmatically obtained, newsgroups, or purchased, loaned or rented lists."
+  - "Do not mail third-party contacts through Campaign Monitor unless that party obtained permission for you specifically to send to them."
+  - "Do not mail co-promotion lists through Campaign Monitor without recipients' deliberate consent to each sender."
+  - "Do not use Campaign Monitor's Transactional Email Feature for non-transactional messages without permission."
+  - "Do not use Campaign Monitor Services for illegal contests, pyramid schemes, chain letters, multilevel marketing campaigns or other illegal activity."
+  - "Do not append known demographic data to third-party information to email a person who has not given the required permission."
+  - "Except as the agreement expressly permits, Campaign Monitor customers may not resell, assign, sublicense, transfer, pledge, lease, rent, copy, modify, repackage, reverse engineer or disassemble its Services or share their contractual rights; repackaging requires express company agreement."
+  - "Campaign Monitor Referral Partners may use only company-provided or approved promotional materials, use current product names and leave the supplied materials unaltered."
+  - "Campaign Monitor Referral Partners must describe products accurately and consistently with approved materials; do not promise pricing or discounts or imply that the company is bound before it signs a customer agreement."
+  - "Campaign Monitor Referral Partners may not negotiate legal or commercial terms for prospects on the company's behalf."
+  - "Referral Partners must keep the other party's confidential information protected and use it only within the agreement; access is limited to employees, contractors and agents with a need to know and equally protective signed confidentiality duties. Public, previously held, independently developed or legitimately received unrestricted information is excluded. Legally compelled disclosure requires advance notice where lawful."
+  - "Use Campaign Monitor referral materials only within the programme license, with supplied trademark and copyright notices and brand guidance; submit proposed use for express written approval at least ten business days ahead. No other use, registration or dealing in company materials is authorized."
+  - "Campaign Monitor Referral Partners may not buy search or PPC keywords or domains using the company's or its corporate affiliates' names or trademarks, including variations or misspellings."
+  - "Campaign Monitor Referral Partners must publish a lawful privacy notice covering their programme data processing."
+  - "Campaign Monitor Referral Partners may promote programme links on social media only on their own pages."
+  - "Do not post Campaign Monitor referral links on the company's social-media pages or accounts."
+  - "Do not create social-media accounts that include Campaign Monitor promotional materials or marks."
+  - "Campaign Monitor Referral Partners must use ethical business practices, provide complete and truthful referral information, hold rights to submit the information and obtain required filings and approvals."
+  - "Campaign Monitor Referral Partners must not act in ways that reflect unfavorably on the company."
+  - "Campaign Monitor Referral Partners must be legally able to enter the agreement and receive fees, must not be barred under US export controls, and must not violate other agreements by participating."
+  - "Campaign Monitor Referral Partners must not make bribes, kickbacks or similar payments connected to the programme."
+  - "Campaign Monitor Referral Partners must follow applicable privacy, anti-spam, advertising, intellectual-property and other law, including FTC endorsement disclosures and GDPR or CCPA where applicable."
+  - "Do not make product representations, guarantees or warranties as a Campaign Monitor Referral Partner unless the company expressly authorizes them in writing beforehand."
+  - "After Campaign Monitor referral participation ends, stop using company materials and marks, implying an ongoing relationship and promoting or soliciting for its products; return or destroy confidential information and certify destruction in writing."
+  - "Campaign Monitor Referral Partners have no authority to bind the company and must not imply agency, employment, legal partnership or joint-venture authority."
+  - "Do not assign Campaign Monitor's Referral Partner agreement or its rights or obligations without prior written consent."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +108,15 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+
+# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
+not_published:
+  cookie_days: "2026-10-19"
+  payout.minimum: "2026-10-19"
+  payout.methods: "2026-10-19"
+  payout.frequency: "2026-10-19"
+  approval: "2026-10-19"

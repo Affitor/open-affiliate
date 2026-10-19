@@ -19,8 +19,37 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
+  conditions: "Monthly PartnerStack payments are issued automatically after the applicable payout threshold is met; the brand FAQ does not specify the threshold amount. PPC trademark bidding or cookie stuffing can forfeit at least the previous 180 days of affiliate fees, reset the affiliate balance to zero without warning and lead to programme termination."
+
+approval: manual
 signup_url: https://www.unitelvoice.com/partners/
-restrictions: null
+# Scoped restrictions from https://www.unitelvoice.com/terms-of-service/ (checked 2026-10-19).
+restrictions:
+  - "Unless UniTel Voice first gives written approval, do not bid on its trademarks, branded keywords, Restricted Terms or their variants and misspellings in search or content campaigns on any advertising network."
+  - "Unless UniTel Voice first gives written permission, do not combine its trademarks or Restricted Terms, variants or misspellings with other keywords."
+  - "Unless UniTel Voice first gives written permission, do not use its trademarks or Restricted Terms in ad titles, ad copy, display names or display URLs."
+  - "Unless UniTel Voice first gives written permission, do not place its trademarks in your website domain or subdomain."
+  - "Unless UniTel Voice first gives written permission, do not link PPC ads directly to its site or use redirects with the same result; direct customers to a real page on your own website."
+  - "Unless UniTel Voice first gives written permission, do not bid above UniTel Voice in positions one through five for any search term in auction-style PPC advertising."
+  - "Unless UniTel Voice first gives written permission, exclude its trademarks from automated PPC campaigns and related marketing."
+  - "Unless UniTel Voice first gives written permission, do not buy ads to your own sites or through affiliate links that compete with its advertising, including branded keywords, trademarks and Restricted Terms; ads must lead to your own website rather than unitelvoice.com or a standalone landing page."
+  - "Do not use cookie stuffing, cookie dropping, forced clicks or similar referral activity."
+  - "UniTel Voice communications services and devices must be used only for lawful, proper and appropriate purposes; illegal, fraudulent, improper or inappropriate use is prohibited."
+  - "On UniTel Voice small-business plans, do not use autodialing."
+  - "On UniTel Voice small-business plans, do not use continuous or extensive call forwarding or conferencing."
+  - "On UniTel Voice small-business plans, do not operate centralized or distributed inbound or outbound call centers."
+  - "On UniTel Voice small-business plans, do not conduct telemarketing, including charitable or political solicitation or polling."
+  - "On UniTel Voice small-business plans, do not broadcast or blast fax or voicemail messages."
+  - "Do not resell or transfer UniTel Voice service, accounts or devices, or provide telephone service to others through them, without written consent; accounts may never be assigned to non-US residents."
+  - "Do not change device serial numbers, equipment identifiers, encryption keys or authentication or technical data, or factory-reset a device, without prior written consent."
+  - "Use UniTel Voice services only with UniTel Voice-approved devices received from the company or retailers."
+  - "Do not hack, alter or disrupt UniTel Voice service or use it inconsistently with its intended purpose."
+  - "Do not obtain UniTel Voice service by avoiding its policies or procedures or through illegal or improper means."
+  - "Do not use UniTel Voice services for criminal or otherwise unlawful conduct, including phishing or calling numbers on a government Do Not Call list."
+  - "Do not use UniTel Voice services for abusive or fraudulent purposes."
+  - "Do not use UniTel Voice services in a way that avoids payment obligations."
+  - "Do not use UniTel Voice services in a way that directly or indirectly disrupts, interferes with or risks the service, network, software, property or security of UniTel Voice, customers, vendors or other third parties."
+  - "Do not use UniTel Voice services inconsistently with their intended purpose or UniTel Voice policies and terms."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +74,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

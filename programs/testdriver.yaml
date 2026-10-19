@@ -21,6 +21,15 @@ commission:
 
 signup_url: https://market.partnerstack.com/page/testdriverai3875
 
+# Scoped restrictions from https://testdriver.ai/terms/ (checked 2026-10-19).
+restrictions:
+  - "When using TestDriver testing Services, do not run them in production environments involving real end users."
+  - "Do not submit real customer data, personal data, sensitive personal data or regulated data, including PII, PHI or financial information, to TestDriver Services."
+  - "Use TestDriver Services only to test applications you own or are authorized to integrate with."
+  - "Use TestDriver-managed virtual machines only for testing; do not use them to automate, spam, scrape, attack or violate the terms of other applications or services."
+  - "Do not attempt to reverse engineer, disrupt or interfere with TestDriver Services."
+  - "Do not use TestDriver Services to build or train competing products."
+
 dashboard_url: null
 # listed on market.partnerstack.com/page/testdriverai3875; testdriver.ai loads js.partnerstack.com for referral tracking; no affiliate page on testdriver.ai (checked 2026-10-17)
 network: partnerstack
@@ -56,7 +65,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

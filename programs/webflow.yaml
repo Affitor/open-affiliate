@@ -20,6 +20,7 @@ tracking_method: link
 payout:
   currency: USD
   frequency: monthly
+  conditions: "Webflow distributes commission once per calendar month following the eligible purchase through its payment provider. Affiliates must keep accurate account and payment-provider details and supply valid tax documents, including VAT invoices where applicable; the provider may defer processing until it receives them. Webflow may withhold commissions linked to programme abuse or misuse and recover related amounts already paid. Termination ends Webflow's obligation to pay outstanding commission."
 
 signup_url: https://webflow.com/affiliates
 approval: manual
@@ -67,7 +68,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
