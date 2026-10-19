@@ -2,9 +2,12 @@
  * OAS v1 scorer: a pure function of one program's YAML, so the same YAML always
  * gives the same number. It reads the raw YAML, never the mapped Program
  * (programs.ts turns a null `restrictions` into [], which v1 reads as "the brand
- * says there are none"). Only verified, live affiliate programs are scored, and
- * a verified program's YAML holds only terms checked on its own page, so a term
- * that is absent is Not published. The rules are stated on /methodology#oas.
+ * says there are none"). Only verified, live affiliate programs are scored.
+ * A term that is absent counts as Not published only when the data lane wrote a
+ * `not_published` marker for it after reading the brand's pages; absent with no
+ * marker, the check is not assessed (held out for that program). The first gate
+ * found unmarked absences wrong 40-93% of the time: the brands publish them and
+ * the YAML lacks them. The rules are stated on /methodology#oas.
  */
 import { FREQUENCIES, PAYOUT_METHODS } from "./claims/form"
 import { CHECK_IDS, CHECKS, isStale, OAS_VERSION, PAIRS, PART_MAX, round1, type CheckState, type OasCheck, type OasScore, type Part } from "./oas"
@@ -24,6 +27,8 @@ export interface ProgramYaml {
   approval?: string
   restrictions?: string[] | null
   conflicts?: { field: string; quote: string }[] | null
+  /** Terms the brand does not publish, each with the date its pages were read. */
+  not_published?: Record<string, string> | null
 }
 
 /** USD per unit, frozen for v1 (ECB 2026-10-16). Another currency leaves V2 Checking. */
@@ -107,6 +112,12 @@ export function scoreProgram(p: ProgramYaml, today: Date, heldOut: string[] = HE
   for (const id of CHECK_IDS) {
     const conflict = conflicts.get(CHECKS[id].field) ?? null
     const r: Result = stale ? { state: "checking" } : conflict ? { state: "not_met" } : judge(id, p)
+    if (r.state === "not_public") {
+      // Absent: Not published only with the data lane's marker; otherwise not assessed for this program.
+      const marked = p.not_published?.[CHECKS[id].field]
+      states.set(id, marked ? { id, state: "not_public", max: 0, points: 0, checked: String(marked) } : { id, state: "held_out", max: 0, points: 0 })
+      continue
+    }
     states.set(id, { id, state: r.state, max: 0, points: 0, ...(r.fact ? { fact: r.fact } : {}), ...(conflict && !stale ? { conflict } : {}) })
   }
   // A held-out T check takes its V pair with it where the term is absent: the V check would only repeat the unverified absence.

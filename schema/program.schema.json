@@ -448,6 +448,20 @@
         }
       }
     },
+    "not_published": {
+      "type": "object",
+      "description": "Terms the brand does not publish, each with the date its pages were read (YYYY-MM-DD). Written by the data lane after reading the program's pages; only then does OAS score the term as Not published. A term that is absent with no marker here has not been checked, and OAS does not assess it.",
+      "additionalProperties": false,
+      "properties": {
+          "commission.duration": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "cookie_days": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.minimum": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.methods": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.frequency": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "approval": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "restrictions": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+      }
+    },
     "claimed_by": {
       "type": "string",
       "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$",
