@@ -18,6 +18,10 @@ commission:
 
 # payout: stated two ways, so left out: "We pay all our affiliates via PayPal." (www.sendible.com/affiliates, checked 2026-10-18) vs "paid to your bank on file, 1 month after Sendible has received payment from the customer." (www.sendible.com/affiliate-terms, checked 2026-10-18)
 
+payout:
+  # "Payments will be made at the end of every month." (https://www.sendible.com/affiliates, checked 2026-10-18)
+  frequency: monthly
+
 signup_url: https://www.sendible.com/affiliates
 approval: manual
 restrictions:
