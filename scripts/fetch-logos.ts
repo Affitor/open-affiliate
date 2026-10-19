@@ -26,6 +26,7 @@ import { existsSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 
 import registry from "../src/lib/registry.json"
+import { blockedReason } from "./blocked-hosts"
 
 const LOGOS_DIR = join(process.cwd(), "public", "logos")
 const args = new Set(process.argv.slice(2))
@@ -76,12 +77,22 @@ function candidates(p: Program): Candidate[] {
  */
 async function tryFetch(url: string): Promise<Buffer | null> {
   try {
-    const res = await fetch(url, {
-      redirect: "follow",
-      headers: { "User-Agent": "Mozilla/5.0 (openaffiliate logo fetcher)" },
-      signal: AbortSignal.timeout(15_000),
-    })
-    if (!res.ok) return null
+    // Redirects by hand: no hop may reach a host in schema/blocked-hosts.json.
+    let res: Response | null = null
+    for (let hop = 0, current = url; hop <= 5; hop++) {
+      if (blockedReason(current)) return null
+      res = await fetch(current, {
+        redirect: "manual",
+        headers: { "User-Agent": "Mozilla/5.0 (openaffiliate logo fetcher)" },
+        signal: AbortSignal.timeout(15_000),
+      })
+      const location = res.headers.get("location")
+      if (res.status < 300 || res.status >= 400 || !location) break
+      await res.body?.cancel()
+      current = new URL(location, current).href
+      res = null
+    }
+    if (!res?.ok) return null
     const type = res.headers.get("content-type") ?? ""
     if (!/image|octet-stream/i.test(type)) return null
     const buf = Buffer.from(await res.arrayBuffer())

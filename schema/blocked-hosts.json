@@ -1,0 +1,7 @@
+{
+  "note": "Hosts no script may request: a listed host blocks itself and every subdomain, at every redirect hop. Network-level holds are listed here by cos-oa; the data lane adds a brand's host when its terms bar automated access (HOLD). Remove a host only when its owner's terms change, with the date and the reason.",
+  "hosts": {
+    "partnerstack.com": "PartnerStack Platform terms (updated 2023-10-25) §4(b) bar accessing the Platform, its marketplace included, by any robot, spider, scraper or other automated means",
+    "dub.co": "Dub network listings are never fetched by our lanes (source policy, 2026-10-19)"
+  }
+}
