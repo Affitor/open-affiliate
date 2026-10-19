@@ -1,11 +1,13 @@
 /**
- * Source policy in verify-programs: a host in schema/blocked-hosts.json gets
- * no request, at the first URL or behind any redirect, and the program is
- * reported as skipped, not failed. fetch is a stub that records every URL.
+ * Source policy in verify-programs and extract-commission-candidates: a host
+ * in schema/blocked-hosts.json gets no request, at the first URL or behind any
+ * redirect, and verify reports the program as skipped, not failed. Each
+ * request goes to a stub that records its URL.
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { blockedReason } from "./blocked-hosts"
+import { get } from "./extract-commission-candidates"
 import { fetchPage, verifyProgram } from "./verify-programs"
 
 const PAGE = "<html>Join our affiliate program: 30% recurring commission. Sign up</html>"
@@ -85,4 +87,37 @@ test("a redirect loop ends after a bounded number of hops", async () => {
   const { fetchImpl, requested } = stub({ "https://p.example/a": { to: "https://p.example/b" }, "https://p.example/b": { to: "https://p.example/a" } })
   assert.equal(await fetchPage("https://p.example/a", fetchImpl), null)
   assert.ok(requested.length <= 2 * 11, `${requested.length} requests`)
+})
+
+test("only the statuses fetch follows are followed: a 304 with a Location is the answer", async () => {
+  const requested: string[] = []
+  const fetchImpl = (async (input: string | URL | Request) => {
+    requested.push(String(input))
+    return new Response(null, { status: 304, headers: { location: "https://other.example/affiliate" } })
+  }) as typeof fetch
+  const page = await fetchPage("https://p.example/a", fetchImpl)
+  assert.deepEqual(requested, ["https://p.example/a"])
+  assert.equal(page && "status" in page ? page.status : null, 304)
+})
+
+test("the commission extractor follows redirects by hand and never requests a blocked host", () => {
+  const routes: Record<string, { code: string; location?: string; body?: string }> = {
+    "https://q.example/affiliates": { code: "301", location: "/join" },
+    "https://q.example/join": { code: "302", location: "https://market.partnerstack.com/q" },
+    "https://r.example/affiliates": { code: "301", location: "https://www.r.example/affiliates" },
+    "https://www.r.example/affiliates": { code: "200", body: "ok" },
+  }
+  const requested: string[] = []
+  const once = (url: string) => {
+    requested.push(url)
+    const r = routes[url] ?? { code: "404" }
+    return { code: r.code, body: r.body ?? "", location: r.location ?? "" }
+  }
+  assert.deepEqual(get("https://market.partnerstack.com/quadient", once), { code: "", body: "", final: "https://market.partnerstack.com/quadient" })
+  assert.deepEqual(requested, [], "a blocked first URL: no request")
+  assert.equal(get("https://q.example/affiliates", once).code, "")
+  assert.deepEqual(requested, ["https://q.example/affiliates", "https://q.example/join"], "stops before the blocked hop")
+  requested.length = 0
+  assert.deepEqual(get("https://r.example/affiliates", once), { code: "200", body: "ok", final: "https://www.r.example/affiliates" })
+  assert.deepEqual(requested, ["https://r.example/affiliates", "https://www.r.example/affiliates"])
 })

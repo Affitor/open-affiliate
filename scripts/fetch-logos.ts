@@ -26,7 +26,7 @@ import { existsSync, readdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 
 import registry from "../src/lib/registry.json"
-import { blockedReason } from "./blocked-hosts"
+import { blockedReason, REDIRECTS } from "./blocked-hosts"
 
 const LOGOS_DIR = join(process.cwd(), "public", "logos")
 const args = new Set(process.argv.slice(2))
@@ -87,7 +87,7 @@ async function tryFetch(url: string): Promise<Buffer | null> {
         signal: AbortSignal.timeout(15_000),
       })
       const location = res.headers.get("location")
-      if (res.status < 300 || res.status >= 400 || !location) break
+      if (!REDIRECTS.has(res.status) || !location) break
       await res.body?.cancel()
       current = new URL(location, current).href
       res = null

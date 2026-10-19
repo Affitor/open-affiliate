@@ -17,7 +17,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { execFileSync } from "child_process";
-import { blockedReason } from "./blocked-hosts";
+import { blockedReason, REDIRECTS } from "./blocked-hosts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROGRAMS_DIR = join(__dirname, "..", "programs");
@@ -211,7 +211,7 @@ export async function fetchPage(
           redirect: "manual",
         }).finally(() => clearTimeout(timeout));
         const location = res.headers.get("location");
-        if (res.status >= 300 && res.status < 400 && location) {
+        if (REDIRECTS.has(res.status) && location) {
           await res.body?.cancel();
           current = new URL(location, current).href;
           continue;
