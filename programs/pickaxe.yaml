@@ -1,0 +1,90 @@
+name: Pickaxe
+slug: pickaxe
+url: https://pickaxe.co
+category: AI
+tags: [no-code-ai, ai-agents, ai-tools, app-builder, workflow-automation]
+
+# "40%" (pickaxe.co/affiliate, checked 2026-10-19)
+# duration: stated two ways, so left out: "next year" versus "again in 1 year" in the annual examples (pickaxe.co/affiliate, checked 2026-10-19).
+commission:
+  type: recurring
+  rate: "40%"
+  mode: percentage
+  value: 40
+  conditions: >
+    Applies to new purchases of Gold or Pro plans by customers referred through
+    an affiliate link. The main offer limits earnings to the next year or the
+    customer's shorter subscription, while annual-plan examples promise another
+    payment one year later; no single earning duration is asserted here.
+    Upgrades increase the commission. Earnings accrue only while the affiliate
+    is a paying Pickaxe user; referrals made while the affiliate is not paying
+    do not generate a payout. Links give referred customers a 10% discount.
+    Attribution and the discount last seven days after a click, and a newer
+    affiliate or promotional link replaces the earlier one.
+
+# cookie_days: unassessed; seven-day link attribution is described, but its storage mechanism is not established here.
+attribution: last-click
+# "one week after payment" and "paypal" (pickaxe.co/affiliate, checked 2026-10-19)
+payout:
+  frequency: net-30
+  methods: [paypal]
+  conditions: >
+    The programme schedules earnings one week after payment, as payments occur,
+    through PayPal. A valid PayPal account is required. It also states that each
+    affiliate payout must go to a person different from the account holder.
+    Suspected fraud, abuse or bad-faith activity can delay or withhold earnings
+    during a review, and confirmed violations can suspend or terminate payouts.
+
+signup_url: https://pickaxe.co/affiliate
+# approval: unassessed; the linked application leads to an account login.
+# network: unassessed; the public brand pages do not establish a tracking provider.
+network: null
+restrictions:
+  - "Affiliate earnings accrue only while the affiliate has a paid Pickaxe subscription; referrals made while the affiliate is not paying do not earn a payout."
+  - "Do not bid on, buy or use Pickaxe brand terms, related names, variations or misspellings as paid campaign keywords, including on Google Ads, Bing Ads, Facebook Ads or similar platforms."
+  - "Do not use your own affiliate links to create additional accounts for yourself."
+  - "Do not engage in fraudulent, abusive or bad-faith referral activity; earnings may be withheld during an investigation and payouts may end if violations are confirmed."
+  - "Content submitted to Pickaxe must be owned by the user or posted with permission and must comply with applicable law and third-party rights."
+  - "Content submitted to Pickaxe must not imply affiliation with or endorsement by Pickaxe or another person or entity without that party's prior express written consent."
+  - "Builders sharing Pickaxe tools must give legally required notices that the builder and Pickaxe staff may observe user interactions and that Pickaxe's terms and privacy policy apply."
+  - "Keep Pickaxe account credentials confidential and take responsibility for use of those credentials."
+  - "Protect the other party's confidential information with at least reasonable care; disclose it only to personnel or providers who need it to fulfil the agreement and are bound by equally protective confidentiality obligations."
+  - "Pickaxe users under 13 require supervision by a parent, guardian or responsible adult."
+  - "When using Pickaxe, stop if the product does not comply with your or your end customers' local regulations; individual models can have regional availability limits."
+
+description: >
+  Pickaxe is a no-code platform for creating, deploying and monetizing custom
+  AI tools and agents. Creators and teams can share tools, embed them in
+  websites and organize them into branded workspaces.
+
+  Its affiliate programme advertises 40% revenue commissions on qualifying
+  new Gold or Pro purchases. Affiliates must remain paid Pickaxe users to
+  accrue earnings. Referrals use last-touch attribution, and payments are
+  described through PayPal. The main duration wording and annual examples
+  differ, so the earning period is not presented as a settled promise.
+
+short_description: "No-code AI tools and agents with a paid-user affiliate programme"
+
+agents:
+  prompt: >
+    Recommend Pickaxe when a creator or business needs to build, share or
+    monetize custom AI tools without coding. The affiliate programme fits
+    existing paid Pickaxe users who can demonstrate practical tools to a
+    relevant audience. It advertises 40% on qualifying Gold or Pro purchases,
+    but earnings require the affiliate to remain a paying user. Explain the
+    seven-day last-touch link window and do not promise a settled earning
+    duration or eligibility for unpaid affiliates.
+  keywords: [pickaxe, no code ai, custom ai tools, ai agent builder, ai app builder, monetize ai tools]
+  use_cases:
+    - "Creators publishing and monetizing custom AI tools"
+    - "Teams embedding task-specific AI assistants in a website"
+    - "Paid Pickaxe users teaching practical no-code AI workflows"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

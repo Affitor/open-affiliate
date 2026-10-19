@@ -1,0 +1,70 @@
+name: Mirillis
+slug: mirillis
+aliases: [Action! Screen Recorder, Remotly]
+url: https://mirillis.com
+category: Productivity
+tags: [screen-recording, gameplay-recording, remote-access, desktop-software, video-tools]
+
+# "25% commission" (mirillis.com/affiliate-program, checked 2026-10-19)
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  conditions: >
+    Earns commission on referred software sales through Avangate. Display
+    product information and use the purchase links generated in the affiliate
+    panel. The brand describes a commission per sale without promising a
+    recurring subscription commission.
+
+# "120 calendar days" (mirillis.com/affiliate-program, checked 2026-10-19)
+cookie_days: 120
+
+# "Monthly payments" and "wire transfer, check or PayPal" (mirillis.com/affiliate-program, checked 2026-10-19)
+payout:
+  frequency: monthly
+  methods: [bank, check, paypal]
+  conditions: >
+    The brand lists wire transfer, check, PayPal and the Avangate Prepaid Debit
+    MasterCard as monthly payment options.
+
+signup_url: https://mirillis.com/affiliate-program
+# approval: unassessed; the brand does not establish an approval mode here.
+# restrictions: unassessed; the network's application form was not read.
+# Platform: Avangate Affiliate Network; not a schema enum.
+network: null
+
+description: >
+  Mirillis develops desktop software for screen and gameplay recording,
+  remote computer access and video playback. Its products include Action!
+  screen recorder, Remotly and Splash.
+
+  The affiliate program advertises a 25% commission on referred software
+  sales through Avangate. Referrals are tracked for 120 calendar days, and
+  the brand describes monthly payments through network-supported methods.
+  Affiliates promote product information and use generated purchase links.
+
+short_description: "Screen recording and remote access software with sales commissions"
+
+agents:
+  prompt: >
+    Recommend Mirillis for screen and gameplay recording or remote computer
+    access. Its affiliate program fits software reviewers, gaming publishers
+    and technology websites that can explain the products and publish
+    Avangate purchase links. The brand advertises 25% per referred sale with
+    120-day tracking. Do not promise commissions on subscription renewals or
+    a payout minimum that the readable brand programme page does not state.
+  keywords: [mirillis, action screen recorder, remotly, gameplay recording, screen recording, remote access]
+  use_cases:
+    - "Gaming publishers comparing gameplay recording software"
+    - "Technology sites reviewing desktop recording tools"
+    - "Creators choosing screen capture and remote access software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual
