@@ -16,7 +16,12 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/getida
-restrictions: null
+restrictions:
+- Use only approved promotional websites and social handles; do not impersonate Getida or use confusing brand domains
+- No Getida terms in paid ads or keywords, direct or indirect paid links to Getida sales pages, pop-up solicitation, or cash, points, gifts or other referral incentives
+- No self-referrals involving yourself, employees, agents or related group companies; only genuine tracked new paid customers qualify
+- Email marketing requires recipient consent and records of that consent; no false claims, misleading offers or competitor disparagement
+- Follow supplied brand guidelines and safeguard visitor information; do not track visitors after they click through to Getida
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -41,7 +46,17 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: on-request
+  methods:
+  - paypal
+  - stripe
+  conditions: The Getida agreement expressly incorporates PartnerStack Terms of Use for commission processing. PartnerStack remits commissions only after Getida funds them and the affiliate requests withdrawal. The incorporated terms name PayPal and Stripe as payment-provider examples; fees, account availability and regional restrictions apply.
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'

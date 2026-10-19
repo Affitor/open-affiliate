@@ -15,7 +15,7 @@ commission:
   value: 30
   currency: USD
   duration: null
-  conditions: "30% recurring on all paid signups to start; 40% after 30 sales and 50% after 200 (PartnerStack listing)."
+  conditions: "30% recurring on all paid signups to start; 40% after 30 sales and 50% after 200 (PartnerStack listing). The exact current Manychat listing explicitly publishes a 120-day cookie. Other missing fields remain unassessed because the brand page returned HTTP 403 and the program agreement was not accessible under the source-policy gate."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/manychat
@@ -44,7 +44,8 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 120
