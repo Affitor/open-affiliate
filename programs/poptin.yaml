@@ -26,8 +26,6 @@ payout:
   # "the User will be able to request payment through the Affiliate Program page." (https://help.poptin.com/en/article/affiliate-program-terms-and-conditions-1gvl7k4/, checked 2026-10-18)
   frequency: on-request
 
-# "We reserve the right to accept or reject any application at our sole discretion." (https://help.poptin.com/en/article/affiliate-program-terms-and-conditions-1gvl7k4/, checked 2026-10-18)
-approval: manual
 signup_url: https://www.poptin.com/affiliate/
 
 # "use paid ads or our creative assets without approval" (help.poptin.com/en/article/affiliate-program-terms-and-conditions-1gvl7k4/, checked 2026-10-18)

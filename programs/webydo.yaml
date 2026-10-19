@@ -47,7 +47,6 @@ agents:
   - Companies evaluating Webydo vs alternatives
 not_published:
   payout.minimum: "2026-10-18"
-  approval: "2026-10-18"
   restrictions: "2026-10-18"
 verified: true
 submitted_by: partnerstack-import
