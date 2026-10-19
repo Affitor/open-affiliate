@@ -21,13 +21,22 @@ cookie_days: 30
 attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  # "The minimum payout is $20." (https://quso.ai/affiliate-terms, checked 2026-10-18)
+  minimum: 20
   currency: USD
   frequency: monthly
   methods: [paypal]
 signup_url: https://quso.ai/affiliate-program
 approval: auto
-restrictions: null
+# "Paid ads with your link. Clicks from paid ads are blocked and do not earn commission." (https://quso.ai/affiliate-terms, checked 2026-10-18)
+restrictions:
+  - "No paid ads with your link; clicks from paid ads are blocked and do not earn commission"
+  - "No ads on the quso.ai or vidyo.ai names (and misspellings or combinations with words such as coupon, promo, discount, review) in any search, social or display ad network, even if the ad sends people to your own page first"
+  - "No listing quso.ai offers or codes on coupon, deal, cashback or voucher sites unless approved in writing, and then only with a code issued to you"
+  - "No paying or rewarding people to sign up or buy, and no passing part of your commission back to the buyer, unless approved in writing"
+  - "No bots, cookie stuffing, forced clicks, hidden frames, pop-unders, browser extensions that insert links, or fake accounts"
+  - "No unsolicited bulk email, DMs or comments"
+  - "No buying through your own link"
 marketing_materials: true
 api_available: true
 dedicated_manager: false
@@ -51,7 +60,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: rewardful

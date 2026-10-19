@@ -72,10 +72,14 @@ agents:
     - "CRO and marketing agencies running onsite campaigns for clients"
     - "SaaS and B2B sites generating demo requests and trial signups"
 
+not_published:
+  commission.duration: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
