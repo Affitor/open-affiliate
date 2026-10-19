@@ -30,6 +30,8 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly
+  # "Commissions enter a 30-day holding period from the date of the underlying customer payment." (https://getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-18)
+  conditions: "Commissions enter a 30-day holding period from the date of the underlying customer payment."
 
 signup_url: https://partners.dub.co/getimg-ai
 # "You must apply through signup page and be approved." (getimg.ai/legal/-getimgai-affiliate-program-terms, checked 2026-10-17)
@@ -76,7 +78,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
