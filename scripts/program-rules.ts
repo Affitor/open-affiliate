@@ -176,13 +176,17 @@ const TOKEN = /[$€£¥₹]|\d+(?:\.\d+)?|[A-Za-z]+|[^\sA-Za-z\d]/g
 const JOIN = new Set([",", "-", "–", "or", "and", "to"])
 /** A number right after one of these is an amount ("$100", "USD 100") or a date ("May 31"), never days. */
 const notCount = (token: string | undefined) =>
-  token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec)[a-z]*$/.test(token))
-/** "the end of the third month following" waits about 30 days a month. */
+  token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*$/i.test(token))
+/** "at the end of the third month following" waits about 30 days a month; "through the third month" is a duration, not a wait. */
 const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
-const MONTHS_AFTER = new RegExp(String.raw`\b(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
-/** A clause about refunds, returns or the cookie, with no payment word, states no payout wait. */
+const MONTHS_AFTER = new RegExp(String.raw`\bend\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
+/**
+ * A clause about refunds, returns or the cookie states no payout wait unless
+ * it says the commission is paid, payable, held or reviewed: "refunds are
+ * accepted up to 60 days after payment" is about the refund.
+ */
 const NOT_PAYOUT = /\b(?:refund|return|chargeback|cancel|cookie|click)/i
-const PAYMENT = /\b(?:pa(?:id|y\w*)|held|hold\w*|sent|issued|released|disburs\w*|lock\w*|review\w*)\b/i
+const PAYOUT = /\b(?:paid|payable|payouts?|held|withheld|holds?|reviewed|locked|locking|released|issued|disbursed)\b/i
 
 /**
  * The wait a "days after" names: the largest number of the count written
@@ -201,7 +205,8 @@ function waitBefore(text: string): number {
   let counted = false
   for (let i = tokens.length - 1; i >= 0; i--) {
     const t = tokens[i]
-    if (/^\d+$/.test(t) && !notCount(tokens[i - 1])) {
+    // Up to three digits: "2026" in "May 31, 2026, 30 days" is a year.
+    if (/^\d{1,3}$/.test(t) && !notCount(tokens[i - 1])) {
       wait = Math.max(wait, Number(t))
       counted = true
     } else if (!(t === "(" || t === ")" || (counted && JOIN.has(t.toLowerCase())))) {
@@ -218,13 +223,15 @@ function waitBefore(text: string): number {
  * after purchase") states none.
  */
 function clauseWait(clause: string): number {
-  if (NOT_PAYOUT.test(clause) && !PAYMENT.test(clause)) return 0
-  const days = [...clause.matchAll(DAYS_AFTER)].map((m) => waitBefore(clause.slice(0, m.index)))
-  const months = [...clause.matchAll(MONTHS_AFTER)].map((m) => {
+  if (NOT_PAYOUT.test(clause) && !PAYOUT.test(clause)) return 0
+  // A loop, not Math.max(...): a long text must not overflow the stack.
+  let wait = 0
+  for (const m of clause.matchAll(DAYS_AFTER)) wait = Math.max(wait, waitBefore(clause.slice(0, m.index)))
+  for (const m of clause.matchAll(MONTHS_AFTER)) {
     const word = ORDINALS.indexOf(m[1].toLowerCase())
-    return 30 * (word >= 0 ? word + 2 : Number(m[1][0]))
-  })
-  return Math.max(0, ...days, ...months)
+    wait = Math.max(wait, 30 * (word >= 0 ? word + 2 : Number(m[1][0])))
+  }
+  return wait
 }
 
 /**
@@ -245,7 +252,7 @@ export function payoutLagProblems(data: Record<string, unknown>): string[] {
   for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
     if (typeof text !== "string") continue
     for (const { sentence } of proseSentences(text)) {
-      const days = Math.max(0, ...sentence.split(";").map(clauseWait))
+      const days = sentence.split(";").reduce((most, clause) => Math.max(most, clauseWait(clause)), 0)
       if (days > 30) {
         problems.push(
           `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +
