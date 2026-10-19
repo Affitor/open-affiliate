@@ -203,7 +203,7 @@ test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
 
-test("ranking: ties share a rank; Kyma and the Affitor network rank like any program; scoring, no apply link and stale are not ranked", () => {
+test("ranking: ties share a rank and every network ranks alike; scoring, no apply link and stale get no rank", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
   const scores = [
     score("top"),

@@ -128,9 +128,9 @@ test("Kyma API is suggested like any program: no same-team exclusion or line (SÆ
   assert.doesNotMatch(programMd(entry), /same team/i)
 })
 
-test("no source file marks a program as same team", () => {
+test("no source file marks a program as same team or keeps a team out of the ranking", () => {
   // git grep exits 1 when nothing matches, 0 with matches: both are answers, anything else is not.
-  const grep = spawnSync("git", ["grep", "-n", "-i", "-E", "same[ -]?team|isSameTeam", "--", "src", "scripts", ":!scripts/no-program.test.ts"], { encoding: "utf8", cwd: join(__dirname, "..") })
+  const grep = spawnSync("git", ["grep", "-n", "-i", "-E", "same[ -]?team|isSameTeam|(kyma|affitor network)[^.]*(never|not) ranked", "--", "src", "scripts", ":!scripts/no-program.test.ts"], { encoding: "utf8", cwd: join(__dirname, "..") })
   assert.ok(grep.status === 0 || grep.status === 1, grep.stderr)
   assert.equal(grep.stdout.trim(), "")
 })

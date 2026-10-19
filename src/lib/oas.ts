@@ -147,7 +147,7 @@ export interface ProgramRef {
   network?: string | null
 }
 
-export function unrankedReason(s: OasScore, p: ProgramRef, today: Date): Unranked | null {
+export function unrankedReason(s: OasScore, today: Date): Unranked | null {
   if (oasValue(s, today) == null) return "checking"
   if (!s.page_url) return "no-apply-link"
   return null
@@ -174,7 +174,7 @@ export function buildBoard(scores: OasScore[], programs: ProgramRef[], today: Da
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const rows: BoardRow[] = scores.flatMap((s) => {
     const program = bySlug.get(s.slug)
-    return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, program, today) }] : []
+    return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, today) }] : []
   })
   const ranked = rows.filter((r) => !r.unranked).sort((a, b) => b.oas! - a.oas! || (a.program.slug < b.program.slug ? -1 : 1))
   ranked.forEach((r, i) => (r.rank = i > 0 && ranked[i - 1].oas === r.oas ? ranked[i - 1].rank : i + 1))

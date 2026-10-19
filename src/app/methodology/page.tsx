@@ -129,9 +129,9 @@ export default function MethodologyPage() {
             that check is not met until they agree. Each report links the page
             the terms were checked on. Only verified, live affiliate programs
             are scored, and terms verified more than 90 days ago show Scoring in
-            progress until we verify them again. Kyma API and programs on the
-            Affitor network are scored the same way and never ranked.{" "}
-            {TEAM_DISCLOSURE}
+            progress until we verify them again. Every program is scored and
+            ranked by the same rules, whoever runs it and whatever network it
+            runs on. {TEAM_DISCLOSURE}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">
             Not scored yet: refund and chargeback rules, and how well the
