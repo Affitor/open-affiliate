@@ -17,6 +17,7 @@ import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { parse as parseYaml } from "yaml";
 import { execFileSync } from "child_process";
+import { blockedReason, REDIRECTS } from "./blocked-hosts";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PROGRAMS_DIR = join(__dirname, "..", "programs");
@@ -101,7 +102,8 @@ type VerifyStatus =
   | "not_affiliate"
   | "closed"
   | "error"
-  | "unclear";
+  | "unclear"
+  | "skipped";
 
 interface VerifyResult {
   slug: string;
@@ -168,9 +170,21 @@ function getChangedFiles(): string[] {
   }
 }
 
-async function fetchPage(
-  url: string
-): Promise<{ status: number; text: string; finalUrl: string } | null> {
+/** Most redirects one page may take before it counts as a failure. */
+const MAX_HOPS = 10;
+
+export type Page = { status: number; text: string; finalUrl: string };
+
+/**
+ * Fetch a page, following redirects by hand so every hop is checked against
+ * schema/blocked-hosts.json before it is requested: a blocked host, at the
+ * start or behind a redirect, gets no request at all and comes back as
+ * `{ blocked }`. null when every attempt failed.
+ */
+export async function fetchPage(
+  url: string,
+  fetchImpl: typeof fetch = fetch
+): Promise<Page | { blocked: string; url: string } | null> {
   // Try multiple User-Agent strings — some sites block non-browser requests
   const userAgents = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
@@ -179,24 +193,34 @@ async function fetchPage(
 
   for (const ua of userAgents) {
     try {
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 15000);
-      const res = await fetch(url, {
-        signal: controller.signal,
-        headers: {
-          "User-Agent": ua,
-          Accept:
-            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
-          "Accept-Language": "en-US,en;q=0.9",
-          "Accept-Encoding": "gzip, deflate, br",
-        },
-        redirect: "follow",
-      });
-      clearTimeout(timeout);
-      const text = await res.text();
-
-      // If we get a real response (even 404), return it — content may still have keywords
-      return { status: res.status, text, finalUrl: res.url };
+      let current = url;
+      for (let hop = 0; hop <= MAX_HOPS; hop++) {
+        const blocked = blockedReason(current);
+        if (blocked) return { blocked, url: current };
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15000);
+        const res = await fetchImpl(current, {
+          signal: controller.signal,
+          headers: {
+            "User-Agent": ua,
+            Accept:
+              "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Accept-Encoding": "gzip, deflate, br",
+          },
+          redirect: "manual",
+        }).finally(() => clearTimeout(timeout));
+        const location = res.headers.get("location");
+        if (REDIRECTS.has(res.status) && location) {
+          await res.body?.cancel();
+          current = new URL(location, current).href;
+          continue;
+        }
+        const text = await res.text();
+        // If we get a real response (even 404), return it — content may still have keywords
+        return { status: res.status, text, finalUrl: current };
+      }
+      throw new Error(`more than ${MAX_HOPS} redirects`);
     } catch {
       continue;
     }
@@ -265,10 +289,28 @@ function analyzeContent(html: string, url?: string): Omit<VerifyResult, "slug" |
   };
 }
 
-async function verifyProgram(program: ProgramYaml): Promise<VerifyResult> {
+export async function verifyProgram(program: ProgramYaml, fetchImpl: typeof fetch = fetch): Promise<VerifyResult> {
   const url = program.signup_url || program.url;
 
-  const page = await fetchPage(url);
+  const page = await fetchPage(url, fetchImpl);
+
+  // A host our source policy bars: not requested, and not a failure.
+  if (page && "blocked" in page) {
+    return {
+      slug: program.slug,
+      signup_url: url,
+      http_status: null,
+      final_url: page.url !== url ? page.url : null,
+      status: "skipped",
+      score: 0,
+      affiliate_keywords: [],
+      non_affiliate_keywords: [],
+      closed_indicators: [],
+      commission_found: [],
+      has_signup_form: false,
+      error: `source policy: ${page.blocked}`,
+    };
+  }
 
   if (!page) {
     return {
@@ -335,6 +377,7 @@ const STATUS_ICON: Record<string, string> = {
   closed: "🚫",
   error: "⚠️ ",
   unclear: "❓",
+  skipped: "⏭️ ",
 };
 
 async function main() {
@@ -391,7 +434,11 @@ async function main() {
     results.push(result);
 
     const icon = STATUS_ICON[result.status] || "?";
-    console.log(`${icon} ${result.status} (score: ${result.score})`);
+    console.log(
+      result.status === "skipped"
+        ? `${icon} skipped: ${result.error}`
+        : `${icon} ${result.status} (score: ${result.score})`
+    );
 
     // Flag real failures (not_affiliate or hard error)
     if (result.status === "not_affiliate" || result.status === "error") {
@@ -450,4 +497,5 @@ async function main() {
   }
 }
 
-main();
+// Run only as a script: scripts/verify-programs.test.ts imports the functions.
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) main();
