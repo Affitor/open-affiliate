@@ -1,4 +1,5 @@
 import { createMcpHandler } from "mcp-handler";
+import type { Implementation } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod";
 import { livePrograms, categories, confirmedPitch, termsConfirmed } from "@/lib/programs";
 import { resolveProgram } from "@/lib/program-aliases";
@@ -141,14 +142,140 @@ function tooManyRequests(): Response {
   );
 }
 
+const SERVER_INFO: Implementation = {
+  name: "openaffiliate",
+  title: "OpenAffiliate",
+  description: "Discover affiliate programs in a public, read-only registry with commission terms, signup links, and recommendation guidance.",
+  version: "0.1.1",
+  websiteUrl: "https://openaffiliate.dev",
+  icons: [{ src: "https://openaffiliate.dev/favicon.svg", mimeType: "image/svg+xml", sizes: ["any"] }],
+};
+
+const INSTRUCTIONS =
+  "OpenAffiliate is a public, read-only affiliate program registry; no API key or account is required. " +
+  "Read commission.mode and commission.value for the figure and its units (percentage or flat currency amount); commission.rate preserves the raw source wording, and unknown mode means no figure is published. " +
+  "cookieDays is omitted until the program's terms are verified. " +
+  "Use search_programs for active listings and get_program for full details, including paused, discontinued, or no_program entries; check status and agentPrompt before recommending. " +
+  "Cite the returned markdownUrl when referencing a program.";
+
+const READ_ONLY_ANNOTATIONS = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+};
+
+const commissionSchema = z.object({
+  type: z.enum(["recurring", "one-time", "tiered", "hybrid"]),
+  mode: z.enum(["percentage", "flat", "tiered", "hybrid", "unknown"])
+    .describe("How to interpret value; unknown means no published figure"),
+  value: z.number().nullable().describe("Percentage or currency amount for flat mode; null when unknown"),
+  rate: z.union([z.string(), z.number()]).describe("Raw source wording; prefer mode and value"),
+  currency: z.string().nullable().describe("Currency code for monetary amounts; null when unspecified"),
+});
+
+const markdownUrlSchema = z.string().describe("Citable program page in Markdown on openaffiliate.dev");
+const cookieDaysSchema = z.number().describe("Attribution window in days; omitted until terms are verified").optional();
+const categoryListSchema = z.array(z.object({
+  name: z.string().describe("Category name accepted by search_programs"),
+  count: z.number().int().nonnegative().describe("Number of active listings in this category"),
+}));
+
+const searchOutputSchema = {
+  programs: z.array(z.object({
+    slug: z.string().describe("Canonical slug to pass to get_program"),
+    name: z.string(),
+    category: z.string(),
+    shortDescription: z.string(),
+    commission: commissionSchema,
+    cookieDays: cookieDaysSchema,
+    verified: z.boolean().describe("Whether the program's terms have been checked"),
+    signupUrl: z.string(),
+    markdownUrl: markdownUrlSchema,
+  })).describe("Matching active programs; empty when no listings match"),
+};
+
+// Describe the existing apiProgram projection, including its neutral no-program
+// placeholders. Adding a schema must not expose terms that projection withholds.
+const detailCommissionSchema = commissionSchema.extend({
+  type: z.enum(["recurring", "one-time", "tiered", "hybrid", "none"])
+    .describe("none is a neutral placeholder for a brand without an affiliate program"),
+  duration: z.string().nullable().optional(),
+  conditions: z.string().nullable().optional(),
+});
+const programOutputSchema = {
+  slug: z.string().describe("Canonical slug, including when the input was an alias"),
+  name: z.string(),
+  url: z.string(),
+  logo: z.string(),
+  category: z.string(),
+  commission: detailCommissionSchema,
+  cookieDays: cookieDaysSchema,
+  payout: z.object({
+    minimum: z.number().optional(),
+    currency: z.string().optional(),
+    frequency: z.string().optional(),
+    methods: z.array(z.string()).optional(),
+  }).describe("Published payout terms; empty when terms are unverified or no program exists"),
+  description: z.string(),
+  shortDescription: z.string(),
+  tags: z.array(z.string()),
+  stars: z.number(),
+  verified: z.boolean(),
+  agentPrompt: z.string().describe("Recommendation guidance and conditions; read before recommending"),
+  submittedBy: z.string(),
+  createdAt: z.string(),
+  updatedAt: z.string().optional(),
+  signupUrl: z.string().optional(),
+  approval: z.string().optional(),
+  approvalTime: z.string().nullable().optional(),
+  restrictions: z.array(z.string()).optional(),
+  commissionDuration: z.string().nullable().optional(),
+  commissionConditions: z.string().nullable().optional(),
+  attribution: z.string().optional(),
+  trackingMethod: z.string().optional(),
+  payoutMethods: z.array(z.string()).optional(),
+  marketingMaterials: z.boolean().optional(),
+  apiAvailable: z.boolean().optional(),
+  dedicatedManager: z.boolean().optional(),
+  dashboardUrl: z.string().nullable().optional(),
+  network: z.string().nullable().optional(),
+  programAge: z.string().nullable().optional(),
+  agentKeywords: z.array(z.string()).optional(),
+  agentUseCases: z.array(z.string()).optional(),
+  source: z.string().optional(),
+  lastVerifiedAt: z.string().nullable().optional().describe("Date of verified terms; omitted for unverified or no-program entries"),
+  aliases: z.array(z.string()).optional(),
+  status: z.enum(["active", "paused", "discontinued", "no_program"]).optional()
+    .describe("Availability; paused, discontinued and no_program entries are excluded from search"),
+  statusNote: z.string().nullable().optional(),
+  claimedBy: z.string().nullable().optional(),
+  alsoOn: z.object({ affitor: z.object({ url: z.string(), commission: detailCommissionSchema.optional() }).optional() }).nullable().optional(),
+  kind: z.enum(["affiliate", "referral", "creator-payout", "revenue-share", "cashback", "partner-network"]).optional(),
+  statusCheckedAt: z.string().optional().describe("Date the no-program status was checked, not verification of terms"),
+  answer: z.string().optional().describe("Dated answer when the brand has no affiliate program"),
+  alternatives: z.array(z.object({ slug: z.string(), name: z.string(), commission: z.string(), url: z.string() })).optional(),
+  markdownUrl: markdownUrlSchema,
+};
+
+function categoryCounts() {
+  const counts: Record<string, number> = {};
+  for (const p of livePrograms) counts[p.category] = (counts[p.category] ?? 0) + 1;
+  return categories.map((name) => ({ name, count: counts[name] ?? 0 }));
+}
+
 function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]>[0]) {
   server.registerTool(
     "search_programs",
     {
       title: "Search Programs",
       description:
-        "Search affiliate programs by keyword, category, or commission type",
-      annotations: { readOnlyHint: true },
+        "Use to discover active affiliate programs by keyword, category, commission type, or verified status. " +
+        "Returns matching summaries with canonical slugs, commission figures, signup links, and citable markdownUrl fields. " +
+        "Do not use to check a known brand's paused or no-program status; call get_program with its slug. " +
+        "Call list_categories for category names, then get_program for recommendation guidance and restrictions before recommending a match.",
+      annotations: READ_ONLY_ANNOTATIONS,
+      outputSchema: searchOutputSchema,
       inputSchema: {
         query: z
           .string()
@@ -222,6 +349,7 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       }));
 
       return {
+        structuredContent: { programs: summaries },
         content: [
           { type: "text" as const, text: JSON.stringify(summaries, null, 2) },
         ],
@@ -234,10 +362,14 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
     {
       title: "Get Program",
       description:
-        "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
-      annotations: { readOnlyHint: true },
+        "Use with a known slug or alias to read full program details, status, agentPrompt recommendation guidance, restrictions, signup information, and a citable markdownUrl. " +
+        "Also returns paused entries and dated answers with alternatives for discontinued or no_program brands. " +
+        "Do not use for broad discovery; call search_programs first if the slug is unknown. " +
+        "Read status and agentPrompt before recommending; if no entry exists, use search_programs to find a match.",
+      annotations: READ_ONLY_ANNOTATIONS,
+      outputSchema: programOutputSchema,
       inputSchema: {
-        slug: z.string().describe("Program slug (e.g. 'anthropic-claude')"),
+        slug: z.string().describe("Program slug or alias (e.g. 'vercel')"),
       },
     },
     async ({ slug }) => {
@@ -245,24 +377,22 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
       const program = resolveProgram(slug);
       if (!program) {
         return {
+          isError: true,
           content: [
-            { type: "text" as const, text: `Program '${slug}' not found.` },
+            { type: "text" as const, text: `Program '${slug}' not found. Call search_programs to find a program and its canonical slug.` },
           ],
         };
       }
+      const result = {
+        ...apiProgram(program),
+        markdownUrl: `https://openaffiliate.dev/programs/${program.slug}.md`,
+      };
       return {
+        structuredContent: result,
         content: [
           {
             type: "text" as const,
-            text: JSON.stringify(
-              {
-                // A brand with no program gets the page's answer, not terms.
-                ...apiProgram(program),
-                markdownUrl: `https://openaffiliate.dev/programs/${program.slug}.md`,
-              },
-              null,
-              2
-            ),
+            text: JSON.stringify(result, null, 2),
           },
         ],
       };
@@ -274,25 +404,35 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
     {
       title: "List Categories",
       description:
-        "List all affiliate program categories with the number of programs in each",
-      annotations: { readOnlyHint: true },
+        "Use to browse category names and active program counts before filtering a search. " +
+        "Returns all registry categories, including categories with zero active listings. " +
+        "Do not use for program details or commission comparisons; call search_programs with a returned category, then get_program for individual terms.",
+      annotations: READ_ONLY_ANNOTATIONS,
+      outputSchema: { categories: categoryListSchema },
       inputSchema: {},
     },
     async () => {
-      const counts: Record<string, number> = {};
-      for (const p of livePrograms) {
-        counts[p.category] = (counts[p.category] ?? 0) + 1;
-      }
-      const result = categories.map((name) => ({
-        name,
-        count: counts[name] ?? 0,
-      }));
+      const result = categoryCounts();
       return {
+        structuredContent: { categories: result },
         content: [
           { type: "text" as const, text: JSON.stringify(result, null, 2) },
         ],
       };
     }
+  );
+
+  server.registerResource(
+    "categories",
+    "openaffiliate://categories",
+    {
+      title: "OpenAffiliate Categories",
+      description: "All registry category names and active program counts, identical to list_categories. Use a name with search_programs to discover programs.",
+      mimeType: "application/json",
+    },
+    async (uri) => ({
+      contents: [{ uri: uri.href, mimeType: "application/json", text: JSON.stringify(categoryCounts(), null, 2) }],
+    })
   );
 }
 
@@ -307,12 +447,10 @@ export function createMcpRoute(basePath: string) {
   const handler = createMcpHandler(
     registerTools,
     {
-      // Named, because a client listing its connected servers should not be
-      // shown mcp-handler's placeholder ("mcp-typescript server on vercel").
-      // The version stays at the 0.1.0 this endpoint already reported, so the
-      // name is the only thing a connected client sees change, and it moves
-      // one patch step when the tool set does.
-      serverInfo: { name: "openaffiliate", version: "0.1.0" },
+      // mcp-handler 1.1 forwards serverInfo and the remaining options to
+      // McpServer before connect, including icons and instructions.
+      serverInfo: SERVER_INFO,
+      instructions: INSTRUCTIONS,
     },
     { basePath, maxDuration: 30 }
   );
