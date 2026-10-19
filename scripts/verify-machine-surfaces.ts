@@ -42,7 +42,6 @@ import {
   categories,
   categoryToSlug,
   networkToSlug,
-  networksByProgramCount,
   programs,
   isLive,
   liveNetworks,
@@ -1567,12 +1566,15 @@ async function checkServedPages(): Promise<string> {
         const problems = sectionProblems(homeHtml, id, slugs(list));
         if (problems.length) fail(`/ ${problems.join("; ")}`);
       }
-      // The networks band: every live network as a plain link, in /networks order.
-      const networkSlugs = networksByProgramCount().map((n) => networkToSlug(n.network));
+      // The networks band: every live network as a plain link, A to Z as on the /networks grid, in-house last.
+      const networkSlugs = [...cardRows, ...networkRows.filter((row) => row.network === IN_HOUSE)].map((n) => networkToSlug(n.network));
       const nets = sectionProblems(homeHtml, "home-networks", networkSlugs, true, "networks");
       if (nets.length) fail(`/ ${nets.join("; ")}`);
       const dropped = homeHtml.replace(new RegExp(`<a href="/networks/${networkSlugs[0]}"[^>]*>[^<]*</a>`), "");
       if (sectionProblems(dropped, "home-networks", networkSlugs, true, "networks").length === 0) fail("the homepage check passed a page with a network link removed");
+      if (sectionProblems(homeHtml, "home-networks", [networkSlugs[1], networkSlugs[0], ...networkSlugs.slice(2)], true, "networks").length === 0) {
+        fail("the homepage check passed the networks band out of A to Z order");
+      }
     }
 
     // REST: the list and one program of each kind, as served.

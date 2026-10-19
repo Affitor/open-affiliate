@@ -9,7 +9,7 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networksByProgramCount, programs, type Program } from "../src/lib/programs"
+import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, programs, type Program } from "../src/lib/programs"
 import { programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 
@@ -64,12 +64,13 @@ test("homepage sets: 5 and 6, disjoint, featured verified and live", () => {
   for (const p of featured as Program[]) assert.ok(p.verified && isLive(p), p.slug)
 })
 
-test("homepage networks: every live network once, most programs first, in-house last (as on /networks)", () => {
-  const list = networksByProgramCount()
+test("homepage networks: every live network once, A to Z by display name ignoring case, in-house last (the /networks grid)", () => {
+  const list = networksByName()
   assert.deepEqual(list.map((n) => n.network).sort(), [...liveNetworks].sort())
   assert.equal(list.at(-1)!.network, IN_HOUSE)
-  const counts = list.slice(0, -1).map((n) => n.programs.length)
-  assert.deepEqual(counts, [...counts].sort((a, b) => b - a))
+  const names = list.slice(0, -1).map((n) => networkName(n.network).toLowerCase())
+  assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en")))
+  assert.equal(list[0].network, "affitor")
   assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
 })
 
