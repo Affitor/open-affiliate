@@ -116,7 +116,13 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
 
     // Every failure resolves with the API's { error } shape; execute never throws or rejects.
     const tools = [[searchTool, { q: "x" }], [getTool, { slug: "vercel" }], [listTool, {}]] as const
-    const code = async (run: () => Promise<unknown>) => ((await run()) as { error: { code: string } }).error.code
+    // The full openapi Error shape: code, message and an actionable hint, nothing else.
+    const code = async (run: () => Promise<unknown>) => {
+      const { error } = (await run()) as { error: Record<string, string> }
+      assert.deepEqual(Object.keys(error), ["code", "message", "hint"])
+      for (const value of Object.values(error)) assert.ok(typeof value === "string" && value.length > 0)
+      return error.code
+    }
     globalThis.fetch = (async () => { throw new TypeError("Failed to fetch") }) as typeof fetch
     for (const [tool, input] of tools) assert.equal(await code(() => tool.execute(input)), "NETWORK_ERROR", tool.name)
     globalThis.fetch = (async () => new Response("<html>Bad gateway</html>", { status: 502 })) as typeof fetch
@@ -131,7 +137,7 @@ test("WebMCP registers exactly the three read-only tools, preferring document.mo
     cancel.abort()
     assert.equal(await code(() => pending), "ABORTED")
     // A 404 keeps the API's own error body.
-    globalThis.fetch = (async () => Response.json({ error: { code: "NOT_FOUND" } }, { status: 404 })) as typeof fetch
+    globalThis.fetch = (async () => Response.json({ error: { code: "NOT_FOUND", message: "Program not found.", hint: "Search first." } }, { status: 404 })) as typeof fetch
     assert.equal(await code(() => getTool.execute({ slug: "not-a-program" })), "NOT_FOUND")
 
     // Fallback: no document.modelContext.

@@ -18,7 +18,8 @@ export default function APIPage() {
 
       <p className="text-sm text-muted-foreground mb-6">
         Download the <a href="/openapi.json" className="underline">OpenAPI 3.1 specification</a> for parameter and response schemas.
-        Unknown query values are ignored rather than rejected; an unknown slug or API path returns HTTP 404.
+        Unknown parameters, and sort, verified, limit or offset values the API does not recognise, are ignored rather than
+        rejected; a category or type no program has returns an empty list; an unknown slug or API path returns HTTP 404.
         Errors use <code>{'{ "error": { "code": "...", "message": "...", "hint": "..." } }'}</code>.
       </p>
 

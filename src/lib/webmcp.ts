@@ -22,29 +22,33 @@ declare global {
 
 /**
  * GETs a same-origin API path and resolves with its JSON (an API error body
- * included). Every failure resolves with the API's own { error } shape instead
- * of throwing, so an agent always gets a readable result: bad input, a dropped
- * connection, a cancelled call, or a response that is not JSON.
+ * included). Every failure resolves with the API's own error shape,
+ * { error: { code, message, hint } } (openapi Error), instead of throwing, so an
+ * agent always gets a readable result: bad input, a dropped connection, a
+ * cancelled call, or a response that is not JSON.
  */
 async function getJson(path: () => string, signal?: AbortSignal): Promise<unknown> {
-  const failed = (code: string, message: string) =>
-    ({ error: signal?.aborted ? { code: "ABORTED", message: "The call was cancelled." } : { code, message } })
+  const failed = (code: string, message: string, hint: string) => ({
+    error: signal?.aborted
+      ? { code: "ABORTED", message: "The call was cancelled.", hint: "Call the tool again if you still need the result." }
+      : { code, message, hint },
+  })
   let url: string
   try {
     url = path()
   } catch {
-    return failed("INVALID_INPUT", "The input could not be turned into a request.")
+    return failed("INVALID_INPUT", "The input could not be turned into a request.", "Pass an object matching the tool's inputSchema, e.g. a slug from search_programs.")
   }
   let response: Response
   try {
     response = await fetch(url, { method: "GET", headers: { Accept: "application/json" }, signal })
   } catch {
-    return failed("NETWORK_ERROR", "Could not reach the OpenAffiliate API.")
+    return failed("NETWORK_ERROR", "Could not reach the OpenAffiliate API.", "Retry shortly; the same tools are served by the MCP server at /mcp.")
   }
   try {
     return await response.json()
   } catch {
-    return failed("INVALID_RESPONSE", `The API answered HTTP ${response.status} without JSON.`)
+    return failed("INVALID_RESPONSE", `The API answered HTTP ${response.status} without JSON.`, "Retry shortly; /openapi.json describes every response.")
   }
 }
 
