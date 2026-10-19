@@ -39,14 +39,24 @@ async function fetchJSON(path: string) {
   return res.json();
 }
 
+const READ_ONLY_ANNOTATIONS = {
+  readOnlyHint: true,
+  destructiveHint: false,
+  idempotentHint: true,
+  openWorldHint: false,
+};
+
 const server = new McpServer({
   name: "openaffiliate",
-  version: "0.0.3",
+  title: "OpenAffiliate",
+  version: "0.0.4",
 });
 
 server.registerTool(
   "search_programs",
   {
+    title: "Search Programs",
+    annotations: READ_ONLY_ANNOTATIONS,
     description:
       "Search affiliate programs by keyword, category, or commission type",
     inputSchema: {
@@ -84,6 +94,8 @@ server.registerTool(
 server.registerTool(
   "get_program",
   {
+    title: "Get Program",
+    annotations: READ_ONLY_ANNOTATIONS,
     description:
       "Get full details of an affiliate program including agent instructions, commission terms, restrictions, and signup info",
     inputSchema: {
@@ -106,6 +118,8 @@ server.registerTool(
 server.registerTool(
   "list_categories",
   {
+    title: "List Categories",
+    annotations: READ_ONLY_ANNOTATIONS,
     description:
       "List all affiliate program categories with the number of programs in each",
     inputSchema: {},
