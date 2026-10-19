@@ -16,7 +16,6 @@ commission:
 attribution: last-click
 tracking_method: cookie
 payout:
-  conditions: "Commission payments will be made to You on or before forty-five (45) days following Credit Repair Cloud’ receipt of payment for a Sold Account, subject to the other terms set forth herein."
   minimum: 100
   currency: USD
   frequency: net-60
