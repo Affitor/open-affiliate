@@ -7,7 +7,9 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { blockedReason } from "./blocked-hosts"
+import { createRequire } from "node:module"
 import { get } from "./extract-commission-candidates"
+import { httpJson } from "./sync-affitor"
 import { fetchPage, verifyProgram } from "./verify-programs"
 
 const PAGE = "<html>Join our affiliate program: 30% recurring commission. Sign up</html>"
@@ -132,4 +134,18 @@ test("a brace or bracket Location is never handed to curl as a host list", () =>
   }
   assert.equal(get("https://s.example/affiliates", once).code, "")
   assert.deepEqual(requested, ["https://s.example/affiliates"])
+})
+
+test("the Affitor API is read with redirects refused, in the sync and in its merge lane", async () => {
+  const policy = createRequire(import.meta.url)("../.github/scripts/auto-merge-policy.cjs")
+  const seen: (RequestRedirect | undefined)[] = []
+  // A fetch that redirects to a blocked host unless told not to follow.
+  const fetchImpl = (async (_url: string | URL | Request, init?: RequestInit) => {
+    seen.push(init?.redirect)
+    if (init?.redirect === "error") throw new TypeError("redirect refused")
+    return new Response(JSON.stringify({ success: true }), { status: 200 })
+  }) as typeof fetch
+  await assert.rejects(httpJson("https://api.affitor.com/api/marketplace/programs", fetchImpl), /redirect refused/)
+  await assert.rejects(policy.fetchAffitorJson("https://api.affitor.com/api/marketplace/programs", { fetchImpl }), /redirect refused/)
+  assert.deepEqual(seen, ["error", "error"])
 })

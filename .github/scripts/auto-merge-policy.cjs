@@ -307,8 +307,10 @@ async function fetchAffitorJson(url, options = {}) {
       maxBytes: MAX_API_BYTES,
       accept: "application/json",
       ...options,
-      fetchImpl: async (...args) => {
-        const response = await fetchImpl(...args)
+      // The API never redirects; a redirect is refused, not followed, so no
+      // hop can reach a host in schema/blocked-hosts.json.
+      fetchImpl: async (url, init) => {
+        const response = await fetchImpl(url, { ...init, redirect: "error" })
         if (response.status !== 200) throw new Error(`HTTP ${response.status}`)
         return response
       },

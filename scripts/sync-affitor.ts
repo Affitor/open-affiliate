@@ -1058,9 +1058,13 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
   return { entries, written: dryRun ? [] : writes.map(([path]) => path) }
 }
 
-/** The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a program exists or not. */
-export async function httpJson(url: string): Promise<unknown> {
-  const res = await fetch(url, { headers: { accept: "application/json" }, signal: AbortSignal.timeout(20_000) })
+/**
+ * The Affitor API over HTTP. Only a 200 is read: the API answers 200 whether a
+ * program exists or not. It never redirects, so a redirect is refused rather
+ * than followed: no hop can reach a host in schema/blocked-hosts.json.
+ */
+export async function httpJson(url: string, fetchImpl: typeof fetch = fetch): Promise<unknown> {
+  const res = await fetchImpl(url, { headers: { accept: "application/json" }, redirect: "error", signal: AbortSignal.timeout(20_000) })
   if (res.status !== 200) throw new Error(`${url} answered ${res.status}`)
   return res.json()
 }
