@@ -772,6 +772,42 @@ test("global search uses the same percentage rule while flat, tiered and unknown
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "unknown", rate: "varies", value: null }), "Not published")
 })
 
+test("a flat commission reads in the program's own currency, and with none the rate as the source wrote it", () => {
+  const entry = registry.programs.find((p) => p.slug === "planday")! as Parameters<typeof programMd>[0]
+  const cases: [{ rate: string; value: number; currency: string | null }, string][] = [
+    [{ rate: "€20 to €250", value: 250, currency: "EUR" }, "€250"],
+    [{ rate: "from £10", value: 10, currency: "GBP" }, "£10"],
+    [{ rate: "$100", value: 100, currency: "AUD" }, "A$100"],
+    [{ rate: "$25", value: 25, currency: "USD" }, "$25"],
+    [{ rate: "$1,500", value: 1500, currency: "USD" }, "$1,500"],
+    [{ rate: "$20 in Replit credits", value: 20, currency: "USD" }, "$20 in credits"],
+    [{ rate: "€20 to €250", value: 250, currency: null }, "€20 to €250"],
+    [{ rate: "$25", value: 25, currency: null }, "$25"],
+  ]
+  for (const [c, want] of cases) {
+    const commission = { ...verifiedBase.commission, type: "one-time" as const, mode: "flat" as const, duration: null, ...c }
+    const label = `${c.rate} ${c.currency}`
+    assert.equal(commissionDisplay(commission), want, label)
+    assert.equal(clientCommissionDisplay(commission), want, label)
+    assert.equal(commissionChip(commission), `${want} one-time`, label)
+    assert.ok(programMd({ ...entry, commission }).split("\n").includes(`Commission: ${want} one-time`), label)
+  }
+  // A stored "€250" is the figure in euros, not a qualifier beside a dollar figure.
+  assert.deepEqual(page.commissionFigure(withCommission({ type: "one-time", mode: "flat", rate: "€250", value: 250, currency: "EUR" })), { big: "€250", rest: "per sale", kind: "number" })
+  // Every flat commission in the registry outside US dollars: no bare dollar figure on any surface.
+  const entries = registry.programs as unknown as Parameters<typeof programMd>[0][]
+  const foreign = programs.filter((p) => p.commission.mode === "flat" && p.commission.value != null && p.commission.currency !== "USD")
+  assert.ok(foreign.length > 0)
+  for (const p of foreign) {
+    const dollars = `$${p.commission.value!.toLocaleString()}`
+    const shown = p.commission.currency ? commissionDisplay(p.commission) : String(p.commission.rate)
+    assert.equal(commissionDisplay(p.commission), shown, p.slug)
+    assert.equal(clientCommissionDisplay(p.commission), shown, p.slug)
+    if (p.commission.currency) assert.notEqual(shown, dollars, p.slug)
+    assert.ok(programMd(entries.find((e) => e.slug === p.slug)!).includes(`Commission: ${shown}`), p.slug)
+  }
+})
+
 test("payout conditions reach REST, MCP and the .md twin for a verified program, and nothing for an unverified one", async () => {
   const entries = registry.programs as unknown as (Parameters<typeof programMd>[0] & { payout?: { conditions?: string } })[]
   const entry = entries.find((e) => e.payout?.conditions && e.verified && (e.status ?? "active") === "active")
