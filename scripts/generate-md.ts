@@ -48,6 +48,7 @@ import {
   rateBasis,
   networkHeading,
   networkName,
+  byNetworkName,
   type CommissionStats,
   type PaidBy,
 } from "../src/lib/programs"
@@ -857,7 +858,9 @@ export function llmsTxt(): string {
     })
     .join("\n")
 
-  const netLines = liveNetworks
+  // A to Z by display name, in-house last: the homepage band's order (networksByName).
+  const netLines = [...liveNetworks]
+    .sort((a, b) => Number(a === IN_HOUSE) - Number(b === IN_HOUSE) || byNetworkName(a, b))
     .map(n => {
       const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
       return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`
