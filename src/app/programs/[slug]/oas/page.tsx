@@ -269,7 +269,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
         <details className="group mt-10 rounded-xl border border-border bg-card">
           <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 sm:px-5 py-3.5 font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
             {/* No point total while scoring: it would read as a score. */}
-            {scored ? `${fixes.length} ways to add up to ${recoverable} points` : `${fixes.length} ways to add points`}
+            {`${fixes.length} ${fixes.length === 1 ? "way" : "ways"} to add ${scored ? `up to ${recoverable} points` : "points"}`}
             <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
           </summary>
           <p className="border-t border-border px-4 sm:px-5 py-2.5 text-meta text-muted-foreground">Biggest first. A term that is not published counts once it is, and we verify it again.</p>
