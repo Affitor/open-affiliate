@@ -29,12 +29,23 @@ signup_url: https://www.housecallpro.com/paid-affiliates/
 approval: manual
 approval_time: a few days
 restrictions:
-- Refer genuine home-service businesses in the United States or Canada; submit accurate phone and email information with the prospect's actual intent to be contacted
-- No fake leads, submission on another person's behalf, bots, scripts, hidden frames, incentivized referrals or get-paid-fast referral groups
+- Refer genuine home-service businesses in the United States or Canada, with accurate contact information and actual intent to be contacted
+- No fake leads, submissions on another person’s behalf or get-paid-fast referral groups
+- Only new qualified leads and enrollments qualify
+- Use promotional materials only to promote and link to Housecall Pro; no changes without prior written consent
+- Demo accounts are for personal education only; do not share, copy, display or publicly provide them to third parties
+- Obtain necessary intellectual property permissions; do not publish infringing material
+- Promotional properties must not be subject to existing or threatened intellectual property infringement claims or reasons to expect such claims
+- No promotional properties containing or associated with sexually explicit, obscene or pornographic material
+- No promotional properties containing or associated with offensive, profane, hateful, threatening, harmful, defamatory, libelous, harassing or discriminatory material
+- No promotional properties containing or associated with graphically violent material
+- No promotional properties soliciting unlawful behavior
+- Do not claim ownership of supplied promotional materials or their intellectual property
 - No ads directing to your own site or through any affiliate link that compete with Housecall Pro advertising, including but not limited to branded keywords
-- No misleading claims, unauthorized modifications to supplied materials, or offensive or unlawful promotional properties
-- Disclose the affiliate relationship and comply with endorsement rules; only new qualified leads and enrollments qualify
-- The program may terminate affiliates with lead exhaustion above 35% or more than three referrals outside supported regions and may claw back exhausted-lead payouts
+- Do not deliver referrals through mechanisms other than an intended referral, including bots, iframes or hidden frames
+- Do not incentivize referrals
+- Disclose the affiliate relationship and compensation under FTC endorsement rules
+- Lead exhaustion above 35% or more than three referrals outside supported regions may result in termination and payout clawbacks
 marketing_materials: true
 api_available: false
 dedicated_manager: false

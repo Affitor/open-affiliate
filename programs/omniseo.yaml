@@ -25,9 +25,25 @@ payout:
   conditions: Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected by the Company. The affiliate page separately advertises monthly PayPal or Stripe payouts in the following month; both descriptions are retained.
 signup_url: https://omniseo.com/affiliates/
 restrictions:
-- Competitors cannot participate; no self-referrals, cookie stuffing, pop-ups, false or misleading links, masked referrers, fake redirects, personal-data lead compilations or incentivized leads
-- No advertising competing with OmniSEO campaigns, including branded keywords; disclose the affiliate relationship and actual promotional properties
-- No deceptive, misleading or unethical marketing, unauthorized claims or materials, spam, or sanctions and export violations
+- Competitors of the company or its affiliates cannot participate
+- No self-referrals or commissions for customers paying you directly for referrals or participating in another OmniSEO partner program
+- Only accepted new customers qualify; existing customers or active sales prospects during the prior sixty days are excluded
+- Do not distribute or resell OmniSEO services, bind OmniSEO or make unauthorized representations or warranties
+- Use only approved, unaltered trademark images in connection with the partner program
+- Do not use trademarks in misleading or disparaging ways
+- Do not imply OmniSEO endorses, sponsors or approves your products or services
+- Do not use trademarks with obscene, indecent or unlawful topics or materials
+- Disclose the affiliate relationship and provide accurate promotional websites and domains
+- No ads to your own sites or through affiliate links competing with OmniSEO advertising, including branded keywords
+- No cookie stuffing or pop-ups
+- No false or misleading links
+- Do not mask referring URL information
+- Do not deliver leads other than through an intended consumer; no phonebook or personal-data compilations, fake redirects, automation devices, robots, iframes or hidden frames
+- Do not offer incentives for purchases or sign-ups
+- No deceptive, misleading, illegal or unethical marketing; comply with anti-spam, export and sanctions requirements
+- Do not use or disclose confidential information outside the agreement
+- Do not contest company intellectual property ownership or remove proprietary notices
+- Complete payment and tax requirements or commissions may be forfeited after six months
 marketing_materials: true
 api_available: false
 dedicated_manager: false

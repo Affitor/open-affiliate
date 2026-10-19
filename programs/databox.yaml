@@ -26,11 +26,28 @@ payout:
   methods: [paypal]
 signup_url: https://databox.com/affiliate-program
 restrictions:
-- No self-referrals, including companies you own or that employ you
-- No brand-keyword bidding, misspellings, brand ad copy or display URLs, or confusing brand domains and social handles
-- Non-brand paid ads must direct to your own content, not directly to Databox; no cloaking
-- No cookie stuffing, forced clicks, misleading pop-ups, adware, concealed identity or unsolicited commercial messages
-- No unauthorized coupon or discount representations; maintain an English privacy policy and clearly identify your independent status
+- No self-referrals to a company you own or that employs you
+- No manipulation, falsification or inflation of referrals, purchases or commissions
+- No ads competing with Databox branded keywords or brand-name variations and misspellings
+- Paid ads must direct to your own website, blog post, landing page or content, not directly to Databox
+- Use your own domain in paid-search ads; do not use an affiliate link or a domain containing Databox trademarks as the display URL
+- Do not display Databox trademarks in ad headlines or body copy
+- Do not use Databox trademarks in domains, blogs, social accounts, YouTube channels, usernames or affiliate-account URLs
+- No trademark bidding on search engines or other paid-placement services
+- No redirect services or cloaking to mask final destination URLs
+- No cookie stuffing, forced clicks or similar activity
+- Do not post refunds, credits or discounts alongside percent-off, sale, discount or coupon claims
+- No spam, unsolicited commercial email or marketing to non-commercial groups, boards, forums or social networks
+- Do not conceal or misrepresent your identity, domain or return email address; clearly represent your independence from Databox
+- No interstitials, parasitic marketing, shopping-assistance applications, toolbars, shopping wallets or deceptive pop-ups/pop-unders between the referral click and exit from Databox
+- Do not overwrite tracking cookies without a customer-initiated qualifying click
+- Do not intercept searches to redirect traffic or set tracking through iframes, hidden links or automatic pop-ups
+- Do not target text for contextual marketing on websites you do not wholly own
+- Do not remove, replace or block affiliate banners on websites you do not wholly own
+- Do not advertise referral links obtained from Databox non-affiliate email, paid-search or other advertising campaigns
+- Do not imply an available offer requires a click from your website to redeem; coupon-search rankings may require changes or removal from the program
+- Do not copy, sell, distribute or create derivatives of Databox content or products without written authorization
+- Display an English privacy policy describing collection, use, disclosure, security and consumer choices; use consumer data only lawfully
 marketing_materials: true
 api_available: false
 dedicated_manager: false

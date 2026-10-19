@@ -17,12 +17,34 @@ attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/getida
 restrictions:
-- Use only approved promotional websites and social handles; do not impersonate Getida or use confusing brand domains
-- No promotional sites or media with hateful, abusive, discriminatory or sexually explicit content, content infringing intellectual property, or content that violates or encourages violations of laws or regulations
-- No Getida terms in paid ads or keywords, direct or indirect paid links to Getida sales pages, pop-up solicitation, or cash, points, gifts or other referral incentives
-- No self-referrals involving yourself, employees, agents or related group companies; only genuine tracked new paid customers qualify
-- Email marketing requires recipient consent and records of that consent; no false claims, misleading offers or competitor disparagement
-- Follow supplied brand guidelines and safeguard visitor information; do not track visitors after they click through to Getida
+- Use only websites and social-media handles submitted for approval
+- No promotional properties with hate-related, abusive or discriminatory content
+- No promotional properties with sexually explicit content
+- No promotional properties containing intellectual property infringement
+- No promotional properties that violate or encourage violations of laws or regulations
+- Do not design websites, emails or promotions to mislead customers into believing you are Getida
+- Follow supplied brand guidelines and do not challenge Getida ownership or weaken its brand rights or goodwill
+- Do not use or register confusing phrases, marks, logos or domain names
+- Do not use Getida in paid advertisements or as a keyword
+- Do not disparage Getida, its personnel or competitors in promotions
+- Do not use brand assets on promotional goods or products, or in ways that damage goodwill
+- Change or withdraw marketing materials when Getida gives written notice that they are noncompliant
+- Use correctly tagged links without viruses, spyware or harmful programming
+- Clearly identify Getida as the link destination; do not misrepresent or alter its new-customer offer
+- Maintain genuine website content and accurately describe and deliver any promised visitor materials
+- Email marketing requires recipient consent and records of opt-in date, source, name and email address
+- Do not link directly or indirectly from paid advertising to a Getida sales page
+- No brand or variant keyword bidding or prohibited terms in display URLs; enable negative keyword matching
+- Do not make claims, warranties or guarantees beyond Getida-approved marketing materials
+- Do not misrepresent Getida or your relationship with it
+- Do not solicit visitors through pop-up advertisements
+- Do not offer cash, points, gifts or other rewards to entice actions
+- No self-referrals to yourself, employees, agents or related group companies
+- Only genuine tracked new paid customers qualify; do not submit non-genuine leads
+- Do not participate with prior or pending governmental consumer-protection or advertising-law investigations
+- Maintain a privacy policy covering collection, cookies, third-party technology and opt-out choices; investigate regulatory data/privacy inquiries within forty-eight hours
+- Do not disclose or misuse confidential information or track visitors after they click through to Getida; safeguard visitor data
+- Do not assign, transfer or subcontract the agreement without prior written consent
 marketing_materials: true
 api_available: false
 dedicated_manager: false

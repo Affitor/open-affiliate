@@ -30,12 +30,10 @@ signup_url: https://hubstaff.com/affiliate
 approval: manual
 approval_time: "72 hours"
 restrictions:
-- Hubstaff employees cannot participate; referrals must be new U.S. companies supplying legitimate information and adding an employee within thirty days
-- No coupon or deal sites disguising affiliate links, spam, cookie stuffing, tracking-code tampering, misleading or masked links
-- Competing PPC requires written permission; no brand keywords, variants, brand ad copy or display URLs, or direct paid links without written consent; use your own landing page and negative keywords
-- Promote only on social platforms that allow affiliate links and on your own or authorized pages; no Hubstaff-branded Facebook ads or social handles
-- Disclose affiliate compensation and sub-affiliate traffic origins; sub-affiliates must follow the same terms
-- Use approved links and assets without redirects, framing, pop-ups, toolbars, browser extensions or downloadable software
+  - "No coupon or deal sites that disguise the affiliate link as a coupon or deal"
+  - "Written permission required before PPC campaigns on keywords that compete with Hubstaff's own"
+  - "No cookie stuffing or tampering with tracking links"
+
 dashboard_url: null
 # "We use PartnerStack, a state-of-the-art affiliate tracking software" (hubstaff.com/affiliate, checked 2026-10-17)
 network: partnerstack
