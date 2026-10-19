@@ -121,3 +121,15 @@ test("the commission extractor follows redirects by hand and never requests a bl
   assert.deepEqual(get("https://r.example/affiliates", once), { code: "200", body: "ok", final: "https://www.r.example/affiliates" })
   assert.deepEqual(requested, ["https://r.example/affiliates", "https://www.r.example/affiliates"])
 })
+
+test("a brace or bracket Location is never handed to curl as a host list", () => {
+  const requested: string[] = []
+  const once = (url: string) => {
+    requested.push(url)
+    return url === "https://s.example/affiliates"
+      ? { code: "302", body: "", location: "https://{s.example,market.partnerstack.com}/affiliate" }
+      : { code: "404", body: "", location: "" }
+  }
+  assert.equal(get("https://s.example/affiliates", once).code, "")
+  assert.deepEqual(requested, ["https://s.example/affiliates"])
+})

@@ -106,7 +106,9 @@ type Hop = { code: string; body: string; location: string }
 function curlOnce(url: string): Hop {
   const out = execFileSync(
     "curl",
-    ["-s", "-m", "10", "-A", UA, "-w", "\n%{http_code} %{redirect_url}", url],
+    // --globoff: braces and brackets in a URL are characters, never a list of
+    // hosts ("{a.example,market.partnerstack.com}" would request both).
+    ["-s", "--globoff", "--proto", "=http,https", "-m", "10", "-A", UA, "-w", "\n%{http_code} %{redirect_url}", url],
     { encoding: "utf8", timeout: 20_000, maxBuffer: 32 * 1024 * 1024 }
   )
   const i = out.lastIndexOf("\n")
@@ -121,6 +123,10 @@ export function get(url: string, once: (url: string) => Hop = curlOnce): Page {
   let current = url
   try {
     for (let hop = 0; hop <= 10; hop++) {
+      // curl gets the URL as parsed, so the host checked is the host requested.
+      const parsed = new URL(current)
+      if (!/^https?:$/.test(parsed.protocol) || /[{}[\]]/.test(parsed.hostname)) break
+      current = parsed.href
       if (blockedReason(current)) return { code: "", body: "", final: current }
       const res = once(current)
       if (!REDIRECTS.has(Number(res.code)) || !res.location) return { code: res.code, body: res.body, final: current }
@@ -214,7 +220,8 @@ async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Pr
     // An SPA shell that answers 200 for any path has nothing beyond it.
     // No homepage, no baseline: accept nothing rather than guess.
     homeHits ??= home().code === "200" ? vocab(home().body) : Infinity
-    if (vocab(body) - homeHits >= 3) return url
+    // The page that answered 200 itself, so the extraction service gets no redirect to follow.
+    if (vocab(body) - homeHits >= 3) return final
   }
   return null
 }
@@ -228,8 +235,10 @@ async function extract(url: string): Promise<Record<string, unknown> | null> {
     body: JSON.stringify({
       url,
       factCheck: true,
-      maxPages: 3,
-      maxDepth: 1,
+      // This page only: the service would follow links and redirects we cannot
+      // check against schema/blocked-hosts.json.
+      maxPages: 1,
+      maxDepth: 0,
       instructions:
         "Determine whether this company runs an AFFILIATE program where promoters earn a share of referred revenue. Integration partners, resellers, and agency directories are NOT affiliate programs — return has_affiliate_program=false for those. Extract commission terms exactly as published; leave null anything not stated. commission_quote is the verbatim sentence from the page stating the commission.",
       schema: {
