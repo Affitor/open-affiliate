@@ -417,6 +417,10 @@ export default async function ProgramPage({
                   </li>
                 ))}
               </ol>
+              {/* When a commission becomes payable; confirmedTerms left it out of an unverified program. */}
+              {program.payout.conditions && (
+                <p data-term="payout-conditions" className="text-sm leading-relaxed text-foreground/80 mt-4">{program.payout.conditions}</p>
+              )}
               {program.network && program.network !== IN_HOUSE && (
                 <p className="text-xs text-muted-foreground mt-4">{networkHowToJoin(program.network)}</p>
               )}
