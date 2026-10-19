@@ -61,6 +61,7 @@ payout:
   methods:
     - paypal
     - stripe
+  conditions: Commissions are verified and paid out 30 days after the customer's subscription starts. This verification period protects against refunds and chargebacks.
 not_published:
   cookie_days: '2026-10-18'
   payout.minimum: '2026-10-18'

@@ -67,6 +67,7 @@ payout:
   methods:
     - paypal
     - stripe
+  conditions: Commissions are paid 60 days after the transaction date to allow for verification, chargeback protection, and fraud prevention.
 not_published:
   cookie_days: '2026-10-18'
   payout.minimum: '2026-10-18'

@@ -15,7 +15,7 @@ commission:
   currency: USD
   duration: lifetime
   # "Company Payments are processed and paid once per calendar quarter." (accessibe.com/partner-program, checked 2026-10-17)
-  conditions: "Recurring commission on new business and renewals of accessWidget and accessFlow, tiered by the active ARR you refer: Access 20% from $0, Accelerate 25% from $5,000, Ascend 30% from $25,000. Tiers are reviewed annually. One-time services earn a separate 5% to 10%. Commissions are calculated and paid once per calendar quarter."
+  conditions: "Recurring commission on new business and renewals of accessWidget and accessFlow, tiered by the active ARR you refer: Access 20% from $0, Accelerate 25% from $5,000, Ascend 30% from $25,000. Tiers are reviewed annually. One-time services earn a separate 5% to 10%. Commissions are calculated and paid once per calendar quarter. The linked help center separates PartnerStack referral enrollment from reseller onboarding. Its Customer Portal payout guides describe the legacy or reseller account flow, including Stripe and first-year monthly payouts; those terms are not applied to this migrated PartnerStack referral track."
 
 # cookie_days: not assessed in this pass; no numeric attribution window was found in readable pages and the linked application is a JavaScript shell.
 # payout.minimum, payout.methods and approval: not assessed in this pass; the linked application is a JavaScript shell.
