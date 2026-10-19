@@ -15,12 +15,20 @@ commission:
   value: 30
   currency: USD
   duration: "lifetime"
-  conditions: "30% commission for as long as the referred user is active."
+  conditions: "30% commission for as long as the referred user is active. The September 2026 agreement pays on the 8th of each month (next business day if needed), once the balance reaches $5 USD. Its commercial terms govern marketing-page statements; the listing separately describes a 30-day hold and availability around the 13th. The program listing names PayPal and Stripe withdrawal options."
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.calilio.com/partners
-restrictions: null
+restrictions:
+  - Partners must be at least 18; current employees and contractors cannot participate; one account per person or entity
+  - Only new customers on paid Standard or Premium plans qualify; no existing or former customers or active sales leads
+  - No self-referrals for yourself, your employer, controlled entities or immediate household
+  - No brand-keyword paid search or social bidding, brand ad copy/display URLs or direct paid linking unless specifically permitted in writing; add negative keywords
+  - No spam, purchased or scraped contact lists, fake coupons, fabricated testimonials, misleading claims or guaranteed outcomes
+  - No cookie stuffing, forced clicks, hidden pixels, bots, click farms, fake accounts, tracking interference or unauthorized extensions
+  - No impersonation, typosquatting, unauthorized brand changes, harmful or illegal content, piracy, or promotion directed at children
+  - Clearly disclose commissions near each endorsement, protect personal data and do not claim Calilio supports emergency calls
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -47,7 +55,15 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  minimum: 5
+  currency: USD
+  frequency: monthly
+  methods:
+    - paypal
+    - stripe
+approval: manual

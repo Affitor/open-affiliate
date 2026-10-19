@@ -24,7 +24,16 @@ payout:
 
 signup_url: https://affiliates.manatal.com/signup
 approval: auto
-restrictions: null
+# "Not run any pay-per-click campaigns competing with Manatal advertising activity." (https://www.manatal.com/affiliate-program-terms-conditions/, checked 2026-10-18)
+restrictions:
+  - "No unsolicited communications, junk email, spam or other duplicative or unsolicited messages to leads"
+  - "No banners or links on newsgroups, chatrooms, message boards, banner networks, hit farms, guest books etc."
+  - "No pay-per-click campaigns competing with Manatal advertising activity"
+  - "No more than one Rewardful account"
+  - "Use only materials given by Manatal for sales and marketing efforts"
+  - "No excessive telemarketing activities for promoting Manatal"
+  - "No promoting Manatal on sites containing unlawful, hateful, abusive or pornographic content"
+  - "No promoting Manatal by promoting incentive programs such as cash back, vouchers, retro-commission, or any other derivative incentive programs aiming to offer a lower pricing than Manatal"
 
 marketing_materials: true
 api_available: true
@@ -61,7 +70,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

@@ -14,14 +14,21 @@ commission:
   duration: null
   conditions: "A flat amount per approved referral, set by product and billing term: for example Web Hosting Launch $15 monthly or $50 for 1 year, up to $1,000 for DreamPress 20 on a 3-year term. Commissions are approved after a 97-day holding period if the referral does not cancel or miss a payment. Custom tiers for high-volume affiliates."
 
-# cookie window: not published on dreamhost.com/affiliates (checked 2026-10-13)
-
 # "No Minimum Payout ... Payments are sent by direct bank transfer every month" (dreamhost.com/affiliates, checked 2026-10-13)
+# "completes the signup process within thirty (30) days of clicking on the affiliate tracking link" (https://www.dreamhost.com/legal/tune-terms-and-conditions/, checked 2026-10-18)
+cookie_days: 30
 payout:
   minimum: 0
   currency: USD
   frequency: monthly
   methods: [bank]
+
+# "you are prohibited from (1) outranking DreamHosts’s internal paid search ad on any keywords, (2) purchasing or bidding on any DreamHost branded keywords" (https://www.dreamhost.com/legal/tune-terms-and-conditions/, checked 2026-10-18)
+restrictions:
+  - "No bidding on DreamHost branded keywords on search engines"
+  - "No outranking DreamHost's internal paid search ad on any keywords"
+  - "No direct linking to dreamhost.com from paid search ads, and no dreamhost.com as a display URL"
+  - "Coupon, deal and discount-focused sites are subject to initial and ongoing approval"
 
 signup_url: https://www.dreamhost.com/affiliates/
 
@@ -55,10 +62,12 @@ agents:
     - "WordPress sites that need managed hosting"
     - "Developers who need a VPS or dedicated server"
 
+not_published:
+  approval: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

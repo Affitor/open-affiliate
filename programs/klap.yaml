@@ -21,6 +21,8 @@ payout:
   minimum: 20
   currency: USD
   methods: [paypal]
+  # "You can request payout once you reach $20 in earnings." (https://klap.app/affiliate, checked 2026-10-18)
+  frequency: on-request
 
 signup_url: https://klap.app/affiliate
 # "We will evaluate your application and notify you of its acceptance or rejection." (Klap Affiliate Program Terms and Conditions, notion.so/ziggapp/Klap-Affiliate-Program-Terms-and-Conditions-56bd7c6ae25744b4aaa9ea92171e8042, linked from klap.app/affiliate, checked 2026-10-13)
@@ -64,7 +66,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

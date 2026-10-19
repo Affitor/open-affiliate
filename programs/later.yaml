@@ -42,7 +42,13 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: monthly
+  methods:
+  - paypal
+  - stripe
+  conditions: The exact listing states verification and payment in the following month, with February earnings illustrated as available March 13th, followed by PayPal or Stripe withdrawals. Brand pages and the linked agreement remain unassessed because brand robots permission is unavailable.

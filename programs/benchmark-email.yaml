@@ -31,6 +31,8 @@ payout:
   frequency: monthly
   methods: [paypal]
 
+# "Sign up for the affiliate program. Once approved, you'll get a unique tracking link and access to your personal dashboard in TrackDesk." (https://www.benchmarkemail.com/partners/affiliates/, checked 2026-10-18)
+approval: manual
 signup_url: https://www.benchmarkemail.com/partners/affiliates/
 restrictions:
   - "No bidding on or using Benchmark brand terms, misspellings or brand plus modifier terms in any paid ad channel, and brand terms must be negative keywords"
@@ -77,7 +79,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

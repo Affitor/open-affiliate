@@ -50,10 +50,17 @@ agents:
     - "Ecommerce stores compressing product photos"
     - "Agencies optimizing images across client sites"
 
+not_published:
+  commission.duration: "2026-10-18"
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
+  payout.frequency: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

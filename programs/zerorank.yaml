@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once ZeroRank approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/zerorank, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/zerorank
 network: affitor
 
@@ -45,10 +47,12 @@ agents:
     - Marketers working to get cited in AI answers
     - SEO teams adding AI search to their reporting
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

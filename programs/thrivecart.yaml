@@ -15,8 +15,16 @@ commission:
   conditions: "20% on the first 2 sales, rising to 30%, 40%, 50% and 55% from 200 sales over a rolling 12 months. Monthly plans pay every month; annual plans pay once per sale per year."
 attribution: last-click
 tracking_method: cookie
+payout:
+  # "Upon an affiliate sale, your commission is automatically queued for payout and sent via PayPal approximately 14 days after the sale is confirmed." (https://thrivecart.com/company/promote/, checked 2026-10-18)
+  methods: [paypal]
+
+# "To sign up, click the Apply Now button above, fill in the requested details, and wait to be approved." (https://thrivecart.com/company/promote/, checked 2026-10-18)
+approval: manual
 signup_url: https://thrivecart.com/company/promote/
-restrictions: null
+# "No, we do not offer affiliate payouts on promotions that target our own paid campaigns, or use the term "ThriveCart" in a way that might confuse customers over your own brand versu" (https://thrivecart.com/company/promote/, checked 2026-10-18)
+restrictions:
+  - "No affiliate payouts on promotions that target ThriveCart's own paid campaigns, or that use the term \"ThriveCart\" in a way that might confuse customers over your own brand versus ThriveCart's"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -37,10 +45,13 @@ agents:
   use_cases:
   - Course creators selling digital products
   - Coaches monetizing lead magnets
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: firstpromoter

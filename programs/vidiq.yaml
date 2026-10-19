@@ -26,6 +26,13 @@ payout:
   frequency: net-60
   methods: [paypal, bank, check]
 
+# "The fact that we auto-approve applications does not imply that we may not re-evaluate your application at a later time." (https://vidiq.com/the-vidiq-affiliate-program-agreement, checked 2026-10-18)
+approval: auto
+# "Affiliates that bid in their Pay-Per-Click (“PPC”) campaigns on keywords such as vidIQ.com , vidIQ, www.vidIQ.com , and/or any misspellings or similar alterations of these" (https://vidiq.com/the-vidiq-affiliate-program-agreement, checked 2026-10-18)
+restrictions:
+  - "No bidding on vidIQ, its domain names or misspellings in PPC campaigns"
+  - "No spamming or unsolicited commercial email"
+  - "No site designed to resemble vidIQ or to lead customers to believe you are vidIQ"
 signup_url: https://vidiq.com/affiliates
 
 dashboard_url: null
@@ -58,10 +65,13 @@ agents:
     - "Creators optimizing titles, tags and thumbnails"
     - "Channels tracking competitors and performance"
 
+not_published:
+  commission.duration: "2026-10-18"
+  payout.minimum: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
