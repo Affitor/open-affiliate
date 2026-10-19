@@ -18,15 +18,13 @@ commission:
   value: 180
   currency: USD
   duration: null
-  conditions: "One flat commission per new paying customer, per product (Fax.Plus and Sign.Plus): $20 on Personal or Professional (Sign.Plus) and Basic or Premium (Fax.Plus) plans, $90 on Business or Enterprise plans of either product, so a customer who buys both products can earn up to $180. The terms count a referral once the customer buys an annual plan or completes two consecutive monthly renewals; the PartnerStack offer records say three monthly renewals. Commission is payable only after Alohi receives the customer's payment and is canceled on chargebacks, refunds or cancellations. The terms say payouts start once a minimum payout threshold is met without naming an amount, and the listing says no minimums."
+  conditions: "One flat commission per new paying customer, per product (Fax.Plus and Sign.Plus): $20 on Personal or Professional (Sign.Plus) and Basic or Premium (Fax.Plus) plans, $90 on Business or Enterprise plans of either product, so a customer who buys both products can earn up to $180. The terms count a referral once the customer buys an annual plan or completes two consecutive monthly renewals; the PartnerStack offer records say three monthly renewals. Commission is payable only after Alohi receives the customer's payment and is canceled on chargebacks, refunds or cancellations. The terms require a minimum payout threshold but do not publish its amount. The listing describes flat per-customer commissions as having no tiers or minimums; that does not establish a numeric withdrawal threshold."
 
 # "Referred User cookies are valid for thirty (30) days." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
 cookie_days: 30
 
 # "Commission invoices are generated on the first day of each month for approved commissions from the prior month." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
 # "All Commission Fee payments are made in U.S. Dollars" (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
-# payout.minimum: stated two ways, so left out: "the minimum payout threshold has been met" (alohi.com/affiliates-terms-of-services) vs "No tiers, no minimums, no guesswork." (market.partnerstack.com/page/alohi), checked 2026-10-17
-# methods: not assessed in this pass; the application returns a JavaScript shell (checked 2026-10-18).
 payout:
   currency: USD
   frequency: monthly
@@ -91,3 +89,6 @@ last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'

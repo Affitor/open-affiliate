@@ -15,14 +15,19 @@ commission:
   value: 30
   currency: USD
   duration: null
-  conditions: "30% on Pro annual, Pro monthly and Team monthly plans; 15% on Team annual. Annual plans pay on the first year only, monthly plans on the first month only; renewals excluded. Paid out 30 days after the subscription starts, through PartnerStack."
+  conditions: "30% on Pro annual, Pro monthly and Team monthly plans; 15% on Team annual. Annual plans pay on the first year only, monthly plans on the first month only; renewals excluded. Paid out 30 days after the subscription starts, through PartnerStack. The terms require conversion within 30 days after the free trial ends; they do not state a tracking-cookie lifetime. The program listing names PayPal and Stripe, with alternatives for regions without PayPal. The terms require prior written approval for all paid advertising, despite the listing allowing non-branded search."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/beautifulai
 approval: manual
 restrictions:
-- No bidding on Beautiful.ai brand keywords, misspellings or variants in any paid media channel
-- No affiliate links in pop-ups, pop-unders or other intrusive ad formats without prior written approval
+  - All paid advertising requires prior written approval; do not bid on brand keywords, misspellings or variants
+  - No self-referrals involving yourself, your company, employees or contractors; only new customers qualify
+  - No spam, misleading claims, impersonation, deceptive domains, tracking manipulation, cookie stuffing, fake traffic or duplicate accounts
+  - Pop-ups, pop-unders and intrusive ad formats require prior written approval
+  - Coupon, deal, cashback and loyalty partnerships require specific written approval; use only assigned, approved offers within their approved audience, channel and dates
+  - Do not use unauthorized coupons, coupon injectors, extensions or overlays to force clicks, intercept traffic or overwrite attribution
+  - Use approved brand assets, obtain permission for modifications and clearly disclose the affiliate relationship
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -47,7 +52,15 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: net-30
+  methods:
+    - paypal
+    - stripe
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'

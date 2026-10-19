@@ -12,7 +12,7 @@ commission:
   value: 10
   currency: USD
   duration: "12 months"
-  conditions: "10% of a referred customer's monthly software subscription fees for up to the first 12 months; execution, token and consumption fees are excluded. A registered lead must be accepted by Airia, subscribe within 90 days and remain subscribed for at least 90 days. Refunds may reduce or reverse referral fees. The extra 20% PartnerStack listing bonus ran only through March 2026."
+  conditions: "10% of a referred customer's monthly software subscription fees for up to the first 12 months; execution, token and consumption fees are excluded. A registered lead must be accepted by Airia, subscribe within 90 days and remain subscribed for at least 90 days. Refunds may reduce or reverse referral fees. The extra 20% PartnerStack listing bonus ran only through March 2026. Referral Addendum section 3.1 incorporates the PartnerStack payout overview: monthly commission invoices are reviewed for seven days, with withdrawals normally available between the 8th and 13th through PayPal, Stripe or direct deposit, subject to Airia paying its invoice and processing delays. The registered-lead conversion period does not establish a tracking-cookie duration."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/airia
@@ -54,3 +54,12 @@ updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: monthly
+  methods:
+    - paypal
+    - stripe
+    - bank
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'

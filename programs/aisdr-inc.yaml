@@ -22,8 +22,6 @@ payout:
   currency: USD
   frequency: quarterly
 signup_url: https://aisdr.com/aisdr-partnership/
-# "Just book a meeting with us" (aisdr.com/aisdr-partnership/, checked 2026-10-18); human onboarding, not instant self-service enrollment.
-approval: manual
 restrictions: null
 marketing_materials: true
 api_available: false
@@ -53,3 +51,9 @@ updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  approval: '2026-10-18'
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  restrictions: '2026-10-18'

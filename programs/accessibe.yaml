@@ -77,3 +77,8 @@ last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  approval: '2026-10-18'

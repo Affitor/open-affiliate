@@ -20,7 +20,7 @@ commission:
   value: 40
   currency: USD
   duration: lifetime
-  conditions: "Bronze pays 30% for the displayed $0-$2,000/month revenue band, Silver 35% for $2,000-$5,000/month, and Gold 40% over $5,000/month. Exact overlapping band boundaries are not explained. Commission continues while the referred customer stays subscribed. The linked PartnerStack offer states the matching 30% starting rate. Commissions undergo a standard 30-day validation period after invoicing, with payment issued within 60 days on average. There is no minimum payout threshold; earnings may be withdrawn on request once available. Payout methods and currency were not assessed in this pass."
+  conditions: "Bronze pays 30% for the displayed $0-$2,000/month revenue band, Silver 35% for $2,000-$5,000/month, and Gold 40% over $5,000/month. Exact overlapping band boundaries are not explained. Commission continues while the referred customer stays subscribed. The linked PartnerStack offer states the matching 30% starting rate. Commissions undergo a standard 30-day validation period after invoicing, with payment issued within 60 days on average. There is no minimum payout threshold; earnings may be withdrawn on request once available. Payout methods and currency are not published in the reviewed public program sources."
 # cookie_days and payout.methods: not assessed in this pass; the linked application is a JavaScript shell. Generic network defaults are not used.
 # "there’s no minimum payout threshold" (adcreative.ai/affiliate, checked 2026-10-18)
 payout:
@@ -70,3 +70,6 @@ status: active
 signup_url_type: official
 verified_by: backfill-auto
 verified_at: 2026-04-18 21:44:54.635000+00:00
+not_published:
+  cookie_days: '2026-10-18'
+  payout.methods: '2026-10-18'

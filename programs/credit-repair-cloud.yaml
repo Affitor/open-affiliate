@@ -11,15 +11,25 @@ commission:
   mode: percentage
   value: 30
   currency: USD
-  duration: null
-  conditions: "30% of all fees received for a referred account; the account must generate at least $179 a month."
+  duration: "lifetime"
+  conditions: "30% of all fees received for a referred account; the account must generate at least $179 a month. The program listing states lifetime account commissions, a renewable 90-day cookie, monthly PayPal or Stripe cash-out and a one-month grace period. The affiliate agreement states payment on or before 45 days after receipt of a qualifying account payment; refunds, chargebacks or fraudulent sales can reverse commissions."
 attribution: last-click
 tracking_method: cookie
 payout:
   minimum: 100
   currency: USD
+  frequency: monthly
+  methods:
+    - paypal
+    - stripe
 signup_url: https://market.partnerstack.com/page/creditrepaircloud
-restrictions: null
+restrictions:
+  - No self-referrals, fictitious accounts, paying for another person's account, cash rebates or monetary incentives
+  - No spam, hijacking company ads or communities, offensive promotion, false claims or misleading income claims
+  - No brand or product keyword bidding, confusingly similar terms or prohibited uses in paid ad copy, display or destination URLs and meta tags
+  - Conspicuously disclose independent affiliate status and referral payments using the required disclaimer
+  - Follow brand guidelines and use only authorized assets; do not speak for the company or imply unauthorized third-party endorsement
+  - Do not disparage the company or others; this obligation survives termination
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -44,7 +54,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 90
+not_published:
+  approval: '2026-10-18'

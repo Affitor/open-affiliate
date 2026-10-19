@@ -14,16 +14,27 @@ commission:
   value: 30
   currency: USD
   duration: "12 months"
-  conditions: "30% of first-year subscription revenue for every qualified customer; higher solution-partner tiers earn lifetime commissions, capped at $10,000 (Tier 2) or $20,000 (Tier 3) per customer."
+  conditions: "30% of first-year subscription revenue for every qualified customer; higher solution-partner tiers earn lifetime commissions, capped at $10,000 (Tier 2) or $20,000 (Tier 3) per customer. The agreement directly links the PartnerStack payout guide, which requires at least $5 USD after fees for withdrawal and names PayPal, Stripe or direct deposit. Availability follows Close approval, company payment and processing; the guide estimates the 13th of the next month and allows delays."
 attribution: last-click
 tracking_method: cookie
 payout:
+  minimum: 5
   currency: USD
   frequency: monthly
+  methods:
+    - paypal
+    - stripe
+    - bank
 signup_url: https://close.com/partners
 approval: manual
 approval_time: "1-2 business days"
-restrictions: null
+restrictions:
+  - Use approved tracking links and accurate, current application information; sites must be live and have a clear privacy policy
+  - No self-referrals, including client accounts using the same or a similar domain as the partner
+  - No bidding on Close brand keywords; follow the paid-advertising guidelines and negative keyword list in the partner resource library
+  - No spam, concealed identity, fake leads, deceptive pop-ups, cookie overwriting, traffic interception or parasiteware
+  - No discounts, promotions or special offers without explicit approval
+  - No infringing, illegal, discriminatory, sexually explicit, violent, impersonating or otherwise unsuitable websites or confusing brand domains
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -46,7 +57,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
