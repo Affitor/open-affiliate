@@ -344,6 +344,17 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
   assert.deepEqual(lag("monthly", "Commissions are paid monthly for sales made through the third month following signup."), [], "a duration, not a wait")
   assert.deepEqual(lag("monthly", "Payout is made on May 31, 2026, 30 days after the sale."), [], "a year is not days")
   assert.deepEqual(lag("monthly", "Payout is made on MARCH 31, 30 days after the sale."), [])
+  // Codex r6.
+  for (const text of [
+    "Commissions are paid within 30 days after approval; refunds are issued within 60 days after purchase.",
+    "Commissions are paid within 30 days after approval; refunds are paid within 60 days after purchase.",
+    "Commissions are paid monthly, and customers can request refunds within 60 days after purchase.",
+    "Commissions are paid monthly through the end of the third month following signup.",
+    "Commissions are paid monthly until the end of the third month following signup.",
+    "Payout is made on 2026-05-31, 30 days after the sale.",
+    "Payout is made on 05/31, 30 days after the sale.",
+  ]) assert.deepEqual(lag("monthly", text), [], text)
+  assert.match(lag("monthly", "After the refund period, commissions are paid 45 days after the sale.")[0], /45-day wait/, "a refund earlier in the sentence is not this count's")
   for (const text of ["Payouts are monthly;" + ";".repeat(140000), "Paid 30 days after sale, ".repeat(140000)]) {
     assert.deepEqual(lag("monthly", text), [], "a long text is read without overflowing the stack")
   }

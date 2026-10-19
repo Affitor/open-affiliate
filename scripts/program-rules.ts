@@ -177,16 +177,20 @@ const JOIN = new Set([",", "-", "–", "or", "and", "to"])
 /** A number right after one of these is an amount ("$100", "USD 100") or a date ("May 31"), never days. */
 const notCount = (token: string | undefined) =>
   token != null && (/^[$€£¥₹]$/.test(token) || /^[A-Z]{3}$/.test(token) || /^(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*$/i.test(token))
-/** "at the end of the third month following" waits about 30 days a month; "through the third month" is a duration, not a wait. */
+/** "at the end of the third month following" waits about 30 days a month; "through (the end of) the third month" is a duration, not a wait. */
 const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
-const MONTHS_AFTER = new RegExp(String.raw`\bend\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
+const MONTHS_AFTER = new RegExp(String.raw`\bat\s+the\s+end\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
 /**
- * A clause about refunds, returns or the cookie states no payout wait unless
- * it says the commission is paid, payable, held or reviewed: "refunds are
- * accepted up to 60 days after payment" is about the refund.
+ * A count whose own words name a refund, return, cancellation or the cookie
+ * ("refunds are issued within 60", "customers can request refunds within
+ * 60", "the cookie lasts 60") is not a payout wait. Its own words: the last
+ * 40 characters before "days", back to a comma or semicolon that is not part
+ * of a list of numbers.
  */
 const NOT_PAYOUT = /\b(?:refund|return|chargeback|cancel|cookie|click)/i
-const PAYOUT = /\b(?:paid|payable|payouts?|held|withheld|holds?|reviewed|locked|locking|released|issued|disbursed)\b/i
+const leadOf = (before: string) => before.slice(-40).split(/[,;](?!\s*\d)/).pop() ?? ""
+/** "2026-05-31", "05/31/2026", "05/31": a date, not a count ("35-40" stays a range). */
+const DATE = /\b\d{4}-\d{1,2}-\d{1,2}\b|\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\b/g
 
 /**
  * The wait a "days after" names: the largest number of the count written
@@ -199,7 +203,7 @@ const PAYOUT = /\b(?:paid|payable|payouts?|held|withheld|holds?|reviewed|locked|
  */
 function waitBefore(text: string): number {
   // "$1,500": a thousands group is one number, so its last digits are not a count.
-  const tokens = digits(text.slice(-200)).replace(/(\d),(?=\d{3}(?!\d))/g, "$1").match(TOKEN) ?? []
+  const tokens = digits(text.slice(-200)).replace(DATE, " date ").replace(/(\d),(?=\d{3}(?!\d))/g, "$1").match(TOKEN) ?? []
   if (/^(?:business|calendar)$/i.test(tokens.at(-1) ?? "")) tokens.pop()
   let wait = 0
   let counted = false
@@ -217,16 +221,17 @@ function waitBefore(text: string): number {
 }
 
 /**
- * The longest wait one clause states: "N days after/following", or "the
- * Nth month following" at 30 days a month. A clause about refunds, returns
- * or the cookie that names no payment ("refunds are accepted up to 60 days
- * after purchase") states none.
+ * The longest wait one clause states: "N days after/following", or "at the
+ * end of the Nth month following" at 30 days a month. A count about a
+ * refund, return or the cookie states none.
  */
 function clauseWait(clause: string): number {
-  if (NOT_PAYOUT.test(clause) && !PAYOUT.test(clause)) return 0
   // A loop, not Math.max(...): a long text must not overflow the stack.
   let wait = 0
-  for (const m of clause.matchAll(DAYS_AFTER)) wait = Math.max(wait, waitBefore(clause.slice(0, m.index)))
+  for (const m of clause.matchAll(DAYS_AFTER)) {
+    const before = clause.slice(0, m.index)
+    if (!NOT_PAYOUT.test(leadOf(before))) wait = Math.max(wait, waitBefore(before))
+  }
   for (const m of clause.matchAll(MONTHS_AFTER)) {
     const word = ORDINALS.indexOf(m[1].toLowerCase())
     wait = Math.max(wait, 30 * (word >= 0 ? word + 2 : Number(m[1][0])))
