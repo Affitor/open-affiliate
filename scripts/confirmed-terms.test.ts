@@ -763,3 +763,26 @@ test("global search uses the same percentage rule while flat, tiered and unknown
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "tiered", rate: "10–20%", value: 20 }), "10–20%")
   assert.equal(searchDisplay({ ...verifiedBase.commission, mode: "unknown", rate: "varies", value: null }), "Not published")
 })
+
+test("payout conditions reach REST, MCP and the .md twin for a verified program, and nothing for an unverified one", async () => {
+  const entries = registry.programs as unknown as (Parameters<typeof programMd>[0] & { payout?: { conditions?: string } })[]
+  const entry = entries.find((e) => e.payout?.conditions && e.verified && (e.status ?? "active") === "active")
+  assert.ok(entry, "no verified program stores payout.conditions")
+  const p = getProgram(entry.slug)!
+  const text = entry.payout!.conditions!
+  assert.equal(p.payout.conditions, text, "the mapper keeps payout.conditions")
+  for (const [surface, body] of [["REST", await restGetProgram(p.slug)], ["MCP get_program", await mcpGetProgram(p.slug)]] as const) {
+    assert.equal((body.payout as Program["payout"]).conditions, text, surface)
+  }
+  assert.ok(programMd(entry).split("\n").includes(`Payout conditions: ${text}`))
+  const off = programMd({ ...entry, verified: false })
+  assert.equal(off.includes("Payout conditions:"), false)
+  assert.equal(off.includes(text), false)
+  assert.deepEqual(termsMdProblems({ ...p, verified: false }, off), [])
+  assert.deepEqual(confirmedTerms({ ...p, verified: false }).payout, {})
+  // The .md check reads the line as generate-md writes it: line breaks collapsed, < > & as entities.
+  const odd = "Paid after <30 days> & the\nrefund window *ends*."
+  const md = programMd({ ...entry, payout: { ...entry.payout, conditions: odd } })
+  assert.deepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, md), [])
+  assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
+})

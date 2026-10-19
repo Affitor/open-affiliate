@@ -237,6 +237,10 @@
               "stripe"
             ]
           }
+        },
+        "conditions": {
+          "type": "string",
+          "description": "When a commission becomes payable, in the terms' own words: a hold or validation period, a payout cycle, a withdrawal rule. Shown with the payout once the terms are verified."
         }
       }
     },

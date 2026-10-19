@@ -159,7 +159,7 @@ type Program = {
   short_description?: string
   commission: Commission
   cookie_days?: number | null
-  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null } | null
+  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null; conditions?: string | null } | null
   attribution?: string | null
   tracking_method?: string | null
   signup_url?: string | null
@@ -367,6 +367,7 @@ export function programMd(entry: Program): string {
     alsoOnLine(p),
     confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
     payout ? `Payout: ${mdEscape(payout)}` : null,
+    confirmed && p.payout?.conditions ? `Payout conditions: ${mdEscape(p.payout.conditions)}` : null,
     p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
     p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
     `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
