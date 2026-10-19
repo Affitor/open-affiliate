@@ -5,21 +5,7 @@ import { ProgramLogo } from "@/components/program-logo"
 import { SameTeamTag } from "@/components/same-team-tag"
 import { SaveButton } from "@/components/save-button"
 import { ImpressionTracker } from "@/components/impression-tracker"
-import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms"
-import { affiliateScore, commissionDisplay, commissionLabel, type Program } from "@/lib/client-programs"
-
-/** "30% recurring/12mo"; the type alone says nothing without a rate, so an unpublished rate is just that. */
-function commissionChip(c: Program["commission"]): string {
-  const figure = commissionDisplay(c)
-  return figure === "Not published" ? "Rate not published" : `${figure} ${commissionLabel(c)}`
-}
-
-/** The cookie as the program page states it; unconfirmed until the terms are checked. */
-function cookieChip(p: Program): string {
-  if (!termsConfirmed(p)) return UNCONFIRMED
-  if (p.cookieDays == null) return "Cookie not published"
-  return p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays}d cookie`
-}
+import { affiliateScore, commissionChip, cookieChip, type Program } from "@/lib/client-programs"
 
 export function ProgramCardGrid({ program }: { program: Program }) {
   return (
@@ -106,10 +92,11 @@ export function ProgramRowList({ program }: { program: Program }) {
         <Badge variant="secondary" className="text-xs">
           {commissionChip(program.commission)}
         </Badge>
-        <Badge variant="outline" className="text-xs">
+        {/* From lg: with the score and commission it overflows a 640px row. */}
+        <Badge variant="outline" className="hidden lg:inline-flex text-xs">
           {cookieChip(program)}
         </Badge>
-        <span className="hidden lg:inline text-xs text-muted-foreground">
+        <span className="hidden xl:inline text-xs text-muted-foreground">
           {program.category}
         </span>
       </div>
