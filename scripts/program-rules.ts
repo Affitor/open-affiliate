@@ -162,8 +162,17 @@ export function commissionTermProblems(data: Record<string, unknown>): string[] 
 
 /** Frequencies that name a payment cadence and no waiting period. */
 const CADENCES = new Set(["daily", "weekly", "bi-weekly", "twice-monthly", "monthly"])
-/** "45 days after", "35-40 business days following": the upper number is the lag. */
-const LAG = /\b(\d+)\s+(?:business\s+|calendar\s+)?days?\s+(?:after|following)\b/gi
+/**
+ * "45 days after", "forty-five (45) days after", "35-40 business days
+ * following", "120, 60 or 10 days after": every number before "days" counts,
+ * and the largest is the wait. A separator is required between numbers, so a
+ * long digit run cannot backtrack.
+ */
+const NUMBER = String.raw`\(?\d+\)?`
+const LAG = new RegExp(
+  String.raw`(?<![\w.])(${NUMBER}(?:\s*(?:,|-|–|\bor\b|\band\b|\bto\b)\s*${NUMBER})*)\s+(?:business\s+|calendar\s+)?days?\s+(?:after|following)\b`,
+  "gi",
+)
 
 /**
  * A commission paid N days after the sale, the customer's payment or the end
@@ -183,7 +192,7 @@ export function payoutLagProblems(data: Record<string, unknown>): string[] {
   for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
     if (typeof text !== "string") continue
     for (const { sentence } of proseSentences(text)) {
-      const days = Math.max(0, ...[...sentence.matchAll(LAG)].map((m) => Number(m[1])))
+      const days = Math.max(0, ...[...sentence.matchAll(LAG)].flatMap((m) => m[1].match(/\d+/g)!.map(Number)))
       if (days > 30) {
         problems.push(
           `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +

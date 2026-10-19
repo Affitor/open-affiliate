@@ -44,7 +44,7 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly  # daily | weekly | bi-weekly | twice-monthly | monthly | quarterly | on-request | net-30 | net-60
-                      # paid N days after the sale: net-30 up to 30 days, net-60 for 31-60, never monthly
+                      # paid more than 30 days after the sale: net-60 (31-60 days), not a cadence like monthly
   methods: [bank, paypal]
 
 network: in-house           # partnerstack | impact | rewardful | ... | in-house (optional)
