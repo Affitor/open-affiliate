@@ -17,7 +17,7 @@ commission:
     The higher rate applies only to new subscribers after each threshold. Earlier referred subscribers keep the rate that applied when they first subscribed, including on renewals, while the subscription remains active.
     Commission is calculated on net subscription revenue after the 15% Apple App Store or Google Play store fee. Refunds and similar adjustments can still reduce commission.
     Each commission is subject to a 30-day hold after the qualifying paid subscription event (including renewals). Eligible commissions are then paid monthly, subject to the $50 minimum.
-  cookie_days: 90
+cookie_days: 90
 
 payout:
   minimum: 50
