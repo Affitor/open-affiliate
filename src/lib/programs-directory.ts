@@ -32,14 +32,14 @@ export function directoryGroups(programs: Pick<Program, "slug" | "name" | "statu
 }
 
 /**
- * The homepage's three program sets, disjoint: the Rankings preview (top 5
- * live by Affiliate Score, the /rankings order), then 6 Featured and 30 more
- * verified live programs in the same order, skipping any already shown.
+ * The homepage's two program sets, disjoint: the Rankings preview (top 5
+ * live by Affiliate Score, the /rankings order), then 6 Featured verified
+ * live programs in the same order, skipping any already shown.
  */
-export function homepageSets(programs: Program[]): { rankings: Program[]; featured: Program[]; row: Program[] } {
+export function homepageSets(programs: Program[]): { rankings: Program[]; featured: Program[] } {
   const ranked = programs.filter(isLive).sort(byScore(affiliateScore))
   const rankings = ranked.slice(0, 5)
   const shown = new Set(rankings.map((p) => p.slug))
   const verified = ranked.filter((p) => p.verified && !shown.has(p.slug))
-  return { rankings, featured: verified.slice(0, 6), row: verified.slice(6, 36) }
+  return { rankings, featured: verified.slice(0, 6) }
 }

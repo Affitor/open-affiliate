@@ -19,7 +19,10 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [paypal, stripe]
+  methods:
+  - paypal
+  - stripe
+  conditions: Payments due hereunder will be made within forty-five (45) days after the end of the calendar month in which the corresponding amounts are collected by the Company. The affiliate page separately advertises monthly PayPal or Stripe payouts in the following month; both descriptions are retained.
 signup_url: https://omniseo.com/affiliates/
 restrictions: null
 marketing_materials: true
@@ -45,7 +48,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+approval: manual
+not_published:
+  payout.minimum: '2026-10-18'

@@ -70,8 +70,10 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.methods: '2026-10-18'

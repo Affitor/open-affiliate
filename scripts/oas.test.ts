@@ -15,6 +15,7 @@ import {
   CHECK_IDS,
   CHECKS,
   improveText,
+  isStale,
   oasScores,
   oasValue,
   partEarned,
@@ -242,33 +243,48 @@ test("rank line: #1 always, others only with 5 or more ranked", () => {
   assert.equal(rankText(null), null)
 })
 
-test("v1.1: an absent term is Not published only with a marker; unmarked it is not assessed for that program", () => {
+test("v1.1/v1.2: an absent term is Not published only with a marker; unmarked it is not assessed yet, so no number", () => {
   const marked = scoreProgram(yaml("p", { restrictions: null, not_published: { restrictions: "2026-10-15" } }), TODAY)
   const t8 = marked.checks.find((c) => c.id === "T8")!
   assert.deepEqual([t8.state, t8.checked, t8.points], ["not_public", "2026-10-15", 0])
   assert.equal(marked.transparency, 64)
 
   const unmarked = scoreProgram(yaml("p", { restrictions: null, not_published: null }), TODAY)
-  assert.equal(states(unmarked).T8, "held_out")
-  assert.deepEqual([unmarked.transparency, unmarked.oas], [70, 100], "an unchecked term costs nothing")
+  assert.equal(states(unmarked).T8, "checking")
+  assert.deepEqual([unmarked.transparency, unmarked.oas, oasValue(unmarked)], [null, null, null], "an unchecked term neither costs nor gives points")
 
-  // An unmarked absent cookie holds out T3 and V1 together; Partner value spreads over V2 and V3.
+  // An unmarked absent cookie leaves T3 and V1 unassessed.
   const cookie = scoreProgram(yaml("p", { cookie_days: undefined, not_published: {} }), TODAY)
-  assert.deepEqual([states(cookie).T3, states(cookie).V1], ["held_out", "held_out"])
-  assert.equal(cookie.checks.find((c) => c.id === "V2")!.max, 15)
-  assert.deepEqual([cookie.transparency, cookie.partner_value], [70, 30])
+  assert.deepEqual([states(cookie).T3, states(cookie).V1], ["checking", "checking"])
+  assert.equal(oasValue(cookie), null)
 
   // A marker for another field does not mark this one.
-  assert.equal(states(scoreProgram(yaml("p", { approval: undefined, not_published: { cookie_days: "2026-10-15" } }), TODAY)).T7, "held_out")
+  assert.equal(states(scoreProgram(yaml("p", { approval: undefined, not_published: { cookie_days: "2026-10-15" } }), TODAY)).T7, "checking")
 
-  // Nothing marked and cookie, minimum and schedule all absent: Partner value has nothing assessed, so Scoring in progress.
-  const bare = scoreProgram(yaml("p", { cookie_days: undefined, payout: { methods: ["paypal"] }, not_published: null }), TODAY)
-  assert.deepEqual([states(bare).V1, states(bare).V2, states(bare).V3], ["checking", "checking", "checking"])
-  assert.equal(oasValue(bare), null)
-
-  // Stated terms ignore markers; a conflict still fails the check.
+  // Stated terms ignore markers; a conflict still fails the check (assessed, so a number).
   assert.equal(state({ not_published: { cookie_days: "2026-10-15" } }, "T3"), "met")
-  assert.equal(state({ cookie_days: undefined, conflicts: [{ field: "cookie_days", quote: "30 vs 90 days" }], not_published: null }, "T3"), "not_met")
+  const conflict = scoreProgram(yaml("p", { cookie_days: undefined, conflicts: [{ field: "cookie_days", quote: "30 vs 90 days" }], not_published: null }), TODAY)
+  assert.deepEqual([states(conflict).T3, states(conflict).V1, conflict.oas], ["not_met", "not_met", 80])
+})
+
+test("v1.2 (spec fixtures): a number needs every check assessed; only a gate-level hold-out redistributes", () => {
+  // Thin YAML, like visualcv: only the rate and a 60-day cookie, nothing marked. v1.1 gave it 100; v1.2 gives no number.
+  const thin = scoreProgram(
+    yaml("thin", { commission: { type: "recurring", rate: "30%", duration: null }, payout: null, approval: undefined, restrictions: null, not_published: null }),
+    TODAY,
+  )
+  assert.equal(oasValue(thin), null)
+  assert.deepEqual(thin.checks.filter((c) => c.state === "met").map((c) => c.id), ["T1", "T3", "V1"])
+
+  // All 11 assessed, approval and rules marked Not published: a number, below 100.
+  const assessed = scoreProgram(yaml("p", { approval: undefined, restrictions: null }), TODAY)
+  assert.ok(assessed.checks.every((c) => c.state !== "checking" && c.state !== "held_out"))
+  assert.deepEqual([assessed.transparency, assessed.partner_value, oasValue(assessed)], [58, 30, 88])
+
+  // A check held out for every program after a gate (HELD_OUT) still spreads its points: T8 out, T1-T7 scaled to 70.
+  const gate = scoreProgram(yaml("p", { restrictions: null, not_published: null }), TODAY, ["T8"])
+  assert.equal(states(gate).T8, "held_out")
+  assert.deepEqual([gate.transparency, oasValue(gate)], [70, 100])
 })
 
 test("v1.1 markers are validated at build: known terms, real dates, a map", () => {
@@ -292,7 +308,7 @@ test("the registry's own YAML: read raw; an absent term is Not published only wi
   for (const s of scored) {
     const t8 = s.checks.find((c) => c.id === "T8")!
     const p = bySlug.get(s.slug)!
-    if (t8.state !== "checking") assert.equal(t8.state, Array.isArray(p.restrictions) ? "met" : p.not_published?.restrictions ? "not_public" : "held_out", s.slug)
+    assert.equal(t8.state, Array.isArray(p.restrictions) && !isStale(p.last_verified_at, new Date()) ? "met" : p.not_published?.restrictions && !isStale(p.last_verified_at, new Date()) ? "not_public" : "checking", s.slug)
     if (s.oas != null) assert.equal(s.oas, round1(partEarned(s, "transparency") + partEarned(s, "partner_value")), s.slug)
   }
 })

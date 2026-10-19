@@ -14,14 +14,17 @@ commission:
   value: 20
   currency: USD
   duration: "up to 2 years"
-  conditions: "20% recurring commission on all plans, for up to 2 years. Paid monthly through PartnerStack to Stripe or PayPal."
+  conditions: "20% recurring commission on all plans, for up to 2 years. Paid monthly through PartnerStack to Stripe or PayPal. Application approval may be automatic at Landbot's discretion under section 3.3, while the marketing page asks applicants to wait for approval. The existing approval classification is retained with this qualification; no absence marker is used for a published policy."
 cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [stripe, paypal]
+  methods:
+  - stripe
+  - paypal
+  conditions: Section 7.3 publishes a $25 withdrawal threshold, while section 4.2 calls $50 the minimum when describing forfeiture of abandoned balances. Both statements are retained without selecting a numeric minimum. Commissions become available on the 13th of the following month, with a seven-day refund delay and initial account-age requirement of one month and thirteen days.
 signup_url: https://landbot.io/affiliates
 approval: manual
 restrictions: null
@@ -48,7 +51,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
