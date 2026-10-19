@@ -11,7 +11,8 @@ commission:
   mode: percentage
   value: 30
   currency: USD
-  duration: null
+  # "get 30% recurring commission each month the person continues their ClickFunnels membership" (clickfunnels.com/affiliate-program, checked 2026-10-18)
+  duration: lifetime
   conditions: "Paid each month the referred account stays active, on all ClickFunnels plans, monthly or annual, as long as the account remains in good status for 45 days after the sale. Paid on the 1st and 15th of each month. Commissions under $100 in a 120-day period are forfeited."
 
 # cookie window: not published on clickfunnels.com/affiliate-program or clickfunnels.com/affiliate-agreement (checked 2026-10-13)
@@ -60,8 +61,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
 source: manual

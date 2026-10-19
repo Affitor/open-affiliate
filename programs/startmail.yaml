@@ -5,7 +5,7 @@ category: Communication
 tags: ["private-email", "encrypted-email", "email-aliases", "business-email"]
 
 # "100% commission" (www.startmail.com/affiliate, checked 2026-10-18)
-# "All purchases within the first subscription year on yearly plans" (affiliates.startmail.com/programs/startmail-com-affiliate-program/tos/, checked 2026-10-18)
+# "for the first year" (www.startmail.com/affiliate, checked 2026-10-18)
 commission:
   type: one-time
   rate: "100%"
@@ -13,10 +13,9 @@ commission:
   value: 100
   currency: USD
   duration: "first subscription year"
-  conditions: "100% of net sales value for qualifying yearly-plan purchases within the first subscription year, including the initial yearly payment, additional mailboxes and add-ons, and monthly-to-yearly upgrades made within that year. Each qualifying transaction earns one commission; renewals after the first year earn none. Payment is approximately 30 days after the end of the month, once $100 is reached."
+  conditions: "100% of net sales value for qualified transactions during the first year. Yearly subscriptions and additional mailboxes or add-ons during the first subscription year qualify. Upgrades to yearly plans from monthly plans qualify while the subscription is younger than one year. Commissions become available for payment monthly once total earnings reach $100."
 
-# "Cookie window: 45 days." (affiliates.startmail.com/programs/startmail-com-affiliate-program/tos/, checked 2026-10-18)
-cookie_days: 45
+# cookie_days: not published on www.startmail.com/affiliate (checked 2026-10-18); linked portal terms could not be reverified.
 
 # "Commissions become available for payment monthly, once the total earned reaches $100." (www.startmail.com/affiliate, checked 2026-10-18)
 # payout.methods: not published on www.startmail.com/affiliate (checked 2026-10-18)
@@ -29,12 +28,14 @@ signup_url: https://www.startmail.com/affiliate
 approval: manual
 restrictions:
   - "No spam or fake traffic"
-  - "No bidding on StartMail branded keywords or using them in paid-ad headlines or descriptions"
+  - "No bidding on StartMail branded keywords or using them in PPC headlines or descriptions"
   - "PPC traffic must go to the affiliate's own website"
+  - "No illegal, deceptive or misleading marketing, or materials that violate brand guidelines"
+  - "No promotion on adult or gambling websites"
 
 dashboard_url: null
-# The signup portal uses Tapfiliate publishing registration and links its program terms.
-network: tapfiliate
+# network: platform not identified on the permitted www.startmail.com/affiliate page (checked 2026-10-18).
+network: null
 program_age: null
 
 description: >
@@ -43,12 +44,11 @@ description: >
   protect their email privacy and use separate addresses for different
   conversations.
 
-  Affiliates earn 100% of net sales value for qualifying yearly-plan
-  purchases within the first subscription year, including the initial yearly
-  payment, additional mailboxes and add-ons, and monthly-to-yearly upgrades
-  made within that year. Each qualifying transaction earns one commission;
-  renewals after the first year earn none. Payment is approximately 30 days
-  after the end of the month, once $100 is reached.
+  Affiliates earn 100% of net sales value for qualified transactions during
+  the first year. This includes yearly subscriptions, additional mailboxes
+  and add-ons bought during the first subscription year, and upgrades from
+  monthly to yearly plans while the subscription is younger than one year.
+  Commissions become available for payment monthly once earnings reach $100.
 
 short_description: "Private email and aliases for individuals and businesses"
 
@@ -63,7 +63,8 @@ agents:
     - "Individuals choosing a private email service"
     - "Businesses setting up private email and aliases"
 
-verified: true
+# Linked program terms could not be reverified; only the permitted brand page supports the retained terms.
+verified: false
 submitted_by: affitor
 created_at: "2026-10-18"
 updated_at: "2026-10-18"

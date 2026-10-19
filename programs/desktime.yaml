@@ -25,6 +25,7 @@ cookie_days: 30
 payout:
   minimum: 25
   currency: USD
+  frequency: on-request
   methods: [paypal]
 
 signup_url: https://desktime.com/affiliate

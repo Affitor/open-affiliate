@@ -20,6 +20,7 @@ import {
   listCommissionText,
   flatUsdPayout,
   verifiedDate,
+  indexable,
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
@@ -27,6 +28,10 @@ import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
+import { outboundUrl } from "../src/lib/outbound-link";
+import { changelog } from "../src/lib/changelog";
+import { blogApplyHref } from "../src/lib/apply-cta";
+import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
 import { sectionProblems } from "./directory-checks";
@@ -308,7 +313,7 @@ if (!requireText("index.md").includes(`${BASE_URL}/llms.txt`)) {
 if (!requireText("rankings.md").includes(`${BASE_URL}/programs/`)) {
   fail("rankings.md does not link program pages");
 }
-if (!requireText("changelog.md").includes("April 18, 2026")) {
+if (!requireText("changelog.md").includes(changelog[0].title)) {
   fail("changelog.md is missing the latest entry");
 }
 
@@ -429,7 +434,10 @@ function sameRows(surface: string, got: string[], want: string[]): void {
  */
 function checkListPage(list: BestList, path: string): void {
   const url = `${BASE_URL}${path}`;
-  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  // A hub below HUB_MIN_INDEXED verified programs is noindex, so it stays out of the sitemap.
+  const indexed = indexable(list);
+  if (indexed && !sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  if (!indexed && sitemapUrlSet.has(url)) fail(`sitemap lists ${url}, a noindex hub`);
   const title = `${list.title} | OpenAffiliate`;
   if (title.length > 60 || /[–—]/.test(title)) {
     fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
@@ -460,6 +468,9 @@ function checkListPage(list: BestList, path: string): void {
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (html.includes('<meta name="robots" content="noindex') === indexed) {
+    fail(`${htmlFile} must ${indexed ? "not carry" : "carry"} a noindex robots meta`);
+  }
   const tbodyStart = html.indexOf("<tbody>");
   const tbodyEnd = html.indexOf("</tbody>", tbodyStart);
   if (tbodyStart === -1 || tbodyEnd === -1) fail(`${htmlFile} has no table body`);
@@ -550,11 +561,11 @@ function checkListPage(list: BestList, path: string): void {
   if (pageDates !== expectedDate) fail(`${htmlFile} says "Verified ${pageDates}"; the verified rows give "${expectedDate}"`);
   if (mdDates !== expectedDate) fail(`${mdFile} says "Verified ${mdDates}"; the verified rows give "${expectedDate}"`);
 
-  // Each row's signup link is the program page's apply link, on both surfaces.
+  // Each row's signup link is the apply link with the list UTM, on both surfaces.
   // The twin prints it as mdUrl does: an autolink with the few characters
   // Markdown would read as structure percent-encoded.
   rows.forEach((p, i) => {
-    const href = applyButton(p).href;
+    const href = applyButton(p, "list").href;
     const shownHref = decodeEntities(/<a href="([^"]*)"[^>]*>Sign up<\/a>/.exec(tableTrs[i] ?? "")?.[1] ?? "");
     if (shownHref !== href) fail(`${htmlFile} links ${p.slug} to ${JSON.stringify(shownHref)}, not ${href}`);
     const line = mdLines.find((l) => l.includes(`/programs/${p.slug}.md) — `)) ?? "";
@@ -563,7 +574,54 @@ function checkListPage(list: BestList, path: string): void {
   });
 }
 
-for (const list of BEST_LISTS) checkListPage(list, bestPath(list));
+/**
+ * An editorial post on a list URL: the blocks, in order, are postSelection's
+ * programs as of this build; the title counts them; the disclosure is there;
+ * every Apply link is blogApplyHref with the post's UTM; the twin carries the
+ * same programs and links.
+ */
+function checkPostPage(post: BestPost, selection: PostSelection, path: string): void {
+  const url = `${BASE_URL}${path}`;
+  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  const title = postTitle(post, selection);
+  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  if (post.description.length < 120 || post.description.length > 155) fail(`${path} description is ${post.description.length} characters; keep it 120 to 155`);
+  const htmlFile = `${path.slice(1)}.html`;
+  if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
+  const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  const want = selection.shown.map(({ program }) => program.slug);
+  const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not postSelection's ${JSON.stringify(want)}`);
+  if (!new RegExp(`<h1[^>]*>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h1>`).test(html)) fail(`${path} H1 is not "${title}"`);
+  if (!html.includes("data-post-disclosure")) fail(`${path} has no disclosure`);
+  for (const { program } of selection.shown) {
+    const href = blogApplyHref(program, post.slug).replaceAll("&", "&amp;");
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${href}"`));
+    if (!tag) fail(`${path} has no Apply link for ${program.slug} with the blog UTM`);
+    if (!tag.includes('rel="sponsored nofollow noopener"')) fail(`${path} Apply link for ${program.slug} is not rel="sponsored nofollow noopener"`);
+  }
+  if (post.category) {
+    const catFile = `categories/${categoryToSlug(post.category)}.html`;
+    const cat = existsSync(join(BUILD_APP, catFile)) ? readFileSync(join(BUILD_APP, catFile), "utf8") : "";
+    if (!cat.includes("data-list-picks") || !cat.includes(`href="${path}"`)) fail(`${catFile} does not link its post ${path} as "Our picks"`);
+  }
+  const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
+  const md = readFileSync(mdFile, "utf8");
+  if (!md.startsWith(`# ${title}\n`)) fail(`${mdFile} does not start with the post title`);
+  const twinOrder = [...md.matchAll(/^\d+\. \[[^\]\n]*\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\)/gm)].map((m) => m[1]);
+  if (twinOrder.join() !== want.join()) fail(`${mdFile} lists ${JSON.stringify(twinOrder)}, not postSelection's ${JSON.stringify(want)}`);
+  for (const { program } of selection.shown) {
+    const autolink = `<${blogApplyHref(program, post.slug).replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
+    if (!md.includes(`/programs/${program.slug}.md)`) || !md.includes(autolink)) fail(`${mdFile} is missing ${program.slug} or its Apply link`);
+  }
+}
+
+for (const list of BEST_LISTS) {
+  const post = getPost(list.slug);
+  const selection = post ? postSelection(post) : null;
+  if (post && selection && postReady(selection)) checkPostPage(post, selection, bestPath(list));
+  else checkListPage(list, bestPath(list));
+}
 for (const category of categories) {
   checkListPage(categoryList(category), `/categories/${categoryToSlug(category)}`);
 }
@@ -1174,7 +1232,8 @@ function noProgramHtmlProblems(program: (typeof programs)[number], html: string)
   for (const label of JOIN_LABELS) {
     if (own.includes(label)) problems.push(`shows a join button ("${label}") for a brand with no program`);
   }
-  if (program.signupUrl && own.includes(`href="${program.signupUrl}"`)) problems.push("links the signup URL of a brand with no program");
+  // Prefix match: a rendered signup link may carry the outbound UTM after the stored URL.
+  if (program.signupUrl && own.includes(`href="${program.signupUrl.replaceAll("&", "&amp;")}`)) problems.push("links the signup URL of a brand with no program");
   if (/>Commission<\/h3>/.test(own)) problems.push("shows a Commission card for a brand with no program");
   if (/data-term="/.test(own)) problems.push("shows an earnings-card term row for a brand with no program");
   for (const label of TERM_LABELS) {
@@ -1304,11 +1363,13 @@ async function checkServedPages(): Promise<string> {
       for (const [what, extra] of [
         ["a join button", "Apply &amp; earn 20%"],
         ["the signup URL", `<a href="${np.signupUrl ?? "https://example.com/signup"}">x</a>`],
+        // A rendered link carries the outbound UTM after the stored URL; the prefix match must still catch it.
+        ["the tagged signup URL", `<a href="${outboundUrl(np.signupUrl ?? "https://example.com/signup", "list", np.slug).replaceAll("&", "&amp;")}">x</a>`],
         ["a cookie window", "60-day cookie"],
         ["a term row", `<span data-term="approval">Automatic</span>`],
       ] as const) {
         const mutated = inTable(extra);
-        const fixture = what === "the signup URL" && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
+        const fixture = what.endsWith("signup URL") && !np.signupUrl ? { ...np, signupUrl: "https://example.com/signup" } : np;
         if (noProgramHtmlProblems(fixture, mutated).length === 0) fail(`the no-program check passed ${np.slug} with ${what} inside its comparison table`);
       }
     }
@@ -1322,6 +1383,8 @@ async function checkServedPages(): Promise<string> {
     // A verified program with an approval time, and a paused one, for the checks below.
     const onTime = termsPages.find((p) => termsConfirmed(p) && p.approval && p.approvalTime && p.payout.frequency);
     const pausedPage = termsPages.find((p) => p.status === "paused");
+    const withConditions = termsPages.find((p) => termsConfirmed(p) && p.payout.conditions);
+    if (!withConditions) fail("the page checks need a verified program with payout conditions");
     if (!onTime || !pausedPage) fail("the page checks need a verified program with approval, approval time and payout frequency, and a paused program");
     if (!off || !on) fail("the terms checks need a verified and an unverified program that store cookie, payout and approval");
     const bySlug = new Map(termsPages.map((p) => [`/programs/${p.slug}`, p]));
@@ -1349,7 +1412,7 @@ async function checkServedPages(): Promise<string> {
         const join = pausedJoinLabel(html);
         if (join) fail(`${page} shows a join button ("${join}") for a paused program`);
       }
-      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage) kept.set(program, html);
+      if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
     // Non-vacuity: the page check fails on a page that breaks the rule either way.
     const offHtml = kept.get(off)!;
@@ -1403,6 +1466,12 @@ async function checkServedPages(): Promise<string> {
     ] as const) {
       if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
     }
+    // Payout conditions: required as stored on a verified page, found anywhere on an unverified one.
+    const conditionsHtml = kept.get(withConditions)!.replace(/<p data-term="payout-conditions"[^>]*>[\s\S]*?<\/p>/, "");
+    if (termsHtmlProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
+    const offConditions = { ...off, payout: { ...off.payout, conditions: withConditions.payout.conditions } };
+    const conditionsFlight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ payout: { conditions: withConditions.payout.conditions } }))}])</script>`;
+    if (termsHtmlProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
     if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
       fail("the paused-page check passed a paused page with a join button");
     }
@@ -1493,12 +1562,19 @@ async function checkServedPages(): Promise<string> {
       const homeHtml = await (await fetch(`${base}/`)).text();
       const sets = homepageSets(programs);
       const slugs = (list: Program[]) => list.map((p) => p.slug);
-      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured], ["home-top-verified", sets.row]] as const) {
+      for (const [id, list] of [["home-rankings", sets.rankings], ["home-featured", sets.featured]] as const) {
         const problems = sectionProblems(homeHtml, id, slugs(list));
         if (problems.length) fail(`/ ${problems.join("; ")}`);
       }
-      const dropped = homeHtml.replace(new RegExp(`<a href="/programs/${sets.row[0].slug}">[^<]*</a>`), "");
-      if (sectionProblems(dropped, "home-top-verified", slugs(sets.row)).length === 0) fail("the homepage check passed a page with a top-verified link removed");
+      // The networks band: every live network as a plain link, A to Z as on the /networks grid, in-house last.
+      const networkSlugs = [...cardRows, ...networkRows.filter((row) => row.network === IN_HOUSE)].map((n) => networkToSlug(n.network));
+      const nets = sectionProblems(homeHtml, "home-networks", networkSlugs, true, "networks");
+      if (nets.length) fail(`/ ${nets.join("; ")}`);
+      const dropped = homeHtml.replace(new RegExp(`<a href="/networks/${networkSlugs[0]}"[^>]*>[^<]*</a>`), "");
+      if (sectionProblems(dropped, "home-networks", networkSlugs, true, "networks").length === 0) fail("the homepage check passed a page with a network link removed");
+      if (sectionProblems(homeHtml, "home-networks", [networkSlugs[1], networkSlugs[0], ...networkSlugs.slice(2)], true, "networks").length === 0) {
+        fail("the homepage check passed the networks band out of A to Z order");
+      }
     }
 
     // REST: the list and one program of each kind, as served.

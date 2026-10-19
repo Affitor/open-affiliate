@@ -8,7 +8,8 @@ import {
   type Program,
 } from "@/lib/programs";
 import { docsNav } from "@/app/docs/_config";
-import { BEST_LISTS, bestPath, buildBestList } from "@/lib/best-lists";
+import { BEST_LISTS, bestPath, buildBestList, indexable } from "@/lib/best-lists";
+import { oasScores } from "@/lib/oas";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -27,6 +28,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, changeFrequency: "weekly", priority: 1.0 },
     { url: `${BASE_URL}/programs`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${BASE_URL}/new`, changeFrequency: "daily", priority: 0.7 },
     { url: `${BASE_URL}/rankings`, changeFrequency: "weekly", priority: 0.9 },
     { url: `${BASE_URL}/categories`, changeFrequency: "weekly", priority: 0.8 },
     { url: `${BASE_URL}/networks`, changeFrequency: "weekly", priority: 0.7 },
@@ -70,7 +72,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     };
   });
 
-  const bestPages: MetadataRoute.Sitemap = BEST_LISTS.map((list) => ({
+  const bestPages: MetadataRoute.Sitemap = BEST_LISTS.filter(indexable).map((list) => ({
     url: `${BASE_URL}${bestPath(list)}`,
     lastModified: latestProgramDate(buildBestList(list).rows),
     changeFrequency: "weekly" as const,
@@ -84,5 +86,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages];
+  const slugs = new Set(programs.map((p) => p.slug));
+  const oasPages: MetadataRoute.Sitemap = oasScores
+    .filter((s) => slugs.has(s.slug))
+    .map((s) => ({
+      url: `${BASE_URL}/programs/${s.slug}/oas`,
+      lastModified: s.checked_at.slice(0, 10),
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    }));
+
+  return [...staticPages, ...docsPages, ...categoryPages, ...bestPages, ...networkPages, ...programPages, ...oasPages];
 }

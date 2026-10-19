@@ -1,6 +1,7 @@
 import { IN_HOUSE, commissionDisplay, commissionUnknown, isCreditReward, type Program } from "@/lib/programs"
 import { namesTerm, proseSentences, statesTerms, termsConfirmed } from "@/lib/confirmed-terms"
 import { hasNoProgram } from "@/lib/no-program"
+import { frequencyLabel } from "@/lib/claims/form"
 import { isPaused } from "@/lib/program-seo"
 
 /**
@@ -57,11 +58,12 @@ export function commissionFigure(p: Program): Figure | null {
   const recurring = c.type === "recurring"
   const stored = String(c.rate ?? "").trim()
   const display = commissionDisplay(c)
+  const numericFigure = c.mode === "percentage" && c.value != null ? `${c.value}%` : display
   const saysDuration = SAYS_DURATION.test(stored)
   const duration = c.duration && !saysDuration ? durationWords(String(c.duration)) : ""
   // The stored rate qualifies the figure ("up to 30%", "$15 to $1,000", "25% of net revenue",
   // "$75 per qualified lead"): show it as written. A bare number ("25") says less than the figure.
-  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, display) === false) {
+  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, numericFigure) === false) {
     const rest = recurring
       ? (saysDuration ? "" : duration ? `recurring ${duration}` : /recurr/i.test(stored) ? "" : "recurring")
       : isCreditReward(c) && !/\bper\b/i.test(stored) ? "per referral" : ""
@@ -113,7 +115,7 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 /** "Monthly, from a $50 minimum"; null when neither is stored. */
 export function payoutText(p: Program): string | null {
   const parts: string[] = []
-  if (p.payout?.frequency) parts.push(capitalize(p.payout.frequency))
+  if (p.payout?.frequency) parts.push(frequencyLabel(p.payout.frequency))
   if (p.payout?.minimum != null) {
     const min = p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
     parts.push(parts.length ? min : min.charAt(0).toUpperCase() + min.slice(1))
@@ -215,7 +217,8 @@ export interface EstimateInput {
  */
 function plainRate(c: Program["commission"]): boolean {
   const norm = (s: string) => s.replace(/[\s,]/g, "").toLowerCase()
-  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(commissionDisplay(c))
+  const numericFigure = c.mode === "percentage" && c.value != null ? `${c.value}%` : commissionDisplay(c)
+  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(numericFigure)
 }
 
 /**

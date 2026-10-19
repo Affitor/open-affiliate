@@ -4,11 +4,13 @@ import { ProgramLogo } from "@/components/program-logo"
 import { programs, affiliateScore, isLive, type Program } from "@/lib/programs"
 import { hasNoProgram, keywordWords as words, noProgramAlternatives } from "@/lib/no-program"
 import { commissionFigure, pageState } from "@/lib/program-page"
+import { isSameTeam } from "@/lib/same-team"
 
 export function getRelatedPrograms(current: Program, limit = 4): Program[] {
   // A page that answers "no program" points only at verified programs that pay.
   if (hasNoProgram(current)) return noProgramAlternatives(current, limit)
-  const candidates = programs.filter((p) => p.slug !== current.slug && isLive(p))
+  // A suggestion carries no same-team line, so our own programs are never one.
+  const candidates = programs.filter((p) => p.slug !== current.slug && !isSameTeam(p.slug) && isLive(p))
   const currentWords = words(current.agentKeywords ?? [])
 
   const scored = candidates.map((p) => {
@@ -44,11 +46,11 @@ function lastsCell(p: Program): string {
 
 function TermsChip({ verified }: { verified: boolean }) {
   return verified ? (
-    <span className="inline-flex items-center gap-1 rounded-full border border-emerald-600/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-800 dark:text-emerald-400">
+    <span className="inline-flex items-center gap-1 rounded-full border border-good-line bg-good-bg px-2 py-0.5 text-xs text-good">
       <Check className="h-3 w-3" /> Verified
     </span>
   ) : (
-    <span className="inline-flex rounded-full border border-border px-2 py-0.5 text-[11px] text-muted-foreground">Not verified</span>
+    <span className="inline-flex rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">Not verified</span>
   )
 }
 

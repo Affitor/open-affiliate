@@ -1,3 +1,4 @@
+import { formatPercentage } from "./commission-mode"
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
 import { commissionUnknown, compareCommission, compareText } from "./commission-order"
@@ -44,6 +45,8 @@ export interface Program {
     currency?: string
     frequency?: string
     methods?: string[]
+    /** When a commission becomes payable, as the brand's terms say ("paid 30 days after the subscription starts"). */
+    conditions?: string
   }
   description: string
   shortDescription: string
@@ -120,6 +123,7 @@ function mapYamlToProgram(yaml: any): Program {
       currency: yaml.payout?.currency,
       frequency: yaml.payout?.frequency,
       methods: yaml.payout?.methods ?? [],
+      conditions: yaml.payout?.conditions,
     },
     description: yaml.description?.trim() ?? "",
     shortDescription: yaml.short_description ?? "",
@@ -243,7 +247,7 @@ export interface SearchOptions {
 export function commissionDisplay(c: Program["commission"]): string {
   switch (c.mode) {
     case "percentage":
-      return c.value !== null ? `${c.value}%` : "Not published"
+      return formatPercentage(c.rate, c.value)
     case "flat":
       if (c.value === null) return "Not published"
       return isCreditReward(c) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
@@ -666,6 +670,30 @@ export function groupRow(name: string, programCount: number, s: CommissionStats)
 export interface NetworkStats extends CommissionStats {
   network: string
   programCount: number
+}
+
+/**
+ * Live networks with their live programs, most programs first (name on ties),
+ * in-house last since it is no network: the order of the /networks intro and FAQ.
+ */
+export function networksByProgramCount(): { network: string; programs: Program[] }[] {
+  return liveNetworks
+    .map((network) => ({ network, programs: livePrograms.filter((p) => (p.network ?? IN_HOUSE) === network) }))
+    .sort((a, b) =>
+      Number(a.network === IN_HOUSE) - Number(b.network === IN_HOUSE) ||
+      b.programs.length - a.programs.length ||
+      a.network.localeCompare(b.network),
+    )
+}
+
+/** A to Z by display name, ignoring case: how /networks lays out its grid. */
+export function byNetworkName(a: string, b: string): number {
+  return networkName(a).localeCompare(networkName(b), "en", { sensitivity: "base" })
+}
+
+/** Every live network A to Z (byNetworkName), in-house last: the homepage band. */
+export function networksByName(): { network: string; programs: Program[] }[] {
+  return networksByProgramCount().sort((a, b) => Number(a.network === IN_HOUSE) - Number(b.network === IN_HOUSE) || byNetworkName(a.network, b.network))
 }
 
 export function getNetworkStats(): NetworkStats[] {

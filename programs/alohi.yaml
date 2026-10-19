@@ -18,15 +18,13 @@ commission:
   value: 180
   currency: USD
   duration: null
-  conditions: "One flat commission per new paying customer, per product (Fax.Plus and Sign.Plus): $20 on Personal or Professional (Sign.Plus) and Basic or Premium (Fax.Plus) plans, $90 on Business or Enterprise plans of either product, so a customer who buys both products can earn up to $180. The terms count a referral once the customer buys an annual plan or completes two consecutive monthly renewals; the PartnerStack offer records say three monthly renewals. Commission is payable only after Alohi receives the customer's payment and is canceled on chargebacks, refunds or cancellations. The terms say payouts start once a minimum payout threshold is met without naming an amount, and the listing says no minimums."
+  conditions: "One flat commission per new paying customer, per product (Fax.Plus and Sign.Plus): $20 on Personal or Professional (Sign.Plus) and Basic or Premium (Fax.Plus) plans, $90 on Business or Enterprise plans of either product, so a customer who buys both products can earn up to $180. The terms count a referral once the customer buys an annual plan or completes two consecutive monthly renewals; the PartnerStack offer records say three monthly renewals. Commission is payable only after Alohi receives the customer's payment and is canceled on chargebacks, refunds or cancellations. The terms require a minimum payout threshold but do not publish its amount. The listing describes flat per-customer commissions as having no tiers or minimums; that does not establish a numeric withdrawal threshold."
 
 # "Referred User cookies are valid for thirty (30) days." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
 cookie_days: 30
 
 # "Commission invoices are generated on the first day of each month for approved commissions from the prior month." (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
 # "All Commission Fee payments are made in U.S. Dollars" (alohi.com/affiliates-terms-of-services, checked 2026-10-17)
-# payout.minimum: stated two ways, so left out: "the minimum payout threshold has been met" (alohi.com/affiliates-terms-of-services) vs "No tiers, no minimums, no guesswork." (market.partnerstack.com/page/alohi), checked 2026-10-17
-# methods: not published on alohi.com/affiliates-terms-of-services or market.partnerstack.com/page/alohi (checked 2026-10-17)
 payout:
   currency: USD
   frequency: monthly
@@ -35,10 +33,15 @@ signup_url: https://www.alohi.com/affiliates
 # "Step 1: Apply and get approved." (market.partnerstack.com/page/alohi, checked 2026-10-17)
 approval: manual
 restrictions:
-  - "No bidding on Alohi, Fax.Plus, Sign.Plus or other Alohi brand keywords in paid search, and no affiliate links directly in PPC ads"
-  - "No spam, cookie stuffing or pop-ups"
+  # "without specific approval" (www.alohi.com/affiliates-terms-of-services, section 3.3, checked 2026-10-18)
+  - "Brand-keyword PPC requires specific approval; no direct affiliate links in PPC ads, domain forwarding or masking, or black-hat SEO"
+  - "No spam or cookie stuffing; bulk messaging requires opt-in consent"
+  # "without specific written approval" (www.alohi.com/affiliates-terms-of-services, section 3.3, checked 2026-10-18)
+  - "Pop-ups and pop-unders require specific written approval; visitors must arrive through manual, direct user clicks"
   - "Clearly disclose the affiliate relationship in all promotional content"
   - "One affiliate account per affiliate unless Alohi approves otherwise"
+  - "Do not modify brand assets, use confusingly similar domains or social accounts, or represent yourself as Alohi"
+  - "Affiliate account transfers require prior written consent"
 
 # "Gain access to a full suite of marketing assets, including banners, landing pages, and performance insights." (alohi.com/affiliates, checked 2026-10-17)
 marketing_materials: true
@@ -81,8 +84,11 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'

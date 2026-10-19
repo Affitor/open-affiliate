@@ -7,6 +7,7 @@ import { track } from "@/lib/track";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/client-programs";
+import { FREQUENCIES } from "@/lib/claims/form";
 
 export default function SubmitPage() {
   useEffect(() => { track("page_view"); }, []);
@@ -265,10 +266,9 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
                 onChange={(e) => updateField("payoutFrequency", e.target.value)}
                 className="w-full rounded-lg border border-border/50 bg-muted/50 px-3 py-2 text-sm"
               >
-                <option value="monthly">Monthly</option>
-                <option value="bi-weekly">Bi-weekly</option>
-                <option value="net-30">Net 30</option>
-                <option value="net-60">Net 60</option>
+                {FREQUENCIES.filter(([value]) => value).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
               </select>
             </div>
           </div>

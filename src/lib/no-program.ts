@@ -7,6 +7,7 @@ import {
   programs,
   type Program,
 } from "./programs"
+import { isSameTeam } from "./same-team"
 
 /**
  * A brand with no affiliate program to join: none could be found on its own
@@ -60,12 +61,13 @@ function paysCash(p: Program): boolean {
  * "<Brand> affiliate program alternatives": verified, live programs in the same
  * category that pay cash, closest first by what the product does. Empty when
  * the category has none: a program from another category is not an
- * alternative to this one.
+ * alternative to this one. Our own team's programs are never suggested: this
+ * list carries no same-team disclosure.
  */
 export function noProgramAlternatives(current: Program, limit = 4): Program[] {
   const want = keywordWords([...(current.agentKeywords ?? []), ...current.tags])
   return programs
-    .filter((p) => p.slug !== current.slug && p.category === current.category && isLive(p) && p.verified && paysCash(p))
+    .filter((p) => p.slug !== current.slug && !isSameTeam(p.slug) && p.category === current.category && isLive(p) && p.verified && paysCash(p))
     .map((p) => ({
       program: p,
       overlap: [...keywordWords([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => want.has(w)).length,

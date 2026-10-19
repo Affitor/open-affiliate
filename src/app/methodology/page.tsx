@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { livePrograms } from "@/lib/programs";
+import { CHECK_IDS, CHECKS, oasScores, PART_MAX, TEAM_DISCLOSURE, type Part } from "@/lib/oas";
 
 export const metadata: Metadata = {
   title: "How We List and Rank Affiliate Programs",
@@ -13,12 +14,18 @@ const verified = livePrograms.filter((p) => p.verified).length;
 
 const link = "underline underline-offset-4";
 
+const checkList = (part: Part) =>
+  CHECK_IDS.filter((id) => CHECKS[id].part === part)
+    .map((id) => `${CHECKS[id].label.charAt(0).toLowerCase()}${CHECKS[id].label.slice(1)} (${CHECKS[id].max})`)
+    .join(", ");
+
 /**
  * Every sentence here describes what the code does today: verification and
  * labels from the program page, src/lib/program-seo.ts and
  * src/lib/confirmed-terms.ts, brands with no
  * program from src/lib/no-program.ts, ranking from src/lib/best-lists.ts and
- * affiliateScore in src/lib/programs.ts.
+ * affiliateScore in src/lib/programs.ts, OAS from src/lib/oas.ts and
+ * src/lib/oas-v1.ts (shown only once scores are published).
  * Change one of those and this page changes with it.
  */
 export default function MethodologyPage() {
@@ -98,6 +105,41 @@ export default function MethodologyPage() {
         no rate are left out of every /best list and placed last in their
         group on category pages.
       </p>
+
+      {oasScores.length > 0 && (
+        <>
+          <h2 id="oas" className="mt-8 text-lg font-semibold">How is OAS calculated?</h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            OAS, the OpenAffiliate Score, measures how clearly a program
+            publishes the terms an affiliate needs (Transparency,{" "}
+            {PART_MAX.transparency} points) and whether three of them protect
+            the affiliate (Partner value, {PART_MAX.partner_value} points). It
+            reads only the terms OpenAffiliate verified on the program&apos;s
+            own page, and never the size of the commission. Transparency:{" "}
+            {checkList("transparency")}. Partner value: {checkList("partner_value")}.
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            A term we read the program&apos;s pages for and did not find scores
+            0 and is marked Not published, with the date we checked. A program
+            gets a number only once every check is assessed; until then it shows
+            Scoring in progress, so a term we have not checked yet neither costs
+            it points nor gives it free ones. A rate published as
+            &ldquo;varies&rdquo;, with no number, does not meet the commission
+            check. When two of the brand&apos;s own pages disagree on a term,
+            that check is not met until they agree. Each report links the page
+            the terms were checked on. Only verified, live affiliate programs
+            are scored, and terms verified more than 90 days ago show Scoring in
+            progress until we verify them again. Kyma API and programs on the
+            Affitor network are scored the same way and never ranked.{" "}
+            {TEAM_DISCLOSURE}
+          </p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Not scored yet: refund and chargeback rules, and how well the
+            application link works. A brand that finds a mistake can report it
+            from its OAS report.
+          </p>
+        </>
+      )}
 
       <h2 className="mt-8 text-lg font-semibold">
         Can a program pay for a better position?

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { livePrograms as programs } from "@/lib/programs";
+import { SAME_TEAM } from "@/lib/same-team";
 
 export const metadata: Metadata = {
   title: "About",
@@ -64,6 +65,11 @@ export default function AboutPage() {
         Contributors submit and correct programs alongside Affitor, and every
         change lands as a public pull request, so the full edit history of any
         entry is visible to anyone.
+      </p>
+      <p id="same-team" className="mt-2 text-sm text-muted-foreground">
+        {SAME_TEAM} Their listings are marked &ldquo;Same team as
+        OpenAffiliate&rdquo;, and they are never suggested as an alternative
+        to another program.
       </p>
 
       <h2 className="mt-8 text-lg font-semibold">How do I contact you?</h2>

@@ -6,8 +6,14 @@
 
 export const AFFITOR_CLICK = "oa_to_affitor_click"
 
+/** The Affitor marketplace, where one partner account joins many programs. */
+export const AFFITOR_MARKETPLACE = "https://affitor.com/marketplace"
+
 /** Where on OA the click came from: the `source` property of AFFITOR_CLICK. */
-export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list"
+export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate"
+
+/** Where a brand moves an existing program to Affitor (live, takes only UTM params). */
+export const AFFITOR_SWITCH = "https://affitor.com/switch"
 
 /** `url` (affitor.com home by default) with utm_source=openaffiliate, the given medium and campaign. */
 export function affitorUrl(medium: string, campaign: string, url = "https://affitor.com/"): string {

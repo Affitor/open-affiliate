@@ -32,8 +32,11 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
+import { formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
+import { compareText } from "../src/lib/commission-order"
+import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText, type CommissionGroup } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
   affiliateScore,
@@ -54,6 +57,7 @@ import {
   VERIFIED_NOTE,
   bestListCopy,
   bestPath,
+  otherLists,
   buildBestList,
   freshnessLine,
   categoryList,
@@ -61,8 +65,28 @@ import {
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
+import { isSameTeam, SAME_TEAM_LABEL } from "../src/lib/same-team"
+import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
-import { applyButton } from "../src/lib/apply-cta"
+import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
+import {
+  DISCLOSURE,
+  FRESHNESS_RULE,
+  SAME_TEAM,
+  checkedRange,
+  checkedText,
+  cookieText,
+  earnText,
+  getPost,
+  payoutText,
+  postFaq,
+  postReady,
+  postSelection,
+  postTitle,
+  sameTeam,
+  type BestPost,
+  type PostSelection,
+} from "../src/lib/best-posts"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -135,7 +159,7 @@ type Program = {
   short_description?: string
   commission: Commission
   cookie_days?: number | null
-  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null } | null
+  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null; conditions?: string | null } | null
   attribution?: string | null
   tracking_method?: string | null
   signup_url?: string | null
@@ -180,11 +204,12 @@ function listedVerified(p: Program): boolean {
  */
 const livePrograms = programs.filter(isLive)
 /** Suffix for list rows: what a reader must know before trusting the terms. */
-function statusMark(p: { verified?: boolean; status?: string | null }): string {
-  if (p.status === "discontinued") return " (discontinued)"
-  if (p.status === "no_program") return " (no affiliate program)"
-  if (p.status === "paused") return " (status unclear)"
-  return p.verified ? "" : " (unverified, terms unconfirmed)"
+function statusMark(p: { slug: string; verified?: boolean; status?: string | null }): string {
+  const team = isSameTeam(p.slug) ? ` (${SAME_TEAM_LABEL})` : ""
+  if (p.status === "discontinued") return `${team} (discontinued)`
+  if (p.status === "no_program") return `${team} (no affiliate program)`
+  if (p.status === "paused") return `${team} (status unclear)`
+  return p.verified ? team : `${team} (unverified, terms unconfirmed)`
 }
 const categories = registryData.categories
 const generatedAt = registryData.generated_at
@@ -209,7 +234,7 @@ const IN_HOUSE = "in-house"
 function rate(c: Commission): string {
   switch (c.mode) {
     case "percentage":
-      return c.value != null ? `${c.value}%` : "Not published"
+      return formatPercentage(c.rate, c.value)
     case "flat":
       if (c.value == null) return "Not published"
       // Product credit, not cash: say so, as the page does.
@@ -342,6 +367,7 @@ export function programMd(entry: Program): string {
     alsoOnLine(p),
     confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
     payout ? `Payout: ${mdEscape(payout)}` : null,
+    confirmed && p.payout?.conditions ? `Payout conditions: ${mdEscape(p.payout.conditions)}` : null,
     p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
     p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
     `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
@@ -360,6 +386,7 @@ export function programMd(entry: Program): string {
   return joinSections([
     `# ${mdHeading(p.name)} affiliate program`,
     p.short_description ? `> ${mdEscapeProse(p.short_description)}` : null,
+    isSameTeam(p.slug) ? SAME_TEAM : null,
     statusBlock(p),
     hasNoProgram(p) ? noProgramAlternativesSection(p) : section(p.status === "paused" ? "Last known terms" : "Terms", facts),
     section("When to recommend", p.agents?.prompt && mdEscapeProse(p.agents.prompt)),
@@ -744,7 +771,7 @@ function docsMd(): string {
       [
         `- [Entry point](${BASE}/llms.txt)`,
         `- [All programs by category](${BASE}/programs.md)`,
-        `- [Rankings by Affiliate Score](${BASE}/rankings.md)`,
+        `- [Rankings of verified programs by commission](${BASE}/rankings.md)`,
         `- [Changelog](${BASE}/changelog.md)`,
         `- [Full dump](${BASE}/llms-full.txt)`,
         `- Any program, category or network page, with .md appended`,
@@ -1019,13 +1046,25 @@ function indexMd(): string {
 }
 
 function rankingsMd(): string {
-  const ranked = sitePrograms.filter(isLive).sort(
-    (a, b) => affiliateScore(b) - affiliateScore(a) || a.name.localeCompare(b.name),
-  )
-  const programLines = ranked
+  // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
+  // Our own programs are listed but never ranked (SAME_TEAM_SLUGS), as on the HTML page.
+  const verified = sitePrograms.filter((p) => isLive(p) && p.verified)
+  const ranked = verified.filter((p) => !isSameTeam(p.slug))
+  const unranked = verified.filter((p) => isSameTeam(p.slug))
+  const inGroup = (g: CommissionGroup) => {
+    const list = ranked.filter((p) => commissionGroup(p.commission) === g)
+    return g === "other" ? list.sort((a, b) => compareText(a.name, b.name)) : list.sort((a, b) => compareCommissionFigure(a, b))
+  }
+  const programLines = (g: CommissionGroup) => inGroup(g)
     .map((p, i) => {
-      const mark = statusMark(p)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — score ${affiliateScore(p)}, ${mdEscape(`${commissionDisplay(p.commission)} ${p.commission.type}`)}${mark}`
+      const terms = [
+        `${commissionDisplay(p.commission)} ${p.commission.type}`,
+        `recurring: ${recurringText(recurringMonths(p.commission)).toLowerCase()}`,
+        `cookie: ${p.cookieDays != null ? `${p.cookieDays} days` : "not published"}`,
+        `payout minimum: ${(payoutMinText(p.payout.minimum, p.payout.currency) ?? "not published").toLowerCase()}`,
+        ...(p.lastVerifiedAt ? [`checked ${p.lastVerifiedAt.slice(0, 10)}`] : []),
+      ]
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(terms.join(", "))}`
     })
     .join("\n")
   // Rates and flat payouts stay apart, as on the HTML tabs (commissionStats).
@@ -1047,14 +1086,28 @@ function rankingsMd(): string {
     .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${[programCount(c.programCount), ...groupFigures(c)].join(", ")}`)
     .join("\n")
 
+  // The OAS leaderboard leads the HTML page once oas-scores.json has entries; empty, it adds nothing.
+  const board = buildBoard(oasScores, sitePrograms.filter(isLive), new Date())
+  const report = (slug: string) => `${BASE}/programs/${slug}/oas`
+  const oasLines = board.length
+    ? [
+        ...board.filter((r) => r.rank != null).map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100, ${mdEscape(r.program.category)}`),
+        "",
+        ...board.filter((r) => r.rank == null).map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${r.oas != null ? `OAS ${r.oas}/100, ` : ""}${UNRANKED_TEXT[r.unranked!]}`),
+        "",
+        `OAS, the OpenAffiliate Score, measures how clearly a program publishes its terms and protects its partners, from public pages only; nobody pays to rank. Equal scores share a rank. ${TEAM_DISCLOSURE}`,
+      ].join("\n")
+    : null
+
   return joinSections([
     `# Affiliate program rankings`,
     [
-      `> ${programCount(ranked.length)} ordered by Affiliate Score, the same score as`,
-      `> the podium on ${BASE}/rankings and the homepage preview.`,
-      `> The interactive table can also sort by verified content, commission,`,
-      `> or cookie length. Those orders depend on live filters, so they are not`,
-      `> copied here.`,
+      `> ${ranked.length} verified programs, every figure checked on the brand's own`,
+      `> terms page, in the three lists of ${BASE}/rankings: a percentage of the`,
+      `> sale and a flat US-dollar amount, each highest first (on a tie, the one`,
+      `> that recurs longer first), then tiered, hybrid, unpublished and other`,
+      `> rewards A to Z. The table there can also sort by how long the commission`,
+      `> recurs, cookie length, payout minimum or check date.`,
       `>`,
       `> Network and category figures keep percentage rates and flat US-dollar`,
       `> payouts apart. Credit and gift-card rewards, tiered and hybrid deals,`,
@@ -1062,7 +1115,11 @@ function rankingsMd(): string {
       `> a percentage counts in any currency. Unconfirmed figures count and are`,
       `> marked "unconfirmed".`,
     ].join("\n"),
-    section("Programs", programLines),
+    section("Ranked by OAS", oasLines),
+    section("Programs paying a percentage of the sale", programLines("percent")),
+    section("Programs paying a flat amount", programLines("flat")),
+    section("Tiered, hybrid and other commissions", programLines("other")),
+    unranked.length ? `Not ranked: ${unranked.map((p) => `[${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) (${SAME_TEAM_LABEL})`).join(", ")}.` : null,
     section("Networks", networkLines),
     section("Categories", categoryLines),
     section("Links", `HTML: ${BASE}/rankings`),
@@ -1090,9 +1147,9 @@ function bestListMd(list: BestList, path: string): string {
               .join(" ")
           : commissionLine(p.commission)
       // The page's columns, in its order: commission, type, duration, cookie,
-      // network, then the same signup link as the program page.
+      // network, then the program page's apply link with the list UTM, as the page shows it.
       const facts = mdEscape(`${terms}${cookie}, network: ${networkName(p.network ?? IN_HOUSE)}`)
-      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p).href)}`
+      return `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${facts}${statusMark(p)}, sign up: ${mdUrl(applyButton(p, "list").href)}`
     })
     .join("\n")
   return joinSections([
@@ -1108,7 +1165,7 @@ function bestListMd(list: BestList, path: string): string {
     section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
     section(
       "Other lists",
-      BEST_LISTS.filter(l => l !== list)
+      otherLists(list)
         .map(l => {
           const other = buildBestList(l)
           return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`
@@ -1123,6 +1180,38 @@ function bestListMd(list: BestList, path: string): string {
   ])
 }
 
+/**
+ * The twin of an editorial post: the same programs as the page (postSelection
+ * as of the build), every figure from structured fields, each Apply link the
+ * page's blogApplyHref.
+ */
+function bestPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  const range = checkedRange(selection)
+  const rows = selection.shown
+    .map(({ program: p, copy }, i) => {
+      const facts = mdEscape(`you earn ${earnText(p)}, cookie: ${cookieText(p)}, payout: ${payoutText(p)}, terms checked ${checkedText(p)}`)
+      return [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${facts}, apply: ${mdUrl(blogApplyHref(p, post.slug))}`,
+        `   ${mdEscapeProse(copy.why)}${copy.notFor ? ` Not for: ${mdEscapeProse(copy.notFor)}` : ""}`,
+      ].join("\n")
+    })
+    .join("\n")
+  const faq = postFaq(post, selection, mdEscape)
+  return joinSections([
+    `# ${mdHeading(postTitle(post, selection))}`,
+    range ? `By the OpenAffiliate team · Terms checked between ${range[0]} and ${range[1]}` : null,
+    `> ${mdEscapeProse(post.intro)}`,
+    `${DISCLOSURE}${sameTeam(post, selection) ? ` ${SAME_TEAM}` : ""}`,
+    section("Programs", rows),
+    section(
+      "How we chose",
+      [`${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`, ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
+    ),
+    faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
+    section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ].filter((x): x is string => Boolean(x)))
+}
+
 const CHANGELOG_TAG: Record<string, string> = {
   new: "New",
   improved: "Improved",
@@ -1134,7 +1223,9 @@ function changelogMd(): string {
     const items = entry.items
       .map(item => `- ${CHANGELOG_TAG[item.tag] ?? item.tag}: ${item.text}`)
       .join("\n")
-    return `## ${entry.date} — ${entry.title}\n\n${items}`
+    const summary = entry.summary ? `${entry.summary}\n\n` : ""
+    const link = entry.link ? `\n\n${entry.link.label}: ${BASE}${entry.link.href}` : ""
+    return `## ${entry.date} · ${entry.title}\n\n${summary}${items}${link}`
   })
   return joinSections([
     `# Changelog`,
@@ -1170,7 +1261,12 @@ function main(): void {
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
   for (const list of BEST_LISTS) {
-    write(`${bestPath(list).slice(1)}.md`, bestListMd(list, bestPath(list)))
+    const post = getPost(list.slug)
+    const selection = post ? postSelection(post) : null
+    write(
+      `${bestPath(list).slice(1)}.md`,
+      post && selection && postReady(selection) ? bestPostMd(post, selection, bestPath(list)) : bestListMd(list, bestPath(list)),
+    )
   }
 
   for (const p of programs) {

@@ -23,6 +23,7 @@ tracking_method: cookie
 payout:
   minimum: 100
   currency: USD
+  frequency: on-request
 
 signup_url: https://surfshark.com/affiliate-signup
 restrictions:

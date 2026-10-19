@@ -9,8 +9,9 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
-import { isLive, programs, type Program } from "../src/lib/programs"
-import { programs as clientPrograms } from "../src/lib/client-programs"
+import { commissionUnknown, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, programs, type Program } from "../src/lib/programs"
+import { programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
+import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
 
 const root = join(__dirname, "..")
 const flat = (groups: ReturnType<typeof directoryGroups>) => groups.flatMap((g) => g.programs.map((p) => p.slug))
@@ -55,12 +56,22 @@ test("the order is the same under another locale", () => {
   assert.equal(tr.stdout, en.stdout)
 })
 
-test("homepage sets: 5, 6 and 30, disjoint, featured and row verified and live", () => {
-  const { rankings, featured, row } = homepageSets(programs)
-  assert.deepEqual([rankings.length, featured.length, row.length], [5, 6, 30])
-  const all = [...rankings, ...featured, ...row].map((p) => p.slug)
+test("homepage sets: 5 and 6, disjoint, featured verified and live", () => {
+  const { rankings, featured } = homepageSets(programs)
+  assert.deepEqual([rankings.length, featured.length], [5, 6])
+  const all = [...rankings, ...featured].map((p) => p.slug)
   assert.equal(new Set(all).size, all.length)
-  for (const p of [...featured, ...row] as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+  for (const p of featured as Program[]) assert.ok(p.verified && isLive(p), p.slug)
+})
+
+test("homepage networks: every live network once, A to Z by display name ignoring case, in-house last (the /networks grid)", () => {
+  const list = networksByName()
+  assert.deepEqual(list.map((n) => n.network).sort(), [...liveNetworks].sort())
+  assert.equal(list.at(-1)!.network, IN_HOUSE)
+  const names = list.slice(0, -1).map((n) => networkName(n.network).toLowerCase())
+  assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en")))
+  assert.equal(list[0].network, "affitor")
+  assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
 })
 
 // CI keeps "typing and paging make no RSC request": the list syncs the URL
@@ -119,3 +130,28 @@ test("every <Link> to /programs, in every source file, opts out of prefetch", ()
   assert.equal(programsLinkProblems('<Link href="/programs/vercel">').links, 0)
   assert.equal(programsLinkProblems('const a = [{ href: "/programs" }]; <Link href={href} className="x">').problems.length, 1)
 })
+
+// The /programs payout and cookie filters and the hub lists read the same
+// facts (payout-filters.ts), so a hub and the filter it links to agree.
+test("each hub's /programs filter returns the hub's programs and only confirmed terms", () => {
+  const options: Record<string, Parameters<typeof searchPrograms>[0]> = {
+    "payout=paypal": { payout: "paypal" },
+    "payout=bank": { payout: "bank" },
+    "minpayout=0": { noMinimum: true },
+    "cookie=90": { longCookie: true },
+  }
+  const hubs = BEST_LISTS.filter((l) => l.filter && options[l.filter])
+  assert.equal(hubs.length, Object.keys(options).length)
+  for (const list of hubs) {
+    const client = new Set(searchPrograms(options[list.filter!]).map((p) => p.slug))
+    const hub = buildBestList(list).verified.map((p) => p.slug)
+    for (const slug of hub) assert.ok(client.has(slug), `${list.slug}: ${slug} missing from /programs?${list.filter}`)
+    for (const slug of client) {
+      const p = getProgram(slug)!
+      assert.ok(p.verified, `${list.filter}: unverified ${slug}`)
+      // The hub ranks only programs that publish a commission; the filter lists them all.
+      assert.ok(hub.includes(slug) || commissionUnknown(p.commission), `${list.filter}: ${slug} is not on ${list.slug}`)
+    }
+  }
+})
+

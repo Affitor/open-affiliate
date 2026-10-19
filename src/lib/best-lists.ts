@@ -10,6 +10,7 @@ import {
 } from "./programs"
 import type { Faq } from "./program-seo"
 import { compareCommission, isLifetime } from "./commission-order"
+import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
 
 /**
  * Ranked list pages. Adding a list is one entry in BEST_LISTS: the page, its
@@ -50,9 +51,31 @@ export interface BestList {
    * no row cap, and those that publish no rate listed last rather than left out.
    */
   directory?: boolean
+  /**
+   * A hub filters on one fact (commission type, payout, cookie). It is
+   * indexed only once it holds HUB_MIN_INDEXED verified programs; below that it
+   * stays up, noindex and out of the sitemap, and indexes itself as the
+   * registry grows.
+   */
+  hub?: boolean
+  /**
+   * The registry category a list belongs to. Other list pages link to a scoped
+   * list only from its own category, so per-category lists do not crowd every page.
+   */
+  scope?: string
+  /** The /programs query string that applies the same filter, linked from the page. */
+  filter?: string
 }
 
 export const MAX_ROWS = 50
+
+/** Verified programs a hub needs before search engines are asked to index it. */
+export const HUB_MIN_INDEXED = 10
+
+/** Payout methods as shown: an unverified program shows none (confirmed-terms.ts). */
+function paysVia(p: Program, filter: PayoutMethodFilter): boolean {
+  return paysBy(confirmedTerms(p).payoutMethods, filter)
+}
 
 /**
  * Follows "Verified <date>" on every list, page and twin alike. The date is
@@ -97,7 +120,7 @@ export function freshnessLine(rows: Pick<Program, "status" | "verified" | "lastV
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
 
-export const BEST_LISTS: BestList[] = [
+const LISTS: BestList[] = [
   {
     // The hub answers "best affiliate programs" at /best; the slug is only its id.
     slug: "affiliate-programs",
@@ -153,6 +176,7 @@ export const BEST_LISTS: BestList[] = [
       "Recurring affiliate programs that keep paying on renewals, ranked by rate. See which pay for 12 months or for life, with verified terms listed first.",
     summary: "list their commission as recurring",
     criteria: "Programs whose commission is listed as recurring.",
+    filter: "type=recurring",
     qualifies: (p) => p.commission.type === "recurring",
   },
   {
@@ -167,6 +191,19 @@ export const BEST_LISTS: BestList[] = [
     criteria:
       "Programs tagged SaaS in the registry whose commission is listed as recurring. Referral rewards paid in credit or gift cards are left out.",
     qualifies: (p) => p.tags.includes("saas") && p.commission.type === "recurring" && p.kind !== "referral",
+  },
+  {
+    // The filter behind src/content/best/saas-affiliate-programs.ts: the "saas"
+    // tag and kind, any commission type, so flat and first-payment deals count.
+    slug: "saas-affiliate-programs",
+    title: "Best SaaS Affiliate Programs, Ranked",
+    h1: "SaaS Affiliate Programs",
+    description:
+      "SaaS and software affiliate programs ranked by commission, flat, first-payment and recurring, with the cookie and signup link for each, verified first.",
+    summary: "are SaaS products, going by their registry tags",
+    criteria:
+      "Programs tagged SaaS in the registry, whatever their commission type. Referral rewards paid in credit or gift cards are left out.",
+    qualifies: (p) => p.tags.includes("saas") && p.kind !== "referral",
   },
   {
     // No field records a sign-up fee or a purchase requirement. What is sourced
@@ -193,13 +230,143 @@ export const BEST_LISTS: BestList[] = [
     criteria: "Programs whose registry tags or keywords name SEO.",
     qualifies: (p) => [...p.tags, ...(p.agentKeywords ?? [])].some((t) => /\bseo\b/i.test(t)),
   },
+  {
+    slug: "one-time-affiliate-programs",
+    title: "One-Time Commission Affiliate Programs",
+    h1: "One-Time Commission Affiliate Programs",
+    description:
+      "Affiliate programs that pay a one-time commission per sale or signup, ranked by payout, with verified terms first and the cookie window for each.",
+    summary: "list their commission as one-time",
+    criteria: "Programs whose commission is listed as one-time: paid once per sale, signup or customer.",
+    hub: true,
+    filter: "type=one-time",
+    qualifies: (p) => p.commission.type === "one-time",
+  },
+  {
+    // Payout terms as shown: unverified programs carry none (confirmed-terms.ts).
+    slug: "no-minimum-payout-affiliate-programs",
+    title: "Affiliate Programs With No Minimum Payout",
+    h1: "Affiliate Programs With No Minimum Payout",
+    description:
+      "Affiliate programs with no minimum payout threshold, so every commission you earn is paid out. Ranked by commission, from terms we verified.",
+    summary: "set no minimum payout, going by verified terms",
+    criteria:
+      "Programs whose verified terms set the payout minimum at zero. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    filter: "minpayout=0",
+    qualifies: (p) => confirmedTerms(p).payout.minimum === 0,
+  },
+  {
+    slug: "paypal-affiliate-programs",
+    title: "Affiliate Programs That Pay via PayPal",
+    h1: "Affiliate Programs That Pay via PayPal",
+    description:
+      "Affiliate programs that pay commissions through PayPal, ranked by commission, with the cookie window and payout terms we verified for each.",
+    summary: "pay affiliates through PayPal, going by verified terms",
+    criteria:
+      "Programs whose verified payout terms list PayPal as a payout method. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    filter: "payout=paypal",
+    qualifies: (p) => paysVia(p, "paypal"),
+  },
+  {
+    slug: "bank-transfer-affiliate-programs",
+    title: "Affiliate Programs That Pay by Bank Transfer",
+    h1: "Affiliate Programs That Pay by Bank Transfer",
+    description:
+      "Affiliate programs that pay commissions by bank transfer, ranked by commission, with the cookie window and payout terms we verified for each.",
+    summary: "pay affiliates by bank transfer, going by verified terms",
+    criteria:
+      "Programs whose verified payout terms list a bank transfer (bank, wire, ACH or SEPA). Wise is counted separately. Payout terms are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    filter: "payout=bank",
+    qualifies: (p) => paysVia(p, "bank"),
+  },
+  {
+    slug: "long-cookie-affiliate-programs",
+    title: "Affiliate Programs With 90-Day+ Cookies",
+    h1: "Affiliate Programs With Long Cookie Windows",
+    description:
+      "Affiliate programs with a cookie window of 90 days or longer, so a reader who buys months later still counts. Ranked by commission, verified terms.",
+    summary: "give a cookie window of 90 days or longer, going by verified terms",
+    criteria:
+      "Programs whose verified terms give a cookie window of 90 days or longer. Cookie windows are not shown for unverified programs, so they are not counted.",
+    hub: true,
+    filter: "cookie=90",
+    qualifies: (p) => (confirmedTerms(p).cookieDays ?? 0) >= LONG_COOKIE_DAYS,
+  },
+  {
+    // The filter behind the editorial post in src/content/best/ai-affiliate-programs.ts;
+    // without enough fresh verified programs the page falls back to this list.
+    slug: "ai-affiliate-programs",
+    title: "Best AI Affiliate Programs, Ranked",
+    h1: "AI Affiliate Programs",
+    description:
+      "The best AI affiliate programs for video, voice, writing and developer tools, ranked by commission, with verified terms first and the cookie for each.",
+    summary: "are AI tools, going by their registry category",
+    criteria: "Programs listed in the AI category.",
+    qualifies: (p) => p.category === "AI",
+  },
 ]
+
+/** Commission types that get a list per category. */
+const CATEGORY_TYPES = [
+  { type: "recurring", label: "Recurring", pays: "a recurring commission" },
+  { type: "one-time", label: "One-Time", pays: "a one-time commission" },
+] as const
+
+/**
+ * "<Category> recurring affiliate programs": one list per category and
+ * commission type, made only where HUB_MIN_INDEXED verified programs with a
+ * published commission qualify. A combination below that gets no page at all,
+ * and its page appears by itself once the registry reaches it.
+ */
+function categoryTypeLists(): BestList[] {
+  const taken = new Set(LISTS.map((l) => l.slug))
+  const categories = [...new Set(livePrograms.map((p) => p.category))].sort()
+  return categories.flatMap((category) =>
+    CATEGORY_TYPES.flatMap(({ type, label, pays }) => {
+      const qualifies = (p: Program) => p.category === category && p.commission.type === type
+      const slug = `${categoryToSlug(category)}-${type}-affiliate-programs`
+      const verified = livePrograms.filter((p) => p.verified && !commissionUnknown(p.commission) && qualifies(p)).length
+      if (verified < HUB_MIN_INDEXED || taken.has(slug)) return []
+      const h1 = `${category} ${label} Affiliate Programs`
+      return [
+        {
+          slug,
+          // 44 characters at most, 60 with the layout's suffix.
+          title: [h1, `${category} ${label} Affiliates`].find((t) => t.length <= 44) ?? h1,
+          h1,
+          description: `${category} affiliate programs that pay ${pays}, ranked by commission, with verified terms first and the cookie window for each.`,
+          summary: `are in the ${category} category and list their commission as ${type}`,
+          criteria: `Programs in the ${category} category whose commission is listed as ${type}.`,
+          hub: true,
+          scope: category,
+          filter: `category=${encodeURIComponent(category)}&type=${type}`,
+          qualifies,
+        },
+      ]
+    })
+  )
+}
+
+export const BEST_LISTS: BestList[] = [...LISTS, ...categoryTypeLists()]
 
 /** The hub: "best affiliate programs" at /best, the parent of every other list. */
 export const BEST_INDEX = BEST_LISTS[0]
 
 export function bestPath(list: BestList): string {
   return list === BEST_INDEX ? "/best" : `/best/${list.slug}`
+}
+
+/** False for a hub with fewer than HUB_MIN_INDEXED verified programs: the page stays up, noindex, out of the sitemap. */
+export function indexable(list: BestList): boolean {
+  return !list.hub || buildBestList(list).verified.length >= HUB_MIN_INDEXED
+}
+
+/** The lists a list page links to: every unscoped list, and the scoped ones of its own category. */
+export function otherLists(list: BestList): BestList[] {
+  return BEST_LISTS.filter((l) => l.slug !== list.slug && (!l.scope || l.scope === list.scope))
 }
 
 /** A list at /best/<slug>; the hub has no such URL. */
@@ -238,6 +405,7 @@ export function categoryList(category: string): BestList {
       "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are listed last.",
     qualifies: (p) => p.category === category,
     directory: true,
+    scope: category,
   }
 }
 

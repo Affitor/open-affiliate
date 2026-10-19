@@ -70,12 +70,12 @@ export function EarningsCalculator({ input }: { input: EstimateInput }) {
       <div className="flex flex-wrap gap-8" aria-live="polite">
         <div>
           <p className="text-xs text-muted-foreground">{input.recurring ? `Per month, at month ${at}` : "Per month"}</p>
-          <p className="text-2xl font-semibold tracking-tight tabular-nums">{monthly == null ? "—" : money(monthly)}</p>
+          <p className="text-subtitle font-mono font-medium tracking-tight tabular-nums">{monthly == null ? "—" : money(monthly)}</p>
         </div>
         {input.recurring && (
           <div>
             <p className="text-xs text-muted-foreground">Earned in year one, before payout holds</p>
-            <p className="text-2xl font-semibold tracking-tight tabular-nums">{yearOne == null ? "—" : money(yearOne)}</p>
+            <p className="text-subtitle font-mono font-medium tracking-tight tabular-nums">{yearOne == null ? "—" : money(yearOne)}</p>
           </div>
         )}
       </div>

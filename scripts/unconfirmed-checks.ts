@@ -14,6 +14,7 @@
  */
 import { namesTerm, proseSentences, statesTerms, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import type { Program } from "../src/lib/programs"
+import { frequencyLabel } from "../src/lib/claims/form"
 
 /** Fields the API leaves out for an unverified program; `payout` stays as {}. */
 export const HIDDEN_API_KEYS = ["cookieDays", "payoutMethods", "approval", "approvalTime"] as const
@@ -175,7 +176,7 @@ const TERM_MARKUP: [string, RegExp][] = [
   ["an Approval or Approval time field", />Approval(?: time)?<\/p>|"Approval(?: time)?"/],
   ["a serialized term field", SERIALIZED_TERM],
   // The earnings card since the human-first page (2026-10-17): one data-term row per term.
-  ["an earnings-card term row or flow step", /data-term="(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"|"data-term":"(?:cookie|payout|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"/],
+  ["an earnings-card term row or flow step", /data-term="(?:cookie|payout|payout-conditions|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"|"data-term":"(?:cookie|payout|payout-conditions|paid-by|approval|conditions|step-approval|step-payout|step-cookie)"/],
   ["a Payout or Paid by label", /"(?:Payout|Paid by)"/],
   // The flow step's approval words even without their data-term.
   ["an approval step", /\b(?:Automatic|Reviewed by hand|By invitation) approval\b/],
@@ -196,7 +197,7 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
       const want = p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
       if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
-    const frequency = p.payout.frequency ? p.payout.frequency.charAt(0).toUpperCase() + p.payout.frequency.slice(1) : null
+    const frequency = p.payout.frequency ? frequencyLabel(p.payout.frequency) : null
     const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
     const minimum = min && !frequency ? min.charAt(0).toUpperCase() + min.slice(1) : min
     const payout = [frequency, minimum].filter(Boolean).join(", ")
@@ -207,6 +208,10 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
     const approval = label ? `${label}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : (p.approvalTime ?? null)
     if (approval && termRow(own, "approval", "Approval") !== approval) {
       problems.push(`does not show its approval and approval time ("${approval}")`)
+    }
+    const conditions = /<p data-term="payout-conditions"[^>]*>([\s\S]*?)<\/p>/.exec(own)?.[1]
+    if (p.payout.conditions && (conditions == null || decodeEntities(conditions) !== p.payout.conditions)) {
+      problems.push("does not show its payout conditions")
     }
     return problems
   }
@@ -229,6 +234,10 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   }
   const leaked = leakedSentence(p, [...blocks, ...flight].join("\n"))
   if (leaked) problems.push(`carries a dropped sentence ("${leaked.slice(0, 120)}")`)
+  // Read whole, not by sentence: "paid 60 days after the transaction" names no term word.
+  if (p.payout.conditions && [...blocks, ...flight].map(squash).join("\n").includes(squash(p.payout.conditions))) {
+    problems.push("carries its payout conditions")
+  }
   for (const label of [">Restrictions</h2>", ">Use cases:</p>", ">Rules before you promote</h2>"]) {
     const at = own.indexOf(label)
     if (at === -1) continue
@@ -267,6 +276,9 @@ export function termsMdProblems(p: Program, md: string): string[] {
       .filter(Boolean)
       .join(", ")
     if (payout && line("Payout: ") !== `Payout: ${payout}`) problems.push(`does not show its payout (${payout})`)
+    // As generate-md writes an inline fact: line breaks collapsed, < > & as entities.
+    const conditions = p.payout.conditions?.replace(/\s*[\r\n]+\s*/g, " ")
+    if (conditions && decodeEntities(line("Payout conditions: ") ?? "") !== `Payout conditions: ${conditions}`) problems.push("does not show its payout conditions")
     const approval = p.approval ? `Approval: ${p.approval}${p.approvalTime ? ` (${p.approvalTime})` : ""}` : null
     if (approval && line("Approval: ") !== approval) problems.push(`does not show its approval (${approval})`)
     return problems
@@ -274,7 +286,7 @@ export function termsMdProblems(p: Program, md: string): string[] {
   // Right after the Commission line, so the marker sits next to the figure.
   const at = lines.findIndex((l) => l.startsWith("Commission: "))
   if (at === -1 || lines[at + 1] !== UNCONFIRMED_NOTE) problems.push(`does not follow its Commission line with "${UNCONFIRMED_NOTE}"`)
-  for (const prefix of ["Cookie window:", "Payout:", "Approval:"]) {
+  for (const prefix of ["Cookie window:", "Payout:", "Payout conditions:", "Approval:"]) {
     if (line(prefix)) problems.push(`shows "${prefix}"`)
   }
   // The whole twin, prose sections included.

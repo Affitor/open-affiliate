@@ -11,7 +11,8 @@ commission:
   mode: percentage
   value: 50
   currency: USD
-  duration: null
+  # "You'll earn a 50% commission every month that your referred customer stays with us." (paraphrasetool.com/affiliate-landing, checked 2026-10-18)
+  duration: lifetime
   conditions: "50% of each monthly payment, paid every month the referred customer stays subscribed."
 
 # cookie window: not published on paraphrasetool.com/affiliate-landing (checked 2026-10-13)
@@ -52,8 +53,8 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-18"
+last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
 source: manual

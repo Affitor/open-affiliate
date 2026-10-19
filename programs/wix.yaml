@@ -41,11 +41,6 @@ description: >
   website, with 2,000+ templates, built-in AI tools, eCommerce, bookings,
   payments, SEO and marketing tools, hosting and custom domains.
 
-  The Wix affiliate program pays a fee for each new user who buys a Premium
-  plan within 30 days of first clicking your link. Wix does not publish the
-  rate, and fees are paid once a $300 monthly threshold is reached.
-  Applications go through Impact.
-
 short_description: "Website builder with AI tools and eCommerce"
 
 agents:
@@ -66,7 +61,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 status: active
 kind: affiliate

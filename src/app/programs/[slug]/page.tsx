@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { SaveButton } from "@/components/save-button";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -19,14 +19,15 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { ProgramCompare, getRelatedPrograms } from "@/components/related-programs";
-import { SocialListenLoader } from "@/components/social-listen-loader";
 import { ClaimChip } from "@/components/claim-chip";
 import { EarningsCalculator } from "@/components/earnings-calculator";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, networkName } from "@/lib/program-seo";
 import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirmedTerms, networkHowToJoin, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
+import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
+import { AFFITOR_SAME_TEAM, SAME_TEAM, isSameTeam } from "@/lib/same-team";
 import {
   answerParts,
   approvalText,
@@ -45,7 +46,8 @@ import {
 import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
-import { FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { getOasScore, oasValue } from "@/lib/oas";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -137,20 +139,28 @@ export default async function ProgramPage({
   const figure = commissionFigure(program);
   const faq = buildFaq(program);
   const network = networkName(program);
-  const applyCta = applyButton(program);
+  const applyCta = applyButton(program, "program_page");
+  const visitHref = outboundUrl(program.url, "program_page", slug);
   // The brand on Affitor too: one line under its own terms, and a secondary button.
   const alsoOn = alsoOnAffitor(program);
   const claimable = !program.claimedBy && claimsEnabledFor(program);
   // Claim spec v4 §3: a program already on Affitor gets a chip instead of the offer line.
   const onAffitor = program.network === "affitor" || Boolean(alsoOn);
+  // A brand running its program elsewhere can move it to Affitor; not one already there, nor our own.
+  const canMoveToAffitor = !noProgram && !onAffitor && !isSameTeam(program.slug);
   const estimate = estimateInput(program);
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
   const payout = payoutText(program);
+  // When a commission becomes payable; confirmedTerms left it out of an unverified program.
+  // Under the payout steps, or under the Payout row on a paused page, which has no steps.
+  const payoutConditions = program.payout.conditions;
   const methods = payoutMethods(program);
   const approval = approvalText(program);
   const cookie = cookieText(program);
   const hasAlternatives = getRelatedPrograms(program).length > 0;
+  // OAS sits in the header, away from the owner box and its "Move this program to Affitor" link.
+  const oas = getOasScore(slug);
 
   // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
   const statusTag = noProgram
@@ -218,7 +228,7 @@ export default async function ProgramPage({
     : "flex items-center justify-center gap-2 rounded-lg bg-foreground text-background px-4 h-11 text-sm font-medium hover:bg-foreground/90 transition-colors w-full";
 
   return (
-    <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-6 sm:pt-8 pb-12">
+    <div className="oa-frame px-4 sm:px-12 pt-6 sm:pt-10 pb-12">
       <TrackView slug={slug} />
 
       {/* JSON-LD */}
@@ -231,7 +241,7 @@ export default async function ProgramPage({
       />
 
       {/* Breadcrumb */}
-      <nav className="flex flex-wrap items-center gap-1.5 text-sm text-muted-foreground" aria-label="Breadcrumb">
+      <nav className="flex flex-wrap items-center gap-1.5 text-meta text-muted-foreground" aria-label="Breadcrumb">
         <Link href="/programs" prefetch={false} className="hover:text-foreground transition-colors">Programs</Link>
         <span>/</span>
         <Link href={`/categories/${categoryToSlug(program.category)}`} className="hover:text-foreground transition-colors">{program.category}</Link>
@@ -241,13 +251,14 @@ export default async function ProgramPage({
 
       {/* Header: what the product is, then the one-line answer */}
       <div className="flex items-start gap-4 sm:gap-5 mt-5">
-        <ProgramLogo slug={program.slug} name={program.name} size={64} className="shrink-0 rounded-2xl border border-border/60 bg-white" />
+        <ProgramLogo slug={program.slug} name={program.name} size={64} className="shrink-0 rounded-[14px] border border-border bg-white" />
         <div className="min-w-0">
-          <h1 className="text-2xl sm:text-4xl font-semibold tracking-tight">{program.name} affiliate program</h1>
-          <p className="text-base sm:text-xl mt-1.5 sm:mt-2">{program.shortDescription}</p>
+          <h1 className="text-title md:text-display font-semibold tracking-[-0.03em]">{program.name} affiliate program</h1>
+          <p className="text-base sm:text-lg text-foreground/80 mt-1.5">{program.shortDescription}</p>
+          {isSameTeam(program.slug) && <p className="text-sm text-muted-foreground mt-1.5">{SAME_TEAM}</p>}
           <div className="flex flex-wrap items-center gap-2 mt-3">
             {verified && (
-              <Badge variant="outline" className="text-xs border-emerald-600/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 shrink-0">
+              <Badge variant="outline" className="text-xs border-good-line bg-good-bg text-good shrink-0">
                 <Check className="h-3 w-3 mr-1" />
                 Verified
               </Badge>
@@ -255,13 +266,18 @@ export default async function ProgramPage({
             {statusTag && (
               <Badge
                 variant="outline"
-                className={`text-xs shrink-0 ${statusTag === "Not verified" ? "text-muted-foreground" : "border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-400"}`}
+                className={`text-xs shrink-0 ${statusTag === "Not verified" ? "text-muted-foreground" : "border-line-strong bg-sunk text-foreground"}`}
               >
                 {statusTag}
               </Badge>
             )}
             <ClaimChip program={program} />
             <Badge variant="outline" className="text-xs shrink-0 text-muted-foreground">{program.category}</Badge>
+            {oas && (
+              <Link href={`/programs/${slug}/oas`} className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs font-medium hover:bg-muted/50 transition-colors">
+                {oasValue(oas) == null ? "OAS · scoring in progress" : <>OAS <span className="font-mono ml-1">{oasValue(oas)}</span></>}
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -273,17 +289,18 @@ export default async function ProgramPage({
 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px] gap-x-14 mt-8">
         {/* Earnings panel: first in the DOM, so keyboard and screen readers reach Apply early; the grid puts it on the right. */}
-        <aside aria-labelledby="earn-heading" className="lg:col-start-2 lg:row-start-1 lg:sticky lg:top-20 self-start rounded-2xl border border-border/60 bg-card p-5 sm:p-6 mb-10 lg:mb-0">
+        <aside aria-labelledby="earn-heading" className="lg:col-start-2 lg:row-start-1 lg:sticky lg:top-20 self-start rounded-xl border border-border bg-card p-5 mb-10 lg:mb-0">
           {paused && (
-            <div className="rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 text-sm mb-5">
+            <div className="rounded-xl border border-line-strong bg-sunk p-4 text-sm mb-5">
               <p className="font-medium">When we last checked, the signup page did not work.</p>
               <p className="text-muted-foreground mt-1">{pausedNote} The program may have closed or moved; the last known terms below are for reference only.</p>
             </div>
           )}
-          <h2 id="earn-heading" className="text-xs font-medium uppercase tracking-widest text-muted-foreground">{panelLabel}</h2>
+          <h2 id="earn-heading" className="oa-label">{panelLabel}</h2>
+          {(noProgram || paused) && <div className="mt-5"><SaveButton slug={program.slug} name={program.name} /></div>}
           {noProgram ? (
             <>
-              <p className="text-3xl font-semibold tracking-tight mt-2">None</p>
+              <p className="text-display font-semibold tracking-tight mt-2">None</p>
               <p className="text-sm text-muted-foreground mt-1">{noProgramHeadline(program)}.</p>
               {hasAlternatives && (
                 <a href="#alternatives" className="mt-5 flex items-center justify-center gap-2 rounded-lg bg-foreground text-background h-11 text-sm font-medium hover:bg-foreground/90 transition-colors">
@@ -295,11 +312,11 @@ export default async function ProgramPage({
             <>
               {figure ? (
                 <p className="mt-1.5">
-                  <span className={`block font-semibold tracking-tight ${figure.kind === "number" ? "text-5xl" : "text-2xl"}`}>{figure.big}</span>
+                  <span className={`block tracking-[-0.03em] ${figure.kind === "number" ? "font-mono font-medium text-display" : "font-semibold text-title"}`}>{figure.big}</span>
                   {figure.rest && <span className="block text-muted-foreground mt-1">{figure.rest}</span>}
                 </p>
               ) : (
-                <p className="text-2xl font-semibold tracking-tight mt-1.5">Commission not published</p>
+                <p className="text-title font-semibold tracking-tight mt-1.5">Commission not published</p>
               )}
               {unconfirmed && <p className="text-xs text-muted-foreground leading-relaxed mt-3">{UNCONFIRMED_NOTE}</p>}
               {facts.length > 0 && (
@@ -309,15 +326,16 @@ export default async function ProgramPage({
                   ))}
                 </dl>
               )}
-              {verified && program.commissionConditions && (
-                <p data-term="conditions" className="text-xs text-muted-foreground leading-relaxed mt-3">{program.commissionConditions}</p>
+              {paused && payoutConditions && (
+                <p data-term="payout-conditions" className="text-xs text-muted-foreground leading-relaxed mt-3">{payoutConditions}</p>
               )}
               {!paused && (
-                <div className="mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
+                  <SaveButton slug={program.slug} name={program.name} />
                 </div>
               )}
               {paused && hasAlternatives && (
@@ -342,7 +360,7 @@ export default async function ProgramPage({
             </>
           )}
           <p className="flex items-start gap-1.5 text-xs text-muted-foreground mt-4">
-            {verified ? <ShieldCheck className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" /> : paused ? <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" /> : <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />}
+            {verified ? <ShieldCheck className="h-3.5 w-3.5 mt-0.5 shrink-0 text-good" /> : paused ? <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" /> : <Info className="h-3.5 w-3.5 mt-0.5 shrink-0" />}
             <span>
               {trust}
               {(verified || noProgram) && (
@@ -369,7 +387,7 @@ export default async function ProgramPage({
             <H2>What {program.name} does</H2>
             <p className="text-muted-foreground leading-relaxed whitespace-pre-line">{productText(program)}</p>
             <p className="mt-3 text-sm">
-              <a href={program.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-foreground">
+              <a href={visitHref} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 underline underline-offset-4 hover:text-foreground">
                 Visit {program.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
                 <ExternalLink className="h-3.5 w-3.5" />
               </a>
@@ -382,7 +400,7 @@ export default async function ProgramPage({
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {cases.map((c, i) => (
                   <li key={i} className="flex gap-2.5 rounded-xl border border-border/60 bg-card px-4 py-3 text-sm">
-                    <Check className="h-4 w-4 mt-0.5 shrink-0 text-emerald-600 dark:text-emerald-400" />
+                    <Check className="h-4 w-4 mt-0.5 shrink-0 text-good" />
                     <span>{c}</span>
                   </li>
                 ))}
@@ -405,31 +423,37 @@ export default async function ProgramPage({
                   </li>
                 ))}
               </ol>
+              {payoutConditions && (
+                <p data-term="payout-conditions" className="text-sm leading-relaxed text-foreground/80 mt-4">{payoutConditions}</p>
+              )}
               {program.network && program.network !== IN_HOUSE && (
                 <p className="text-xs text-muted-foreground mt-4">{networkHowToJoin(program.network)}</p>
               )}
             </section>
           )}
 
-          {!noProgram && program.restrictions && program.restrictions.length > 0 && (
+          {!noProgram && ((program.restrictions?.length ?? 0) > 0 || (verified && program.commissionConditions)) && (
             <section>
               <H2>Rules before you promote</H2>
-              <ul className="space-y-2.5">
-                {program.restrictions.map((r, i) => (
+              {/* The card keeps the figure, the facts and Apply; the long commission terms live here. */}
+              {verified && program.commissionConditions && (
+                <details className="group mb-4 rounded-xl border border-border bg-card">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 py-3 text-sm font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
+                    How the commission works
+                    <ChevronDown className="size-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
+                  </summary>
+                  <p data-term="conditions" className="border-t border-border px-4 py-3 text-sm leading-relaxed text-foreground/80">{program.commissionConditions}</p>
+                </details>
+              )}
+              {(program.restrictions?.length ?? 0) > 0 && <ul className="space-y-2.5">
+                {(program.restrictions ?? []).map((r, i) => (
                   <li key={i} className="flex gap-2.5 text-sm">
-                    <AlertTriangle className="h-4 w-4 mt-0.5 shrink-0 text-amber-700 dark:text-amber-400" />
+                    <Info className="h-4 w-4 mt-0.5 shrink-0 text-muted-foreground" />
                     <span>{r}</span>
                   </li>
                 ))}
-              </ul>
+              </ul>}
             </section>
-          )}
-
-          {/* Social Listen */}
-          {!noProgram && (
-            <Suspense fallback={<div className="animate-pulse h-48 rounded-xl bg-muted/30" />}>
-              <SocialListenLoader slug={slug} />
-            </Suspense>
           )}
 
           {estimate && (
@@ -473,6 +497,12 @@ export default async function ProgramPage({
                     {onAffitor && <Badge variant="outline" className="text-xs text-muted-foreground">Runs on Affitor</Badge>}
                   </div>
                   <p className="text-sm text-muted-foreground">{program.name}&apos;s team keeps this page up to date. Every change is reviewed before it goes live.</p>
+                  {/* Claim spec v4 §7.2: a dispute goes to the manual review queue. */}
+                  {claimsEnabledFor(program) && (
+                    <Link href={`/programs/${program.slug}/claim#report`} className="text-xs text-muted-foreground underline underline-offset-4 hover:text-foreground">
+                      Report this page
+                    </Link>
+                  )}
                 </>
               ) : (
                 <>
@@ -501,6 +531,21 @@ export default async function ProgramPage({
                         Suggest an edit on GitHub
                       </a>
                     </p>
+                  )}
+                  {canMoveToAffitor && (
+                    <div className="space-y-1.5 border-t border-border pt-3">
+                      <AffitorLink
+                        href={affitorUrl("migrate", program.slug, AFFITOR_SWITCH)}
+                        source="migrate"
+                        slug={program.slug}
+                        cta="move"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border h-9 px-3.5 text-sm font-medium hover:bg-muted/50 transition-colors"
+                      >
+                        Move this program to Affitor
+                        <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                      </AffitorLink>
+                      <p className="text-xs text-muted-foreground">{AFFITOR_SAME_TEAM}</p>
+                    </div>
                   )}
                 </>
               )}

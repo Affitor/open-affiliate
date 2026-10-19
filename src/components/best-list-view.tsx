@@ -3,18 +3,20 @@ import Link from "next/link";
 import { ArrowLeft, ArrowRight, BadgeCheck, Percent, Trophy, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
+import { SameTeamTag } from "@/components/same-team-tag";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { AffitorLink } from "@/components/affitor-link";
 import {
   BEST_INDEX,
-  BEST_LISTS,
   MIN_SAMPLE,
   SHARED_RULES,
   bestListCopy,
   VERIFIED_NOTE,
   bestPath,
+  indexable,
+  otherLists,
   buildBestList,
   listCommissionText,
   type BestList,
@@ -29,6 +31,7 @@ export function bestListMetadata(list: BestList, path: string): Metadata {
   return {
     title: list.title,
     description: list.description,
+    ...(indexable(list) ? {} : { robots: { index: false, follow: true } }),
     alternates: {
       canonical: path,
       types: { "text/markdown": `${SITE}${path}.md` },
@@ -51,10 +54,13 @@ export function BestListView({
   list,
   path,
   parent,
+  picks,
 }: {
   list: BestList;
   path: string;
   parent: { name: string; href: string };
+  /** An editorial post on the same topic, linked under the intro. */
+  picks?: { href: string; label: string };
 }) {
   const data = buildBestList(list);
   const { intro, faq } = bestListCopy(data);
@@ -131,8 +137,23 @@ export function BestListView({
       <div className="mb-8">
         <h1 className="text-2xl font-bold tracking-tight">{list.h1}</h1>
         <p className="text-sm text-muted-foreground mt-2 max-w-3xl">{intro}</p>
+        {picks && (
+          <p data-list-picks className="text-sm mt-3 max-w-3xl">
+            <span className="font-medium">Our picks:</span>{" "}
+            <Link href={picks.href} className="underline underline-offset-4">{picks.label}</Link>
+          </p>
+        )}
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
+          {list.filter && (
+            <>
+              {" "}
+              <Link href={`/programs?${list.filter}`} prefetch={false} className="underline underline-offset-4">
+                Filter all programs the same way
+              </Link>
+              .
+            </>
+          )}
         </p>
         {data.checked && (
           <p className="text-xs text-muted-foreground mt-2 max-w-3xl">
@@ -179,6 +200,7 @@ export function BestListView({
                         <span className="text-sm font-medium block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {program.name}
                         </span>
+                        <SameTeamTag slug={program.slug} inLink className="block" />
                         {program.verified ? (
                           <Badge
                             variant="outline"
@@ -219,9 +241,9 @@ export function BestListView({
                     {networkName(program.network ?? IN_HOUSE)}
                   </td>
                   <td className="py-3 px-3 text-xs">
-                    {/* The program page's own apply link, so both send readers to the same place. */}
+                    {/* The program page's apply link with the list UTM, so both send readers to the same place. */}
                     <AffitorLink
-                      href={applyButton(program).href}
+                      href={applyButton(program, "list").href}
                       source="list"
                       slug={program.slug}
                       cta="sign_up"
@@ -251,7 +273,7 @@ export function BestListView({
       </div>
 
       <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3">
-        {BEST_LISTS.filter((l) => bestPath(l) !== path).map((l) => (
+        {otherLists(list).map((l) => (
           <Link
             key={l.slug}
             href={bestPath(l)}

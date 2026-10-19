@@ -14,11 +14,17 @@ commission:
   value: 30
   currency: USD
   duration: "12 months"
-  conditions: Earn 30% commission of the monthly subscription fee for up to one year
+  conditions: "Earn 30% commission of the monthly subscription fee for up to one year Commission applies only to recurring paid-plan subscription fees for the first 12 months, excluding booking fees and other non-subscription charges. The agreement specifies monthly payment."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.bokun.io/affiliate-program-terms
-restrictions: null
+restrictions:
+  - Partners must not be engaged in a business competing with Bokun or its affiliates
+  - Leads must be new potential customers, not existing customers or active sales prospects at submission or during the previous 60 days
+  - No self-referrals, incentives, deceptive claims, cookie stuffing, pop-ups, masked referring URLs, fake redirects or automated leads
+  - Do not purchase advertising competing with Bokun advertising, including branded keywords
+  - Use approved brand materials and disclose the referral relationship; do not make unauthorized guarantees or commitments
+  - Complete payment-account and tax requirements; outstanding eligibility requirements can forfeit commissions after three months
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -43,7 +49,14 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: monthly
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'

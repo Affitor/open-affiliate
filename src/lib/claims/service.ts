@@ -1,7 +1,9 @@
-import { createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto"
+import { createHash, createHmac, randomBytes, randomInt, randomUUID, timingSafeEqual } from "node:crypto"
+import { parse } from "tldts"
 import { z } from "zod"
 import { parseCommissionMode } from "@/lib/commission-mode"
 import type { Program } from "@/lib/programs"
+import programSchema from "../../../schema/program.schema.json"
 import {
   PILOT_SLUGS,
   TURNSTILE_HOSTNAMES,
@@ -60,6 +62,8 @@ export const LIMITS = {
   codesSiteDay: 100,
   manualPerEmailDay: 2,
   editsPerClaimDay: 10,
+  /** New programs per account per 24 hours, inside the edit quota above. */
+  newProgramsPerClaimDay: 3,
   /**
    * Sign-in requests per address per 24 hours, counted whether or not the
    * address is on a team, and answered the same way either way.
@@ -134,10 +138,12 @@ export interface SigninCodeRow {
   used_at: string | null
 }
 
+export type EditKind = "edit" | "new"
+
 export interface EditRow {
   id: string
   slug: string
-  kind: "edit" | "new"
+  kind: EditKind
   status: string
   pr_url: string | null
   fields: Record<string, unknown>
@@ -174,16 +180,21 @@ export interface ClaimStore {
    */
   release(claimId: string, actorId: string): Promise<boolean>
   /**
-   * Queues a member's edit and its `terms.submitted` event, unless the claim
-   * already has `dailyLimit` edits in the last 24 hours, or the member or the
-   * claim is no longer active. One atomic step under the claim row lock
-   * (claim_member_submit_edit), so parallel submissions cannot pass the quota
-   * together and a removed member cannot slip one in.
+   * Queues a member's edit (or new program) and its `edit.submitted` /
+   * `program.submitted` event, unless the claim already has `limits.perDay`
+   * changes (or, for a new program, `limits.newPerDay` new programs) in the
+   * last 24 hours, the member or the claim is no longer active, or the claim's
+   * domain is not `domain`. One atomic step under the claim row lock
+   * (claim_member_submit_edit, migration 012), so parallel submissions cannot
+   * pass the quota together, a removed member cannot slip one in, and a
+   * listing on another domain cannot be queued under this account even if a
+   * caller skipped its own check. A new program is refused ("already_sent")
+   * while one with the same slug or `fields.page_key` waits for review.
    */
   submitEdit(
-    edit: { member_id: string; slug: string; fields: Record<string, unknown> },
-    dailyLimit: number,
-  ): Promise<"ok" | "quota" | "not_owner">
+    edit: { member_id: string; slug: string; domain: string; kind: EditKind; fields: Record<string, unknown> },
+    limits: { perDay: number; newPerDay: number },
+  ): Promise<"ok" | "quota" | "quota_new" | "already_sent" | "not_owner">
   /** Unverified claims older than 30 days and events older than a year. */
   prune(now: Date): Promise<void>
   /** Program page events for the owner panel; null when unavailable (the panel hides it). */
@@ -216,7 +227,7 @@ export interface ClaimStore {
   listEdits(claimId: string): Promise<EditRow[]>
 }
 
-export type ClaimProgram = Pick<Program, "slug" | "name" | "url" | "signupUrl" | "commission">
+export type ClaimProgram = Pick<Program, "slug" | "name" | "url" | "signupUrl" | "commission" | "network">
 
 /**
  * Every email the claim flow may send. Each is a reply to something the
@@ -251,6 +262,8 @@ export interface ClaimDeps {
   getProgram: (slug: string) => ClaimProgram | undefined
   /** Every listing whose website is on this registrable domain. */
   programsOnDomain: (domain: string) => ClaimProgram[]
+  /** The whole registry: the "already listed" check and other brands' names. */
+  allPrograms: () => readonly ClaimProgram[]
   /** siteverify's answer, or null when it could not be reached. */
   verifyTurnstile: (token: string, ip: string) => Promise<TurnstileResult | null>
   sendEmail: (mail: OutgoingEmail) => Promise<boolean>
@@ -421,6 +434,27 @@ async function readBody<T>(req: Request, schema: z.ZodType<T>): Promise<T | null
 }
 
 /**
+ * Like readBody, for the owner forms: a refusal names the form field (the
+ * schema path, e.g. "changes.payout.currency"), never the value sent.
+ */
+async function readForm<T>(req: Request, schema: z.ZodType<T>): Promise<T | Response> {
+  const parsed = schema.safeParse(await req.json().catch(() => null))
+  if (parsed.success) return parsed.data
+  const issue = parsed.error.issues[0]
+  const path = issue?.path ?? []
+  // The last named key: "changes.use_cases.3" reads as "use cases".
+  const name = [...path].reverse().find((k) => typeof k === "string")
+  const field = name ? String(name).replace(/_/g, " ") : ""
+  // Free text refused for a hidden or control character (often pasted) says so.
+  const message = !field
+    ? "Check the form and try again."
+    : issue?.message === HIDDEN_CHARACTER
+      ? `Remove hidden or special characters from ${field} and try again.`
+      : `Check ${field} and try again.`
+  return fail(400, "bad_request", message, { field: path.join(".") })
+}
+
+/**
  * null when the visitor passed Turnstile on our own site, for this step;
  * otherwise the response to send.
  */
@@ -564,19 +598,166 @@ const turnstileField = z.string().max(4096).optional()
 const ContactBody = z.object({ slug: slugField, email: z.string().max(320), turnstileToken: turnstileField })
 const VerifyBody = z.object({ slug: slugField, code: z.string().max(20) })
 const SlugBody = z.object({ slug: slugField })
-const ManualBody = ContactBody.extend({ note: z.string().max(1000).optional() })
-const TermsBody = z.object({
-  slug: slugField,
-  terms: z.object({
-    rate: z.string().trim().min(1).max(80),
-    type: z.enum(["recurring", "one-time", "tiered", "hybrid"]),
-    duration: z.string().trim().max(60).optional(),
-    cookieDays: z.number().int().min(0).max(3650).nullable().optional(),
-    payoutMinimum: z.number().min(0).max(100_000).nullable().optional(),
-    signupUrl: z.string().trim().max(500).optional(),
-    note: z.string().trim().max(1000).optional(),
-  }),
+/**
+ * Free text a person reads in a review queue or a pull request, and an AI
+ * agent reads from the registry: nothing invisible may ride along. Refused:
+ * control and format characters, default-ignorable code points (tag
+ * characters, fillers), line/paragraph separators, lone surrogates. Allowed
+ * only where real text needs them, one per character: a variation selector
+ * after the character it varies (an ideographic one after an ideograph, a
+ * Mongolian one after Mongolian, emoji presentation after an emoji), a
+ * zero-width joiner between two visible characters that are not Latin letters
+ * (👩‍💻, ❤️‍🔥, Indic conjuncts), a non-joiner between two letters (Persian, Indic),
+ * and tag characters only inside the England, Scotland or Wales flag. Multi-line fields
+ * keep line breaks; \r\n becomes \n and a tab becomes a space first.
+ */
+// The three subdivision flags in Unicode's recommended set (England,
+// Scotland, Wales). Any other run of tag characters could spell hidden text.
+const EMOJI_TAG_SEQUENCE =
+  /\u{1F3F4}\u{E0067}\u{E0062}(?:\u{E0065}\u{E006E}\u{E0067}|\u{E0073}\u{E0063}\u{E0074}|\u{E0077}\u{E006C}\u{E0073})\u{E007F}/gu
+const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800]/u
+const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
+const LATIN_LETTER = /^[A-Za-z]$/
+const MONGOLIAN_LETTER = /^(?=\p{L})\p{Script=Mongolian}$/u
+
+/** True when every invisible code point is one text needs, in the place it needs it. */
+function plainText(multiLine: boolean) {
+  return (text: string): boolean => {
+    const chars = [...text.replace(EMOJI_TAG_SEQUENCE, "")]
+    return chars.every((c, i) => {
+      const before = chars[i - 1] ?? ""
+      const after = chars[i + 1] ?? ""
+      const cp = c.codePointAt(0)!
+      if (cp >= 0xe0100 && cp <= 0xe01ef) return /\p{Ideographic}/u.test(before)
+      // Mongolian free variation selectors right after a Mongolian letter; the
+      // vowel separator only between two.
+      if (cp === 0x180e) return MONGOLIAN_LETTER.test(before) && MONGOLIAN_LETTER.test(after)
+      if (cp >= 0x180b && cp <= 0x180f) return MONGOLIAN_LETTER.test(before)
+      // Emoji and text presentation (❤️, 1️⃣) after an emoji; the other
+      // standardized variants never follow a Latin letter.
+      if (cp === 0xfe0e || cp === 0xfe0f) return /\p{Emoji}/u.test(before)
+      if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !LATIN_LETTER.test(before)
+      // After a virama (क्‍ष, Malayalam chillu ന്‍ at the end of a word).
+      if (cp === 0x200d && /^\p{Mn}$/u.test(before)) return after === "" || !NEVER.test(after)
+      if (cp === 0x200d) {
+        return (
+          (VISIBLE.test(before) || before === "\uFE0F") &&
+          VISIBLE.test(after) &&
+          !LATIN_LETTER.test(before) &&
+          !LATIN_LETTER.test(after)
+        )
+      }
+      if (cp === 0x200c) return /[\p{L}\p{M}]/u.test(before) && /[\p{L}\p{M}]/u.test(after)
+      if (multiLine && c === "\n") return true
+      return !NEVER.test(c)
+    })
+  }
+}
+
+const HIDDEN_CHARACTER = "hidden_character"
+/** Required text must show something once invisible code points are set aside. */
+const showsSomething = (text: string) => text.length === 0 || /[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]/u.test(text)
+const normalizeText = (multiLine: boolean) => (v: unknown) =>
+  typeof v === "string" ? (multiLine ? v.replace(/\r\n?/g, "\n") : v).replace(/\t/g, " ") : v
+const freeText = (multiLine: boolean, max: number, min: number) =>
+  z.preprocess(
+    normalizeText(multiLine),
+    z
+      .string()
+      .trim()
+      .min(min)
+      .max(max)
+      .refine(plainText(multiLine), HIDDEN_CHARACTER)
+      .refine(showsSomething),
+  )
+const textField = (max: number, min = 0) => freeText(false, max, min)
+const proseField = (max: number, min = 0) => freeText(true, max, min)
+
+/** `report`: "Report this page" on a claimed listing, into the same manual queue. */
+const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), report: z.boolean().optional() })
+
+// Owner edits and new programs (spec v4 §5, §6). Every value a page or the
+// YAML can hold is checked here against the schema's own enums; lengths are
+// caps for a form, not the schema's (it has none except short_description).
+const S = programSchema.properties
+const enumOf = (values: readonly string[]) => z.enum(values as [string, ...string[]])
+const lineList = (count: number, each: number) => z.array(textField(each, 1)).max(count)
+const CommissionInput = z
+  .object({
+    type: enumOf(S.commission.properties.type.enum),
+    rate: textField(80, 1),
+    // null clears the field.
+    duration: textField(60).nullable().optional(),
+    conditions: textField(300).nullable().optional(),
+  })
+  .strict()
+const PayoutInput = z
+  .object({
+    minimum: z.number().min(0).max(100_000).nullable().optional(),
+    currency: z.string().regex(/^[A-Z]{3}$/).optional(),
+    frequency: enumOf(S.payout.properties.frequency.enum).nullable().optional(),
+    methods: z.array(enumOf(S.payout.properties.methods.items.enum)).max(6).optional(),
+  })
+  .strict()
+const cookieDaysInput = z.number().int().min(0).max(3650).nullable()
+const shortDescriptionInput = textField(S.short_description.maxLength, 1)
+const descriptionInput = proseField(2000, 1)
+const urlInput = textField(500)
+
+/** Spec v4 §5.1: what an owner may change on a listing. Keys are the YAML's. */
+const EditChanges = z
+  .object({
+    commission: CommissionInput.optional(),
+    cookie_days: cookieDaysInput.optional(),
+    payout: PayoutInput.optional(),
+    short_description: shortDescriptionInput.optional(),
+    description: descriptionInput.optional(),
+    use_cases: lineList(8, 200).optional(),
+    // null clears an optional field (the apply step deletes the YAML key).
+    signup_url: urlInput.nullable().optional(),
+    approval: enumOf(S.approval.enum).nullable().optional(),
+    approval_time: textField(60).nullable().optional(),
+    restrictions: lineList(15, 300).optional(),
+    marketing_materials: z.boolean().optional(),
+    dedicated_manager: z.boolean().optional(),
+    // no_program is OpenAffiliate's finding, never an owner's.
+    status: z.enum(["active", "paused", "discontinued"]).optional(),
+    status_note: textField(300).nullable().optional(),
+  })
+  .strict()
+type EditChanges = z.infer<typeof EditChanges>
+
+const EditBody = z.object({ slug: slugField, changes: EditChanges, termsUrl: urlInput.optional(), note: proseField(1000).optional() })
+
+/** Spec v4 §6: the schema's required fields minus agents, plus terms. */
+const NewProgramBody = z.object({
+  domain: z.string().min(1).max(253),
+  program: z
+    .object({
+      // Letters or digits: a name of punctuation or invisible marks is no name.
+      name: textField(80, 2).refine((name) => /[\p{L}\p{N}]/u.test(name)),
+      url: urlInput,
+      category: enumOf(S.category.enum),
+      commission: CommissionInput,
+      short_description: shortDescriptionInput,
+      description: descriptionInput,
+      signup_url: urlInput.optional(),
+      cookie_days: cookieDaysInput.optional(),
+      payout: PayoutInput.optional(),
+    })
+    .strict(),
+  termsUrl: urlInput,
+  note: proseField(1000).optional(),
 })
+
+/** Changing any of these needs a public page that states the new terms (spec v4 §5.3). */
+const MONEY_KEYS = ["commission", "cookie_days", "payout"] as const
+/**
+ * network: affitor listings: the daily Affitor sync owns every terms field
+ * and deletes the unpublished ones (scripts/sync-affitor.ts), so an owner
+ * edits only these; terms change in the Affitor dashboard (spec v4 §5.2).
+ */
+export const AFFITOR_EDITABLE: ReadonlySet<string> = new Set(["short_description", "description", "use_cases"])
 
 const badRequest = () => fail(400, "bad_request", "Check the form and try again.")
 const badEmail = () => fail(400, "bad_email", "Enter a single email address, like name@example.com.")
@@ -770,7 +951,9 @@ async function requestManual(req: Request, deps: ClaimDeps): Promise<Response> {
     code_hash: null,
     expires_at: new Date(now.getTime() + MANUAL_TTL_MS).toISOString(),
     status: "review",
-    note: body.note?.trim() || null,
+    // One queue for people. The marker is always set here, never taken from
+    // the visitor's text, so a claim request cannot pass for a report or back.
+    note: `${body.report ? "[report]" : "[claim]"} ${body.note?.trim() ?? ""}`.trim(),
   })
   return reply(200, { ok: true })
 }
@@ -787,44 +970,247 @@ async function session(req: Request, deps: ClaimDeps): Promise<Response> {
   return reply(200, { owner: true, domain: owner.claim.domain, stats: { views, clicks } })
 }
 
-/** Marks edits a person must confirm with the owner before applying them. */
-export function editFlags(program: ClaimProgram, terms: { rate: string; signupUrl?: string }): string[] {
+/**
+ * Marks edits a person must confirm with the owner before applying them
+ * (spec v4 §5.4): a commission cut of more than half, a signup link on another
+ * domain, a program paused or closed.
+ */
+export function editFlags(
+  program: ClaimProgram,
+  changes: { commission?: { rate: string }; signup_url?: string | null; status?: string },
+): string[] {
   const flags: string[] = []
-  const next = parseCommissionMode(terms.rate)
-  const current = program.commission
-  if (current.value != null && next.value != null && next.mode === current.mode && next.value < current.value * 0.5) {
-    flags.push("commission_drop_over_50pct")
+  if (changes.commission) {
+    const next = parseCommissionMode(changes.commission.rate)
+    const current = program.commission
+    if (current.value != null && next.value != null && next.mode === current.mode && next.value < current.value * 0.5) {
+      flags.push("commission_drop_over_50pct")
+    }
   }
-  if (terms.signupUrl && registrableDomain(terms.signupUrl) !== registrableDomain(program.signupUrl ?? program.url)) {
-    flags.push("signup_domain_changed")
+  // Where Apply leads after the change: a cleared signup link falls back to the website.
+  if (changes.signup_url !== undefined) {
+    const next = changes.signup_url ?? program.url
+    if (registrableDomain(next) !== registrableDomain(program.signupUrl ?? program.url)) flags.push("signup_domain_changed")
   }
+  if (changes.status && changes.status !== "active") flags.push("status_not_active")
   return flags
 }
 
-async function submitTerms(req: Request, deps: ClaimDeps): Promise<Response> {
-  const body = await readBody(req, TermsBody)
-  if (!body) return badRequest()
-  const owner = await ownerOf(req, deps, body.slug)
-  if (!owner) return fail(401, "not_owner", "Verify that you run this listing first.")
-  const { terms } = body
-  if (terms.signupUrl && !signupUrlAllowed(terms.signupUrl)) {
-    return fail(400, "bad_signup_url", "Use a full https:// link to your affiliate signup page.")
-  }
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
 
-  const derived = parseCommissionMode(terms.rate)
-  // A queue row for a person to review and turn into a YAML PR. Nothing here
-  // writes to the registry.
-  const result = await deps.store.submitEdit(
-    {
-      member_id: owner.member.id,
-      slug: body.slug,
-      fields: { ...terms, mode: derived.mode, value: derived.value, flags: editFlags(owner.target.program, terms) },
-    },
-    LIMITS.editsPerClaimDay,
-  )
-  if (result === "not_owner") return fail(401, "not_owner", "Verify that you run this listing first.")
-  if (result === "quota") return tooMany()
+/** Compatibility forms folded (fullwidth letters, ligatures), invisible code points and case dropped, for matching only. */
+const fold = (s: string) => s.normalize("NFKC").replace(/\p{Default_Ignorable_Code_Point}/gu, "").toLowerCase()
+
+/**
+ * Other brands' names in an owner's text (spec v4 §5.4: a description that
+ * names another brand goes back to the owner first). Names of listings on
+ * other domains, any case, whole words, four characters or more so a name
+ * like "Box" does not match a sentence. It flags for a reviewer; a common
+ * word that is also a brand ("Linear") costs a look, not a refusal.
+ */
+export function brandsNamed(text: string, ownDomain: string, catalog: readonly ClaimProgram[]): string[] {
+  const folded = fold(text)
+  const found = new Set<string>()
+  for (const p of catalog) {
+    const name = fold(p.name)
+    if (name.length < 4 || !folded.includes(name) || registrableDomain(p.url) === ownDomain) continue
+    if (new RegExp(`(?<![\\p{L}\\p{N}])${escapeRegExp(name)}(?![\\p{L}\\p{N}])`, "u").test(folded)) found.add(p.name)
+  }
+  return [...found].sort()
+}
+
+/** Flags every owner submission shares: other brands named, terms cited from another site. */
+function sharedFlags(deps: ClaimDeps, domain: string, prose: (string | null | undefined)[], termsUrl?: string) {
+  const mentions = brandsNamed(prose.filter(Boolean).join("\n"), domain, deps.allPrograms())
+  const flags = mentions.length ? ["names_other_brand"] : []
+  // The reviewer then checks the network listing or other page it points at.
+  if (termsUrl && registrableDomain(termsUrl) !== domain) flags.push("terms_url_off_domain")
+  return { flags, mentions }
+}
+
+const notOwner = () => fail(401, "not_owner", "Verify that you run this listing first.")
+const badLink = (what: string) => fail(400, "bad_url", `Use a full https:// link for ${what}.`)
+
+/** Queues a change and answers for it; nothing here writes to the registry. */
+async function queue(
+  deps: ClaimDeps,
+  edit: { member_id: string; slug: string; domain: string; kind: EditKind; fields: Record<string, unknown> },
+): Promise<Response> {
+  const result = await deps.store.submitEdit(edit, {
+    perDay: LIMITS.editsPerClaimDay,
+    newPerDay: LIMITS.newProgramsPerClaimDay,
+  })
+  if (result === "not_owner") return notOwner()
+  if (result === "already_sent") return fail(409, "already_sent", "You already sent this program. It is waiting for review.")
+  if (result === "quota_new") {
+    return fail(429, "rate_limited", `You can add ${LIMITS.newProgramsPerClaimDay} programs a day. Try again tomorrow.`)
+  }
+  if (result === "quota") return fail(429, "rate_limited", `You can send ${LIMITS.editsPerClaimDay} changes a day. Try again tomorrow.`)
   return reply(200, { ok: true })
+}
+
+/**
+ * An owner's edit to one listing (spec v4 §5). The form sends only the fields
+ * the owner changed; a person reviews the queued change and turns it into a
+ * YAML pull request.
+ */
+async function submitEdit(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readForm(req, EditBody)
+  if (body instanceof Response) return body
+  const owner = await ownerOf(req, deps, body.slug)
+  if (!owner) return notOwner()
+  const { changes } = body
+  const keys = Object.keys(changes) as (keyof EditChanges)[]
+  if (keys.length === 0) return fail(400, "no_changes", "Change at least one field.")
+  if (owner.target.program.network === "affitor" && keys.some((k) => !AFFITOR_EDITABLE.has(k))) {
+    return fail(400, "synced_field", "Edit these terms in your Affitor dashboard. OpenAffiliate updates daily.")
+  }
+  if (changes.signup_url != null && !signupUrlAllowed(changes.signup_url)) return badLink("your affiliate signup page")
+  const money = keys.some((k) => (MONEY_KEYS as readonly string[]).includes(k))
+  if (money && !body.termsUrl) {
+    return fail(400, "terms_url_required", "Add a link to the public page that states these terms.")
+  }
+  if (body.termsUrl && !signupUrlAllowed(body.termsUrl)) return badLink("the page that states your terms")
+
+  // The listing's own domain, from the registry: the store re-checks it
+  // against the account under the claim lock.
+  const domain = owner.target.domain
+  const shared = sharedFlags(
+    deps,
+    domain,
+    [
+      changes.short_description,
+      changes.description,
+      ...(changes.use_cases ?? []),
+      ...(changes.restrictions ?? []),
+      changes.commission?.conditions,
+      changes.status_note,
+      body.note,
+    ],
+    body.termsUrl,
+  )
+  const derived = changes.commission ? parseCommissionMode(changes.commission.rate) : null
+  return queue(deps, {
+    member_id: owner.member.id,
+    slug: body.slug,
+    domain,
+    kind: "edit",
+    fields: {
+      changes,
+      ...(body.termsUrl ? { terms_url: body.termsUrl } : {}),
+      ...(body.note ? { note: body.note } : {}),
+      ...(derived ? { mode: derived.mode, value: derived.value } : {}),
+      flags: [...editFlags(owner.target.program, changes), ...shared.flags],
+      ...(shared.mentions.length ? { mentions: shared.mentions } : {}),
+    },
+  })
+}
+
+const SLUG_SHAPE = new RegExp(S.slug.pattern)
+
+/**
+ * The slug a new program would get: the name, lowercased, words joined by
+ * hyphens. A name with no Latin letters or digits ("开发工具") takes its
+ * website instead (studio.kymaapi.com/a → studio-kymaapi-<hash of the page>).
+ */
+export function slugFor(name: string, url?: string): string {
+  const fromName = slugOf(name)
+  if (fromName || !url) return fromName
+  // The site's subdomain and name without the public suffix, plus a short
+  // hash of the page, so two pages on one site never share a slug:
+  // studio.kymaapi.com/a → studio-kymaapi-<6 hex>.
+  const page = pageKey(url)
+  if (!page) return ""
+  const parsed = parse(url, { allowPrivateDomains: true })
+  const host = slugOf([parsed.subdomain?.replace(/^www(\.|$)/, ""), parsed.domainWithoutSuffix].filter(Boolean).join(" ")).slice(0, 60).replace(/-+$/, "")
+  const hash = createHash("sha256").update(page).digest("hex").slice(0, 6)
+  return host ? `${host}-${hash}` : ""
+}
+
+function slugOf(name: string): string {
+  return name
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80)
+    .replace(/-+$/, "")
+}
+
+/** Host and path without "www.", a trailing slash, query or fragment: two URLs for one page compare equal. */
+function pageKey(url: string): string | null {
+  try {
+    const u = new URL(url)
+    return `${u.hostname.toLowerCase().replace(/^www\./, "")}${u.pathname.replace(/\/+$/, "")}`
+  } catch {
+    return null
+  }
+}
+
+/** The listing that already covers this website or takes this slug, if any. */
+export function alreadyListed(catalog: readonly ClaimProgram[], url: string, slug: string): ClaimProgram | undefined {
+  const key = pageKey(url)
+  return catalog.find((p) => p.slug === slug || (key !== null && pageKey(p.url) === key))
+}
+
+/**
+ * Add a program (spec v4 §6): a new listing on the account's own domain.
+ * Refused when the registry already has it, or the team already sent it and
+ * it is still waiting. The apply step runs the intake checks and writes
+ * `agents`; nothing here touches the registry.
+ */
+async function submitProgram(req: Request, deps: ClaimDeps): Promise<Response> {
+  const body = await readForm(req, NewProgramBody)
+  if (body instanceof Response) return body
+  const acct = await accountOf(req, deps)
+  if (!acct) return notSignedIn()
+  const { member, claim } = acct
+  if (body.domain !== claim.domain) return accountChanged()
+  const { program } = body
+  if (!signupUrlAllowed(program.url)) return badLink("the program's website")
+  // product.brand.com is fine for brand.com; another site is not.
+  if (unclaimableReason(program.url) || registrableDomain(program.url) !== claim.domain) {
+    return fail(400, "domain_mismatch", `The website must be on ${claim.domain}.`)
+  }
+  if (program.signup_url !== undefined && !signupUrlAllowed(program.signup_url)) return badLink("your affiliate signup page")
+  if (!signupUrlAllowed(body.termsUrl)) return badLink("the page that states your terms")
+  const slug = slugFor(program.name, program.url)
+  if (!SLUG_SHAPE.test(slug)) return fail(400, "bad_name", "Use a name with letters or digits.")
+
+  const listed = alreadyListed(deps.allPrograms(), program.url, slug)
+  if (listed) {
+    return registrableDomain(listed.url) === claim.domain
+      ? fail(409, "already_listed", "This program is already on OpenAffiliate. Edit it instead.", { slug: listed.slug })
+      : fail(409, "name_taken", "Another program on OpenAffiliate has this name. Add your company name to it.")
+  }
+  const shared = sharedFlags(
+    deps,
+    claim.domain,
+    [program.name, program.short_description, program.description, program.commission.conditions, body.note],
+    body.termsUrl,
+  )
+  const flags = [...shared.flags]
+  if (program.signup_url && registrableDomain(program.signup_url) !== claim.domain) flags.push("signup_domain_changed")
+  const derived = parseCommissionMode(program.commission.rate)
+  // The store refuses a second waiting submission of the same slug or page
+  // (page_key), under the claim lock, so parallel sends cannot both queue.
+  return queue(deps, {
+    member_id: member.id,
+    slug,
+    domain: registrableDomain(program.url)!,
+    kind: "new",
+    fields: {
+      program,
+      page_key: pageKey(program.url),
+      terms_url: body.termsUrl,
+      ...(body.note ? { note: body.note } : {}),
+      mode: derived.mode,
+      value: derived.value,
+      flags,
+      ...(shared.mentions.length ? { mentions: shared.mentions } : {}),
+    },
+  })
 }
 
 /** Ends the account: every member is signed out and the listings show as unclaimed again. */
@@ -1020,7 +1406,9 @@ async function account(req: Request, deps: ClaimDeps): Promise<Response> {
       kind: e.kind,
       status: e.status,
       prUrl: e.pr_url,
-      fields: Object.keys(e.fields).filter((k) => k !== "flags"),
+      // What changed, by YAML key; a new program shows its name instead.
+      fields: e.kind === "new" ? [] : Object.keys((e.fields.changes as Record<string, unknown> | undefined) ?? {}),
+      name: e.kind === "new" ? (e.fields.program as { name?: unknown } | undefined)?.name ?? null : null,
       sentAt: e.created_at,
     })),
   })
@@ -1094,7 +1482,8 @@ const POST_ACTIONS: Record<string, (req: Request, deps: ClaimDeps) => Promise<Re
   "dns-start": startDns,
   "dns-check": checkDns,
   manual: requestManual,
-  terms: submitTerms,
+  edit: submitEdit,
+  "program-new": submitProgram,
   release,
   "signin-code": signinCode,
   "signin-verify": signinVerify,
