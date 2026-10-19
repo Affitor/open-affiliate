@@ -162,17 +162,29 @@ export function commissionTermProblems(data: Record<string, unknown>): string[] 
 
 /** Frequencies that name a payment cadence and no waiting period. */
 const CADENCES = new Set(["daily", "weekly", "bi-weekly", "twice-monthly", "monthly"])
+const DAYS_AFTER = /\bdays?\s+(?:after|following)\b/gi
+/** One count: "45", "(45)", "35-40", "120," — never "$100" or "2.45". */
+const COUNT = /^\(?(\d+)(?:[-–](\d+))?\)?,?$/
+const JOIN = new Set(["or", "and", "to", "-", "–"])
+
 /**
- * "45 days after", "forty-five (45) days after", "35-40 business days
- * following", "120, 60 or 10 days after": every number before "days" counts,
- * and the largest is the wait. A separator is required between numbers, so a
- * long digit run cannot backtrack.
+ * The wait a "days after" names: the largest number of the count written
+ * right before it, read word by word backwards: "45", "forty-five (45)",
+ * "35-40 business", "120, 60, or 10". A word that is no count or joining
+ * word ends it, so an amount ("$100, 30 days") is never read as days. 0 when
+ * no count precedes. Linear: one pass over at most 200 characters.
  */
-const NUMBER = String.raw`\(?\d+\)?`
-const LAG = new RegExp(
-  String.raw`(?<![\w.])(${NUMBER}(?:\s*(?:,|-|–|\bor\b|\band\b|\bto\b)\s*${NUMBER})*)\s+(?:business\s+|calendar\s+)?days?\s+(?:after|following)\b`,
-  "gi",
-)
+function waitBefore(text: string): number {
+  const words = text.slice(-200).trimEnd().split(/\s+/)
+  if (/^(?:business|calendar)$/i.test(words.at(-1) ?? "")) words.pop()
+  let wait = 0
+  for (let i = words.length - 1; i >= 0; i--) {
+    const count = COUNT.exec(words[i])
+    if (count) wait = Math.max(wait, Number(count[1]), Number(count[2] ?? 0))
+    else if (!(wait > 0 && JOIN.has(words[i].toLowerCase()))) break
+  }
+  return wait
+}
 
 /**
  * A commission paid N days after the sale, the customer's payment or the end
@@ -192,7 +204,7 @@ export function payoutLagProblems(data: Record<string, unknown>): string[] {
   for (const [where, text] of [["payout.conditions", payout.conditions], ["commission.conditions", commission.conditions]] as const) {
     if (typeof text !== "string") continue
     for (const { sentence } of proseSentences(text)) {
-      const days = Math.max(0, ...[...sentence.matchAll(LAG)].flatMap((m) => m[1].match(/\d+/g)!.map(Number)))
+      const days = Math.max(0, ...[...sentence.matchAll(DAYS_AFTER)].map((m) => waitBefore(sentence.slice(0, m.index))))
       if (days > 30) {
         problems.push(
           `payout.frequency is ${frequency}, but ${where} states a ${days}-day wait (${JSON.stringify(sentence.trim())}); ` +
