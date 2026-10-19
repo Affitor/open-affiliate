@@ -374,6 +374,8 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
+  methods: ${JSON.stringify(AFFITOR_SYNC.network_terms.payout_methods)}
+restrictions: ${JSON.stringify(AFFITOR_SYNC.network_terms.restrictions)}
 signup_url: https://affitor.com/marketplace/${slug}
 network: affitor
 description: ${slug} measures things.
@@ -547,6 +549,17 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
   assert.equal(mismatch.eligible, false)
   assert.match(mismatch.reasons.join("\n"), /commission\.rate is "25%", Affitor says "30%": programs\/alpha\.yaml/)
 
+  // Affitor's network terms are lists the lane compares item by item: one
+  // restriction edited, or the methods reordered, is not what the sync writes.
+  for (const head of [
+    syncedYaml("alpha", { rate: 25, date: "2026-10-13" }).replace("No self-referrals", "Self-referrals allowed"),
+    syncedYaml("alpha", { rate: 25, date: "2026-10-13" }).replace('["wise","bank"]', '["bank","wise"]'),
+  ]) {
+    const list = await evaluateSync({ files: [modified("alpha", syncedYaml("alpha"), head), SYNC_FILES[1]] })
+    assert.equal(list.eligible, false)
+    assert.match(list.reasons.join("\n"), /(restrictions|payout\.methods) is \[.*\], Affitor says \[.*\]: programs\/alpha\.yaml/)
+  }
+
   // Prose rides along on a terms update.
   const prose = await evaluateSync({
     files: [
@@ -561,9 +574,44 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
 
   // A field the API no longer publishes must be gone.
   const stale = await evaluateSync({
-    files: [modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval: auto\n" }))],
+    files: [modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval_time: instant\n" }))],
   })
-  assert.match(stale.reasons.join("\n"), /approval is "auto", Affitor says absent/)
+  assert.match(stale.reasons.join("\n"), /approval_time is "instant", Affitor says absent/)
+
+  // approval and payout.frequency are the data lane's: a sync that adds,
+  // changes or deletes one is blocked; one it leaves alone passes.
+  const LANE = "approval: manual\n"
+  for (const [base, head] of [
+    [syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, date: "2026-10-13", extra: LANE })],
+    [syncedYaml("alpha", { extra: LANE }), syncedYaml("alpha", { rate: 25, date: "2026-10-13" })],
+    [syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, date: "2026-10-13" }).replace("  currency: USD\n  methods", "  currency: USD\n  frequency: net-30\n  methods")],
+  ]) {
+    const owned = await evaluateSync({ files: [modified("alpha", base, head), SYNC_FILES[1]] })
+    assert.match(owned.reasons.join("\n"), /changes (approval|payout\.frequency), which the sync does not own/)
+  }
+  const kept = await evaluateSync({
+    files: [modified("alpha", syncedYaml("alpha", { extra: LANE }), syncedYaml("alpha", { rate: 25, date: "2026-10-13", extra: LANE })), SYNC_FILES[1]],
+  })
+  assert.deepEqual(kept.reasons, [])
+
+  // The brand's own restrictions stay ahead of the network's; dropping one is blocked.
+  const network = AFFITOR_SYNC.network_terms.restrictions
+  const withBrand = (yaml, items) => yaml.replace(/^restrictions: .*$/m, `restrictions: ${JSON.stringify(items)}`)
+  const brandBase = withBrand(syncedYaml("alpha"), ["No coupon sites", ...network])
+  const brandKept = await evaluateSync({
+    files: [modified("alpha", brandBase, withBrand(syncedYaml("alpha", { rate: 25, date: "2026-10-13" }), ["No coupon sites", ...network])), SYNC_FILES[1]],
+  })
+  assert.deepEqual(brandKept.reasons, [])
+  const brandDropped = await evaluateSync({
+    files: [modified("alpha", brandBase, syncedYaml("alpha", { rate: 25, date: "2026-10-13" })), SYNC_FILES[1]],
+  })
+  assert.match(brandDropped.reasons.join("\n"), /restrictions is \[.*\], Affitor says \["No coupon sites",.*\]: programs\/alpha\.yaml/)
+
+  // An item the schema refuses, carried over from the base, is blocked like the sync blocks it (Codex PR318 r1).
+  const numberBase = withBrand(syncedYaml("alpha"), [123])
+  const numberHead = withBrand(syncedYaml("alpha", { rate: 25, date: "2026-10-13" }), [123, ...network])
+  const numbered = await evaluateSync({ files: [modified("alpha", numberBase, numberHead), SYNC_FILES[1]] })
+  assert.match(numbered.reasons.join("\n"), /restrictions holds an item that is not a string: programs\/alpha\.yaml/)
 
   // A pause Affitor does not confirm: the program is still listed.
   const notGone = await evaluateSync({ fetchJson: affitorApi([...SYNC_API, affitorProgram("gone")]) })

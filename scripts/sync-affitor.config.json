@@ -4,6 +4,18 @@
   "max_pauses": 3,
   "bot": "openaffiliate-sync[bot]",
   "label": "affitor-sync",
+  "network_terms": {
+    "source": "Affitor's terms (https://affitor.com/terms, sections 7 and 8.3, effective 2026-01-28) and payout docs (https://affitor.com/docs/brand/quickstart/payouts), both linked from every marketplace listing; read 2026-10-19",
+    "payout_methods": ["wise", "bank"],
+    "restrictions": [
+      "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing",
+      "No self-referrals: do not refer yourself or your own accounts",
+      "No bidding on the brand's keywords in paid search without its written permission",
+      "No misrepresenting your relationship with the brand or making false claims about its products",
+      "No attempts to manipulate or circumvent attribution",
+      "Disclose the affiliate relationship as the law requires, such as FTC guidelines"
+    ]
+  },
   "not_found": {
     "success": false,
     "data": null,
