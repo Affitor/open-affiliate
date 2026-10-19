@@ -1,3 +1,4 @@
+import { SaveButton } from "@/components/save-button";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -26,7 +27,7 @@ import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirm
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
-import { SAME_TEAM, isSameTeam } from "@/lib/same-team";
+import { AFFITOR_SAME_TEAM, SAME_TEAM, isSameTeam } from "@/lib/same-team";
 import {
   answerParts,
   approvalText,
@@ -45,7 +46,8 @@ import {
 import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
-import { FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
+import { getOasScore, oasValue } from "@/lib/oas";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -144,14 +146,21 @@ export default async function ProgramPage({
   const claimable = !program.claimedBy && claimsEnabledFor(program);
   // Claim spec v4 §3: a program already on Affitor gets a chip instead of the offer line.
   const onAffitor = program.network === "affitor" || Boolean(alsoOn);
+  // A brand running its program elsewhere can move it to Affitor; not one already there, nor our own.
+  const canMoveToAffitor = !noProgram && !onAffitor && !isSameTeam(program.slug);
   const estimate = estimateInput(program);
   const answer = answerParts(program, noProgram ? noProgramHeadline(program) : "");
   const cases = programUseCases(program);
   const payout = payoutText(program);
+  // When a commission becomes payable; confirmedTerms left it out of an unverified program.
+  // Under the payout steps, or under the Payout row on a paused page, which has no steps.
+  const payoutConditions = program.payout.conditions;
   const methods = payoutMethods(program);
   const approval = approvalText(program);
   const cookie = cookieText(program);
   const hasAlternatives = getRelatedPrograms(program).length > 0;
+  // OAS sits in the header, away from the owner box and its "Move this program to Affitor" link.
+  const oas = getOasScore(slug);
 
   // Mockup states: one tag next to the H1; "Verified" only on a live, checked program.
   const statusTag = noProgram
@@ -264,6 +273,11 @@ export default async function ProgramPage({
             )}
             <ClaimChip program={program} />
             <Badge variant="outline" className="text-xs shrink-0 text-muted-foreground">{program.category}</Badge>
+            {oas && (
+              <Link href={`/programs/${slug}/oas`} className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs font-medium hover:bg-muted/50 transition-colors">
+                {oasValue(oas) == null ? "OAS · scoring in progress" : <>OAS <span className="font-mono ml-1">{oasValue(oas)}</span></>}
+              </Link>
+            )}
           </div>
         </div>
       </div>
@@ -283,6 +297,7 @@ export default async function ProgramPage({
             </div>
           )}
           <h2 id="earn-heading" className="oa-label">{panelLabel}</h2>
+          {(noProgram || paused) && <div className="mt-5"><SaveButton slug={program.slug} name={program.name} /></div>}
           {noProgram ? (
             <>
               <p className="text-display font-semibold tracking-tight mt-2">None</p>
@@ -311,12 +326,16 @@ export default async function ProgramPage({
                   ))}
                 </dl>
               )}
+              {paused && payoutConditions && (
+                <p data-term="payout-conditions" className="text-xs text-muted-foreground leading-relaxed mt-3">{payoutConditions}</p>
+              )}
               {!paused && (
-                <div className="mt-5">
+                <div className="mt-5 flex items-center gap-2">
                   <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
+                  <SaveButton slug={program.slug} name={program.name} />
                 </div>
               )}
               {paused && hasAlternatives && (
@@ -404,6 +423,9 @@ export default async function ProgramPage({
                   </li>
                 ))}
               </ol>
+              {payoutConditions && (
+                <p data-term="payout-conditions" className="text-sm leading-relaxed text-foreground/80 mt-4">{payoutConditions}</p>
+              )}
               {program.network && program.network !== IN_HOUSE && (
                 <p className="text-xs text-muted-foreground mt-4">{networkHowToJoin(program.network)}</p>
               )}
@@ -509,6 +531,21 @@ export default async function ProgramPage({
                         Suggest an edit on GitHub
                       </a>
                     </p>
+                  )}
+                  {canMoveToAffitor && (
+                    <div className="space-y-1.5 border-t border-border pt-3">
+                      <AffitorLink
+                        href={affitorUrl("migrate", program.slug, AFFITOR_SWITCH)}
+                        source="migrate"
+                        slug={program.slug}
+                        cta="move"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-border h-9 px-3.5 text-sm font-medium hover:bg-muted/50 transition-colors"
+                      >
+                        Move this program to Affitor
+                        <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                      </AffitorLink>
+                      <p className="text-xs text-muted-foreground">{AFFITOR_SAME_TEAM}</p>
+                    </div>
                   )}
                 </>
               )}

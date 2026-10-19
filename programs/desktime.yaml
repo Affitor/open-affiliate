@@ -25,8 +25,11 @@ cookie_days: 30
 payout:
   minimum: 25
   currency: USD
+  frequency: on-request
   methods: [paypal]
 
+# "This Agreement is effective at the time your application is, at the sole discretion of DeskTime, accepted by DeskTime and you are notified of such acceptance" (https://desktime.com/affiliate-terms, checked 2026-10-18)
+approval: manual
 signup_url: https://desktime.com/affiliate
 restrictions:
   - "No bidding on keywords that include DeskTime, DeskTime.com or any variation, and no ads placed above DeskTime's own ads"
@@ -74,7 +77,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

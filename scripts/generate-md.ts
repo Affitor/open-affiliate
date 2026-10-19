@@ -48,6 +48,7 @@ import {
   rateBasis,
   networkHeading,
   networkName,
+  byNetworkName,
   type CommissionStats,
   type PaidBy,
 } from "../src/lib/programs"
@@ -66,6 +67,7 @@ import {
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 import { isSameTeam, SAME_TEAM_LABEL } from "../src/lib/same-team"
+import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -158,7 +160,7 @@ type Program = {
   short_description?: string
   commission: Commission
   cookie_days?: number | null
-  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null } | null
+  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null; conditions?: string | null } | null
   attribution?: string | null
   tracking_method?: string | null
   signup_url?: string | null
@@ -366,6 +368,7 @@ export function programMd(entry: Program): string {
     alsoOnLine(p),
     confirmed && p.cookie_days !== null && p.cookie_days !== undefined ? `Cookie window: ${mdEscape(String(p.cookie_days))} days` : null,
     payout ? `Payout: ${mdEscape(payout)}` : null,
+    confirmed && p.payout?.conditions ? `Payout conditions: ${mdEscape(p.payout.conditions)}` : null,
     p.attribution ? `Attribution: ${mdEscape(p.attribution)}` : null,
     p.tracking_method ? `Tracking: ${mdEscape(p.tracking_method)}` : null,
     `Network: ${mdEscape(p.network ?? IN_HOUSE)}`,
@@ -855,7 +858,9 @@ export function llmsTxt(): string {
     })
     .join("\n")
 
-  const netLines = liveNetworks
+  // A to Z by display name, in-house last: the homepage band's order (networksByName).
+  const netLines = [...liveNetworks]
+    .sort((a, b) => Number(a === IN_HOUSE) - Number(b === IN_HOUSE) || byNetworkName(a, b))
     .map(n => {
       const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
       return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`
@@ -1084,6 +1089,19 @@ function rankingsMd(): string {
     .map(c => `- [${mdEscape(c.category)}](${BASE}/categories/${categoryToSlug(c.category)}.md) — ${[programCount(c.programCount), ...groupFigures(c)].join(", ")}`)
     .join("\n")
 
+  // The OAS leaderboard leads the HTML page once oas-scores.json has entries; empty, it adds nothing.
+  const board = buildBoard(oasScores, sitePrograms.filter(isLive), new Date())
+  const report = (slug: string) => `${BASE}/programs/${slug}/oas`
+  const oasLines = board.length
+    ? [
+        ...board.filter((r) => r.rank != null).map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100, ${mdEscape(r.program.category)}`),
+        "",
+        ...board.filter((r) => r.rank == null).map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${r.oas != null ? `OAS ${r.oas}/100, ` : ""}${UNRANKED_TEXT[r.unranked!]}`),
+        "",
+        `OAS, the OpenAffiliate Score, measures how clearly a program publishes its terms and protects its partners, from public pages only; nobody pays to rank. Equal scores share a rank. ${TEAM_DISCLOSURE}`,
+      ].join("\n")
+    : null
+
   return joinSections([
     `# Affiliate program rankings`,
     [
@@ -1100,6 +1118,7 @@ function rankingsMd(): string {
       `> a percentage counts in any currency. Unconfirmed figures count and are`,
       `> marked "unconfirmed".`,
     ].join("\n"),
+    section("Ranked by OAS", oasLines),
     section("Programs paying a percentage of the sale", programLines("percent")),
     section("Programs paying a flat amount", programLines("flat")),
     section("Tiered, hybrid and other commissions", programLines("other")),

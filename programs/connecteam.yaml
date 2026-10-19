@@ -13,11 +13,18 @@ commission:
   value: 25
   currency: USD
   duration: "12 months"
-  conditions: "25% revenue share for each paying subscriber for the first year (PartnerStack listing)."
+  conditions: "25% revenue share for each paying subscriber for the first year (PartnerStack listing). The brand affiliate page states monthly payments through PayPal or Stripe. The agreement requires a referred customer to register for paid services within 120 days of the link referral. Monthly subscriptions earn the published percentage for up to 12 months; annual subscriptions instead earn a one-time flat amount set in PartnerStack, and switching to annual pays only any difference up to that annual amount. The annual flat amount is not published in the reviewed public sources."
 attribution: last-click
 tracking_method: cookie
 signup_url: https://connecteam.com/affiliates/
-restrictions: null
+restrictions:
+  - Register with PartnerStack and keep the account active; Connecteam may reject an application at its discretion
+  - Customers must register for paid services within 120 days through the dedicated referral link and must not have been referred previously by advertisements or another affiliate
+  - No paid affiliate links or advertisements, including search or sponsored advertising; do not use Connecteam trade names or trademarks in paid ads
+  - No incentives, payments or benefits inducing someone to use the referral link or obtain Connecteam services
+  - Use only authorized marketing materials and obtain written consent for changes; create original, truthful content and do not impersonate or bind Connecteam
+  - No spam or offensive, discriminatory, violent, illegal, infringing or privacy-violating promotional content; provide message opt-outs
+  - Comply with sanctions and anti-corruption requirements; authorized representatives must not be government or political-party officials or employees
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -40,7 +47,16 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: monthly
+  methods:
+    - paypal
+    - stripe
+cookie_days: 120
+approval: manual
+not_published:
+  payout.minimum: '2026-10-18'

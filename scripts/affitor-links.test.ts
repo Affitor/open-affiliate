@@ -10,7 +10,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import { test } from "node:test"
-import { FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
+import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
@@ -37,6 +37,11 @@ function hasUtm(href: string, medium?: string): boolean {
 
 test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
   assert.ok(hasUtm(affitorUrl("for_brands", "for_brands"), "for_brands"))
+  // "Move this program to Affitor": the /switch URL Affitor confirmed, UTM only.
+  assert.equal(
+    affitorUrl("migrate", "jasper", AFFITOR_SWITCH),
+    "https://affitor.com/switch?utm_source=openaffiliate&utm_medium=migrate&utm_campaign=jasper",
+  )
   assert.ok(isAffitorHref("https://affitor.com/marketplace"))
   assert.ok(isAffitorHref("https://app.affitor.com/x"))
   assert.equal(isAffitorHref("https://notaffitor.com/"), false)
@@ -67,13 +72,15 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/page.tsx | `/api/programs/${program.slug}`", // machine strip: the API, internal
   "src/components/explore-table.tsx | item.url", // social posts
   "src/components/docs-toc.tsx | `#${h.id}`",
-  "src/app/page.tsx | `/programs/${p.slug}`", // homepage top-verified row, internal (N-2)
+  "src/app/page.tsx | `/networks/${networkToSlug(network)}`", // homepage networks band, internal (N-2)
   "src/app/programs/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
   "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
+  "src/app/programs/[slug]/oas/page.tsx | url", // OAS evidence: a page the reviewer read; affitor.com pages render as text (evidenceLink)
+  "src/app/programs/[slug]/oas/page.tsx | errorUrl", // "Report an error": a prefilled GitHub issue
 ])
 
 test("every computed anchor href is tracked or reviewed as not Affitor", () => {

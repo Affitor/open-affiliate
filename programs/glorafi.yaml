@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Apply on Affitor. Once GloraFi approves you" (https://affitor.com/marketplace/glorafi, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/glorafi
 network: affitor
 
@@ -46,10 +48,12 @@ agents:
     - Firms sending branded reports instead of generic PDF exports
     - CFOs explaining QuickBooks numbers to business owners
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

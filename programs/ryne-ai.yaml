@@ -18,8 +18,18 @@ commission:
 # cookie window: not published on ryne.ai/earn or ryne.ai/affiliate-policy (checked 2026-10-13)
 # payout minimum for the affiliate program: not published on ryne.ai/earn (the $20 minimum on ryne.ai/affiliate-policy is for the influencer program) (checked 2026-10-13)
 
+payout:
+  # "Cash out by bank transfer or PayPal." (https://ryne.ai/earn, checked 2026-10-18)
+  methods: [bank, paypal]
+  # "Email earnings@ryne.ai to cash out or with any question about your earnings." (https://ryne.ai/earn, checked 2026-10-18)
+  frequency: on-request
+
+# "Every Ryne account comes with its own referral link, no application." (https://ryne.ai/earn, checked 2026-10-18)
+approval: auto
 signup_url: https://ryne.ai/earn
-restrictions: null
+# "Fake views, reposting the same video for extra views and any other fraudulent activity." (https://ryne.ai/earn, checked 2026-10-18)
+restrictions:
+  - "No fake views, reposting the same video for extra views, or any other fraudulent activity"
 
 dashboard_url: null
 # "Influencers can track referral earnings in real-time on the Ryne AI website's earnings page" (ryne.ai/affiliate-policy, checked 2026-10-13)
@@ -49,10 +59,12 @@ agents:
     - "Students checking AI detection before submitting work"
     - "Creators making study and productivity content for students"
 
+not_published:
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

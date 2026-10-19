@@ -24,6 +24,8 @@ payout:
   frequency: monthly
   methods: [paypal, bank]
 
+# "Submit a short application and start sharing JoggAI's AI video tools through organic content after approval." (https://www.jogg.ai/affiliate-program/, checked 2026-10-18)
+approval: manual
 signup_url: https://www.jogg.ai/affiliate-program/
 restrictions:
   - "Organic, unpaid promotion only: search ads, social ads, display ads, sponsored placements and paid traffic are prohibited"
@@ -63,7 +65,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

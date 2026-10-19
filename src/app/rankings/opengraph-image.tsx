@@ -1,19 +1,26 @@
 import { ImageResponse } from "next/og";
-import { livePrograms as programs, affiliateScore, commissionDisplay } from "@/lib/programs";
-import { byScore } from "@/lib/score-order";
+import { livePrograms, commissionDisplay } from "@/lib/programs";
+import { commissionGroup, compareCommissionFigure, recurringMonths, recurringText } from "@/lib/rankings-terms";
+import { isSameTeam } from "@/lib/same-team";
 
 export const alt = "Affiliate Program Rankings: OpenAffiliate";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default async function Image() {
-  const top5 = [...programs]
-    // The /rankings podium's order. Ranking "by commission" put a percentage
-    // and a dollar amount on one scale: $10,000 above every 50% deal.
-    .sort(byScore(affiliateScore))
-    .slice(0, 5);
+/** "Lifetime", "12 months", or "One-time" for a commission that pays once. */
+function recurs(p: (typeof livePrograms)[number]): string {
+  const text = recurringText(recurringMonths(p.commission));
+  return text === "No" ? "One-time" : text;
+}
 
-  const medals = ["#f59e0b", "#9ca3af", "#f97316", "#64748b", "#64748b"];
+export default async function Image() {
+  // The /rankings default view: verified programs paying a percentage of the
+  // sale, highest first, longer recurring first on a tie; our own programs unranked.
+  const ranked = livePrograms.filter((p) => p.verified && !isSameTeam(p.slug));
+  const top5 = ranked
+    .filter((p) => commissionGroup(p.commission) === "percent")
+    .sort((a, b) => compareCommissionFigure(a, b))
+    .slice(0, 5);
 
   return new ImageResponse(
     (
@@ -24,7 +31,7 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)",
-          padding: "60px 80px",
+          padding: "48px 80px",
           fontFamily: "system-ui, sans-serif",
         }}
       >
@@ -49,15 +56,16 @@ export default async function Image() {
           <span style={{ color: "#64748b", fontSize: "16px" }}>OpenAffiliate</span>
         </div>
 
-        <div style={{ fontSize: "44px", fontWeight: 800, color: "white", marginBottom: "8px" }}>
+        <div style={{ display: "flex", flexShrink: 0, fontSize: "44px", lineHeight: "52px", fontWeight: 800, color: "white", marginBottom: "12px" }}>
           Affiliate Program Rankings
         </div>
-        <div style={{ fontSize: "20px", color: "#94a3b8", marginBottom: "40px" }}>
-          {`Top programs by Affiliate Score — ${programs.length} programs compared`}
+        <div style={{ display: "flex", flexShrink: 0, fontSize: "20px", lineHeight: "28px", color: "#94a3b8", marginBottom: "32px" }}>
+          {`${ranked.length} verified programs ranked by what they pay. Top 5 by percentage of sale.`}
         </div>
 
         {/* Top 5 list */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+        {/* Header, title and list fit 630px: a taller column made Satori shrink the title into the subtitle. */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           {top5.map((program, i) => (
             <div
               key={program.slug}
@@ -67,7 +75,7 @@ export default async function Image() {
                 gap: "16px",
                 background: i < 3 ? "rgba(255,255,255,0.04)" : "transparent",
                 borderRadius: "12px",
-                padding: "12px 16px",
+                padding: "8px 16px",
               }}
             >
               {/* Rank */}
@@ -75,7 +83,7 @@ export default async function Image() {
                 style={{
                   fontSize: "24px",
                   fontWeight: 700,
-                  color: medals[i],
+                  color: "#94a3b8",
                   width: "40px",
                   textAlign: "center",
                 }}
@@ -112,17 +120,17 @@ export default async function Image() {
                 {commissionDisplay(program.commission)}
               </span>
 
-              {/* Type */}
+              {/* How long it recurs */}
               <span
                 style={{
                   fontSize: "13px",
                   color: "#64748b",
                   textTransform: "uppercase",
                   letterSpacing: "1px",
-                  width: "100px",
+                  width: "130px",
                 }}
               >
-                {program.commission.type}
+                {recurs(program)}
               </span>
             </div>
           ))}

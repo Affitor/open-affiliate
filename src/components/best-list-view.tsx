@@ -145,6 +145,15 @@ export function BestListView({
         )}
         <p className="text-xs text-muted-foreground mt-3 max-w-3xl">
           <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
+          {list.filter && (
+            <>
+              {" "}
+              <Link href={`/programs?${list.filter}`} prefetch={false} className="underline underline-offset-4">
+                Filter all programs the same way
+              </Link>
+              .
+            </>
+          )}
         </p>
         {data.checked && (
           <p className="text-xs text-muted-foreground mt-2 max-w-3xl">

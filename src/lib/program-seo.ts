@@ -1,5 +1,6 @@
 import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, networkName as displayName, type Program } from "@/lib/programs"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "@/lib/no-program"
+import { frequencyLabel } from "@/lib/claims/form"
 
 const SITE = "https://openaffiliate.dev"
 
@@ -132,7 +133,7 @@ export function buildFaq(p: Program): Faq[] {
   }
   if (p.payout?.minimum || p.payout?.frequency) {
     const methods = p.payoutMethods?.length ? ` by ${p.payoutMethods.join(" or ")}` : ""
-    const freq = p.payout?.frequency ? `${p.payout.frequency.charAt(0).toUpperCase()}${p.payout.frequency.slice(1)}` : "Paid"
+    const freq = p.payout?.frequency ? frequencyLabel(p.payout.frequency) : "Paid"
     faq.push({
       q: `When do ${name} affiliates get paid?`,
       a: `${freq}${methods}${p.payout?.minimum ? `, once you reach the $${p.payout.minimum} minimum` : ""}.`,

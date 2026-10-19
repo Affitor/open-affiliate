@@ -10,6 +10,7 @@ import {
 } from "./programs"
 import type { Faq } from "./program-seo"
 import { compareCommission, isLifetime } from "./commission-order"
+import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
 
 /**
  * Ranked list pages. Adding a list is one entry in BEST_LISTS: the page, its
@@ -62,6 +63,8 @@ export interface BestList {
    * list only from its own category, so per-category lists do not crowd every page.
    */
   scope?: string
+  /** The /programs query string that applies the same filter, linked from the page. */
+  filter?: string
 }
 
 export const MAX_ROWS = 50
@@ -69,12 +72,9 @@ export const MAX_ROWS = 50
 /** Verified programs a hub needs before search engines are asked to index it. */
 export const HUB_MIN_INDEXED = 10
 
-/** Bank hub: payout.methods values that mean a transfer to a bank account. Wise is its own method. */
-const BANK_METHODS = new Set(["bank", "wire", "ach", "sepa"])
-
 /** Payout methods as shown: an unverified program shows none (confirmed-terms.ts). */
-function paysBy(p: Program, match: (method: string) => boolean): boolean {
-  return (confirmedTerms(p).payoutMethods ?? []).some((m) => match(m.toLowerCase()))
+function paysVia(p: Program, filter: PayoutMethodFilter): boolean {
+  return paysBy(confirmedTerms(p).payoutMethods, filter)
 }
 
 /**
@@ -176,6 +176,7 @@ const LISTS: BestList[] = [
       "Recurring affiliate programs that keep paying on renewals, ranked by rate. See which pay for 12 months or for life, with verified terms listed first.",
     summary: "list their commission as recurring",
     criteria: "Programs whose commission is listed as recurring.",
+    filter: "type=recurring",
     qualifies: (p) => p.commission.type === "recurring",
   },
   {
@@ -261,6 +262,7 @@ const LISTS: BestList[] = [
     summary: "list their commission as one-time",
     criteria: "Programs whose commission is listed as one-time: paid once per sale, signup or customer.",
     hub: true,
+    filter: "type=one-time",
     qualifies: (p) => p.commission.type === "one-time",
   },
   {
@@ -274,6 +276,7 @@ const LISTS: BestList[] = [
     criteria:
       "Programs whose verified terms set the payout minimum at zero. Payout terms are not shown for unverified programs, so they are not counted.",
     hub: true,
+    filter: "minpayout=0",
     qualifies: (p) => confirmedTerms(p).payout.minimum === 0,
   },
   {
@@ -286,7 +289,8 @@ const LISTS: BestList[] = [
     criteria:
       "Programs whose verified payout terms list PayPal as a payout method. Payout terms are not shown for unverified programs, so they are not counted.",
     hub: true,
-    qualifies: (p) => paysBy(p, (m) => m === "paypal"),
+    filter: "payout=paypal",
+    qualifies: (p) => paysVia(p, "paypal"),
   },
   {
     slug: "bank-transfer-affiliate-programs",
@@ -298,7 +302,8 @@ const LISTS: BestList[] = [
     criteria:
       "Programs whose verified payout terms list a bank transfer (bank, wire, ACH or SEPA). Wise is counted separately. Payout terms are not shown for unverified programs, so they are not counted.",
     hub: true,
-    qualifies: (p) => paysBy(p, (m) => BANK_METHODS.has(m)),
+    filter: "payout=bank",
+    qualifies: (p) => paysVia(p, "bank"),
   },
   {
     slug: "long-cookie-affiliate-programs",
@@ -310,7 +315,8 @@ const LISTS: BestList[] = [
     criteria:
       "Programs whose verified terms give a cookie window of 90 days or longer. Cookie windows are not shown for unverified programs, so they are not counted.",
     hub: true,
-    qualifies: (p) => (confirmedTerms(p).cookieDays ?? 0) >= 90,
+    filter: "cookie=90",
+    qualifies: (p) => (confirmedTerms(p).cookieDays ?? 0) >= LONG_COOKIE_DAYS,
   },
   {
     // The filter behind the editorial post in src/content/best/ai-affiliate-programs.ts;
@@ -359,6 +365,7 @@ function categoryTypeLists(): BestList[] {
           criteria: `Programs in the ${category} category whose commission is listed as ${type}.`,
           hub: true,
           scope: category,
+          filter: `category=${encodeURIComponent(category)}&type=${type}`,
           qualifies,
         },
       ]

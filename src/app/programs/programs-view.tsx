@@ -1,7 +1,6 @@
 "use client";
 
 import { Suspense, useState, useMemo, useCallback, useEffect } from "react";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   ChevronLeft,
@@ -9,15 +8,11 @@ import {
   LayoutGrid,
   List,
   X,
-  ArrowRight,
   Search,
   ShieldCheck,
 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { ProgramLogo } from "@/components/program-logo";
-import { SameTeamTag } from "@/components/same-team-tag";
+import { ProgramCardGrid, ProgramRowList } from "@/components/program-card";
 import { FilterSelect } from "@/components/filter-select";
-import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms";
 import {
   programs,
   categories,
@@ -26,14 +21,11 @@ import {
   categoryCounts,
   networks,
   networkCounts,
-  affiliateScore,
   type SortOption,
-  type Program,
-  commissionLabel,  commissionDisplay
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
 import { track } from "@/lib/track";
-import { ImpressionTracker } from "@/components/impression-tracker";
+import { LONG_COOKIE_DAYS, type PayoutMethodFilter } from "@/lib/payout-filters";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
 
@@ -51,6 +43,22 @@ const COMMISSION_TYPE_LABELS: Record<string, string> = {
   tiered: "Tiered",
   hybrid: "Hybrid",
 };
+
+/** Payout and cookie filters: the facts the hub lists filter on (payout-filters.ts). */
+const PAYOUT_OPTIONS = [
+  { value: "", label: "Any Payout Method" },
+  { value: "paypal", label: "PayPal" },
+  { value: "bank", label: "Bank Transfer" },
+];
+const MIN_PAYOUT_OPTIONS = [
+  { value: "", label: "Any Minimum" },
+  { value: "0", label: "No Minimum Payout" },
+];
+const COOKIE_OPTIONS = [
+  { value: "", label: "Any Cookie" },
+  { value: String(LONG_COOKIE_DAYS), label: `${LONG_COOKIE_DAYS}+ Day Cookie` },
+];
+const optionValue = (options: { value: string }[], v: string | null) => (options.some((o) => o.value === v) ? v! : "");
 
 type ViewMode = "grid" | "list";
 
@@ -72,105 +80,6 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
   return [view, setView];
 }
 
-function ProgramCardGrid({ program }: { program: Program }) {
-  return (
-    <Link
-      href={`/programs/${program.slug}`}
-      className="group relative flex flex-col gap-3 rounded-xl border border-border/40 bg-card/30 p-5 transition-all hover:border-emerald-500/30 hover:bg-card/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.06)]"
-    >
-      <ImpressionTracker slug={program.slug} />
-      <div className="flex items-start gap-3">
-        <ProgramLogo slug={program.slug} name={program.name} size={40} />
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-2">
-            <h3 className="text-sm font-semibold truncate">{program.name}</h3>
-            <SameTeamTag slug={program.slug} inLink className="shrink-0" />
-            {program.verified && (
-              <Badge
-                variant="outline"
-                className="text-[10px] px-1.5 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
-              >
-                verified
-              </Badge>
-            )}
-          </div>
-          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-            {program.shortDescription}
-          </p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 flex-wrap">
-        <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-          Score: {affiliateScore(program)}
-        </Badge>
-        <Badge variant="secondary" className="text-[11px]">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
-        </Badge>
-        <Badge variant="outline" className="text-[11px]">
-          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
-        </Badge>
-        <Badge variant="outline" className="text-[11px]">
-          {program.category}
-        </Badge>
-      </div>
-    </Link>
-  );
-}
-
-function ProgramRowList({ program }: { program: Program }) {
-  return (
-    <Link
-      href={`/programs/${program.slug}`}
-      className="glow-card group relative flex items-center gap-4 rounded-xl border border-border/40 bg-card/30 p-4 transition-all hover:border-border hover:bg-card/60"
-    >
-      <ImpressionTracker slug={program.slug} />
-      <ProgramLogo
-        slug={program.slug}
-        name={program.name}
-        size={44}
-        className="shrink-0"
-      />
-
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <h3 className="text-sm font-semibold truncate">{program.name}</h3>
-          <SameTeamTag slug={program.slug} inLink className="shrink-0" />
-          {program.verified && (
-            <Badge
-              variant="outline"
-              className="text-[10px] px-1.5 py-0 border-emerald-600/30 dark:border-emerald-500/30 text-emerald-600 dark:text-emerald-400 shrink-0"
-            >
-              verified
-            </Badge>
-          )}
-        </div>
-        <p className="text-xs text-muted-foreground truncate mt-0.5">
-          {program.shortDescription}
-        </p>
-      </div>
-
-      <div className="hidden sm:flex items-center gap-3 shrink-0">
-        <Badge className="text-[11px] bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
-          {affiliateScore(program)}
-        </Badge>
-        <Badge variant="secondary" className="text-[11px]">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
-        </Badge>
-        <Badge variant="outline" className="text-[11px]">
-          {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
-        </Badge>
-        <span className="hidden lg:inline text-[11px] text-muted-foreground">
-          {program.category}
-        </span>
-      </div>
-
-      <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-foreground/60 transition-colors shrink-0 hidden sm:block" />
-    </Link>
-  );
-}
 
 // ProgramsContent reads useSearchParams, so the whole subtree bails out of
 // prerendering. Without a fallback the served HTML had an empty <main>, which
@@ -228,6 +137,9 @@ function ProgramsContent() {
   const [selectedNetwork, setSelectedNetwork] = useState(
     searchParams.get("network") ?? ""
   );
+  const [selectedPayout, setSelectedPayout] = useState(optionValue(PAYOUT_OPTIONS, searchParams.get("payout")));
+  const [minPayout, setMinPayout] = useState(optionValue(MIN_PAYOUT_OPTIONS, searchParams.get("minpayout")));
+  const [cookie, setCookie] = useState(optionValue(COOKIE_OPTIONS, searchParams.get("cookie")));
   const [sort, setSort] = useState<SortOption>(
     (searchParams.get("sort") as SortOption) ?? "relevance"
   );
@@ -275,10 +187,13 @@ function ProgramsContent() {
       category: selectedCategory,
       type: selectedType,
       network: selectedNetwork,
+      payout: selectedPayout,
+      minpayout: minPayout,
+      cookie,
       sort: sort === "relevance" ? "" : sort,
       size: pageSize === 25 ? "" : String(pageSize),
     }),
-    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, pageSize]
   );
 
   const setPage = useCallback(
@@ -293,12 +208,15 @@ function ProgramsContent() {
   );
 
   const updateFilters = useCallback(
-    (updates: Partial<{ q: string; category: string; type: string; network: string; sort: string }>) => {
+    (updates: Partial<{ q: string; category: string; type: string; network: string; payout: string; minpayout: string; cookie: string; sort: string }>) => {
       const next = {
         q: updates.q ?? query,
         category: updates.category ?? selectedCategory,
         type: updates.type ?? selectedType,
         network: updates.network ?? selectedNetwork,
+        payout: updates.payout ?? selectedPayout,
+        minpayout: updates.minpayout ?? minPayout,
+        cookie: updates.cookie ?? cookie,
         sort: updates.sort ?? sort,
         // Keep the reader's page-size choice; drop page, since a changed
         // filter makes the old page number meaningless.
@@ -308,7 +226,7 @@ function ProgramsContent() {
       if (next.sort === "relevance") next.sort = "";
       syncUrl(next);
     },
-    [query, selectedCategory, selectedType, selectedNetwork, sort, pageSize, syncUrl]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, pageSize, syncUrl]
   );
 
   const filtered = useMemo(
@@ -318,10 +236,13 @@ function ProgramsContent() {
         category: selectedCategory || undefined,
         commissionType: selectedType || undefined,
         network: selectedNetwork || undefined,
+        payout: (selectedPayout || undefined) as PayoutMethodFilter | undefined,
+        noMinimum: minPayout === "0" || undefined,
+        longCookie: cookie !== "" || undefined,
         sort,
         verified: verifiedOnly || undefined,
       }),
-    [query, selectedCategory, selectedType, selectedNetwork, sort, verifiedOnly]
+    [query, selectedCategory, selectedType, selectedNetwork, selectedPayout, minPayout, cookie, sort, verifiedOnly]
   );
 
   // Debounced search tracking
@@ -366,17 +287,41 @@ function ProgramsContent() {
     updateFilters({ network: net });
     if (net) track("filter", { metadata: { filter: "network", value: net } });
   };
+  const handlePayout = (v: string) => {
+    setSelectedPayout(v);
+    updateFilters({ payout: v });
+    if (v) track("filter", { metadata: { filter: "payout", value: v } });
+  };
+  const handleMinPayout = (v: string) => {
+    setMinPayout(v);
+    updateFilters({ minpayout: v });
+    if (v) track("filter", { metadata: { filter: "minpayout", value: v } });
+  };
+  const handleCookie = (v: string) => {
+    setCookie(v);
+    updateFilters({ cookie: v });
+    if (v) track("filter", { metadata: { filter: "cookie", value: v } });
+  };
   const clearAll = () => {
     setQuery("");
     setSelectedCategory("");
     setSelectedType("");
     setSelectedNetwork("");
+    setSelectedPayout("");
+    setMinPayout("");
+    setCookie("");
     setVerifiedOnly(false);
     setSort("relevance");
     syncUrl({});
   };
 
-  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork || verifiedOnly);
+  const hasActiveFilters = !!(query || selectedCategory || selectedType || selectedNetwork || selectedPayout || minPayout || cookie || verifiedOnly);
+  // One chip per payout or cookie filter that is on, labelled as in its select.
+  const termChips = [
+    { value: selectedPayout, options: PAYOUT_OPTIONS, clear: () => handlePayout("") },
+    { value: minPayout, options: MIN_PAYOUT_OPTIONS, clear: () => handleMinPayout("") },
+    { value: cookie, options: COOKIE_OPTIONS, clear: () => handleCookie("") },
+  ].filter((c) => c.value);
 
   // Category options with counts
   const categoryOptions = [
@@ -467,6 +412,9 @@ function ProgramsContent() {
           onChange={handleNetwork}
           options={networkOptions}
         />
+        <FilterSelect label="Payout Method" value={selectedPayout} onChange={handlePayout} options={PAYOUT_OPTIONS} />
+        <FilterSelect label="Minimum Payout" value={minPayout} onChange={handleMinPayout} options={MIN_PAYOUT_OPTIONS} />
+        <FilterSelect label="Cookie Window" value={cookie} onChange={handleCookie} options={COOKIE_OPTIONS} />
         <FilterSelect
           label="Sort"
           value={sort}
@@ -564,6 +512,16 @@ function ProgramsContent() {
                 <X className="h-3 w-3" />
               </button>
             )}
+            {termChips.map((c) => (
+              <button
+                key={c.options[0].label}
+                onClick={c.clear}
+                className="inline-flex items-center gap-1 rounded-md border border-border/50 bg-muted/40 px-2 py-0.5 text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              >
+                {c.options.find((o) => o.value === c.value)?.label}
+                <X className="h-3 w-3" />
+              </button>
+            ))}
             <button
               onClick={clearAll}
               className="text-[11px] text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2"

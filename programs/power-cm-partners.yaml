@@ -13,7 +13,7 @@ commission:
   mode: percentage
   value: 25
   currency: USD
-  duration: "12 calendar months from the first actual subscription payment; product exceptions apply"
+  duration: "12 calendar months from the first actual subscription charge; product exceptions apply"
   conditions: >
     Standard rates apply only to enabled products and eligible attributed payments.
     Free trials and zero value invoices generate no commission and do not start the

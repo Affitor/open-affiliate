@@ -19,9 +19,34 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [paypal, stripe]
+  methods:
+  - paypal
+  - stripe
+  conditions: The program FAQ describes monthly PayPal or Stripe payments after the commission balance is more than $29. Referrals must be new customers not already contracted, contacted or referred by someone else. Commissions run for up to 24 months; payment records become final 12 months after the successful referral.
 signup_url: https://simpletexting.com/partnership/sms-affiliate/
-restrictions: null
+restrictions:
+- Accept the program agreement and PartnerStack enrollment terms; participants must have legal capacity and authority to bind their business.
+- Referrals must be new customers not already contracted with, contacted by SimpleTexting, or referred by someone else.
+- Do not bind SimpleTexting or make agreements or representations on its behalf.
+- Do not disclose confidential information to third parties or use it for personal or third-party benefit; these duties survive termination.
+- Comply with applicable laws, rules and regulations.
+- Refer only genuine new customers ethically; no self-referrals.
+- Do not infringe or violate third-party rights.
+- Do not copy or mirror any part of SimpleTexting’s site or create the impression your site is theirs.
+- No fraudulent, abusive or site- or program-harming behavior.
+- No cookie stuffing, pop-ups, inaccurate or misleading links, or masking the referring URL.
+- Do not fake the source domain with redirects; same-domain outbound redirects are excepted.
+- No unsolicited bulk email. Advertising sites must exclude adult content, pornography, weapons, graphic violence including violent game imagery, alcohol, drugs, tragedy, transportation accidents, sensitive social issues, gambling, and abusive, profane, hateful, threatening, harmful, harassing or discriminatory material.
+- Use SimpleTexting-provided branded copy, content and media; obtain approval before using other materials.
+- Disclose referral compensation clearly in promotional emails, websites and blogs and comply with FTC endorsement and other applicable advertising rules.
+- Without express permission, do not use SimpleTexting IP or confusing variants, including in domains, search ads, keyword bids, metatags, code or advertising, or cause initial-interest confusion.
+- Unless written permission is granted, no bidding on SimpleTexting’s restricted brand, domain, coupon, discount, promo, sale or deal terms, variants or misspellings, alone or combined with other keywords.
+- Without written permission, do not use restricted terms in ad titles, copy, display names or URLs, or trademarks in domains or subdomains.
+- Without written permission, do not direct PPC ads to SimpleTexting, including via redirects; use a genuine page on your own site and do not outbid SimpleTexting in auction-style search advertising.
+- You remain responsible for excluding restricted trademark terms from automated PPC campaigns.
+- Social promotion must use your own page; do not post affiliate links on SimpleTexting’s or other companies’ social accounts or pages.
+- Do not put SimpleTexting trademarks in social page names or usernames.
+- Do not assign, transfer or delegate agreement rights or obligations without SimpleTexting’s prior written consent.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +70,8 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+approval: manual

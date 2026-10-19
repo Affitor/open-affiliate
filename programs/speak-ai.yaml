@@ -24,6 +24,14 @@ payout:
   currency: USD
   frequency: monthly
 
+# "Offering rebates, coupons, or other forms of promised kick-backs from your affiliate commission as an incentive." (https://speakai.co/affiliate-terms-of-service/, checked 2026-10-18)
+restrictions:
+  - "No offering rebates, coupons or other promised kick-backs from your affiliate commission as an incentive"
+  - "No self-referrals or fraudulent transactions"
+  - "Affiliate site domain name may not include 'Speakai' or variations or misspellings of it"
+  - "No spamming (mass email, mass newsgroup posting)"
+  - "Must disclose the affiliate relationship for any promotion that qualifies as an endorsement"
+  - "No pay-per-click bidding on Speak brand keywords (speakai, Speakai.co and misspellings) unless that traffic goes to the affiliate's own website before being redirected; violators are banned"
 signup_url: https://speakai.co/affiliates/
 # "Sign up through Rewardful in under two minutes. You get instant access to your dashboard and affiliate links — no waiting on approval." (speakai.co/affiliates, checked 2026-10-13)
 approval: auto
@@ -60,10 +68,12 @@ agents:
     - "Sales teams scoring and coaching calls"
     - "Podcasters and creators transcribing recordings"
 
+not_published:
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

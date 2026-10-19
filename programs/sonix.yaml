@@ -26,6 +26,8 @@ commission:
 payout:
   currency: USD
   methods: [paypal]
+  # "will be paid out every quarter (every three months)" (https://sonix.ai/affiliates/faq, checked 2026-10-18)
+  frequency: quarterly
 
 signup_url: https://sonix.ai/affiliates
 # "Sonix is under no obligation to accept you as an Affiliate and may refuse your application for any reason." (sonix.ai/affiliates/terms, checked 2026-10-17)
@@ -36,6 +38,9 @@ restrictions:
   - "No Sonix banners or links as pop-ups or pop-unders"
   - "Pages showing Sonix special terms must carry a noindex meta tag"
 
+conflicts:
+  - field: payout.minimum
+    quote: "sonix.ai/affiliates/terms: paid \"If the accrued Referral Fee is $200 or more\". sonix.ai/affiliates/faq: a smaller balance \"will be held until the next quarter when your balance is greater than $100.\" Checked 2026-10-18."
 marketing_materials: true
 dashboard_url: null
 # "Our custom tracking is built into our platform." (sonix.ai/affiliates, checked 2026-10-17)
@@ -72,10 +77,12 @@ agents:
     - "Researchers turning recorded sessions into searchable text"
     - "Video producers adding subtitles in several languages"
 
+not_published:
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

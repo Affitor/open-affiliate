@@ -4,9 +4,10 @@ import { TrackPageView } from "@/components/track-page-view";
 import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
 import { SameTeamTag } from "@/components/same-team-tag";
-import { programs, livePrograms, categories, categoryToSlug, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED } from "@/lib/programs";
+import { programs, livePrograms, categories, categoryToSlug, affiliateScore, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
+import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
 
 export const metadata: Metadata = {
@@ -38,9 +39,11 @@ function cookieShort(program: Program): string {
 }
 
 export default function Home() {
-  // Rankings top 5, then 6 verified programs and 30 more by the same Affiliate
-  // Score order, none shown twice (homepageSets).
-  const { rankings, featured, row } = homepageSets(programs);
+  // Rankings top 5, then 6 verified programs by the same Affiliate Score order,
+  // none shown twice (homepageSets).
+  const { rankings, featured } = homepageSets(programs);
+  const networks = networksByName();
+  const networkCount = networks.filter((n) => n.network !== IN_HOUSE).length;
   const checked = livePrograms.filter(termsConfirmed).length;
   const byCategory = categories
     .map((name) => ({ name, slug: categoryToSlug(name), count: livePrograms.filter((p) => p.category === name).length }))
@@ -78,6 +81,7 @@ export default function Home() {
               >
                 Docs and API
               </Link>
+              <Link href="/new" className="inline-flex h-10 items-center rounded-lg border border-line-strong bg-card px-4 text-sm font-medium hover:bg-sunk transition-colors">New programs</Link>
             </div>
           </div>
           <dl className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card" aria-label="Registry today">
@@ -105,8 +109,8 @@ export default function Home() {
                 <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
                 <span className="min-w-0 truncate text-sm font-medium">{program.name}<SameTeamTag slug={program.slug} inLink className="ml-1" /></span>
-                <span className="hidden font-mono text-meta sm:block">
-                  {commissionDisplay(program.commission)} <span className="text-muted-foreground">{commissionLabel(program.commission, true)}</span>
+                <span className="hidden truncate font-mono text-meta sm:block">
+                  {commissionChip(program.commission, true)}
                 </span>
                 <span className="hidden text-meta text-muted-foreground sm:block">{program.category}</span>
                 <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title="Affiliate Score">
@@ -139,7 +143,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
-                <span className="truncate font-mono text-meta">{commissionDisplay(program.commission)} {program.commission.type}</span>
+                <span className="truncate font-mono text-meta">{commissionChip(program.commission)}</span>
                 <span className="shrink-0 text-xs text-muted-foreground">{cookieShort(program)}</span>
               </div>
             </Link>
@@ -148,19 +152,21 @@ export default function Home() {
       </section>
 
       {/* Top verified programs: plain links, so each is in the raw HTML. */}
-      <section id="home-top-verified" className="oa-band">
-        <SectionHead title="More verified programs" note="The next 30 by Affiliate Score" href="/docs/affiliate-score" link="How we score" />
+      {/* Plain anchors: every network is a link in the raw HTML. A to Z by name, in-house last (networksByName, the /networks grid order). */}
+      <section id="home-networks" className="oa-band">
+        <SectionHead title={`${networkCount} networks`} href="/networks" link="All networks" />
         <ul className="columns-2 gap-6 text-sm text-foreground/80 sm:columns-3 lg:columns-5 [&_a:hover]:text-foreground [&_a:hover]:underline [&_li]:py-1">
-          {row.map((p) => (
-            <li key={p.slug}>
-              <a href={`/programs/${p.slug}`}>{p.name}</a><SameTeamTag slug={p.slug} className="ml-1" />
+          {networks.map(({ network, programs: list }) => (
+            <li key={network} className="flex items-baseline justify-between gap-2 break-inside-avoid">
+              <a href={`/networks/${networkToSlug(network)}`} className="truncate">{networkName(network)}</a>
+              <span className="font-mono text-meta text-muted-foreground">{list.length}</span>
             </li>
           ))}
         </ul>
       </section>
 
       <section className="oa-band">
-        <SectionHead title={`${byCategory.length} categories`} href="/networks" link="Browse by network" />
+        <SectionHead title={`${byCategory.length} categories`} href="/categories" link="All categories" />
         <nav aria-label="Categories" className="grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card md:grid-cols-4">
           {byCategory.map((c) => (
             <Link

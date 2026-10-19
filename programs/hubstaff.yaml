@@ -13,7 +13,7 @@ commission:
   value: 30
   currency: USD
   duration: 12 months
-  conditions: "30% on Enterprise plans and 20% on all other plans, on the referred customer's subscription for 12 months. A valid customer is a U.S. company new to Hubstaff that registers through your link and adds an employee within 30 days. Commissions are withheld for three months per referral, then paid monthly; refunds and chargebacks are not paid."
+  conditions: "30% on Enterprise plans and 20% on all other plans, on the referred customer's subscription for 12 months. A valid customer is a U.S. company new to Hubstaff that registers through your link and adds an employee within 30 days. Commissions are withheld for three months per referral, then paid monthly; refunds and chargebacks are not paid. The PayPal and Wise names in the website navigation describe product integrations, not affiliate payment methods; no withdrawal rails or numeric minimum are published in the reviewed program sources."
 
 # "you'll earn up to 30% of the revenue for 12 months with a generous 120-day cookie tracking window" (hubstaff.com/affiliate, checked 2026-10-17)
 cookie_days: 120
@@ -69,8 +69,11 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-17"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'

@@ -21,7 +21,16 @@ cookie_days: 30
 payout:
   currency: EUR
   methods: [paypal, bank]
+  # "The minimum amount for payment of Commission is 40 EUR excluding VAT." (https://help.smartsupp.com/en/articles/12646843-affiliate-terms, checked 2026-10-18)
+  minimum: 40
 
+# "advertising through advertising systems such as Google Ads, Facebook Business Manager and other advertising systems that redirect to the Service's website" (https://help.smartsupp.com/en/articles/12646843-affiliate-terms, checked 2026-10-18)
+restrictions:
+  - "No spam or unsolicited commercial communications"
+  - "No advertising through ad systems such as Google Ads or Facebook Business Manager that redirect to the Smartsupp website"
+  - "No Smartsupp protected keywords in PPC advertising, and no direct linking from PPC ads to the Smartsupp website"
+  - "No promotion methods that could damage or jeopardize Smartsupp's reputation"
+  - "No promotion methods that interfere with or threaten the rights of third parties"
 signup_url: https://www.smartsupp.com/affiliate/
 
 dashboard_url: https://app.smartsupp.com/app/dashboard/affiliate
@@ -55,10 +64,12 @@ agents:
     - "Web agencies setting up chat for client websites"
     - "Small teams answering website, Messenger and WhatsApp messages in one place"
 
+not_published:
+  payout.frequency: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

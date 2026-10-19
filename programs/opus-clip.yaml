@@ -27,7 +27,15 @@ payout:
 signup_url: https://www.opus.pro/affiliate
 approval: manual
 approval_time: "About a week"
-restrictions: null
+# "Affiliates are expressly prohibited from engaging in any form of paid advertising, including but not limited to search advertising, social media advertising, display advertising" (https://www.opus.pro/affiliate-terms, checked 2026-10-18)
+restrictions:
+  - "No promotion on coupon sites"
+  - "No discounts, free trials, coupons, rebates or other offers not expressly approved by OpusClip in writing"
+  - "No paid advertising of any kind (search, social, display, native, paid influencer, other performance marketing)"
+  - "No buying/owning domains or ad keywords containing OpusClip brand names or variations, or using them in social account names"
+  - "No referrals on your own purchases, including with a different email address"
+  - "No spam, including unsolicited bulk email"
+  - "Must disclose the affiliate relationship in all marketing, including social posts"
 marketing_materials: true
 api_available: true
 dedicated_manager: false
@@ -48,10 +56,12 @@ agents:
   use_cases:
   - Podcasters repurposing for shorts
   - Creators scaling short-form content
+not_published:
+  cookie_days: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: rewardful

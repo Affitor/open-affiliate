@@ -1,8 +1,10 @@
-import { formatPercentage } from "./commission-mode"
 import registryData from "./client-registry.json"
 import { compareCommission, compareText } from "./commission-order"
+import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
 
 export const IN_HOUSE = "in-house"
+
+export { commissionChip, commissionDisplay, commissionLabel, cookieChip } from "./program-chips"
 
 export interface ClientProgram {
   slug: string
@@ -19,6 +21,10 @@ export interface ClientProgram {
   }
   /** Left out for an unverified program (confirmed-terms.ts). */
   cookieDays?: number
+  /** Left out for an unverified program, and when the terms name none. */
+  payoutMethods?: string[]
+  /** Left out for an unverified program. */
+  payoutMinimum?: number
   shortDescription: string
   verified: boolean
   network?: string | null
@@ -50,53 +56,23 @@ interface SearchOptions {
   network?: string
   sort?: SortOption
   verified?: boolean
+  payout?: PayoutMethodFilter
+  /** Only programs whose terms set no payout minimum. */
+  noMinimum?: boolean
+  /** Only programs with a cookie of LONG_COOKIE_DAYS or more. */
+  longCookie?: boolean
 }
 
 // Paused, discontinued and no_program entries are not listed or ranked; their own page still renders.
 // build-registry writes `status` only when it is not active. Through `unknown`:
 // the committed client-registry.json can predate a field (`score`), and
 // prebuild and predev regenerate it before anything reads it.
-export const programs = (registryData.programs as unknown as ClientProgram[]).filter((p) => !p.status)
+export const allPrograms = registryData.programs as unknown as ClientProgram[]
+export const programs = allPrograms.filter((p) => !p.status)
 export const categories = registryData.categories as string[]
 
 export function getProgram(slug: string): ClientProgram | undefined {
   return programs.find((program) => program.slug === slug)
-}
-
-export function commissionLabel(
-  commission: ClientProgram["commission"],
-  short = false
-): string {
-  const type =
-    commission.type === "recurring"
-      ? short
-        ? "rec"
-        : "recurring"
-      : commission.type
-  if (commission.type !== "recurring" || !commission.duration) return type
-
-  const duration = commission.duration.toLowerCase().trim()
-  if (duration === "lifetime") return `${type}/lifetime`
-  const months = duration.match(/^(\d+)\s*months?$/)
-  return months ? `${type}/${months[1]}mo` : `${type}/${duration}`
-}
-
-export function commissionDisplay(
-  commission: ClientProgram["commission"]
-): string {
-  switch (commission.mode) {
-    case "percentage":
-      return formatPercentage(commission.rate, commission.value)
-    case "flat":
-      return commission.value !== null
-        ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
-        : "Not published"
-    case "tiered":
-    case "hybrid":
-      return String(commission.rate)
-    default:
-      return "Not published"
-  }
 }
 
 /**
@@ -149,6 +125,17 @@ export function searchPrograms(
   }
   if (options.verified) {
     results = results.filter((program) => program.verified)
+  }
+  // Payout and cookie fields ship for confirmed terms only, so these keep unverified programs out.
+  if (options.payout) {
+    const filter = options.payout
+    results = results.filter((program) => paysBy(program.payoutMethods, filter))
+  }
+  if (options.noMinimum) {
+    results = results.filter((program) => program.payoutMinimum === 0)
+  }
+  if (options.longCookie) {
+    results = results.filter((program) => (program.cookieDays ?? 0) >= LONG_COOKIE_DAYS)
   }
   if (options.query) {
     const query = options.query.toLowerCase()

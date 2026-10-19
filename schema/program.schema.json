@@ -4,6 +4,7 @@
   "description": "Schema for affiliate program YAML files in the OpenAffiliate registry",
   "type": "object",
   "required": [
+    "created_at",
     "name",
     "slug",
     "url",
@@ -173,7 +174,11 @@
     "cookie_days": {
       "type": "integer",
       "minimum": 0,
-      "description": "Cookie/attribution window in days"
+      "description": "Cookie/attribution window in days. 0 = no cookie (code-based attribution), still a stated term."
+    },
+    "cookie_lifetime": {
+      "type": "boolean",
+      "description": "true when the program says a referral stays credited for the customer's lifetime (no expiring window). Leave cookie_days out then."
     },
     "attribution": {
       "type": "string",
@@ -207,11 +212,17 @@
         "frequency": {
           "type": "string",
           "enum": [
+            "daily",
             "weekly",
+            "bi-weekly",
+            "twice-monthly",
             "monthly",
+            "quarterly",
+            "on-request",
             "net-30",
             "net-60"
-          ]
+          ],
+          "description": "When payouts are sent. on-request: the affiliate asks for each payout. net-30 / net-60: paid 30 or 60 days after the month a commission is earned in."
         },
         "methods": {
           "type": "array",
@@ -226,6 +237,10 @@
               "stripe"
             ]
           }
+        },
+        "conditions": {
+          "type": "string",
+          "description": "When a commission becomes payable, in the terms' own words: a hold or validation period, a payout cycle, a withdrawal rule. Shown with the payout once the terms are verified."
         }
       }
     },
@@ -418,6 +433,39 @@
         "null"
       ],
       "description": "One sentence on the status, with its source and a short quote where there is one, e.g. 'Cursor closed its referral program on July 23, 2026: \"the referral discount program is officially closed as of July 23, 2026\" (forum.cursor.com/t/166990)'. last_verified_at is the date it was checked."
+    },
+    "conflicts": {
+      "type": "array",
+      "description": "Terms on which the brand's own pages disagree, found when verifying. Each fails its OAS check with \"Your pages disagree\" until the pages agree.",
+      "items": {
+        "type": "object",
+        "required": ["field", "quote"],
+        "additionalProperties": false,
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": ["commission.rate", "commission.duration", "cookie_days", "payout.minimum", "payout.methods", "payout.frequency", "approval", "restrictions"]
+          },
+          "quote": {
+            "type": "string",
+            "description": "What each page says, with where, e.g. 'Terms: 60-day cookie; PartnerStack listing: 90 days.'"
+          }
+        }
+      }
+    },
+    "not_published": {
+      "type": "object",
+      "description": "Terms the brand does not publish, each with the date its pages were read (YYYY-MM-DD). Written by the data lane after reading the program's pages; only then does OAS score the term as Not published. A term that is absent with no marker here has not been checked, and OAS does not assess it.",
+      "additionalProperties": false,
+      "properties": {
+          "commission.duration": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "cookie_days": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.minimum": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.methods": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "payout.frequency": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "approval": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+          "restrictions": { "type": "string", "format": "date", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+      }
     },
     "claimed_by": {
       "type": "string",

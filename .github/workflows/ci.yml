@@ -25,6 +25,7 @@ jobs:
       - run: node --test .github/scripts/sift-rankings-agg.test.cjs
       - run: node --test .github/scripts/fork-yaml-ci.test.cjs
       - run: node --test .github/scripts/program-logo-server.test.cjs
+      - run: npx tsx --test scripts/saved-programs.test.ts scripts/new-feed.test.ts scripts/created-at.test.ts
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
@@ -42,6 +43,7 @@ jobs:
       - run: npx tsx --test scripts/commission-stats.test.ts
       - run: npx tsx --test scripts/commission-order.test.ts
       - run: npx tsx --test scripts/rankings-terms.test.ts
+      - run: npx tsx --test scripts/oas.test.ts
       - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
       - run: npx tsx --test --test-force-exit scripts/freshness.test.ts
       - run: npx tsx --test scripts/affitor-links.test.ts
@@ -62,6 +64,9 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+
+      - name: Validate immutable creation dates
+        run: npx tsx scripts/validate-created-at.ts
 
       - name: Validate YAML schema
         run: npx tsx scripts/build-registry.ts

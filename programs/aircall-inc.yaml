@@ -15,11 +15,22 @@ commission:
   value: 75
   currency: USD
   duration: null
-  conditions: "$75 per qualified lead (PartnerStack listing)."
+  conditions: "$75 per qualified lead (PartnerStack listing). The brand's affiliate page states monthly payouts for verified leads. This track is for marketing affiliates, not reseller or referral partnerships. The program listing states a 90-day cookie renewed by another click and cash-out via PayPal, Stripe or direct deposit, after verification in the following month."
 attribution: last-click
 tracking_method: cookie
+# "tracked automatically with monthly payouts." (aircall.io/partners/affiliate-partners/, checked 2026-10-18)
+payout:
+  frequency: monthly
+  methods:
+    - paypal
+    - stripe
+    - bank
 signup_url: https://aircall.io/partners/affiliate-partners/
-restrictions: null
+# "This program is built for marketing affiliates only." (aircall.io/partners/affiliate-partners/, checked 2026-10-18)
+restrictions:
+  - "This track is for marketing affiliates serving B2B audiences; reseller and referral partnerships use a separate partner program"
+  - "Commission is earned on qualified leads verified through the affiliate's channel"
+# cookie_days, payout.minimum, payout.methods and approval: not assessed; the linked PartnerStack portal is robots-blocked (checked 2026-10-18).
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -46,7 +57,8 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 90

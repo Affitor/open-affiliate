@@ -12,7 +12,7 @@ commission:
   value: 22
   currency: USD
   duration: "12 months"
-  conditions: "22% of every payment for the first 12 months on Starter, Creator, Pro or Scale plans; 11% on the Business plan; no commission on enterprise purchases. No limit on referrals. Commission becomes payable 90 days after the purchase."
+  conditions: "22% of every payment for the first 12 months on Starter, Creator, Pro or Scale plans; 11% on the Business plan; no commission on enterprise purchases. No limit on referrals. The current program terms state that commission payments are made at the end of the third month following the date on which the commission is earned."
 
 # cookie window and payout methods: not published on elevenlabs.io/affiliates, /affiliates-terms or the help center (checked 2026-10-12)
 
@@ -20,7 +20,7 @@ payout:
   minimum: 5
   currency: USD
   frequency: monthly
-
+  conditions: Commission payments will be made at the end of the third month following the date upon which the commission is earned.
 signup_url: https://elevenlabs.io/affiliates
 approval: auto
 restrictions:
@@ -65,8 +65,11 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 status: active
 kind: affiliate
 source: partnerstack-api
+not_published:
+  cookie_days: '2026-10-18'
+  payout.methods: '2026-10-18'
