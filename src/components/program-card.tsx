@@ -5,8 +5,7 @@ import { ProgramLogo } from "@/components/program-logo"
 import { SameTeamTag } from "@/components/same-team-tag"
 import { SaveButton } from "@/components/save-button"
 import { ImpressionTracker } from "@/components/impression-tracker"
-import { termsConfirmed, UNCONFIRMED } from "@/lib/confirmed-terms"
-import { affiliateScore, commissionDisplay, commissionLabel, type Program } from "@/lib/client-programs"
+import { affiliateScore, commissionChip, cookieChip, type Program } from "@/lib/client-programs"
 
 export function ProgramCardGrid({ program }: { program: Program }) {
   return (
@@ -40,11 +39,10 @@ export function ProgramCardGrid({ program }: { program: Program }) {
           Score: {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-xs">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
+          {commissionChip(program.commission)}
         </Badge>
         <Badge variant="outline" className="text-xs">
-          {!termsConfirmed(program) ? UNCONFIRMED : program.cookieDays != null ? `${program.cookieDays}d cookie` : "Cookie not published"}
+          {cookieChip(program)}
         </Badge>
         <Badge variant="outline" className="text-xs">
           {program.category}
@@ -92,13 +90,13 @@ export function ProgramRowList({ program }: { program: Program }) {
           {affiliateScore(program)}
         </Badge>
         <Badge variant="secondary" className="text-xs">
-          {commissionDisplay(program.commission)}{" "}
-          {commissionLabel(program.commission)}
+          {commissionChip(program.commission)}
         </Badge>
-        <Badge variant="outline" className="text-xs">
-          {termsConfirmed(program) && program.cookieDays != null ? `${program.cookieDays}d` : "—"}
+        {/* From lg: with the score and commission it overflows a 640px row. */}
+        <Badge variant="outline" className="hidden lg:inline-flex text-xs">
+          {cookieChip(program)}
         </Badge>
-        <span className="hidden lg:inline text-xs text-muted-foreground">
+        <span className="hidden xl:inline text-xs text-muted-foreground">
           {program.category}
         </span>
       </div>
