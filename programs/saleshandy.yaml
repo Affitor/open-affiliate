@@ -25,11 +25,9 @@ cookie_days: 90
 # minimum: not published on saleshandy.com/affiliate-program or saleshandy.com/affiliate-program/terms-new (checked 2026-10-17)
 # "Payment frequency: Monthly (usually on the 5th)." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
 # "Payment method: Via PayPal." (saleshandy.com/affiliate-program/terms-new, checked 2026-10-17)
-# "The commission is payable only after 60 days of payment made by the customer." (www.saleshandy.com/affiliate-program/terms-new, checked 2026-10-19) — 60 days after payment → net-60 (backfill rule #1)
 payout:
   currency: USD
-  frequency: net-60
-  conditions: "The commission is payable only after 60 days of payment made by the customer."
+  frequency: monthly
   methods: [paypal]
   # "when the total amount owing is equal to or greater than USD 50" (https://www.saleshandy.com/affiliate-program, checked 2026-10-18)
   minimum: 50
@@ -80,7 +78,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-19"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate

@@ -18,11 +18,13 @@ commission:
 # cookie window: not published on clickfunnels.com/affiliate-program or clickfunnels.com/affiliate-agreement (checked 2026-10-13)
 
 # "Your combined Commissions must equal or exceed One Hundred and 00/100 Dollars ($100.00) (USD) before You receive a payment" (clickfunnels.com/affiliate-agreement, checked 2026-10-13)
+# "Provided that the Sold Account (as defined below) remains in good status within forty-five (45) days from the Sale, You will be paid a commission for each Sold Account that generates a payment to ClickFunnels in a month (“Commission”). Except as otherwise provided herein, Commission payments will be paid on the 1st and 15th of each month following ClickFunnels’ receipt of payment for a Sold Account, subject to the other terms of this Agreement." (www.clickfunnels.com/affiliate-agreement, checked 2026-10-19) — 45 days after the sale → net-60 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
   # "Commission payments will be paid on the 1st and 15th of each month following ClickFunnels’ receipt of payment for a Sold Account" (https://www.clickfunnels.com/affiliate-agreement, checked 2026-10-18)
-  frequency: twice-monthly
+  frequency: net-60
+  conditions: "Provided that the Sold Account (as defined below) remains in good status within forty-five (45) days from the Sale, You will be paid a commission for each Sold Account that generates a payment to ClickFunnels in a month (“Commission”). Except as otherwise provided herein, Commission payments will be paid on the 1st and 15th of each month following ClickFunnels’ receipt of payment for a Sold Account, subject to the other terms of this Agreement."
 
 # "If Your application to become an Affiliate is approved by ClickFunnels, You will receive a unique Affiliate ID." (https://www.clickfunnels.com/affiliate-agreement, checked 2026-10-18)
 approval: manual
@@ -68,7 +70,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-18"
 status: active
 kind: affiliate
