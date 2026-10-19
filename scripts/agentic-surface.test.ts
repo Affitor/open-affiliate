@@ -154,8 +154,22 @@ test("HTTP Markdown negotiation matches generated twins; HTML remains HTML", asy
     const html = await get(path, "text/html")
     assert.equal(html.status, 200, path)
     assert.match(html.headers.get("content-type") ?? "", /^text\/html/)
-    assert.match(html.headers.get("vary") ?? "", /\bAccept\b/i)
     assert.match(await html.text(), /<!DOCTYPE html>/i)
+  }
+  // The brief requires Vary: Accept on Markdown and unchanged HTML. Vercel
+  // prerendered HTML retains its RSC Vary keys; Accept is already a CDN key:
+  // https://vercel.com/docs/caching/cdn-cache#use-cases
+  for (const accept of ["text/html", "text/markdown", "text/html", "text/markdown"]) {
+    const response = await get("/", accept)
+    assert.equal(response.status, 200)
+    assert.ok(response.headers.get("content-type")?.startsWith(accept))
+    const body = await response.text()
+    if (accept === "text/markdown") {
+      assert.match(response.headers.get("vary") ?? "", /\bAccept\b/i)
+      assert.equal(body, readFileSync("public/index.md", "utf8"))
+    } else {
+      assert.match(body, /<!DOCTYPE html>/i)
+    }
   }
   const index = await get("/index.md", "text/html")
   assert.equal(index.status, 200)

@@ -21,11 +21,6 @@ export const nextConfig: NextConfig = {
   // ad-blockers don't strip it. instrumentation-client.ts sets api_host:"/_ph".
   // US Cloud splits static assets onto us-assets.i.posthog.com.
   skipTrailingSlashRedirect: true,
-  // Prerendered HTML can bypass Proxy response headers on the CDN. Declare
-  // the representation dimension here too; Next appends its own RSC Vary keys.
-  async headers() {
-    return [{ source: "/:path*", headers: [{ key: "Vary", value: "Accept" }] }];
-  },
   // /for-agents is the conventional entry point other sites use; the MCP docs page covers it.
   async redirects() {
     // A program's URL-shaped YAML `aliases` (former names, the spellings people
