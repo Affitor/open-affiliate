@@ -16,32 +16,7 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/quil
-# Scoped Website/Service-use categories: corecruit.com/legal/terms-of-service sections 4, 6.2 and 8.4 (checked 2026-10-19).
-restrictions:
-  - "When using CoRecruit Services, do not license, sell, resell, rent, lease, transfer, assign, distribute, time-share or otherwise commercially exploit them or make them available to third parties."
-  - "Do not use CoRecruit Services for spam or duplicative or unsolicited messages in violation of applicable law."
-  - "Do not send, store, upload or transmit harmful code through CoRecruit Services, including viruses, worms, time bombs, Trojan horses or malicious files, scripts, agents or programs."
-  - "Do not interfere with or disrupt the integrity or performance of CoRecruit Services or their data."
-  - "Do not attempt unauthorized access to CoRecruit Services or related systems or networks."
-  - "Do not upload or transmit Services Data that violates third-party rights or consists of unsolicited or unauthorized advertising, junk mail, spam, chain letters, pyramid schemes or other solicitations."
-  - "Services Data must not infringe patent, trademark, trade-secret, copyright, publicity, proprietary or privacy rights."
-  - "Services Data must not be misleading, sexually explicit, unlawful, harmful, threatening, abusive, harassing, tortious, defamatory, vulgar, obscene, libelous, invasive of privacy, hateful, racially or ethnically objectionable, or otherwise objectionable."
-  - "Do not use other measures to mislead CoRecruit or its customers or otherwise take advantage of its Services."
-  - "Use Enrichment Data only for your own internal business-to-business recruitment or commercial prospecting."
-  - "Do not sell, resell, share, license, distribute, market or otherwise commercialize Enrichment Data to third parties."
-  - "Users of Enrichment Data must follow the restrictions that the relevant Enrichment Provider places on CoRecruit's use of that data."
-  - "Users of Enrichment Data must maintain a lawful processing basis, provide required notices, obtain consent where required and support applicable data-subject rights."
-  - "Do not copy, reproduce or otherwise use Enrichment Provider names, trademarks or logos."
-  - "Do not modify, translate, reverse engineer, decompile, disassemble or create derivative works of CoRecruit Services or Content, or allow another person to do so, except where enforcing the contractual restriction is prohibited by applicable law."
-  - "Do not circumvent CoRecruit user limits or built-in timing or use restrictions, or allow another person to do so."
-  - "Do not remove Content or proprietary notices, labels or marks from CoRecruit Services, or allow another person to do so."
-  - "Do not frame or mirror content forming part of CoRecruit Services, or allow another person to do so."
-  - "Do not access CoRecruit Services to build a competing product or service or copy their ideas, features, functions or graphics, or allow another person to do so."
-  - "When using AI Services, do not bypass filters or make the service perform unanticipated actions."
-  - "Do not use AI Services to expose information from their training data."
-  - "Do not override an AI Service's privacy or security controls."
-  - "Do not create or exacerbate biases in an AI Service."
-  - "Do not otherwise undermine an AI Service's safeguards or extract personal information while using it."
+restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -70,11 +45,3 @@ updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
-
-# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
-not_published:
-  cookie_days: "2026-10-19"
-  payout.minimum: "2026-10-19"
-  payout.methods: "2026-10-19"
-  payout.frequency: "2026-10-19"
-  approval: "2026-10-19"

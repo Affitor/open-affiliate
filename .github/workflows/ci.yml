@@ -29,11 +29,14 @@ jobs:
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
+      - run: npx tsx --test scripts/verify-programs.test.ts
       - run: npx tsx --test scripts/claims.test.ts
       - run: npx tsx --test scripts/check-type-scale.test.ts
       - run: npm run check:type-scale
       - run: npx tsc --noEmit
       - run: npm run build
+      - run: npx tsx --test scripts/agentic-surface.test.ts
+      - run: npx tsx --test scripts/agent-skills.test.ts
       # After the build: it reads the registry that prebuild regenerates.
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
@@ -77,11 +80,6 @@ jobs:
       - name: Verify program URLs (changed files)
         if: github.event_name == 'pull_request'
         run: npm run verify:changed
-
-      - name: Verify all program URLs (weekly)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: npm run verify
-        continue-on-error: true
 
       - name: Upload verification report
         if: always()

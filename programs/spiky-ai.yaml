@@ -22,20 +22,6 @@ restrictions:
 - Only Pro, Premium and Enterprise sales qualify; Plus-plan sales earn no commission.
 - Submit at least one deal or demonstrate active collaboration each year; inactive partners cannot renew or extend the contract.
 - New partner territories are evaluated before approval to avoid excessive overlap in a region.
-- For Spiky service use, do not reverse engineer or attempt to discover source or object code, structure, ideas or algorithms, including related documentation or materials.
-- Do not modify, translate or create derivatives of the services.
-- Do not copy, rent, lease, distribute, pledge, transfer or encumber service rights.
-- Do not use or access services to build or support competing offerings or help a third party do so.
-- Do not remove proprietary notices or labels from services.
-- Service access is for permitted internal use, not service-bureau, timesharing or other third-party benefit.
-- Do not provide illegal or rights-violating data, depictions of children under 13 without prior written consent from the child’s parent or legal guardian, material Spiky cannot lawfully transmit, HIPAA-protected information or destructive code.
-- Do not provide data infringing third-party IP or proprietary rights.
-- Do not disrupt networks connected to the services.
-- Follow applicable law, including export-control and privacy requirements.
-- Do not use Spiky IP, trademarks, copyrighted materials or trade dress without authorization.
-- Do not distribute or commercialize Spiky technology.
-- Do not assign or transfer agreement rights or obligations without Spiky’s prior written consent; a change of control counts as assignment.
-- Take reasonable precautions to protect confidential information and do not use or disclose it except as permitted; duties generally end five years after termination and include the agreement’s public, prior-known, third-party, independently developed and legally compelled disclosure exceptions.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -58,7 +44,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

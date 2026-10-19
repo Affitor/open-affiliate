@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
-import { aliasRoutes, commissionTermProblems, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
+import { aliasRoutes, commissionTermProblems, noProgramProblems, nonCashAffiliate, notPublishedProblems, payoutLagProblems } from "./program-rules"
 import { createdAtProblems } from "./created-at-rules"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
@@ -22,6 +22,14 @@ const SIGNUP_URL_DEBT = new Set<string>(
       readFileSync(join(process.cwd(), "schema", "signup-url-debt.json"), "utf8")
     ) as { slugs: string[] }
   ).slugs
+)
+
+/**
+ * Slugs whose payout.frequency names a cadence while their conditions state a
+ * wait over 30 days, frozen when the rule landed. See payoutLagProblems.
+ */
+const PAYOUT_LAG_DEBT = new Set<string>(
+  (JSON.parse(readFileSync(join(process.cwd(), "schema", "payout-lag-debt.json"), "utf8")) as { slugs: string[] }).slugs
 )
 
 /**
@@ -157,6 +165,12 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   const commissionTerms = commissionTermProblems(data)
   if (commissionTerms.length) {
     throw new Error(commissionTerms.join("; "))
+  }
+
+  // A cadence beside a stated wait over 30 days. Rule in program-rules.ts.
+  const lag = payoutLagProblems(data)
+  if (lag.length && !PAYOUT_LAG_DEBT.has(String(data.slug))) {
+    throw new Error(lag.join("; "))
   }
 
   const noProgram = noProgramProblems(data)

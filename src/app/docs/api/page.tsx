@@ -16,6 +16,12 @@ export default function APIPage() {
         description="Query the registry with simple HTTP requests. No auth required."
       />
 
+      <p className="text-sm text-muted-foreground mb-6">
+        Download the <a href="/openapi.json" className="underline">OpenAPI 3.1 specification</a> for parameter and response schemas.
+        Invalid query values return HTTP 400; an unknown slug or API path returns HTTP 404.
+        Errors use <code>{'{ "error": { "code": "...", "message": "...", "hint": "..." } }'}</code>.
+      </p>
+
       <div className="space-y-10">
         <section>
           <h2 id="endpoints" className="text-lg font-semibold mb-3">Endpoints</h2>
@@ -25,7 +31,7 @@ export default function APIPage() {
                 method: "GET",
                 path: "/api/programs",
                 desc: "List all programs",
-                params: "?q=, ?category=, ?type=, ?verified=",
+                params: "?q=, ?category=, ?type=, ?verified=, ?include_description=, ?sort=, ?limit=, ?offset=",
               },
               {
                 method: "GET",
@@ -80,8 +86,9 @@ export default function APIPage() {
             label="curl"
             code={`curl "https://openaffiliate.dev/api/programs?q=database&type=recurring&verified=true"
 
-# Response
-[
+# Response (abbreviated)
+{
+  "programs": [
   {
     "slug": "supabase",
     "name": "Supabase",
@@ -91,7 +98,10 @@ export default function APIPage() {
     "verified": true,
     ...
   }
-]`}
+  ],
+  "total": 1,
+  "filters": { "q": "database", "category": null, "type": "recurring", "sort": "relevance" }
+}`}
           />
         </section>
 

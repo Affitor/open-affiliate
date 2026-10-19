@@ -1,0 +1,37 @@
+# Weekly check of every program's signup page (scripts/verify-programs.ts).
+# Once a week on its own schedule, never on a push or by hand: a full run
+# requests every listed brand's page. Hosts in schema/blocked-hosts.json are
+# never requested. Report only: it opens nothing and never fails a merge.
+name: Verify all program URLs (weekly)
+
+on:
+  schedule:
+    - cron: "0 15 * * 1" # Mondays 15:00 UTC, 08:00 in San Francisco
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-weekly
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Verify all program URLs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run verify
+        continue-on-error: true
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verification-report
+          path: verification-report.json
+          if-no-files-found: ignore

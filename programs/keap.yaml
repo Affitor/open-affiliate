@@ -43,13 +43,14 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
 cookie_days: 90
 payout:
-  frequency: monthly
+  # payout.frequency: unassessed; inherited multi-month qualification and processing clocks do not establish a supported payment-lag enum.
+  # No new positive fact from PartnerStack; linked brand legal source remains inaccessible.
   methods:
   - paypal
   - stripe

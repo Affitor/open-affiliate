@@ -44,8 +44,10 @@
 import { execFileSync } from "node:child_process"
 import { readFileSync, writeFileSync, existsSync } from "node:fs"
 import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
+import { blockedReason, REDIRECTS } from "./blocked-hosts"
 
 const API = "https://api.context.dev/v1/web/extract"
 const KEY = process.env.CONTEXT_DEV_API_KEY
@@ -97,22 +99,43 @@ function targets(): Program[] {
 const sleep = (ms: number) => new Promise(r => setTimeout(r, ms))
 
 type Page = { code: string; body: string; final: string }
+type Hop = { code: string; body: string; location: string }
 
-/** One GET, redirects followed. No shell, so a URL cannot break out of quoting;
+/** One GET, no redirect followed. No shell, so a URL cannot break out of quoting;
  *  the buffer fits pages over 1 MB, which used to come back empty. */
-function get(url: string): Page {
+function curlOnce(url: string): Hop {
+  const out = execFileSync(
+    "curl",
+    // --globoff: braces and brackets in a URL are characters, never a list of
+    // hosts ("{a.example,market.partnerstack.com}" would request both).
+    ["-s", "--globoff", "--proto", "=http,https", "-m", "10", "-A", UA, "-w", "\n%{http_code} %{redirect_url}", url],
+    { encoding: "utf8", timeout: 20_000, maxBuffer: 32 * 1024 * 1024 }
+  )
+  const i = out.lastIndexOf("\n")
+  const tail = out.slice(i + 1)
+  const space = tail.indexOf(" ")
+  return { code: tail.slice(0, space), body: out.slice(0, i), location: tail.slice(space + 1) }
+}
+
+/** One GET, redirects followed by hand so no hop reaches a host in
+ *  schema/blocked-hosts.json: a blocked host gets no request and reads as no page. */
+export function get(url: string, once: (url: string) => Hop = curlOnce): Page {
+  let current = url
   try {
-    const out = execFileSync(
-      "curl",
-      ["-s", "-L", "-m", "10", "-A", UA, "-w", "\n%{http_code} %{url_effective}", url],
-      { encoding: "utf8", timeout: 20_000, maxBuffer: 32 * 1024 * 1024 }
-    )
-    const i = out.lastIndexOf("\n")
-    const [code, final] = out.slice(i + 1).split(" ")
-    return { code, body: out.slice(0, i), final }
+    for (let hop = 0; hop <= 10; hop++) {
+      // curl gets the URL as parsed, so the host checked is the host requested.
+      const parsed = new URL(current)
+      if (!/^https?:$/.test(parsed.protocol) || /[{}[\]]/.test(parsed.hostname)) break
+      current = parsed.href
+      if (blockedReason(current)) return { code: "", body: "", final: current }
+      const res = once(current)
+      if (!REDIRECTS.has(Number(res.code)) || !res.location) return { code: res.code, body: res.body, final: current }
+      current = new URL(res.location, current).href
+    }
   } catch {
-    return { code: "", body: "", final: url }
+    // a failed request or a malformed Location reads as no page
   }
+  return { code: "", body: "", final: current }
 }
 
 const bare = (hostname: string) => hostname.replace(/^www\./, "")
@@ -197,20 +220,25 @@ async function findAffiliatePage(siteUrl: string, signupUrl?: string | null): Pr
     // An SPA shell that answers 200 for any path has nothing beyond it.
     // No homepage, no baseline: accept nothing rather than guess.
     homeHits ??= home().code === "200" ? vocab(home().body) : Infinity
-    if (vocab(body) - homeHits >= 3) return url
+    // The page that answered 200 itself, so the extraction service gets no redirect to follow.
+    if (vocab(body) - homeHits >= 3) return final
   }
   return null
 }
 
 async function extract(url: string): Promise<Record<string, unknown> | null> {
+  // The extraction service fetches the page for us: a blocked host is not sent either.
+  if (blockedReason(url)) return null
   const res = await fetch(API, {
     method: "POST",
     headers: { Authorization: `Bearer ${KEY}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       url,
       factCheck: true,
-      maxPages: 3,
-      maxDepth: 1,
+      // This page only: the service would follow links and redirects we cannot
+      // check against schema/blocked-hosts.json.
+      maxPages: 1,
+      maxDepth: 0,
       instructions:
         "Determine whether this company runs an AFFILIATE program where promoters earn a share of referred revenue. Integration partners, resellers, and agency directories are NOT affiliate programs — return has_affiliate_program=false for those. Extract commission terms exactly as published; leave null anything not stated. commission_quote is the verbatim sentence from the page stating the commission.",
       schema: {
@@ -309,7 +337,10 @@ async function main(): Promise<void> {
   if (!PROBE_ONLY) console.log(`\nwrote ${OUT}`)
 }
 
-main().catch(e => {
-  console.error(e)
-  process.exit(1)
-})
+// Run only as a script: scripts/verify-programs.test.ts imports get().
+if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1]) {
+  main().catch(e => {
+    console.error(e)
+    process.exit(1)
+  })
+}

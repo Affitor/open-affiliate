@@ -1,7 +1,6 @@
 import { ImageResponse } from "next/og";
 import { livePrograms, commissionDisplay } from "@/lib/programs";
 import { commissionGroup, compareCommissionFigure, recurringMonths, recurringText } from "@/lib/rankings-terms";
-import { isSameTeam } from "@/lib/same-team";
 
 export const alt = "Affiliate Program Rankings: OpenAffiliate";
 export const size = { width: 1200, height: 630 };
@@ -15,8 +14,8 @@ function recurs(p: (typeof livePrograms)[number]): string {
 
 export default async function Image() {
   // The /rankings default view: verified programs paying a percentage of the
-  // sale, highest first, longer recurring first on a tie; our own programs unranked.
-  const ranked = livePrograms.filter((p) => p.verified && !isSameTeam(p.slug));
+  // sale, highest first, longer recurring first on a tie.
+  const ranked = livePrograms.filter((p) => p.verified);
   const top5 = ranked
     .filter((p) => commissionGroup(p.commission) === "percent")
     .sort((a, b) => compareCommissionFigure(a, b))

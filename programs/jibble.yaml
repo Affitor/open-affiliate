@@ -19,7 +19,7 @@ tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  # Schedule left unassessed: a sixty-day eligibility lock plus sixty days after reaching the threshold and monthly processing windows do not establish one bounded payment deadline. No absence marker.
   methods:
   - paypal
   - bank
@@ -74,7 +74,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

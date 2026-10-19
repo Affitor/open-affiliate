@@ -22,9 +22,10 @@ cookie_days: 60
 # "last week of each month." (circleboom.com/affiliate-program-terms-of-service, checked 2026-10-18)
 # "a $50.00 threshold in revenue." (circleboom.com/affiliate-program-policy, checked 2026-10-18)
 payout:
+  conditions: "The affiliate page says: \"When one of your leads becomes a paid subscriber, we wait 60 days to clear commissions based on that sale.\" The programme policy requires the customer to be active for more than 60 days and pays in the last week of each month for commissions qualified in the prior month. The clearance and eligibility requirements precede the published monthly processing cycle."
   minimum: 50
   currency: USD
-  frequency: monthly
+  # Schedule left unassessed: published sixty-day clearance, more-than-sixty-day eligibility and payment in the month after qualification cannot be represented by one supported lag enum. No absence marker.
   methods: ["paypal"]
 
 signup_url: https://circleboom.com/affiliate-program
@@ -71,7 +72,7 @@ agents:
 verified: false
 submitted_by: affitor
 created_at: "2026-10-18"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-18"
 status: active
 kind: affiliate

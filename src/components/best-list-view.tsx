@@ -1,9 +1,9 @@
+import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight, BadgeCheck, Percent, Trophy, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
-import { SameTeamTag } from "@/components/same-team-tag";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
@@ -200,7 +200,6 @@ export function BestListView({
                         <span className="text-sm font-medium block group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {program.name}
                         </span>
-                        <SameTeamTag slug={program.slug} inLink className="block" />
                         {program.verified ? (
                           <Badge
                             variant="outline"
@@ -262,14 +261,7 @@ export function BestListView({
 
       <div className="mt-10 max-w-3xl">
         <h2 className="text-base font-semibold mb-3">{list.h1} FAQ</h2>
-        <dl className="space-y-4">
-          {faq.map((f) => (
-            <div key={f.q}>
-              <dt className="text-sm font-medium">{f.q}</dt>
-              <dd className="text-sm text-muted-foreground mt-1">{f.a}</dd>
-            </div>
-          ))}
-        </dl>
+        <FaqAccordion items={faq} />
       </div>
 
       <div className="mt-10 flex flex-col sm:flex-row flex-wrap gap-3">

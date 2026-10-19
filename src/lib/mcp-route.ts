@@ -267,7 +267,7 @@ const programOutputSchema = {
     name: z.string().describe("Alternative program's display name"),
     commission: z.string().describe("Formatted commission figure and payment structure for display; includes percent or currency units when known"),
     url: z.string().describe("Alternative program's page URL on openaffiliate.dev"),
-  })).optional().describe("Verified, active cash-paying alternatives in the same category, excluding same-team brands; only returned for discontinued/no_program, empty when none match"),
+  })).optional().describe("Verified, active cash-paying alternatives in the same category; only returned for discontinued/no_program, empty when none match"),
   markdownUrl: markdownUrlSchema,
 };
 

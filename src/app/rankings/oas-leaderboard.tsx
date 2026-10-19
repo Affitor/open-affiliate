@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { ProgramLogo } from "@/components/program-logo";
-import { TEAM_DISCLOSURE, UNRANKED_TEXT, type BoardRow } from "@/lib/oas";
+import { TEAM_DISCLOSURE, type BoardRow } from "@/lib/oas";
 
 const TOP = 5;
 
@@ -17,14 +17,10 @@ function Row({ r, rank }: { r: BoardRow; rank: number | null }) {
   );
 }
 
-/**
- * OAS leaderboard by category: top 5 ranked, then programs still scoring.
- * Same-team programs keep their score and are listed apart, never ranked.
- */
+/** OAS leaderboard by category: top 5 ranked, then programs still scoring. */
 export function OasLeaderboard({ board }: { board: BoardRow[] }) {
   if (board.length === 0) return null;
-  const team = board.filter((r) => r.unranked === "same-team" || r.unranked === "affitor");
-  const listed = board.filter((r) => !team.includes(r));
+  const listed = board;
   const ranked = listed.filter((r) => r.rank != null);
   const scoring = listed.filter((r) => r.unranked === "checking");
   const latest = board.map((r) => r.score.checked_at).sort().at(-1)!;
@@ -62,21 +58,6 @@ export function OasLeaderboard({ board }: { board: BoardRow[] }) {
           );
         })}
       </div>
-
-      {team.length > 0 && (
-        <div className="mt-8">
-          <h3 className="oa-label">Not ranked</h3>
-          <ul className="mt-1">
-            {team.map((r) => (
-              <li key={r.program.slug} className="flex flex-wrap items-baseline gap-x-3 py-2 border-b border-border text-sm">
-                <Link href={`/programs/${r.program.slug}/oas`} className="font-medium hover:underline underline-offset-2">{r.program.name}</Link>
-                <span className="font-mono">{r.oas ?? "In progress"}</span>
-                <span className="text-muted-foreground">{UNRANKED_TEXT[r.unranked!]}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
 
       <p className="text-meta text-muted-foreground mt-6 max-w-3xl">
         Ranking needs a score, a public application link and terms verified in the last 90 days; equal scores share a rank. A term that is not published scores 0 until it is. Not scored: commission size, recurring or one-time, popularity or payment to OpenAffiliate. {TEAM_DISCLOSURE}

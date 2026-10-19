@@ -268,6 +268,8 @@ npx tsx scripts/verify-programs.ts stripe
 npm run verify:changed
 ```
 
+CI checks the files a pull request changes; the whole registry is checked once a week (`.github/workflows/verify-weekly.yml`). Hosts listed in `schema/blocked-hosts.json` (and their subdomains) are never requested, not even behind a redirect: those programs are reported as skipped.
+
 ## License
 
 MIT
