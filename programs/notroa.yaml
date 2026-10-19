@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once Notroa approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/notroa, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/notroa
 network: affitor
 
@@ -46,10 +48,12 @@ agents:
     - Teams deciding which property leads to work first
     - Professionals replacing manual public-record research
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

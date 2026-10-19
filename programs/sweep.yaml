@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
 
+# "Once Sweep approves you, you get your referral link in your Affitor dashboard." (https://affitor.com/marketplace/sweep, checked 2026-10-18)
+approval: manual
 signup_url: https://affitor.com/marketplace/sweep
 network: affitor
 
@@ -47,10 +49,12 @@ agents:
     - Reviewing what a cache holds before deleting it
     - Watching CPU, memory and drive usage while developing
 
+not_published:
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: affitor-api

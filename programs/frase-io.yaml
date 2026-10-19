@@ -22,10 +22,16 @@ tracking_method: cookie
 payout:
   minimum: 100
   currency: USD
+  # "Affiliates receive payments monthly via PayPal for commissions earned in the previous month." (https://www.frase.io/partners/affiliates, checked 2026-10-18)
+  methods: [paypal]
+  # "Affiliates receive payments monthly via PayPal for commissions earned in the previous month." (https://www.frase.io/partners/affiliates, checked 2026-10-18)
+  frequency: monthly
 signup_url: https://www.frase.io/partners/affiliates
 approval: manual
 approval_time: "2-3 business days"
-restrictions: null
+# "Bidding on Frase's brand name via Search Engine Ads is not allowed." (https://affiliates.frase.io/, checked 2026-10-18)
+restrictions:
+  - "No bidding on Frase's brand name via search engine ads"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -49,7 +55,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

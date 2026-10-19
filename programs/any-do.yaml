@@ -25,6 +25,8 @@ payout:
   currency: USD
   frequency: monthly
 
+# "to become part of the Any.do Ambassador Program, you must complete an application form and be accepted into the program" (https://www.any.do/ambassadors/tos, checked 2026-10-18)
+approval: manual
 signup_url: https://www.any.do/ambassadors/
 restrictions:
   - "Commission only after the 30-day refund period passes"
@@ -62,7 +64,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
