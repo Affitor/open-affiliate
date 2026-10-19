@@ -46,6 +46,7 @@ function yaml(slug: string, over: Partial<ProgramYaml> = {}): ProgramYaml {
   }
 }
 
+const P = (slug: string, category = "AI", network: string | null = "partnerstack"): ProgramRef => ({ slug, name: slug, category, network })
 const states = (s: OasScore) => Object.fromEntries(s.checks.map((c) => [c.id, c.state])) as Record<string, CheckState>
 const state = (over: Partial<ProgramYaml>, id: string) => states(scoreProgram(yaml("p", over), TODAY))[id]
 
@@ -95,6 +96,8 @@ test("T4 and V2 minimum: USD 50 or less after the frozen FX; none = 0; other cur
   assert.equal(state(pay(50), "V2"), "met")
   assert.equal(state(pay(100), "V2"), "not_met")
   assert.equal(state(pay(46, "EUR"), "V2"), "met") // 49.68 USD
+  assert.equal(state(pay(46.29, "EUR"), "V2"), "met") // 49.9932 USD
+  assert.equal(state(pay(46.3, "EUR"), "V2"), "not_met") // 50.004 USD: compared unrounded
   assert.equal(state(pay(50, "EUR"), "V2"), "not_met") // 54 USD
   assert.equal(state(pay(50, "AUD"), "V2"), "met") // 32.5 USD
   assert.deepEqual([state(pay(undefined), "T4"), state(pay(undefined), "V2")], ["not_public", "not_public"])
@@ -159,6 +162,25 @@ test("a held-out T check takes its V pair where the term is absent, and only the
   assert.equal(stated.partner_value, 20)
 })
 
+test("a part with nothing left to assess is Checking, never a crash", () => {
+  const bare = { cookie_days: undefined, payout: { methods: ["paypal"] } }
+  const s = scoreProgram(yaml("p", bare), TODAY, ["T3", "T4", "T6"])
+  assert.deepEqual([states(s).V1, states(s).V2, states(s).V3], ["checking", "checking", "checking"])
+  assert.equal(oasValue(s), null)
+  const dir = join(process.cwd(), "programs")
+  const raw = readdirSync(dir).filter((f) => f.endsWith(".yaml")).map((f) => parse(readFileSync(join(dir, f), "utf8")) as ProgramYaml)
+  assert.doesNotThrow(() => scoreAll(raw, TODAY, ["T3", "T4", "T6"]))
+  assert.doesNotThrow(() => scoreAll(raw, TODAY, CHECK_IDS))
+})
+
+test("a score expires when read more than 90 days after the terms were verified, even with no rebuild", () => {
+  const s = scoreProgram(yaml("p"), TODAY)
+  assert.equal(oasValue(s, TODAY), 100)
+  assert.equal(oasValue(s, new Date("2027-01-12T00:00:00Z")), null)
+  const later = buildBoard([s], [P("p")], new Date("2027-01-12T00:00:00Z"))
+  assert.deepEqual([later[0].oas, later[0].rank, later[0].unranked], [null, null, "checking"])
+})
+
 test("eligibility: unverified, referral and paused are not scored; a review older than 90 days is Scoring in progress", () => {
   assert.equal(isScored(yaml("a")), true)
   assert.equal(isScored(yaml("a", { verified: false })), false)
@@ -174,8 +196,6 @@ test("eligibility: unverified, referral and paused are not scored; a review olde
 test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
-
-const P = (slug: string, category = "AI", network: string | null = "partnerstack"): ProgramRef => ({ slug, name: slug, category, network })
 
 test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply link and stale are not ranked", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
@@ -201,7 +221,8 @@ test("ranking: ties share a rank; Kyma, the Affitor network, scoring, no apply l
   assert.equal(by["on-affitor"].unranked, "affitor")
   assert.equal(by["scoring"].unranked, "checking")
   assert.equal(by["no-apply"].unranked, "no-apply-link")
-  assert.equal(by["stale"].unranked, "stale")
+  assert.equal(by["stale"].unranked, "checking")
+  assert.equal(by["stale"].oas, null)
   assert.deepEqual(categoryRank(board, "tie-b"), { rank: 2, of: 3, category: "AI" })
   assert.equal(categoryRank(board, "kyma-api"), null)
 })

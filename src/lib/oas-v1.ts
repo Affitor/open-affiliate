@@ -4,10 +4,10 @@
  * (programs.ts turns a null `restrictions` into [], which v1 reads as "the brand
  * says there are none"). Only verified, live affiliate programs are scored, and
  * a verified program's YAML holds only terms checked on its own page, so a term
- * that is absent is Not published. Spec: .internal/specs/2026-10-18-OAS-V1-AUTOMATED-SPEC.md §3.
+ * that is absent is Not published. The rules are stated on /methodology#oas.
  */
 import { FREQUENCIES, PAYOUT_METHODS } from "./claims/form"
-import { CHECK_IDS, CHECKS, OAS_VERSION, PAIRS, PART_MAX, round1, STALE_DAYS, type CheckState, type OasCheck, type OasScore, type Part } from "./oas"
+import { CHECK_IDS, CHECKS, isStale, OAS_VERSION, PAIRS, PART_MAX, round1, type CheckState, type OasCheck, type OasScore, type Part } from "./oas"
 
 /** The YAML keys v1 reads. */
 export interface ProgramYaml {
@@ -83,7 +83,8 @@ function judge(id: string, p: ProgramYaml): Result {
       const fact = money(pay.minimum, currency)
       const fx = FX_USD[currency]
       if (fx == null) return { state: "checking", fact: `${fact}: currency not supported yet` }
-      return { state: Math.round(pay.minimum * fx * 100) / 100 <= MINIMUM_USD_MAX ? "met" : "not_met", fact }
+      // Compared unrounded: EUR 46.30 is USD 50.004, over the line.
+      return { state: pay.minimum * fx <= MINIMUM_USD_MAX ? "met" : "not_met", fact }
     }
     case "V3":
       if (!pay.frequency) return { state: "not_public" }
@@ -99,7 +100,7 @@ function judge(id: string, p: ProgramYaml): Result {
  */
 export function scoreProgram(p: ProgramYaml, today: Date, heldOut: string[] = HELD_OUT): OasScore {
   const checked_at = p.last_verified_at ?? ""
-  const stale = !checked_at || today.getTime() - Date.parse(checked_at) > STALE_DAYS * 864e5
+  const stale = isStale(checked_at, today)
   const conflicts = new Map((p.conflicts ?? []).map((c) => [c.field, c.quote]))
 
   const states = new Map<string, OasCheck>()
@@ -121,9 +122,13 @@ export function scoreProgram(p: ProgramYaml, today: Date, heldOut: string[] = HE
   // Points of held-out checks are spread over the rest of their part, so the parts stay /70 and /30. Unrounded.
   for (const part of Object.keys(PART_MAX) as Part[]) {
     const ids = CHECK_IDS.filter((id) => CHECKS[id].part === part)
+    // Nothing left to assess in this part for this program (e.g. T3, T4 and T6 held out, and none of
+    // their terms stated): that is our gap, so the part is Checking and the score in progress.
+    if (ids.every((id) => states.get(id)!.state === "held_out")) {
+      for (const id of ids) states.set(id, { id, state: "checking", max: 0, points: 0 })
+    }
     const active = ids.filter((id) => states.get(id)!.state !== "held_out")
     const base = active.reduce((a, id) => a + CHECKS[id].max, 0)
-    if (base === 0) throw new Error(`OAS ${OAS_VERSION}: every ${part} check is held out`)
     for (const id of active) {
       const c = states.get(id)!
       c.max = (CHECKS[id].max * PART_MAX[part]) / base

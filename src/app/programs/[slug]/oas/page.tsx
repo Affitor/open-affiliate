@@ -243,7 +243,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
           ) : (
             <>
               <p className="text-title font-semibold tracking-tight mt-2">Scoring in progress</p>
-              <p className="text-sm text-muted-foreground mt-1.5">Some checks are not finished yet. The score appears when they are; nothing is counted against {program.name} meanwhile.</p>
+              <p className="text-sm text-muted-foreground mt-1.5">We are verifying its terms again. The score appears when we finish; nothing is counted against {program.name} meanwhile.</p>
             </>
           )}
           {rankLine ? (

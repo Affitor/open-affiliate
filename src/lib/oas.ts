@@ -63,6 +63,9 @@ export interface CheckDef {
 
 export const OAS_VERSION = "v1"
 
+/** Terms verified longer ago than this show Scoring in progress until they are verified again. */
+export const STALE_DAYS = 90
+
 export const PART_MAX: Record<Part, number> = { transparency: 70, partner_value: 30 }
 
 export const GROUPS: CheckGroup[] = [
@@ -113,10 +116,20 @@ export function round1(n: number): number {
   return Math.round(n * 10) / 10
 }
 
-/** OAS, or null while any check is still Checking ("Scoring in progress"). Held-out checks never block it. */
-export function oasValue(s: OasScore): number | null {
-  if (s.oas == null || s.checks.some((c) => c.state === "checking")) return null
+/**
+ * OAS, or null ("Scoring in progress") while any check is still Checking or the
+ * terms were verified more than STALE_DAYS ago. Freshness is checked when read,
+ * not only when the file is built, so a score expires between deploys too.
+ * Held-out checks never block it.
+ */
+export function oasValue(s: OasScore, today: Date = new Date()): number | null {
+  if (s.oas == null || s.checks.some((c) => c.state === "checking") || isStale(s.checked_at, today)) return null
   return s.oas
+}
+
+/** Terms verified more than STALE_DAYS before today, or never. */
+export function isStale(checkedAt: string | null | undefined, today: Date): boolean {
+  return !checkedAt || today.getTime() - Date.parse(checkedAt) > STALE_DAYS * 864e5
 }
 
 export function partEarned(s: OasScore, part: Part): number {
@@ -124,7 +137,7 @@ export function partEarned(s: OasScore, part: Part): number {
 }
 
 /** Why a scored program has no rank. Same team first: it holds even when the score is complete. */
-export type Unranked = "same-team" | "affitor" | "checking" | "no-apply-link" | "stale"
+export type Unranked = "same-team" | "affitor" | "checking" | "no-apply-link"
 
 export interface ProgramRef {
   slug: string
@@ -133,14 +146,11 @@ export interface ProgramRef {
   network?: string | null
 }
 
-export const STALE_DAYS = 90
-
 export function unrankedReason(s: OasScore, p: ProgramRef, today: Date): Unranked | null {
   if (isSameTeam(p.slug)) return "same-team"
   if (p.network === "affitor") return "affitor"
-  if (oasValue(s) == null) return "checking"
+  if (oasValue(s, today) == null) return "checking"
   if (!s.page_url) return "no-apply-link"
-  if (today.getTime() - Date.parse(s.checked_at) > STALE_DAYS * 864e5) return "stale"
   return null
 }
 
@@ -149,7 +159,6 @@ export const UNRANKED_TEXT: Record<Unranked, string> = {
   affitor: "Runs on Affitor (same team as OpenAffiliate) · not ranked",
   checking: "Scoring in progress",
   "no-apply-link": "Not ranked: no public application link",
-  stale: `Not ranked: last verified more than ${STALE_DAYS} days ago`,
 }
 
 export const TEAM_DISCLOSURE = "OpenAffiliate is run by the same team as Affitor."
@@ -168,7 +177,7 @@ export function buildBoard(scores: OasScore[], programs: ProgramRef[], today: Da
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const rows: BoardRow[] = scores.flatMap((s) => {
     const program = bySlug.get(s.slug)
-    return program ? [{ program, score: s, oas: oasValue(s), rank: null, unranked: unrankedReason(s, program, today) }] : []
+    return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, program, today) }] : []
   })
   const ranked = rows.filter((r) => !r.unranked).sort((a, b) => b.oas! - a.oas! || (a.program.slug < b.program.slug ? -1 : 1))
   ranked.forEach((r, i) => (r.rank = i > 0 && ranked[i - 1].oas === r.oas ? ranked[i - 1].rank : i + 1))
