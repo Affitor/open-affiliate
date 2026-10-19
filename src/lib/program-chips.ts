@@ -1,4 +1,4 @@
-import { formatPercentage } from "./commission-mode"
+import { formatFlat, formatPercentage } from "./commission-mode"
 import { termsConfirmed, UNCONFIRMED } from "./confirmed-terms"
 
 /**
@@ -12,6 +12,7 @@ export interface ChipCommission {
   rate: string | number
   mode: string
   value: number | null
+  currency?: string | null
   duration?: string | null
 }
 
@@ -30,9 +31,7 @@ export function commissionDisplay(commission: ChipCommission): string {
     case "percentage":
       return formatPercentage(commission.rate, commission.value)
     case "flat":
-      return commission.value !== null
-        ? `$${commission.value.toLocaleString()}${/credit/i.test(String(commission.rate)) ? " in credits" : ""}`
-        : "Not published"
+      return formatFlat(commission)
     case "tiered":
     case "hybrid":
       return String(commission.rate)
