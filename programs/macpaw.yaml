@@ -22,6 +22,8 @@ payout:
   currency: USD
   frequency: monthly
   methods: [bank, check, paypal]
+  # paraphrased from https://macpaw.com/affiliate (checked 2026-10-18)
+  conditions: "Paid monthly; earnings below the payment threshold carry over to later months until the threshold is met."
 
 signup_url: https://macpaw.com/affiliate
 approval: manual
@@ -65,7 +67,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

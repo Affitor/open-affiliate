@@ -17,8 +17,45 @@ commission:
 # cookie window: not published on pdf.wondershare.com/affiliate.html (checked 2026-10-13)
 # payout minimum: not published on pdf.wondershare.com/affiliate.html (checked 2026-10-13); "Affiliate commissions are paid through affiliate networks which you choose."
 
+payout:
+  # paraphrased from https://pdf.wondershare.com/affiliate.html (checked 2026-10-18)
+  methods: [bank, check]
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  conditions: "Wondershare may hold payments for up to 90 days after the referred customer's purchase."
+
 signup_url: https://pdf.wondershare.com/affiliate.html
 
+# paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+approval: manual
+restrictions:
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No bidding on, registering or purchasing search engine keywords, domain names or other search terms similar to Wondershare trademarks"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No spamming or unsolicited email to promote the program"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No pay per click search engine advertising to publicize the relationship with Wondershare"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No selling Wondershare products on online stores or auction sites such as eBay or Amazon"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No offering additional coupons, bonuses or incentives to end users; any discount promotion must be authorized by Wondershare"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No submitting Wondershare products to other websites under a changed or the same product name"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No selling discontinued products"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No exaggerating product functionality in promotion or on your site"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No pop-up or pop-under advertising using third-party properties or software"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No pop-ups/pop-unders delivered through downloadable software that force clicks, redirect, or pop over pay-per-click or natural search results"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No using Wondershare trademarks (or variations or misspellings) in domain names or in usernames or group names on social networks, except under license"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No using affiliate promotional links to promote other parties' goods or services"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No framing or hotlinking to the Wondershare website or images other than your own without prior written consent"
+  # paraphrased from https://www.wondershare.com/company/affiliate-policy.html (checked 2026-10-18)
+  - "No unlawful, infringing, fraudulent, misleading, defamatory, obscene, abusive, violent or otherwise offensive content or activity"
 marketing_materials: true
 dedicated_manager: true
 dashboard_url: null
@@ -56,7 +93,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

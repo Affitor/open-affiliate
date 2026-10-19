@@ -18,6 +18,8 @@ tracking_method: cookie
 payout:
   currency: USD
   methods: [bank, paypal]
+  # paraphrased from https://www.veed.io/affiliate (checked 2026-10-18)
+  conditions: "Commissions show as pending, are locked after a validation period for cancelled orders, and become available for withdrawal once VEED has paid its monthly invoice to Impact."
 signup_url: https://www.veed.io/affiliate
 approval: manual
 restrictions: null
@@ -44,7 +46,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: impact
