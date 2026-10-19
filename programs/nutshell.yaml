@@ -19,28 +19,7 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.nutshell.com/partner-program
-restrictions:
-- Competitors of the company or its affiliates cannot participate
-- No self-referrals or commissions for customers paying you directly for referrals or participating in another Nutshell partner program
-- Only accepted new customers qualify; existing customers or active sales prospects during the prior sixty days are excluded
-- Do not distribute or resell Nutshell services, bind Nutshell or make unauthorized representations or warranties
-- Use only approved, unaltered trademark images in connection with the partner program
-- Do not use trademarks in misleading or disparaging ways
-- Do not imply Nutshell endorses, sponsors or approves your products or services
-- Do not use trademarks with obscene, indecent or unlawful topics or materials
-- Disclose the affiliate relationship and provide accurate promotional websites and domains
-- No advertising using Nutshell brand terms, variants, sign-up, trial, login, pricing or account terms
-- No advertising competing with, duplicating or reasonably increasing the cost of Nutshell campaigns, even without an affiliate link
-- No affiliate links directly in any ads, including otherwise permitted non-branded advertising
-- No cookie stuffing or pop-ups
-- No false or misleading links
-- Do not mask referring URL information
-- Do not deliver leads other than through an intended consumer; no phonebook or personal-data compilations, fake redirects, automation devices, robots, iframes or hidden frames
-- Do not offer incentives for purchases or sign-ups
-- No deceptive, misleading, illegal or unethical marketing; comply with anti-spam, export and sanctions requirements
-- Do not use or disclose confidential information outside the agreement
-- Do not contest company intellectual property ownership or remove proprietary notices
-- Complete payment and tax requirements or commissions may be forfeited after six months
+restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false

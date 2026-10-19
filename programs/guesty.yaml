@@ -15,18 +15,7 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.guesty.com/affiliate-program/
-restrictions:
-- Guesty employees and contractors cannot participate
-- Do not refer yourself or an organization employing or engaging you, including contractors and internal consultants; external consultants require approval
-- Referred businesses must manage at least five Guesty Pro listings or one Guesty Lite listing in qualifying countries
-- Each qualifying listing must have at least one paid reservation per month during the three-month qualification period
-- No current or returning customers or businesses engaged with Guesty during the previous twelve months
-- The referral must execute its service agreement within the six-month referral eligibility period
-- Submit referrals through the designated form or another method determined by Guesty
-- Provide an invoice within seven days after benefit approval
-- No duplicate listings for the same property or double compensation for referrals already rewarded under a reseller or similar program
-- Do not circumvent, disrupt, damage or undermine the legitimate operation of the program
-- Participants must be at least eighteen, have legal authority to participate and comply with applicable laws and existing agreements
+restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false

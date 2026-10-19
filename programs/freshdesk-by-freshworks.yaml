@@ -17,37 +17,7 @@ cookie_days: 90
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.freshworks.com/company/affiliate-partner/
-restrictions:
-- Submit referrals only through the provided referral link; phone, email and self-referrals are not qualified
-- Do not negotiate terms or make commitments on behalf of Freshworks
-- Only net-new paying customers qualify; conversion must occur within three months unless a written exception is agreed
-- Submit attribution claims in the same financial year as the sale or conversion; later MRR upgrades and upsells do not earn additional commissions
-- No unsolicited communications, junk email, spam or duplicative messages
-- No banners or links on newsgroups, chatrooms, message boards, banner networks, hit farms or guest books
-- No PPC bidding on Freshworks brand-related keywords without express permission
-- Do not have more than one affiliate account
-- Do not have an account with more than one vendor
-- Do not alter Freshworks-provided assets
-- Do not engage in excessive telemarketing
-- Do not promote Freshworks on sites containing unlawful, hateful, abusive or pornographic content
-- Comply with the incorporated Freshworks Business Partner Standards of Conduct and applicable laws
-- Do not participate if named on, owned or controlled by a party on prohibited-government lists, or located, registered or a national in a prohibited jurisdiction
-- Use marks only to identify Freshworks products, follow trademark policies and do not misrepresent product capabilities
-- Do not use confidential information outside the agreement or disclose it beyond authorized need-to-know recipients
-- During participation and for one year thereafter, do not engage Freshworks employees or consultants outside the agreement or induce them to leave Freshworks
-- No unethical practices, corruption, extortion, bribery or improper gifts or advantages to influence decisions
-- Do not coordinate with competitors on Freshworks prices, discounts, margins, allocations, supply, boycotts or bids
-- Do not make false representations or use forged, fraudulent or inaccurate transaction records
-- Do not use or share inside information for securities trading or tipping
-- Avoid and disclose conflicts of interest; no excessive gifts, employee economic conflicts or government reselling after advising on that procurement
-- Comply with export controls and do not transact with comprehensively sanctioned territories or restricted parties
-- Use Freshworks intellectual property only as contracted and report unauthorized use; do not misuse third-party confidential information or intellectual property
-- No forced, bonded, indentured or involuntary prison labor, slavery or human trafficking
-- No child labor; pay legal wages, follow lawful working hours, verify work authorization and provide safe working conditions
-- No unlawful employment discrimination
-- No unlawful workplace harassment, bullying, physical punishment, threats or discriminatory slurs
-- Provide a safe and hygienic workplace with appropriate safety equipment and training
-- Report violations in Freshworks transactions and do not retaliate against good-faith reporters
+restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false

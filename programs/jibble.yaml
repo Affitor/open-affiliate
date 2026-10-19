@@ -25,24 +25,7 @@ payout:
   - bank
   conditions: The program terms usually allow PayPal or a bank account via direct deposit. Eligible payments have a sixty-day locking period; commission obligations require exceeding the $50 threshold and sixty calendar days after reaching it. Internal approval occurs monthly between the 10th and 20th; payouts occur between the 20th and the last day.
 signup_url: https://www.jibble.io/partner
-restrictions:
-- Do not recruit sub-affiliates or share commission with third parties
-- No self-dealing to obtain discounts for your own accounts or organizations
-- No deceptive, misleading, illegal or unethical marketing
-- No spyware, viruses, adware or similar deceptive methods
-- No spam, unsolicited email or other unsolicited marketing communications
-- No harassment, abuse or threats
-- No intellectual property violations or fraud
-- No unlawful gambling
-- Do not publish or distribute material inciting violence, hate or discrimination towards any group
-- Do not publish or distribute sexually explicit material
-- Do not unlawfully gather information about others
-- Written materials referencing Jibble beyond what is necessary for the program require prior written consent
-- No paid campaigns or keyword bidding using affiliate links, ads for Jibble websites or other competition with Jibble advertising
-- Do not advertise Jibble under another brand or as a bundled project, or let others use licensed content
-- Do not use Jibble marks misleadingly, imply endorsement, sponsorship or approval, or use them with obscene, indecent or unlawful topics or materials
-- Disclose affiliate status and accurately disclose collection, storage, use and sharing of visitor data
-- Do not disclose exact commission or confidential information to others except as the agreement permits
+restrictions: null
 marketing_materials: true
 api_available: false
 dedicated_manager: false
