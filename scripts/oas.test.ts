@@ -354,13 +354,20 @@ test("a cadence beside a stated wait over 30 days fails the build: up to 30 days
     "Payout is made on 2026-05-31, 30 days after the sale.",
     "Payout is made on 05/31, 30 days after the sale.",
   ]) assert.deepEqual(lag("monthly", text), [], text)
-  assert.match(lag("monthly", "After the refund period, commissions are paid 45 days after the sale.")[0], /45-day wait/, "a refund earlier in the sentence is not this count's")
+  assert.deepEqual(lag("monthly", "After the refund period, commissions are paid 45 days after the sale."), [], "precision over recall: a refund word earlier in the clause skips it")
   // Codex r7.
   for (const text of [
     "Commissions are paid monthly; refund requests are accepted for up to 60 days after purchase.",
     "Commissions are paid monthly and stop at the end of the third month following signup.",
     "Payout is made on 05-31, 30 days after the sale.",
   ]) assert.deepEqual(lag("monthly", text), [], text)
+  // Codex r8.
+  for (const text of [
+    "Commissions are paid monthly; customers may request a refund, for any reason, within 60 days after purchase.",
+    "Payout is made on 10-31, 30 days after the sale.",
+    "Commissions are paid monthly; refunds are issued at the end of the second month following cancellation.",
+  ]) assert.deepEqual(lag("monthly", text), [], text)
+  assert.match(lag("monthly", "Paid on all ClickFunnels plans as long as the account stays in good status for 45 days after the sale.")[0], /45-day wait/, "a brand name is not the word click")
   assert.match(lag("monthly", "Paid 60/90 days after the sale.")[0], /90-day wait/, "a slash range is not a date")
   assert.match(lag("monthly", "Commissions are sent 10-15 or 45 days after the sale.")[0], /45-day wait/, "10-15 is a range")
   for (const text of ["Payouts are monthly;" + ";".repeat(140000), "Paid 30 days after sale, ".repeat(140000)]) {

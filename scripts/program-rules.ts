@@ -185,22 +185,27 @@ const notCount = (token: string | undefined) =>
 const ORDINALS = ["second", "third", "fourth", "fifth", "sixth"]
 const MONTHS_AFTER = new RegExp(String.raw`\b(?:paid|made|issued|sent|payable)\s+(?:out\s+)?at\s+the\s+end\s+of\s+the\s+(${ORDINALS.join("|")}|[2-6](?:nd|rd|th))\s+(?:calendar\s+)?months?\s+(?:following|after)\b`, "gi")
 /**
- * A count whose own words name a refund, return, cancellation or the cookie
- * ("refunds are issued within 60", "customers can request refunds within
- * 60", "the cookie lasts 60") is not a payout wait. Its own words: back to
- * the nearest comma or semicolon that is not part of a list of numbers,
- * within 200 characters (one pass, however long the text).
+ * A wait whose clause names a refund, return, cancellation or the cookie
+ * before it ("refunds are issued within 60", "customers may request a
+ * refund, for any reason, within 60", "the cookie lasts 60") is not a
+ * payout wait. Precision over recall: "after the refund period, commissions
+ * are paid 45 days after" is skipped too. The clause runs back to the last
+ * semicolon, at most 200 characters (one pass, however long the text).
  */
-const NOT_PAYOUT = /\b(?:refund|return|chargeback|cancel|cookie|click)/i
-const leadOf = (before: string) => before.slice(-200).split(/[,;](?!\s*\d)/).pop() ?? ""
+const NOT_PAYOUT = /\b(?:refund(?:s|ed|ing)?|return(?:s|ed|ing)?|chargebacks?|cancel\w*|cookies?|clicks?)\b/i
+const leadOf = (before: string) => before.slice(-200)
 /**
- * "2026-05-31", "05-31", "05/31/2026", "5/31": a date, not a count. A real
- * month and day only, so "35-40" and "60/90" stay ranges; a dash date needs
- * a zero-padded month ("10-15" is a range).
+ * "2026-05-31", "05-31", "on 10-31", "05/31/2026", "5/31": a date, not a
+ * count. A real month and day only, so "35-40" and "60/90" stay ranges; a
+ * dash date needs a zero-padded month or "on/by/before/until" in front
+ * ("10-15 days" is a range).
  */
 const MONTH = String.raw`(?:0?[1-9]|1[0-2])`
 const DAY = String.raw`(?:0?[1-9]|[12]\d|3[01])`
-const DATE = new RegExp(String.raw`\b\d{4}-\d{1,2}-\d{1,2}\b|\b0[1-9]-${DAY}\b|\b${MONTH}\/${DAY}(?:\/\d{2,4})?\b`, "g")
+const DATE = new RegExp(
+  String.raw`\b\d{4}-\d{1,2}-\d{1,2}\b|\b0[1-9]-${DAY}\b|(?<=\b(?:on|by|before|until)\s+)${MONTH}-${DAY}\b|\b${MONTH}\/${DAY}(?:\/\d{2,4})?\b`,
+  "gi",
+)
 
 /**
  * The wait a "days after" names: the largest number of the count written
@@ -243,6 +248,7 @@ function clauseWait(clause: string): number {
     if (!NOT_PAYOUT.test(leadOf(before))) wait = Math.max(wait, waitBefore(before))
   }
   for (const m of clause.matchAll(MONTHS_AFTER)) {
+    if (NOT_PAYOUT.test(leadOf(clause.slice(0, m.index)))) continue
     const word = ORDINALS.indexOf(m[1].toLowerCase())
     wait = Math.max(wait, 30 * (word >= 0 ? word + 2 : Number(m[1][0])))
   }
