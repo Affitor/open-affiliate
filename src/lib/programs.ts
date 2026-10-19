@@ -683,6 +683,16 @@ export function networksByProgramCount(): { network: string; programs: Program[]
     )
 }
 
+/** A to Z by display name, ignoring case: how /networks lays out its grid. */
+export function byNetworkName(a: string, b: string): number {
+  return networkName(a).localeCompare(networkName(b), "en", { sensitivity: "base" })
+}
+
+/** Every live network A to Z (byNetworkName), in-house last: the homepage band. */
+export function networksByName(): { network: string; programs: Program[] }[] {
+  return networksByProgramCount().sort((a, b) => Number(a.network === IN_HOUSE) - Number(b.network === IN_HOUSE) || byNetworkName(a.network, b.network))
+}
+
 export function getNetworkStats(): NetworkStats[] {
   const networkMap = new Map<string, Program[]>()
   for (const p of livePrograms) {
