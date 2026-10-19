@@ -24,6 +24,8 @@ export interface OasCheck {
   fact?: string | null
   /** Two of the brand's pages disagree on this term; the quote shows both. */
   conflict?: string | null
+  /** Not published: the date the brand's pages were read (the data lane's not_published marker). */
+  checked?: string
 }
 
 export interface OasScore {
