@@ -45,6 +45,8 @@ export interface Program {
     currency?: string
     frequency?: string
     methods?: string[]
+    /** When a commission becomes payable, as the brand's terms say ("paid 30 days after the subscription starts"). */
+    conditions?: string
   }
   description: string
   shortDescription: string
@@ -121,6 +123,7 @@ function mapYamlToProgram(yaml: any): Program {
       currency: yaml.payout?.currency,
       frequency: yaml.payout?.frequency,
       methods: yaml.payout?.methods ?? [],
+      conditions: yaml.payout?.conditions,
     },
     description: yaml.description?.trim() ?? "",
     shortDescription: yaml.short_description ?? "",
