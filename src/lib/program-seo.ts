@@ -120,9 +120,14 @@ export function buildFaq(p: Program): Faq[] {
   const faq: Faq[] = []
   const earn = earningPhrase(p)
   if (earn) {
+    const summary = `${earn.charAt(0).toUpperCase()}${earn.slice(1)}.`
+    const conditions = p.commissionConditions?.trim() ?? ""
+    const extra = conditions.toLowerCase().startsWith(summary.toLowerCase())
+      ? conditions.slice(summary.length).trim()
+      : conditions
     faq.push({
       q: `How much does the ${name} affiliate program pay?`,
-      a: `${earn.charAt(0).toUpperCase()}${earn.slice(1)}.${p.commissionConditions ? ` ${p.commissionConditions}` : ""}`,
+      a: `${summary}${extra ? ` ${extra}` : ""}`,
     })
   }
   if (p.cookieDays) {
@@ -146,7 +151,7 @@ export function buildFaq(p: Program): Faq[] {
     q: `How do I join the ${name} affiliate program?`,
     a: [
       `Apply${p.signupUrl ? ` at ${p.signupUrl.replace(/^https?:\/\//, "").replace(/\/$/, "")}` : ` on ${name}'s website`}${net && p.network !== IN_HOUSE ? ` (runs on ${net})` : ""}.`,
-      approval ? `${approval}${p.approvalTime ? `, usually within ${p.approvalTime}` : ""}.` : "",
+      p.approvalTime === "instant" ? "Approval is instant." : approval ? `${approval}${p.approvalTime ? `, usually within ${p.approvalTime}` : ""}.` : "",
     ]
       .filter(Boolean)
       .join(" "),

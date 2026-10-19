@@ -22,6 +22,7 @@ import CategoryPage from "../src/app/categories/[slug]/page"
 import ProgramPage from "../src/app/programs/[slug]/page"
 import { BestPostView } from "../src/components/best-post-view"
 import { FaqAccordion } from "../src/components/faq-accordion"
+import { buildFaq, programJsonLd } from "../src/lib/program-seo"
 import { POSTS, postList, postSelection } from "../src/lib/best-posts"
 
 const root = join(__dirname, "..")
@@ -277,4 +278,37 @@ test("the shared FAQ renders text safely without client JavaScript", () => {
   assert.match(html, /&lt;img/)
   assert.doesNotMatch(html, /<script|<img|\bopen=/)
   assert.doesNotMatch(readFileSync(join(root, "src/components/faq-accordion.tsx"), "utf8"), /use client|onClick|onKeyDown/)
+})
+
+test("Cal.com FAQ states earnings once and keeps the customer discount", async () => {
+  const program = getProgram("cal-com")!
+  assert.ok(program)
+  const faq = buildFaq(program)
+  const answer = faq.find((item) => item.q === "How much does the Cal.com affiliate program pay?")!.a
+  assert.equal(answer, "20% recurring for 12 months. Referred customers also get 20% off for 12 months.")
+  const schema = programJsonLd(program, faq)["@graph"].find((item) => item["@type"] === "FAQPage")!
+  assert.equal(schema.mainEntity![0].acceptedAnswer.text, answer)
+  const html = renderToStaticMarkup(await ProgramPage({ params: Promise.resolve({ slug: program.slug }) }))
+  assertFaqAccordion(html)
+  assert.doesNotMatch(html, /20% recurring for 12 months\. 20% recurring for 12 months\.|usually within instant/)
+})
+
+test("instant approval has its own sentence in the join FAQ", () => {
+  const base = getProgram("cal-com")!
+  assert.ok(base)
+  for (const approval of ["auto", "manual", undefined] as const) {
+    const program = { ...base, approval, approvalTime: "instant" }
+    const answer = buildFaq(program).find((item) => item.q.startsWith("How do I join"))!.a
+    assert.ok(answer.endsWith("Approval is instant."), answer)
+    assert.doesNotMatch(answer, /usually within instant/)
+  }
+})
+
+test("numeric approval times and distinct commission conditions stay in the FAQ", () => {
+  const base = getProgram("cal-com")!
+  assert.ok(base)
+  const program = { ...base, approval: "manual" as const, approvalTime: "1-2 business days", commissionConditions: "Only new paid customers qualify." }
+  const faq = buildFaq(program)
+  assert.ok(faq.find((item) => item.q.startsWith("How do I join"))!.a.endsWith("Applications are reviewed by hand, usually within 1-2 business days."))
+  assert.equal(faq[0].a, "20% recurring for 12 months. Only new paid customers qualify.")
 })
