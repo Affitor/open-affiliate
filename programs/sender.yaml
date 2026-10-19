@@ -18,7 +18,37 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.sender.net/affiliate-program/
-restrictions: null
+restrictions:
+- Do not provide representations or warranties about Sender beyond its approved marketing materials.
+- Uses of Sender services, marks and marketing materials must meet its standards and require approval before sale, use, distribution or disclosure.
+- Use provided trademark images unchanged, only for the program and under trademark guidelines; stop when requested.
+- No misleading or disparaging trademark use.
+- Do not imply Sender endorses, sponsors or approves your products or services.
+- No trademark use that breaks the law or accompanies obscene, indecent or unlawful material.
+- Do not contest Sender’s IP ownership, remove or conceal proprietary notices, or imply its IP belongs to you.
+- When participation ends, discontinue and delete the affiliate tool and remove Sender trademarks and program references from websites and other materials.
+- Hold the rights and permissions required to provide referral leads and partner marks, and avoid conflicts with existing agreements.
+- Meet trade and regulatory requirements, including identifying your Sender partner relationship on sites carrying affiliate links.
+- Accurately register all owned websites and domains where affiliate links will be used.
+- Do not buy ads to your sites or affiliate links that compete with Sender’s advertising, including but not limited to branded keywords.
+- No cookie stuffing, pop-ups or false or misleading links.
+- Do not mask the referring URL.
+- Do not buy Sender products through your own affiliate link.
+- Leads must come from intended consumers; no phonebook-style personal-data compilations, fake redirects, lead-generation robots or other automated devices, iframes, hidden frames, or incentives for purchases or sign-ups.
+- You must not be a competitor of Sender or any of its affiliates.
+- No distributing, reselling or sublicensing Sender services, or making commitments or incurring liabilities on Sender’s behalf.
+- Referral leads must be new potential customers, not pre-existing customers or in an active sales process at submission or during the prior 60 days.
+- No commission where prohibited by law, rejected by the customer, already paid directly by the customer, obtained fraudulently or through program misuse, or where the customer participates in a Sender partner program.
+- You and third parties performing referral activities must follow foreign and domestic law, including unsolicited-email and export rules; no deceptive, misleading, illegal, unethical or otherwise detrimental marketing, and no prohibited transfers or use under OFAC sanctions.
+- Do not assign or transfer the agreement without the consent required by its assignment clause.
+- No unsolicited mass email, spam or activities violating Sender’s anti-spam policies or applicable law.
+- Do not provide inaccurate or incomplete identity, address or other required information.
+- Do not cheat, defraud or mislead Sender.
+- Do not misrepresent Sender’s or your own website terms to the public.
+- Do not participate in popup advertising networks.
+- No advertisements leading directly or automatically redirecting to Sender’s website, subpages, subdomains or affiliate links; this ban also applies to unbranded ads that do not compete with Sender advertising.
+- Do not bid on Sender-related brand terms, misspellings or close variants on any paid advertising platform, including search and social advertising.
+- Iframes require Sender’s express permission; hidden iframes and cookie stuffing do not earn referral credit.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -41,7 +71,18 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+cookie_days: 90
+payout:
+  methods:
+  - paypal
+  - stripe
+  - bank
+  frequency: net-60
+  conditions: The affiliate agreement requires payment within 45 days after the end of the calendar month in which Sender collects the corresponding amounts. The program page separately describes monthly PayPal, Stripe or direct-deposit withdrawals around two weeks after month-end. Both published schedules remain applicable; the structured net-60 value represents the agreement’s 45-day deadline.
+approval: manual
+not_published:
+  payout.minimum: '2026-10-18'

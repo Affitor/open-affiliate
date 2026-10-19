@@ -19,8 +19,21 @@ commission:
 cookie_days: 45
 attribution: last-click
 tracking_method: cookie
+payout:
+  conditions: "The brand says PartnerStack manages and sends payments on a regular schedule, without specifying a cadence or payout threshold on its programme page."
+
+approval: manual
 signup_url: https://ueni.com/en-us/partner-program/
-restrictions: null
+# Scoped restrictions from https://ueni.com/en-us/partner-program/ (checked 2026-10-19).
+restrictions:
+  - "UENI customers must be at least eighteen and legally entitled to enter the service agreement and represent the business for which they register."
+  - "Do not try to circumvent security, reverse engineer or interfere with the UENI Platform or digital accounts it manages."
+  - "Keep UENI Platform passwords secure; customers are responsible for unauthorized access arising from disclosure of their password."
+  - "Content supplied to UENI and use of any Domain Name must not be defamatory, indecent, illegal or infringe third-party intellectual property, and must be accurate, current and lawful."
+  - "Do not use the UENI Platform commercially except in connection with purchased Services."
+  - "Do not abuse Service Providers' booking systems on the UENI Platform."
+  - "Store and manage User Data from a UENI-built Company Website in accordance with data-protection law and UENI's privacy policy."
+  - "Do not sell or license, or attempt to sell or license, access to the UENI Platform or Services without written consent."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +58,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

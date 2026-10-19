@@ -42,7 +42,16 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+
+# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
+not_published:
+  cookie_days: "2026-10-19"
+  payout.minimum: "2026-10-19"
+  payout.methods: "2026-10-19"
+  payout.frequency: "2026-10-19"
+  approval: "2026-10-19"
+  restrictions: "2026-10-19"

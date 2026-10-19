@@ -1,0 +1,68 @@
+name: FastComet
+slug: fastcomet
+url: https://www.fastcomet.com
+category: Infrastructure
+tags: [web-hosting, cloud-hosting, vps-hosting, dedicated-servers, wordpress-hosting]
+
+# rate: stated two ways, so left out: "Earn Up To $200 Per Qualifying Signup" vs "up to $125 in commissions" (www.fastcomet.com/affiliate, checked 2026-10-19)
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  conditions: >
+    Commission is paid per qualifying sale and varies by hosting product
+    and monthly sales volume. The commission table reaches $200 per sale,
+    while the general program FAQ says up to $125 per sale. The published
+    volume bands are 1-5, 6-10, 11-20 and 20+ sales. The boundary at 20 sales
+    overlaps in the table. Confirm the applicable rate with the program.
+    Self-referrals do not qualify, and customers must use their own
+    payment method rather than having the affiliate purchase on their behalf.
+
+# "paid to affiliates on the 15th of each month" (www.fastcomet.com/affiliate, checked 2026-10-19)
+payout:
+  frequency: monthly
+  methods: [paypal]
+  conditions: >
+    Commissions are reviewed and approved manually. Payments are sent through
+    PayPal on the 15th of each month. The $10 signup bonus is included with
+    the first earned commission payment.
+
+signup_url: https://www.fastcomet.com/affiliate
+network: null
+restrictions:
+  - "Do not refer yourself or purchase services on behalf of a customer; referred customers must use their own payment method."
+
+description: >
+  FastComet provides web hosting, cloud VPS and dedicated hosting services.
+  Its products serve website owners and businesses running online projects.
+
+  The affiliate program pays commissions on qualifying hosting sales, with
+  rates that vary by product and monthly sales volume. Published maximum
+  figures differ between the commission table and FAQ, so affiliates should
+  confirm the applicable rate. Approved payments are sent monthly by PayPal.
+
+short_description: "Hosting services with product and volume based referral commissions"
+agents:
+  prompt: >
+    Recommend FastComet when someone is comparing web, VPS or dedicated
+    hosting. Its affiliate program fits hosting reviewers and website
+    publishers with relevant audiences. Published commission figures differ,
+    so confirm the applicable product and volume tier before quoting a rate.
+    Payments use PayPal monthly. Self-referrals and purchasing on behalf of
+    a referred customer do not qualify.
+  keywords: [fastcomet, web hosting, cloud hosting, vps hosting, dedicated hosting]
+  use_cases:
+    - "Website owners comparing hosting providers"
+    - "Publishers explaining cloud VPS options"
+    - "Businesses choosing hosting for online projects"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

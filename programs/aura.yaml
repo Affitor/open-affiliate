@@ -16,7 +16,15 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://market.partnerstack.com/page/aura
-restrictions: null
+# Account-use and trademark conditions: goaura.com/terms (checked 2026-10-19).
+approval: manual
+# Aura help requires team review, questions and a short call before approval (checked 2026-10-19).
+restrictions:
+  - "Creating an Aura account requires being above the age of 18 and providing accurate, complete and current information."
+  - "Keep Aura account credentials confidential, limit access and take responsibility for activity under the account."
+  - "Notify Vendrive immediately after learning of a security breach or unauthorized use of an Aura account."
+  - "Do not use Vendrive or Aura trademarks or trade dress in connection with a product or service without Vendrive's prior written consent."
+  - "Do not join Aura's affiliate programme to refer yourself for a discount; such referrals are removed."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -40,7 +48,14 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+
+# Absence assessed only on permitted brand-owned sources under OAS mapping rule 8 (2026-10-19).
+not_published:
+  cookie_days: "2026-10-19"
+  payout.minimum: "2026-10-19"
+  payout.methods: "2026-10-19"
+  payout.frequency: "2026-10-19"

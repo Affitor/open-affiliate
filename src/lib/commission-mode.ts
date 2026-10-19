@@ -73,3 +73,22 @@ export function formatPercentage(rate: string | number | null | undefined, value
     ? stored
     : `${value}%`
 }
+
+/**
+ * A flat amount in the program's own currency: "$250", "€200", "A$100", "$20 in
+ * credits". With no currency the stored rate as the source wrote it, never an
+ * assumed dollar sign.
+ */
+export function formatFlat(c: { rate?: string | number | null; value?: number | null; currency?: string | null }): string {
+  if (c.value == null) return "Not published"
+  const code = c.currency?.trim().toUpperCase()
+  if (!code) return String(c.rate ?? "").trim() || "Not published"
+  const credits = /credit/i.test(String(c.rate)) ? " in credits" : ""
+  if (code === "USD") return `$${c.value.toLocaleString()}${credits}`
+  try {
+    const amount = new Intl.NumberFormat("en-US", { style: "currency", currency: code, minimumFractionDigits: 0, maximumFractionDigits: 3 }).format(c.value)
+    return `${amount.replace(/ /g, " ")}${credits}`
+  } catch {
+    return `${c.value.toLocaleString()} ${code}${credits}`
+  }
+}

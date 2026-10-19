@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync, readdirSync } from "fs"
 import { join, basename } from "path"
 import { parse } from "yaml"
-import { aliasRoutes, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
+import { aliasRoutes, commissionTermProblems, noProgramProblems, nonCashAffiliate, notPublishedProblems } from "./program-rules"
 import { createdAtProblems } from "./created-at-rules"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
 
@@ -152,6 +152,11 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   const markers = notPublishedProblems(data)
   if (markers.length) {
     throw new Error(markers.join("; "))
+  }
+  // The rate and duration are shown verbatim: an unverified one states no withheld term.
+  const commissionTerms = commissionTermProblems(data)
+  if (commissionTerms.length) {
+    throw new Error(commissionTerms.join("; "))
   }
 
   const noProgram = noProgramProblems(data)
@@ -365,7 +370,7 @@ async function buildRegistry(): Promise<void> {
         rate: p.commission.rate,
         mode: p.commission.mode,
         value: p.commission.value,
-        currency: p.commission.currency,
+        currency: p.commission.currency ?? null,
         duration: p.commission.duration,
       },
       // Unverified: no cookie window, and no sentence stating one (confirmed-terms.ts).
