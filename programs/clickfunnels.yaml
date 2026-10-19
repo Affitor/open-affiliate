@@ -21,7 +21,11 @@ commission:
 payout:
   minimum: 100
   currency: USD
+  # "Commission payments will be paid on the 1st and 15th of each month following ClickFunnels’ receipt of payment for a Sold Account" (https://www.clickfunnels.com/affiliate-agreement, checked 2026-10-19)
+  frequency: twice-monthly
 
+# "If Your application to become an Affiliate is approved by ClickFunnels, You will receive a unique Affiliate ID." (https://www.clickfunnels.com/affiliate-agreement, checked 2026-10-19)
+approval: manual
 signup_url: https://www.clickfunnels.com/affiliate-program
 restrictions:
   - "No bidding on ClickFunnels trademarks or brand names in paid search"
@@ -61,7 +65,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-18"
 status: active
 kind: affiliate

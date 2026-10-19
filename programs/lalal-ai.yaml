@@ -23,7 +23,10 @@ payout:
 signup_url: https://www.lalal.ai/affiliate-program/
 approval: manual
 approval_time: "24-48 hours"
-restrictions: null
+# "Affiliates may not use paid ads that include “lalal.ai,” its variations, or misspellings in the domain name or ad copy." (https://www.lalal.ai/affiliate-program/, checked 2026-10-19)
+restrictions:
+  - "No paid ads that include lalal.ai, its variations, or misspellings in the domain name or ad copy"
+  - "Google Ads traffic is not accepted without prior agreement"
 
 marketing_materials: true
 api_available: true
@@ -61,7 +64,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: "2026-04-17"
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

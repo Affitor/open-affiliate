@@ -19,6 +19,12 @@ cookie_days: 120
 
 # payout minimum, frequency and methods: not published on iobit.com/en/affiliate-solutions.php (checked 2026-10-13)
 
+# "Bidding on, register or purchase search engine keywords, domain names, or other identifying searching terms or titles that are similar to the trademarks" (https://www.iobit.com/en/terms.php, checked 2026-10-19)
+restrictions:
+  - "No bidding on IObit trademark keywords or similar domains without prior approval"
+  - "No extra coupons, bonuses or incentives without approval; use official pricing"
+  - "No spam or unsolicited email, no unauthorized link placement in forums"
+  - "No malware, adware, forced click or cookie stuffing"
 signup_url: https://www.iobit.com/en/affiliate-solutions.php
 approval: manual
 approval_time: "Within 48 hours on 2Checkout"
@@ -60,7 +66,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

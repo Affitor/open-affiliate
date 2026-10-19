@@ -21,7 +21,11 @@ commission:
 payout:
   currency: EUR
   methods: [paypal, bank]
+  # "4. Payment Threshold €250" (https://neurithtools.com/term_of_service_affiliation, checked 2026-10-19)
+  minimum: 250
 
+# "the SaaS Business’ subsequent acceptance and confirmation of Partner’s enrollment" (https://neurithtools.com/term_of_service_affiliation, checked 2026-10-19)
+approval: manual
 signup_url: https://neurithtools.com/term_of_service_affiliation
 
 restrictions:
@@ -64,7 +68,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

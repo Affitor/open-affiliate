@@ -14,7 +14,8 @@ commission:
   duration: null
   conditions: "Paid on referrals who upgrade to Metricool Premium. Every Metricool user starts as a Tier 1 Associate: 25% of subscriptions, capped at $100 per referred user. Reaching 200 paid registrations unlocks Tier 2 Partner: 50%, capped at $300 per user; keeping Tier 2 needs 100 more paid registrations within 12 months. Affiliate cookies never expire."
 
-# cookie_days: "Metricool affiliate cookies never expire" (metricool.com/affiliate-program, checked 2026-10-13); no day count, so left out
+# "Metricool affiliate cookies never expire" (https://metricool.com/affiliate-program/, checked 2026-10-19)
+cookie_lifetime: true
 
 # "A minimum of $200 in earnings is required to initiate a payout"; "Payouts are issued monthly" (metricool.com/affiliate-program, checked 2026-10-13); payment methods not listed
 payout:
@@ -60,7 +61,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

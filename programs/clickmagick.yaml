@@ -21,6 +21,8 @@ payout:
   minimum: 50
   currency: USD
   methods: [paypal]
+  # "We payout commissions DAILY via PayPal MassPay, with just a 14-day lag time" (https://www.clickmagick.com/referral-program/, checked 2026-10-19)
+  frequency: daily
 
 signup_url: https://www.clickmagick.com/referral-program/
 restrictions:
@@ -64,7 +66,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

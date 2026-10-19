@@ -10,7 +10,8 @@ commission:
   mode: hybrid
   value: 20
   currency: USD
-  duration: null
+  # "for as long as the referral and your partner account remain active" (https://help.kajabi.com/en/articles/17175726-partner-program-overview, checked 2026-10-19)
+  duration: lifetime
   conditions: "Your tier follows your number of active referrals. Starter (1-4) earns a one-time bounty of 100% of the referral's first month. Builder (5-24) earns 10%, Accelerator (25-49) 15% and Premium (50+) 20% of every subscription payment from all active referrals, for as long as you and the referral stay active. Base plan subscriptions only; add-ons and Kajabi Payments are excluded."
 
 # cookie window and payout minimum: not published in Kajabi's Partner Program help articles or agreement (checked 2026-10-12)
@@ -62,7 +63,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-12"
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 status: active
 kind: affiliate
