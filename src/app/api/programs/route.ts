@@ -1,5 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { confirmedTerms, searchPrograms, type SortOption } from "@/lib/programs"
+import { apiError } from "@/lib/api-error"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -15,9 +16,33 @@ export function OPTIONS() {
 }
 
 const VALID_SORTS = new Set(["relevance", "az", "za", "commission_desc", "newest"])
+const VALID_TYPES = new Set(["recurring", "one-time", "tiered", "hybrid"])
 
 export function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
+  for (const name of ["q", "category", "type", "verified", "include_description", "sort", "limit", "offset"]) {
+    if (searchParams.getAll(name).length > 1) {
+      return apiError(400, "INVALID_QUERY", `Repeated parameter: ${name}.`, "Supply each filter once. See /openapi.json.")
+    }
+  }
+  for (const name of ["verified", "include_description"]) {
+    const value = searchParams.get(name)
+    if (value !== null && value !== "true" && value !== "false") {
+      return apiError(400, "INVALID_QUERY", `Invalid ${name} value.`, "Use true or false.")
+    }
+  }
+  for (const name of ["limit", "offset"]) {
+    const value = searchParams.get(name)
+    if (value !== null && (!/^\d+$/.test(value) || !Number.isSafeInteger(Number(value)))) {
+      return apiError(400, "INVALID_QUERY", `Invalid ${name} value.`, "Use a non-negative safe integer; limit is capped at 500.")
+    }
+  }
+  if (searchParams.has("sort") && !VALID_SORTS.has(searchParams.get("sort")!)) {
+    return apiError(400, "INVALID_QUERY", "Unknown sort order.", "Use relevance, az, za, commission_desc or newest.")
+  }
+  if (searchParams.has("type") && !VALID_TYPES.has(searchParams.get("type")!)) {
+    return apiError(400, "INVALID_QUERY", "Unknown commission type.", "Use recurring, one-time, tiered or hybrid.")
+  }
   const q = searchParams.get("q") ?? ""
   const category = searchParams.get("category") ?? undefined
   const type = searchParams.get("type") ?? undefined
