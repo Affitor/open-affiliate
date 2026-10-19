@@ -142,6 +142,7 @@ function ProgramsContent() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [view, setView] = usePersistedView();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const closeSheet = useCallback(() => setSheetOpen(false), []);
 
   // Pagination lives in the URL, not in React state.
   //
@@ -576,7 +577,7 @@ function ProgramsContent() {
 
       {sheetOpen && (
         <FilterSheet
-          onClose={() => setSheetOpen(false)}
+          onClose={closeSheet}
           resultCount={filtered.length}
           onClear={clearAll}
           sort={sort}
@@ -655,33 +656,38 @@ function FilterSheet(props: {
   cookie: string;
   onCookie: (v: string) => void;
 }) {
-  const { onClose } = props;
-  const panelRef = useRef<HTMLDivElement>(null);
+  // A native modal dialog: showModal() keeps keyboard focus inside and makes the page behind
+  // inert; Escape arrives as "cancel". Opened once on mount, so a filter change (a re-render
+  // with new props) never moves focus. The latest onClose is read through a ref.
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const onCloseRef = useRef(props.onClose);
+  useEffect(() => { onCloseRef.current = props.onClose; }, [props.onClose]);
   useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
     const opener = document.activeElement as HTMLElement | null;
-    panelRef.current?.focus();
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    document.addEventListener("keydown", onKey);
+    if (!dialog.open) dialog.showModal();
+    const onCancel = (e: Event) => { e.preventDefault(); onCloseRef.current(); };
+    dialog.addEventListener("cancel", onCancel);
     return () => {
-      document.removeEventListener("keydown", onKey);
+      dialog.removeEventListener("cancel", onCancel);
+      if (dialog.open) dialog.close();
       document.body.style.overflow = overflow;
       opener?.focus();
     };
-  }, [onClose]);
+  }, []);
+  const onClose = props.onClose;
   const toggle = (current: string, value: string, set: (v: string) => void) => set(current === value ? "" : value);
 
   return (
-    <div className="md:hidden">
-      <div className="fixed inset-0 z-[65] bg-black/35" onClick={onClose} aria-hidden />
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
+    <dialog
+        ref={dialogRef}
         aria-labelledby="filter-sheet-title"
-        tabIndex={-1}
-        className="fixed inset-x-0 bottom-0 z-[70] flex max-h-[85dvh] flex-col rounded-t-[14px] border-t border-line-strong bg-card shadow-[0_-12px_40px_rgb(0_0_0/0.18)] focus:outline-none"
+        // A click on the backdrop lands on the dialog element itself.
+        onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+        className="md:hidden fixed inset-x-0 bottom-0 top-auto m-0 flex max-h-[85dvh] w-full max-w-none flex-col rounded-t-[14px] border-0 border-t border-line-strong bg-card p-0 text-foreground shadow-[0_-12px_40px_rgb(0_0_0/0.18)] backdrop:bg-black/35 focus:outline-none [&:not([open])]:hidden"
       >
         <div className="mx-auto mt-3 h-1 w-9 rounded-full bg-line-strong" aria-hidden />
         <div className="flex items-center justify-between px-4 pt-2 pb-3">
@@ -730,7 +736,6 @@ function FilterSheet(props: {
             Show {props.resultCount.toLocaleString("en-US")} programs
           </button>
         </div>
-      </div>
-    </div>
+    </dialog>
   );
 }
