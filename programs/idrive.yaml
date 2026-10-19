@@ -13,15 +13,13 @@ commission:
   mode: percentage
   value: 25
   currency: USD
-  # "Once the Partner’s referral cancels the service, the Partner will no longer receive commissions for that subscriber from the date of cancelation." (https://www.idrive.com/reseller/partner-terms, checked 2026-10-19)
-  duration: lifetime
+  duration: null
   conditions: "Referral Partner Program: 25% recurring commission on IDrive cloud backup, IDrive e2 and BMR referrals. Paid quarterly."
 attribution: last-click
 tracking_method: cookie
 payout:
   # "A ten dollar ($10.00) minimum threshold is required before payment will be made via PayPal." (https://www.idrive.com/reseller/partner-terms, checked 2026-10-19)
   minimum: 10
-  currency: USD
   # "Domestic Partners may select to receive commission payments by PayPal, paper check, or eCheck." (https://www.idrive.com/reseller/partner-terms, checked 2026-10-19)
   methods: [paypal, check]
   # "We pay the Partner referral commission on a quarterly basis for core services like backup, restore, and sync" (https://www.idrive.com/reseller/partner-terms, checked 2026-10-19)
