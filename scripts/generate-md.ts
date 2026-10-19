@@ -32,7 +32,7 @@ import { dirname, join, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 
 import registry from "../src/lib/registry.json"
-import { formatPercentage } from "../src/lib/commission-mode"
+import { formatFlat, formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
 import { compareText } from "../src/lib/commission-order"
@@ -48,6 +48,7 @@ import {
   rateBasis,
   networkHeading,
   networkName,
+  byNetworkName,
   type CommissionStats,
   type PaidBy,
 } from "../src/lib/programs"
@@ -236,9 +237,8 @@ function rate(c: Commission): string {
     case "percentage":
       return formatPercentage(c.rate, c.value)
     case "flat":
-      if (c.value == null) return "Not published"
-      // Product credit, not cash: say so, as the page does.
-      return /credit/i.test(String(c.rate)) ? `$${c.value.toLocaleString()} in credits` : `$${c.value.toLocaleString()}`
+      // In its own currency; product credit, not cash, says so, as the page does.
+      return formatFlat(c)
     case "tiered":
     case "hybrid":
       return String(c.rate)
@@ -857,7 +857,9 @@ export function llmsTxt(): string {
     })
     .join("\n")
 
-  const netLines = liveNetworks
+  // A to Z by display name, in-house last: the homepage band's order (networksByName).
+  const netLines = [...liveNetworks]
+    .sort((a, b) => Number(a === IN_HOUSE) - Number(b === IN_HOUSE) || byNetworkName(a, b))
     .map(n => {
       const inNet = livePrograms.filter(p => (p.network ?? IN_HOUSE) === n)
       return `- [${mdEscape(networkName(n))}](${BASE}/networks/${networkToSlug(n)}.md) — ${programCount(inNet.length)}`

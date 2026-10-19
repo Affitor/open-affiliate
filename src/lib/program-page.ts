@@ -63,7 +63,7 @@ export function commissionFigure(p: Program): Figure | null {
   const duration = c.duration && !saysDuration ? durationWords(String(c.duration)) : ""
   // The stored rate qualifies the figure ("up to 30%", "$15 to $1,000", "25% of net revenue",
   // "$75 per qualified lead"): show it as written. A bare number ("25") says less than the figure.
-  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, numericFigure) === false) {
+  if (stored && !/^\d+(\.\d+)?$/.test(stored) && sameFigure(stored, numericFigure) === false && !bareAmount(stored, c)) {
     const rest = recurring
       ? (saysDuration ? "" : duration ? `recurring ${duration}` : /recurr/i.test(stored) ? "" : "recurring")
       : isCreditReward(c) && !/\bper\b/i.test(stored) ? "per referral" : ""
@@ -80,6 +80,20 @@ export function commissionFigure(p: Program): Figure | null {
 function sameFigure(stored: string, display: string): boolean {
   const norm = (x: string) => x.replace(/[\s,]/g, "").replace(/\.0+(?=\D|$)/, "").toLowerCase()
   return norm(stored) === norm(display)
+}
+
+/**
+ * True when the stored rate of a flat amount is that amount and nothing else, under
+ * a currency mark ("$100" for an AUD 100, "100 EUR"): the figure, written in the
+ * program's currency, says the same. A qualifier ("up to €200", "from £10") is kept.
+ */
+function bareAmount(stored: string, c: Program["commission"]): boolean {
+  const code = c.currency?.trim().toUpperCase()
+  if (c.mode !== "flat" || !code || !/^[A-Z]{3}$/.test(code)) return false
+  // Only a currency mark may stand beside the number: a bare symbol or the program's own code.
+  const mark = `(?:[$€£¥₹]|${code})`
+  const amount = stored.replace(/[\s,]/g, "").match(new RegExp(`^(?:${mark})?(\\d+(?:\\.\\d+)?)(?:${code})?$`))
+  return amount != null && Number(amount[1]) === c.value
 }
 
 /** "22% recurring for 12 months", or the text alone. */
@@ -213,12 +227,14 @@ export interface EstimateInput {
 /**
  * The stored rate must be exactly the figure ("22%", "$100"), in US dollars: a range
  * ("$20–$500"), a gift card, a tier or another currency is not a fixed cash amount
- * the estimate could multiply.
+ * the estimate could multiply. A flat amount must say USD: with no currency the
+ * dollar sign would be a guess.
  */
 function plainRate(c: Program["commission"]): boolean {
   const norm = (s: string) => s.replace(/[\s,]/g, "").toLowerCase()
-  const numericFigure = c.mode === "percentage" && c.value != null ? `${c.value}%` : commissionDisplay(c)
-  return (c.currency ?? "USD").toUpperCase() === "USD" && norm(String(c.rate)) === norm(numericFigure)
+  const usd = c.mode === "flat" ? c.currency?.toUpperCase() === "USD" : (c.currency ?? "USD").toUpperCase() === "USD"
+  const numericFigure = c.mode === "percentage" ? `${c.value}%` : `$${c.value?.toLocaleString()}`
+  return usd && norm(String(c.rate)) === norm(numericFigure)
 }
 
 /**

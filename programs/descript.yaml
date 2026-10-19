@@ -13,7 +13,7 @@ commission:
   rate: $25
   mode: flat
   value: 25
-  currency: null
+  currency: USD
   duration: null
   conditions: null
   recurring_period: null

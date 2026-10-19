@@ -19,7 +19,7 @@ export interface Commission {
   /** "none" with rate "No affiliate program" when status is "discontinued" or "no_program". */
   type: "recurring" | "one-time" | "tiered" | "hybrid" | "none";
   rate: string | number;
-  currency: string;
+  currency: string | null;
   duration?: string | null;
   conditions?: string | null;
 }

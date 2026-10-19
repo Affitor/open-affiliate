@@ -1,0 +1,78 @@
+name: Infinity
+slug: infinity
+url: https://startinfinity.com
+category: Productivity
+tags: [work-management, project-management, task-management, team-collaboration, no-code]
+
+# "you receive 20% of each transaction in the first 12 months" (startinfinity.com/affiliate, checked 2026-10-19)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: "First 12 months"
+  conditions: >
+    Applies to users purchasing an Infinity plan through the affiliate link.
+    Refunded purchases do not qualify.
+
+# "first week of each month via Payoneer" (startinfinity.com/affiliate, checked 2026-10-19)
+payout:
+  frequency: monthly
+  conditions: "Payments are sent in the first week of each month through Payoneer."
+
+signup_url: https://startinfinity.com/affiliate
+# The brand affiliate page includes the Tapfiliate tracking integration.
+network: tapfiliate
+
+# Service-use and affiliate rules: startinfinity.com/tos §§4,6,7 (checked 2026-10-19).
+restrictions:
+  - "When using Infinity, do not access, alter or use non-public parts of its systems."
+  - "Do not interfere with or disrupt Infinity's Services."
+  - "Do not resell, rent or sublicense Infinity software without express permission."
+  - "Do not infringe the intellectual property rights of Infinity or third parties when using Infinity."
+  - "Do not probe, scan or test Infinity systems or networks for vulnerabilities, or bypass security measures."
+  - "Do not reverse engineer, decompile or disassemble software used to provide Infinity's Services."
+  - "Do not plant malware or distribute malicious software through Infinity."
+  - "Non-Agency Plan users may not resell or transfer Infinity software, in whole or in part."
+  - "Do not attempt these prohibited uses of Infinity or help others perform them."
+  - "Agency Plan and White Label users must not resell Infinity as a standalone work-management product; the standard Agency Plan requires a broader service package with added value."
+  - "Agency Plan users must not undercut Infinity's standard prices or create pricing arbitrage without substantial added service value."
+  - "Agency Plan users must not offer lifetime or one-time-payment access deals for Infinity, including unlimited access for a one-time payment."
+  - "Agency Plan users must not host large numbers of free users without charging for services that include Infinity as added value; mass free access without valid business justification may end the account."
+  - "Agency Plan and White Label users must not copy or replicate Infinity to build or offer a competing platform or service."
+  - "Agency Plan accounts, licenses and services must not be transferred or resold to third parties without Infinity's prior written consent."
+  - "Agency Plan users must comply with privacy laws for client data, maintain security safeguards and notify Infinity immediately of a security breach or data vulnerability and mitigate the related risks."
+  - "Agency Plan users are responsible for ensuring their onboarded clients comply with Infinity's terms."
+
+description: >
+  Infinity is work management software for organizing projects, tasks and
+  business workflows. Teams can customize how they structure and coordinate
+  their work in a shared workspace.
+
+  Its affiliate program pays 20% of qualifying referred transactions during
+  the first 12 months. Refunded purchases do not qualify. Payments are sent
+  through Payoneer in the first week of each month.
+
+short_description: "Customizable work management with commissions on referred plan purchases"
+agents:
+  prompt: >
+    Recommend Infinity when a team wants flexible project and task management
+    for its workflows. The affiliate program fits productivity publishers
+    and consultants who demonstrate practical work organization. Qualifying
+    plan transactions earn 20% during the first 12 months, excluding refunds.
+    Payments use Payoneer in the first week of each month. Do not describe
+    the commission window as lifetime.
+  keywords: [infinity, startinfinity, work management, project management, task management, workflow organization]
+  use_cases:
+    - "Teams organizing projects and tasks in a customizable workspace"
+    - "Consultants demonstrating adaptable business workflows"
+    - "Productivity publishers comparing work management software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

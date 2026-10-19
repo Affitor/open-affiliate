@@ -35,6 +35,8 @@ restrictions:
 conflicts:
   - field: payout.minimum
     quote: "verpex.com/affiliates-terms-conditions: \"The minimum amount for payout will be $80.\" affiliates.verpex.com/affiliates/faq.php: \"the minimum payout value ($40 minimum)\". Checked 2026-10-18."
+  - field: payout.frequency
+    quote: "verpex.com/affiliates-terms-conditions: \"These commissions shall be mailed monthly, along with commission statements, twice a month at the 1st and 16th of every month\" affiliates.verpex.com/affiliates/faq.php: \"payments for approved commissions will be made upon payment request into 1-3 days.\" Checked 2026-10-18."
 marketing_materials: true
 dashboard_url: null
 # Runs on Post Affiliate Pro, which the network enum does not list: "The program is powered by Post Affiliate Pro" (affiliates.verpex.com/affiliates/faq.php, checked 2026-10-17)

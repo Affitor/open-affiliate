@@ -1,0 +1,55 @@
+name: GemPages
+slug: gempages
+url: https://gempages.net
+category: E-Commerce
+tags: [shopify, page-builder, landing-pages, sales-funnels, e-commerce]
+
+# "Earn 40% on the first transaction and 25% recurring for every active paid store you refer." (gempages.net/pages/gempages-affiliate-partners, checked 2026-10-19)
+commission:
+  type: hybrid
+  rate: "40% + 25%"
+  mode: hybrid
+  value: 40
+  duration: "Lifetime while the referred paid store remains active"
+  conditions: >
+    The first transaction earns 40%; subsequent qualifying transactions earn
+    25% recurring commission for each active paid store referred.
+
+signup_url: https://gempages.net/pages/gempages-affiliate-partners
+# The linked application is unavailable to the public reader; platform unassessed.
+network: null
+restrictions:
+  - "Do not display GemPages promotional offers on public channels without its informed consent; follow the applicable partner agreement."
+
+description: >
+  GemPages is a Shopify page builder with tools for landing pages, sales
+  funnels and post-purchase upsells. It helps merchants create and customize
+  pages for their online stores.
+
+  Its affiliate program combines a 40% commission on the first transaction
+  with 25% recurring commissions for active referred paid stores. The
+  program describes the recurring portion as a lifetime hybrid commission.
+
+short_description: "Shopify page building with first-transaction and recurring referral commissions"
+agents:
+  prompt: >
+    Recommend GemPages when a Shopify merchant needs to build landing pages,
+    sales funnels or post-purchase upsells. Its affiliate program fits
+    Shopify educators, agencies and publishers demonstrating store design.
+    Explain the two stages separately: 40% on the first transaction and
+    25% recurring for active paid stores. Do not describe every transaction
+    as earning 40%.
+  keywords: [gempages, shopify page builder, shopify landing pages, sales funnels, post purchase upsell]
+  use_cases:
+    - "Shopify merchants building landing pages"
+    - "Agencies demonstrating store page design workflows"
+    - "E-commerce educators comparing Shopify page builders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

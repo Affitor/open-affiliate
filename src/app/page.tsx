@@ -4,9 +4,10 @@ import { TrackPageView } from "@/components/track-page-view";
 import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
 import { SameTeamTag } from "@/components/same-team-tag";
-import { programs, livePrograms, categories, categoryToSlug, commissionLabel, affiliateScore, commissionDisplay, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
+import { programs, livePrograms, categories, categoryToSlug, affiliateScore, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { freshnessLine } from "@/lib/best-lists";
+import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
 
 export const metadata: Metadata = {
@@ -108,8 +109,8 @@ export default function Home() {
                 <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
                 <span className="min-w-0 truncate text-sm font-medium">{program.name}<SameTeamTag slug={program.slug} inLink className="ml-1" /></span>
-                <span className="hidden font-mono text-meta sm:block">
-                  {commissionDisplay(program.commission)} <span className="text-muted-foreground">{commissionLabel(program.commission, true)}</span>
+                <span className="hidden truncate font-mono text-meta sm:block">
+                  {commissionChip(program.commission, true)}
                 </span>
                 <span className="hidden text-meta text-muted-foreground sm:block">{program.category}</span>
                 <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title="Affiliate Score">
@@ -142,7 +143,7 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
-                <span className="truncate font-mono text-meta">{commissionDisplay(program.commission)} {program.commission.type}</span>
+                <span className="truncate font-mono text-meta">{commissionChip(program.commission)}</span>
                 <span className="shrink-0 text-xs text-muted-foreground">{cookieShort(program)}</span>
               </div>
             </Link>

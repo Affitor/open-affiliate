@@ -38,8 +38,8 @@ export function ProgramCardGrid({ program }: { program: Program }) {
         <Badge className="text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
           Score: {affiliateScore(program)}
         </Badge>
-        <Badge variant="secondary" className="text-xs">
-          {commissionChip(program.commission)}
+        <Badge variant="secondary" className="max-w-56 text-xs" title={commissionChip(program.commission)}>
+          <span className="truncate">{commissionChip(program.commission)}</span>
         </Badge>
         <Badge variant="outline" className="text-xs">
           {cookieChip(program)}
@@ -89,8 +89,8 @@ export function ProgramRowList({ program }: { program: Program }) {
         <Badge className="text-xs bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/30">
           {affiliateScore(program)}
         </Badge>
-        <Badge variant="secondary" className="text-xs">
-          {commissionChip(program.commission)}
+        <Badge variant="secondary" className="max-w-56 text-xs" title={commissionChip(program.commission)}>
+          <span className="truncate">{commissionChip(program.commission)}</span>
         </Badge>
         {/* From lg: with the score and commission it overflows a 640px row. */}
         <Badge variant="outline" className="hidden lg:inline-flex text-xs">

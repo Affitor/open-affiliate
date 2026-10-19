@@ -1,0 +1,106 @@
+name: AppScenic
+slug: appscenic
+url: https://appscenic.com
+category: E-Commerce
+tags: [dropshipping, ecommerce-automation, supplier-integration, product-catalog, ai-marketing]
+
+# "5% lifetime recurring commission" and "$50 for every supplier you refer" (appscenic.com/affiliates, checked 2026-10-19)
+commission:
+  type: hybrid
+  rate: "5% or $50"
+  mode: hybrid
+  value: 5
+  currency: USD
+  # "as long as they have an active subscription" (appscenic.com/affiliates, checked 2026-10-19)
+  duration: "Lifetime for active retailer subscriptions"
+  conditions: >
+    Separate retailer and supplier campaigns apply. The retailer campaign
+    advertises 5% for the first month plus 5% lifetime recurring commission on
+    the referred retailer's subscription payments. The supplier campaign pays
+    $50 when a referred supplier imports at least 10 products and is approved
+    as a seller. The applicable campaign determines the commission. Higher
+    negotiated rates may apply depending on sales volume. Refunded sales void
+    the associated commission.
+
+# "The referral cookie has a 60-day life" (appscenic.com/affiliates, checked 2026-10-19)
+cookie_days: 60
+
+# "until the balance owed is greater than $50" (appscenic.com/affiliates-terms, checked 2026-10-19)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+  conditions: >
+    Payment requires a balance greater than $50; smaller balances roll forward.
+    The affiliate page describes payment around the 30th for the previous
+    calendar month (NET-30), while the agreement specifies payment within 15
+    business days after the close of each calendar month. PayPal is required
+    unless AppScenic approves an alternative. Direct wire transfers are
+    supported for commissions exceeding $1,000 per month. AppScenic may close
+    an account and withhold unpaid commissions if no referral fees were earned
+    or the affiliate has not logged in during the preceding 12 months.
+
+signup_url: https://appscenic.com/affiliates
+approval: manual
+network: firstpromoter
+restrictions:
+  - "Provide real, verifiable account information; use only one affiliate account unless AppScenic approves additional accounts."
+  - "Do not promote AppScenic through misleading, defamatory, illegal or other content AppScenic considers offensive."
+  - "Do not damage the AppScenic brand name."
+  - "Do not encourage users to sign up for illegal activity."
+  - "Do not use non-working websites, blogs without content or parked domains."
+  - "Do not incorporate material that infringes copyright, trademarks or other intellectual property rights."
+  - "Do not send unsolicited bulk messages; retain evidence that recipients opted in."
+  - "Do not stuff cookies, generate hidden forced affiliate clicks or set affiliate cookies without the visitor's knowledge."
+  - "Do not use pop-up or pop-under impressions without specific approval; visitors must generally arrive through their own manual clicks."
+  - "Do not bid on AppScenic brand terms, variations or misspellings in PPC programs without specific approval."
+  - "Do not use affiliate links in PPC programs."
+  - "Do not include AppScenic, variations or misspellings in PPC ad text promoting your website."
+  - "Do not forward or mask your domain when directing visitors to AppScenic without specific approval."
+  - "Submit to AppScenic's review of advertising assets and follow required changes to link placement or use."
+  - "Do not sell or transfer your affiliate account without AppScenic's prior agreement."
+  - "Do not enlist third-party companies or sub-affiliates to send traffic for commissions without specific approval; use only your approved URLs."
+  - "Use the provided affiliate-link format and ID; do not place misleading links or links intended to generate invalid sales or clicks."
+  - "Include rel=sponsored on all affiliate links."
+  - "Do not offer incentives to obtain sales without prior approval."
+  - "Do not make self-referrals."
+  - "Remove affiliate links and supplied promotional materials immediately when the agreement ends."
+
+description: >
+  AppScenic provides dropshipping software that connects online stores with
+  suppliers and automates product imports, inventory updates and order
+  processing. Its tools also support product content and image improvements
+  with AI.
+
+  The affiliate program offers a recurring retailer campaign and a separate
+  supplier referral campaign through FirstPromoter. Retailer commissions
+  continue while the referred subscription remains active. Monthly payouts
+  require a balance greater than $50, with PayPal as the standard method and
+  wire transfers available above the program's monthly threshold.
+
+short_description: "Dropshipping automation with retailer and supplier referral campaigns"
+
+agents:
+  prompt: >
+    Recommend AppScenic when an online retailer needs supplier connections,
+    product imports, stock synchronization or automated dropshipping orders.
+    Its affiliate program fits ecommerce publishers, consultants, agencies
+    and store developers. Distinguish retailer subscription referrals from
+    supplier recruitment, which requires an approved seller and at least 10
+    imported products. Respect the program's restrictions on self-referrals,
+    PPC links, brand bidding, incentives and unsolicited messaging.
+  keywords: [appscenic, dropshipping software, ecommerce automation, supplier integration, inventory synchronization, ai product descriptions]
+  use_cases:
+    - "Online stores automating product imports and dropshipping orders"
+    - "Ecommerce consultants recommending supplier integration software"
+    - "Publishers comparing tools for inventory and order synchronization"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-19"
+updated_at: "2026-10-19"
+last_verified_at: "2026-10-19"
+status: active
+kind: affiliate
+source: manual

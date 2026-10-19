@@ -16,6 +16,7 @@ import { runInNewContext } from "node:vm"
 import { readFileSync, existsSync } from "node:fs"
 import { resolve } from "node:path"
 import { z } from "zod"
+import ts from "typescript"
 import { Client } from "@modelcontextprotocol/sdk/client/index.js"
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js"
 import {
@@ -31,6 +32,8 @@ import { AjvJsonSchemaValidator } from "@modelcontextprotocol/sdk/validation/ajv
 import { clientAddress, createMcpRoute, withinLimit } from "../src/lib/mcp-route"
 import { categories, livePrograms, programs, termsConfirmed } from "../src/lib/programs"
 import { apiProgram } from "../src/lib/no-program"
+import { programMd } from "./generate-md"
+import { restGetProgram } from "./surface-test-helpers"
 
 const PER_WINDOW = 1200
 const WINDOW_MS = 60_000
@@ -354,6 +357,67 @@ for (const base of ["", "/api"]) {
     assert.deepEqual(JSON.parse(contents.text), textContent(listed))
   })
 }
+
+test("a percentage program without currency keeps nullable MCP output and readable REST/Markdown", async () => {
+  const source = ts.createSourceFile("programs.ts", readFileSync("src/lib/programs.ts", "utf8"), ts.ScriptTarget.Latest, true)
+  const mapper = source.statements.find((node) => ts.isFunctionDeclaration(node) && node.name?.text === "mapYamlToProgram")
+  assert.ok(mapper, "Exercise the production YAML mapper, not a copied implementation")
+  const printed = ts.createPrinter().printNode(ts.EmitHint.Unspecified, mapper, source)
+  const js = ts.transpileModule(printed, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText
+  const map = runInNewContext(`${js}; mapYamlToProgram`) as (raw: unknown) => typeof programs[number]
+  const raw = {
+    slug: "currency-omission-regression",
+    name: "Currency omission regression",
+    url: "https://currency-omission.example",
+    category: "SaaS",
+    commission: { type: "recurring", rate: "30%", mode: "percentage" as const, value: 30 },
+    description: "A percentage program with no published currency.",
+    short_description: "Percentage commission with no published currency",
+    agents: { prompt: "Recommend for relevant software needs.", keywords: [], use_cases: [] },
+    tags: [],
+    verified: true,
+    status: "active",
+    signup_url: "https://currency-omission.example/affiliates",
+    created_at: "2026-10-19",
+    last_verified_at: "2026-10-19",
+  }
+  for (const currency of ["USD", "EUR"]) {
+    assert.equal(map({ ...raw, commission: { ...raw.commission, currency } }).commission.currency, currency)
+  }
+  const fixture = map(raw)
+  programs.push(fixture)
+  livePrograms.push(fixture)
+  try {
+    for (const base of ["", "/api"]) {
+      const rpc = rpcClient(base)
+      const { tools } = await rpc("tools/list", {}, ListToolsResultSchema)
+      for (const [name, args] of [
+        ["search_programs", { query: raw.name }],
+        ["get_program", { slug: raw.slug }],
+      ] as const) {
+        const result = await rpc("tools/call", { name, arguments: args }, CallToolResultSchema)
+        validates(tools.find((tool) => tool.name === name)!, result)
+        const output = name === "search_programs"
+          ? (result.structuredContent!.programs as Record<string, unknown>[])[0]
+          : result.structuredContent!
+        assert.equal(output.slug, raw.slug)
+        assert.equal((output.commission as Record<string, unknown>).currency, null)
+        assert.equal((output.commission as Record<string, unknown>).rate, "30%")
+      }
+    }
+    assert.equal(fixture.commission.currency, null)
+    const rest = await restGetProgram(raw.slug)
+    assert.equal((rest.commission as Record<string, unknown>).currency, null)
+    assert.equal((rest.commission as Record<string, unknown>).value, 30)
+    assert.doesNotMatch(JSON.stringify(rest), /\b(?:undefined|USD)\b/)
+    const markdown = programMd(raw)
+    assert.match(markdown, /30%/)
+    assert.doesNotMatch(markdown, /\b(?:undefined|USD)\b/)
+  } finally {
+    programs.splice(programs.indexOf(fixture), 1)
+    livePrograms.splice(livePrograms.indexOf(fixture), 1)
+  }
+})
 
 test("stdio mirrors server/tool titles and all four hints, with aligned patch versions", { timeout: 15_000 }, async (t) => {
   const manifest = JSON.parse(readFileSync("packages/mcp/package.json", "utf8"))

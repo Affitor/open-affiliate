@@ -21,6 +21,9 @@ tracking_method: cookie
 payout:
   # "Commission payments are made via Paypal, our partner Stripe or bank transfer, depending on the payment methods available in your country." (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
   methods: [paypal, stripe, bank]
+  # "Payments within 15 working days" (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)
+  frequency: net-30
+  conditions: "Payments within 15 working days"
 
 signup_url: https://www.waalaxy.com/affiliate-program
 # "Self-referrals, including sharing your affiliate link with employees of your own company or using it for your own accounts, are strictly prohibited." (https://www.waalaxy.com/affiliate-program, checked 2026-10-18)

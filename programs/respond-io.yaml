@@ -19,7 +19,24 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://respond.io/reseller
-restrictions: null
+restrictions:
+- Complete platform training and Partner Manager onboarding in the first two weeks before pitching.
+- The recurring Partner Program requires an established business with existing customers and the ability and resources to sell, implement and support respond.io.
+- No white-label version is offered; sell respond.io under its own platform identity while offering your own implementation, integration, training and support services.
+- Maintain a separate respond.io account for each customer and manage each customer’s setup and billing.
+- To maintain reseller status, bring in a first paying customer within three months and at least one paying customer every three months thereafter.
+- Users must represent a business, be legally adult and have capacity to enter a binding agreement.
+- Do not participate from US-embargoed or designated terrorist-supporting countries or while listed as a US-prohibited or restricted party.
+- Do not register accounts through bots or other automated methods.
+- Register only one account per user unless otherwise specified; do not share an account unless explicitly permitted.
+- Use respond.io content only as needed or implicit in proper service use; copying, downloading, sharing, modification, publication, sale, sublicensing, transfer and derivatives require permission or an applicable statutory exception. Explicit personal-use downloads remain noncommercial and must retain required attribution.
+- Provide only content you are legally entitled to share without violating law or third-party rights.
+- Do not use respond.io or its service in violation of laws, regulations or its terms.
+- Do not infringe third-party rights through respond.io use.
+- Do not substantially impair respond.io’s legitimate interests.
+- Do not offend respond.io or third parties through service use.
+- Do not create, receive, maintain or transmit HIPAA-protected health information without a written BAA expressly permitting it.
+- The software license does not permit accessing, using or disclosing the original source code.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -44,7 +61,13 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+approval: manual
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  payout.frequency: '2026-10-18'

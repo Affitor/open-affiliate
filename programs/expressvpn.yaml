@@ -15,7 +15,7 @@ commission:
   duration: null
   conditions: "CPA commission for every new referred customer who completes an irrevocable sale; no recurring commissions. Rates are set in each affiliate's Insertion Order and are not published. The more sales you drive, the more you are paid."
 
-# cookie_days: not published on expressvpn.com/affiliates, /affiliates/faq or /affiliates/terms (checked 2026-10-13)
+# cookie_days: unassessed; no current tracking-window assertion.
 # "the most recent link clicked will receive the commission for the resulting sale" (expressvpn.com/affiliates/faq, checked 2026-10-13)
 attribution: last-click
 
@@ -26,6 +26,8 @@ payout:
   currency: USD
   frequency: net-30
   methods: [paypal, bank]
+  # Timing, threshold and payment qualifications: expressvpn.com/affiliates/terms section 7 and /affiliates/faq (checked 2026-10-18).
+  conditions: "Commission payments are scheduled 30 days after the end of the calendar month in which they were earned, net of customer refunds. The FAQ calls the minimum USD 50 and rolls amounts below that figure forward; the agreement also says the balance must be greater than USD 50. A PayPal account is required unless ExpressVPN approves another payment method. Direct wire transfers are supported only when monthly commissions exceed USD 1,000. Fraudulent signups do not earn payable commissions. An account with no referral earnings or no login in the preceding 12 months may be closed and unpaid commissions withheld; payments may also be suspended or withheld for agreement violations."
 
 signup_url: https://www.expressvpn.com/affiliates
 approval: manual
@@ -72,7 +74,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

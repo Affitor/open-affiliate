@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs"
 import assert from "node:assert/strict"
 import { test } from "node:test"
 import { createSavedStore, EMPTY_SAVED, parseSaved, SAVED_KEY, SAVED_LIMIT_MESSAGE } from "../src/lib/saved-programs"
@@ -64,4 +65,17 @@ test("read cap, newest-first, cross-tab changes, and historical tombstones", () 
   assert.deepEqual(store.getSnapshot().items, [{ slug: "removed", savedAt: 5 }])
   assert.equal(store.toggle("removed").saved, false)
   assert.ok(store.toggle("never-existed").error)
+})
+
+test("Save button: one name in both states, a dismissable 500-cap note; /new renders no row without its data", () => {
+  const button = readFileSync(new URL("../src/components/save-button.tsx", import.meta.url), "utf8")
+  // A toggle keeps its name; aria-pressed carries the state (no "Unsave", no "Saved" label).
+  assert.match(button, /aria-label=\{`Save \$\{name\}`\}/)
+  assert.match(button, /aria-pressed=\{saved\}/)
+  assert.doesNotMatch(button, /Unsave|"Saved"/)
+  // The note closes with its button or Escape.
+  assert.match(button, /aria-label="Dismiss" onClick=\{\(\) => setError\(undefined\)\}/)
+  assert.match(button, /event\.key === "Escape"\) setError\(undefined\)/)
+  const page = readFileSync(new URL("../src/app/new/page.tsx", import.meta.url), "utf8")
+  assert.doesNotMatch(page, /\.get\([^)]*\)!/)
 })

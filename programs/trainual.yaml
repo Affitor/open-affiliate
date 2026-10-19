@@ -21,8 +21,30 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
+  methods:
+  - paypal
+  - stripe
+  conditions: Monthly PayPal or Stripe withdrawals are verified and available in the month after commissions are earned; the program page illustrates February earnings as available on March 16. Unspecified alternatives may be available in regions without PayPal. Legacy commissions stop after 12 months without a new referral.
 signup_url: https://trainual.com/affiliate
-restrictions: null
+restrictions:
+- Do not make unauthorized claims or warranties about Trainual or its service.
+- Do not use the Trainual service in violation of applicable local, state, national or international laws, rules or regulations, or permit others to do so.
+- Do not upload or distribute unlawful, defamatory, harassing, abusive, fraudulent, obscene or harmful content, including malware, through the service. You must not permit others to do this either.
+- Do not use the service for fraud, deception or inappropriate purposes. You must not permit others to do this either.
+- Do not portray AI-generated content as human-authored when disclosure is legally required. You must not permit others to do this either.
+- Do not reverse engineer, decompile, hack, delete, augment, alter, disassemble or interfere with the software or service. You must not permit others to do this either.
+- Do not copy, create derivatives of, reproduce or exploit the service without written permission. You must not permit others to do this either.
+- Do not resell, distribute, sublicense, rent, exploit or use the service for a competing solution, including through contractors; do not remove or alter logos, trademarks, proprietary notices or other service markings. You must not permit others to do this either.
+- Do not extract hosted service content with bots, scrapers or other automated tools; this service restriction is incorporated by the affiliate terms. You must not permit others to do this either.
+- Do not use the service to build or support a competing offering. You must not permit others to do this either.
+- Do not publish offensive or objectionable content through Trainual-managed channels. You must not permit others to do this either.
+- No direct or indirect spam, unlawful promotional tactics, or coupon or discounting websites.
+- Do not create your own Trainual account through your affiliate link.
+- Do not promote your affiliate link through Trainual-owned or sponsored posts, comments or content.
+- No paid advertising to drive traffic to your affiliate link, including Google or Meta ads.
+- Publish affiliate links only on websites or platforms you own or control.
+- Refer new customers during each 12-month period to maintain affiliate status; inactivity can lead to termination.
+- On termination, stop using Trainual branding and sharing affiliate links; unpaid commissions are forfeited and program confidential or proprietary information must be returned or deleted.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,7 +67,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  payout.minimum: '2026-10-18'
+  approval: '2026-10-18'

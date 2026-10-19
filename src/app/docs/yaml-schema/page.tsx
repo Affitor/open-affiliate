@@ -29,7 +29,7 @@ tags: [saas, api, developer]
 commission:
   type: recurring          # recurring | one-time | tiered | hybrid
   rate: "25%"
-  currency: USD
+  currency: USD            # required for a flat amount; a percentage may leave it out
   duration: "12 months"
 
 cookie_days: 30

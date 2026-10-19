@@ -23,8 +23,34 @@ payout:
   currency: USD
   frequency: monthly
   methods: [stripe, paypal]
+  conditions: "After referral revenue exceeds $5, Ticket Tailor invites the referrer to create a PartnerStack account and link Stripe or PayPal. Commissions are verified and paid in the month after they are earned; its example makes February commissions available on March 13. Referrers are responsible for declaring and paying any tax due on their earnings."
+
 signup_url: https://www.tickettailor.com/partners
-restrictions: null
+# Scoped restrictions from https://www.tickettailor.com/partners (checked 2026-10-19).
+restrictions:
+  - "Do not use your own Ticket Tailor referral link to purchase its Services for yourself."
+  - "Do not spam people; comply with local data-privacy and trading laws when referring Ticket Tailor."
+  - "Do not imply that referring Ticket Tailor customers makes you a Ticket Tailor employee."
+  - "When posting or transmitting material through the Ticket Tailor Website, do not include threats, defamation, obscenity, indecency, sedition, offensive, pornographic, abusive, discriminatory, menacing, scandalous, inflammatory or blasphemous material, incitement to racial hatred, or breaches of confidence or privacy."
+  - "Do not post or transmit material through the Ticket Tailor Website without the necessary licenses or approvals."
+  - "Do not post or transmit gambling material through the Ticket Tailor Website, including lotteries, raffles, auctions, sweepstakes, sports forecasting or games of chance."
+  - "Do not post or transmit material through the Ticket Tailor Website that encourages crime, civil liability or unlawful conduct or infringes third-party rights in any country."
+  - "Do not transmit malware, corrupted data or other technically harmful material through the Ticket Tailor Website, or misuse it through hacking."
+  - "Event listings and events using Ticket Tailor must not promote, condone or incite hateful or discriminatory speech. Respectful, neutrally described community or demographic events addressing specific group needs are permitted if they do not disparage others."
+  - "Event listings and events using Ticket Tailor must not encourage conduct that is criminal or illegal where the event takes place."
+  - "Ticket Tailor event listings must not contain full nudity, pornography or sexually explicit imagery."
+  - "Event listings and events using Ticket Tailor must not sell or promote nicotine, tobacco or marijuana, including cannabis businesses and CBD or THC products."
+  - "Event listings and events using Ticket Tailor must not promote recruitment for sexual services."
+  - "Event listings and events using Ticket Tailor must not contain, encourage or promote harassment, bullying, abuse, violence or threats toward people, groups or animals."
+  - "Event listings and events using Ticket Tailor must not exploit or endanger minors or contain or promote material created by exploiting children or harmful to children."
+  - "Do not sell Ticket Tailor tickets whose purchase constitutes gambling, including lotteries, raffles, auctions, sweepstakes, sports forecasting or games of chance."
+  - "Event listings and events using Ticket Tailor must not breach privacy rights, including collecting, selling or sharing personal data without consent."
+  - "Event listings and events using Ticket Tailor must not contain malware, corrupted data or other technically harmful material."
+  - "Event listings and events using Ticket Tailor must not exist for or promote fraud, including unproven money-making schemes, deceptive marketing, phishing or extortion."
+  - "Event listings and events using Ticket Tailor must not spam or send unsolicited content to individuals."
+  - "Do not list a Ticket Tailor event unless you organize it or have official authority to sell its tickets and its advertised venue is contractually reserved."
+  - "Event listings and events using Ticket Tailor must not spread misinformation or conspiracy-related content."
+  - "Event listings and events using Ticket Tailor must not contain health misinformation."
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -50,7 +76,7 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
