@@ -133,3 +133,26 @@ export function notPublishedProblems(data: Record<string, unknown>): string[] {
   }
   return problems
 }
+
+/**
+ * Words commission.rate and commission.duration have no business carrying: a
+ * cookie, payout, payment method, approval or payout-schedule term. Those
+ * have their own fields, which confirmedTerms withholds until a program is
+ * verified; the rate and duration are shown verbatim on every surface (page,
+ * API, MCP, .md, list chips), verified or not, so a term written there would
+ * reach readers unchecked. Schedule words count only after "paid": "Team
+ * monthly" is a plan name.
+ */
+const COMMISSION_TERM = /\b(cookies?|payouts?|paid out|pays? out|paid (?:within|after|every|on|via|daily|weekly|bi-?weekly|twice-monthly|monthly|quarterly)|payments? (?:via|by|through|method)|deposit\w*|withdraw\w*|approv\w*|minimum|threshold|net[- ]?\d+|paypal|wise|bank|wire|stripe|attribution|referral window)\b/i
+
+/** commission.rate and commission.duration state the commission only (COMMISSION_TERM). */
+export function commissionTermProblems(data: Record<string, unknown>): string[] {
+  const commission = data.commission as Record<string, unknown> | null | undefined
+  const problems: string[] = []
+  for (const field of ["rate", "duration"]) {
+    const value = commission?.[field]
+    const hit = value == null ? null : COMMISSION_TERM.exec(String(value))
+    if (hit) problems.push(`commission.${field} names "${hit[0]}", a term with its own field (cookie_days, payout, approval): ${JSON.stringify(value)}`)
+  }
+  return problems
+}

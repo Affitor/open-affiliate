@@ -36,6 +36,7 @@ import * as page from "../src/lib/program-page"
 import { commissionDisplay as clientCommissionDisplay } from "../src/lib/client-programs"
 import { hasNoProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
+import { commissionTermProblems } from "./program-rules"
 import { chunkScan, termsApiProblems, termsMdProblems } from "./unconfirmed-checks"
 import {
   mcpCall,
@@ -785,4 +786,29 @@ test("payout conditions reach REST, MCP and the .md twin for a verified program,
   const md = programMd({ ...entry, payout: { ...entry.payout, conditions: odd } })
   assert.deepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, md), [])
   assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
+})
+
+test("commission.rate and duration carry no withheld term: build-registry refuses one, every program passes", () => {
+  const rate = (value: string) => commissionTermProblems({ commission: { rate: value } })
+  for (const leak of [
+    "20% per referral; 90-day cookie; monthly payouts",
+    "20% per referral; commissions deposited monthly",
+    "20% per referral; approval required",
+    "20% per referral; cookie: 3 months",
+    "$50 per sale, paid monthly via PayPal",
+    "30% recurring, $50 minimum payout",
+    "20% net-30",
+  ]) assert.equal(rate(leak).length, 1, leak)
+  assert.equal(commissionTermProblems({ commission: { rate: "20%", duration: "while partner status is approved" } }).length, 1)
+  // The commission itself, however it is worded, passes.
+  for (const ok of [
+    "30% (Pro, Team monthly), 15% (Team annual)",
+    "100% first payment + 25% recurring",
+    "25% of the first paid transaction",
+    "$500 Visa gift card per referral",
+    "up to 30% for 12 months",
+  ]) assert.deepEqual(rate(ok), [], ok)
+  assert.deepEqual(commissionTermProblems({ commission: { rate: "20%", duration: "12 months" } }), [])
+  assert.deepEqual(commissionTermProblems({}), [])
+  for (const p of registry.programs as unknown as Record<string, unknown>[]) assert.deepEqual(commissionTermProblems(p), [], String(p.slug))
 })

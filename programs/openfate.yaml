@@ -13,7 +13,7 @@ commission:
   mode: tiered
   value: 25
   currency: USD
-  duration: "while partner status is approved"
+  duration: null
   conditions: "20% base rate; 25% after 11 referred customers complete an eligible payment."
 cookie_days: 60
 attribution: first-click
