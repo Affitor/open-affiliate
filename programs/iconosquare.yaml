@@ -21,6 +21,7 @@ attribution: last-click
 tracking_method: cookie
 payout:
   currency: USD
+  frequency: net-60
   methods: [paypal, stripe]
   conditions: "The programme FAQ says payment is received 32 days after the customer signs up, accounting for the 31-day cancellation period on annual plans. It separately says monthly-plan payments are processed after the seven-day cancellation period, starting on day eight. The monthly-plan statement gives a starting point rather than a payment deadline."
 
