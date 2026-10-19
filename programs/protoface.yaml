@@ -8,7 +8,7 @@ tags: [generative-ai, ai-video, video-generation, realtime-avatars, managed-infe
 
 commission:
   type: hybrid
-  rate: "100% first payment + 25% recurring"
+  rate: "100% of the first charge + 25% recurring"
   mode: hybrid
   value: 25
   currency: USD

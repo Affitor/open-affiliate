@@ -153,7 +153,7 @@ function validateProgram(data: Record<string, unknown>, filename: string): void 
   if (markers.length) {
     throw new Error(markers.join("; "))
   }
-  // The rate and duration are shown verbatim, verified or not: no withheld term in them.
+  // The rate and duration are shown verbatim: an unverified one states no withheld term.
   const commissionTerms = commissionTermProblems(data)
   if (commissionTerms.length) {
     throw new Error(commissionTerms.join("; "))

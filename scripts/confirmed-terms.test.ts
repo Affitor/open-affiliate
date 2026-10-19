@@ -15,7 +15,11 @@
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { readFileSync } from "node:fs"
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { spawnSync } from "node:child_process"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
+import { fileURLToPath } from "node:url"
 import { runInNewContext } from "node:vm"
 import ts from "typescript"
 import { formatPercentage } from "../src/lib/commission-mode"
@@ -788,27 +792,38 @@ test("payout conditions reach REST, MCP and the .md twin for a verified program,
   assert.notDeepEqual(termsMdProblems({ ...p, payout: { ...p.payout, conditions: odd } }, programMd(entry)), [])
 })
 
-test("commission.rate and duration carry no withheld term: build-registry refuses one, every program passes", () => {
-  const rate = (value: string) => commissionTermProblems({ commission: { rate: value } })
+test("an unverified program's commission.rate and duration state no withheld term: build-registry refuses one, every program passes", () => {
+  const off = (commission: Record<string, unknown>, extra: Record<string, unknown> = {}) => commissionTermProblems({ verified: false, commission, ...extra })
   for (const leak of [
     "20% per referral; 90-day cookie; monthly payouts",
     "20% per referral; commissions deposited monthly",
     "20% per referral; approval required",
     "20% per referral; cookie: 3 months",
+    "20% per sale; commissions sent monthly",
+    "20% per sale; payable after 30 days",
+    "20%; applications reviewed within 48 hours",
     "$50 per sale, paid monthly via PayPal",
-    "30% recurring, $50 minimum payout",
-    "20% net-30",
-  ]) assert.equal(rate(leak).length, 1, leak)
-  assert.equal(commissionTermProblems({ commission: { rate: "20%", duration: "while partner status is approved" } }).length, 1)
-  // The commission itself, however it is worded, passes.
-  for (const ok of [
-    "30% (Pro, Team monthly), 15% (Team annual)",
-    "100% first payment + 25% recurring",
-    "25% of the first paid transaction",
-    "$500 Visa gift card per referral",
-    "up to 30% for 12 months",
-  ]) assert.deepEqual(rate(ok), [], ok)
-  assert.deepEqual(commissionTermProblems({ commission: { rate: "20%", duration: "12 months" } }), [])
-  assert.deepEqual(commissionTermProblems({}), [])
+    "20% net 30",
+  ]) assert.equal(off({ rate: leak }).length, 1, leak)
+  for (const duration of ["45-day tracking", "while partner status is approved", "paid monthly"]) assert.equal(off({ rate: "20%", duration }).length, 1, duration)
+  // The Affitor commission an also_on line shows is held to the same rule.
+  assert.equal(off({ rate: "20%" }, { also_on: { affitor: { url: "https://x", commission: { rate: "20%; 90-day cookie", duration: "paid monthly" } } } }).length, 2)
+  // The commission itself passes, however it is worded.
+  for (const ok of ["100% of the first charge + 25% recurring", "25% of the first paid transaction", "$500 Visa gift card per referral", "up to 30% for 12 months", "$50 per qualified bank account opened", "at least 20% commission"]) {
+    assert.deepEqual(off({ rate: ok, duration: "12 months" }), [], ok)
+  }
+  // A verified program withholds nothing, so its rate is its own words.
+  assert.deepEqual(commissionTermProblems({ verified: true, commission: { rate: "30% (Pro, Team monthly), 15% (Team annual)" } }), [])
   for (const p of registry.programs as unknown as Record<string, unknown>[]) assert.deepEqual(commissionTermProblems(p), [], String(p.slug))
+
+  // build-registry itself refuses the file (not only the rule): run it on a one-program copy.
+  const dir = mkdtempSync(join(tmpdir(), "oa-guard-"))
+  for (const d of ["programs", "schema", "src/lib", "public/logos"]) mkdirSync(join(dir, d), { recursive: true })
+  for (const f of ["program.schema.json", "signup-url-debt.json"]) copyFileSync(new URL(`../schema/${f}`, import.meta.url), join(dir, "schema", f))
+  const yaml = readFileSync(new URL("../programs/openfate.yaml", import.meta.url), "utf8")
+  writeFileSync(join(dir, "programs", "openfate.yaml"), yaml.replace(/  duration: null\n/, '  duration: "while partner status is approved"\n'))
+  const run = spawnSync(fileURLToPath(new URL("../node_modules/.bin/tsx", import.meta.url)), [fileURLToPath(new URL("./build-registry.ts", import.meta.url))], { cwd: dir, encoding: "utf8" })
+  rmSync(dir, { recursive: true, force: true })
+  assert.notEqual(run.status, 0, "build-registry accepted a withheld term in commission.duration")
+  assert.match(run.stdout + run.stderr, /commission\.duration states a cookie, payout or approval term/)
 })

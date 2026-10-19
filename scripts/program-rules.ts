@@ -1,8 +1,9 @@
 /**
- * Per-file rules build-registry applies, kept pure and free of imports so
- * scripts/no-program.test.ts can run them: importing build-registry itself
- * builds the registry.
+ * Per-file rules build-registry applies, kept pure (the one import,
+ * confirmed-terms, has none of its own) so scripts/no-program.test.ts can run
+ * them: importing build-registry itself builds the registry.
  */
+import { proseSentences, statesTerms, termsConfirmed } from "../src/lib/confirmed-terms"
 
 /** A no_program file sets none of these: a brand with no program has no terms. */
 export const NO_PROGRAM_FORBIDDEN = ["cookie_days", "payout", "signup_url", "approval", "approval_time", "restrictions"]
@@ -135,24 +136,26 @@ export function notPublishedProblems(data: Record<string, unknown>): string[] {
 }
 
 /**
- * Words commission.rate and commission.duration have no business carrying: a
- * cookie, payout, payment method, approval or payout-schedule term. Those
- * have their own fields, which confirmedTerms withholds until a program is
- * verified; the rate and duration are shown verbatim on every surface (page,
- * API, MCP, .md, list chips), verified or not, so a term written there would
- * reach readers unchecked. Schedule words count only after "paid": "Team
- * monthly" is a plan name.
+ * commission.rate and commission.duration (and the also_on Affitor
+ * commission's) are shown verbatim on every surface: page, API, MCP, .md,
+ * list chips. For an unverified program confirmedTerms withholds cookie,
+ * payout and approval terms and drops every free-text sentence that states
+ * one (statesTerms); the rate and duration get the same rule here, at data
+ * entry, so no such sentence is stored where it would be shown. A verified
+ * program withholds nothing. Rephrase rather than drop: "100% of the first
+ * charge", not "first payment".
  */
-const COMMISSION_TERM = /\b(cookies?|payouts?|paid out|pays? out|paid (?:within|after|every|on|via|daily|weekly|bi-?weekly|twice-monthly|monthly|quarterly)|payments? (?:via|by|through|method)|deposit\w*|withdraw\w*|approv\w*|minimum|threshold|net[- ]?\d+|paypal|wise|bank|wire|stripe|attribution|referral window)\b/i
-
-/** commission.rate and commission.duration state the commission only (COMMISSION_TERM). */
 export function commissionTermProblems(data: Record<string, unknown>): string[] {
-  const commission = data.commission as Record<string, unknown> | null | undefined
+  if (termsConfirmed(data as { verified?: boolean | null })) return []
+  const alsoOn = (data.also_on as { affitor?: { commission?: unknown } } | null | undefined)?.affitor?.commission
   const problems: string[] = []
-  for (const field of ["rate", "duration"]) {
-    const value = commission?.[field]
-    const hit = value == null ? null : COMMISSION_TERM.exec(String(value))
-    if (hit) problems.push(`commission.${field} names "${hit[0]}", a term with its own field (cookie_days, payout, approval): ${JSON.stringify(value)}`)
+  for (const [where, commission] of [["commission", data.commission], ["also_on.affitor.commission", alsoOn]] as const) {
+    for (const field of ["rate", "duration"]) {
+      const value = (commission as Record<string, unknown> | null | undefined)?.[field]
+      if (value == null) continue
+      const sentence = proseSentences(String(value)).find((s) => statesTerms(s.sentence, "program"))
+      if (sentence) problems.push(`${where}.${field} states a cookie, payout or approval term, which an unverified program withholds: ${JSON.stringify(value)}`)
+    }
   }
   return problems
 }
