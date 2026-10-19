@@ -60,7 +60,6 @@ agents:
 not_published:
   cookie_days: "2026-10-18"
   payout.minimum: "2026-10-18"
-  approval: "2026-10-18"
   restrictions: "2026-10-18"
 verified: true
 submitted_by: affitor

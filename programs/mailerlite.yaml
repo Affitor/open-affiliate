@@ -60,8 +60,6 @@ agents:
     - "Small businesses setting up welcome and sales email automations"
     - "Teams moving from a pricier email marketing tool"
 
-not_published:
-  approval: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"

@@ -49,7 +49,6 @@ agents:
   - Startups replacing expensive vendors
 not_published:
   cookie_days: "2026-10-18"
-  payout.frequency: "2026-10-18"
   approval: "2026-10-18"
 verified: true
 submitted_by: community
