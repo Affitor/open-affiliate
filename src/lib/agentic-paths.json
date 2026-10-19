@@ -1257,6 +1257,7 @@
     "/submit"
   ],
   "assets": [
+    "/.well-known/agent-skills/index.json",
     "/docs/sift-explore-all.png",
     "/docs/sift-explore-verified.png",
     "/docs/sift-social-listen.png",
