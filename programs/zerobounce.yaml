@@ -22,7 +22,12 @@ commission:
   conditions: "18% of gross sales (subscriptions, one-time credits and annual plans) from each referred customer for the first 12 months after their first payment, then 5% of gross sales after that. New customers only; existing, past and self-referred customers do not earn commission. Payouts are issued 35 days after the sale is finalized, paid in USD, as cash or as ZeroBounce credits."
 
 # cookie_days: not published on zerobounce.net/affiliate-program or zerobounce.net/affiliate-terms-and-conditions (checked 2026-10-17)
-# payout: minimum, frequency and methods not published on zerobounce.net/affiliate-program (checked 2026-10-17)
+# payout: minimum and methods not published on zerobounce.net/affiliate-program (checked 2026-10-17)
+
+payout:
+  # "We’ll issue Affiliate payouts 35 days after the End User’s sale is finalized." (https://www.zerobounce.net/affiliate-program, checked 2026-10-18)
+  frequency: net-60
+  conditions: "We’ll issue Affiliate payouts 35 days after the End User’s sale is finalized."
 
 signup_url: https://www.zerobounce.net/affiliate-program
 restrictions:

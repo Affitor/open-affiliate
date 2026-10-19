@@ -17,11 +17,13 @@ commission:
 # cookie_days: not published on www.coupler.io/affiliate-program (checked 2026-10-18)
 
 # "the minimum payment threshold is $100, with payouts made at least quarterly." (www.coupler.io/affiliate-program, checked 2026-10-18)
-# payout.frequency: see conditions; quarterly is published but is outside the schema frequency enum on www.coupler.io/affiliate-program (checked 2026-10-18)
 payout:
   minimum: 100
   currency: USD
   methods: ["paypal", "bank"]
+  # "the minimum payment threshold is $100, with payouts made at least quarterly." (https://www.coupler.io/affiliate-program, checked 2026-10-18)
+  frequency: quarterly
+  conditions: "the minimum payment threshold is $100, with payouts made at least quarterly."
 
 signup_url: https://www.coupler.io/affiliate-program
 approval: manual

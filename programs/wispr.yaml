@@ -23,8 +23,28 @@ payout:
   minimum: 100
   currency: USD
   frequency: monthly
+  # "Payments will be made on the first business day of each calendar month for all eligible commission earned in the previous month." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  conditions: "Payments will be made on the first business day of each calendar month for all eligible commission earned in the previous month."
 signup_url: https://partners.dub.co/flow
-restrictions: null
+restrictions:
+  # "We do not allow any traffic sources that promote abusive or offensive content and material." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No traffic sources that promote abusive or offensive content and material"
+  # "We do not allow email list rental. Please don’t send emails to anyone who has not double opted-in." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No email list rental; do not email anyone who has not double opted-in"
+  # "We do not allow bidding on your affiliate link on any PPC sites." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No bidding on your affiliate link on any PPC sites"
+  # "Affiliates are not allowed to incentivize sign-ups with any kinds of rewards (e.g., sharing your reward with the person who signs up)." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No incentivizing sign-ups with rewards (for example sharing your reward with the person who signs up)"
+  # "We do not allow use of sub-affiliate networks." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No sub-affiliate networks"
+  # "No, influencers with existing paid sponsorship content cannot use affiliate links as part of your sponsorship." (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No affiliate links as part of paid sponsorship content (non-sponsored content is fine)"
+  # "will not feature products that are similar to or competitive with Wispr Flow’s products and services" (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "Do not feature similar or competing products"
+  # "Partner will refrain from making or distributing any negative or disparaging statements, content or other communications about Wispr Flow" (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+  - "No negative or disparaging statements about Wispr Flow"
+# "click Apply Today, and we'll approve your application ASAP" (https://wispr.notion.site/Wispr-Flow-Affiliate-Program-1062ebdc733480fa8403ecc71dd34d3a, checked 2026-10-18)
+approval: manual
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -45,10 +65,12 @@ agents:
   use_cases:
   - Professionals typing faster via voice
   - Writers dictating drafts
+not_published:
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community
