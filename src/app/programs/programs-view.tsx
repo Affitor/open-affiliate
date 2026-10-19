@@ -404,7 +404,9 @@ function ProgramsContent() {
           </label>
           {/* Phones: one button opens every filter in a bottom sheet. */}
           <button
+            id="filters-button"
             type="button"
+            aria-haspopup="dialog"
             onClick={() => setSheetOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={sheetOpen}
@@ -665,7 +667,8 @@ function FilterSheet(props: {
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    const opener = document.activeElement as HTMLElement | null;
+    // Focus goes back to the Filters button: a tap does not always focus it (Safari).
+    const opener = document.getElementById("filters-button");
     const overflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     if (!dialog.open) dialog.showModal();
