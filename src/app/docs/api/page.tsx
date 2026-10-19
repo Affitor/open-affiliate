@@ -152,7 +152,8 @@ export default function APIPage() {
         <section>
           <h2 id="versioning" className="text-lg font-semibold mb-3">Versioning</h2>
           <p className="text-sm text-muted-foreground">
-            Every response carries an <code>API-Version</code> header, currently <code>1</code>. Breaking changes ship only
+            Every response carries an <code>API-Version</code> header, currently <code>1</code>. A request may send{" "}
+            <code>API-Version: 1</code> to pin it; any other value returns HTTP 400 <code>UNSUPPORTED_API_VERSION</code>. Breaking changes ship only
             under a new major version; new fields, parameters and endpoints can be added to the current one. A field,
             parameter or endpoint is deprecated at least 90 days before it is removed: its responses then carry a{" "}
             <code>Deprecation</code> header (RFC 9745) with the date it was deprecated and a <code>Sunset</code> header

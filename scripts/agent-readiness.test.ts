@@ -2,10 +2,14 @@
 import assert from "node:assert/strict"
 import { readFileSync } from "node:fs"
 import { test } from "node:test"
+import { NextRequest } from "next/server"
+import { GET as list, OPTIONS as listOptions } from "../src/app/api/programs/route"
+import { GET as detail } from "../src/app/api/programs/[slug]/route"
+import { GET as categories } from "../src/app/api/categories/route"
 import { openapi } from "../src/lib/openapi"
 import { registerWebMcpTools, WEBMCP_TOOLS, type WebMcpTool } from "../src/lib/webmcp"
 import { nextConfig } from "../next.config"
-import { ardCatalog } from "./generate-ard"
+import { ardCatalog, CATALOG_PATHS } from "./generate-ard"
 import { llmsTxt } from "./generate-md"
 
 const BASE = "https://openaffiliate.dev"
@@ -13,6 +17,9 @@ const BASE = "https://openaffiliate.dev"
 test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   const served = JSON.parse(readFileSync("public/.well-known/ard.json", "utf8"))
   assert.deepEqual(served, ardCatalog(process.cwd()), "public/.well-known/ard.json is stale: run npm run md:build")
+  // ai-catalog.json is the same document at the AI Catalog Standard's own path.
+  assert.deepEqual(CATALOG_PATHS, ["public/.well-known/ard.json", "public/.well-known/ai-catalog.json"])
+  assert.equal(readFileSync(CATALOG_PATHS[1], "utf8"), readFileSync(CATALOG_PATHS[0], "utf8"))
   // AI Catalog root (ai-catalog.io): Major.Minor specVersion, host, entries.
   assert.deepEqual(Object.keys(served), ["specVersion", "host", "entries"])
   assert.match(served.specVersion, /^\d+\.\d+$/)
@@ -40,6 +47,45 @@ test("ARD catalog lists only served surfaces, in the v0.91 entry shape", () => {
   assert.equal(byType["text/plain"].url, `${BASE}/llms.txt`)
   assert.ok(llmsTxt().includes(`${BASE}/.well-known/ard.json`))
   assert.match(readFileSync("src/app/layout.tsx", "utf8"), /rel="ard" href="\/\.well-known\/ard\.json"/)
+})
+
+test("API-Version request header: 1 or absent is served, anything else is a 400", async () => {
+  const slug = { params: Promise.resolve({ slug: "vercel" }) }
+  const call = (version?: string) => {
+    const headers = version === undefined ? undefined : { "API-Version": version }
+    return Promise.all([
+      list(new NextRequest("http://localhost/api/programs?limit=1", { headers })),
+      detail(new NextRequest("http://localhost/api/programs/vercel", { headers }), slug),
+      categories(new NextRequest("http://localhost/api/categories", { headers })),
+    ])
+  }
+  for (const version of [undefined, "1"]) {
+    for (const response of await call(version)) {
+      assert.equal(response.status, 200, `${response.url} ${version}`)
+      assert.equal(response.headers.get("Vary"), "API-Version")
+    }
+  }
+  for (const version of ["2", "0", "1.0", "v1", ""]) {
+    for (const response of await call(version)) {
+      assert.equal(response.status, 400, `API-Version ${JSON.stringify(version)}`)
+      assert.equal(response.headers.get("Cache-Control"), "no-store")
+      const body = await response.json()
+      assert.deepEqual(Object.keys(body.error), ["code", "message", "hint"])
+      assert.equal(body.error.code, "UNSUPPORTED_API_VERSION")
+    }
+  }
+  // Browsers may send the header cross-origin.
+  assert.match(listOptions().headers.get("Access-Control-Allow-Headers") ?? "", /\bAPI-Version\b/)
+  for (const route of ["programs/route.ts", "programs/[slug]/route.ts", "categories/route.ts"]) {
+    assert.match(readFileSync(`src/app/api/${route}`, "utf8"), /"Access-Control-Allow-Headers": "Content-Type, API-Version"/, route)
+  }
+  // Declared on every operation, with the 400 it can cause.
+  for (const [path, item] of Object.entries(openapi.paths)) {
+    const header = (item.get.parameters as { name: string; in: string; schema: { enum?: string[] } }[]).find((p) => p.in === "header")
+    assert.equal(header?.name, "API-Version", path)
+    assert.deepEqual(header?.schema.enum, [openapi.components.headers.APIVersion.schema.const], path)
+    assert.ok("400" in item.get.responses, path)
+  }
 })
 
 test("discovery files are served with CORS", async () => {

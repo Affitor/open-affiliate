@@ -1,14 +1,16 @@
 import { type NextRequest, NextResponse } from "next/server"
 import { confirmedTerms, searchPrograms, type SortOption } from "@/lib/programs"
-import { apiError } from "@/lib/api-error"
+import { unsupportedApiVersion } from "@/lib/api-error"
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Headers": "Content-Type, API-Version",
   "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
   "CDN-Cache-Control": "public, s-maxage=3600",
   "Vercel-CDN-Cache-Control": "public, s-maxage=3600",
+  // A cached answer must not be reused for a request pinning another version.
+  "Vary": "API-Version",
 }
 
 export function OPTIONS() {
@@ -23,6 +25,8 @@ const LEGACY_SORTS = new Map<string, SortOption>([["new", "newest"]])
 // clients written against earlier versions keep working. /openapi.json lists
 // the canonical values.
 export function GET(request: NextRequest) {
+  const unsupported = unsupportedApiVersion(request)
+  if (unsupported) return unsupported
   const searchParams = request.nextUrl.searchParams
   const q = searchParams.get("q") ?? ""
   const category = searchParams.get("category") ?? undefined

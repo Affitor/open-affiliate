@@ -71,7 +71,7 @@ test("OpenAPI describes only the three existing read-only REST operations", asyn
     assert.ok(!ids.has(path.get.operationId))
     ids.add(path.get.operationId)
   }
-  validate("CategoryList", await categories().json())
+  validate("CategoryList", await categories(new NextRequest("http://localhost/api/categories")).json())
   const body = await list(new NextRequest("http://localhost/api/programs")).json()
   validate("ProgramSearch", body)
   assert.ok(body.programs.length > 100)

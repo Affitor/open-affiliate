@@ -69,8 +69,15 @@ export function ardCatalog(root: string) {
   }
 }
 
+// One document at both discovery paths: ARD's ard.json and the AI Catalog Standard's own
+// ai-catalog.json, which the ARD spec keeps as an equivalent source.
+export const CATALOG_PATHS = ["public/.well-known/ard.json", "public/.well-known/ai-catalog.json"]
+
 export function generateArd(root: string): void {
-  const path = join(root, "public/.well-known/ard.json")
-  mkdirSync(dirname(path), { recursive: true })
-  writeFileSync(path, JSON.stringify(ardCatalog(root), null, 2) + "\n")
+  const catalog = JSON.stringify(ardCatalog(root), null, 2) + "\n"
+  for (const file of CATALOG_PATHS) {
+    const path = join(root, file)
+    mkdirSync(dirname(path), { recursive: true })
+    writeFileSync(path, catalog)
+  }
 }

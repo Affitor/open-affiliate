@@ -22,12 +22,19 @@ const headers = {
 }
 const response = (description: string, schema: unknown) => ({ description, headers, content: { "application/json": { schema } } })
 const parameter = (name: string, description: string, schema: unknown) => ({ name, in: "query", required: false, description, schema })
+// Header versioning: every operation accepts API-Version and refuses a version it does not serve.
+const apiVersion = {
+  name: "API-Version", in: "header", required: false,
+  description: "Pin the API major version. Omitted means the current version, 1. Any other value returns 400 UNSUPPORTED_API_VERSION.",
+  schema: { type: "string", enum: ["1"], default: "1" },
+}
+const unsupportedVersion = response("API-Version names a version this API does not serve.", ref("Error"))
 
 export const openapi = {
   openapi: "3.1.0",
   jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema",
   info: { title: "OpenAffiliate REST API", version: "1.0.0", description: "Search the public affiliate program registry and read program terms. No authentication or API key is required. No write operations are exposed. " +
-    "Versioning: every response carries an API-Version header, currently 1. Breaking changes ship only under a new major version; additive changes (new fields, parameters or endpoints) can arrive in the current one. " +
+    "Versioning: every response carries an API-Version header, currently 1, and a request may send API-Version: 1 to pin it (any other value returns 400 UNSUPPORTED_API_VERSION). Breaking changes ship only under a new major version; additive changes (new fields, parameters or endpoints) can arrive in the current one. " +
     "Deprecation: a field, parameter or endpoint is deprecated at least 90 days before it is removed. Its responses then carry a Deprecation header (RFC 9745) with the date it was deprecated and a Sunset header (RFC 8594) with the date it stops working, and the change is listed in the changelog at https://openaffiliate.dev/changelog." },
   servers: [{ url: "https://openaffiliate.dev" }],
   paths: {
@@ -36,6 +43,7 @@ export const openapi = {
         operationId: "searchPrograms", summary: "Search affiliate programs",
         description: "Search active programs. Returns a programs array, total before pagination and applied filters. Unverified terms are omitted or empty. Nothing in the query is rejected, so older clients keep working: unknown parameters are ignored (tracking parameters are fine), a repeated parameter uses its first value, an unknown sort falls back to relevance (legacy sort=new means newest), a non-boolean verified does not filter, limit and offset are read as a leading integer (so 1x reads as 1; text with no leading digits or a negative offset counts as 0), and an unknown type or category simply matches nothing.",
         parameters: [
+          apiVersion,
           parameter("q", "Search keywords. Empty means all active programs.", { type: "string", default: "" }),
           parameter("category", "Category name, matched exactly (case-sensitive). Unknown categories return an empty list.", string),
           parameter("type", "Filter by commission type.", { type: "string", enum: ["recurring", "one-time", "tiered", "hybrid"] }),
@@ -45,22 +53,23 @@ export const openapi = {
           parameter("limit", "Maximum results, capped at 500. Zero or omission means all remaining results.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
           parameter("offset", "Skip this many results before applying limit.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
         ],
-        responses: { "200": response("Matching active programs (possibly none).", ref("ProgramSearch")) },
+        responses: { "200": response("Matching active programs (possibly none).", ref("ProgramSearch")), "400": unsupportedVersion },
       },
     },
     "/api/programs/{slug}": {
       get: {
         operationId: "getProgram", summary: "Get a program by slug",
         description: "Read a program, including paused entries and brands with no public program. Aliases resolve to the canonical slug in the 200 response. Unverified cookie, approval and payout terms are withheld. no_program and discontinued entries have neutral commission/payout placeholders, answer and alternatives rather than joinable terms.",
-        parameters: [{ name: "slug", in: "path", required: true, description: "Canonical program slug or a registered alias.", schema: string }],
-        responses: { "200": response("Program details or a no-program answer.", ref("Program")), "404": response("No program or alias matches the slug.", ref("Error")) },
+        parameters: [{ name: "slug", in: "path", required: true, description: "Canonical program slug or a registered alias.", schema: string }, apiVersion],
+        responses: { "200": response("Program details or a no-program answer.", ref("Program")), "400": unsupportedVersion, "404": response("No program or alias matches the slug.", ref("Error")) },
       },
     },
     "/api/categories": {
       get: {
         operationId: "listCategories", summary: "List categories with counts",
         description: "Return every registry category and its active program count. Paused, discontinued and no_program entries do not count.",
-        responses: { "200": response("Categories and total category count.", ref("CategoryList")) },
+        parameters: [apiVersion],
+        responses: { "200": response("Categories and total category count.", ref("CategoryList")), "400": unsupportedVersion },
       },
     },
   },
