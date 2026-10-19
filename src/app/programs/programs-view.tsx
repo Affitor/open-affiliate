@@ -406,7 +406,6 @@ function ProgramsContent() {
           <button
             id="filters-button"
             type="button"
-            aria-haspopup="dialog"
             onClick={() => setSheetOpen(true)}
             aria-haspopup="dialog"
             aria-expanded={sheetOpen}
