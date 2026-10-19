@@ -44,10 +44,16 @@ agents:
   use_cases:
   - Knowledge workers automating research
   - Power users building custom AI workflows
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.frequency: "2026-10-18"
+  approval: "2026-10-18"
+  restrictions: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

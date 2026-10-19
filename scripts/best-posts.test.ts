@@ -161,16 +161,31 @@ test("the bank hub never counts a program paid only by Wise, PayPal or other met
 })
 
 test("a hub below the threshold is noindex and out of the sitemap; every other list is in it", () => {
-  const urls = new Set(sitemap().map((e) => e.url))
-  for (const list of BEST_LISTS) {
-    const url = `https://openaffiliate.dev${bestPath(list)}`
-    const small = Boolean(list.hub) && buildBestList(list).verified.length < HUB_MIN_INDEXED
-    assert.equal(indexable(list), !small, list.slug)
-    assert.equal(urls.has(url), !small, url)
+  const sample = livePrograms.filter((p) => p.verified && !commissionUnknown(p.commission)).slice(0, HUB_MIN_INDEXED)
+  assert.equal(sample.length, HUB_MIN_INDEXED)
+  const base = BEST_LISTS.find((list) => list.hub)!
+  const fixtures = [HUB_MIN_INDEXED - 1, HUB_MIN_INDEXED].map((count) => {
+    const slugs = new Set(sample.slice(0, count).map((p) => p.slug))
+    return { ...base, slug: `test-hub-threshold-${count}`, qualifies: (p: (typeof sample)[number]) => slugs.has(p.slug) }
+  })
+  assert.ok(fixtures.every((fixture) => !BEST_LISTS.some((list) => list.slug === fixture.slug)))
+  const originalLength = BEST_LISTS.length
+  try {
+    BEST_LISTS.push(...fixtures)
+    const urls = new Set(sitemap().map((e) => e.url))
+    for (const list of BEST_LISTS) {
+      const url = `https://openaffiliate.dev${bestPath(list)}`
+      const small = Boolean(list.hub) && buildBestList(list).verified.length < HUB_MIN_INDEXED
+      assert.equal(indexable(list), !small, list.slug)
+      assert.equal(urls.has(url), !small, url)
+    }
+    assert.equal(buildBestList(fixtures[0]).verified.length, HUB_MIN_INDEXED - 1)
+    assert.equal(indexable(fixtures[0]), false)
+    assert.equal(buildBestList(fixtures[1]).verified.length, HUB_MIN_INDEXED)
+    assert.equal(indexable(fixtures[1]), true)
+  } finally {
+    BEST_LISTS.length = originalLength
   }
-  // The registry today has a hub on each side of the line, so both branches run.
-  assert.ok(BEST_LISTS.some((l) => l.hub && !indexable(l)))
-  assert.ok(BEST_LISTS.some((l) => l.hub && indexable(l)))
 })
 
 test("every category and commission type with enough verified programs gets a list, and no other does", () => {

@@ -14,9 +14,13 @@ commission:
   value: 20
   currency: USD
   duration: "12 months"
-  conditions: "20% commission for the first year on each referred customer (PartnerStack listing)."
+  conditions: "20% commission for the first year on each referred customer (PartnerStack listing). The brand's partnership FAQ states payments every three months in USD. Joining starts with a meeting with the AiSDR team, which walks partners through the next steps."
 attribution: last-click
 tracking_method: cookie
+# "receive your payment every 3 months" / "paid in USD" (aisdr.com/aisdr-partnership/, checked 2026-10-18)
+payout:
+  currency: USD
+  frequency: quarterly
 signup_url: https://aisdr.com/aisdr-partnership/
 restrictions: null
 marketing_materials: true
@@ -43,7 +47,13 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  approval: '2026-10-18'
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
+  payout.methods: '2026-10-18'
+  restrictions: '2026-10-18'

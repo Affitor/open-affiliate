@@ -20,6 +20,8 @@ commission:
 payout:
   frequency: monthly
 
+# "Take 10 seconds to register there and claim your unique referral link immediately!" (https://www.strikingly.com/affiliate-program, checked 2026-10-18)
+approval: auto
 signup_url: https://www.strikingly.com/affiliate-program
 restrictions:
   - "No bidding on Strikingly brand terms or misspellings in paid search"
@@ -56,10 +58,14 @@ agents:
     - "Small businesses that need a simple mobile-friendly site"
     - "Founders launching a landing page for a new idea"
 
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

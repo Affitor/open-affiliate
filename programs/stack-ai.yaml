@@ -19,7 +19,10 @@ commission:
 attribution: last-click
 tracking_method: cookie
 signup_url: https://www.stackai.com/partnership
-restrictions: null
+# "may not use any paid advertisement to promote the Referral Program, including but not limited to, paid search marketing, advertisements, affiliate networks, paid email campaigns, p" (https://www.stackai.com/referralterms, checked 2026-10-18)
+restrictions:
+  - "No paid advertising to promote the referral program, including paid search, advertisements, affiliate networks, paid email campaigns and paid social campaigns"
+  - "No using a referral to sign up for Stack AI services for your own company, its affiliated entities or yourself"
 marketing_materials: true
 api_available: true
 dedicated_manager: false
@@ -40,10 +43,16 @@ agents:
   use_cases:
   - Enterprises deploying internal AI agents
   - Teams building knowledge chatbots
+not_published:
+  cookie_days: "2026-10-18"
+  payout.minimum: "2026-10-18"
+  payout.methods: "2026-10-18"
+  payout.frequency: "2026-10-18"
+  approval: "2026-10-18"
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

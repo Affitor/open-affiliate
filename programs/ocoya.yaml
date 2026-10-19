@@ -21,6 +21,10 @@ cookie_days: 60
 payout:
   methods: [paypal]
 
+# "No — bidding on our branded keywords in paid search isn't permitted under the affiliate terms." (https://www.ocoya.com/affiliates, checked 2026-10-18)
+restrictions:
+  - "No bidding on branded keywords (\"Ocoya\" and related) in paid search"
+  - "No self-referrals; self-purchases through your own link earn no commission"
 signup_url: https://www.ocoya.com/affiliates
 
 dashboard_url: null
@@ -57,7 +61,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
