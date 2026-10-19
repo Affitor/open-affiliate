@@ -24,7 +24,7 @@ payout:
   methods: ["paypal", "wise", "bank"]
 
 signup_url: https://jgcore.com/earn
-approval: manual
+approval: auto
 restrictions:
   - "Label every post that carries your link, for example with #ad or 'affiliate link'"
   - "No promises of income, results or rankings"
