@@ -308,7 +308,10 @@ test("the registry's own YAML: read raw; an absent term is Not published only wi
   for (const s of scored) {
     const t8 = s.checks.find((c) => c.id === "T8")!
     const p = bySlug.get(s.slug)!
-    assert.equal(t8.state, Array.isArray(p.restrictions) && !isStale(p.last_verified_at, new Date()) ? "met" : p.not_published?.restrictions && !isStale(p.last_verified_at, new Date()) ? "not_public" : "checking", s.slug)
+    const fresh = !isStale(p.last_verified_at, new Date())
+    // Same as scoreProgram: the last entry for a field wins, and only a non-empty quote counts.
+    const disagree = Boolean(new Map((p.conflicts ?? []).map((c) => [c.field, c.quote])).get("restrictions"))
+    assert.equal(t8.state, !fresh ? "checking" : disagree ? "not_met" : Array.isArray(p.restrictions) ? "met" : p.not_published?.restrictions ? "not_public" : "checking", s.slug)
     if (s.oas != null) assert.equal(s.oas, round1(partEarned(s, "transparency") + partEarned(s, "partner_value")), s.slug)
   }
 })

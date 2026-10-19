@@ -30,6 +30,10 @@ restrictions:
   - "No self-referrals"
   - "Disclose the affiliate relationship next to every link or endorsement, inside the video or audio itself"
 
+conflicts:
+  - field: commission.rate
+    quote: "elevenlabs.io/affiliates: \"for every new paid subscriber plan, you'll earn 22% of all payments for the first 12 months\". elevenlabs.io/affiliates-terms: \"Referrals for Business Plan: 11%\" and no commission on enterprise purchases. Checked 2026-10-18."
+
 marketing_materials: true
 dashboard_url: null
 network: partnerstack
