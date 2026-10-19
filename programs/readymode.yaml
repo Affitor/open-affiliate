@@ -48,6 +48,19 @@ restrictions:
 - Each use of Readymode branding in your materials requires prior written approval and compliance with written trademark policies; the license does not permit prohibited paid advertising.
 - Follow applicable laws, report known noncompliance to the other party, and obtain required export-control permits.
 - Do not make misleading promotional claims or use prohibited channels such as unsolicited email; follow Readymode’s brand standards.
+- Do not use, encourage or allow others to use Readymode services for illegal, abusive, false, fraudulent, deceptive or misleading activities, or activities that exploit, harm or threaten children.
+- Do not use, encourage or allow others to use services for unsolicited advertising, marketing or other unlawful activities; comply with applicable advertising, electronic-communications, telemarketing, FTC, CAN-SPAM, TCPA, Do Not Call, calling-time, CRTC and CASL requirements.
+- Do not use, encourage or allow others to use services contrary to applicable industry guidelines, including CTIA messaging principles and short-code registry and monitoring standards.
+- Do not bypass service security, create security or service risks, or encourage or allow others to do so.
+- Do not reverse engineer services for improper purposes, or encourage or allow others to do so.
+- Do not use, encourage or allow others to use services in ways that expose Readymode or third parties to liability, damage or danger.
+- Do not record calls unlawfully through the services, or encourage or allow others to do so.
+- Do not launch or facilitate denial-of-service attacks or impair service availability, reliability or stability, or encourage or allow others to do so.
+- Do not transmit viruses, trojans, worms or other harmful or malicious programs, or encourage or allow others to do so.
+- Do not receive, send or process HIPAA-protected health information through the services, or encourage or allow others to do so, unless a BAA with Readymode is signed or the use falls within an exception to the BAA requirement.
+- Do not transmit material infringing third-party IP or other rights, or encourage or allow others to do so.
+- Do not transmit libelous, defamatory, discriminatory or otherwise malicious or harmful material, or encourage or allow others to do so.
+- Do not use false identities, forged email addresses or headers or phone numbers, or mislead recipients about message or call origins, or encourage or allow others to do so; comply with Truth in Caller ID requirements.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
