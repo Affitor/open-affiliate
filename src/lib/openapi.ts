@@ -25,7 +25,7 @@ export const openapi = {
     "/api/programs": {
       get: {
         operationId: "searchPrograms", summary: "Search affiliate programs",
-        description: "Search active programs. Returns a programs array, total before pagination and applied filters. Unverified terms are omitted or empty. Unknown query parameters are ignored, allowing tracking parameters; repeated supported parameters and malformed values return 400.",
+        description: "Search active programs. Returns a programs array, total before pagination and applied filters. Unverified terms are omitted or empty. Nothing in the query is rejected, so older clients keep working: unknown parameters are ignored (tracking parameters are fine), a repeated parameter uses its first value, an unknown sort falls back to relevance (legacy sort=new means newest), a non-boolean verified does not filter, a malformed limit or offset counts as 0, and an unknown type or category simply matches nothing.",
         parameters: [
           parameter("q", "Search keywords. Empty means all active programs.", { type: "string", default: "" }),
           parameter("category", "Category name, matched exactly (case-sensitive). Unknown categories return an empty list.", string),
@@ -36,7 +36,7 @@ export const openapi = {
           parameter("limit", "Maximum results, capped at 500. Zero or omission means all remaining results.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
           parameter("offset", "Skip this many results before applying limit.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
         ],
-        responses: { "200": response("Matching active programs. Unknown filter values are ignored: an unknown sort falls back to relevance (legacy sort=new means newest).", ref("ProgramSearch")) },
+        responses: { "200": response("Matching active programs (possibly none).", ref("ProgramSearch")) },
       },
     },
     "/api/programs/{slug}": {

@@ -17,7 +17,7 @@ export function OPTIONS() {
 
 const VALID_SORTS = new Set(["relevance", "az", "za", "commission_desc", "newest"])
 // Older clients (skills, CLIs) still send these; an unknown sort falls back to relevance.
-const LEGACY_SORTS: Record<string, SortOption> = { new: "newest" }
+const LEGACY_SORTS = new Map<string, SortOption>([["new", "newest"]])
 
 // Filters are lenient on purpose: an unknown value is ignored, never a 400, so
 // clients written against earlier versions keep working. /openapi.json lists
@@ -31,7 +31,7 @@ export function GET(request: NextRequest) {
   const includeDescription =
     searchParams.get("include_description") === "true"
   const sortParam = searchParams.get("sort") ?? "relevance"
-  const sort = VALID_SORTS.has(sortParam) ? (sortParam as SortOption) : LEGACY_SORTS[sortParam] ?? "relevance"
+  const sort = VALID_SORTS.has(sortParam) ? (sortParam as SortOption) : LEGACY_SORTS.get(sortParam) ?? "relevance"
   const limit = Math.min(parseInt(searchParams.get("limit") ?? "0") || 0, 500)
   const offset = Math.max(parseInt(searchParams.get("offset") ?? "0") || 0, 0)
 
