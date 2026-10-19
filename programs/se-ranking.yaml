@@ -63,10 +63,12 @@ agents:
     - "Small businesses auditing and improving their own site's SEO"
     - "Marketers tracking brand visibility in AI search answers"
 
+not_published:
+  commission.duration: "2026-10-18"
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
