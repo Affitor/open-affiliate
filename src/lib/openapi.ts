@@ -13,13 +13,18 @@ const commission = object({
   value: { type: ["number", "null"] }, currency: nullableString,
   duration: nullableString, conditions: nullableString,
 }, ["type", "rate", "mode", "value", "currency"])
-const response = (description: string, schema: unknown) => ({ description, content: { "application/json": { schema } } })
+// Every response of the REST API carries API-Version (see info.description).
+const response = (description: string, schema: unknown) => ({
+  description, headers: { "API-Version": { $ref: "#/components/headers/APIVersion" } }, content: { "application/json": { schema } },
+})
 const parameter = (name: string, description: string, schema: unknown) => ({ name, in: "query", required: false, description, schema })
 
 export const openapi = {
   openapi: "3.1.0",
   jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema",
-  info: { title: "OpenAffiliate REST API", version: "1.0.0", description: "Search the public affiliate program registry and read program terms. No authentication or API key is required. No write operations are exposed." },
+  info: { title: "OpenAffiliate REST API", version: "1.0.0", description: "Search the public affiliate program registry and read program terms. No authentication or API key is required. No write operations are exposed. " +
+    "Versioning: every response carries an API-Version header, currently 1. Breaking changes ship only under a new major version; additive changes (new fields, parameters or endpoints) can arrive in the current one. " +
+    "Deprecation: a field, parameter or endpoint is deprecated at least 90 days before it is removed. Its responses then carry a Deprecation header (RFC 9745) with the date it was deprecated and a Sunset header (RFC 8594) with the date it stops working, and the change is listed in the changelog at https://openaffiliate.dev/changelog." },
   servers: [{ url: "https://openaffiliate.dev" }],
   paths: {
     "/api/programs": {
@@ -56,6 +61,9 @@ export const openapi = {
     },
   },
   components: {
+    headers: {
+      APIVersion: { description: "Major version of this API. Breaking changes ship only under a new value.", schema: { type: "string", const: "1" } },
+    },
     schemas: {
       Commission: commission,
       Program: object({

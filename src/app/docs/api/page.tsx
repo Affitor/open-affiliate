@@ -18,7 +18,8 @@ export default function APIPage() {
 
       <p className="text-sm text-muted-foreground mb-6">
         Download the <a href="/openapi.json" className="underline">OpenAPI 3.1 specification</a> for parameter and response schemas.
-        Invalid query values return HTTP 400; an unknown slug or API path returns HTTP 404.
+        Unknown parameters, and sort, verified, limit or offset values the API does not recognise, are ignored rather than
+        rejected; a category or type no program has returns an empty list; an unknown slug or API path returns HTTP 404.
         Errors use <code>{'{ "error": { "code": "...", "message": "...", "hint": "..." } }'}</code>.
       </p>
 
@@ -146,6 +147,18 @@ export default function APIPage() {
   ...
 }`}
           />
+        </section>
+
+        <section>
+          <h2 id="versioning" className="text-lg font-semibold mb-3">Versioning</h2>
+          <p className="text-sm text-muted-foreground">
+            Every response carries an <code>API-Version</code> header, currently <code>1</code>. Breaking changes ship only
+            under a new major version; new fields, parameters and endpoints can be added to the current one. A field,
+            parameter or endpoint is deprecated at least 90 days before it is removed: its responses then carry a{" "}
+            <code>Deprecation</code> header (RFC 9745) with the date it was deprecated and a <code>Sunset</code> header
+            (RFC 8594) with the date it stops working, and the change is listed in the{" "}
+            <a href="/changelog" className="underline">changelog</a>.
+          </p>
         </section>
       </div>
 
