@@ -18,9 +18,11 @@ commission:
 
 # payout minimum: not published as a threshold on greengeeks.com/legal/atoc (checked 2026-10-13)
 # "All affiliate commissions are processed and sent to affiliates 35-40 days after the end of the month" (greengeeks.com/legal/atoc, checked 2026-10-13)
+# "All affiliate commissions are processed and sent to affiliates 35-40 days after the end of the month in which the sale occurred." (www.greengeeks.com/legal/atoc, checked 2026-10-19) — 35–40 days after month end → net-60 (backfill rule #1)
 payout:
   currency: USD
-  frequency: monthly
+  frequency: net-60
+  conditions: "All affiliate commissions are processed and sent to affiliates 35-40 days after the end of the month in which the sale occurred."
   methods: [paypal]
 
 signup_url: https://www.greengeeks.com/affiliates/signup/
@@ -67,7 +69,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

@@ -20,10 +20,12 @@ cookie_days: 60
 tracking_method: cookie
 
 # "The minimum cash-out amount is $50. Commissions will be disbursed monthly" (zeemo.ai/affiliate-program-terms, checked 2026-10-13)
+# "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days." (zeemo.ai/affiliate-program-terms, checked 2026-10-19) — 30 days after the sale → net-30 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
+  conditions: "Commissions will be considered due and payable 30 days after the referred sale is completed. … Commissions will be disbursed monthly, with occasional delays of a few days."
 
 # "Once you are approved, you will receive an follow up email with your personal inviting link from us." (https://zeemo.ai/affiliate-program, checked 2026-10-18)
 approval: manual
@@ -73,7 +75,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-19"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate
