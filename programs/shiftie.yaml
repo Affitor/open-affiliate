@@ -39,7 +39,11 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+payout:
+  frequency: net-60
+  conditions: The agreement names Digital Ticketing Systems Ltd. and requires payment within 45 days after the end of the calendar month in which it collects the corresponding amounts. Payment-account and tax details must be complete.
+approval: manual

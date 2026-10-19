@@ -21,10 +21,33 @@ tracking_method: cookie
 payout:
   currency: USD
   frequency: monthly
-  methods: [bank, paypal]
+  methods:
+  - bank
+  - paypal
+  conditions: Commissions are paid monthly on or around the 15th of the following month, subject to eligibility and risk holds. Only full monthly license invoices qualify; prorated or partial charges, credits and refunds are excluded. Excessive customer customization may spread commission payments over two months.
 signup_url: https://readymode.com/about/partners/
 approval: manual
-restrictions: null
+restrictions:
+- Use the Readymode name; do not rebrand, modify or white-label its software.
+- Do not claim to manage or own Readymode software IP, or offer ownership of any software copy, element, concept or related IP.
+- Introduce prospective customers through PartnerStack or the unique link; do not sell software-use rights yourself. Readymode arranges customer agreements and collects customer payments directly and in full.
+- Do not bind Readymode, change its pricing or contract terms, or make representations beyond the agreement’s authorization.
+- On irrevocable default, stop contacting Readymode clients on its behalf or for its product interests.
+- After irrevocable default, do not sell competing products or services to Readymode clients learned of or accessed through this or derived agreements; the surviving clause specifies no 12-month expiry.
+- Immediately notify Readymode of requests for its Do Not Call list and follow up diligently if receipt is not acknowledged.
+- Follow all applicable telemarketing regulations.
+- Be able to explain and pitch the platform’s value within 90 days of signing.
+- No Readymode brand or confusing-variant bidding or targeting in paid digital or offline ads. No paid ad may name the brand or contain, link to or direct traffic to a referral link, tracking key or partner page, even if the ad is unbranded.
+- Submit all leads through PartnerStack; emailing or contacting account executives, account managers or other Readymode personnel does not qualify.
+- Submit the referral in PartnerStack before the deal becomes Closed Won; later submissions earn no commission.
+- 'No rewards for prospects already known to Readymode: existing customers or active CRM opportunities, ongoing communications, or previous referrals by another partner or internal source.'
+- No referral where you or your principals, owners, officers, employees or contractors currently, or in the prior six months, worked for, contracted with, owned, held office in or sat on the prospect’s board.
+- Do not sell or transfer the contract without express written consent and a new agreement.
+- No infringement, misappropriation or unauthorized use of Readymode software, names, marks, logos, copyrighted or proprietary material or confidential information.
+- Use confidential information only to perform the agreement; disclose only with written consent or to bound need-to-know personnel and advisers, protect it reasonably, and maintain confidentiality for three years after termination.
+- Each use of Readymode branding in your materials requires prior written approval and compliance with written trademark policies; the license does not permit prohibited paid advertising.
+- Follow applicable laws, report known noncompliance to the other party, and obtain required export-control permits.
+- Do not make misleading promotional claims or use prohibited channels such as unsolicited email; follow Readymode’s brand standards.
 marketing_materials: true
 api_available: false
 dedicated_manager: false
@@ -47,7 +70,10 @@ agents:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-12"
+updated_at: "2026-10-18"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api
+not_published:
+  cookie_days: '2026-10-18'
+  payout.minimum: '2026-10-18'
