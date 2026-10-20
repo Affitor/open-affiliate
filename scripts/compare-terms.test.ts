@@ -128,6 +128,8 @@ test("whatever the reference parsing misses, only the verified row's own visible
   // Parse failures make the check stricter: a cut-off text row or JSON row is checked whole.
   assert.ok(termsHtmlProblems(page, base + push("3d:Tff,Cookie lasts 60 days.")).some((x) => x.includes("Cookie lasts 60 days")), "truncated text row")
   assert.ok(termsHtmlProblems(page, base + push('3d:{"children":"Cookie lasts 60 days.')).some((x) => x.includes("Cookie lasts 60 days")), "truncated JSON row")
+  // A cut comparison node that is not valid JSON is checked whole too.
+  assert.ok(termsHtmlProblems(page, base + push(`7:["$","tr","${verifiedOther.slug}",{"children":Cookie lasts 60 days.}]\n`), [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "malformed cut node")
 })
 
 test("the exemption does not hide the page's other terms", () => {

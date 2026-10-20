@@ -324,7 +324,7 @@ function flightTexts(payload: string, slugs: Set<string>, allowed: Set<string>):
     ...rows.filter((r) => !fromCut.has(r.id) || kept.has(r.id)).flatMap(texts),
     // The candidates left out: only the verified rows' own visible text may go.
     ...rows.filter((r) => fromCut.has(r.id) && !kept.has(r.id)).flatMap(texts).filter(notTheirs),
-    ...cut.flatMap(payloadStrings).filter(notTheirs),
+    ...cut.flatMap(rowStrings).filter(notTheirs),
     ...loose.flatMap((l) => [...payloadStrings(l), l]),
   ]
 }
