@@ -615,9 +615,13 @@ const SlugBody = z.object({ slug: slugField })
 // Scotland, Wales). Any other run of tag characters could spell hidden text.
 const EMOJI_TAG_SEQUENCE =
   /\u{1F3F4}\u{E0067}\u{E0062}(?:\u{E0065}\u{E006E}\u{E0067}|\u{E0073}\u{E0063}\u{E0074}|\u{E0077}\u{E006C}\u{E0073})\u{E007F}/gu
-const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800]/u
+const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800\u{16FE4}]/u
 const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
 const LATIN_LETTER = /^[A-Za-z]$/
+// Viramas (canonical combining class 9) of the scripts that join with a
+// zero-width joiner after one; any other mark does not need it.
+const VIRAMA =
+  /^[\u094D\u09CD\u0A4D\u0ACD\u0B4D\u0BCD\u0C4D\u0CCD\u0D3B\u0D3C\u0D4D\u0DCA\u0E3A\u0F84\u1039\u103A\u1714\u1734\u17D2\u1A60\u1B44\u1BAA\u1BAB\u1BF2\u1BF3\uA806\uA8C4\uA953\uA9C0\uAAF6\uABED\u{10A3F}\u{11046}\u{1107F}\u{110B9}\u{11133}\u{11134}\u{111C0}\u{11235}\u{112EA}\u{1134D}\u{11442}\u{114C2}\u{115BF}\u{1163F}\u{116B6}\u{1172B}\u{11839}\u{1193D}\u{1193E}\u{119E0}\u{11A34}\u{11A47}\u{11A99}\u{11C3F}\u{11D44}\u{11D45}\u{11D97}]$/u
 const MONGOLIAN_LETTER = /^(?=\p{L})\p{Script=Mongolian}$/u
 
 /** True when every invisible code point is one text needs, in the place it needs it. */
@@ -637,8 +641,8 @@ function plainText(multiLine: boolean) {
       // standardized variants never follow a Latin letter.
       if (cp === 0xfe0e || cp === 0xfe0f) return /\p{Emoji}/u.test(before)
       if (cp >= 0xfe00 && cp <= 0xfe0d) return VISIBLE.test(before) && !LATIN_LETTER.test(before)
-      // After a virama (क्‍ष, Malayalam chillu ന്‍ at the end of a word).
-      if (cp === 0x200d && /^\p{Mn}$/u.test(before)) return after === "" || !NEVER.test(after)
+      // After a virama (क्‍ष, Malayalam chillu ന്‍ at the end of a word or line).
+      if (cp === 0x200d && VIRAMA.test(before)) return after === "" || after === "\n" || (!NEVER.test(after) && !LATIN_LETTER.test(after))
       if (cp === 0x200d) {
         return (
           (VISIBLE.test(before) || before === "\uFE0F") &&
@@ -705,7 +709,7 @@ const descriptionInput = proseField(2000, 1)
 const urlInput = textField(500)
 
 /** Spec v4 §5.1: what an owner may change on a listing. Keys are the YAML's. */
-const EditChanges = z
+export const EditChanges = z
   .object({
     commission: CommissionInput.optional(),
     cookie_days: cookieDaysInput.optional(),
@@ -725,7 +729,7 @@ const EditChanges = z
     status_note: textField(300).nullable().optional(),
   })
   .strict()
-type EditChanges = z.infer<typeof EditChanges>
+export type EditChanges = z.infer<typeof EditChanges>
 
 const EditBody = z.object({ slug: slugField, changes: EditChanges, termsUrl: urlInput.optional(), note: proseField(1000).optional() })
 
@@ -1139,7 +1143,7 @@ function slugOf(name: string): string {
 }
 
 /** Host and path without "www.", a trailing slash, query or fragment: two URLs for one page compare equal. */
-function pageKey(url: string): string | null {
+export function pageKey(url: string): string | null {
   try {
     const u = new URL(url)
     return `${u.hostname.toLowerCase().replace(/^www\./, "")}${u.pathname.replace(/\/+$/, "")}`
