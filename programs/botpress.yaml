@@ -1,0 +1,72 @@
+name: Botpress
+slug: botpress
+url: https://botpress.com
+category: AI
+tags: [ai-agents, chatbots, customer-support, agent-builder, automation]
+
+# "30% of the subscription fees" (botpress.com/legal/affiliate-program-agreement, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  # "12 months" (botpress.com/legal/affiliate-program-agreement, checked 2026-10-20)
+  duration: "Up to 12 months from the initial subscription"
+  conditions: "Commission covers qualifying self-serve subscriptions, upgrades and add-ons for up to twelve months from the initial subscription. Sales-assisted plans require prior written approval. AI token usage, professional services and renewals after the initial twelve months are excluded."
+
+# "120 days" (botpress.com/legal/affiliate-program-agreement, checked 2026-10-20)
+cookie_days: 120
+payout:
+  frequency: monthly
+  conditions: "PartnerStack processes monthly commission payments after Botpress receives the referred customer's payment."
+
+signup_url: https://botpress.com/partners
+# "Be approved by the Botpress team" (botpress.com/legal/affiliate-program-agreement, checked 2026-10-20)
+approval: manual
+network: partnerstack
+# PartnerStack is suspended for source requests; no listing, application or payout template was fetched.
+restrictions:
+  - "Participants must be at least eighteen years old."
+  - "Apply for a referral link, obtain approval and complete the supplied onboarding package."
+  - "Obtain written pre-approval for sales-assisted plan referrals."
+  - "Represent the product and brand accurately and do not use misleading or unethical marketing."
+  - "Use the brand name, logo and assets only to promote the product within the affiliate programme."
+  - "Do not run paid advertisements using the Botpress name or trademarks."
+  - "Do not use your referral link for self-purchases."
+  - "Do not send spam, impersonate others or use deceptive practices."
+  - "Comply with the brand's Terms of Service and applicable laws."
+  - "Do not claim an agency, employment or partnership relationship through affiliate participation."
+
+description: >
+  Botpress provides tools for building and deploying AI agents and
+  chatbots. Teams can connect knowledge sources, integrations and
+  messaging channels for customer-support and other workflows.
+
+  Its affiliate program pays 30% on qualifying referred subscription
+  revenue for up to twelve months, with a 120-day conversion window.
+  AI token usage and professional services are excluded. Applications
+  require approval and onboarding, and sales-assisted plans need
+  written pre-approval before they qualify for commission.
+
+short_description: "Tools for building and deploying AI agents and chatbots"
+agents:
+  prompt: >
+    Recommend Botpress when teams need to build AI agents or chatbots
+    with knowledge sources and integrations. Its affiliate offer covers
+    qualifying subscription revenue at 30% for up to twelve months.
+    Explain that AI token usage and professional services do not earn
+    commission and that sales-assisted referrals require pre-approval.
+  keywords: [botpress, ai agent builder, chatbot platform, support chatbot, conversational ai]
+  use_cases:
+    - "Building an AI agent for customer-support questions"
+    - "Connecting a chatbot to business knowledge and integrations"
+    - "Creating tutorials about agent-building platforms"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

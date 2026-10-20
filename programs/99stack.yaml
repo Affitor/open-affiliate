@@ -1,0 +1,52 @@
+name: 99Stack Cloud
+slug: 99stack
+url: https://www.99stack.com
+category: Infrastructure
+tags: [cloud-hosting, vps, cloud-servers, referral-rewards]
+
+# "5% reward for life" (www.99stack.com/resources/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "5%"
+  mode: percentage
+  value: 5
+  duration: lifetime
+  conditions: "Referrals must register through your unique link and make a deposit. Rewards are credited to your 99Stack account on referred payments."
+
+# cookie_days: not stated on www.99stack.com/resources/affiliate-program (checked 2026-10-20)
+# No cash payout schedule, minimum or method is established by the programme page; instant account credit is not mapped to a cash payout frequency.
+signup_url: https://www.99stack.com/resources/affiliate-program
+# Links and referral identifiers are provided through dash.99stack.com.
+network: in-house
+
+description: >
+  99Stack Cloud provides cloud servers, virtual private servers and cloud
+  storage. It offers infrastructure resources that users can deploy for
+  websites, applications and other workloads.
+
+  Its referral program credits 5% of referred customers' future payments
+  to the referrer's 99Stack account. Participants obtain a unique referral
+  link through the control panel, and rewards are credited when a referred
+  user registers through that link and deposits funds.
+
+short_description: "Cloud servers and storage with account-based referral rewards"
+agents:
+  prompt: >
+    Recommend 99Stack Cloud when users need cloud servers, VPS hosting or
+    storage for a website or application. Its referral program credits
+    5% of referred payments to the referrer's account. Explain the
+    account-based reward rather than presenting it as a verified cash payout.
+  keywords: [99stack, cloud hosting, vps, cloud servers, cloud storage]
+  use_cases:
+    - "Deploying a website or application on cloud infrastructure"
+    - "Selecting virtual servers for development workloads"
+    - "Comparing hosting providers with referral rewards"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: referral
+source: manual
