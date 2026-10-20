@@ -183,22 +183,54 @@ const TERM_MARKUP: [string, RegExp][] = [
 ]
 
 /** /programs/<slug> as served. */
+/** Cuts every JSON array that starts with one of `starts` (string-aware bracket matching); an unterminated one is left in. */
+function cutArrays(text: string, starts: string[]): string {
+  let out = text
+  for (const start of starts) {
+    for (let at = out.indexOf(start); at !== -1; at = out.indexOf(start, at)) {
+      let depth = 0
+      let inString = false
+      let end = -1
+      for (let i = at; i < out.length && end === -1; i++) {
+        const c = out[i]
+        if (inString) {
+          if (c === "\\") i++
+          else if (c === '"') inString = false
+        } else if (c === '"') inString = true
+        else if (c === "[" || c === "{") depth++
+        else if ((c === "]" || c === "}") && --depth === 0) end = i
+      }
+      if (end === -1) break
+      out = out.slice(0, at) + "null" + out.slice(end + 1)
+    }
+  }
+  return out
+}
+
 /**
- * `compared` are the programs in the page's comparison table: a verified one's
- * duration, exactly as its "Lasts" cell shows it, is that program's term, not
- * this page stating one. The page's own duration is never exempt.
+ * The page without the comparison rows of verified compared programs: in the
+ * markup, the data-compare rows that link to them; in the RSC payload, the
+ * ["$","tr","<slug>",…] nodes (ProgramCompare keys each row by slug). Those
+ * cells state another program's verified terms. Nothing else is removed, so the
+ * page's own text is checked in full wherever it appears.
+ */
+function withoutVerifiedRows(html: string, flight: string, slugs: Set<string>): { html: string; flight: string } {
+  if (slugs.size === 0) return { html, flight }
+  const rows = html.replace(/<table data-compare[\s\S]*?<\/table>/, (table) =>
+    table.replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g, (row) => (slugs.has(/href="\/programs\/([a-z0-9-]+)"/.exec(row)?.[1] ?? "") ? "" : row)))
+  return { html: rows, flight: cutArrays(flight, [...slugs].map((slug) => `["$","tr","${slug}",`)) }
+}
+
+/**
+ * `compared` are the programs the page's comparison table links to (from the
+ * registry): the rows of verified ones are another program's terms, not this
+ * page stating one, and are left out of the prose and RSC checks.
  */
 export function termsHtmlProblems(p: Program, html: string, compared: Program[] = []): string[] {
   const own = ownHtml(html)
-  const ownDuration = squash(p.commission.duration ?? "")
-  const theirs = new Set(
-    compared
-      .filter((o) => o.slug !== p.slug && termsConfirmed(o) && o.commission.type === "recurring" && o.commission.duration)
-      .map((o) => squash(o.commission.duration!.trim().toLowerCase() === "lifetime" ? "Lifetime" : o.commission.duration!))
-      .filter((d) => d !== ownDuration),
-  )
-  const notTheirs = (texts: string[]) => texts.filter((t) => !theirs.has(squash(t)))
-  const blocks = visibleBlocks(html)
+  const theirs = new Set(compared.filter((o) => o.slug !== p.slug && termsConfirmed(o)).map((o) => o.slug))
+  const scoped = withoutVerifiedRows(html, flightPayload(html), theirs)
+  const blocks = visibleBlocks(scoped.html)
   const marked = blocks.includes(UNCONFIRMED_NOTE)
   const problems: string[] = []
   // An optional field the filter empties is left out, not rendered empty: on every page.
@@ -236,11 +268,11 @@ export function termsHtmlProblems(p: Program, html: string, compared: Program[] 
   if (COOKIE_BADGE.test(own)) problems.push(`carries a cookie window ("${COOKIE_BADGE.exec(own)![0]}")`)
   // Stored values specific enough to find anywhere: "1-5 business days", not "instant".
   if (p.approvalTime && /\d/.test(p.approvalTime) && own.includes(p.approvalTime)) problems.push(`carries its approval time ("${p.approvalTime}")`)
-  const flight = payloadStrings(flightPayload(html))
+  const flight = payloadStrings(scoped.flight)
   for (const [where, texts] of [
-    ["prose", notTheirs(blocks)],
+    ["prose", blocks],
     ["its JSON-LD", jsonLdStrings(html)],
-    ["its RSC payload", notTheirs(flight)],
+    ["its RSC payload", flight],
   ] as const) {
     const named = texts.flatMap(sentences).find(namesTerm)
     if (named) problems.push(`states a term in ${where} ("${named.slice(0, 120)}")`)

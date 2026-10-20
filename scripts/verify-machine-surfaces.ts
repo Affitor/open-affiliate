@@ -1463,7 +1463,13 @@ async function checkServedPages(): Promise<string> {
       }
       if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
-    // Non-vacuity: the page check fails on a page that breaks the rule either way.
+    // Non-vacuity: the page check fails on a page that breaks the rule either way. Every probe runs
+    // with the page's own comparison context, as served, from a baseline the check passes.
+    const pageTermsProblems = (p: Program, html: string) => termsHtmlProblems(p, html, comparedPrograms(html));
+    for (const p of [off, on, dropped.p, onTime, withConditions]) {
+      const baseline = pageTermsProblems(p, kept.get(p)!);
+      if (baseline.length) fail(`probe baseline for ${p.slug} is not clean: ${baseline.join("; ")}`);
+    }
     const offHtml = kept.get(off)!;
     for (const [leak, extra] of [
       ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
@@ -1481,26 +1487,26 @@ async function checkServedPages(): Promise<string> {
       ["a cookie window in its RSC payload", `<script>self.__next_f.push([1,"{\\"cookieDays\\":${off.cookieDays}}"])</script>`],
       ["a payout sentence in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(`5:${JSON.stringify(["$", "p", null, { children: "Payouts are monthly with a $50 minimum." }])}\n`)}])</script>`],
     ]) {
-      if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
+      if (pageTermsProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
     }
     // A sentence the filter drops from this program's own prose, put back into the RSC payload.
     const flight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ children: dropped.s }))}])</script>`;
-    if (termsHtmlProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
+    if (pageTermsProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
       fail(`the page terms check passed ${dropped.p.slug} carrying a dropped sentence in its RSC payload`);
     }
     // An optional field rendered empty instead of left out.
     const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
-    if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
+    if (pageTermsProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
     // On a verified page a conditions row is allowed, so only the empty-row rule can catch this one.
-    if (termsHtmlProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
+    if (pageTermsProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
     const onHtml = kept.get(on)!;
-    if (termsHtmlProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
+    if (pageTermsProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
       fail("the page terms check passed a verified page with its cookie window removed");
     }
-    if (termsHtmlProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
+    if (pageTermsProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
     }
-    if (termsHtmlProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
+    if (pageTermsProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
       fail("the page terms check passed a verified page with its approval row removed");
     }
     // Rows that say more, or other, than the stored fields: the comparison is exact, not a prefix.
@@ -1513,14 +1519,14 @@ async function checkServedPages(): Promise<string> {
       ["extra words after its approval", rowValue(timeHtml, "approval", (v) => `${v} or automatically`)],
       ["its approval time removed", rowValue(timeHtml, "approval", (v) => v.replace(` (${onTime.approvalTime})`, ""))],
     ] as const) {
-      if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
+      if (pageTermsProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
     }
     // Payout conditions: required as stored on a verified page, found anywhere on an unverified one.
     const conditionsHtml = kept.get(withConditions)!.replace(/<p data-term="payout-conditions"[^>]*>[\s\S]*?<\/p>/, "");
-    if (termsHtmlProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
+    if (pageTermsProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
     const offConditions = { ...off, payout: { ...off.payout, conditions: withConditions.payout.conditions } };
     const conditionsFlight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ payout: { conditions: withConditions.payout.conditions } }))}])</script>`;
-    if (termsHtmlProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
+    if (pageTermsProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
     if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
       fail("the paused-page check passed a paused page with a join button");
     }

@@ -9,7 +9,10 @@ import { termsHtmlProblems } from "./unconfirmed-checks"
 const base = `<p>${UNCONFIRMED_NOTE}</p>`
 const table = (other: Program, cell: string) =>
   `<table data-compare><tbody><tr><th><a href="/programs/${other.slug}">${other.name}</a></th><td>30% recurring</td><td>${cell}</td></tr></tbody></table>`
-const flight = (cell: string) => `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify(["td", null, { children: cell }]))}])</script>`
+const push = (chunk: string) => `<script>self.__next_f.push([1,${JSON.stringify(chunk)}])</script>`
+/** The RSC form of a comparison row: ProgramCompare keys each row by slug. */
+const rowFlight = (slug: string, cell: string) => push(`7:${JSON.stringify(["$", "tr", slug, { children: [["$", "td", null, { children: "30% recurring" }], ["$", "td", null, { children: cell }]] }])}\n`)
+const flight = (cell: string) => push(JSON.stringify(["td", null, { children: cell }]))
 const states = (problems: string[], text: string) => problems.some((x) => x.includes(text))
 
 // Fixtures from one registry program, so the test needs no particular registry data:
@@ -32,7 +35,8 @@ test("an unverified page may show a verified program's duration in its compariso
   const d = verifiedOther.commission.duration!
   assert.deepEqual(termsHtmlProblems(page, base, [verifiedOther]), [], "baseline")
   assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d), [verifiedOther]), [], "prose")
-  assert.deepEqual(termsHtmlProblems(page, base + flight(d), [verifiedOther]), [], "RSC payload")
+  assert.deepEqual(termsHtmlProblems(page, base + rowFlight(verifiedOther.slug, d), [verifiedOther]), [], "RSC payload row")
+  assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + rowFlight(verifiedOther.slug, d), [verifiedOther]), [], "both, as served")
 })
 
 test("the exemption is narrow: no compared list, an unverified program, or the page's own duration still fail", () => {
@@ -43,11 +47,26 @@ test("the exemption is narrow: no compared list, an unverified program, or the p
   // An unverified program's duration is never exempt.
   const u = unverifiedOther.commission.duration!
   assert.ok(states(termsHtmlProblems(page, base + table(unverifiedOther, u), [unverifiedOther]), u), "unverified other: prose flagged")
-  assert.ok(states(termsHtmlProblems(page, base + flight(u), [unverifiedOther]), u), "unverified other: RSC payload flagged")
-  // The page's own duration is never exempt, even when a verified program shows the same words.
+  assert.ok(states(termsHtmlProblems(page, base + rowFlight(unverifiedOther.slug, u), [unverifiedOther]), u), "unverified other: RSC payload flagged")
+  // A page whose own duration has the same words: the verified program's row stays exempt (it is that
+  // program's term), but the page stating the words itself, in prose or its RSC payload, still fails.
   const own: Program = { ...page, commission: { ...page.commission, type: "recurring", duration: d } }
-  assert.ok(states(termsHtmlProblems(own, base + table(verifiedOther, d), [verifiedOther]), d), "own duration: prose flagged")
-  assert.ok(states(termsHtmlProblems(own, base + flight(d), [verifiedOther]), d), "own duration: RSC payload flagged")
+  const legit = base + table(verifiedOther, d) + rowFlight(verifiedOther.slug, d)
+  assert.deepEqual(termsHtmlProblems(own, legit, [verifiedOther]), [], "own duration: the other program's row alone")
+  assert.ok(states(termsHtmlProblems(own, legit + `<p>Commission lasts ${d}.</p>`, [verifiedOther]), d), "own duration: own prose flagged")
+  assert.ok(states(termsHtmlProblems(own, legit + flight(d), [verifiedOther]), d), "own duration: own RSC payload flagged")
+})
+
+test("only the verified rows are exempt: the same words anywhere else on the page still fail", () => {
+  const d = DURATION
+  const legit = base + table(verifiedOther, d) + rowFlight(verifiedOther.slug, d)
+  const withCompared = (extra: string) => termsHtmlProblems(page, legit + extra, [verifiedOther])
+  assert.ok(states(withCompared(`<h2>Page</h2><p>${d}</p>`), d), "own prose outside the table")
+  assert.ok(states(withCompared(push(`8:${JSON.stringify({ description: d })}\n`)), d), "own RSC props")
+  assert.ok(states(withCompared(flight(d)), d), "an RSC cell not inside a verified program's row")
+  assert.ok(states(withCompared(rowFlight("someone-else", d)), d), "a row keyed by a program not in the compared list")
+  // A row cut off mid-payload is not removed, so the check stays strict.
+  assert.ok(states(termsHtmlProblems(page, base + push(`7:["$","tr","${verifiedOther.slug}",{"children":"${d}"`), [verifiedOther]), d), "unterminated row")
 })
 
 test("the exemption does not hide the page's other terms", () => {
