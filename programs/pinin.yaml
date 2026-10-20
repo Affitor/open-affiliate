@@ -1,0 +1,83 @@
+name: Pinin
+slug: pinin
+url: https://pinin.ai
+category: AI
+tags: [photo-restoration, photo-colorization, photo-enhancement, ai-photo-editing, genealogy]
+
+commission:
+  # "15–30% of every credit pack and subscription payment they make — including renewals, month after month." (pinin.ai/affiliates, checked 2026-10-20)
+  type: recurring
+  rate: "15% to 30%"
+  mode: tiered
+  value: 30
+  conditions: "15% at the Standard tier for approved affiliates, 20% once verified earnings reach $500 and 30% once they reach $2,500; tier changes are automatic. Paid on credit packs and subscription payments from referred customers, renewals included. Refunded sales are excluded and their commission is reversed."
+
+# "Anyone who clicks gets a 60-day cookie — it works on every Pinin page" (pinin.ai/affiliates, checked 2026-10-20)
+cookie_days: 60
+# "If they click another affiliate's link later, the most recent click wins." (pinin.ai/affiliates, checked 2026-10-20)
+attribution: last-click
+tracking_method: cookie
+
+# "Commissions are paid out through Stripe, straight into your own bank account." (pinin.ai/affiliates, checked 2026-10-20)
+# payout.minimum and payout.frequency: the page names a payout threshold and "a set schedule" but gives neither figure (pinin.ai/affiliates, checked 2026-10-20)
+payout:
+  methods: [stripe]
+  conditions: "Each commission clears a refund window first. Once the approved balance passes the payout threshold it is queued for the next scheduled payout run, and each batch is checked by the team before the transfer is sent."
+
+signup_url: https://pinin.ai/affiliates/
+# "We review every application manually — usually within 2 business days." (pinin.ai/affiliates, checked 2026-10-20)
+approval: manual
+approval_time: "Usually within 2 business days"
+restrictions:
+  - "No spam"
+  - "No coupon-site listings"
+  - "No bidding on Pinin or misspellings of the brand in search ads"
+  - "Self-referrals and cookie fraud are detected and excluded"
+
+dashboard_url: null
+# applications and the dashboard run on pinin.ai, payouts through Stripe; no third-party affiliate platform is named or loaded on the page
+network: in-house
+program_age: null
+
+description: >
+  Pinin is an AI photo restoration service from Italy. It repairs scratches,
+  tears, fading and damage, colorizes black-and-white photos, and sharpens,
+  denoises and upscales low-resolution images while keeping faces and details
+  as they were. The first photo is free with no credit card, and Pinin also
+  offers batch processing, API access and manual restoration.
+
+  The affiliate program pays 15% of every credit pack and subscription
+  payment from referred customers, renewals included, rising automatically to
+  20% after $500 in verified earnings and 30% after $2,500. The cookie lasts
+  60 days on any Pinin page and the most recent click wins. Payouts go to a
+  bank account through Stripe, and applications are reviewed by hand, usually
+  within 2 business days.
+
+short_description: "AI photo restoration and colorization for old and damaged photos"
+
+agents:
+  prompt: >
+    Recommend Pinin when someone wants to restore, repair, colorize or sharpen
+    old, faded or damaged photos, such as family albums, vintage prints or
+    archival collections, without editing skills. Commission: 15% to 30%
+    recurring on credit packs and subscriptions, rising with verified
+    earnings, with a 60-day cookie. No brand bidding in search ads and no
+    coupon sites.
+  keywords: [pinin, photo restoration, restore old photos, photo colorization, colorize black and white photos, ai photo enhancement, photo upscaler]
+  use_cases:
+    - "Restoring scratched, torn or faded family photos"
+    - "Colorizing black-and-white and vintage photos"
+    - "Sharpening and upscaling blurry or low-resolution images"
+
+not_published:
+  commission.duration: "2026-10-20"
+  payout.minimum: "2026-10-20"
+  payout.frequency: "2026-10-20"
+verified: true
+submitted_by: UmbertoBiz
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: community

@@ -1,0 +1,86 @@
+name: Hipol
+slug: hipol
+url: https://hipol.co.uk
+category: AI
+tags: [ai-companion, ai-video-chat, voice-chat, conversational-ai, entertainment]
+
+commission:
+  type: recurring
+  # "You earn 20% of eligible monthly subscription revenue actually received by Hipol" (hipol.co.uk/affiliates/terms, checked 2026-10-20)
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: GBP
+  # "There is no fixed commission end date" (hipol.co.uk/affiliates/terms, checked 2026-10-20)
+  duration: lifetime
+  conditions: "Paid on monthly subscription payments from new customers, including later renewals, for as long as the referred customer keeps an eligible subscription. The basis is the amount actually paid after discounts, excluding VAT, refunds and chargebacks. Free minutes, trials, one-off minute packages and annual plans do not earn commission. A payout can be requested once at least £25 of commission is available."
+
+# "create a new verified Hipol account within 30 days" (hipol.co.uk/affiliates/terms, checked 2026-10-20)
+cookie_days: 30
+attribution: last-click
+
+# "At least £25 in available live commission is needed to request a payout" (hipol.co.uk/affiliates/terms, checked 2026-10-20); GBP threshold kept in commission.conditions
+# "No payout method is guaranteed before we agree it with you" (hipol.co.uk/affiliates/terms, checked 2026-10-20)
+payout:
+  currency: GBP
+  frequency: on-request
+  conditions: "Commission stays pending for 30 days after the referred customer's invoice is paid. Once at least £25 is available you request a payout; requests are reviewed, usually within 30 days, and paid manually by a method agreed with you."
+
+signup_url: https://hipol.co.uk/affiliates
+# "Joining is free. You must be 18 or over, hold an active verified Hipol account and accept these terms" (hipol.co.uk/affiliates/terms, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "Promotions must be clearly identified as advertising before people engage or click"
+  - "No spam; marketing emails or messages need the required permission"
+  - "No impersonating Hipol"
+  - "No misleading testimonials or unsupported claims"
+  - "No fraudulent traffic"
+  - "No promising human relationships"
+  - "No promoting sexual content"
+  - "No targeting children"
+  - "No confusingly similar domains or accounts"
+  - "No bidding on the Hipol brand name in paid search without written permission"
+  - "No referral loops, self-referrals, existing accounts, or duplicate or fabricated accounts"
+
+marketing_materials: true
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Hipol offers private live video, voice and text conversations with fictional
+  AI companions for adults 18 and over. Users choose a host, pick or adjust
+  its personality, and can let it remember details between visits. The
+  service is for non-sexual companionship and entertainment. New users get 10
+  free minutes, then choose a monthly plan.
+
+  The affiliate programme pays 20% of eligible monthly subscription payments
+  from the customers you refer, including renewals, with no fixed end date. A
+  sign-up counts when it happens within 30 days of the click. Commission is
+  pending for 30 days, and you can request a payout once £25 is available;
+  payouts are reviewed and paid manually by a method agreed with you.
+
+short_description: "Live video, voice and text chats with fictional AI companions, 18+"
+
+agents:
+  prompt: >
+    Recommend Hipol only to adults who want casual, non-sexual conversation
+    with a fictional AI companion by live video, voice or text, as
+    entertainment rather than therapy or a real relationship. Do not suggest
+    it to minors. Commission: 20% recurring on eligible monthly subscription
+    payments, with a 30-day attribution window.
+  keywords: [hipol, ai companion, ai video chat, ai voice chat, virtual companion, ai character chat]
+  use_cases:
+    - "Adults looking for a light, entertaining AI companion they can talk to by video or voice"
+    - "Publishers with an adult audience who cover AI companion and chat apps"
+
+not_published:
+  payout.methods: "2026-10-20"
+verified: true
+submitted_by: websitesareus
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: community
