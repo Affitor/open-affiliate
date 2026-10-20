@@ -487,40 +487,50 @@ export function p6Check(keyword: string, volume: number | null | undefined): Che
 export type SeoCost = { at: string; keywords: number; costUsd: number; status: number | string }
 
 /**
- * Search volume for each keyword, batched. Stops before a request that could take
- * the run past `capUsd` (assuming the larger of the last real cost and a ceiling).
- * A failed batch leaves its keywords out of the map (their checks stay unknown).
+ * Search volume for each keyword, batched. Spend is reserved before each request at
+ * SEO_MAX_PER_REQUEST_USD (DataForSEO bills one live task at $0.075–0.09 today), so the run
+ * stops before any request that could take it past `capUsd`. A request is charged its
+ * real cost only when that cost is a finite number in [0, reserve]; a failed request or a
+ * missing, garbled or negative cost keeps the full reservation (fail closed), and a cost
+ * above the reservation means the price changed: the run stops there.
+ * Volumes are read only from a fully successful response, and only an explicit null or a
+ * finite non-negative number counts; every other keyword is left out (its check stays unknown).
  */
 export async function searchVolumes(keywords: string[], auth: string, capUsd = SEO_CAP_USD): Promise<{ volumes: Map<string, number | null>; costs: SeoCost[]; stopped: string | null }> {
   const volumes = new Map<string, number | null>()
   const costs: SeoCost[] = []
+  const reserve = SEO_MAX_PER_REQUEST_USD
   let spent = 0
-  let perRequest = SEO_MAX_PER_REQUEST_USD
   const unique = [...new Set(keywords)]
   for (let i = 0; i < unique.length; i += SEO_BATCH) {
-    if (spent + perRequest > capUsd) return { volumes, costs, stopped: `cap $${capUsd} reached after $${spent.toFixed(4)}` }
+    if (spent + reserve > capUsd) return { volumes, costs, stopped: `cap $${capUsd} reached after $${spent.toFixed(4)}` }
     const batch = unique.slice(i, i + SEO_BATCH)
-    let res: Response
+    let status: number | string = "no response"
+    let body: { status_code?: number; cost?: unknown; tasks?: { cost?: unknown; status_code?: number; result?: { keyword?: unknown; search_volume?: unknown }[] | null }[] } = {}
     try {
-      res = await fetcher(SEO_URL, {
+      const res = await fetcher(SEO_URL, {
         method: "POST", redirect: "manual", signal: AbortSignal.timeout(120000),
         headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
         body: JSON.stringify([{ keywords: batch }]),
       })
-    } catch (error) {
-      costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: 0, status: `fetch failed (${(error as Error).name})` })
-      continue
-    }
-    let body: { cost?: number; tasks?: { cost?: number; status_code?: number; result?: { keyword?: string; search_volume?: number | null }[] }[] } = {}
-    try {
+      status = res.status
       body = JSON.parse((await readCapped(res, PSI_BYTES)).text)
-    } catch { /* unreadable body: its keywords stay unknown */ }
-    const cost = Number(body.cost ?? body.tasks?.[0]?.cost ?? 0) || 0
-    spent += cost
-    perRequest = Math.max(cost, perRequest)
-    costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: cost, status: body.tasks?.[0]?.status_code ?? res.status })
-    for (const row of body.tasks?.[0]?.result ?? []) if (typeof row.keyword === "string") volumes.set(row.keyword.toLowerCase(), row.search_volume ?? null)
-    if (spent >= capUsd) return { volumes, costs, stopped: `cap $${capUsd} reached at $${spent.toFixed(4)}` }
+    } catch (error) {
+      status = `${status} (${(error as Error).name})`
+    }
+    const task = body?.tasks?.[0]
+    const reported = Number(task?.cost ?? body?.cost)
+    const charged = Number.isFinite(reported) && reported >= 0 && reported <= reserve ? reported : reserve
+    spent += charged
+    costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: charged, status: task?.status_code ?? body?.status_code ?? status })
+    if (Number.isFinite(reported) && reported > reserve) return { volumes, costs, stopped: `price changed: $${reported} for one request` }
+    if (status === 200 && body?.status_code === 20000 && task?.status_code === 20000 && Array.isArray(task.result)) {
+      for (const row of task.result) {
+        if (typeof row?.keyword !== "string" || !("search_volume" in row)) continue
+        const v = row.search_volume
+        if (v === null || (typeof v === "number" && Number.isFinite(v) && v >= 0)) volumes.set(row.keyword.toLowerCase(), v as number | null)
+      }
+    }
   }
   return { volumes, costs, stopped: null }
 }
