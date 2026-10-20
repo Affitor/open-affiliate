@@ -79,7 +79,7 @@ export const guide: GuidePost = {
       slug: "benchmark-email",
       bestFor: "Best for newsletter and small business blogs",
       why: "Benchmark Email is email marketing software for small businesses, with a drag-and-drop editor, templates, an AI assistant, signup forms, segmentation, reporting and list verification, and a free plan. Its program on Trackdesk pays a share of every monthly payment from a referred customer on a monthly plan for up to a set number of months while they stay, or a one-time share on an annual plan once the customer stays active for a set period, paid monthly via PayPal.",
-      notFor: "Brand-term ads: no bidding on Benchmark brand terms in any paid ad channel, and no direct linking from paid ads.",
+      notFor: "Brand-term ads: no bidding on or using Benchmark brand terms, their misspellings or brand-plus-modifier terms in any paid ad channel, brand terms must be negative keywords, and no direct linking from paid ads.",
     },
   ],
   rulesIntro: "Rules from the programs above that matter on a blog, in their own terms:",
@@ -98,7 +98,7 @@ export const guide: GuidePost = {
     },
     {
       q: "How much traffic does a blog need?",
-      a: "Many programs publish no traffic minimum, and some approve new affiliates automatically. Others set one: Ghost, for example, asks for an established audience. Check each program's requirements before you apply.",
+      a: "Many programs publish no traffic minimum, and some approve new affiliates automatically. Others set one: Ghost, for example, asks for an established audience of the size its terms set. Check each program's requirements before you apply.",
     },
     {
       q: "Where should affiliate links go in a blog post?",

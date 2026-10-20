@@ -76,7 +76,7 @@ export const guide: GuidePost = {
       slug: "desktime",
       bestFor: "Best for remote team and productivity content",
       why: "DeskTime is automatic time tracking software for teams, with app and website tracking, project time tracking, AI daily and weekly summaries, shift scheduling and an absence calendar, and a free trial. Its own program pays a share of each referred customer's payments for a set period after their first payment, by PayPal in US dollars on request once you reach the minimum.",
-      notFor: "A single referral: you must refer more than one customer to be paid, current and former customers do not qualify, and commission not withdrawn within a year is voided.",
+      notFor: "A single referral: you must refer more than one customer to be paid, current and former customers do not qualify, self-referrals earn nothing, and commission not withdrawn within a year is voided.",
     },
     {
       slug: "dashthis",
