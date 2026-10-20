@@ -4,6 +4,8 @@ import { isLifetime } from "./commission-order"
 import { selectPrograms, type PostProgram, type PostSelection } from "./best-posts"
 import type { Faq } from "./program-seo"
 import { guide as howToStart } from "../content/guides/how-to-start-affiliate-marketing"
+import { guide as whatIs } from "../content/guides/what-is-affiliate-marketing"
+import { guide as withoutAWebsite } from "../content/guides/affiliate-marketing-without-a-website"
 
 /**
  * Guide posts on /blog/<slug>: how-to articles about affiliate marketing. The
@@ -52,7 +54,7 @@ export interface GuidePost {
   related: string[]
 }
 
-export const GUIDES: GuidePost[] = [howToStart]
+export const GUIDES: GuidePost[] = [howToStart, whatIs, withoutAWebsite]
 
 /**
  * The primary source for every guide's disclosure paragraph: the FTC's
