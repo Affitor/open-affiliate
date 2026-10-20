@@ -14,7 +14,7 @@ commission:
   value: 50
   currency: USD
   duration: null
-  conditions: 50% of the first payment on monthly plans and 25% on annual plans, for the first billing cycle only; renewals earn nothing. Free-plan signups earn no commission.
+  conditions: 50% of the first payment on monthly plans and 25% on annual plans, for the first billing cycle only; renewals earn nothing. Free-plan signups earn no commission. A customer who signs up within the 120-day window stays attributed to you whenever they later upgrade to a paid plan.
 # "We allow referrals via clicks for up to 120 days." (invideo.io/make/affiliate-program/, checked 2026-10-19)
 cookie_days: 120
 attribution: last-click

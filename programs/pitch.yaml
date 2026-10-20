@@ -7,8 +7,9 @@ tags:
 - saas
 # "As an affiliate partner, you will earn 30% of the referred subscription in a cash payout, up to a cap of $100 per referred user." (pitch.com/affiliates, checked 2026-10-19)
 # duration and cookie window: not stated on pitch.com/affiliates (checked 2026-10-19)
+# type: the page pays "up to $100 per referred sign up" and never mentions renewals, so one-time is the closer reading; it does not say how renewals are treated
 commission:
-  type: recurring
+  type: one-time
   rate: 30% up to $100 per referred user
   mode: percentage
   value: 30
@@ -17,17 +18,22 @@ commission:
   conditions: 30% of the referred subscription, paid in cash, capped at $100 per referred user. Referred users get 30% off for 6 months on a monthly plan or 15% off for 12 months on an annual plan.
 attribution: last-click
 tracking_method: cookie
+# "Affiliate payments are processed through our partner Cello and sent via PayPal or Venmo. Rewards are paid within 48 hours of being earned." (pitch.com/affiliates, checked 2026-10-19) — 48 hours after earning → net-30 (backfill rule #1); Venmo is not in the methods enum
+# payout minimum: not stated on pitch.com/affiliates ("no minimum number of referrals" is about referrals, not payout); the earlier $50 had no source (checked 2026-10-19)
 payout:
-  minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
   methods:
-  - bank
   - paypal
+  conditions: "Affiliate payments are processed through our partner Cello and sent via PayPal or Venmo. Rewards are paid within 48 hours of being earned."
 signup_url: https://pitch.com/affiliates
 approval: manual
 approval_time: 1-5 business days
-restrictions: null
+# "No, self-referrals aren’t allowed." / "All content must follow our guidelines and applicable laws. This means no violent, sexual, explicit, hateful, discriminatory, illegal, misleading, or otherwise offensive material." (pitch.com/affiliates, checked 2026-10-19)
+restrictions:
+  - "No self-referrals"
+  - "No violent, sexual, explicit, hateful, discriminatory, illegal, misleading, or otherwise offensive material"
+  - "All content must follow Pitch's guidelines and applicable laws"
 marketing_materials: true
 api_available: false
 dedicated_manager: false
