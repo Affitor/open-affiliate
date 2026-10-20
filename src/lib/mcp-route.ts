@@ -268,6 +268,14 @@ const programOutputSchema = {
     version: z.string().describe("Scoring method version, such as v1"),
     reportUrl: z.string().describe("The program's full OAS report"),
   }).optional().describe("OAS, the OpenAffiliate Score: how clearly the program publishes its terms and protects its partners. Omitted when the program is not scored or OAS is not published"),
+  oasMachineChecks: z.array(z.object({
+    id: z.enum(["A1", "P5", "P6"]).describe("A1 program page is live; P5 Core Web Vitals (mobile); P6 buyer search demand"),
+    label: z.string().describe("The check's name as the report shows it"),
+    met: z.boolean().describe("True when the check is met"),
+    reading: z.string().describe("What was measured, in words"),
+    measuredAt: z.string().describe("Measurement date, YYYY-MM-DD"),
+    validUntil: z.string().describe("First day the reading lapses (90 days after measuredAt), YYYY-MM-DD"),
+  })).optional().describe("Machine checks shown on the OAS report, not counted in OAS; omitted when there are none to show"),
   kind: z.enum(["affiliate", "referral", "creator-payout", "revenue-share", "cashback", "partner-network"]).optional()
     .describe("Income program model: affiliate commissions, customer referrals, creator payouts, revenue sharing, cashback or a partner network; omitted when unspecified or discontinued/no_program"),
   statusCheckedAt: z.string().optional().describe("YYYY-MM-DD date the discontinued/no_program status was checked, not verification of terms; omitted for other statuses or when no check date is stored"),

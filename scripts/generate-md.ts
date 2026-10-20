@@ -72,6 +72,7 @@ import { blogEntries, type BlogEntry } from "../src/lib/blog"
 import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
 import { directoryGroups } from "../src/lib/programs-directory"
 import { buildBoard, oasGrade, oasScores, oasSummary, TEAM_DISCLOSURE, TIE_ORDER, UNRANKED_TEXT } from "../src/lib/oas"
+import { machineChecks } from "../src/lib/oas-machine"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -396,6 +397,7 @@ export function programMd(entry: Program): string {
     hasNoProgram(p) ? null : section("Restrictions", bullets(p.restrictions)),
     section("About", p.description && mdEscapeProse(p.description)),
     section("OAS", oasMd(p.slug)),
+    section("Machine checks (not counted in OAS)", machineMd(p.slug)),
     section("Links", links),
   ])
 }
@@ -412,6 +414,13 @@ function oasMd(slug: string): string | null {
     ? oas.summary
     : `OAS ${oas.score}/100 (${oas.grade}): ${oas.summary}. Terms verified ${oas.checkedAt}; the score lapses on ${oas.validUntil} unless they are verified again.`
   return [head, `Full report: ${oas.reportUrl}`].join("\n")
+}
+
+/** The report's machine checks, one line each; null (no section) when there are none to show. */
+function machineMd(slug: string): string | null {
+  const checks = machineChecks(slug)
+  if (!checks.length) return null
+  return checks.map((c) => `${mdEscape(c.label)}: ${c.met ? "met" : "not met"}. ${mdEscape(c.reading)} (measured ${c.measuredAt}, valid until ${c.validUntil})`).join("\n")
 }
 
 // ---------- No-program page -------------------------------------------------

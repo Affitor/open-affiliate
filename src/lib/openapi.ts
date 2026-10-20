@@ -109,6 +109,9 @@ export const openapi = {
           status: { type: "string", enum: ["scored", "stale", "in_progress"] },
           summary: string, checkedAt: nullableString, validUntil: nullableString, version: string, reportUrl: string,
         }, ["score", "grade", "status", "summary", "checkedAt", "validUntil", "version", "reportUrl"]),
+        oasMachineChecks: { type: "array", items: object({
+          id: { type: "string", enum: ["A1", "P5", "P6"] }, label: string, met: { type: "boolean" }, reading: string, measuredAt: string, validUntil: string,
+        }, ["id", "label", "met", "reading", "measuredAt", "validUntil"]) },
         alternatives: { type: "array", items: object({ slug: string, name: string, commission: string, url: string }, ["slug", "name", "commission", "url"]) },
       }, ["slug", "name", "url", "logo", "category", "commission", "payout", "description", "shortDescription", "tags", "stars", "verified", "agentPrompt", "submittedBy", "createdAt"]),
       ProgramSearch: object({
