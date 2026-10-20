@@ -300,7 +300,7 @@ test("P6: brand names become valid Google Ads keywords", () => {
   assert.equal(p6Check("none", null).state, "not_met")
 })
 
-test("P6: batches of 1,000, real cost logged, and the spend cap reserves before each request", async () => {
+test("P6: batches of 1,000, real cost logged, and the cap counts every request at least at the reservation", async () => {
   const bodies: { keywords: string[] }[][] = []
   let reply: (keywords: string[]) => Response = () => new Response("", { status: 500 })
   setFetcher((async (_url: string, init?: RequestInit) => {
@@ -319,31 +319,34 @@ test("P6: batches of 1,000, real cost logged, and the spend cap reserves before 
   const all = await searchVolumes([...keywords, "brand 1"], "eA==", 1)
   assert.deepEqual(bodies.map((b) => b[0].keywords.length), [1000, 500], "duplicates sent once, 1,000 per request")
   assert.equal(all.stopped, null)
-  assert.deepEqual(all.costs.map((c) => c.costUsd), [0.09, 0.09])
+  assert.deepEqual(all.costs.map((c) => c.costUsd), [0.09, 0.09], "the real reported cost is logged")
   assert.equal(all.volumes.get("brand 1"), 50)
   assert.equal(all.volumes.get("brand 0"), null, "an explicit null is a reading")
 
-  // Ten batches billed at the ceiling: the reservation stops the run at the cap, never past it.
-  bodies.length = 0
-  reply = ok(0.15, (k) => ({ keyword: k, search_volume: 10 }))
-  const many = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
-  assert.equal(bodies.length, 6, "6 × $0.15 = $0.90; a 7th could pass $1")
-  assert.ok(many.costs.reduce((a, c) => a + c.costUsd, 0) <= 1)
-  assert.match(many.stopped!, /cap/)
+  // At most floor(cap / reservation) requests, whatever each one reports.
+  for (const cost of [0.15, 0.09, 0]) {
+    bodies.length = 0
+    reply = ok(cost, (k) => ({ keyword: k, search_volume: 10 }))
+    const many = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 6, `6 × $0.15 = $0.90; a 7th could pass $1 (reported $${cost})`)
+    assert.match(many.stopped!, /cap/)
+  }
 
-  // Failed requests and garbled, missing or negative costs keep the full reservation.
+  // Failed requests and invalid costs (at either level) still count the full reservation.
   const failedWithCost = (cost: unknown) => () => Response.json({ status_code: 40000, cost, tasks: [{ cost, status_code: 40000 }] })
   for (const bad of [
     () => new Response("oops", { status: 500 }), ok("free", () => ({})), ok(undefined, () => ({})), ok(-5, () => ({})),
     ok(false, () => ({})), ok("", () => ({})), ok(null, () => ({})), failedWithCost(0), () => Response.json({ status_code: 20000, cost: 0, tasks: [{ cost: 0, status_code: 20000 }] }, { status: 503 }),
+    (ks: string[]) => Response.json({ status_code: 20000, cost: "2", tasks: [{ cost: 0, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] }),
+    (ks: string[]) => Response.json({ status_code: 20000, cost: 0, tasks: [{ cost: "2", status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] }),
   ]) {
     bodies.length = 0
     reply = bad
-    const r = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
-    assert.equal(bodies.length, 6, "charged at the reservation")
-    assert.ok(r.costs.every((c) => c.costUsd === 0.15))
-    assert.equal(r.volumes.size, 0)
+    await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 6, "counted at the reservation")
   }
+  reply = ok("free", () => ({}))
+  assert.ok((await searchVolumes(["a"], "eA==", 1)).costs.every((c) => c.costUsd === null), "an invalid cost is logged as null, not $0")
 
   // A cost above the reservation means the price changed: stop there.
   bodies.length = 0

@@ -484,17 +484,17 @@ export function p6Check(keyword: string, volume: number | null | undefined): Che
     : { state: "not_met", evidence: `"${keyword}": ${volume}/mo worldwide` }
 }
 
-export type SeoCost = { at: string; keywords: number; costUsd: number; status: number | string }
+/** costUsd is the cost DataForSEO reported (null when it is missing or not a valid number); the cap counts at least the reservation. */
+export type SeoCost = { at: string; keywords: number; costUsd: number | null; status: number | string }
 
 /**
- * Search volume for each keyword, batched. Spend is reserved before each request at
- * SEO_MAX_PER_REQUEST_USD (DataForSEO bills one live task at $0.075–0.09 today), so the run
- * stops before any request that could take it past `capUsd`. A request is charged its
- * real cost only when that cost is a finite number in [0, reserve]; a failed request or a
- * missing, garbled or negative cost keeps the full reservation (fail closed), and a cost
- * above the reservation means the price changed: the run stops there.
- * Volumes are read only from a fully successful response, and only an explicit null or a
- * finite non-negative number counts; every other keyword is left out (its check stays unknown).
+ * Search volume for each keyword, batched. The cap counts every request at
+ * max(reservation, reported cost) — SEO_MAX_PER_REQUEST_USD, above the $0.075–0.09 DataForSEO
+ * bills one live task today — and a request is sent only when that still fits, so a run sends
+ * at most floor(cap / reservation) requests. A reported cost above the reservation (a price
+ * change) stops the run at the first sign; no client can stop the provider billing that one
+ * request. Volumes are read only from a fully successful response, and only an explicit null or
+ * a finite non-negative number counts; every other keyword is left out (its check stays unknown).
  */
 export async function searchVolumes(keywords: string[], auth: string, capUsd = SEO_CAP_USD): Promise<{ volumes: Map<string, number | null>; costs: SeoCost[]; stopped: string | null }> {
   const volumes = new Map<string, number | null>()
@@ -520,12 +520,12 @@ export async function searchVolumes(keywords: string[], auth: string, capUsd = S
     }
     const task = body?.tasks?.[0]
     const success = status === 200 && body?.status_code === 20000 && task?.status_code === 20000
-    // Only real numbers count as a cost, and the larger of the request and task figures wins.
-    const figures = [body?.cost, task?.cost].filter((c): c is number => typeof c === "number" && Number.isFinite(c) && c >= 0)
-    const reported = figures.length ? Math.max(...figures) : null
-    const charged = reported !== null && reported > reserve ? reported : success && reported !== null ? reported : reserve
-    spent += charged
-    costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: charged, status: task?.status_code ?? body?.status_code ?? status })
+    // The reported cost: the larger of the request and task figures, null if either is not a valid number.
+    const raw = [body?.cost, task?.cost].filter((c) => c !== undefined)
+    const valid = raw.length > 0 && raw.every((c) => typeof c === "number" && Number.isFinite(c) && c >= 0)
+    const reported = valid ? Math.max(...(raw as number[])) : null
+    spent += Math.max(reserve, reported ?? 0)
+    costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: reported, status: task?.status_code ?? body?.status_code ?? status })
     if (reported !== null && reported > reserve) return { volumes, costs, stopped: `price changed: $${reported} for one request` }
     if (success && Array.isArray(task.result)) {
       for (const row of task.result) {
@@ -735,7 +735,8 @@ async function main() {
     const log = join(out, "dataforseo-costs.json")
     const previous: SeoCost[] = existsSync(log) ? JSON.parse(readFileSync(log, "utf8")) : []
     writeFileSync(log, JSON.stringify([...previous, ...costs], null, 2) + "\n")
-    console.log(`DataForSEO: ${costs.length} requests, $${costs.reduce((a, c) => a + c.costUsd, 0).toFixed(4)}${stopped ? ` · ${stopped}` : ""}`)
+    const known = costs.filter((c) => c.costUsd !== null)
+    console.log(`DataForSEO: ${costs.length} requests, $${known.reduce((a, c) => a + c.costUsd!, 0).toFixed(4)} reported${known.length < costs.length ? `, ${costs.length - known.length} without a valid cost` : ""}${stopped ? ` · ${stopped}` : ""}`)
   }
   results.sort((a, b) => a.slug.localeCompare(b.slug))
   writeFileSync(join(out, "dry-run.json"), JSON.stringify(results, null, 2) + "\n")
