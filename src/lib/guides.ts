@@ -6,6 +6,8 @@ import type { Faq } from "./program-seo"
 import { guide as howToStart } from "../content/guides/how-to-start-affiliate-marketing"
 import { guide as whatIs } from "../content/guides/what-is-affiliate-marketing"
 import { guide as withoutAWebsite } from "../content/guides/affiliate-marketing-without-a-website"
+import { guide as forBloggers } from "../content/guides/affiliate-marketing-for-bloggers"
+import { guide as makeMoney } from "../content/guides/make-money-with-affiliate-marketing"
 
 /**
  * Guide posts on /blog/<slug>: how-to articles about affiliate marketing. The
@@ -54,7 +56,7 @@ export interface GuidePost {
   related: string[]
 }
 
-export const GUIDES: GuidePost[] = [howToStart, whatIs, withoutAWebsite]
+export const GUIDES: GuidePost[] = [howToStart, whatIs, withoutAWebsite, forBloggers, makeMoney]
 
 /**
  * The primary source for every guide's disclosure paragraph: the FTC's
