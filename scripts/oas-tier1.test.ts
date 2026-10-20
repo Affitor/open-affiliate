@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -136,6 +136,28 @@ test("PageSpeed re-checks access first: a cached result never authorises a reque
   await runPsi({ slug: "w", url: "https://brand.test/" }, r)
   assert.ok(!bounced.some((u) => u.includes("partnerstack.com")), bounced.join(", "))
   assert.match(r.checks.P5.evidence!, /PageSpeed redirected/)
+})
+
+test("PageSpeed waits for the run's pace before each call", async () => {
+  const psi = "https://www.googleapis.com/"
+  const r = { slug: "x", network: "n", checkedAt: "", checks: { P5: { state: "unknown" as const, evidence: "PageSpeed not run" } } }
+  const requested = network({ "https://brand.test/robots.txt": html(""), "https://brand.test/": html("ok"), [psi]: () => Response.json({}) })
+  let release!: () => void
+  const held = runPsi({ slug: "x", url: "https://brand.test/" }, r, () => new Promise<void>((resolve) => { release = resolve }))
+  await new Promise((resolve) => setTimeout(resolve, 50))
+  assert.ok(!requested.some((u) => u.startsWith(psi)), "no PageSpeed call before the permit")
+  release()
+  await held
+  assert.ok(requested.some((u) => u.startsWith(psi)), "the call follows the permit")
+})
+
+test("PageSpeed slots stay a full gap apart, even when the event loop stalls", async () => {
+  const grants: number[] = []
+  const slots = [0, 1, 2].map(() => psiSlot().then(() => grants.push(Date.now())))
+  const stall = Date.now() + 2500
+  while (Date.now() < stall) { /* block the event loop past every planned deadline */ }
+  await Promise.all(slots)
+  for (let i = 1; i < grants.length; i++) assert.ok(grants[i] - grants[i - 1] >= PSI_GAP_MS, JSON.stringify(grants))
 })
 
 test("an unreadable pricing page leaves its negative checks unknown; an absent one is a reading", async () => {

@@ -14,6 +14,7 @@ import { commissionFigure } from "../src/lib/program-page"
 import { hasNoProgram } from "../src/lib/no-program"
 import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
+import type { PayoutMethodFilter } from "../src/lib/payout-filters"
 import { llmsTxt } from "./generate-md"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
@@ -174,6 +175,25 @@ test("each hub's /programs filter returns the hub's programs and only confirmed 
 })
 
 
+// "Filter all programs the same way": every list that links a /programs
+// query gets back its own verified, rated programs and no others.
+test("every list's /programs filter matches the list's verified programs", () => {
+  for (const list of BEST_LISTS.filter((l) => l.filter)) {
+    const q = new URLSearchParams(list.filter)
+    const client = searchPrograms({
+      category: q.get("category") ?? undefined,
+      commissionType: q.get("type") ?? undefined,
+      payout: (q.get("payout") ?? undefined) as PayoutMethodFilter | undefined,
+      noMinimum: q.get("minpayout") === "0" || undefined,
+      longCookie: q.has("cookie") || undefined,
+      verified: true,
+    })
+    const rated = new Set(client.map((p) => getProgram(p.slug)!).filter((p) => !commissionUnknown(p.commission)).map((p) => p.slug))
+    const hub = new Set(buildBestList(list).verified.map((p) => p.slug))
+    assert.deepEqual([...hub].sort(), [...rated].sort(), `${list.slug} vs /programs?${list.filter}`)
+  }
+})
+
 test("program row and card chips: no type after an unpublished rate, cookie only once terms are checked", () => {
   const c = (mode: string, value: number | null, rate: string | number, type = "recurring", duration: string | null = "12 months") =>
     commissionChip({ type, rate, mode, value, duration })
@@ -276,6 +296,20 @@ test("best-of post FAQs use the shared accordion and preserve JSON-LD answers", 
     post, list, selection: postSelection(post), path: `/best/${post.slug}`,
     parent: { name: "Categories", href: "/categories" },
   })))
+})
+
+// A post page shows its list's /programs filter link, as the plain list does.
+test("a post links its list's /programs filter, and a post whose list has none shows no link", () => {
+  for (const post of POSTS) {
+    const list = postList(post)!
+    const html = renderToStaticMarkup(createElement(BestPostView, {
+      post, list, selection: postSelection(post), path: `/best/${post.slug}`,
+      parent: { name: "Categories", href: "/categories" },
+    }))
+    const links = [...html.matchAll(/href="\/programs\?([^"]*)"/g)].map((m) => m[1].replaceAll("&amp;", "&"))
+    assert.deepEqual(links, list.filter ? [list.filter] : [], post.slug)
+  }
+  assert.ok(POSTS.some((p) => postList(p)!.filter) && POSTS.some((p) => !postList(p)!.filter))
 })
 
 test("the shared FAQ renders text safely without client JavaScript", () => {
