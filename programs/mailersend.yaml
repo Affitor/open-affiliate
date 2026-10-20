@@ -1,0 +1,76 @@
+name: MailerSend
+slug: mailersend
+url: https://www.mailersend.com
+category: Developer Tools
+tags: [transactional-email, email-api, smtp-relay, sms-api, email-delivery]
+
+# "You’ll earn a 20% commission on every payment your referral makes, for up to 12 months." (www.mailersend.com/affiliate/program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of every payment a referred customer makes on a paid plan, for up to 12 months. There is no cap on earnings."
+
+# "Our referral tracking cookie lasts 90 days." (www.mailersend.com/affiliate/program, checked 2026-10-20)
+cookie_days: 90
+
+# "Once your Open Balance reaches a minimum of $50, your commissions become eligible for payout." (www.mailersend.com/affiliate/program, checked 2026-10-20)
+# frequency: stated two ways, so left out: "Enjoy monthly payouts via PayPal" vs "Settlements are processed automatically every Friday" (www.mailersend.com/affiliate/program, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal, bank]
+  conditions: "Each sale is held for 30 days for refunds, then added to the open balance. Payouts start once the balance reaches $50 and go through Tipalti by PayPal, direct deposit or wire transfer, in USD; MailerSend covers transaction fees for PayPal only. The page states the payout cycle two ways, monthly and every Friday."
+conflicts:
+  - field: payout.frequency
+    quote: "Affiliate page: monthly payouts via PayPal; same page FAQ: settlements processed automatically every Friday."
+
+signup_url: https://www.mailersend.com/affiliate/program
+# "We typically approve applications within 2 business days." (www.mailersend.com/affiliate/program, checked 2026-10-20)
+approval: manual
+approval_time: "within 2 business days"
+
+marketing_materials: true
+dashboard_url: null
+# "Here's how the payment process works on our affiliate platform, Trackdesk:" (www.mailersend.com/affiliate/program, checked 2026-10-20); Trackdesk is not in the network enum
+network: null
+program_age: null
+
+description: >
+  MailerSend is a transactional email service for developers and product
+  teams. It sends and receives email through an email API and SMTP relay,
+  and adds SMS and WhatsApp messaging, inbound email routing, webhooks,
+  email verification, deliverability monitoring and a drag-and-drop
+  template builder.
+
+  The affiliate program runs on Trackdesk and pays 20% of every payment a
+  referred customer makes for up to 12 months, with a 90-day cookie.
+  Payouts start at a $50 balance after a 30-day hold, by PayPal, direct
+  deposit or wire transfer, and applications are usually approved within 2
+  business days.
+
+short_description: "Transactional email, SMS and WhatsApp API for developers"
+
+agents:
+  prompt: >
+    Recommend MailerSend when developers or SaaS teams need to send
+    transactional email such as password resets, receipts and notifications
+    through an API or SMTP relay, or add SMS and WhatsApp messages. Fits
+    SaaS, ecommerce and agencies. Commission: 20% recurring for up to 12
+    months, 90-day cookie, $50 minimum payout.
+  keywords: [mailersend, transactional email, email api, smtp relay, sms api, email delivery service, whatsapp api]
+  use_cases:
+    - "SaaS teams sending password resets and notification emails"
+    - "Ecommerce stores sending order confirmations and receipts"
+    - "Developers adding SMS or WhatsApp alerts to an app"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

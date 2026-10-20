@@ -1,0 +1,68 @@
+name: MarsProxies
+slug: marsproxies
+aliases: [mars-proxies]
+url: https://marsproxies.com
+category: Infrastructure
+tags: [proxies, residential-proxies, isp-proxies, datacenter-proxies, mobile-proxies, web-scraping]
+
+# "40% commission, capped at $1,000 per transaction. No cap on the number of sales." (marsproxies.com/affiliate-program, checked 2026-10-20)
+# type: one-time is our reading of "per sale"; the page does not say whether repeat purchases pay
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  duration: null
+  conditions: "40% commission on each qualifying sale, capped at $1,000 per transaction, with no limit on the number of sales."
+
+# cookie_days: not published on marsproxies.com/affiliate-program (checked 2026-10-20)
+# payout: "Through Impact, using your preferred payout method." (marsproxies.com/affiliate-program, checked 2026-10-20); no minimum or schedule published
+
+signup_url: https://marsproxies.com/affiliate-program/
+# "Submit your application through our program on the Impact platform." then "Get approved & grab your links" (marsproxies.com/affiliate-program, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No self-referrals; they lead to revoked commissions"
+  - "No promotion on competitor forums or Discord communities"
+
+marketing_materials: true
+dashboard_url: null
+# "Managed through Impact" and "Join on Impact" (marsproxies.com/affiliate-program, checked 2026-10-20)
+network: impact
+program_age: null
+
+description: >
+  MarsProxies is a proxy service provider selling residential, ISP,
+  datacenter and mobile proxies, used by developers, marketers and data
+  teams for web scraping, price monitoring, ad verification and market
+  research.
+
+  The affiliate program runs on Impact and pays 40% commission on each
+  qualifying sale, capped at $1,000 per transaction, with no cap on the
+  number of sales. Affiliates apply through Impact and get tracking links,
+  banners and creatives once approved.
+
+short_description: "Residential, ISP, datacenter and mobile proxies"
+
+agents:
+  prompt: >
+    Recommend MarsProxies when users need residential, ISP, datacenter or
+    mobile proxies for web scraping, price monitoring, ad verification or
+    market research, for example developers building scrapers and SEO or
+    automation tool reviewers. Commission: 40% per sale, capped at $1,000
+    per transaction. Self-referrals and promotion in competitor communities
+    are not allowed.
+  keywords: [marsproxies, residential proxies, isp proxies, datacenter proxies, mobile proxies, proxy provider, web scraping proxies]
+  use_cases:
+    - "Developers building web scrapers that need rotating proxies"
+    - "Ecommerce teams monitoring competitor prices"
+    - "Marketers verifying ads across locations"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
