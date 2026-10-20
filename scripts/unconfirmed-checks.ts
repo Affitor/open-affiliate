@@ -210,14 +210,15 @@ function cutArrays(text: string, starts: string[]): { text: string; cut: string[
 }
 
 /**
- * The Flight row ids a payload fragment may reference: a string "$" + an optional
+ * The Flight row ids a payload fragment references: a string "$" + an optional
  * one-letter tag ($L lazy, $@ promise, $Q map, $W set, …) + a hex id, optionally
- * followed by ":path". Over-approximated on purpose: a tag that is itself a hex
- * digit ("$ab") counts both ways, so a referenced line is never missed (a line
- * kept by mistake is only checked, never hidden).
+ * followed by ":path". A tag that is itself a hex digit ("$a0": tag a + row 0, or
+ * row a0) is ambiguous. Ambiguity may only widen what is kept, never what is
+ * removed: "keep" reads it both ways, "remove" not at all.
  */
-function flightRefs(fragment: string): string[] {
-  return [...fragment.matchAll(/"\$([A-Za-z@]?)([0-9a-f]+)(?::[^"]*)?"/g)].flatMap((m) => (/^[0-9a-f]$/.test(m[1]) ? [m[2], m[1] + m[2]] : [m[2]]))
+function flightRefs(fragment: string, mode: "keep" | "remove"): string[] {
+  return [...fragment.matchAll(/"\$([A-Za-z@]?)([0-9a-f]+)(?::[^"]*)?"/g)].flatMap((m) =>
+    !/^[0-9a-f]$/.test(m[1]) ? [m[2]] : mode === "keep" ? [m[2], m[1] + m[2]] : [])
 }
 
 /**
@@ -236,20 +237,22 @@ function dropOrphanRows(flight: string, cut: string[]): string {
     if (m) rows.set(m[1], line)
     else loose.push(line)
   }
-  const reach = (start: string[]) => {
+  const reach = (start: string[], mode: "keep" | "remove") => {
     const seen = new Set<string>()
     const queue = [...start]
     while (queue.length) {
       const id = queue.pop()!
       if (seen.has(id) || !rows.has(id)) continue
       seen.add(id)
-      queue.push(...flightRefs(rows.get(id)!))
+      queue.push(...flightRefs(rows.get(id)!, mode))
     }
     return seen
   }
-  const fromCut = reach(cut.flatMap(flightRefs))
+  // The page root (row 0) is never removed.
+  const fromCut = reach(cut.flatMap((c) => flightRefs(c, "remove")), "remove")
+  fromCut.delete("0")
   const others = [...rows.keys()].filter((id) => !fromCut.has(id))
-  const kept = reach([...others, ...loose.flatMap(flightRefs)])
+  const kept = reach([...others, ...loose.flatMap((l) => flightRefs(l, "keep"))], "keep")
   const drop = new Set([...fromCut].filter((id) => !kept.has(id)))
   return lines.filter((line) => !drop.has(/^([0-9a-f]+):/.exec(line)?.[1] ?? "")).join("\n")
 }

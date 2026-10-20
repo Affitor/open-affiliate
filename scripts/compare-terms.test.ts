@@ -96,6 +96,9 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
   // An id whose tag is also a hex digit ("$ab") is read both ways, so line "ab" is kept when the page uses it.
   const hexTag = base + push(`7:["$","tr","${verifiedOther.slug}",{"children":["$Lab"]}]\nab:["$","td",null,{"children":"${d}"}]\n9:["$","p",null,{"children":"$ab"}]\n`)
   assert.ok(states(termsHtmlProblems(page, hexTag, [verifiedOther]), d), "plain $ab keeps line ab")
+  // Ambiguity never widens removal: "$a0" (row a0, or tag a + row 0) must not take the page root with it.
+  const root = base + push(`0:["$","div",null,{"children":[["$","p",null,{"children":"Cookie lasts 60 days."}],["$","tr","${verifiedOther.slug}",{"children":"$a0"}]]}]\na0:["$","td",null,{"children":"${d}"}]\n`)
+  assert.ok(termsHtmlProblems(page, root, [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "the root's own paragraph is still checked")
 })
 
 test("the exemption does not hide the page's other terms", () => {
