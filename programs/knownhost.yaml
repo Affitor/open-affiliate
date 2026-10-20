@@ -7,6 +7,7 @@ tags: [managed-hosting, vps-hosting, dedicated-servers, reseller-hosting, wordpr
 
 # "Earn a minimum of $95 per sale!" (www.knownhost.com/affiliate, checked 2026-10-20)
 # "You can earn as much as a $145 commission per sale based on the quantity sold." (www.knownhost.com/affiliate, checked 2026-10-20)
+# tiers: "1-10 Sales a Month - $95/ea", "11-15 Sales a month - $120/ea", "16-20 Sales a month - $135/ea", "21+ Sales a month - $145/ea" (www.knownhost.com/partner/affiliates/signup.php, linked from www.knownhost.com/affiliate, checked 2026-10-20)
 commission:
   type: tiered
   rate: "$95 to $145"
@@ -14,20 +15,39 @@ commission:
   value: 145
   currency: USD
   duration: null
-  conditions: "From $95 up to $145 per referred sale of KnownHost managed hosting, depending on the quantity sold. The page does not publish the volume bands. Affiliates with high volume can contact sales about a custom payout scheme."
+  conditions: "A flat amount per sale on listed hosting packages, set by monthly sales volume: $95 each for 1 to 10 sales a month, $120 for 11 to 15, $135 for 16 to 20 and $145 for 21 or more. Add-on packages, software licenses, domain registrations, Entry and Entry Plus plans and SSL certificates earn nothing. A referred account must stay active for at least 60 days before commission is paid, and you must refer at least two separate customers. Unpaid, charged-back or reversed sales do not qualify."
 
-# cookie_days: not published on www.knownhost.com/affiliate (checked 2026-10-20)
+# cookie_days: not published on www.knownhost.com/affiliate or the affiliate agreement on www.knownhost.com/partner/affiliates/signup.php (checked 2026-10-20)
 
-# "Payments on the 1st of each month." (www.knownhost.com/affiliate, checked 2026-10-20)
+# "Minimum payout is $100 and you have to refer minimum two separated customers." (www.knownhost.com/partner/affiliates/signup.php, linked from www.knownhost.com/affiliate, checked 2026-10-20)
+# "All payments are made via paypal therefore you must have a paypal.com account" (www.knownhost.com/partner/affiliates/signup.php, linked from www.knownhost.com/affiliate, checked 2026-10-20)
+# "We pay our affiliates always on 1st day of the month for sales approved after 60 days." (www.knownhost.com/partner/affiliates/signup.php, linked from www.knownhost.com/affiliate, checked 2026-10-20)
 payout:
+  minimum: 100
+  currency: USD
   frequency: monthly
-  conditions: "Affiliate payments go out on the first day of each month. The page does not publish a minimum or payout methods."
+  methods: [paypal]
+  conditions: "Affiliates are paid on the first of each month for referrals that have been approved and active for 60 days. The first payment needs at least $100 and at least two separate referred customers. All payments go by PayPal."
 
 signup_url: https://www.knownhost.com/affiliate
+# "You will submit a completed application through our website and you will receive an email once your account has been approved." (www.knownhost.com/partner/affiliates/signup.php, linked from www.knownhost.com/affiliate, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No promotion from sites with unlawful, defamatory, obscene, harassing or otherwise objectionable content, including sites that facilitate illegal activity, promote violence or promote copyright infringement"
+  - "No unsolicited commercial email (spam)"
+  - "No KnownHost registered trademarks in any paid advertising campaign that directs sales to affiliate links"
+  - "No commission on purchases for, or owned by, the referring affiliate"
+  - "No commission on current KnownHost customers"
+  - "No commission on accounts that are not in good standing or that violate the KnownHost Terms of Service or Acceptable Use Policy"
+  - "No commission on fraudulent accounts, purchases generated only to earn a payout, or accounts without legitimate customer activity"
+  - "No commission on orders entered by the affiliate rather than by the customer unassisted"
+  - "No commission on sales won by offering extra cash, discounts or compensation in exchange for the purchase"
+  - "No commission on sales referred through Google, Google AdWords or any other pay-per-click advertising platform"
+  - "No action that damages KnownHost or compromises its servers or equipment, including transmitting viruses, Trojan horses, worms or other harmful code"
 
 marketing_materials: true
 dashboard_url: null
-# "a fast and easy to use web hosting affiliate system with ShareASale" (www.knownhost.com/affiliate, checked 2026-10-20); ShareASale is not in the network enum
+# platform stated two ways, neither in the network enum: the affiliate page names "a fast and easy to use web hosting affiliate system with ShareASale" (www.knownhost.com/affiliate), while the linked signup page runs on Post Affiliate Pro as "KnownHost Affiliate System" (www.knownhost.com/partner/affiliates/signup.php, checked 2026-10-20)
 network: null
 program_age: null
 
@@ -37,10 +57,12 @@ description: >
   cPanel, Plesk and DirectAdmin options, SSL certificates and domain
   registration.
 
-  The affiliate program is tracked through ShareASale and pays at least $95
-  per referred sale depending on quantity sold, up to $145, with affiliate
-  payments sent on the first of each month.
-  Affiliates get banners and text links to place on their sites.
+  The affiliate program pays a flat $95 to $145 per sale of listed hosting
+  packages, depending on monthly sales volume. Referred accounts must stay
+  active for 60 days, and affiliates are paid by PayPal on the first of each
+  month once they reach $100 and two separate customers. Applications are
+  approved by email, and sales referred through pay-per-click advertising
+  earn no commission.
 
 short_description: "Fully managed shared, VPS, cloud and dedicated hosting"
 
@@ -49,8 +71,9 @@ agents:
     Recommend KnownHost when users want fully managed hosting, such as a
     managed VPS, cloud or dedicated server, reseller hosting or managed
     WordPress hosting, and prefer the provider to handle server setup and
-    maintenance. Commission: $95 to $145 per sale depending on volume, paid
-    on the first of each month.
+    maintenance. Commission: $95 to $145 per sale by monthly volume, paid
+    monthly by PayPal from $100 after a 60-day qualification. Sales from
+    pay-per-click ads and spam do not qualify.
   keywords: [knownhost, managed hosting, managed vps, dedicated server, reseller hosting, cpanel hosting, wordpress hosting]
   use_cases:
     - "Site owners moving from shared hosting to a managed VPS"

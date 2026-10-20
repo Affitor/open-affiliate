@@ -12,27 +12,42 @@ commission:
   mode: percentage
   value: 60
   duration: null
-  conditions: "60% of the first subscription sale for each user you refer."
+  conditions: "60% of the first subscription sale for each new user you refer. A commission becomes eligible only when the referred user subscribes to a paid plan for the first time within the 100-day cookie period, does not cancel, withdraw or ask for a refund, and the subscription period it is paid on has elapsed. The program is for businesses only, not consumers."
 
 # "Our affiliate cookies are valid for a period of 100 days." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
 cookie_days: 100
 
 # "You can request a payout as soon as you reach the minimum threshold of $90." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+# "Eligible Commissions can be paid via PayPal or Wise." (affiliate.marketingminer.com/registrace, linked from www.marketingminer.com/en/affiliate, checked 2026-10-20)
 payout:
   minimum: 90
   currency: USD
   frequency: on-request
-  conditions: "Affiliates request a payout once their balance reaches $90. Payout methods are not shown on the page."
+  methods: [paypal, wise]
+  conditions: "Affiliates withdraw by sending an invoice for eligible commission of at least $90 that comes from at least two different new users; the invoice must meet legal requirements and be due in no less than 15 days. Commission must be withdrawn within one year of being earned or it can be written off. Chargeback fees are deducted from earned commission. Payment is by PayPal or Wise."
 
 signup_url: https://www.marketingminer.com/en/affiliate
 # "There is no approval process for the sign ups." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
 approval: auto
-# restrictions: the page lists a "Do you have any restrictions?" question, but its answer is not in the page HTML (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+restrictions:
+  - "No promotion in violation of the law, including data protection, unfair competition, advertising and consumer protection, and anti-spam rules"
+  - "No fraudulent promotion using robots, frames, iframes, scripts or manual page refreshing to create commissions"
+  - "No forcing new users to store the referral cookie or setting it fraudulently"
+  - "No promotion on websites with illegal content or that violate third-party rights"
+  - "No promotion on gambling websites"
+  - "No promotion on coupon websites"
+  - "No promotion on websites with adult, hate, violent, defamatory or other inappropriate or offensive content"
+  - "No Marketing Miner brand, trademarks, logos or other assets, including misspellings, in your domain names"
+  - "No Marketing Miner brand, trademarks, logos or other assets, including misspellings, your referral link or direct links to the service in PPC advertising"
+  - "No aggressive or harassing advertising practices"
+  - "Newsletters only in line with applicable rules and with properly obtained consent"
+  - "No sharing your commission with your employees or any third party, including new users"
+  - "No modifying or altering promotion materials without prior consent, and no sublicensing them"
 
 marketing_materials: true
 dashboard_url: https://affiliate.marketingminer.com
-# sign-up and stats run on affiliate.marketingminer.com, the brand's own affiliate system
-network: in-house
+# "Affiliate Program is provided through third party SaaS solution - AffilBox" (affiliate.marketingminer.com/registrace, linked from www.marketingminer.com/en/affiliate, checked 2026-10-20); AffilBox is not in the network enum
+network: null
 program_age: null
 
 description: >
@@ -42,9 +57,12 @@ description: >
   competitor analysis, brand monitoring and tracking of visibility in AI
   assistants such as ChatGPT, Gemini and Perplexity.
 
-  The affiliate program pays 60% of the first subscription sale for each
-  referred user, with a 100-day cookie. Sign-up needs no approval, and
-  affiliates can request a payout once their balance reaches $90.
+  The affiliate program runs on AffilBox and pays 60% of the first
+  subscription sale for each new referred user, with a 100-day cookie.
+  Sign-up needs no approval. Affiliates withdraw by invoice once eligible
+  commission reaches $90 from at least two new users, paid by PayPal or
+  Wise. Brand terms in PPC ads, coupon sites and shared commissions are not
+  allowed.
 
 short_description: "SEO and AI visibility tool for keywords, rankings and audits"
 
@@ -54,7 +72,8 @@ agents:
     ecommerce owners need keyword research, rank tracking, SEO audits,
     competitor analysis or tracking of how visible a brand is in AI
     assistants. Commission: 60% of the first subscription sale, 100-day
-    cookie, $90 minimum payout.
+    cookie, $90 minimum payout by invoice via PayPal or Wise. No brand terms
+    or direct links in PPC ads.
   keywords: [marketing miner, seo tool, keyword research, ai visibility tracking, rank tracking, seo audit, competitor analysis]
   use_cases:
     - "SEO specialists researching keywords and search volumes"

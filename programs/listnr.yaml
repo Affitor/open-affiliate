@@ -7,13 +7,14 @@ tags: [ai-voice-generator, text-to-speech, voice-cloning, ai-dubbing, audiobooks
 
 # "Every affiliate starts at 30% commission on referred subscriptions. The rate increases to 35% once you refer 30 customers and to 40% at 50 customers." (listnr.ai/affiliate, checked 2026-10-20)
 # "Earn 30–40% commission on referred subscriptions." and "12-month commission period" (listnr.ai/affiliate, checked 2026-10-20)
+# tier cards: "Unlocks once you refer 30 active customers." and "Our top rate once you refer 50 active customers." (listnr.ai/affiliate, checked 2026-10-20)
 commission:
   type: recurring
   rate: "30% to 40%"
   mode: tiered
   value: 40
   duration: 12 months
-  conditions: "30% of referred subscriptions to start, rising to 35% after 30 referred customers and 40% after 50. Commission accrues across a 12-month commission period."
+  conditions: "30% of referred subscriptions to start, rising to 35% once you have referred 30 active customers and to 40% at 50 active customers. Commission accrues across a 12-month commission period."
 
 # cookie_days: not published on listnr.ai/affiliate (checked 2026-10-20)
 # payout: not published on listnr.ai/affiliate; payouts are handled in the Tolt affiliate dashboard (checked 2026-10-20)
@@ -35,8 +36,9 @@ description: >
 
   The affiliate program runs on Tolt and pays 30% to 40% commission on
   referred subscriptions over a 12-month commission period: 30% to start,
-  35% after 30 referred customers and 40% after 50. Applications are
-  approved before affiliates get their referral link.
+  35% once you have 30 active referred customers and 40% at 50 active
+  customers. Applications are approved before affiliates get their
+  referral link.
 
 short_description: "AI voice generator for voiceovers, dubbing and audiobooks"
 
