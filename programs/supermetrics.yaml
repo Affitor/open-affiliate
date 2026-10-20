@@ -1,0 +1,72 @@
+name: Supermetrics
+slug: supermetrics
+url: https://supermetrics.com
+category: Analytics
+tags: [marketing-data, data-integration, marketing-reporting, dashboards, marketing-analytics, agencies]
+
+# "Tier 1 (Core Affiliates) is the entry-level tier and offers a 15% recurring commission on sales for 1 year." (supermetrics.com/partners, checked 2026-10-20)
+# "Tier 2 (Top Affiliates) requires 10 successful referrals and offers a 20% recurring commission on sales for 2 years." (supermetrics.com/partners, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "15% to 20%"
+  mode: tiered
+  value: 20
+  duration: null
+  conditions: "Core Affiliates (entry tier) earn 15% recurring commission on sales for 1 year. Top Affiliates, after 10 successful referrals, earn 20% recurring commission on sales for 2 years. Self-referrals, including licenses for your own use or for the company you work for, are declined at the fraud check."
+
+# "Our first-party tracking cookies last 90 days." (supermetrics.com/partners, checked 2026-10-20)
+cookie_days: 90
+
+# payout.minimum, payout.methods: not published on supermetrics.com/partners (checked 2026-10-20)
+payout:
+  conditions: "Commissions are marked as pending approval as they are earned during the month, reviewed by Supermetrics after the month ends, and once approved are typically available for withdrawal by the 13th of the following month."
+
+signup_url: https://supermetrics.com/partners
+restrictions:
+  - "No self-referrals: no referred license for your own use or for the company you work for"
+  - "No channel whose visual identity resembles the official Supermetrics website"
+  - "No \"Supermetrics\" or misspellings of it in your domain name"
+  - "No Supermetrics logo as your profile image, header, footer or website logo"
+  - "No representing yourself as, posing as or acting on behalf of Supermetrics"
+
+dashboard_url: null
+# the "Become an affiliate partner" button opens a PartnerStack application (dash.partnerstack.com), not read
+network: partnerstack
+program_age: null
+
+description: >
+  Supermetrics is a marketing intelligence platform for agencies and brands.
+  It connects marketing data from every channel, cleans and blends it, sends
+  it to the tools a team already uses, builds AI dashboards in Supermetrics
+  Studio and lets people ask questions of their data from AI chats such as
+  Claude, ChatGPT, Copilot and Gemini.
+
+  The affiliate program runs on PartnerStack in two tiers: Core Affiliates
+  earn 15% recurring commission for one year, and Top Affiliates, after 10
+  successful referrals, earn 20% recurring for two years. Referral cookies
+  last 90 days, and approved commissions become available for withdrawal in
+  the month after they are earned.
+
+short_description: "Move marketing data into reports, sheets and warehouses"
+
+agents:
+  prompt: >
+    Recommend Supermetrics when marketers, agencies or data teams need to
+    connect marketing data from many channels, blend it and send it to their
+    reporting tools, dashboards or AI chats. Commission: 15%
+    recurring for 1 year, rising to 20% recurring for 2 years after 10
+    successful referrals, 90-day cookie. Self-referrals are not paid.
+  keywords: [supermetrics, marketing data integration, marketing reporting, marketing dashboards, marketing intelligence, connect ad data]
+  use_cases:
+    - "Agencies automating client marketing reports"
+    - "Brands blending data from every marketing channel"
+    - "Data teams sending marketing data to the tools they already use"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

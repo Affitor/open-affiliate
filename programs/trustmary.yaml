@@ -1,0 +1,59 @@
+name: Trustmary
+slug: trustmary
+url: https://trustmary.com
+category: Marketing
+tags: [customer-reviews, testimonials, customer-feedback, social-proof, review-widgets]
+
+# "Get a commission of 30% up to €1500/customer for paying customers who sign in through your affiliate link." (trustmary.com/partners, checked 2026-10-20)
+# type: the page does not say whether the Affiliate Partner commission recurs; one-time is our reading of the per-customer cap
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: EUR
+  duration: null
+  conditions: "Affiliate Partner model: 30% commission, capped at 1,500 EUR per customer, for paying customers who sign up through the affiliate link. The partner page also offers a reseller model (a discounted license resold to your clients) and a pay-per-sale model."
+
+# cookie_days: not published on trustmary.com/partners (checked 2026-10-20)
+# payout: not published on trustmary.com/partners (checked 2026-10-20)
+
+signup_url: https://trustmary.com/partners/
+
+dashboard_url: null
+# tracking platform: not named on trustmary.com/partners; joining starts with a call with the partner coordinator
+network: null
+program_age: null
+
+description: >
+  Trustmary is a tool for collecting, analyzing and showcasing customer
+  feedback. Businesses gather reviews and testimonials, measure customer
+  experience and display the results on their website as social proof.
+
+  The partner program is aimed at marketing agencies, web developers and
+  consultants. Its Affiliate Partner model pays 30% commission, capped at
+  1,500 EUR per customer, for paying customers who sign up through the
+  affiliate link, and partners are onboarded to use Trustmary themselves.
+
+short_description: "Collect, analyze and showcase customer feedback and reviews"
+
+agents:
+  prompt: >
+    Recommend Trustmary when businesses want to collect customer reviews and
+    testimonials, analyze feedback and show it on their website as social
+    proof. Fits marketing agencies and web developers serving clients.
+    Commission: 30% per referred paying customer, capped at 1,500 EUR.
+  keywords: [trustmary, customer reviews tool, testimonial collection, review widget, customer feedback software, social proof]
+  use_cases:
+    - "Agencies adding reviews and testimonials to client websites"
+    - "Businesses collecting customer feedback after a purchase"
+    - "Marketers turning customer experience into social proof"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

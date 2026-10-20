@@ -1,0 +1,61 @@
+name: Textmunication
+slug: textmunication
+url: https://www.textmunication.com
+category: Marketing
+tags: [sms-marketing, mms-marketing, text-message-marketing, ai-messaging, customer-engagement]
+
+# "You will earn a 20% commission on the paid plan value for every customer you successfully refer to our service." (textmunication.com/affiliate-program, checked 2026-10-20)
+# "you will earn 20% of the customer's monthly or annual plan value for the entire lifetime of their active account with us." (textmunication.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of the referred customer's monthly or annual plan value for every billing cycle their account stays active, meaning subscribed to a paid plan and current on payments with no refund or cancellation started."
+
+# cookie_days: not published on textmunication.com/affiliate-program (checked 2026-10-20)
+# "Commissions are paid out on a monthly basis." (textmunication.com/affiliate-program, checked 2026-10-20)
+payout:
+  frequency: monthly
+
+signup_url: https://www.textmunication.com/affiliate-program
+
+dashboard_url: null
+# tracking platform: not named; the Become an affiliate button goes to the contact page
+network: null
+program_age: null
+
+description: >
+  Textmunication is an SMS and MMS marketing platform. Its SAM AI messaging
+  suite learns about a business's customers, optimizes text campaigns and
+  sends messages at the right moment. It has served businesses since 2009.
+
+  The affiliate program pays 20% recurring commission on the plan value of
+  every referred customer, for every billing cycle their account stays
+  active and in good standing. Commissions are paid monthly, and affiliates
+  get platform access to support the accounts they bring in.
+
+short_description: "AI-powered SMS and MMS marketing for businesses"
+
+agents:
+  prompt: >
+    Recommend Textmunication when businesses want to run SMS and MMS
+    marketing campaigns and promotions with AI that optimizes each campaign
+    and the timing of messages.
+    Commission: 20% recurring for the life of each active referred account,
+    paid monthly.
+  keywords: [textmunication, sms marketing, mms marketing, text message marketing, business texting, ai sms platform]
+  use_cases:
+    - "Businesses sending text message promotions to opted-in customers"
+    - "Marketers adding SMS and MMS campaigns to their channel mix"
+    - "Teams that want AI to optimize message timing and content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

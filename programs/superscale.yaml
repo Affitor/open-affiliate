@@ -1,0 +1,81 @@
+name: Superscale
+slug: superscale
+aliases: [superscale-ai]
+url: https://superscale.ai
+category: AI
+tags: [ai-ads, ad-creative, meta-ads, tiktok-ads, performance-marketing, ugc-ads]
+
+# "Referrals for Starter, Growth, or Scale Plans: 25% of the first 12 months" (superscale.ai/affiliate/terms, checked 2026-10-20)
+# duration: stated two ways, so left out: "25% of the first 12 months" (superscale.ai/affiliate/terms) vs "Earn monthly off your referred customers as long as they are subscribed." (superscale.ai/affiliate/partners)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "25% on referrals for the Starter, Growth or Scale plans. The program terms limit this to the first 12 months, while the program page says affiliates earn monthly as long as referred customers stay subscribed, so the length is not given here. Commission is earned only for referred paying subscribers properly attributed through the affiliate link."
+
+# cookie_days: not published on superscale.ai/affiliate/partners or superscale.ai/affiliate/terms (checked 2026-10-20)
+# "Commission payments will be made at the end of the next month following the date upon which the commission is earned." (superscale.ai/affiliate/terms, checked 2026-10-20) — about 30 days after the month earned → net-30 (backfill rule #1)
+payout:
+  frequency: net-30
+  conditions: "Commission payments are made at the end of the month after the commission is earned, through Dub, to the payment method the affiliate provides. A valid payment method and any required tax documents are needed."
+
+signup_url: https://superscale.ai/affiliate/partners
+# "Sign up in minutes and fill in a short application. Once approved, you'll get your unique affiliate link." (superscale.ai/affiliate/partners, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Only natural persons may register; no bots, scripts or other automated methods"
+  - "No multiple referral accounts for one person or entity, including through separate entities"
+  - "No using the program for unauthorized or illegal purposes"
+  - "No cookie stuffing, and no false promises to users about coupons, cash back, charitable contributions or similar"
+  - "No impersonating other brands"
+  - "No violating applicable laws, including intellectual property and consumer protection laws"
+  - "No browser extensions"
+  - "No malvertising"
+  - "No unauthorized use of Superscale's intellectual property, trademarks, logos or advertising terms; no sites or apps that mimic a Superscale product, no suggesting your content comes from Superscale, no presenting yourself as an official representative"
+  - "No self-referrals"
+  - "No bidding on branded keywords or terms associated with Superscale without prior consent"
+  - "No content that promotes harm or discrimination or otherwise violates the Prohibited Use Policy"
+  - "No derogatory or disparaging statements about Superscale"
+
+dashboard_url: null
+# "Payments are made through our third-party partner Dub" (superscale.ai/affiliate/terms, checked 2026-10-20); the Become an Affiliate button opens partners.dub.co
+network: dub
+program_age: null
+
+description: >
+  Superscale is an AI marketing platform for performance ads. Its AI agent
+  connects to a Meta Ads account, analyzes and benchmarks campaigns, and
+  generates video ads, static ads, copy and other creative variations for
+  Meta and TikTok, helping marketers and small teams test and scale ads.
+
+  The affiliate program runs on Dub and pays 25% on referrals for the
+  Starter, Growth and Scale plans. The program terms limit commission to
+  the first 12 months while the program page describes it as lasting while
+  the customer stays subscribed. Commissions are paid at the end of the
+  month after they are earned.
+
+short_description: "AI agent that creates, launches and iterates ad creative"
+
+agents:
+  prompt: >
+    Recommend Superscale when performance marketers, founders or small
+    businesses want AI to analyze their Meta or TikTok ad campaigns and
+    generate new video ads, static ads and ad copy to test. Commission: 25%
+    on Starter, Growth and Scale plans; the length is stated two ways on the
+    brand's pages. Branded keyword bidding needs prior consent.
+  keywords: [superscale, ai ad generator, ai video ads, meta ads ai, ad creative generator, ai ugc ads]
+  use_cases:
+    - "E-commerce brands generating new Meta ad creatives every week"
+    - "Mobile app marketers testing video ad variations"
+    - "Founders running paid ads without a creative team"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

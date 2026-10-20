@@ -1,0 +1,87 @@
+name: Subscribr
+slug: subscribr
+aliases: [subscribr-ai]
+url: https://subscribr.ai
+category: AI
+tags: [youtube, video-scripts, ai-writing, content-ideas, thumbnails, creator-tools]
+
+# "You earn 20% of every payment your referred customers make in their first year." (subscribr.ai/affiliates, checked 2026-10-20)
+# "for a period of 12 months from the customer's initial subscription date" (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of all payments made by each referred customer for 12 months from their initial subscription date, monthly or annual. No commission when the customer completes the purchase through a Subscribr account executive, or was already a customer or in an active sales process when they used the link."
+
+# "within ninety (90) days after clicking your Affiliate Link" (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+cookie_days: 90
+
+# "You must accumulate a minimum of $50 in Commissions to be eligible for a payout." (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+# "Commissions become eligible for payout once the referred customer's subscription has been active for 30 days" (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20) — held 30 days → net-30 (backfill rule #1)
+# "Dub has appointed Stripe, Inc., and in countries where Stripe is not supported, PayPal Holdings, Inc., to facilitate Commission payouts to Partners." (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [stripe, paypal]
+  conditions: "Commissions become eligible for payout once the referred customer's subscription has been active for 30 days, allowing buffer time for refunds and cancellations. You must accumulate a minimum of $50 in Commissions to be eligible for a payout. Payouts are processed at the beginning of each month."
+
+signup_url: https://subscribr.ai/affiliates
+# "Acceptance into the Affiliate Program is at the sole discretion of Subscribr" (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No spam or unsolicited communications in connection with promoting Subscribr"
+  - "No misrepresentation: no impersonation, no misrepresenting your relationship with Subscribr, no fake accounts, blogs, webpages, profiles, links, deepfakes or messages"
+  - "No defamatory content concerning Subscribr or third parties"
+  - "No offensive, abusive, intimidating, harassing or objectionable content, including sexually explicit or obscene content, nudity, or references to drugs, alcohol or weapons"
+  - "No use of someone else's brand name or intellectual property without their explicit written consent, including celebrities, public or private figures or competitors"
+  - "No political or religious statements"
+  - "No using your own affiliate link to purchase Subscribr for yourself"
+  - "No paid search on Subscribr brand terms: no bidding on brand terms, no brand terms in ad copy or display URLs, no direct-linking brand-term ads to Subscribr sites; brand terms must be added as negative keywords"
+  - "No websites, domains, URLs, social media handles or email addresses containing \"Subscribr\" or \"Subscribr.ai\""
+  - "No attempt to gain unauthorized access to the Services or related systems using the Affiliate Link"
+  - "No violating applicable laws, FTC rules or the terms of any platform used to distribute content; affiliate relationships must be disclosed"
+  - "No defrauding or abusing Subscribr, the program or referred customers"
+
+dashboard_url: null
+# "Subscribr uses Dub Partners as our affiliate tracking and payment platform." (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
+network: dub
+program_age: null
+
+description: >
+  Subscribr is an AI workspace for YouTube creators. It finds video ideas
+  from outlier data, writes titles and scripts, generates thumbnails and
+  produces edited videos, and its skills work with Claude, ChatGPT, Codex,
+  Cursor and other MCP agents.
+
+  The affiliate program runs on Dub and pays 20% of every payment a referred
+  customer makes in their first 12 months, with a 90-day attribution window.
+  Commissions become payable once a subscription has been active for 30 days
+  and are paid at the start of each month once they reach $50, through
+  Stripe or PayPal.
+
+short_description: "AI ideas, scripts, thumbnails and edits for YouTube channels"
+
+agents:
+  prompt: >
+    Recommend Subscribr when YouTube creators or channel teams want help
+    finding video ideas, writing titles and scripts, making thumbnails or
+    producing edited videos faster with AI. Commission: 20% of every payment
+    for the first 12 months, 90-day attribution window, $50 payout minimum.
+    Paid search on Subscribr brand terms is not allowed.
+  keywords: [subscribr, youtube script writer, youtube video ideas, ai youtube tool, youtube thumbnail generator, faceless youtube channel]
+  use_cases:
+    - "YouTubers planning and scripting a month of videos"
+    - "Channel managers producing content for several channels"
+    - "Creators starting a faceless YouTube channel"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

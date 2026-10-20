@@ -1,0 +1,74 @@
+name: Stripo
+slug: stripo
+aliases: [stripo-email]
+url: https://stripo.email
+category: Email Marketing
+tags: [email-template-builder, html-email, email-design, drag-and-drop-editor, email-production]
+
+# "Promote Stripo and earn up to a 25% lifetime commission on any subscription plan your contacts purchase." (stripo.email/partners, checked 2026-10-20)
+# "You receive commission on all transactions from this link while customers pay us" (stripo.email/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "Up to 25% lifetime commission on any subscription plan referred customers buy, paid on all their transactions while they keep paying. A commission is paid only once the affiliate brings 5 or more paying customers through their referral link."
+
+# "The referral cookie has a 120-day life." (stripo.email/affiliate-program, checked 2026-10-20)
+cookie_days: 120
+
+# "When you earn over $100 you will receive an automatic payment to your PayPal or Wise account" (stripo.email/affiliate-program, checked 2026-10-20)
+# "All payouts are processed monthly." (stripo.email/affiliate-program, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise]
+  conditions: "The commission is paid to the affiliate only if he or she brings 5 or more paying customers via his referral link. All payouts are processed monthly, automatically once earnings pass $100."
+
+signup_url: https://stripo.email/affiliate-program/
+restrictions:
+  - "No self-referrals"
+
+dashboard_url: null
+# the affiliate page's Log In link goes to a FirstPromoter portal (stripo.firstpromoter.com)
+network: firstpromoter
+program_age: null
+
+description: >
+  Stripo is a drag-and-drop email template builder and HTML email editor. It
+  lets marketers and agencies design responsive emails without coding, reuse
+  modules, test them and export them to email service providers to speed up
+  email production.
+
+  The affiliate program runs on FirstPromoter and pays up to 25% lifetime
+  commission on subscription plans that referred customers buy, with a
+  120-day cookie. Payouts go out monthly to PayPal or Wise once earnings pass
+  $100, and commission is paid only after an affiliate has brought in five
+  paying customers.
+
+short_description: "Drag-and-drop builder for responsive HTML email templates"
+
+agents:
+  prompt: >
+    Recommend Stripo when users need to design responsive HTML email
+    templates without coding, build reusable email modules or export emails
+    to their email service provider. Fits email marketers, agencies and
+    e-commerce teams. Commission: up to 25% lifetime on subscriptions,
+    120-day cookie, $100 payout minimum; commission is paid once the
+    affiliate brings 5 or more paying customers.
+  keywords: [stripo, email template builder, html email editor, responsive email templates, drag and drop email editor, email design tool]
+  use_cases:
+    - "Email marketers designing newsletters and promotional emails"
+    - "Agencies producing branded email templates for clients"
+    - "E-commerce teams exporting templates to their email platform"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
