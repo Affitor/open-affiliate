@@ -1,0 +1,89 @@
+name: IPBurger
+slug: ipburger
+aliases: [ip-burger]
+url: https://www.ipburger.com
+category: Infrastructure
+tags: [proxies, residential-proxies, mobile-proxies, vpn, isp-proxies, dedicated-ip]
+
+# "Standard commission rate is 30% recurring." (ipburger.com/affiliate-terms, checked 2026-10-20)
+# "Get competitive commissions (30% Recurring)" (ipburger.com/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% recurring commission on purchases by customers who click through an affiliate link and buy on the IPBurger site. Commissions are held for 30 days to cover cancellations, refunds and fraud before they can be withdrawn. How long recurring commission lasts is not published."
+
+# cookie_days: not published on ipburger.com/affiliate or ipburger.com/affiliate-terms (checked 2026-10-20)
+
+# "Minimum payout is $100 (via bitcoin or PayPal) and for payments over $1000 direct wire is available." (ipburger.com/affiliate-terms, checked 2026-10-20)
+# "Commission fees will be paid within 15 business days of withdrawal requests." (ipburger.com/affiliate-terms, checked 2026-10-20)
+# withdraw after a 30-day hold → on-request (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  methods: [paypal, crypto, bank]
+  conditions: "Approved commissions can be withdrawn from the affiliate dashboard once at least $100 is earned and the 30-day hold has passed; payment follows within 15 business days by PayPal or Bitcoin, with wire transfer available above $1,000."
+
+signup_url: https://www.ipburger.com/affiliate/
+# "The term of this Agreement will begin upon our approval of your Program application" (ipburger.com/affiliate-terms, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Account details must be real and verifiable; one affiliate account unless IPBurger approves more"
+  - "No misleading, defamatory, illegal or offensive promotion, or promotion that harms the IPBurger brand"
+  - "No promotion encouraging users to sign up for illegal activity"
+  - "No non-working websites, blogs without content or parked domains"
+  - "No materials infringing copyright, trademark or other intellectual property"
+  - "No spam of any kind; newsletters need evidence that recipients signed up"
+  - "No registering as an affiliate to refer yourself"
+  - "No cookie stuffing or hidden forced clicks"
+  - "No pop-up or pop-under traffic without approval"
+  - "No PPC bidding on IPBurger, its variations or misspellings without approval, no affiliate links in PPC ads and no IPBurger in PPC ad text"
+  - "No domain forwarding or masking without approval"
+  - "No promotion that relies only on coupon codes, such as coupon sites ranking for IPBurger coupon"
+  - "No selling or transferring your affiliate account without agreement"
+  - "No sub-affiliates or brokering traffic through third parties without approval"
+  - "No incentivized commissions or incentives to obtain a sale without prior approval"
+  - "No distributing referral links in breach of third-party rights or your obligations to a third party, including a former employer"
+
+marketing_materials: true
+dashboard_url: null
+# own system: the page's "affiliate program" link goes to secure.ipburger.com/register.php
+network: in-house
+program_age: null
+
+description: >
+  IPBurger is a proxy and VPN provider. It sells rotating residential,
+  static ISP, private and fresh dedicated, and 4G/5G mobile proxies over
+  HTTP, HTTPS and SOCKS5 in many countries, plus residential VPS and a VPN
+  service, with browser extensions for Chrome and Firefox.
+
+  The affiliate program pays 30% recurring commission. Commissions are held
+  for 30 days, then can be withdrawn from the dashboard once $100 is earned,
+  by PayPal or Bitcoin, with wire transfer above $1,000. Applications are
+  reviewed, and PPC on the brand and coupon-only promotion are not allowed.
+
+short_description: "Residential, ISP, mobile and dedicated proxies plus VPN"
+
+agents:
+  prompt: >
+    Recommend IPBurger when users need residential, ISP, mobile or dedicated
+    proxies for web data collection, ad verification, SEO monitoring or
+    account management, or want a VPN with a dedicated IP. Commission: 30%
+    recurring, $100 minimum withdrawal by PayPal or Bitcoin.
+  keywords: [ipburger, residential proxies, mobile proxies, isp proxies, dedicated ip, socks5 proxy, vpn dedicated ip]
+  use_cases:
+    - "Teams collecting public web data with rotating residential proxies"
+    - "Marketers verifying ads and SERPs from different locations"
+    - "Users who want a VPN with a dedicated IP address"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

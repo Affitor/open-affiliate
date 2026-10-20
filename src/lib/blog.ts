@@ -1,9 +1,10 @@
 import { BEST_INDEX, BEST_LISTS, bestPath, buildBestList, type BestList } from "./best-lists"
 import { postTitle, readyPost } from "./best-posts"
+import { GUIDES, guidePath, guideSelection, guideTitle, type GuidePost } from "./guides"
 
 /**
- * The /blog index: every editorial post and every ranked list, at their
- * existing /best URLs. A list with a ready post (best-posts.ts) is a post; the
+ * The /blog index: every guide (/blog/<slug>), every editorial post and every
+ * ranked list, at their existing /best URLs. A list with a ready post (best-posts.ts) is a post; the
  * rest are ranked lists rebuilt from the registry. The page, its .md twin and
  * the category "Posts about" blocks all read this.
  */
@@ -43,6 +44,11 @@ function entry(list: BestList): BlogEntry {
       }
 }
 
+function guideEntry(g: GuidePost): BlogEntry {
+  const shown = guideSelection(g).shown.length
+  return { kind: "post", href: guidePath(g), title: guideTitle(g), date: g.checked, category: null, programs: shown, verified: shown }
+}
+
 /** Newest first; ties keep the registry's own order (POSTS, then BEST_LISTS). */
 function newestFirst(entries: BlogEntry[]): BlogEntry[] {
   return entries
@@ -55,7 +61,7 @@ export function blogEntries(): { posts: BlogEntry[]; lists: BlogEntry[] } {
   // The hub (/best) first among lists on equal dates: it is the parent of every other list.
   const all = [BEST_INDEX, ...BEST_LISTS.filter((l) => l !== BEST_INDEX)].map(entry)
   return {
-    posts: newestFirst(all.filter((e) => e.kind === "post")),
+    posts: newestFirst([...GUIDES.map(guideEntry), ...all.filter((e) => e.kind === "post")]),
     lists: newestFirst(all.filter((e) => e.kind === "list")),
   }
 }

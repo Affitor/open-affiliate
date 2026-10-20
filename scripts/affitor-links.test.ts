@@ -78,6 +78,7 @@ test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () =
 const PLAIN_ANCHORS = new Set([
   "src/app/layout.tsx | href", // footer list: internal paths and GitHub
   "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
+  "src/components/guide-view.tsx | DISCLOSURE_SOURCE.href", // a fixed govinfo.gov URL (src/lib/guides.ts), the FTC Endorsement Guides
   "src/app/explore/page.tsx | `/explore?${sp.toString()}`",
   "src/app/programs/[slug]/page.tsx | visitHref", // the brand's own site (outboundUrl of program.url); checked against the registry below
   "src/app/programs/[slug]/page.tsx | `https://github.com/Affitor/open-affiliate/blob/main/programs/${program.slug}.yaml`",

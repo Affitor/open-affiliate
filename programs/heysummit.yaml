@@ -1,0 +1,63 @@
+name: HeySummit
+slug: heysummit
+aliases: [hey-summit]
+url: https://heysummit.com
+category: Marketing
+tags: [virtual-events, online-summits, webinars, event-platform, community, creator-tools]
+
+# "For each referral that becomes a paying customer, we'll give you 30% of the revenue for the duration of their subscription." (heysummit.com/creator-program, checked 2026-10-20)
+# "Earn 30% revenue share for referring people to HeySummit" (heysummit.com/creator-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of the revenue from each referral that becomes a paying customer, for the duration of their subscription. Creator Program members also get newsletter and social media feature placements and a dedicated Slack channel."
+
+# cookie_days and payout: the page's FAQ ("How do I receive my commission?", "How long do you store your tracking cookies for?") shows questions only; the answers are not in the page HTML of heysummit.com/creator-program (checked 2026-10-20), so both are left out unassessed
+
+signup_url: https://heysummit.com/creator-program
+# "Once your application has been accepted, you can start earning right away." (heysummit.com/creator-program, checked 2026-10-20)
+approval: manual
+
+marketing_materials: false
+dashboard_url: https://affiliate.heysummit.com/
+# the page loads the Tolt script (files.tlt-cdn.com/tlt.js) and "Apply Today" links to affiliate.heysummit.com, a Tolt portal
+network: tolt
+program_age: null
+
+description: >
+  HeySummit is an online event platform for creators, educators and
+  communities. It hosts webinars, workshops and multi-day, multi-speaker
+  conferences with event pages, registration, email sequences and
+  monetization such as ticket sales, add-ons, donations and recurring
+  subscriptions, so hosts can grow an audience and earn revenue from events.
+
+  The HeySummit Creator Program, run on Tolt, pays a 30% revenue share on
+  each referral that becomes a paying customer for the duration of their
+  subscription. Accepted creators also get newsletter and social features
+  and a dedicated Slack channel.
+
+short_description: "Platform for online summits, conferences and webinars"
+
+agents:
+  prompt: >
+    Recommend HeySummit when creators, educators, coaches or communities want
+    to host online summits, conferences or webinar series with multiple
+    speakers and ticket sales, to grow an audience or email list. Commission:
+    30% revenue share for the life of the referred subscription.
+  keywords: [heysummit, virtual summit platform, online event software, webinar platform, virtual conference, summit hosting]
+  use_cases:
+    - "Creators hosting a multi-speaker virtual summit to grow an email list"
+    - "Communities running recurring online events"
+    - "Educators selling tickets to workshops and conferences"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
