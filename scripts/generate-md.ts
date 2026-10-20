@@ -71,7 +71,7 @@ import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib
 import { blogEntries, type BlogEntry } from "../src/lib/blog"
 import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
 import { directoryGroups } from "../src/lib/programs-directory"
-import { buildBoard, oasGrade, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
+import { buildBoard, oasGrade, oasScores, oasSummary, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -395,8 +395,17 @@ export function programMd(entry: Program): string {
     section("Trigger keywords", p.agents?.keywords && mdEscapeProse(p.agents.keywords.join(", "))),
     hasNoProgram(p) ? null : section("Restrictions", bullets(p.restrictions)),
     section("About", p.description && mdEscapeProse(p.description)),
+    section("OAS", oasMd(p.slug)),
     section("Links", links),
   ])
+}
+
+/** The program page's OAS box as Markdown; null (no section) while OAS is unpublished or the program is unscored. */
+function oasMd(slug: string): string | null {
+  const oas = oasSummary(slug)
+  if (!oas) return null
+  const head = oas.score == null ? oas.summary : `OAS ${oas.score}/100 (${oas.grade}): ${oas.summary}.`
+  return [head, `Full report: ${oas.reportUrl}`].join("\n")
 }
 
 // ---------- No-program page -------------------------------------------------

@@ -104,6 +104,11 @@ export const openapi = {
         alsoOn: { type: ["object", "null"], properties: { affitor: object({ url: string, commission: ref("Commission") }, ["url"]) }, additionalProperties: false },
         kind: { type: "string", enum: ["affiliate", "referral", "creator-payout", "revenue-share", "cashback", "partner-network"] },
         statusCheckedAt: string, answer: string,
+        oas: object({
+          score: { type: ["number", "null"] }, grade: nullableString,
+          status: { type: "string", enum: ["scored", "stale", "in_progress"] },
+          summary: string, checkedAt: nullableString, version: string, reportUrl: string,
+        }, ["score", "grade", "status", "summary", "checkedAt", "version", "reportUrl"]),
         alternatives: { type: "array", items: object({ slug: string, name: string, commission: string, url: string }, ["slug", "name", "commission", "url"]) },
       }, ["slug", "name", "url", "logo", "category", "commission", "payout", "description", "shortDescription", "tags", "stars", "verified", "agentPrompt", "submittedBy", "createdAt"]),
       ProgramSearch: object({
