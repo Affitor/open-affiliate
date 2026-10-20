@@ -44,6 +44,32 @@ export function normalizePath(path: string): string {
   return [...decoded].map((c) => (c.codePointAt(0)! > 0x7e || c.codePointAt(0)! < 0x21 ? encodeURIComponent(c) : c)).join("")
 }
 
+/**
+ * RFC 9309 path match: `*` is any run of characters, a trailing `$` anchors the end,
+ * otherwise the rule is a prefix. Greedy two-pointer matching, O(rule × path) at worst:
+ * a rule like "/*a*a*a…b" cannot backtrack exponentially the way a regex would.
+ */
+export function wildcardMatch(rule: string, path: string): boolean {
+  const pattern = rule.endsWith("$") ? rule.slice(0, -1) : rule + "*"
+  let i = 0, j = 0, star = -1, mark = 0
+  while (i < path.length) {
+    if (j < pattern.length && pattern[j] !== "*" && pattern[j] === path[i]) {
+      i++
+      j++
+    } else if (j < pattern.length && pattern[j] === "*") {
+      star = j++
+      mark = i
+    } else if (star !== -1) {
+      j = star + 1
+      i = ++mark
+    } else {
+      return false
+    }
+  }
+  while (pattern[j] === "*") j++
+  return j === pattern.length
+}
+
 export function robotsAllows(robots: string, path: string, agent = AGENT): boolean {
   const groups: { agents: string[]; rules: { allow: boolean; path: string }[] }[] = []
   let current: (typeof groups)[number] | null = null
@@ -68,9 +94,7 @@ export function robotsAllows(robots: string, path: string, agent = AGENT): boole
   const target = normalizePath(path)
   let best: { allow: boolean; length: number } | null = null
   for (const rule of rules) {
-    const anchored = rule.path.endsWith("$")
-    const body = (anchored ? rule.path.slice(0, -1) : rule.path).replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")
-    if (!new RegExp("^" + body + (anchored ? "$" : "")).test(target)) continue
+    if (!wildcardMatch(rule.path, target)) continue
     if (!best || rule.path.length > best.length || (rule.path.length === best.length && rule.allow)) best = { allow: rule.allow, length: rule.path.length }
   }
   return best ? best.allow : true
@@ -174,9 +198,24 @@ export function politeGet(url: string): Promise<Page | Refused> {
 
 // ---------- readers (pure, tested) ----------
 
+/** Drops script, style, noscript and svg blocks in one forward pass (an unclosed block runs to the end). */
+function stripBlocks(html: string): string {
+  const lower = html.toLowerCase()
+  const open = /<(script|style|noscript|svg)\b/g
+  let out = ""
+  let at = 0
+  for (let m = open.exec(lower); m; m = open.exec(lower)) {
+    if (m.index < at) continue
+    out += html.slice(at, m.index) + " "
+    const close = lower.indexOf(`</${m[1]}`, m.index)
+    at = close === -1 ? html.length : lower.indexOf(">", close) + 1 || html.length
+    open.lastIndex = at
+  }
+  return out + html.slice(at)
+}
+
 export function visibleText(html: string): string {
-  return html
-    .replace(/<(script|style|noscript|svg)[\s\S]*?<\/\1>/gi, " ")
+  return stripBlocks(html)
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;|&#160;/g, " ").replace(/&amp;/g, "&").replace(/&#36;|&dollar;/g, "$").replace(/&euro;/g, "€").replace(/&pound;/g, "£")
     .replace(/\s+/g, " ")

@@ -43,6 +43,25 @@ test("robots.txt: RFC 9309 groups, precedence, wildcards and percent-encoding", 
   assert.equal(robotsAllows("User-agent: *\nDisallow:\n", "/"), true, "empty Disallow allows")
   assert.equal(robotsAllows("", "/"), true)
   assert.equal(robotsAllows("User-agent: *\nDisallow: /a\nAllow: /a\n", "/a"), true, "Allow wins a tie")
+  assert.equal(robotsAllows("User-agent: *\nDisallow: /*/edit$\n", "/docs/x/edit"), false)
+  assert.equal(robotsAllows("User-agent: *\nDisallow: /*/edit$\n", "/docs/x/edit/more"), true)
+  assert.equal(robotsAllows("User-agent: *\nDisallow: /*.php*q=\n", "/a/b.php?x=1&q=2"), false)
+})
+
+test("visible text drops script blocks in one pass, even when they never close", () => {
+  assert.equal(visibleText(`a<script>var p = "$9"</script>b<STYLE>x{}</STYLE>c<svg><text>d</text></svg>e`).replace(/\s/g, ""), "abce")
+  assert.equal(visibleText("a<script>never closed $9").trim(), "a")
+  const started = performance.now()
+  visibleText("<script".repeat(200_000))
+  assert.ok(performance.now() - started < 500, `took ${Math.round(performance.now() - started)}ms`)
+})
+
+test("robots wildcards match in bounded time (no regex backtracking)", () => {
+  const robots = "User-agent: *\nDisallow: /" + "*a".repeat(24) + "b\n"
+  const started = performance.now()
+  assert.equal(robotsAllows(robots, "/" + "a".repeat(60)), true)
+  assert.equal(robotsAllows(robots, "/" + "a".repeat(60) + "b"), false)
+  assert.ok(performance.now() - started < 50, `took ${Math.round(performance.now() - started)}ms`)
 })
 
 test("a robots.txt redirect to a blocked host is never requested; the site counts as unreachable", async () => {
