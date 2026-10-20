@@ -469,7 +469,9 @@ const SEO_URL = "https://api.dataforseo.com/v3/keywords_data/google_ads/search_v
  * diacritics folded, only letters, digits, spaces, dots, apostrophes and hyphens
  * (Google Ads rejects other symbols), at most 10 words and 80 characters. null when nothing is left.
  */
-const LEGAL_SUFFIX = new Set(["inc", "llc", "ltd", "limited", "gmbh", "corp", "corporation", "co", "company", "plc", "sa", "s.a", "sas", "srl", "bv", "b.v", "ag", "pty", "oy", "ab", "as", "kk"])
+// Only suffixes that are never part of a brand name: "Co", "Company", "AB" and the like can be
+// ("The Browser Company", "Brit + Co"), so they stay.
+const LEGAL_SUFFIX = new Set(["inc", "llc", "ltd", "limited", "gmbh", "corp", "plc", "srl", "pty"])
 
 export function seoKeyword(name: string | null | undefined): string | null {
   if (!name) return null
@@ -571,6 +573,21 @@ export async function searchVolumes(keywords: string[], auth: string, capUsd = S
     }
   }
   return { volumes, costs, stopped: null }
+}
+
+/**
+ * Recomputes P6 for every result under today's rule (threshold and query), so a
+ * cached answer from an older rule never survives a --seo run.
+ */
+export async function refreshP6(results: Result[], queries: Map<string, string | null>, auth: string): Promise<{ costs: SeoCost[]; stopped: string | null }> {
+  const { volumes, costs, stopped } = await searchVolumes(results.map((r) => queries.get(r.slug)).filter((k): k is string => !!k), auth)
+  for (const r of results) {
+    const keyword = queries.get(r.slug)
+    r.checks.P6 = !keyword ? unknown("no usable brand name")
+      : volumes.has(keyword) ? p6Check(keyword, volumes.get(keyword))
+      : unknown(stopped ? "DataForSEO spend cap reached" : "DataForSEO returned no row")
+  }
+  return { costs, stopped }
 }
 
 /** A cached result, or null when the file is missing, unreadable or not a result (the program is then scanned again). */
@@ -754,15 +771,10 @@ async function main() {
   // With PageSpeed each scan waits ~30 s on Google; psiSlot caps the call rate, so more run at once.
   await Promise.all(Array.from({ length: psi ? 12 : 8 }, worker))
   if (seo) {
-    const names = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoQuery(p)]))
-    const pending = results.filter((r) => r.checks.P6.evidence === "DataForSEO not run")
-    for (const r of pending) if (!names.get(r.slug)) r.checks.P6 = unknown("no usable brand name")
+    const queries = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoQuery(p)]))
     const auth = Buffer.from(`${process.env.DATAFORSEO_LOGIN ?? ""}:${process.env.DATAFORSEO_PASSWORD ?? ""}`).toString("base64")
-    const { volumes, costs, stopped } = await searchVolumes(pending.map((r) => names.get(r.slug)).filter((k): k is string => !!k), auth)
-    for (const r of pending) {
-      const keyword = names.get(r.slug)
-      if (keyword && volumes.has(keyword)) r.checks.P6 = p6Check(keyword, volumes.get(keyword))
-      else if (keyword) r.checks.P6 = unknown(stopped ? "DataForSEO spend cap reached" : "DataForSEO returned no row")
+    const { costs, stopped } = await refreshP6(results, queries, auth)
+    for (const r of results) {
       try {
         writeFileSync(join(cache, `${r.slug}.json`), JSON.stringify(r, null, 2) + "\n")
       } catch { /* rescanned next run */ }

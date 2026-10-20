@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -294,6 +294,9 @@ test("P6: brand names become valid Google Ads keywords", () => {
   assert.equal(seoKeyword("Aircall Inc."), "aircall", "legal suffix dropped")
   assert.equal(seoKeyword("Acme Software GmbH"), "acme software")
   assert.equal(seoKeyword("Co"), "co", "a one-word name is kept whole")
+  assert.equal(seoKeyword("The Browser Company"), "the browser company", "Company can be part of the brand")
+  assert.equal(seoKeyword("Brit + Co"), "brit co", "Co can be part of the brand")
+  assert.equal(seoKeyword("Acme Corp."), "acme")
   assert.equal(seoKeyword("🚀 ✨"), null)
   assert.equal(seoKeyword(null), null)
   assert.equal(seoKeyword(Array(15).fill("word").join(" "))!.split(" ").length, 10)
@@ -395,6 +398,22 @@ test("P6: only an explicit null or a finite non-negative volume from a successfu
   assert.equal((await run(500, 20000, 20000, rows)).size, 0, "HTTP failure")
   assert.equal((await run(200, 40000, 20000, rows)).size, 0, "request-level error")
   assert.equal((await run(200, 20000, 40501, rows)).size, 0, "task-level error")
+})
+
+test("P6 refresh: a cached answer from an older rule is asked again under today's rule", async () => {
+  const asked: string[] = []
+  setFetcher((async (_url: string, init?: RequestInit) => {
+    const keywords = (JSON.parse(String(init?.body)) as { keywords: string[] }[])[0].keywords
+    asked.push(...keywords)
+    return Response.json({ status_code: 20000, cost: 0.09, tasks: [{ cost: 0.09, status_code: 20000, result: keywords.map((k) => ({ keyword: k, search_volume: k === "pitch.com" ? 4400 : 500 })) }] })
+  }) as typeof fetch)
+  const old = { slug: "pitch", network: "n", checkedAt: "", checks: Object.fromEntries(["P1", "P2", "P3", "P5", "P6", "A1", "A2"].map((id) => [id, { state: "unknown" as const }])) } as Result
+  old.checks.P6 = { state: "met", evidence: '"pitch": 500/mo worldwide' } // passed under the old ≥ 10 rule
+  const small = { ...old, slug: "small", checks: { ...old.checks, P6: { state: "met" as const, evidence: '"small": 500/mo worldwide' } } }
+  await refreshP6([old, small], new Map([["pitch", "pitch.com"], ["small", "small"]]), "eA==")
+  assert.deepEqual(asked.sort(), ["pitch.com", "small"])
+  assert.deepEqual(old.checks.P6, { state: "met", evidence: '"pitch.com": 4400/mo worldwide' })
+  assert.equal(small.checks.P6.state, "not_met", "500 a month is under today's threshold")
 })
 
 test("dry-run score ignores unknown checks and needs four determined ones", () => {
