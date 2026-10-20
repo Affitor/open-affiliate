@@ -255,7 +255,10 @@ async function scanProgram(p: Program): Promise<Result> {
       checks.A1 = unknown(page.refused)
       checks.A2 = unknown(page.refused)
     } else {
-      checks.A1 = page.status === 200 ? { state: "met", evidence: page.url } : { state: "not_met", evidence: `HTTP ${page.status} at ${page.url}` }
+      // Gone (404/410) is not live; 401/403/429 is bot protection and 5xx may pass, so those stay unknown.
+      checks.A1 = page.status === 200 ? { state: "met", evidence: page.url }
+        : page.status === 404 || page.status === 410 ? { state: "not_met", evidence: `HTTP ${page.status} at ${page.url}` }
+        : unknown(`program page HTTP ${page.status}`)
       const terms = page.status === 200 ? termsLink(page.html, page.url) : null
       checks.A2 = page.status !== 200 ? unknown("program page not live") : terms ? { state: "met", evidence: terms } : { state: "not_met", evidence: "no link to program terms" }
     }
