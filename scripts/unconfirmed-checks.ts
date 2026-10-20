@@ -268,15 +268,27 @@ function parseFlight(payload: string): { rows: FlightRow[]; loose: string[] } {
   return { rows, loose }
 }
 
+/** The strings a JSON row carries; a body that is not valid JSON (cut off, garbled) is also checked whole. */
+function rowStrings(body: string): string[] {
+  try {
+    JSON.parse(body)
+    return payloadStrings(body)
+  } catch {
+    return [...payloadStrings(body), body]
+  }
+}
+
 /**
- * The text of a Flight payload to check, without the comparison rows of verified
- * programs: their ["$","tr","<slug>",…] nodes, and the rows reachable only from
- * them (React outlines a row's cells into rows of their own, "$L3d"). Reachability,
- * not reference counting: a row reachable from anything else stays, whatever order
- * or stream shape (one id may span several rows) it comes in. Checked: every
- * string in a JSON row, every text row, all loose text.
+ * The text of a Flight payload to check. The comparison rows of verified programs
+ * may be left out: their ["$","tr","<slug>",…] nodes, and the rows reachable only
+ * from them (React outlines a row's cells into rows of their own, "$L3d").
+ * Whatever the reference parsing concludes, a string from those nodes and rows is
+ * left out only when it is exactly the visible text of a verified program's
+ * comparison row in the served HTML (`allowed`); every other string is checked.
+ * Checked: every string in a JSON row (and the whole body if it is not valid
+ * JSON), every text row, all loose text.
  */
-function flightTexts(payload: string, slugs: Set<string>): string[] {
+function flightTexts(payload: string, slugs: Set<string>, allowed: Set<string>): string[] {
   const { rows, loose } = parseFlight(payload)
   const cut: string[] = []
   if (slugs.size) {
@@ -306,8 +318,13 @@ function flightTexts(payload: string, slugs: Set<string>): string[] {
   fromCut.delete("0")
   const others = [...byId.keys()].filter((id) => !fromCut.has(id))
   const kept = reach([...others, ...loose.flatMap((l) => flightRefs(l, "keep"))], "keep")
+  const texts = (r: FlightRow) => (r.text ? [r.body] : rowStrings(r.body))
+  const notTheirs = (t: string) => !allowed.has(squash(t))
   return [
-    ...rows.filter((r) => !fromCut.has(r.id) || kept.has(r.id)).flatMap((r) => (r.text ? [r.body] : payloadStrings(r.body))),
+    ...rows.filter((r) => !fromCut.has(r.id) || kept.has(r.id)).flatMap(texts),
+    // The candidates left out: only the verified rows' own visible text may go.
+    ...rows.filter((r) => fromCut.has(r.id) && !kept.has(r.id)).flatMap(texts).filter(notTheirs),
+    ...cut.flatMap(payloadStrings).filter(notTheirs),
     ...loose.flatMap((l) => [...payloadStrings(l), l]),
   ]
 }
@@ -321,9 +338,14 @@ function flightTexts(payload: string, slugs: Set<string>): string[] {
  * full wherever it appears.
  */
 function withoutVerifiedRows(html: string, flight: string, slugs: Set<string>): { html: string; flight: string[] } {
+  const allowed = new Set<string>()
   const rows = slugs.size === 0 ? html : html.replace(/<table data-compare[\s\S]*?<\/table>/, (table) =>
-    table.replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g, (row) => (slugs.has(/href="\/programs\/([a-z0-9-]+)"/.exec(row)?.[1] ?? "") ? "" : row)))
-  return { html: rows, flight: flightTexts(flight, slugs) }
+    table.replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g, (row) => {
+      if (!slugs.has(/href="\/programs\/([a-z0-9-]+)"/.exec(row)?.[1] ?? "")) return row
+      for (const block of visibleBlocks(row)) allowed.add(squash(block))
+      return ""
+    }))
+  return { html: rows, flight: flightTexts(flight, slugs, allowed) }
 }
 
 /**

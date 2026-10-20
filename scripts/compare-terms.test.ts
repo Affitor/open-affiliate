@@ -35,7 +35,8 @@ test("an unverified page may show a verified program's duration in its compariso
   const d = verifiedOther.commission.duration!
   assert.deepEqual(termsHtmlProblems(page, base, [verifiedOther]), [], "baseline")
   assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d), [verifiedOther]), [], "prose")
-  assert.deepEqual(termsHtmlProblems(page, base + rowFlight(verifiedOther.slug, d), [verifiedOther]), [], "RSC payload row")
+  // The payload text is exempt only as the visible text of the verified row the HTML serves.
+  assert.ok(states(termsHtmlProblems(page, base + rowFlight(verifiedOther.slug, d), [verifiedOther]), d), "RSC row without its HTML row: checked")
   assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + rowFlight(verifiedOther.slug, d), [verifiedOther]), [], "both, as served")
 })
 
@@ -76,13 +77,14 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
     push(`7:["$","tr","${slug}",{"children":["$L3c","$L${cell}"]}]\n3c:["$","td",null,{"children":"30% recurring"}]\n3d:["$","td",null,{"children":"${d}"}]\n`)
   assert.ok(states(termsHtmlProblems(page, base + outlined(verifiedOther.slug)), d), "no compared list: flagged")
   assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + outlined(verifiedOther.slug), [verifiedOther]), [], "verified row with outlined cells")
+  assert.ok(states(termsHtmlProblems(page, base + outlined(verifiedOther.slug), [verifiedOther]), d), "outlined cells without the HTML row: checked")
   assert.ok(states(termsHtmlProblems(page, base + outlined(unverifiedOther.slug), [unverifiedOther]), d), "unverified row with outlined cells: flagged")
   // A line the page's own content also references stays, and is checked.
   const shared = base + outlined(verifiedOther.slug) + push(`9:["$","p",null,{"children":"$3d"}]\n`)
   assert.ok(states(termsHtmlProblems(page, shared, [verifiedOther]), d), "outlined line also used by the page: flagged")
   // References are followed: a cell outlined inside an outlined cell goes too, when only the row reaches it.
   const nested = push(`7:["$","tr","${verifiedOther.slug}",{"children":["$L3e"]}]\n3e:["$","td",null,{"children":"$L3f"}]\n3f:["$","span",null,{"children":"${d}"}]\n`)
-  assert.deepEqual(termsHtmlProblems(page, base + nested, [verifiedOther]), [], "nested outlined cells")
+  assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + nested, [verifiedOther]), [], "nested outlined cells")
   // Every reference form keeps a line: a Map ($Q), a Set ($W) or a path ($3d:props) from the page's own content.
   for (const ref of ["$Q3d", "$W3d", "$3d:props:children", "$@3d"]) {
     const used = base + outlined(verifiedOther.slug) + push(`9:["$","p",null,{"children":"${ref}"}]\n`)
@@ -91,7 +93,7 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
   // Order does not matter: cut row → [a, b], a → b, b holds the duration; both go, in either order.
   for (const order of [["$La1", "$Lb1"], ["$Lb1", "$La1"]]) {
     const chain = push(`7:["$","tr","${verifiedOther.slug}",{"children":${JSON.stringify(order)}}]\na1:["$","td",null,{"children":"$Lb1"}]\nb1:["$","td",null,{"children":"${d}"}]\n`)
-    assert.deepEqual(termsHtmlProblems(page, base + chain, [verifiedOther]), [], `chain ${order.join(",")}`)
+    assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + chain, [verifiedOther]), [], `chain ${order.join(",")}`)
   }
   // An id whose tag is also a hex digit ("$ab") is read both ways, so line "ab" is kept when the page uses it.
   const hexTag = base + push(`7:["$","tr","${verifiedOther.slug}",{"children":["$Lab"]}]\nab:["$","td",null,{"children":"${d}"}]\n9:["$","p",null,{"children":"$ab"}]\n`)
@@ -113,7 +115,19 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
   assert.ok(termsHtmlProblems(page, textRow, [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "text row content")
   // A verified row's outlined text cell goes with the row.
   const ownText = base + push(`7:["$","tr","${verifiedOther.slug}",{"children":"$L3d"}]\n3d:T${Buffer.byteLength(d).toString(16)},${d}0:["$","p",null,{"children":"ok"}]\n`)
-  assert.deepEqual(termsHtmlProblems(page, ownText, [verifiedOther]), [], "verified row's text cell removed; the next row right after it still parsed")
+  assert.deepEqual(termsHtmlProblems(page, ownText + table(verifiedOther, d), [verifiedOther]), [], "verified row's text cell removed; the next row right after it still parsed")
+})
+
+test("whatever the reference parsing misses, only the verified row's own visible text can be left out", () => {
+  const d = DURATION
+  const row = table(verifiedOther, d)
+  const shared = (ref: string) => base + row + push(`7:["$","tr","${verifiedOther.slug}",{"children":"$L3d"}]\n3d:["$","span",null,{"children":"Cookie lasts 60 days."}]\n0:["$","p",null,{"children":${ref}}]\n`)
+  for (const ref of ['"$03d"', '"$3D"', '"\\u00243d"', '"$\\u0033d"']) {
+    assert.ok(termsHtmlProblems(page, shared(ref), [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), `page text reached via ${ref}`)
+  }
+  // Parse failures make the check stricter: a cut-off text row or JSON row is checked whole.
+  assert.ok(termsHtmlProblems(page, base + push("3d:Tff,Cookie lasts 60 days.")).some((x) => x.includes("Cookie lasts 60 days")), "truncated text row")
+  assert.ok(termsHtmlProblems(page, base + push('3d:{"children":"Cookie lasts 60 days.')).some((x) => x.includes("Cookie lasts 60 days")), "truncated JSON row")
 })
 
 test("the exemption does not hide the page's other terms", () => {
