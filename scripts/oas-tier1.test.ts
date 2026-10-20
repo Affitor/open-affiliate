@@ -153,6 +153,19 @@ test("an unreadable pricing page leaves its negative checks unknown; an absent o
   assert.equal(homePrice.checks.P2.state, "unknown")
 })
 
+test("a page longer than the read limit: what was read counts, a miss is unknown", async () => {
+  const pad = "<p>" + "x".repeat(1_500_100) + "</p>"
+  network({
+    "https://brand.test/robots.txt": html(""), "https://brand.test/pricing": html("", 404),
+    "https://brand.test/": html(`<p>Pro $29/mo</p>${pad}<p>14-day free trial</p><a href="/signup">Sign up</a>`),
+    "https://brand.test/affiliates": html(`${pad}<a href="/affiliate-terms">Affiliate terms</a>`),
+  })
+  const { checks } = await scanProgram({ slug: "b", url: "https://brand.test/", signup_url: "https://brand.test/affiliates" })
+  assert.equal(checks.P1.state, "met", "found before the cut")
+  for (const id of ["P2", "P3", "A2"]) assert.equal(checks[id].state, "unknown", id)
+  assert.match(checks.P2.evidence!, /longer than the read limit/)
+})
+
 test("program page: live, gone, bot-protected, soft 404, or bounced to the homepage", async () => {
   const run = async (routes: Record<string, () => Response>) => {
     network({ "https://brand.test/robots.txt": html(""), ...routes })

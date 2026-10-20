@@ -369,7 +369,9 @@ export async function scanProgram(p: Program): Promise<Result> {
       const pricing = isPage(found) && found.status === 200 ? found : null
       // Absent (404/410) is a reading; refused, blocked or erroring is not, so a miss stays unknown.
       const unread = pricing || (isPage(found) && gone(found.status)) ? null : isPage(found) ? `pricing page HTTP ${found.status}` : `pricing page: ${found.refused}`
-      const miss = (fallback: string): Check => (unread ? unknown(unread) : { state: "not_met", evidence: fallback })
+      // A page longer than the read limit was not read in full: what was found counts, a miss is unknown.
+      const cut = home.truncated || pricing?.truncated ? "page longer than the read limit" : null
+      const miss = (fallback: string): Check => (unread ? unknown(unread) : cut ? unknown(cut) : { state: "not_met", evidence: fallback })
       const homeText = visibleText(home.html)
       const pricingText = pricing ? visibleText(pricing.html) : ""
       const price = (pricing && hasPrice(pricingText, pricing.html)) || hasPrice(homeText, home.html)
@@ -403,7 +405,9 @@ export async function scanProgram(p: Program): Promise<Result> {
       } else {
         checks.A1 = { state: "met", evidence: page.url }
         const terms = termsLink(page.html, page.url)
-        checks.A2 = terms ? { state: "met", evidence: terms } : { state: "not_met", evidence: "no link to program terms" }
+        checks.A2 = terms ? { state: "met", evidence: terms }
+          : page.truncated ? unknown("program page longer than the read limit")
+          : { state: "not_met", evidence: "no link to program terms" }
       }
     } else {
       // Gone (404/410) is not live; 401/403/429 is bot protection and 5xx may pass, so those stay unknown.
