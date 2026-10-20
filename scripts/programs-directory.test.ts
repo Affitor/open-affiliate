@@ -14,6 +14,7 @@ import { commissionFigure } from "../src/lib/program-page"
 import { hasNoProgram } from "../src/lib/no-program"
 import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
+import type { PayoutMethodFilter } from "../src/lib/payout-filters"
 import { llmsTxt } from "./generate-md"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
@@ -173,6 +174,25 @@ test("each hub's /programs filter returns the hub's programs and only confirmed 
   }
 })
 
+
+// "Filter all programs the same way": every list that links a /programs
+// query gets back its own verified, rated programs and no others.
+test("every list's /programs filter matches the list's verified programs", () => {
+  for (const list of BEST_LISTS.filter((l) => l.filter)) {
+    const q = new URLSearchParams(list.filter)
+    const client = searchPrograms({
+      category: q.get("category") ?? undefined,
+      commissionType: q.get("type") ?? undefined,
+      payout: (q.get("payout") ?? undefined) as PayoutMethodFilter | undefined,
+      noMinimum: q.get("minpayout") === "0" || undefined,
+      longCookie: q.has("cookie") || undefined,
+      verified: true,
+    })
+    const rated = new Set(client.map((p) => getProgram(p.slug)!).filter((p) => !commissionUnknown(p.commission)).map((p) => p.slug))
+    const hub = new Set(buildBestList(list).verified.map((p) => p.slug))
+    assert.deepEqual([...hub].sort(), [...rated].sort(), `${list.slug} vs /programs?${list.filter}`)
+  }
+})
 
 test("program row and card chips: no type after an unpublished rate, cookie only once terms are checked", () => {
   const c = (mode: string, value: number | null, rate: string | number, type = "recurring", duration: string | null = "12 months") =>
