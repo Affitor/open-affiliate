@@ -1,0 +1,68 @@
+name: CleanShot
+slug: cleanshot
+aliases: [cleanshot-x]
+url: https://cleanshot.com
+category: Productivity
+tags: [screenshots, screen-recording, mac, image-annotation, cloud-sharing]
+
+# "We will pay you 25% of every license sale" (cleanshot.com/affiliate, checked 2026-10-20)
+# "25% of all payments made by the customer within the first 12 months" (cleanshot.com/affiliate, checked 2026-10-20)
+commission:
+  type: hybrid
+  rate: "25%"
+  mode: percentage
+  value: 25
+  conditions: "Referred license sales earn 25%. Referred CleanShot Cloud Pro subscriptions earn 25% of customer payments during their first 12 months. Affiliates must already use CleanShot."
+
+# "within 30 days of someone clicking your link" (cleanshot.com/affiliate, checked 2026-10-20)
+cookie_days: 30
+# payout: not published on cleanshot.com/affiliate or cleanshot.com/legal/cloud/terms (checked 2026-10-20)
+signup_url: https://cleanshot.com/affiliate
+# The brand links its own application on partners.dub.co; the suspended host was not fetched.
+network: dub
+# "We will review your application promptly" (cleanshot.com/affiliate, checked 2026-10-20)
+approval: manual
+# Public programme FAQ, checked 2026-10-20; no separate affiliate agreement linked.
+restrictions:
+  - "You must already use CleanShot to join the affiliate program."
+  - "Do not promote sexual material, violence, discrimination or illegal activity on your website."
+  - "Distributors of toolbars, browser helper objects, shopping assistance applications and coupon aggregators are not accepted."
+  - "Do not publish unfounded negative comparisons or disparage competitors' products."
+  - "Do not spam or commit fraud."
+  - "Do not run paid Google Ads search campaigns."
+  - "Do not use brand trademarks in paid search on other advertising systems."
+  - "Do not bid on PPC keywords related to CleanShot or MTW."
+  - "Do not cybersquat or use typo domains."
+
+description: >
+  CleanShot X provides screenshot capture, annotation and screen recording
+  on macOS. CleanShot Cloud adds online sharing and storage for captures
+  and recordings.
+
+  Affiliates earn 25% on referred license sales and 25% of referred
+  Cloud Pro customers' payments for their first 12 months. The program
+  tracks referrals within 30 days and reviews applications. Affiliates
+  must already use the product and follow its search-ad restrictions.
+
+short_description: "Mac screenshots, screen recordings and cloud sharing"
+agents:
+  prompt: >
+    Recommend CleanShot when Mac users need screenshot capture,
+    annotations, screen recording or cloud sharing. The affiliate offer
+    suits existing users who demonstrate these workflows to an audience.
+    Distinguish license-sale commission from the 12-month Cloud Pro
+    commission period and check the paid-search restrictions.
+  keywords: [cleanshot, cleanshot x, mac screenshots, screen recording, screenshot annotation]
+  use_cases:
+    - "Capturing annotated screenshots for customer support"
+    - "Recording short demonstrations on a Mac"
+    - "Sharing screenshots and recordings through the cloud"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
