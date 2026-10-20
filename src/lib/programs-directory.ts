@@ -1,5 +1,6 @@
 import { affiliateScore, isLive, type Program } from "./programs"
 import { byScore } from "./score-order"
+import { buildBoard, isStale, oasScores, type OasScore } from "./oas"
 
 /**
  * The A–Z directory on /programs/a-z, server-rendered so every live program has a
@@ -32,14 +33,34 @@ export function directoryGroups(programs: Pick<Program, "slug" | "name" | "statu
 }
 
 /**
- * The homepage's two program sets, disjoint: the Rankings preview (top 5
- * live by Affiliate Score, the /rankings order), then 6 Featured verified
- * live programs in the same order, skipping any already shown.
+ * The homepage's two program sets, disjoint: the Rankings preview, then 6
+ * Featured verified live programs by Affiliate Score, skipping any already
+ * shown. Once OAS is published the preview is the top 5 of the OAS
+ * leaderboard, so the number on the homepage is the one each program page and
+ * report shows; until then it is the top 5 by Affiliate Score.
+ *
+ * Pages refresh on their own schedules (homepage hourly, program page and
+ * report daily), so the preview leaves out any program whose review reaches
+ * 90 days within HOME_LOOKAHEAD_DAYS: it drops a score before any page that
+ * links from it can. Ranks are the leaderboard's own, ties shared.
  */
-export function homepageSets(programs: Program[]): { rankings: Program[]; featured: Program[] } {
+export const HOME_LOOKAHEAD_DAYS = 2
+
+export function homepageSets(
+  programs: Program[],
+  scores: OasScore[] = oasScores,
+  today: Date = new Date(),
+): { rankings: Program[]; ranks: number[]; featured: Program[]; by: "oas" | "affiliate-score" } {
   const ranked = programs.filter(isLive).sort(byScore(affiliateScore))
-  const rankings = ranked.slice(0, 5)
+  const bySlug = new Map(programs.map((p) => [p.slug, p]))
+  const horizon = new Date(today.getTime() + HOME_LOOKAHEAD_DAYS * 864e5)
+  const board = buildBoard(scores, ranked, today)
+    .filter((r) => r.rank != null && !isStale(r.score.checked_at, horizon))
+    .slice(0, 5)
+  const by = board.length ? "oas" : "affiliate-score"
+  const rankings = board.length ? board.map((r) => bySlug.get(r.program.slug)!) : ranked.slice(0, 5)
+  const ranks = board.length ? board.map((r) => r.rank!) : rankings.map((_, i) => i + 1)
   const shown = new Set(rankings.map((p) => p.slug))
   const verified = ranked.filter((p) => p.verified && !shown.has(p.slug))
-  return { rankings, featured: verified.slice(0, 6) }
+  return { rankings, ranks, featured: verified.slice(0, 6), by }
 }

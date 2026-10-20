@@ -1,16 +1,12 @@
 import type { Metadata } from "next";
-import { livePrograms } from "@/lib/programs";
-import { serializeJsonLd } from "@/lib/json-ld";
-import { commissionGroup, compareCommissionFigure } from "@/lib/rankings-terms";
+import { RANKINGS_DESCRIPTION } from "./json-ld";
 
 export const metadata: Metadata = {
-  title: "Affiliate Program Rankings: Highest Paying Programs",
-  description:
-    "Verified affiliate programs ranked by what they pay: commission, how long it recurs, cookie length and payout minimum. Browse by program, network or category.",
+  title: "Affiliate Program Rankings by OAS",
+  description: RANKINGS_DESCRIPTION,
   openGraph: {
-    title: "Affiliate Program Rankings: OpenAffiliate",
-    description:
-      `${livePrograms.filter((p) => p.verified).length} verified affiliate programs ranked by commission, cookie and payout.`,
+    title: "Affiliate Program Rankings by OAS: OpenAffiliate",
+    description: RANKINGS_DESCRIPTION,
     url: "https://openaffiliate.dev/rankings",
     siteName: "OpenAffiliate",
   },
@@ -27,40 +23,5 @@ export default function RankingsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // The table's default view: verified programs paying a percentage, highest first.
-  const ranked = livePrograms
-    .filter((p) => p.verified && commissionGroup(p.commission) === "percent")
-    .sort((a, b) => compareCommissionFigure(a, b))
-    .slice(0, 20);
-
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        suppressHydrationWarning
-        dangerouslySetInnerHTML={{
-          __html: serializeJsonLd({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            name: "Affiliate Program Rankings",
-            description: metadata.description,
-            url: "https://openaffiliate.dev/rankings",
-            isPartOf: { "@id": "https://openaffiliate.dev/#website" },
-            publisher: { "@id": "https://openaffiliate.dev/#organization" },
-            mainEntity: {
-              "@type": "ItemList",
-              numberOfItems: ranked.length,
-              itemListElement: ranked.map((program, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                url: `https://openaffiliate.dev/programs/${program.slug}`,
-                name: program.name,
-              })),
-            },
-          }),
-        }}
-      />
-      {children}
-    </>
-  );
+  return children;
 }

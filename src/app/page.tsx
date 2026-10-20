@@ -9,6 +9,14 @@ import { freshnessLine } from "@/lib/best-lists";
 import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
 import { blogEntries } from "@/lib/blog";
+import { getOasScore, oasValue } from "@/lib/oas";
+import { OasGradeChip } from "@/components/oas-grade";
+
+// Hourly, like /rankings. The OAS preview also leaves out programs within two
+// days of their 90-day expiry (homepageSets), so it does not show a score its
+// program page or report (daily) has already dropped, unless the homepage went
+// unvisited for two days (an accepted case).
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   alternates: {
@@ -39,9 +47,10 @@ function cookieShort(program: Program): string {
 }
 
 export default function Home() {
-  // Rankings top 5, then 6 verified programs by the same Affiliate Score order,
-  // none shown twice (homepageSets).
-  const { rankings, featured } = homepageSets(programs);
+  // Rankings top 5 (by OAS once it is published, else Affiliate Score), then 6
+  // verified programs by Affiliate Score, none shown twice (homepageSets).
+  const { rankings, ranks, featured, by } = homepageSets(programs);
+  const byOas = by === "oas";
   const networks = networksByName();
   const networkCount = networks.filter((n) => n.network !== IN_HOUSE).length;
   const checked = livePrograms.filter(termsConfirmed).length;
@@ -102,20 +111,23 @@ export default function Home() {
       </section>
 
       <section id="home-rankings" className="oa-band">
-        <SectionHead title="Rankings" note="Top programs by Affiliate Score" href="/rankings" link="All rankings" />
+        <SectionHead title="Rankings" note={byOas ? "Top programs by OAS, the OpenAffiliate Score" : "Top programs by Affiliate Score"} href="/rankings" link="All rankings" />
         <ol className="border-t border-line-strong">
           {rankings.map((program, i) => (
             <li key={program.slug} className="border-b border-border">
               <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-1 py-2.5 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
-                <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
+                <span className="font-mono text-meta text-muted-foreground">{ranks[i]}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
                 <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
                 <span className="hidden truncate font-mono text-meta sm:block">
                   {commissionChip(program.commission, true)}
                 </span>
                 <span className="hidden text-meta text-muted-foreground sm:block">{program.category}</span>
-                <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title="Affiliate Score">
-                  {affiliateScore(program)}
+                <span className="inline-flex items-center gap-1.5">
+                  <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title={byOas ? "OAS" : "Affiliate Score"}>
+                    {byOas ? oasValue(getOasScore(program.slug)!) : affiliateScore(program)}
+                  </span>
+                  {byOas && <OasGradeChip score={oasValue(getOasScore(program.slug)!)!} />}
                 </span>
               </Link>
             </li>

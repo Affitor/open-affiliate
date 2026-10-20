@@ -99,4 +99,5 @@ reports/
 /public/.well-known/ard.json
 /public/.well-known/ai-catalog.json
 /.Codex-lock/
+/public/rankings/
 *.bak

@@ -71,7 +71,7 @@ import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib
 import { blogEntries, type BlogEntry } from "../src/lib/blog"
 import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
 import { directoryGroups } from "../src/lib/programs-directory"
-import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
+import { buildBoard, oasGrade, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -1133,19 +1133,20 @@ function rankingsMd(): string {
   const report = (slug: string) => `${BASE}/programs/${slug}/oas`
   const oasLines = board.length
     ? [
-        ...board.filter((r) => r.rank != null).map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100, ${mdEscape(r.program.category)}`),
+        ...board.filter((r) => r.rank != null).map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100 (${oasGrade(r.oas!)}), ${mdEscape(r.program.category)}`),
         "",
         ...board.filter((r) => r.rank == null).map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${r.oas != null ? `OAS ${r.oas}/100, ` : ""}${UNRANKED_TEXT[r.unranked!]}`),
         "",
-        `OAS, the OpenAffiliate Score, measures how clearly a program publishes its terms and protects its partners, from public pages only; nobody pays to rank. Equal scores share a rank. ${TEAM_DISCLOSURE}`,
+        `OAS, the OpenAffiliate Score, measures how clearly a program publishes its terms and protects its partners, from the terms verified on its own page; nobody pays to rank. Every program is ranked by the same rules, whoever runs it. Equal scores share a rank. ${TEAM_DISCLOSURE}`,
       ].join("\n")
     : null
 
   return joinSections([
     `# Affiliate program rankings`,
     [
+      ...(board.length ? [`> Ranked by OAS first, the full list at ${BASE}/rankings/leaderboard.md; the commission lists below are ${BASE}/rankings/commission.`, `>`] : []),
       `> ${ranked.length} verified programs, every figure checked on the brand's own`,
-      `> terms page, in the three lists of ${BASE}/rankings: a percentage of the`,
+      `> terms page, in the three lists of ${board.length ? `${BASE}/rankings/commission` : `${BASE}/rankings`}: a percentage of the`,
       `> sale and a flat US-dollar amount, each highest first (on a tie, the one`,
       `> that recurs longer first), then tiered, hybrid, unpublished and other`,
       `> rewards A to Z. The table there can also sort by how long the commission`,
@@ -1163,7 +1164,40 @@ function rankingsMd(): string {
     section("Tiered, hybrid and other commissions", programLines("other")),
     section("Networks", networkLines),
     section("Categories", categoryLines),
-    section("Links", `HTML: ${BASE}/rankings`),
+    section("Links", [`HTML: ${BASE}/rankings`, ...(board.length ? [`Leaderboard: ${BASE}/rankings/leaderboard`, `By commission: ${BASE}/rankings/commission`] : [])].join("\n")),
+  ])
+}
+
+/**
+ * /rankings/leaderboard: the whole OAS board in /rankings order (OAS high to
+ * low, equal scores A to Z), then the programs still scoring. Empty while
+ * oas-scores.json has no entries, like the page.
+ */
+export function leaderboardMd(): string | null {
+  const live = sitePrograms.filter(isLive)
+  const board = buildBoard(oasScores, live, new Date())
+  if (!board.length) return null
+  const bySlug = new Map(live.map((p) => [p.slug, p]))
+  const report = (slug: string) => `${BASE}/programs/${slug}/oas`
+  const facts = (slug: string) => {
+    const p = bySlug.get(slug)!
+    let domain = ""
+    try {
+      domain = new URL(p.url).hostname.replace(/^www\./, "")
+    } catch {}
+    return [domain, p.category, networkName(p.network ?? IN_HOUSE), p.lastVerifiedAt ? `verified ${p.lastVerifiedAt.slice(0, 10)}` : null]
+      .filter(Boolean)
+      .map((x) => mdEscape(String(x)))
+      .join(" · ")
+  }
+  const ranked = board.filter((r) => r.rank != null)
+  const rest = board.filter((r) => r.rank == null)
+  return joinSections([
+    "# OAS leaderboard",
+    "> Every scored affiliate program ranked by OAS, the OpenAffiliate Score: how clearly a program publishes its terms and protects its partners, from the terms verified on its own page. Equal scores share a rank and are listed A to Z. Nobody pays to rank.",
+    section(`Ranked (${ranked.length})`, ranked.map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100 (${oasGrade(r.oas!)}) · ${facts(r.program.slug)}`).join("\n")),
+    rest.length ? section(`Not ranked yet (${rest.length})`, rest.map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${UNRANKED_TEXT[r.unranked!]} · ${facts(r.program.slug)}`).join("\n")) : null,
+    section("Links", [`HTML: ${BASE}/rankings/leaderboard`, `By category: ${BASE}/rankings/leaderboard?category=<category-slug>`, `Rankings: ${BASE}/rankings.md`].join("\n")),
   ])
 }
 
@@ -1341,7 +1375,7 @@ function main(): void {
   generateArd(process.cwd())
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
-  for (const dir of ["programs", "categories", "networks", "best", "blog"]) {
+  for (const dir of ["programs", "categories", "networks", "best", "blog", "rankings"]) {
     rmSync(join(OUT, dir), { recursive: true, force: true })
   }
 
@@ -1352,6 +1386,8 @@ function main(): void {
   write("docs.md", docsMd())
   write("index.md", indexMd())
   write("rankings.md", rankingsMd())
+  const leaderboard = leaderboardMd()
+  if (leaderboard) write("rankings/leaderboard.md", leaderboard)
   write("changelog.md", changelogMd())
   write("blog.md", blogMd())
   for (const g of GUIDES) write(`${guidePath(g).slice(1)}.md`, guideMd(g))
