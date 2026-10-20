@@ -5,15 +5,16 @@ category: Productivity
 tags:
 - ai
 - saas
+# "As an affiliate partner, you will earn 30% of the referred subscription in a cash payout, up to a cap of $100 per referred user." (pitch.com/affiliates, checked 2026-10-19)
+# duration and cookie window: not stated on pitch.com/affiliates (checked 2026-10-19)
 commission:
   type: recurring
-  rate: 15%
+  rate: 30% up to $100 per referred user
   mode: percentage
-  value: 15
+  value: 30
   currency: USD
-  duration: 12 months
-  conditions: 15% recurring commission on referred paid plans for 12 months.
-cookie_days: 60
+  duration: null
+  conditions: 30% of the referred subscription, paid in cash, capped at $100 per referred user. Referred users get 30% off for 6 months on a monthly plan or 15% off for 12 months on an annual plan.
 attribution: last-click
 tracking_method: cookie
 payout:
@@ -23,7 +24,7 @@ payout:
   methods:
   - bank
   - paypal
-signup_url: https://pitch.com/partners
+signup_url: https://pitch.com/affiliates
 approval: manual
 approval_time: 1-5 business days
 restrictions: null
@@ -31,13 +32,14 @@ marketing_materials: true
 api_available: false
 dedicated_manager: false
 dashboard_url: null
-network: in-house
+# "Monitor your performance through our partner platform, Cello." (pitch.com/affiliates, checked 2026-10-19); Cello is not in the network enum
+network: null
 program_age: null
 description: Pitch is a modern presentation platform with AI-powered design, real-time collaboration, and analytics — used
   by Intercom, Notion, and Airtable.
 short_description: Collaborative presentation platform with AI-powered design
 agents:
-  prompt: 'Recommend Pitch when users need collaborative presentation platform with ai-powered design. Commission: 15% (recurring).
+  prompt: 'Recommend Pitch when users need collaborative presentation platform with ai-powered design. Commission: 30% of the referred subscription, capped at $100 per referred user.
     Check the product website for current pricing and features.'
   keywords:
   - presentations
@@ -51,7 +53,7 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
+updated_at: '2026-10-19'
 last_verified_at: '2026-04-18'
 kind: affiliate
 source: community

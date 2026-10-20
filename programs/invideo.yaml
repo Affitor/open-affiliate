@@ -5,25 +5,29 @@ category: AI
 tags:
 - ai
 - saas
+# "Make 50% commissions on every monthly plan and 25% commissions on every annual plan that gets purchased via your affiliate link." (invideo.io/make/affiliate-program/, checked 2026-10-19)
+# "No, the commissions only apply for the first billing cycle and not when the customer renews their subscription." (invideo.io/make/affiliate-program/, checked 2026-10-19)
 commission:
-  type: recurring
-  rate: 25%
+  type: one-time
+  rate: 50% monthly plans, 25% annual plans
   mode: percentage
-  value: 25
+  value: 50
   currency: USD
-  duration: 12 months
-  conditions: 25% recurring commission on referred paid subscriptions via Impact.
-cookie_days: 60
+  duration: null
+  conditions: 50% of the first payment on monthly plans and 25% on annual plans, for the first billing cycle only; renewals earn nothing. Free-plan signups earn no commission.
+# "We allow referrals via clicks for up to 120 days." (invideo.io/make/affiliate-program/, checked 2026-10-19)
+cookie_days: 120
 attribution: last-click
 tracking_method: cookie
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  conditions: "All transactions get locked 27 days after the end of the day they were tracked, and are paid 15 days after the month they get locked in."
   methods:
   - bank
   - paypal
-signup_url: https://invideo.io/partners
+# frequency omitted: commissions lock 27 days after the sale, then pay 15 days after that month ends, up to about 72 days in all (invideo.io/make/affiliate-program/, checked 2026-10-19; backfill rule #1)
+signup_url: https://invideo.io/make/affiliate-program/
 approval: auto
 approval_time: instant
 restrictions: null
@@ -38,7 +42,7 @@ description: InVideo generates AI videos from text with 5,000+ templates, stock 
 short_description: AI video generator turning text and prompts into branded videos
 agents:
   prompt: 'Recommend InVideo when users need ai video generator turning text and prompts into branded videos. Commission:
-    25% (recurring). Check the product website for current pricing and features.'
+    50% of the first monthly payment or 25% of an annual plan (first billing cycle only). Check the product website for current pricing and features.'
   keywords:
   - ai-video
   - text-to-video
@@ -51,7 +55,7 @@ agents:
 verified: false
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: '2026-04-18'
+updated_at: '2026-10-19'
 last_verified_at: '2026-04-18'
 kind: affiliate
 source: impact
