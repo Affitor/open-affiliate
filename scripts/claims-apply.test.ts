@@ -199,6 +199,20 @@ test("network: affitor listings take only description and use cases; stored valu
   }
 })
 
+test("a file whose layout the splice cannot keep is left for a person, not sent back", async () => {
+  const dir = repo()
+  try {
+    writeFileSync(join(dir, "programs", "acme.yaml"), JSON.stringify(parseYaml(ACME), null, 2))
+    assert.equal((planEdit(row({ cookie_days: 60 }), dir, TODAY) as { reason: string }).reason, "layout")
+    const rows = [row({ cookie_days: 60 })]
+    const f = fakes(rows, dir)
+    assert.deepEqual((await run({ store: f.store, forge: f.forge, write: true, today: TODAY })).closed, [])
+    assert.equal(rows[0].status, "pending")
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
+})
+
 test("a change main already has opens nothing", () => {
   const dir = repo()
   try {
@@ -264,6 +278,9 @@ function fakes(rows: QueuedEdit[], dir: string) {
       rows.find((x) => x.id === r.id)!.status = "applied"
       calls.applied.push(r.id)
     },
+    async close(r, status) {
+      rows.find((x) => x.id === r.id)!.status = status
+    },
   }
   const forge: Forge = {
     checkout() {
@@ -294,7 +311,7 @@ test("run: the first --write opens one PR per change; a second run writes nothin
     assert.equal(f.calls.openPr, 2)
     assert.deepEqual(f.calls.recorded, rows.map((r) => r.id))
     const second = await run({ store: f.store, forge: f.forge, write: true, today: TODAY })
-    assert.deepEqual(second, { plans: [], opened: [], recorded: [], applied: [] })
+    assert.deepEqual(second, { plans: [], opened: [], recorded: [], applied: [], closed: [] })
     assert.equal(f.calls.openPr, 2)
     assert.equal(f.calls.checkout, 1, "no checkout when nothing is new")
   } finally {
@@ -331,7 +348,7 @@ test("run: a PR pushed before a crash is recorded, not opened twice; a merged on
     const done = await run({ store: f.store, forge: f.forge, write: true, today: TODAY })
     assert.deepEqual(done.applied, [rows[0].id])
     assert.equal(rows[0].status, "applied")
-    assert.deepEqual(await run({ store: f.store, forge: f.forge, write: true, today: TODAY }), { plans: [], opened: [], recorded: [], applied: [] })
+    assert.deepEqual(await run({ store: f.store, forge: f.forge, write: true, today: TODAY }), { plans: [], opened: [], recorded: [], applied: [], closed: [] })
   } finally {
     rmSync(dir, { recursive: true })
   }
@@ -345,4 +362,59 @@ test("owner text: ZWJ after a mark only after a virama, never before Latin; U+16
   assert.ok(!ok("क्‍a"), "never before a Latin letter")
   assert.ok(!ok("é‍x"), "not after an accent")
   assert.ok(!ok("Acme\u{16FE4}"), "Khitan filler")
+})
+
+test("run: a skipped change ends as rejected or goes back to the owner; nothing is picked up again", async () => {
+  const dir = repo()
+  try {
+    const gone = row({ short_description: "x y" }, { id: "2f8e7d6c-0000-4000-8000-000000000003", claim: claim("other.com") })
+    const flat = row({ commission: { type: "one-time", rate: "$40 per sale" } }, { id: "3f8e7d6c-0000-4000-8000-000000000004" })
+    const rows = [gone, flat]
+    const f = fakes(rows, dir)
+    const dry = await run({ store: f.store, forge: f.forge, write: false, today: TODAY })
+    assert.deepEqual(dry.closed, [])
+    assert.equal(gone.status, "pending")
+    const r = await run({ store: f.store, forge: f.forge, write: true, today: TODAY })
+    assert.deepEqual(r.closed, [gone.id, flat.id])
+    assert.equal(gone.status, "rejected")
+    assert.equal(flat.status, "asked")
+    assert.equal((await run({ store: f.store, forge: f.forge, write: true, today: TODAY })).plans.length, 0)
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
+})
+
+test("run: a PR that fails to open leaves the change pending for the next run", async () => {
+  const dir = repo()
+  try {
+    const rows = [row({ short_description: "One" })]
+    const f = fakes(rows, dir)
+    const real = f.forge.openPr
+    f.forge.openPr = () => {
+      throw new Error("network")
+    }
+    const r = await run({ store: f.store, forge: f.forge, write: true, today: TODAY })
+    assert.deepEqual([r.opened, r.recorded, rows[0].pr_url], [[], [], null])
+    f.forge.openPr = real
+    assert.equal((await run({ store: f.store, forge: f.forge, write: true, today: TODAY })).recorded.length, 1)
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
+})
+
+test("a use_cases change touches only the use_cases lines; the wrapped prompt stays byte for byte", () => {
+  const dir = repo()
+  try {
+    const plan = pr(planEdit(row({ use_cases: ["Booking rooms", "Shift planning"] }), dir, TODAY))
+    assert.equal(plan.text, ACME.replace('    - "Planning a team\'s week"\n', "    - Booking rooms\n    - Shift planning\n"))
+    const cleared = pr(planEdit(row({ use_cases: [] }), dir, TODAY))
+    assert.equal(cleared.text, ACME.replace('  use_cases:\n    - "Planning a team\'s week"\n', ""))
+    assert.equal(planEdit(row({ use_cases: ["Planning a team's week"] }), dir, TODAY).action, "same")
+    // Items at the key's own indent, then another key after them.
+    writeFileSync(join(dir, "programs", "acme.yaml"), ACME.replace('  use_cases:\n    - "Planning a team\'s week"\n', "  use_cases:\n  - Old one\n  - Old two\n  keywords:\n  - acme\n"))
+    const compact = pr(planEdit(row({ use_cases: ["New one"] }), dir, TODAY))
+    assert.match(compact.text, /  use_cases:\n    - New one\n  keywords:\n  - acme\n/)
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
 })

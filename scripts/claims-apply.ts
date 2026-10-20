@@ -18,11 +18,12 @@ import { existsSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSy
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { pathToFileURL } from "node:url"
-import { parse as parseYaml } from "yaml"
+import { isDeepStrictEqual } from "node:util"
+import { Document, parse as parseYaml } from "yaml"
 import { parseCommissionMode } from "../src/lib/commission-mode"
 import { registrableDomain, unclaimableReason } from "../src/lib/claims/rules"
 import { AFFITOR_EDITABLE, EditChanges, alreadyListed, pageKey, slugFor, type ClaimProgram } from "../src/lib/claims/service"
-import { DELETE, edit, type Diff, type Edit } from "./sync-affitor"
+import { DELETE, checkReadBack, checkSchema, edit, type Diff, type Edit } from "./sync-affitor"
 
 /** A claim_edits row with the claim it was sent under (program_claims). */
 export interface QueuedEdit {
@@ -123,7 +124,7 @@ export function editsFor(changes: EditChanges, current: Record<string, unknown>)
     const c = changes.commission
     const read = parseCommissionMode(c.rate)
     const currency = (current.commission as Record<string, unknown> | undefined)?.currency
-    // The form has no currency: a flat amount needs one the listing already states.
+    // The form has no currency: a flat amount needs one the listing already states (missing, null and "" do not count).
     if (read.mode === "flat" && (typeof currency !== "string" || !currency)) return "flat_needs_currency"
     set(["commission", "type"], c.type)
     set(["commission", "rate"], c.rate)
@@ -150,6 +151,70 @@ export function editsFor(changes: EditChanges, current: Record<string, unknown>)
   set(["status"], changes.status)
   set(["status_note"], changes.status_note)
   return edits
+}
+
+/**
+ * agents.use_cases spliced into the file: renderEdited re-renders a whole
+ * top-level entry, which would unfold the hand-wrapped agents.prompt into
+ * the diff. The block is every line under "agents:" up to the next line at
+ * column 0; use_cases is its "  use_cases:" line and its items.
+ */
+function withUseCases(src: string, useCases: unknown): string {
+  const lines = src.split("\n")
+  const start = lines.indexOf("agents:")
+  if (start < 0) throw new Error("agents is not a block")
+  let end = start + 1
+  while (end < lines.length && (lines[end] === "" || lines[end].startsWith(" "))) end++
+  while (end > start + 1 && lines[end - 1] === "") end--
+  const at = lines.findIndex((l, i) => i > start && i < end && l.startsWith("  use_cases:"))
+  let stop = at + 1
+  // Its items sit deeper, or at the key's own indent ("  - x", as many files have).
+  while (at >= 0 && stop < end && (lines[stop] === "" || lines[stop].startsWith("   ") || lines[stop].startsWith("  - "))) stop++
+  const rendered =
+    useCases === DELETE
+      ? []
+      : new Document({ use_cases: useCases })
+          .toString({ lineWidth: 0 })
+          .trimEnd()
+          .split("\n")
+          .map((l) => `  ${l}`)
+  const out = at >= 0 ? [...lines.slice(0, at), ...rendered, ...lines.slice(stop)] : [...lines.slice(0, end), ...rendered, ...lines.slice(end)]
+  return out.join("\n")
+}
+
+/**
+ * The file with the owner's edits, or null text when main already says
+ * this. Proof, beyond the read-back of each edit: every other value in the
+ * file parses exactly as before.
+ */
+function written(src: string, listing: Record<string, unknown>, edits: Edit[], stamps: Edit[], file: string): { text: string | null; diffs: Diff[] } {
+  const useCases = edits.find(([path]) => path[0] === "agents")
+  const result = edit(src, edits.filter((e) => e !== useCases), stamps, file)
+  let text = result.text
+  const diffs = [...result.diffs]
+  const agents = (listing.agents ?? {}) as Record<string, unknown>
+  const before = agents.use_cases ?? null
+  if (useCases && !(useCases[1] === DELETE ? before === null : isDeepStrictEqual(before, useCases[1]))) {
+    checkSchema([useCases], file)
+    text = withUseCases(text ?? src, useCases[1])
+    diffs.push({ field: "agents.use_cases", from: before, to: useCases[1] === DELETE ? null : useCases[1] })
+  }
+  if (!text) return { text: null, diffs }
+  checkReadBack(text, [...edits, ...stamps], file)
+  const after = parseYaml(text) as Record<string, unknown>
+  const touched = new Set(diffs.map((d) => d.field))
+  for (const key of new Set([...Object.keys(listing), ...Object.keys(after)])) {
+    const field = (sub: string) => `${key}.${sub}`
+    const a = listing[key]
+    const b = after[key]
+    if (touched.has(key)) continue
+    if (a && b && typeof a === "object" && typeof b === "object" && !Array.isArray(a)) {
+      const left = Object.fromEntries(Object.entries(a).filter(([k]) => !touched.has(field(k))))
+      const right = Object.fromEntries(Object.entries(b).filter(([k]) => !touched.has(field(k))))
+      if (!isDeepStrictEqual(left, right)) throw new Error(`${file}: ${key} changed beyond the edit`)
+    } else if (!isDeepStrictEqual(a, b)) throw new Error(`${file}: ${key} changed beyond the edit`)
+  }
+  return { text, diffs }
 }
 
 /** The listing's domain when the claim still owns it; null otherwise. */
@@ -187,9 +252,12 @@ export function planEdit(row: QueuedEdit, repo: string, today: string): Plan {
   const stamps: Edit[] = money ? [[["verified"], true], [["last_verified_at"], today]] : []
   let result: { text: string | null; diffs: Diff[] }
   try {
-    result = edit(src, edits, stamps, file)
-  } catch {
-    return { action: "skip", edit: row, reason: "schema" }
+    result = written(src, listing, edits, stamps, file)
+  } catch (e) {
+    // Our file's layout (JSON-style YAML, an inline agents map) is a person's
+    // job; a value the schema refuses goes back to the owner.
+    const ours = e instanceof Error && /does not parse|reads back|beyond the edit|not a block/.test(e.message)
+    return { action: "skip", edit: row, reason: ours ? "layout" : "schema" }
   }
   if (!result.text) return { action: "same", edit: row }
 
@@ -282,6 +350,8 @@ export interface ApplyStore {
   recordPr(id: string, url: string): Promise<boolean>
   /** pending → applied, plus an edit.applied event. */
   markApplied(row: QueuedEdit): Promise<void>
+  /** pending → rejected or asked, plus an edit.rejected / edit.returned event carrying the reason. */
+  close(row: QueuedEdit, status: "rejected" | "asked", reason: string): Promise<void>
 }
 
 export interface Forge {
@@ -300,12 +370,19 @@ export interface RunResult {
   opened: string[]
   recorded: string[]
   applied: string[]
+  closed: string[]
 }
+
+/**
+ * What a skipped change becomes. The owner can do nothing about these, so
+ * they end as "Not applied"; the rest go back to the owner ("Needs your reply").
+ */
+const REJECTED: ReadonlySet<string> = new Set(["not_owner", "listing_gone", "invalid_change"])
 
 export async function run(o: { store: ApplyStore; forge: Forge; write: boolean; today: string; log?: (s: string) => void }): Promise<RunResult> {
   const log = o.log ?? (() => {})
   const rows = await o.store.pending()
-  const out: RunResult = { plans: [], opened: [], recorded: [], applied: [] }
+  const out: RunResult = { plans: [], opened: [], recorded: [], applied: [], closed: [] }
 
   // Changes already in a PR: applied once it merged; a closed one waits for a person.
   for (const row of rows.filter((r) => r.pr_url)) {
@@ -328,14 +405,30 @@ export async function run(o: { store: ApplyStore; forge: Forge; write: boolean; 
     for (const row of fresh) {
       const plan = row.kind === "new" ? planNew(row, programs, prFiles) : planEdit(row, dir, o.today)
       out.plans.push(plan)
-      if (plan.action === "skip") log(`${row.id} ${row.slug}: skip (${plan.reason}), a person decides`)
+      if (plan.action === "skip" && plan.reason === "layout") log(`${row.id} ${row.slug}: the file's layout needs a person, left pending`)
+      else if (plan.action === "skip") {
+        const status = REJECTED.has(plan.reason) ? "rejected" : "asked"
+        log(`${row.id} ${row.slug}: ${status} (${plan.reason})`)
+        if (o.write) {
+          await o.store.close(row, status, plan.reason)
+          out.closed.push(row.id)
+        }
+      }
       if (plan.action === "same") log(`${row.id} ${row.slug}: main already says this, no PR`)
       if (plan.action === "intake") log(`${row.id}\n${plan.brief}`)
       if (plan.action !== "pr") continue
       log(`${row.id} ${row.slug}: PR ${plan.branch} (${plan.diffs.map((d) => d.field).join(", ")})`)
       if (!o.write) continue
       // A run that pushed and died before recording finds its PR by branch.
-      const url = o.forge.openPrFor(plan.branch) ?? o.forge.openPr(dir, plan)
+      // Runs are meant to be serial; a racing second run fails its push
+      // (no force) and the next run records the PR the first one opened.
+      let url: string
+      try {
+        url = o.forge.openPrFor(plan.branch) ?? o.forge.openPr(dir, plan)
+      } catch {
+        log(`${row.id} ${row.slug}: could not open the PR, left pending for the next run`)
+        continue
+      }
       out.opened.push(url)
       if (await o.store.recordPr(row.id, url)) out.recorded.push(row.id)
     }
@@ -415,11 +508,19 @@ async function supabaseStore(): Promise<ApplyStore> {
       if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
       return (data ?? []).length === 1
     },
+    async close(row, status, reason) {
+      const { data, error } = await db.from("claim_edits").update({ status }).eq("id", row.id).eq("status", "pending").select("id")
+      if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
+      if ((data ?? []).length !== 1) return
+      const type = status === "rejected" ? "edit.rejected" : "edit.returned"
+      const ev = await db.from("claim_events").insert({ type, slug: row.slug, domain: row.claim?.domain ?? null, meta: { edit_id: row.id, reason } })
+      if (ev.error) throw new Error(`claim_events insert: ${ev.error.code ?? "failed"}`)
+    },
     async markApplied(row) {
       const { data, error } = await db.from("claim_edits").update({ status: "applied" }).eq("id", row.id).eq("status", "pending").select("id")
       if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
       if ((data ?? []).length !== 1) return
-      const ev = await db.from("claim_events").insert({ type: "edit.applied", slug: row.slug, domain: row.claim?.domain ?? null, meta: { pr_url: row.pr_url } })
+      const ev = await db.from("claim_events").insert({ type: "edit.applied", slug: row.slug, domain: row.claim?.domain ?? null, meta: { edit_id: row.id, pr_url: row.pr_url } })
       if (ev.error) throw new Error(`claim_events insert: ${ev.error.code ?? "failed"}`)
     },
   }
@@ -439,7 +540,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
     }
     const write = args.includes("--write")
     const r = await run({ store, forge: gitForge(root), write, today, log: (s) => console.log(s) })
-    console.log(`${write ? "" : "dry run: "}${r.plans.length} planned · ${r.opened.length} PRs · ${r.recorded.length} recorded · ${r.applied.length} applied`)
+    console.log(`${write ? "" : "dry run: "}${r.plans.length} planned · ${r.opened.length} PRs · ${r.recorded.length} recorded · ${r.applied.length} applied · ${r.closed.length} closed`)
   }
   main().catch((e: unknown) => {
     // Our own messages only: never a raw error that could carry a key or a row.
