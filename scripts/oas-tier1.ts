@@ -420,7 +420,7 @@ export async function scanProgram(p: Program): Promise<Result> {
 
 let psiStopped: string | null = null
 /** PageSpeed for the brand page, after re-checking that page under today's rules: a cached result never authorises a request. */
-export async function runPsi(p: Program, r: Result): Promise<void> {
+export async function runPsi(p: Program, r: Result, permit: () => Promise<void> = async () => {}): Promise<void> {
   if (psiStopped || !p.url) return
   const page = await politeGet(p.url)
   if (!isPage(page) || page.status !== 200) {
@@ -430,6 +430,7 @@ export async function runPsi(p: Program, r: Result): Promise<void> {
   const key = process.env.PAGESPEED_API_KEY ? `&key=${encodeURIComponent(process.env.PAGESPEED_API_KEY)}` : ""
   const api = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&url=${encodeURIComponent(page.url)}${key}`
   try {
+    await permit() // the run's shared pace: one PageSpeed call per second at most
     // The API is never followed through a redirect: the next hop would skip the blocked-host check.
     const res = await fetcher(api, { redirect: "manual", signal: AbortSignal.timeout(120000) })
     if (REDIRECTS.has(res.status)) {
@@ -515,6 +516,16 @@ export function distribution(results: Result[]): string {
   return lines.join("\n") + "\n"
 }
 
+/** PageSpeed calls across all child processes start at least this far apart (≤ 1 request per second). */
+export const PSI_GAP_MS = 1000
+let nextPsiAt = 0
+/** Resolves when this caller may start a PageSpeed call; callers are spaced PSI_GAP_MS apart in arrival order. */
+export function psiSlot(now = Date.now()): Promise<void> {
+  const at = Math.max(now, nextPsiAt)
+  nextPsiAt = at + PSI_GAP_MS
+  return new Promise((resolve) => setTimeout(resolve, at - now))
+}
+
 const failed = (slug: string, network: string, why: string): Result =>
   ({ slug, network, checkedAt: new Date().toISOString(), checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(why)])) })
 
@@ -534,7 +545,11 @@ export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, 
       resolve({ result, psi429 })
     }
     const timer = setTimeout(() => finish(failed(p.slug, p.network ?? "unknown", `scan timed out after ${ms / 1000}s`)), ms)
-    child.once("message", (m: { result: Result; psi429: boolean }) => finish(m.result, m.psi429))
+    child.on("message", (m: { result?: Result; psi429?: boolean; psiReady?: boolean }) => {
+      // A child asks before each PageSpeed call; the parent paces the whole run.
+      if (m.psiReady) psiSlot().then(() => child.connected && child.send({ psiGo: true }))
+      else if (m.result) finish(m.result, m.psi429)
+    })
     child.once("exit", () => finish(failed(p.slug, p.network ?? "unknown", "scan process exited")))
     child.once("error", (error) => finish(failed(p.slug, p.network ?? "unknown", `scan process failed (${error.name})`)))
     child.send({ program: p, ...mode })
@@ -546,7 +561,15 @@ async function child() {
     const result = scan
       ? await scanProgram(program).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
       : failed(program.slug, program.network ?? "unknown", "PageSpeed not run") // PageSpeed only: the caller keeps its cached checks
-    if (psi && result.checks.P5.evidence === "PageSpeed not run") await runPsi(program, result).catch(() => {})
+    const permit = () => new Promise<void>((resolve) => {
+      process.on("message", function go(m: { psiGo?: boolean }) {
+        if (!m?.psiGo) return
+        process.off("message", go)
+        resolve()
+      })
+      process.send!({ psiReady: true })
+    })
+    if (psi && result.checks.P5.evidence === "PageSpeed not run") await runPsi(program, result, permit).catch(() => {})
     process.send!({ result, psi429: psiStopped !== null }, () => process.exit(0))
   })
 }
@@ -556,6 +579,8 @@ async function main() {
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
   const psi = args.includes("--psi")
+  // Length only, never the value: confirms the key reached the run before any call.
+  if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
   const out = join(process.cwd(), ".internal", "oas", "tier1")
   const cache = join(out, "cache")
   mkdirSync(cache, { recursive: true })

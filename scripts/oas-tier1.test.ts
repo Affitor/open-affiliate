@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -136,6 +136,22 @@ test("PageSpeed re-checks access first: a cached result never authorises a reque
   await runPsi({ slug: "w", url: "https://brand.test/" }, r)
   assert.ok(!bounced.some((u) => u.includes("partnerstack.com")), bounced.join(", "))
   assert.match(r.checks.P5.evidence!, /PageSpeed redirected/)
+})
+
+test("PageSpeed waits for the run's pace before each call", async () => {
+  const psi = "https://www.googleapis.com/"
+  const r = { slug: "x", network: "n", checkedAt: "", checks: { P5: { state: "unknown" as const, evidence: "PageSpeed not run" } } }
+  const order: string[] = []
+  const requested = network({ "https://brand.test/robots.txt": html(""), "https://brand.test/": html("ok"), [psi]: () => { order.push("call"); return Response.json({}) } })
+  await runPsi({ slug: "x", url: "https://brand.test/" }, r, async () => { order.push("permit") })
+  assert.deepEqual(order, ["permit", "call"])
+  assert.ok(requested.some((u) => u.startsWith(psi)))
+  // Slots are spaced PSI_GAP_MS apart however many callers arrive at once.
+  const starts: number[] = []
+  const t0 = Date.now()
+  await Promise.all([0, 1, 2].map(() => psiSlot().then(() => starts.push(Date.now() - t0))))
+  starts.sort((a, b) => a - b)
+  assert.ok(starts[1] - starts[0] >= PSI_GAP_MS - 20 && starts[2] - starts[1] >= PSI_GAP_MS - 20, JSON.stringify(starts))
 })
 
 test("an unreadable pricing page leaves its negative checks unknown; an absent one is a reading", async () => {
