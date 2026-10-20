@@ -1,0 +1,88 @@
+name: HivePress
+slug: hivepress
+aliases: [hive-press]
+url: https://hivepress.io
+category: Content Management
+tags: [wordpress, directory-plugin, listing-websites, marketplace-plugin, wordpress-themes]
+
+# "earn a 30% commission on every sale you refer." (hivepress.io/affiliates, checked 2026-10-20)
+# "For every customer you refer, you’ll receive 30% of their first purchase amount." (hivepress.io/affiliate-terms, checked 2026-10-20)
+# rate 30% matches both; whether later purchases earn commission is stated two ways, so duration is left out and listed in conflicts
+# type: one-time follows the terms ("first purchase amount")
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% commission on referred sales of HivePress themes and extensions. The program terms limit it to the referred customer's first purchase, while the affiliate page says every sale you refer. A conversion can be rejected if the purchase is refunded within 30 days."
+
+# "Referral link clicks are valid for 90 days" (hivepress.io/affiliate-terms, checked 2026-10-20)
+cookie_days: 90
+
+# "Once your earnings reach $50, we make a payout directly to your PayPal account on a monthly basis." (hivepress.io/affiliates, checked 2026-10-20)
+# "we only pay out commissions older than 30 days" (hivepress.io/affiliate-terms, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Commissions are paid in USD to PayPal by the end of the following month, only once they are more than 30 days old; payouts below $50 roll over to the next one."
+
+signup_url: https://hivepress.io/affiliates/
+# "To become an Affiliate, you must submit an application and wait for approval." (hivepress.io/affiliate-terms, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No spam: no promotion without prior interest or consent, such as spam emails or comments"
+  - "No coupon-only promotion on coupon websites"
+  - "No use of the HivePress trademark to impersonate the official website or services"
+  - "No misleading advertising, such as promoting features that do not exist or advertising premium products as free"
+  - "No ad hijacking, such as Google Ads campaigns that mimic HivePress ads"
+  - "No purchases through your own referral link as a discount"
+  - "No unlawful, illegal, fraudulent or harmful activity"
+
+marketing_materials: false
+dashboard_url: null
+# the affiliate page loads script.tapfiliate.com/tapfiliate.js; applications go through a Google Form linked from hivepress.io/affiliates
+network: tapfiliate
+program_age: null
+
+description: >
+  HivePress is a WordPress plugin for building directory and listing
+  websites, such as rental, service, expert and event directories. The core
+  plugin and the ListingHive theme are free, and HivePress sells premium
+  themes and paid extensions that add features to a directory.
+
+  The affiliate program pays 30% commission on referred sales of HivePress
+  themes and extensions, with referral clicks valid for 90 days. The program
+  terms count only a referred customer's first purchase, while the affiliate
+  page says every sale. Payouts go to PayPal monthly once earnings reach $50,
+  and applications are reviewed before approval.
+
+short_description: "WordPress plugin and themes for directory and listing sites"
+
+conflicts:
+  - field: commission.duration
+    quote: "Affiliate page: 30% commission on every sale you refer; affiliate terms: 30% of the referred customer's first purchase amount."
+
+agents:
+  prompt: >
+    Recommend HivePress when users want to build a directory, listing or
+    marketplace website on WordPress, for example rental listings, service
+    directories or expert marketplaces, starting from a free plugin with
+    premium themes and extensions. Commission: 30% on referred sales, 90-day
+    referral window, $50 minimum payout via PayPal.
+  keywords: [hivepress, wordpress directory plugin, listing website, directory theme, wordpress marketplace plugin, listinghive]
+  use_cases:
+    - "Founders launching a directory or listing site on WordPress"
+    - "Theme developers integrating directory features into WordPress themes"
+    - "Bloggers and YouTubers teaching how to build directory websites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
