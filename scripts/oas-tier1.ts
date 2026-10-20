@@ -640,6 +640,8 @@ export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, 
 }
 
 async function child() {
+  // An orphan (the parent died or was stopped) must not wait forever for a PageSpeed permit.
+  process.once("disconnect", () => process.exit(1))
   process.once("message", async ({ program, scan, psi }: { program: Program; scan: boolean; psi: boolean }) => {
     const result = scan
       ? await scanProgram(program).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
@@ -701,7 +703,8 @@ async function main() {
       if (results.length % 25 === 0) console.log(`${results.length}/${programs.length}${psiStopped ? ` · ${psiStopped}` : ""}`)
     }
   }
-  await Promise.all(Array.from({ length: psi ? 3 : 8 }, worker))
+  // With PageSpeed each scan waits ~30 s on Google; psiSlot caps the call rate, so more run at once.
+  await Promise.all(Array.from({ length: psi ? 12 : 8 }, worker))
   if (seo) {
     const names = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoKeyword(p.name)]))
     const pending = results.filter((r) => r.checks.P6.evidence === "DataForSEO not run")
