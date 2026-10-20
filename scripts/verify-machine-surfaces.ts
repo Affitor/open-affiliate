@@ -32,6 +32,7 @@ import { outboundUrl } from "../src/lib/outbound-link";
 import { changelog } from "../src/lib/changelog";
 import { blogApplyHref } from "../src/lib/apply-cta";
 import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
+import { GUIDES, guidePath, guideSelection, guideTitle, type GuidePost } from "../src/lib/guides";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
 import { sectionProblems } from "./directory-checks";
@@ -625,6 +626,47 @@ for (const list of BEST_LISTS) {
 for (const category of categories) {
   checkListPage(categoryList(category), `/categories/${categoryToSlug(category)}`);
 }
+
+/**
+ * A guide on /blog/<slug>: in the sitemap, prerendered with its H1 and the
+ * disclosure, the program blocks in guideSelection's order, every Apply link
+ * blogApplyHref with the guide's UTM, and a twin with the same programs.
+ */
+function checkGuidePage(guide: GuidePost): void {
+  const path = guidePath(guide);
+  const selection = guideSelection(guide);
+  const url = `${BASE_URL}${path}`;
+  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  const title = guideTitle(guide);
+  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  if (guide.description.length < 120 || guide.description.length > 155) fail(`${path} description is ${guide.description.length} characters; keep it 120 to 155`);
+  const htmlFile = `${path.slice(1)}.html`;
+  if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
+  const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (!new RegExp(`<h1[^>]*>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h1>`).test(html)) fail(`${path} H1 is not "${title}"`);
+  if (!html.includes("data-post-disclosure") || !html.includes("data-registry-facts")) fail(`${path} has no disclosure or no registry facts`);
+  const want = selection.shown.map(({ program }) => program.slug);
+  const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not guideSelection's ${JSON.stringify(want)}`);
+  for (const { program } of selection.shown) {
+    const href = blogApplyHref(program, guide.slug).replaceAll("&", "&amp;");
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${href}"`));
+    if (!tag) fail(`${path} has no Apply link for ${program.slug} with the blog UTM`);
+    if (!tag.includes('rel="sponsored nofollow noopener"')) fail(`${path} Apply link for ${program.slug} is not rel="sponsored nofollow noopener"`);
+  }
+  const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
+  if (!existsSync(mdFile)) fail(`${mdFile} was not generated`);
+  const md = readFileSync(mdFile, "utf8");
+  if (!md.startsWith(`# ${title}\n`)) fail(`${mdFile} does not start with the guide title`);
+  const twinOrder = [...md.matchAll(/^\d+\. \[[^\]\n]*\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\)/gm)].map((m) => m[1]);
+  if (twinOrder.join() !== want.join()) fail(`${mdFile} lists ${JSON.stringify(twinOrder)}, not guideSelection's ${JSON.stringify(want)}`);
+  for (const { program } of selection.shown) {
+    const autolink = `<${blogApplyHref(program, guide.slug).replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
+    if (!md.includes(autolink)) fail(`${mdFile} is missing the Apply link for ${program.slug}`);
+  }
+}
+
+for (const guide of GUIDES) checkGuidePage(guide);
 
 /**
  * listScore, and so high-paying qualification, reads structured fields only.

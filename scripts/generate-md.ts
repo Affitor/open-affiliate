@@ -69,6 +69,7 @@ import {
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 import { blogEntries, type BlogEntry } from "../src/lib/blog"
+import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
 import { directoryGroups } from "../src/lib/programs-directory"
 import { buildBoard, oasScores, TEAM_DISCLOSURE, UNRANKED_TEXT } from "../src/lib/oas"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
@@ -1252,6 +1253,56 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
   ].filter((x): x is string => Boolean(x)))
 }
 
+/** The twin of a guide (/blog/<slug>): the page's text, its registry facts and programs, each Apply link the page's blogApplyHref. */
+function guideMd(g: GuidePost): string {
+  const selection = guideSelection(g)
+  const f = registryFacts()
+  const count = (t: string) => f.byType.find(x => x.type === t)?.count ?? 0
+  const facts = [
+    `- Pay a recurring commission: ${count("recurring")} of ${f.verified}`,
+    `- Pay for the customer's lifetime: ${f.lifetime} of ${f.verified}`,
+    `- Pay once per sale: ${count("one-time")} of ${f.verified}`,
+    f.cookie ? `- Publish a cookie window: ${f.cookie.published} of ${f.verified}` : null,
+    f.cookie ? `- Median cookie window: ${f.cookie.median} days` : null,
+    f.cookie ? `- Middle half of cookie windows: ${f.cookie.p25} to ${f.cookie.p75} days` : null,
+    `- Approve every applicant automatically: ${f.approval.auto} of ${f.verified}`,
+    `- Review applications by hand: ${f.approval.manual} of ${f.verified}`,
+    `- Pay by PayPal: ${f.payout.paypal} of ${f.verified}`,
+  ].filter(Boolean).join("\n")
+  const sections = g.sections.map(s =>
+    section(
+      s.heading,
+      [
+        ...s.paragraphs.map(mdEscapeProse),
+        ...(s.steps ?? []).map((st, i) => `${i + 1}. **${mdEscape(st.title)}.** ${mdEscapeProse(st.text)}${st.link ? ` [${mdEscape(st.link.label)}](${BASE}${st.link.href})` : ""}`),
+      ].join("\n\n"),
+    ),
+  )
+  const rows = selection.shown
+    .map(({ program: p, copy }, i) => {
+      const terms = mdEscape(`you earn ${earnText(p)}, cookie: ${cookieText(p)}, payout: ${payoutText(p)}, terms checked ${checkedText(p)}`)
+      return [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${terms}, apply: ${mdUrl(blogApplyHref(p, g.slug))}`,
+        `   ${mdEscapeProse(copy.why)}${copy.notFor ? ` Not for: ${mdEscapeProse(copy.notFor)}` : ""}`,
+      ].join("\n")
+    })
+    .join("\n")
+  return joinSections([
+    `# ${mdHeading(guideTitle(g))}`,
+    `By the OpenAffiliate team · Updated ${g.checked}`,
+    `> ${mdEscapeProse(g.answer)}`,
+    DISCLOSURE,
+    sections[0] ?? null,
+    section("What the registry shows", `Verified programs in the OpenAffiliate registry, terms checked up to ${f.asOf}.\n\n${facts}`),
+    ...sections.slice(1),
+    rows ? section("Programs to start with", `${mdEscapeProse(g.programsIntro)}\n\n${rows}`) : null,
+    g.rules.length ? section("Rules that trip people up", [mdEscapeProse(g.rulesIntro), ...g.rules.map(r => `- ${mdEscapeProse(r.text)} [Terms](${BASE}/programs/${r.slug}.md)`)].join("\n\n")) : null,
+    section("Disclose every affiliate link", `${mdEscapeProse(g.disclosure)} Source: [${mdEscape(DISCLOSURE_SOURCE.label)}](${DISCLOSURE_SOURCE.href})`),
+    g.faq.length ? section("FAQ", g.faq.map(q => `### ${q.q.replace(/#/g, "\\#")}\n\n${mdEscapeProse(q.a)}`).join("\n\n")) : null,
+    section("Links", [`HTML: ${BASE}${guidePath(g)}`, `All guides and lists: ${BASE}/blog.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ])
+}
+
 const CHANGELOG_TAG: Record<string, string> = {
   new: "New",
   improved: "Improved",
@@ -1290,7 +1341,7 @@ function main(): void {
   generateArd(process.cwd())
   // Clear previous output so a renamed or retired program cannot leave a file
   // behind that keeps answering as current — worse than a 404.
-  for (const dir of ["programs", "categories", "networks", "best"]) {
+  for (const dir of ["programs", "categories", "networks", "best", "blog"]) {
     rmSync(join(OUT, dir), { recursive: true, force: true })
   }
 
@@ -1303,6 +1354,7 @@ function main(): void {
   write("rankings.md", rankingsMd())
   write("changelog.md", changelogMd())
   write("blog.md", blogMd())
+  for (const g of GUIDES) write(`${guidePath(g).slice(1)}.md`, guideMd(g))
   for (const list of BEST_LISTS) {
     const post = getPost(list.slug)
     const selection = post ? postSelection(post) : null
