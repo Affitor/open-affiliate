@@ -15,7 +15,8 @@ commission:
   duration: "First order only"
   conditions: "Only the first order from each referral qualifies. Completed sales earn commission; refunds, chargebacks and self-referrals do not."
 
-# cookie_days: not stated on the affiliate page or agreement (aioseo.com/affiliates, checked 2026-10-20)
+# "affwp_ref" / "Stores the referring affiliate ID for commission attribution." / "30 days" (aioseo.com/affiliates cookie table, checked 2026-10-20)
+cookie_days: 30
 # payout minimum and methods: not stated on the affiliate page or agreement (checked 2026-10-20)
 # Schedule is left unstructured: FAQ has a 30-day payment hold; agreement requires 37 active-account days. Neither clock is silently discarded.
 payout:
@@ -65,6 +66,10 @@ agents:
     - "Managing on-page SEO for a WordPress site"
     - "Creating XML sitemaps and structured data"
     - "Reviewing SEO issues within WordPress"
+
+conflicts:
+  - field: payout.frequency
+    quote: 'FAQ: "We hold payments for a full 30 days to allow for processing, chargebacks, etc." (https://aioseo.com/affiliates/), mapping to net-30. Agreement: "the referred account must remain active for a minimum of 37 days" (https://aioseo.com/affiliates/affiliate-terms-of-service/), mapping to net-60 under the program waiting-period rule. Frequency is left out and both clocks are retained in payout conditions.'
 
 verified: true
 submitted_by: affitor

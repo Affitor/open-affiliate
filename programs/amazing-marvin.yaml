@@ -20,6 +20,8 @@ signup_url: https://amazingmarvin.com/partner-program
 approval: manual
 # The programme page does not identify a tracking platform.
 network: null
+# "We'll provide you with marketing materials, links, and support" (amazingmarvin.com/partner-program, checked 2026-10-20)
+marketing_materials: true
 
 # Programme-specific promotion restrictions are not stated on the partner page.
 description: >

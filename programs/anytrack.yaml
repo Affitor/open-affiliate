@@ -20,7 +20,7 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly
-  methods: [stripe, bank]
+  methods: [stripe]
   conditions: "Commission is paid on or around the fifteenth for previous months. The FAQ says amounts over USD 50 qualify; lower balances roll forward. Stripe Connect transfers the payment to the affiliate's bank account after payout onboarding."
 
 signup_url: https://anytrack.io/affiliate-program

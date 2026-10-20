@@ -23,7 +23,7 @@ signup_url: https://burstyai.com/affiliate.html
 # The brand links burstyai.firstpromoter.com; this suspended host was not requested.
 network: firstpromoter
 restrictions:
-  - "Do not use your own referral link to obtain a discount on your own purchase."
+  - "Do not sign up through your own referral link; self-referrals are prohibited."
 
 description: >
   BurstyAI offers AI workflows, chatbot tools and templates for content,

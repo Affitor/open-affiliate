@@ -7,7 +7,7 @@ tags: [cloud-hosting, vps, cloud-servers, referral-rewards]
 # "5% reward for life" (www.99stack.com/resources/affiliate-program, checked 2026-10-20)
 commission:
   type: recurring
-  rate: "5% credited to your account"
+  rate: "5%"
   mode: percentage
   value: 5
   duration: lifetime

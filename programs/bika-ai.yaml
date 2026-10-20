@@ -29,8 +29,6 @@ network: rewardful
 # "Marketing & Sales materials" (bika.ai/affiliate, checked 2026-10-20)
 marketing_materials: true
 # Direct signup without an additional agreement does not establish automatic approval.
-restrictions:
-  - "Join with your own communication channel and share at least one piece of content about Bika.ai."
 
 description: >
   Bika.ai combines AI agents, automation, databases, dashboards and

@@ -17,11 +17,13 @@ commission:
 cookie_days: 90
 # "one month in arrears plus one (1) day" (betterproposals.io/partners/terms, checked 2026-10-20)
 # "For example, commission earned in January will be paid on the 1st of March." (betterproposals.io/partners, checked 2026-10-20)
-# Calendar-month arrears is retained without forcing a fixed-day frequency enum.
+# The calendar clock can be 29–32 days after month end; the longest lag maps to net-60.
+# "If the commission balance is below $20 (USD), then it will be held until the next payout." (betterproposals.io/partners, checked 2026-10-20)
 payout:
   minimum: 20
   currency: USD
-  conditions: "Payments occur on the first of the month, one month in arrears plus one day; January earnings are paid March 1. The agreement says payment applies above USD 20, and balances roll forward until USD 20 or more. Fraud, risk or anti-money-laundering reviews and missing payment information may delay payment. Template bonuses also require payment for the design and signed approval of the completed template."
+  frequency: net-60
+  conditions: "Payments occur on the first of the month, one month in arrears plus one day; January earnings are paid March 1 (29 days after January 31 in 2026); April earnings are paid June 1 (32 days after April 30). The agreement says payment applies above USD 20, and balances roll forward until USD 20 or more. Fraud, risk or anti-money-laundering reviews and missing payment information may delay payment. Template bonuses also require payment for the design and signed approval of the completed template."
 
 signup_url: https://betterproposals.io/partners
 dashboard_url: https://partners.betterproposals.io/login
@@ -34,7 +36,6 @@ marketing_materials: true
 # Programme FAQ, agreement sections 2/5/6/9 and linked brand guidelines, checked 2026-10-20.
 restrictions:
   - "Apply with an established relevant audience, original content, experience using the platform and agreement to the partner terms."
-  - "Individuals must be at least 18 or the age of majority in their jurisdiction."
   - "Promote the service actively without competing with the brand's own marketing efforts, and cover your own promotional costs."
   - "Do not use Google Ads for keyword purchases or any PPC or similar campaign."
   - "Do not put affiliate links directly in PPC or similar advertising on any platform."
@@ -51,16 +52,10 @@ restrictions:
   - "Do not imply that promotional email comes from Better Proposals; follow applicable email and anti-spam rules."
   - "Disclose referral compensation clearly, avoid deceptive advertising and follow applicable endorsement rules, industry standards and laws."
   - "Do not duplicate or resell a customer's custom template to other customers or outside the platform under the Template Plan."
-  - "Partners and their subsidiaries or officers must not be controlled by sanctioned parties or based in comprehensively sanctioned territories."
-  - "Keep account credentials secure; access customer accounts only with the customer's permission and credentials."
   - "Use supplied creative only to promote the service; obtain prior written consent before modifying, adapting or translating it."
   - "Follow brand asset guidelines, maintain clear space and contrast, respect minimum sizes and link web uses of assets or the brand name to its website."
   - "Do not imply sponsorship or endorsement, use branding deceptively or harmfully, or associate it with illegal activity."
   - "Do not use brand marks or confusing variants in business names, logos, branding, ads, social media, domains, products or services without advance written permission."
-  - "Do not challenge ownership of the brand's marks or register confusingly similar marks."
-  - "Protect confidential information and use it only for agreement obligations; secure customer data and limit use, disclosure, contact and retention to authorized services."
-  - "Report suspected or actual customer-data breaches within 24 hours and cooperate in investigation and remediation."
-  - "Stop using brand creative and marks, and return or destroy creative and confidential information when the agreement ends."
 
 description: >
   Better Proposals helps businesses create proposals, quotes and contracts,
