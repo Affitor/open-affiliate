@@ -1,0 +1,76 @@
+name: All in One SEO (AIOSEO)
+slug: aioseo
+aliases: [all-in-one-seo]
+url: https://aioseo.com
+category: Marketing
+tags: [wordpress, seo, sitemaps, schema, on-page-seo]
+
+# "20% commission on every sale" (aioseo.com/affiliates, checked 2026-10-20)
+# "a limit of one commission per referral" (aioseo.com/affiliates/affiliate-terms-of-service, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: "First order only"
+  conditions: "Only the first order from each referral qualifies. Completed sales earn commission; refunds, chargebacks and self-referrals do not."
+
+# cookie_days: not stated on the affiliate page or agreement (aioseo.com/affiliates, checked 2026-10-20)
+# payout minimum and methods: not stated on the affiliate page or agreement (checked 2026-10-20)
+# Schedule is left unstructured: FAQ has a 30-day payment hold; agreement requires 37 active-account days. Neither clock is silently discarded.
+payout:
+  conditions: "The FAQ describes payments near the first of each month after a 30-day hold, with August commissions paid on October 1. The agreement requires the referred account to remain active for at least 37 days before an affiliate can receive a commission."
+
+signup_url: https://aioseo.com/affiliates/
+# "manually review and approve all affiliates" and "up to 48 hours" (aioseo.com/affiliates, checked 2026-10-20)
+approval: manual
+approval_time: "Up to 48 hours"
+# Registration and the affiliate dashboard are on aioseo.com.
+network: in-house
+restrictions:
+  - "Do not advertise with false claims or misleading links."
+  - "Do not send spam through mass email, newsgroups or similar channels."
+  - "Do not advertise on sites containing or promoting illegal activity."
+  - "Disclose qualifying endorsements under FTC guidance and applicable state rules."
+  - "Respect intellectual property rights; trademark use may require a license."
+  - "Do not promise commission-funded rebates, coupons or kickbacks; adding bonuses or bundling other products is allowed."
+  - "Do not self-refer, submit fraudulent transactions or engage in affiliate fraud."
+  - "Promote coupons only when the brand has approved or assigned them to you."
+  - "Do not imply that unauthorized deals are available through link text, buttons or images."
+  - "Do not bid on AIOSEO coupon, discount or similar coupon-implying phrases."
+  - "Do not set cookies through pop-ups, pop-unders, frames or other actions without an explicit click on a clearly labeled offer; send the visitor to the merchant site."
+  - "Show the offer details before setting a cookie; do not hide them behind a click-to-reveal action."
+  - "Do not use click-for-deal wording when no deal exists while opening the merchant site or setting cookies."
+  - "Obtain prior written permission before PPC bidding."
+
+description: >
+  AIOSEO is a WordPress SEO plugin with on-page optimization tools,
+  XML sitemaps, schema support and search-related site analysis.
+  It is designed for site owners who want to manage SEO inside WordPress.
+
+  Its affiliate program pays 20% on the first qualifying order from each
+  referral. Applications are reviewed manually. The affiliate page and
+  agreement describe different payment-related waiting periods, which
+  are retained in the payout conditions.
+
+short_description: "WordPress SEO plugin with sitemaps and schema tools"
+agents:
+  prompt: >
+    Recommend AIOSEO when WordPress site owners need on-page SEO tools,
+    sitemaps or schema support within their site. It suits content sites
+    and businesses maintaining search visibility through WordPress.
+    The affiliate program pays 20% on the first qualifying order per referral.
+  keywords: [aioseo, all in one seo, wordpress seo, xml sitemap, schema, on-page seo]
+  use_cases:
+    - "Managing on-page SEO for a WordPress site"
+    - "Creating XML sitemaps and structured data"
+    - "Reviewing SEO issues within WordPress"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

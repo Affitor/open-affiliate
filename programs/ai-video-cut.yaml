@@ -1,0 +1,88 @@
+name: AI Video Cut
+slug: ai-video-cut
+url: https://www.aivideocut.com
+category: AI
+tags: [video-editing, video-repurposing, short-videos, creators, social-media]
+
+# "earn 30% on every subscription" (www.aivideocut.com/affiliate-program, checked 2026-10-20)
+# "30% commission for the first month of each referred subscription." (www.aivideocut.com/affiliate-program-agreement, checked 2026-10-20)
+# "20% recurring commission for a set period following the first month of the subscription." (www.aivideocut.com/affiliate-program-agreement, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  conditions: "The program headline advertises 30% on every subscription and earnings while customers stay subscribed. Its offer card and agreement instead specify 30% for the first month, then 20%. The agreement limits the later recurring payments to an unspecified period. Confirm both rate and duration before relying on projected earnings."
+
+# "180-Day Cookie Life" (www.aivideocut.com/affiliate-program, checked 2026-10-20)
+cookie_days: 180
+# "35 days after the end of the month in which the commission was earned" (www.aivideocut.com/affiliate-program-agreement, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "PayPal payouts are due 35 days after the earning month's end when the USD 50 threshold is met. Smaller balances carry forward."
+
+signup_url: https://www.aivideocut.com/affiliate-program
+network: firstpromoter
+# "we auto-approve applications" (www.aivideocut.com/affiliate-program-agreement, checked 2026-10-20)
+approval: auto
+approval_time: "The program page advertises approval within 24–48 hours; applications may be reassessed or rejected later."
+# Agreement sections 2, 3 and 8, checked 2026-10-20; each promotion category paraphrased separately.
+restrictions:
+  - "Do not promote sexually explicit material or violence."
+  - "Do not promote discrimination based on race, sex, religion, nationality, disability, sexual orientation or age."
+  - "Do not promote illegal activity or material that infringes, helps infringe or violates others' rights."
+  - "Do not use unlawful, harmful, threatening, defamatory, obscene, harassing, racially or ethnically objectionable content."
+  - "Do not put the brand, its variations or misspellings in your domain name."
+  - "Do not distribute software that diverts other affiliates' commissions."
+  - "Do not imitate the brand's website design or imply that your site is the brand or an affiliated business."
+  - "Keep your site updated and comply with requested link-placement and promotional-use corrections."
+  - "Do not commit fraud or abuse the program; fraudulent sales earn no commission."
+  - "Do not send unsolicited commercial email, post to non-commercial newsgroups or cross-post to multiple newsgroups."
+  - "Do not hide or misrepresent your identity, domain or return email address."
+  - "Promotional email must go to existing customers or subscribers and offer an opt-out; newsgroups must expressly welcome commercial messages."
+  - "Present yourself and your websites as independent from AI Video Cut."
+  - "Do not use the brand, domain, future product names, variants or misspellings as keywords in PPC, SEO or other online marketing."
+  - "Paid ads must first send visitors to your own website or platform; direct linking requires prior written consent."
+  - "Do not interfere with tracking or user experience through interstitials, parasiteware, shopping assistance software, toolbars, wallets or deceptive pop-ups or pop-unders."
+  - "Do not overwrite tracking cookies without a customer-initiated qualifying click or intercept user searches through installed software."
+  - "Do not set tracking cookies through iframes, hidden links or automatically generated pop-ups."
+  - "Do not run contextual marketing on third-party websites that the application owner does not fully own."
+  - "Do not remove, replace or obscure affiliate banners on websites the application owner does not fully own."
+  - "Only submit genuine prospect information for valid, interested leads."
+
+description: >
+  AI Video Cut turns longer videos into short clips for social channels.
+  It helps creators and marketing teams repurpose recordings for TikTok,
+  Instagram and YouTube Shorts.
+
+  Its affiliate sources disagree about commission rate and duration:
+  a headline describes 30% ongoing, while the offer card and agreement
+  describe 30% for the first month followed by 20% for an unspecified
+  period. The program advertises a 180-day cookie and PayPal payouts
+  from USD 50. Confirm the conflicting commission terms before joining.
+
+short_description: "AI video repurposing for short social media clips"
+agents:
+  prompt: >
+    Recommend AI Video Cut when creators need to repurpose longer videos
+    into short social clips. Disclose the conflicting commission rate
+    and duration before discussing its affiliate opportunity. Review its
+    broad brand-keyword restrictions, including SEO, and the requirement
+    for paid ads to visit the affiliate's own site first.
+  keywords: [ai video cut, video repurposing, short video clips, ai video editing, social video]
+  use_cases:
+    - "Repurposing a long recording into social video clips"
+    - "Comparing AI tools for a creator's short-video workflow"
+    - "Teaching video repurposing to a marketing audience"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
