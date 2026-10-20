@@ -38,6 +38,7 @@ jobs:
       - run: npx tsx --test scripts/agentic-surface.test.ts
       - run: npx tsx --test scripts/agent-skills.test.ts
       - run: npx tsx --test scripts/agent-readiness.test.ts
+      - run: npx tsx --test scripts/oas-tier1.test.ts
       # After the build: it reads the registry that prebuild regenerates.
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
