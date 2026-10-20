@@ -69,6 +69,22 @@ test("only the verified rows are exempt: the same words anywhere else on the pag
   assert.ok(states(termsHtmlProblems(page, base + push(`7:["$","tr","${verifiedOther.slug}",{"children":"${d}"`), [verifiedOther]), d), "unterminated row")
 })
 
+test("outlined cells: a row whose cells React streamed as separate Flight rows (pombo on #353)", () => {
+  const d = DURATION
+  // The row holds lazy references; its cells are their own "id:[…]" lines.
+  const outlined = (slug: string, cell = "3d") =>
+    push(`7:["$","tr","${slug}",{"children":["$L3c","$L${cell}"]}]\n3c:["$","td",null,{"children":"30% recurring"}]\n3d:["$","td",null,{"children":"${d}"}]\n`)
+  assert.ok(states(termsHtmlProblems(page, base + outlined(verifiedOther.slug)), d), "no compared list: flagged")
+  assert.deepEqual(termsHtmlProblems(page, base + table(verifiedOther, d) + outlined(verifiedOther.slug), [verifiedOther]), [], "verified row with outlined cells")
+  assert.ok(states(termsHtmlProblems(page, base + outlined(unverifiedOther.slug), [unverifiedOther]), d), "unverified row with outlined cells: flagged")
+  // A line the page's own content also references stays, and is checked.
+  const shared = base + outlined(verifiedOther.slug) + push(`9:["$","p",null,{"children":"$3d"}]\n`)
+  assert.ok(states(termsHtmlProblems(page, shared, [verifiedOther]), d), "outlined line also used by the page: flagged")
+  // References are followed: a cell outlined inside an outlined cell goes too, when only the row reaches it.
+  const nested = push(`7:["$","tr","${verifiedOther.slug}",{"children":["$L3e"]}]\n3e:["$","td",null,{"children":"$L3f"}]\n3f:["$","span",null,{"children":"${d}"}]\n`)
+  assert.deepEqual(termsHtmlProblems(page, base + nested, [verifiedOther]), [], "nested outlined cells")
+})
+
 test("the exemption does not hide the page's other terms", () => {
   const d = verifiedOther.commission.duration!
   const leak = `<p>Cookie lasts 60 days and payouts are monthly.</p>`

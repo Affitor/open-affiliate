@@ -183,9 +183,10 @@ const TERM_MARKUP: [string, RegExp][] = [
 ]
 
 /** /programs/<slug> as served. */
-/** Cuts every JSON array that starts with one of `starts` (string-aware bracket matching); an unterminated one is left in. */
-function cutArrays(text: string, starts: string[]): string {
+/** Cuts every JSON array that starts with one of `starts` (string-aware bracket matching); an unterminated one is left in. Returns the cut text too. */
+function cutArrays(text: string, starts: string[]): { text: string; cut: string[] } {
   let out = text
+  const cut: string[] = []
   for (const start of starts) {
     for (let at = out.indexOf(start); at !== -1; at = out.indexOf(start, at)) {
       let depth = 0
@@ -201,8 +202,37 @@ function cutArrays(text: string, starts: string[]): string {
         else if ((c === "]" || c === "}") && --depth === 0) end = i
       }
       if (end === -1) break
+      cut.push(out.slice(at, end + 1))
       out = out.slice(0, at) + "null" + out.slice(end + 1)
     }
+  }
+  return { text: out, cut }
+}
+
+/** The Flight row ids a payload fragment references: "$3d", "$L3d", "$@3d", "$3d:props:children". */
+function flightRefs(fragment: string): string[] {
+  return [...fragment.matchAll(/"\$[L@]?([0-9a-f]+)(?::[^"]*)?"/g)].map((m) => m[1])
+}
+
+/**
+ * Removes the Flight rows ("3d:[…]" lines) that only the cut nodes referenced,
+ * following their own references in turn. React outlines a row's cells into
+ * such lines (the row then holds "$L3d"); a line still referenced from anywhere
+ * else stays and is checked.
+ */
+function dropOrphanRows(flight: string, cut: string[]): string {
+  let out = flight
+  const queue = cut.flatMap(flightRefs)
+  const seen = new Set<string>()
+  while (queue.length) {
+    const id = queue.pop()!
+    if (seen.has(id) || id === "0") continue
+    seen.add(id)
+    if (new RegExp(`"\\$[L@]?${id}(?::[^"]*)?"`).test(out)) continue
+    const row = new RegExp(`(^|\n)${id}:[^\n]*`).exec(out)
+    if (!row) continue
+    queue.push(...flightRefs(row[0]))
+    out = out.slice(0, row.index) + row[1] + out.slice(row.index + row[0].length)
   }
   return out
 }
@@ -210,15 +240,17 @@ function cutArrays(text: string, starts: string[]): string {
 /**
  * The page without the comparison rows of verified compared programs: in the
  * markup, the data-compare rows that link to them; in the RSC payload, the
- * ["$","tr","<slug>",…] nodes (ProgramCompare keys each row by slug). Those
- * cells state another program's verified terms. Nothing else is removed, so the
- * page's own text is checked in full wherever it appears.
+ * ["$","tr","<slug>",…] nodes (ProgramCompare keys each row by slug) and the
+ * outlined rows only they reference. Those cells state another program's
+ * verified terms. Nothing else is removed, so the page's own text is checked in
+ * full wherever it appears.
  */
 function withoutVerifiedRows(html: string, flight: string, slugs: Set<string>): { html: string; flight: string } {
   if (slugs.size === 0) return { html, flight }
   const rows = html.replace(/<table data-compare[\s\S]*?<\/table>/, (table) =>
     table.replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g, (row) => (slugs.has(/href="\/programs\/([a-z0-9-]+)"/.exec(row)?.[1] ?? "") ? "" : row)))
-  return { html: rows, flight: cutArrays(flight, [...slugs].map((slug) => `["$","tr","${slug}",`)) }
+  const nodes = cutArrays(flight, [...slugs].map((slug) => `["$","tr","${slug}",`))
+  return { html: rows, flight: dropOrphanRows(nodes.text, nodes.cut) }
 }
 
 /**
