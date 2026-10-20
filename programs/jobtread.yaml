@@ -17,10 +17,11 @@ commission:
 # cookie_days: not published on jobtread.com/referrals (checked 2026-10-20)
 
 # "Commissions earned are aggregated by calendar quarter and are paid within fifteen days of the end of each quarter" (jobtread.com/referrals, checked 2026-10-20)
-# methods: the application form offers Zelle (preferred) or a mailed check (jobtread.com/referrals, checked 2026-10-20); Zelle is not in the methods enum, so methods is left out
+# methods: the application form offers "Zelle (preferred method)" and "Check mailed to address inputted" (jobtread.com/referrals, checked 2026-10-20); Zelle is not in the methods enum, so only check is listed and Zelle is kept in conditions
 # minimum: not published on jobtread.com/referrals (checked 2026-10-20)
 payout:
   frequency: quarterly
+  methods: [check]
   conditions: "Commissions are totaled per calendar quarter and paid within 15 days after the quarter ends, with a statement of the calculation; partners choose Zelle or a mailed check."
 
 signup_url: https://www.jobtread.com/referrals

@@ -7,13 +7,15 @@ tags: [multi-session-browser, chromium-browser, multiple-accounts, social-media-
 
 # "You will receive a 20% commission all purchases made by your referrals over the lifetime of their account, up to $2,000 per paying account referred." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
 # "Earn Up to $2,000 for each customer you refer" and "20% recurring commissions" (ghostbrowser.com/affiliate-program, checked 2026-10-20)
+# "do not make any new referrals for a period of six months, or who do not log into the Partner area for 12 months" (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+# "no more commissions will be paid on any referrals" (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
 commission:
   type: recurring
   rate: "20%"
   mode: percentage
   value: 20
   duration: lifetime
-  conditions: "20% of all purchases a referred customer makes over the lifetime of their account, including upgrades and additional accounts, capped at $2,000 per paying account. Own purchases, customers already in Ghost Browser's database and refunded signups do not qualify."
+  conditions: "20% of all purchases a referred customer makes over the lifetime of their account, including upgrades and additional accounts, capped at $2,000 per paying account. Own purchases, customers already in Ghost Browser's database and refunded signups do not qualify. A partner who makes no new referrals for six months, or does not log in to the Partner area for 12 months, is treated as dormant: the account is expelled and no more commissions are paid on any referrals."
 
 # "The Cookie Life for referred traffic is 30 days." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
 cookie_days: 30
@@ -62,7 +64,8 @@ description: >
 
   The partner program pays 20% of every purchase a referred customer makes
   over the lifetime of their account, up to $2,000 per paying account, with
-  a 30-day cookie. Payouts go to PayPal in the first week of the month,
+  a 30-day cookie, as long as the partner stays active: no new referrals for
+  six months, or no login for 12 months, ends all further commissions. Payouts go to PayPal in the first week of the month,
   about two months after the referral, once $100 is owed. Applications are
   reviewed and currently open to existing Ghost Browser users.
 
@@ -74,8 +77,9 @@ agents:
     accounts on the same website at once, such as social media managers,
     agencies, e-commerce sellers and marketers juggling client profiles.
     The partner program currently accepts existing users. Commission: 20%
-    for the lifetime of the account, up to $2,000 per customer, 30-day cookie,
-    $100 minimum payout via PayPal.
+    for the lifetime of the account, up to $2,000 per customer, while the
+    partner stays active (a new referral at least every six months and a
+    login at least every 12 months), 30-day cookie, $100 minimum via PayPal.
   keywords: [ghost browser, multi-session browser, multiple accounts browser, multi login browser, social media account management, browser workspaces]
   use_cases:
     - "Social media managers running many client accounts"

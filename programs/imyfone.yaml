@@ -14,12 +14,23 @@ commission:
   mode: tiered
   value: 60
   duration: null
-  conditions: "40% of each sale for monthly sales up to $3,999, 50% from $4,000 a month, and 60% under an incentive cooperation, on sales and renewals. The affiliate policy also says commission is determined on an individual basis."
+  conditions: "40% of each sale for monthly sales up to $3,999, 50% from $4,000 a month, and 60% under an incentive cooperation, on sales and renewals. The affiliate policy and the application terms also say commission is determined on an individual basis, and the application terms say the rate is set by iMyFone and communicated by email or on its website."
 
 # cookie_days: not published on imyfone.com/company/partner or imyfone.com/company/affliate-policy (checked 2026-10-20)
-# payout: not published on imyfone.com/company/partner or imyfone.com/company/affliate-policy (checked 2026-10-20); affiliates join through the networks listed on the partner page
+# minimum: not published on imyfone.com/company/partner, imyfone.com/company/affliate-policy or the affiliate application terms (checked 2026-10-20)
+# "Any commissions will be settled before the 25th of the following month after the orders are generated and tracked." (order-agents-ma.imyfone.com/iCartManager/affiliate/apply, checked 2026-10-20)
+# "We will pay your commission by PayPal or Bank Transfer." (order-agents-ma.imyfone.com/iCartManager/affiliate/apply, checked 2026-10-20)
+# "Financial transactions covered by this Agreement will be processed in the USD currency." (order-agents-ma.imyfone.com/iCartManager/affiliate/apply, checked 2026-10-20)
+# settled before the 25th of the month after the orders → net-30 (backfill rule #1)
+payout:
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+  conditions: "For affiliates who apply through iMyFone's own application, commissions are settled before the 25th of the month after the orders are tracked, by PayPal or bank transfer in USD. Refunds after settlement are deducted from pending commissions, and PayPal or bank processing fees and any currency exchange fees are deducted from or paid by the affiliate."
 
 signup_url: https://www.imyfone.com/company/partner/
+# "We reserve the right to approve or reject ANY Affiliate Program Application at our sole and absolute discretion." (order-agents-ma.imyfone.com/iCartManager/affiliate/apply, checked 2026-10-20)
+approval: manual
 restrictions:
   - "No iFrames, toolbars, pop-unders, pop-ups or layer ads that load iMyFone promotional material on a user's computer without authorization"
   - "No forced clicks, spyware or downloadable adware"
@@ -34,6 +45,7 @@ restrictions:
   - "No copying or imitating videos, photos or content from the iMyFone website"
   - "No bidding on iMyFone brands or trademarks, including variations or misspellings"
   - "No terms or symbols such as TM, (R), (C) or official in links to the affiliate URL"
+  - "No firing a tracking pixel when the consumer action is completed"
 
 marketing_materials: true
 dashboard_url: null
@@ -49,9 +61,10 @@ description: >
 
   The affiliate program pays up to 60% commission on sales and renewals:
   40% up to $3,999 in monthly sales, 50% from $4,000 and 60% under an
-  incentive cooperation. Affiliates join through one of the affiliate
-  platforms listed on the partner page; cookie length and payout terms are
-  not published on iMyFone's own pages.
+  incentive cooperation. Affiliates join through one of the platforms
+  listed on the partner page, including iMyFone's own application, whose
+  terms settle commissions before the 25th of the following month by
+  PayPal or bank transfer in USD. Cookie length is not published.
 
 short_description: "Phone data recovery, transfer and repair utilities"
 

@@ -18,14 +18,12 @@ commission:
 
 # cookie_days: not published on klenty.com/affiliate-program or klenty.com/affiliate-terms-and-conditions (checked 2026-10-20)
 
-# "Minimum balance required for payout is $200.00" (klenty.com/affiliate-program, checked 2026-10-20)
-# "Commissions will be paid once the amount gets accumulated to $200 or once in a month." (klenty.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# minimum: stated two ways, so left out: "Minimum balance required for payout is $200.00" (klenty.com/affiliate-program, checked 2026-10-20) vs "Commissions will be paid once the amount gets accumulated to $200 or once in a month." (klenty.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# "Instant payouts every month!" (klenty.com/affiliate-program, checked 2026-10-20)
 # methods: not published on klenty.com/affiliate-program or klenty.com/affiliate-terms-and-conditions (checked 2026-10-20)
 payout:
-  minimum: 200
-  currency: USD
   frequency: monthly
-  conditions: "Paid monthly once the balance reaches $200, and only for completed transactions on accounts that stay active for at least 31 days."
+  conditions: "The affiliate page sets a $200 minimum balance for payout, while the affiliate terms say commissions are paid once $200 accumulates or once a month. Only completed transactions on accounts that stay active for at least 31 days are paid."
 
 signup_url: https://www.klenty.com/affiliate-program/
 # "Anyone can be an affiliate. Just sign up and we'll approve instantly" (klenty.com/affiliate-program, checked 2026-10-20)
@@ -61,14 +59,16 @@ description: >
   The affiliate program runs on FirstPromoter. Klenty's affiliate page
   offers 20% of each referral's monthly revenue for up to 3 years plus small
   bonuses, while its affiliate terms limit commission to the first order of
-  each referral. Payouts are monthly once the balance reaches $200, and
-  sign-ups are approved instantly. PPC bidding is not allowed.
+  each referral. Payouts are monthly; the page sets a $200 minimum while
+  the terms say $200 or once a month. Sign-ups are approved instantly. PPC bidding is not allowed.
 
 short_description: "Sales engagement platform with cadences and AI dialers"
 
 conflicts:
   - field: commission.duration
     quote: "Affiliate page: 20% monthly recurring revenue for 3 years; affiliate terms: one commission per referral, on the first order only."
+  - field: payout.minimum
+    quote: "Affiliate page: minimum balance required for payout is $200; affiliate terms: commissions are paid once $200 accumulates or once in a month."
 
 agents:
   prompt: >
@@ -77,7 +77,7 @@ agents:
     especially B2B sales teams that rely on phone and email outreach. Klenty's
     pages state the commission two ways (20% for up to 3 years on the
     affiliate page, first order only in the terms), and PPC bidding is not
-    allowed. Payout minimum $200.
+    allowed.
   keywords: [klenty, sales engagement platform, parallel dialer, cold email cadence, outbound sales tool, sdr software]
   use_cases:
     - "SDR teams running email and phone cadences"

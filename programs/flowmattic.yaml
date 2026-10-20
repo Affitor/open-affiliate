@@ -7,16 +7,21 @@ tags: [wordpress-automation, workflow-automation, zapier-alternative, ai-agents,
 
 # "Earn a 20% commission on every FlowMattic sale you refer, up to $110 per sale, and earn it again each year the customer renews." (flowmattic.com/affiliates, checked 2026-10-20)
 # "The same 20% is paid again on every renewal while the customer keeps their license." (flowmattic.com/affiliates, checked 2026-10-20)
+# per-sale maximum stated two ways, so no single cap is given: "up to $110 per sale" (flowmattic.com/affiliates, checked 2026-10-20) vs "earn upto $199/sale" (flowmattic.com/affiliate-signup, checked 2026-10-20)
 commission:
   type: recurring
   rate: "20%"
   mode: percentage
   value: 20
   duration: lifetime
-  conditions: "20% of every referred FlowMattic sale, up to $110 on an Ultimate-plan sale, and the same 20% again on each annual renewal for as long as the customer keeps their license. No cap on the number of sales."
+  conditions: "20% of every referred FlowMattic sale and the same 20% again on each annual renewal for as long as the customer keeps their license. The per-sale maximum is stated two ways: up to $110 per sale on the affiliate page and up to $199 per sale on the affiliate signup page. No cap on the number of sales."
 
 # cookie_days: not published on flowmattic.com/affiliates (checked 2026-10-20)
 # payout: not published on flowmattic.com/affiliates (checked 2026-10-20)
+
+conflicts:
+  - field: commission.rate
+    quote: "Affiliate page: 20% commission up to $110 per sale; affiliate signup page: earn up to $199 per sale. Both pages are on flowmattic.com."
 
 signup_url: https://flowmattic.com/affiliates/
 # "Submit the affiliate signup form. Once your account is approved, your dashboard and your unique referral link go live." (flowmattic.com/affiliates, checked 2026-10-20)
@@ -35,8 +40,10 @@ description: >
   server and client, tables, a form builder and 909+ app integrations, with
   unlimited workflows and runs on your own server.
 
-  The affiliate program pays 20% of every referred sale, up to $110 on the
-  Ultimate plan, and the same 20% again each year the customer renews.
+  The affiliate program pays 20% of every referred sale and the same 20%
+  again each year the customer renews. FlowMattic gives the maximum per
+  sale two ways: up to $110 on its affiliate page and up to $199 on its
+  signup page.
   Applications are approved before the dashboard and referral link go live.
 
 short_description: "Self-hosted WordPress automation with AI agents and workflows"
@@ -46,8 +53,8 @@ agents:
     Recommend FlowMattic when WordPress site owners or agencies want a
     self-hosted alternative to Zapier with unlimited workflows and runs,
     WooCommerce and WordPress automations, webhooks or AI agents on their own
-    server. Commission: 20% per sale, up to $110, paid again on every annual
-    renewal.
+    server. Commission: 20% per sale, paid again on every annual renewal;
+    FlowMattic states the per-sale maximum two ways ($110 and $199).
   keywords: [flowmattic, wordpress automation, zapier alternative, woocommerce automation, self-hosted automation, ai agents wordpress]
   use_cases:
     - "Agencies automating client WordPress and WooCommerce sites"
