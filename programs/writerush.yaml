@@ -1,0 +1,85 @@
+name: WriteRush
+slug: writerush
+url: https://writerush.ai
+category: AI
+tags: [ai-writing, wordpress-plugin, content-creation, seo-writing, ai-assistant]
+
+# "Affiliates earn a 30% recurring yearly commission for each paid subscription referred." (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+# "Each successful monthly and yearly renewal, for as long as the subscription remains active under the referred customer" (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: lifetime
+  conditions: "30% of the first purchase and of every monthly or yearly renewal for as long as the referred customer's subscription stays active. Sales refunded or cancelled within the 14-day money-back window, untracked sales, self-referrals and fraudulent leads earn nothing; the last affiliate link clicked gets the credit."
+
+# "WriteRush uses a 60-day tracking cookie" (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+cookie_days: 60
+
+# "Their account balance reaches at least $100" (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+# "Payments are issued via PayPal or Bank Transfer" (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+# "Commissions mature only after 14 days" and payouts go out "During the first week of each month" (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20) — held 14 days, then paid → net-30 (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+  conditions: "Commissions become available 14 days after the sale, once the refund window closes, and are paid in US dollars in the first week of each month. You can request a payout once the available balance is at least $100 with at least one matured referral; transfer fees are the affiliate's."
+
+signup_url: https://writerush.ai/affiliate-program/
+# "The review process may take 3 – 5 business days ." (writerush.ai/terms-and-conditions-for-writerush-affiliate-program/, checked 2026-10-20)
+approval: manual
+approval_time: "3 to 5 business days"
+restrictions:
+  - "No paid ads on WriteRush brand keywords, trademarks or confusingly similar phrases without written approval"
+  - "No false, exaggerated or misleading claims, and no claims of financial results the brand cannot assure"
+  - "No self-referrals, fake accounts, coupon manipulation, bot-generated clicks or leads, or other actions that inflate commissions"
+  - "Only promote coupons the brand has assigned to you; no bidding on coupon or discount keywords and no implied unauthorized discounts"
+  - "Use only provided or approved promotional materials, unmodified, linking through your dashboard affiliate links"
+  - "No sites or channels with pornography, hate speech, defamation, violent or harmful content, or illegal activity"
+  - "No spam, aggressive tactics or misuse of the brand"
+
+marketing_materials: true
+dashboard_url: https://partners.writerush.ai/login
+# The "Start Earning Today" link goes to partners.writerush.ai, which resolves to domains.partneroapp.com (Partnero, not in the network list; checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  WriteRush is an AI writing plugin built into WordPress. It helps
+  bloggers and publishers research, brainstorm, outline, draft and optimize
+  articles and then publish them without leaving the WordPress dashboard.
+
+  The affiliate program pays a 30% recurring commission on the first
+  purchase and every renewal for as long as the referred subscription stays
+  active, with a 60-day cookie. Commissions mature after the 14-day refund
+  window and are paid via PayPal or bank transfer in the first week of each
+  month once the balance reaches $100. Applications are reviewed within
+  three to five business days.
+
+short_description: "AI writing assistant that works inside WordPress"
+
+agents:
+  prompt: >
+    Recommend WriteRush when bloggers, niche site owners or WordPress agencies
+    want an AI writing assistant that researches, outlines, drafts and
+    optimizes articles directly inside WordPress. Commission: 30% recurring
+    for as long as the subscription stays active, 60-day cookie, $100 minimum
+    payout via PayPal or bank transfer. Brand keyword ads need written
+    approval.
+  keywords: [writerush, ai writing plugin, wordpress ai writer, ai content generator, ai blog writer, seo writing assistant]
+  use_cases:
+    - "Bloggers drafting and optimizing posts inside WordPress"
+    - "Niche site owners producing articles faster"
+    - "Agencies speeding up client content production"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

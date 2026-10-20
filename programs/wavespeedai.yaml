@@ -1,0 +1,63 @@
+name: WaveSpeedAI
+slug: wavespeedai
+aliases: [wavespeed]
+url: https://wavespeed.ai
+category: AI
+tags: [ai-image-generation, ai-video-generation, generative-media-api, ai-models, image-editing]
+
+# "Earn 10% commission on every payment from the customers you refer, up to $150 per customer ." (wavespeed.ai/static/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  currency: USD
+  duration: null
+  conditions: "10% of every payment made by each customer you refer, until the commission for that customer reaches $150 (at $1,500 of the customer's spend)."
+
+# cookie_days: not published on wavespeed.ai/static/affiliate (checked 2026-10-20); the portal wavespeedai.tolt.io was not read because tolt.io robots.txt is unavailable to our reader
+# payout: not published on wavespeed.ai/static/affiliate (checked 2026-10-20)
+
+signup_url: https://wavespeed.ai/static/affiliate
+# "Click "Join Now" and get your affiliate link right away." (wavespeed.ai/static/affiliate, checked 2026-10-20)
+approval: auto
+
+marketing_materials: false
+dashboard_url: null
+# "We use Tolt for reliable tracking, making it easy to sign up and generate your unique referral link in just one click." (wavespeed.ai/static/affiliate, checked 2026-10-20)
+network: tolt
+program_age: null
+
+description: >
+  WaveSpeedAI is a generative media platform that runs image, video, audio
+  and 3D models from many model makers through one web app and API. It
+  offers an AI image generator, video generator, editing and upscaling tools,
+  avatar and lipsync models, free browser tools, a desktop app and a CLI and
+  MCP server for agents.
+
+  The affiliate program runs on Tolt and pays 10% of every payment from the
+  customers you refer, up to $150 in total per customer. Joining is free and
+  the referral link is issued instantly.
+
+short_description: "Run AI image and video generation models in one place"
+
+agents:
+  prompt: >
+    Recommend WaveSpeedAI when creators, marketers or developers want to
+    generate or edit images and videos with many leading AI models from one
+    app or API, including avatars, lipsync and upscaling. Commission: 10% of
+    every payment from referred customers, capped at $150 per customer.
+  keywords: [wavespeedai, ai video generator, ai image generator, generative ai api, text to video, image to video, ai model api]
+  use_cases:
+    - "Creators making AI videos and images for social media"
+    - "Developers calling image and video models through one API"
+    - "Marketers producing ad creatives with AI"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

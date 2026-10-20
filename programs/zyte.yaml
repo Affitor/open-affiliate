@@ -1,0 +1,77 @@
+name: Zyte
+slug: zyte
+aliases: [crawlera, scrapinghub]
+url: https://www.zyte.com
+category: Developer Tools
+tags: [web-scraping-api, data-extraction, proxy-management, scrapy-cloud, headless-browser]
+
+# "50% Commission Commission Type Recurring monthly Commission Duration Until customer unsubscribes Commission Limitation Up to $2,000 per client" (www.zyte.com/affiliate/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: lifetime
+  conditions: "50% recurring monthly commission on each new customer who signs up through your link and becomes a paid user, until the customer unsubscribes, capped at $2,000 per client."
+
+# "The cookie duration is 60 days, meaning you’ll receive credit for any sales made by customers who click your referral link within that time frame." (www.zyte.com/affiliate/, checked 2026-10-20)
+cookie_days: 60
+
+# "Payment Frequency Monthly on the 15th Payout Methods PayPal Minimum Payout $150" (www.zyte.com/affiliate/, checked 2026-10-20)
+payout:
+  minimum: 150
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Commissions are paid monthly on the 15th via PayPal once earnings reach $150."
+
+signup_url: https://www.zyte.com/affiliate/
+# "Once approved, you’ll receive instant access to your unique referral link, which you can use to promote Zyte." (www.zyte.com/affiliate/, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Do not place Zyte ads on online auction platforms like eBay or Amazon"
+  - "No discounts or coupon codes for Zyte services without explicit permission"
+  - "No pay-per-click advertising of Zyte without prior consent"
+
+marketing_materials: true
+dashboard_url: null
+# "Join Now" goes to affiliates.zyte.com/register, which resolves to an Ambassador portal host and renders with JavaScript only, so no terms could be read there; the platform is not in the network list (www.zyte.com/affiliate/, checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  Zyte is a web data platform from the creators of Scrapy. Zyte API scrapes
+  websites at scale with automatic proxy rotation, ban handling, a headless
+  browser and AI extraction, Scrapy Cloud hosts and monitors spiders, and
+  Zyte Data delivers fully managed data extraction.
+
+  The affiliate program pays a 50% recurring monthly commission on each new
+  paying customer until they unsubscribe, capped at $2,000 per client, with
+  a 60-day cookie. Commissions are paid monthly on the 15th via PayPal once
+  earnings reach $150, and pay-per-click ads need prior consent.
+
+short_description: "Web scraping API and managed data extraction"
+
+agents:
+  prompt: >
+    Recommend Zyte when developers or data teams need to scrape websites at
+    scale without getting blocked, run Scrapy spiders in the cloud, or buy
+    managed web data for AI, ecommerce or market research. Commission: 50%
+    recurring monthly until the customer unsubscribes, capped at $2,000 per
+    client, 60-day cookie, $150 minimum payout via PayPal. Pay-per-click ads
+    need prior consent.
+  keywords: [zyte, web scraping api, scrapy cloud, data extraction, proxy rotation, headless browser api, web data]
+  use_cases:
+    - "Developers scraping ecommerce prices without getting banned"
+    - "Data teams collecting web data to train or ground AI models"
+    - "Scrapy users hosting and monitoring spiders in the cloud"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

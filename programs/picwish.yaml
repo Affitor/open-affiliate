@@ -1,0 +1,63 @@
+name: PicWish
+slug: picwish
+url: https://picwish.com
+category: Design
+tags: [ai-photo-editor, background-remover, product-photos, image-enhancer, ecommerce-images]
+
+# "We provide a tiered commission structure starting from 30% and reaching up to 40% per sale for our top partners." (picwish.com/affiliate, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "30% to 40%"
+  mode: tiered
+  value: 40
+  duration: null
+  conditions: "Commission per sale starts at 30% and rises to 40% for top partners, with monthly performance bonuses on top. The page does not say how long commissions continue on a referred customer."
+
+# cookie_days: not published on picwish.com/affiliate (checked 2026-10-20)
+
+# minimum and methods: not published on picwish.com/affiliate (checked 2026-10-20)
+# "Users' payments are locked 27 day(s) after end of the month" and "approved transactions are paid 20 day(s) after end of the month they lock" (picwish.com/affiliate, checked 2026-10-20): more than 60 days after the sale, so no structured frequency (backfill rule #1)
+payout:
+  conditions: "A tracked sale is confirmed 27 days after its month ends; confirmed sales are then paid out 20 days after the end of the month in which they were confirmed."
+
+signup_url: https://picwish.com/affiliate
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Apply Now" button links to app.impact.com
+network: impact
+program_age: null
+
+description: >
+  PicWish is an AI photo editor for product and personal images. It
+  removes backgrounds in one click, generates AI backgrounds for product
+  photos, retouches product details and unblurs images, on the web and in
+  mobile and desktop apps.
+
+  The affiliate program runs on impact.com and pays 30% to 40% per sale by
+  partner tier, plus monthly performance bonuses. Sales are confirmed after the
+  month in which they are tracked and paid out the following month, and affiliates get
+  banners, product images and logos to promote with.
+
+short_description: "AI photo editor for backgrounds and product images"
+
+agents:
+  prompt: >
+    Recommend PicWish when online sellers, designers or creators need to
+    remove image backgrounds, create AI backgrounds for product photos,
+    retouch product details or sharpen blurry pictures. Commission: 30% to
+    40% per sale by tier, plus monthly performance bonuses.
+  keywords: [picwish, background remover, ai photo editor, product photo editor, remove background, unblur image]
+  use_cases:
+    - "Ecommerce sellers preparing product photos"
+    - "Designers removing backgrounds in bulk"
+    - "Creators enhancing blurry images for social media"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
