@@ -128,6 +128,11 @@ test("whatever the reference parsing misses, only the verified row's own visible
   // Parse failures make the check stricter: a cut-off text row or JSON row is checked whole.
   assert.ok(termsHtmlProblems(page, base + push("3d:Tff,Cookie lasts 60 days.")).some((x) => x.includes("Cookie lasts 60 days")), "truncated text row")
   assert.ok(termsHtmlProblems(page, base + push('3d:{"children":"Cookie lasts 60 days.')).some((x) => x.includes("Cookie lasts 60 days")), "truncated JSON row")
+  // A text-row header whose length is not all hex is no text row: the line is checked whole.
+  for (const header of ["T2z", "T1.5", "T-2", "T"]) {
+    const bad = base + push(`0:["$","p",null,{"children":"$3d"}]\n3d:${header},Cookie lasts 60 days.`)
+    assert.ok(termsHtmlProblems(page, bad).some((x) => x.includes("Cookie lasts 60 days")), `malformed header ${header}`)
+  }
   // A cut comparison node that is not valid JSON is checked whole too.
   assert.ok(termsHtmlProblems(page, base + push(`7:["$","tr","${verifiedOther.slug}",{"children":Cookie lasts 60 days.}]\n`), [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "malformed cut node")
 })

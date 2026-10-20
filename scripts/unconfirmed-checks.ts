@@ -254,7 +254,9 @@ function parseFlight(payload: string): { rows: FlightRow[]; loose: string[] } {
     const at = i + head[0].length
     if (buf[at] === 0x54) {
       const comma = buf.indexOf(0x2c, at)
-      const length = comma === -1 ? NaN : parseInt(buf.subarray(at + 1, comma).toString("latin1"), 16)
+      // The whole length must be hex ("T2z" is not "T2"): a malformed header is no text row, so the line is checked whole.
+      const digits = comma === -1 ? "" : buf.subarray(at + 1, comma).toString("latin1")
+      const length = /^[0-9a-fA-F]+$/.test(digits) ? parseInt(digits, 16) : NaN
       if (Number.isFinite(length) && length >= 0 && comma + 1 + length <= buf.length) {
         rows.push({ id: head[1], text: true, body: buf.subarray(comma + 1, comma + 1 + length).toString("utf8") })
         i = comma + 1 + length
