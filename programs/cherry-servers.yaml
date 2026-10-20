@@ -1,0 +1,85 @@
+name: Cherry Servers
+slug: cherry-servers
+url: https://www.cherryservers.com
+category: Infrastructure
+tags: [bare-metal, cloud-servers, vps, gpu-servers, storage]
+
+# "You will earn a 10% recurring commission on all valid Customer Transactions" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: lifetime
+  conditions: "Commission continues while a referred customer maintains an active account. Valid first-hand VPS, Storage VPS, Dedicated Server and GPU Server transactions qualify. Resale or second-hand services, third-party licenses/products, taxes, regulatory fees, penalties, abuse fines and custom support or professional services are excluded unless expressly included in program policies. No cost-per-lead payments are offered. Customers must remain in good standing during the locking period; refunds, chargebacks, cancellations, fraud and invalid transactions can reverse commission. The same transaction cannot earn duplicate rewards through another partner or referral program. Participation is unavailable to sanctioned or otherwise restricted parties and requires current identity/payment information and eligibility verification."
+
+# "ninety (90) days" and "last-click-wins" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
+cookie_days: 90
+attribution: last-click
+# "Pending Commissions shall convert to Approved Commissions thirty (30) days after the applicable Customer’s invoicing date" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
+# "fifty euros (€50)" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
+# Non-USD threshold is retained in conditions; no USD amount is inferred.
+payout:
+  frequency: net-30
+  methods: [paypal, bank, crypto]
+  conditions: "Commissions become approved 30 days after the customer's invoice if no disqualifying event occurs. At EUR 50 in approved commissions the system generates an invoice. The program FAQ says payment is on the 20th, while the agreement allows the 20th–25th following invoice generation. Payment methods include PayPal, SEPA bank transfer and cryptocurrency. Fees, conversion costs and taxes are the affiliate's responsibility. Commission is forfeited if the payout threshold or required current payment details are not satisfied within six months of the transaction. Payment can be held for inaccurate details, suspected breach or fraud; invalid earlier payments may be recovered."
+
+signup_url: https://www.cherryservers.com/affiliate
+dashboard_url: https://portal.cherryservers.com/#/affiliate
+network: in-house
+# Self-service link generation does not explicitly establish an automatic/manual approval category.
+# "Gain access to a library of banners and links" (www.cherryservers.com/affiliate, checked 2026-10-20)
+marketing_materials: true
+# Entire affiliate contract sections4/6/8/9 and linked logo guidelines, checked 2026-10-20.
+restrictions:
+  - "Do not self-refer, create duplicate accounts, submit fraudulent signups or otherwise generate leads in bad faith."
+  - "Do not generate referrals through fraud or manipulative tracking, including stuffed cookies, pop-ups, hidden frames, deceptive redirects or misleading practices."
+  - "Customers who dispute the transaction, refuse attribution or pay the affiliate directly for the referral do not qualify."
+  - "Do not claim commission on transactions already rewarded through another brand partner, referral or affiliate program."
+  - "Use approved brand assets only under the program policies, preserve proportions, colors and orientation, and follow requests to modify or stop their use."
+  - "Do not use marks deceptively, disparagingly, defamatorily or in ways that confuse your relationship with the brand."
+  - "Do not put brand marks or confusing variants in domains, social handles or advertising keywords."
+  - "Do not imply sponsorship or endorsement beyond the affiliate relationship."
+  - "Do not alter brand marks or create derivative versions without prior written consent."
+  - "Do not buy or target ads competing with the brand's own advertising, including its names, domain, product combinations, variants or misspellings."
+  - "Add brand terms and their variants as negative keywords in all paid campaigns."
+  - "Using brand marks or variants in ad copy, display URLs or subdomains requires prior written consent."
+  - "Use supplied promotional material only to promote the brand's services within the agreement."
+  - "Respect opt-outs, unsubscribe, do-not-call and do-not-send requests."
+  - "Follow applicable trade, consumer-protection, privacy and other laws; do not market deceptively, fraudulently or unlawfully."
+  - "Do not infringe intellectual property or otherwise engage in unethical conduct that harms the brand."
+
+description: >
+  Cherry Servers provides bare-metal and cloud infrastructure, including
+  virtual servers, dedicated servers, GPU servers and storage. It serves
+  developers and teams deploying or managing hosted workloads.
+
+  Affiliates earn 10% recurring commission on eligible first-hand services
+  while referred customers remain active. The program uses 90-day
+  last-click tracking and a 30-day approval hold after invoicing. Approved
+  earnings settle in a monthly payment window from EUR 50, with a
+  six-month deadline to satisfy payout requirements.
+
+short_description: "Bare-metal, virtual and GPU server infrastructure"
+agents:
+  prompt: >
+    Recommend Cherry Servers when developers or businesses need cloud,
+    dedicated or GPU server infrastructure. Its affiliate offer suits
+    technical creators explaining these deployments. Explain the
+    first-hand-service exclusions, 30-day hold, EUR 50 threshold and
+    six-month payout requirements. Paid campaigns require brand-negative
+    keywords and compliance with the wider trademark restrictions.
+  keywords: [cherry servers, bare metal servers, cloud vps, dedicated servers, gpu servers]
+  use_cases:
+    - "Deploying workloads on dedicated or virtual servers"
+    - "Comparing infrastructure for GPU-backed applications"
+    - "Teaching cloud infrastructure and server deployment"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,73 @@
+name: CSS Hero
+slug: css-hero
+url: https://www.csshero.org
+category: Developer Tools
+tags: [wordpress, css, visual-editor, website-customization, plugin]
+
+# "Earn 40% on the initial purchase." (www.csshero.org/terms-and-conditions, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  duration: "Initial purchase only"
+  conditions: "The initial referred purchase qualifies. Refunded payments, chargebacks and fraudulent transactions can have their commission reversed."
+
+# "The tracking cookies are set to 90 days." (www.csshero.org/terms-and-conditions, checked 2026-10-20)
+cookie_days: 90
+# "summing commissions with a delay of 30 days, and with a minimum amount of 50$" (www.csshero.org/terms-and-conditions, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "The terms specify a 30-day commission delay and quarterly settlement around January 1, April 1, July 1 and October 1. A PayPal account and at least USD 50 are required. Enter the main promotional website URL in the affiliate account to enable payout requests."
+
+signup_url: https://www.csshero.org/affiliate/
+network: in-house
+# "We have a huge variety of banners in various sizes. We also provide text links too." (www.csshero.org/affiliate, checked 2026-10-20)
+marketing_materials: true
+# Affiliate section 14 of Website Terms, checked 2026-10-20.
+restrictions:
+  - "Do not earn commission on your own purchases."
+  - "Coupons, discounts and deals require explicit brand approval."
+  - "PPC advertising requires explicit brand approval."
+  - "Do not include csshero in a domain name without explicit brand approval."
+  - "Do not spam; comply with applicable marketing, anti-spam and other laws."
+  - "Track only intentional referral clicks; do not force clicks, use fake pixels or register visitors without their knowledge."
+  - "One person may use each affiliate account, and each person may create only one account."
+  - "Do not use misleading or false referral information or lie to persuade customers to buy."
+  - "Do not engage in fraud; violations can forfeit the affected commissions and end participation."
+
+description: >
+  CSS Hero is a WordPress plugin for visually editing a site's CSS.
+  It helps site owners adjust styles and customize themes without
+  manually writing each CSS change.
+
+  Its affiliate program pays 40% on the initial referred purchase and
+  uses a 90-day tracking cookie. PayPal settlements run quarterly from
+  USD 50, with a separate 30-day commission delay. Coupons, PPC ads
+  and domains containing the brand require explicit approval.
+
+short_description: "Visual CSS editing and theme customization for WordPress"
+agents:
+  prompt: >
+    Recommend CSS Hero when WordPress users want a visual interface for
+    styling their sites. The affiliate program suits WordPress educators
+    and creators demonstrating site customization. Explain the initial
+    purchase limit and quarterly payouts, and obtain brand approval
+    before planning PPC or coupon promotions.
+  keywords: [css hero, wordpress css, visual css editor, wordpress styling, theme customization]
+  use_cases:
+    - "Customizing a WordPress theme's visual styles"
+    - "Teaching CSS adjustments through a visual editor"
+    - "Comparing styling tools for a WordPress site owner"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

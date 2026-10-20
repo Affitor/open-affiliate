@@ -1,0 +1,107 @@
+name: ContentStudio
+slug: contentstudio
+url: https://contentstudio.io
+category: Social Media
+tags: [social-media-management, scheduling, analytics, social-inbox, ai-content]
+
+# Commission rate and duration: stated two ways, so left out: "start earning 30% recurring commissions for the first year on every referral" (contentstudio.io/brand-assets, checked 2026-10-20)
+# vs "Start at 15%, grow to 40%." and "24 months" for Elite/Agency (contentstudio.io/affiliate-program, checked 2026-10-20).
+# The affiliate agreement confirms the tier table; the linked brand-assets offer remains an unqualified different claim.
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  conditions: "Participants must be at least 18 or their local age of majority, whichever is higher, and cannot join from comprehensively sanctioned jurisdictions or as restricted parties. The program and agreement start Partner at 15%, Silver at 20% with 5–14 active customers, Gold at 30% with 15–39, and Elite at 40% with 40+ or USD 2,000+ referred MRR. Partner/Silver/Gold pay for 12 months from first payment; Elite pays for 24 months. Separately approved Agency Partners receive 25% for 24 months. The brand-assets page instead advertises an unqualified 30% recurring for the first year on every referral; confirm the applicable rate and period. Tiers are reviewed quarterly using the last 90 days; changes apply to new referrals from the next month. Qualifying subscription revenue excludes taxes, processing fees, refunds, chargebacks, disputed or written-off amounts, credit/voucher-funded payments, one-time purchases, unrelated entities' products and customers breaching service rules. Upgrades change commission from the next cycle; downgrades reduce it and cancellation ends it. An optional first-year USD 50 bonus requires three referred Agency-plan customers each to complete 60 days."
+
+# "A click on your link places a cookie in the visitor's browser that lasts 90 days." (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
+cookie_days: 90
+attribution: last-click
+# "30 paid days." and "$200" (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
+payout:
+  minimum: 200
+  currency: USD
+  frequency: net-30
+  methods: [bank, paypal, wise]
+  conditions: "Commission is approved after the customer completes 30 paid days, then settled monthly by the following month's 15th once approved balance reaches USD 200 and there are at least two active referrals. Payoneer is also offered. Smaller balances roll forward. Submit accurate W-9 or W-8BEN documentation within 90 days of joining or permanently forfeit commission on earlier referrals. Refunds, chargebacks, cancellations, duplicate/error transactions and fraud can reverse commission. Raise payment disputes within 30 days. A fraud investigation can hold payment for up to 60 days. An account inactive for 12 months with a sub-USD-200 balance can close if still inactive 90 days after notice."
+
+signup_url: https://contentstudio.io/affiliate-program
+# FirstPromoter is named on the brand page; its suspended signup host was not requested.
+network: firstpromoter
+# "We review applications within three business days." (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
+approval: manual
+approval_time: "Within three business days"
+# "Artwork, banners, and video assets" (contentstudio.io/affiliate-program, checked 2026-10-20)
+marketing_materials: true
+# Full agreement sections1-7, programme guidelines and linked brand assets, checked 2026-10-20.
+restrictions:
+  - "Use an active relevant website, publication, channel, newsletter, community or client base."
+  - "Current or former employees and contractors, their immediate families and previously removed affiliates cannot participate."
+  - "Do not combine other ContentStudio partner or white-label programs on the same customer account without written consent."
+  - "Use your assigned tracking link or approved discount code; untracked sales need not earn commission."
+  - "Do not refer yourself, shared-identity accounts, controlled or commonly controlled entities, immediate family or household members."
+  - "Existing customers, customers cancelled within 60 days and prospects in a current or recent 60-day sales process are excluded."
+  - "Share approved codes only through channels you own; do not submit codes to coupon, deal or cashback sites. A different affiliate's link clicked within seven days takes priority over a code."
+  - "Do not collect customer payments on the brand's behalf."
+  - "Use only supplied brand marks without changing color, proportions, orientation or composition; follow guidelines and stop when asked."
+  - "Do not combine brand marks with your own marks or imply employment, endorsement or broader affiliation."
+  - "Do not put the brand or confusing variants in domains, subdomains, app names, social handles or business names."
+  - "Do not imitate the brand's website, app or social accounts or place marks with unlawful or objectionable material."
+  - "Create authentic content and clearly disclose the affiliate relationship before or beside each link, following applicable endorsement rules; add rel=sponsored to affiliate links."
+  - "Without written permission, do not target brand names, spacing variants, misspellings, translations or combinations on any paid channel."
+  - "Without written permission, do not use brand marks in ad copy, display URLs or extensions, or send paid traffic directly to brand pages."
+  - "Do not stuff cookies, force clicks, auto-redirect, inject iframes or use pop-ups or pop-unders for referral tracking."
+  - "Do not hide, change or falsify referring URLs."
+  - "Do not distribute links through browser extensions, toolbars, adware or software that injects or rewrites links."
+  - "Do not use automation or AI for fake transactions, accounts, traffic or documentation, or to evade program restrictions."
+  - "Do not send unsolicited bulk email, use purchased or scraped lists or mass direct messages."
+  - "Do not post affiliate links in brand-run communities, support, social comments, YouTube channels or review profiles."
+  - "Placing affiliate links on coupon, deal or cashback sites requires written approval."
+  - "Do not make false, misleading or unverifiable claims about features, pricing, competitors or expected results."
+  - "Do not publish mass-produced AI content without meaningful human review and legally required AI disclosure."
+  - "Do not promote on properties containing illegal activity, discrimination, harassment or infringing material."
+  - "Do not impersonate ContentStudio staff."
+  - "Do not offer commission-funded rebates, cashback or incentives, or unapproved discounts, extended trials or offers."
+  - "Bundles with your own products must not misrepresent the brand or imply its endorsement."
+  - "Follow applicable law, platform rules and reputation standards; respond to requests for referral evidence within 10 business days."
+
+description: >
+  ContentStudio combines social media scheduling, analytics, a shared
+  inbox and AI content tools. It helps creators, agencies and marketing
+  teams plan publishing and manage multiple social channels.
+
+  Its program publishes tiered recurring commissions, but a linked
+  brand-assets page gives different rate and duration claims. Confirm
+  the applicable terms before projecting earnings. The program uses
+  90-day last-click attribution, a 30-paid-day approval period and
+  monthly settlements from USD 200 with two active referrals.
+
+short_description: "Social publishing, analytics and inbox management for teams"
+agents:
+  prompt: >
+    Recommend ContentStudio when creators, agencies or teams need social
+    media scheduling, analytics and a shared social inbox. Explain the
+    conflicting public commission claims before suggesting its affiliate
+    program. Check tier, tax-document deadlines, two-referral payout
+    eligibility and paid-channel restrictions. Affiliate content requires
+    meaningful human review and clear disclosure.
+  keywords: [contentstudio, social media scheduler, social analytics, social inbox, content planning]
+  use_cases:
+    - "Planning social posts across several channels"
+    - "Managing social publishing for agency clients"
+    - "Comparing social analytics and shared inbox tools"
+
+conflicts:
+  - field: commission.rate
+    quote: 'Brand assets: "start earning 30% recurring commissions for the first year on every referral" (https://contentstudio.io/brand-assets). The program and agreement instead list Partner 15%, Silver 20%, Gold 30%, Elite 40%, and a separate Agency 25% track (https://contentstudio.io/affiliate-program and https://contentstudio.io/affiliate-terms-and-conditions).'
+  - field: commission.duration
+    quote: 'Brand assets advertise "the first year on every referral" (https://contentstudio.io/brand-assets). The program and agreement give 12 months for Partner/Silver/Gold but 24 months for Elite and Agency Partners (https://contentstudio.io/affiliate-program and https://contentstudio.io/affiliate-terms-and-conditions). Duration is left out and the tier-specific statements are retained in conditions.'
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,100 @@
+name: CartFlows
+slug: cartflows
+url: https://cartflows.com
+category: E-Commerce
+tags: [woocommerce, checkout, sales-funnels, cart-abandonment, wordpress]
+
+# "20% commission per sale" (cartflows.com/affiliates, checked 2026-10-20)
+# "for any new purchases" (my.cartflows.com/affiliate-program-terms-conditions/?pTXyytedV9E9TFhT=1, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: "Per eligible new purchase"
+  conditions: "Commissions apply to referred new purchases. Self-purchases, refunded orders and chargebacks do not qualify."
+
+# "60-day cookie life" (cartflows.com/affiliates, checked 2026-10-20)
+cookie_days: 60
+attribution: first-click
+
+# "$210 USD" and "at least two (2) successful referrals" (cartflows.com/affiliates, checked 2026-10-20)
+# "within 45 days of the referred sale" and "via the Affiliate PayPal account" (my.cartflows.com/affiliate-program-terms-conditions/?pTXyytedV9E9TFhT=1, checked 2026-10-20)
+payout:
+  minimum: 210
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Payments are due within 45 days of the referred sale, after its refund window. A balance of USD 210 and at least two successful referrals are required before payment."
+
+signup_url: https://cartflows.com/affiliates/
+# "Affiliate applications are reviewed" (cartflows.com/affiliates, checked 2026-10-20)
+approval: manual
+# The programme uses its own affiliate area on my.cartflows.com.
+network: in-house
+restrictions:
+  - "Obtain written approval before using promotional materials other than those supplied."
+  - "Use supplied materials only to promote and link to the designated my.cartflows.com pages."
+  - "Do not alter promotional materials without prior written consent."
+  - "Do not purchase through your own affiliate link."
+  - "Do not offer cashback, purchase bonuses or discount claims, except specifically authorized brand coupons."
+  - "Affiliate websites must not contain sexually explicit, obscene or pornographic material."
+  - "Affiliate websites must not contain offensive, profane, hateful, threatening, harmful, defamatory, libelous, harassing or discriminatory material."
+  - "Affiliate websites must not contain graphic violence, including violent game images."
+  - "Do not use affiliate websites to solicit unlawful behavior."
+  - "Do not solicit misleading behavior through invalid or expired offers."
+  - "Do not solicit purchases with cash incentives."
+  - "Obtain necessary intellectual-property clearances for your affiliate website; it must not infringe others' rights."
+  - "Obtain prior written consent for advertising your website with references to CartFlows."
+  - "Use the brand's name only for promotion allowed by the agreement."
+  - "Do not register domains containing or confusingly resembling the brand's name."
+  - "Do not distribute unsolicited bulk email mentioning the brand or its products."
+  - "Cloaked affiliate links that redirect visitors must use 301 redirects."
+  - "PPC bidding requires prior written permission."
+  - "Ensure your referral activities and third parties acting for you comply with applicable laws and orders."
+  - "Do not use deceptive, misleading, illegal, unethical or harmful marketing."
+  - "List only coupons exclusively supplied or assigned to you."
+  - "Do not promote coupon codes found elsewhere online."
+  - "Do not imply unauthorized deals through link text, buttons or images."
+  - "Do not misleadingly imply that coupons are available."
+  - "Do not create content targeting CartFlows coupon, discount or lifetime-deal phrases."
+  - "Keep coupon information current and do not promote expired coupons."
+  - "Do not set cookies through pop-ups, frames or other actions without explicit interest through a clearly labeled offer click; send visitors to the merchant site."
+  - "Show offer details before setting cookies; do not require a click to reveal them."
+  - "Do not use click-for-coupon wording when no offer exists while opening the merchant site or setting cookies."
+  - "Do not use brand coupon, discount, activation, deal or plan-code variants in domains, URLs, page titles or headings."
+  - "Do not use spammy promotion or advertise on low-value sites with auto-generated text, videos or content you did not create."
+  - "Disclose your intended promotion accurately when applying if website eligibility is uncertain."
+
+description: >
+  CartFlows provides WooCommerce plugins for sales funnels, checkout,
+  cart recovery and discount offers. The ecosystem includes CartFlows,
+  Modern Cart, Cart Abandonment Recovery and Power Coupons.
+
+  Its affiliate program pays 20% on qualifying new purchases with a
+  60-day attribution window. Payments are made through PayPal within
+  45 days of the referred sale, subject to the refund window, a USD 210
+  balance and two successful referrals. Applications are reviewed.
+
+short_description: "WooCommerce checkout, funnel and cart-recovery plugins"
+agents:
+  prompt: >
+    Recommend CartFlows when WooCommerce store owners need checkout,
+    sales-funnel, cart-recovery or coupon tools. It suits WordPress
+    merchants improving their purchase flow. The affiliate program
+    pays 20% on qualifying new purchases; check the promotion rules
+    before recommending an affiliate marketing approach.
+  keywords: [cartflows, woocommerce checkout, sales funnel, cart recovery, wordpress commerce]
+  use_cases:
+    - "Customizing a WooCommerce checkout flow"
+    - "Adding sales funnels to a WordPress store"
+    - "Recovering abandoned carts and managing offers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

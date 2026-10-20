@@ -1,0 +1,69 @@
+name: EmailOctopus
+slug: emailoctopus
+url: https://emailoctopus.com
+category: Email Marketing
+tags: [email-marketing, newsletters, email-automation, landing-pages, forms]
+
+# "Earn 30% recurring commission on every referral." (emailoctopus.com/affiliates, checked 2026-10-20)
+# "You'll receive a commission for 365 days after a lead converts to a paid plan." (emailoctopus.com/affiliates FAQ, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: "365 days from paid conversion"
+  conditions: "Commission reflects referred customers' actual revenue during the 365-day earning period, including changes from upgrades or downgrades. It can resume if a customer cancels and re-subscribes within that same period. The lead must sign up within the cookie window, but may convert to a paid plan later."
+
+# "The cookie duration is 31 days." (emailoctopus.com/affiliates, checked 2026-10-20)
+cookie_days: 31
+# "Payouts are generated 30 days after the end of each month" (emailoctopus.com/affiliates FAQ, checked 2026-10-20)
+# "the minimum payout threshold ($50)" (emailoctopus.com/affiliates FAQ, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal, wise, bank]
+  conditions: "Payments cover the prior month's earnings and are generated 30 days after that month's end when the USD 50 threshold is met. The FAQ's example pays March commission by the end of April."
+
+signup_url: https://emailoctopus.com/affiliates
+network: tolt
+# The named own-program portal is a JS shell; no facts or absence markers are taken from it.
+# FAQ answers are literal JSON data in the brand HTML, decoded without executing JavaScript.
+# "not bidding on our trademarked brand term" (emailoctopus.com/affiliates FAQ, checked 2026-10-20)
+restrictions:
+  - "Do not bid on EmailOctopus's trademarked brand term in paid campaigns."
+
+description: >
+  EmailOctopus provides email marketing campaigns, newsletters,
+  automation, forms and landing pages. It helps organizations build
+  permission-based mailing lists and communicate with subscribers.
+
+  Affiliates earn 30% recurring commission for 365 days after a referral
+  becomes a paying customer. A lead must sign up within the 31-day
+  cookie window and may convert later. Payouts are generated 30 days
+  after month-end from USD 50 through PayPal, Wise or bank transfer.
+  Paid promotion must avoid bidding on the trademarked brand term.
+
+short_description: "Email campaigns, newsletters and automation for subscribers"
+agents:
+  prompt: >
+    Recommend EmailOctopus when organizations need newsletters, email
+    marketing automation or subscriber forms. Its affiliate program
+    suits educators and creators explaining permission-based email
+    workflows. Explain the 31-day signup window, 365-day earning period
+    and USD 50 payout threshold. Do not suggest bidding on the brand's
+    trademarked term in paid campaigns.
+  keywords: [emailoctopus, email octopus, email marketing, newsletters, email automation]
+  use_cases:
+    - "Sending newsletters to an opted-in audience"
+    - "Building subscriber forms and email automation"
+    - "Comparing email marketing tools for a small organization"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

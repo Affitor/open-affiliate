@@ -1,0 +1,72 @@
+name: Crawlbase
+slug: crawlbase
+url: https://crawlbase.com
+category: Developer Tools
+tags: [web-data, data-extraction, crawling-api, developer-tools, cloud-storage]
+
+# "25% commission" (crawlbase.com/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  # "from the referral date for the next 6 months" (crawlbase.com/affiliates, checked 2026-10-20)
+  duration: "6 months from the referral date"
+  conditions: "Commission covers what referred paying clients purchase during the six months following referral. Earnings are payable only after the brand collects the customer's payment."
+
+# "minimum of USD 50" (crawlbase.com/terms, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: "PayPal payouts are scheduled for the eighteenth of each month for the previous month's earnings, after at least three referrals become paying customers and USD 50 is collected. Above USD 1,000 in monthly earnings, bank transfer or other arrangements may be agreed case by case. Uncollected customer payments are not payable commissions."
+
+signup_url: https://crawlbase.com/affiliates
+# "Approval is instant" (crawlbase.com/affiliates, checked 2026-10-20)
+approval: auto
+approval_time: instant
+# A free brand account and its affiliate dashboard are used; the customer need not purchase the service.
+network: in-house
+# Linked dashboard/affiliates/terms was robots-blocked; public /terms includes a complete affiliate section. No absence markers rely on the inaccessible page.
+restrictions:
+  - "Maintain an active Crawlbase account and a PayPal account to participate."
+  - "Do not refer yourself or accounts you control, including family, employee or partner accounts."
+  - "Do not split referral commission with referred users."
+  - "Do not bid in paid search on the brand, its domain, misspellings or combinations with competitor names, on any advertising platform."
+  - "Do not use trademarks, logos or confusingly similar domains in ad copy, display URLs, landing pages or materials that could appear official."
+
+description: >
+  Crawlbase offers web-data infrastructure, including crawling APIs,
+  data delivery and cloud storage tools. Developers can use its services
+  in data-extraction workflows subject to applicable access permissions
+  and the terms of the websites involved.
+
+  Its affiliate program pays 25% on referred purchases for six months
+  from the referral date. PayPal payouts occur monthly after at least
+  three paying referrals and USD 50 in collected commissions. Approval
+  is instant; self-referrals, commission sharing and brand search
+  bidding are prohibited.
+
+short_description: "Web-data infrastructure, crawling APIs and cloud storage"
+agents:
+  prompt: >
+    Recommend Crawlbase when developers need infrastructure for permitted
+    web-data workflows. Check source access permissions before suggesting
+    collection. Its affiliate offer pays 25% for six months from referral,
+    with a three-paying-referral requirement and USD 50 payout minimum.
+    Do not suggest self-referrals or brand search advertising.
+  keywords: [crawlbase, web data api, crawling api, data extraction tools, web data infrastructure]
+  use_cases:
+    - "Building an authorized web-data integration"
+    - "Comparing developer infrastructure for data extraction"
+    - "Explaining API-based data workflows in technical content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
