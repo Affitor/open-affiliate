@@ -347,7 +347,7 @@ function termsOf(l: Listing): Record<string, unknown> {
 
 // ---------- Editing YAML -------------------------------------------------------
 
-const DELETE = Symbol("delete")
+export const DELETE = Symbol("delete")
 export type Edit = [path: string[], value: unknown]
 
 /**
@@ -577,7 +577,7 @@ function leaves(value: unknown, path: string[] = []): Edit[] {
  * changed something, so a run against an unchanged source writes nothing,
  * on any day.
  */
-function edit(src: string, edits: Edit[], stamps: Edit[], file: string): { text: string | null; diffs: Diff[] } {
+export function edit(src: string, edits: Edit[], stamps: Edit[], file: string): { text: string | null; diffs: Diff[] } {
   const doc = parseDocument(src)
   const diffs: Diff[] = []
   applyEdits(doc, edits, diffs)
