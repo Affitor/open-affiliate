@@ -230,11 +230,12 @@ function flightRefs(fragment: string, mode: "keep" | "remove"): string[] {
  */
 function dropOrphanRows(flight: string, cut: string[]): string {
   const lines = flight.split("\n")
+  // One id can span several lines in a stream ("9:R", "9:\"$3d\"", "9:C"): a row is all of them.
   const rows = new Map<string, string>()
   const loose: string[] = []
   for (const line of lines) {
     const m = /^([0-9a-f]+):/.exec(line)
-    if (m) rows.set(m[1], line)
+    if (m) rows.set(m[1], (rows.get(m[1]) ?? "") + "\n" + line)
     else loose.push(line)
   }
   const reach = (start: string[], mode: "keep" | "remove") => {

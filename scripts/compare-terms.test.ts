@@ -99,6 +99,9 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
   // Ambiguity never widens removal: "$a0" (row a0, or tag a + row 0) must not take the page root with it.
   const root = base + push(`0:["$","div",null,{"children":[["$","p",null,{"children":"Cookie lasts 60 days."}],["$","tr","${verifiedOther.slug}",{"children":"$a0"}]]}]\na0:["$","td",null,{"children":"${d}"}]\n`)
   assert.ok(termsHtmlProblems(page, root, [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "the root's own paragraph is still checked")
+  // A streamed row spans several lines with one id: a reference on any of them keeps its target.
+  const stream = base + push(`0:["$","p",null,{"children":"$9"}]\n7:["$","tr","${verifiedOther.slug}",{"children":"$L3d"}]\n3d:["$","span",null,{"children":"Cookie lasts 60 days."}]\n9:R\n9:"$3d"\n9:C\n`)
+  assert.ok(termsHtmlProblems(page, stream, [verifiedOther]).some((x) => x.includes("Cookie lasts 60 days")), "a reference on an earlier line of the same row keeps its target")
 })
 
 test("the exemption does not hide the page's other terms", () => {
