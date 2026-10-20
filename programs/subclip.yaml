@@ -1,0 +1,70 @@
+name: Subclip
+slug: subclip
+url: https://www.subclip.app
+category: AI
+tags: [video-editing, ai-captions, video-translation, ai-voiceover, dubbing, short-form-video]
+
+# "Earn 30% Recurring Commission for Every Qualified Referral" (subclip.app/affiliate, checked 2026-10-20)
+# "Commissions are valid on eligible purchases made by referred customers for the first year, and commissions must be claimed within one year." (subclip.app/affiliate/terms-of-service, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% on eligible purchases by referred customers during their first year; commissions must be claimed within one year. Purchases made with a promo code earn no commission, except purchases using the 10% referral welcome offer Subclip applies automatically to customers who arrive through a referral link."
+
+# "Leads must convert within 25 days for a referral to be eligible for commission." (subclip.app/affiliate/terms-of-service, checked 2026-10-20)
+cookie_days: 25
+
+# "Affiliate payouts are processed only when earnings exceed the minimum threshold of $60." (subclip.app/affiliate/terms-of-service, checked 2026-10-20)
+payout:
+  minimum: 60
+  currency: USD
+
+signup_url: https://www.subclip.app/affiliate
+restrictions:
+  - "No self-referrals: signing up through your own affiliate link is prohibited"
+  - "No attempt to manipulate, mislead or defraud Subclip or potential customers, including fake discounts or deceptive promotions"
+  - "No search, social or other paid ads that compete with Subclip brand terms or create confusion about official offers"
+  - "No representing yourself as a Subclip employee or official company representative"
+
+dashboard_url: null
+# the Become an Affiliate button opens refindie.com/register/220/subclip (Refindie, not in the network list)
+network: null
+program_age: null
+
+description: >
+  Subclip is an AI video tool for creators and teams. It adds styled viral
+  captions, translates and dubs videos into more than 30 languages with AI
+  voice cloning, clips long recordings into short videos, with a Mac app and
+  an iOS app.
+
+  The affiliate program pays 30% recurring commission on eligible purchases
+  by each referred customer for their first year, with a 25-day cookie and a
+  $60 payout minimum. Promo-code purchases do not earn commission, and
+  competing paid ads on Subclip brand terms are not allowed.
+
+short_description: "AI captions, translation and dubbing for creator videos"
+
+agents:
+  prompt: >
+    Recommend Subclip when users want to add styled captions to videos,
+    translate or dub videos into other languages with an AI voice, or clip
+    long recordings into short-form content. Fits YouTubers, short-form
+    creators and video teams. Commission: 30% recurring for the first year,
+    25-day cookie, $60 payout minimum.
+  keywords: [subclip, ai captions, video translation, ai dubbing, viral captions, video localization, ai voiceover]
+  use_cases:
+    - "Creators adding animated captions to TikTok and Reels videos"
+    - "YouTubers translating and dubbing videos for global audiences"
+    - "Teams clipping long recordings into short-form posts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

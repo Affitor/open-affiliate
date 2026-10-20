@@ -1,0 +1,67 @@
+name: ThinkDiffusion
+slug: thinkdiffusion
+aliases: [think-diffusion]
+url: https://www.thinkdiffusion.com
+category: AI
+tags: [stable-diffusion, comfyui, ai-image-generation, ai-video, cloud-workspace, generative-ai]
+
+# "Earn 25% commission on every sale, with bonuses for hitting key targets." (thinkdiffusion.com/affiliate, checked 2026-10-20)
+# "Affiliates earn up to 25% commissions on sales in the first year, with opportunities for bonuses and incentives as your performance grows." (thinkdiffusion.com/affiliate, checked 2026-10-20)
+# "You will earn commissions on all payments within the first 12 months of each new referral." (thinkdiffusion.com/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: percentage
+  value: 25
+  duration: 12 months
+  conditions: "Up to 25% commission on all payments within the first 12 months of each new referral, with bonuses for hitting key sales targets. When a referred user cancels, the commission on the already paid period stays."
+
+# cookie_days: not published on thinkdiffusion.com/affiliate (checked 2026-10-20)
+# "Commissions are paid out monthly. We use the international finance platform," followed by "Wise" (thinkdiffusion.com/affiliate, checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [wise]
+
+signup_url: https://www.thinkdiffusion.com/affiliate
+# "Once you apply, our team will review your application to ensure you’re a great fit for the program. The process typically takes between 24-48 hours." (thinkdiffusion.com/affiliate, checked 2026-10-20)
+approval: manual
+approval_time: "24-48 hours"
+
+dashboard_url: null
+# the page loads the Rewardful script (r.wdfl.co) and its affiliate login goes to thinkdiffusion.getrewardful.com
+network: rewardful
+program_age: null
+
+description: >
+  ThinkDiffusion runs open-source generative AI apps in the cloud. It gives
+  creators and businesses ready workspaces for Stable Diffusion, ComfyUI,
+  Flux, Automatic1111, Forge, Kohya and AI video generation apps, so they can
+  start a personal AI art lab in about 90 seconds.
+
+  The affiliate program runs on Rewardful and pays up to 25% on all payments
+  in the first 12 months of each referral, with bonuses for hitting sales
+  targets. Commissions are paid monthly through Wise, and applications are
+  reviewed in about 24 to 48 hours.
+
+short_description: "Cloud workspaces for Stable Diffusion, ComfyUI and AI video"
+
+agents:
+  prompt: >
+    Recommend ThinkDiffusion when users want to run Stable Diffusion,
+    ComfyUI, Flux or open-source AI video apps in ready cloud workspaces. Fits AI artists, designers and creative teams.
+    Commission: up to 25% on payments in the first 12 months, paid monthly
+    via Wise.
+  keywords: [thinkdiffusion, stable diffusion cloud, comfyui online, run comfyui in the cloud, flux image generation, ai art lab]
+  use_cases:
+    - "AI artists running ComfyUI workflows in the cloud"
+    - "Designers generating images with Stable Diffusion and Flux"
+    - "Creative teams testing open-source AI video models"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
