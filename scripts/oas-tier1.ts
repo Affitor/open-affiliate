@@ -11,8 +11,11 @@
  * Results are cached per program in .internal/oas/tier1/cache, so a run resumes.
  * --psi adds PageSpeed Insights (PAGESPEED_API_KEY when set, keyless otherwise):
  * the URL is re-checked under the same rules first, and the first 429 stops PageSpeed.
+ * Each program is scanned in its own child process with a hard time limit, so no
+ * response (however it is shaped, whatever it costs to parse) can stall the run.
  * Writes .internal/oas/tier1/dry-run.json and distribution.md.
  */
+import { fork } from "node:child_process"
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { parse } from "yaml"
@@ -74,17 +77,29 @@ export function robotsAllows(robots: string, path: string, agent = AGENT): boole
   const groups: { agents: string[]; rules: { allow: boolean; path: string }[] }[] = []
   let current: (typeof groups)[number] | null = null
   let inAgents = false
+  // Forward scan by the "#" and ":" boundaries (RFC 9309 §2.2), trimming only SP and HTAB:
+  // no regex over the record, so any Unicode in a value (U+2028 included) is kept.
+  const trim = (v: string) => {
+    let a = 0
+    let b = v.length
+    while (a < b && (v[a] === " " || v[a] === "\t")) a++
+    while (b > a && (v[b - 1] === " " || v[b - 1] === "\t")) b--
+    return v.slice(a, b)
+  }
   for (const raw of robots.split(/\r\n|\r|\n/)) {
-    const match = /^\s*([A-Za-z-]+)\s*:\s*(.*?)\s*$/.exec(raw.replace(/#.*/, ""))
-    if (!match) continue
-    const key = match[1].toLowerCase()
+    const hash = raw.indexOf("#")
+    const line = hash === -1 ? raw : raw.slice(0, hash)
+    const colon = line.indexOf(":")
+    if (colon === -1) continue
+    const key = trim(line.slice(0, colon)).toLowerCase()
+    const value = trim(line.slice(colon + 1))
     if (key === "user-agent") {
       if (!current || !inAgents) groups.push((current = { agents: [], rules: [] }))
       // The product token is the part before any "/version".
-      current.agents.push(match[2].split("/")[0].trim().toLowerCase())
+      current.agents.push(trim(value.split("/")[0]).toLowerCase())
       inAgents = true
     } else if ((key === "allow" || key === "disallow") && current) {
-      if (match[2]) current.rules.push({ allow: key === "allow", path: normalizePath(match[2]) })
+      if (value) current.rules.push({ allow: key === "allow", path: normalizePath(value) })
       inAgents = false
     }
     // Other records (Sitemap, Crawl-delay, Host) are not part of a group and do not end one.
@@ -496,6 +511,42 @@ export function distribution(results: Result[]): string {
   return lines.join("\n") + "\n"
 }
 
+const failed = (slug: string, network: string, why: string): Result =>
+  ({ slug, network, checkedAt: new Date().toISOString(), checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(why)])) })
+
+/**
+ * Scans one program in a child process (same tsx flags), killed after `ms`: CPU or
+ * memory spent on one hostile response ends with that program as unknown.
+ */
+export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, ms: number): Promise<{ result: Result; psi429: boolean }> {
+  return new Promise((resolve) => {
+    const child = fork(__filename, ["--child"], { execArgv: process.execArgv, stdio: ["ignore", "ignore", "ignore", "ipc"] })
+    let done = false
+    const finish = (result: Result, psi429 = false) => {
+      if (done) return
+      done = true
+      clearTimeout(timer)
+      child.kill("SIGKILL")
+      resolve({ result, psi429 })
+    }
+    const timer = setTimeout(() => finish(failed(p.slug, p.network ?? "unknown", `scan timed out after ${ms / 1000}s`)), ms)
+    child.once("message", (m: { result: Result; psi429: boolean }) => finish(m.result, m.psi429))
+    child.once("exit", () => finish(failed(p.slug, p.network ?? "unknown", "scan process exited")))
+    child.once("error", (error) => finish(failed(p.slug, p.network ?? "unknown", `scan process failed (${error.name})`)))
+    child.send({ program: p, ...mode })
+  })
+}
+
+async function child() {
+  process.once("message", async ({ program, scan, psi }: { program: Program; scan: boolean; psi: boolean }) => {
+    const result = scan
+      ? await scanProgram(program).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
+      : failed(program.slug, program.network ?? "unknown", "PageSpeed not run") // PageSpeed only: the caller keeps its cached checks
+    if (psi && result.checks.P5.evidence === "PageSpeed not run") await runPsi(program, result).catch(() => {})
+    process.send!({ result, psi429: psiStopped !== null }, () => process.exit(0))
+  })
+}
+
 async function main() {
   const args = process.argv.slice(2)
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
@@ -518,12 +569,17 @@ async function main() {
         continue
       }
       const file = join(cache, `${p.slug}.json`)
-      // One program's failure is recorded as unknown, never the end of the run.
-      const r: Result = (existsSync(file) && readCache(file, p.slug)) || await scanProgram(p).catch((error: Error) => ({
-        slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(),
-        checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(`scan error (${error.name})`)])),
-      }))
-      if (psi && r.checks.P5.evidence === "PageSpeed not run") await runPsi(p, r).catch(() => {})
+      // One program's failure, hang or timeout is recorded as unknown, never the end of the run.
+      const cached = existsSync(file) ? readCache(file, p.slug) : null
+      const wantPsi = psi && !psiStopped && (!cached || cached.checks.P5.evidence === "PageSpeed not run")
+      let r: Result
+      if (cached && !wantPsi) {
+        r = cached
+      } else {
+        const { result, psi429 } = await scanIsolated(p, { scan: !cached, psi: wantPsi }, wantPsi ? 240_000 : 120_000)
+        r = cached && wantPsi ? { ...cached, checks: { ...cached.checks, P5: result.checks.P5 } } : result
+        if (psi429 && !psiStopped) psiStopped = `PageSpeed 429 at ${p.slug}`
+      }
       try {
         writeFileSync(file, JSON.stringify(r, null, 2) + "\n")
       } catch { /* the result still counts; it is scanned again next run */ }
@@ -538,4 +594,7 @@ async function main() {
   console.log(`tier 1: ${results.length} programs → ${join(out, "distribution.md")}${psiStopped ? ` · ${psiStopped}` : ""}`)
 }
 
-if (process.argv[1]?.endsWith("oas-tier1.ts")) main()
+if (process.argv[1]?.endsWith("oas-tier1.ts")) {
+  if (process.argv.includes("--child")) child()
+  else main()
+}

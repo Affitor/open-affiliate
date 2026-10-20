@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -54,6 +54,23 @@ test("visible text drops script blocks in one pass, even when they never close",
   const started = performance.now()
   visibleText("<script".repeat(200_000))
   assert.ok(performance.now() - started < 500, `took ${Math.round(performance.now() - started)}ms`)
+})
+
+test("robots.txt keeps Unicode in values and parses hostile lines in linear time", () => {
+  assert.equal(robotsAllows("User-agent: *\nDisallow: /\u2028private\n", "/%E2%80%A8private"), false, "U+2028 in a rule")
+  assert.equal(robotsAllows("User-agent: *\nDisallow:\t /x \t\n", "/x"), false, "SP and HTAB around a value")
+  const started = performance.now()
+  robotsAllows("User-agent: *\nDisallow:" + " ".repeat(400_000) + "x\u2028y\n", "/x")
+  assert.ok(performance.now() - started < 500, `took ${Math.round(performance.now() - started)}ms`)
+})
+
+test("each program runs in its own process with a hard time limit", async () => {
+  // 192.0.2.1 is TEST-NET-1 (RFC 5737): nothing answers, so the scan can only end by the limit.
+  const started = Date.now()
+  const { result } = await scanIsolated({ slug: "hang", url: "https://192.0.2.1/" }, { scan: true, psi: false }, 1500)
+  assert.ok(Date.now() - started < 5000)
+  assert.equal(result.slug, "hang")
+  for (const check of Object.values(result.checks)) assert.match(check.evidence!, /timed out after 1\.5s/)
 })
 
 test("robots wildcards match in bounded time (no regex backtracking)", () => {
