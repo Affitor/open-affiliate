@@ -3,7 +3,7 @@
  * the way ora.ai reads a site (HTTP status, HTML links and text, PageSpeed).
  * Shadow only: nothing here changes a published score.
  *
- *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo]
+ *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo] [--rescan-html]
  *
  * Every request names itself (UA "OpenAffiliate"), obeys the host's robots.txt,
  * and is refused for schema/blocked-hosts.json hosts at every redirect hop,
@@ -241,7 +241,8 @@ export function visibleText(html: string): string {
 
 export function links(html: string, base: string): { href: string; text: string }[] {
   const out: { href: string; text: string }[] = []
-  for (const m of html.matchAll(/<a\b[^>]*?href\s*=\s*["']([^"'#][^"']*)["'][^>]*>([\s\S]{0,400}?)<\/a>/gi)) {
+  // Up to 4,000 characters of anchor content: icon buttons carry inline SVG (the sample's missed "Get started").
+  for (const m of html.matchAll(/<a\b[^>]*?href\s*=\s*["']([^"'#][^"']*)["'][^>]*>([\s\S]{0,4000}?)<\/a>/gi)) {
     try {
       out.push({ href: new URL(m[1], base).href, text: visibleText(m[2]).trim() })
     } catch { /* not a URL */ }
@@ -270,8 +271,9 @@ export function pricingLink(html: string, base: string): string | null {
   return found.map((l) => l.href).sort((a, b) => new URL(a).pathname.length - new URL(b).pathname.length)[0] ?? null
 }
 
-const PRICE = /(?:[$€£₹]\s?(\d[\d.,]*)|\b(\d[\d.,]*)\s?(?:USD|EUR|GBP)\b)/g
-const NOT_A_PRICE = /\b(save|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission)\b[^.]{0,20}$/i
+// A currency before the amount ("$29"), or after it ("29 USD", "1,90 €"); a K/M/B figure ("$2B+", "$50K") is a statistic, not a price.
+const PRICE = /(?:[$€£₹]\s?(\d[\d.,]*)(?![\d.,]*\s?(?:k|m|b|bn|mm|million|billion)\b)|\b(\d[\d.,]*)\s?(?:USD|EUR|GBP|€|£)(?![\w]))/gi
+const NOT_A_PRICE = /\b(save[sd]?|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission|spend|managed)\b[^.]{0,20}$/i
 /**
  * A product price: a non-zero amount in the visible text that is not a saving,
  * discount or other marketing figure, or a non-zero JSON-LD offer (pages that
@@ -279,7 +281,8 @@ const NOT_A_PRICE = /\b(save|saving|off|discount|over|up to|worth|raised|funding
  */
 export function hasPrice(text: string, html = ""): string | null {
   for (const m of text.matchAll(PRICE)) {
-    const amount = Number((m[1] ?? m[2]).replace(/,/g, ""))
+    // "1,90" (comma decimals) and "1,900" both read as a positive amount; only zero is not a price.
+    const amount = Number((m[1] ?? m[2]).replace(/[.,](?=\d{3}\b)/g, "").replace(",", "."))
     if (!(amount > 0) || NOT_A_PRICE.test(text.slice(Math.max(0, m.index! - 40), m.index))) continue
     return text.slice(Math.max(0, m.index! - 30), m.index! + 40).trim()
   }
@@ -290,7 +293,8 @@ export function hasPrice(text: string, html = ""): string | null {
   return null
 }
 
-const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|start (?:for )?free|try (?:it )?(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month))/gi
+// Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
+const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita|無料トライアル|免费试用)/gi
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
@@ -300,18 +304,30 @@ export function hasTrial(text: string): string | null {
   return null
 }
 
-const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|register|join (?:now|free))\b/i
+const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|make an account|register|join (?:now|free)|install now)\b/i
 const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
 // Sales, event and newsletter calls to action are not a buyer signing up.
 const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
+// App stores are self-serve: installing is signing up.
+const APP_STORE = /^(apps\.shopify\.com|wordpress\.org\/plugins|chromewebstore\.google\.com|chrome\.google\.com\/webstore|apps\.apple\.com|play\.google\.com\/store\/apps|marketplace\.atlassian\.com|marketplace\.visualstudio\.com|addons\.mozilla\.org)/i
+/** Same site, or a sibling host carrying the brand's name ("console.neon.tech" for "neon.com"). */
+const brandHost = (href: string, base: string) => {
+  const label = (u: string) => new URL(u).hostname.replace(/^www\./, "").split(".").slice(-2)[0]
+  return sameSite(href, base) || label(href) === label(base)
+}
 export function selfServe(html: string, base: string): string | null {
-  const found = links(html, base).find((l) =>
-    sameSite(l.href, base) && !NOT_SIGNUP.test(l.text) && !NOT_SIGNUP.test(decoded(l.href)) &&
-    (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname)))
+  const found = links(html, base).find((l) => {
+    const target = decoded(l.href)
+    if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
+    if (APP_STORE.test(new URL(l.href).hostname + new URL(l.href).pathname)) return true
+    return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+  })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
 
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
+const COMMISSION_FIGURE = /(?:\d+(?:\.\d+)?\s?%|[$€£]\s?\d[\d.,]*)[^.]{0,60}\b(commission|revenue share|rev share|recurring|per (?:sale|referral|signup|customer)|of (?:every|each) (?:payment|sale))|\b(commission|revenue share|earn)\w*[^.]{0,40}?(?:\d+(?:\.\d+)?\s?%|[$€£]\s?\d[\d.,]*)/i
+const CONCRETE_TERM = /\b\d+[- ]day (?:cookie|attribution|tracking)|\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d+|\bpaid (?:out )?(?:monthly|weekly|every|via)|\bpayouts? (?:are )?(?:sent |made |paid )?(?:monthly|weekly|on the|via|through)|\bminimum payout|\b(?:paypal|wise|bank transfer|stripe) (?:payouts?|payments?)|\b\d+[- ]day attribution|\battribution (?:window|duration)/i
 const TERMS_CONTENT = [/\d+(?:\.\d+)?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
  * A link to the program's terms or agreement (a site-wide Terms of Service link
@@ -323,8 +339,14 @@ export function termsLink(html: string, base: string): string | null {
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const text = visibleText(html)
   const inline = TERMS_LINK.exec(text)
-  if (!inline || /coming soon|to be announced|tba\b/i.test(text.slice(inline.index, inline.index + 120))) return null
-  return TERMS_CONTENT.filter((re) => re.test(text)).length >= 2 ? `on page: ${inline[0]}` : null
+  if (inline && !/coming soon|to be announced|tba\b/i.test(text.slice(inline.index, inline.index + 120)) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
+    return `on page: ${inline[0]}`
+  }
+  // Terms published on the page without a "terms" heading: a commission figure next to commission wording,
+  // plus at least one concrete term (cookie or attribution window, payout schedule or method).
+  const figure = COMMISSION_FIGURE.exec(text)
+  const concrete = CONCRETE_TERM.exec(text)
+  return figure && concrete ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 
 /**
@@ -729,6 +751,8 @@ async function main() {
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
   const psi = args.includes("--psi")
+  // Re-read every page (the HTML checks changed) but keep cached PageSpeed and DataForSEO readings.
+  const rescanHtml = args.includes("--rescan-html")
   const seo = args.includes("--seo")
   // Lengths only, never values: confirms the credentials reached the run before any call.
   if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
@@ -754,7 +778,10 @@ async function main() {
       const cached = existsSync(file) ? readCache(file, p.slug) : null
       const wantPsi = psi && !psiStopped && (!cached || cached.checks.P5.evidence === "PageSpeed not run")
       let r: Result
-      if (cached && !wantPsi) {
+      if (cached && rescanHtml) {
+        const { result } = await scanIsolated(p, { scan: true, psi: false }, 120_000)
+        r = { ...result, checks: { ...result.checks, P5: cached.checks.P5, P6: cached.checks.P6 } }
+      } else if (cached && !wantPsi) {
         r = cached
       } else {
         const { result, psi429 } = await scanIsolated(p, { scan: !cached, psi: wantPsi }, wantPsi ? 240_000 : 120_000)

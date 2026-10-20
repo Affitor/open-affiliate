@@ -230,6 +230,33 @@ test("brand-page readers", () => {
   assert.ok(selfServe(`<a href="https://app.brand.com/register">Create account</a>`, "https://brand.com"), "the app subdomain counts")
 })
 
+test("fixes from the blind sample (SAMPLE-40.md): each miss and false positive, as found", () => {
+  // P1: currency after the number counts; statistics and savings do not.
+  assert.ok(hasPrice("Basic ab 1,90 € User/Monat"), "seatti")
+  assert.ok(hasPrice("Team 49 EUR per seat"))
+  assert.equal(hasPrice("if a customer from churning saves you $50K, then it could be a great fit"), null, "june")
+  assert.equal(hasPrice("Brands of Every Size $2B+ Annual Retail Ad Spend Managed $25B"), null, "quartile")
+  assert.ok(hasPrice("Pro $12/mo, save $50K in churn"), "a real price next to a statistic still counts")
+  // P2: "Try X free", "Install X Free", non-English trial phrases; a free demo is not a trial.
+  assert.ok(hasTrial("Try Duplicator free on your site"), "duplicator")
+  assert.ok(hasTrial("Install Duplicator Free"), "duplicator")
+  assert.ok(hasTrial("Dùng thử miễn phí"), "vbee")
+  assert.ok(hasTrial("Jetzt kostenlos testen"))
+  assert.equal(hasTrial("Get your free demo today"), null)
+  assert.equal(hasTrial("Miễn phí vận chuyển"), null, "free shipping is not a free plan")
+  // P3: a brand sibling host, an app-store install, and a link wrapped in a large inline SVG.
+  assert.ok(selfServe(`<a href="https://console.neon.tech/signup">Sign up</a>`, "https://neon.com"), "neon")
+  assert.equal(selfServe(`<a href="https://other.tech/signup">Sign up</a>`, "https://neon.com"), null, "an unrelated host")
+  assert.ok(selfServe(`<a href="https://apps.shopify.com/fast-bundle-product-bundles">Install Now</a>`, "https://fastbundle.co"), "fast-bundle")
+  assert.ok(selfServe(`<a href="/signup"><svg>${"<path d='M0 0'/>".repeat(80)}</svg>Get started</a>`, "https://klap.app"), "klap")
+  assert.ok(selfServe(`<a href="https://crayo.ai/signup">Make an account</a>`, "https://crayo.ai"), "crayo")
+  // A2: terms published on the page without a "terms" heading.
+  assert.ok(termsLink(`<h2>Become an affiliate</h2><p>20% recurring commissions for life.</p><p>Our tracking cookie lasts 30 days.</p>`, "https://replygain.com"), "replygain")
+  assert.ok(termsLink(`<p>Earn 30% of every payment for 12 months.</p><p>Referrals are tracked with a 90 day cookie.</p>`, "https://pumpgtm.com"), "pumpgtm")
+  assert.equal(termsLink(`<p>Earn 30% commission. Terms coming soon.</p>`, "https://brand.com"), null, "a figure with no concrete term")
+  assert.equal(termsLink(`<p>Our tracking cookie lasts 30 days.</p>`, "https://brand.com"), null, "a term with no commission figure")
+})
+
 test("program-page terms: a qualifying link or published terms, not a mention", () => {
   assert.ok(termsLink(`<a href="/affiliate-terms">Read the terms</a>`, "https://brand.com"))
   assert.ok(termsLink(`<a href="/legal">Partner Program Agreement</a>`, "https://brand.com"))
