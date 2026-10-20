@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -274,17 +274,56 @@ test("a corrupt or foreign cache file is rescanned, not trusted", () => {
     writeFileSync(join(dir, "bad.yaml"), "slug: [unclosed")
     assert.match(JSON.stringify(loadProgram(join(dir, "bad.yaml"))), /"slug":"bad","error":"program file unreadable/)
     writeFileSync(join(dir, "good.yaml"), "slug: good\nurl: https://good.test\ncommission: {rate: 30%}\n")
-    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", url: "https://good.test", signup_url: null, network: null })
+    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", name: null, url: "https://good.test", signup_url: null, network: null })
     // A cyclic or odd shape never leaves loadProgram: only the four text fields do.
     writeFileSync(join(dir, "cyclic.yaml"), "slug: cyclic\nnetwork: &n {nested: *n}\nurl: [1, 2]\n")
     const cyclic = loadProgram(join(dir, "cyclic.yaml"))
-    assert.deepEqual(cyclic, { slug: "cyclic", url: null, signup_url: null, network: null })
+    assert.deepEqual(cyclic, { slug: "cyclic", name: null, url: null, signup_url: null, network: null })
     assert.doesNotThrow(() => JSON.stringify(cyclic))
     writeFileSync(join(dir, "mismatch.yaml"), "slug: other\n")
     assert.match(JSON.stringify(loadProgram(join(dir, "mismatch.yaml"))), /does not match/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
+})
+
+test("P6: brand names become valid Google Ads keywords", () => {
+  assert.equal(seoKeyword("Vercel (v0)"), "vercel")
+  assert.equal(seoKeyword("Café Société!"), "cafe societe")
+  assert.equal(seoKeyword("Monday.com"), "monday.com")
+  assert.equal(seoKeyword("🚀 ✨"), null)
+  assert.equal(seoKeyword(null), null)
+  assert.equal(seoKeyword(Array(15).fill("word").join(" "))!.split(" ").length, 10)
+  assert.ok(seoKeyword("x".repeat(200))!.length <= 80)
+  assert.equal(p6Check("vercel", 90500).state, "met")
+  assert.equal(p6Check("tiny", 0).state, "not_met")
+  assert.equal(p6Check("none", null).state, "not_met")
+})
+
+test("P6: batches of 1,000, real cost logged, and the spend cap stops before a request could cross it", async () => {
+  const bodies: { keywords: string[] }[][] = []
+  setFetcher((async (_url: string, init?: RequestInit) => {
+    assert.equal(init?.method, "POST")
+    assert.match(String((init?.headers as Record<string, string>).Authorization), /^Basic /)
+    const body = JSON.parse(String(init?.body)) as { keywords: string[] }[]
+    bodies.push(body)
+    return Response.json({ cost: 0.1, tasks: [{ cost: 0.1, status_code: 20000, result: body[0].keywords.map((k, i) => ({ keyword: k.toUpperCase(), search_volume: i % 2 ? 50 : null })) }] })
+  }) as typeof fetch)
+  const keywords = Array.from({ length: 1500 }, (_, i) => `brand ${i}`)
+  const all = await searchVolumes([...keywords, "brand 1"], "eA==", 1)
+  assert.deepEqual(bodies.map((b) => b[0].keywords.length), [1000, 500], "duplicates sent once, 1,000 per request")
+  assert.equal(all.stopped, null)
+  assert.deepEqual(all.costs.map((c) => c.costUsd), [0.1, 0.1])
+  assert.equal(all.volumes.get("brand 1"), 50)
+  assert.equal(all.volumes.get("brand 0"), null)
+  bodies.length = 0
+  const capped = await searchVolumes(keywords, "eA==", 0.2)
+  assert.equal(bodies.length, 1, "a second request could take the run past $0.20")
+  assert.match(capped.stopped!, /cap \$0\.2/)
+  bodies.length = 0
+  const none = await searchVolumes(keywords, "eA==", 0.1)
+  assert.equal(bodies.length, 0, "no request when even one could exceed the cap")
+  assert.match(none.stopped!, /cap/)
 })
 
 test("dry-run score ignores unknown checks and needs four determined ones", () => {

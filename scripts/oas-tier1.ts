@@ -3,7 +3,7 @@
  * the way ora.ai reads a site (HTTP status, HTML links and text, PageSpeed).
  * Shadow only: nothing here changes a published score.
  *
- *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi]
+ *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo]
  *
  * Every request names itself (UA "OpenAffiliate"), obeys the host's robots.txt,
  * and is refused for schema/blocked-hosts.json hosts at every redirect hop,
@@ -13,6 +13,9 @@
  * the URL is re-checked under the same rules first, and the first 429 stops PageSpeed.
  * Each program is scanned in its own child process with a hard time limit, so no
  * response (however it is shaped, whatever it costs to parse) can stall the run.
+ * --seo adds P6 from DataForSEO (Google Ads search volume, worldwide, DATAFORSEO_LOGIN
+ * and DATAFORSEO_PASSWORD): up to 1,000 brand names per request, a hard spend cap per
+ * run, and every request's real cost logged to dataforseo-costs.json.
  * Writes .internal/oas/tier1/dry-run.json and distribution.md.
  */
 import { fork } from "node:child_process"
@@ -347,7 +350,7 @@ export function cwv(psi: { loadingExperience?: { metrics?: Record<string, { cate
 
 // ---------- one program ----------
 
-export type Program = { slug: string; name?: string; url?: string | null; signup_url?: string | null; network?: string | null; status?: string }
+export type Program = { slug: string; name?: string | null; url?: string | null; signup_url?: string | null; network?: string | null; status?: string }
 export type Result = { slug: string; network: string; checkedAt: string; checks: Record<string, Check> }
 
 const unknown = (why: string): Check => ({ state: "unknown", evidence: why })
@@ -451,6 +454,77 @@ export async function runPsi(p: Program, r: Result, permit: () => Promise<void> 
 
 // ---------- run + report ----------
 
+// ---------- P6: DataForSEO search volume ----------
+
+/** Google Ads reports volumes in buckets; 10 a month is the smallest measurable one. */
+export const P6_MIN_VOLUME = 10
+export const SEO_CAP_USD = 1
+/** Assumed ceiling per request before the first real cost is known (one task, up to 1,000 keywords). */
+const SEO_MAX_PER_REQUEST_USD = 0.15
+const SEO_BATCH = 1000
+const SEO_URL = "https://api.dataforseo.com/v3/keywords_data/google_ads/search_volume/live"
+
+/**
+ * The brand as a Google Ads keyword: the name without its parenthesised part,
+ * diacritics folded, only letters, digits, spaces, dots, apostrophes and hyphens
+ * (Google Ads rejects other symbols), at most 10 words and 80 characters. null when nothing is left.
+ */
+export function seoKeyword(name: string | null | undefined): string | null {
+  if (!name) return null
+  const plain = name.replace(/\([^)]*\)/g, " ").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  const words = plain.replace(/[^a-z0-9.' -]/g, " ").split(" ").filter((w) => /[a-z0-9]/.test(w)).slice(0, 10)
+  const keyword = words.join(" ").slice(0, 80).trim()
+  return keyword || null
+}
+
+export function p6Check(keyword: string, volume: number | null | undefined): Check {
+  if (volume == null) return { state: "not_met", evidence: `"${keyword}": no measurable volume` }
+  return volume >= P6_MIN_VOLUME
+    ? { state: "met", evidence: `"${keyword}": ${volume}/mo worldwide` }
+    : { state: "not_met", evidence: `"${keyword}": ${volume}/mo worldwide` }
+}
+
+export type SeoCost = { at: string; keywords: number; costUsd: number; status: number | string }
+
+/**
+ * Search volume for each keyword, batched. Stops before a request that could take
+ * the run past `capUsd` (assuming the larger of the last real cost and a ceiling).
+ * A failed batch leaves its keywords out of the map (their checks stay unknown).
+ */
+export async function searchVolumes(keywords: string[], auth: string, capUsd = SEO_CAP_USD): Promise<{ volumes: Map<string, number | null>; costs: SeoCost[]; stopped: string | null }> {
+  const volumes = new Map<string, number | null>()
+  const costs: SeoCost[] = []
+  let spent = 0
+  let perRequest = SEO_MAX_PER_REQUEST_USD
+  const unique = [...new Set(keywords)]
+  for (let i = 0; i < unique.length; i += SEO_BATCH) {
+    if (spent + perRequest > capUsd) return { volumes, costs, stopped: `cap $${capUsd} reached after $${spent.toFixed(4)}` }
+    const batch = unique.slice(i, i + SEO_BATCH)
+    let res: Response
+    try {
+      res = await fetcher(SEO_URL, {
+        method: "POST", redirect: "manual", signal: AbortSignal.timeout(120000),
+        headers: { Authorization: `Basic ${auth}`, "Content-Type": "application/json" },
+        body: JSON.stringify([{ keywords: batch }]),
+      })
+    } catch (error) {
+      costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: 0, status: `fetch failed (${(error as Error).name})` })
+      continue
+    }
+    let body: { cost?: number; tasks?: { cost?: number; status_code?: number; result?: { keyword?: string; search_volume?: number | null }[] }[] } = {}
+    try {
+      body = JSON.parse((await readCapped(res, PSI_BYTES)).text)
+    } catch { /* unreadable body: its keywords stay unknown */ }
+    const cost = Number(body.cost ?? body.tasks?.[0]?.cost ?? 0) || 0
+    spent += cost
+    perRequest = Math.max(cost, perRequest)
+    costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: cost, status: body.tasks?.[0]?.status_code ?? res.status })
+    for (const row of body.tasks?.[0]?.result ?? []) if (typeof row.keyword === "string") volumes.set(row.keyword.toLowerCase(), row.search_volume ?? null)
+    if (spent >= capUsd) return { volumes, costs, stopped: `cap $${capUsd} reached at $${spent.toFixed(4)}` }
+  }
+  return { volumes, costs, stopped: null }
+}
+
 /** A cached result, or null when the file is missing, unreadable or not a result (the program is then scanned again). */
 export function readCache(file: string, slug: string): Result | null {
   try {
@@ -478,7 +552,7 @@ export function loadProgram(path: string): Program | { slug: string; error: stri
     const p = parse(readFileSync(path, "utf8"))
     const text = (v: unknown) => (typeof v === "string" ? v : null)
     if (text(p?.slug) !== slug) return { slug, error: "program file slug does not match its name" }
-    return { slug, url: text(p.url), signup_url: text(p.signup_url), network: text(p.network) }
+    return { slug, name: text(p.name), url: text(p.url), signup_url: text(p.signup_url), network: text(p.network) }
   } catch (error) {
     return { slug, error: `program file unreadable (${(error as Error).name})` }
   }
@@ -588,8 +662,10 @@ async function main() {
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
   const psi = args.includes("--psi")
-  // Length only, never the value: confirms the key reached the run before any call.
+  const seo = args.includes("--seo")
+  // Lengths only, never values: confirms the credentials reached the run before any call.
   if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
+  if (seo) console.log(`DATAFORSEO_LOGIN length ${process.env.DATAFORSEO_LOGIN?.length ?? 0}, DATAFORSEO_PASSWORD length ${process.env.DATAFORSEO_PASSWORD?.length ?? 0}`)
   const out = join(process.cwd(), ".internal", "oas", "tier1")
   const cache = join(out, "cache")
   mkdirSync(cache, { recursive: true })
@@ -626,6 +702,25 @@ async function main() {
     }
   }
   await Promise.all(Array.from({ length: psi ? 3 : 8 }, worker))
+  if (seo) {
+    const names = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoKeyword(p.name)]))
+    const pending = results.filter((r) => r.checks.P6.evidence === "DataForSEO not run")
+    for (const r of pending) if (!names.get(r.slug)) r.checks.P6 = unknown("no usable brand name")
+    const auth = Buffer.from(`${process.env.DATAFORSEO_LOGIN ?? ""}:${process.env.DATAFORSEO_PASSWORD ?? ""}`).toString("base64")
+    const { volumes, costs, stopped } = await searchVolumes(pending.map((r) => names.get(r.slug)).filter((k): k is string => !!k), auth)
+    for (const r of pending) {
+      const keyword = names.get(r.slug)
+      if (keyword && volumes.has(keyword)) r.checks.P6 = p6Check(keyword, volumes.get(keyword))
+      else if (keyword) r.checks.P6 = unknown(stopped ? "DataForSEO spend cap reached" : "DataForSEO returned no row")
+      try {
+        writeFileSync(join(cache, `${r.slug}.json`), JSON.stringify(r, null, 2) + "\n")
+      } catch { /* rescanned next run */ }
+    }
+    const log = join(out, "dataforseo-costs.json")
+    const previous: SeoCost[] = existsSync(log) ? JSON.parse(readFileSync(log, "utf8")) : []
+    writeFileSync(log, JSON.stringify([...previous, ...costs], null, 2) + "\n")
+    console.log(`DataForSEO: ${costs.length} requests, $${costs.reduce((a, c) => a + c.costUsd, 0).toFixed(4)}${stopped ? ` · ${stopped}` : ""}`)
+  }
   results.sort((a, b) => a.slug.localeCompare(b.slug))
   writeFileSync(join(out, "dry-run.json"), JSON.stringify(results, null, 2) + "\n")
   writeFileSync(join(out, "distribution.md"), distribution(results))
