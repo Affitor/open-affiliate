@@ -11,15 +11,16 @@ commission:
   mode: percentage
   value: 40
   duration: "Initial purchase only"
-  conditions: "The initial referred purchase qualifies. Refunded payments, chargebacks and fraudulent transactions can have their commission reversed."
+  conditions: "The affiliate page says each sale; the terms limit eligibility to the initial referred purchase. Refunded payments, chargebacks and fraudulent transactions can have their commission reversed."
 
 # "The tracking cookies are set to 90 days." (www.csshero.org/terms-and-conditions, checked 2026-10-20)
 cookie_days: 90
 # "summing commissions with a delay of 30 days, and with a minimum amount of 50$" (www.csshero.org/terms-and-conditions, checked 2026-10-20)
+# "We will pay out commissions Quarterly" (www.csshero.org/terms-and-conditions, checked 2026-10-20)
 payout:
   minimum: 50
   currency: USD
-  frequency: net-30
+  frequency: quarterly
   methods: [paypal]
   conditions: "The terms specify a 30-day commission delay and quarterly settlement around January 1, April 1, July 1 and October 1. A PayPal account and at least USD 50 are required. Enter the main promotional website URL in the affiliate account to enable payout requests."
 

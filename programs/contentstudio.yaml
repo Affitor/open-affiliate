@@ -16,12 +16,14 @@ commission:
 
 # "A click on your link places a cookie in the visitor's browser that lasts 90 days." (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
 cookie_days: 90
+# "We use last-click attribution." (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
 attribution: last-click
 # "30 paid days." and "$200" (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
+# "We pay approved commissions monthly, by the 15th of the following month" (contentstudio.io/affiliate-terms-and-conditions, checked 2026-10-20)
 payout:
   minimum: 200
   currency: USD
-  frequency: net-30
+  frequency: net-60
   methods: [bank, paypal, wise]
   conditions: "Commission is approved after the customer completes 30 paid days, then settled monthly by the following month's 15th once approved balance reaches USD 200 and there are at least two active referrals. Payoneer is also offered. Smaller balances roll forward. Submit accurate W-9 or W-8BEN documentation within 90 days of joining or permanently forfeit commission on earlier referrals. Refunds, chargebacks, cancellations, duplicate/error transactions and fraud can reverse commission. Raise payment disputes within 30 days. A fraud investigation can hold payment for up to 60 days. An account inactive for 12 months with a sub-USD-200 balance can close if still inactive 90 days after notice."
 

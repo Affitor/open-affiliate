@@ -15,10 +15,11 @@ commission:
   conditions: "Commission covers what referred paying clients purchase during the six months following referral. Earnings are payable only after the brand collects the customer's payment."
 
 # "minimum of USD 50" (crawlbase.com/terms, checked 2026-10-20)
+# "at the 18th of every month for your earnings from the previous month" (crawlbase.com/terms, checked 2026-10-20)
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
   methods: [paypal, bank]
   conditions: "PayPal payouts are scheduled for the eighteenth of each month for the previous month's earnings, after at least three referrals become paying customers and USD 50 is collected. Above USD 1,000 in monthly earnings, bank transfer or other arrangements may be agreed case by case. Uncollected customer payments are not payable commissions."
 

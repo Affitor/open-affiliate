@@ -15,11 +15,12 @@ commission:
   conditions: "The affiliate page title advertises 30% but its body specifies 20%, with examples of USD 9.90, 19.90, 39.90 and 59.90. Confirm the applicable rate. Only a customer's first new order earns commission; subsequent purchases, renewals, upgrades and downgrades are excluded. Only completed transactions qualify, excluding refunds, chargebacks and self-referrals. All promotional channels must first send visitors through the affiliate's website."
 
 # "the referred account must remain active for a minimum of 37 days" (duplicator.com/affiliate-terms-and-conditions, checked 2026-10-20)
-# The 37-day active-account waiting period maps to net-60; monthly is the batch schedule.
+# payout.frequency: model gap; the minimum 37-day active-account hold plus an unspecified monthly payment date can exceed 60 days. The schedule is published, not absent.
+# payout.minimum and payout.methods: not published on duplicator.com/affiliates or duplicator.com/affiliate-terms-and-conditions (checked 2026-10-20)
 payout:
-  frequency: net-60
   conditions: "Commissions are processed once a month, and the referred account must remain active for at least 37 days before commission can be received."
 
+# cookie_days: not published on duplicator.com/affiliates or duplicator.com/affiliate-terms-and-conditions (checked 2026-10-20)
 signup_url: https://duplicator.com/affiliates/
 dashboard_url: https://duplicator.com/affiliate-area/
 network: in-house

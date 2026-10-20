@@ -19,8 +19,9 @@ attribution: last-click
 # "Pending Commissions shall convert to Approved Commissions thirty (30) days after the applicable Customer’s invoicing date" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
 # "fifty euros (€50)" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
 # Non-USD threshold is retained in conditions; no USD amount is inferred.
+# "between the twentieth (20th) and twenty-fifth (25th) day of each calendar month, following invoice generation" (www.cherryservers.com/legal/affiliate-contract, checked 2026-10-20)
 payout:
-  frequency: net-30
+  frequency: net-60
   methods: [paypal, bank, crypto]
   conditions: "Commissions become approved 30 days after the customer's invoice if no disqualifying event occurs. At EUR 50 in approved commissions the system generates an invoice. The program FAQ says payment is on the 20th, while the agreement allows the 20th–25th following invoice generation. Payment methods include PayPal, SEPA bank transfer and cryptocurrency. Fees, conversion costs and taxes are the affiliate's responsibility. Commission is forfeited if the payout threshold or required current payment details are not satisfied within six months of the transaction. Payment can be held for inaccurate details, suspected breach or fraud; invalid earlier payments may be recovered."
 

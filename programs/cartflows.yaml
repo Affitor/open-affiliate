@@ -16,7 +16,6 @@ commission:
 
 # "60-day cookie life" (cartflows.com/affiliates, checked 2026-10-20)
 cookie_days: 60
-attribution: first-click
 
 # "$210 USD" and "at least two (2) successful referrals" (cartflows.com/affiliates, checked 2026-10-20)
 # "within 45 days of the referred sale" and "via the Affiliate PayPal account" (my.cartflows.com/affiliate-program-terms-conditions/?pTXyytedV9E9TFhT=1, checked 2026-10-20)

@@ -16,6 +16,7 @@ commission:
 
 # "within 30 days of someone clicking your link" (cleanshot.com/affiliate, checked 2026-10-20)
 cookie_days: 30
+# payout: not published on cleanshot.com/affiliate or cleanshot.com/legal/cloud/terms (checked 2026-10-20)
 signup_url: https://cleanshot.com/affiliate
 # The brand links its own application on partners.dub.co; the suspended host was not fetched.
 network: dub
