@@ -456,8 +456,8 @@ export async function runPsi(p: Program, r: Result, permit: () => Promise<void> 
 
 // ---------- P6: DataForSEO search volume ----------
 
-/** Google Ads reports volumes in buckets; 10 a month is the smallest measurable one. */
-export const P6_MIN_VOLUME = 10
+/** Buyer demand: at least 1,000 searches a month (in the dry run, 10, the smallest bucket, passed 97% of programs). */
+export const P6_MIN_VOLUME = 1000
 export const SEO_CAP_USD = 1
 /** Assumed ceiling per request before the first real cost is known (one task, up to 1,000 keywords). */
 const SEO_MAX_PER_REQUEST_USD = 0.15
@@ -469,12 +469,45 @@ const SEO_URL = "https://api.dataforseo.com/v3/keywords_data/google_ads/search_v
  * diacritics folded, only letters, digits, spaces, dots, apostrophes and hyphens
  * (Google Ads rejects other symbols), at most 10 words and 80 characters. null when nothing is left.
  */
+const LEGAL_SUFFIX = new Set(["inc", "llc", "ltd", "limited", "gmbh", "corp", "corporation", "co", "company", "plc", "sa", "s.a", "sas", "srl", "bv", "b.v", "ag", "pty", "oy", "ab", "as", "kk"])
+
 export function seoKeyword(name: string | null | undefined): string | null {
   if (!name) return null
   const plain = name.replace(/\([^)]*\)/g, " ").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
-  const words = plain.replace(/[^a-z0-9.' -]/g, " ").split(" ").filter((w) => /[a-z0-9]/.test(w)).slice(0, 10)
+  const words = plain.replace(/[^a-z0-9.' -]/g, " ").split(" ").filter((w) => /[a-z0-9]/.test(w))
+  // A legal suffix is not what buyers type: "Aircall Inc." is searched as "aircall".
+  while (words.length > 1 && LEGAL_SUFFIX.has(words[words.length - 1].replace(/\.$/, ""))) words.pop()
+  words.splice(10)
   const keyword = words.join(" ").slice(0, 80).trim()
   return keyword || null
+}
+
+let dictionary: Set<string> | null | undefined
+/** The system word list, when the machine has one; without it no name counts as an ordinary word. */
+function systemWords(): Set<string> | null {
+  if (dictionary === undefined) {
+    try {
+      dictionary = new Set(readFileSync("/usr/share/dict/words", "utf8").toLowerCase().split("\n"))
+    } catch {
+      dictionary = null
+    }
+  }
+  return dictionary
+}
+
+/**
+ * What to ask DataForSEO for a program: its brand keyword, or, when the brand is a
+ * single ordinary word ("pitch", "finally"), its domain ("pitch.com"), because the
+ * word's volume measures the word, not the brand.
+ */
+export function seoQuery(p: { name?: string | null; url?: string | null }, words: Set<string> | null = systemWords()): string | null {
+  const keyword = seoKeyword(p.name)
+  if (!keyword || keyword.includes(" ") || !words?.has(keyword) || !p.url) return keyword
+  try {
+    return seoKeyword(new URL(p.url).hostname.replace(/^www\./, "")) ?? keyword
+  } catch {
+    return keyword
+  }
 }
 
 export function p6Check(keyword: string, volume: number | null | undefined): Check {
@@ -721,7 +754,7 @@ async function main() {
   // With PageSpeed each scan waits ~30 s on Google; psiSlot caps the call rate, so more run at once.
   await Promise.all(Array.from({ length: psi ? 12 : 8 }, worker))
   if (seo) {
-    const names = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoKeyword(p.name)]))
+    const names = new Map(programs.filter((p): p is Program => !("error" in p)).map((p) => [p.slug, seoQuery(p)]))
     const pending = results.filter((r) => r.checks.P6.evidence === "DataForSEO not run")
     for (const r of pending) if (!names.get(r.slug)) r.checks.P6 = unknown("no usable brand name")
     const auth = Buffer.from(`${process.env.DATAFORSEO_LOGIN ?? ""}:${process.env.DATAFORSEO_PASSWORD ?? ""}`).toString("base64")

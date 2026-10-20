@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -291,12 +291,24 @@ test("P6: brand names become valid Google Ads keywords", () => {
   assert.equal(seoKeyword("Vercel (v0)"), "vercel")
   assert.equal(seoKeyword("Café Société!"), "cafe societe")
   assert.equal(seoKeyword("Monday.com"), "monday.com")
+  assert.equal(seoKeyword("Aircall Inc."), "aircall", "legal suffix dropped")
+  assert.equal(seoKeyword("Acme Software GmbH"), "acme software")
+  assert.equal(seoKeyword("Co"), "co", "a one-word name is kept whole")
   assert.equal(seoKeyword("🚀 ✨"), null)
   assert.equal(seoKeyword(null), null)
   assert.equal(seoKeyword(Array(15).fill("word").join(" "))!.split(" ").length, 10)
   assert.ok(seoKeyword("x".repeat(200))!.length <= 80)
   assert.equal(p6Check("vercel", 90500).state, "met")
   assert.equal(p6Check("tiny", 0).state, "not_met")
+  assert.equal(p6Check("small", 500).state, "not_met", "under 1,000 a month")
+  assert.equal(p6Check("enough", 1000).state, "met")
+  // A one-word brand that is an ordinary word is asked for by its domain.
+  const words = new Set(["pitch", "finally", "notion"])
+  assert.equal(seoQuery({ name: "Pitch", url: "https://www.pitch.com/" }, words), "pitch.com")
+  assert.equal(seoQuery({ name: "Canva", url: "https://www.canva.com" }, words), "canva")
+  assert.equal(seoQuery({ name: "Pitch Deck AI", url: "https://pitchdeck.ai" }, words), "pitch deck ai", "several words are specific enough")
+  assert.equal(seoQuery({ name: "Pitch", url: null }, words), "pitch", "no URL: the name")
+  assert.equal(seoQuery({ name: "Pitch", url: "https://pitch.com" }, null), "pitch", "no word list: the name")
   assert.equal(p6Check("none", null).state, "not_met")
 })
 
