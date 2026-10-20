@@ -105,7 +105,8 @@ function unescapeJs(inner: string): string {
 /** The RSC (Flight) payload of a served page: every self.__next_f.push string, decoded. */
 function flightPayload(html: string): string {
   let out = ""
-  for (const m of html.matchAll(/self\.__next_f\.push\(\[\d+,"((?:[^"\\]|\\.)*)"\]\)/g)) out += unescapeJs(m[1]) + "\n"
+  // Joined exactly as the browser joins them: a row (or a reference) may span two pushes.
+  for (const m of html.matchAll(/self\.__next_f\.push\(\[\d+,"((?:[^"\\]|\\.)*)"\]\)/g)) out += unescapeJs(m[1])
   return out
 }
 
@@ -221,41 +222,94 @@ function flightRefs(fragment: string, mode: "keep" | "remove"): string[] {
     !/^[0-9a-f]$/.test(m[1]) ? [m[2]] : mode === "keep" ? [m[2], m[1] + m[2]] : [])
 }
 
+type FlightRow = { id: string; text: boolean; body: string }
+
 /**
- * Removes the Flight rows ("3d:[…]" lines) reachable only from the cut nodes.
- * React outlines a row's cells into such lines (the row then holds "$L3d").
- * Reachability, not reference counting: a line reachable from anything else in
- * the payload (another line, or text that is not a row line) stays and is
- * checked, whatever order the lines come in.
+ * A Flight payload as React reads it: "id:" rows; a "T" row is "id:T<hex byte
+ * length>," followed by exactly that many UTF-8 bytes (newlines included), any
+ * other row runs to the next newline. Whatever does not parse is kept as loose
+ * text, which is always checked and never removed.
  */
-function dropOrphanRows(flight: string, cut: string[]): string {
-  const lines = flight.split("\n")
-  // One id can span several lines in a stream ("9:R", "9:\"$3d\"", "9:C"): a row is all of them.
-  const rows = new Map<string, string>()
+function parseFlight(payload: string): { rows: FlightRow[]; loose: string[] } {
+  const buf = Buffer.from(payload, "utf8")
+  const rows: FlightRow[] = []
   const loose: string[] = []
-  for (const line of lines) {
-    const m = /^([0-9a-f]+):/.exec(line)
-    if (m) rows.set(m[1], (rows.get(m[1]) ?? "") + "\n" + line)
-    else loose.push(line)
+  let i = 0
+  const toNewline = (from: number) => {
+    const nl = buf.indexOf(0x0a, from)
+    return nl === -1 ? buf.length : nl
   }
+  while (i < buf.length) {
+    if (buf[i] === 0x0a) {
+      i++
+      continue
+    }
+    const head = /^([0-9a-f]+):/.exec(buf.subarray(i, i + 24).toString("latin1"))
+    if (!head) {
+      const end = toNewline(i)
+      loose.push(buf.subarray(i, end).toString("utf8"))
+      i = end
+      continue
+    }
+    const at = i + head[0].length
+    if (buf[at] === 0x54) {
+      const comma = buf.indexOf(0x2c, at)
+      const length = comma === -1 ? NaN : parseInt(buf.subarray(at + 1, comma).toString("latin1"), 16)
+      if (Number.isFinite(length) && length >= 0 && comma + 1 + length <= buf.length) {
+        rows.push({ id: head[1], text: true, body: buf.subarray(comma + 1, comma + 1 + length).toString("utf8") })
+        i = comma + 1 + length
+        continue
+      }
+    }
+    const end = toNewline(at)
+    rows.push({ id: head[1], text: false, body: buf.subarray(at, end).toString("utf8") })
+    i = end
+  }
+  return { rows, loose }
+}
+
+/**
+ * The text of a Flight payload to check, without the comparison rows of verified
+ * programs: their ["$","tr","<slug>",…] nodes, and the rows reachable only from
+ * them (React outlines a row's cells into rows of their own, "$L3d"). Reachability,
+ * not reference counting: a row reachable from anything else stays, whatever order
+ * or stream shape (one id may span several rows) it comes in. Checked: every
+ * string in a JSON row, every text row, all loose text.
+ */
+function flightTexts(payload: string, slugs: Set<string>): string[] {
+  const { rows, loose } = parseFlight(payload)
+  const cut: string[] = []
+  if (slugs.size) {
+    for (const row of rows) {
+      if (row.text) continue
+      const nodes = cutArrays(row.body, [...slugs].map((slug) => `["$","tr","${slug}",`))
+      row.body = nodes.text
+      cut.push(...nodes.cut)
+    }
+  }
+  const byId = new Map<string, FlightRow[]>()
+  for (const row of rows) byId.set(row.id, [...(byId.get(row.id) ?? []), row])
+  const refsOf = (id: string, mode: "keep" | "remove") => (byId.get(id) ?? []).flatMap((r) => (r.text ? [] : flightRefs(r.body, mode)))
   const reach = (start: string[], mode: "keep" | "remove") => {
     const seen = new Set<string>()
     const queue = [...start]
     while (queue.length) {
       const id = queue.pop()!
-      if (seen.has(id) || !rows.has(id)) continue
+      if (seen.has(id) || !byId.has(id)) continue
       seen.add(id)
-      queue.push(...flightRefs(rows.get(id)!, mode))
+      queue.push(...refsOf(id, mode))
     }
     return seen
   }
   // The page root (row 0) is never removed.
   const fromCut = reach(cut.flatMap((c) => flightRefs(c, "remove")), "remove")
   fromCut.delete("0")
-  const others = [...rows.keys()].filter((id) => !fromCut.has(id))
+  const others = [...byId.keys()].filter((id) => !fromCut.has(id))
   const kept = reach([...others, ...loose.flatMap((l) => flightRefs(l, "keep"))], "keep")
-  const drop = new Set([...fromCut].filter((id) => !kept.has(id)))
-  return lines.filter((line) => !drop.has(/^([0-9a-f]+):/.exec(line)?.[1] ?? "")).join("\n")
+  return [
+    ...rows.filter((r) => !fromCut.has(r.id) || kept.has(r.id)).flatMap((r) => (r.text ? [r.body] : payloadStrings(r.body))),
+    ...loose.flatMap((l) => [...payloadStrings(l), l]),
+  ]
 }
 
 /**
@@ -266,12 +320,10 @@ function dropOrphanRows(flight: string, cut: string[]): string {
  * verified terms. Nothing else is removed, so the page's own text is checked in
  * full wherever it appears.
  */
-function withoutVerifiedRows(html: string, flight: string, slugs: Set<string>): { html: string; flight: string } {
-  if (slugs.size === 0) return { html, flight }
-  const rows = html.replace(/<table data-compare[\s\S]*?<\/table>/, (table) =>
+function withoutVerifiedRows(html: string, flight: string, slugs: Set<string>): { html: string; flight: string[] } {
+  const rows = slugs.size === 0 ? html : html.replace(/<table data-compare[\s\S]*?<\/table>/, (table) =>
     table.replace(/<tr\b[^>]*>[\s\S]*?<\/tr>/g, (row) => (slugs.has(/href="\/programs\/([a-z0-9-]+)"/.exec(row)?.[1] ?? "") ? "" : row)))
-  const nodes = cutArrays(flight, [...slugs].map((slug) => `["$","tr","${slug}",`))
-  return { html: rows, flight: dropOrphanRows(nodes.text, nodes.cut) }
+  return { html: rows, flight: flightTexts(flight, slugs) }
 }
 
 /**
@@ -321,7 +373,7 @@ export function termsHtmlProblems(p: Program, html: string, compared: Program[] 
   if (COOKIE_BADGE.test(own)) problems.push(`carries a cookie window ("${COOKIE_BADGE.exec(own)![0]}")`)
   // Stored values specific enough to find anywhere: "1-5 business days", not "instant".
   if (p.approvalTime && /\d/.test(p.approvalTime) && own.includes(p.approvalTime)) problems.push(`carries its approval time ("${p.approvalTime}")`)
-  const flight = payloadStrings(scoped.flight)
+  const flight = scoped.flight
   for (const [where, texts] of [
     ["prose", blocks],
     ["its JSON-LD", jsonLdStrings(html)],
