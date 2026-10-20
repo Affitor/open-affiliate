@@ -516,14 +516,23 @@ export function distribution(results: Result[]): string {
   return lines.join("\n") + "\n"
 }
 
-/** PageSpeed calls across all child processes start at least this far apart (≤ 1 request per second). */
-export const PSI_GAP_MS = 1000
-let nextPsiAt = 0
-/** Resolves when this caller may start a PageSpeed call; callers are spaced PSI_GAP_MS apart in arrival order. */
-export function psiSlot(now = Date.now()): Promise<void> {
-  const at = Math.max(now, nextPsiAt)
-  nextPsiAt = at + PSI_GAP_MS
-  return new Promise((resolve) => setTimeout(resolve, at - now))
+/** PageSpeed calls across all child processes are granted at least this far apart (< 1 request per second, with margin for IPC delivery). */
+export const PSI_GAP_MS = 1200
+let lastGrant = -Infinity
+let queue: Promise<void> = Promise.resolve()
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+/**
+ * Resolves when this caller may start a PageSpeed call. Grants are serialised and
+ * measured on the real clock at grant time, so a late timer or a stalled event
+ * loop only delays later grants; it never releases two together.
+ */
+export function psiSlot(): Promise<void> {
+  const grant = queue.then(async () => {
+    while (Date.now() - lastGrant < PSI_GAP_MS) await sleep(PSI_GAP_MS - (Date.now() - lastGrant))
+    lastGrant = Date.now()
+  })
+  queue = grant
+  return grant
 }
 
 const failed = (slug: string, network: string, why: string): Result =>
