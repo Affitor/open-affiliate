@@ -8,7 +8,7 @@ import { ShareButton } from "@/components/share-button";
 import { OasGradeChip } from "@/components/oas-grade";
 import { categoryToSlug, getProgram, livePrograms } from "@/lib/programs";
 import { isAffitorHref } from "@/lib/affitor-link";
-import { machineChecks } from "@/lib/oas-machine";
+import { machineChecks, provenanceOf } from "@/lib/oas-machine";
 import {
   buildBoard,
   categoryRank,
@@ -322,6 +322,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
                 <span className="font-medium">{c.label}</span>
                 <span className={`font-mono text-sm ${c.met ? "text-good" : "text-muted-foreground"}`}>{c.met ? "Met" : "Not met"}</span>
                 <span className="col-span-2 text-sm text-muted-foreground">{c.reading}</span>
+                <span className="col-span-2 text-meta text-muted-foreground break-all">{provenanceOf(c)}</span>
               </li>
             ))}
           </ul>

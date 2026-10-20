@@ -44,11 +44,17 @@ type Stored = { id: MachineCheckId; met: boolean; target: string; measurement: M
 type Entry = { measuredAt: string; ruleset: string; checks: Stored[] }
 
 const SOURCE: Record<MachineCheckId, MachineCheck["source"]> = { A1: "http", P5: "pagespeed", P6: "dataforseo" }
+const SOURCE_NAME: Record<MachineCheck["source"], string> = { http: "HTTP request", pagespeed: "PageSpeed Insights (mobile)", dataforseo: "DataForSEO (Google Ads estimate)" }
+
+/** Where a reading comes from, on what, under which rule: one line every surface prints the same way. */
+export function provenanceOf(c: Pick<MachineCheck, "source" | "target" | "ruleset">): string {
+  return `Source: ${SOURCE_NAME[c.source]} · ${c.source === "dataforseo" ? `query "${c.target}"` : c.target} · rule ${c.ruleset}`
+}
 
 /** The reading in words, from the typed measurement: it names its data and thresholds. */
 export function readingOf(c: Stored): string {
   const m = c.measurement
-  if ("status" in m) return "The listed program page answers"
+  if ("status" in m) return "The listed program page answers (HTTP 200)"
   if ("data" in m && m.data === "field") {
     return m.notGood.length
       ? `Real-user data (Chrome UX Report, last 28 days): ${m.notGood.join(", ")} not in the good range`

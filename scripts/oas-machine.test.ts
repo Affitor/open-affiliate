@@ -6,7 +6,7 @@ import { test } from "node:test"
 import { parse } from "yaml"
 import { machineData, MACHINE_RULESET } from "./build-oas-machine"
 import { programMd } from "./generate-md"
-import { machineChecks, MACHINE_LABELS, readingOf } from "../src/lib/oas-machine"
+import { machineChecks, MACHINE_LABELS, provenanceOf, readingOf } from "../src/lib/oas-machine"
 import { apiProgram } from "../src/lib/no-program"
 import { getOasScore, oasScores, oasSummary } from "../src/lib/oas"
 import { getProgram } from "../src/lib/programs"
@@ -50,7 +50,10 @@ test("data file: A1 (met, listed URL not the site root), P5 and P6 with provenan
   assert.doesNotMatch(JSON.stringify(out), /22200|22,200/, "the provider's volume is not stored")
 })
 
-test("readings in words name their data and thresholds", () => {
+test("readings in words name their data and thresholds; provenance names source, target and rule", () => {
+  assert.equal(readingOf({ id: "A1", met: true, target: "https://b.test/affiliates", measurement: { status: 200 } }), "The listed program page answers (HTTP 200)")
+  assert.equal(provenanceOf({ source: "dataforseo", target: "chatling", ruleset: "tier1-v1" }), 'Source: DataForSEO (Google Ads estimate) · query "chatling" · rule tier1-v1')
+  assert.equal(provenanceOf({ source: "pagespeed", target: "https://b.test", ruleset: "tier1-v1" }), "Source: PageSpeed Insights (mobile) · https://b.test · rule tier1-v1")
   assert.equal(readingOf({ id: "P5", met: false, target: "https://b.test", measurement: { data: "field", notGood: ["LCP"] } }), "Real-user data (Chrome UX Report, last 28 days): LCP not in the good range")
   assert.match(readingOf({ id: "P5", met: true, target: "https://a.test", measurement: { data: "lab", lcpMs: 2400, cls: 0.05, tbtMs: 150 } }), /^Lab test, no real-user data \(thresholds LCP ≤ 2,500 ms, CLS ≤ 0.1, TBT ≤ 200 ms standing in for INP\): LCP 2,400 ms/)
   assert.equal(readingOf({ id: "P6", met: false, target: "a.com", measurement: { scope: "worldwide", threshold: 1000, reached: false } }), 'Estimated searches for "a.com" (Google Ads, worldwide): under 1,000 a month')
@@ -92,7 +95,14 @@ test("the report, REST/MCP and the .md twin carry the same machine checks; the O
   assert.equal((apiProgram(getProgram(slug)!) as { oas?: { score: number | null } }).oas?.score, oasSummary(slug)?.score)
   const md = programMd(parse(readFileSync(join("programs", `${slug}.yaml`), "utf8")))
   assert.ok(md.includes("## Machine checks (not counted in OAS)"))
-  for (const c of checks) assert.ok(md.includes(`${c.label}: ${c.met ? "met" : "not met"}.`) && md.includes(`valid until ${c.validUntil}`), c.id)
+  for (const c of checks) {
+    assert.ok(md.includes(`${c.label}: ${c.met ? "met" : "not met"}.`) && md.includes(`valid until ${c.validUntil}`), c.id)
+    // Provenance on the .md and the report, the same line REST/MCP's fields make.
+    const line = provenanceOf(c)
+    assert.ok(md.includes(line), `.md provenance ${c.id}`)
+    assert.ok(line.includes(c.target) && line.includes(`rule ${c.ruleset}`), line)
+  }
+  assert.match(readFileSync("src/app/programs/[slug]/oas/page.tsx", "utf8"), /\{provenanceOf\(c\)\}/, "the report prints each check's provenance")
   const none = oasScores.map((s) => s.slug).find((s) => !machineChecks(s).length && getProgram(s))
   if (none) {
     assert.ok(!("oasMachineChecks" in apiProgram(getProgram(none)!)))

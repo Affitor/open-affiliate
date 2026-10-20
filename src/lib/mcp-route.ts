@@ -269,7 +269,7 @@ const programOutputSchema = {
     reportUrl: z.string().describe("The program's full OAS report"),
   }).optional().describe("OAS, the OpenAffiliate Score: how clearly the program publishes its terms and protects its partners. Omitted when the program is not scored or OAS is not published"),
   oasMachineChecks: z.array(z.object({
-    id: z.enum(["A1", "P5", "P6"]).describe("A1 program page is live; P5 Core Web Vitals (mobile); P6 buyer search demand"),
+    id: z.enum(["A1", "P5", "P6"]).describe("A1 program page is live; P5 Core Web Vitals (mobile); P6 estimated monthly brand-query search volume (Google Ads, worldwide)"),
     label: z.string().describe("The check's name as the report shows it"),
     met: z.boolean().describe("True when the check is met"),
     reading: z.string().describe("What was measured, in words, naming its data and thresholds"),

@@ -72,7 +72,7 @@ import { blogEntries, type BlogEntry } from "../src/lib/blog"
 import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
 import { directoryGroups } from "../src/lib/programs-directory"
 import { buildBoard, oasGrade, oasScores, oasSummary, TEAM_DISCLOSURE, TIE_ORDER, UNRANKED_TEXT } from "../src/lib/oas"
-import { machineChecks } from "../src/lib/oas-machine"
+import { machineChecks, provenanceOf } from "../src/lib/oas-machine"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED_NOTE } from "../src/lib/confirmed-terms"
 import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
@@ -420,7 +420,7 @@ function oasMd(slug: string): string | null {
 function machineMd(slug: string): string | null {
   const checks = machineChecks(slug)
   if (!checks.length) return null
-  return checks.map((c) => `${mdEscape(c.label)}: ${c.met ? "met" : "not met"}. ${mdEscape(c.reading)} (measured ${c.measuredAt}, valid until ${c.validUntil})`).join("\n")
+  return checks.map((c) => `${mdEscape(c.label)}: ${c.met ? "met" : "not met"}. ${mdEscape(c.reading)} (measured ${c.measuredAt}, valid until ${c.validUntil}). ${mdEscape(provenanceOf(c))}`).join("\n")
 }
 
 // ---------- No-program page -------------------------------------------------
