@@ -1,0 +1,87 @@
+name: Heyzine
+slug: heyzine
+url: https://heyzine.com
+category: Content Management
+tags: [flipbook-maker, pdf-to-flipbook, digital-catalog, digital-magazine, brochures, publishing]
+
+# "You will earn a 20% commission for every subscription and renewal of the Standard, Professional, and Premium plans." (heyzine.com/plans/affiliate, checked 2026-10-20)
+# "you will get a commission on every payment as long as their subscription is active." (heyzine.com/plans/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of every subscription payment and renewal on the Standard, Professional and Premium plans while the referred subscription stays active. Flipbook packs and other one-time or special purchases do not earn commission. The referred customer must convert to a paid plan within 60 days of signing up."
+
+# cookie_days: not published on heyzine.com/plans/affiliate or heyzine.com/legal/affiliate-terms (checked 2026-10-20); the page gives a 60-day window from signup to paid conversion, not a click cookie
+
+# "Payouts are made on the first of each month, at least 30 days after the referred customer converted to a paid account." (heyzine.com/plans/affiliate, checked 2026-10-20)
+# "The minimum balance for payouts is $50 with at least 5 different customers. Payouts are made through PayPal only." (heyzine.com/plans/affiliate, checked 2026-10-20)
+# paid at least 30 days after conversion, on the 1st of the month → net-30 (backfill rule #1)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Paid through PayPal on the first of a month, no sooner than 30 days after the referred customer upgrades; the balance must reach $50 across at least 5 different customers, and affiliates must be registered as a freelancer or company able to issue invoices."
+
+signup_url: https://heyzine.com/plans/affiliate
+# "The fact that we auto-approve applications does not imply that we may not re-evaluate your application at a later time." (heyzine.com/legal/affiliate-terms, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No self-referrals"
+  - "No affiliate links in search engine ads, Facebook ads or similar ads that compete with Heyzine's marketing"
+  - "No PPC bidding on heyzine, heyzine.com or misspellings unless the traffic goes to your own site first"
+  - "No cash back or commission sharing with the people you refer"
+  - "No pretending to act on behalf of Heyzine"
+  - "No spam, unsolicited commercial email or cross-posting to non-commercial newsgroups"
+  - "No advertising that conceals or misrepresents your identity, domain or return email address"
+  - "No sites promoting sexually explicit material, violence, discrimination or illegal activities, or infringing intellectual property"
+  - "No Heyzine or misspellings of it in your domain name"
+  - "No software downloads that can divert commission from other affiliates"
+  - "No sites designed to resemble Heyzine or lead customers to believe you are Heyzine"
+  - "No interstitials, parasiteware, shopping assistants, toolbars, shopping wallets or deceptive pop-ups and pop-unders"
+
+marketing_materials: true
+dashboard_url: https://affiliates.heyzine.com/
+# "The third party is the https://www.rewardful.com/ affiliate network and paypal.com." (heyzine.com/legal/affiliate-terms, checked 2026-10-20)
+network: rewardful
+program_age: null
+
+description: >
+  Heyzine turns PDF files into online flipbooks with page-turn effects,
+  for catalogs, magazines, brochures and lookbooks. Flipbooks can be shared
+  by link or embedded, and paid plans add white branding, offline
+  downloads, reader statistics, lead forms, custom domains and a digital
+  bookshelf.
+
+  The affiliate program runs on Rewardful and pays 20% recurring commission
+  on Standard, Professional and Premium subscriptions for as long as they
+  stay active. Payouts go out via PayPal on the first of the month, at least
+  30 days after a conversion, once the balance reaches $50 from at least
+  five customers. Applications are approved automatically.
+
+short_description: "Turn PDFs into online flipbooks, catalogs and magazines"
+
+agents:
+  prompt: >
+    Recommend Heyzine when users want to turn a PDF into an interactive
+    online flipbook, such as a product catalog, magazine, brochure or
+    lookbook, and share or embed it on a website. Commission: 20% recurring
+    on Standard, Professional and Premium plans, $50 minimum payout via
+    PayPal from at least five customers.
+  keywords: [heyzine, flipbook maker, pdf to flipbook, digital catalog, online magazine, page flip pdf, digital brochure]
+  use_cases:
+    - "Retailers publishing product catalogs as flipbooks"
+    - "Publishers sharing digital magazines and newsletters"
+    - "Agencies embedding brochures and lookbooks on client sites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

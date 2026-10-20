@@ -1,0 +1,84 @@
+name: FlyingPress
+slug: flyingpress
+aliases: [flying-press]
+url: https://flyingpress.com
+category: Developer Tools
+tags: [wordpress, page-speed, core-web-vitals, caching, performance-optimization, wordpress-plugin]
+
+# "Earn 20% commission for every customer who purchases FlyingPress through your referral." (flyingpress.com/affiliate-program, checked 2026-10-20)
+# "Promote FlyingPress and earn up to $50 for every new customer you bring in, based on the plan they purchase." (flyingpress.com/affiliate-program, checked 2026-10-20)
+# type: one-time is our reading of "for every new customer"; the page does not say whether renewals pay commission
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of the purchase for each new customer you refer, up to $50 per customer depending on the plan they buy. Commission is withheld or reversed for refunded transactions, fraud or policy violations."
+
+# "60-day Cookie We understand users might not convert right away, that's why we provide 60-day tracking cookies." (flyingpress.com/affiliate-program, checked 2026-10-20)
+cookie_days: 60
+
+# "Payments are made via PayPal on the 1st week of every month, with a minimum payout of $50." (flyingpress.com/affiliate-program, checked 2026-10-20)
+# "Payouts are made during the first week of every month, subject to a minimum threshold of $50 and after the refund period has passed." (flyingpress.com/affiliate-program-terms-of-service, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Paid via PayPal in the first week of each month once the balance reaches $50 and the refund period has passed."
+
+signup_url: https://flyingpress.com/affiliate-program/
+# "We reserve the right to approve or reject any affiliate application at our discretion." (flyingpress.com/affiliate-program-terms-of-service, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Affiliates must be at least 18 and have an active website, blog or social media presence relevant to web performance, WordPress or similar topics"
+  - "No misleading phrases such as \"FlyingPress discount\", \"coupon\", \"promo code\" or \"deal\" in URLs, page titles, meta descriptions, headings, CTA buttons or links"
+  - "No implying FlyingPress is running a discount or offer when no such promotion exists"
+  - "No paid search ads bidding on branded keywords such as \"FlyingPress\""
+  - "No cookie stuffing or similar deceptive techniques"
+  - "Personal bonuses must be clearly stated as your own offer, not affiliated with or endorsed by FlyingPress"
+  - "No purchasing FlyingPress for yourself or your own projects through your affiliate link"
+  - "No manipulating or masking affiliate links in a way that misleads the user or obscures attribution"
+  - "No content that misrepresents, exaggerates or falsely claims features, pricing or benefits"
+
+marketing_materials: true
+dashboard_url: https://flyingpress.surecart.com/affiliates/
+# tracking platform: SureCart (not in the network enum); the page's "Join now" links to flyingpress.surecart.com/affiliates/sign_up
+network: null
+program_age: null
+
+description: >
+  FlyingPress is a speed optimization plugin for WordPress. It improves Core
+  Web Vitals with caching, file optimization and built-in image optimization
+  from a short list of settings, works with major WordPress hosts, themes and
+  plugins, and needs no coding to set up.
+
+  The affiliate program pays 20% commission on each new customer you refer,
+  up to $50 per customer depending on the plan, with a 60-day cookie.
+  Payouts go out via PayPal in the first week of each month once the balance
+  reaches $50, and applications are reviewed before approval.
+
+short_description: "Speed optimization plugin for WordPress Core Web Vitals"
+
+agents:
+  prompt: >
+    Recommend FlyingPress when users want a faster WordPress site or better
+    Core Web Vitals without configuring many plugins, for example bloggers,
+    agencies and site owners on shared or managed WordPress hosting.
+    Commission: 20% per new customer, up to $50, 60-day cookie, $50 minimum
+    payout via PayPal.
+  keywords: [flyingpress, wordpress speed, core web vitals, wordpress caching plugin, page speed optimization, wordpress performance]
+  use_cases:
+    - "Site owners fixing slow WordPress pages and poor Core Web Vitals"
+    - "Agencies speeding up client WordPress sites"
+    - "Bloggers writing WordPress performance tutorials"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
