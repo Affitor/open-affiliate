@@ -519,12 +519,15 @@ export async function searchVolumes(keywords: string[], auth: string, capUsd = S
       status = `${status} (${(error as Error).name})`
     }
     const task = body?.tasks?.[0]
-    const reported = Number(task?.cost ?? body?.cost)
-    const charged = Number.isFinite(reported) && reported >= 0 && reported <= reserve ? reported : reserve
+    const success = status === 200 && body?.status_code === 20000 && task?.status_code === 20000
+    // Only real numbers count as a cost, and the larger of the request and task figures wins.
+    const figures = [body?.cost, task?.cost].filter((c): c is number => typeof c === "number" && Number.isFinite(c) && c >= 0)
+    const reported = figures.length ? Math.max(...figures) : null
+    const charged = reported !== null && reported > reserve ? reported : success && reported !== null ? reported : reserve
     spent += charged
     costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: charged, status: task?.status_code ?? body?.status_code ?? status })
-    if (Number.isFinite(reported) && reported > reserve) return { volumes, costs, stopped: `price changed: $${reported} for one request` }
-    if (status === 200 && body?.status_code === 20000 && task?.status_code === 20000 && Array.isArray(task.result)) {
+    if (reported !== null && reported > reserve) return { volumes, costs, stopped: `price changed: $${reported} for one request` }
+    if (success && Array.isArray(task.result)) {
       for (const row of task.result) {
         if (typeof row?.keyword !== "string" || !("search_volume" in row)) continue
         const v = row.search_volume

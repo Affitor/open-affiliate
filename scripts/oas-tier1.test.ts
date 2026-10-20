@@ -332,7 +332,11 @@ test("P6: batches of 1,000, real cost logged, and the spend cap reserves before 
   assert.match(many.stopped!, /cap/)
 
   // Failed requests and garbled, missing or negative costs keep the full reservation.
-  for (const bad of [() => new Response("oops", { status: 500 }), ok("free", () => ({})), ok(undefined, () => ({})), ok(-5, () => ({}))]) {
+  const failedWithCost = (cost: unknown) => () => Response.json({ status_code: 40000, cost, tasks: [{ cost, status_code: 40000 }] })
+  for (const bad of [
+    () => new Response("oops", { status: 500 }), ok("free", () => ({})), ok(undefined, () => ({})), ok(-5, () => ({})),
+    ok(false, () => ({})), ok("", () => ({})), ok(null, () => ({})), failedWithCost(0), () => Response.json({ status_code: 20000, cost: 0, tasks: [{ cost: 0, status_code: 20000 }] }, { status: 503 }),
+  ]) {
     bodies.length = 0
     reply = bad
     const r = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
@@ -347,6 +351,12 @@ test("P6: batches of 1,000, real cost logged, and the spend cap reserves before 
   const pricey = await searchVolumes(keywords, "eA==", 1)
   assert.equal(bodies.length, 1)
   assert.match(pricey.stopped!, /price changed/)
+  // A request-level price above the reservation is not hidden by a task-level 0.
+  bodies.length = 0
+  reply = (ks) => Response.json({ status_code: 20000, cost: 2, tasks: [{ cost: 0, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 10 })) }] })
+  const hidden = await searchVolumes(keywords, "eA==", 1)
+  assert.equal(bodies.length, 1)
+  assert.match(hidden.stopped!, /price changed/)
   bodies.length = 0
   assert.equal((await searchVolumes(keywords, "eA==", 0.1)).costs.length, 0, "no request when one could exceed the cap")
 })
