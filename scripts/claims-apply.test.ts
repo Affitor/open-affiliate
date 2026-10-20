@@ -1,11 +1,12 @@
 import assert from "node:assert/strict"
+import { execFileSync } from "node:child_process"
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import { parse as parseYaml } from "yaml"
 import { EditChanges } from "../src/lib/claims/service"
-import { editsFor, fenced, planEdit, planNew, run, visible, type ApplyStore, type Forge, type Plan, type QueuedEdit } from "./claims-apply"
+import { editsFor, fenced, gitForge, planEdit, planNew, run, visible, type ApplyStore, type Forge, type Plan, type QueuedEdit } from "./claims-apply"
 import { DELETE } from "./sync-affitor"
 
 const ACME = `name: Acme
@@ -288,7 +289,7 @@ function fakes(rows: QueuedEdit[], dir: string) {
       return { dir, done: () => {} }
     },
     openPrFiles: () => new Set(),
-    openPrFor: (branch) => prs.get(branch) ?? null,
+    prFor: (branch) => prs.get(branch) ?? null,
     openPr(_dir, plan) {
       calls.openPr++
       const url = `https://github.com/Affitor/open-affiliate/pull/${900 + calls.openPr}`
@@ -327,6 +328,22 @@ test("run: a dry run opens and records nothing", async () => {
     assert.equal(r.plans[0].action, "pr")
     assert.equal(f.calls.openPr, 0)
     assert.equal(f.calls.recorded.length, 0)
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
+})
+
+test("run: a PR merged before its URL was recorded is found by branch and then applied", async () => {
+  const dir = repo()
+  try {
+    const rows = [row({ cookie_days: 30, approval: "manual" })]
+    const f = fakes(rows, dir)
+    const url = "https://github.com/Affitor/open-affiliate/pull/778"
+    f.prs.set("claim/acme-0f8e7d6c", url)
+    f.states.set(url, "MERGED")
+    const r = await run({ store: f.store, forge: f.forge, write: true, today: TODAY })
+    assert.deepEqual([r.recorded, r.plans.length, rows[0].pr_url], [[rows[0].id], 0, url])
+    assert.deepEqual((await run({ store: f.store, forge: f.forge, write: true, today: TODAY })).applied, [rows[0].id])
   } finally {
     rmSync(dir, { recursive: true })
   }
@@ -416,5 +433,56 @@ test("a use_cases change touches only the use_cases lines; the wrapped prompt st
     assert.match(compact.text, /  use_cases:\n    - New one\n  keywords:\n  - acme\n/)
   } finally {
     rmSync(dir, { recursive: true })
+  }
+})
+
+test("gitForge: each PR branch starts from origin/main, and a failed PR open can be retried", () => {
+  const base = mkdtempSync(join(tmpdir(), "claims-apply-git-"))
+  const git = (cwd: string, ...args: string[]) => execFileSync("git", args, { cwd, encoding: "utf8" }).trim()
+  const oldPath = process.env.PATH
+  try {
+    const remote = join(base, "remote.git")
+    const root = join(base, "root")
+    git(base, "init", "-q", "--bare", "-b", "main", remote)
+    git(base, "clone", "-q", remote, root)
+    mkdirSync(join(root, "programs"))
+    writeFileSync(join(root, "programs", "acme.yaml"), ACME)
+    writeFileSync(join(root, "programs", "synced.yaml"), AFFITOR)
+    git(root, "add", ".")
+    git(root, "-c", "user.name=t", "-c", "user.email=t@example.com", "commit", "-q", "-m", "init")
+    git(root, "push", "-q", "origin", "main")
+    // A gh that fails `pr create` for the branch named in a file, and prints a URL otherwise.
+    const bin = join(base, "bin")
+    mkdirSync(bin)
+    writeFileSync(
+      join(bin, "gh"),
+      `#!/bin/sh\nif [ "$2" = "create" ]; then head="$4"; if [ "$head" = "$(cat ${base}/fail 2>/dev/null)" ]; then exit 1; fi; echo "https://github.com/Affitor/open-affiliate/pull/$(printf %s "$head" | cksum | cut -c1-4)"; exit 0; fi\necho "[]"\n`,
+      { mode: 0o755 },
+    )
+    process.env.PATH = `${bin}:${oldPath}`
+    process.env.GIT_AUTHOR_NAME = process.env.GIT_COMMITTER_NAME = "t"
+    process.env.GIT_AUTHOR_EMAIL = process.env.GIT_COMMITTER_EMAIL = "t@example.com"
+    const forge = gitForge(root)
+    const { dir, done } = forge.checkout()
+    try {
+      const a = pr(planEdit(row({ short_description: "Alpha" }), dir, TODAY))
+      const b = pr(planEdit(row({ description: "Synced keeps things in sync." }, { id: "9f8e7d6c-0000-4000-8000-000000000009", slug: "synced", claim: claim("synced.io") }), dir, TODAY))
+      writeFileSync(join(base, "fail"), a.branch)
+      assert.throws(() => forge.openPr(dir, a))
+      assert.match(forge.openPr(dir, b), /pull\/\d+$/)
+      // B carries only its own file, on top of main.
+      assert.equal(git(remote, "rev-list", "--count", `main..${b.branch}`), "1")
+      assert.equal(git(remote, "diff", "--name-only", `main..${b.branch}`), "programs/synced.yaml")
+      // The retry of A replaces the branch its failed attempt pushed.
+      writeFileSync(join(base, "fail"), "")
+      assert.match(forge.openPr(dir, a), /pull\/\d+$/)
+      assert.equal(git(remote, "rev-list", "--count", `main..${a.branch}`), "1")
+      assert.equal(git(remote, "diff", "--name-only", `main..${a.branch}`), "programs/acme.yaml")
+    } finally {
+      done()
+    }
+  } finally {
+    process.env.PATH = oldPath
+    rmSync(base, { recursive: true, force: true })
   }
 })

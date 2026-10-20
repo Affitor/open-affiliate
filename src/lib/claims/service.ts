@@ -617,7 +617,7 @@ const EMOJI_TAG_SEQUENCE =
   /\u{1F3F4}\u{E0067}\u{E0062}(?:\u{E0065}\u{E006E}\u{E0067}|\u{E0073}\u{E0063}\u{E0074}|\u{E0077}\u{E006C}\u{E0073})\u{E007F}/gu
 const NEVER = /[\p{Default_Ignorable_Code_Point}\p{Cf}\p{Cc}\p{Zl}\p{Zp}\p{Cs}\u2800\u{16FE4}]/u
 const VISIBLE = /^[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]$/u
-const LATIN_LETTER = /^[A-Za-z]$/
+const LATIN_LETTER = /^(?=\p{L})\p{Script=Latin}$/u
 // Viramas (canonical combining class 9) of the scripts that join with a
 // zero-width joiner after one; any other mark does not need it.
 const VIRAMA =
@@ -644,8 +644,9 @@ function plainText(multiLine: boolean) {
       // After a virama (क्‍ष, Malayalam chillu ന്‍ at the end of a word or line).
       if (cp === 0x200d && VIRAMA.test(before)) return after === "" || after === "\n" || (!NEVER.test(after) && !LATIN_LETTER.test(after))
       if (cp === 0x200d) {
+        // A mark that is not a virama joins nothing (e + accent + joiner).
         return (
-          (VISIBLE.test(before) || before === "\uFE0F") &&
+          ((VISIBLE.test(before) && !/\p{M}/u.test(before)) || before === "\uFE0F") &&
           VISIBLE.test(after) &&
           !LATIN_LETTER.test(before) &&
           !LATIN_LETTER.test(after)

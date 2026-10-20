@@ -64,12 +64,17 @@ const SHOWN_AS_CODE = /[\p{Cc}\p{Z}\p{Default_Ignorable_Code_Point}\p{Cf}\p{Co}\
  * sits on nothing (start of the text, after a space) too. Line breaks stay.
  */
 export function visible(text: string): string {
-  const chars = [...text]
-  return chars
-    .map((c, i) => {
-      if (c === "\n" || c === " ") return c
-      const lone = /\p{M}/u.test(c) && (i === 0 || /\s/u.test(chars[i - 1]))
-      if (!SHOWN_AS_CODE.test(c) && !lone) return c
+  // Whether the current run of marks sits on a visible character.
+  let based = false
+  return [...text]
+    .map((c) => {
+      const shown = c !== "\n" && c !== " " && SHOWN_AS_CODE.test(c)
+      if (/\p{M}/u.test(c)) {
+        if (based && !shown) return c
+      } else {
+        based = !shown && !/\s/u.test(c)
+        if (!shown) return c
+      }
       return `⟨U+${c.codePointAt(0)!.toString(16).toUpperCase().padStart(4, "0")}⟩`
     })
     .join("")
@@ -358,8 +363,8 @@ export interface Forge {
   /** A checkout of origin/main, fresh for this run; removed by `done`. */
   checkout(): { dir: string; done: () => void }
   openPrFiles(): Set<string>
-  /** The open PR whose head is this branch, if any. */
-  openPrFor(branch: string): string | null
+  /** A PR (open, merged or closed) whose head is this branch, if any. */
+  prFor(branch: string): string | null
   /** Commit `text` to `file` on a new branch off origin/main, push, open the PR; its URL. */
   openPr(dir: string, plan: Extract<Plan, { action: "pr" }>): string
   state(prUrl: string): "OPEN" | "MERGED" | "CLOSED"
@@ -403,6 +408,14 @@ export async function run(o: { store: ApplyStore; forge: Forge; write: boolean; 
     const programs = fresh.some((r) => r.kind === "new") ? catalog(dir) : []
     const prFiles = fresh.some((r) => r.kind === "new") ? o.forge.openPrFiles() : new Set<string>()
     for (const row of fresh) {
+      // A run that opened a PR and died before recording it: find the PR by
+      // branch, in any state, before planning (a merged one reads as "same").
+      const earlier = row.kind === "edit" ? o.forge.prFor(branchFor(row)) : null
+      if (earlier) {
+        log(`${row.id} ${row.slug}: found its PR ${earlier}, recording it`)
+        if (o.write && (await o.store.recordPr(row.id, earlier))) out.recorded.push(row.id)
+        continue
+      }
       const plan = row.kind === "new" ? planNew(row, programs, prFiles) : planEdit(row, dir, o.today)
       out.plans.push(plan)
       if (plan.action === "skip" && plan.reason === "layout") log(`${row.id} ${row.slug}: the file's layout needs a person, left pending`)
@@ -419,12 +432,11 @@ export async function run(o: { store: ApplyStore; forge: Forge; write: boolean; 
       if (plan.action !== "pr") continue
       log(`${row.id} ${row.slug}: PR ${plan.branch} (${plan.diffs.map((d) => d.field).join(", ")})`)
       if (!o.write) continue
-      // A run that pushed and died before recording finds its PR by branch.
       // Runs are meant to be serial; a racing second run fails its push
-      // (no force) and the next run records the PR the first one opened.
+      // (the lease) and the next run records the PR the first one opened.
       let url: string
       try {
-        url = o.forge.openPrFor(plan.branch) ?? o.forge.openPr(dir, plan)
+        url = o.forge.openPr(dir, plan)
       } catch {
         log(`${row.id} ${row.slug}: could not open the PR, left pending for the next run`)
         continue
@@ -446,7 +458,7 @@ function sh(cmd: string, args: string[], cwd?: string, input?: string): string {
   return execFileSync(cmd, args, { cwd, input, encoding: "utf8", stdio: ["pipe", "pipe", "pipe"] }).trim()
 }
 
-function gitForge(root: string): Forge {
+export function gitForge(root: string): Forge {
   return {
     checkout() {
       sh("git", ["fetch", "-q", "origin", "main"], root)
@@ -464,22 +476,28 @@ function gitForge(root: string): Forge {
       const prs = JSON.parse(sh("gh", ["pr", "list", "--state", "open", "--limit", "500", "--json", "files"], root)) as { files: { path: string }[] }[]
       return new Set(prs.flatMap((p) => p.files.map((f) => f.path)))
     },
-    openPrFor(branch) {
-      const prs = JSON.parse(sh("gh", ["pr", "list", "--state", "open", "--head", branch, "--json", "url"], root)) as { url: string }[]
+    prFor(branch) {
+      const prs = JSON.parse(sh("gh", ["pr", "list", "--state", "all", "--head", branch, "--json", "url"], root)) as { url: string }[]
       return prs[0]?.url ?? null
     },
     openPr(dir, plan) {
-      sh("git", ["checkout", "-q", "-b", plan.branch], dir)
-      writeFileSync(join(dir, plan.file), plan.text)
-      sh("git", ["add", plan.file], dir)
-      sh("git", ["commit", "-q", "-m", plan.title], dir)
-      // No force: a second run racing this one fails here instead of replacing it.
-      sh("git", ["push", "-q", "origin", plan.branch], dir)
-      const url = sh("gh", ["pr", "create", "--head", plan.branch, "--base", "main", "--title", plan.title, "--body-file", "-"], dir, plan.body)
-      sh("git", ["checkout", "-q", "--detach", "origin/main"], dir)
-      const last = url.split("\n").pop()!
-      if (!PR_URL.test(last)) throw new Error(`gh pr create returned no PR URL for ${plan.branch}`)
-      return last
+      // A branch left by an attempt that pushed but opened no PR (prFor found
+      // none) is ours to replace; the lease refuses if it moved since we looked.
+      const remote = sh("git", ["ls-remote", "origin", `refs/heads/${plan.branch}`], dir).split("\t")[0] ?? ""
+      try {
+        // Each branch starts from origin/main, never from the previous one.
+        sh("git", ["checkout", "-q", "-f", "-B", plan.branch, "origin/main"], dir)
+        writeFileSync(join(dir, plan.file), plan.text)
+        sh("git", ["add", plan.file], dir)
+        sh("git", ["commit", "-q", "-m", plan.title], dir)
+        sh("git", ["push", "-q", `--force-with-lease=refs/heads/${plan.branch}:${remote}`, "origin", plan.branch], dir)
+        const url = sh("gh", ["pr", "create", "--head", plan.branch, "--base", "main", "--title", plan.title, "--body-file", "-"], dir, plan.body)
+        const last = url.split("\n").pop()!
+        if (!PR_URL.test(last)) throw new Error(`gh pr create returned no PR URL for ${plan.branch}`)
+        return last
+      } finally {
+        sh("git", ["checkout", "-q", "-f", "--detach", "origin/main"], dir)
+      }
     },
     state(prUrl) {
       return JSON.parse(sh("gh", ["pr", "view", prUrl, "--json", "state"], root)).state
@@ -508,21 +526,24 @@ async function supabaseStore(): Promise<ApplyStore> {
       if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
       return (data ?? []).length === 1
     },
-    async close(row, status, reason) {
-      const { data, error } = await db.from("claim_edits").update({ status }).eq("id", row.id).eq("status", "pending").select("id")
-      if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
-      if ((data ?? []).length !== 1) return
-      const type = status === "rejected" ? "edit.rejected" : "edit.returned"
-      const ev = await db.from("claim_events").insert({ type, slug: row.slug, domain: row.claim?.domain ?? null, meta: { edit_id: row.id, reason } })
+    close: (row, status, reason) => settle(row, status, status === "rejected" ? "edit.rejected" : "edit.returned", { reason }),
+    markApplied: (row) => settle(row, "applied", "edit.applied", { pr_url: row.pr_url }),
+  }
+
+  /**
+   * The event first, once per change and type, then the status: a crash or a
+   * failed write between the two leaves the row pending, and the next run
+   * finds the event already there instead of writing it twice.
+   */
+  async function settle(row: QueuedEdit, status: string, type: string, meta: Record<string, unknown>): Promise<void> {
+    const seen = await db.from("claim_events").select("id").eq("type", type).eq("meta->>edit_id", row.id).limit(1)
+    if (seen.error) throw new Error(`claim_events: ${seen.error.code ?? "read failed"}`)
+    if (!seen.data?.length) {
+      const ev = await db.from("claim_events").insert({ type, slug: row.slug, domain: row.claim?.domain ?? null, meta: { edit_id: row.id, ...meta } })
       if (ev.error) throw new Error(`claim_events insert: ${ev.error.code ?? "failed"}`)
-    },
-    async markApplied(row) {
-      const { data, error } = await db.from("claim_edits").update({ status: "applied" }).eq("id", row.id).eq("status", "pending").select("id")
-      if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
-      if ((data ?? []).length !== 1) return
-      const ev = await db.from("claim_events").insert({ type: "edit.applied", slug: row.slug, domain: row.claim?.domain ?? null, meta: { edit_id: row.id, pr_url: row.pr_url } })
-      if (ev.error) throw new Error(`claim_events insert: ${ev.error.code ?? "failed"}`)
-    },
+    }
+    const { error } = await db.from("claim_edits").update({ status }).eq("id", row.id).eq("status", "pending")
+    if (error) throw new Error(`claim_edits update: ${error.code ?? "failed"}`)
   }
 }
 
