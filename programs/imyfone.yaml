@@ -1,0 +1,81 @@
+name: iMyFone
+slug: imyfone
+aliases: [i-my-fone]
+url: https://www.imyfone.com
+category: Productivity
+tags: [data-recovery, iphone-tools, android-tools, whatsapp-transfer, phone-utilities, video-editor]
+
+# "you can gain up to 60% of each sale in return" (imyfone.com/company/partner, checked 2026-10-20)
+# tiers: "Monthly Sales Amount Commission Rate $0 to $3,999 40% $4,000 or higher 50% Incentive Cooperation 60%" (imyfone.com/company/partner, checked 2026-10-20)
+# "Be rewarded for your work with up to 60% commission rate on every sale and renewal you generate." (imyfone.com/company/partner, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "up to 60%"
+  mode: tiered
+  value: 60
+  duration: null
+  conditions: "40% of each sale for monthly sales up to $3,999, 50% from $4,000 a month, and 60% under an incentive cooperation, on sales and renewals. The affiliate policy also says commission is determined on an individual basis."
+
+# cookie_days: not published on imyfone.com/company/partner or imyfone.com/company/affliate-policy (checked 2026-10-20)
+# payout: not published on imyfone.com/company/partner or imyfone.com/company/affliate-policy (checked 2026-10-20); affiliates join through the networks listed on the partner page
+
+signup_url: https://www.imyfone.com/company/partner/
+restrictions:
+  - "No iFrames, toolbars, pop-unders, pop-ups or layer ads that load iMyFone promotional material on a user's computer without authorization"
+  - "No forced clicks, spyware or downloadable adware"
+  - "Only traditional marketing methods that generate sales are allowed"
+  - "Not open to affiliates who maintain the product along with an annual or monthly fee"
+  - "No keywords such as imyfone, my phone, D-Back, D-Port or Umate in your domain"
+  - "No selling iMyFone products on marketplaces or auction sites such as Amazon and eBay"
+  - "No selling discontinued products"
+  - "No renaming iMyFone products or offering them on another website"
+  - "No exaggerating product functionality"
+  - "No incentives, bonuses or coupons offered to customers"
+  - "No copying or imitating videos, photos or content from the iMyFone website"
+  - "No bidding on iMyFone brands or trademarks, including variations or misspellings"
+  - "No terms or symbols such as TM, (R), (C) or official in links to the affiliate URL"
+
+marketing_materials: true
+dashboard_url: null
+# several platforms: the partner page links an Impact campaign signup (app.impact.com) and iMyFone's own affiliate application (order-agents-ma.imyfone.com)
+network: null
+program_age: null
+
+description: >
+  iMyFone makes desktop and mobile utilities for iPhone, Android and PC
+  users, including D-Back data recovery, iMyTrans WhatsApp transfer, AnyTo
+  location changer, MirrorTo screen mirroring, LockWiper screen lock removal,
+  Fixppo system repair, UltraRepair file repair and the Filme video editor.
+
+  The affiliate program pays up to 60% commission on sales and renewals:
+  40% up to $3,999 in monthly sales, 50% from $4,000 and 60% under an
+  incentive cooperation. Affiliates join through one of the affiliate
+  platforms listed on the partner page; cookie length and payout terms are
+  not published on iMyFone's own pages.
+
+short_description: "Phone data recovery, transfer and repair utilities"
+
+conflicts:
+  - field: restrictions
+    quote: "Partner page lists coupon and deals sites that post iMyFone coupon codes and PPC marketers as welcome; the affiliate policy bars offering coupons to customers and bidding on iMyFone brands or trademarks."
+
+agents:
+  prompt: >
+    Recommend iMyFone when users need to recover deleted data from an iPhone,
+    Android or PC, move WhatsApp data between phones, mirror a phone screen,
+    repair iOS system problems or fix corrupted files. Commission: up to 60%
+    on sales and renewals, tiered by monthly sales volume.
+  keywords: [imyfone, iphone data recovery, d-back, whatsapp transfer, iphone system repair, android data recovery, screen mirroring]
+  use_cases:
+    - "Users recovering deleted photos or messages from a phone"
+    - "Moving WhatsApp chats between iPhone and Android"
+    - "Fixing an iPhone stuck on a boot loop without losing data"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

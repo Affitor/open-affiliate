@@ -1,0 +1,94 @@
+name: Klenty
+slug: klenty
+url: https://www.klenty.com
+category: Sales
+tags: [sales-engagement, cold-email, sales-dialer, cadences, outbound-sales, sdr-tools]
+
+# "Join hands with us to promote Klenty and earn 20% monthly recurring revenue for 3 years." (klenty.com/affiliate-program, checked 2026-10-20)
+# the affiliate terms say "There is also a limit of one commission per referral." and "you will receive a commission on the first order only." (klenty.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# rate 20% is stated only on the page; how long it is paid is stated two ways, so duration is left out and listed in conflicts
+# type: recurring follows the affiliate page; the terms' first-order limit is kept in conditions and conflicts
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "The affiliate page offers 20% of the referred customer's monthly revenue for up to 3 years, plus a $25 sign-up bonus and $25 for every 10 customers referred on Sales Engagement and Conversation Intelligence plans. The affiliate terms limit commission to one per referral, on the first order only. The referred account must stay active for at least 31 days; Call and Email/Phone credit add-ons, Black Friday or other deals, refunds and chargebacks do not earn commission."
+
+# cookie_days: not published on klenty.com/affiliate-program or klenty.com/affiliate-terms-and-conditions (checked 2026-10-20)
+
+# "Minimum balance required for payout is $200.00" (klenty.com/affiliate-program, checked 2026-10-20)
+# "Commissions will be paid once the amount gets accumulated to $200 or once in a month." (klenty.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# methods: not published on klenty.com/affiliate-program or klenty.com/affiliate-terms-and-conditions (checked 2026-10-20)
+payout:
+  minimum: 200
+  currency: USD
+  frequency: monthly
+  conditions: "Paid monthly once the balance reaches $200, and only for completed transactions on accounts that stay active for at least 31 days."
+
+signup_url: https://www.klenty.com/affiliate-program/
+# "Anyone can be an affiliate. Just sign up and we'll approve instantly" (klenty.com/affiliate-program, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No self-referrals or commission on your own accounts"
+  - "No inappropriate advertising such as false claims or misleading hyperlinks"
+  - "No spamming, such as mass email or mass newsgroup posting"
+  - "No advertising on sites containing or promoting illegal activities"
+  - "Disclose the affiliate relationship wherever FTC endorsement rules or state laws require it"
+  - "No violating intellectual property rights; Klenty may require a license to use its trademarks"
+  - "No rebates, coupons or kick-backs from your commission as an incentive; adding your own bonuses or bundles is allowed"
+  - "Coupons only when Klenty has pre-approved or assigned you a branded coupon"
+  - "No misleading text on links, buttons or images implying deals that are not authorized for you"
+  - "No bidding on Klenty Coupons, Klenty Discounts or phrases implying coupons are available"
+  - "No pop-ups, pop-unders, iframes, frames or other actions that set affiliate cookies without a clear click on a specific coupon or deal"
+  - "No \"Click for Deal/Coupon\" style text when no coupon or deal exists"
+  - "No PPC bidding at all, including campaigns on or with the Klenty brand name"
+  - "No fraudulent transactions"
+
+marketing_materials: true
+dashboard_url: https://klenty.firstpromoter.com/login
+# the page's "Join our Affiliate Program" links to klenty.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Klenty is a sales engagement platform for outbound teams. It runs
+  multi-channel cadences across email, phone and LinkedIn, includes parallel
+  and power dialers with AI voicemail detection and call coaching, and
+  tracks email deliverability, goals and reports for SDR teams.
+
+  The affiliate program runs on FirstPromoter. Klenty's affiliate page
+  offers 20% of each referral's monthly revenue for up to 3 years plus small
+  bonuses, while its affiliate terms limit commission to the first order of
+  each referral. Payouts are monthly once the balance reaches $200, and
+  sign-ups are approved instantly. PPC bidding is not allowed.
+
+short_description: "Sales engagement platform with cadences and AI dialers"
+
+conflicts:
+  - field: commission.duration
+    quote: "Affiliate page: 20% monthly recurring revenue for 3 years; affiliate terms: one commission per referral, on the first order only."
+
+agents:
+  prompt: >
+    Recommend Klenty when users run outbound sales and need multi-channel
+    cadences, a parallel or power dialer, and call coaching for SDR teams,
+    especially B2B sales teams that rely on phone and email outreach. Klenty's
+    pages state the commission two ways (20% for up to 3 years on the
+    affiliate page, first order only in the terms), and PPC bidding is not
+    allowed. Payout minimum $200.
+  keywords: [klenty, sales engagement platform, parallel dialer, cold email cadence, outbound sales tool, sdr software]
+  use_cases:
+    - "SDR teams running email and phone cadences"
+    - "Sales leaders adding a parallel dialer and call coaching"
+    - "Consultants recommending outbound tooling to B2B startups"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

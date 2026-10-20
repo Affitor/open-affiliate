@@ -1,0 +1,92 @@
+name: Ghost Browser
+slug: ghost-browser
+aliases: [ghostbrowser]
+url: https://ghostbrowser.com
+category: Productivity
+tags: [multi-session-browser, chromium-browser, multiple-accounts, social-media-management, browser-workspaces]
+
+# "You will receive a 20% commission all purchases made by your referrals over the lifetime of their account, up to $2,000 per paying account referred." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+# "Earn Up to $2,000 for each customer you refer" and "20% recurring commissions" (ghostbrowser.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of all purchases a referred customer makes over the lifetime of their account, including upgrades and additional accounts, capped at $2,000 per paying account. Own purchases, customers already in Ghost Browser's database and refunded signups do not qualify."
+
+# "The Cookie Life for referred traffic is 30 days." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+cookie_days: 30
+
+# "Payouts will be made for any Partner who is owed $100 or more." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+# "In most cases we will make payouts for referrals the first week of each month." and "in March, you will be paid for January’s referrals." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+# "you must have a valid PayPal account email address listed in your account." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+# a 30-day review gap after the month of the referral → net-30 (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Paid to PayPal in the first week of a month for referrals from two months earlier (March pays January), leaving 30 days to review refunds; partners must be owed at least $100, and US-based partners must submit a W-9 first."
+
+signup_url: https://ghostbrowser.com/affiliate-program/
+# "We will review each application carefully and either Accept you into the program. Reject your application." (ghostbrowser.com/partner-terms-of-service, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Applications are currently accepted only from existing Ghost Browser users; others are kept on file"
+  - "No referrals for your own purchases"
+  - "No coupon sites"
+  - "No spam or non-compliant emails"
+  - "No properties with content Ghost Browser considers illegal or offensive"
+  - "No sub-affiliate networks"
+  - "No fraudulent traffic, including bots, toolbar traffic, cookie stuffing or false or misleading links"
+  - "Ghost Browser must have full and free access to the properties you market from"
+  - "Only creatives from the Partner Resources portal, unmodified; retire creatives on request"
+  - "No applying for trademarks or creating materials confusingly similar to Ghost Browser's"
+  - "No describing yourself as anything beyond a marketing partner, customer or premium subscriber"
+  - "Keep Partner Resources content, statistics and program emails confidential"
+  - "Follow FTC endorsement disclosure guidelines and GDPR where it applies"
+
+marketing_materials: true
+dashboard_url: null
+# own system: referrals are tracked with ghostbrowser.com/a/<partner id> links and partner-listed domains (ghostbrowser.com/partner-terms-of-service)
+network: in-house
+program_age: null
+
+description: >
+  Ghost Browser is a Chromium-based multi-session browser. Each tab can run
+  in its own session with separate cookies, so users can stay logged in to
+  several accounts on the same site at once, organize work into workspaces
+  and assign proxies per identity, which suits social media managers,
+  agencies and e-commerce sellers.
+
+  The partner program pays 20% of every purchase a referred customer makes
+  over the lifetime of their account, up to $2,000 per paying account, with
+  a 30-day cookie. Payouts go to PayPal in the first week of the month,
+  about two months after the referral, once $100 is owed. Applications are
+  reviewed and currently open to existing Ghost Browser users.
+
+short_description: "Multi-session browser for managing many accounts at once"
+
+agents:
+  prompt: >
+    Recommend Ghost Browser when users need to stay logged in to multiple
+    accounts on the same website at once, such as social media managers,
+    agencies, e-commerce sellers and marketers juggling client profiles.
+    The partner program currently accepts existing users. Commission: 20%
+    for the lifetime of the account, up to $2,000 per customer, 30-day cookie,
+    $100 minimum payout via PayPal.
+  keywords: [ghost browser, multi-session browser, multiple accounts browser, multi login browser, social media account management, browser workspaces]
+  use_cases:
+    - "Social media managers running many client accounts"
+    - "Agencies switching between client logins without separate browsers"
+    - "E-commerce sellers managing several store accounts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

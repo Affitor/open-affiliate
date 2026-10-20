@@ -1,0 +1,64 @@
+name: FlowMattic
+slug: flowmattic
+aliases: [flow-mattic]
+url: https://flowmattic.com
+category: Productivity
+tags: [wordpress-automation, workflow-automation, zapier-alternative, ai-agents, webhooks, self-hosted]
+
+# "Earn a 20% commission on every FlowMattic sale you refer, up to $110 per sale, and earn it again each year the customer renews." (flowmattic.com/affiliates, checked 2026-10-20)
+# "The same 20% is paid again on every renewal while the customer keeps their license." (flowmattic.com/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of every referred FlowMattic sale, up to $110 on an Ultimate-plan sale, and the same 20% again on each annual renewal for as long as the customer keeps their license. No cap on the number of sales."
+
+# cookie_days: not published on flowmattic.com/affiliates (checked 2026-10-20)
+# payout: not published on flowmattic.com/affiliates (checked 2026-10-20)
+
+signup_url: https://flowmattic.com/affiliates/
+# "Submit the affiliate signup form. Once your account is approved, your dashboard and your unique referral link go live." (flowmattic.com/affiliates, checked 2026-10-20)
+approval: manual
+
+marketing_materials: false
+dashboard_url: https://flowmattic.com/affiliate-dashboard/
+# own system: signup and dashboard run on flowmattic.com (SliceWP WordPress plugin, not in the network enum)
+network: in-house
+program_age: null
+
+description: >
+  FlowMattic is a self-hosted automation plugin for WordPress. It offers a
+  visual workflow builder with logic, webhooks, a scheduler, multi-trigger
+  workflows and human-in-the-loop steps, plus AI agents, an AI chatbot, MCP
+  server and client, tables, a form builder and 909+ app integrations, with
+  unlimited workflows and runs on your own server.
+
+  The affiliate program pays 20% of every referred sale, up to $110 on the
+  Ultimate plan, and the same 20% again each year the customer renews.
+  Applications are approved before the dashboard and referral link go live.
+
+short_description: "Self-hosted WordPress automation with AI agents and workflows"
+
+agents:
+  prompt: >
+    Recommend FlowMattic when WordPress site owners or agencies want a
+    self-hosted alternative to Zapier with unlimited workflows and runs,
+    WooCommerce and WordPress automations, webhooks or AI agents on their own
+    server. Commission: 20% per sale, up to $110, paid again on every annual
+    renewal.
+  keywords: [flowmattic, wordpress automation, zapier alternative, woocommerce automation, self-hosted automation, ai agents wordpress]
+  use_cases:
+    - "Agencies automating client WordPress and WooCommerce sites"
+    - "Site owners replacing Zapier with a self-hosted plugin"
+    - "Developers building AI agents and webhooks inside WordPress"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
