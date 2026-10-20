@@ -81,9 +81,16 @@ export function visible(text: string): string {
 }
 
 /** A fenced block GitHub renders as plain text: the fence is longer than any backtick run inside. */
+/** Every string (keys too) of a JSON value made visible one by one, before quotes could give a mark a base. */
+function shownDeep(value: unknown): unknown {
+  if (typeof value === "string") return visible(value)
+  if (Array.isArray(value)) return value.map(shownDeep)
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k, v]) => [visible(k), shownDeep(v)]))
+  return value
+}
+
 export function fenced(value: unknown): string {
-  const text = value === null || value === undefined ? "(none)" : typeof value === "string" ? value : JSON.stringify(value, null, 2)
-  const shown = visible(text)
+  const shown = value === null || value === undefined ? "(none)" : typeof value === "string" ? visible(value) : JSON.stringify(shownDeep(value), null, 2)
   const longest = Math.max(0, ...(shown.match(/`+/g) ?? []).map((run) => run.length))
   const fence = "`".repeat(Math.max(3, longest + 1))
   return `${fence}text\n${shown}\n${fence}`
@@ -192,9 +199,21 @@ function withUseCases(src: string, useCases: unknown): string {
  * this. Proof, beyond the read-back of each edit: every other value in the
  * file parses exactly as before.
  */
-function written(src: string, listing: Record<string, unknown>, edits: Edit[], stamps: Edit[], file: string): { text: string | null; diffs: Diff[] } {
+function written(
+  src: string,
+  listing: Record<string, unknown>,
+  edits: Edit[],
+  today: string,
+  file: string,
+): { text: string | null; diffs: Diff[]; money: boolean } {
   const useCases = edits.find(([path]) => path[0] === "agents")
-  const result = edit(src, edits.filter((e) => e !== useCases), stamps, file)
+  const rest = edits.filter((e) => e !== useCases)
+  // Verified and its date only when a money value really changes (spec v4 §5.3):
+  // one the owner sent that main already has stamps nothing.
+  let result = edit(src, rest, [], file)
+  const money = result.diffs.some((d) => MONEY_KEYS.has(d.field.split(".")[0]))
+  const stamps: Edit[] = money ? [[["verified"], true], [["last_verified_at"], today]] : []
+  if (money) result = edit(src, rest, stamps, file)
   let text = result.text
   const diffs = [...result.diffs]
   const agents = (listing.agents ?? {}) as Record<string, unknown>
@@ -204,7 +223,7 @@ function written(src: string, listing: Record<string, unknown>, edits: Edit[], s
     text = withUseCases(text ?? src, useCases[1])
     diffs.push({ field: "agents.use_cases", from: before, to: useCases[1] === DELETE ? null : useCases[1] })
   }
-  if (!text) return { text: null, diffs }
+  if (!text) return { text: null, diffs, money }
   checkReadBack(text, [...edits, ...stamps], file)
   const after = parseYaml(text) as Record<string, unknown>
   const touched = new Set(diffs.map((d) => d.field))
@@ -219,7 +238,7 @@ function written(src: string, listing: Record<string, unknown>, edits: Edit[], s
       if (!isDeepStrictEqual(left, right)) throw new Error(`${file}: ${key} changed beyond the edit`)
     } else if (!isDeepStrictEqual(a, b)) throw new Error(`${file}: ${key} changed beyond the edit`)
   }
-  return { text, diffs }
+  return { text, diffs, money }
 }
 
 /** The listing's domain when the claim still owns it; null otherwise. */
@@ -252,12 +271,9 @@ export function planEdit(row: QueuedEdit, repo: string, today: string): Plan {
   }
   const edits = editsFor(changes, listing)
   if (typeof edits === "string") return { action: "skip", edit: row, reason: edits }
-  // Every money field is checked against terms_url before this merges (spec v4 §5.3).
-  const money = keys.some((k) => MONEY_KEYS.has(k))
-  const stamps: Edit[] = money ? [[["verified"], true], [["last_verified_at"], today]] : []
-  let result: { text: string | null; diffs: Diff[] }
+  let result: { text: string | null; diffs: Diff[]; money: boolean }
   try {
-    result = written(src, listing, edits, stamps, file)
+    result = written(src, listing, edits, today, file)
   } catch (e) {
     // Our file's layout (JSON-style YAML, an inline agents map) is a person's
     // job; a value the schema refuses goes back to the owner.
@@ -265,6 +281,8 @@ export function planEdit(row: QueuedEdit, repo: string, today: string): Plan {
     return { action: "skip", edit: row, reason: ours ? "layout" : "schema" }
   }
   if (!result.text) return { action: "same", edit: row }
+  // Every money field that changes is checked against terms_url before this merges.
+  const { money } = result
 
   const termsUrl = typeof row.fields.terms_url === "string" ? row.fields.terms_url : null
   const note = typeof row.fields.note === "string" ? row.fields.note : null
@@ -485,12 +503,14 @@ export function gitForge(root: string): Forge {
       // none) is ours to replace; the lease refuses if it moved since we looked.
       const remote = sh("git", ["ls-remote", "origin", `refs/heads/${plan.branch}`], dir).split("\t")[0] ?? ""
       try {
-        // Each branch starts from origin/main, never from the previous one.
-        sh("git", ["checkout", "-q", "-f", "-B", plan.branch, "origin/main"], dir)
+        // A detached commit on origin/main, pushed to the branch: no local
+        // branch exists, so a run killed halfway leaves nothing that blocks
+        // the next one, and each PR starts from main, never from the previous one.
+        sh("git", ["checkout", "-q", "-f", "--detach", "origin/main"], dir)
         writeFileSync(join(dir, plan.file), plan.text)
         sh("git", ["add", plan.file], dir)
         sh("git", ["commit", "-q", "-m", plan.title], dir)
-        sh("git", ["push", "-q", `--force-with-lease=refs/heads/${plan.branch}:${remote}`, "origin", plan.branch], dir)
+        sh("git", ["push", "-q", `--force-with-lease=refs/heads/${plan.branch}:${remote}`, "origin", `HEAD:refs/heads/${plan.branch}`], dir)
         const url = sh("gh", ["pr", "create", "--head", plan.branch, "--base", "main", "--title", plan.title, "--body-file", "-"], dir, plan.body)
         const last = url.split("\n").pop()!
         if (!PR_URL.test(last)) throw new Error(`gh pr create returned no PR URL for ${plan.branch}`)

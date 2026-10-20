@@ -214,6 +214,22 @@ test("a file whose layout the splice cannot keep is left for a person, not sent 
   }
 })
 
+test("a money value main already has stamps nothing; list values are made visible string by string", () => {
+  const dir = repo()
+  try {
+    const text = pr(planEdit(row({ cookie_days: 30, short_description: "New description" }), dir, TODAY))
+    assert.deepEqual(text.diffs.map((d) => d.field), ["short_description"])
+    assert.doesNotMatch(text.body, /matches the terms page/)
+    const cases = pr(planEdit(row({ cookie_days: 30, use_cases: ["New case"] }), dir, TODAY))
+    assert.deepEqual(cases.diffs.map((d) => d.field), ["agents.use_cases"])
+    const marks = pr(planEdit(row({ use_cases: ["\u0301\u0302x"] }), dir, TODAY))
+    assert.ok(!/[\u0301\u0302]/u.test(marks.body), "no raw mark in the body")
+    assert.match(marks.body, /"⟨U\+0301⟩⟨U\+0302⟩x"/)
+  } finally {
+    rmSync(dir, { recursive: true })
+  }
+})
+
 test("a change main already has opens nothing", () => {
   const dir = repo()
   try {
@@ -478,8 +494,24 @@ test("gitForge: each PR branch starts from origin/main, and a failed PR open can
       assert.match(forge.openPr(dir, a), /pull\/\d+$/)
       assert.equal(git(remote, "rev-list", "--count", `main..${a.branch}`), "1")
       assert.equal(git(remote, "diff", "--name-only", `main..${a.branch}`), "programs/acme.yaml")
+      // No local branch is ever created, so an orphaned worktree cannot hold one.
+      assert.equal(git(root, "branch", "--list", "claim/*"), "")
     } finally {
       done()
+    }
+    // A run killed after its push: its worktree stays. A new run still opens the PR.
+    const orphan = forge.checkout()
+    const c = pr(planEdit(row({ short_description: "Gamma" }, { id: "7f8e7d6c-0000-4000-8000-000000000007" }), orphan.dir, TODAY))
+    writeFileSync(join(base, "fail"), c.branch)
+    assert.throws(() => forge.openPr(orphan.dir, c))
+    writeFileSync(join(base, "fail"), "")
+    const next = forge.checkout()
+    try {
+      assert.match(forge.openPr(next.dir, c), /pull\/\d+$/)
+      assert.equal(git(remote, "rev-list", "--count", `main..${c.branch}`), "1")
+    } finally {
+      next.done()
+      orphan.done()
     }
   } finally {
     process.env.PATH = oldPath
