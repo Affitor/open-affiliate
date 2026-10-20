@@ -183,8 +183,21 @@ const TERM_MARKUP: [string, RegExp][] = [
 ]
 
 /** /programs/<slug> as served. */
-export function termsHtmlProblems(p: Program, html: string): string[] {
+/**
+ * `compared` are the programs in the page's comparison table: a verified one's
+ * duration, exactly as its "Lasts" cell shows it, is that program's term, not
+ * this page stating one. The page's own duration is never exempt.
+ */
+export function termsHtmlProblems(p: Program, html: string, compared: Program[] = []): string[] {
   const own = ownHtml(html)
+  const ownDuration = squash(p.commission.duration ?? "")
+  const theirs = new Set(
+    compared
+      .filter((o) => o.slug !== p.slug && termsConfirmed(o) && o.commission.type === "recurring" && o.commission.duration)
+      .map((o) => squash(o.commission.duration!.trim().toLowerCase() === "lifetime" ? "Lifetime" : o.commission.duration!))
+      .filter((d) => d !== ownDuration),
+  )
+  const notTheirs = (texts: string[]) => texts.filter((t) => !theirs.has(squash(t)))
   const blocks = visibleBlocks(html)
   const marked = blocks.includes(UNCONFIRMED_NOTE)
   const problems: string[] = []
@@ -225,9 +238,9 @@ export function termsHtmlProblems(p: Program, html: string): string[] {
   if (p.approvalTime && /\d/.test(p.approvalTime) && own.includes(p.approvalTime)) problems.push(`carries its approval time ("${p.approvalTime}")`)
   const flight = payloadStrings(flightPayload(html))
   for (const [where, texts] of [
-    ["prose", blocks],
+    ["prose", notTheirs(blocks)],
     ["its JSON-LD", jsonLdStrings(html)],
-    ["its RSC payload", flight],
+    ["its RSC payload", notTheirs(flight)],
   ] as const) {
     const named = texts.flatMap(sentences).find(namesTerm)
     if (named) problems.push(`states a term in ${where} ("${named.slice(0, 120)}")`)

@@ -36,8 +36,9 @@ function commissionCell(p: Program): string {
   return p.commission.type === "recurring" ? `${f.big} recurring` : `${f.big} ${f.rest}`
 }
 
-function lastsCell(p: Program): string {
-  const d = p.commission.type === "recurring" ? p.commission.duration : null
+/** How long a recurring commission lasts, shown only for a verified program (an unverified duration is a term no page states). */
+export function lastsCell(p: Program): string {
+  const d = p.commission.type === "recurring" && pageState(p) === "verified" ? p.commission.duration : null
   if (!d) return "—"
   return d.trim().toLowerCase() === "lifetime" ? "Lifetime" : d
 }
@@ -55,8 +56,8 @@ function TermsChip({ verified }: { verified: boolean }) {
 /**
  * The program next to similar ones, as a table (Program, Commission, Lasts,
  * Terms). Each other program's name links to its page. Commission, duration
- * and the verified flag only: no cookie window, payout or approval, so an
- * unverified page shows none of another program's terms either. data-compare
+ * (verified programs only) and the verified flag: no cookie window, payout or
+ * approval, so an unverified page shows none of another program's terms either. data-compare
  * marks the table for the page checks' probes.
  */
 export function ProgramCompare({ current, title }: { current: Program; title: string }) {

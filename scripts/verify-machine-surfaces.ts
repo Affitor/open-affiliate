@@ -896,6 +896,12 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
 const STATIC = join(ROOT, ".next", "static");
 if (!existsSync(STATIC)) fail(".next/static is missing; the chunk check needs `npm run build` first");
 const shownBySlug = new Map(programs.map((p) => [p.slug, termsConfirmed(p)]));
+const programBySlug = new Map(programs.map((p) => [p.slug, p]));
+/** The programs a page's comparison table links to, looked up in the registry (never taken from the page's own claims). */
+function comparedPrograms(html: string): (typeof programs)[number][] {
+  const table = /<table data-compare[\s\S]*?<\/table>/.exec(html)?.[0] ?? "";
+  return [...table.matchAll(/href="\/programs\/([a-z0-9-]+)"/g)].flatMap((m) => programBySlug.get(m[1]) ?? []);
+}
 const shown = (slug: string) => shownBySlug.get(slug);
 let chunkCount = 0;
 let confirmedRecords = 0;
@@ -1441,7 +1447,7 @@ async function checkServedPages(): Promise<string> {
     let affitorOnProgramPages = 0;
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
-      const problems = termsHtmlProblems(program, html);
+      const problems = termsHtmlProblems(program, html, comparedPrograms(html));
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
       // The Affitor line and its secondary button, only where also_on says so.
       const also = alsoOnHtmlProblem(program, html);
