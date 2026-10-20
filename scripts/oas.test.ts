@@ -35,6 +35,7 @@ import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/o
 import { NOT_PUBLISHED_FIELDS, notPublishedProblems, payoutLagProblems } from "./program-rules"
 import { matchPrograms, scoreIndex, type ScoreEntry } from "../src/lib/score-index"
 import { leaderRows } from "../src/app/rankings/leaderboard/rows"
+import { livePrograms } from "../src/lib/programs"
 import { leaderboardMd, rankingsMd } from "./generate-md"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
@@ -514,17 +515,29 @@ test("every shown verified date is the score's own, the one the tie-break orders
   if (!oasScores.length) return t.skip("OAS is not published in this build")
   const scoreDate = new Map(oasScores.map((s) => [s.slug, s.checked_at]))
   for (const row of leaderRows().rows) assert.equal(row.checked, (scoreDate.get(row.slug) ?? "").slice(0, 10), row.slug)
-  // The registry's date usually matches; give one score its own date to prove which source is read.
-  const probe = oasScores.find((x) => x.checked_at && x.oas != null)!
-  const saved = probe.checked_at
+  // The registry's date usually matches; give a ranked and a not-ranked score their own date to prove
+  // which source every surface reads (each line must exist, so a missing row cannot pass silently).
+  const board = buildBoard(oasScores, livePrograms, new Date())
+  const live = new Set(leaderRows().rows.map((r) => r.slug))
+  const rankedProbe = board.find((r) => r.rank != null && live.has(r.program.slug))!.score
+  const unrankedProbe = board.find((r) => r.unranked === "checking" && r.score.checks.some((c) => c.state === "checking") && live.has(r.program.slug))?.score
+  const probes = [rankedProbe, ...(unrankedProbe ? [unrankedProbe] : [])]
+  const saved = probes.map((p) => p.checked_at)
   try {
-    probe.checked_at = "2026-10-19"
-    const shown = leaderRows().rows.find((r) => r.slug === probe.slug)
-    if (shown) assert.equal(shown.checked, "2026-10-19", "table")
-    const line = leaderboardMd()!.split("\n").find((l) => l.includes(`/programs/${probe.slug}/oas)`))
-    if (line) assert.ok(line.includes("verified 2026-10-19"), "leaderboard.md")
+    for (const p of probes) p.checked_at = "2026-10-19"
+    const rows = leaderRows().rows
+    const lb = leaderboardMd()!.split("\n")
+    const rk = rankingsMd().split("\n")
+    for (const p of probes) {
+      assert.equal(rows.find((r) => r.slug === p.slug)?.checked, "2026-10-19", `table ${p.slug}`)
+      for (const [name, lines] of [["leaderboard.md", lb], ["rankings.md", rk]] as const) {
+        const line = lines.find((l) => l.includes(`/programs/${p.slug}/oas)`))
+        assert.ok(line, `${name} has a line for ${p.slug}`)
+        assert.ok(line.includes("verified 2026-10-19"), `${name} ${p.slug}`)
+      }
+    }
   } finally {
-    probe.checked_at = saved
+    probes.forEach((p, i) => (p.checked_at = saved[i]))
   }
   const md = leaderboardMd()!
   const ranks = rankingsMd()
