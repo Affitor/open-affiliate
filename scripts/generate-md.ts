@@ -1105,7 +1105,7 @@ function indexMd(): string {
   ])
 }
 
-function rankingsMd(): string {
+export function rankingsMd(): string {
   // The HTML table's three lists: a percentage and a dollar amount are never ranked against each other.
   const ranked = sitePrograms.filter((p) => isLive(p) && p.verified)
   const inGroup = (g: CommissionGroup) => {
@@ -1150,7 +1150,7 @@ function rankingsMd(): string {
     ? [
         ...board.filter((r) => r.rank != null).map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100 (${oasGrade(r.oas!)}), ${mdEscape(r.program.category)}, verified ${r.score.checked_at}`),
         "",
-        ...board.filter((r) => r.rank == null).map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${r.oas != null ? `OAS ${r.oas}/100, ` : ""}${UNRANKED_TEXT[r.unranked!]}`),
+        ...board.filter((r) => r.rank == null).map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${r.oas != null ? `OAS ${r.oas}/100, ` : ""}${UNRANKED_TEXT[r.unranked!]}${r.score.checked_at ? `, verified ${r.score.checked_at}` : ""}`),
         "",
         `OAS, the OpenAffiliate Score, measures how clearly a program publishes its terms and protects its partners, from the terms verified on its own page; nobody pays to rank. Every program is ranked by the same rules, whoever runs it. ${TIE_ORDER} ${TEAM_DISCLOSURE}`,
       ].join("\n")
@@ -1184,9 +1184,9 @@ function rankingsMd(): string {
 }
 
 /**
- * /rankings/leaderboard: the whole OAS board in /rankings order (OAS high to
- * low, equal scores A to Z), then the programs still scoring. Empty while
- * oas-scores.json has no entries, like the page.
+ * /rankings/leaderboard: the whole OAS board in /rankings order (compareBoard:
+ * OAS, Partner value, newest verification, name), then the programs still
+ * scoring. Empty while oas-scores.json has no entries, like the page.
  */
 export function leaderboardMd(): string | null {
   const live = sitePrograms.filter(isLive)
@@ -1194,13 +1194,14 @@ export function leaderboardMd(): string | null {
   if (!board.length) return null
   const bySlug = new Map(live.map((p) => [p.slug, p]))
   const report = (slug: string) => `${BASE}/programs/${slug}/oas`
-  const facts = (slug: string) => {
-    const p = bySlug.get(slug)!
+  // The verified date is the score's own: the one the tie-break orders by.
+  const facts = (r: (typeof board)[number]) => {
+    const p = bySlug.get(r.program.slug)!
     let domain = ""
     try {
       domain = new URL(p.url).hostname.replace(/^www\./, "")
     } catch {}
-    return [domain, p.category, networkName(p.network ?? IN_HOUSE), p.lastVerifiedAt ? `verified ${p.lastVerifiedAt.slice(0, 10)}` : null]
+    return [domain, p.category, networkName(p.network ?? IN_HOUSE), r.score.checked_at ? `verified ${r.score.checked_at.slice(0, 10)}` : null]
       .filter(Boolean)
       .map((x) => mdEscape(String(x)))
       .join(" · ")
@@ -1210,8 +1211,8 @@ export function leaderboardMd(): string | null {
   return joinSections([
     "# OAS leaderboard",
     "> Every scored affiliate program ranked by OAS, the OpenAffiliate Score: how clearly a program publishes its terms and protects its partners, from the terms verified on its own page. " + TIE_ORDER + " Nobody pays to rank.",
-    section(`Ranked (${ranked.length})`, ranked.map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100 (${oasGrade(r.oas!)}) · ${facts(r.program.slug)}`).join("\n")),
-    rest.length ? section(`Not ranked yet (${rest.length})`, rest.map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${UNRANKED_TEXT[r.unranked!]} · ${facts(r.program.slug)}`).join("\n")) : null,
+    section(`Ranked (${ranked.length})`, ranked.map((r) => `${r.rank}. [${mdEscape(r.program.name)}](${report(r.program.slug)}) — OAS ${r.oas}/100 (${oasGrade(r.oas!)}) · ${facts(r)}`).join("\n")),
+    rest.length ? section(`Not ranked yet (${rest.length})`, rest.map((r) => `- [${mdEscape(r.program.name)}](${report(r.program.slug)}) — ${UNRANKED_TEXT[r.unranked!]} · ${facts(r)}`).join("\n")) : null,
     section("Links", [`HTML: ${BASE}/rankings/leaderboard`, `By category: ${BASE}/rankings/leaderboard?category=<category-slug>`, `Rankings: ${BASE}/rankings.md`].join("\n")),
   ])
 }

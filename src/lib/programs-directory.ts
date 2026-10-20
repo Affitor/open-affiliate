@@ -42,7 +42,7 @@ export function directoryGroups(programs: Pick<Program, "slug" | "name" | "statu
  * Pages refresh on their own schedules (homepage hourly, program page and
  * report daily), so the preview leaves out any program whose review reaches
  * 90 days within HOME_LOOKAHEAD_DAYS: it drops a score before any page that
- * links from it can. Ranks are the leaderboard's own, ties shared.
+ * links from it can. Positions are the leaderboard's own (unique, compareBoard order).
  */
 export const HOME_LOOKAHEAD_DAYS = 2
 
@@ -50,7 +50,7 @@ export function homepageSets(
   programs: Program[],
   scores: OasScore[] = oasScores,
   today: Date = new Date(),
-): { rankings: Program[]; ranks: number[]; featured: Program[]; by: "oas" | "affiliate-score" } {
+): { rankings: Program[]; ranks: number[]; verified: (string | null)[]; featured: Program[]; by: "oas" | "affiliate-score" } {
   const ranked = programs.filter(isLive).sort(byScore(affiliateScore))
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const horizon = new Date(today.getTime() + HOME_LOOKAHEAD_DAYS * 864e5)
@@ -60,7 +60,9 @@ export function homepageSets(
   const by = board.length ? "oas" : "affiliate-score"
   const rankings = board.length ? board.map((r) => bySlug.get(r.program.slug)!) : ranked.slice(0, 5)
   const ranks = board.length ? board.map((r) => r.rank!) : rankings.map((_, i) => i + 1)
+  // Each OAS row shows the score's verified date, the one the tie-break orders by.
+  const verified = board.length ? board.map((r) => r.score.checked_at ?? null) : rankings.map(() => null)
   const shown = new Set(rankings.map((p) => p.slug))
-  const verified = ranked.filter((p) => p.verified && !shown.has(p.slug))
-  return { rankings, ranks, featured: verified.slice(0, 6), by }
+  const verifiedPrograms = ranked.filter((p) => p.verified && !shown.has(p.slug))
+  return { rankings, ranks, verified, featured: verifiedPrograms.slice(0, 6), by }
 }

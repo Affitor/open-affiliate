@@ -34,6 +34,8 @@ import {
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
 import { NOT_PUBLISHED_FIELDS, notPublishedProblems, payoutLagProblems } from "./program-rules"
 import { matchPrograms, scoreIndex, type ScoreEntry } from "../src/lib/score-index"
+import { leaderRows } from "../src/app/rankings/leaderboard/rows"
+import { leaderboardMd, rankingsMd } from "./generate-md"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
@@ -486,6 +488,52 @@ test("tie-break (TIE-BREAK.md): OAS unrounded, then Partner value, then newest v
   assert.deepEqual(["best", "pv-low-new", "zz-alpha", "aa-zulu"].map((slug) => categoryRank(board, slug)!.rank), [1, 2, 3, 4])
   assert.deepEqual(["pv-high", "pv-low-old"].map((slug) => categoryRank(board, slug)!.rank), [1, 2])
   assert.ok(TIE_ORDER.includes("Partner value") && TIE_ORDER.includes("most recently verified") && TIE_ORDER.includes("A to Z"))
+})
+
+test("tie-break: unrounded OAS decides before every later key, and the slug settles identical rows whatever the input order", () => {
+  const named = (slug: string, name: string): ProgramRef => ({ slug, name, category: "AI", network: null })
+  const s = (slug: string, over: Partial<OasScore>): OasScore => ({ ...scoreProgram(yaml(slug), TODAY), ...over })
+  // 90.2 beats 90.1 although every later key favours the 90.1 (rounding both to 90 would flip them).
+  const decimals = [
+    s("low-decimal", { oas: 90.1, partner_value: 30, transparency: 60.1, checked_at: "2026-10-19" }),
+    s("high-decimal", { oas: 90.2, partner_value: 10, transparency: 80.2, checked_at: "2026-09-01" }),
+  ]
+  const refs = [named("low-decimal", "Abe"), named("high-decimal", "Zed")]
+  assert.deepEqual(buildBoard(decimals, refs, TODAY).map((r) => r.program.slug), ["high-decimal", "low-decimal"])
+  // Identical score, Partner value, date and name: the slug decides, for any input order.
+  const twin = (slug: string) => s(slug, { oas: 80, partner_value: 20, transparency: 60, checked_at: "2026-10-10" })
+  const twins = [twin("same-c"), twin("same-a"), twin("same-b")]
+  const twinRefs = ["same-c", "same-a", "same-b"].map((slug) => named(slug, "Same Name"))
+  for (const order of [[0, 1, 2], [2, 1, 0], [1, 2, 0]]) {
+    const board = buildBoard(order.map((i) => twins[i]), order.map((i) => twinRefs[i]), TODAY)
+    assert.deepEqual(board.map((r) => [r.program.slug, r.rank]), [["same-a", 1], ["same-b", 2], ["same-c", 3]], `input order ${order}`)
+  }
+})
+
+test("every shown verified date is the score's own, the one the tie-break orders by", (t) => {
+  if (!oasScores.length) return t.skip("OAS is not published in this build")
+  const scoreDate = new Map(oasScores.map((s) => [s.slug, s.checked_at]))
+  for (const row of leaderRows().rows) assert.equal(row.checked, (scoreDate.get(row.slug) ?? "").slice(0, 10), row.slug)
+  // The registry's date usually matches; give one score its own date to prove which source is read.
+  const probe = oasScores.find((x) => x.checked_at && x.oas != null)!
+  const saved = probe.checked_at
+  try {
+    probe.checked_at = "2026-10-19"
+    const shown = leaderRows().rows.find((r) => r.slug === probe.slug)
+    if (shown) assert.equal(shown.checked, "2026-10-19", "table")
+    const line = leaderboardMd()!.split("\n").find((l) => l.includes(`/programs/${probe.slug}/oas)`))
+    if (line) assert.ok(line.includes("verified 2026-10-19"), "leaderboard.md")
+  } finally {
+    probe.checked_at = saved
+  }
+  const md = leaderboardMd()!
+  const ranks = rankingsMd()
+  for (const s of oasScores.slice(0, 50)) {
+    const line = md.split("\n").find((l) => l.includes(`/programs/${s.slug}/oas)`))
+    if (line && s.checked_at) assert.ok(line.includes(`verified ${s.checked_at}`), `leaderboard.md ${s.slug}`)
+    const rline = ranks.split("\n").find((l) => l.includes(`/programs/${s.slug}/oas)`))
+    if (rline && s.checked_at) assert.ok(rline.includes(`verified ${s.checked_at}`), `rankings.md ${s.slug}`)
+  }
 })
 
 test("Score your program: a name or domain finds the program and its score, nothing else is fetched", () => {
