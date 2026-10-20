@@ -22,7 +22,7 @@ payout:
   currency: EUR
   frequency: net-30
   methods: [paypal, wise]
-  conditions: "A commission becomes payable 30 days after the referred customer pays; payouts go out monthly by PayPal or Wise once the balance reaches EUR 50."
+  conditions: "Every month, from a €50 balance, via PayPal or Wise. A commission becomes payable 30 days after the customer's payment. No invoice to write, nobody to chase."
 
 signup_url: https://launchspy.io/affiliate
 # "Approved within 24 hours." (launchspy.io/affiliate, checked 2026-10-20)

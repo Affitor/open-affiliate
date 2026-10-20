@@ -4,26 +4,25 @@ url: https://www.pressmage.com
 category: Infrastructure
 tags: [managed-wordpress-hosting, static-site-hosting, agency-software, care-plans, white-label]
 
-# "Approved Affiliates earn 20% of each eligible payment made by a referred customer during the first 12 months" (pressmage.com/affiliates/terms, checked 2026-10-20)
+# "Approved Affiliates earn" "20%" "of each eligible payment made by a referred customer during the first" (pressmage.com/affiliates/terms, checked 2026-10-20)
 commission:
   type: recurring
   rate: "20%"
   mode: percentage
   value: 20
-  # "during the first 12 months after that customer's first payment" (pressmage.com/affiliates/terms, checked 2026-10-20)
+  # "12 months" "after that customer's first payment." (pressmage.com/affiliates/terms, checked 2026-10-20)
   duration: "12 months"
   conditions: "Paid on the amount actually collected from a referred customer, after discounts, for the first 12 months after their first payment. Taxes, fees, pass-through charges, refunds, credits and chargebacks are not commissionable; custom or heavily discounted deals need written approval. Higher levels of 25% and 30% are by invitation only. The published program terms are marked as a draft pending legal review."
 
-# "The tracking window is 60 days from the click." (pressmage.com/affiliates/terms, checked 2026-10-20)
+# "The tracking window is" "60 days" "from the click." (pressmage.com/affiliates/terms, checked 2026-10-20)
 cookie_days: 60
-# "Cleared commissions are paid monthly by PayPal or Wise once your balance reaches $50." (pressmage.com/affiliates/terms, checked 2026-10-20)
+# "Cleared commissions are paid monthly by PayPal or Wise once your balance reaches" "$50" (pressmage.com/affiliates/terms, checked 2026-10-20)
+# payout.minimum: the $50 threshold is given in dollars without naming the currency, so it is kept in conditions
 payout:
-  minimum: 50
-  currency: USD
-  # "Commissions clear 30 days after the customer's payment, to allow for refunds, chargebacks and payment failures." (pressmage.com/affiliates/terms, checked 2026-10-20)
+  # "Commissions clear" "30 days" "after the customer's payment, to allow for refunds, chargebacks and payment failures." (pressmage.com/affiliates/terms, checked 2026-10-20)
   frequency: net-30
   methods: [paypal, wise]
-  conditions: "Commissions clear 30 days after the customer's payment, then are paid monthly by PayPal or Wise once the balance reaches $50. Smaller balances carry forward. A W-9 or W-8 may be required before payment."
+  conditions: "Commissions clear 30 days after the customer's payment, to allow for refunds, chargebacks and payment failures. A refunded or reversed payment reverses its commission. Cleared commissions are paid monthly by PayPal or Wise once your balance reaches $50. Smaller balances carry forward. You are responsible for any tax due on commissions and for supplying the tax documentation we request (for example a W-9 or W-8). We may withhold payment until it is provided."
 
 signup_url: https://www.pressmage.com/affiliates
 # "We review every application and may approve or decline it at our discretion" (pressmage.com/affiliates/terms, checked 2026-10-20)

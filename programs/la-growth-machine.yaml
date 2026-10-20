@@ -30,8 +30,9 @@ payout:
   conditions: "Paid every quarter once the quarter ends. La Growth Machine reports what you earned, you send an invoice, and it pays by bank transfer. You are responsible for declaring and paying taxes on your earnings."
 
 signup_url: https://lagrowthmachine.com/affiliate-program/
-# "We review every application against our criteria." / "We reply within 2 business days." (lagrowthmachine.com/affiliate-program-terms, checked 2026-10-20)
-approval: manual
+# approval: the program page and its terms disagree (see conflicts), left out (checked 2026-10-20)
+# "We reply within 2 business days." (lagrowthmachine.com/affiliate-program-terms, checked 2026-10-20)
+# "We answer within 2 business days and send you your link and partner kit." (lagrowthmachine.com/affiliate-program, checked 2026-10-20)
 approval_time: "2 business days"
 # Affiliate program terms section 5, checked 2026-10-20.
 restrictions:
@@ -71,6 +72,10 @@ agents:
     - "A consultant helping a B2B team set up its outbound stack"
     - "A fractional sales leader picking a LinkedIn and email outreach tool"
     - "A creator whose audience works in sales, growth or RevOps"
+
+conflicts:
+  - field: approval
+    quote: 'Program page: "Already a La Growth Machine customer? Your application is approved automatically." (https://lagrowthmachine.com/affiliate-program/). Terms: "We review every application against our criteria. We may decline an application without giving a reason." (https://lagrowthmachine.com/affiliate-program-terms). Checked 2026-10-20.'
 
 not_published:
   payout.minimum: "2026-10-20"

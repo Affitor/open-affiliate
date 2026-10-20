@@ -17,16 +17,16 @@ commission:
 
 # "Attribution window 90 days" (affitor.com/marketplace/webzon-ai, checked 2026-10-20); the brand's page says 60 days, see conflicts.
 cookie_days: 90
-attribution: last-click
+# attribution left out: Affitor publishes no model; the brand's page says "We use a 60-day first-click attribution window." (webzon.ai/affiliate, checked 2026-10-20)
 tracking_method: cookie
 
-# "$50 Minimum Payout" (webzon.ai/affiliate, checked 2026-10-20)
+# "Once your verified earnings reach the $50 minimum threshold, payouts are processed directly in USD through Affitor." (webzon.ai/affiliate, checked 2026-10-20)
 payout:
   minimum: 50
   currency: USD
   # "Commissions become payable 15 days after each transaction (to accommodate standard refund periods)." (webzon.ai/affiliate, checked 2026-10-20)
   frequency: net-30
-  conditions: "Commissions become payable 15 days after each transaction, to cover the refund period. Once verified earnings reach the $50 minimum, payouts are made in USD through Affitor."
+  conditions: "Commissions become payable 15 days after each transaction (to accommodate standard refund periods). Once your verified earnings reach the $50 minimum threshold, payouts are processed directly in USD through Affitor."
   methods:
     - wise
     - bank

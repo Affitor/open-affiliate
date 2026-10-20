@@ -24,7 +24,7 @@ attribution: last-click
 payout:
   currency: GBP
   frequency: on-request
-  conditions: "Commission stays pending for 30 days after the referred customer's invoice is paid. Once at least £25 is available you request a payout; requests are reviewed, usually within 30 days, and paid manually by a method agreed with you."
+  conditions: "Commission remains pending for 30 days from the confirmed invoice payment to allow review of refunds, disputes and invalid referrals. At least £25 in available live commission is needed to request a payout. Only one request may await review at a time. We aim to review valid requests within 30 days and contact your verified account email to agree an available payout method and verify the recipient. Payouts are arranged manually; requesting a payout or displaying a balance does not send money automatically. No payout method is guaranteed before we agree it with you."
 
 signup_url: https://hipol.co.uk/affiliates
 # "Joining is free. You must be 18 or over, hold an active verified Hipol account and accept these terms" (hipol.co.uk/affiliates/terms, checked 2026-10-20)

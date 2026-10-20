@@ -5,8 +5,7 @@ url: https://jgcore.com
 category: Business Operations
 tags: [website-course, cv-templates, company-reports, uk, digital-products]
 
-# "up to 40% of every sale, depending on the product" (jgcore.com/earn, checked 2026-10-20)
-# "The Website System (£4,950) earns you £990 per sale at 20%" (jgcore.com/earn, checked 2026-10-20)
+# Program page (jgcore.com/earn, checked 2026-10-20): rates depend on the product, up to 40% of each sale; for example The Website System at GBP 4,950 pays GBP 990 per sale at 20%.
 # The terms limit copying of site content, so conditions are paraphrased.
 commission:
   type: hybrid
@@ -17,14 +16,14 @@ commission:
   duration: null
   conditions: "One account covers every JG Core company on the program page, each product at its own rate: 40% on JG Core Academy packs and the Supercargo refund kit, 35% on Core Careers CV products, 30% on CoreFi reports, and 20% on The Website System and the Supercargo audit. CoreFi, Revitaco and Instrukt subscriptions earn 25% or 20% of each paid invoice for the first 12 months; some services pay 10% with a per-sale cap. Commission is on the price paid, before VAT and fees, at the rate shown when the sale happens. A one-off bonus of GBP 25 applies to the first sale of an eligible product. Rate cuts come with 14 days' email notice."
 
-# "60-day referral window; the last affiliate link clicked gets the credit" (jgcore.com/earn, checked 2026-10-20)
+# Program page (jgcore.com/earn, checked 2026-10-20): referrals last 60 days and the most recent affiliate link clicked takes the credit.
 # Some products show a 90-day window; visitors who decline cookies are credited only for same-visit purchases.
 cookie_days: 60
 attribution: last-click
 tracking_method: cookie
 
-# "£50 minimum payout, paid monthly by PayPal, Wise or bank transfer" (jgcore.com/earn, checked 2026-10-20)
-# "Each commission is held for 30 days before it can be paid." (jgcore.com/earn/terms, checked 2026-10-20)
+# Program page (jgcore.com/earn, checked 2026-10-20): payouts are monthly by PayPal, Wise or bank transfer from a GBP 50 minimum.
+# Terms (jgcore.com/earn/terms, checked 2026-10-20): every commission waits 30 days before it becomes payable.
 # Held 30 days, then paid once the minimum is reached: net-30. GBP threshold kept in conditions.
 payout:
   currency: GBP
@@ -77,7 +76,7 @@ agents:
 
 conflicts:
   - field: approval
-    quote: 'Program page: "Most applicants are approved instantly; a few are checked by hand first." (https://jgcore.com/earn). Terms: "We review every application by hand and may decline any application without giving a reason." (https://jgcore.com/earn/terms). Checked 2026-10-20.'
+    quote: 'Paraphrased, as the terms limit copying of site content. The program page says most applicants are approved straight away and only some are checked manually first (https://jgcore.com/earn). The terms say each application is checked manually and can be turned down without a reason (https://jgcore.com/earn/terms). Checked 2026-10-20.'
 
 verified: true
 submitted_by: joshuacore
