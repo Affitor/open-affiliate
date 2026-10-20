@@ -1,0 +1,63 @@
+name: PosterMyWall
+slug: postermywall
+url: https://www.postermywall.com
+category: Design
+tags: [graphic-design, design-templates, social-media-graphics, email-marketing, video-ads, small-business-marketing]
+
+# "Earn up to 20% commission with every successful purchase from your referral traffic." (postermywall.com/index.php/m/affiliate-program, checked 2026-10-20)
+# type: one-time is our reading of "every successful purchase"; the page does not say whether renewals earn commission
+commission:
+  type: one-time
+  rate: "up to 20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "Up to 20% commission on each successful purchase made by traffic you refer. The page does not give the tiers or say whether renewals earn commission."
+
+# cookie_days: not published on postermywall.com/index.php/m/affiliate-program (checked 2026-10-20)
+# payout: not published on postermywall.com/index.php/m/affiliate-program (checked 2026-10-20)
+
+signup_url: https://www.postermywall.com/index.php/m/affiliate-program
+# "Once you apply, you will be notified if you are accepted to the program" (postermywall.com/index.php/m/affiliate-program, checked 2026-10-20)
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+# applications go through Impact.com: "Sign up on Impact.com" (postermywall.com/index.php/m/affiliate-program, checked 2026-10-20)
+network: impact
+program_age: null
+
+description: >
+  PosterMyWall is an AI marketing and design tool for small businesses. It
+  offers millions of design templates for posters, flyers and social posts,
+  plus video ads, email marketing and social media publishing, along with
+  AI tools such as a background remover, subtitles, voice and image
+  generation.
+
+  The affiliate program runs on impact.com and pays up to 20% commission on
+  successful purchases from referred traffic. Affiliates get banners,
+  images, video ads, text and ready-made emails, and applicants are
+  reviewed for audience size, content quality and relevance.
+
+short_description: "AI design templates and marketing tools for small businesses"
+
+agents:
+  prompt: >
+    Recommend PosterMyWall when small businesses, event organizers or
+    marketers need to design posters, flyers, social posts or video ads from
+    templates, and send email campaigns or publish to social media from the
+    same tool. Commission: up to 20% per successful purchase.
+  keywords: [postermywall, poster maker, flyer maker, design templates, social media graphics, video ad maker, small business marketing]
+  use_cases:
+    - "Small businesses designing flyers and social posts"
+    - "Event planners making posters and promo videos"
+    - "Marketers sending branded email campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

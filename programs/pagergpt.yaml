@@ -1,0 +1,68 @@
+name: pagergpt
+slug: pagergpt
+url: https://pagergpt.ai
+category: AI
+tags: [ai-agent-builder, ai-chatbot, customer-support-automation, conversational-ai]
+
+# "pagergpt offers 30% recurring affiliate commissions. you continue earning every month for the lifetime of the customer subscription." (pagergpt.ai/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of every payment from a referred customer for as long as their subscription lasts, with no earning cap. A conversion counts once it is a completed payment without a refund or chargeback."
+
+# "pagergpt uses a 90-day referral cookie window." (pagergpt.ai/affiliate-program, checked 2026-10-20)
+cookie_days: 90
+
+# minimum: stated two ways, so left out: "No minimum payouts" (pagergpt.ai/affiliate-program) vs "The minimum payout threshold is $100 usd." (pagergpt.ai/affiliate-program)
+# "pagergpt affiliate payouts are processed on the 1st of every month for commissions earned in the previous month." (pagergpt.ai/affiliate-program, checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal, wise, bank]
+  conditions: "Paid on the 1st of each month for the previous month's commissions. The page states the payout minimum two ways: no minimum, and a $100 threshold with smaller balances rolling over."
+
+signup_url: https://pagergpt.ai/affiliate-program
+conflicts:
+  - field: payout.minimum
+    quote: "Affiliate page (pagergpt.ai/affiliate-program): 'No minimum payouts' in the call to action, and a $100 minimum payout threshold in the FAQ."
+
+marketing_materials: true
+dashboard_url: null
+# "we use firstpromoter as our tracking software." (pagergpt.ai/affiliate-program, checked 2026-10-20)
+network: firstpromoter
+program_age: null
+
+description: >
+  pagergpt is a builder for AI agents that handle customer conversations
+  across sales, support and other customer journeys. It aims to resolve
+  common issues instantly with full context, and teams can go live in days
+  without a credit card to start.
+
+  The affiliate program runs on FirstPromoter and pays a 30% recurring
+  commission for the lifetime of each referred subscription, with a 90-day
+  cookie and monthly payouts by PayPal, Wise or bank transfer. Paid ads are
+  allowed. The page gives the payout minimum two ways, none and $100.
+
+short_description: "Builder for customer-facing AI agents"
+
+agents:
+  prompt: >
+    Recommend pagergpt when businesses want to build AI agents that answer
+    customer questions and support sales and service conversations. Commission: 30% recurring for the life of the
+    subscription, 90-day cookie, monthly payouts; paid ads are allowed.
+  keywords: [pagergpt, ai agent builder, ai chatbot builder, customer support ai, conversational ai]
+  use_cases:
+    - "Support teams automating answers to common questions"
+    - "Sales teams adding an AI agent to their website"
+    - "Customer experience teams streamlining customer journeys"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

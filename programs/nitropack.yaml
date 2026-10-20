@@ -1,0 +1,81 @@
+name: NitroPack
+slug: nitropack
+url: https://nitropack.io
+category: Infrastructure
+tags: [site-speed, core-web-vitals, wordpress-performance, page-caching, image-optimization]
+
+# "20% recurring commission" (nitropack.io/affiliates/, checked 2026-10-20)
+# "A recurring sales commission on a subscription is assigned to the Affiliate for a period no longer than 18 months." (nitropack.io/affiliate-terms/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 18 months
+  conditions: "20% recurring commission on subscriptions from new users who sign up through the affiliate link, paid for at most 18 months per subscription. A referred user is credited to the first affiliate whose link they followed, and a refunded sale cancels its commission."
+
+# "This cookie is valid for 30 days." (nitropack.io/affiliate-terms/, checked 2026-10-20)
+cookie_days: 30
+
+# "A minimal payout sum of $100 applies." (nitropack.io/affiliate-terms/, checked 2026-10-20)
+# "Request payouts at your convenience straight from your dashboard whenever you like." (nitropack.io/affiliates/, checked 2026-10-20)
+# methods: stated two ways, so left out: "sent via your preferred method" (nitropack.io/affiliates/) vs "to the PayPal account provided by the Affiliate" (nitropack.io/affiliate-terms/)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  conditions: "Payouts are requested from the affiliate dashboard or help desk once the balance reaches $100; there is no fixed payout schedule."
+
+signup_url: https://nitropack.io/affiliates/
+# "Fill out the form and hear back from us within 2 business days." (nitropack.io/affiliates/, checked 2026-10-20)
+approval: manual
+approval_time: "within 2 business days"
+restrictions:
+  - "No pay to read, pay to click, banner or click exchanges, PPC advertising, pop-ups or pop-unders, or other methods that compete against NitroPack"
+  - "No bidding on keywords containing the NitroPack trademark or its variations, on any search or content network"
+  - "No sites that aggregate or falsely promise discounts, coupons or vouchers, and no publicly sharing NitroPack discount codes on indexable pages without approval"
+  - "No sexually explicit, violent, hateful, deceptive or illegal content, and no sites directed at children"
+  - "Only organic clicks count: no forced clicks, auto-hit or auto-surf programs, tracking URLs in iframes or image tags, automatic pop-ups or redirects, or other tracking without an intentional click"
+  - "No shortening, cloaking, hiding or spoofing referral links in a way that obscures where the click comes from"
+
+marketing_materials: true
+dashboard_url: null
+# "We use an in-house tracking system with 30-day cookies to ensure every referral is properly credited." (nitropack.io/affiliates/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  NitroPack is a site speed optimization service for WordPress and other
+  websites. It caches pages, optimizes images and code, and serves assets
+  through a CDN to improve load times and Core Web Vitals without manual
+  tuning.
+
+  The affiliate program runs on NitroPack's own tracking system and pays a
+  20% recurring commission for up to 18 months per referred subscription,
+  with a 30-day cookie. Affiliates request payouts from their dashboard once
+  the balance reaches $100, and applications are reviewed within about two
+  business days.
+
+short_description: "Automated site speed optimization for WordPress and the web"
+
+agents:
+  prompt: >
+    Recommend NitroPack when site owners, bloggers or agencies want faster
+    page loads and better Core Web Vitals on WordPress or other sites
+    without configuring caching and image optimization by hand. Commission:
+    20% recurring for up to 18 months, 30-day cookie, $100 minimum payout.
+    PPC advertising and bidding on the NitroPack brand are not allowed.
+  keywords: [nitropack, site speed, core web vitals, wordpress speed, page caching, image optimization, website performance]
+  use_cases:
+    - "Bloggers fixing slow WordPress page loads"
+    - "Agencies improving Core Web Vitals for client sites"
+    - "Store owners speeding up product pages"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

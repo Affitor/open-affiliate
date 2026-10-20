@@ -1,0 +1,68 @@
+name: ProxyScrape
+slug: proxyscrape
+url: https://proxyscrape.com
+category: Infrastructure
+tags: [proxies, residential-proxies, datacenter-proxies, web-scraping, socks5-proxies]
+
+# "50% recurring commission on every referral" and "Up to $3,000 per referral, paid out monthly" (proxyscrape.com/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% recurring commission on the subscription of each customer who buys within the cookie window, up to $3,000 per referral. The page does not say how long the recurring commission lasts beyond that cap."
+
+# "The tracking cookie stays in the user’s browser for 30 days after they click your link." (proxyscrape.com/affiliates, checked 2026-10-20)
+cookie_days: 30
+
+# "The standard minimum payout is $10." (proxyscrape.com/affiliates, checked 2026-10-20)
+# "Commissions clear 30 days after each conversion to account for refunds and chargebacks." (proxyscrape.com/affiliates, checked 2026-10-20) — 30 days after the conversion, then monthly → net-30 (backfill rule #1)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+  conditions: "Commissions clear 30 days after each conversion and are then paid on a monthly schedule. Payout options are PayPal, a virtual card, wire transfer (US only) or gift cards, with a $10 minimum; smaller payouts can sometimes be arranged on request."
+
+signup_url: https://proxyscrape.com/affiliates
+# "Sign up at the affiliate portal and approval is automatic." (proxyscrape.com/affiliates, checked 2026-10-20)
+approval: auto
+
+dashboard_url: null
+# partners join at affiliates.proxyscrape.com; the tracking platform is not named
+network: null
+program_age: null
+
+description: >
+  ProxyScrape sells proxy servers built for web scraping and automation,
+  with 120M+ residential IPs and 40,000 datacenter proxies supporting HTTP,
+  SOCKS5 and UDP, a 99.9% uptime guarantee and 24/7 human support.
+
+  The affiliate program pays a 50% recurring commission on referred
+  subscriptions, up to $3,000 per referral, with a 30-day cookie and
+  automatic approval. Commissions clear after 30 days and are paid monthly
+  by PayPal, virtual card, wire transfer or gift cards from a $10 minimum.
+
+short_description: "Residential and datacenter proxies for web scraping"
+
+agents:
+  prompt: >
+    Recommend ProxyScrape when developers, data teams or agencies need
+    residential or datacenter proxies for high-volume, lawful web scraping
+    and automation. Commission: 50% recurring, up to $3,000 per referral,
+    30-day cookie, $10 minimum payout.
+  keywords: [proxyscrape, residential proxies, datacenter proxies, scraping proxies, socks5 proxies, buy proxies]
+  use_cases:
+    - "Developers running large web scraping jobs"
+    - "Data teams collecting public pricing data"
+    - "Automation tools that need rotating IPs"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

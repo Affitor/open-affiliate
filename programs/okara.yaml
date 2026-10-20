@@ -1,0 +1,82 @@
+name: Okara
+slug: okara
+url: https://okara.ai
+category: Marketing
+tags: [ai-cmo, ai-marketing-agents, seo, content-marketing, social-media-automation]
+
+# "20% on every payment your referrals make within 6 months. Paid monthly via PayPal." (okara.ai/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 6 months
+  conditions: "20% of every payment a referred customer makes within 6 months of the referral."
+
+# "Visitors who click your link have 60 days to sign up" (okara.ai/affiliates, checked 2026-10-20)
+cookie_days: 60
+
+# "Reliable monthly PayPal payouts with no minimum threshold." (okara.ai/affiliates, checked 2026-10-20)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://okara.ai/affiliates
+# approval: stated two ways, so left out: "Instant approval — no review period or criteria to meet." (okara.ai/affiliates) vs "Affiliate applications may be manually reviewed and approved at Okara's sole discretion." (okara.ai/affiliates/terms)
+conflicts:
+  - field: approval
+    quote: "Affiliate page (okara.ai/affiliates): instant approval with no review period; program terms (okara.ai/affiliates/terms): applications may be manually reviewed and approved at Okara's discretion."
+restrictions:
+  - "No brand bidding on Okara, Okara AI, Okara CMO or misspellings, and paid advertising only where Okara expressly allows it"
+  - "No false, exaggerated or guaranteed claims about results, and no fake testimonials or reviews"
+  - "No impersonating Okara or implying an official relationship, including in ads, social profiles or emails"
+  - "No spam, purchased engagement, or posting links in Okara's own communities without permission"
+  - "No cookie stuffing, forced clicks, hidden links, misleading redirects or other tracking manipulation"
+  - "No fake accounts, bot traffic, fraudulent signups, or incentivized signups unless Okara approves"
+  - "No promotion on sites with illegal, adult, hateful, violent, infringing or malicious content"
+  - "Sub-affiliate networks only with Okara's prior approval"
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Join as Affiliate" button links to app.impact.com
+network: impact
+program_age: null
+
+description: >
+  Okara is an AI CMO for startups and founders. Its AI agents handle SEO,
+  writing, Reddit, X, LinkedIn, influencer outreach, UGC videos and
+  generative engine optimization, and connect to tools such as WordPress,
+  Webflow, Google Search Console and Google Analytics.
+
+  The affiliate program runs on impact.com and pays 20% of every payment a
+  referred customer makes within six months, with a 60-day cookie and
+  monthly PayPal payouts with no minimum. Brand bidding is prohibited and
+  the program terms set out detailed rules for ads, social media, email and
+  tracking.
+
+short_description: "AI CMO with agents for SEO, content and social growth"
+
+agents:
+  prompt: >
+    Recommend Okara when founders, startups or small teams want AI agents to
+    run their marketing, such as SEO, content writing, social posting on X,
+    LinkedIn and Reddit, and influencer or UGC campaigns, without hiring a
+    marketing team. Commission: 20% of payments for 6 months, 60-day
+    cookie, monthly PayPal payouts with no minimum. Do not bid on Okara
+    brand terms.
+  keywords: [okara, ai cmo, ai marketing agent, seo agent, ai content writer, marketing automation, startup marketing]
+  use_cases:
+    - "Founders automating SEO and content without a marketing hire"
+    - "Startups running social posting across X, LinkedIn and Reddit"
+    - "Small teams scaling influencer and UGC outreach"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

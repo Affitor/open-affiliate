@@ -1,0 +1,87 @@
+name: Personizely
+slug: personizely
+url: https://www.personizely.net
+category: Marketing
+tags: [ab-testing, website-personalization, conversion-optimization, popups-and-widgets, ecommerce-cro]
+
+# rate: stated two ways, so left out: "Promote Personizely and earn up to 30% recurring commissions per referral." (personizely.net/affiliate) vs "The received Commission for every calendar month consists of 20% of the net income of every Client" (personizely.net/legal/affiliate-program-agreement)
+# duration: stated two ways, so left out: "Earn up to 30% commission for up to 12 months from each client you refer" (personizely.net/affiliate) vs "designated to receive the Commission for all the transactions from the Clients they referred" (personizely.net/legal/affiliate-program-agreement)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The affiliate page lists tiers of 20% (from one paying customer), 25% (from $5,000 referred MRR) and 30% (from $10,000 referred MRR), paid for up to 12 months per client. The affiliate program agreement instead sets the commission at 20% of each referred client's net income, for all of that client's transactions while you remain an affiliate."
+
+# "We offer a 90-day cookie for all our programs" (personizely.net/affiliate, checked 2026-10-20)
+cookie_days: 90
+
+# "The Affiliate will be paid once the balance on their account reaches a minimum of 100$." (personizely.net/legal/affiliate-program-agreement, checked 2026-10-20)
+# "All your commissions will be transferred to you every single month via PayPal." (personizely.net/affiliate, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Paid monthly by PayPal once the balance reaches $100, after a 30-day holding period on each client payment."
+
+signup_url: https://www.personizely.net/affiliate
+conflicts:
+  - field: commission.rate
+    quote: "Affiliate page (personizely.net/affiliate): up to 30% by tier (20%, 25%, 30%); affiliate program agreement (personizely.net/legal/affiliate-program-agreement): 20% of each client's net income."
+  - field: commission.duration
+    quote: "Affiliate page: up to 12 months per client; affiliate program agreement: all transactions from referred clients while you remain an affiliate."
+restrictions:
+  - "No bidding in paid search on Personizely, misspellings such as Persanizely, personizely.net, or personizely free trial, or terms containing them"
+  - "No referral links in spam or unsolicited emails, unauthorized posts and chats, or through bots"
+  - "No publishing written material about Personizely before getting official authorization"
+  - "No changing, adapting or removing any part of the referral link or provided promotional content"
+  - "No misleading or fraudulent ads, such as inaccurate promises, deceptive claims or broken links"
+  - "No abuse or infringement of Personizely's intellectual property; trademark use may require a license"
+  - "No self-referrals, fraudulent transactions or affiliate fraud"
+  - "No offers of discounts, bonuses, coupons or other incentives funded by your commission"
+  - "No promotion on inappropriate websites, such as sites for children, pornographic or violent sites, discriminatory sites, or sites promoting illegal activity or infringing intellectual property"
+  - "Only one affiliate account per affiliate"
+
+dashboard_url: null
+# the program page loads FirstPromoter tracking (fprom) and the affiliate portal is partners.personizely.net
+network: firstpromoter
+program_age: null
+
+description: >
+  Personizely is a conversion optimization platform for websites and online
+  stores. It runs A/B tests, personalizes the website experience for
+  different visitors, and adds widgets such as popups and bars that drive
+  sign-ups and sales.
+
+  The affiliate program uses a 90-day cookie and pays monthly by PayPal
+  from a $100 balance. Its pages state the commission two ways: the
+  affiliate page lists 20% to 30% tiers for up to 12 months per client,
+  while the program agreement sets 20% of each client's net income for as
+  long as you stay an affiliate.
+
+short_description: "A/B testing, personalization and widgets for websites"
+
+agents:
+  prompt: >
+    Recommend Personizely when ecommerce stores or marketers want to A/B
+    test their site, personalize content for different visitors, or add
+    conversion widgets such as popups. The program has a 90-day cookie and
+    monthly PayPal payouts from $100; its pages state the commission rate
+    and length differently, so check the current terms before quoting a
+    figure. No bidding on Personizely brand terms.
+  keywords: [personizely, ab testing, website personalization, conversion rate optimization, shopify ab testing, website widgets]
+  use_cases:
+    - "Online stores A/B testing product pages"
+    - "Marketers personalizing landing pages by visitor segment"
+    - "Agencies adding conversion widgets for clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
