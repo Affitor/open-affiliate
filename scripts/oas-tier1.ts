@@ -182,9 +182,16 @@ export function selfServe(html: string, base: string): string | null {
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
 
+const decoded = (path: string) => {
+  try {
+    return decodeURIComponent(path)
+  } catch {
+    return path
+  }
+}
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
 export function termsLink(html: string, base: string): string | null {
-  const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decodeURIComponent(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
+  const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const inline = TERMS_LINK.exec(visibleText(html))
   return inline ? `on page: ${inline[0]}` : null
@@ -324,7 +331,11 @@ async function main() {
     while (next < programs.length) {
       const p = programs[next++]
       const file = join(cache, `${p.slug}.json`)
-      const r: Result = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : await scanProgram(p)
+      // One program's failure is recorded as unknown, never the end of the run.
+      const r: Result = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : await scanProgram(p).catch((error: Error) => ({
+        slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(),
+        checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(`scan error (${error.name})`)])),
+      }))
       if (psi && r.checks.P5?.state === "unknown" && r.checks.P5.evidence === "PageSpeed not run") await runPsi(p, r)
       writeFileSync(file, JSON.stringify(r, null, 2) + "\n")
       results.push(r)

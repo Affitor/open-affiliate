@@ -41,6 +41,7 @@ test("program-page terms link: affiliate terms, not the site's own ToS", () => {
   assert.ok(termsLink(`<a href="/legal">Partner Program Agreement</a>`, "https://brand.com"))
   assert.ok(termsLink(`<h2>Affiliate program terms</h2><p>30% recurring</p>`, "https://brand.com"))
   assert.equal(termsLink(`<a href="/terms">Terms of Service</a><a href="/privacy">Privacy</a>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<a href="/%E0%A4%A">Broken</a>`, "https://brand.com"), null, "a malformed escape does not throw")
 })
 
 test("Core Web Vitals: field data first, lab thresholds otherwise", () => {
