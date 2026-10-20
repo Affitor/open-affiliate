@@ -18,11 +18,11 @@ commission:
 cookie_days: 90
 
 # "The Affiliate will be paid once the balance on their account reaches a minimum of 100$." (personizely.net/legal/affiliate-program-agreement, checked 2026-10-20)
-# "All your commissions will be transferred to you every single month via PayPal." (personizely.net/affiliate, checked 2026-10-20)
+# "All your commissions will be transferred to you every single month via PayPal." and "required 30-day holding period for your client’s payments first" (personizely.net/affiliate, checked 2026-10-20); held 30 days → net-30 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-30
   methods: [paypal]
   conditions: "Paid monthly by PayPal once the balance reaches $100, after a 30-day holding period on each client payment."
 
@@ -33,15 +33,24 @@ conflicts:
   - field: commission.duration
     quote: "Affiliate page: up to 12 months per client; affiliate program agreement: all transactions from referred clients while you remain an affiliate."
 restrictions:
-  - "No bidding in paid search on Personizely, misspellings such as Persanizely, personizely.net, or personizely free trial, or terms containing them"
-  - "No referral links in spam or unsolicited emails, unauthorized posts and chats, or through bots"
-  - "No publishing written material about Personizely before getting official authorization"
-  - "No changing, adapting or removing any part of the referral link or provided promotional content"
-  - "No misleading or fraudulent ads, such as inaccurate promises, deceptive claims or broken links"
+  - "No coupon sites"
+  - "No PPC ads that link directly to any Personizely website, tool or landing page"
+  - "No Personizely brand names, logos, tool names or their misspellings in PPC ads, domains, subdomains or social media profiles"
+  - "No bidding in paid search on Personizely, Persanizely, www.personizely.net, personizely.net, personizely free trial, or terms containing them"
+  - "No misleading or incorrect information, such as discounts that do not exist"
+  - "No using discount coupons that were not assigned to you"
+  - "No referral links in spam, unsolicited emails, unauthorized posts or chats, or through bots"
+  - "No publishing written material about Personizely or its website before getting official authorization"
+  - "No changing, adapting or removing any part of the referral link, code or provided promotional content"
+  - "No inappropriate or fraudulent advertising, such as inaccurate promises, deceptive claims or broken links"
+  - "No promotion on websites that contain or advertise illegal activity"
+  - "No promotion on websites aimed at children"
+  - "No promotion on websites with pornographic content or violence"
+  - "No promotion on websites that discriminate by race, sex, religion, nationality, sexual orientation or age"
+  - "No promotion on websites that infringe intellectual property rights"
   - "No abuse or infringement of Personizely's intellectual property; trademark use may require a license"
-  - "No self-referrals, fraudulent transactions or affiliate fraud"
+  - "No self-referrals, fraudulent transactions or suspected affiliate fraud"
   - "No offers of discounts, bonuses, coupons or other incentives funded by your commission"
-  - "No promotion on inappropriate websites, such as sites for children, pornographic or violent sites, discriminatory sites, or sites promoting illegal activity or infringing intellectual property"
   - "Only one affiliate account per affiliate"
 
 dashboard_url: null

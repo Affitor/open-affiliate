@@ -16,7 +16,7 @@ commission:
 # cookie_days: not published on picwish.com/affiliate (checked 2026-10-20)
 
 # minimum and methods: not published on picwish.com/affiliate (checked 2026-10-20)
-# "Users' payments are locked 27 day(s) after end of the month they are tracked, and approved transactions are paid 20 day(s) after end of the month they lock" (picwish.com/affiliate, checked 2026-10-20) — more than 60 days after the sale, so no structured frequency (backfill rule #1)
+# "Users' payments are locked 27 day(s) after end of the month" and "approved transactions are paid 20 day(s) after end of the month they lock" (picwish.com/affiliate, checked 2026-10-20): more than 60 days after the sale, so no structured frequency (backfill rule #1)
 payout:
   conditions: "A tracked sale is confirmed 27 days after its month ends; confirmed sales are then paid out 20 days after the end of the month in which they were confirmed."
 

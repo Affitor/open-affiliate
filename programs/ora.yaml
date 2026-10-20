@@ -28,7 +28,8 @@ restrictions:
   - "No referring subscriptions from your own company"
   - "No manipulating the system to gain unauthorized commissions"
 
-marketing_materials: false
+# "license to use the provided marketing materials solely for the purpose of promoting our products" (ora.pm/affiliate-terms, checked 2026-10-20)
+marketing_materials: true
 dashboard_url: null
 # affiliates get a dashboard inside their Ora account after Ora designates the account as an affiliate; no third-party platform named
 network: in-house

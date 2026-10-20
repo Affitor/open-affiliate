@@ -31,9 +31,19 @@ signup_url: https://perfmatters.io/affiliate-program/
 approval: manual
 approval_time: "within 24 hours"
 restrictions:
+  - "No sites with unlawful content or images"
+  - "No sites with defamatory content or images"
+  - "No sites with obscene content or images"
+  - "No sites with harassing or otherwise objectionable content or images"
+  - "No sites that facilitate illegal activity"
+  - "No sites that promote violence"
+  - "No sites that promote or help others promote copyright infringement"
+  - "No sites that are or promote a business opportunity program"
+  - "No sites with content written solely by AI"
   - "No sites that are solely focused on coupons or coupon directories"
-  - "No spam"
-  - "PPC is allowed, but no bidding on keywords containing the Perfmatters brand name, its variations, abbreviations or misspellings"
+  - "No spam or unsolicited bulk email"
+  - "No visually modifying links without Perfmatters' consent"
+  - "PPC is allowed, but no placing or bidding on keywords containing the Perfmatters brand name, its variations, abbreviations or misspellings"
   - "No commission on signups by you, your household or anyone in your organization"
 
 dashboard_url: null

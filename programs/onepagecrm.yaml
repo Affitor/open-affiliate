@@ -19,10 +19,11 @@ commission:
 cookie_days: 30
 
 # "Affiliate fees are paid via PayPal monthly only if a minimum amount of $100 is reached." (onepagecrm.com/affiliate-terms/, checked 2026-10-20)
+# "The affiliate fee will be pending for 30 days after the user successfully pays the subscription" (onepagecrm.com/affiliate-terms/, checked 2026-10-20); held 30 days after the payment → net-30 (backfill rule #1)
 payout:
   minimum: 100
   currency: USD
-  frequency: monthly
+  frequency: net-30
   methods: [paypal]
   conditions: "Commissions are credited 30 days after the referred customer pays and are paid around the 14th of each month by PayPal once the balance reaches $100; smaller balances roll over."
 
