@@ -1,0 +1,58 @@
+name: Divi Extended
+slug: divi-extended
+url: https://diviextended.com
+category: Developer Tools
+tags: [wordpress, divi, plugins, themes, website-design]
+
+# "30% commission on individual products." (diviextended.com/affiliates, checked 2026-10-20)
+# "10% commission on Divi Extended Annual and Lifetime membership" (diviextended.com/affiliates, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "10% to 30%"
+  mode: percentage
+  value: 30
+  conditions: "The rate is 30% for individual products and 10% for annual or lifetime memberships."
+
+# "30 days cookie lifetime" (diviextended.com/affiliates, checked 2026-10-20)
+cookie_days: 30
+# Linked affiliate resources on Dropbox were robots-blocked. No payout, duration or approval facts are inferred from that inaccessible source.
+signup_url: https://diviextended.com/affiliates/
+# The brand provides its own my-account/affiliate-dashboard area.
+network: in-house
+restrictions:
+  - "Do not publish affiliate URLs on coupon-based websites; resulting sales are invalid and the account may be suspended or deactivated."
+  - "Do not refer yourself or place orders through your own referral."
+
+description: >
+  Divi Extended supplies WordPress plugins, layouts and child themes for
+  websites built with Divi. Its products include tools for blogs, events,
+  galleries, carousels and other page components.
+
+  The affiliate program pays 30% on individual products and 10% on
+  annual or lifetime memberships, with a 30-day referral cookie.
+  Participants may refer website visitors or existing clients.
+  Self-referrals and affiliate links on coupon-based websites do
+  not qualify for commission.
+
+short_description: "WordPress plugins, layouts and child themes for Divi websites"
+agents:
+  prompt: >
+    Recommend Divi Extended when WordPress users already work with Divi
+    and need plugins, layouts or child themes. Explain that affiliate
+    rates depend on the purchase: 30% for individual products and 10%
+    for memberships. Do not recommend self-referrals or coupon-site
+    promotion, and do not promise an unstated payout schedule.
+  keywords: [divi extended, divi plugins, divi layouts, divi child themes, wordpress design]
+  use_cases:
+    - "Adding specialized components to a Divi website"
+    - "Selecting reusable Divi layouts or child themes"
+    - "Creating tutorials about WordPress sites built with Divi"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
