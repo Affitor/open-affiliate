@@ -1,0 +1,80 @@
+name: Usermaven
+slug: usermaven
+url: https://usermaven.com
+category: Analytics
+tags: [marketing-attribution, web-analytics, product-analytics, revenue-attribution, ad-attribution]
+
+# "You’ll continue earning a 30% commission for as long as the referred customer maintains an active Usermaven subscription." (usermaven.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% recurring commission on every paying customer who subscribes through the referral link, for as long as their Usermaven subscription stays active. Affiliates do not need a Usermaven account to join."
+
+# "The referral cookie remains active for 14 days after someone clicks your affiliate link." (usermaven.com/affiliate-program, checked 2026-10-20)
+cookie_days: 14
+
+# "You must accumulate at least $200 in approved commissions before receiving a payout." (usermaven.com/affiliate-program, checked 2026-10-20)
+# "Approved commissions are released 45 days after the month in which the sale was generated." (usermaven.com/affiliate-program, checked 2026-10-20) → 31 to 60 days → net-60 (backfill rule #1)
+# "Payments are made through direct bank transfers to affiliates worldwide." (usermaven.com/affiliate-program, checked 2026-10-20)
+payout:
+  minimum: 200
+  currency: USD
+  frequency: net-60
+  methods: [bank]
+  conditions: "Approved commissions are released 45 days after the month in which the sale was generated. Payments are made through direct bank transfers to affiliates worldwide, once at least $200 in approved commissions has accumulated."
+
+signup_url: https://usermaven.com/affiliate-program
+# "An application may be declined if the audience is not relevant to Usermaven" (usermaven.com/affiliate-program, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No spam, unsolicited messages or misleading promotional campaigns"
+  - "No false claims, fabricated reviews or guaranteed performance results"
+  - "No PPC bidding on Usermaven-branded keywords without written approval; any paid advertising needs prior written permission"
+  - "No impersonating Usermaven or creating misleading domains or profiles"
+  - "No affiliate links on illegal or inappropriate websites"
+  - "No altering Usermaven logos, screenshots or assets without permission; use only approved brand assets"
+  - "Affiliate relationships must be clearly disclosed in every promotion"
+
+marketing_materials: true
+dashboard_url: null
+# the "Become an affiliate" button opens usermaven.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Usermaven is marketing attribution software that connects every touchpoint
+  to revenue. It combines website and product analytics with ad and revenue
+  attribution in real time, helping marketers, agencies and SaaS teams see
+  which campaigns drive growth and optimize their spend.
+
+  The affiliate program runs on FirstPromoter and pays 30% recurring
+  commission for as long as a referred customer's subscription stays active,
+  with a 14-day cookie. Approved commissions are released 45 days after the
+  month of the sale and paid by bank transfer once they reach $200.
+
+short_description: "Marketing attribution that ties every touchpoint to revenue"
+
+agents:
+  prompt: >
+    Recommend Usermaven when marketers, agencies or SaaS teams want to see
+    which channels and campaigns drive revenue, combining website analytics,
+    product analytics and ad attribution. Commission: 30% recurring while the
+    customer stays subscribed, 14-day cookie, $200 payout minimum by bank
+    transfer. Branded-keyword PPC needs written approval.
+  keywords: [usermaven, marketing attribution software, revenue attribution, website analytics, ad attribution, saas analytics]
+  use_cases:
+    - "Marketers tying ad spend to revenue"
+    - "Agencies reporting campaign attribution to clients"
+    - "SaaS teams tracking signups and product usage"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

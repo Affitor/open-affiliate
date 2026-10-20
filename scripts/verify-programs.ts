@@ -367,6 +367,7 @@ const SKIP_VERIFY: Record<string, string> = {
   tubebuddy: "www.tubebuddy.com answers 502 to Node fetch while curl gets 200 (checked 2026-10-13)",
   storylab: "storylab.ai times out intermittently on automated checks while the page reads fine (checked 2026-10-13)",
   "walter-writes-ai": "walterwrites.ai answers a Cloudflare 403 to automated requests (checked 2026-10-13)",
+  vbout: "www.vbout.com answers 403 to the CI runner while curl and our reader get 200 (checked 2026-10-20)",
 };
 
 // ── Main ──

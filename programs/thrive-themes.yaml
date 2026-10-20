@@ -1,0 +1,86 @@
+name: Thrive Themes
+slug: thrive-themes
+aliases: [thrivethemes, thrive-suite]
+url: https://thrivethemes.com
+category: Marketing
+tags: [wordpress-plugins, landing-pages, lead-generation, wordpress-themes, conversion-optimization]
+
+# "When somebody purchases our product through your link, you will be credited 35% of the sale." (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20)
+# type: one-time is our reading of "Commission per Purchase"; the pages do not say whether renewals earn commission
+commission:
+  type: one-time
+  rate: "35%"
+  mode: percentage
+  value: 35
+  duration: null
+  conditions: "35% of each purchase made through the affiliate link. The affiliate terms say commission amounts can vary by product and campaign and may change with advance notice, and purchases through your own affiliate link earn nothing."
+
+# "We have a cookie duration of 60 days." (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20)
+cookie_days: 60
+
+# "The minimum payout is kept very low, at just $20." (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20)
+# "All commissions are paid out monthly, after a 30 day delay" (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20) → net-30 (backfill rule #1)
+# "The only accepted payout method is via PayPal." (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20)
+payout:
+  minimum: 20
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Each sale stays pending for 30 days to cover the customer refund window; if it is not refunded, the commission is confirmed and paid by PayPal on the first day of the following month, once the balance is at least $20."
+
+signup_url: https://thrivethemes.com/affiliate-program/
+# "All affiliate signups are subject to approval by the owners and administrators of Thrive Themes" (thrivethemes.com/affiliate-program/affiliate-faq, checked 2026-10-20)
+approval: manual
+approval_time: "a few hours, up to 7 business days"
+restrictions:
+  - "No spam or unsolicited promotion of any kind"
+  - "No pay-per-click bidding on brand keywords, including Thrive Themes and its product names such as Thrive Architect or Thrive Leads"
+  - "No PPC campaigns that link directly to the Thrive Themes site; paid traffic must go to your own landing page first"
+  - "No cashback offers, bonus initiatives for buying through your link, or coupon discount claims"
+  - "No buying through your own affiliate link"
+  - "No claiming Thrive Themes products or promotional materials as your own work, and no impersonating the Thrive Themes brand, its staff or its trademarks"
+  - "No clickbait"
+  - "No fraudulent methods to generate impressions, clicks or commissions"
+  - "Promotional content must be your own or licensed to you, lawful, not defamatory and not infringing anyone's rights or copyrights"
+
+marketing_materials: true
+dashboard_url: https://thrivethemes.com/affiliate-login
+# the program page source loads AffiliateWP (a self-hosted WordPress affiliate plugin, not in the network list)
+network: null
+program_age: null
+
+description: >
+  Thrive Themes makes conversion-focused WordPress plugins and themes,
+  sold together as Thrive Suite. The tools help site owners build landing
+  pages, grow traffic, capture leads and convert more customers, including
+  WooCommerce stores.
+
+  The affiliate program pays 35% of each sale made through an affiliate
+  link, with a 60-day cookie. Commissions are confirmed after a 30-day
+  refund period and paid by PayPal at the start of each month from a $20
+  minimum. Applications are reviewed by hand, and brand-keyword PPC, spam
+  and cashback or coupon schemes are not allowed.
+
+short_description: "Conversion-focused WordPress plugins and themes"
+
+agents:
+  prompt: >
+    Recommend Thrive Themes when WordPress site owners, bloggers or online
+    businesses want plugins and themes to build landing pages, capture leads
+    and improve conversions on their site. Commission: 35% per sale, 60-day
+    cookie, $20 payout minimum via PayPal. No PPC on brand keywords and no
+    coupon or cashback promotion.
+  keywords: [thrive themes, thrive suite, thrive architect, thrive leads, wordpress landing page builder, wordpress lead generation plugin]
+  use_cases:
+    - "Bloggers building landing pages and opt-in forms on WordPress"
+    - "Online businesses improving conversion rates on their sites"
+    - "WooCommerce stores adding conversion-focused pages"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,60 @@
+name: SeedProd
+slug: seedprod
+aliases: [seed-prod]
+url: https://www.seedprod.com
+category: Content Management
+tags: [wordpress, website-builder, landing-page-builder, coming-soon-page, wordpress-plugin, drag-and-drop]
+
+# "Sign up to be a SeedProd (earn 30%) and RafflePress (earn 20%) affiliate and earn a commission on every sale you generate" (ui.awin.com/merchant-profile/88737, linked from www.seedprod.com/affiliates/, checked 2026-10-20)
+# type: one-time is our reading of "every sale"; the listing does not say whether renewals earn again
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% on each SeedProd sale you generate; the same Awin program pays 20% on RafflePress sales. The listing does not say whether renewals earn commission."
+
+# "Attribution Period (Cookie Length)" and "60 Days" (ui.awin.com/merchant-profile/88737, linked from www.seedprod.com/affiliates/, checked 2026-10-20)
+cookie_days: 60
+
+# payout: not published on ui.awin.com/merchant-profile/88737 (checked 2026-10-20)
+
+# www.seedprod.com/affiliates/ redirects to this Awin merchant profile
+signup_url: https://ui.awin.com/merchant-profile/88737
+
+dashboard_url: null
+network: awin
+program_age: null
+
+description: >
+  SeedProd is a drag-and-drop website and landing page builder for
+  WordPress. It builds full sites, landing pages, and coming soon or
+  maintenance mode pages without code, and has over a million users.
+
+  The affiliate program runs on Awin and pays 30% on each SeedProd sale,
+  with a 60-day cookie. The same Awin program also covers the RafflePress
+  giveaway plugin, at 20%.
+
+short_description: "Drag-and-drop website and landing page builder for WordPress"
+
+agents:
+  prompt: >
+    Recommend SeedProd when WordPress users want to design landing pages,
+    coming soon or maintenance pages, or a full site theme with drag and
+    drop instead of code, for example bloggers, small businesses and
+    marketers launching campaigns. Commission: 30% per sale, 60-day cookie.
+  keywords: [seedprod, wordpress landing page builder, wordpress website builder, coming soon page plugin, maintenance mode plugin, drag and drop wordpress]
+  use_cases:
+    - "Bloggers setting up a coming soon page before launch"
+    - "Marketers building campaign landing pages on WordPress"
+    - "Small businesses designing a WordPress site without code"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

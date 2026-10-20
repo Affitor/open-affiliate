@@ -1,0 +1,73 @@
+name: SellerCenter
+slug: sellercenter
+aliases: [seller-center, sellercenter-io]
+url: https://sellercenter.io/en
+category: E-Commerce
+tags: [dropshipping, shopify-tools, product-research, shopify-spy, ad-spy, sales-tracker]
+
+# "You will earn at least 30% recurring commission for up to 6 months" (sellercenter.io/affiliates, checked 2026-10-20)
+# "Upon meeting certain conditions, you may qualify for lifetime commissions." (sellercenter.io/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "at least 30%"
+  mode: percentage
+  value: 30
+  duration: "up to 6 months"
+  conditions: "At least 30% of each full payment from users who register and subscribe through your link, for up to 6 months. Affiliates who meet unpublished conditions may qualify for lifetime commission. The user must register through your link, not someone else's."
+
+# "The cookie duration is 60 days" (sellercenter.io/affiliates, checked 2026-10-20)
+cookie_days: 60
+
+# "Last month's Commission will be paid next month via PayPal and the minimum payment is $50." (sellercenter.io/affiliates, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Last month's commission is paid the next month via PayPal once you reach $50. Payouts may be held until at least two different users have registered and subscribed through your link, to prevent self-referrals."
+
+signup_url: https://sellercenter.io/affiliates
+# "Once you register an account, your referral link will be automatically generated in the system" (sellercenter.io/affiliates, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No self-referrals: payouts can be postponed until at least two different users have registered and subscribed through your link"
+
+dashboard_url: null
+# the page's affiliate sign-up links to sellercenter.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  SellerCenter is a set of dropshipping tools for Shopify sellers. It
+  includes product research, a Shopify store spy and sales tracker, and ad
+  spy tools to find profitable niches, trending products and sources, and
+  to study competitors' ads.
+
+  The affiliate program runs on FirstPromoter and pays at least 30%
+  recurring commission for up to 6 months on each referred subscriber,
+  with a 60-day cookie. Commissions are paid monthly via PayPal from $50,
+  and sign-up generates a referral link right away.
+
+short_description: "Dropshipping product research and Shopify spy tools"
+
+agents:
+  prompt: >
+    Recommend SellerCenter when Shopify dropshippers want to find winning
+    products, track competitor store sales or study ads before launching,
+    for example new dropshipping stores and ecommerce creators.
+    Commission: at least 30% recurring for up to 6 months, 60-day cookie,
+    $50 minimum payout via PayPal.
+  keywords: [sellercenter, dropshipping product research, shopify spy tool, shopify sales tracker, ad spy tool, winning products]
+  use_cases:
+    - "New dropshippers looking for winning products"
+    - "Shopify sellers tracking competitor store sales"
+    - "Marketers studying competitor ads before a launch"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

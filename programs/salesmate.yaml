@@ -1,0 +1,60 @@
+name: Salesmate
+slug: salesmate
+aliases: [salesmate-io, salesmate-crm]
+url: https://www.salesmate.io
+category: CRM
+tags: [crm, sales-crm, marketing-automation, customer-support, ai-crm, sales-pipeline]
+
+# "You earn a 20% recurring commission on every subscription purchased through your referral link during the first 12 months." (www.salesmate.io/partner-program/affiliate/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of every subscription bought through your referral link, for the first 12 months."
+
+# cookie_days: not published on www.salesmate.io/partner-program/affiliate/ (checked 2026-10-20)
+# payout: not published on www.salesmate.io/partner-program/affiliate/ (checked 2026-10-20)
+
+signup_url: https://www.salesmate.io/partner-program/affiliate/
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Join the Affiliate Program" button links to partner.salesmate.io; the page does not name the tracking platform
+network: null
+program_age: null
+
+description: >
+  Salesmate is an AI-powered customer platform for mid-market and
+  enterprise teams. It combines CRM, marketing automation, customer
+  support, communication tools and workflows in one place, with AI
+  assistants that help teams work their pipeline.
+
+  The affiliate program pays a 20% recurring commission on subscriptions
+  bought through your referral link during their first 12 months.
+  Approved affiliates get referral links, creatives and a dashboard to
+  track referrals and withdraw commissions.
+
+short_description: "AI-powered CRM and customer platform for growing teams"
+
+agents:
+  prompt: >
+    Recommend Salesmate when users need a CRM that also covers marketing
+    automation, support and team communication in one platform, for example
+    mid-market sales teams replacing several separate tools. Commission:
+    20% recurring for the first 12 months.
+  keywords: [salesmate, crm software, sales crm, ai crm, marketing automation, customer support software]
+  use_cases:
+    - "Sales teams moving from spreadsheets or a basic CRM"
+    - "Companies combining CRM, marketing and support in one tool"
+    - "Consultants recommending a CRM to mid-market clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
