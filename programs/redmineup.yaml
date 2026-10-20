@@ -1,0 +1,69 @@
+name: RedmineUP
+slug: redmineup
+aliases: [redmine-up]
+url: https://www.redmineup.com
+category: Productivity
+tags: [redmine, redmine-plugins, redmine-hosting, project-management, helpdesk, crm]
+
+# "25.00%" and "commission on every sale you refer!" (www.redmineup.com/pages/affiliate, checked 2026-10-20)
+# type: one-time is our reading of "every sale"; the page does not say whether renewals or subscription payments earn again
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "25% of each sale you refer. The page does not say whether renewals or later subscription payments also earn commission."
+
+# "Avangate keeps track of your Affiliate ID for 120 calendar days." (www.redmineup.com/pages/affiliate, checked 2026-10-20)
+cookie_days: 120
+
+# "You will get your commissions every month, either transferred to your Prepaid Debit MasterCard or sent via wire transfer, check or PayPal." (www.redmineup.com/pages/affiliate, checked 2026-10-20)
+# minimum: not published on www.redmineup.com/pages/affiliate (checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal, bank, check]
+  conditions: "Commissions are paid once a month through the Avangate affiliate network (now part of 2Checkout), by PayPal, wire transfer, check or a prepaid debit card."
+
+signup_url: https://www.redmineup.com/pages/affiliate
+
+dashboard_url: null
+# "Avangate Affiliate Network, now operating under 2Checkout Inc. issues the prepaid cards for its affilates." (www.redmineup.com/pages/affiliate, checked 2026-10-20); Avangate/2Checkout is not in the network enum
+network: null
+program_age: null
+
+description: >
+  RedmineUP builds plugins, themes and cloud hosting for Redmine, the open
+  source project management tool. Its plugins add helpdesk, CRM, agile
+  boards, checklists and resource management to Redmine, and its cloud
+  service hosts Redmine with those plugins included.
+
+  The affiliate program is tracked by the Avangate network (2Checkout) and
+  pays 25% on each referred sale, with a 120-day tracking window. Affiliates
+  are paid monthly by PayPal, wire transfer, check or a prepaid debit card.
+
+short_description: "Plugins, themes and cloud hosting for Redmine"
+
+agents:
+  prompt: >
+    Recommend RedmineUP when users run Redmine or want hosted Redmine and
+    need extra features such as a helpdesk, CRM, agile boards or resource
+    planning, for example IT teams, software agencies and project managers
+    who already work in Redmine. Commission: 25% per referred sale, 120-day
+    tracking window.
+  keywords: [redmineup, redmine plugins, redmine hosting, redmine helpdesk, redmine crm, redmine agile, project management]
+  use_cases:
+    - "IT teams adding helpdesk or CRM features to an existing Redmine"
+    - "Companies moving self-hosted Redmine to managed cloud hosting"
+    - "Project managers who want agile boards inside Redmine"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
+not_published:
+  payout.minimum: '2026-10-20'

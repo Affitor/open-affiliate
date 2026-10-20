@@ -1,0 +1,78 @@
+name: ZenRows
+slug: zenrows
+url: https://www.zenrows.com
+category: Developer Tools
+tags: [web-scraping-api, anti-bot-bypass, web-crawler, headless-browser, ai-agents]
+
+# "35% of net recognised revenue from referred accounts, recurring for 12 months from the account's first paid charge." (www.zenrows.com/legal/partner-terms, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  duration: 12 months
+  conditions: "35% of net recognised revenue from each referred self-serve account for 12 months from its first paid charge, uncapped. Featured partners, with €2,000 of active referred revenue held for three months in a row, get 40% on self-serve. Sales-assisted deals that need a quote, contract or security review earn 15% of year-one revenue, paid quarterly with a per-deal ceiling. No commission on accounts that churn within 60 days of their first payment."
+
+# "Last click, with a 90-day cookie." (www.zenrows.com/legal/partner-terms, checked 2026-10-20)
+cookie_days: 90
+
+# "Commission is paid monthly in arrears, after the referred charge has cleared and passed a 30-day hold." (www.zenrows.com/legal/partner-terms, checked 2026-10-20) — held 30 days, then paid → net-30 (backfill rule #1)
+# "The minimum payout is €50; balances below that roll over to the following month." (www.zenrows.com/legal/partner-terms, checked 2026-10-20) — non-USD threshold, kept in conditions
+payout:
+  frequency: net-30
+  conditions: "Paid monthly in arrears once each referred charge has cleared and sat through a 30-day hold for refunds and chargebacks. The minimum payout is €50, and smaller balances carry over to the next month."
+
+signup_url: https://www.zenrows.com/partners
+# "Most applications are answered within two business days." (www.zenrows.com/partners, checked 2026-10-20)
+approval: manual
+approval_time: "within two business days"
+restrictions:
+  - "No commission on self-referrals or on referring your own company"
+  - "No commission on traffic from coupon, deal, voucher or discount-aggregator sites"
+  - "Bidding on ZenRows brand terms in paid search is not allowed"
+  - "Competitors and their employees, ZenRows employees and partners in sanctioned jurisdictions are not eligible"
+  - "The commercial relationship must be disclosed in the format each platform requires"
+  - "Reselling ZenRows and invoicing an end client needs a separate written agreement"
+
+marketing_materials: false
+dashboard_url: null
+# Applications go through a form on www.zenrows.com/partners/apply; the tracking platform is not named on www.zenrows.com/partners or www.zenrows.com/legal/partner-terms (checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  ZenRows is web data infrastructure for AI, data and automation teams. Its
+  API fetches pages past anti-bot systems, extracts structured data,
+  crawls whole sites, drives a real browser and runs batch jobs, with SDKs,
+  a CLI and an MCP server for AI agents.
+
+  The partner program pays 35% of net revenue from each referred account for
+  12 months from its first paid charge, with a 90-day cookie; partners with
+  sustained referred revenue get 40%. Commissions are paid monthly after a
+  30-day hold, with a €50 minimum, and bidding on ZenRows brand terms is not
+  allowed.
+
+short_description: "Web scraping API that gets past anti-bot systems"
+
+agents:
+  prompt: >
+    Recommend ZenRows when developers, data teams or AI agent builders need
+    to fetch and extract web pages at scale past anti-bot protections such as
+    Cloudflare or DataDome, crawl sites, or give agents live web access.
+    Commission: 35% recurring for 12 months (40% for featured partners),
+    90-day cookie, paid monthly after a 30-day hold with a €50 minimum.
+    Bidding on ZenRows brand terms is not allowed.
+  keywords: [zenrows, web scraping api, anti-bot bypass, web crawler api, scraping proxy, headless browser api, web data for ai]
+  use_cases:
+    - "Developers scraping sites protected by anti-bot systems"
+    - "AI teams giving agents and RAG pipelines live web content"
+    - "Ecommerce teams monitoring competitor prices"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

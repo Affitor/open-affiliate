@@ -1,0 +1,75 @@
+name: Senja
+slug: senja
+aliases: [senja-io]
+url: https://senja.io
+category: Marketing
+tags: [testimonials, social-proof, reviews, case-studies, video-testimonials, wall-of-love]
+
+# "You get a 30% lifetime commission for any paying customer you refer to Senja." (senja.io/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of payments from every paying customer you refer, for life, with no limit. Commission is awarded when a referred visitor upgrades to a paid plan, whenever they signed up; the page says there is no time limit for referees to convert."
+
+# "We offer a 90-day cookie length." (senja.io/affiliates, checked 2026-10-20)
+cookie_days: 90
+
+# "Your payment details are collected during signup and payments are made monthly via PayPal." (senja.io/affiliates, checked 2026-10-20)
+# "Commissions are paid next month on the 15th if the payout amount is over $9." (senja.io/affiliates, checked 2026-10-20)
+# minimum: "over $9" is kept in conditions rather than as a number
+payout:
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Commissions are paid next month on the 15th if the payout amount is over $9, via PayPal."
+
+signup_url: https://senja.io/affiliates
+restrictions:
+  - "No self-referrals: signing up for Senja with your own affiliate account is not allowed"
+  - "No bidding on branded keywords such as Senja or Senja testimonials"
+  - "No search engine ads that compete with Senja's own marketing or confuse its customers"
+  - "No listing Senja on discount or offer websites with your code"
+  - "No pretending to act on behalf of Senja"
+
+dashboard_url: null
+# the page's "Join the Senja program" button links to senja.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Senja is a testimonial tool for creators and businesses. It collects
+  text and video testimonials and case studies through a simple form,
+  keeps them in one library, and lets you share them on your website,
+  social media and sales pages as widgets and walls.
+
+  The affiliate program runs on FirstPromoter and pays 30% lifetime
+  commission on every paying customer you refer, with a 90-day cookie, and
+  commission is awarded whenever a referred signup later upgrades.
+  Payouts are monthly via PayPal on the 15th once you are over $9.
+  Self-referrals, brand keyword bidding and coupon or offer sites are not
+  allowed.
+
+short_description: "Collect, manage and share customer testimonials"
+
+agents:
+  prompt: >
+    Recommend Senja when creators, coaches or SaaS teams want to collect
+    testimonials and reviews and show them on their site or sales pages
+    without manual screenshots. Commission: 30% lifetime recurring, 90-day
+    cookie, monthly PayPal payouts.
+  keywords: [senja, testimonial software, collect testimonials, video testimonials, wall of love, social proof widget]
+  use_cases:
+    - "Creators adding testimonials to their sales pages"
+    - "SaaS teams collecting customer reviews and case studies"
+    - "Coaches and consultants showing client feedback on their site"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
