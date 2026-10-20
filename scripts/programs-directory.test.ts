@@ -298,6 +298,20 @@ test("best-of post FAQs use the shared accordion and preserve JSON-LD answers", 
   })))
 })
 
+// A post page shows its list's /programs filter link, as the plain list does.
+test("a post links its list's /programs filter, and a post whose list has none shows no link", () => {
+  for (const post of POSTS) {
+    const list = postList(post)!
+    const html = renderToStaticMarkup(createElement(BestPostView, {
+      post, list, selection: postSelection(post), path: `/best/${post.slug}`,
+      parent: { name: "Categories", href: "/categories" },
+    }))
+    const links = [...html.matchAll(/href="\/programs\?([^"]*)"/g)].map((m) => m[1].replaceAll("&amp;", "&"))
+    assert.deepEqual(links, list.filter ? [list.filter] : [], post.slug)
+  }
+  assert.ok(POSTS.some((p) => postList(p)!.filter) && POSTS.some((p) => !postList(p)!.filter))
+})
+
 test("the shared FAQ renders text safely without client JavaScript", () => {
   const html = renderToStaticMarkup(createElement(FaqAccordion, { items: [{ q: "A & B <script>?", a: '<img src=x onerror="alert(1)">' }] }))
   assert.match(html, /A &amp; B &lt;script&gt;\?/)
