@@ -229,6 +229,30 @@ const LISTS: BestList[] = [
     qualifies: (p) => p.category === "Marketing",
   },
   {
+    // The filter behind src/content/best/design-affiliate-programs.ts.
+    slug: "design-affiliate-programs",
+    title: "Best Design Affiliate Programs, Ranked",
+    h1: "Design Affiliate Programs",
+    description:
+      "Design affiliate programs for graphics, photo, video, website and creative tools, ranked by commission, with verified terms first and the cookie for each.",
+    summary: "are design tools, going by their registry category",
+    criteria: "Programs listed in the Design category.",
+    filter: "category=Design",
+    qualifies: (p) => p.category === "Design",
+  },
+  {
+    // The filter behind src/content/best/sales-affiliate-programs.ts.
+    slug: "sales-affiliate-programs",
+    title: "Best Sales Tools Affiliate Programs, Ranked",
+    h1: "Sales Tools Affiliate Programs",
+    description:
+      "Sales tool affiliate programs for prospecting, outreach and CRM software, ranked by commission, with verified terms first and the cookie for each.",
+    summary: "are sales tools, going by their registry category",
+    criteria: "Programs listed in the Sales category.",
+    filter: "category=Sales",
+    qualifies: (p) => p.category === "Sales",
+  },
+  {
     // No field records a sign-up fee or a purchase requirement. What is sourced
     // is automatic approval, on verified programs only; the criteria say so.
     slug: "free-affiliate-programs",
