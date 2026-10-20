@@ -6,9 +6,11 @@
  *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi]
  *
  * Every request names itself (UA "OpenAffiliate"), obeys the host's robots.txt,
- * and is refused for schema/blocked-hosts.json hosts at every redirect hop.
+ * and is refused for schema/blocked-hosts.json hosts at every redirect hop,
+ * robots.txt requests included. Bodies are read up to a byte cap.
  * Results are cached per program in .internal/oas/tier1/cache, so a run resumes.
- * --psi adds PageSpeed Insights (keyless): the first 429 stops PageSpeed for the run.
+ * --psi adds PageSpeed Insights (PAGESPEED_API_KEY when set, keyless otherwise):
+ * the URL is re-checked under the same rules first, and the first 429 stops PageSpeed.
  * Writes .internal/oas/tier1/dry-run.json and distribution.md.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
@@ -24,43 +26,51 @@ export const CHECK_NAMES: Record<string, string> = {
   P5: "Core Web Vitals (mobile)", P6: "Buyer search demand", A1: "Program page is live", A2: "Program page links its terms",
 }
 
-const AGENT = "OpenAffiliate"
+const AGENT = "openaffiliate"
 const UA = "Mozilla/5.0 (compatible; OpenAffiliate/1.0; +https://openaffiliate.dev)"
 const MAX_HOPS = 10
-const MAX_BYTES = 1_500_000
+const PAGE_BYTES = 1_500_000
+const ROBOTS_BYTES = 500_000
+const PSI_BYTES = 8_000_000
 
-// ---------- robots.txt (RFC 9309: longest match wins, Allow wins a tie) ----------
+// ---------- robots.txt (RFC 9309) ----------
+
+/** RFC 9309 §2.2.2: compare paths with unreserved characters decoded and everything else percent-encoded in upper case. */
+export function normalizePath(path: string): string {
+  const decoded = path.replace(/%([0-9a-fA-F]{2})/g, (_, hex: string) => {
+    const c = String.fromCharCode(parseInt(hex, 16))
+    return /[A-Za-z0-9\-._~]/.test(c) ? c : `%${hex.toUpperCase()}`
+  })
+  return [...decoded].map((c) => (c.codePointAt(0)! > 0x7e || c.codePointAt(0)! < 0x21 ? encodeURIComponent(c) : c)).join("")
+}
 
 export function robotsAllows(robots: string, path: string, agent = AGENT): boolean {
   const groups: { agents: string[]; rules: { allow: boolean; path: string }[] }[] = []
   let current: (typeof groups)[number] | null = null
-  let lastWasAgent = false
-  for (const raw of robots.split(/\r?\n/)) {
-    const line = raw.replace(/#.*/, "").trim()
-    const match = /^([A-Za-z-]+)\s*:\s*(.*)$/.exec(line)
+  let inAgents = false
+  for (const raw of robots.split(/\r\n|\r|\n/)) {
+    const match = /^\s*([A-Za-z-]+)\s*:\s*(.*?)\s*$/.exec(raw.replace(/#.*/, ""))
     if (!match) continue
     const key = match[1].toLowerCase()
-    const value = match[2].trim()
     if (key === "user-agent") {
-      if (!current || !lastWasAgent) groups.push((current = { agents: [], rules: [] }))
-      current.agents.push(value.toLowerCase())
-      lastWasAgent = true
+      if (!current || !inAgents) groups.push((current = { agents: [], rules: [] }))
+      // The product token is the part before any "/version".
+      current.agents.push(match[2].split("/")[0].trim().toLowerCase())
+      inAgents = true
     } else if ((key === "allow" || key === "disallow") && current) {
-      if (value) current.rules.push({ allow: key === "allow", path: value })
-      lastWasAgent = false
-    } else {
-      lastWasAgent = false
+      if (match[2]) current.rules.push({ allow: key === "allow", path: normalizePath(match[2]) })
+      inAgents = false
     }
+    // Other records (Sitemap, Crawl-delay, Host) are not part of a group and do not end one.
   }
-  const name = agent.toLowerCase()
-  const mine = groups.filter((g) => g.agents.some((a) => a !== "*" && name.includes(a)))
+  const mine = groups.filter((g) => g.agents.includes(agent))
   const rules = (mine.length ? mine : groups.filter((g) => g.agents.includes("*"))).flatMap((g) => g.rules)
+  const target = normalizePath(path)
   let best: { allow: boolean; length: number } | null = null
   for (const rule of rules) {
     const anchored = rule.path.endsWith("$")
     const body = (anchored ? rule.path.slice(0, -1) : rule.path).replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, ".*")
-    const pattern = new RegExp("^" + body + (anchored ? "$" : ""))
-    if (!pattern.test(path)) continue
+    if (!new RegExp("^" + body + (anchored ? "$" : "")).test(target)) continue
     if (!best || rule.path.length > best.length || (rule.path.length === best.length && rule.allow)) best = { allow: rule.allow, length: rule.path.length }
   }
   return best ? best.allow : true
@@ -70,26 +80,36 @@ export function robotsAllows(robots: string, path: string, agent = AGENT): boole
 
 type Page = { status: number; html: string; url: string }
 type Refused = { refused: string }
+let fetcher: typeof fetch = (input, init) => fetch(input, init)
 const robotsCache = new Map<string, Promise<string | null>>()
 
-async function robotsFor(origin: string): Promise<string | null> {
-  if (!robotsCache.has(origin)) {
-    robotsCache.set(origin, (async () => {
-      try {
-        const res = await fetch(`${origin}/robots.txt`, { headers: { "User-Agent": UA }, signal: AbortSignal.timeout(10000) })
-        if (res.status >= 400 && res.status < 500) return "" // no robots.txt: everything allowed
-        if (!res.ok) return null // unreachable or 5xx: treat as disallowed for this run
-        return (await res.text()).slice(0, 500_000)
-      } catch {
-        return null
-      }
-    })())
-  }
-  return robotsCache.get(origin)!
+/** Tests swap the network for a stub; the robots cache goes with it. */
+export function setFetcher(stub: typeof fetch): void {
+  fetcher = stub
+  robotsCache.clear()
 }
 
-/** GET with every hop checked against blocked hosts and robots.txt before it is requested. */
-export async function politeGet(url: string): Promise<Page | Refused> {
+/** Reads at most `max` bytes of a body, then cancels the rest. */
+export async function readCapped(res: Response, max: number): Promise<string> {
+  const reader = res.body?.getReader()
+  if (!reader) return ""
+  const chunks: Uint8Array[] = []
+  let size = 0
+  for (;;) {
+    const { done, value } = await reader.read()
+    if (done) break
+    chunks.push(value)
+    size += value.byteLength
+    if (size >= max) {
+      await reader.cancel()
+      break
+    }
+  }
+  return new TextDecoder().decode(Buffer.concat(chunks).subarray(0, max))
+}
+
+/** GET following redirects by hand: each hop is checked against blocked hosts (and robots.txt when asked) before it is requested. */
+async function hopGet(url: string, opts: { robots: boolean; maxBytes: number; timeout: number }): Promise<Page | Refused> {
   let current = url
   for (let hop = 0; hop <= MAX_HOPS; hop++) {
     const blocked = blockedReason(current)
@@ -100,15 +120,17 @@ export async function politeGet(url: string): Promise<Page | Refused> {
     } catch {
       return { refused: "bad url" }
     }
-    const robots = await robotsFor(parsed.origin)
-    if (robots === null) return { refused: "robots.txt unreachable" }
-    if (!robotsAllows(robots, parsed.pathname + parsed.search)) return { refused: "robots.txt disallows" }
+    if (opts.robots) {
+      const robots = await robotsFor(parsed.origin)
+      if (robots === null) return { refused: "robots.txt unreachable" }
+      if (!robotsAllows(robots, parsed.pathname + parsed.search)) return { refused: "robots.txt disallows" }
+    }
     let res: Response
     try {
-      res = await fetch(current, {
+      res = await fetcher(current, {
         headers: { "User-Agent": UA, Accept: "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8", "Accept-Language": "en-US,en;q=0.9" },
         redirect: "manual",
-        signal: AbortSignal.timeout(15000),
+        signal: AbortSignal.timeout(opts.timeout),
       })
     } catch (error) {
       return { refused: `fetch failed (${(error as Error).name})` }
@@ -119,10 +141,29 @@ export async function politeGet(url: string): Promise<Page | Refused> {
       current = new URL(location, current).href
       continue
     }
-    const html = res.status === 200 ? (await res.text()).slice(0, MAX_BYTES) : (await res.body?.cancel(), "")
-    return { status: res.status, html, url: current }
+    try {
+      const html = res.status === 200 ? await readCapped(res, opts.maxBytes) : (await res.body?.cancel(), "")
+      return { status: res.status, html, url: current }
+    } catch (error) {
+      return { refused: `read failed (${(error as Error).name})` }
+    }
   }
   return { refused: "too many redirects" }
+}
+
+function robotsFor(origin: string): Promise<string | null> {
+  if (!robotsCache.has(origin)) {
+    robotsCache.set(origin, hopGet(`${origin}/robots.txt`, { robots: false, maxBytes: ROBOTS_BYTES, timeout: 10000 }).then((r) => {
+      if (!isPage(r)) return null // unreachable, or redirected to a blocked host: treat as disallowed
+      if (r.status === 200) return r.html
+      return r.status >= 400 && r.status < 500 ? "" : null // no robots.txt allows all; 5xx disallows for this run
+    }))
+  }
+  return robotsCache.get(origin)!
+}
+
+export function politeGet(url: string): Promise<Page | Refused> {
+  return hopGet(url, { robots: true, maxBytes: PAGE_BYTES, timeout: 15000 })
 }
 
 // ---------- readers (pure, tested) ----------
@@ -151,37 +192,6 @@ const sameSite = (a: string, b: string) => {
   return x === y || x.endsWith(`.${y}`) || y.endsWith(`.${x}`)
 }
 
-export function pricingLink(html: string, base: string): string | null {
-  const found = links(html, base).filter((l) =>
-    sameSite(l.href, base) && (/\/(pricing|plans|prices?)(\/|$|\?)/i.test(new URL(l.href).pathname + "/") || /^(pricing|plans|plans (&|and) pricing|prices?)$/i.test(l.text)))
-  // The main pricing page, not a sub-page such as /pricing/enterprise.
-  return found.map((l) => l.href).sort((a, b) => new URL(a).pathname.length - new URL(b).pathname.length)[0] ?? null
-}
-
-const PRICE = /(?:[$€£₹]\s?\d|\b\d[\d.,]*\s?(?:USD|EUR|GBP)\b)/
-/** A price in the visible text, or in a JSON-LD offer (pages that render prices with script often publish one). */
-export function hasPrice(text: string, html = ""): string | null {
-  const m = PRICE.exec(text)
-  if (m) return text.slice(Math.max(0, m.index - 30), m.index + 40).trim()
-  for (const ld of html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
-    const offer = /"price"\s*:\s*"?(\d[\d.]*)"?[\s\S]{0,120}?"priceCurrency"\s*:\s*"([A-Z]{3})"|"priceCurrency"\s*:\s*"([A-Z]{3})"[\s\S]{0,120}?"price"\s*:\s*"?(\d[\d.]*)/.exec(ld[1])
-    if (offer && Number(offer[1] ?? offer[4]) > 0) return `JSON-LD offer ${offer[1] ?? offer[4]} ${offer[2] ?? offer[3]}`
-  }
-  return null
-}
-
-const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|start (?:for )?free|try (?:it )?(?:for )?free|free to start|get started (?:for )?free)\b/i
-export function hasTrial(text: string): string | null {
-  return TRIAL.exec(text)?.[0] ?? null
-}
-
-const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|register|join (?:now|free))\b/i
-const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
-export function selfServe(html: string, base: string): string | null {
-  const found = links(html, base).find((l) => SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
-  return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
-}
-
 const decoded = (path: string) => {
   try {
     return decodeURIComponent(path)
@@ -189,40 +199,102 @@ const decoded = (path: string) => {
     return path
   }
 }
+
+export function pricingLink(html: string, base: string): string | null {
+  const found = links(html, base).filter((l) =>
+    sameSite(l.href, base) && (/\/(pricing|plans|prices?)(\/|$|\?)/i.test(new URL(l.href).pathname + "/") || /^(pricing|plans|plans (&|and) pricing|prices?)$/i.test(l.text)))
+  // The main pricing page, not a sub-page such as /pricing/enterprise.
+  return found.map((l) => l.href).sort((a, b) => new URL(a).pathname.length - new URL(b).pathname.length)[0] ?? null
+}
+
+const PRICE = /(?:[$€£₹]\s?(\d[\d.,]*)|\b(\d[\d.,]*)\s?(?:USD|EUR|GBP)\b)/g
+const NOT_A_PRICE = /\b(save|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission)\b[^.]{0,20}$/i
+/**
+ * A product price: a non-zero amount in the visible text that is not a saving,
+ * discount or other marketing figure, or a non-zero JSON-LD offer (pages that
+ * draw prices with script often publish one).
+ */
+export function hasPrice(text: string, html = ""): string | null {
+  for (const m of text.matchAll(PRICE)) {
+    const amount = Number((m[1] ?? m[2]).replace(/,/g, ""))
+    if (!(amount > 0) || NOT_A_PRICE.test(text.slice(Math.max(0, m.index! - 40), m.index))) continue
+    return text.slice(Math.max(0, m.index! - 30), m.index! + 40).trim()
+  }
+  for (const ld of html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+    const offer = /"price"\s*:\s*"?(\d[\d.]*)"?[\s\S]{0,120}?"priceCurrency"\s*:\s*"([A-Z]{3})"|"priceCurrency"\s*:\s*"([A-Z]{3})"[\s\S]{0,120}?"price"\s*:\s*"?(\d[\d.]*)/.exec(ld[1])
+    if (offer && Number(offer[1] ?? offer[4]) > 0) return `JSON-LD offer ${offer[1] ?? offer[4]} ${offer[2] ?? offer[3]}`
+  }
+  return null
+}
+
+const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|start (?:for )?free|try (?:it )?(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month))/gi
+/** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
+export function hasTrial(text: string): string | null {
+  for (const m of text.matchAll(TRIAL)) {
+    if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
+    return m[0]
+  }
+  return null
+}
+
+const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|register|join (?:now|free))\b/i
+const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
+// Sales, event and newsletter calls to action are not a buyer signing up.
+const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
+export function selfServe(html: string, base: string): string | null {
+  const found = links(html, base).find((l) =>
+    sameSite(l.href, base) && !NOT_SIGNUP.test(l.text) && !NOT_SIGNUP.test(decoded(l.href)) &&
+    (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname)))
+  return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
+}
+
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
+const TERMS_CONTENT = [/\d+(?:\.\d+)?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
+/**
+ * A link to the program's terms or agreement (a site-wide Terms of Service link
+ * does not count), or terms published on the page itself: the heading wording plus
+ * at least two concrete terms, and not an announcement that they are coming.
+ */
 export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
-  const inline = TERMS_LINK.exec(visibleText(html))
-  return inline ? `on page: ${inline[0]}` : null
+  const text = visibleText(html)
+  const inline = TERMS_LINK.exec(text)
+  if (!inline || /coming soon|to be announced|tba\b/i.test(text.slice(inline.index, inline.index + 120))) return null
+  return TERMS_CONTENT.filter((re) => re.test(text)).length >= 2 ? `on page: ${inline[0]}` : null
 }
 
-/** Core Web Vitals from a PageSpeed v5 result: field data when present, lab otherwise. */
+/**
+ * Core Web Vitals from a PageSpeed v5 result. Field data (CrUX) decides when it
+ * shows a failure, or covers LCP, INP and CLS all good; partial good field data
+ * falls back to lab thresholds, where Total Blocking Time stands in for INP.
+ */
 export function cwv(psi: { loadingExperience?: { metrics?: Record<string, { category?: string }> }; lighthouseResult?: { audits?: Record<string, { numericValue?: number }> } }): Check {
-  const field = psi.loadingExperience?.metrics
+  const field = psi.loadingExperience?.metrics ?? {}
   const keys = ["LARGEST_CONTENTFUL_PAINT_MS", "INTERACTION_TO_NEXT_PAINT", "CUMULATIVE_LAYOUT_SHIFT_SCORE"]
-  if (field && keys.every((k) => field[k]?.category)) {
-    const slow = keys.filter((k) => field[k].category !== "FAST")
-    return slow.length ? { state: "not_met", evidence: `field: ${slow.join(", ")} not good` } : { state: "met", evidence: "field: LCP, INP, CLS good" }
-  }
+  const present = keys.filter((k) => field[k]?.category)
+  const bad = present.filter((k) => field[k].category !== "FAST")
+  if (bad.length) return { state: "not_met", evidence: `field: ${bad.join(", ")} not good` }
+  if (present.length === keys.length) return { state: "met", evidence: "field: LCP, INP, CLS good" }
   const audits = psi.lighthouseResult?.audits
   const lcp = audits?.["largest-contentful-paint"]?.numericValue
   const cls = audits?.["cumulative-layout-shift"]?.numericValue
   const tbt = audits?.["total-blocking-time"]?.numericValue
   if (lcp == null || cls == null || tbt == null) return { state: "unknown", evidence: "no field or lab data" }
   const ok = lcp <= 2500 && cls <= 0.1 && tbt <= 200
-  return { state: ok ? "met" : "not_met", evidence: `lab: LCP ${Math.round(lcp)}ms, CLS ${cls.toFixed(2)}, TBT ${Math.round(tbt)}ms` }
+  return { state: ok ? "met" : "not_met", evidence: `lab: LCP ${Math.round(lcp)}ms, CLS ${cls.toFixed(2)}, TBT ${Math.round(tbt)}ms (INP proxy)` }
 }
 
 // ---------- one program ----------
 
-type Program = { slug: string; name?: string; url?: string | null; signup_url?: string | null; network?: string | null; status?: string }
+export type Program = { slug: string; name?: string; url?: string | null; signup_url?: string | null; network?: string | null; status?: string }
 export type Result = { slug: string; network: string; checkedAt: string; checks: Record<string, Check> }
 
 const unknown = (why: string): Check => ({ state: "unknown", evidence: why })
 const isPage = (p: Page | Refused): p is Page => "status" in p
+const gone = (status: number) => status === 404 || status === 410
 
-async function scanProgram(p: Program): Promise<Result> {
+export async function scanProgram(p: Program): Promise<Result> {
   const checks: Record<string, Check> = {}
   if (!p.url) {
     for (const id of ["P1", "P2", "P3", "P5"]) checks[id] = unknown("no brand URL")
@@ -235,13 +307,17 @@ async function scanProgram(p: Program): Promise<Result> {
       // A linked pricing page, else the conventional /pricing path (one request).
       const found = await politeGet(pricingLink(home.html, home.url) ?? new URL("/pricing", home.url).href)
       const pricing = isPage(found) && found.status === 200 ? found : null
-      const text = visibleText(home.html) + " " + (pricing ? visibleText(pricing.html) : "")
-      const price = pricing ? hasPrice(visibleText(pricing.html), pricing.html) : null
-      checks.P1 = price ? { state: "met", evidence: `${pricing!.url}: ${price}` } : { state: "not_met", evidence: pricing ? `${pricing.url}: no price in the HTML` : "no pricing page found" }
-      const trial = hasTrial(text)
-      checks.P2 = trial ? { state: "met", evidence: trial } : { state: "not_met", evidence: "no trial or free plan stated" }
+      // Absent (404/410) is a reading; refused, blocked or erroring is not, so a miss stays unknown.
+      const unread = pricing || (isPage(found) && gone(found.status)) ? null : isPage(found) ? `pricing page HTTP ${found.status}` : `pricing page: ${found.refused}`
+      const miss = (fallback: string): Check => (unread ? unknown(unread) : { state: "not_met", evidence: fallback })
+      const homeText = visibleText(home.html)
+      const pricingText = pricing ? visibleText(pricing.html) : ""
+      const price = (pricing && hasPrice(pricingText, pricing.html)) || hasPrice(homeText, home.html)
+      checks.P1 = price ? { state: "met", evidence: price } : miss(pricing ? `${pricing.url}: no price in the HTML` : "no pricing page found")
+      const trial = hasTrial(homeText) ?? hasTrial(pricingText)
+      checks.P2 = trial ? { state: "met", evidence: trial } : miss("no trial or free plan stated")
       const signup = selfServe(home.html, home.url) ?? (pricing ? selfServe(pricing.html, pricing.url) : null)
-      checks.P3 = signup ? { state: "met", evidence: signup } : { state: "not_met", evidence: "no sign-up link" }
+      checks.P3 = signup ? { state: "met", evidence: signup } : miss("no sign-up link")
       checks.P5 = unknown("PageSpeed not run")
     }
   }
@@ -254,35 +330,66 @@ async function scanProgram(p: Program): Promise<Result> {
     if (!isPage(page)) {
       checks.A1 = unknown(page.refused)
       checks.A2 = unknown(page.refused)
+    } else if (page.status === 200) {
+      const title = /<title[^>]*>([\s\S]{0,200}?)<\/title>/i.exec(page.html)?.[1] ?? ""
+      const toHome = new URL(page.url).pathname.replace(/\/$/, "") === "" && new URL(p.signup_url).pathname.replace(/\/$/, "") !== ""
+      if (/\b(404|not found)\b/i.test(title)) {
+        checks.A1 = { state: "not_met", evidence: `soft 404 at ${page.url}` }
+        checks.A2 = unknown("program page not live")
+      } else if (toHome) {
+        // The program URL now lands on the homepage: the program may be gone, or moved.
+        checks.A1 = unknown(`program URL redirects to the homepage (${page.url})`)
+        checks.A2 = unknown("program URL redirects to the homepage")
+      } else {
+        checks.A1 = { state: "met", evidence: page.url }
+        const terms = termsLink(page.html, page.url)
+        checks.A2 = terms ? { state: "met", evidence: terms } : { state: "not_met", evidence: "no link to program terms" }
+      }
     } else {
       // Gone (404/410) is not live; 401/403/429 is bot protection and 5xx may pass, so those stay unknown.
-      checks.A1 = page.status === 200 ? { state: "met", evidence: page.url }
-        : page.status === 404 || page.status === 410 ? { state: "not_met", evidence: `HTTP ${page.status} at ${page.url}` }
-        : unknown(`program page HTTP ${page.status}`)
-      const terms = page.status === 200 ? termsLink(page.html, page.url) : null
-      checks.A2 = page.status !== 200 ? unknown("program page not live") : terms ? { state: "met", evidence: terms } : { state: "not_met", evidence: "no link to program terms" }
+      checks.A1 = gone(page.status) ? { state: "not_met", evidence: `HTTP ${page.status} at ${page.url}` } : unknown(`program page HTTP ${page.status}`)
+      checks.A2 = unknown("program page not live")
     }
   }
   return { slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(), checks }
 }
 
 let psiStopped: string | null = null
-async function runPsi(p: Program, r: Result): Promise<void> {
-  if (psiStopped || !p.url || r.checks.P1.state === "unknown") return // brand page not readable under our rules
-  const api = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&url=${encodeURIComponent(p.url)}`
+/** PageSpeed for the brand page, after re-checking that page under today's rules: a cached result never authorises a request. */
+export async function runPsi(p: Program, r: Result): Promise<void> {
+  if (psiStopped || !p.url) return
+  const page = await politeGet(p.url)
+  if (!isPage(page) || page.status !== 200) {
+    r.checks.P5 = unknown(isPage(page) ? `brand page HTTP ${page.status}` : page.refused)
+    return
+  }
+  const key = process.env.PAGESPEED_API_KEY ? `&key=${encodeURIComponent(process.env.PAGESPEED_API_KEY)}` : ""
+  const api = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&url=${encodeURIComponent(page.url)}${key}`
   try {
-    const res = await fetch(api, { signal: AbortSignal.timeout(120000) })
+    const res = await fetcher(api, { signal: AbortSignal.timeout(120000) })
     if (res.status === 429) {
+      await res.body?.cancel()
       psiStopped = `PageSpeed 429 at ${p.slug}`
       return
     }
-    r.checks.P5 = res.ok ? cwv(await res.json()) : unknown(`PageSpeed HTTP ${res.status}`)
+    r.checks.P5 = res.ok ? cwv(JSON.parse(await readCapped(res, PSI_BYTES))) : (await res.body?.cancel(), unknown(`PageSpeed HTTP ${res.status}`))
   } catch (error) {
     r.checks.P5 = unknown(`PageSpeed failed (${(error as Error).name})`)
   }
 }
 
 // ---------- run + report ----------
+
+/** A cached result, or null when the file is missing, unreadable or not a result (the program is then scanned again). */
+export function readCache(file: string, slug: string): Result | null {
+  try {
+    const r = JSON.parse(readFileSync(file, "utf8")) as Result
+    const valid = r?.slug === slug && CHECK_IDS.every((id) => ["met", "not_met", "unknown"].includes(r.checks?.[id]?.state))
+    return valid ? r : null
+  } catch {
+    return null
+  }
+}
 
 /** Tier-1 score for the dry run: met over determined checks, equal weights (provisional, not a proposal). */
 export function tier1Score(r: Result): number | null {
@@ -335,11 +442,11 @@ async function main() {
       const p = programs[next++]
       const file = join(cache, `${p.slug}.json`)
       // One program's failure is recorded as unknown, never the end of the run.
-      const r: Result = existsSync(file) ? JSON.parse(readFileSync(file, "utf8")) : await scanProgram(p).catch((error: Error) => ({
+      const r: Result = (existsSync(file) && readCache(file, p.slug)) || await scanProgram(p).catch((error: Error) => ({
         slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(),
         checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(`scan error (${error.name})`)])),
       }))
-      if (psi && r.checks.P5?.state === "unknown" && r.checks.P5.evidence === "PageSpeed not run") await runPsi(p, r)
+      if (psi && r.checks.P5.evidence === "PageSpeed not run") await runPsi(p, r).catch(() => {})
       writeFileSync(file, JSON.stringify(r, null, 2) + "\n")
       results.push(r)
       if (results.length % 25 === 0) console.log(`${results.length}/${programs.length}${psiStopped ? ` · ${psiStopped}` : ""}`)
