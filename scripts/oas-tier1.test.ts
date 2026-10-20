@@ -4,7 +4,7 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
@@ -274,17 +274,115 @@ test("a corrupt or foreign cache file is rescanned, not trusted", () => {
     writeFileSync(join(dir, "bad.yaml"), "slug: [unclosed")
     assert.match(JSON.stringify(loadProgram(join(dir, "bad.yaml"))), /"slug":"bad","error":"program file unreadable/)
     writeFileSync(join(dir, "good.yaml"), "slug: good\nurl: https://good.test\ncommission: {rate: 30%}\n")
-    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", url: "https://good.test", signup_url: null, network: null })
+    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", name: null, url: "https://good.test", signup_url: null, network: null })
     // A cyclic or odd shape never leaves loadProgram: only the four text fields do.
     writeFileSync(join(dir, "cyclic.yaml"), "slug: cyclic\nnetwork: &n {nested: *n}\nurl: [1, 2]\n")
     const cyclic = loadProgram(join(dir, "cyclic.yaml"))
-    assert.deepEqual(cyclic, { slug: "cyclic", url: null, signup_url: null, network: null })
+    assert.deepEqual(cyclic, { slug: "cyclic", name: null, url: null, signup_url: null, network: null })
     assert.doesNotThrow(() => JSON.stringify(cyclic))
     writeFileSync(join(dir, "mismatch.yaml"), "slug: other\n")
     assert.match(JSON.stringify(loadProgram(join(dir, "mismatch.yaml"))), /does not match/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
+})
+
+test("P6: brand names become valid Google Ads keywords", () => {
+  assert.equal(seoKeyword("Vercel (v0)"), "vercel")
+  assert.equal(seoKeyword("Café Société!"), "cafe societe")
+  assert.equal(seoKeyword("Monday.com"), "monday.com")
+  assert.equal(seoKeyword("🚀 ✨"), null)
+  assert.equal(seoKeyword(null), null)
+  assert.equal(seoKeyword(Array(15).fill("word").join(" "))!.split(" ").length, 10)
+  assert.ok(seoKeyword("x".repeat(200))!.length <= 80)
+  assert.equal(p6Check("vercel", 90500).state, "met")
+  assert.equal(p6Check("tiny", 0).state, "not_met")
+  assert.equal(p6Check("none", null).state, "not_met")
+})
+
+test("P6: batches of 1,000, real cost logged, and the cap counts every request at least at the reservation", async () => {
+  const bodies: { keywords: string[] }[][] = []
+  let reply: (keywords: string[]) => Response = () => new Response("", { status: 500 })
+  setFetcher((async (_url: string, init?: RequestInit) => {
+    assert.equal(init?.method, "POST")
+    assert.equal(init?.redirect, "manual")
+    assert.match(String((init?.headers as Record<string, string>).Authorization), /^Basic /)
+    const body = JSON.parse(String(init?.body)) as { keywords: string[] }[]
+    bodies.push(body)
+    return reply(body[0].keywords)
+  }) as typeof fetch)
+  const ok = (cost: unknown, rows: (k: string, i: number) => object) => (keywords: string[]) =>
+    Response.json({ status_code: 20000, cost, tasks: [{ cost, status_code: 20000, result: keywords.map(rows) }] })
+  const keywords = Array.from({ length: 1500 }, (_, i) => `brand ${i}`)
+
+  reply = ok(0.09, (k, i) => ({ keyword: k.toUpperCase(), search_volume: i % 2 ? 50 : null }))
+  const all = await searchVolumes([...keywords, "brand 1"], "eA==", 1)
+  assert.deepEqual(bodies.map((b) => b[0].keywords.length), [1000, 500], "duplicates sent once, 1,000 per request")
+  assert.equal(all.stopped, null)
+  assert.deepEqual(all.costs.map((c) => c.costUsd), [0.09, 0.09], "the real reported cost is logged")
+  assert.equal(all.volumes.get("brand 1"), 50)
+  assert.equal(all.volumes.get("brand 0"), null, "an explicit null is a reading")
+
+  // At most floor(cap / reservation) requests, whatever each one reports.
+  for (const cost of [0.15, 0.09, 0]) {
+    bodies.length = 0
+    reply = ok(cost, (k) => ({ keyword: k, search_volume: 10 }))
+    const many = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 6, `6 × $0.15 = $0.90; a 7th could pass $1 (reported $${cost})`)
+    assert.match(many.stopped!, /cap/)
+  }
+
+  // Failed requests and invalid costs (at either level) still count the full reservation.
+  const failedWithCost = (cost: unknown) => () => Response.json({ status_code: 40000, cost, tasks: [{ cost, status_code: 40000 }] })
+  for (const bad of [
+    () => new Response("oops", { status: 500 }), ok("free", () => ({})), ok(undefined, () => ({})), ok(-5, () => ({})),
+    ok(false, () => ({})), ok("", () => ({})), ok(null, () => ({})), failedWithCost(0), () => Response.json({ status_code: 20000, cost: 0, tasks: [{ cost: 0, status_code: 20000 }] }, { status: 503 }),
+    (ks: string[]) => Response.json({ status_code: 20000, cost: "2", tasks: [{ cost: 0, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] }),
+    (ks: string[]) => Response.json({ status_code: 20000, cost: 0, tasks: [{ cost: "2", status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] }),
+  ]) {
+    bodies.length = 0
+    reply = bad
+    await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 6, "counted at the reservation")
+  }
+  reply = ok("free", () => ({}))
+  assert.ok((await searchVolumes(["a"], "eA==", 1)).costs.every((c) => c.costUsd === null), "an invalid cost is logged as null, not $0")
+
+  // A cost above the reservation means the price changed: stop there.
+  bodies.length = 0
+  reply = ok(2, (k) => ({ keyword: k, search_volume: 10 }))
+  const pricey = await searchVolumes(keywords, "eA==", 1)
+  assert.equal(bodies.length, 1)
+  assert.match(pricey.stopped!, /price changed/)
+  // A price above the reservation is not hidden by a garbled or null figure at the other level.
+  for (const [top, inner] of [[2, "free"], ["free", 2], [2, null], [null, 2]]) {
+    bodies.length = 0
+    reply = (ks) => Response.json({ status_code: 20000, cost: top, tasks: [{ cost: inner, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] })
+    const mixed = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 1, `stops after the first request (${top}, ${inner})`)
+    assert.match(mixed.stopped!, /price changed: \$2/)
+  }
+  // A request-level price above the reservation is not hidden by a task-level 0.
+  bodies.length = 0
+  reply = (ks) => Response.json({ status_code: 20000, cost: 2, tasks: [{ cost: 0, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 10 })) }] })
+  const hidden = await searchVolumes(keywords, "eA==", 1)
+  assert.equal(bodies.length, 1)
+  assert.match(hidden.stopped!, /price changed/)
+  bodies.length = 0
+  assert.equal((await searchVolumes(keywords, "eA==", 0.1)).costs.length, 0, "no request when one could exceed the cap")
+})
+
+test("P6: only an explicit null or a finite non-negative volume from a successful response counts", async () => {
+  const run = async (status: number, top: number, task: number, rows: object[]) => {
+    setFetcher((async () => Response.json({ status_code: top, cost: 0.09, tasks: [{ cost: 0.09, status_code: task, result: rows }] }, { status })) as typeof fetch)
+    return (await searchVolumes(["a", "b", "c", "d", "e"], "eA==", 1)).volumes
+  }
+  const rows = [{ keyword: "a", search_volume: 20 }, { keyword: "b", search_volume: null }, { keyword: "c" }, { keyword: "d", search_volume: "invalid" }, { keyword: "e", search_volume: -1 }]
+  const v = await run(200, 20000, 20000, rows)
+  assert.deepEqual([...v.entries()], [["a", 20], ["b", null]], "missing, non-numeric and negative volumes stay unknown")
+  assert.equal((await run(500, 20000, 20000, rows)).size, 0, "HTTP failure")
+  assert.equal((await run(200, 40000, 20000, rows)).size, 0, "request-level error")
+  assert.equal((await run(200, 20000, 40501, rows)).size, 0, "task-level error")
 })
 
 test("dry-run score ignores unknown checks and needs four determined ones", () => {
