@@ -8,6 +8,7 @@
  * fixtures.
  */
 import { compareText } from "./commission-order"
+import { oasGrade } from "./oas-grade"
 export { GRADE_BANDS, oasGrade, type OasGrade } from "./oas-grade"
 import scoresFile from "./oas-scores.json"
 
@@ -221,9 +222,9 @@ export function oasValue(s: OasScore, today: Date = new Date()): number | null {
   return s.oas
 }
 
-/** Terms verified more than STALE_DAYS before today, or never. */
+/** Terms verified STALE_DAYS or more before today, or never: from the start of lapseDate(), exactly. */
 export function isStale(checkedAt: string | null | undefined, today: Date): boolean {
-  return !checkedAt || today.getTime() - Date.parse(checkedAt) > STALE_DAYS * 864e5
+  return !checkedAt || today.getTime() - Date.parse(checkedAt) >= STALE_DAYS * 864e5
 }
 
 export function partEarned(s: OasScore, part: Part): number {
@@ -305,4 +306,48 @@ export const oasScores: OasScore[] = scoresFile as OasScore[]
 
 export function getOasScore(slug: string): OasScore | undefined {
   return oasScores.find((s) => s.slug === slug)
+}
+
+/** What a program without a current score says instead, on the page and every machine surface. */
+export const OAS_STALE_TEXT = "Its terms were verified more than 90 days ago; the score returns once we verify them again."
+export const OAS_IN_PROGRESS_TEXT = "Scoring in progress: some of its terms are not read yet."
+
+/** The OAS a program's page shows, in the shape REST, MCP and the .md twin share. */
+export interface OasSummary {
+  score: number | null
+  grade: string | null
+  status: "scored" | "stale" | "in_progress"
+  summary: string
+  checkedAt: string | null
+  /** The day the score lapses unless the terms are verified again (checkedAt + STALE_DAYS); null without a checked date. */
+  validUntil: string | null
+  version: string
+  reportUrl: string
+}
+
+/** checkedAt + STALE_DAYS as YYYY-MM-DD: from midnight (UTC) that day, isStale() is true. */
+export function lapseDate(checkedAt: string | null | undefined): string | null {
+  return checkedAt ? new Date(Date.parse(checkedAt) + STALE_DAYS * 864e5).toISOString().slice(0, 10) : null
+}
+
+/** null when the program has no OAS entry (OAS not published, or the program is not scored). */
+export function oasSummary(slug: string, today: Date = new Date()): OasSummary | null {
+  const s = getOasScore(slug)
+  return s ? oasSummaryOf(s, today) : null
+}
+
+export function oasSummaryOf(s: OasScore, today: Date = new Date()): OasSummary {
+  const slug = s.slug
+  const score = oasValue(s, today)
+  const status = score != null ? "scored" : isStale(s.checked_at, today) ? "stale" : "in_progress"
+  return {
+    score,
+    grade: score == null ? null : oasGrade(score),
+    status,
+    summary: status === "scored" ? verdictText(s, today)! : status === "stale" ? OAS_STALE_TEXT : OAS_IN_PROGRESS_TEXT,
+    checkedAt: s.checked_at ?? null,
+    validUntil: lapseDate(s.checked_at),
+    version: s.version,
+    reportUrl: `https://openaffiliate.dev/programs/${slug}/oas`,
+  }
 }

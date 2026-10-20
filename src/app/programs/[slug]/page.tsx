@@ -47,7 +47,7 @@ import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
 import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
-import { getOasScore, isStale, oasValue, verdictText } from "@/lib/oas";
+import { getOasScore, isStale, OAS_IN_PROGRESS_TEXT, OAS_STALE_TEXT, oasValue, verdictText } from "@/lib/oas";
 import { OasGradeChip } from "@/components/oas-grade";
 
 export const revalidate = 86400;
@@ -480,9 +480,7 @@ export default async function ProgramPage({
               <h2 id="oas-heading" className="oa-label">OAS · OpenAffiliate Score</h2>
               {oasValue(oas) == null ? (
                 <p className="mt-2 text-sm text-muted-foreground">
-                  {isStale(oas.checked_at, new Date())
-                    ? "Its terms were verified more than 90 days ago; the score returns once we verify them again."
-                    : "Scoring in progress: some of its terms are not read yet."}
+                  {isStale(oas.checked_at, new Date()) ? OAS_STALE_TEXT : OAS_IN_PROGRESS_TEXT}
                 </p>
               ) : (
                 <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">

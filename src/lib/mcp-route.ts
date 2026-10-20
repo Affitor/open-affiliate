@@ -258,6 +258,16 @@ const programOutputSchema = {
       commission: detailCommissionSchema.optional().describe("Commission published on Affitor, separate from this listing's terms; omitted when Affitor publishes none"),
     }).optional().describe("The same brand on the Affitor marketplace; omitted when no Affitor entry is stored"),
   }).nullable().optional().describe("Additional marketplace listings; null when none are stored, omitted for discontinued/no_program"),
+  oas: z.object({
+    score: z.number().nullable().describe("OAS 0-100 as the program page shows it; null while scoring is in progress or the verified terms are older than 90 days"),
+    grade: z.string().nullable().describe("Letter grade for the score (A+ to F); null when score is null"),
+    status: z.enum(["scored", "stale", "in_progress"]).describe("scored: a current score; stale: terms verified more than 90 days ago; in_progress: some terms not read yet"),
+    summary: z.string().describe("One line: the verdict when scored, otherwise why there is no score"),
+    checkedAt: z.string().nullable().describe("Date the scored terms were verified, YYYY-MM-DD"),
+    validUntil: z.string().nullable().describe("First day the score lapses unless the terms are verified again (90 days after checkedAt), YYYY-MM-DD"),
+    version: z.string().describe("Scoring method version, such as v1"),
+    reportUrl: z.string().describe("The program's full OAS report"),
+  }).optional().describe("OAS, the OpenAffiliate Score: how clearly the program publishes its terms and protects its partners. Omitted when the program is not scored or OAS is not published"),
   kind: z.enum(["affiliate", "referral", "creator-payout", "revenue-share", "cashback", "partner-network"]).optional()
     .describe("Income program model: affiliate commissions, customer referrals, creator payouts, revenue sharing, cashback or a partner network; omitted when unspecified or discontinued/no_program"),
   statusCheckedAt: z.string().optional().describe("YYYY-MM-DD date the discontinued/no_program status was checked, not verification of terms; omitted for other statuses or when no check date is stored"),
