@@ -23,7 +23,7 @@ export const post: BestPost = {
     {
       slug: "hosting-com",
       bestFor: "Best for general hosting reviews",
-      why: "hosting.com is a web hosting company with shared hosting, managed WordPress and WooCommerce hosting, VPS, dedicated servers, reseller hosting, AI application hosting, domains and SSL certificates. It pays a share of the customer's first invoice on hosting products, up to a cap per sale, and a smaller share on reseller hosting, Windows hosting and domains, approved once the customer stays active for a set period. It is free to join, you do not have to be a customer, and payouts go by PayPal once you reach its minimum.",
+      why: "hosting.com is a web hosting company with shared hosting, managed WordPress and WooCommerce hosting, managed and unmanaged VPS, dedicated servers, reseller hosting, AI application hosting, domains and SSL certificates. It pays a share of the customer's first invoice on hosting products, up to a cap per sale, and a smaller share on reseller hosting, Windows hosting and domains, approved once the customer stays active for a set period. It is free to join, you do not have to be a customer, and payouts go by PayPal once you reach its minimum.",
       notFor: "Brand-name PPC: bidding on the hosting.com name, its variations or misspellings is not allowed.",
     },
     {
@@ -60,12 +60,12 @@ export const post: BestPost = {
       slug: "kinsta",
       bestFor: "Best for WordPress agencies and developers",
       why: "Kinsta is a managed WordPress host for sites from small blogs to high-traffic enterprise sites. It pays a one-time bonus by plan, approved after a qualification period, and then a recurring share of the plan's monthly fee for the lifetime of the customer, with discounts applied and add-ons excluded. Kinsta customers are approved automatically, and other applications are reviewed within a few business days.",
-      notFor: "Coupon and deal sites: they are not accepted, and your site needs an affiliate disclosure.",
+      notFor: "Coupon and deal sites, social profiles or bare list sites: they are not accepted, bidding on Kinsta brand keywords is not allowed, and your site needs an affiliate disclosure.",
     },
     {
       slug: "siteground",
       bestFor: "Best for WordPress bloggers",
-      why: "SiteGround is a web hosting company for WordPress, WooCommerce and other websites, running on Google Cloud with a global CDN, free SSL, daily backups, an AI-powered firewall and round-the-clock support. It pays a flat amount per hosting sale that rises with monthly volume, with custom deals at the top, and a referral who buys its website builder, ecommerce, Coderick AI or email marketing instead earns a share of that service's first-year revenue. Payouts are weekly with no minimum.",
+      why: "SiteGround is a web hosting company for WordPress, WooCommerce and other websites, running on Google Cloud with a global CDN, free SSL, daily backups, an AI-powered firewall and round-the-clock support. It pays a flat amount per hosting sale that rises with monthly volume, with custom deals at the top, and a referral who buys its website builder, ecommerce, Coderick AI or email marketing instead earns a share of that service's first-year revenue, and those sales do not count toward the hosting tiers. Payouts are weekly with no minimum.",
     },
     {
       slug: "verpex",

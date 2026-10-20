@@ -18,13 +18,13 @@ export const post: BestPost = {
       slug: "decktopus",
       bestFor: "Best for presentation and pitch content",
       why: "Decktopus is an AI presentation maker that generates complete decks from prompts, with custom branding, layouts and speaker notes. It pays a recurring commission on each sale, monthly via PayPal, and approval is automatic.",
-      notFor: "Brand-keyword PPC: bidding on Decktopus brand terms is not allowed unless the traffic goes to your own site first, with negative keywords for the brand.",
+      notFor: "Brand-keyword PPC: bidding on Decktopus brand terms and misspellings is not allowed unless the traffic goes to your own site first, with negative keywords for the brand.",
     },
     {
       slug: "talkio-ai",
       bestFor: "Best for language learning audiences",
       why: "Talkio AI is an AI language tutor for speaking practice: learners hold real conversations with AI tutors and get instant pronunciation feedback in many languages and dialects, in the browser or in the iPhone and Android apps. It pays a share of every payment a referral makes in their first year, not just the first one, monthly via PayPal, and applications are reviewed.",
-      notFor: "App store links: only web signups are credited, so referrals must go to the Talkio website, and coupon sites are not allowed.",
+      notFor: "App store links: only web signups are credited, so referrals must go to the Talkio website. Coupon, deal and discount code sites and bidding on Talkio brand keywords are not allowed.",
     },
     {
       slug: "bannerbear",
