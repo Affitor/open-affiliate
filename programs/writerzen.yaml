@@ -11,7 +11,6 @@ commission:
   rate: "20% to 30%"
   mode: tiered
   value: 30
-  currency: USD
   duration: null
   conditions: "Commission on each Lifetime Deal package sold through your link: 20% to start, 25% after 100 Lifetime Deal sales a month for three months in a row, and 30% after 300 a month for three months in a row. WriterZen's Lifetime Deal is a one-time payment."
 

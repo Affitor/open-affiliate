@@ -15,9 +15,12 @@ commission:
   value: 50
   currency: USD
   duration: null
-  conditions: "Up to 50% of each successful purchase by a new customer you refer, depending on the product, with at most $250 per sale. A purchase counts once its 30-day money-back period has passed. License upgrades earn no commission; the pages do not say whether renewals do. Purchases made with special or support discount codes, or coupons tagged to other affiliates, do not count, and the first affiliate cookie set wins."
+  conditions: "Up to 50% of each successful purchase by a new customer you refer, depending on the product, with at most $250 per sale. A purchase counts once its 30-day money-back period has passed. License upgrades earn no commission; the pages do not say whether renewals do. Purchases made with special or support discount codes, or coupons tagged to other affiliates, do not count, and the first affiliate cookie set wins. The affiliate page gives the cookie length two ways, 45 days in its feature list and 30 days in its FAQ, so no single cookie length is stated here."
 
 # cookie_days: stated two ways, so left out: "We save cookies for 45 days" (wpmet.com/affiliates/) vs "we will make sure you have that customer locked-in for 30 days!" (wpmet.com/affiliates/)
+conflicts:
+  - field: cookie_days
+    quote: "wpmet.com/affiliates/ feature list: \"We save cookies for 45 days\". Same page, FAQ: \"we will make sure you have that customer locked-in for 30 days!\". Checked 2026-10-20."
 
 # "The minimum payment that can be processed is $200." (account.wpmet.com/affiliate-program-policy/, checked 2026-10-20)
 # "Affiliate payments are made via PayPal." (account.wpmet.com/affiliate-program-policy/, checked 2026-10-20)

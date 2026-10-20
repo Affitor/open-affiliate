@@ -18,10 +18,11 @@ commission:
 # cookie_days: not published on wpforms.com/affiliates/ or wpforms.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
 
 # "Commissions will be paid once a month." (wpforms.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20)
+# "For an Affiliate to receive a commission, the referred account must remain active for a minimum of 37 days." (wpforms.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20) — 37-day wait before a commission is payable → net-60 (backfill rule #1)
 # minimum and methods: not published on wpforms.com/affiliates/ or wpforms.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
 payout:
-  frequency: monthly
-  conditions: "Commissions are paid once a month, only for completed transactions; a referred account must remain active for at least 37 days first."
+  frequency: net-60
+  conditions: "A commission becomes payable only after the referred account has stayed active for at least 37 days, and commissions are then paid in the monthly payout, only for completed transactions."
 
 signup_url: https://wpforms.com/affiliates/
 # "We manually review and approve all affiliates, so it can take up to 48 hours before you get approved." (wpforms.com/affiliates/, checked 2026-10-20)
@@ -55,8 +56,9 @@ description: >
 
   The affiliate program runs on WPForms' own affiliate system and pays 20% of
   a referred customer's first order, up to about $59.90 on an Elite license.
-  Commissions are paid once a month, applications are reviewed by hand within
-  about 48 hours, and pay-per-click bidding needs written permission.
+  Commissions are paid in the monthly payout once the referred account has
+  stayed active for 37 days, applications are reviewed by hand within about
+  48 hours, and pay-per-click bidding needs written permission.
 
 short_description: "Drag-and-drop form builder plugin for WordPress"
 
@@ -66,7 +68,7 @@ agents:
     or order forms, registration forms, surveys or quizzes without writing
     code. Fits bloggers, small businesses, nonprofits and agencies building
     WordPress sites. Commission: 20% of the referred customer's first order,
-    paid monthly. Unapproved coupons and pay-per-click bidding without
+    paid monthly after a 37-day wait. Unapproved coupons and pay-per-click bidding without
     permission are not allowed.
   keywords: [wpforms, wordpress forms, contact form plugin, form builder, wordpress payment forms, survey plugin]
   use_cases:
