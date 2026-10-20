@@ -215,6 +215,8 @@ const LISTS: BestList[] = [
       "Affiliate programs that pay a recurring commission for the lifetime of each customer you refer, ranked by rate, with verified terms listed first.",
     summary: "pay a recurring commission for the lifetime of the customer",
     criteria: "Programs whose commission is listed as recurring with a lifetime duration.",
+    // No filter: /programs has none for duration, and type=recurring is wider
+    // than this list, so "Filter all programs the same way" would not hold.
     qualifies: (p) => isLifetime(p),
   },
   {
@@ -226,6 +228,7 @@ const LISTS: BestList[] = [
       "Marketing affiliate programs for SEO, social, email and ad tools, ranked by commission, with verified terms first and the cookie window for each.",
     summary: "are marketing tools, going by their registry category",
     criteria: "Programs listed in the Marketing category.",
+    filter: "category=Marketing",
     qualifies: (p) => p.category === "Marketing",
   },
   {

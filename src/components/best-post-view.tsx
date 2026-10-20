@@ -313,7 +313,18 @@ export function BestPostView({
       <section className="oa-band">
         <div className="mx-auto max-w-[760px]">
           <h2 className="text-lg font-semibold">How we chose</h2>
-          <p className="text-base leading-relaxed text-foreground/80 mt-3">{post.howWeChose} {FRESHNESS_RULE}</p>
+          <p className="text-base leading-relaxed text-foreground/80 mt-3">
+            {post.howWeChose} {FRESHNESS_RULE}
+            {list.filter && (
+              <>
+                {" "}
+                <Link href={`/programs?${list.filter}`} prefetch={false} className="underline underline-offset-4">
+                  Filter all programs the same way
+                </Link>
+                .
+              </>
+            )}
+          </p>
           {(post.leftOut ?? []).map((l) => (
             <p key={l.name} className="text-sm text-muted-foreground mt-2">
               <span className="font-medium text-foreground">Left out: {l.name}</span>, {l.reason}
