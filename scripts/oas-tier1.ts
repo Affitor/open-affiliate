@@ -30,7 +30,7 @@ const AGENT = "openaffiliate"
 const UA = "Mozilla/5.0 (compatible; OpenAffiliate/1.0; +https://openaffiliate.dev)"
 const MAX_HOPS = 10
 const PAGE_BYTES = 1_500_000
-const ROBOTS_BYTES = 500_000
+const ROBOTS_BYTES = 512_000 // RFC 9309 §2.5: parse at least 500 KiB
 const PSI_BYTES = 8_000_000
 
 // ---------- robots.txt (RFC 9309) ----------
@@ -78,7 +78,7 @@ export function robotsAllows(robots: string, path: string, agent = AGENT): boole
 
 // ---------- polite fetch ----------
 
-type Page = { status: number; html: string; url: string }
+type Page = { status: number; html: string; url: string; truncated?: boolean }
 type Refused = { refused: string }
 let fetcher: typeof fetch = (input, init) => fetch(input, init)
 const robotsCache = new Map<string, Promise<string | null>>()
@@ -89,10 +89,10 @@ export function setFetcher(stub: typeof fetch): void {
   robotsCache.clear()
 }
 
-/** Reads at most `max` bytes of a body, then cancels the rest. */
-export async function readCapped(res: Response, max: number): Promise<string> {
+/** Reads at most `max` bytes of a body, then cancels the rest; `truncated` says whether anything was cut. */
+export async function readCapped(res: Response, max: number): Promise<{ text: string; truncated: boolean }> {
   const reader = res.body?.getReader()
-  if (!reader) return ""
+  if (!reader) return { text: "", truncated: false }
   const chunks: Uint8Array[] = []
   let size = 0
   for (;;) {
@@ -100,12 +100,12 @@ export async function readCapped(res: Response, max: number): Promise<string> {
     if (done) break
     chunks.push(value)
     size += value.byteLength
-    if (size >= max) {
+    if (size > max) {
       await reader.cancel()
       break
     }
   }
-  return new TextDecoder().decode(Buffer.concat(chunks).subarray(0, max))
+  return { text: new TextDecoder().decode(Buffer.concat(chunks).subarray(0, max)), truncated: size > max }
 }
 
 /** GET following redirects by hand: each hop is checked against blocked hosts (and robots.txt when asked) before it is requested. */
@@ -142,8 +142,12 @@ async function hopGet(url: string, opts: { robots: boolean; maxBytes: number; ti
       continue
     }
     try {
-      const html = res.status === 200 ? await readCapped(res, opts.maxBytes) : (await res.body?.cancel(), "")
-      return { status: res.status, html, url: current }
+      if (res.status !== 200) {
+        await res.body?.cancel()
+        return { status: res.status, html: "", url: current }
+      }
+      const { text, truncated } = await readCapped(res, opts.maxBytes)
+      return { status: res.status, html: text, url: current, truncated }
     } catch (error) {
       return { refused: `read failed (${(error as Error).name})` }
     }
@@ -155,7 +159,9 @@ function robotsFor(origin: string): Promise<string | null> {
   if (!robotsCache.has(origin)) {
     robotsCache.set(origin, hopGet(`${origin}/robots.txt`, { robots: false, maxBytes: ROBOTS_BYTES, timeout: 10000 }).then((r) => {
       if (!isPage(r)) return null // unreachable, or redirected to a blocked host: treat as disallowed
-      if (r.status === 200) return r.html
+      // A cut file ends mid-record: drop the partial last line, so a cut "Allow: /private/public"
+      // never becomes "Allow: /private". Rules past the parse limit are ignored (RFC 9309 §2.5).
+      if (r.status === 200) return r.truncated ? r.html.slice(0, r.html.lastIndexOf("\n") + 1) : r.html
       return r.status >= 400 && r.status < 500 ? "" : null // no robots.txt allows all; 5xx disallows for this run
     }))
   }
@@ -366,13 +372,19 @@ export async function runPsi(p: Program, r: Result): Promise<void> {
   const key = process.env.PAGESPEED_API_KEY ? `&key=${encodeURIComponent(process.env.PAGESPEED_API_KEY)}` : ""
   const api = `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?strategy=mobile&category=performance&url=${encodeURIComponent(page.url)}${key}`
   try {
-    const res = await fetcher(api, { signal: AbortSignal.timeout(120000) })
+    // The API is never followed through a redirect: the next hop would skip the blocked-host check.
+    const res = await fetcher(api, { redirect: "manual", signal: AbortSignal.timeout(120000) })
+    if (REDIRECTS.has(res.status)) {
+      await res.body?.cancel()
+      r.checks.P5 = unknown(`PageSpeed redirected (HTTP ${res.status})`)
+      return
+    }
     if (res.status === 429) {
       await res.body?.cancel()
       psiStopped = `PageSpeed 429 at ${p.slug}`
       return
     }
-    r.checks.P5 = res.ok ? cwv(JSON.parse(await readCapped(res, PSI_BYTES))) : (await res.body?.cancel(), unknown(`PageSpeed HTTP ${res.status}`))
+    r.checks.P5 = res.ok ? cwv(JSON.parse((await readCapped(res, PSI_BYTES)).text)) : (await res.body?.cancel(), unknown(`PageSpeed HTTP ${res.status}`))
   } catch (error) {
     r.checks.P5 = unknown(`PageSpeed failed (${(error as Error).name})`)
   }
@@ -383,11 +395,27 @@ export async function runPsi(p: Program, r: Result): Promise<void> {
 /** A cached result, or null when the file is missing, unreadable or not a result (the program is then scanned again). */
 export function readCache(file: string, slug: string): Result | null {
   try {
-    const r = JSON.parse(readFileSync(file, "utf8")) as Result
-    const valid = r?.slug === slug && CHECK_IDS.every((id) => ["met", "not_met", "unknown"].includes(r.checks?.[id]?.state))
-    return valid ? r : null
+    const r = JSON.parse(readFileSync(file, "utf8"))
+    if (r?.slug !== slug || !CHECK_IDS.every((id) => ["met", "not_met", "unknown"].includes(r.checks?.[id]?.state))) return null
+    // Rebuilt from the fields we own, so nothing else in the file reaches the report.
+    const check = (c: Check): Check => (typeof c.evidence === "string" ? { state: c.state, evidence: c.evidence } : { state: c.state })
+    return {
+      slug, network: typeof r.network === "string" ? r.network : "unknown", checkedAt: typeof r.checkedAt === "string" ? r.checkedAt : "",
+      checks: Object.fromEntries(CHECK_IDS.map((id) => [id, check(r.checks[id])])),
+    }
   } catch {
     return null
+  }
+}
+
+/** One program file, or null with the reason when it cannot be read: a broken file never stops the run. */
+export function loadProgram(path: string): Program | { slug: string; error: string } {
+  const slug = path.replace(/^.*\//, "").replace(/\.yaml$/, "")
+  try {
+    const p = parse(readFileSync(path, "utf8")) as Program
+    return typeof p?.slug === "string" ? p : { slug, error: "program file has no slug" }
+  } catch (error) {
+    return { slug, error: `program file unreadable (${(error as Error).name})` }
   }
 }
 
@@ -432,14 +460,18 @@ async function main() {
   const cache = join(out, "cache")
   mkdirSync(cache, { recursive: true })
   const programs = readdirSync("programs").filter((f) => f.endsWith(".yaml"))
-    .map((f) => parse(readFileSync(join("programs", f), "utf8")) as Program)
-    .filter((p) => !only || p.slug === only)
+    .filter((f) => !only || f === `${only}.yaml`)
     .slice(0, limit)
+    .map((f) => loadProgram(join("programs", f)))
   const results: Result[] = []
   let next = 0
   const worker = async () => {
     while (next < programs.length) {
       const p = programs[next++]
+      if ("error" in p) {
+        results.push({ slug: p.slug, network: "unknown", checkedAt: new Date().toISOString(), checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(p.error)])) })
+        continue
+      }
       const file = join(cache, `${p.slug}.json`)
       // One program's failure is recorded as unknown, never the end of the run.
       const r: Result = (existsSync(file) && readCache(file, p.slug)) || await scanProgram(p).catch((error: Error) => ({

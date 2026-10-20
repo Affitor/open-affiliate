@@ -4,19 +4,22 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { test } from "node:test"
 import {
-  cwv, distribution, hasPrice, hasTrial, politeGet, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
+  cwv, distribution, hasPrice, hasTrial, loadProgram, politeGet, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
   selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
-/** A stub network: answers by URL and records every request it receives. */
+/** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
 function network(routes: Record<string, () => Response>) {
   const requested: string[] = []
-  setFetcher((async (input: string | URL | Request) => {
+  const stub = async (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
     const url = String(input)
     requested.push(url)
     const route = Object.entries(routes).find(([prefix]) => url === prefix || (prefix.endsWith("/") && url.startsWith(prefix) && prefix.includes("googleapis")))
-    return route ? route[1]() : new Response("", { status: 404 })
-  }) as typeof fetch)
+    const res = route ? route[1]() : new Response("", { status: 404 })
+    const location = res.headers.get("location")
+    return [301, 302, 303, 307, 308].includes(res.status) && location && init?.redirect !== "manual" ? stub(new URL(location, url).href, init) : res
+  }
+  setFetcher(stub as typeof fetch)
   return requested
 }
 const html = (body: string, status = 200) => () => new Response(body, { status, headers: { "content-type": "text/html" } })
@@ -58,9 +61,21 @@ test("a page redirect to a blocked host stops before the request", async () => {
 test("bodies are read up to the cap, even when the server never stops sending", async () => {
   let sent = 0
   const endless = new ReadableStream<Uint8Array>({ pull(c) { sent += 65536; c.enqueue(new Uint8Array(65536).fill(97)) } })
-  const text = await readCapped(new Response(endless), 200_000)
+  const { text, truncated } = await readCapped(new Response(endless), 200_000)
   assert.equal(text.length, 200_000)
+  assert.equal(truncated, true)
   assert.ok(sent < 400_000, `stopped reading after ${sent} bytes`)
+  assert.deepEqual(await readCapped(new Response("abc"), 3), { text: "abc", truncated: false }, "exactly the cap is not truncated")
+})
+
+test("a robots.txt cut at the parse limit never widens access", async () => {
+  // Byte 512,000 falls inside "Allow: /private/public": the cut line must not become "Allow: /private".
+  const head = "User-agent: *\nDisallow: /private\n"
+  const cut = "Allow: /private"
+  const body = head + "#".repeat(512_000 - head.length - cut.length - 1) + "\n" + cut + "/public\n"
+  const requested = network({ "https://brand.test/robots.txt": html(body), "https://brand.test/private/secret": html("secret") })
+  assert.deepEqual(await politeGet("https://brand.test/private/secret"), { refused: "robots.txt disallows" })
+  assert.ok(!requested.includes("https://brand.test/private/secret"))
 })
 
 test("PageSpeed re-checks access first: a cached result never authorises a request", async () => {
@@ -76,6 +91,11 @@ test("PageSpeed re-checks access first: a cached result never authorises a reque
   const allowed = network({ "https://brand.test/robots.txt": html(""), "https://brand.test/": html("ok"), [psi]: () => Response.json({}) })
   await runPsi({ slug: "z", url: "https://brand.test/" }, r)
   assert.ok(allowed.some((u) => u.startsWith(psi) && u.includes(encodeURIComponent("https://brand.test/"))), allowed.join(", "))
+  // The API itself is never followed through a redirect.
+  const bounced = network({ "https://brand.test/robots.txt": html(""), "https://brand.test/": html("ok"), [psi]: redirect("https://partnerstack.com/api-redirect") })
+  await runPsi({ slug: "w", url: "https://brand.test/" }, r)
+  assert.ok(!bounced.some((u) => u.includes("partnerstack.com")), bounced.join(", "))
+  assert.match(r.checks.P5.evidence!, /PageSpeed redirected/)
 })
 
 test("an unreadable pricing page leaves its negative checks unknown; an absent one is a reading", async () => {
@@ -168,6 +188,18 @@ test("a corrupt or foreign cache file is rescanned, not trusted", () => {
     const ok = { slug: "x", network: "n", checkedAt: "", checks: Object.fromEntries(["P1", "P2", "P3", "P5", "P6", "A1", "A2"].map((id) => [id, { state: "unknown" }])) }
     writeFileSync(file, JSON.stringify(ok))
     assert.deepEqual(readCache(file, "x"), ok)
+    // Extra or malformed entries never reach the report.
+    writeFileSync(file, JSON.stringify({ ...ok, network: 7, checks: { ...ok.checks, extra: null, P1: { state: "met", evidence: { x: 1 } } } }))
+    const cached = readCache(file, "x")!
+    assert.deepEqual(Object.keys(cached.checks), ["P1", "P2", "P3", "P5", "P6", "A1", "A2"])
+    assert.deepEqual(cached.checks.P1, { state: "met" })
+    assert.equal(cached.network, "unknown")
+    assert.doesNotThrow(() => distribution([cached]))
+    // A broken program file is reported, not fatal.
+    writeFileSync(join(dir, "bad.yaml"), "slug: [unclosed")
+    assert.match(JSON.stringify(loadProgram(join(dir, "bad.yaml"))), /"slug":"bad","error":"program file unreadable/)
+    writeFileSync(join(dir, "good.yaml"), "slug: good\nurl: https://good.test\n")
+    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", url: "https://good.test" })
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
