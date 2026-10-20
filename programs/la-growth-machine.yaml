@@ -7,6 +7,8 @@ verified: false
 commission:
   type: recurring
   rate: 25
+  mode: percentage
+  currency: EUR
 cookie_days: 45
 
 payout:
