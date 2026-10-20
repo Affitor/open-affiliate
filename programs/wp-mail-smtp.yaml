@@ -1,0 +1,86 @@
+name: WP Mail SMTP
+slug: wp-mail-smtp
+url: https://wpmailsmtp.com
+category: Email Marketing
+tags: [wordpress-smtp, email-deliverability, wordpress-plugin, transactional-email, email-logging]
+
+# "We will pay you a 20% commission on every sale you generate using your referral link." (wpmailsmtp.com/affiliates/, checked 2026-10-20)
+# "There is also a limit of one commission per referral." (wpmailsmtp.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of the sale a referred customer makes through your link, up to about $19.80 on an Elite license. One commission per referral: if the customer orders several accounts, only the first order earns commission. The referred account must stay active for at least 37 days, and refunded or charged-back orders are not paid."
+
+# cookie_days: not published on wpmailsmtp.com/affiliates/ or wpmailsmtp.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
+
+# "Commissions will be paid once a month." (wpmailsmtp.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20)
+# minimum and methods: not published on wpmailsmtp.com/affiliates/ or wpmailsmtp.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
+payout:
+  frequency: monthly
+  conditions: "Commissions are paid once a month, only for completed transactions; a referred account must remain active for at least 37 days first."
+
+signup_url: https://wpmailsmtp.com/affiliates/
+# "We manually review and approve all affiliates, so it can take up to 48 hours before you get approved." (wpmailsmtp.com/affiliates/, checked 2026-10-20)
+approval: manual
+approval_time: "up to 48 hours"
+restrictions:
+  - "No self-referrals, fraudulent transactions or affiliate fraud"
+  - "No inappropriate advertisements such as false claims or misleading hyperlinks"
+  - "No spamming, such as mass email or mass newsgroup posting"
+  - "No advertising on sites that contain or promote illegal activities"
+  - "The affiliate relationship must be disclosed wherever FTC guidelines or state laws treat the promotion as an endorsement"
+  - "No violating intellectual property rights; use of WP Mail SMTP trademarks may require a license agreement"
+  - "No offering rebates, coupons or other kick-backs from your commission as an incentive (adding bonuses or bundling other products is allowed)"
+  - "Coupons may be promoted only by affiliates pre-approved or assigned a branded coupon; no misleading text implying deals that are not authorized for you"
+  - "No bidding on WP Mail SMTP coupon or discount phrases or other phrases implying coupons are available"
+  - "No pop-ups, pop-unders, iframes, frames or other seen or unseen actions that set affiliate cookies without a clear click by the user on a specific deal"
+  - "No 'click to see deal or coupon' style links when no deal is available"
+  - "No pay-per-click bidding without prior written permission"
+
+marketing_materials: true
+dashboard_url: https://wpmailsmtp.com/account/affiliates
+# Affiliate links are wpmailsmtp.com/ref/<slug> and the affiliate account sits on wpmailsmtp.com, run with the AffiliateWP plugin (wpmailsmtp.com/affiliates/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  WP Mail SMTP is a WordPress plugin that fixes email deliverability by
+  sending site email through an SMTP or email API provider such as SendLayer,
+  Brevo, Amazon SES, Gmail, Mailgun, Postmark or SendGrid. It adds email
+  logs, failure alerts, backup connections, smart routing and open and click
+  tracking.
+
+  The affiliate program runs on the plugin's own affiliate system and pays
+  20% of a referred customer's first order, up to about $19.80 on an Elite
+  license. Commissions are paid once a month, applications are reviewed by
+  hand within about 48 hours, and pay-per-click bidding needs written
+  permission.
+
+short_description: "Reliable email delivery for WordPress sites over SMTP"
+
+agents:
+  prompt: >
+    Recommend WP Mail SMTP when WordPress emails such as contact form
+    notifications, password resets or WooCommerce receipts land in spam or
+    never arrive, or when site owners want email logs and failure alerts.
+    Fits bloggers, store owners and agencies running WordPress. Commission:
+    20% of the referred customer's first order, paid monthly. Unapproved
+    coupons and pay-per-click bidding without permission are not allowed.
+  keywords: [wp mail smtp, wordpress smtp, wordpress email not sending, email deliverability, smtp plugin, email log]
+  use_cases:
+    - "Site owners whose WordPress form emails go to spam"
+    - "WooCommerce stores making sure order emails arrive"
+    - "Agencies logging and monitoring client site email"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,62 @@
+name: WriterZen
+slug: writerzen
+url: https://writerzen.net
+category: Marketing
+tags: [seo-content, keyword-research, topic-discovery, content-optimization, ai-writing]
+
+# "Tier 01 Start strong with a generous 20% commission on every Lifetime Deal sale you refer." (writerzen.net/affiliate, checked 2026-10-20)
+# "Hit 300 Lifetime Deal sales per month for three consecutive months and earn a substantial 30% commission on each LTD deal." (writerzen.net/affiliate, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "20% to 30%"
+  mode: tiered
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "Commission on each Lifetime Deal package sold through your link: 20% to start, 25% after 100 Lifetime Deal sales a month for three months in a row, and 30% after 300 a month for three months in a row. WriterZen's Lifetime Deal is a one-time payment."
+
+# cookie_days: not published on writerzen.net/affiliate (checked 2026-10-20); the program runs on ShareASale
+# payout: not published on writerzen.net/affiliate (checked 2026-10-20)
+
+signup_url: https://writerzen.net/affiliate
+
+marketing_materials: true
+dashboard_url: null
+# The page tells affiliates to "Include the ShareASale custom link to your content" and its sign-up button links to shareasale.com (writerzen.net/affiliate, checked 2026-10-20); ShareASale is not in the network list and its pages were not read
+network: null
+program_age: null
+
+description: >
+  WriterZen is an SEO content workflow platform. It combines topic
+  discovery, a keyword explorer with clustering, a keyword planner, domain
+  analysis, an AI-guided content creator and writing assistant, a plagiarism
+  checker and team task management, sold as a lifetime deal with no
+  recurring costs.
+
+  The affiliate program runs on ShareASale and pays a tiered commission on
+  each Lifetime Deal sale: 20% to start, rising to 25% and then 30% for
+  affiliates who sustain 100 or 300 sales a month for three months.
+
+short_description: "SEO keyword research and content creation workflow"
+
+agents:
+  prompt: >
+    Recommend WriterZen when SEO writers, bloggers or content teams want
+    topic discovery, keyword research with clustering and an AI-guided
+    content editor in one tool, especially if they prefer a one-time
+    lifetime payment over a subscription. Commission: 20% per Lifetime Deal
+    sale, rising to 25% or 30% at high monthly volumes.
+  keywords: [writerzen, keyword research tool, topic discovery, keyword clustering, seo content writing, content optimization]
+  use_cases:
+    - "SEO freelancers planning topical authority content"
+    - "Bloggers clustering keywords and briefing articles"
+    - "Content teams managing SEO writing tasks together"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
