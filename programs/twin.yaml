@@ -12,7 +12,7 @@ commission:
   mode: percentage
   value: 20
   duration: 12 months
-  conditions: "20% recurring commission on every paying customer for their first 12 months. Custom commission terms are offered to high-volume affiliates."
+  conditions: "20% recurring commission on every paying customer for their first 12 months. Commissions are paid only on real customers and may be reversed if a referred customer churns or refunds within the 12-month window. Custom commission terms are offered to high-volume affiliates."
 
 # "60-day cookie window" (twin.so/affiliates, checked 2026-10-20)
 cookie_days: 60
@@ -26,8 +26,10 @@ payout:
 signup_url: https://twin.so/affiliates/
 # "Create your free Rewardful affiliate account. Approval is usually instant" (twin.so/affiliates, checked 2026-10-20)
 approval: auto
+# "Self-referrals are not allowed." (twin.so/affiliates, checked 2026-10-20)
 restrictions:
   - "No paid search ads on Twin-branded keywords"
+  - "No self-referrals"
 
 marketing_materials: true
 dashboard_url: null
@@ -43,8 +45,8 @@ description: >
 
   The affiliate program runs on Rewardful and pays 20% recurring commission
   on every paying customer for 12 months, with a 60-day cookie and monthly
-  PayPal payouts. Approval is usually instant, and paid search ads on
-  Twin-branded keywords are not allowed.
+  PayPal payouts. Approval is usually instant; self-referrals and paid search ads
+  on Twin-branded keywords are not allowed.
 
 short_description: "AI agents that automate recurring business workflows"
 

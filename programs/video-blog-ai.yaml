@@ -17,7 +17,7 @@ commission:
   duration: lifetime
   conditions: "Three partnership levels: 15% to start, 20% on sales after $500 in sales in the last 30 days, and 25% on new sales after $1,500 in the last 30 days. Commission is paid on every recurring payment for as long as the referral stays subscribed. Referred customers get 10% off with the affiliate's coupon code."
 
-# cookie_days: not published on videoblog.ai/affiliate-program (the FAQ answers do not load without JavaScript) (checked 2026-10-20)
+# cookie_days: unassessed; videoblog.ai/affiliate-program asks "How long does sale attribution of an affiliate link last after they click on my link?" but the answer does not load without JavaScript (checked 2026-10-20)
 # "60 days after you refer someone, you'll be paid out via Stripe bank transfer in your country's currency." (videoblog.ai/affiliate-program, checked 2026-10-20) → 60 days → net-60 (backfill rule #1)
 payout:
   frequency: net-60

@@ -26,7 +26,7 @@ payout:
   currency: USD
   frequency: net-30
   methods: [stripe, paypal]
-  conditions: "Commissions become eligible for payout once the referred customer's subscription has been active for 30 days, allowing buffer time for refunds and cancellations. You must accumulate a minimum of $50 in Commissions to be eligible for a payout. Payouts are processed at the beginning of each month."
+  conditions: "A commission can be paid out after the referred subscription has stayed active for 30 days, which leaves room for refunds and cancellations. Payouts run at the start of each month once an affiliate has at least $50 in commissions, through Dub with Stripe, or PayPal where Stripe is not supported."
 
 signup_url: https://subscribr.ai/affiliates
 # "Acceptance into the Affiliate Program is at the sole discretion of Subscribr" (subscribr.ai/affiliate-terms-of-service, checked 2026-10-20)
@@ -39,7 +39,8 @@ restrictions:
   - "No use of someone else's brand name or intellectual property without their explicit written consent, including celebrities, public or private figures or competitors"
   - "No political or religious statements"
   - "No using your own affiliate link to purchase Subscribr for yourself"
-  - "No paid search on Subscribr brand terms: no bidding on brand terms, no brand terms in ad copy or display URLs, no direct-linking brand-term ads to Subscribr sites; brand terms must be added as negative keywords"
+  - "No ads directing to your site through an Affiliate Link that could be considered as competing with Subscribr's own advertising, including but not limited to its branded keywords"
+  - "In paid search: no bidding on or targeting Subscribr brand terms (including misspellings, variations and its domains), no brand terms in ad copy, headlines, extensions or display URLs except creative Subscribr has provided in writing, no direct-linking brand-term ads to Subscribr sites, and brand terms must be added as negative keywords; this also binds sub-affiliates and agencies acting for you"
   - "No websites, domains, URLs, social media handles or email addresses containing \"Subscribr\" or \"Subscribr.ai\""
   - "No attempt to gain unauthorized access to the Services or related systems using the Affiliate Link"
   - "No violating applicable laws, FTC rules or the terms of any platform used to distribute content; affiliate relationships must be disclosed"
@@ -70,7 +71,8 @@ agents:
     finding video ideas, writing titles and scripts, making thumbnails or
     producing edited videos faster with AI. Commission: 20% of every payment
     for the first 12 months, 90-day attribution window, $50 payout minimum.
-    Paid search on Subscribr brand terms is not allowed.
+    Ads that compete with Subscribr's own advertising, including branded
+    keywords, are not allowed.
   keywords: [subscribr, youtube script writer, youtube video ideas, ai youtube tool, youtube thumbnail generator, faceless youtube channel]
   use_cases:
     - "YouTubers planning and scripting a month of videos"

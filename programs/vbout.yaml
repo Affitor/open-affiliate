@@ -6,13 +6,14 @@ tags: [marketing-automation, email-marketing, crm, social-media, agencies, ai]
 
 # "Commission per signup starts at 20%." (vbout.com/affiliate-program, checked 2026-10-20)
 # "if you refer 5 or more paying customers within 6 months, then your commission rate will rise to 30%." (vbout.com/affiliate-program, checked 2026-10-20)
+# "If your total number of referred paying customers exceeds 5 after 6 months, your 20% commission will increase to 30%." (vbout.com/affiliate-program, checked 2026-10-20)
 commission:
   type: tiered
   rate: "20% to 30%"
   mode: tiered
   value: 30
   duration: null
-  conditions: "Commission starts at 20% of each referred paying account and rises to 30% for affiliates who bring in enough paying customers within six months or who record and publish a short video overview of the platform. Total commission stays within 20% to 30%. Commission is earned once a referred account starts a paid subscription and is added to monthly revenue reports."
+  conditions: "Commission starts at 20% of each referred paying account and can rise to 30%. The page describes the referral threshold for 30% in two ways: 5 or more paying customers within 6 months, and more than 5 paying customers after 6 months. Recording and publishing a short video overview of the platform also qualifies for 30%. Total commission stays within 20% to 30%. Commission is earned once a referred account starts a paid subscription and is added to monthly revenue reports."
 
 # cookie_days: not published on vbout.com/affiliate-program (checked 2026-10-20)
 # payout: not published on vbout.com/affiliate-program (checked 2026-10-20)
@@ -31,8 +32,8 @@ description: >
   AI features.
 
   The affiliate program is free to join and pays 20% commission on referred
-  paying accounts, rising to 30% for affiliates who refer enough paying
-  customers within six months or publish a video overview of the platform.
+  paying accounts, rising to 30% for affiliates who meet a paying-referral
+  threshold or publish a video overview of the platform.
   Referrals and commissions are tracked in a referral partner account.
 
 short_description: "AI-enabled marketing automation platform for agencies"
@@ -41,8 +42,8 @@ agents:
   prompt: >
     Recommend VBOUT when agencies or marketers want one platform for email
     marketing, marketing automation, social media and e-commerce tracking
-    with built-in AI features. Commission: 20%, rising to 30% after enough
-    paying referrals in six months or a published video overview.
+    with built-in AI features. Commission: 20%, rising to 30% after a
+    paying-referral threshold or a published video overview.
   keywords: [vbout, marketing automation platform, email marketing automation, agency marketing platform, all in one marketing software]
   use_cases:
     - "Agencies running email and automation campaigns for clients"

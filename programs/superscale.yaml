@@ -71,6 +71,10 @@ agents:
     - "Mobile app marketers testing video ad variations"
     - "Founders running paid ads without a creative team"
 
+conflicts:
+  - field: commission.duration
+    quote: "superscale.ai/affiliate/terms: \"Referrals for Starter, Growth, or Scale Plans: 25% of the first 12 months\". superscale.ai/affiliate/partners: \"Earn monthly off your referred customers as long as they are subscribed.\" Checked 2026-10-20."
+
 verified: false
 submitted_by: affitor
 created_at: "2026-10-20"
