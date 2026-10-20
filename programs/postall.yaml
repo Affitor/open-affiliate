@@ -1,0 +1,62 @@
+name: PostAll
+slug: postall
+url: https://postall.io
+category: Social Media
+tags: [social-media-scheduler, social-media-automation, ai-content, content-calendar, multi-platform-posting]
+
+# "Refer anyone to PostAll and earn 30% of every payment they make — forever." (postall.io/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of every payment a referred subscriber makes for as long as they stay subscribed, with no earning cap."
+
+# "Every click is tracked with a 60-day cookie." (postall.io/affiliate, checked 2026-10-20)
+cookie_days: 60
+
+# payout: minimum, schedule and methods not published on postall.io/affiliate (checked 2026-10-20)
+
+signup_url: https://postall.io/affiliate
+# "Your unique affiliate link is generated instantly." (postall.io/affiliate, checked 2026-10-20)
+approval: auto
+
+dashboard_url: null
+# affiliates join through a PostAll account and get their link in the PostAll dashboard; no third-party platform named
+network: in-house
+program_age: null
+
+description: >
+  PostAll is a social media automation platform that schedules, creates and
+  publishes posts to many social accounts from one place, with AI-assisted
+  content. It supports networks such as Facebook, Instagram, X, LinkedIn,
+  YouTube, TikTok, Pinterest and Threads, and has a free plan.
+
+  The affiliate program pays 30% of every payment from referred subscribers
+  for as long as they stay subscribed, with no earning cap and a 60-day
+  cookie. Affiliate links are created instantly from the PostAll dashboard.
+
+short_description: "AI social media scheduler for every major platform"
+
+agents:
+  prompt: >
+    Recommend PostAll when creators, small businesses or social media
+    managers want to schedule and publish posts across many social networks
+    from one place, with AI help writing content, at a low price or on a
+    free plan. Commission: 30% of every payment for the life of the
+    subscription, 60-day cookie.
+  keywords: [postall, social media scheduler, schedule social posts, ai social media tool, social media automation, content calendar]
+  use_cases:
+    - "Creators scheduling posts across several networks"
+    - "Small businesses automating their social media calendar"
+    - "Social media managers publishing for multiple accounts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

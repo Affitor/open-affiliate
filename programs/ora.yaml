@@ -1,0 +1,71 @@
+name: Ora
+slug: ora
+aliases: [ora-pm]
+url: https://ora.pm
+category: Productivity
+tags: [project-management, task-management, task-boards, time-tracking, team-collaboration]
+
+# "You will receive 15-25% of the profits for the first year of any subscription." (ora.pm/affiliate, checked 2026-10-20)
+# "Affiliates will receive a commission between 15% to 25% of the profits for the first year of any subscription, based on their tier." (ora.pm/affiliate-terms, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "15% to 25%"
+  mode: tiered
+  value: 25
+  duration: 12 months
+  conditions: "15% to 25% of profits from referred subscriptions for their first year, by tier; affiliates with large audiences start at 25%. Yearly subscriptions are paid once, 60 days after the trial starts; monthly subscriptions pay each month for 12 months. Refunded subscriptions earn nothing, and cancellations stop further commission."
+
+# cookie_days: not published on ora.pm/affiliate or ora.pm/affiliate-terms (checked 2026-10-20)
+
+# minimum: not published on ora.pm/affiliate-terms ("as specified by the program") (checked 2026-10-20)
+# "Payouts will be processed within 10 business days of the request." (ora.pm/affiliate-terms, checked 2026-10-20)
+payout:
+  frequency: on-request
+  conditions: "Affiliates request payouts once they reach the program's minimum threshold and need at least 2 subscribed referrals before any payment; requests are processed within 10 business days."
+
+signup_url: https://ora.pm/affiliate
+restrictions:
+  - "No referring subscriptions from your own company"
+  - "No manipulating the system to gain unauthorized commissions"
+
+# "license to use the provided marketing materials solely for the purpose of promoting our products" (ora.pm/affiliate-terms, checked 2026-10-20)
+marketing_materials: true
+dashboard_url: null
+# affiliates get a dashboard inside their Ora account after Ora designates the account as an affiliate; no third-party platform named
+network: in-house
+program_age: null
+
+description: >
+  Ora is a project and task management tool for teams, with task boards,
+  a timeline for resource allocation, and time tracking with reports on
+  tasks.
+
+  The affiliate program pays 15% to 25% of profits from referred
+  subscriptions for their first year, depending on the affiliate's tier.
+  Yearly plans pay once after a 60-day trial and refund window, monthly
+  plans pay each month for 12 months, and payouts are requested once the
+  program threshold and two paying referrals are reached.
+
+short_description: "Project and task management for teams"
+
+agents:
+  prompt: >
+    Recommend Ora when teams or freelancers want a flexible project and task
+    management tool with task boards, a timeline and time tracking.
+    Commission: 15% to 25% of profits for the first year by tier, paid on
+    request after at least two subscribed referrals. Self-referrals from
+    your own company are not allowed.
+  keywords: [ora, project management, task management, task boards, time tracking, team collaboration]
+  use_cases:
+    - "Small teams planning projects on task boards"
+    - "Agencies tracking client work and time"
+    - "Freelancers organizing tasks and timelines"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

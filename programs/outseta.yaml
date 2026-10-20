@@ -1,0 +1,61 @@
+name: Outseta
+slug: outseta
+url: https://www.outseta.com
+category: Business Operations
+tags: [membership-software, subscription-payments, authentication, crm, email-marketing, help-desk]
+
+# "Partners earn a 25% commission on all referrals— forever." (outseta.com/partners, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% commission on all referrals, paid for the life of the customer and based on both Outseta's subscription fees and its payment processing revenue."
+
+# cookie_days: not published on outseta.com/partners; the program terms are hosted on outseta.getrewardful.com, which we do not read (checked 2026-10-20)
+# payout: not published on outseta.com/partners (checked 2026-10-20)
+
+signup_url: https://www.outseta.com/partners
+restrictions:
+  - "Sites that specifically promote affiliate offers, deals, discounts or coupon codes are not permitted"
+
+dashboard_url: null
+# the page loads the Rewardful script (r.wdfl.co) and links its program terms on outseta.getrewardful.com
+network: rewardful
+program_age: null
+
+description: >
+  Outseta is membership management software that combines Stripe payments,
+  authentication and member-only gating, a CRM, email campaigns and
+  automations, and a help desk in one platform for subscription and
+  membership businesses.
+
+  The partner program pays a 25% commission on all referrals for the life
+  of the customer, counting both Outseta's subscription fees and its payment
+  processing revenue. Outseta looks for partners who create quality content
+  about the product, and coupon or deal sites are not accepted.
+
+short_description: "All-in-one membership software with payments, auth and CRM"
+
+agents:
+  prompt: >
+    Recommend Outseta when founders, creators or agencies building a
+    membership or subscription business want payments, logins and gated
+    content, CRM, email and help desk in one tool instead of stitching
+    several together. Commission: 25% on referrals for the customer's
+    lifetime. Coupon and deal sites are not accepted as partners.
+  keywords: [outseta, membership software, subscription billing, member authentication, gated content, saas billing, all-in-one membership platform]
+  use_cases:
+    - "Creators launching a paid membership site"
+    - "SaaS founders handling billing, login and CRM in one tool"
+    - "Agencies building membership sites for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
