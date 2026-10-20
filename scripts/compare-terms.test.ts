@@ -83,6 +83,19 @@ test("outlined cells: a row whose cells React streamed as separate Flight rows (
   // References are followed: a cell outlined inside an outlined cell goes too, when only the row reaches it.
   const nested = push(`7:["$","tr","${verifiedOther.slug}",{"children":["$L3e"]}]\n3e:["$","td",null,{"children":"$L3f"}]\n3f:["$","span",null,{"children":"${d}"}]\n`)
   assert.deepEqual(termsHtmlProblems(page, base + nested, [verifiedOther]), [], "nested outlined cells")
+  // Every reference form keeps a line: a Map ($Q), a Set ($W) or a path ($3d:props) from the page's own content.
+  for (const ref of ["$Q3d", "$W3d", "$3d:props:children", "$@3d"]) {
+    const used = base + outlined(verifiedOther.slug) + push(`9:["$","p",null,{"children":"${ref}"}]\n`)
+    assert.ok(states(termsHtmlProblems(page, used, [verifiedOther]), d), `outlined line also reached via ${ref}: flagged`)
+  }
+  // Order does not matter: cut row → [a, b], a → b, b holds the duration; both go, in either order.
+  for (const order of [["$La1", "$Lb1"], ["$Lb1", "$La1"]]) {
+    const chain = push(`7:["$","tr","${verifiedOther.slug}",{"children":${JSON.stringify(order)}}]\na1:["$","td",null,{"children":"$Lb1"}]\nb1:["$","td",null,{"children":"${d}"}]\n`)
+    assert.deepEqual(termsHtmlProblems(page, base + chain, [verifiedOther]), [], `chain ${order.join(",")}`)
+  }
+  // An id whose tag is also a hex digit ("$ab") is read both ways, so line "ab" is kept when the page uses it.
+  const hexTag = base + push(`7:["$","tr","${verifiedOther.slug}",{"children":["$Lab"]}]\nab:["$","td",null,{"children":"${d}"}]\n9:["$","p",null,{"children":"$ab"}]\n`)
+  assert.ok(states(termsHtmlProblems(page, hexTag, [verifiedOther]), d), "plain $ab keeps line ab")
 })
 
 test("the exemption does not hide the page's other terms", () => {

@@ -209,32 +209,49 @@ function cutArrays(text: string, starts: string[]): { text: string; cut: string[
   return { text: out, cut }
 }
 
-/** The Flight row ids a payload fragment references: "$3d", "$L3d", "$@3d", "$3d:props:children". */
+/**
+ * The Flight row ids a payload fragment may reference: a string "$" + an optional
+ * one-letter tag ($L lazy, $@ promise, $Q map, $W set, …) + a hex id, optionally
+ * followed by ":path". Over-approximated on purpose: a tag that is itself a hex
+ * digit ("$ab") counts both ways, so a referenced line is never missed (a line
+ * kept by mistake is only checked, never hidden).
+ */
 function flightRefs(fragment: string): string[] {
-  return [...fragment.matchAll(/"\$[L@]?([0-9a-f]+)(?::[^"]*)?"/g)].map((m) => m[1])
+  return [...fragment.matchAll(/"\$([A-Za-z@]?)([0-9a-f]+)(?::[^"]*)?"/g)].flatMap((m) => (/^[0-9a-f]$/.test(m[1]) ? [m[2], m[1] + m[2]] : [m[2]]))
 }
 
 /**
- * Removes the Flight rows ("3d:[…]" lines) that only the cut nodes referenced,
- * following their own references in turn. React outlines a row's cells into
- * such lines (the row then holds "$L3d"); a line still referenced from anywhere
- * else stays and is checked.
+ * Removes the Flight rows ("3d:[…]" lines) reachable only from the cut nodes.
+ * React outlines a row's cells into such lines (the row then holds "$L3d").
+ * Reachability, not reference counting: a line reachable from anything else in
+ * the payload (another line, or text that is not a row line) stays and is
+ * checked, whatever order the lines come in.
  */
 function dropOrphanRows(flight: string, cut: string[]): string {
-  let out = flight
-  const queue = cut.flatMap(flightRefs)
-  const seen = new Set<string>()
-  while (queue.length) {
-    const id = queue.pop()!
-    if (seen.has(id) || id === "0") continue
-    seen.add(id)
-    if (new RegExp(`"\\$[L@]?${id}(?::[^"]*)?"`).test(out)) continue
-    const row = new RegExp(`(^|\n)${id}:[^\n]*`).exec(out)
-    if (!row) continue
-    queue.push(...flightRefs(row[0]))
-    out = out.slice(0, row.index) + row[1] + out.slice(row.index + row[0].length)
+  const lines = flight.split("\n")
+  const rows = new Map<string, string>()
+  const loose: string[] = []
+  for (const line of lines) {
+    const m = /^([0-9a-f]+):/.exec(line)
+    if (m) rows.set(m[1], line)
+    else loose.push(line)
   }
-  return out
+  const reach = (start: string[]) => {
+    const seen = new Set<string>()
+    const queue = [...start]
+    while (queue.length) {
+      const id = queue.pop()!
+      if (seen.has(id) || !rows.has(id)) continue
+      seen.add(id)
+      queue.push(...flightRefs(rows.get(id)!))
+    }
+    return seen
+  }
+  const fromCut = reach(cut.flatMap(flightRefs))
+  const others = [...rows.keys()].filter((id) => !fromCut.has(id))
+  const kept = reach([...others, ...loose.flatMap(flightRefs)])
+  const drop = new Set([...fromCut].filter((id) => !kept.has(id)))
+  return lines.filter((line) => !drop.has(/^([0-9a-f]+):/.exec(line)?.[1] ?? "")).join("\n")
 }
 
 /**
