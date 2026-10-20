@@ -65,3 +65,5 @@ last_verified_at: "2026-10-20"
 status: active
 kind: affiliate
 source: manual
+not_published:
+  payout.minimum: '2026-10-20'

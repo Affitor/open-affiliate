@@ -5,14 +5,14 @@ url: https://sellercenter.io/en
 category: E-Commerce
 tags: [dropshipping, shopify-tools, product-research, shopify-spy, ad-spy, sales-tracker]
 
-# "You will earn at least 30% recurring commission for up to 6 months from each full payment made by users who register and subscribe through your exclusive referral link." (sellercenter.io/affiliates, checked 2026-10-20)
+# "You will earn at least 30% recurring commission for up to 6 months" (sellercenter.io/affiliates, checked 2026-10-20)
 # "Upon meeting certain conditions, you may qualify for lifetime commissions." (sellercenter.io/affiliates, checked 2026-10-20)
 commission:
   type: recurring
-  rate: "30%"
+  rate: "at least 30%"
   mode: percentage
   value: 30
-  duration: 6 months
+  duration: "up to 6 months"
   conditions: "At least 30% of each full payment from users who register and subscribe through your link, for up to 6 months. Affiliates who meet unpublished conditions may qualify for lifetime commission. The user must register through your link, not someone else's."
 
 # "The cookie duration is 60 days" (sellercenter.io/affiliates, checked 2026-10-20)

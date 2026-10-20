@@ -15,7 +15,7 @@ commission:
   duration: null
   conditions: "20% of the total of the first new order from each referred customer. Renewals, upgrades, downgrades and later purchases earn nothing, refunded or charged-back orders are not paid, and the referred account must stay active for at least 37 days."
 
-# "When a user clicks on one of your banners or links and makes a purchase of one of our plugins within 30 days then you will be awarded a commission" (smashballoon.com/affiliates/, checked 2026-10-20)
+# "makes a purchase of one of our plugins within 30 days" (smashballoon.com/affiliates/, checked 2026-10-20)
 cookie_days: 30
 
 # "Commissions will be paid once a month." (smashballoon.com/affiliate-terms/, checked 2026-10-20)
@@ -86,3 +86,5 @@ last_verified_at: "2026-10-20"
 status: active
 kind: affiliate
 source: manual
+not_published:
+  payout.minimum: '2026-10-20'

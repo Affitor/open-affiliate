@@ -15,10 +15,10 @@ commission:
   duration: lifetime
   conditions: "Up to 20% of the monthly plan price for each user who registers through your link, recurring while they stay subscribed. The page does not say what sets the rate below 20%."
 
-# cookie_days: not published on serpwatch.io/affiliate-program/ or its sign-up form (checked 2026-10-20)
+# cookie_days: not published on serpwatch.io/affiliate-program/, its sign-up form or the linked serpwatch.io/terms-and-conditions/ (checked 2026-10-20)
 
 # methods: the sign-up form at serpwatch.io/affiliate-program/form/ offers "PayPal", "Bank (IBAN)", "Bitcoin", "Neteller" and "Payoneer" (checked 2026-10-20); Neteller and Payoneer are not in the methods enum
-# minimum and frequency: not published on serpwatch.io/affiliate-program/ or its sign-up form (checked 2026-10-20)
+# minimum and frequency: not published on serpwatch.io/affiliate-program/, its sign-up form or the linked serpwatch.io/terms-and-conditions/ (checked 2026-10-20)
 payout:
   methods: [paypal, bank, crypto]
   conditions: "Affiliates choose PayPal, bank transfer (IBAN), Bitcoin, Neteller or Payoneer when they sign up."
@@ -65,3 +65,7 @@ last_verified_at: "2026-10-20"
 status: active
 kind: affiliate
 source: manual
+not_published:
+  cookie_days: '2026-10-20'
+  payout.minimum: '2026-10-20'
+  payout.frequency: '2026-10-20'

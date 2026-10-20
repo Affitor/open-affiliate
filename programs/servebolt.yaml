@@ -49,6 +49,12 @@ description: >
   current terms when you join. Commissions are paid via PayPal after a
   90-day holding period, and paid search is not allowed.
 
+conflicts:
+  - field: commission.rate
+    quote: "servebolt.com/affiliate-program/ Significant payouts: \"You receive from $50 to $699 for every sign-up based on the type of plan you refer to.\" Same page, tier table: Bronze \"10%\" \"per sale\" through Platinum \"25%\" \"per sale\". Checked 2026-10-20."
+  - field: payout.minimum
+    quote: "servebolt.com/affiliate-program/ Full transparency: \"We have no minimum performance metrics or minimum earned-for payouts\". Same page, payment FAQ: \"paid via PayPal, once a $100 minimum commission balance has been reached\". Checked 2026-10-20."
+
 short_description: "High-performance hosting for WordPress, WooCommerce and Magento"
 
 agents:

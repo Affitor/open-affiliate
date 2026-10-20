@@ -7,25 +7,40 @@ tags: [marketplace-software, no-code-marketplace, marketplace-builder, headless-
 
 # "We pay you up to 20% of what the referred customer pays Sharetribe during their first 12 months as a Sharetribe customer." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
 # "With the base offer, we pay you 10% of what the referred customer pays Sharetribe during their first 12 months" (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# "the Referral Fee is either ten percent (10%) or twenty percent (20%) of the payments made by the Eligible Customer" (sharetribe.refersion.com, linked from www.sharetribe.com/affiliate-program/, checked 2026-10-20)
 commission:
   type: recurring
   rate: "up to 20%"
   mode: tiered
   value: 20
   duration: 12 months
-  conditions: "10% of what a referred customer pays in their first 12 months, or 20% if you publish a permanent piece of online content promoting Sharetribe (a newsletter alone does not count). Covers subscription payments and usage fees, before VAT; monthly plans pay each month, yearly plans pay once. Trial signups, canceled or refunded payments earn nothing, and the customer must subscribe with the same email used to create the account."
+  conditions: "10% of what a referred customer pays in their first 12 months, or 20% if you publish a permanent piece of online content promoting Sharetribe (a newsletter alone does not count). Covers subscription payments and usage fees, before VAT; monthly plans pay each month, yearly plans pay once. Trial signups, canceled or refunded payments earn nothing, and the customer must subscribe with the same email used to create the account. Only validly registered companies can join; private individuals may not enroll."
 
-# cookie_days: stated as months, not days: "A customer signup counts as a referral if the customer signs up for a paid plan of Sharetribe within 6 months of clicking your affiliate referral link" (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# cookie_days: stated two ways, so left out: "within 6 months of clicking your affiliate referral link" (www.sharetribe.com/affiliate-program/, checked 2026-10-20) vs "The cookies are valid for ninety (90) days." (sharetribe.refersion.com, linked from www.sharetribe.com/affiliate-program/, checked 2026-10-20); the agreement also keeps the customer's email as a conversion trigger once they create an account
 
 # "Commissions are paid via PayPal. A valid PayPal account is required for the program." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
 # "Commission payments are made on the 10th day of the following month or on the next business day." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
-# minimum: not assessed; the page points to the full terms on the Refersion sign-up page (sharetribe.refersion.com), which was not read (checked 2026-10-20)
+# "Payments are made monthly in arrears on the 10th day of the month." (sharetribe.refersion.com, linked from www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# minimum: not published on www.sharetribe.com/affiliate-program/ or the program terms at sharetribe.refersion.com (checked 2026-10-20)
 payout:
   frequency: monthly
   methods: [paypal]
-  conditions: "Commission payments are made on the 10th day of the following month or on the next business day, via PayPal. A referral counts if the customer subscribes within 6 months of clicking your link, in the same browser."
+  conditions: "Commission payments are made on the 10th day of the following month or on the next business day, via PayPal only. The affiliate page says a referral counts if the customer subscribes within 6 months of clicking your link in the same browser; the program terms say the cookie lasts 90 days, after which a customer who has created an account stays tied to you by email."
 
 signup_url: https://www.sharetribe.com/affiliate-program/
+# "acceptance of Your Program application by Sharetribe, which acceptance shall be made by Sharetribe at its sole discretion." (sharetribe.refersion.com, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Only validly registered corporate entities may enroll; private individuals may not"
+  - "No more than one account, no accounts registered by bots or other automated methods, and no shared logins"
+  - "No use of the program for any illegal or unauthorized purpose"
+  - "Use Sharetribe's links and artwork only in the form provided"
+  - "No buying Sharetribe products or services through any Special Links, your own or third parties'"
+  - "No press releases about the agreement, and no misrepresenting or embellishing your relationship with Sharetribe"
+  - "No unsolicited emails or other spam"
+  - "No misrepresenting or embellishing the offer, such as presenting the link as a coupon or discount code"
+  - "Materials on your site must not infringe third-party rights or be libelous, immoral or otherwise illegal"
+  - "No search keywords, pay-per-click ads or domain names that include Sharetribe or its variations and misspellings"
 
 dashboard_url: null
 # the page's "Become a Sharetribe affiliate" button links to sharetribe.refersion.com; Refersion is not in the network enum
@@ -40,8 +55,14 @@ description: >
 
   The affiliate program pays 10% of what each referred customer pays in
   their first 12 months, or 20% if you publish content promoting
-  Sharetribe, including usage fees. A referral counts within 6 months of
-  the click, and commissions are paid monthly via PayPal.
+  Sharetribe, including usage fees. It is open to registered companies
+  only, and commissions are paid monthly via PayPal. The affiliate page
+  gives a 6-month referral window while the program terms give a 90-day
+  cookie.
+
+conflicts:
+  - field: cookie_days
+    quote: "www.sharetribe.com/affiliate-program/: \"within 6 months of clicking your affiliate referral link\". Program terms at sharetribe.refersion.com: \"The cookies are valid for ninety (90) days.\" and the portal shows \"Attribution Window 90 days\". Checked 2026-10-20."
 
 short_description: "No-code and headless software to build online marketplaces"
 
@@ -66,3 +87,5 @@ last_verified_at: "2026-10-20"
 status: active
 kind: affiliate
 source: manual
+not_published:
+  payout.minimum: '2026-10-20'

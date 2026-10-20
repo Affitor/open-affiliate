@@ -5,16 +5,16 @@ url: https://skedsocial.com
 category: Social Media
 tags: [social-media-management, instagram-scheduling, content-approvals, social-media-analytics, agencies]
 
-# "20% USD ex-GST of every payment your referral makes for a full year." (skedsocial.com/affiliate, checked 2026-10-20)
+# rate: stated two ways, so left out: "20% USD ex-GST of every payment your referral makes for a full year." (skedsocial.com/affiliate, checked 2026-10-20) vs "Get up to 25% commission on all payments for 12 months." (refer.skedsocial.com/signup/31573, linked from skedsocial.com/affiliate, checked 2026-10-20)
 # "You'll earn 20% every payment your referred customer makes for 12 months after they sign up, whether it's monthly or annual." (skedsocial.com/affiliate-terms-conditions, checked 2026-10-20)
 commission:
   type: recurring
-  rate: "20%"
-  mode: percentage
-  value: 20
+  rate: "varies"
+  mode: unknown
+  value: null
   currency: USD
   duration: 12 months
-  conditions: "20% (in USD, excluding GST) of each payment a new referred customer makes during their first 12 months, on monthly or annual plans; commission stops early if they cancel or downgrade. Existing or returning customers do not count. Referred customers get 10% off their plan."
+  conditions: "The affiliate page and the affiliate terms give 20% (in USD, excluding GST), while the sign-up portal linked from the page says up to 25%; the pages do not explain the difference. Commission applies to each payment a new referred customer makes during their first 12 months, on monthly or annual plans; commission stops early if they cancel or downgrade. Existing or returning customers do not count. Referred customers get 10% off their plan."
 
 # "Cookie Period: We offer a 120-day cookie period" (skedsocial.com/affiliate-terms-conditions, checked 2026-10-20)
 cookie_days: 120
@@ -51,11 +51,16 @@ description: >
   channels, collect client and franchisee sign-off with login-free review
   links, manage comments and DMs in one inbox, and report on results.
 
-  The affiliate program runs on FirstPromoter and pays 20% of every
+  The affiliate program runs on FirstPromoter and pays commission on every
   payment a new customer makes in their first year, with a 120-day cookie;
-  referred customers get 10% off. Payouts go via PayPal once your balance
+  referred customers get 10% off. The affiliate page and terms give 20%,
+  while the sign-up portal says up to 25%. Payouts go via PayPal once your balance
   passes $100, and brand keyword bidding and self-referrals are not
   allowed.
+
+conflicts:
+  - field: commission.rate
+    quote: "skedsocial.com/affiliate: \"20% USD ex-GST of every payment your referral makes for a full year.\" Affiliate terms (skedsocial.com/affiliate-terms-conditions): \"You'll earn 20% every payment\". Sign-up portal refer.skedsocial.com/signup/31573: \"Get up to 25% commission on all payments for 12 months.\" Checked 2026-10-20."
 
 short_description: "Social media scheduling with client and team approvals"
 
@@ -63,15 +68,16 @@ agents:
   prompt: >
     Recommend Sked Social when agencies, franchises or in-house brand teams
     need to schedule social posts across channels and get client or
-    stakeholder approval before anything goes live. Commission: 20% for
-    the first 12 months, 120-day cookie, $100 minimum payout via PayPal.
+    stakeholder approval before anything goes live. Commission: paid on
+    payments for the first 12 months (20% on the program page, up to 25% on
+    the sign-up portal), 120-day cookie, $100 minimum payout via PayPal.
   keywords: [sked social, social media scheduler, instagram scheduling, social media approvals, agency social media tool, social media management]
   use_cases:
     - "Agencies getting client sign-off on social posts"
     - "Franchise brands publishing across many locations"
     - "In-house teams routing posts through legal or leadership review"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-20"
 updated_at: "2026-10-20"
