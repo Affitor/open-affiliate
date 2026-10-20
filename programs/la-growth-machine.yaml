@@ -17,22 +17,22 @@ short_description: "Multichannel Outreach Platform for B2B"
 description: |
   La Growth Machine is a multichannel outreach platform for B2B sales and growth teams, used by 10,000+ GTM teams. It connects to your stack and handles the outreach layer, from the first touch to a qualified reply.
 
-KEY FEATURES
-
-- Multichannel sequences on LinkedIn and email, with conditions and A/B tests
-- AI-written copy with Magic Messages and AI Voice Messages on LinkedIn
-- Open-source MCP connecting Claude, ChatGPT and Cursor to your stack
-- Inbox rotation to protect email deliverability
-- Native two-way CRM sync with HubSpot, Pipedrive and others
-- Integrations with Clay, Make n8n and Slack, plus API and webhooks
-- Shared inbox for every reply, with one-click lead qualification
-- LinkedIn safety with a 100% cloud setup, dedicated mobile proxies and safety limits
-
-AFFILIATE PROGRAM
-
-You earn 25% of every payment for each customer’s first 12 months with your link, no cap. Commissions are paid quarterly, the cookie lasts 45 days and your referrals get a one-month free trial instead of 14 days.
-
-This program is for consultants, fractional GTM leaders and creators who serve B2B sales and growth teams.
+  KEY FEATURES
+  
+  - Multichannel sequences on LinkedIn and email, with conditions and A/B tests
+  - AI-written copy with Magic Messages and AI Voice Messages on LinkedIn
+  - Open-source MCP connecting Claude, ChatGPT and Cursor to your stack
+  - Inbox rotation to protect email deliverability
+  - Native two-way CRM sync with HubSpot, Pipedrive and others
+  - Integrations with Clay, Make n8n and Slack, plus API and webhooks
+  - Shared inbox for every reply, with one-click lead qualification
+  - LinkedIn safety with a 100% cloud setup, dedicated mobile proxies and safety limits
+  
+  AFFILIATE PROGRAM
+  
+  You earn 25% of every payment for each customer’s first 12 months with your link, no cap. Commissions are paid quarterly, the cookie lasts 45 days and your referrals get a one-month free trial instead of 14 days.
+  
+  This program is for consultants, fractional GTM leaders and creators who serve B2B sales and growth teams.
 
 signup_url: https://lagrowthmachine.com/affiliate-program/
 approval: manual
