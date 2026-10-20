@@ -72,7 +72,7 @@ test("a scored program carries the page's score on REST, MCP and its .md twin", 
   assert.ok(twin.includes(`the score lapses on ${summary.validUntil} unless`), "md lapse date")
   const lapse = new Date(`${summary.validUntil}T00:00:00Z`)
   assert.equal(oasValue(s, new Date(lapse.getTime() - 1)), s.oas, "still scored until that day starts")
-  assert.equal(oasValue(s, new Date(lapse.getTime() + 1)), null, "lapsed from the day named")
+  assert.equal(oasValue(s, lapse), null, "lapsed at midnight of the day named")
   assert.ok(twin.includes(`Full report: ${summary.reportUrl}`))
   // A score that is not current shows its reason, never a number.
   const other = oasScores.find((x) => oasValue(x) == null)

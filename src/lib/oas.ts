@@ -222,9 +222,9 @@ export function oasValue(s: OasScore, today: Date = new Date()): number | null {
   return s.oas
 }
 
-/** Terms verified more than STALE_DAYS before today, or never. */
+/** Terms verified STALE_DAYS or more before today, or never: from the start of lapseDate(), exactly. */
 export function isStale(checkedAt: string | null | undefined, today: Date): boolean {
-  return !checkedAt || today.getTime() - Date.parse(checkedAt) > STALE_DAYS * 864e5
+  return !checkedAt || today.getTime() - Date.parse(checkedAt) >= STALE_DAYS * 864e5
 }
 
 export function partEarned(s: OasScore, part: Part): number {
@@ -325,7 +325,7 @@ export interface OasSummary {
   reportUrl: string
 }
 
-/** checkedAt + STALE_DAYS as YYYY-MM-DD: from just after midnight that day, isStale() is true. */
+/** checkedAt + STALE_DAYS as YYYY-MM-DD: from midnight (UTC) that day, isStale() is true. */
 export function lapseDate(checkedAt: string | null | undefined): string | null {
   return checkedAt ? new Date(Date.parse(checkedAt) + STALE_DAYS * 864e5).toISOString().slice(0, 10) : null
 }
