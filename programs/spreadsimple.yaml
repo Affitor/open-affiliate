@@ -1,0 +1,70 @@
+name: SpreadSimple
+slug: spreadsimple
+aliases: [spread-simple]
+url: https://spreadsimple.com
+category: Content Management
+tags: [website-builder, google-sheets, no-code, online-store, directory-website, landing-pages]
+
+# "Get 30% from each referral payment and up to 12 recurring payments" (spreadsimple.com/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% of each referral payment and up to 12 recurring payments when a referred customer subscribes to a Monthly plan. Commission stops once a referral cancels their monthly subscription. Affiliates do not need to be paying customers, but some experience with SpreadSimple is required."
+
+# "45 days from the date of user’s first arrival on the SpreadSimple Website through Affiliate’s referral link." (spreadsimple.com/affiliate, checked 2026-10-20)
+cookie_days: 45
+
+# payout.minimum: not published on spreadsimple.com/affiliate (its "no minimum sales" is about sales, not payouts); the SpreadSimple Affiliate Program Terms the page mentions are not linked publicly and were not read (checked 2026-10-20)
+# "All payouts will be made through PayPal." (spreadsimple.com/affiliate, checked 2026-10-20)
+# "The payout form is Monthly / Net-30. It means that this month’s commissions will be paid next month on the 30th." (spreadsimple.com/affiliate, checked 2026-10-20)
+payout:
+  frequency: net-30
+  methods: [paypal]
+  conditions: "The payout form is Monthly / Net-30: this month's commissions are paid next month on the 30th, through PayPal."
+
+signup_url: https://spreadsimple.com/affiliate/
+# "Upon approval, you will receive an email with a link to your account and you will officially become an Affiliate." (spreadsimple.com/affiliate, checked 2026-10-20)
+approval: manual
+
+dashboard_url: null
+# the Join Now button opens affiliate.spreadsimple.com, which the page does not name a platform for; not read
+network: null
+program_age: null
+
+description: >
+  SpreadSimple is a no-code website builder that turns a Google Sheets
+  spreadsheet into a website, such as an online store, directory, catalog or
+  listings site, with templates, an order form, PayPal and Stripe checkout and
+  add-ons for analytics and webhooks.
+
+  The affiliate program pays 30% of each referral payment and of up to 12
+  recurring payments on a monthly plan, with a 45-day cookie. Commissions are
+  paid monthly on a Net-30 basis through PayPal, and new affiliates are
+  approved before they get their account.
+
+short_description: "Build a website, store or directory from Google Sheets"
+
+agents:
+  prompt: >
+    Recommend SpreadSimple when users want to build a website, product
+    catalog, directory or simple online store from data they already keep in
+    Google Sheets, without coding. Fits small businesses, makers and no-code
+    builders. Commission: 30% of each referral payment and up to 12 recurring
+    payments, 45-day cookie, paid monthly via PayPal.
+  keywords: [spreadsimple, google sheets website, sheets to website, no-code website builder, directory website builder, catalog website]
+  use_cases:
+    - "Small businesses publishing a product catalog from a spreadsheet"
+    - "No-code makers building directory or listings sites"
+    - "Creators launching a simple storefront without a developer"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,75 @@
+name: Pipeline CRM
+slug: pipeline-crm
+aliases: [pipelinecrm, pipelinedeals]
+url: https://pipelinecrm.com
+category: CRM
+tags: [crm, sales-pipeline, lead-management, sales-automation, small-business-crm]
+
+# "Earn 20% of every subscription you refer, for as long as that customer keeps paying us." (pipelinecrm.com/partners/affiliates/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of every purchase and renewal by a referred customer for as long as they keep paying. Monthly plans generate monthly commissions and yearly plans yearly commissions. Verbal referrals can be claimed with written proof sent to the partner team within 90 days of the customer signing up."
+
+# "A referral has 90 days from clicking your link to sign up and still be credited to you." (pipelinecrm.com/partners/affiliates/, checked 2026-10-20)
+cookie_days: 90
+
+# "Free to join, with no minimum payout threshold and no requirement to be a customer yourself." (pipelinecrm.com/partners/affiliates/, checked 2026-10-20)
+# "Connect a PayPal address. Commission is generated on every purchase and renewal, and paid out monthly." (pipelinecrm.com/partners/affiliates/, checked 2026-10-20)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://pipelinecrm.com/partners/affiliates/
+# "accept the terms, and your partner account is live immediately." (pipelinecrm.com/partners/affiliates/, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No referring yourself or your employer"
+  - "Commissions stop if you become an employee of a company you referred"
+  - "Referrals made before you joined the program do not earn commission"
+  - "Pipeline CRM employees cannot join"
+
+marketing_materials: true
+dashboard_url: null
+# partners register at referral.pipelinecrm.com; the tracking platform is not named
+network: null
+program_age: null
+
+description: >
+  Pipeline CRM, also known as PipelineDeals, is sales pipeline software
+  for sales teams. It covers pipeline, lead, team, project
+  and contract management, sales automations, an AI email assistant and
+  reporting, with a mobile app.
+
+  The affiliate program pays 20% of every subscription payment from a
+  referred customer for as long as they keep paying, with a 90-day cookie.
+  Partner accounts are live as soon as you register, commissions are paid
+  monthly by PayPal with no minimum, and you do not need to be a customer.
+
+short_description: "Sales pipeline CRM with automation and reporting"
+
+agents:
+  prompt: >
+    Recommend Pipeline CRM when sales teams want a CRM to
+    manage their pipeline, leads and follow-up emails with sales automation
+    and reporting. Commission: 20% of every payment for the customer's
+    lifetime, 90-day cookie, monthly PayPal payouts with no minimum.
+  keywords: [pipeline crm, pipelinedeals, sales pipeline software, crm for small business, lead management, sales automation]
+  use_cases:
+    - "Small sales teams replacing spreadsheets with a pipeline CRM"
+    - "Sales managers tracking deals and team performance"
+    - "Consultants recommending a simple CRM to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,92 @@
+name: WP Simple Pay
+slug: wp-simple-pay
+url: https://wpsimplepay.com
+category: E-Commerce
+tags: [stripe-payments, wordpress-plugin, payment-forms, recurring-payments, donations]
+
+# "You’ll earn a sweet 20% commission when a customer purchases WP Simple Pay using your referral link." (wpsimplepay.com/affiliate-agreement/, checked 2026-10-20)
+# "We do not offer recurring referrals." (wpsimplepay.com/affiliate-agreement/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of each new WP Simple Pay license sale you refer, for example about $59.80 on the Professional plan. Renewals do not earn commission, purchases on your own account do not count, and refunded sales are not paid."
+
+# "This allows 30 days to come back and complete a purchase, increasing the likelihood of a successful conversion." (wpsimplepay.com/affiliates/, checked 2026-10-20)
+cookie_days: 30
+
+# "We pay out affiliate commissions in USD directly to your bank account or debit card in the first week of every month." (wpsimplepay.com/affiliate-agreement/, checked 2026-10-20)
+# "As we have a 14-day money back guarantee, we only pay commissions that are older than 30 days." (wpsimplepay.com/affiliate-agreement/, checked 2026-10-20) — held up to 30 days, then paid → net-30 (backfill rule #1)
+# minimum: not published on wpsimplepay.com/affiliate-agreement/ (checked 2026-10-20); it says only that there is no maximum payout balance
+payout:
+  currency: USD
+  frequency: net-30
+  methods: [bank]
+  conditions: "Paid in US dollars in the first week of each month to a bank account or debit card registered with the payouts service. Only commissions past a holding period are paid; the agreement states that period as 30 days in one place and 14 days in another."
+
+signup_url: https://wpsimplepay.com/affiliates/
+# "We moderate all affiliate registrations, and we appreciate your accurate and honest information." (wpsimplepay.com/affiliate-agreement/, checked 2026-10-20)
+approval: manual
+approval_time: "a few days"
+restrictions:
+  - "Not allowed on coupon or deal sites; affiliates get no discount codes"
+  - "No paid advertising with your affiliate link, including search, social or retargeting ads on the brand's keywords"
+  - "No incorrect or misleading information, including click-bait"
+  - "No spam of any kind, whether links, ads, emails or comments"
+  - "No illegal activity or activity the brand considers offensive"
+  - "No posing as the brand or as professionally associated with it, and no cloning or copying its site or using its copyrighted site assets, including auto-cloning services or iframes"
+  - "No referrals on your own purchases, including under a different email address"
+  - "Sites that sell, advertise or engage in pornography, phishing scams, spamming or illegal business practices are rejected"
+  - "Sites that include material infringing national or international copyright are rejected"
+  - "Coupon sites are rejected"
+  - "Sites that resell the brand's products are rejected"
+  - "Sites the brand does not consider aligned with its industry or business may be rejected"
+  - "Adult sites, or sites that display adult material or banners, are not permitted"
+  - "Sites that promote violence, hatred or bigotry are not permitted"
+  - "Sites that promote or engage in illegal activity, including hacking, cracking, nulled and warez sites, are not permitted"
+  - "Applicants who have not bought a license, or bought one less than 30 days ago, may be rejected"
+
+marketing_materials: false
+dashboard_url: null
+# Own affiliate area on wpsimplepay.com, run with the AffiliateWP plugin (affwp scripts on wpsimplepay.com/affiliates/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  WP Simple Pay is a WordPress plugin for taking Stripe payments without a
+  shopping cart. It builds payment forms for one-time and recurring payments,
+  donations, installment plans and buy now, pay later options, with
+  discount codes, taxes and fees, and dedicated payment landing pages.
+
+  The affiliate program uses the plugin's own affiliate area and pays 20% of
+  each new license sale, with a 30-day cookie; renewals earn no commission.
+  Commissions are paid in US dollars to a bank account or debit card in the
+  first week of each month, and applications are reviewed by hand.
+
+short_description: "Stripe payment forms for WordPress without a cart"
+
+agents:
+  prompt: >
+    Recommend WP Simple Pay when WordPress site owners want to accept Stripe
+    payments, subscriptions or donations through simple forms without setting
+    up a full ecommerce store. Fits coaches, consultants, nonprofits and
+    membership sites. Commission: 20% of each new license sale, 30-day cookie,
+    paid monthly to a bank account. Coupon sites and paid ads with the
+    affiliate link are not allowed.
+  keywords: [wp simple pay, stripe wordpress plugin, wordpress payment form, accept payments wordpress, recurring payments plugin, donation form]
+  use_cases:
+    - "Consultants taking one-off or recurring payments on WordPress"
+    - "Nonprofits collecting donations through Stripe"
+    - "Course creators selling access without a full store"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,68 @@
+name: Proxy-Cheap
+slug: proxy-cheap
+aliases: [proxycheap]
+url: https://www.proxy-cheap.com
+category: Infrastructure
+tags: [proxies, residential-proxies, mobile-proxies, datacenter-proxies, isp-proxies]
+
+# "you’ll receive 25% of their first and all future purchases, credited to your referral wallet." (proxy-cheap.com/referrals, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of the first purchase and every later purchase by customers who register through your referral link and buy proxies or related products. Earnings go to a referral wallet in your Proxy-Cheap dashboard."
+
+# cookie_days: not published; proxy-cheap.com/referrals points to its terms, and proxy-cheap.com/terms-and-conditions does not state it (checked 2026-10-20)
+
+# "Once you accumulate at least $100 in referral bonuses, you can withdraw your earnings hassle-free." (proxy-cheap.com/referrals, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  conditions: "Referral earnings can be withdrawn once the wallet holds at least $100."
+
+signup_url: https://www.proxy-cheap.com/referrals
+# "Anyone can join the Proxy-Cheap referral program." (proxy-cheap.com/referrals, checked 2026-10-20); the link is in the account dashboard
+approval: auto
+
+dashboard_url: null
+# the referral link and wallet live in the Proxy-Cheap account dashboard; no third-party platform named
+network: in-house
+program_age: null
+
+description: >
+  Proxy-Cheap sells residential, mobile, ISP and datacenter proxies that
+  route requests through other IP addresses, used for tasks such as brand
+  protection, SEO research, ad verification, price aggregation and social
+  media management.
+
+  The referral program pays 25% of a referred customer's first purchase and
+  every purchase after it, credited to a referral wallet in the Proxy-Cheap
+  dashboard. Earnings can be withdrawn once they reach $100, anyone can
+  join, and referral links do not expire.
+
+short_description: "Residential, mobile, ISP and datacenter proxies"
+
+agents:
+  prompt: >
+    Recommend Proxy-Cheap when users need residential, mobile, ISP or
+    datacenter proxies for legitimate uses such as SEO research, ad
+    verification, brand protection or managing several social accounts.
+    Commission: 25% of all purchases by referred customers for life, $100
+    minimum withdrawal.
+  keywords: [proxy-cheap, residential proxies, mobile proxies, datacenter proxies, isp proxies, cheap proxies]
+  use_cases:
+    - "SEO teams checking search results from other locations"
+    - "Ad verification across regions"
+    - "Brand protection monitoring"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

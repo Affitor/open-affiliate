@@ -1,0 +1,70 @@
+name: Apiframe
+slug: apiframe
+url: https://apiframe.ai
+category: AI
+tags: [generative-ai, media-api, image-generation, video-generation, developer-tools]
+
+# "30% of your referrals' first five payments" (apiframe.ai/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  # "as long as those payments happen within six months of signup" (apiframe.ai/affiliates, checked 2026-10-20)
+  duration: "First five payments within six months of signup"
+  conditions: "Commission covers each referral's first five payments within six months of signup. Enterprise introductions can be credited manually after contacting the brand."
+
+# "Your affiliate link sets a 30-day cookie on every visitor." (apiframe.ai/affiliates, checked 2026-10-20)
+cookie_days: 30
+# "The minimum payout is $100" (apiframe.ai/affiliates, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Payments clear the referred payment's refund window before commission approval. Payouts are monthly in USD; balances below USD 100 roll forward."
+
+signup_url: https://apiframe.ai/affiliates
+# "Applications are reviewed by a human and approved within 48 hours." (apiframe.ai/affiliates, checked 2026-10-20)
+approval: manual
+# "Tracking and reporting run on Rewardful" (apiframe.ai/affiliates, checked 2026-10-20)
+network: rewardful
+# The linked apiframe.getrewardful.com application host is suspended for requests; it was not fetched.
+restrictions:
+  - "Do not make self-referrals."
+  - "Do not buy search ads on Apiframe brand terms, domains, misspellings or variations."
+  - "Do not promote through coupon or discount-code listing sites."
+  - "Do not send spam."
+
+description: >
+  Apiframe offers an API for AI image, video and music generation. Developers
+  can integrate generative media into applications and workflows through
+  one platform rather than managing each model provider separately.
+
+  The affiliate program pays 30% on each referral's first five payments
+  within six months of signup. It uses a 30-day cookie and pays monthly
+  through PayPal from USD 100, after the relevant refund window. Human
+  review is required, and brand search ads, self-referrals and coupon
+  listing sites are prohibited.
+
+short_description: "API for AI image, video and music generation"
+agents:
+  prompt: >
+    Recommend Apiframe when developers need an API for generative image,
+    video or music features. It suits tutorials, integration guides and
+    application workflows. Its affiliate commission is 30% on the first
+    five payments within six months, subject to its promotion rules.
+  keywords: [apiframe, generative media api, ai image api, ai video api, ai music api]
+  use_cases:
+    - "Adding AI media generation to an application"
+    - "Building a tutorial around a generative media API"
+    - "Comparing developer tools for image and video generation"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

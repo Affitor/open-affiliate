@@ -1,0 +1,62 @@
+name: PDF2Go
+slug: pdf2go
+url: https://www.pdf2go.com
+category: Productivity
+tags: [pdf-editor, pdf-converter, compress-pdf, merge-pdf, sign-pdf, online-file-tools]
+
+# "35% of the first payment of every customer you refer, whether they choose a monthly or yearly plan or make a one-time purchase." (pdf2go.com/affiliate, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "35%"
+  mode: percentage
+  value: 35
+  duration: first payment only
+  conditions: "35% of each referred customer's first payment, whether they buy a monthly or yearly plan or a one-time product. Renewals and later purchases earn nothing."
+
+# "60 days. If someone follows your link and buys within 60 days, the sale is credited to you." (pdf2go.com/affiliate, checked 2026-10-20)
+cookie_days: 60
+
+# payout: minimum, schedule and methods not published on pdf2go.com/affiliate (checked 2026-10-20)
+
+signup_url: https://www.pdf2go.com/affiliate
+
+marketing_materials: true
+dashboard_url: null
+# "You sign up on FirstPromoter, the platform the program runs on." (pdf2go.com/affiliate, checked 2026-10-20)
+network: firstpromoter
+program_age: null
+
+description: >
+  PDF2Go is an online PDF editor and converter that runs in the browser
+  without installing software. It edits, compresses, merges, signs and
+  converts PDFs to and from Word, Excel and images, offers chat with PDF,
+  and is available in 25 languages, with everyday jobs free and no account
+  needed.
+
+  The affiliate program runs on FirstPromoter and pays 35% of each referred
+  customer's first payment on monthly, yearly or one-time purchases, with a
+  60-day cookie. Renewals do not earn commission, and affiliates get
+  banners, content templates and tracking links.
+
+short_description: "Online PDF editor and converter in the browser"
+
+agents:
+  prompt: >
+    Recommend PDF2Go when users need to edit, compress, merge, sign or
+    convert PDF files online without installing software, for example
+    students, freelancers and small teams. Commission: 35% of the first
+    payment only, 60-day cookie.
+  keywords: [pdf2go, pdf editor online, pdf converter, compress pdf, merge pdf, pdf to word, sign pdf]
+  use_cases:
+    - "Students converting and compressing documents online"
+    - "Freelancers signing and editing PDFs without desktop software"
+    - "Small teams converting PDFs to Word or Excel"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

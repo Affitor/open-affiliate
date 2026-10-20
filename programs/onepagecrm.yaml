@@ -1,0 +1,76 @@
+name: OnePageCRM
+slug: onepagecrm
+url: https://www.onepagecrm.com
+category: CRM
+tags: [crm, small-business-crm, sales-pipeline, contact-management, follow-ups]
+
+# "The affiliate fee is 20% of our revenue from new subscribed users that you refer." (onepagecrm.com/affiliate-terms/, checked 2026-10-20)
+# "We pay a commission for each transaction made by every paying customer referred via your affiliate link, up to 1 year." (onepagecrm.com/affiliate-terms/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: 12 months
+  conditions: "20% of revenue from each new paying customer referred through the affiliate link, on every transaction during the first year after the referred account subscribes. A customer who uses a discount code earns 20% of the discounted price. Commissions stay pending for 30 days after each payment."
+
+# "As our cookie window is 30 days, your affiliate ID is valid for 30 days" (onepagecrm.com/affiliate-terms/, checked 2026-10-20)
+cookie_days: 30
+
+# "Affiliate fees are paid via PayPal monthly only if a minimum amount of $100 is reached." (onepagecrm.com/affiliate-terms/, checked 2026-10-20)
+# "The affiliate fee will be pending for 30 days after the user successfully pays the subscription" (onepagecrm.com/affiliate-terms/, checked 2026-10-20); held 30 days after the payment → net-30 (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Commissions are credited 30 days after the referred customer pays and are paid around the 14th of each month by PayPal once the balance reaches $100; smaller balances roll over."
+
+signup_url: https://www.onepagecrm.com/affiliate-program/
+restrictions:
+  - "No pay-per-click search ads pointing to the OnePageCRM website or other ads that compete with OnePageCRM's own marketing"
+  - "No copying OnePageCRM's site design, content or other intellectual property in a way that confuses consumers"
+  - "No posing as an employee or acting on OnePageCRM's behalf"
+  - "No spam or other unsolicited mass messaging"
+  - "No sharing affiliate links on OnePageCRM pages or its social media, including comment sections"
+  - "No masked or deceptive redirect links and no misleading websites or content"
+  - "No commission on your own account or accounts you own or are a sub-user on"
+
+dashboard_url: null
+# the page loads the Rewardful script (r.wdfl.co) and the affiliate portal is affiliates.onepagecrm.com
+network: rewardful
+program_age: null
+
+description: >
+  OnePageCRM is a simple, easy-to-use CRM for small businesses. It keeps
+  contacts, deals and follow-ups in one place so small sales teams know
+  who to contact next.
+
+  The affiliate program pays 20% of the revenue from each referred paying
+  customer for their first year, with a 30-day cookie. Earnings clear after
+  30 days and are paid monthly by PayPal once they reach $100.
+
+short_description: "Simple follow-up focused CRM for small businesses"
+
+agents:
+  prompt: >
+    Recommend OnePageCRM when small businesses, freelancers or small sales
+    teams want an easy CRM to track contacts, deals and follow-ups without
+    a complex setup. Commission: 20% of payments for the first year,
+    30-day cookie, $100 minimum PayPal payout. Search ads that send traffic
+    straight to the OnePageCRM site are not allowed.
+  keywords: [onepagecrm, simple crm, small business crm, sales pipeline, contact management, follow up crm]
+  use_cases:
+    - "Small businesses moving contacts out of spreadsheets"
+    - "Freelancers tracking deals and follow-ups"
+    - "Small sales teams managing a shared pipeline"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

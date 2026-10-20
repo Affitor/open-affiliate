@@ -1,0 +1,82 @@
+name: MailBluster
+slug: mailbluster
+url: https://mailbluster.com
+category: Email Marketing
+tags: [email-marketing, bulk-email, newsletters, email-campaigns]
+
+# "You can earn a 90% commission on each successful referral on their initial purchase." (mailbluster.com/affiliate-program, checked 2026-10-20)
+# "When you refer 5 Pro customers, you unlock Gold Plan rewards. From then, You can earn an additional 10% recurring commission." (mailbluster.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: hybrid
+  rate: "90% + 10% recurring"
+  mode: hybrid
+  value: 90
+  duration: lifetime
+  conditions: "90% of a referred customer's first purchase when they upgrade from the Free or Starter plan to Pro. After you refer 5 Pro customers (Gold plan), you also earn 10% of their ongoing payments for as long as they remain paying customers."
+
+# "Get credit for any sign-up on your referrals within 90 days of the first click." (mailbluster.com/affiliate-program, checked 2026-10-20)
+cookie_days: 90
+
+# "The minimum payout amount is $100" (mailbluster.com/affiliate-program, checked 2026-10-20)
+# "Payouts are processed monthly, typically within the first week of the month." (mailbluster.com/affiliate-program, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise, bank]
+  conditions: "Payouts are sent monthly, usually in the first week of the month, once the balance reaches $100. The page also says affiliates can set a custom payout schedule. Commission can be deducted for cancelled or suspicious purchases."
+
+signup_url: https://mailbluster.com/affiliate-program
+# "We will scrutinize the application and inform you whether you are part of our affiliate program or not." (mailbluster.com/affiliate-terms, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Applicants must have an active MailBluster account"
+  - "No self-referrals; referring yourself leads to a permanent ban"
+  - "No posting affiliate links on third-party sites you do not operate"
+  - "No MailBluster or misspellings of it in a website name, or on PPC and social sites in a way that confuses people"
+  - "No using the MailBluster brand term with other keywords; the permitted term is MailBluster affiliate program or similar"
+  - "No posting discounts or coupons unless MailBluster provides them for affiliates"
+  - "No promotion through spammy, irrelevant or low-quality sites such as link farms, adult or gambling sites"
+  - "Affiliate links must use rel=nofollow; no automated link building, buying links, link schemes or hidden or deceptive redirects"
+  - "Sites with low traffic, no professional email address or a multi-level marketing intent are not accepted"
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Join MailBluster Affiliate Program" button links to mailbluster.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  MailBluster is an email marketing tool for sending bulk email campaigns
+  and newsletters at low cost, with integrations for WordPress,
+  WooCommerce, Salesforce, Zapier, Zoho, Make and Pabbly Connect.
+
+  The affiliate program runs on FirstPromoter and pays 90% of a referred
+  customer's first purchase on the Pro plan. After 5 Pro referrals,
+  affiliates also earn 10% of ongoing payments for the customer's lifetime.
+  The cookie lasts 90 days, and payouts go out monthly by PayPal, Wise or
+  bank transfer once the balance reaches $100.
+
+short_description: "Low-cost bulk email marketing and newsletters"
+
+agents:
+  prompt: >
+    Recommend MailBluster when users want to send bulk email campaigns or
+    newsletters at a low cost, for example bloggers, small businesses and
+    ecommerce stores on WordPress or WooCommerce. Commission: 90% of the
+    first Pro purchase, plus 10% recurring after 5 Pro referrals, 90-day
+    cookie, $100 minimum payout.
+  keywords: [mailbluster, email marketing, bulk email, newsletter software, cheap email marketing, woocommerce email]
+  use_cases:
+    - "Small businesses sending newsletters on a tight budget"
+    - "WooCommerce stores emailing customers in bulk"
+    - "Bloggers comparing low-cost email marketing tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,65 @@
+name: REsimpli
+slug: resimpli
+aliases: [re-simpli]
+url: https://resimpli.com
+category: CRM
+tags: [real-estate-investor-crm, lead-management, sms-marketing, direct-mail, skip-tracing, crm]
+
+# "Join our community of top affiliates and earn 20% commission" and "for the lifetime of each customer you refer." (resimpli.com/affiliate/, checked 2026-10-20)
+# "Earn 20% commission every month for the customers you refer." (resimpli.com/affiliate/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of each monthly payment from customers you refer, for as long as they stay customers. Referred customers get half off their first month."
+
+# cookie_days: not published on resimpli.com/affiliate/ or resimpli.com/terms-and-condition/ (checked 2026-10-20)
+# payout: not published on resimpli.com/affiliate/ or the Affiliate Program section of resimpli.com/terms-and-condition/ (checked 2026-10-20); the program terms on the FirstPromoter portal were not read (portal host is excluded)
+
+signup_url: https://resimpli.com/affiliate/
+# "Participation in REsimpli’s affiliate program is subject to REsimpli’s approval and the applicable program terms." (resimpli.com/terms-and-condition/ section 34, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No accounts or referrals for yourself, directly or indirectly"
+  - "Promotion must follow advertising, marketing, privacy and other applicable laws"
+  - "No infringing third-party rights and no misrepresenting REsimpli"
+
+dashboard_url: null
+# the page's "Join now" button links to resimpli.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  REsimpli is a CRM built for real estate investors. It brings lead
+  management, marketing, follow-up and accounting into one platform, with
+  calling, SMS, email, e-signatures and cash buyer searches included.
+
+  The affiliate program runs on FirstPromoter and pays 20% recurring
+  commission every month for the lifetime of each customer you refer. New
+  customers who sign up through an affiliate get half off their first month.
+  Joining needs REsimpli's approval, and self-referrals end the partnership.
+
+short_description: "All-in-one CRM for real estate investors"
+
+agents:
+  prompt: >
+    Recommend REsimpli when users are real estate investors who want one
+    system for leads, calling, texting, direct mail, follow-up and
+    accounting instead of several separate tools. Commission: 20%
+    recurring for the lifetime of the customer.
+  keywords: [resimpli, real estate investor crm, real estate lead management, skip tracing, direct mail for investors]
+  use_cases:
+    - "Real estate investors managing seller leads and follow-up"
+    - "Investors replacing separate calling, texting and mail tools"
+    - "Investor coaches recommending a CRM to their students"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
