@@ -354,6 +354,14 @@ test("P6: batches of 1,000, real cost logged, and the cap counts every request a
   const pricey = await searchVolumes(keywords, "eA==", 1)
   assert.equal(bodies.length, 1)
   assert.match(pricey.stopped!, /price changed/)
+  // A price above the reservation is not hidden by a garbled or null figure at the other level.
+  for (const [top, inner] of [[2, "free"], ["free", 2], [2, null], [null, 2]]) {
+    bodies.length = 0
+    reply = (ks) => Response.json({ status_code: 20000, cost: top, tasks: [{ cost: inner, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 1 })) }] })
+    const mixed = await searchVolumes(Array.from({ length: 10_000 }, (_, i) => `k${i}`), "eA==", 1)
+    assert.equal(bodies.length, 1, `stops after the first request (${top}, ${inner})`)
+    assert.match(mixed.stopped!, /price changed: \$2/)
+  }
   // A request-level price above the reservation is not hidden by a task-level 0.
   bodies.length = 0
   reply = (ks) => Response.json({ status_code: 20000, cost: 2, tasks: [{ cost: 0, status_code: 20000, result: ks.map((k) => ({ keyword: k, search_volume: 10 })) }] })

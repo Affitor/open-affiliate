@@ -522,11 +522,13 @@ export async function searchVolumes(keywords: string[], auth: string, capUsd = S
     const success = status === 200 && body?.status_code === 20000 && task?.status_code === 20000
     // The reported cost: the larger of the request and task figures, null if either is not a valid number.
     const raw = [body?.cost, task?.cost].filter((c) => c !== undefined)
-    const valid = raw.length > 0 && raw.every((c) => typeof c === "number" && Number.isFinite(c) && c >= 0)
-    const reported = valid ? Math.max(...(raw as number[])) : null
-    spent += Math.max(reserve, reported ?? 0)
+    const numbers = raw.filter((c): c is number => typeof c === "number" && Number.isFinite(c) && c >= 0)
+    const reported = raw.length > 0 && numbers.length === raw.length ? Math.max(...numbers) : null
+    // Any real figure above the reservation, at either level, is a price change, even if the other level is garbled.
+    const highest = numbers.length ? Math.max(...numbers) : 0
+    spent += Math.max(reserve, highest)
     costs.push({ at: new Date().toISOString(), keywords: batch.length, costUsd: reported, status: task?.status_code ?? body?.status_code ?? status })
-    if (reported !== null && reported > reserve) return { volumes, costs, stopped: `price changed: $${reported} for one request` }
+    if (highest > reserve) return { volumes, costs, stopped: `price changed: $${highest} for one request` }
     if (success && Array.isArray(task.result)) {
       for (const row of task.result) {
         if (typeof row?.keyword !== "string" || !("search_volume" in row)) continue
