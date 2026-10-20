@@ -68,14 +68,18 @@ test("bodies are read up to the cap, even when the server never stops sending", 
   assert.deepEqual(await readCapped(new Response("abc"), 3), { text: "abc", truncated: false }, "exactly the cap is not truncated")
 })
 
-test("a robots.txt cut at the parse limit never widens access", async () => {
-  // Byte 512,000 falls inside "Allow: /private/public": the cut line must not become "Allow: /private".
+test("a robots.txt past the parse limit fails closed, whatever its line endings", async () => {
   const head = "User-agent: *\nDisallow: /private\n"
   const cut = "Allow: /private"
-  const body = head + "#".repeat(512_000 - head.length - cut.length - 1) + "\n" + cut + "/public\n"
-  const requested = network({ "https://brand.test/robots.txt": html(body), "https://brand.test/private/secret": html("secret") })
-  assert.deepEqual(await politeGet("https://brand.test/private/secret"), { refused: "robots.txt disallows" })
-  assert.ok(!requested.includes("https://brand.test/private/secret"))
+  const bodies = [
+    head + "#".repeat(512_000 - head.length - cut.length - 1) + "\n" + cut + "/public\n", // cut inside an Allow
+    "User-agent: *\rDisallow: /\r#" + "x".repeat(512_000), // CR-only, cut inside a comment
+  ]
+  for (const body of bodies) {
+    const requested = network({ "https://brand.test/robots.txt": html(body), "https://brand.test/private/secret": html("secret") })
+    assert.deepEqual(await politeGet("https://brand.test/private/secret"), { refused: "robots.txt unreachable" })
+    assert.ok(!requested.includes("https://brand.test/private/secret"))
+  }
 })
 
 test("PageSpeed re-checks access first: a cached result never authorises a request", async () => {
@@ -198,8 +202,15 @@ test("a corrupt or foreign cache file is rescanned, not trusted", () => {
     // A broken program file is reported, not fatal.
     writeFileSync(join(dir, "bad.yaml"), "slug: [unclosed")
     assert.match(JSON.stringify(loadProgram(join(dir, "bad.yaml"))), /"slug":"bad","error":"program file unreadable/)
-    writeFileSync(join(dir, "good.yaml"), "slug: good\nurl: https://good.test\n")
-    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", url: "https://good.test" })
+    writeFileSync(join(dir, "good.yaml"), "slug: good\nurl: https://good.test\ncommission: {rate: 30%}\n")
+    assert.deepEqual(loadProgram(join(dir, "good.yaml")), { slug: "good", url: "https://good.test", signup_url: null, network: null })
+    // A cyclic or odd shape never leaves loadProgram: only the four text fields do.
+    writeFileSync(join(dir, "cyclic.yaml"), "slug: cyclic\nnetwork: &n {nested: *n}\nurl: [1, 2]\n")
+    const cyclic = loadProgram(join(dir, "cyclic.yaml"))
+    assert.deepEqual(cyclic, { slug: "cyclic", url: null, signup_url: null, network: null })
+    assert.doesNotThrow(() => JSON.stringify(cyclic))
+    writeFileSync(join(dir, "mismatch.yaml"), "slug: other\n")
+    assert.match(JSON.stringify(loadProgram(join(dir, "mismatch.yaml"))), /does not match/)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

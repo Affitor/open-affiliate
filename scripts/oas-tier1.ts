@@ -159,9 +159,9 @@ function robotsFor(origin: string): Promise<string | null> {
   if (!robotsCache.has(origin)) {
     robotsCache.set(origin, hopGet(`${origin}/robots.txt`, { robots: false, maxBytes: ROBOTS_BYTES, timeout: 10000 }).then((r) => {
       if (!isPage(r)) return null // unreachable, or redirected to a blocked host: treat as disallowed
-      // A cut file ends mid-record: drop the partial last line, so a cut "Allow: /private/public"
-      // never becomes "Allow: /private". Rules past the parse limit are ignored (RFC 9309 §2.5).
-      if (r.status === 200) return r.truncated ? r.html.slice(0, r.html.lastIndexOf("\n") + 1) : r.html
+      // A file past the parse limit is not read in part: a cut record could widen access, so the host
+      // counts as unreachable (fail closed). Files that large are rare.
+      if (r.status === 200) return r.truncated ? null : r.html
       return r.status >= 400 && r.status < 500 ? "" : null // no robots.txt allows all; 5xx disallows for this run
     }))
   }
@@ -408,12 +408,18 @@ export function readCache(file: string, slug: string): Result | null {
   }
 }
 
-/** One program file, or null with the reason when it cannot be read: a broken file never stops the run. */
+/**
+ * One program file, rebuilt from the four text fields the scan uses (so no other
+ * shape in the YAML can reach a request or a report), or the reason it cannot be
+ * read: a broken file never stops the run.
+ */
 export function loadProgram(path: string): Program | { slug: string; error: string } {
   const slug = path.replace(/^.*\//, "").replace(/\.yaml$/, "")
   try {
-    const p = parse(readFileSync(path, "utf8")) as Program
-    return typeof p?.slug === "string" ? p : { slug, error: "program file has no slug" }
+    const p = parse(readFileSync(path, "utf8"))
+    const text = (v: unknown) => (typeof v === "string" ? v : null)
+    if (text(p?.slug) !== slug) return { slug, error: "program file slug does not match its name" }
+    return { slug, url: text(p.url), signup_url: text(p.signup_url), network: text(p.network) }
   } catch (error) {
     return { slug, error: `program file unreadable (${(error as Error).name})` }
   }
@@ -479,7 +485,9 @@ async function main() {
         checks: Object.fromEntries(CHECK_IDS.map((id) => [id, unknown(`scan error (${error.name})`)])),
       }))
       if (psi && r.checks.P5.evidence === "PageSpeed not run") await runPsi(p, r).catch(() => {})
-      writeFileSync(file, JSON.stringify(r, null, 2) + "\n")
+      try {
+        writeFileSync(file, JSON.stringify(r, null, 2) + "\n")
+      } catch { /* the result still counts; it is scanned again next run */ }
       results.push(r)
       if (results.length % 25 === 0) console.log(`${results.length}/${programs.length}${psiStopped ? ` · ${psiStopped}` : ""}`)
     }
