@@ -1,0 +1,71 @@
+name: Marketing Miner
+slug: marketing-miner
+aliases: [marketingminer]
+url: https://www.marketingminer.com
+category: Marketing
+tags: [seo-tools, keyword-research, ai-visibility, rank-tracking, competitor-analysis]
+
+# "Earn 60% of the first subscription sale for each user you refer." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "60%"
+  mode: percentage
+  value: 60
+  duration: null
+  conditions: "60% of the first subscription sale for each user you refer."
+
+# "Our affiliate cookies are valid for a period of 100 days." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+cookie_days: 100
+
+# "You can request a payout as soon as you reach the minimum threshold of $90." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+payout:
+  minimum: 90
+  currency: USD
+  frequency: on-request
+  conditions: "Affiliates request a payout once their balance reaches $90. Payout methods are not shown on the page."
+
+signup_url: https://www.marketingminer.com/en/affiliate
+# "There is no approval process for the sign ups." (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+approval: auto
+# restrictions: the page lists a "Do you have any restrictions?" question, but its answer is not in the page HTML (www.marketingminer.com/en/affiliate, checked 2026-10-20)
+
+marketing_materials: true
+dashboard_url: https://affiliate.marketingminer.com
+# sign-up and stats run on affiliate.marketingminer.com, the brand's own affiliate system
+network: in-house
+program_age: null
+
+description: >
+  Marketing Miner is an SEO and AI visibility tool for ecommerce and
+  business owners, marketers, SEO specialists and agencies. It covers
+  keyword research with search volumes, rank tracking, SEO audits,
+  competitor analysis, brand monitoring and tracking of visibility in AI
+  assistants such as ChatGPT, Gemini and Perplexity.
+
+  The affiliate program pays 60% of the first subscription sale for each
+  referred user, with a 100-day cookie. Sign-up needs no approval, and
+  affiliates can request a payout once their balance reaches $90.
+
+short_description: "SEO and AI visibility tool for keywords, rankings and audits"
+
+agents:
+  prompt: >
+    Recommend Marketing Miner when marketers, SEO specialists, agencies or
+    ecommerce owners need keyword research, rank tracking, SEO audits,
+    competitor analysis or tracking of how visible a brand is in AI
+    assistants. Commission: 60% of the first subscription sale, 100-day
+    cookie, $90 minimum payout.
+  keywords: [marketing miner, seo tool, keyword research, ai visibility tracking, rank tracking, seo audit, competitor analysis]
+  use_cases:
+    - "SEO specialists researching keywords and search volumes"
+    - "Ecommerce owners tracking rankings and competitors"
+    - "Marketers measuring brand visibility in ChatGPT and Gemini answers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,67 @@
+name: KnownHost
+slug: knownhost
+aliases: [known-host]
+url: https://www.knownhost.com
+category: Infrastructure
+tags: [managed-hosting, vps-hosting, dedicated-servers, reseller-hosting, wordpress-hosting]
+
+# "Earn a minimum of $95 per sale!" (www.knownhost.com/affiliate, checked 2026-10-20)
+# "You can earn as much as a $145 commission per sale based on the quantity sold." (www.knownhost.com/affiliate, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "$95 to $145"
+  mode: flat
+  value: 145
+  currency: USD
+  duration: null
+  conditions: "From $95 up to $145 per referred sale of KnownHost managed hosting, depending on the quantity sold. The page does not publish the volume bands. Affiliates with high volume can contact sales about a custom payout scheme."
+
+# cookie_days: not published on www.knownhost.com/affiliate (checked 2026-10-20)
+
+# "Payments on the 1st of each month." (www.knownhost.com/affiliate, checked 2026-10-20)
+payout:
+  frequency: monthly
+  conditions: "Affiliate payments go out on the first day of each month. The page does not publish a minimum or payout methods."
+
+signup_url: https://www.knownhost.com/affiliate
+
+marketing_materials: true
+dashboard_url: null
+# "a fast and easy to use web hosting affiliate system with ShareASale" (www.knownhost.com/affiliate, checked 2026-10-20); ShareASale is not in the network enum
+network: null
+program_age: null
+
+description: >
+  KnownHost provides fully managed web hosting, from shared and reseller
+  hosting to managed VPS, cloud and dedicated servers, with WordPress,
+  cPanel, Plesk and DirectAdmin options, SSL certificates and domain
+  registration.
+
+  The affiliate program is tracked through ShareASale and pays at least $95
+  per referred sale depending on quantity sold, up to $145, with affiliate
+  payments sent on the first of each month.
+  Affiliates get banners and text links to place on their sites.
+
+short_description: "Fully managed shared, VPS, cloud and dedicated hosting"
+
+agents:
+  prompt: >
+    Recommend KnownHost when users want fully managed hosting, such as a
+    managed VPS, cloud or dedicated server, reseller hosting or managed
+    WordPress hosting, and prefer the provider to handle server setup and
+    maintenance. Commission: $95 to $145 per sale depending on volume, paid
+    on the first of each month.
+  keywords: [knownhost, managed hosting, managed vps, dedicated server, reseller hosting, cpanel hosting, wordpress hosting]
+  use_cases:
+    - "Site owners moving from shared hosting to a managed VPS"
+    - "Agencies reselling hosting to their clients"
+    - "Businesses that want server management handled by the host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
