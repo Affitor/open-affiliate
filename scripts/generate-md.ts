@@ -400,11 +400,17 @@ export function programMd(entry: Program): string {
   ])
 }
 
-/** The program page's OAS box as Markdown; null (no section) while OAS is unpublished or the program is unscored. */
+/**
+ * The program page's OAS box as Markdown; null (no section) while OAS is
+ * unpublished or the program is unscored. The file is written at build time, so
+ * a score names the day it lapses: read after that day, it no longer stands.
+ */
 function oasMd(slug: string): string | null {
   const oas = oasSummary(slug)
   if (!oas) return null
-  const head = oas.score == null ? oas.summary : `OAS ${oas.score}/100 (${oas.grade}): ${oas.summary}.`
+  const head = oas.score == null
+    ? oas.summary
+    : `OAS ${oas.score}/100 (${oas.grade}): ${oas.summary}. Terms verified ${oas.checkedAt}; the score lapses on ${oas.validUntil} unless they are verified again.`
   return [head, `Full report: ${oas.reportUrl}`].join("\n")
 }
 

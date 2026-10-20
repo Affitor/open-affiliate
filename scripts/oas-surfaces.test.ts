@@ -35,6 +35,7 @@ test("summary: scored, stale and in progress read as the program page reads them
   assert.equal(scored.summary, verdictText(scoreProgram(yaml(), TODAY), TODAY))
   assert.equal(scored.reportUrl, "https://openaffiliate.dev/programs/p/oas")
   assert.equal(scored.checkedAt, "2026-10-13")
+  assert.equal(scored.validUntil, "2027-01-11", "checked + 90 days")
 
   const stale = oasSummaryOf(scoreProgram(yaml({ last_verified_at: "2026-06-01" }), TODAY), TODAY)
   assert.deepEqual([stale.status, stale.score, stale.grade, stale.summary], ["stale", null, null, OAS_STALE_TEXT])
@@ -65,7 +66,13 @@ test("a scored program carries the page's score on REST, MCP and its .md twin", 
   // MCP get_program returns apiProgram plus markdownUrl (src/lib/mcp-route.ts).
   assert.deepEqual((apiProgram(getProgram(s.slug)!) as { oas?: unknown }).oas, summary, "MCP")
   const twin = md(s.slug)
-  assert.match(twin, new RegExp(`^## OAS\\n\\nOAS ${summary.score}/100 \\(${summary.grade}\\): `, "m"))
+  // Literal, not a regex: grades such as A+ carry regex characters.
+  assert.ok(twin.includes(`## OAS\n\nOAS ${summary.score}/100 (${summary.grade}): `), "md score line")
+  // Written at build time, the line names the day the score lapses (isStale is true from that day).
+  assert.ok(twin.includes(`the score lapses on ${summary.validUntil} unless`), "md lapse date")
+  const lapse = new Date(`${summary.validUntil}T00:00:00Z`)
+  assert.equal(oasValue(s, new Date(lapse.getTime() - 1)), s.oas, "still scored until that day starts")
+  assert.equal(oasValue(s, new Date(lapse.getTime() + 1)), null, "lapsed from the day named")
   assert.ok(twin.includes(`Full report: ${summary.reportUrl}`))
   // A score that is not current shows its reason, never a number.
   const other = oasScores.find((x) => oasValue(x) == null)

@@ -319,8 +319,15 @@ export interface OasSummary {
   status: "scored" | "stale" | "in_progress"
   summary: string
   checkedAt: string | null
+  /** The day the score lapses unless the terms are verified again (checkedAt + STALE_DAYS); null without a checked date. */
+  validUntil: string | null
   version: string
   reportUrl: string
+}
+
+/** checkedAt + STALE_DAYS as YYYY-MM-DD: from just after midnight that day, isStale() is true. */
+export function lapseDate(checkedAt: string | null | undefined): string | null {
+  return checkedAt ? new Date(Date.parse(checkedAt) + STALE_DAYS * 864e5).toISOString().slice(0, 10) : null
 }
 
 /** null when the program has no OAS entry (OAS not published, or the program is not scored). */
@@ -339,6 +346,7 @@ export function oasSummaryOf(s: OasScore, today: Date = new Date()): OasSummary 
     status,
     summary: status === "scored" ? verdictText(s, today)! : status === "stale" ? OAS_STALE_TEXT : OAS_IN_PROGRESS_TEXT,
     checkedAt: s.checked_at ?? null,
+    validUntil: lapseDate(s.checked_at),
     version: s.version,
     reportUrl: `https://openaffiliate.dev/programs/${slug}/oas`,
   }

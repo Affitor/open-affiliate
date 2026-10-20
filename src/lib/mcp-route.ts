@@ -264,6 +264,7 @@ const programOutputSchema = {
     status: z.enum(["scored", "stale", "in_progress"]).describe("scored: a current score; stale: terms verified more than 90 days ago; in_progress: some terms not read yet"),
     summary: z.string().describe("One line: the verdict when scored, otherwise why there is no score"),
     checkedAt: z.string().nullable().describe("Date the scored terms were verified, YYYY-MM-DD"),
+    validUntil: z.string().nullable().describe("First day the score lapses unless the terms are verified again (90 days after checkedAt), YYYY-MM-DD"),
     version: z.string().describe("Scoring method version, such as v1"),
     reportUrl: z.string().describe("The program's full OAS report"),
   }).optional().describe("OAS, the OpenAffiliate Score: how clearly the program publishes its terms and protects its partners. Omitted when the program is not scored or OAS is not published"),

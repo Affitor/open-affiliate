@@ -107,8 +107,8 @@ export const openapi = {
         oas: object({
           score: { type: ["number", "null"] }, grade: nullableString,
           status: { type: "string", enum: ["scored", "stale", "in_progress"] },
-          summary: string, checkedAt: nullableString, version: string, reportUrl: string,
-        }, ["score", "grade", "status", "summary", "checkedAt", "version", "reportUrl"]),
+          summary: string, checkedAt: nullableString, validUntil: nullableString, version: string, reportUrl: string,
+        }, ["score", "grade", "status", "summary", "checkedAt", "validUntil", "version", "reportUrl"]),
         alternatives: { type: "array", items: object({ slug: string, name: string, commission: string, url: string }, ["slug", "name", "commission", "url"]) },
       }, ["slug", "name", "url", "logo", "category", "commission", "payout", "description", "shortDescription", "tags", "stars", "verified", "agentPrompt", "submittedBy", "createdAt"]),
       ProgramSearch: object({
