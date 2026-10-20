@@ -20,7 +20,8 @@ export function leaderRows(): { rows: LeaderRow[]; tabs: { name: string; slug: s
       oas: r.oas,
       rank: r.rank,
       status: r.unranked,
-      checked: (p.lastVerifiedAt ?? "").slice(0, 10),
+      // The score's verified date: the one the tie-break orders by.
+      checked: (r.score.checked_at ?? "").slice(0, 10),
     }
   })
   const tabs = categories.filter((c) => rows.some((r) => r.category === c)).map((c) => ({ name: c, slug: categoryToSlug(c) }))

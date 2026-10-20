@@ -99,8 +99,11 @@ test("homepage Rankings: the OAS top 5 once scores exist, Affiliate Score before
   assert.equal(sets.by, "oas")
   assert.deepEqual(sets.rankings.map((p) => p.slug), live.slice(0, 5).map((p) => p.slug))
   assert.deepEqual(sets.ranks, [1, 2, 3, 4, 5])
+  // Each OAS row carries its score's verified date (the tie-break's date); the Affiliate Score fallback has none.
+  assert.deepEqual(sets.verified, sets.rankings.map((p) => scores.find((x) => x.slug === p.slug)!.checked_at))
+  assert.deepEqual(homepageSets(programs, []).verified, [null, null, null, null, null])
   const tied = homepageSets(programs, scores.map((s) => ({ ...s, oas: 100 })), new Date("2026-10-20T00:00:00Z"))
-  assert.deepEqual(tied.ranks, [1, 1, 1, 1, 1], "equal OAS share a rank, as on the leaderboard")
+  assert.deepEqual(tied.ranks, [1, 2, 3, 4, 5], "equal OAS still get their own positions, as on the leaderboard")
   // The top program's review reaches 90 days tomorrow: the leaderboard still ranks it, the homepage
   // already leaves it out, and the others keep the leaderboard's ranks (2-6).
   const expiring = scores.map((s, i) => (i === 0 ? { ...s, checked_at: "2026-07-23" } : s))

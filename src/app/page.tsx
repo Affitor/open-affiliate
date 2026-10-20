@@ -49,7 +49,7 @@ function cookieShort(program: Program): string {
 export default function Home() {
   // Rankings top 5 (by OAS once it is published, else Affiliate Score), then 6
   // verified programs by Affiliate Score, none shown twice (homepageSets).
-  const { rankings, ranks, featured, by } = homepageSets(programs);
+  const { rankings, ranks, verified, featured, by } = homepageSets(programs);
   const byOas = by === "oas";
   const networks = networksByName();
   const networkCount = networks.filter((n) => n.network !== IN_HOUSE).length;
@@ -118,7 +118,11 @@ export default function Home() {
               <Link href={`/programs/${program.slug}`} className="grid grid-cols-[24px_28px_minmax(0,1fr)_auto] items-center gap-3 px-1 py-2.5 hover:bg-sunk transition-colors sm:grid-cols-[24px_28px_minmax(0,1fr)_200px_120px_56px]">
                 <span className="font-mono text-meta text-muted-foreground">{ranks[i]}</span>
                 <ProgramLogo slug={program.slug} name={program.name} size={28} className="shrink-0" />
-                <span className="min-w-0 truncate text-sm font-medium">{program.name}</span>
+                <span className="min-w-0">
+                  <span className="block truncate text-sm font-medium">{program.name}</span>
+                  {/* The date the ranking's tie-break uses (compareBoard): the score's verified date. */}
+                  {verified[i] && <span className="block text-meta text-muted-foreground">Verified <time dateTime={verified[i]!}>{verified[i]}</time></span>}
+                </span>
                 <span className="hidden truncate font-mono text-meta sm:block">
                   {commissionChip(program.commission, true)}
                 </span>

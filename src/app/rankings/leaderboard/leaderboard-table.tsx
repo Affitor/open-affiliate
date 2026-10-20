@@ -15,7 +15,7 @@ export type LeaderRow = {
   categorySlug: string;
   network: string;
   oas: number | null;
-  /** Overall rank, ties shared; null when not ranked. */
+  /** Overall position, unique; null when not ranked. */
   rank: number | null;
   status: "checking" | "no-apply-link" | null;
   checked: string;
@@ -24,9 +24,10 @@ export type LeaderRow = {
 const HEAD = "py-3 px-3 font-mono text-xs font-medium uppercase tracking-[0.08em] text-muted-foreground";
 
 /**
- * The whole board, in /rankings order (OAS high to low, equal scores A to Z),
- * then programs still scoring. A category tab ranks within the category,
- * ties shared, as the boxes on /rankings do. The tab lives in the URL
+ * The whole board, in /rankings order (compareBoard in src/lib/oas.ts: OAS,
+ * Partner value, newest verification, name), then programs still scoring. A
+ * category tab ranks within the category in the same order, as the boxes on
+ * /rankings do; every position is unique. The tab lives in the URL
  * (?category=<slug>) so a category box links straight to it.
  */
 export function LeaderboardTable({
@@ -52,8 +53,8 @@ export function LeaderboardTable({
 
   const inTab = category ? rows.filter((r) => r.categorySlug === category) : rows;
   const ranked = inTab.filter((r) => r.rank != null);
-  // Within a category: the position of the first row with this score, so ties share it.
-  const rankOf = (r: LeaderRow) => (r.rank == null ? null : category ? ranked.findIndex((x) => x.oas === r.oas) + 1 : r.rank);
+  // Within a category: the row's own position in the board's order (positions are unique).
+  const rankOf = (r: LeaderRow) => (r.rank == null ? null : category ? ranked.indexOf(r) + 1 : r.rank);
   const matched = q ? inTab.filter((r) => r.name.toLowerCase().includes(q) || r.domain.includes(q)) : inTab;
   const shown = limit ? matched.slice(0, limit) : matched;
   const full = category ? `/rankings/leaderboard?category=${category}` : "/rankings/leaderboard";
@@ -119,6 +120,8 @@ export function LeaderboardTable({
                         <span className="min-w-0">
                           <span className="block truncate font-medium">{r.name}</span>
                           {r.domain && <span className="block truncate text-meta text-muted-foreground">{r.domain}</span>}
+                          {/* The Verified column is hidden on narrow screens; the date stays on every row. */}
+                          {r.checked && <span className="block text-meta text-muted-foreground md:hidden">Verified <time dateTime={r.checked}>{r.checked}</time></span>}
                         </span>
                       </Link>
                     </td>
