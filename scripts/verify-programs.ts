@@ -358,6 +358,7 @@ export async function verifyProgram(program: ProgramYaml, fetchImpl: typeof fetc
 // Programs that we know are valid but can't be auto-verified
 // (e.g. own products, JS-heavy pages, known false negatives)
 const SKIP_VERIFY: Record<string, string> = {
+  "better-proposals": "Node request timeout in verify; brand pages read 200 by the capture reader on 2026-10-20",
   tailwindcss: "Partner page 404 — program unconfirmed, kept as unverified",
   thryv: "www.thryv.com answers 403 to automated requests (checked 2026-10-13)",
   siteground: "www.siteground.com answers 403 to Node fetch while curl gets 200 (checked 2026-10-13)",
@@ -366,6 +367,7 @@ const SKIP_VERIFY: Record<string, string> = {
   tubebuddy: "www.tubebuddy.com answers 502 to Node fetch while curl gets 200 (checked 2026-10-13)",
   storylab: "storylab.ai times out intermittently on automated checks while the page reads fine (checked 2026-10-13)",
   "walter-writes-ai": "walterwrites.ai answers a Cloudflare 403 to automated requests (checked 2026-10-13)",
+  vbout: "www.vbout.com answers 403 to the CI runner while curl and our reader get 200 (checked 2026-10-20)",
 };
 
 // ── Main ──

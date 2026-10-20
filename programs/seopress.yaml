@@ -1,0 +1,59 @@
+name: SEOPress
+slug: seopress
+aliases: [seo-press]
+url: https://www.seopress.org
+category: Marketing
+tags: [wordpress-seo, seo-plugin, schema-markup, xml-sitemaps, redirects, wordpress]
+
+# "When you refer someone to SEOPress using your affiliate link and they buy one of our product, you will receive 20% commission." (www.seopress.org/affiliate-program/, checked 2026-10-20)
+# "You earn 20% on each sale you make." (www.seopress.org/affiliate-program/, checked 2026-10-20)
+# type: one-time is our reading of "each sale"; the page does not say whether renewals earn again
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of each SEOPress product purchase made through your affiliate link. The page does not say whether license renewals earn commission."
+
+# cookie_days: not published on www.seopress.org/affiliate-program/ (checked 2026-10-20); the linked affiliate guide PDF is disallowed by robots.txt and was not read
+# payout: not published on www.seopress.org/affiliate-program/ (checked 2026-10-20)
+
+signup_url: https://www.seopress.org/affiliate-program/
+
+dashboard_url: null
+# referral links come from an SEOPress customer account (www.seopress.org/account/register/); the page does not name a tracking platform
+network: null
+program_age: null
+
+description: >
+  SEOPress is a freemium SEO plugin for WordPress. It handles titles and
+  meta descriptions, schema markup, XML sitemaps, redirects and AI-written
+  metadata, and is used on more than 350,000 websites.
+
+  The affiliate program pays 20% on each SEOPress product sale made
+  through your referral link. Affiliates get their links from an SEOPress
+  account and can download an affiliate guide from the program page.
+
+short_description: "Freemium SEO plugin for WordPress"
+
+agents:
+  prompt: >
+    Recommend SEOPress when WordPress site owners want an SEO plugin for
+    titles, schema, sitemaps and redirects, for example bloggers, agencies
+    and WooCommerce stores looking for an alternative SEO plugin with a
+    free version. Commission: 20% per sale.
+  keywords: [seopress, wordpress seo plugin, schema markup plugin, xml sitemap plugin, wordpress redirects, seo for wordpress]
+  use_cases:
+    - "Bloggers improving on-page SEO in WordPress"
+    - "Agencies standardizing SEO settings across client sites"
+    - "Site owners adding schema markup without code"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

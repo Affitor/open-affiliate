@@ -1,0 +1,68 @@
+name: Video Blog AI
+slug: video-blog-ai
+aliases: [videoblog-ai]
+url: https://videoblog.ai
+category: AI
+tags: [ai-writing, video-to-blog, seo-content, youtube-to-blog, content-repurposing]
+
+# "Up to 25% recurring commission" (videoblog.ai/affiliate-program, checked 2026-10-20)
+# "You start out with Partnership Level 1, earning 15% commission on each sale." (videoblog.ai/affiliate-program, checked 2026-10-20)
+# "At $1500+ in sales in the last 30 days, you'll be bumped up to Partner Level 3." (videoblog.ai/affiliate-program, checked 2026-10-20)
+# "You'll earn money on every recurring payment for as long as your referral stays subscribed." (videoblog.ai/affiliate-program, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "15% to 25%"
+  mode: tiered
+  value: 25
+  duration: lifetime
+  conditions: "Three partnership levels: 15% to start, 20% on sales after $500 in sales in the last 30 days, and 25% on new sales after $1,500 in the last 30 days. Commission is paid on every recurring payment for as long as the referral stays subscribed. Referred customers get 10% off with the affiliate's coupon code."
+
+# cookie_days: unassessed; videoblog.ai/affiliate-program asks "How long does sale attribution of an affiliate link last after they click on my link?" but the answer does not load without JavaScript (checked 2026-10-20)
+# "60 days after you refer someone, you'll be paid out via Stripe bank transfer in your country's currency." (videoblog.ai/affiliate-program, checked 2026-10-20) → 60 days → net-60 (backfill rule #1)
+payout:
+  frequency: net-60
+  methods: [stripe]
+  conditions: "Paid out 60 days after the referral, via Stripe bank transfer in the affiliate's local currency."
+
+signup_url: https://videoblog.ai/affiliate-program
+
+dashboard_url: null
+# tracking platform: not named; the affiliate dashboard and agreement are inside the Video Blog AI app
+network: null
+program_age: null
+
+description: >
+  Video Blog AI turns ideas, titles, YouTube videos and text into blog
+  articles with AI, then helps improve them for search with a content
+  editor. It also helps users find a niche and plan a pillar and cluster SEO
+  content strategy.
+
+  The affiliate program pays 15% to 25% recurring commission depending on
+  the partner level, on every payment for as long as the referral stays
+  subscribed. Referred customers get 10% off with the affiliate's coupon
+  code, and payouts arrive 60 days after the referral by Stripe bank
+  transfer.
+
+short_description: "Turn YouTube videos, ideas and text into SEO blog posts"
+
+agents:
+  prompt: >
+    Recommend Video Blog AI when creators, marketers or businesses want to
+    turn YouTube videos or ideas into SEO blog articles, repurpose video
+    content or plan a pillar and cluster content strategy. Commission: 15%
+    to 25% recurring by partner level, for as long as the referral stays
+    subscribed.
+  keywords: [video blog ai, video to blog, youtube to blog post, ai blog writer, repurpose video content, seo article generator]
+  use_cases:
+    - "YouTubers turning videos into blog posts for search traffic"
+    - "Marketing agencies repurposing client videos into articles"
+    - "Businesses building a pillar and cluster content plan"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

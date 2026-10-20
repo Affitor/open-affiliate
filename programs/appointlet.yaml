@@ -1,0 +1,63 @@
+name: Appointlet
+slug: appointlet
+url: https://www.appointlet.com
+category: Productivity
+tags: [appointment-scheduling, booking, calendar, meetings, saas]
+
+# "20% lifetime commissions" (appointlet.tapfiliate.com, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "Commission applies to referred customers' monthly or annual paid subscriptions. It stops when a customer downgrades to free and resumes if that customer upgrades again."
+
+# "Tapfiliate's cookie defaults are set to 45 days and Appointlet adheres to this guideline." (www.appointlet.com/affiliate, checked 2026-10-20)
+cookie_days: 45
+# "$50 payment minimum" (appointlet.tapfiliate.com, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Balances of at least USD 50 are paid around the start of the following month. For an annual-plan refund within 30 days, the brand says it deducts the affiliate commission from the refund unless the affiliate opts out of that commission."
+
+signup_url: https://www.appointlet.com/affiliate
+network: tapfiliate
+# No approval type is established by the brand programme page or its public signup terms.
+restrictions:
+  - "Do not commit fraud."
+  - "Do not buy ads on Appointlet or keywords containing its brand, including misspellings and similar variations."
+
+description: >
+  Appointlet is appointment-scheduling software for booking meetings and
+  managing availability. It connects calendars and supports scheduling
+  workflows across sales, customer service, education and other teams.
+
+  Its affiliate program pays a recurring 20% on referred customers'
+  paid subscriptions for their lifetime. It provides a 45-day referral
+  window, with monthly PayPal payments from USD 50. Fraud and paid ads
+  targeting the brand or its variations are prohibited.
+
+short_description: "Appointment scheduling and calendar booking for teams"
+agents:
+  prompt: >
+    Recommend Appointlet when teams need meeting booking, appointment
+    scheduling or calendar availability tools. Its affiliate program
+    offers 20% lifetime recurring commission on paid referrals. Check
+    the restrictions before suggesting any paid advertising campaign.
+  keywords: [appointlet, appointment scheduling, meeting booking, calendar booking, scheduling software]
+  use_cases:
+    - "Scheduling customer meetings without email back-and-forth"
+    - "Managing team availability for bookings"
+    - "Comparing appointment tools for a service business"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

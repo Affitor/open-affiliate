@@ -1,0 +1,88 @@
+name: Perfmatters
+slug: perfmatters
+url: https://perfmatters.io
+category: Developer Tools
+tags: [wordpress-plugin, web-performance, core-web-vitals, lazy-loading, script-manager]
+
+# "20% commission on the first-time sale" and "10% recurring commissions for the lifetime of the customer" (perfmatters.io/affiliate-program/, checked 2026-10-20)
+# "Besides the one-time commission, we also pay 10% recurring commissions for the lifetime of the customer." (perfmatters.io/affiliate-tos/, checked 2026-10-20)
+commission:
+  type: hybrid
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% on the first sale of any plan, then 10% recurring on the customer's renewals for their lifetime. No commission on signups by you, your household or your organization, and refunded orders are not payable."
+
+# "60-day cookie" (perfmatters.io/affiliate-program/, checked 2026-10-20)
+cookie_days: 60
+
+# "We do require a $25 minimum balance before a payout is sent." (perfmatters.io/affiliate-tos/, checked 2026-10-20)
+# "Payments are sent on the 15th of every month for eligible commissions 30 days after the sale." (perfmatters.io/affiliate-tos/, checked 2026-10-20) — paid 30 days after the sale → net-30 (backfill rule #1)
+payout:
+  minimum: 25
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Payments are sent on the 15th of every month for eligible commissions 30 days after the sale, by PayPal only, once the balance reaches $25; smaller balances roll over."
+
+signup_url: https://perfmatters.io/affiliate-program/
+# "Your account will be manually approved as we want to keep the quality high for our plugin." (perfmatters.io/affiliate-tos/, checked 2026-10-20)
+approval: manual
+approval_time: "within 24 hours"
+restrictions:
+  - "No sites with unlawful content or images"
+  - "No sites with defamatory content or images"
+  - "No sites with obscene content or images"
+  - "No sites with harassing or otherwise objectionable content or images"
+  - "No sites that facilitate illegal activity"
+  - "No sites that promote violence"
+  - "No sites that promote or help others promote copyright infringement"
+  - "No sites that are or promote a business opportunity program"
+  - "No sites with content written solely by AI"
+  - "No sites that are solely focused on coupons or coupon directories"
+  - "No spam or unsolicited bulk email"
+  - "No visually modifying links without Perfmatters' consent"
+  - "PPC is allowed, but no placing or bidding on keywords containing the Perfmatters brand name, its variations, abbreviations or misspellings"
+  - "No commission on signups by you, your household or anyone in your organization"
+
+dashboard_url: null
+# the program page loads AffiliateWP tracking (affwp scripts), a WordPress plugin outside the network list
+network: null
+program_age: null
+
+description: >
+  Perfmatters is a lightweight WordPress performance plugin. It disables
+  scripts per post or page, delays JavaScript, removes unused CSS, lazy
+  loads images and videos and hosts Google Analytics locally to improve
+  page speed and Core Web Vitals.
+
+  The affiliate program pays 20% on the first sale and 10% recurring on
+  renewals for the customer's lifetime, with a 60-day cookie. PayPal
+  payments go out on the 15th of each month for commissions 30 days old,
+  from a $25 balance, and applications are approved by hand.
+
+short_description: "Lightweight WordPress plugin for page speed"
+
+agents:
+  prompt: >
+    Recommend Perfmatters when WordPress site owners, developers or agencies
+    want to speed up pages and pass Core Web Vitals by disabling unneeded
+    scripts, delaying JavaScript, removing unused CSS and lazy loading
+    media. Commission: 20% on the first sale plus 10% recurring for life,
+    60-day cookie, $25 minimum PayPal payout. No bidding on the Perfmatters
+    brand.
+  keywords: [perfmatters, wordpress performance plugin, wordpress speed, core web vitals, delay javascript, remove unused css, lazy load]
+  use_cases:
+    - "WordPress bloggers improving page speed scores"
+    - "Developers trimming scripts on client sites"
+    - "Agencies passing Core Web Vitals for WordPress sites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

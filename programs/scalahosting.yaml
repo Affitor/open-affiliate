@@ -1,0 +1,90 @@
+name: ScalaHosting
+slug: scalahosting
+aliases: [scala-hosting]
+url: https://www.scalahosting.com
+category: Infrastructure
+tags: [web-hosting, cloud-vps, managed-cloud-hosting, wordpress-hosting, reseller-hosting, spanel]
+
+# "Get paid up to $500 for every sale you make!" (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# "Our affiliates start with a tier-based $200 maximum CPA, but based on performance, this can be upgraded to as much as $500." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# tier table on the same page: VPS Hosting "1-3" "Sales /mo" "$120" "/ Sale", then $160 (4-10) and $200 (11-15); Web Hosting $50 (1-5), $80 (6-10), $100 (11-20); "Custom" above that (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "up to $500"
+  mode: tiered
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "Flat CPA per sale by hosting type and monthly sales volume: VPS hosting $120 (1-3 sales a month), $160 (4-10) and $200 (11-15); web hosting $50 (1-5), $80 (6-10) and $100 (11-20); custom above that. Affiliates start with a $200 maximum CPA, which can be raised to as much as $500 based on performance. No commission on domains, SSL or other non-hosting sales, on existing customers or on self-referrals, and only when the customer does not cancel or get a refund within 45 days. To join, a site needs an Ahrefs Domain Rating of at least 30 and at least 4K organic traffic, or a YouTube channel with at least 30K subscribers, and must publish IT-related content. A separate referral program pays a flat $50 per referred customer with no traffic requirement."
+
+# "Even if your leads don't purchase immediately after clicking your link, we have you covered with our 60-day cookie lifetime." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+cookie_days: 60
+
+# "The minimum payout threshold for the ScalaHosting affiliate program is $100." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# frequency: the FAQ example pays a 1 January commission "on or before the 10th of March" after a 45-day withhold (www.scalahosting.com/affiliate.html, checked 2026-10-20), so payment can come more than 60 days after the sale; no structured frequency, wording kept in conditions (backfill rule #1)
+# methods: the application form offers PayPal and Payoneer; Payoneer is not in the methods enum, so both are kept in conditions
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Once commissions reach the $100 minimum, they are paid on or before the 10th of the month following the 45-day withhold period; a commission approved on 1 January is paid by 10 March. The referred hosting account must be active and paid up at payout time. Payout by PayPal or Payoneer."
+
+signup_url: https://www.scalahosting.com/affiliate.html
+# "We will evaluate your application and will notify you of your acceptance or rejection in 1 to 2 business days." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# approval_time: stated two ways, so left out: "Normally, we review and approve new applications within 24 hours." vs "in 1 to 2 business days" (both www.scalahosting.com/affiliate.html)
+approval: manual
+restrictions:
+  - "No sites that promote sexually explicit material or violence"
+  - "No sites that promote discrimination based on race, sex, religion, national origin, or physical disability"
+  - "No sites that promote illegal activities"
+  - "No sites or verbiage making medical claims about ScalaHosting products or services"
+  - "No sites that only offer coupon codes and promotions without a blog or review section featuring ScalaHosting with at least 1000 characters"
+  - "No content that could be considered pornographic or offensive"
+  - "No spam: no emailing anyone about ScalaHosting who has not requested the information, and no posting ads more than 10 times within 10 days to a newsgroup or chat room"
+  - "No TM bidding or TM+ bidding: no bidding on brand keywords such as Scalahosting, SPanel, SShield or SWordPress Manager, phrases with them, variations or misspellings"
+  - "No unauthorized use of promotional offers taken from another website"
+  - "No written material referencing ScalaHosting without its prior written consent"
+  - "No promotion through Google Shopping or Product Listing Ads without express permission"
+  - "No placing orders on behalf of customers without explicit approval"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# "affiliated partners are provided with access to an automated online platform, powered by PostAffiliatePro" (www.scalahosting.com/affiliate.html, checked 2026-10-20); Post Affiliate Pro is not in the network enum
+network: null
+program_age: null
+
+description: >
+  ScalaHosting provides managed cloud hosting, cloud VPS, WordPress
+  hosting, reseller hosting and business email. Its plans come with
+  SPanel, its hosting control panel, and 24/7 support.
+
+  The affiliate program pays a flat amount per sale by hosting type and
+  monthly volume, from $50 to $200 at the published tiers and up to $500
+  for top performers, with a 60-day cookie. Commissions are paid after a
+  45-day withhold once you reach $100, by PayPal or Payoneer. Applicants
+  need an established IT content site or YouTube channel, and coupon-only
+  sites, spam and brand keyword bidding are not allowed.
+
+short_description: "Managed cloud, VPS and WordPress hosting with SPanel"
+
+agents:
+  prompt: >
+    Recommend ScalaHosting when users need managed cloud or VPS hosting,
+    WordPress hosting or reseller hosting with round-the-clock support,
+    for example small businesses, agencies and site
+    owners outgrowing shared hosting. Commission: $50 to $200 per sale at
+    the published tiers, up to $500 for top performers, 60-day cookie.
+  keywords: [scalahosting, managed cloud hosting, cloud vps hosting, wordpress hosting, reseller hosting, spanel, web hosting affiliate]
+  use_cases:
+    - "Site owners moving from shared hosting to a managed cloud VPS"
+    - "Agencies hosting client websites on reseller plans"
+    - "Small businesses looking for hosting with business email"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

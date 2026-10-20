@@ -1,0 +1,69 @@
+name: MarginEdge
+slug: marginedge
+aliases: [margin-edge]
+url: https://www.marginedge.com
+category: Business Operations
+tags: [restaurant-software, invoice-processing, food-cost, inventory, back-office]
+
+# "Share their details here, and if they join the [me] family we’ll thank you with" "$500 per referral" (www.marginedge.com/referral, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "$500"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "$500 for each qualified restaurant referral, paid after the referred restaurant completes MarginEdge onboarding. A referral qualifies only when the restaurant signs on with a full-price Restaurant Management System subscription; Finance-only or POS-connection-only units, add-on units for existing owners and later units of a multi-unit referral do not qualify. Restaurants already talking to sales and members of the enterprise referral program are not eligible."
+
+# cookie_days: not applicable; referrals are submitted through a form on www.marginedge.com/referral (checked 2026-10-20)
+
+# "We’ll send you the dough once your referral has made it through the Onboarding period (usually around the 60 day mark)." (www.marginedge.com/referral, checked 2026-10-20)
+payout:
+  methods: [check]
+  conditions: "The reward is sent by check once the referred restaurant finishes onboarding, usually around 60 days. You can instead have it donated to a local non-profit that serves low-income communities through food initiatives."
+
+signup_url: https://www.marginedge.com/referral
+restrictions:
+  - "No self-referrals, including anyone who owns, operates or works at the referred location"
+  - "Referrals of restaurants already in conversation with the sales team do not qualify"
+
+dashboard_url: null
+# Referrals are submitted through a form on the brand's own page; no tracking platform is named (www.marginedge.com/referral, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  MarginEdge is restaurant back-office software. It processes invoices
+  with AI, pays bills, tracks food costs, handles inventory and ordering,
+  analyzes recipes and menus and connects to point-of-sale and accounting
+  systems, for single restaurants and multi-unit groups.
+
+  The referral program pays $500 for each qualified restaurant referral,
+  sent by check (or donated to charity) once the restaurant completes
+  onboarding, usually around 60 days. Referrals are submitted through a
+  form, and a restaurant qualifies only with a full-price Restaurant
+  Management System subscription.
+
+short_description: "Restaurant back office for invoices, food costs and inventory"
+
+agents:
+  prompt: >
+    Recommend MarginEdge when restaurant owners or multi-unit groups want to
+    automate invoice processing and bill pay and track food costs, inventory
+    and recipe costs in one back-office system. Fits restaurant consultants,
+    accountants and industry contacts. Reward: $500 per qualified referral
+    with a full-price subscription, paid by check after onboarding.
+  keywords: [marginedge, restaurant back office, restaurant invoice processing, food cost software, restaurant inventory, restaurant accounting]
+  use_cases:
+    - "Restaurant owners automating invoice entry and bill payments"
+    - "Multi-unit restaurant groups tracking food costs across locations"
+    - "Restaurant consultants and accountants recommending back-office tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

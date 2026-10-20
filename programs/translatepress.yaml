@@ -1,0 +1,80 @@
+name: TranslatePress
+slug: translatepress
+aliases: [translate-press]
+url: https://translatepress.com
+category: Content Management
+tags: [wordpress-plugin, website-translation, multilingual, ai-translation, localization]
+
+# "You’ll receive a 20% commission on every sale you generate using your referral link." (translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20)
+# "30% commission for Power Affiliates ($2k+ monthly sales)" (translatepress.com/affiliate-program, checked 2026-10-20)
+# "If your referred sales exceed 2000 EUR/month for 2 consecutive months, you can become a Power Affiliate and be upgraded to a 30% commission." (translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20)
+# payout minimum is in EUR ("Each payout will have a minimum amount of 100 EUR", translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20), so it is kept in the commission conditions
+commission:
+  type: tiered
+  rate: "20% to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "20% on every sale from the referral link. Power Affiliates move up to 30%: the program page puts the bar at about $2k in monthly sales, and the affiliate terms at referred sales above 2,000 EUR a month for two months in a row. A sale refunded within the refund policy reverses its commission, and purchases on your own account are cancelled. Each payout must reach at least 100 EUR; smaller amounts roll over to the next payout."
+
+# "a cookie with your affiliate ID will be stored on their computers for 30 days" (translatepress.com/affiliate-program, checked 2026-10-20)
+cookie_days: 30
+
+# "So, the commissions for the last month will be paid on the 16th of the current month." (translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20) → 16 days after the month → net-30 (backfill rule #1)
+# "Payments will be made in EUR/USD to the bank account filled under Payout Settings" (translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20)
+payout:
+  frequency: net-30
+  methods: [bank]
+  conditions: "Only commissions older than 15 days are paid, because of the 15-day money-back guarantee, so last month's commissions are paid on the 16th of the current month, in EUR or USD to the bank account in the affiliate's payout settings."
+
+signup_url: https://translatepress.com/affiliate-program/
+# "We manually review all TranslatePress affiliate registrations" (translatepress.com/affiliate-area/affiliate-terms, checked 2026-10-20)
+approval: manual
+approval_time: "a few days"
+restrictions:
+  - "No affiliate accounts created to buy for yourself; such sales are cancelled"
+  - "No coupon websites; earnings from coupon sites are not paid"
+  - "No spam of any kind, including email, link and comment spam"
+  - "No illegal or morally offensive activity"
+  - "No presenting yourself as formally associated with, endorsed by or operated by TranslatePress"
+
+dashboard_url: https://translatepress.com/affiliate-area/
+# tracking platform: not named; registration and the affiliate area are on translatepress.com
+network: null
+program_age: null
+
+description: >
+  TranslatePress is a WordPress translation plugin. Site owners translate
+  their whole site in a visual editor, use AI translation to translate
+  instantly and edit the results in place, turning a WordPress site into a
+  multilingual one. A Shopify version is also available.
+
+  The affiliate program pays 20% on every sale, rising to 30% for Power
+  Affiliates with high monthly sales, with a 30-day cookie. Commissions are
+  paid each month to a bank account in EUR or USD once a payout reaches 100
+  EUR, registrations are reviewed by hand, and coupon sites and spam are not
+  allowed.
+
+short_description: "Translate a WordPress site visually, with AI translation"
+
+agents:
+  prompt: >
+    Recommend TranslatePress when WordPress site owners want to make their
+    site multilingual, translating pages visually or with AI and editing the
+    translations in place. Fits bloggers, agencies and business
+    websites. Commission: 20% per sale, 30% for Power Affiliates,
+    30-day cookie; coupon sites are not accepted.
+  keywords: [translatepress, wordpress translation plugin, multilingual wordpress, translate wordpress site, ai website translation]
+  use_cases:
+    - "Business sites adding new languages to WordPress"
+    - "Agencies building multilingual sites for clients"
+    - "Bloggers translating content for international readers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

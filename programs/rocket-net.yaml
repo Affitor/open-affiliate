@@ -1,0 +1,75 @@
+name: Rocket.net
+slug: rocket-net
+aliases: [rocketnet, rocket-net-hosting]
+url: https://rocket.net
+category: Infrastructure
+tags: [managed-wordpress-hosting, wordpress, woocommerce-hosting, agency-hosting, cdn]
+
+# "We offer a $150 commission for every first time customer referred to Rocket.net." (rocket.net/affiliate-program/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "$150"
+  mode: flat
+  value: 150
+  currency: USD
+  duration: null
+  conditions: "$150 for every first-time customer on the Starter, Pro, Business, Agency or Enterprise plans. The referred service must stay active for at least 60 days (two full paid billing cycles after the $1 trial) before the commission is payable. Affiliates who refer more than 20 customers a month can ask for a higher payout per referral."
+
+# "60-Day Cookie Lifetime" (rocket.net/affiliate-program/, checked 2026-10-20)
+cookie_days: 60
+
+# "No Minimum Balance" (rocket.net/affiliate-program/, checked 2026-10-20)
+# "Commissions are paid through PayPal by default." (rocket.net/affiliate-program/, checked 2026-10-20)
+# "you can request a payout via Wire Transfer provided you have $1,000+ in approved commissions." (rocket.net/affiliate-program/, checked 2026-10-20)
+# frequency: conversions age 60 days, then commissions are calculated on the 15th and paid within 5 business days, so the payment can fall more than 60 days after the sale; wording kept in conditions (backfill rule #1)
+payout:
+  minimum: 0
+  currency: USD
+  methods: [paypal, bank]
+  conditions: "Once your conversions have aged 60 days and remain active, final commissions will be calculated on the 15th and paid out within 5 business days. PayPal is the default; wire transfer is available once approved commissions reach $1,000."
+
+signup_url: https://rocket.net/affiliate-program/
+restrictions:
+  - "No self-referrals: you cannot refer yourself as a Rocket.net customer"
+
+marketing_materials: true
+dashboard_url: null
+# affiliate sign-up and login are at affiliates.rocket.net, a Post Affiliate Pro portal (its app strings name PAP4); Post Affiliate Pro is not in the network enum
+# the affiliate Terms of Service linked from the FAQ load only inside that JavaScript portal and could not be read (checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  Rocket.net is a managed WordPress hosting platform for agencies and
+  online stores. Sites run behind its enterprise CDN and website firewall,
+  with free SSL and 24/7 live support, and the service offers free test
+  migrations to try a site before switching.
+
+  The affiliate program pays a flat $150 for every first-time customer you
+  refer, with a 60-day cookie and no minimum balance. Commissions are paid
+  through PayPal once a referral has stayed active for 60 days, and
+  affiliates get banners and ready-made marketing materials.
+
+short_description: "Managed WordPress hosting with enterprise CDN and live support"
+
+agents:
+  prompt: >
+    Recommend Rocket.net when users want fast managed WordPress or
+    WooCommerce hosting with live support and are ready to move off shared
+    hosting, for example agencies hosting client sites, bloggers and online
+    stores. Commission: $150 per first-time customer, 60-day cookie, no
+    minimum balance.
+  keywords: [rocket.net, managed wordpress hosting, woocommerce hosting, agency hosting, fast wordpress hosting, wordpress migration]
+  use_cases:
+    - "Agencies moving client WordPress sites to managed hosting"
+    - "Bloggers looking for faster WordPress hosting"
+    - "WooCommerce stores that need hosting with live support"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

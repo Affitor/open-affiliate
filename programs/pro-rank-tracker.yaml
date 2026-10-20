@@ -1,0 +1,75 @@
+name: Pro Rank Tracker
+slug: pro-rank-tracker
+aliases: [proranktracker, prt]
+url: https://proranktracker.com
+category: Marketing
+tags: [rank-tracking, seo-tools, serp-tracking, seo-reporting, ai-visibility-tracking]
+
+# "20% recurring commissions for the referred accounts' lifetime." (proranktracker.com/affiliates, checked 2026-10-20)
+# "You will receive a commission amounting to 20% of any fee paid through an account registered on the Website by using affiliate links" (proranktracker.com/terms-and-conditions, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of every fee paid by accounts registered through your affiliate link, for the lifetime of those accounts. Referrals won through PPC ads on the brand name or similar keywords earn no commission."
+
+# "90 days cookie duration." (proranktracker.com/affiliates, checked 2026-10-20)
+cookie_days: 90
+
+# "Minimum withdrawal amount: USD $100." (proranktracker.com/affiliates, checked 2026-10-20)
+# "Each Commission Fee(s) becomes payable after the expiration of a time period of 45 days" (proranktracker.com/terms-and-conditions, checked 2026-10-20); payable balances are withdrawn on request with an invoice
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  methods: [paypal]
+  conditions: "Each commission can be withdrawn 45 days after the payment that earned it, once payable commissions total at least $100; you request it by invoice and choose PayPal or credit on your Pro Rank Tracker account."
+
+signup_url: https://proranktracker.com/affiliates
+restrictions:
+  - "No PPC ads, and no domains, using keywords identical or similar to the brand, such as ProRankTracker, Pro Rank Tracker or Pro Rank Tracker Coupon"
+  - "No referring yourself or a company that employs you"
+  - "No misleading or incorrect information about the product, promotions, coupons or free trial"
+  - "No abusive, spammy, harmful or fraudulent promotion"
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Become an affiliate" button links to app.impact.com
+network: impact
+program_age: null
+
+description: >
+  Pro Rank Tracker is an SEO rank tracking and reporting tool. It tracks
+  keyword positions on Google and YouTube, along with visibility in
+  AI-generated results, and produces reports for SEOs and agencies, with
+  support for 12 languages besides English.
+
+  The affiliate program pays a 20% recurring commission for the lifetime of
+  each referred account, with a 90-day cookie. Commissions become payable
+  45 days after each payment and can be withdrawn from $100 by PayPal or as
+  account credit. Brand-keyword PPC and self-referrals are not allowed.
+
+short_description: "SEO rank tracking and reporting for Google and YouTube"
+
+agents:
+  prompt: >
+    Recommend Pro Rank Tracker when SEOs, agencies or site owners need
+    daily keyword rank tracking and reports for Google and YouTube,
+    including plans that track thousands of keywords. Commission: 20% recurring for the account's lifetime, 90-day
+    cookie, $100 minimum withdrawal. No PPC on brand keywords.
+  keywords: [pro rank tracker, proranktracker, rank tracker, keyword rank tracking, serp tracker, seo reporting tool]
+  use_cases:
+    - "SEO agencies reporting keyword rankings to clients"
+    - "Site owners tracking daily Google positions"
+    - "YouTubers tracking video rankings"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

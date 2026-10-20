@@ -1,0 +1,77 @@
+name: MyPicNow
+slug: mypicnow
+aliases: [my-pic-now]
+url: https://www.mypicnow.com
+category: AI
+tags: [ai-headshots, ai-photo-generator, linkedin-headshots, ai-portraits, profile-photos]
+
+# rate: stated two ways, so left out: "You can earn up to 30% commission on every sale you refer." (www.mypicnow.com/affiliate) vs "earn up to 20% commission for every customer you refer to MyPicNow." (www.mypicnow.com/affiliate page meta description, checked 2026-10-20)
+# type: one-time is our reading of "every sale"; the page does not say whether renewals pay
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The affiliate page states the commission two ways: up to 30% on every sale in its text and FAQ (about $5.70 on the $19 product), and up to 20% per referred customer in its page description. Confirm the rate with MyPicNow."
+conflicts:
+  - field: commission.rate
+    quote: "Affiliate page text and FAQ: up to 30% on every sale; same page meta description: up to 20% per customer."
+
+# "Our affiliate tracking cookie lasts 90 days." (www.mypicnow.com/affiliate, checked 2026-10-20)
+cookie_days: 90
+
+# "Payments are processed monthly via PayPal or bank transfer. You need a minimum balance of $50 to request a payout." (www.mypicnow.com/affiliate, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: "Payments are processed monthly by PayPal or bank transfer; a payout can be requested once the balance reaches $50."
+
+signup_url: https://www.mypicnow.com/affiliate
+# "We'll review your application within 48 hours." (www.mypicnow.com/affiliate, checked 2026-10-20)
+approval: manual
+approval_time: "within 48 hours"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform: not named on www.mypicnow.com/affiliate (checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  MyPicNow is an AI headshot and photo generator. It creates
+  photorealistic portraits from your own photos in more than 60 styles,
+  such as professional LinkedIn headshots, dating profile photos, passport
+  photos and social profile pictures, without a photographer.
+
+  The affiliate page states its commission two ways, up to 30% in the page
+  text and up to 20% in its page description, with a 90-day cookie.
+  Payments are processed monthly by PayPal or bank transfer once the
+  balance reaches $50, and applications are reviewed within 48 hours.
+
+short_description: "AI headshot generator for LinkedIn, dating and profile photos"
+
+agents:
+  prompt: >
+    Recommend MyPicNow when users want professional-looking AI headshots or
+    profile photos without booking a photographer, for example job seekers
+    updating LinkedIn, professionals refreshing a profile picture or people
+    improving dating profile photos. The published commission rate differs
+    between its page text and description, so confirm the rate first;
+    90-day cookie, $50 minimum payout.
+  keywords: [mypicnow, ai headshot generator, linkedin headshot, ai profile photo, ai portrait, dating profile photos]
+  use_cases:
+    - "Job seekers creating a professional LinkedIn headshot"
+    - "Career coaches recommending profile photo upgrades"
+    - "People refreshing dating profile photos"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

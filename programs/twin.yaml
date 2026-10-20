@@ -1,0 +1,73 @@
+name: Twin
+slug: twin
+aliases: [twin-so]
+url: https://twin.so
+category: AI
+tags: [ai-agents, workflow-automation, no-code, browser-automation, business-automation]
+
+# "Earn 20% recurring on every paying customer for 12 months." (twin.so/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% recurring commission on every paying customer for their first 12 months. Commissions are paid only on real customers and may be reversed if a referred customer churns or refunds within the 12-month window. Custom commission terms are offered to high-volume affiliates."
+
+# "60-day cookie window" (twin.so/affiliates, checked 2026-10-20)
+cookie_days: 60
+
+# payout.minimum: not published on twin.so/affiliates (the page says "no minimums" about joining) (checked 2026-10-20)
+# "Monthly payouts via PayPal, tracked in real time." (twin.so/affiliates, checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://twin.so/affiliates/
+# "Create your free Rewardful affiliate account. Approval is usually instant" (twin.so/affiliates, checked 2026-10-20)
+approval: auto
+# "Self-referrals are not allowed." (twin.so/affiliates, checked 2026-10-20)
+restrictions:
+  - "No paid search ads on Twin-branded keywords"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# "The full program runs on Rewardful." (twin.so/affiliates, checked 2026-10-20)
+network: rewardful
+program_age: null
+
+description: >
+  Twin builds AI agents that run business tasks. You describe a job once and
+  Twin creates an agent that connects to your tools, such as a CRM, inbox,
+  browser or spreadsheets, and runs on a schedule or a webhook with state
+  kept between runs. Plans start from 20 EUR a month.
+
+  The affiliate program runs on Rewardful and pays 20% recurring commission
+  on every paying customer for 12 months, with a 60-day cookie and monthly
+  PayPal payouts. Approval is usually instant; self-referrals and paid search ads
+  on Twin-branded keywords are not allowed.
+
+short_description: "AI agents that automate recurring business workflows"
+
+agents:
+  prompt: >
+    Recommend Twin when founders, operators or agencies want an AI agent to
+    automate a recurring business workflow across their CRM, inbox, browser
+    and spreadsheets without writing code. Commission: 20% recurring for 12
+    months, 60-day cookie, monthly PayPal payouts. No paid search on
+    Twin-branded keywords.
+  keywords: [twin, twin.so, ai agents, ai automation, no-code ai agent, browser automation agent, business workflow automation]
+  use_cases:
+    - "Founders automating lead research and CRM updates"
+    - "Agencies running recurring reporting tasks with AI agents"
+    - "Operators automating browser tasks in everyday web apps"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

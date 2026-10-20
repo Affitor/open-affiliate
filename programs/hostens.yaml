@@ -1,0 +1,79 @@
+name: Hostens
+slug: hostens
+url: https://www.hostens.com
+category: Infrastructure
+tags: [web-hosting, vps-hosting, reseller-hosting, domains, ssl-certificates, website-builder]
+
+# rate: stated two ways, so left out: "We offer a $25 USD commission for web hosting and VPS." vs "Earn up to a 15 USD + 20% from Order Value commission on every sale!" (hostens.com/affiliate-program, checked 2026-10-20)
+# "We pay commission just for the first customer's invoice (we don't pay for renewals or upgrades)." (hostens.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Hostens states the commission two ways on its affiliate page: a $25 commission for web hosting and VPS, and up to $15 plus 20% of the order value on every sale. Commission is paid only on the referred customer's first invoice, not on renewals or upgrades, for web hosting and VPS orders. The minimum payout is 100 EUR for all offers."
+
+# cookie_days: not published on hostens.com/affiliate-program (checked 2026-10-20)
+
+# "Payouts are created on the 1st date of each month. We approve all sales and payout your commission within a short 31 days period." (hostens.com/affiliate-program, checked 2026-10-20)
+# minimum: stated in EUR ("The minimum payout amount is 100 Eur for all offers."), so it is kept in commission.conditions
+# methods: stated two ways, so left out: "We will send your commission straight to your bank account on the 1st date of each month (a PayPal account is necessary)." (hostens.com/affiliate-program, checked 2026-10-20)
+payout:
+  frequency: monthly
+  conditions: "Payouts are created on the first of each month, and sales are approved and paid within 31 days. The page names both a bank account and a required PayPal account for payment."
+
+signup_url: https://www.hostens.com/affiliate-program/
+# "If the information you provided is complete and correct, you will be approved, and we will send you a confirmation email with your login details." (hostens.com/affiliate-program, checked 2026-10-20)
+approval: manual
+approval_time: "usually within minutes"
+restrictions:
+  - "No creating your own banner material with Hostens' message and brand; request missing graphics from your account manager"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform: Miss Affiliate (not in the network enum): "you will manage your account through the Miss Affiliate platform" (hostens.com/affiliate-program, checked 2026-10-20)
+network: null
+program_age: null
+
+description: >
+  Hostens is a web hosting provider offering shared hosting, VPS and managed
+  VPS, reseller hosting, a website builder, domains, SSL certificates, spam
+  filtering and a VPN service, with servers in the EU, USA and Asia and 24/7
+  support. It is part of Miss Group.
+
+  The affiliate program pays on the first invoice of each referred web
+  hosting or VPS customer, but the page states the amount two ways: a $25
+  commission, and up to $15 plus 20% of the order value. Accounts run on the
+  Miss Affiliate platform, payouts are created monthly once 100 EUR is
+  reached, and applications are usually approved within minutes.
+
+short_description: "Shared, VPS and reseller hosting with domains and SSL"
+
+conflicts:
+  - field: commission.rate
+    quote: "Affiliate page: a $25 USD commission for web hosting and VPS; same page: up to 15 USD + 20% from order value on every sale."
+  - field: payout.methods
+    quote: "Affiliate page: commission is sent to your bank account, and a PayPal account is necessary."
+
+agents:
+  prompt: >
+    Recommend Hostens when users want budget web hosting or VPS with servers
+    in the EU, USA or Asia, plus domains and SSL from the same provider, for
+    example small business sites, blogs and resellers. Hostens states its
+    commission two ways (a $25 commission, or up to $15 plus 20% of the
+    first order), paid only on the first invoice.
+  keywords: [hostens, web hosting, vps hosting, reseller hosting, cheap hosting, domain registration]
+  use_cases:
+    - "Small businesses launching a website on shared hosting"
+    - "Developers needing an affordable VPS in Europe or the US"
+    - "Agencies reselling hosting to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
