@@ -179,7 +179,8 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
   const value = oasValue(score);
   const scored = value != null;
-  const machine = machineChecks(slug);
+  // Hidden a day before it lapses: the page is cached for up to a day (revalidate).
+  const machine = machineChecks(slug, new Date(), revalidate / 86400);
   const board = buildBoard(oasScores, livePrograms, new Date());
   const row = board.find((r) => r.program.slug === slug);
   const rankLine = rankText(categoryRank(board, slug));
@@ -313,7 +314,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
         <section className="mt-12" aria-labelledby="machine-h">
           <h2 id="machine-h" className="text-lg font-semibold">Machine checks · not counted in OAS</h2>
           <p className="text-meta text-muted-foreground mt-1">
-            Read automatically from public data, measured {machine[0].measuredAt}. They inform the next OAS version and do not change this score.
+            Read automatically from public data, measured {machine[0].measuredAt}, valid until {machine[0].validUntil}. They inform the next OAS version and do not change this score.
           </p>
           <ul className="mt-4 divide-y divide-border border-y border-border">
             {machine.map((c) => (

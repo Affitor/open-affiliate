@@ -110,8 +110,16 @@ export const openapi = {
           summary: string, checkedAt: nullableString, validUntil: nullableString, version: string, reportUrl: string,
         }, ["score", "grade", "status", "summary", "checkedAt", "validUntil", "version", "reportUrl"]),
         oasMachineChecks: { type: "array", items: object({
-          id: { type: "string", enum: ["A1", "P5", "P6"] }, label: string, met: { type: "boolean" }, reading: string, measuredAt: string, validUntil: string,
-        }, ["id", "label", "met", "reading", "measuredAt", "validUntil"]) },
+          id: { type: "string", enum: ["A1", "P5", "P6"] }, label: string, met: { type: "boolean" }, reading: string,
+          source: { type: "string", enum: ["http", "pagespeed", "dataforseo"] }, target: string,
+          measurement: { oneOf: [
+            object({ status: { type: "integer", const: 200 } }, ["status"]),
+            object({ data: { type: "string", const: "field" }, notGood: strings }, ["data", "notGood"]),
+            object({ data: { type: "string", const: "lab" }, lcpMs: { type: "number" }, cls: { type: "number" }, tbtMs: { type: "number" } }, ["data", "lcpMs", "cls", "tbtMs"]),
+            object({ scope: { type: "string", const: "worldwide" }, threshold: { type: "integer" }, reached: { type: "boolean" } }, ["scope", "threshold", "reached"]),
+          ] },
+          ruleset: string, measuredAt: string, validUntil: string,
+        }, ["id", "label", "met", "reading", "source", "target", "measurement", "ruleset", "measuredAt", "validUntil"]) },
         alternatives: { type: "array", items: object({ slug: string, name: string, commission: string, url: string }, ["slug", "name", "commission", "url"]) },
       }, ["slug", "name", "url", "logo", "category", "commission", "payout", "description", "shortDescription", "tags", "stars", "verified", "agentPrompt", "submittedBy", "createdAt"]),
       ProgramSearch: object({
