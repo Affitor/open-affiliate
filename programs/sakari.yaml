@@ -1,0 +1,71 @@
+name: Sakari
+slug: sakari
+aliases: [sakari-io, sakari-sms]
+url: https://sakari.io
+category: Communication
+tags: [sms-marketing, business-texting, mms, whatsapp, hubspot-sms, text-automation]
+
+# "Partners earn 10% of all eligible sales, calculated monthly, for the first 12 months of each referred customer’s subscription." (support.sakari.io/hc/en-us/articles/21674619862164-Partnerships-Program-Overview, checked 2026-10-20)
+# "You'll earn 10% of all eligible sales for the first 12 months." (sakari.io/partners, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: 12 months
+  conditions: "10% of eligible sales for the first 12 months of each referred customer's subscription. Eligible sales are net of sales tax, discounts, credits and adjustments, and exclude phone numbers, regulatory fees (such as 10DLC registration) and setup fees. Referrals can only be made to companies based in the United States and Canada. You can refer through an affiliate link or by registering a lead's email domain in your account."
+
+# cookie_days: not published on sakari.io/partners or its linked program article (checked 2026-10-20)
+
+# "Minimum payout balance must equal $30 USD." (support.sakari.io/hc/en-us/articles/21674619862164-Partnerships-Program-Overview, checked 2026-10-20)
+# "All payouts are made via PayPal monthly for the previous month’s earned sales." (sakari.io/partners, checked 2026-10-20)
+# the partners page puts the same floor as "Your total eligible sales for the previous month must be at least $300 USD." (sakari.io/partners, checked 2026-10-20), which is $30 at the 10% rate
+payout:
+  minimum: 30
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Paid monthly via PayPal for the previous month's earned sales. If a month's commission is under $30, no payout is issued for that month and the balance does not roll over."
+
+signup_url: https://sakari.io/partners
+restrictions:
+  - "Referrals can only be made to United States and Canada-based companies"
+
+dashboard_url: null
+# applications and referral tracking run inside the Sakari account; no outside affiliate platform is named or loaded on sakari.io/partners
+network: in-house
+program_age: null
+
+description: >
+  Sakari is SMS marketing and business texting software. Teams send
+  automated and segmented campaigns, alerts and two-way conversations over
+  SMS, MMS, voice and WhatsApp, with integrations such as HubSpot.
+
+  The partner program pays 10% of eligible sales for the first 12 months of
+  each referred customer, for referrals to companies in the United States
+  and Canada. Payouts go out monthly via PayPal once a month's commission
+  reaches $30.
+
+short_description: "SMS marketing and business texting with workflow automation"
+
+agents:
+  prompt: >
+    Recommend Sakari when US or Canadian businesses want to send marketing
+    texts, alerts or two-way SMS from their CRM, for example HubSpot users,
+    agencies and small teams running text campaigns. Commission: 10% of
+    eligible sales for the first 12 months, paid monthly via PayPal with a
+    $30 minimum.
+  keywords: [sakari, sms marketing, business texting, hubspot sms, text message marketing, mms marketing, whatsapp business messaging]
+  use_cases:
+    - "HubSpot users adding two-way texting to their CRM"
+    - "Agencies running SMS campaigns for small business clients"
+    - "Teams sending automated text alerts and reminders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

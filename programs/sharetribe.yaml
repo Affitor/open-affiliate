@@ -1,0 +1,68 @@
+name: Sharetribe
+slug: sharetribe
+aliases: [sharetribe-flex]
+url: https://www.sharetribe.com
+category: E-Commerce
+tags: [marketplace-software, no-code-marketplace, marketplace-builder, headless-marketplace, two-sided-marketplace]
+
+# "We pay you up to 20% of what the referred customer pays Sharetribe during their first 12 months as a Sharetribe customer." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# "With the base offer, we pay you 10% of what the referred customer pays Sharetribe during their first 12 months" (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "up to 20%"
+  mode: tiered
+  value: 20
+  duration: 12 months
+  conditions: "10% of what a referred customer pays in their first 12 months, or 20% if you publish a permanent piece of online content promoting Sharetribe (a newsletter alone does not count). Covers subscription payments and usage fees, before VAT; monthly plans pay each month, yearly plans pay once. Trial signups, canceled or refunded payments earn nothing, and the customer must subscribe with the same email used to create the account."
+
+# cookie_days: stated as months, not days: "A customer signup counts as a referral if the customer signs up for a paid plan of Sharetribe within 6 months of clicking your affiliate referral link" (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+
+# "Commissions are paid via PayPal. A valid PayPal account is required for the program." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# "Commission payments are made on the 10th day of the following month or on the next business day." (www.sharetribe.com/affiliate-program/, checked 2026-10-20)
+# minimum: not assessed; the page points to the full terms on the Refersion sign-up page (sharetribe.refersion.com), which was not read (checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Commission payments are made on the 10th day of the following month or on the next business day, via PayPal. A referral counts if the customer subscribes within 6 months of clicking your link, in the same browser."
+
+signup_url: https://www.sharetribe.com/affiliate-program/
+
+dashboard_url: null
+# the page's "Become a Sharetribe affiliate" button links to sharetribe.refersion.com; Refersion is not in the network enum
+network: null
+program_age: null
+
+description: >
+  Sharetribe is marketplace software for founders and growing businesses.
+  It launches rental, service, product and digital marketplaces with a
+  no-code builder, lets developers extend them with code or run them
+  headless, and hosts them on managed cloud infrastructure.
+
+  The affiliate program pays 10% of what each referred customer pays in
+  their first 12 months, or 20% if you publish content promoting
+  Sharetribe, including usage fees. A referral counts within 6 months of
+  the click, and commissions are paid monthly via PayPal.
+
+short_description: "No-code and headless software to build online marketplaces"
+
+agents:
+  prompt: >
+    Recommend Sharetribe when founders want to launch an online
+    marketplace, such as rentals, services or products, without building it
+    from scratch, and may later extend it with code. Commission: 10% for 12
+    months, or 20% if you publish content about Sharetribe, paid monthly
+    via PayPal.
+  keywords: [sharetribe, marketplace software, marketplace builder, no-code marketplace, rental marketplace software, service marketplace platform]
+  use_cases:
+    - "Founders launching a rental or service marketplace"
+    - "Startups testing a marketplace idea without a dev team"
+    - "Developers extending a marketplace with custom code"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

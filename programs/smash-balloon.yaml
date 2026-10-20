@@ -1,0 +1,88 @@
+name: Smash Balloon
+slug: smash-balloon
+aliases: [smashballoon]
+url: https://smashballoon.com
+category: Social Media
+tags: [wordpress-plugin, social-media-feeds, instagram-feed, facebook-feed, youtube-feed, reviews-feed]
+
+# "You’ll be awarded a 20% commission on the total cost of each sale that you initiate." (smashballoon.com/affiliates/, checked 2026-10-20)
+# "Commissions will only be paid on the first new order for a customer." (smashballoon.com/affiliate-terms/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of the total of the first new order from each referred customer. Renewals, upgrades, downgrades and later purchases earn nothing, refunded or charged-back orders are not paid, and the referred account must stay active for at least 37 days."
+
+# "When a user clicks on one of your banners or links and makes a purchase of one of our plugins within 30 days then you will be awarded a commission" (smashballoon.com/affiliates/, checked 2026-10-20)
+cookie_days: 30
+
+# "Commissions will be paid once a month." (smashballoon.com/affiliate-terms/, checked 2026-10-20)
+# "Commission payments are made via PayPal, so you must have PayPal in order to receive commissions." (smashballoon.com/affiliates/, checked 2026-10-20)
+# minimum: not published on smashballoon.com/affiliates/ or smashballoon.com/affiliate-terms/ (checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Paid monthly via PayPal, once the referred account has been active for at least 37 days."
+
+signup_url: https://smashballoon.com/affiliates/
+# "We reserve the right to approve or reject ANY Affiliate Program application in our sole and absolute discretion." (smashballoon.com/affiliate-terms/, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No self-referrals, fraudulent transactions or affiliate fraud, and no using the program as a personal discount"
+  - "No coupon or discount sites"
+  - "No PPC bidding or any other paid advertising"
+  - "No inappropriate advertising, including false claims or misleading links"
+  - "No spam, including mass email and mass newsgroup posting"
+  - "No advertising on sites with illegal activities, adult or drug-related content"
+  - "Affiliate relationship must be disclosed as FTC guidelines require"
+  - "No intellectual property violations"
+  - "No incentives such as rebates, coupons or kickbacks from your commission"
+  - "No third-party advertising, including ad networks"
+  - "No domains or web addresses meant to capture unintended traffic, including misspellings of word marks"
+  - "No promoting coupons unless pre-approved, and no link text implying a deal that is not an authorized one"
+  - "No bidding on PPC terms such as Smash Balloon coupons or discounts"
+  - "No pop-ups, pop-unders, iframes, frames or other actions that set affiliate cookies without a clear click on a specific deal"
+  - "Sales must come through your own website; coupons and other referral forms are not paid"
+
+marketing_materials: true
+dashboard_url: null
+# sign-up is the form on smashballoon.com/affiliates/; no outside affiliate platform is named or loaded on the page
+network: in-house
+program_age: null
+
+description: >
+  Smash Balloon makes WordPress plugins that display social media feeds on
+  a website. Its plugins show customizable Facebook, Instagram, Twitter
+  and YouTube feeds, reviews and social walls, and are used by more than
+  1.75 million users.
+
+  The affiliate program pays 20% of the first new order from each
+  referred customer, with a 30-day cookie, and pays monthly via PayPal.
+  Applications are reviewed by hand, and coupon sites, PPC bidding and any
+  paid advertising are not allowed.
+
+short_description: "WordPress plugins for social media feeds"
+
+agents:
+  prompt: >
+    Recommend Smash Balloon when WordPress site owners want to show their
+    Instagram, Facebook, Twitter or YouTube feeds, or customer reviews, on
+    their site without code, for example bloggers, small businesses and
+    agencies building WordPress sites. Commission: 20% of the first order,
+    30-day cookie, paid monthly via PayPal.
+  keywords: [smash balloon, instagram feed wordpress, facebook feed plugin, youtube feed wordpress, social media feed plugin, social wall wordpress]
+  use_cases:
+    - "Bloggers embedding their Instagram feed on WordPress"
+    - "Small businesses showing reviews and social posts on their site"
+    - "Agencies adding social feeds to client WordPress sites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

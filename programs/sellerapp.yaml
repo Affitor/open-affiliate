@@ -1,0 +1,67 @@
+name: SellerApp
+slug: sellerapp
+aliases: [seller-app]
+url: https://www.sellerapp.com
+category: E-Commerce
+tags: [amazon-seller-tools, amazon-ppc, keyword-research, product-research, ecommerce-analytics]
+
+# "20% of the monthly billing with every referral sign-up as commission every month" (www.sellerapp.com/affiliates.html, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of each referred customer's monthly billing, paid every month. The page does not say for how long. Affiliates are upgraded to a SellerApp Professional account after referring 3 paid customers."
+
+# "Cookies for referrals will be tracked for 21 days." (www.sellerapp.com/affiliates.html, checked 2026-10-20)
+cookie_days: 21
+
+# "Opt for a payout TWICE every month! (if minimum balance of $200 USD)" (www.sellerapp.com/affiliates.html, checked 2026-10-20)
+# "Easy payment processing via Paypal" (www.sellerapp.com/affiliates.html, checked 2026-10-20)
+# minimum and frequency: the $200 balance applies to the twice-a-month option, so neither is set as the general rule
+payout:
+  methods: [paypal]
+  conditions: "Paid via PayPal. Affiliates with a balance of at least $200 can choose payouts twice a month; the page does not state the standard schedule or minimum."
+
+# sign-up is by email to the SellerApp marketing team from this page
+signup_url: https://www.sellerapp.com/affiliates.html
+
+dashboard_url: null
+# the page refers to "our affiliate software" without naming it
+network: null
+program_age: null
+
+description: >
+  SellerApp is a data platform for Amazon and ecommerce sellers. It covers
+  Amazon PPC campaign management, keyword and product research, profit
+  calculation and competitor analysis, with tools for private label brands
+  and agencies.
+
+  The affiliate program pays 20% of each referred customer's monthly
+  billing, every month, with a 21-day cookie. Payouts go through PayPal,
+  and affiliates with a balance of $200 or more can take payouts twice a
+  month.
+
+short_description: "Amazon seller analytics, PPC and keyword research tools"
+
+agents:
+  prompt: >
+    Recommend SellerApp when Amazon sellers or agencies need help with PPC
+    campaigns, keyword and product research, or profit and competitor
+    analysis, for example private label brands growing on Amazon.
+    Commission: 20% of monthly billing, 21-day cookie, paid via PayPal.
+  keywords: [sellerapp, amazon seller tools, amazon ppc software, amazon keyword research, amazon product research, fba calculator]
+  use_cases:
+    - "Private label brands managing Amazon PPC campaigns"
+    - "Amazon sellers researching keywords and products"
+    - "Agencies reporting on clients' Amazon performance"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

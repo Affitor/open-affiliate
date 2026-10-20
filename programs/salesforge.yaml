@@ -1,0 +1,75 @@
+name: Salesforge
+slug: salesforge
+aliases: [salesforge-ai, forge-ambassador]
+url: https://www.salesforge.ai
+category: Sales
+tags: [cold-email, linkedin-outreach, ai-sdr, email-warmup, sales-engagement, outbound]
+
+# "Earn 15% recurring commissions by referring any Forge product." (www.salesforge.ai/ambassador, checked 2026-10-20)
+# "15% commission on every successful payment (excluding domains)" (www.salesforge.ai/ambassador, checked 2026-10-20)
+# duration: left out; the FAQ says "You earn 15% of the invoice value for every referred customer who subscribes to any Forge product for one year." (www.salesforge.ai/ambassador, checked 2026-10-20), which does not clearly set a commission length
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "15% of each successful payment from referred customers on any Forge product, through one referral link. Domain purchases earn nothing, and white-label partnerships are handled separately at 20%."
+
+# cookie_days: not published on www.salesforge.ai/ambassador (checked 2026-10-20)
+
+# "Payouts begin once you’ve earned $100." (www.salesforge.ai/ambassador, checked 2026-10-20)
+# "Monthly payouts starting at just $100 earned" (www.salesforge.ai/ambassador, checked 2026-10-20)
+# methods: not published on www.salesforge.ai/ambassador (checked 2026-10-20)
+# frequency: stated two ways, so left out: "Monthly payouts starting at just $100 earned" vs "Once you reach $100 in commissions, you can withdraw your earnings via the Tolt platform." (both www.salesforge.ai/ambassador)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "The page describes monthly payouts from $100 and also says earnings can be withdrawn through the Tolt platform once you reach $100."
+
+signup_url: https://www.salesforge.ai/ambassador
+# "No manual approval." (www.salesforge.ai/ambassador, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No paid advertising for Salesforge through any ad network"
+
+marketing_materials: true
+dashboard_url: null
+# the FAQ says earnings are withdrawn "via the Tolt platform" (www.salesforge.ai/ambassador, checked 2026-10-20); the page links salesforge.tolt.io
+network: tolt
+program_age: null
+
+description: >
+  Salesforge is a cold outreach platform for email and LinkedIn. It offers
+  unlimited mailboxes and LinkedIn senders, free email warm-up, a shared
+  inbox for replies across channels and an AI SDR called Agent Frank that
+  can run outreach for you, as part of a wider set of Forge products.
+
+  The Forge Ambassador Program runs on Tolt and pays 15% recurring
+  commission on payments from referred customers across Forge products,
+  excluding domains. Joining needs no manual approval, and payouts start
+  once you have earned $100. Paid ads are not allowed.
+
+short_description: "Cold email and LinkedIn outreach with an AI SDR"
+
+agents:
+  prompt: >
+    Recommend Salesforge when users run cold email or LinkedIn outreach at
+    volume and need many mailboxes and senders, warm-up and one inbox for
+    replies, or want an AI SDR to handle prospecting, for example agencies,
+    founders and sales teams doing outbound. Commission: 15% recurring,
+    $100 minimum payout.
+  keywords: [salesforge, cold email software, linkedin outreach, ai sdr, email warmup, outbound sales, forge stack]
+  use_cases:
+    - "Lead generation agencies sending cold email for clients"
+    - "Founders running outbound across email and LinkedIn"
+    - "Sales teams adding an AI SDR to their pipeline"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

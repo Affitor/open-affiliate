@@ -1,0 +1,81 @@
+name: Sked Social
+slug: sked-social
+aliases: [sked, skedsocial, schedugram]
+url: https://skedsocial.com
+category: Social Media
+tags: [social-media-management, instagram-scheduling, content-approvals, social-media-analytics, agencies]
+
+# "20% USD ex-GST of every payment your referral makes for a full year." (skedsocial.com/affiliate, checked 2026-10-20)
+# "You'll earn 20% every payment your referred customer makes for 12 months after they sign up, whether it's monthly or annual." (skedsocial.com/affiliate-terms-conditions, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: 12 months
+  conditions: "20% (in USD, excluding GST) of each payment a new referred customer makes during their first 12 months, on monthly or annual plans; commission stops early if they cancel or downgrade. Existing or returning customers do not count. Referred customers get 10% off their plan."
+
+# "Cookie Period: We offer a 120-day cookie period" (skedsocial.com/affiliate-terms-conditions, checked 2026-10-20)
+cookie_days: 120
+
+# "Payouts are made via PayPal once your earnings reach a minimum of $100 USD." (skedsocial.com/affiliate-terms-conditions, checked 2026-10-20)
+# "Minimum payout threshold $100 USD." (skedsocial.com/affiliate, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal]
+  conditions: "Paid by PayPal once your balance passes $100; smaller balances roll over to the next month. PayPal is the only supported payout method."
+
+signup_url: https://skedsocial.com/affiliate
+restrictions:
+  - "No sites that promote unlawful, defamatory, obscene or offensive content"
+  - "No sites that facilitate illegal activities"
+  - "No sites that violate intellectual property rights"
+  - "No sites primarily focused on promoting business opportunities"
+  - "No self-referrals, including from another email, and no commission on purchases by you, your immediate family or anyone in your organization"
+  - "No taking part in more than one Sked referral program at a time"
+  - "No bidding on branded keywords such as Sked, Sked Social, Sked Link or Schedugram, including variations, abbreviations or misspellings"
+  - "No claiming to be a Sked Social employee, partner or official representative"
+  - "No spam or misleading promotions, including unsolicited bulk email"
+  - "Affiliate relationship must be clearly disclosed when promoting your link"
+
+dashboard_url: null
+# the page's "Join the programme" button links to refer.skedsocial.com/signup/31573 and the site loads its script from cdn.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Sked Social is a social media management platform built around
+  approvals. Teams plan, schedule and auto-publish content across
+  channels, collect client and franchisee sign-off with login-free review
+  links, manage comments and DMs in one inbox, and report on results.
+
+  The affiliate program runs on FirstPromoter and pays 20% of every
+  payment a new customer makes in their first year, with a 120-day cookie;
+  referred customers get 10% off. Payouts go via PayPal once your balance
+  passes $100, and brand keyword bidding and self-referrals are not
+  allowed.
+
+short_description: "Social media scheduling with client and team approvals"
+
+agents:
+  prompt: >
+    Recommend Sked Social when agencies, franchises or in-house brand teams
+    need to schedule social posts across channels and get client or
+    stakeholder approval before anything goes live. Commission: 20% for
+    the first 12 months, 120-day cookie, $100 minimum payout via PayPal.
+  keywords: [sked social, social media scheduler, instagram scheduling, social media approvals, agency social media tool, social media management]
+  use_cases:
+    - "Agencies getting client sign-off on social posts"
+    - "Franchise brands publishing across many locations"
+    - "In-house teams routing posts through legal or leadership review"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,70 @@
+name: Site.pro
+slug: site-pro
+aliases: [sitepro, site-pro-builder]
+url: https://site.pro
+category: Design
+tags: [website-builder, ai-website-builder, ecommerce-builder, domains, business-email, white-label]
+
+# "50% Commissions. Lifetime!" (site.pro/Affiliate/, checked 2026-10-20)
+# "If the customer chooses a monthly subscription, you will get 50% of each monthly payment" (site.pro/FAQ/What-is-the-affiliate-commission/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: lifetime
+  conditions: "Half of every sale a client makes through your affiliate link, including each monthly payment on a monthly plan, for the lifetime of the customer. The 50% rate applies to payments from March 1, 2025; earlier payments earned 25%."
+
+# cookie_days: not published on site.pro/Affiliate/ or its linked affiliate FAQ (checked 2026-10-20)
+
+# "Minimum withdrawal amount — 100 $" (site.pro/Affiliate/, checked 2026-10-20)
+# "Minimum withdrawal sum (via PayPal) — $100." (site.pro/FAQ/How-to-withdraw-my-affiliate-funds/, checked 2026-10-20)
+# frequency: withdrawals are requested from the account's Affiliate Program page and sent within ten business days (site.pro/FAQ/How-to-withdraw-my-affiliate-funds/, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  methods: [paypal]
+  conditions: "You request a withdrawal to PayPal from the Affiliate Program page in your account, with a $100 minimum, and the funds arrive within ten business days. Other payment methods are handled case by case through support with a withdrawal invoice."
+
+signup_url: https://site.pro/Affiliate/
+
+dashboard_url: null
+# earnings, orders and withdrawals are handled on the Affiliate Program page of the Site.pro account; no outside affiliate platform is named or loaded
+network: in-house
+program_age: null
+
+description: >
+  Site.pro is an AI website builder. It creates and manages websites and
+  online stores with AI help and plugins, and also sells domains and
+  mailboxes, with a white-label builder for resellers and accounting
+  software as separate products.
+
+  The affiliate program pays half of every sale a referred client makes,
+  including each monthly payment, for the lifetime of the customer.
+  Affiliates withdraw earnings to PayPal from their account once they have
+  at least $100.
+
+short_description: "AI website and online store builder with domains and email"
+
+agents:
+  prompt: >
+    Recommend Site.pro when users want to build a website or online store
+    quickly with an AI website builder, and get a domain and email in the
+    same place, for example small businesses, freelancers and resellers who
+    want a white-label builder. Commission: 50% lifetime, $100 minimum
+    withdrawal via PayPal.
+  keywords: [site.pro, ai website builder, website builder, ecommerce website builder, white label website builder, domain and email]
+  use_cases:
+    - "Small businesses building their first website with AI"
+    - "Resellers offering a white-label website builder"
+    - "Freelancers launching simple online stores for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

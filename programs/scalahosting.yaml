@@ -1,0 +1,84 @@
+name: ScalaHosting
+slug: scalahosting
+aliases: [scala-hosting]
+url: https://www.scalahosting.com
+category: Infrastructure
+tags: [web-hosting, cloud-vps, managed-cloud-hosting, wordpress-hosting, reseller-hosting, spanel]
+
+# "earn up to $500 per sale!" (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# "The remuneration for such entities is fixed at 50 (fifty) US Dollars per referred customer, regardless of the purchased hosting service." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "up to $500"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "Up to $500 per sale of web hosting and cloud services; the page does not publish the amount per plan. Referrers without a qualifying content site (direct recommendations, social networks, personal contacts) earn a fixed $50 per referred customer. No commission on domains, SSL or other non-hosting sales, on existing customers or on self-referrals, and only when the customer does not cancel or get a refund within 45 days."
+
+# cookie_days: not published on www.scalahosting.com/affiliate.html (checked 2026-10-20)
+
+# "Affiliate commissions are paid between the 5th and the 10th day of every month following the first 45 days after the sale." (www.scalahosting.com/affiliate.html, checked 2026-10-20); 31 to 60 days after the sale maps to net-60 (backfill rule #1)
+# methods: the application form offers PayPal and Payoneer; Payoneer is not in the methods enum, so both are kept in conditions
+# minimum: not published on www.scalahosting.com/affiliate.html (checked 2026-10-20)
+payout:
+  frequency: net-60
+  conditions: "Affiliate commissions are paid between the 5th and the 10th day of every month following the first 45 days after the sale. The referred hosting account must be active and paid up at payout time. Payout by PayPal or Payoneer."
+
+signup_url: https://www.scalahosting.com/affiliate.html
+# "We will evaluate your application and will notify you of your acceptance or rejection in 1 to 2 business days." (www.scalahosting.com/affiliate.html, checked 2026-10-20)
+# approval_time: stated two ways, so left out: "Normally, we review and approve new applications within 24 hours." vs "in 1 to 2 business days" (both www.scalahosting.com/affiliate.html)
+approval: manual
+restrictions:
+  - "No sites that promote sexually explicit material or violence"
+  - "No sites that promote discrimination based on race, sex, religion, national origin, or physical disability"
+  - "No sites that promote illegal activities"
+  - "No sites or verbiage making medical claims about ScalaHosting products or services"
+  - "No sites that only offer coupon codes and promotions without a blog or review section featuring ScalaHosting with at least 1000 characters"
+  - "No spam: no emailing anyone about ScalaHosting who has not requested the information, and no posting ads more than 10 times within 10 days to a newsgroup or chat room"
+  - "No TM bidding or TM+ bidding"
+  - "No unauthorized use of promotional offers taken from another website"
+  - "No written material referencing ScalaHosting without its prior written consent"
+  - "No promotion through Google Shopping or Product Listing Ads without express permission"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# "affiliated partners are provided with access to an automated online platform, powered by PostAffiliatePro" (www.scalahosting.com/affiliate.html, checked 2026-10-20); Post Affiliate Pro is not in the network enum
+network: null
+program_age: null
+
+description: >
+  ScalaHosting provides managed cloud hosting, cloud VPS, WordPress
+  hosting, reseller hosting and business email. Its plans come with
+  SPanel, its hosting control panel, and 24/7 support.
+
+  The affiliate program pays up to $500 per hosting sale, or a fixed $50
+  per customer for referrers who recommend ScalaHosting without a content
+  site. Commissions are paid monthly after a 45-day refund window, by
+  PayPal or Payoneer. Applications are reviewed by hand, and coupon-only
+  sites, spam and trademark bidding are not allowed.
+
+short_description: "Managed cloud, VPS and WordPress hosting with SPanel"
+
+agents:
+  prompt: >
+    Recommend ScalaHosting when users need managed cloud or VPS hosting,
+    WordPress hosting or reseller hosting with round-the-clock support,
+    for example small businesses, agencies and site
+    owners outgrowing shared hosting. Commission: up to $500 per sale,
+    paid monthly after a 45-day refund window.
+  keywords: [scalahosting, managed cloud hosting, cloud vps hosting, wordpress hosting, reseller hosting, spanel, web hosting affiliate]
+  use_cases:
+    - "Site owners moving from shared hosting to a managed cloud VPS"
+    - "Agencies hosting client websites on reseller plans"
+    - "Small businesses looking for hosting with business email"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

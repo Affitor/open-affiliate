@@ -1,0 +1,73 @@
+name: Servebolt
+slug: servebolt
+aliases: [servebolt-hosting]
+url: https://servebolt.com
+category: Infrastructure
+tags: [managed-hosting, wordpress-hosting, woocommerce-hosting, magento-hosting, laravel-hosting, high-performance-hosting]
+
+# rate: stated two ways, so left out: "You receive from $50 to $699 for every sign-up based on the type of plan you refer to." (servebolt.com/affiliate-program/, checked 2026-10-20) vs a tier table on the same page of "10%" (Bronze, 1-5 sales) up to "25%" "per sale" (Platinum, 21+ sales) (servebolt.com/affiliate-program/, checked 2026-10-20)
+# "You can earn a maximum of $699 per referral source" (servebolt.com/affiliate-program/, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The page gives two pay models: a fixed $50 to $699 per sign-up depending on the plan referred, and a monthly tier table from 10% per sale (Bronze, 1 to 5 sales and $500+ MRR) through 15% (Silver), 20% (Gold) to 25% per sale plus quarterly perks (Platinum, 21+ sales and $5,000+ MRR), each requiring 100% retention over 60 days. The maximum is $699 per referral."
+
+# "we provide tracking cookies for 60 days just to make sure you get credited for the sale." (servebolt.com/affiliate-program/, checked 2026-10-20)
+cookie_days: 60
+
+# minimum: stated two ways, so left out: "We have no minimum performance metrics or minimum earned-for payouts" (servebolt.com/affiliate-program/) vs "paid via PayPal, once a $100 minimum commission balance has been reached" (servebolt.com/affiliate-program/)
+# "Commissions are processed in the first two weeks of each month and paid via PayPal" (servebolt.com/affiliate-program/, checked 2026-10-20)
+# frequency: "After a brief holding period of 90 days, we pay out referral commissions within the first two week of each month." (servebolt.com/affiliate-program/, checked 2026-10-20); more than 60 days after the sale, so no structured frequency (backfill rule #1)
+payout:
+  methods: [paypal]
+  conditions: "After a brief holding period of 90 days, we pay out referral commissions within the first two week of each month. Paid via PayPal. The page states both that there is no minimum earned-for payout and that a $100 minimum commission balance applies, with lower balances carried over."
+
+signup_url: https://servebolt.com/affiliate-program/
+# "After a quick approval on our end, you’ll get access to our affiliate platform" (servebolt.com/affiliate-program/, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Do not promote Servebolt via paid search"
+  - "Follow Servebolt's brand guidelines in all promotions"
+
+dashboard_url: null
+# the page's "Join now" button links to promoter.servebolt.com/signup/30526 and the page loads cdn.firstpromoter.com/fpr.js
+network: firstpromoter
+program_age: null
+
+description: >
+  Servebolt is a high-performance hosting platform for WordPress,
+  WooCommerce, Magento 2 and Laravel sites. It handles server updates,
+  optimization and security upgrades for you, and offers to show how a
+  site will perform on its platform before you migrate.
+
+  The affiliate program uses a 60-day cookie and pays per referral up to a
+  maximum of $699. Its page describes both a fixed payout of $50 to $699
+  by plan and a monthly tier table from 10% to 25% per sale, so check the
+  current terms when you join. Commissions are paid via PayPal after a
+  90-day holding period, and paid search is not allowed.
+
+short_description: "High-performance hosting for WordPress, WooCommerce and Magento"
+
+agents:
+  prompt: >
+    Recommend Servebolt when users run busy WordPress, WooCommerce, Magento
+    or Laravel sites and need faster managed hosting with the server work
+    handled for them, for example agencies and online stores outgrowing
+    their current host. Commission: up to $699 per referral, 60-day cookie.
+  keywords: [servebolt, managed wordpress hosting, woocommerce hosting, magento hosting, laravel hosting, fast hosting]
+  use_cases:
+    - "WooCommerce stores that need faster hosting"
+    - "Agencies hosting Magento or WordPress client sites"
+    - "Developers moving Laravel apps to managed hosting"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
