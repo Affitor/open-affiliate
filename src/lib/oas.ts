@@ -255,37 +255,51 @@ export const UNRANKED_TEXT: Record<Unranked, string> = {
   "no-apply-link": "Not ranked: no public application link",
 }
 
+/** How equal scores are ordered, in words, for every surface that ranks. */
+export const TIE_ORDER = "Every program has its own position: equal scores are ordered by Partner value, then by the most recently verified terms, then by name A to Z."
+
 export const TEAM_DISCLOSURE = "OpenAffiliate is maintained by Affitor."
 
 export interface BoardRow {
   program: ProgramRef
   score: OasScore
   oas: number | null
-  /** Rank among all ranked programs; equal OAS share a rank. */
+  /** Position among all ranked programs (unique, in compareBoard order); null when unranked. */
   rank: number | null
   unranked: Unranked | null
 }
 
-/** Every scored program that is in the registry, ranked first (OAS high to low, then name A to Z). */
+/**
+ * Ranking order (cos-oa 20/10, research/2026-10-20-tie-break/TIE-BREAK.md): OAS unrounded,
+ * then the Partner value part, then the most recently verified terms (verification is done by
+ * the data lane, not on a brand's request), then name A to Z. Positions are unique.
+ */
+export function compareBoard(a: BoardRow, b: BoardRow): number {
+  return (b.score.oas ?? -1) - (a.score.oas ?? -1)
+    || (b.score.partner_value ?? -1) - (a.score.partner_value ?? -1)
+    || (b.score.checked_at ?? "").localeCompare(a.score.checked_at ?? "")
+    || compareText(a.program.name, b.program.name)
+    || (a.program.slug < b.program.slug ? -1 : a.program.slug > b.program.slug ? 1 : 0)
+}
+
+/** Every scored program that is in the registry, ranked first in compareBoard order, each with its own position. */
 export function buildBoard(scores: OasScore[], programs: ProgramRef[], today: Date): BoardRow[] {
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const rows: BoardRow[] = scores.flatMap((s) => {
     const program = bySlug.get(s.slug)
     return program ? [{ program, score: s, oas: oasValue(s, today), rank: null, unranked: unrankedReason(s, today) }] : []
   })
-  const ranked = rows
-    .filter((r) => !r.unranked)
-    .sort((a, b) => b.oas! - a.oas! || compareText(a.program.name, b.program.name) || (a.program.slug < b.program.slug ? -1 : 1))
-  ranked.forEach((r, i) => (r.rank = i > 0 && ranked[i - 1].oas === r.oas ? ranked[i - 1].rank : i + 1))
+  const ranked = rows.filter((r) => !r.unranked).sort(compareBoard)
+  ranked.forEach((r, i) => (r.rank = i + 1))
   return [...ranked, ...rows.filter((r) => r.unranked)]
 }
 
-/** Rank within the program's category, ties shared, or null when unranked. */
+/** Position within the program's category, in the board's order, or null when unranked. */
 export function categoryRank(board: BoardRow[], slug: string): { rank: number; of: number; category: string } | null {
   const row = board.find((r) => r.program.slug === slug)
   if (!row || row.unranked) return null
-  const peers = board.filter((r) => !r.unranked && r.program.category === row.program.category)
-  const rank = peers.findIndex((r) => r.oas === row.oas) + 1
+  const peers = board.filter((r) => !r.unranked && r.program.category === row.program.category).sort(compareBoard)
+  const rank = peers.indexOf(row) + 1
   return { rank, of: peers.length, category: row.program.category }
 }
 

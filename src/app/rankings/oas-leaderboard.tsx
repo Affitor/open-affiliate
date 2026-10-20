@@ -13,7 +13,10 @@ function Row({ r, rank }: { r: BoardRow; rank: number | null }) {
       <span className="font-mono text-meta text-muted-foreground">{rank ?? "–"}</span>
       <Link href={`/programs/${r.program.slug}/oas`} className="flex min-w-0 items-center gap-2.5 hover:underline underline-offset-2">
         <ProgramLogo slug={r.program.slug} name={r.program.name} size={24} className="shrink-0 rounded-md border border-border bg-white" />
-        <span className="truncate">{r.program.name}</span>
+        <span className="min-w-0">
+          <span className="block truncate">{r.program.name}</span>
+          {r.score.checked_at && <span className="block text-meta text-muted-foreground">Verified <time dateTime={r.score.checked_at}>{r.score.checked_at}</time></span>}
+        </span>
       </Link>
       <span className={`inline-flex items-center gap-1.5 font-mono text-sm ${r.rank == null ? "text-muted-foreground" : ""}`}>{r.rank != null ? <>{r.oas}<OasGradeChip score={r.oas!} /></> : r.unranked === "checking" ? "In progress" : "Not ranked"}</span>
     </li>
@@ -50,7 +53,7 @@ export function OasLeaderboard({ board, limit }: { board: BoardRow[]; limit?: nu
                 </span>
               </div>
               {/* Rank within the category: equal OAS share it, as on the report. */}
-              <ol>{rows.map((r) => <Row key={r.program.slug} r={r} rank={r.rank == null ? null : c.ranked.findIndex((x) => x.oas === r.oas) + 1} />)}</ol>
+              <ol>{rows.map((r) => <Row key={r.program.slug} r={r} rank={r.rank == null ? null : c.ranked.indexOf(r) + 1} />)}</ol>
               {c.ranked.length < TOP && <p className="text-meta text-muted-foreground mt-2">Fewer than {TOP} ranked, so no &ldquo;top {TOP}&rdquo; claim yet.</p>}
             </div>
           );

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { livePrograms } from "@/lib/programs";
-import { buildBoard, CHECK_IDS, CHECKS, GRADE_BANDS, oasScores, PART_MAX, TEAM_DISCLOSURE, type Part } from "@/lib/oas";
+import { buildBoard, CHECK_IDS, CHECKS, GRADE_BANDS, oasScores, PART_MAX, TEAM_DISCLOSURE, TIE_ORDER, type Part } from "@/lib/oas";
 import { scoreIndex } from "@/lib/score-index";
 import { ScoreYourProgram } from "@/components/score-your-program";
 import { OasGradeChip } from "@/components/oas-grade";
@@ -138,7 +138,7 @@ export default function MethodologyPage() {
             are scored, and terms verified more than 90 days ago show Scoring in
             progress until we verify them again. Every program is scored and
             ranked by the same rules, whoever runs it and whatever network it
-            runs on. {TEAM_DISCLOSURE}
+            runs on. {TIE_ORDER} {TEAM_DISCLOSURE}
           </p>
           <p className="mt-2 text-sm text-muted-foreground">Each score carries a letter, as a college grade does:</p>
           <table className="mt-2 text-sm">

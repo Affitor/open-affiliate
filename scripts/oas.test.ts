@@ -28,6 +28,7 @@ import {
   round1,
   type CheckState,
   type OasScore,
+  TIE_ORDER,
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
@@ -230,7 +231,7 @@ test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
 
-test("ranking: ties share a rank and every network ranks alike; scoring, no apply link and stale get no rank", () => {
+test("ranking: every position is unique, every network ranks alike; scoring, no apply link and stale get no rank", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
   const scores = [
     score("top"),
@@ -248,7 +249,8 @@ test("ranking: ties share a rank and every network ranks alike; scoring, no appl
   const board = buildBoard(scores, programs, TODAY)
   const by = Object.fromEntries(board.map((r) => [r.program.slug, r]))
   assert.equal(board.length, 9)
-  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["top", 1], ["kyma-api", 2], ["on-affitor", 2], ["tie-a", 2], ["tie-b", 2], ["third", 6]])
+  // Equal OAS, Partner value and verified date: name A to Z decides, and each still gets its own position.
+  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["top", 1], ["kyma-api", 2], ["on-affitor", 3], ["tie-a", 4], ["tie-b", 5], ["third", 6]])
   // Kyma API and programs on the Affitor network rank like any other (Sơn 19/10: the team tag is gone).
   assert.equal(by["kyma-api"].unranked, null)
   assert.equal(by["on-affitor"].unranked, null)
@@ -256,7 +258,7 @@ test("ranking: ties share a rank and every network ranks alike; scoring, no appl
   assert.equal(by["no-apply"].unranked, "no-apply-link")
   assert.equal(by["stale"].unranked, "checking")
   assert.equal(by["stale"].oas, null)
-  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 2, of: 5, category: "AI" })
+  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 5, of: 5, category: "AI" })
   assert.deepEqual(categoryRank(board, "kyma-api"), { rank: 2, of: 5, category: "AI" })
   assert.equal(categoryRank(board, "scoring"), null)
 })
@@ -464,11 +466,26 @@ test("oas-scores.json: [] while OAS_PUBLISHED is false, and well formed", () => 
   }
 })
 
-test("equal scores rank A to Z by name, on /rankings and the full leaderboard alike", () => {
-  const s = (slug: string) => scoreProgram(yaml(slug), TODAY)
-  const named = (slug: string, name: string): ProgramRef => ({ slug, name, category: "AI", network: null })
-  const board = buildBoard([s("zz-alpha"), s("aa-zulu"), s("mm-mike")], [named("zz-alpha", "Alpha"), named("aa-zulu", "Zulu"), named("mm-mike", "Mike")], TODAY)
-  assert.deepEqual(board.map((r) => [r.program.name, r.rank]), [["Alpha", 1], ["Mike", 1], ["Zulu", 1]])
+test("tie-break (TIE-BREAK.md): OAS unrounded, then Partner value, then newest verification, then name A to Z; positions unique", () => {
+  const named = (slug: string, name: string, category = "AI"): ProgramRef => ({ slug, name, category, network: null })
+  const s = (slug: string, over: Partial<OasScore> = {}): OasScore => ({ ...scoreProgram(yaml(slug), TODAY), ...over })
+  // Same OAS 90 for all but the first; they differ only in the later keys.
+  const scores = [
+    s("best", { oas: 90.4 }),
+    s("pv-high", { oas: 90, partner_value: 30, transparency: 60 }),
+    s("pv-low-new", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-10-15" }),
+    s("pv-low-old", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-10-01" }),
+    s("zz-alpha", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-09-30" }),
+    s("aa-zulu", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-09-30" }),
+  ]
+  const refs = [named("best", "Best"), named("pv-high", "Pv High", "Marketing"), named("pv-low-new", "Pv Low New"), named("pv-low-old", "Pv Low Old", "Marketing"), named("zz-alpha", "Alpha"), named("aa-zulu", "Zulu")]
+  const board = buildBoard(scores, refs, TODAY)
+  assert.deepEqual(board.map((r) => [r.program.slug, r.rank]),
+    [["best", 1], ["pv-high", 2], ["pv-low-new", 3], ["pv-low-old", 4], ["zz-alpha", 5], ["aa-zulu", 6]])
+  // Category positions follow the same order, unique too.
+  assert.deepEqual(["best", "pv-low-new", "zz-alpha", "aa-zulu"].map((slug) => categoryRank(board, slug)!.rank), [1, 2, 3, 4])
+  assert.deepEqual(["pv-high", "pv-low-old"].map((slug) => categoryRank(board, slug)!.rank), [1, 2])
+  assert.ok(TIE_ORDER.includes("Partner value") && TIE_ORDER.includes("most recently verified") && TIE_ORDER.includes("A to Z"))
 })
 
 test("Score your program: a name or domain finds the program and its score, nothing else is fetched", () => {
