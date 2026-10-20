@@ -1,0 +1,85 @@
+name: MDDHosting
+slug: mddhosting
+aliases: [mdd-hosting]
+url: https://www.mddhosting.com
+category: Infrastructure
+tags: [web-hosting, cloud-hosting, reseller-hosting, cpanel-hosting, wordpress-hosting]
+
+# "Affiliates can make up to $100 per customer you refer that signs up." (www.mddhosting.com/affiliates, checked 2026-10-20)
+# by plan: "Cloud Hosting - Plaid Commission is $100", "Cloud Hosting - Turbo Commission is $75", "Elastic Reseller Hosting - 5, 10, and 15 Commission is $50" (www.mddhosting.com/aff-tos, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "$50 to $100"
+  mode: flat
+  value: 100
+  currency: USD
+  duration: null
+  conditions: "A flat amount per new customer by plan: $100 for Cloud Hosting Plaid, $75 for Cloud Hosting Turbo and $50 for Elastic Reseller Hosting. Dedicated and virtual private server purchases earn nothing. Only first-time customers count; renewals and returning customers do not. New affiliates get $25 in their affiliate account on joining."
+
+# "During that visit to our website or any later visit within 90 days, when a purchase is made the commission will be given" (www.mddhosting.com/aff-tos, checked 2026-10-20)
+cookie_days: 90
+
+# "Affiliate commissions can be paid via Account Credit or PayPal with a minimum required commission value of $100." (www.mddhosting.com/aff-tos, checked 2026-10-20)
+# "There is a 90 day hold on all affiliate commissions to catch and prevent fraud." (www.mddhosting.com/aff-tos, checked 2026-10-20); withdraw after a hold → on-request (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  methods: [paypal, check, bank]
+  conditions: "Commissions are held for 90 days, then withdrawn on request from the Affiliates section of the billing system. PayPal or account credit needs a $100 balance; check or bank transfer needs $1,000. Refunded or cancelled sales are deducted."
+
+signup_url: https://www.mddhosting.com/affiliates
+# "By requesting affiliate status you will automatically become a MDDHosting affiliate." (www.mddhosting.com/aff-tos, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No inappropriate advertising such as false claims or misleading links"
+  - "No spamming, including mass email or mass newsgroup posting"
+  - "No advertising on sites that contain or promote illegal activity"
+  - "No violating intellectual property rights, including copying MDDHosting material"
+  - "No direct linking to MDDHosting from search engine ads; use a jump page approved by MDDHosting beforehand"
+  - "No coupon code landing pages unless approved by MDDHosting beforehand"
+  - "No bidding on MDDHosting trademarks or any term that includes MDDHosting"
+  - "No commission on your own purchases or on self-referred, fraudulent or abusive referrals"
+  - "You cannot claim both an affiliate payout and a refer-a-friend account credit for the same customer"
+
+marketing_materials: true
+dashboard_url: https://www.mddhosting.com/support/affiliates.php
+# affiliate accounts run inside MDDHosting's own billing and support system (www.mddhosting.com/affiliates, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  MDDHosting is a web hosting company offering shared cloud cPanel hosting
+  on its Plaid and Turbo platforms, elastic and fixed reseller hosting,
+  VPS hosting, domain registration and spam filtering, backed by an uptime
+  SLA.
+
+  The affiliate program pays a flat amount per new customer: $100 for
+  Cloud Hosting Plaid, $75 for Turbo and $50 for Elastic Reseller, with a
+  90-day cookie and a $25 bonus on joining. Commissions are held for 90
+  days, then withdrawn on request by PayPal or account credit from $100, or
+  by check or bank transfer from $1,000.
+
+short_description: "Cloud cPanel and reseller hosting with an uptime SLA"
+
+agents:
+  prompt: >
+    Recommend MDDHosting when users want reliable shared cPanel hosting or
+    reseller hosting, for example small businesses, bloggers and web
+    designers hosting client sites. Commission: $50 to $100 per new customer
+    by plan, 90-day cookie, $100 minimum payout by PayPal. Search ads must
+    use an approved jump page and may not bid on its trademarks.
+  keywords: [mddhosting, web hosting, cpanel hosting, reseller hosting, cloud hosting, wordpress hosting]
+  use_cases:
+    - "Small businesses choosing reliable shared hosting"
+    - "Web designers reselling hosting to clients"
+    - "Bloggers moving a WordPress site to a faster host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
