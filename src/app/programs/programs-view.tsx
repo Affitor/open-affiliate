@@ -85,10 +85,18 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
 // ProgramsContent reads useSearchParams, so the whole subtree bails out of
 // prerendering. Without a fallback the served HTML had an empty <main>, which
 // left the 430px footer sitting near the top of the viewport until the client
-// filled the list in and shoved it down — 0.53 CLS. The skeleton mirrors the
+// filled the list in and shoved it down — 0.53 CLS. The fallback mirrors the
 // real layout and is a viewport tall, so the footer starts below the fold and
-// the swap shifts nothing that is on screen.
-function ProgramsSkeleton() {
+// the swap shifts nothing that is on screen. Its rows are the list's first
+// page as the server computes it (`initial`), each a plain link, so the raw
+// HTML a crawler reads carries the directory's first programs.
+export interface InitialRow {
+  slug: string;
+  name: string;
+  shortDescription: string;
+}
+
+function ProgramsSkeleton({ initial }: { initial: InitialRow[] }) {
   return (
     <div className="min-h-dvh">
       <div className="oa-band !py-4">
@@ -96,19 +104,22 @@ function ProgramsSkeleton() {
       </div>
       <div className="oa-band !pt-5">
         <div className="mb-3 h-4 w-28 animate-pulse rounded bg-sunk" />
-        <div className="overflow-hidden rounded-xl border border-border bg-card">
-          {Array.from({ length: 25 }, (_, i) => (
-            <div key={i} className="h-[57px] border-b border-border last:border-b-0" />
+        <ul data-directory-rows className="overflow-hidden rounded-xl border border-border bg-card">
+          {initial.map((r) => (
+            <li key={r.slug} className="flex h-[57px] flex-col justify-center border-b border-border px-3 last:border-b-0 md:pl-[56px]">
+              <a href={`/programs/${r.slug}`} className="truncate text-sm font-medium">{r.name}</a>
+              <span className="truncate text-xs text-muted-foreground">{r.shortDescription}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </div>
   );
 }
 
-export function ProgramsView() {
+export function ProgramsView({ initial }: { initial: InitialRow[] }) {
   return (
-    <Suspense fallback={<ProgramsSkeleton />}>
+    <Suspense fallback={<ProgramsSkeleton initial={initial} />}>
       <ProgramsContent />
     </Suspense>
   );

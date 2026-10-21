@@ -110,7 +110,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/a-z/letter-bar.tsx | `#${id}`", // A–Z letter jump: an anchor on the same page
   "src/app/page.tsx | `/networks/${networkToSlug(network)}`", // homepage networks band, internal (N-2)
   "src/app/programs/a-z/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
-  "src/app/programs/top-programs.tsx | `/programs/${slug}`", // /programs top rows by OAS, internal
+  "src/app/programs/programs-view.tsx | `/programs/${r.slug}`", // /programs first page, server-rendered in the list's fallback, internal
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
