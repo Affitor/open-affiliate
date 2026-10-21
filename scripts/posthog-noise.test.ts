@@ -86,4 +86,7 @@ test("submission ids never reach analytics, in any property", async () => {
   assert.equal((out as typeof event).properties.kept, "/programs/vercel")
   assert.equal((out as typeof event).properties.$pathname, "/submissions/{id}")
   assert.equal(maskSubmissionIds(null), null)
+  // Percent-encoded, as Next would still decode it to the same id.
+  const encoded = maskSubmissionIds({ event: "$pageview", uuid: "u", properties: { $current_url: "https://openaffiliate.dev/submissions/%30b9c2c1e-5a3f-4c7d-9e2b-1f0a8d6c4b3a" } } as never)
+  assert.equal((encoded as unknown as { properties: { $current_url: string } }).properties.$current_url, "https://openaffiliate.dev/submissions/{id}")
 })

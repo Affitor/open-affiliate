@@ -32,11 +32,11 @@ export default async function SubmissionPage({ params }: { params: Promise<{ id:
       {typeof body.reason === "string" && <p className="mt-2 text-sm text-muted-foreground">{body.reason}</p>}
       {typeof body.listingUrl === "string" && (
         <p className="mt-2 text-sm">
-          <a href={body.listingUrl} className="underline underline-offset-2">See the listing</a>
+          <Link href={new URL(body.listingUrl).pathname} className="underline underline-offset-2">See the listing</Link>
           {typeof body.reportUrl === "string" && (
             <>
               {" · "}
-              <a href={body.reportUrl} className="underline underline-offset-2">OAS report</a>
+              <Link href={new URL(body.reportUrl).pathname} className="underline underline-offset-2">OAS report</Link>
             </>
           )}
         </p>

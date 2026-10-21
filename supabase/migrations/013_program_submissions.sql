@@ -84,6 +84,10 @@ BEGIN
   UPDATE program_submissions SET contact_email = NULL
     WHERE contact_email IS NOT NULL AND status IN ('listed', 'rejected') AND updated_at < now() - interval '29 days';
   DELETE FROM program_submissions WHERE created_at < now() - interval '364 days';
+  -- Our own events too: claims prune claim_events only while claims are on.
+  DELETE FROM claim_events
+    WHERE created_at < now() - interval '364 days'
+      AND (type = 'submission.requested' OR (type = 'cap.reached' AND meta->>'cap' = 'submissions'));
 
   SELECT count(*) FILTER (WHERE created_at > now() - interval '1 hour'), count(*)
     INTO v_ip_hour, v_ip_day
@@ -184,6 +188,9 @@ BEGIN
         UPDATE public.program_submissions SET contact_email = NULL
           WHERE contact_email IS NOT NULL AND status IN ('listed', 'rejected') AND updated_at < now() - interval '29 days';
         DELETE FROM public.program_submissions WHERE created_at < now() - interval '364 days';
+        DELETE FROM public.claim_events
+          WHERE created_at < now() - interval '364 days'
+            AND (type = 'submission.requested' OR (type = 'cap.reached' AND meta->>'cap' = 'submissions'));
       $job$
     );
   ELSE

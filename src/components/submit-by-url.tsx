@@ -113,7 +113,7 @@ export function SubmitByUrl({ siteKey }: { siteKey: string }) {
           {result.kind === "listed" && (
             <p>
               Already on OpenAffiliate.{" "}
-              <a href={result.listingUrl} className="underline underline-offset-2">See the listing</a>.
+              <Link href={new URL(result.listingUrl).pathname} className="underline underline-offset-2">See the listing</Link>.
             </p>
           )}
           {result.kind === "error" && <p className="text-red-600 dark:text-red-400">{result.message}</p>}

@@ -53,7 +53,8 @@ export function dropNoisyException(event: CaptureResult | null): CaptureResult |
 }
 
 /** A submission id is the only key to its status page, so it never goes to analytics. */
-const SUBMISSION_ID = /\/submissions\/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/g
+// The whole segment, not only a literal UUID: Next decodes /submissions/%30b9c… to the same id.
+const SUBMISSION_ID = /\/submissions\/[^/?#\s"'<>]+/g
 export const SUBMISSION_ID_MASK = "/submissions/{id}"
 
 function masked(value: unknown): unknown {
