@@ -328,7 +328,7 @@ export default async function ProgramPage({
               )}
               {!paused && (
                 <div className="mt-5 flex items-center gap-2">
-                  <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
+                  <TrackLink href={applyCta.href} slug={slug} network={program.network} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
@@ -346,6 +346,7 @@ export default async function ProgramPage({
                   <TrackLink
                     href={alsoOn.href}
                     slug={slug}
+                    network="affitor"
                     cta="also_on"
                     className="flex items-center justify-center gap-1.5 rounded-lg border border-border h-10 text-sm font-medium hover:bg-muted/50 transition-colors"
                   >

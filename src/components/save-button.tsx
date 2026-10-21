@@ -5,7 +5,7 @@ import { Bookmark, X } from "lucide-react"
 import { allPrograms } from "@/lib/client-programs"
 import removedPrograms from "@/lib/removed-programs.json"
 import { createSavedStore, SAVED_KEY } from "@/lib/saved-programs"
-import { posthog } from "@/lib/posthog"
+import { capture } from "@/lib/track"
 
 const known = new Set([...allPrograms.map((p) => p.slug), ...Object.keys(removedPrograms)])
 const store = createSavedStore(() => window.localStorage, (slug) => known.has(slug))
@@ -40,7 +40,8 @@ export function SaveButton({ slug, name, iconOnly = false }: { slug: string; nam
           const result = store.toggle(slug)
           setError(result.error)
           if (result.saved !== undefined) {
-            try { posthog.capture(result.saved ? "program_saved" : "program_unsaved", { slug }) } catch { /* Analytics never blocks saving. */ }
+            // Named program_saved / program_unsaved until 2026-10-20.
+            capture(result.saved ? "program_save" : "program_unsave", { slug })
           }
         }}
       >

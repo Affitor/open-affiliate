@@ -4,23 +4,32 @@
  * components can use it without pulling in the registry.
  */
 
-export const AFFITOR_CLICK = "oa_to_affitor_click"
+/**
+ * PostHog event for a click on any link to affitor.com: {placement (the link's
+ * utm_medium), cta, slug?}. Named oa_to_affitor_click until 2026-10-20; an
+ * insight that spans that date counts both names.
+ */
+export const AFFITOR_CLICK = "affitor_cta_click"
 
 /** The Affitor marketplace, where one partner account joins many programs. */
 export const AFFITOR_MARKETPLACE = "https://affitor.com/marketplace"
 
-/** Where on OA the click came from: the `source` property of AFFITOR_CLICK. */
+/** Where on OA the link sits: the AFFITOR_ATTR value in served HTML. */
 export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate" | "footer" | "docs"
 
 /** Where a brand moves an existing program to Affitor (live, takes only UTM params). */
 export const AFFITOR_SWITCH = "https://affitor.com/switch"
 
-/** `url` (affitor.com home by default) with utm_source=openaffiliate, the given medium and campaign. */
-export function affitorUrl(medium: string, campaign?: string, url = "https://affitor.com/"): string {
+/**
+ * The one way to build an affitor.com link: `url` (affitor.com home by default)
+ * with utm_source=openaffiliate, utm_medium=<placement> (where on OA the link
+ * sits) and utm_campaign=<program slug, or the page for a link with no program>.
+ */
+export function affitorUrl(placement: string, campaign: string, url = "https://affitor.com/"): string {
   const href = new URL(url)
   href.searchParams.set("utm_source", "openaffiliate")
-  href.searchParams.set("utm_medium", medium)
-  if (campaign) href.searchParams.set("utm_campaign", campaign)
+  href.searchParams.set("utm_medium", placement)
+  href.searchParams.set("utm_campaign", campaign)
   return href.toString()
 }
 

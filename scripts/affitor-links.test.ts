@@ -1,6 +1,6 @@
 /**
  * Every OpenAffiliate link to affitor.com carries the openaffiliate UTM and
- * records oa_to_affitor_click (src/lib/affitor-link.ts), and /for-brands
+ * records affitor_cta_click (src/lib/affitor-link.ts), and /for-brands
  * states no pricing.
  *
  * The registry checks read src/lib/registry.json, so run this after
@@ -51,13 +51,34 @@ test("affitorUrl adds the UTM; isAffitorHref matches affitor.com only", () => {
   assert.equal(isAffitorHref("/for-brands"), false)
 })
 
+test("affitorUrl always sets source, placement and campaign, replacing any UTM already on the URL", () => {
+  const href = new URL(affitorUrl("compare", "notion", "https://affitor.com/marketplace/notion?ref=x&utm_source=other&utm_medium=old"))
+  assert.equal(href.origin + href.pathname, "https://affitor.com/marketplace/notion")
+  assert.equal(href.searchParams.get("ref"), "x")
+  assert.equal(href.searchParams.get("utm_source"), "openaffiliate")
+  assert.equal(href.searchParams.get("utm_medium"), "compare")
+  assert.equal(href.searchParams.get("utm_campaign"), "notion")
+  assert.equal(href.searchParams.getAll("utm_medium").length, 1)
+  assert.equal(affitorUrl("docs", "submit"), "https://affitor.com/?utm_source=openaffiliate&utm_medium=docs&utm_campaign=submit")
+})
+
+test("an Affitor apply link's utm_medium is its surface; the program page keeps apply", () => {
+  const live = programs.find((p) => p.network === "affitor" && isAffitorHref(applyButton(p, "program_page").href))
+  assert.ok(live, "no live Affitor program in the registry: the check would be vacuous")
+  const medium = (surface: Parameters<typeof applyButton>[1]) => new URL(applyButton(live, surface).href).searchParams.get("utm_medium")
+  assert.equal(medium("program_page"), "apply")
+  assert.equal(medium("compare"), "compare")
+  assert.equal(medium("list"), "list")
+  assert.equal(new URL(applyButton(live, "list").href).searchParams.get("utm_campaign"), live.slug)
+})
+
 test("the footer maintainer links to Affitor with footer attribution and no nofollow", () => {
   const layout = readFileSync(join(root, "src/app/layout.tsx"), "utf8")
-  assert.match(layout, /OpenAffiliate is maintained by <AffitorLink href=\{affitorUrl\("footer"\)\} source="footer" cta="maintainer"[^>]*>Affitor<\/AffitorLink>\. Listings are free; rankings are never paid\./)
-  const href = affitorUrl("footer")
-  assert.equal(href, "https://affitor.com/?utm_source=openaffiliate&utm_medium=footer")
+  assert.match(layout, /OpenAffiliate is maintained by <AffitorLink href=\{affitorUrl\("footer", "sitewide"\)\} source="footer" cta="maintainer"[^>]*>Affitor<\/AffitorLink>\. Listings are free; rankings are never paid\./)
+  const href = affitorUrl("footer", "sitewide")
+  assert.equal(href, "https://affitor.com/?utm_source=openaffiliate&utm_medium=footer&utm_campaign=sitewide")
   const html = renderToStaticMarkup(AffitorLink({ href, source: "footer", cta: "maintainer", children: "Affitor" }))
-  assert.match(html, /<a [^>]*href="https:\/\/affitor\.com\/\?utm_source=openaffiliate&amp;utm_medium=footer"[^>]*>Affitor<\/a>/)
+  assert.match(html, /<a [^>]*href="https:\/\/affitor\.com\/\?utm_source=openaffiliate&amp;utm_medium=footer&amp;utm_campaign=sitewide"[^>]*>Affitor<\/a>/)
   assert.doesNotMatch(html, /nofollow/)
   assert.deepEqual(affitorAnchorProblems(html), { problems: [], tracked: 1 })
 })
@@ -74,7 +95,7 @@ test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () =
 // plain <a> with a computed href is allowed only for the expressions below,
 // each reviewed as never pointing at affitor.com. Any other computed href
 // (applyButton(p).href, p.applyHref, a new one) must use AffitorLink or
-// TrackLink, which record oa_to_affitor_click when the href is on affitor.com.
+// TrackLink, which record affitor_cta_click when the href is on affitor.com.
 const PLAIN_ANCHORS = new Set([
   "src/app/layout.tsx | href", // footer list: internal paths and GitHub
   "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
@@ -119,12 +140,15 @@ test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   assert.ok(tracked >= 8, `found ${tracked} tracked anchors`)
   for (const p of programs) assert.equal(isAffitorHref(p.url), false, `${p.slug}: program.url is on affitor.com but rendered as a plain link`)
   const trackLink = readFileSync(join(root, "src/app/programs/[slug]/track-view.tsx"), "utf8")
-  assert.match(trackLink, /if \(isAffitorHref\(href\)\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "program_page", cta \} \}\)/)
+  assert.match(trackLink, /trackApply\(href, slug, network, "program_page"\)/)
+  assert.match(trackLink, /trackAffitorClick\(href, cta, slug\)/)
   const postApply = readFileSync(join(root, "src/components/post-apply-link.tsx"), "utf8")
-  assert.match(postApply, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source: "blog", cta: "apply", post \} \}\)/)
+  assert.match(postApply, /trackApply\(href, slug, network, "blog"\)/)
+  assert.match(postApply, /trackAffitorClick\(href, "apply", slug\)/)
   assert.match(postApply, /\[AFFITOR_ATTR\]: "blog"/)
   const affitorLink = readFileSync(join(root, "src/components/affitor-link.tsx"), "utf8")
-  assert.match(affitorLink, /if \(affitor\) track\(AFFITOR_CLICK, \{ slug, metadata: \{ source, cta \} \}\)/)
+  assert.match(affitorLink, /trackAffitorClick\(href, cta, slug\)/)
+  assert.match(affitorLink, /if \(applyNetwork && slug\) trackApply\(href, slug, applyNetwork, source\)/)
 })
 
 test("served-HTML check: an untracked Affitor link or one without the UTM fails", () => {

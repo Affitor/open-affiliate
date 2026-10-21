@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
-import { track } from "@/lib/track";
+import { capture, track } from "@/lib/track";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/client-programs";
@@ -34,8 +34,14 @@ export default function SubmitPage() {
     submittedBy: "",
   });
   const [copied, setCopied] = useState(false);
+  // submit_start once, on the first edit; submit_done when the reader takes the file away.
+  const started = useRef(false);
 
   const updateField = (field: keyof SubmitValues, value: string) => {
+    if (!started.current) {
+      started.current = true;
+      capture("submit_start");
+    }
     setForm((prev) => {
       const next = { ...prev, [field]: value };
       if (field === "name") next.slug = slugOf(value);
@@ -58,6 +64,7 @@ export default function SubmitPage() {
   const openGitHubPR = () => {
     // Too long for GitHub's URL: copy the file first, then open the page with its name only.
     if (!github.withContent) copyYaml();
+    capture("submit_done", { method: "github" });
     window.open(github.url, "_blank");
   };
 
@@ -404,7 +411,10 @@ export default function SubmitPage() {
             Open GitHub PR
           </button>
           <button
-            onClick={copyYaml}
+            onClick={() => {
+              copyYaml();
+              capture("submit_done", { method: "copy" });
+            }}
             disabled={!isValid}
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-border/60 px-5 py-2.5 text-sm font-medium hover:bg-muted transition-colors disabled:opacity-40 disabled:pointer-events-none"
           >
