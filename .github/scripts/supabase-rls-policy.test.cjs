@@ -134,6 +134,22 @@ test("013: oa_inbox_forwards is service-role only and holds no addresses or bodi
   assert.deepEqual(columns, ["email_id", "status", "payload_hash", "first_post_at", "lease_token", "lease_until", "created_at", "updated_at"])
 })
 
+test("014: program_submissions and its two functions are service-role only", () => {
+  const sql = fs.readFileSync(path.join(migrationsDir, "014_program_submissions.sql"), "utf8")
+  assert.deepEqual(byTable.program_submissions ?? [], [], "program_submissions must have no policies")
+  assert.match(sql, /ALTER TABLE program_submissions ENABLE ROW LEVEL SECURITY;/i)
+  assert.match(sql, /REVOKE ALL ON program_submissions FROM anon, authenticated;/i)
+  for (const fn of [
+    "submission_submit\\(text, text, text, text, text, text, text, text, int, int, int, int, int, int\\)",
+    "submission_set_status\\(uuid, text, text, text, text\\)",
+  ]) {
+    assert.match(sql, new RegExp(`REVOKE ALL ON FUNCTION public\\.${fn} FROM PUBLIC, anon, authenticated;`, "i"), fn)
+    assert.match(sql, new RegExp(`GRANT EXECUTE ON FUNCTION public\\.${fn} TO service_role;`, "i"), fn)
+  }
+  assert.equal((sql.match(/SECURITY INVOKER/gi) ?? []).length, 2, "both functions run with the caller's rights")
+  assert.doesNotMatch(sql, /SECURITY DEFINER/i)
+})
+
 test("claim_submit_edit is callable by service_role only", () => {
   const sql = fs.readFileSync(path.join(migrationsDir, "010_claim_edit_quota.sql"), "utf8")
   assert.match(sql, /SECURITY INVOKER/i, "must run with the caller's rights")

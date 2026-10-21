@@ -9,7 +9,7 @@ import { DocsPagination } from "@/components/docs-pagination";
 export const metadata: Metadata = {
   title: "Submit a Program",
   description:
-    "Add an affiliate program to OpenAffiliate: four ways in, what a maintainer checks, how long it takes, and what happens after merge.",
+    "Add an affiliate program to OpenAffiliate: five ways in, what a maintainer checks, how long it takes, and what happens after merge.",
 };
 
 const link = "text-foreground hover:underline";
@@ -26,23 +26,35 @@ export default function SubmitPage() {
 
       <div className="space-y-10">
         <section>
-          <h2 id="ways" className="text-lg font-semibold mb-3">Four ways to add a program</h2>
+          <h2 id="ways" className="text-lg font-semibold mb-3">Five ways to add a program</h2>
           <p className="text-base text-muted-foreground mb-4">
             Listing is free. Every way ends in the same place: a program file in
             the public repository, reviewed by a maintainer.
           </p>
           <div className="space-y-4 text-base text-muted-foreground">
             <div>
-              <h3 id="web-form" className="text-sm font-semibold text-foreground mb-1">1. Web form</h3>
+              <h3 id="by-url" className="text-sm font-semibold text-foreground mb-1">1. Submit by URL</h3>
               <p>
-                <Link href="/submit" className={link}>The submit form</Link> writes
+                On <Link href="/submit#by-url" className={link}>the submit page</Link>,
+                send your program page. No account is needed. It joins the review
+                queue with a status link; nothing is listed or scored, and no pull
+                request is opened for you, until a maintainer has verified the terms
+                on your page and added the program file. Agents use the same queue
+                through <code className={code}>submit_program</code> or{" "}
+                <code className={code}>POST /api/submissions</code>.
+              </p>
+            </div>
+            <div>
+              <h3 id="web-form" className="text-sm font-semibold text-foreground mb-1">2. Full form</h3>
+              <p>
+                <Link href="/submit" className={link}>The full form</Link> writes
                 the program file for you and opens GitHub, where you create the
                 pull request. You need a GitHub account: GitHub copies the
                 repository to your account before the pull request opens.
               </p>
             </div>
             <div>
-              <h3 id="pull-request" className="text-sm font-semibold text-foreground mb-1">2. Pull request</h3>
+              <h3 id="pull-request" className="text-sm font-semibold text-foreground mb-1">3. Pull request</h3>
               <p>
                 Fork{" "}
                 <a href="https://github.com/Affitor/open-affiliate" className={link}>Affitor/open-affiliate</a>, add{" "}
@@ -53,7 +65,7 @@ export default function SubmitPage() {
               </p>
             </div>
             <div>
-              <h3 id="suggest" className="text-sm font-semibold text-foreground mb-1">3. Suggest a program</h3>
+              <h3 id="suggest" className="text-sm font-semibold text-foreground mb-1">4. Suggest a program</h3>
               <p>
                 Open a{" "}
                 <a href="https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml" className={link}>
@@ -64,7 +76,7 @@ export default function SubmitPage() {
               </p>
             </div>
             <div>
-              <h3 id="email" className="text-sm font-semibold text-foreground mb-1">4. Email</h3>
+              <h3 id="email" className="text-sm font-semibold text-foreground mb-1">5. Email</h3>
               <p>
                 Send the link to your program page to{" "}
                 <a href="mailto:hello@openaffiliate.dev" className={link}>hello@openaffiliate.dev</a>.
@@ -136,9 +148,14 @@ export default function SubmitPage() {
         <section>
           <h2 id="agents" className="text-lg font-semibold mb-3">With an AI agent</h2>
           <p className="text-base text-muted-foreground mb-4">
-            The MCP server is read-only: it can look a program up, not add one.
-            An agent should check first, then use its own GitHub tools to open
-            a pull request or a Suggest a program issue, following the same
+            An agent should check first. If the program is missing, it sends the
+            brand&apos;s own program page with the MCP tool{" "}
+            <code className={code}>submit_program</code> or{" "}
+            <code className={code}>POST /api/submissions</code>, and reads the
+            result later with <code className={code}>get_submission_status</code>.
+            That only joins the review queue: nothing is listed or scored until a
+            maintainer verifies the terms. An agent with GitHub tools can open a
+            pull request or a Suggest a program issue instead, following the same
             rules as a person.
           </p>
           <CodeBlock

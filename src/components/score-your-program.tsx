@@ -70,8 +70,8 @@ export function ScoreYourProgram({ index, compact = false, className = "" }: { i
           ) : (
             <p className="mt-3 text-sm text-muted-foreground">
               Not listed yet.{" "}
-              <Link href="/submit" className="underline underline-offset-2 hover:text-foreground">
-                Submit your program
+              <Link href={`/submit?url=${encodeURIComponent(query.trim())}#by-url`} className="underline underline-offset-2 hover:text-foreground">
+                Submit it by URL
               </Link>{" "}
               and it is scored once its terms are verified.
             </p>

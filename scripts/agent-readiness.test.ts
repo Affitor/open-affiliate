@@ -9,7 +9,7 @@ import { proxy } from "../src/proxy"
 import { GET as list, OPTIONS as listOptions } from "../src/app/api/programs/route"
 import { GET as detail } from "../src/app/api/programs/[slug]/route"
 import { GET as categories } from "../src/app/api/categories/route"
-import { openapi } from "../src/lib/openapi"
+import { openapi, operations } from "../src/lib/openapi"
 import { registerWebMcpTools, WEBMCP_TOOLS, type WebMcpTool } from "../src/lib/webmcp"
 import { nextConfig } from "../next.config"
 import { ardCatalog, CATALOG_PATHS, generateArd } from "./generate-ard"
@@ -97,11 +97,11 @@ test("API-Version request header: 1 or absent is served, anything else is a 400 
     assert.match(readFileSync(`src/app/api/${route}`, "utf8"), /"Access-Control-Allow-Headers": "Content-Type, API-Version"/, route)
   }
   // Declared on every operation, with the 400 it can cause.
-  for (const [path, item] of Object.entries(openapi.paths)) {
-    const header = (item.get.parameters as { name: string; in: string; schema: { enum?: string[] } }[]).find((p) => p.in === "header")
+  for (const { path, op } of operations()) {
+    const header = op.parameters.find((p) => p.in === "header")
     assert.equal(header?.name, "API-Version", path)
     assert.deepEqual(header?.schema.enum, [openapi.components.headers.APIVersion.schema.const], path)
-    assert.ok("400" in item.get.responses, path)
+    assert.ok("400" in op.responses, path)
   }
 })
 
@@ -118,9 +118,11 @@ test("every /api response carries the API-Version the OpenAPI document declares"
   const rules = (await nextConfig.headers!()).filter((r) => r.headers.some((h) => h.key === "API-Version"))
   assert.equal(rules.length, 1)
   assert.deepEqual(rules[0], { source: "/api/:path*", headers: [{ key: "API-Version", value: version }] })
-  for (const path of Object.values(openapi.paths)) {
-    for (const response of Object.values(path.get.responses)) {
-      assert.deepEqual(response.headers, Object.fromEntries(["API-Version", "Deprecation", "Sunset"].map((name) => [name, { $ref: `#/components/headers/${name.replace("-", "")}` }])))
+  const versionHeaders = Object.fromEntries(["API-Version", "Deprecation", "Sunset"].map((name) => [name, { $ref: `#/components/headers/${name.replace("-", "")}` }]))
+  for (const { op } of operations()) {
+    for (const response of Object.values(op.responses)) {
+      // Rate-limited submission responses add Retry-After and RateLimit-* to the same three.
+      assert.deepEqual(Object.fromEntries(Object.entries(response.headers ?? {}).filter(([name]) => name in versionHeaders)), versionHeaders)
     }
   }
   for (const [name, rfc] of [["Deprecation", "RFC 9745"], ["Sunset", "RFC 8594"]]) {

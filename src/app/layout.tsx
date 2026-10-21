@@ -209,7 +209,7 @@ const SITE_JSON_LD = {
       "@id": "https://openaffiliate.dev/#api",
       name: "OpenAffiliate API",
       description:
-        "Read-only REST API and MCP server for searching the registry and reading program terms. No authentication or API key.",
+        "REST API and MCP server for searching the registry and reading program terms; the one write queues a missing program for review. No authentication or API key.",
       url: "https://openaffiliate.dev/docs/api",
       documentation: "https://openaffiliate.dev/openapi.json",
       provider: { "@id": "https://openaffiliate.dev/#organization" },

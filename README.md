@@ -32,7 +32,7 @@ OpenAffiliate is an open-source registry of affiliate programs. Every program is
 - **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
 - **REST API** -- Public JSON API, no auth required.
 - **SDK** -- TypeScript SDK for programmatic access.
-- **Submit** -- Web form that writes the program file and opens a GitHub pull request.
+- **Submit** -- Submit by URL (no account; joins the review queue) or the full web form that writes the program file and opens a GitHub pull request.
 - **Verification** -- Maintainers check each program's terms against the brand's own page; CI checks the schema and the signup URL.
 - **Content Lab** -- Generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program, picking the AI model in the UI. Runs on Kyma API.
 
@@ -60,7 +60,7 @@ npx openaffiliate add supabase
 
 ### MCP (for AI agents)
 
-**Hosted HTTP endpoint** — public, read-only, no API key. One line:
+**Hosted HTTP endpoint** — public, no API key; read-only except `submit_program`, which only queues. One line:
 
 ```bash
 claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
@@ -93,7 +93,7 @@ The same endpoint as config, for Claude.ai, ChatGPT, and any other remote MCP cl
 }
 ```
 
-Available tools (read-only): `search_programs`, `get_program`, `list_categories`. `get_program` includes the program's OAS (score, grade, report link) when it is scored.
+Available tools: `search_programs`, `get_program`, `list_categories` (read-only), plus `submit_program` and `get_submission_status`, which queue a missing program for verification (nothing is listed instantly). `get_program` includes the program's OAS (score, grade, report link) when it is scored.
 
 ### Markdown, without MCP
 
@@ -145,6 +145,8 @@ const stripe = await getProgram("stripe");
 GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?verified=)
 GET /api/programs/[slug]       # Program details, with `oas` (score, grade, reportUrl) when scored
 GET /api/categories            # List categories with counts
+POST /api/submissions          # Submit a missing program by URL (queued for verification)
+GET /api/submissions/[id]      # Read a submission's status
 ```
 
 ### Content Lab
@@ -155,12 +157,13 @@ Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to 
 
 ## Get listed and scored
 
-Four ways to add a program. Each needs only the brand's own program page as the source.
+Five ways to add a program. Each needs only the brand's own program page as the source.
 
-1. **Web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
-2. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
-3. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
-4. **Email** -- send the program page link to hello@openaffiliate.dev.
+1. **Submit by URL** -- send the program page at [openaffiliate.dev/submit](https://openaffiliate.dev/submit#by-url), with MCP `submit_program`, or `POST /api/submissions`. No account needed. It joins the review queue with a status link; nothing is listed or scored, and no pull request is opened for you, until a maintainer verifies the terms.
+2. **Full web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
+3. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
+4. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
+5. **Email** -- send the program page link to hello@openaffiliate.dev.
 
 What happens next:
 
@@ -175,7 +178,7 @@ Full rules and the YAML template: [CONTRIBUTING.md](CONTRIBUTING.md). Scoring: [
 
 ### For AI agents
 
-Look a program up before suggesting it is missing: `GET https://openaffiliate.dev/api/programs/{slug}` or MCP `get_program`. Cite `oas.reportUrl` when you quote a score. The MCP server is read-only; to add a program, open a pull request or a Suggest a program issue with your own GitHub tools, using only terms from the brand's own page. See [AGENTS.md](AGENTS.md).
+Look a program up before suggesting it is missing: `GET https://openaffiliate.dev/api/programs/{slug}` or MCP `get_program`. Cite `oas.reportUrl` when you quote a score. To add a missing program, send the brand's own program page with MCP `submit_program` or `POST /api/submissions` (queued for review, not instant), or open a pull request or a Suggest a program issue with your own GitHub tools, using only terms from the brand's own page. See [AGENTS.md](AGENTS.md).
 
 ## AGENTS.md
 

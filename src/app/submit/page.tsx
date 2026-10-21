@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { Suspense, useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { capture, track } from "@/lib/track";
@@ -9,6 +9,10 @@ import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/client-programs";
 import { APPROVALS, FREQUENCIES } from "@/lib/claims/form";
 import { fieldErrors, githubNewFileUrl, missingFields, SHORT_DESCRIPTION_MAX, slugOf, submitYaml, type SubmitValues } from "@/lib/submit-yaml";
+import { SubmitByUrl } from "@/components/submit-by-url";
+
+// Inlined at build; without it the page offers only the GitHub path.
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 export default function SubmitPage() {
   useEffect(() => { track("page_view"); }, []);
@@ -76,10 +80,18 @@ export default function SubmitPage() {
     <div className="mx-auto max-w-3xl px-6 py-10">
       <h1 className="text-2xl font-bold tracking-tight">Submit a program</h1>
       <p className="text-sm text-muted-foreground mt-2">
-        Add your affiliate program to the open registry. This form writes the
-        program file and opens GitHub, where you create the pull request. You
-        need a GitHub account: GitHub copies the repository to your account
-        before the pull request opens.
+        Add your affiliate program to the open registry.
+        {TURNSTILE_SITE_KEY && (
+          <>
+            {" "}The quickest way is Submit by URL below: send your program page,
+            no account needed. It joins the review queue; nothing is listed or
+            scored, and no pull request is opened, until a maintainer has
+            verified the terms on your page.
+          </>
+        )}{" "}
+        The full form writes the program file and opens GitHub, where you create
+        the pull request. That form needs a GitHub account: GitHub copies the
+        repository to your account before the pull request opens.
       </p>
       <p className="text-sm text-muted-foreground mt-2">
         A maintainer checks every term against your program page before
@@ -108,6 +120,12 @@ export default function SubmitPage() {
         <BookOpen className="h-3.5 w-3.5" />
         Read the submission guide: what we check, and how programs are scored
       </Link>
+
+      {TURNSTILE_SITE_KEY && (
+        <Suspense fallback={null}>
+          <SubmitByUrl siteKey={TURNSTILE_SITE_KEY} />
+        </Suspense>
+      )}
 
       <div className="mt-8 space-y-6">
         {/* Basic Info */}
