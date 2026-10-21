@@ -3,6 +3,7 @@ import { GUIDES, guidePath, guideTitle } from "./guides"
 import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type BestPost, type PostSelection } from "./best-posts"
 
 import { IN_HOUSE, isLive, livePrograms, networkName, programs, type Program } from "./programs"
+import { networkKind } from "./network-meta"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
 import { termNotes } from "./term-notes"
@@ -69,9 +70,41 @@ export function methodsText(p: Program): string | null {
   return text[0].toUpperCase() + text.slice(1)
 }
 
-/** A third-party network the program runs on (not in-house, not unknown). */
+/**
+ * A network that pays partners itself (kind "marketplace": PartnerStack, CJ,
+ * Impact…), so its payout terms apply. Tracking software (Rewardful,
+ * FirstPromoter: kind "software") leaves payouts to the brand, so it never
+ * stands in for the brand's own terms.
+ */
 function thirdPartyNetwork(p: Program): string | null {
-  return p.network && p.network !== IN_HOUSE ? networkName(p.network) : null
+  return p.network && p.network !== IN_HOUSE && networkKind(p.network) === "marketplace" ? networkName(p.network) : null
+}
+
+/** The line every section of a program on the Affitor network carries, so the link into Affitor is disclosed where it sits. */
+export const AFFITOR_NETWORK_LINE = "Runs on Affitor, the affiliate network that maintains OpenAffiliate."
+
+/**
+ * The commission as the standard layout shows it: earnText, with its pointer
+ * to full terms (which this layout does not link) said as what the data
+ * holds: "length not published" when the brand does not publish one,
+ * "length not recorded" otherwise.
+ */
+export function earnShown(p: Program): string {
+  const length = termNotes(p.slug).notPublished.has("commission.duration") ? "length not published" : "length not recorded"
+  return earnText(p).replace("length: see full terms", length)
+}
+
+/** A restriction that forbids something: "No …", "Do not …", "Never …". */
+const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r.trim())
+/** A restriction that asks something of the partner (conservative: only these openings): "Use …", "Affiliates must …". */
+const requires = (r: string) => /^(use|have|must|be|apply|promote|share|you must|affiliates must|applicants must|applicants need|website must|your (site|website) must)\b/i.test(r.trim())
+/** Restrictions read as fragments in lists, without a final period. */
+const fragment = (t: string) => t.trim().replace(/\.$/, "")
+
+/** The brand's requirements of partners, as one detail ("Use at least one website …; Promote transparently …"), or null. */
+export function requirementsText(p: Program): string | null {
+  const reqs = (p.restrictions ?? []).filter((r) => !forbids(r) && requires(r)).map(fragment)
+  return reqs.length ? reqs.join("; ") : null
 }
 
 const twoWays = (p: Program, ...fields: string[]) => fields.some((f) => termNotes(p.slug).conflicts.has(f))
@@ -127,11 +160,12 @@ function cookieDetail(p: Program): string | null {
  */
 export function programDetails(p: Program): [string, string][] {
   const rows: [string, string | null][] = [
-    ["Commission rate", earnText(p)],
+    ["Commission rate", earnShown(p)],
     ["Getting paid", gettingPaid(p)],
     ["Payment method", methodsText(p) ?? (twoWays(p, "payout.methods") ? "The brand names two different methods" : null)],
     ["Cookie duration", cookieDetail(p)],
     ["Approval", p.approval === "auto" ? "Automatic" : p.approval === "manual" ? `Manual${approvalTime(p) ? `, ${approvalTime(p)}` : ""}` : null],
+    ["Requirements", requirementsText(p)],
   ]
   return rows.filter((r): r is [string, string] => Boolean(r[1]))
 }
@@ -139,7 +173,7 @@ export function programDetails(p: Program): [string, string][] {
 /** The comparison table's cells: Commission, Cookie, Payout ("—" when there is none on record). */
 export function tableRow(p: Program): { commission: string; cookie: string; payout: string } {
   return {
-    commission: earnText(p),
+    commission: earnShown(p),
     cookie: p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? (bothValues(p, "cookie_days") ?? "Two values") : "—",
     payout: [gettingPaid(p), methodsText(p)].filter(Boolean).join(" · ") || "—",
   }
@@ -156,9 +190,10 @@ const MEDIAN_COOKIE = medianCookie()
 export const PROS_CONS_MAX = 3
 
 /**
- * Pros and cons for one program, from structured fields only: approval,
- * payout rules, cookie length against the registry median, assets, and the
- * brand's restrictions as recorded.
+ * Pros and cons for one program, from structured fields only. Cons are the
+ * brand's prohibitions first, then the limits we compute (one-time, tiered),
+ * then its other limits (eligibility, exclusions). Requirements of partners
+ * are not cons: they go to the "Requirements" detail.
  */
 export function prosCons(p: Program): { pros: string[]; cons: string[] } {
   const pros: string[] = []
@@ -172,15 +207,11 @@ export function prosCons(p: Program): { pros: string[]; cons: string[] } {
   if (p.marketingMaterials) pros.push("Banners and other marketing assets provided")
   if (p.dedicatedManager) pros.push("Dedicated affiliate manager")
 
-  // The brand's prohibitions ("No …", "Do not …") lead: they are what a partner must not do.
-  const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r.trim())
   const restrictions = p.restrictions ?? []
   cons.push(...restrictions.filter(forbids))
   if (p.commission.type === "one-time") cons.push("Pays once per referral, with no recurring share")
   if (p.commission.type === "tiered") cons.push("The top figure needs volume or a higher tier")
-  cons.push(...restrictions.filter((r) => !forbids(r)))
-  // Restrictions are stored as sentences; the lists read as fragments, without a final period.
-  const fragment = (t: string) => t.trim().replace(/\.$/, "")
+  cons.push(...restrictions.filter((r) => !forbids(r) && !requires(r)))
   return { pros: pros.slice(0, PROS_CONS_MAX), cons: cons.slice(0, PROS_CONS_MAX).map(fragment) }
 }
 
@@ -249,7 +280,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
     q: `Do ${niche} pay recurring commissions?`,
     a:
       (recurring.length
-        ? `On this page, ${andList(recurring.map((p) => `${name(p)} (${esc(earnText(p))})`))} ${recurring.length === 1 ? "pays" : "pay"} a recurring share. `
+        ? `On this page, ${andList(recurring.map((p) => `${name(p)} (${esc(earnShown(p))})`))} ${recurring.length === 1 ? "pays" : "pay"} a recurring share. `
         : "None of the programs on this page pays a recurring share. ") +
       (rest.length ? `The other ${rest.length} list their commission as ${andList(restTypes)}, with no recurring length on record; each section gives the details. ` : "") +
       `Across the ${split.total} verified programs this post draws from, ${recurringAll} list a recurring commission.`,

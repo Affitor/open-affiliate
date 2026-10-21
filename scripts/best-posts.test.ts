@@ -19,7 +19,7 @@ import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, AFFITOR_NETWORK_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { programs as allPrograms } from "../src/lib/programs"
@@ -363,6 +363,43 @@ test("the no-figure check catches a renderer that reads figures out of quote tex
     details: (p) => programDetails(p).map(([k, v]) => [k, k === "Getting paid" ? figures(quoteOf(p.slug, "payout.minimum")) || v : v] as [string, string]),
   })
   assert.ok(injected.leaks.length > 0, "the check did not catch figures parsed from quotes")
+})
+
+test("every public/logos/*.png is a PNG file", () => {
+  const dir = join(process.cwd(), "public", "logos")
+  const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a])
+  const bad = readdirSync(dir)
+    .filter((f) => f.endsWith(".png"))
+    .filter((f) => !readFileSync(join(dir, f)).subarray(0, 8).equals(PNG))
+  assert.deepEqual(bad, [], "these .png files are not PNG images (an HTML page saved as a logo shows as a broken image)")
+})
+
+test("standard sections: Affitor-network programs disclose it; requirements are a detail, not a con; no software network stands in for payout terms", () => {
+  const byslug = (slug: string) => allPrograms.find((x) => x.slug === slug)!
+  // Classification on fixtures.
+  const fixture = { ...byslug("cloudtalk"), restrictions: ["No bidding on brand keywords.", "Use at least one website with real traffic.", "Affiliates must disclose the link.", "Open only to paying customers"] }
+  assert.deepEqual(prosCons(fixture).cons, ["No bidding on brand keywords", ...(fixture.commission.type === "one-time" ? ["Pays once per referral, with no recurring share"] : fixture.commission.type === "tiered" ? ["The top figure needs volume or a higher tier"] : []), "Open only to paying customers"].slice(0, PROS_CONS_MAX))
+  assert.equal(requirementsText(fixture), "Use at least one website with real traffic; Affiliates must disclose the link")
+  assert.equal(requirementsText({ ...fixture, restrictions: ["No spam"] }), null)
+  for (const post of STANDARD) {
+    const { html, selection } = renderStandard(post)
+    for (const { program: p } of selection.shown) {
+      const section = html.slice(html.indexOf(`data-post-program="${p.slug}"`)).split("data-post-program=")[1] ?? ""
+      if (p.network === "affitor") assert.ok(section.includes(AFFITOR_NETWORK_LINE), `${post.slug}: ${p.slug} runs on Affitor without saying so`)
+      else assert.ok(!section.includes(AFFITOR_NETWORK_LINE), `${post.slug}: ${p.slug} is not on Affitor`)
+      const { cons } = prosCons(p)
+      for (const r of p.restrictions ?? []) {
+        if (/^(use|have|must|be|apply|promote|share|affiliates must|applicants must|applicants need|website must)\b/i.test(r.trim()))
+          assert.ok(!cons.includes(r.trim().replace(/\.$/, "")), `${p.slug}: a requirement listed as a con: ${r}`)
+      }
+      const text = [tableRow(p).payout, ...programDetails(p).map(([, v]) => v)].join(" ")
+      assert.doesNotMatch(text, /On (Rewardful|FirstPromoter|Tolt|Tapfiliate|Lemon Squeezy|Creem)'s terms/, `${p.slug}: tracking software shown as the payer`)
+      assert.doesNotMatch(text, /see full terms/, `${p.slug}: points to full terms the page does not link`)
+    }
+  }
+  // Fathom records its commission length as unpublished; Raycast simply has none on record.
+  assert.match(tableRow(byslug("fathom-analytics")).commission, /length not published/)
+  assert.match(tableRow(byslug("raycast")).commission, /length not recorded/)
 })
 
 test("conflicts[].values items match their field: numbers for payout.minimum, a unit or a word for cookie_days", () => {

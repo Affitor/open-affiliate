@@ -49,7 +49,6 @@ export const CAPTURES: Record<string, Capture> = {
   landbot: program("landbot", "https://landbot.io/affiliates"),
   surveysparrow: program("surveysparrow", "https://surveysparrow.com/partners/"),
   raycast: program("raycast", "https://www.raycast.com/blog/affiliate-program"),
-  "kyma-api": program("kyma-api", `${AFFITOR_MARKETPLACE}/kyma-api`),
   blogify: program("blogify", "https://blogify.ai/partner-program/"),
   "snov-io": program("snov-io", "https://snov.io/affiliate-program"),
   "123formbuilder": program("123formbuilder", "https://www.123formbuilder.com/affiliate-program/"),

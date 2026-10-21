@@ -8,7 +8,7 @@ import { type Program } from "@/lib/programs";
 import { blogApplyHref } from "@/lib/apply-cta";
 import { type BestList } from "@/lib/best-lists";
 import { FRESHNESS_RULE, checkedRange, postTitle, type BestPost, type PostProgram, type PostSelection } from "@/lib/best-posts";
-import { AFFITOR_LINE, dateText, picksSentence, programDetails, prosCons, readMoreLinks, splitLink, standardFaq, tableRow, typeSplit } from "@/lib/best-standard";
+import { AFFITOR_LINE, AFFITOR_NETWORK_LINE, dateText, picksSentence, programDetails, prosCons, readMoreLinks, splitLink, standardFaq, tableRow, typeSplit } from "@/lib/best-standard";
 import { CAPTURES } from "@/lib/best-captures";
 import { AffitorLink } from "@/components/affitor-link";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
@@ -111,6 +111,7 @@ function ProgramSection({ program, copy, index, campaign }: { program: Program; 
           </li>
         ))}
       </ul>
+      {program.network === "affitor" && <p data-affitor-network className={`${prose} mt-4`}>{AFFITOR_NETWORK_LINE}</p>}
       {pros.length > 0 && (
         <>
           <p className="mt-5 font-semibold">Pros:</p>

@@ -92,7 +92,7 @@ export const post: BestPost = {
       slug: "vwo",
       bestFor: "Best for conversion and growth marketers",
       verdict: "A fit for conversion and growth marketers.",
-      why: "VWO is an A/B testing tool for experimentation and conversion rate optimization, now part of Wingify. Its {affiliate program}, run on PartnerStack, pays a share of every payment a referred customer makes.",
+      why: "VWO is an A/B testing tool for experimentation and conversion rate optimization, now part of Wingify. Its {affiliate program}, run on PartnerStack, pays a share of the first-year contract value on a referred customer's first purchase.",
     },
     {
       slug: "cloudtalk",
