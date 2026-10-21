@@ -4,12 +4,8 @@
  * components can use it without pulling in the registry.
  */
 
-/**
- * PostHog event for a click on any link to affitor.com: {placement (the link's
- * utm_medium), cta, slug?}. Named oa_to_affitor_click until 2026-10-20; an
- * insight that spans that date counts both names.
- */
-export const AFFITOR_CLICK = "affitor_cta_click"
+/** PostHog event for a click on any link to affitor.com: {placement (the link's utm_medium), cta, slug?}. */
+export const AFFITOR_CLICK = "oa_to_affitor_click"
 
 /** The Affitor marketplace, where one partner account joins many programs. */
 export const AFFITOR_MARKETPLACE = "https://affitor.com/marketplace"

@@ -2,7 +2,7 @@ import { AFFITOR_ATTR, isAffitorHref } from "../src/lib/affitor-link"
 
 /**
  * Every anchor in served HTML whose href is on affitor.com must be a tracked
- * component (it renders AFFITOR_ATTR and records affitor_cta_click) and carry
+ * component (it renders AFFITOR_ATTR and records oa_to_affitor_click) and carry
  * the openaffiliate UTM. Returns the problems and how many tracked anchors were
  * seen, so a caller can refuse a vacuous pass.
  */

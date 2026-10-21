@@ -40,8 +40,7 @@ export function SaveButton({ slug, name, iconOnly = false }: { slug: string; nam
           const result = store.toggle(slug)
           setError(result.error)
           if (result.saved !== undefined) {
-            // Named program_saved / program_unsaved until 2026-10-20.
-            capture(result.saved ? "program_save" : "program_unsave", { slug })
+            capture(result.saved ? "program_saved" : "program_unsaved", { slug })
           }
         }}
       >

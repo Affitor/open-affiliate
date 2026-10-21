@@ -1,6 +1,6 @@
 /**
  * Every OpenAffiliate link to affitor.com carries the openaffiliate UTM and
- * records affitor_cta_click (src/lib/affitor-link.ts), and /for-brands
+ * records oa_to_affitor_click (src/lib/affitor-link.ts), and /for-brands
  * states no pricing.
  *
  * The registry checks read src/lib/registry.json, so run this after
@@ -95,7 +95,7 @@ test("every apply and Also-on-Affitor link to affitor.com carries the UTM", () =
 // plain <a> with a computed href is allowed only for the expressions below,
 // each reviewed as never pointing at affitor.com. Any other computed href
 // (applyButton(p).href, p.applyHref, a new one) must use AffitorLink or
-// TrackLink, which record affitor_cta_click when the href is on affitor.com.
+// TrackLink, which record oa_to_affitor_click when the href is on affitor.com.
 const PLAIN_ANCHORS = new Set([
   "src/app/layout.tsx | href", // footer list: internal paths and GitHub
   "src/app/privacy/page.tsx | `mailto:${CONTACT}`",
