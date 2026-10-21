@@ -527,3 +527,11 @@ test("submit_program queues through the shared service, takes the IP from the re
   assert.equal(disabled.isError, true)
   assert.match(JSON.stringify(disabled.content), /not enabled/)
 })
+
+test("every agent-facing doc tells agents they can submit, and none says MCP cannot", () => {
+  for (const path of ["skills/openaffiliate/SKILL.md", "AGENTS.md", "README.md", "src/app/docs/submit/page.tsx", "src/app/docs/mcp/page.tsx", "scripts/generate-md.ts"]) {
+    const text = readFileSync(path, "utf8")
+    assert.match(text, /submit_program/, `${path} must name submit_program`)
+    assert.doesNotMatch(text, /cannot add (a )?programs?|no submit tool|read-only: it can look a program up, not add|MCP server is read-only[;.]/i, `${path} still says agents cannot submit`)
+  }
+})
