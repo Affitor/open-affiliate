@@ -20,7 +20,7 @@ approval: auto
 api_available: true
 
 payout:
-  minimum: 50
+  minimum: 10
   currency: USD
   frequency: net-60
   methods: [paypal, crypto, bank]
@@ -41,7 +41,7 @@ description: >
   ?ref=<code> to any TableJourney link or embed the food tours widget with their code; AI agents
   join through MCP tools and every booking link the API returns to their key carries their code.
   Earnings become payable 3 days after the partner pays TableJourney and are paid monthly by
-  PayPal, USDC or bank transfer from a $50 balance.
+  PayPal or USDC from a $10 balance, or bank transfer from $50.
 
 agents:
   prompt: >
