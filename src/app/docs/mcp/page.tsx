@@ -90,7 +90,7 @@ url = "https://openaffiliate.dev/mcp"`}
               },
               {
                 name: "get_program",
-                desc: "Get full program details including agent instructions, restrictions, signup URL",
+                desc: "Get full program details including agent instructions, restrictions, signup URL, and its OAS (score, grade, report link) when it is scored",
               },
               {
                 name: "list_categories",

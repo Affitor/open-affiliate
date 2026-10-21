@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  discover, discoverIsolated, discoveryCandidates, titleOf, recordingFetcher, replayFetcher, runOptions, withDiscovered, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -73,6 +73,50 @@ test("each program runs in its own process with a hard time limit", async () => 
   for (const check of Object.values(result.checks)) assert.match(check.evidence!, /timed out after 1\.5s/)
 })
 
+test("phase 2 cannot erase phase 1: a stalled discovery returns nothing and every reading stands", async () => {
+  const phase1: Result = { slug: "x", network: "in-house", checkedAt: "", checks: {
+    P1: { state: "met", evidence: "$9" }, P2: { state: "not_met" }, P3: { state: "unknown", evidence: "page longer than the read limit" },
+    P5: { state: "unknown" }, P6: { state: "unknown" }, A1: { state: "met", evidence: "https://x.test/affiliates" }, A2: { state: "not_met" } } }
+  const started = Date.now()
+  // TEST-NET-1 never answers: the discovery child can only end by its own limit.
+  const found = await discoverIsolated({ slug: "x", url: "https://192.0.2.1/" }, ["https://192.0.2.1/pricing"], ["P2", "P3"], 1500)
+  assert.ok(Date.now() - started < 5000)
+  assert.deepEqual(found, {})
+  assert.deepEqual(withDiscovered(phase1, found), phase1)
+  // A positive reading replaces not_met or unknown only; met stays as phase 1 read it.
+  const merged = withDiscovered(phase1, { P1: { state: "met", evidence: "other" }, P2: { state: "met", evidence: "free plan (on /plans)" }, P3: { state: "not_met" } })
+  assert.equal(merged.checks.P1.evidence, "$9")
+  assert.equal(merged.checks.P2.state, "met")
+  assert.deepEqual(merged.checks.P3, phase1.checks.P3)
+  assert.deepEqual(merged.checks.A1, phase1.checks.A1)
+})
+
+test("discovery candidates: pricing kinds first, shorter path, A-Z, three at most, never a page already read or another site", () => {
+  const home = { url: "https://brand.com/", html: [
+    '<a href="/shop">Shop</a>', '<a href="/blog/pricing-guide">Guide</a>', '<a href="/plugin/kit/pricing/">Kit pricing</a>',
+    '<a href="/free-trial?utm=x">Trial</a>', '<a href="/pricing">Pricing</a>', '<a href="/store/app">Store</a>', '<a href="/buy">Buy</a>',
+    '<a href="https://other.com/pricing">Other</a>', '<a href="/download">Download</a>',
+  ].join("") }
+  const got = discoveryCandidates([home], ["https://brand.com", "https://brand.com/pricing"], new Set()).slice(0, 3)
+  assert.deepEqual(got, ["https://brand.com/buy", "https://brand.com/store/app", "https://brand.com/plugin/kit/pricing"])
+  assert.ok(!got.some((u) => u.includes("shop") || u.includes("other.com")))
+})
+
+test("discovery reads only the brand's pages, skips merchandise, and only adds readings", async () => {
+  network({
+    "https://brand.com/robots.txt": html(""),
+    "https://brand.com/store/merch": html("<title>Merch store</title><p>Pro plan $29/mo</p>"),
+    "https://brand.com/store/app": html("<p>Company merch T-shirt $29</p><p>Start your 14-day free trial</p>"),
+    "https://brand.com/buy": redirect("https://reseller.example/buy"),
+    "https://reseller.example/robots.txt": html(""),
+    "https://reseller.example/buy": html("<p>Pro $19/mo</p>"),
+  })
+  const found = await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/buy", "https://brand.com/store/app", "https://brand.com/store/merch"], ["P1", "P2", "P3"], new Set())
+  assert.equal(found.P1, undefined, "the reseller's price, the merch page and the merch price all ignored")
+  assert.match(found.P2!.evidence!, /14-day free trial \(on https:\/\/brand\.com\/store\/app\)/)
+  assert.equal(found.P3, undefined)
+})
+
 test("robots wildcards match in bounded time (no regex backtracking)", () => {
   const robots = "User-agent: *\nDisallow: /" + "*a".repeat(24) + "b\n"
   const started = performance.now()
@@ -86,6 +130,23 @@ test("a robots.txt redirect to a blocked host is never requested; the site count
   assert.deepEqual(await politeGet("https://brand.test/"), { refused: "robots.txt unreachable" })
   assert.ok(!requested.some((u) => u.includes("partnerstack.com")), requested.join(", "))
   assert.ok(!requested.includes("https://brand.test/"), "the page itself is not requested either")
+})
+
+test("--record saves every response and --replay serves the same bytes without the network", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "oas-record-"))
+  const routes: Record<string, () => Response> = {
+    "https://brand.test/robots.txt": html("User-agent: *\nAllow: /"),
+    "https://brand.test/go": redirect("https://brand.test/pricing"),
+    "https://brand.test/pricing": html("<p>Pro $29/mo</p>"),
+  }
+  const live = (async (input: string | URL | Request) => (routes[String(input)] ?? html("", 404))()) as typeof fetch
+  setFetcher(recordingFetcher(dir, live))
+  const recorded = await politeGet("https://brand.test/go")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://brand.test/go"), recorded, "the redirect, robots.txt and page replay as recorded")
+  assert.equal((recorded as { url: string }).url, "https://brand.test/pricing")
+  assert.match(JSON.stringify(await politeGet("https://brand.test/other")), /fetch failed \(Error\)/, "a URL that was not recorded fails, never reaches the network")
+  rmSync(dir, { recursive: true, force: true })
 })
 
 test("a page redirect to a blocked host stops before the request", async () => {
@@ -336,6 +397,217 @@ test("review of the fixes (PR #364 r3): store routes, valued terms, announcement
   assert.ok(hasTrial("Try Duplicator free on your site"))
   assert.ok(hasTrial("Install Duplicator Free"))
   assert.ok(hasTrial("Start for free, no credit card"))
+})
+
+test("v2 readers follow the grader rubric, each with its boundary (spec 2026-10-20-OAS-V2-DISCOVERY §2)", () => {
+  const terms = (body: string, head = "") => termsLink(`<html><head>${head}</head><body>${body}</body></html>`, "https://brand.com")
+  // A2 approval ("concrete term: … approval"), only in a sentence about the program.
+  assert.ok(terms(`<p>Earn 30% commission. Affiliate applications are reviewed within 48 hours.</p>`))
+  assert.ok(terms(`<p>Earn 25% commission. Once approved, we'll set you up with a referral link.</p>`))
+  assert.equal(terms(`<p>Earn 30% commission. Job applications are reviewed by our HR team.</p>`), null, "a job application is not program approval")
+  // A2 payout ("payout"): schedule or method, in a sentence about the program; buyer payment does not count.
+  assert.ok(terms(`<p>Recurring 20% commission. Receive monthly commissions.</p>`), "hello-bar")
+  assert.ok(terms(`<p>25% commission on the first sale. Affiliates are paid the first of the month via PayPal.</p>`), "memberpress")
+  assert.ok(terms(`<p>25% lifetime commission. Payments are made every two months.</p>`), "fast-bundle")
+  assert.ok(terms(`<p>30% commission. Payouts twice a month through PayPal.</p>`), "se-ranking")
+  assert.equal(terms(`<p>Plans from $29. You can pay via PayPal or card.</p>`), null, "buyer payment")
+  assert.equal(terms(`<p>Earn 20% commission. Monthly commissions add up.</p>`), null, "accrual without a receive or paid verb")
+  // A2 cookie ("cookie window"), up to two words between, never a consent or analytics cookie.
+  assert.ok(terms(`<p>25% commission and a 60-day return cookie.</p>`), "memberpress")
+  assert.ok(terms(`<p>30% commission. We store your referred users' cookies for 120 days.</p>`), "se-ranking")
+  assert.equal(terms(`<p>30% commission. We set a 30-day analytics cookie.</p>`), null, "an analytics cookie")
+  // A2 figure: the meta description is the page's own text; statistics are not rates.
+  assert.ok(terms(`<p>Payouts via PayPal, payout minimum $100.</p>`, `<meta name="description" content="Join and earn up to 30% CPA!">`), "common-ninja")
+  assert.equal(terms(`<p>$25,000+ earned in commission 100% of clients happy. You'll receive your payment every 3 months.</p>`), null, "aisdr: stat cards")
+  assert.equal(terms(`<p>Earn recurring commissions. Read our partnership terms.</p>`), null, "wisestamp: a terms heading without a figure")
+  // Registry phrasings found by the full-rescan audit (v2 A2 losses), and their boundaries.
+  assert.ok(terms(`<p>You'll receive 20% of each sale you make. We offer a 30 day cookie.</p>`), "ai-detector-pro")
+  assert.ok(terms(`<p>Earn 20% recurring commission. Commissions greater than $10 are paid out on the first day of each month to your PayPal account.</p>`), "linkhub")
+  assert.ok(terms(`<p>Earn up to 75% commission. 120 days' cookie tracking.</p>`), "iobit")
+  assert.ok(terms(`<p>Earn 20% recurring commission. 90-Days Cookie Duration.</p>`), "socialpilot")
+  assert.ok(terms(`<p>Earn 40% on the initial purchase. The tracking cookies are set to a lengthy 60 days.</p>`), "themify")
+  assert.ok(terms(`<p>30% of every payment your client makes. Cookie window 60 days. Payouts Monthly.</p>`), "rank-prompt")
+  assert.ok(terms(`<p>Earn 10% on attributed sales. Applications are reviewed manually; there is no automatic approval.</p>`), "csv-safecheck")
+  assert.ok(terms(`<p>Get 50% of all referred payments. Commission will be paid monthly.</p>`), "craft / bokun")
+  assert.ok(terms(`<p>Up to 50% commission on every subscription you refer. Get paid monthly.</p>`), "kittl")
+  assert.equal(terms(`<p>Earn 10% commission each month, for an entire year, on their monthly bill.</p>`), null, "a recurring rate is not a payout schedule")
+  assert.equal(terms(`<p>Earn 20% commission for any referral that subscribes to a monthly plan.</p>`), null, "a monthly plan is not a schedule")
+  assert.equal(terms(`<p>Earn up to $10,000. Your payout $348 monthly.</p>`), null, "an earnings calculator")
+  assert.equal(terms(`<p>Earn up to 40% per sale. Partners get recurring payouts and monthly performance bonuses.</p>`), null, "picwish: monthly qualifies the bonuses")
+  assert.ok(terms(`<p>Earn 25% recurring commission. Affiliate payouts and agency payouts both on the same monthly schedule.</p>`), "magicblocks")
+  assert.ok(terms(`<p>Earn up to $70. Commissions are paid in USD on a monthly basis.</p>`), "carepatron")
+  assert.ok(terms(`<p>Earn 10%. Commissions are available for cash-out via ACH.</p>`), "goflow: a cash-out method")
+  assert.equal(terms(`<p>Get 25% off your first year. Payouts monthly.</p>`), null, "a discount is not a rate")
+  assert.equal(terms(`<p>Customers get 99.9% uptime. Payouts monthly.</p>`), null, "a product claim is not a rate")
+  assert.equal(terms(`<p>Earn 20% commission. We use cookies for analytics; accept cookies for 30 days.</p>`), null, "a consent banner")
+  assert.equal(terms(`<p>Earn 20% commission. Your plan is paid monthly by card.</p>`), null, "buyer billing")
+  // P2 ("free trial … or a free plan/tier"): "free to try", negated before or after.
+  assert.ok(hasTrial("Boolvideo is free to try"))
+  assert.equal(hasTrial("Our app is not free to try"), null)
+  assert.equal(hasTrial("Free to try? No, plans start at $9."), null)
+  assert.equal(hasTrial("The free plan is no longer available."), null)
+  // P3 purchase and start ("start without booking a demo or contacting sales"), brand host only.
+  assert.ok(selfServe(`<a href="https://www.literatureandlatte.com/store/scrivener">BUY NOW</a>`, "https://www.literatureandlatte.com"))
+  assert.equal(selfServe(`<a href="https://readymode.chargifypay.com/subscribe/x">Buy now</a>`, "https://www.readymode.com"), null, "a third-party checkout")
+  assert.equal(selfServe(`<a href="https://brand.com/merch/hoodie">Buy now</a>`, "https://brand.com"), null, "merchandise")
+  assert.ok(selfServe(`<a href="https://www.freemockup.video/app/">Start creating free</a>`, "https://www.freemockup.video"))
+  assert.equal(selfServe(`<a href="https://brand.com/blog/start-creating">Start creating now</a>`, "https://brand.com"), null, "a marketing page")
+  // The sales veto: link text, and only sales-contact shapes in a path.
+  assert.ok(selfServe(`<a href="https://sellercenter.io/sales-tracking">Start for Free</a>`, "https://sellercenter.io"))
+  assert.equal(selfServe(`<a href="https://brand.com/contact-sales">Get started</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://brand.com/start">Talk to sales</a>`, "https://brand.com"), null)
+})
+
+test("v2 readers stay linear on 2 MB inputs", () => {
+  const big = 2_000_000
+  for (const text of ["payments ".repeat(big / 9), "paid ".repeat(big / 5) + " via", "cookies ".repeat(big / 8), "payments " + "x".repeat(big), "commission " + "9% ".repeat(big / 3), "free to try ".repeat(big / 12)]) {
+    const t0 = performance.now()
+    termsLink(`<p>${text}</p>`, "https://brand.com")
+    hasTrial(text)
+    assert.ok(performance.now() - t0 < 1500, `${text.slice(0, 16)}… took ${Math.round(performance.now() - t0)} ms`)
+  }
+})
+
+test("review of PR #365 r1: reader boundaries", () => {
+  const terms = (body: string) => termsLink(`<p>${body}</p>`, "https://brand.com")
+  assert.equal(terms("Customers get 99% satisfaction. Payouts monthly."), null, "a product claim is not a commission")
+  assert.equal(terms("Earn 30% commission. Job applications require manual approval."), null, "a job approval")
+  assert.equal(terms("Earn 20% commission. Payments are processed monthly for your plan."), null, "the buyer's bill")
+  assert.equal(terms("Earn 30% commission. Your cookies expire after 30 days to remember your consent."), null, "a consent cookie, consent after the match")
+  assert.ok(terms("Earn 30% commission. Cookie duration is 24 hours."), "a cookie window in hours")
+  assert.ok(terms("Earn up to 50%. 45-Day Cookie Policy We save cookies for 45 days, so if a visitor buys you earn."), "wpmet: a cookie section heading")
+  assert.ok(terms(`Products: collect cookie consent with a banner. ${"Features and tools for your site ".repeat(6)}Earn up to 40% commission with cookies to track customers who clicked affiliate links for 30 days.`), "iubenda: consent in the menu, far from the term")
+  assert.ok(terms("30 % Revenue Share Lifetime Recurring Commission. No credit card Free signup · Approved within 24 hours"), "poweradspy: no credit card is not a credit approval")
+  assert.ok(terms("Earn 30% commission. Payouts are sent on the 20th."), "a payout day of the month")
+  assert.ok(terms("Earn $15 for every new subscriber. Payouts monthly via PayPal."), "a figure per referral")
+  for (const text of ["Free to try is unavailable.", "Free to try: No.", "Free to try? Not anymore."]) assert.equal(hasTrial(text), null, text)
+  assert.equal(selfServe(`<a href="/bl%6fg/how-to">Start creating free</a>`, "https://brand.com"), null, "an encoded marketing path")
+})
+
+test("review of PR #365 r1: discovery and recording", async () => {
+  // Every URL phase 1 read is removed before the first three are taken.
+  const home = { url: "https://brand.com/", html: '<a href="/buy">b</a><a href="/store">s</a><a href="/a/buy">ab</a><a href="/c/store">cs</a>' }
+  const all = discoveryCandidates([home], ["https://brand.com"], new Set())
+  assert.deepEqual(all.filter((u) => u !== "https://brand.com/buy").slice(0, 3), ["https://brand.com/a/buy", "https://brand.com/store", "https://brand.com/c/store"])
+  // Titles by forward scan: whole title, linear on hostile input.
+  assert.equal(titleOf(`<title id="t">${"x".repeat(300)} merch</title>`).endsWith("merch"), true)
+  const t0 = performance.now()
+  titleOf("<title ".repeat(300_000))
+  assert.ok(performance.now() - t0 < 200)
+  // A JSON-LD offer on a discovered page is not read (it cannot be checked against the merchandise guard).
+  network({
+    "https://brand.com/robots.txt": html(""),
+    "https://brand.com/store": html('<p>Company merch T-shirt $29</p><script type="application/ld+json">{"offers":{"price":"29","priceCurrency":"USD"}}</script>'),
+  })
+  assert.equal((await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/store"], ["P1"], new Set())).P1, undefined)
+  // Recording keeps the raw bytes and only what the reader read: a body of invalid UTF-8 replays exactly as live.
+  const dir = mkdtempSync(join(tmpdir(), "oas-bytes-"))
+  const bytes = Buffer.concat([Buffer.alloc(600_000, 0xff), Buffer.from(" Pro $29/mo ")])
+  const live = (async (input: string | URL | Request) => String(input).endsWith("robots.txt") ? new Response("") : new Response(bytes)) as typeof fetch
+  setFetcher(recordingFetcher(dir, live))
+  const recorded = await politeGet("https://bytes.test/p")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://bytes.test/p"), recorded)
+  assert.equal((recorded as { truncated?: boolean }).truncated, false)
+  rmSync(dir, { recursive: true, force: true })
+  // A replay refuses PageSpeed and DataForSEO, which run in the parent.
+  assert.throws(() => runOptions(["--replay", "x", "--seo"]), /cannot run/)
+  assert.throws(() => runOptions(["--replay", "x", "--psi"]), /cannot run/)
+})
+
+test("review of PR #365 r2: boundaries across sentences and subjects", async () => {
+  const terms = (body: string) => termsLink(`<p>${body}</p>`, "https://brand.com")
+  assert.equal(terms("Our service costs $29 per customer. Affiliate payouts monthly."), null, "a price per customer is not a commission")
+  assert.equal(terms("Earn 30% commission. We use cookies to enhance your browsing experience. These cookies expire after 30 days."), null, "consent in the sentence before")
+  assert.equal(terms("Earn 30% commission. Essential cookies last 30 days."), null, "an essential cookie")
+  assert.equal(terms("Earn 30% commission. Job applications for open engineering and design positions across all our locations are first screened by a recruiter and then require manual approval."), null, "a far job subject")
+  assert.equal(terms("Earn 30% commission. Employment applications require manual approval."), null)
+  assert.equal(terms("Earn 20% commission. For your plan, the details about accessing our collection of premium downloadable resources and product features are available here, while payments are processed monthly."), null, "a far buyer subject")
+  assert.equal(terms("Earn 20% commission. Customer payments are processed monthly."), null, "a buyer's payment")
+  assert.equal(hasTrial("Free to try is currently unavailable."), null)
+  // Real terms these guards must keep.
+  assert.ok(terms("Partner with us: earn 10% on attributed sales. Applications are reviewed manually; there is no automatic approval."), "csv-safecheck")
+  assert.ok(terms("Our affiliates earn 25% lifetime commission. Payments are made every two months."), "fast-bundle")
+  assert.ok(terms("Earn up to $2,000. We use cookies to track your referrals. The cookies last for 90 days after someone clicks your link."), "easydmarc")
+  assert.ok(terms("For a $30 subscription your commission is 100% which is $30. Commissions become available for payment monthly."), "startmail")
+  assert.ok(terms("Earn up to 50%. 45-Day Cookie Policy We save cookies for 45 days, so if a visitor buys you earn."), "wpmet")
+  // A title is read whole for the merchandise veto.
+  network({ "https://brand.com/robots.txt": html(""), "https://brand.com/store": html(`<title>${"Brand ".repeat(350)} merch</title><p>$29</p>`) })
+  assert.equal((await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/store"], ["P1"], new Set())).P1, undefined)
+})
+
+test("review of PR #365 r2: a recorded stream failure replays as a failure; recording appends", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "oas-fail-"))
+  const failing = (async (input: string | URL | Request) => {
+    if (String(input).endsWith("robots.txt")) return new Response("")
+    const body = new ReadableStream<Uint8Array>({ start(c) { c.enqueue(new TextEncoder().encode("Pro $29/mo")); c.error(new Error("reset")) } })
+    return new Response(body)
+  }) as typeof fetch
+  setFetcher(recordingFetcher(dir, failing))
+  const live = await politeGet("https://fail.test/p")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://fail.test/p"), live)
+  assert.match(JSON.stringify(live), /read failed/)
+  // 4 MB in 1 KiB chunks: appended, not rewritten (linear).
+  const chunked = (async (input: string | URL | Request) => String(input).endsWith("robots.txt") ? new Response("") : new Response(new ReadableStream<Uint8Array>({
+    start(c) { const k = new Uint8Array(1024).fill(97); for (let i = 0; i < 1400; i++) c.enqueue(k); c.close() } }))) as typeof fetch
+  setFetcher(recordingFetcher(dir, chunked))
+  const t0 = performance.now()
+  await politeGet("https://big.test/p")
+  assert.ok(performance.now() - t0 < 2000, `${Math.round(performance.now() - t0)} ms`)
+  rmSync(dir, { recursive: true, force: true })
+})
+
+const scanTextTrial = (html: string) => hasTrial(visibleText(html))
+test("review of PR #365 r3: concurrent and unfinished recordings, risk-free", async () => {
+  // A money-back guarantee is not a free trial.
+  assert.equal(hasTrial("100% risk-free to try. All plans come with a 30-day money-back guarantee. Plans start at $29/month."), null)
+  for (const v of ["risk free to try", "risk\u2011free to try", "risk\u2013free to try", "Risk-Free to try", "risk - free to try", "risk \u2014 free to try", "risk\u00a0\u2011\u00a0free to try"]) {
+    assert.equal(hasTrial(`100% ${v}. 30-day money-back guarantee.`), null, v)
+  }
+  assert.equal(scanTextTrial(`<p>100% risk <span>-</span> free to try.</p>`), null, "tags between")
+  assert.ok(hasTrial("Boolvideo is free to try"))
+  const dir = mkdtempSync(join(tmpdir(), "oas-conc-"))
+  // Two responses for one URL at once: each recording is whole, never interleaved.
+  const big = (async () => new Response(new ReadableStream<Uint8Array>({
+    start(c) { const k = new Uint8Array(1024).fill(98); for (let i = 0; i < 977; i++) c.enqueue(k); c.close() } }))) as typeof fetch
+  const rec = recordingFetcher(dir, big)
+  const [x, y] = await Promise.all([rec("https://same.test/robots.txt"), rec("https://same.test/robots.txt")])
+  await Promise.all([x.arrayBuffer(), y.arrayBuffer()])
+  const replayed = await (await replayFetcher(dir)("https://same.test/robots.txt")).arrayBuffer()
+  assert.equal(replayed.byteLength, 977 * 1024)
+  // Two captures of one URL finishing in either order: the manifest and its body always belong together.
+  const welcome = (async () => new Response("Welcome")) as typeof fetch
+  let n = 0
+  const priceThenFail = (async () => new Response(new ReadableStream<Uint8Array>({
+    pull(c) { if (n++ === 0) c.enqueue(new TextEncoder().encode("Pro $29/mo")); else c.error(new TypeError("reset")) } }, { highWaterMark: 0 }))) as typeof fetch
+  const ra = await recordingFetcher(dir, welcome)("https://pair.test/p")
+  const rb = await recordingFetcher(dir, priceThenFail)("https://pair.test/p")
+  const rbr = rb.body!.getReader()
+  await rbr.read()
+  await ra.text() // A finishes after B started: A's manifest wins, with A's body
+  const pa = await replayFetcher(dir)("https://pair.test/p")
+  assert.equal(await pa.text(), "Welcome")
+  await assert.rejects(rbr.read()) // B fails: B's manifest wins, with B's body and failure
+  const pb = (await replayFetcher(dir)("https://pair.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await pb.read()).value), "Pro $29/mo")
+  await assert.rejects(pb.read())
+  // An unfinished capture does not replay.
+  const hanging = (async () => new Response(new ReadableStream<Uint8Array>({ start(c) { c.enqueue(new TextEncoder().encode("Pro $29/mo")) } }))) as typeof fetch
+  const r = await recordingFetcher(dir, hanging)("https://hang.test/p")
+  await r.body!.getReader().read()
+  await assert.rejects(replayFetcher(dir)("https://hang.test/p"), /not recorded/)
+  // A recorded failure replays its bytes first, then fails.
+  let pulls = 0
+  const failing = (async () => new Response(new ReadableStream<Uint8Array>({
+    pull(c) { if (pulls++ === 0) c.enqueue(new TextEncoder().encode("Pro")); else c.error(new TypeError("reset")) } }, { highWaterMark: 0 }))) as typeof fetch
+  const live = (await recordingFetcher(dir, failing)("https://f.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await live.read()).value), "Pro")
+  await assert.rejects(live.read())
+  const again = (await replayFetcher(dir)("https://f.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await again.read()).value), "Pro")
+  await assert.rejects(again.read(), (e: Error) => e.name === "TypeError")
+  rmSync(dir, { recursive: true, force: true })
 })
 
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
