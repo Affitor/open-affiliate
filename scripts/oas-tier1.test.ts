@@ -286,7 +286,7 @@ test("review of the fixes (PR #364 r1): false positives and long digit runs", ()
   assert.equal(selfServe(`<a href="https://apps.shopify.com/partners/brand-studio">Apps</a>`, "https://brand.com"), null, "a developer page")
   assert.equal(selfServe(`<a href="https://wordpress.org/plugins/gdpr-cookie-compliance/">Powered by GDPR Cookie Compliance</a>`, "https://ninjapromo.io"), null, "ninja-promo: a third-party plugin in the footer")
   assert.ok(selfServe(`<a href="https://wordpress.org/plugins/seo-by-rank-math/#reviews">WP.org</a>`, "https://rankmath.com"), "rank-math: the brand's own listing")
-  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/mylens-ai-webpage/phgl">Chrome Extension</a>`, "https://mylens.ai"), "mylens")
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/mylens-ai-webpage/phglephbecffklifllmgaojdpaaaaaaa">Chrome Extension</a>`, "https://mylens.ai"), "mylens")
   assert.ok(selfServe(`<a href="https://apps.apple.com/app/suno-make-and-explore-music/id6480136315">iOS app</a>`, "https://suno.com"), "suno")
   assert.equal(selfServe(`<a href="https://apps.apple.com/app/inbox-zero/id1">iOS app</a>`, "https://box.com"), null, "a short name is a whole word, not a substring")
   assert.equal(selfServe(`<a href="https://apps.shopify.com/bread-recipes">Install</a>`, "https://read.com"), null, "a substring is not the name")
@@ -308,6 +308,30 @@ test("review of the fixes (PR #364 r1): false positives and long digit runs", ()
   assert.ok(termsLink(`<p>Earn up to 40% commission. The minimum payout for affiliates is 50 USD.</p>`, "https://brand.com"))
   assert.ok(termsLink(`<p>Earn 30% on every sale. Our cookie life is 30 days.</p>${"<p>Lorem ipsum dolor sit amet.</p>".repeat(10)}<p>New partner program dashboard coming soon.</p>`, "https://brand.com"), "burstyai: an unrelated 'coming soon' far away")
   assert.ok(termsLink(`<p>30% commission on every sale. Attribution window of 60 days.</p>`, "https://brand.com"))
+})
+
+test("review of the fixes (PR #364 r3): store routes, valued terms, announcement distance, freebies", () => {
+  // The store matcher stays linear on a long listing identity (was cubic: 3.7 s at 1,600 words).
+  const t0 = performance.now()
+  selfServe(`<a href="https://apps.shopify.com/${Array(1600).fill("x").join("-")}">Install</a>`, "https://acme.com")
+  assert.ok(performance.now() - t0 < 50, `took ${Math.round(performance.now() - t0)} ms`)
+  // Store routes must be complete listing routes.
+  assert.equal(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math">Install</a>`, "https://rankmath.com"), null)
+  assert.equal(selfServe(`<a href="https://addons.mozilla.org/invalid/addon/rank-math/garbage">Install</a>`, "https://rankmath.com"), null)
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math-seo/${"a".repeat(32)}">Add to Chrome</a>`, "https://rankmath.com"))
+  assert.ok(selfServe(`<a href="https://addons.mozilla.org/en-US/firefox/addon/rank-math/">Add to Firefox</a>`, "https://rankmath.com"))
+  // A2 terms carry a value of the right kind.
+  assert.equal(termsLink(`<p>30% commission. Cookie duration details are in section 2.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window: see section 2.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Payouts via checklist to be determined.</p>`, "https://brand.com"), null)
+  assert.ok(termsLink(`<p>30% commission. Our cookie lasts 60 days.</p>`, "https://brand.com"))
+  assert.equal(termsLink(`<p>30% commission. Paid monthly. ${"x".repeat(126)} Coming soon.</p>`, "https://brand.com"), null, "a marker at the window's edge")
+  // A "free" that qualifies another noun is a freebie.
+  assert.equal(hasTrial("Try our free video demo today"), null)
+  assert.equal(hasTrial("Try our service for free worldwide shipping"), null)
+  assert.ok(hasTrial("Try Duplicator free on your site"))
+  assert.ok(hasTrial("Install Duplicator Free"))
+  assert.ok(hasTrial("Start for free, no credit card"))
 })
 
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {

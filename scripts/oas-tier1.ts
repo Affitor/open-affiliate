@@ -299,11 +299,15 @@ export function hasPrice(text: string, html = ""): string | null {
 const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
+const FREE_ENDS = /^(?:\s*$|\s*[.,!?;:)|\-–—]|\s+(?:today|now|for|with|and|or|on|in|at|no|forever|to|first)\b)/i
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
     if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
-    if (NOT_TRIAL_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 30))) continue
+    const after = text.slice(m.index! + m[0].length, m.index! + m[0].length + 30)
+    if (NOT_TRIAL_AFTER.test(after)) continue
+    // "Try our free video demo": a "free" that qualifies another noun is a freebie, not a trial or plan.
+    if (/free$/i.test(m[0]) && !FREE_ENDS.test(after)) continue
     return m[0]
   }
   return null
@@ -320,13 +324,17 @@ function listingId(u: URL): string | null {
   switch (u.hostname) {
     case "apps.shopify.com": return seg.length === 1 ? seg[0] : null
     case "wordpress.org": return seg[0] === "plugins" && seg.length === 2 ? seg[1] : null
-    case "chromewebstore.google.com": return seg[0] === "detail" ? seg[1] ?? null : null
-    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" ? seg[2] ?? null : null
+    case "chromewebstore.google.com": return seg[0] === "detail" && seg.length === 3 && /^[a-p]{32}$/.test(seg[2]) ? seg[1] : null
+    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" && seg.length === 4 && /^[a-p]{32}$/.test(seg[3]) ? seg[2] : null
     case "apps.apple.com": { const i = seg.indexOf("app"); return i >= 0 && /^id\d+$/.test(seg[i + 2] ?? "") ? seg[i + 1] : null }
     case "play.google.com": return u.pathname === "/store/apps/details" ? u.searchParams.get("id") : null
     case "marketplace.atlassian.com": return seg[0] === "apps" && /^\d+$/.test(seg[1] ?? "") ? seg[2] ?? null : null
     case "marketplace.visualstudio.com": return u.pathname === "/items" ? u.searchParams.get("itemName") : null
-    case "addons.mozilla.org": { const i = seg.indexOf("addon"); return i >= 0 ? seg[i + 1] ?? null : null }
+    case "addons.mozilla.org": {
+      // /<locale>/firefox/addon/<slug>/ or /firefox/addon/<slug>/
+      const i = seg.indexOf("addon")
+      return (i === 1 || i === 2) && /^(firefox|android)$/.test(seg[i - 1]) && seg.length === i + 2 ? seg[i + 1] : null
+    }
     default: return null
   }
 }
@@ -342,10 +350,17 @@ const appStore = (href: string, base: string) => {
   const u = new URL(href)
   const id = u.protocol === "https:" ? listingId(u) : null
   const name = parseDomain(new URL(base).hostname, { allowPrivateDomains: true }).domainWithoutSuffix?.toLowerCase().replace(/[^a-z0-9]/g, "")
-  if (!id || !name) return false
+  if (!id || !name || id.length > 200) return false
   const words = decoded(id).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
   if (words.some((w) => THIRD_PARTY.has(w))) return false
-  return words.some((_, i) => words.slice(i).some((__, j) => words.slice(i, i + j + 1).join("") === name))
+  // The name must start and end on word boundaries of the joined words: linear in the identity's length.
+  const joined = words.join("")
+  const bounds = new Set<number>([0])
+  words.reduce((at, w) => (bounds.add(at + w.length), at + w.length), 0)
+  for (let at = joined.indexOf(name); at >= 0; at = joined.indexOf(name, at + 1)) {
+    if (bounds.has(at) && bounds.has(at + name.length)) return true
+  }
+  return false
 }
 /**
  * A link on the brand's own page to another host of the brand: the same registrable domain
@@ -377,11 +392,11 @@ const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
 const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
 // A concrete term carries its value: a number of days, an amount, a schedule or a named method.
-const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)`
+const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
 const CONCRETE_TERM = new RegExp([
   String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
-  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d`,
-  String.raw`\battribution (?:window|duration)[^.]{0,20}\d`,
+  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}\s?(?:days?|months?|hours?)\b`,
+  String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}\s?(?:days?|months?|hours?)\b`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
   String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
@@ -400,7 +415,9 @@ export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const text = visibleText(html)
-  const announced = (at: number) => NOT_YET.test(text.slice(Math.max(0, at - 150), at + 150))
+  // Markers found once over the whole text, then compared by distance: a window slice could cut one in half.
+  const markers = [...text.matchAll(new RegExp(NOT_YET.source, "gi"))].map((m) => m.index!)
+  const announced = (at: number) => markers.some((m) => Math.abs(m - at) <= 150)
   const inline = TERMS_LINK.exec(text)
   if (inline && !announced(inline.index) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
     return `on page: ${inline[0]}`
