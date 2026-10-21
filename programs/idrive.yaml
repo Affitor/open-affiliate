@@ -20,6 +20,7 @@ tracking_method: cookie
 payout:
   # "A ten dollar ($10.00) minimum threshold is required before payment will be made via PayPal." (https://www.idrive.com/reseller/partner-terms, checked 2026-10-18)
   minimum: 10
+  currency: USD
   # "Domestic Partners may select to receive commission payments by PayPal, paper check, or eCheck." (https://www.idrive.com/reseller/partner-terms, checked 2026-10-18)
   methods: [paypal, check]
   # "We pay the Partner referral commission on a quarterly basis for core services like backup, restore, and sync" (https://www.idrive.com/reseller/partner-terms, checked 2026-10-18)
@@ -52,7 +53,7 @@ not_published:
 verified: true
 submitted_by: partnerstack-import
 created_at: 2026-04-18
-updated_at: "2026-10-18"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: partnerstack-api

@@ -92,7 +92,7 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { AFFITOR_LINE, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, AFFITOR_NETWORK_LINE, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const BASE = "https://openaffiliate.dev"
@@ -1346,6 +1346,7 @@ function standardPostMd(post: BestPost, selection: PostSelection, path: string):
         why,
         copy.verdict ? mdEscapeProse(copy.verdict) : null,
         `Affiliate program details:\n\n${programDetails(p).map(([k, v]) => `- **${k}:** ${mdEscape(v)}`).join("\n")}`,
+        p.network === "affitor" ? AFFITOR_NETWORK_LINE : null,
         pros.length ? `Pros:\n\n${pros.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
         cons.length ? `Cons:\n\n${cons.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
       ]
