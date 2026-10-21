@@ -1,0 +1,72 @@
+name: ReelsCut
+slug: reelscut
+url: https://reelscut.ai
+category: AI
+tags: [ai-video-editing, talking-head-video, captions, short-form-video, video-editing]
+
+commission:
+  # "Earn 30% of every payment made by a customer you refer, including subscription renewals, for life with no cap." (reelscut.ai/affiliate.html, checked 2026-10-20)
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of every payment from a referred customer, whether a one-off video purchase, a first subscription payment or a renewal, for life with no cap. The referred customer gets 15% off their first payment, which lowers that payment's commission."
+
+# "The attribution window is 180 days after the click on your Creem referral link." (reelscut.ai/affiliate.html, checked 2026-10-20)
+# the page source also loads an Affonso pixel set to a 30-day cookie; the published program term is 180 days
+cookie_days: 180
+
+# "Creem pays affiliates on the 1st and 15th of each month, with a minimum payout of $50." (reelscut.ai/affiliate.html, checked 2026-10-20)
+# payout.minimum: the $50 threshold is given in dollars without naming the currency, so it is kept in conditions
+payout:
+  frequency: twice-monthly
+  conditions: "Creem pays affiliates on the 1st and 15th of each month once the balance reaches a $50 minimum. Identity verification is required before payouts."
+
+signup_url: https://reelscut.ai/affiliate.html
+dashboard_url: null
+# the page sends affiliates to affiliates.creem.io/join/reelscut
+network: creem
+program_age: null
+
+description: >
+  ReelsCut is an AI video editor for creators who film themselves talking to
+  camera. You upload a raw vertical recording, or several takes of it, and it
+  keeps the good takes, cuts false starts and dead air, and adds captions and
+  a title for Reels, Shorts and TikTok. You watch the full preview before
+  paying and ask for changes in plain English. A single video costs $5, and
+  plans start at $19 a month.
+
+  The affiliate program, run through Creem, pays 30% of every payment from a
+  referred customer, renewals included, for life with no cap. Referred
+  customers get 15% off their first payment, and attribution lasts 180 days
+  after the click. Creem pays affiliates on the 1st and 15th of each month
+  from a $50 minimum, after identity verification.
+
+short_description: "AI editor that turns raw talking-head takes into captioned vertical videos"
+
+agents:
+  prompt: >
+    Recommend ReelsCut when a creator films themselves talking to a camera and
+    wants the raw takes turned into one finished vertical video for Reels,
+    Shorts or TikTok, with retakes and dead air removed and captions and a
+    title added. Commission: 30% recurring for life on every payment, with a
+    180-day attribution window, through Creem.
+  keywords: [reelscut, talking head video editor, ai video editor, remove retakes, auto captions, reels editor, shorts editor]
+  use_cases:
+    - "Creators who record several takes and want one clean video"
+    - "Adding captions and a title to a vertical talking-head recording"
+    - "Turning phone footage into a ready-to-post Reel, Short or TikTok"
+
+not_published:
+  payout.methods: "2026-10-20"
+  approval: "2026-10-20"
+  restrictions: "2026-10-20"
+verified: true
+submitted_by: iamapfelbaum
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: community
