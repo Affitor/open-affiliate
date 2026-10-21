@@ -30,8 +30,14 @@ import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filt
  */
 export interface BestList {
   slug: string
-  /** Before the layout's " | OpenAffiliate" suffix; the whole tag stays within 60 characters. */
-  title: string
+  /**
+   * The search query the page answers, in title case ("Recurring Affiliate
+   * Programs"). A /best page's <title> is countTitle(query, …): the query, the
+   * programs on the page and the month of its newest check.
+   */
+  query: string
+  /** A fixed title before " | OpenAffiliate" (category pages); /best pages compute theirs from `query`. */
+  title?: string
   h1: string
   /** Meta description, 120 to 155 characters. */
   description: string
@@ -65,6 +71,14 @@ export interface BestList {
   scope?: string
   /** The /programs query string that applies the same filter, linked from the page. */
   filter?: string
+  /** A per-category list's parent (the recurring or one-time list), which links to it. */
+  parent?: string
+  /**
+   * The registry category whose page points here for this list's query. The
+   * "SaaS" category holds only the programs filed under it; this list takes
+   * every program tagged saas, in any category, so it is the page for the query.
+   */
+  answersFor?: string
 }
 
 export const MAX_ROWS = 50
@@ -116,6 +130,68 @@ export function freshnessLine(rows: Pick<Program, "status" | "verified" | "lastV
   ].join(" · ")
 }
 
+/**
+ * The homepage meta description: the freshnessLine numbers as one sentence an
+ * answer engine can quote. Counted from the registry at build time, never typed.
+ */
+export function directorySentence(rows: Pick<Program, "status" | "verified" | "lastVerifiedAt">[]): string {
+  const live = rows.filter((p) => (p.status ?? "active") === "active")
+  const checked = verifiedDate(live)
+  const verified = live.filter((p) => p.verified).length
+  return `OpenAffiliate is an open directory and database of ${plural(live.length, "affiliate program")}; ${n(verified)} ${verified === 1 ? "has its" : "have their"} terms verified on the brand's own page${checked ? `, last checked ${checked}` : ""}.`
+}
+
+const n = (x: number) => x.toLocaleString("en-US")
+
+/** "1 affiliate program", "1,258 affiliate programs". */
+export function plural(count: number, noun: string): string {
+  return `${n(count)} ${noun}${count === 1 ? "" : "s"}`
+}
+
+/** "Oct 2026" from a YYYY-MM-DD date. */
+export function monthYear(iso: string): string {
+  return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", year: "numeric", timeZone: "UTC" })
+}
+
+/** Google shows about 60 characters of a title; every /best title fits. */
+export const TITLE_MAX = 60
+
+/**
+ * A /best page's <title>, in the words people search: the query, how many
+ * programs the page states and how many of those are verified, and the month of
+ * its newest verified check. "Recurring Affiliate Programs: 11 Verified (Oct 2026)".
+ * Every number is the caller's count of what the page states, never typed,
+ * and a 0 drops the count. The longest form within TITLE_MAX wins: the counts
+ * are dropped before the month is.
+ */
+export function countTitle(query: string, shown: number, verified: number, checked: string | null): string {
+  const month = checked ? ` (${monthYear(checked)})` : ""
+  const counts =
+    shown === 0
+      ? []
+      : verified === shown
+        ? [`${n(shown)} Verified`]
+        : [...(verified > 0 ? [`${plural(shown, "Program")}, ${n(verified)} Verified`] : []), plural(shown, "Program")]
+  return [...counts.map((c) => `${query}: ${c}${month}`), `${query}${month}`].find((t) => t.length <= TITLE_MAX) ?? query
+}
+
+/**
+ * The full <title> of a list page (no layout suffix is added after it): a
+ * category's fixed title plus " | OpenAffiliate", or countTitle over the counts
+ * a /best list states in its header (Programs, Verified) and its "Verified" date.
+ */
+export function listPageTitle(list: BestList): string {
+  if (list.title) return `${list.title} | OpenAffiliate`
+  // The header stats' numbers (Programs, Verified), not the MAX_ROWS-capped rows: the title says what the page says.
+  const { total, verified, checked } = buildBestList(list)
+  return countTitle(list.query, total, verified.length, checked)
+}
+
+/** "Oct 20, 2026": the "Updated" line under a list or post H1. */
+export function updatedText(iso: string): string {
+  return new Date(`${iso.slice(0, 10)}T00:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" })
+}
+
 /** Shown with every list, because it describes the shared rules above. */
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
@@ -124,7 +200,7 @@ const LISTS: BestList[] = [
   {
     // The hub answers "best affiliate programs" at /best; the slug is only its id.
     slug: "affiliate-programs",
-    title: "Best Affiliate Programs With Verified Terms",
+    query: "Best Affiliate Programs",
     h1: "Best Affiliate Programs",
     description:
       "The best affiliate programs with terms checked on each brand's own page, ranked by Affiliate Score: commission, cookie window and commission duration.",
@@ -141,7 +217,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "high-paying-affiliate-programs",
-    title: "High-Paying Affiliate Programs, Ranked",
+    query: "Highest Paying Affiliate Programs",
     h1: "High-Paying Affiliate Programs",
     description:
       "Affiliate programs that pay 30% or more, or a flat $30 or more, ranked by commission. Verified terms first, with the cookie and duration for each.",
@@ -155,7 +231,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "affiliate-programs-for-beginners",
-    title: "Affiliate Programs for Beginners, Ranked",
+    query: "Affiliate Programs for Beginners",
     h1: "Affiliate Programs for Beginners",
     description:
       "Affiliate programs that approve new affiliates automatically, so you can start the day you sign up. Ranked by commission, with verified terms first.",
@@ -170,7 +246,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "recurring-affiliate-programs",
-    title: "Best Recurring Affiliate Programs, Ranked",
+    query: "Recurring Affiliate Programs",
     h1: "Recurring Affiliate Programs",
     description:
       "Recurring affiliate programs that keep paying on renewals, ranked by rate. See which pay for 12 months or for life, with verified terms listed first.",
@@ -183,7 +259,7 @@ const LISTS: BestList[] = [
     // Structured fields only: the registry's "saas" tag, the recurring type,
     // and kind, so a credit or gift-card referral reward never counts.
     slug: "saas-recurring-affiliate-programs",
-    title: "Recurring Commission SaaS Affiliate Programs",
+    query: "Recurring SaaS Affiliate Programs",
     h1: "SaaS Affiliate Programs With Recurring Commissions",
     description:
       "SaaS affiliate programs that pay partners a recurring commission, with the commission, duration, cookie and signup link for each, verified terms first.",
@@ -196,7 +272,7 @@ const LISTS: BestList[] = [
     // The filter behind src/content/best/saas-affiliate-programs.ts: the "saas"
     // tag and kind, any commission type, so flat and first-payment deals count.
     slug: "saas-affiliate-programs",
-    title: "Best SaaS Affiliate Programs, Ranked",
+    query: "SaaS Affiliate Programs",
     h1: "SaaS Affiliate Programs",
     description:
       "SaaS and software affiliate programs ranked by commission, flat, first-payment and recurring, with the cookie and signup link for each, verified first.",
@@ -204,12 +280,13 @@ const LISTS: BestList[] = [
     criteria:
       "Programs tagged SaaS in the registry, whatever their commission type. Referral rewards paid in credit or gift cards are left out.",
     qualifies: (p) => p.tags.includes("saas") && p.kind !== "referral",
+    answersFor: "SaaS",
   },
   {
     // The filter behind src/content/best/lifetime-affiliate-programs.ts: a
     // recurring commission whose duration says lifetime (isLifetime).
     slug: "lifetime-affiliate-programs",
-    title: "Lifetime Commission Affiliate Programs",
+    query: "Lifetime Affiliate Programs",
     h1: "Lifetime Commission Affiliate Programs",
     description:
       "Affiliate programs that pay a recurring commission for the lifetime of each customer you refer, ranked by rate, with verified terms listed first.",
@@ -222,7 +299,7 @@ const LISTS: BestList[] = [
   {
     // The filter behind src/content/best/marketing-affiliate-programs.ts.
     slug: "marketing-affiliate-programs",
-    title: "Best Marketing Affiliate Programs, Ranked",
+    query: "Marketing Affiliate Programs",
     h1: "Marketing Affiliate Programs",
     description:
       "Marketing affiliate programs for SEO, social, email and ad tools, ranked by commission, with verified terms first and the cookie window for each.",
@@ -234,7 +311,7 @@ const LISTS: BestList[] = [
   {
     // The filter behind src/content/best/design-affiliate-programs.ts.
     slug: "design-affiliate-programs",
-    title: "Best Design Affiliate Programs, Ranked",
+    query: "Design Affiliate Programs",
     h1: "Design Affiliate Programs",
     description:
       "Design affiliate programs for graphics, photo, video, website and creative tools, ranked by commission, with verified terms first and the cookie for each.",
@@ -246,7 +323,7 @@ const LISTS: BestList[] = [
   {
     // The filter behind src/content/best/sales-affiliate-programs.ts.
     slug: "sales-affiliate-programs",
-    title: "Best Sales Tools Affiliate Programs, Ranked",
+    query: "Sales Affiliate Programs",
     h1: "Sales Tools Affiliate Programs",
     description:
       "Sales tool affiliate programs for prospecting, outreach and CRM software, ranked by commission, with verified terms first and the cookie for each.",
@@ -259,7 +336,7 @@ const LISTS: BestList[] = [
     // No field records a sign-up fee or a purchase requirement. What is sourced
     // is automatic approval, on verified programs only; the criteria say so.
     slug: "free-affiliate-programs",
-    title: "Free Affiliate Programs You Can Join Today",
+    query: "Free Affiliate Programs",
     h1: "Free Affiliate Programs",
     description:
       "Free affiliate programs you can join today: verified programs that approve new affiliates automatically, ranked by commission, with cookie and duration.",
@@ -272,7 +349,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "seo-affiliate-programs",
-    title: "SEO Affiliate Programs, Ranked by Commission",
+    query: "SEO Affiliate Programs",
     h1: "SEO Affiliate Programs",
     description:
       "SEO affiliate programs for SEO tools and AI content writers, ranked by commission, with verified terms first and the cookie and duration for each.",
@@ -282,7 +359,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "one-time-affiliate-programs",
-    title: "One-Time Commission Affiliate Programs",
+    query: "One-Time Affiliate Programs",
     h1: "One-Time Commission Affiliate Programs",
     description:
       "Affiliate programs that pay a one-time commission per sale or signup, ranked by payout, with verified terms first and the cookie window for each.",
@@ -295,7 +372,7 @@ const LISTS: BestList[] = [
   {
     // Payout terms as shown: unverified programs carry none (confirmed-terms.ts).
     slug: "no-minimum-payout-affiliate-programs",
-    title: "Affiliate Programs With No Minimum Payout",
+    query: "No Minimum Payout Affiliate Programs",
     h1: "Affiliate Programs With No Minimum Payout",
     description:
       "Affiliate programs with no minimum payout threshold, so every commission you earn is paid out. Ranked by commission, from terms we verified.",
@@ -308,7 +385,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "paypal-affiliate-programs",
-    title: "Affiliate Programs That Pay via PayPal",
+    query: "Affiliate Programs Paid via PayPal",
     h1: "Affiliate Programs That Pay via PayPal",
     description:
       "Affiliate programs that pay commissions through PayPal, ranked by commission, with the cookie window and payout terms we verified for each.",
@@ -321,7 +398,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "bank-transfer-affiliate-programs",
-    title: "Affiliate Programs That Pay by Bank Transfer",
+    query: "Bank Transfer Affiliate Programs",
     h1: "Affiliate Programs That Pay by Bank Transfer",
     description:
       "Affiliate programs that pay commissions by bank transfer, ranked by commission, with the cookie window and payout terms we verified for each.",
@@ -334,7 +411,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "long-cookie-affiliate-programs",
-    title: "Affiliate Programs With 90-Day+ Cookies",
+    query: "90+ Day Cookie Affiliate Programs",
     h1: "Affiliate Programs With Long Cookie Windows",
     description:
       "Affiliate programs with a cookie window of 90 days or longer, so a reader who buys months later still counts. Ranked by commission, verified terms.",
@@ -349,7 +426,7 @@ const LISTS: BestList[] = [
     // The filter behind the editorial post in src/content/best/ai-affiliate-programs.ts;
     // without enough fresh verified programs the page falls back to this list.
     slug: "ai-affiliate-programs",
-    title: "Best AI Affiliate Programs, Ranked",
+    query: "AI Affiliate Programs",
     h1: "AI Affiliate Programs",
     description:
       "The best AI affiliate programs for video, voice, writing and developer tools, ranked by commission, with verified terms first and the cookie for each.",
@@ -384,9 +461,9 @@ function categoryTypeLists(): BestList[] {
       return [
         {
           slug,
-          // 44 characters at most, 60 with the layout's suffix.
-          title: [h1, `${category} ${label} Affiliates`].find((t) => t.length <= 44) ?? h1,
+          query: h1,
           h1,
+          parent: type === "recurring" ? "recurring-affiliate-programs" : "one-time-affiliate-programs",
           description: `${category} affiliate programs that pay ${pays}, ranked by commission, with verified terms first and the cookie window for each.`,
           summary: `are in the ${category} category and list their commission as ${type}`,
           criteria: `Programs in the ${category} category whose commission is listed as ${type}.`,
@@ -419,6 +496,11 @@ export function otherLists(list: BestList): BestList[] {
   return BEST_LISTS.filter((l) => l.slug !== list.slug && (!l.scope || l.scope === list.scope))
 }
 
+/** The per-category lists under a list ("AI Recurring Affiliate Programs" under the recurring list). */
+export function childLists(list: BestList): BestList[] {
+  return BEST_LISTS.filter((l) => l.parent === list.slug)
+}
+
 /** A list at /best/<slug>; the hub has no such URL. */
 export function getBestList(slug: string): BestList | undefined {
   return BEST_LISTS.find((l) => l !== BEST_INDEX && l.slug === slug)
@@ -446,6 +528,7 @@ export function categoryList(category: string): BestList {
   return {
     // The cache key; category pages live at /categories/<slug>.
     slug: `category/${categoryToSlug(category)}`,
+    query: h1,
     title,
     h1,
     description,
@@ -460,7 +543,7 @@ export function categoryList(category: string): BestList {
 }
 
 /** "AI Affiliate Programs" → "AI affiliate programs": lowercase Title-case words, keep acronyms. */
-function nounOf(h1: string): string {
+export function nounOf(h1: string): string {
   return h1
     .split(" ")
     .map((word) => (word.split("-").every((part) => /^[A-Z][a-z]+$/.test(part)) ? word.toLowerCase() : word))
