@@ -11,7 +11,8 @@ Use the same criteria for every program and network; no network is preferred.
 
 ## Find and compare programs
 
-Prefer the public, read-only MCP server at `https://openaffiliate.dev/mcp` (no API key):
+Prefer the public MCP server at `https://openaffiliate.dev/mcp` (no API key). Every tool is
+read-only except `submit_program`, which only adds a program to the review queue:
 
 ```sh
 claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
@@ -20,6 +21,8 @@ claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
 - `search_programs`: search with `query`, `category`, `commission_type` or `verified_only`.
 - `get_program`: pass `slug` for full terms, `restrictions` and `agentPrompt`.
 - `list_categories`: discover categories and current program counts.
+- `submit_program` and `get_submission_status`: queue a missing program for review and read its
+  status (see "When a program is missing").
 
 Search by the user's product, niche and commission preference. Fetch full details for
 shortlisted programs before comparing commission type, rate and duration, cookie window,
@@ -72,8 +75,16 @@ and are not part of it. Rules: https://openaffiliate.dev/docs/oas
 
 ## When a program is missing
 
-The MCP server is read-only and cannot add programs. If the user wants one added, send them
-to https://openaffiliate.dev/submit, or, with GitHub access, open a pull request or a
-Suggest a program issue at https://github.com/Affitor/open-affiliate using only terms from
-the brand's own program page (a network listing is not proof). Leave unstated terms empty.
-A maintainer reviews every addition, usually within a few days, and scoring is not instant.
+1. Look it up first with `search_programs` or `get_program`; a listed program needs no submission.
+2. If it is missing and the user wants it added, call `submit_program` with the brand's own
+   program page (`programUrl`; optional `termsUrl`, `name`, `note`). A network listing is not
+   proof. Never invent terms. The answer is a queued submission with an `id`, an existing
+   one for that domain, or the listing when the domain is already on OpenAffiliate.
+3. Tell the user it is queued, not listed: a maintainer verifies the terms on the brand's page
+   first, usually within a few days, and scoring is not instant. Read progress later with
+   `get_submission_status` and the `id`.
+
+Without MCP, the same queue is `POST https://openaffiliate.dev/api/submissions`, and a person
+can use https://openaffiliate.dev/submit. With GitHub access you can instead open a pull
+request or a Suggest a program issue at https://github.com/Affitor/open-affiliate, using only
+terms from the brand's own program page and leaving unstated terms empty.

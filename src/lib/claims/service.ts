@@ -659,7 +659,7 @@ function plainText(multiLine: boolean) {
   }
 }
 
-const HIDDEN_CHARACTER = "hidden_character"
+export const HIDDEN_CHARACTER = "hidden_character"
 /** Required text must show something once invisible code points are set aside. */
 const showsSomething = (text: string) => text.length === 0 || /[^\p{Default_Ignorable_Code_Point}\p{C}\p{Z}]/u.test(text)
 const normalizeText = (multiLine: boolean) => (v: unknown) =>
@@ -675,8 +675,8 @@ const freeText = (multiLine: boolean, max: number, min: number) =>
       .refine(plainText(multiLine), HIDDEN_CHARACTER)
       .refine(showsSomething),
   )
-const textField = (max: number, min = 0) => freeText(false, max, min)
-const proseField = (max: number, min = 0) => freeText(true, max, min)
+export const textField = (max: number, min = 0) => freeText(false, max, min)
+export const proseField = (max: number, min = 0) => freeText(true, max, min)
 
 /** `report`: "Report this page" on a claimed listing, into the same manual queue. */
 const ManualBody = ContactBody.extend({ note: proseField(1000).optional(), report: z.boolean().optional() })

@@ -173,11 +173,12 @@ export default function MethodologyPage() {
         How do I add or correct a program?
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Open a pull request that adds or edits its YAML file, or use{" "}
+        Open a pull request that adds or edits its YAML file, or{" "}
         <Link href="/submit" className={link}>
-          the submit form
+          submit it
         </Link>
-        , which writes the file and opens it on GitHub. To report an
+        : send the program page for review (no account needed), or use the
+        full form, which writes the file and opens it on GitHub. To report an
         error,{" "}
         <a
           href="https://github.com/Affitor/open-affiliate/issues/new"

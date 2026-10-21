@@ -12,7 +12,7 @@ import { GET as detail } from "../src/app/api/programs/[slug]/route"
 import { GET as categories } from "../src/app/api/categories/route"
 import { GET as specResponse } from "../src/app/openapi.json/route"
 import { programs } from "../src/lib/programs"
-import { openapi } from "../src/lib/openapi"
+import { openapi, operations } from "../src/lib/openapi"
 import { negotiateMarkdown, wantsMarkdown } from "../src/lib/agentic-surface"
 import paths from "../src/lib/agentic-paths.json"
 
@@ -60,16 +60,17 @@ async function get(path: string, accept = "application/json") {
   return fetch(base + path, { headers: { Accept: accept }, signal: AbortSignal.timeout(90000) })
 }
 
-test("OpenAPI describes only the three existing read-only REST operations", async () => {
+test("OpenAPI describes the three registry reads and the two submission operations", async () => {
   const spec = await specResponse().json()
   assert.equal(spec.openapi, "3.1.0")
-  assert.deepEqual(Object.keys(spec.paths).sort(), ["/api/categories", "/api/programs", "/api/programs/{slug}"])
+  assert.deepEqual(Object.keys(spec.paths).sort(), ["/api/categories", "/api/programs", "/api/programs/{slug}", "/api/submissions", "/api/submissions/{id}"])
   const ids = new Set<string>()
-  for (const path of Object.values(openapi.paths)) {
-    assert.deepEqual(Object.keys(path), ["get"])
-    assert.ok(path.get.summary && path.get.description)
-    assert.ok(!ids.has(path.get.operationId))
-    ids.add(path.get.operationId)
+  for (const { path, method, op } of operations()) {
+    // POST /api/submissions is the one write.
+    assert.equal(method, path === "/api/submissions" ? "post" : "get", path)
+    assert.ok(op.summary && op.description)
+    assert.ok(!ids.has(op.operationId))
+    ids.add(op.operationId)
   }
   validate("CategoryList", await categories().json())
   const body = await list(new NextRequest("http://localhost/api/programs")).json()

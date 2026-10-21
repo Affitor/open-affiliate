@@ -230,7 +230,7 @@ export default function Home() {
         <div className="grid grid-cols-[minmax(0,1fr)] gap-8 md:grid-cols-2">
           <div>
             <h2 className="text-lg font-semibold">Run a program?</h2>
-            <p className="text-sm text-muted-foreground mt-1">Add it to the registry: open a pull request on GitHub or use the form.</p>
+            <p className="text-sm text-muted-foreground mt-1">Add it to the registry: submit your program page for review, or open a pull request on GitHub.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link href="/submit" className="inline-flex h-8 items-center rounded-lg border border-line-strong bg-card px-3 text-meta font-medium hover:bg-sunk transition-colors">Submit a program</Link>
               <a href="https://github.com/Affitor/open-affiliate" className="inline-flex h-8 items-center rounded-lg border border-line-strong bg-card px-3 text-meta font-medium hover:bg-sunk transition-colors">Open a pull request</a>

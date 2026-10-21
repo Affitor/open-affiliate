@@ -1,6 +1,6 @@
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { dirname, join } from "node:path"
-import { openapi } from "../src/lib/openapi"
+import { operations } from "../src/lib/openapi"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -23,8 +23,8 @@ export function ardCatalog(root: string) {
         displayName: "OpenAffiliate MCP server",
         type: "application/mcp-server+json",
         data: server,
-        description: "Hosted, read-only MCP server for the OpenAffiliate registry at https://openaffiliate.dev/mcp (streamable HTTP, no key).",
-        capabilities: ["search_programs", "get_program", "list_categories"],
+        description: "Hosted MCP server for the OpenAffiliate registry at https://openaffiliate.dev/mcp (streamable HTTP, no key). Read-only except submit_program, which only queues a missing program for verification.",
+        capabilities: ["search_programs", "get_program", "list_categories", "submit_program", "get_submission_status"],
         representativeQueries: [
           "find affiliate programs for a developer tool",
           "which AI products pay recurring affiliate commission",
@@ -36,8 +36,8 @@ export function ardCatalog(root: string) {
         displayName: "OpenAffiliate REST API",
         type: "application/vnd.oai.openapi+json;version=3.1",
         url: `${BASE}/openapi.json`,
-        description: "Read-only REST API for searching affiliate programs and reading their terms. No key.",
-        capabilities: Object.values(openapi.paths).map((path) => path.get.operationId),
+        description: "REST API for searching affiliate programs and reading their terms, plus one write that queues a missing program for verification. No key.",
+        capabilities: operations().map(({ op }) => op.operationId),
         representativeQueries: [
           "search affiliate programs by category and commission type",
           "get the signup URL and payout terms of an affiliate program",
