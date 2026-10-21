@@ -298,7 +298,7 @@ export function hasPrice(text: string, html = ""): string | null {
 // Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
 const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
-const NOT_TRIAL_AFTER = /^\s*(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
+const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
@@ -314,46 +314,45 @@ const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|
 // Sales, event and newsletter calls to action are not a buyer signing up.
 const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
 // App stores are self-serve: installing is signing up. Exact store host and a listing path, never the store's home.
-const APP_STORE: Record<string, RegExp> = {
-  "apps.shopify.com": /^\/[\w-]+\/?$/,
-  "wordpress.org": /^\/plugins\/[\w-]+\/?$/,
-  "chromewebstore.google.com": /^\/detail\//,
-  "chrome.google.com": /^\/webstore\/detail\//,
-  "apps.apple.com": /\/app\/[^/]+\/id\d+/,
-  "play.google.com": /^\/store\/apps\/details$/,
-  "marketplace.atlassian.com": /^\/apps\/\d+/,
-  "marketplace.visualstudio.com": /^\/items$/,
-  "addons.mozilla.org": /\/addon\/[\w-]+/,
+/** A store listing's identity (its slug or package id), from the fields each store uses; null for anything else. */
+function listingId(u: URL): string | null {
+  const seg = u.pathname.split("/").filter(Boolean)
+  switch (u.hostname) {
+    case "apps.shopify.com": return seg.length === 1 ? seg[0] : null
+    case "wordpress.org": return seg[0] === "plugins" && seg.length === 2 ? seg[1] : null
+    case "chromewebstore.google.com": return seg[0] === "detail" ? seg[1] ?? null : null
+    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" ? seg[2] ?? null : null
+    case "apps.apple.com": { const i = seg.indexOf("app"); return i >= 0 && /^id\d+$/.test(seg[i + 2] ?? "") ? seg[i + 1] : null }
+    case "play.google.com": return u.pathname === "/store/apps/details" ? u.searchParams.get("id") : null
+    case "marketplace.atlassian.com": return seg[0] === "apps" && /^\d+$/.test(seg[1] ?? "") ? seg[2] ?? null : null
+    case "marketplace.visualstudio.com": return u.pathname === "/items" ? u.searchParams.get("itemName") : null
+    case "addons.mozilla.org": { const i = seg.indexOf("addon"); return i >= 0 ? seg[i + 1] ?? null : null }
+    default: return null
+  }
 }
+// A listing that integrates the brand into another product is someone else's ("integration-for-rank-math").
+const THIRD_PARTY = new Set(["integration", "integrations", "connector", "for", "bridge", "sync"])
 /**
- * The brand's own store listing: the listing names the brand (".../seo-by-rank-math" for
- * rankmath.com). A third-party plugin credited in a footer or a developer page is not.
- * Names under four characters must be a whole listing word, not a substring.
+ * The brand's own store listing: the listing's identity carries the brand's name as whole
+ * words ("seo-by-rank-math" for rankmath.com, "com.datadog.app" for datadog.com). Query
+ * parameters other than the store's id field, substrings ("bread" for read.com) and
+ * integrations by other developers do not count.
  */
 const appStore = (href: string, base: string) => {
   const u = new URL(href)
-  if (u.protocol !== "https:" || !(APP_STORE[u.hostname]?.test(u.pathname) ?? false)) return false
-  const name = parseDomain(new URL(base).hostname, { allowPrivateDomains: true }).domainWithoutSuffix?.toLowerCase()
-  if (!name) return false
-  const listing = decoded(u.pathname + u.search).toLowerCase()
-  return name.length >= 4 ? listing.replace(/[^a-z0-9]/g, "").includes(name.replace(/[^a-z0-9]/g, "")) : listing.split(/[^a-z0-9]+/).includes(name)
-}
-/**
- * Same site, or a sibling registrable domain with the same name under another suffix
- * ("console.neon.tech" for "neon.com"). The link sits on the brand's own page, which
- * is what ties the sibling to the brand; the public suffix list keeps "co.uk" from
- * reading as a name.
- */
-const brandHost = (href: string, base: string) => {
-  const name = (u: string) => parseDomain(new URL(u).hostname, { allowPrivateDomains: true }).domainWithoutSuffix
-  return sameSite(href, base) || (!!name(base) && name(href) === name(base))
+  const id = u.protocol === "https:" ? listingId(u) : null
+  const name = parseDomain(new URL(base).hostname, { allowPrivateDomains: true }).domainWithoutSuffix?.toLowerCase().replace(/[^a-z0-9]/g, "")
+  if (!id || !name) return false
+  const words = decoded(id).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+  if (words.some((w) => THIRD_PARTY.has(w))) return false
+  return words.some((_, i) => words.slice(i).some((__, j) => words.slice(i, i + j + 1).join("") === name))
 }
 export function selfServe(html: string, base: string): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
     if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
     if (appStore(l.href, base)) return true
-    return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+    return sameSite(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
@@ -363,9 +362,20 @@ const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}
 const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\d.,]{0,9}(?![\d.,]))`
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
 const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
-const CONCRETE_TERM = /\b\d{1,4}[- ]day (?:cookie|attribution|tracking)|\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d|\bpaid (?:out )?(?:monthly|weekly|every|via)|\bpayouts? (?:are )?(?:sent |made |paid )?(?:monthly|weekly|on the|via|through)|\bminimum payout|\b(?:paypal|wise|bank transfer|stripe) (?:payouts?|payments?)|\battribution (?:window|duration)[^.]{0,20}\d/i
-// Terms announced, not published: neither inline reading counts when this is near it.
-const NOT_YET = /(terms|program|agreement|commission)[^.]{0,60}(coming soon|to be announced|\btb[ad]\b)|(coming soon|to be announced)[^.]{0,60}(terms|program|agreement)/i
+// A concrete term carries its value: a number of days, an amount, a schedule or a named method.
+const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|bank transfer|wire|ach|direct deposit)`
+const CONCRETE_TERM = new RegExp([
+  String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
+  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d`,
+  String.raw`\battribution (?:window|duration)[^.]{0,20}\d`,
+  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|every (?:month|week|\d{1,3} days))`,
+  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
+  String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
+  String.raw`\bminimum payout[^.]{0,20}[$€£]\s?\d`,
+  String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
+].join("|"), "i")
+// Terms announced, not published: an announcement within the window cancels the inline reading (precision first).
+const NOT_YET = /coming soon|to be announced|\btb[ad]\b/i
 const TERMS_CONTENT = [/(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
  * A link to the program's terms or agreement (a site-wide Terms of Service link
