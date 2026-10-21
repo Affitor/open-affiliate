@@ -91,18 +91,13 @@ function usePersistedView(): [ViewMode, (v: ViewMode) => void] {
 function ProgramsSkeleton() {
   return (
     <div className="min-h-dvh">
-      <div className="oa-band !py-8 md:!py-10">
-        <p className="oa-label">Directory</p>
-        <div className="mt-2 h-8 w-72 max-w-full animate-pulse rounded bg-sunk md:h-10" />
-        <div className="mt-2 h-4 w-24 animate-pulse rounded bg-sunk" />
-      </div>
       <div className="oa-band !py-4">
         <div className="h-10 animate-pulse rounded-lg bg-sunk md:h-8" />
       </div>
       <div className="oa-band !pt-5">
         <div className="mb-3 h-4 w-28 animate-pulse rounded bg-sunk" />
         <div className="overflow-hidden rounded-xl border border-border bg-card">
-          {Array.from({ length: 12 }, (_, i) => (
+          {Array.from({ length: 25 }, (_, i) => (
             <div key={i} className="h-[57px] border-b border-border last:border-b-0" />
           ))}
         </div>
@@ -376,18 +371,11 @@ function ProgramsContent() {
   ];
   // The Filters button counts what the sheet holds: everything but the search box.
   const filterCount = activeChips.filter((c) => c.key !== "q").length + (sort !== "relevance" ? 1 : 0);
-  const verifiedTotal = programs.filter((p) => p.verified).length;
 
   return (
     // min-h-dvh as on the skeleton: a short filtered list does not pull the
     // footer up into view while the list is still loading.
     <div className="min-h-dvh">
-      <header className="oa-band !py-8 md:!py-10">
-        <p className="oa-label">Directory</p>
-        <h1 className="mt-2 text-title md:text-display font-semibold tracking-[-0.03em]">{programs.length.toLocaleString("en-US")} affiliate programs</h1>
-        <p className="mt-1 font-mono text-meta text-muted-foreground tabular-nums">{verifiedTotal.toLocaleString("en-US")} verified</p>
-      </header>
-
       <div className="oa-band !py-4">
         {/* One search on this page: the nav hides its own here. */}
         <div className="flex items-center gap-2 md:items-start">
