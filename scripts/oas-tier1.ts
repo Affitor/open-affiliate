@@ -21,6 +21,7 @@
 import { fork } from "node:child_process"
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
+import { parse as parseDomain } from "tldts"
 import { parse } from "yaml"
 import { blockedReason, REDIRECTS } from "./blocked-hosts"
 
@@ -272,8 +273,9 @@ export function pricingLink(html: string, base: string): string | null {
 }
 
 // A currency before the amount ("$29"), or after it ("29 USD", "1,90 €"); a K/M/B figure ("$2B+", "$50K") is a statistic, not a price.
-const PRICE = /(?:[$€£₹]\s?(\d[\d.,]*)(?![\d.,]*\s?(?:k|m|b|bn|mm|million|billion)\b)|\b(\d[\d.,]*)\s?(?:USD|EUR|GBP|€|£)(?![\w]))/gi
-const NOT_A_PRICE = /\b(save[sd]?|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission|spend|managed)\b[^.]{0,20}$/i
+// Amounts are at most 16 characters and must be the whole digit run, so a long run of digits costs linear time, not quadratic.
+const PRICE = /(?:[$€£₹]\s?(\d[\d.,]{0,15})(?![\d.,])(?!\s?(?:k|m|b|bn|mm|million|billion)\b)|(?<![\d.,])(\d[\d.,]{0,15})(?![\d.,])\s?(?:USD|EUR|GBP|€|£)(?![\w]))/gi
+const NOT_A_PRICE = /\b(save[sd]?|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission|spend|managed|reduc\w*|cut|lower\w*|by)\b[^.]{0,20}$/i
 /**
  * A product price: a non-zero amount in the visible text that is not a saving,
  * discount or other marketing figure, or a non-zero JSON-LD offer (pages that
@@ -294,11 +296,14 @@ export function hasPrice(text: string, html = ""): string | null {
 }
 
 // Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
-const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita|無料トライアル|免费试用)/gi
+const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
+// "Try our free demo", "for free shipping": free, but not a trial or a plan.
+const NOT_TRIAL_AFTER = /^\s*(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
     if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
+    if (NOT_TRIAL_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 30))) continue
     return m[0]
   }
   return null
@@ -308,27 +313,53 @@ const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )
 const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
 // Sales, event and newsletter calls to action are not a buyer signing up.
 const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
-// App stores are self-serve: installing is signing up.
-const APP_STORE = /^(apps\.shopify\.com|wordpress\.org\/plugins|chromewebstore\.google\.com|chrome\.google\.com\/webstore|apps\.apple\.com|play\.google\.com\/store\/apps|marketplace\.atlassian\.com|marketplace\.visualstudio\.com|addons\.mozilla\.org)/i
-/** Same site, or a sibling host carrying the brand's name ("console.neon.tech" for "neon.com"). */
+// App stores are self-serve: installing is signing up. Exact store host and a listing path, never the store's home.
+const APP_STORE: Record<string, RegExp> = {
+  "apps.shopify.com": /^\/[\w-]+\/?$/,
+  "wordpress.org": /^\/plugins\/[\w-]+\/?$/,
+  "chromewebstore.google.com": /^\/detail\//,
+  "chrome.google.com": /^\/webstore\/detail\//,
+  "apps.apple.com": /\/app\/[^/]+\/id\d+/,
+  "play.google.com": /^\/store\/apps\/details$/,
+  "marketplace.atlassian.com": /^\/apps\/\d+/,
+  "marketplace.visualstudio.com": /^\/items$/,
+  "addons.mozilla.org": /\/addon\/[\w-]+/,
+}
+// A store badge often has no text; with text, it names installing or getting the app.
+const STORE_TEXT = /^$|\b(install|add to|get|download|try|start|available on|app store|google play|chrome web store)\b/i
+const appStore = (l: { href: string; text: string }) => {
+  const u = new URL(l.href)
+  return u.protocol === "https:" && (APP_STORE[u.hostname]?.test(u.pathname) ?? false) && STORE_TEXT.test(l.text.trim())
+}
+/**
+ * Same site, or a sibling registrable domain with the same name under another suffix
+ * ("console.neon.tech" for "neon.com"). The link sits on the brand's own page, which
+ * is what ties the sibling to the brand; the public suffix list keeps "co.uk" from
+ * reading as a name.
+ */
 const brandHost = (href: string, base: string) => {
-  const label = (u: string) => new URL(u).hostname.replace(/^www\./, "").split(".").slice(-2)[0]
-  return sameSite(href, base) || label(href) === label(base)
+  const name = (u: string) => parseDomain(new URL(u).hostname, { allowPrivateDomains: true }).domainWithoutSuffix
+  return sameSite(href, base) || (!!name(base) && name(href) === name(base))
 }
 export function selfServe(html: string, base: string): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
     if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
-    if (APP_STORE.test(new URL(l.href).hostname + new URL(l.href).pathname)) return true
+    if (appStore(l)) return true
     return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
 
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
-const COMMISSION_FIGURE = /(?:\d+(?:\.\d+)?\s?%|[$€£]\s?\d[\d.,]*)[^.]{0,60}\b(commission|revenue share|rev share|recurring|per (?:sale|referral|signup|customer)|of (?:every|each) (?:payment|sale))|\b(commission|revenue share|earn)\w*[^.]{0,40}?(?:\d+(?:\.\d+)?\s?%|[$€£]\s?\d[\d.,]*)/i
-const CONCRETE_TERM = /\b\d+[- ]day (?:cookie|attribution|tracking)|\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d+|\bpaid (?:out )?(?:monthly|weekly|every|via)|\bpayouts? (?:are )?(?:sent |made |paid )?(?:monthly|weekly|on the|via|through)|\bminimum payout|\b(?:paypal|wise|bank transfer|stripe) (?:payouts?|payments?)|\b\d+[- ]day attribution|\battribution (?:window|duration)/i
-const TERMS_CONTENT = [/\d+(?:\.\d+)?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
+// Bounded figures ("30%", "$25"), never a run of digits matched from every position.
+const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\d.,]{0,9}(?![\d.,]))`
+// A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
+const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
+const CONCRETE_TERM = /\b\d{1,4}[- ]day (?:cookie|attribution|tracking)|\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d|\bpaid (?:out )?(?:monthly|weekly|every|via)|\bpayouts? (?:are )?(?:sent |made |paid )?(?:monthly|weekly|on the|via|through)|\bminimum payout|\b(?:paypal|wise|bank transfer|stripe) (?:payouts?|payments?)|\battribution (?:window|duration)[^.]{0,20}\d/i
+// Terms announced, not published: neither inline reading counts.
+const NOT_YET = /(terms|program|agreement|commission)[^.]{0,60}(coming soon|to be announced|\btb[ad]\b)|(coming soon|to be announced)[^.]{0,60}(terms|program|agreement)/i
+const TERMS_CONTENT = [/(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
  * A link to the program's terms or agreement (a site-wide Terms of Service link
  * does not count), or terms published on the page itself: the heading wording plus
@@ -338,8 +369,9 @@ export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const text = visibleText(html)
+  if (NOT_YET.test(text)) return null
   const inline = TERMS_LINK.exec(text)
-  if (inline && !/coming soon|to be announced|tba\b/i.test(text.slice(inline.index, inline.index + 120)) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
+  if (inline && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
     return `on page: ${inline[0]}`
   }
   // Terms published on the page without a "terms" heading: a commission figure next to commission wording,
@@ -746,14 +778,21 @@ async function child() {
   })
 }
 
+/**
+ * --rescan-html re-reads every page (the HTML checks changed) but keeps cached PageSpeed
+ * and DataForSEO readings: it makes no paid or quota call, whatever else is on the line.
+ */
+export function runOptions(args: string[]) {
+  const rescanHtml = args.includes("--rescan-html")
+  return { rescanHtml, psi: args.includes("--psi") && !rescanHtml, seo: args.includes("--seo") && !rescanHtml }
+}
+
 async function main() {
   const args = process.argv.slice(2)
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
-  const psi = args.includes("--psi")
-  // Re-read every page (the HTML checks changed) but keep cached PageSpeed and DataForSEO readings.
-  const rescanHtml = args.includes("--rescan-html")
-  const seo = args.includes("--seo")
+  const { rescanHtml, psi, seo } = runOptions(args)
+  if (rescanHtml && (args.includes("--psi") || args.includes("--seo"))) console.log("--rescan-html: --psi and --seo ignored")
   // Lengths only, never values: confirms the credentials reached the run before any call.
   if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
   if (seo) console.log(`DATAFORSEO_LOGIN length ${process.env.DATAFORSEO_LOGIN?.length ?? 0}, DATAFORSEO_PASSWORD length ${process.env.DATAFORSEO_PASSWORD?.length ?? 0}`)
@@ -778,9 +817,10 @@ async function main() {
       const cached = existsSync(file) ? readCache(file, p.slug) : null
       const wantPsi = psi && !psiStopped && (!cached || cached.checks.P5.evidence === "PageSpeed not run")
       let r: Result
-      if (cached && rescanHtml) {
+      if (rescanHtml) {
+        // A program with no cache keeps P5 and P6 as the scan leaves them (PageSpeed not run, P6 not asked).
         const { result } = await scanIsolated(p, { scan: true, psi: false }, 120_000)
-        r = { ...result, checks: { ...result.checks, P5: cached.checks.P5, P6: cached.checks.P6 } }
+        r = cached ? { ...result, checks: { ...result.checks, P5: cached.checks.P5, P6: cached.checks.P6 } } : result
       } else if (cached && !wantPsi) {
         r = cached
       } else {

@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -255,6 +255,43 @@ test("fixes from the blind sample (SAMPLE-40.md): each miss and false positive, 
   assert.ok(termsLink(`<p>Earn 30% of every payment for 12 months.</p><p>Referrals are tracked with a 90 day cookie.</p>`, "https://pumpgtm.com"), "pumpgtm")
   assert.equal(termsLink(`<p>Earn 30% commission. Terms coming soon.</p>`, "https://brand.com"), null, "a figure with no concrete term")
   assert.equal(termsLink(`<p>Our tracking cookie lasts 30 days.</p>`, "https://brand.com"), null, "a term with no commission figure")
+})
+
+test("review of the fixes (PR #364 r1): false positives and long digit runs", () => {
+  // Long digit runs: every reader stays linear (was quadratic: 1.2 s at 64k digits).
+  for (const text of ["$" + "1".repeat(64_000) + "K", "1".repeat(64_000), "1.".repeat(32_000) + " USD", "commission " + "9".repeat(64_000) + "%"]) {
+    const t0 = performance.now()
+    hasPrice(text)
+    termsLink(`<p>${text}</p>`, "https://brand.com")
+    hasTrial(text)
+    assert.ok(performance.now() - t0 < 150, `${text.slice(0, 12)}… took ${Math.round(performance.now() - t0)} ms`)
+  }
+  // P1: a reduction is not a price.
+  assert.equal(hasPrice("Customer acquisition cost reduced by 49 € with our platform. Contact sales for pricing."), null)
+  // P2: a free demo or free shipping after "try … free" is not a trial; CJK phrasings count.
+  assert.equal(hasTrial("Try our free demo today"), null)
+  assert.equal(hasTrial("Try our service for free shipping"), null)
+  assert.ok(hasTrial("無料トライアルを開始"))
+  assert.ok(hasTrial("立即免费试用"))
+  // P3: the public suffix list decides the name; app stores need the exact host, a listing and install wording.
+  assert.equal(selfServe(`<a href="https://unrelated.co.uk/signup">Sign up</a>`, "https://brand.co.uk"), null)
+  assert.ok(selfServe(`<a href="https://app.brand.io/signup">Sign up</a>`, "https://brand.co.uk"))
+  assert.equal(selfServe(`<a href="https://apps.shopify.com.evil.test/x">Install</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/">Browse apps</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/brand-app">Read reviews</a>`, "https://brand.com"), null)
+  assert.ok(selfServe(`<a href="https://apps.shopify.com/brand-app"><img src="badge.svg"></a>`, "https://brand.com"), "a badge with no text")
+  assert.ok(selfServe(`<a href="https://apps.apple.com/us/app/brand/id123456">Download on the App Store</a>`, "https://brand.com"))
+  // A2: billing copy is not program terms; an unannounced window is not a term; "coming soon" applies first.
+  assert.equal(termsLink(`<p>$29 recurring subscription, paid monthly.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window to be announced.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window TBD.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>Affiliate program terms are coming soon. 30% commission, 60-day cookie.</p>`, "https://brand.com"), null)
+  assert.ok(termsLink(`<p>30% commission on every sale. Attribution window of 60 days.</p>`, "https://brand.com"))
+})
+
+test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
+  assert.deepEqual(runOptions(["--rescan-html", "--psi", "--seo"]), { rescanHtml: true, psi: false, seo: false })
+  assert.deepEqual(runOptions(["--psi", "--seo"]), { rescanHtml: false, psi: true, seo: true })
 })
 
 test("program-page terms: a qualifying link or published terms, not a mention", () => {
