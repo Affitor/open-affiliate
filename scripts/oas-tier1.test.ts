@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  discover, discoverIsolated, discoveryCandidates, recordingFetcher, replayFetcher, runOptions, withDiscovered, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  discover, discoverIsolated, discoveryCandidates, titleOf, recordingFetcher, replayFetcher, runOptions, withDiscovered, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -97,7 +97,7 @@ test("discovery candidates: pricing kinds first, shorter path, A-Z, three at mos
     '<a href="/free-trial?utm=x">Trial</a>', '<a href="/pricing">Pricing</a>', '<a href="/store/app">Store</a>', '<a href="/buy">Buy</a>',
     '<a href="https://other.com/pricing">Other</a>', '<a href="/download">Download</a>',
   ].join("") }
-  const got = discoveryCandidates([home], ["https://brand.com", "https://brand.com/pricing"], new Set())
+  const got = discoveryCandidates([home], ["https://brand.com", "https://brand.com/pricing"], new Set()).slice(0, 3)
   assert.deepEqual(got, ["https://brand.com/buy", "https://brand.com/store/app", "https://brand.com/plugin/kit/pricing"])
   assert.ok(!got.some((u) => u.includes("shop") || u.includes("other.com")))
 })
@@ -466,6 +466,50 @@ test("v2 readers stay linear on 2 MB inputs", () => {
     hasTrial(text)
     assert.ok(performance.now() - t0 < 1500, `${text.slice(0, 16)}… took ${Math.round(performance.now() - t0)} ms`)
   }
+})
+
+test("review of PR #365 r1: reader boundaries", () => {
+  const terms = (body: string) => termsLink(`<p>${body}</p>`, "https://brand.com")
+  assert.equal(terms("Customers get 99% satisfaction. Payouts monthly."), null, "a product claim is not a commission")
+  assert.equal(terms("Earn 30% commission. Job applications require manual approval."), null, "a job approval")
+  assert.equal(terms("Earn 20% commission. Payments are processed monthly for your plan."), null, "the buyer's bill")
+  assert.equal(terms("Earn 30% commission. Your cookies expire after 30 days to remember your consent."), null, "a consent cookie, consent after the match")
+  assert.ok(terms("Earn 30% commission. Cookie duration is 24 hours."), "a cookie window in hours")
+  assert.ok(terms("Earn 30% commission. Payouts are sent on the 20th."), "a payout day of the month")
+  assert.ok(terms("Earn $15 for every new subscriber. Payouts monthly via PayPal."), "a figure per referral")
+  for (const text of ["Free to try is unavailable.", "Free to try: No.", "Free to try? Not anymore."]) assert.equal(hasTrial(text), null, text)
+  assert.equal(selfServe(`<a href="/bl%6fg/how-to">Start creating free</a>`, "https://brand.com"), null, "an encoded marketing path")
+})
+
+test("review of PR #365 r1: discovery and recording", async () => {
+  // Every URL phase 1 read is removed before the first three are taken.
+  const home = { url: "https://brand.com/", html: '<a href="/buy">b</a><a href="/store">s</a><a href="/a/buy">ab</a><a href="/c/store">cs</a>' }
+  const all = discoveryCandidates([home], ["https://brand.com"], new Set())
+  assert.deepEqual(all.filter((u) => u !== "https://brand.com/buy").slice(0, 3), ["https://brand.com/a/buy", "https://brand.com/store", "https://brand.com/c/store"])
+  // Titles by forward scan: whole title, linear on hostile input.
+  assert.equal(titleOf(`<title id="t">${"x".repeat(300)} merch</title>`).endsWith("merch"), true)
+  const t0 = performance.now()
+  titleOf("<title ".repeat(300_000))
+  assert.ok(performance.now() - t0 < 200)
+  // A JSON-LD offer on a discovered page is not read (it cannot be checked against the merchandise guard).
+  network({
+    "https://brand.com/robots.txt": html(""),
+    "https://brand.com/store": html('<p>Company merch T-shirt $29</p><script type="application/ld+json">{"offers":{"price":"29","priceCurrency":"USD"}}</script>'),
+  })
+  assert.equal((await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/store"], ["P1"], new Set())).P1, undefined)
+  // Recording keeps the raw bytes and only what the reader read: a body of invalid UTF-8 replays exactly as live.
+  const dir = mkdtempSync(join(tmpdir(), "oas-bytes-"))
+  const bytes = Buffer.concat([Buffer.alloc(600_000, 0xff), Buffer.from(" Pro $29/mo ")])
+  const live = (async (input: string | URL | Request) => String(input).endsWith("robots.txt") ? new Response("") : new Response(bytes)) as typeof fetch
+  setFetcher(recordingFetcher(dir, live))
+  const recorded = await politeGet("https://bytes.test/p")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://bytes.test/p"), recorded)
+  assert.equal((recorded as { truncated?: boolean }).truncated, false)
+  rmSync(dir, { recursive: true, force: true })
+  // A replay refuses PageSpeed and DataForSEO, which run in the parent.
+  assert.throws(() => runOptions(["--replay", "x", "--seo"]), /cannot run/)
+  assert.throws(() => runOptions(["--replay", "x", "--psi"]), /cannot run/)
 })
 
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {

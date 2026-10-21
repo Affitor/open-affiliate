@@ -138,21 +138,40 @@ export function setFetcher(stub: typeof fetch): void {
 }
 
 /** The largest body any reader asks for (PageSpeed JSON): a recording keeps one byte more, so a cut is replayed as a cut. */
-const RECORD_BYTES = PSI_BYTES + 1
 const recordKey = (url: string) => createHash("sha256").update(url).digest("hex")
 const NULL_BODY = new Set([101, 204, 205, 304])
 
-/** Wraps a fetch: each response is saved under `dir` (status, Location, body up to RECORD_BYTES), then handed on unchanged. */
+/**
+ * Wraps a fetch: each response's status and Location are saved under `dir`, and its body exactly as the reader
+ * consumes it (raw bytes, as far as the reader reads before it stops or cancels), so a replay reads the same bytes.
+ */
 export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch {
   mkdirSync(dir, { recursive: true })
   return async (input, init) => {
     const url = String(input)
     const res = await base(input, init)
-    const { text } = await readCapped(res, RECORD_BYTES)
-    const body = Buffer.from(text)
-    writeFileSync(join(dir, `${recordKey(url)}.json`), JSON.stringify({ url, status: res.status, location: res.headers.get("location") }))
-    writeFileSync(join(dir, `${recordKey(url)}.body`), body)
-    return new Response(NULL_BODY.has(res.status) ? null : body, { status: res.status, headers: res.headers })
+    const file = join(dir, recordKey(url))
+    writeFileSync(`${file}.json`, JSON.stringify({ url, status: res.status, location: res.headers.get("location") }))
+    const chunks: Uint8Array[] = []
+    const save = () => writeFileSync(`${file}.body`, Buffer.concat(chunks))
+    save() // a body the reader cancels at once (a redirect) is recorded as empty
+    const reader = res.body?.getReader()
+    if (!reader || NULL_BODY.has(res.status)) return new Response(null, { status: res.status, headers: res.headers })
+    const body = new ReadableStream<Uint8Array>({
+      async pull(controller) {
+        const { done, value } = await reader.read()
+        if (done) {
+          save()
+          controller.close()
+          return
+        }
+        chunks.push(value)
+        save()
+        controller.enqueue(value)
+      },
+      cancel: (reason) => reader.cancel(reason),
+    })
+    return new Response(body, { status: res.status, headers: res.headers })
   }
 }
 
@@ -335,8 +354,8 @@ export function hasPrice(text: string, html = "", skip?: (before: string) => boo
 const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
-// A negation right after the phrase: "free to try? No", "the free plan is no longer available".
-const NEGATED_AFTER = /^\W{0,3}(?:\?\s*no\b|(?:is|are) no longer\b|(?:is|are)n'?t available|(?:is|are) not available|no longer available)/i
+// A negation right after the phrase: "free to try? No", "Free to try: No", "is unavailable", "is no longer available".
+const NEGATED_AFTER = /^\W{0,3}(?:[?:]\s*(?:no|not)\b|(?:is|are)\s+(?:no longer|not)\b|(?:is|are)n'?t\b|(?:is|are)\s+unavailable|no longer available|unavailable|not anymore)/i
 /** Trial or free-plan wording, skipping negated mentions before or after it ("no free trial", "free plan is no longer available"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
@@ -431,7 +450,7 @@ export function selfServe(html: string, base: string, words: Set<string> | null 
     if (SALES_PATH.test(decoded(path))) return false
     if (appStore(l.href, base)) return true
     if (MERCH.test(l.text) || MERCH.test(decoded(path))) return false
-    const start = START_TEXT.test(l.text) && !MARKETING_PATH.test(path)
+    const start = START_TEXT.test(l.text) && !MARKETING_PATH.test(decoded(path))
     return brandHost(l.href, base, words) && (SIGNUP_TEXT.test(l.text) || start || SIGNUP_HREF.test(path))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
@@ -443,76 +462,92 @@ const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}
 // people ("100% of clients happy"), which stat cards put right next to commission wording.
 const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%(?!\s+of\s+(?:our\s+|all\s+)?(?:clients|customers|users|partners|merchants|businesses|companies|members|creators)\b)|[$€£]\s?\d[\d.,]{0,9}(?![\d.,])(?!\s?\+))`
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
-// The commission figure: next to commission wording, after an earning verb ("you'll receive 20%"), or as a share of
-// what referrals pay ("30% of every payment"). Not a discount ("25% off") or a product claim ("99.9% uptime").
-const NOT_RATE = String.raw`(?!\s*(?:off|discount|uptime|accura\w*|faster|fewer|more|less|cheaper|savings?)\b)`
+// The commission figure: next to commission wording, after "earn" or "pays you", as a share of what referrals pay
+// ("30% of every payment"), or per referral ("$15 for every new subscriber"). Not a discount ("25% off") or a product
+// claim ("99.9% uptime"); generic verbs ("customers get 99% satisfaction") do not make a figure a commission.
+const NOT_RATE = String.raw`(?!\s*(?:off|discount|uptime|accura\w*|faster|fewer|more|less|cheaper|savings?|satisf\w*)\b)`
 const COMMISSION_FIGURE = new RegExp([
   String.raw`${FIGURE}[^.]{0,60}\b(?:commission|revenue share|rev share)`,
-  String.raw`\b(?:(?:commission|revenue share|rev share)\w*|earn(?:s|ing)?|get|receive|make|pays? you)\b[^.]{0,40}?${FIGURE}${NOT_RATE}`,
+  String.raw`\b(?:(?:commission|revenue share|rev share)\w*|earn(?:s|ing)?|pays? you)\b[^.]{0,40}?${FIGURE}${NOT_RATE}`,
   String.raw`${FIGURE}\s+(?:of|from|on)\s+(?:each|every|all|the|their|any|what)\b[^.]{0,30}?\b(?:sales?|payments?|purchases?|subscriptions?|orders?|referrals?|revenue|spend|they pay)\b`,
+  String.raw`${FIGURE}\s+(?:per|for (?:each|every)(?: new)?)\s+(?:sales?|referrals?|sign-?ups?|customers?|subscribers?|deals?|leads?|purchases?)\b`,
 ].join("|"), "i")
 // A concrete term carries its value: a number of days, an amount, a schedule, a named method, or an approval rule.
 const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
 // A schedule, not a noun it qualifies: "a monthly plan" is what the buyer pays, "monthly performance bonuses" are not payouts.
-const SCHEDULE = String.raw`(?:monthly|weekly|bi-?weekly|twice a month|every (?:month|week|two (?:weeks|months)|\d{1,3} (?:days|weeks|months))|(?:on )?the (?:first|1st|15th|last|end) (?:day |business day )?of (?:the|each|every) month)\b(?!\s+(?:plans?|subscriptions?|subscribers?|fees?|prices?|pricing|billing|payments? plan|performance|bonus(?:es)?|reports?|newsletters?|updates?|webinars?|challenges?))`
-// Up to n words (letters, digits, currency, apostrophes), never a consent-banner word: the gap a term may span.
-const gap = (n: number, amounts = true) =>
-  String.raw`(?:\s+(?!(?:consent|session|analytics|preferences?|functional|essential|necessary|advertising|marketing|accept|privacy|settings)\b)${amounts ? "[a-z0-9$€£'’:,;()-]+" : "[a-z'’:,;()-]+"}){0,${n}}?`
-const CONCRETE_TERM = new RegExp([
-  // Cookie or attribution window with its length: "30-day cookie", "90-Days Cookie Duration", "120 days' cookie tracking",
-  // "Cookie window 60 days", "cookies are set to a lengthy 60 days".
-  String.raw`\b\d{1,4}[- ]?days?['’]?${gap(2)}\s+(?:cookies?|attribution|tracking)\b`,
-  String.raw`\b(?:cookies?|attribution)\b${gap(8)}\s+\d{1,4}[\s-]?(?:days?|months?)\b`,
-  // Payout schedule or method. "Payouts", "get paid", "paid out", "cash out" and "payments are made / sent /
-  // processed" describe paying the affiliate (a buyer is "billed" or "charged"); their gap holds no amount, so an
-  // earnings calculator ("Payout $348 Monthly") is not a schedule. "Commissions" alone often means a recurring rate
-  // ("commission each month for a year"), so it needs a payout verb.
-  String.raw`\b(?:payouts?|payments? (?:are|is|will be) (?:made|sent|processed|issued)|get paid|paid out|cash(?:-| )?out)\b${gap(6, false)}\s+(?:${SCHEDULE}|(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD})`,
-  String.raw`\bcommissions?\b${gap(6)}\s+(?:are|is|will be|get|gets)\s+(?:paid|sent|credited|distributed|issued|transferred|deposited)(?:\s+out)?${gap(4)}\s+(?:${SCHEDULE}|(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD})`,
-  String.raw`\b(?:receive|get) (?:your )?(?:monthly |weekly )?commissions?(?: payments?)?${gap(3, false)}\s+${SCHEDULE}`,
-  String.raw`\b(?:receive|get) (?:your )?(?:monthly|weekly) commissions?\b`,
-  String.raw`\b(?:minimum payout|payout minimum|payout threshold|payment minimum|minimum threshold)[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|ZAR|dollars?)\b)`,
-  String.raw`\b[A-Z]{3}\s?\d[\d,.]{0,8} minimum payout`,
-  String.raw`\bno minimum (?:payout|threshold)`,
-  String.raw`\bnet[- ]?(?:15|30|45|60|90)\b[^.]{0,30}\b(?:payouts?|payments?|paid)\b|\b(?:payouts?|payments?|paid)\b[^.]{0,30}\bnet[- ]?(?:15|30|45|60|90)\b`,
-  String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
-  // Approval rules (A2 reads only the program page): "no automatic approval", "automatically approved", "once approved".
-  String.raw`\bapproval (?:is )?required`,
-  String.raw`\brequires? (?:manual )?approval`,
-  String.raw`\b(?:manual|instant|automatic) approval`,
-  String.raw`\b(?:automatically|instantly|manually) approved`,
-  String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
-  String.raw`\bonce (?:you(?:'re|’re| are) )?approved\b`,
-].join("|"), "i")
+const SCHEDULE = String.raw`(?:monthly|weekly|bi-?weekly|twice a month|every (?:month|week|two (?:weeks|months)|\d{1,3} (?:days|weeks|months))|(?:on )?the \d{1,2}(?:st|nd|rd|th)\b(?: (?:day )?of (?:the|each|every) month)?|(?:on )?the (?:first|last|end)(?: business)? (?:day )?of (?:the|each|every) month)\b(?!\s+(?:plans?|subscriptions?|subscribers?|fees?|prices?|pricing|billing|payments? plan|performance|bonus(?:es)?|reports?|newsletters?|updates?|webinars?|challenges?))`
+// Up to n words (letters, digits, currency, apostrophes): the gap a term may span; without amounts for payout schedules,
+// so an earnings calculator ("Payout $348 Monthly") is not a schedule.
+const gap = (n: number, amounts = true) => String.raw`(?:\s+${amounts ? "[a-z0-9$€£'’:,;()-]+" : "[a-z'’:,;()-]+"}){0,${n}}?`
+const METHOD_OR_SCHEDULE = String.raw`(?:${SCHEDULE}|(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD})`
+const any = (parts: string[]) => new RegExp(parts.join("|"), "i")
 /**
- * Terms that count only in a sentence about the program: "applications are reviewed" also describes job
- * applications, and "paid" or "payments" also describe buyers paying.
+ * Each kind of concrete term is read inside one sentence, with what that sentence must not be about: a cookie in a
+ * consent banner, an approval of jobs or loans, a payment that is the buyer's bill. Terms that also describe buyers
+ * ("paid monthly") or jobs ("applications are reviewed") need a sentence that names the program.
  */
-const PROGRAM_SENTENCE = /\b(affiliat|partner|referr|ambassador|program|commission|payout|earn|reward)/i
-const PROGRAM_TERM = new RegExp([
-  String.raw`\bapplications? (?:are|is|will be|get) (?:manually |personally )?(?:reviewed|approved)`,
-  String.raw`\bwe review (?:every|each|all) applications?`,
-  String.raw`\b(?:paid|payments?)\b${gap(8)}\s+${SCHEDULE}`,
-  String.raw`\b(?:paid|payments?)\b${gap(8)}\s+(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD}`,
-  String.raw`\b${PAY_METHOD} account\b[^.]{0,30}\b(?:get|be) paid`,
-].join("|"), "i")
-// A cookie term inside a consent banner ("accept cookies for 30 days") is not a referral window.
-const CONSENT_BEFORE = /\b(consent|accept|privacy|we use cookies|cookie (?:policy|settings|preferences))\b[^.]{0,60}$/i
-const CONCRETE_ALL = new RegExp(CONCRETE_TERM.source, "gi")
-/** The first concrete term that is not a consent-banner cookie, with its position in `text`. */
+const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
+  {
+    // "30-day cookie", "90-Days Cookie Duration", "120 days' cookie tracking", "Cookie window 60 days", "cookie duration is 24 hours".
+    term: any([
+      String.raw`\b\d{1,4}[- ]?(?:days?|hours?)['’]?${gap(2)}\s+(?:cookies?|attribution|tracking)\b`,
+      String.raw`\b(?:cookies?|attribution)\b${gap(8)}\s+\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
+    ]),
+    denies: /\b(consent|accept|privacy|we use cookies|cookie (?:policy|settings|preferences)|remember|preferences?|session|analytics)\b/i,
+  },
+  {
+    // Words that are about paying the affiliate: payouts, get paid, paid out, cash out, commissions with a payout verb.
+    term: any([
+      String.raw`\b(?:payouts?|get paid|paid out|cash(?:-| )?out)\b${gap(6, false)}\s+${METHOD_OR_SCHEDULE}`,
+      String.raw`\bcommissions?\b${gap(6)}\s+(?:are|is|will be|get|gets)\s+(?:paid|sent|credited|distributed|issued|transferred|deposited)(?:\s+out)?${gap(4)}\s+${METHOD_OR_SCHEDULE}`,
+      String.raw`\b(?:receive|get) (?:your )?(?:monthly |weekly )?commissions?(?: payments?)?${gap(3, false)}\s+${SCHEDULE}`,
+      String.raw`\b(?:receive|get) (?:your )?(?:monthly|weekly) commissions?\b`,
+      String.raw`\b(?:minimum payout|payout minimum|payout threshold|payment minimum|minimum threshold)[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|ZAR|dollars?)\b)`,
+      String.raw`\b[A-Z]{3}\s?\d[\d,.]{0,8} minimum payout`,
+      String.raw`\bno minimum (?:payout|threshold)`,
+      String.raw`\bnet[- ]?(?:15|30|45|60|90)\b[^.]{0,30}\b(?:payouts?|payments?|paid)\b|\b(?:payouts?|payments?|paid)\b[^.]{0,30}\bnet[- ]?(?:15|30|45|60|90)\b`,
+      String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
+    ]),
+  },
+  {
+    // "Payments are made every two months": the affiliate's money, unless the sentence is the buyer's bill.
+    term: any([String.raw`\bpayments? (?:are|is|will be) (?:made|sent|processed|issued)\b${gap(6, false)}\s+${METHOD_OR_SCHEDULE}`]),
+    denies: /\b(your plan|plans?|subscriptions?|billing|billed|invoices?|cards?|charged|customers? pay)\b/i,
+  },
+  {
+    // Approval rules: "no automatic approval", "automatically approved", "once approved", unless jobs, loans or documents.
+    term: any([
+      String.raw`\bapproval (?:is )?required`,
+      String.raw`\brequires? (?:manual )?approval`,
+      String.raw`\b(?:manual|instant|automatic) approval`,
+      String.raw`\b(?:automatically|instantly|manually) approved`,
+      String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
+      String.raw`\bonce (?:you(?:'re|’re| are) )?approved\b`,
+    ]),
+    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|credit|mortgages?|expenses?|leave|time off|documents?|invoices?|budgets?|timesheets?|purchase orders?)\b/i,
+  },
+  {
+    term: any([
+      String.raw`\bapplications? (?:are|is|will be|get) (?:manually |personally )?(?:reviewed|approved)`,
+      String.raw`\bwe review (?:every|each|all) applications?`,
+      String.raw`\b(?:paid|payments?)\b${gap(8)}\s+${METHOD_OR_SCHEDULE}`,
+      String.raw`\b${PAY_METHOD} account\b[^.]{0,30}\b(?:get|be) paid`,
+    ]),
+    needs: /\b(affiliat|partner|referr|ambassador|program|commission|payout|earn|reward)/i,
+    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|your plan|plans?|subscriptions?|billing|billed|invoices?|charged)\b/i,
+  },
+]
+/** The first concrete term, in reading order, whose sentence passes its kind's rules; with its position in `text`. */
 function concreteTerm(text: string): { index: number; 0: string } | null {
-  for (const m of text.matchAll(CONCRETE_ALL)) {
-    if (/cookie/i.test(m[0]) && CONSENT_BEFORE.test(text.slice(Math.max(0, m.index! - 80), m.index))) continue
-    return { index: m.index!, 0: m[0] }
-  }
-  return null
-}
-/** The first program term in a sentence that names the program, with its position in `text`. */
-function programTerm(text: string): { index: number; 0: string } | null {
   let at = 0
   for (const sentence of text.split(/(?<=[.!?])\s+/)) {
-    const m = PROGRAM_SENTENCE.test(sentence) ? PROGRAM_TERM.exec(sentence) : null
-    if (m) return { index: at + m.index, 0: m[0] }
+    let best: RegExpExecArray | null = null
+    for (const kind of TERM_KINDS) {
+      if ((kind.needs && !kind.needs.test(sentence)) || kind.denies?.test(sentence)) continue
+      const m = kind.term.exec(sentence)
+      if (m && (!best || m.index < best.index)) best = m
+    }
+    if (best) return { index: at + best.index, 0: best[0] }
     at += sentence.length + 1
   }
   return null
@@ -535,7 +570,7 @@ export function termsLink(html: string, base: string): string | null {
   const announced = (at: number) => markers.some((m) => Math.abs(m - at) <= 150)
   // A terms heading alone ("partnership terms") is not published terms: the figure and the concrete term are.
   const figure = COMMISSION_FIGURE.exec(text)
-  const concrete = concreteTerm(text) ?? programTerm(text)
+  const concrete = concreteTerm(text)
   return figure && concrete && !announced(figure.index) && !announced(concrete.index) ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 
@@ -609,7 +644,8 @@ export async function scanProgram(p: Program, found: { candidates: string[] } = 
   } else {
     const page = await politeGet(p.signup_url)
     // Phase 2 never re-reads the listed program page either.
-    found.candidates = found.candidates.filter((u) => normalUrl(u) !== normalUrl(p.signup_url!) && (!isPage(page) || normalUrl(u) !== normalUrl(page.url)))
+    found.candidates = found.candidates
+      .filter((u) => normalUrl(u) !== normalUrl(p.signup_url!) && (!isPage(page) || normalUrl(u) !== normalUrl(page.url)))
     if (!isPage(page)) {
       checks.A1 = unknown(page.refused)
       checks.A2 = unknown(page.refused)
@@ -636,6 +672,7 @@ export async function scanProgram(p: Program, found: { candidates: string[] } = 
       checks.A2 = unknown("program page not live")
     }
   }
+  found.candidates = found.candidates.slice(0, DISCOVERY_PAGES)
   return { slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(), checks }
 }
 
@@ -682,8 +719,22 @@ export function discoveryCandidates(pages: { html: string; url: string }[], read
   const path = (u: string) => new URL(u).pathname
   return [...kinds]
     .sort(([a, ka], [b, kb]) => ka - kb || path(a).length - path(b).length || (a < b ? -1 : a > b ? 1 : 0))
-    .slice(0, DISCOVERY_PAGES)
+    .slice(0, 50) // the caller removes the program page, then takes the first three
     .map(([u]) => u)
+}
+
+/** The page's <title> text, by a forward scan (no regex over the document), at most 2,000 characters. */
+export function titleOf(html: string): string {
+  const lower = html.toLowerCase()
+  for (let at = lower.indexOf("<title"); at !== -1; at = lower.indexOf("<title", at + 6)) {
+    const next = lower[at + 6]
+    if (next !== ">" && next !== " " && next !== "\t" && next !== "\n" && next !== "\r" && next !== "/") continue
+    const open = lower.indexOf(">", at)
+    if (open === -1) return ""
+    const close = lower.indexOf("</title", open)
+    return html.slice(open + 1, close === -1 ? Math.min(html.length, open + 2001) : Math.min(close, open + 2001))
+  }
+  return ""
 }
 
 /**
@@ -696,12 +747,12 @@ export async function discover(p: Program, candidates: string[], wanted: ("P1" |
     if (wanted.every((id) => out[id])) break
     const page = await politeGet(url)
     if (!isPage(page) || page.status !== 200 || !p.url || !brandHost(page.url, p.url, words)) continue
-    const title = /<title[^>]*>([\s\S]{0,200}?)<\/title>/i.exec(page.html)?.[1] ?? ""
-    if (MERCH.test(decoded(new URL(page.url).pathname)) || MERCH.test(title)) continue
+    if (MERCH.test(decoded(new URL(page.url).pathname)) || MERCH.test(titleOf(page.html))) continue
     const text = visibleText(page.html)
     const on = (evidence: string): Check => ({ state: "met", evidence: `${evidence} (on ${page.url})`.slice(0, 160) })
     if (wanted.includes("P1") && !out.P1) {
-      const price = hasPrice(text, page.html, (before) => MERCH.test(before))
+      // Visible prices only: a JSON-LD offer on a discovered page cannot be checked against the merchandise guard.
+      const price = hasPrice(text, "", (before) => MERCH.test(before))
       if (price) out.P1 = on(price)
     }
     if (wanted.includes("P2") && !out.P2) {
@@ -1062,7 +1113,11 @@ async function child() {
  */
 export function runOptions(args: string[]) {
   const rescanHtml = args.includes("--rescan-html")
-  return { rescanHtml, psi: args.includes("--psi") && !rescanHtml, seo: args.includes("--seo") && !rescanHtml }
+  const psi = args.includes("--psi") && !rescanHtml
+  const seo = args.includes("--seo") && !rescanHtml
+  // PageSpeed and DataForSEO run in the parent: a replay makes no network call at all, so it refuses them.
+  if (args.includes("--replay") && (psi || seo)) throw new Error("--replay cannot run --psi or --seo (they would reach the network)")
+  return { rescanHtml, psi, seo }
 }
 
 async function main() {
@@ -1075,9 +1130,15 @@ async function main() {
   const record = flag("--record")
   const replay = flag("--replay")
   if (record && replay) throw new Error("--record and --replay are exclusive")
-  // Children inherit the environment: they install the recording or replaying fetcher.
-  if (record) process.env.OAS_RECORD = record
-  if (replay) process.env.OAS_REPLAY = replay
+  // Children inherit the environment: they install the recording or replaying fetcher. An explicit flag clears the other.
+  if (record) {
+    process.env.OAS_RECORD = record
+    delete process.env.OAS_REPLAY
+  }
+  if (replay) {
+    process.env.OAS_REPLAY = replay
+    delete process.env.OAS_RECORD
+  }
   const { rescanHtml, psi, seo } = runOptions(args)
   if (rescanHtml && (args.includes("--psi") || args.includes("--seo"))) console.log("--rescan-html: --psi and --seo ignored")
   // Lengths only, never values: confirms the credentials reached the run before any call.
