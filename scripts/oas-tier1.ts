@@ -24,7 +24,7 @@
  */
 import { fork } from "node:child_process"
 import { createHash } from "node:crypto"
-import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, renameSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import { parse as parseDomain } from "tldts"
 import { parse } from "yaml"
@@ -141,10 +141,13 @@ export function setFetcher(stub: typeof fetch): void {
 const recordKey = (url: string) => createHash("sha256").update(url).digest("hex")
 const NULL_BODY = new Set([101, 204, 205, 304])
 
+let recordSeq = 0
 /**
  * Wraps a fetch: each response's status and Location are saved under `dir`, and its body exactly as the reader
  * consumes it (raw bytes, appended chunk by chunk, read only when the reader asks), with a failure that ended the
- * stream, so a replay reads the same bytes and fails the same way.
+ * stream, so a replay reads the same bytes and fails the same way. Each response writes its own temporary files and
+ * renames them into place only when the stream ends, is cancelled or fails: two responses for one URL never mix, and
+ * an unfinished capture (a killed child) does not exist for a replay.
  */
 export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch {
   mkdirSync(dir, { recursive: true })
@@ -152,32 +155,50 @@ export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch 
     const url = String(input)
     const res = await base(input, init)
     const file = join(dir, recordKey(url))
-    const meta = { url, status: res.status, location: res.headers.get("location"), error: null as string | null }
-    writeFileSync(`${file}.json`, JSON.stringify(meta))
-    writeFileSync(`${file}.body`, "") // a body the reader cancels at once (a redirect) is recorded as empty
+    const tmp = `${file}.${process.pid}.${recordSeq++}.tmp`
+    let error: string | null = null
+    let done = false
+    writeFileSync(`${tmp}.body`, "")
+    const finish = () => {
+      if (done) return
+      done = true
+      writeFileSync(`${tmp}.json`, JSON.stringify({ url, status: res.status, location: res.headers.get("location"), error }))
+      renameSync(`${tmp}.body`, `${file}.body`)
+      renameSync(`${tmp}.json`, `${file}.json`)
+    }
     const reader = res.body?.getReader()
-    if (!reader || NULL_BODY.has(res.status)) return new Response(null, { status: res.status, headers: res.headers })
+    if (!reader || NULL_BODY.has(res.status)) {
+      finish()
+      return new Response(null, { status: res.status, headers: res.headers })
+    }
     const body = new ReadableStream<Uint8Array>({
       async pull(controller) {
         let chunk: ReadableStreamReadResult<Uint8Array>
         try {
           chunk = await reader.read()
-        } catch (error) {
-          writeFileSync(`${file}.json`, JSON.stringify({ ...meta, error: (error as Error).name || "Error" }))
-          controller.error(error)
+        } catch (e) {
+          error = (e as Error).name || "Error"
+          finish()
+          controller.error(e)
           return
         }
-        if (chunk.done) return controller.close()
-        appendFileSync(`${file}.body`, chunk.value)
+        if (chunk.done) {
+          finish()
+          return controller.close()
+        }
+        appendFileSync(`${tmp}.body`, chunk.value)
         controller.enqueue(chunk.value)
       },
-      cancel: (reason) => reader.cancel(reason),
+      cancel: (reason) => {
+        finish() // the reader stopped here on purpose (a cap, a redirect): what it read is the recording
+        return reader.cancel(reason)
+      },
     }, { highWaterMark: 0 })
     return new Response(body, { status: res.status, headers: res.headers })
   }
 }
 
-/** Serves responses saved by recordingFetcher; a URL that was not saved fails like a network error. */
+/** Serves responses saved by recordingFetcher; a URL that was not saved (or never finished) fails like a network error. */
 export function replayFetcher(dir: string): typeof fetch {
   return async (input) => {
     const key = recordKey(String(input))
@@ -186,17 +207,22 @@ export function replayFetcher(dir: string): typeof fetch {
     const headers = new Headers(meta.location ? { location: meta.location } : {})
     if (NULL_BODY.has(meta.status)) return new Response(null, { status: meta.status, headers })
     const bytes = readFileSync(join(dir, `${key}.body`))
-    // A stream that failed while recording fails again after the same bytes.
+    // The bytes first, then the end or the recorded failure, on separate reads (as the stream delivered them live).
+    let sent = false
     const body = new ReadableStream<Uint8Array>({
-      start(controller) {
-        if (bytes.length) controller.enqueue(new Uint8Array(bytes))
+      pull(controller) {
+        if (!sent && bytes.length) {
+          sent = true
+          controller.enqueue(new Uint8Array(bytes))
+          return
+        }
         if (meta.error) {
           const error = new Error("recorded stream failure")
           error.name = meta.error
           controller.error(error)
         } else controller.close()
       },
-    })
+    }, { highWaterMark: 0 })
     return new Response(body, { status: meta.status, headers })
   }
 }
@@ -366,7 +392,7 @@ export function hasPrice(text: string, html = "", skip?: (before: string) => boo
 }
 
 // Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
-const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
+const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|(?<!-)free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 // A negation right after the phrase: "free to try? No", "Free to try: No", "is unavailable", "is no longer available".

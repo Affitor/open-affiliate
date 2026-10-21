@@ -558,6 +558,37 @@ test("review of PR #365 r2: a recorded stream failure replays as a failure; reco
   rmSync(dir, { recursive: true, force: true })
 })
 
+test("review of PR #365 r3: concurrent and unfinished recordings, risk-free", async () => {
+  // A money-back guarantee is not a free trial.
+  assert.equal(hasTrial("100% risk-free to try. All plans come with a 30-day money-back guarantee. Plans start at $29/month."), null)
+  assert.ok(hasTrial("Boolvideo is free to try"))
+  const dir = mkdtempSync(join(tmpdir(), "oas-conc-"))
+  // Two responses for one URL at once: each recording is whole, never interleaved.
+  const big = (async () => new Response(new ReadableStream<Uint8Array>({
+    start(c) { const k = new Uint8Array(1024).fill(98); for (let i = 0; i < 977; i++) c.enqueue(k); c.close() } }))) as typeof fetch
+  const rec = recordingFetcher(dir, big)
+  const [x, y] = await Promise.all([rec("https://same.test/robots.txt"), rec("https://same.test/robots.txt")])
+  await Promise.all([x.arrayBuffer(), y.arrayBuffer()])
+  const replayed = await (await replayFetcher(dir)("https://same.test/robots.txt")).arrayBuffer()
+  assert.equal(replayed.byteLength, 977 * 1024)
+  // An unfinished capture does not replay.
+  const hanging = (async () => new Response(new ReadableStream<Uint8Array>({ start(c) { c.enqueue(new TextEncoder().encode("Pro $29/mo")) } }))) as typeof fetch
+  const r = await recordingFetcher(dir, hanging)("https://hang.test/p")
+  await r.body!.getReader().read()
+  await assert.rejects(replayFetcher(dir)("https://hang.test/p"), /not recorded/)
+  // A recorded failure replays its bytes first, then fails.
+  let pulls = 0
+  const failing = (async () => new Response(new ReadableStream<Uint8Array>({
+    pull(c) { if (pulls++ === 0) c.enqueue(new TextEncoder().encode("Pro")); else c.error(new TypeError("reset")) } }, { highWaterMark: 0 }))) as typeof fetch
+  const live = (await recordingFetcher(dir, failing)("https://f.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await live.read()).value), "Pro")
+  await assert.rejects(live.read())
+  const again = (await replayFetcher(dir)("https://f.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await again.read()).value), "Pro")
+  await assert.rejects(again.read(), (e: Error) => e.name === "TypeError")
+  rmSync(dir, { recursive: true, force: true })
+})
+
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
   assert.deepEqual(runOptions(["--rescan-html", "--psi", "--seo"]), { rescanHtml: true, psi: false, seo: false })
   assert.deepEqual(runOptions(["--psi", "--seo"]), { rescanHtml: false, psi: true, seo: true })
