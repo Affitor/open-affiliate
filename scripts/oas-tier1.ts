@@ -3,7 +3,7 @@
  * the way ora.ai reads a site (HTTP status, HTML links and text, PageSpeed).
  * Shadow only: nothing here changes a published score.
  *
- *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo]
+ *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo] [--rescan-html]
  *
  * Every request names itself (UA "OpenAffiliate"), obeys the host's robots.txt,
  * and is refused for schema/blocked-hosts.json hosts at every redirect hop,
@@ -21,6 +21,7 @@
 import { fork } from "node:child_process"
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
+import { parse as parseDomain } from "tldts"
 import { parse } from "yaml"
 import { blockedReason, REDIRECTS } from "./blocked-hosts"
 
@@ -241,7 +242,8 @@ export function visibleText(html: string): string {
 
 export function links(html: string, base: string): { href: string; text: string }[] {
   const out: { href: string; text: string }[] = []
-  for (const m of html.matchAll(/<a\b[^>]*?href\s*=\s*["']([^"'#][^"']*)["'][^>]*>([\s\S]{0,400}?)<\/a>/gi)) {
+  // Up to 4,000 characters of anchor content: icon buttons carry inline SVG (the sample's missed "Get started").
+  for (const m of html.matchAll(/<a\b[^>]*?href\s*=\s*["']([^"'#][^"']*)["'][^>]*>([\s\S]{0,4000}?)<\/a>/gi)) {
     try {
       out.push({ href: new URL(m[1], base).href, text: visibleText(m[2]).trim() })
     } catch { /* not a URL */ }
@@ -270,8 +272,10 @@ export function pricingLink(html: string, base: string): string | null {
   return found.map((l) => l.href).sort((a, b) => new URL(a).pathname.length - new URL(b).pathname.length)[0] ?? null
 }
 
-const PRICE = /(?:[$€£₹]\s?(\d[\d.,]*)|\b(\d[\d.,]*)\s?(?:USD|EUR|GBP)\b)/g
-const NOT_A_PRICE = /\b(save|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission)\b[^.]{0,20}$/i
+// A currency before the amount ("$29"), or after it ("29 USD", "1,90 €"); a K/M/B figure ("$2B+", "$50K") is a statistic, not a price.
+// Amounts are at most 16 characters and must be the whole digit run, so a long run of digits costs linear time, not quadratic.
+const PRICE = /(?:[$€£₹]\s?(\d[\d.,]{0,15})(?![\d.,])(?!\s?(?:k|m|b|bn|mm|million|billion)\b)|(?<![\d.,])(\d[\d.,]{0,15})(?![\d.,])\s?(?:USD|EUR|GBP|€|£)(?![\w]))/gi
+const NOT_A_PRICE = /\b(save[sd]?|saving|off|discount|over|up to|worth|raised|funding|revenue|earn|commission|spend|managed|reduc\w*|cut|lower\w*|by)\b[^.]{0,20}$/i
 /**
  * A product price: a non-zero amount in the visible text that is not a saving,
  * discount or other marketing figure, or a non-zero JSON-LD offer (pages that
@@ -279,7 +283,8 @@ const NOT_A_PRICE = /\b(save|saving|off|discount|over|up to|worth|raised|funding
  */
 export function hasPrice(text: string, html = ""): string | null {
   for (const m of text.matchAll(PRICE)) {
-    const amount = Number((m[1] ?? m[2]).replace(/,/g, ""))
+    // "1,90" (comma decimals) and "1,900" both read as a positive amount; only zero is not a price.
+    const amount = Number((m[1] ?? m[2]).replace(/[.,](?=\d{3}\b)/g, "").replace(",", "."))
     if (!(amount > 0) || NOT_A_PRICE.test(text.slice(Math.max(0, m.index! - 40), m.index))) continue
     return text.slice(Math.max(0, m.index! - 30), m.index! + 40).trim()
   }
@@ -290,29 +295,117 @@ export function hasPrice(text: string, html = ""): string | null {
   return null
 }
 
-const TRIAL = /\b(free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|start (?:for )?free|try (?:it )?(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month))/gi
+// Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
+const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
+// "Try our free demo", "for free shipping": free, but not a trial or a plan.
+const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
     if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
+    // Only named freebies are skipped. Page text loses element boundaries, so the word after a "Start for free"
+    // button is usually the next button's label: requiring "free" to end the phrase dropped 63 real readings.
+    if (NOT_TRIAL_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 30))) continue
     return m[0]
   }
   return null
 }
 
-const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|register|join (?:now|free))\b/i
+const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|make an account|register|join (?:now|free)|install now)\b/i
 const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
 // Sales, event and newsletter calls to action are not a buyer signing up.
 const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
-export function selfServe(html: string, base: string): string | null {
-  const found = links(html, base).find((l) =>
-    sameSite(l.href, base) && !NOT_SIGNUP.test(l.text) && !NOT_SIGNUP.test(decoded(l.href)) &&
-    (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname)))
+// App stores are self-serve: installing is signing up. Exact store host and a listing path, never the store's home.
+/** A store listing's identity (its slug or package id), from the fields each store uses; null for anything else. */
+function listingId(u: URL): string | null {
+  const seg = u.pathname.split("/").filter(Boolean)
+  switch (u.hostname) {
+    case "apps.shopify.com": return seg.length === 1 ? seg[0] : null
+    case "wordpress.org": return seg[0] === "plugins" && seg.length === 2 ? seg[1] : null
+    // The 32-letter extension id is required; a tab after it ("/reviews") is the same listing.
+    case "chromewebstore.google.com": return seg[0] === "detail" && /^[a-p]{32}$/.test(seg[2] ?? "") ? seg[1] : null
+    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" && /^[a-p]{32}$/.test(seg[3] ?? "") ? seg[2] : null
+    case "apps.apple.com": { const i = seg.indexOf("app"); return i >= 0 && /^id\d+$/.test(seg[i + 2] ?? "") ? seg[i + 1] : null }
+    case "play.google.com": return u.pathname === "/store/apps/details" ? u.searchParams.get("id") : null
+    case "marketplace.atlassian.com": return seg[0] === "apps" && /^\d+$/.test(seg[1] ?? "") ? seg[2] ?? null : null
+    case "marketplace.visualstudio.com": return u.pathname === "/items" ? u.searchParams.get("itemName") : null
+    case "addons.mozilla.org": {
+      // /<locale>/firefox/addon/<slug>/ or /firefox/addon/<slug>/
+      const i = seg.indexOf("addon")
+      return (i === 1 || i === 2) && /^(firefox|android)$/.test(seg[i - 1]) && seg.length === i + 2 ? seg[i + 1] : null
+    }
+    default: return null
+  }
+}
+// A listing that integrates the brand into another product is someone else's ("integration-for-rank-math").
+const THIRD_PARTY = new Set(["integration", "integrations", "connector", "for", "bridge", "sync"])
+/**
+ * The brand's own store listing: the listing's identity carries the brand's name as whole
+ * words ("seo-by-rank-math" for rankmath.com, "com.datadog.app" for datadog.com). Query
+ * parameters other than the store's id field, substrings ("bread" for read.com) and
+ * integrations by other developers do not count.
+ */
+const appStore = (href: string, base: string) => {
+  const u = new URL(href)
+  const id = u.protocol === "https:" ? listingId(u) : null
+  const name = parseDomain(new URL(base).hostname, { allowPrivateDomains: true }).domainWithoutSuffix?.toLowerCase().replace(/[^a-z0-9]/g, "")
+  if (!id || !name || id.length > 200) return false
+  const words = decoded(id).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean)
+  if (words.some((w) => THIRD_PARTY.has(w))) return false
+  // The name must start and end on word boundaries of the joined words: linear in the identity's length.
+  const joined = words.join("")
+  const bounds = new Set<number>([0])
+  words.reduce((at, w) => (bounds.add(at + w.length), at + w.length), 0)
+  for (let at = joined.indexOf(name); at >= 0; at = joined.indexOf(name, at + 1)) {
+    if (bounds.has(at) && bounds.has(at + name.length)) return true
+  }
+  return false
+}
+/**
+ * A link on the brand's own page to another host of the brand: the same registrable domain
+ * ("ads.snapchat.com" from "forbusiness.snapchat.com"), or the same distinctive name under
+ * another suffix ("app.n8n.cloud" from "n8n.io"). A name that is a dictionary word ("brand")
+ * does not prove the brand across suffixes; without a dictionary, nothing does.
+ */
+function brandHost(href: string, base: string, words: Set<string> | null = systemWords()): boolean {
+  if (sameSite(href, base)) return true
+  const [a, b] = [href, base].map((u) => parseDomain(new URL(u).hostname, { allowPrivateDomains: true }))
+  if (!a.domain || !b.domain) return false
+  if (a.domain === b.domain) return true
+  const name = b.domainWithoutSuffix?.toLowerCase() ?? ""
+  return name === a.domainWithoutSuffix?.toLowerCase() && name.length >= 3 && !!words && !words.has(name.replace(/-/g, ""))
+}
+/** `words`: the dictionary that decides which names are distinctive across suffixes (injected in tests; none fails closed). */
+export function selfServe(html: string, base: string, words: Set<string> | null = systemWords()): string | null {
+  const found = links(html, base).find((l) => {
+    const target = decoded(l.href)
+    if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
+    if (appStore(l.href, base)) return true
+    return brandHost(l.href, base, words) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+  })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
 
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
-const TERMS_CONTENT = [/\d+(?:\.\d+)?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
+// Bounded figures ("30%", "$25"), never a run of digits matched from every position.
+const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\d.,]{0,9}(?![\d.,]))`
+// A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
+const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
+// A concrete term carries its value: a number of days, an amount, a schedule or a named method.
+const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
+const CONCRETE_TERM = new RegExp([
+  String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
+  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
+  String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
+  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
+  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
+  String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
+  String.raw`\bminimum payout[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|dollars?)\b)`,
+  String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
+].join("|"), "i")
+// Terms announced, not published: an announcement within the window cancels the inline reading (precision first).
+const NOT_YET = /coming soon|to be announced|\btb[ad]\b/i
+const TERMS_CONTENT = [/(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
  * A link to the program's terms or agreement (a site-wide Terms of Service link
  * does not count), or terms published on the page itself: the heading wording plus
@@ -322,9 +415,18 @@ export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const text = visibleText(html)
+  // Markers found once over the whole text, then compared by distance: a window slice could cut one in half.
+  const markers = [...text.matchAll(new RegExp(NOT_YET.source, "gi"))].map((m) => m.index!)
+  const announced = (at: number) => markers.some((m) => Math.abs(m - at) <= 150)
   const inline = TERMS_LINK.exec(text)
-  if (!inline || /coming soon|to be announced|tba\b/i.test(text.slice(inline.index, inline.index + 120))) return null
-  return TERMS_CONTENT.filter((re) => re.test(text)).length >= 2 ? `on page: ${inline[0]}` : null
+  if (inline && !announced(inline.index) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
+    return `on page: ${inline[0]}`
+  }
+  // Terms published on the page without a "terms" heading: a commission figure next to commission wording,
+  // plus at least one concrete term (cookie or attribution window, payout schedule or method).
+  const figure = COMMISSION_FIGURE.exec(text)
+  const concrete = CONCRETE_TERM.exec(text)
+  return figure && concrete && !announced(figure.index) && !announced(concrete.index) ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 
 /**
@@ -724,12 +826,21 @@ async function child() {
   })
 }
 
+/**
+ * --rescan-html re-reads every page (the HTML checks changed) but keeps cached PageSpeed
+ * and DataForSEO readings: it makes no paid or quota call, whatever else is on the line.
+ */
+export function runOptions(args: string[]) {
+  const rescanHtml = args.includes("--rescan-html")
+  return { rescanHtml, psi: args.includes("--psi") && !rescanHtml, seo: args.includes("--seo") && !rescanHtml }
+}
+
 async function main() {
   const args = process.argv.slice(2)
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
-  const psi = args.includes("--psi")
-  const seo = args.includes("--seo")
+  const { rescanHtml, psi, seo } = runOptions(args)
+  if (rescanHtml && (args.includes("--psi") || args.includes("--seo"))) console.log("--rescan-html: --psi and --seo ignored")
   // Lengths only, never values: confirms the credentials reached the run before any call.
   if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
   if (seo) console.log(`DATAFORSEO_LOGIN length ${process.env.DATAFORSEO_LOGIN?.length ?? 0}, DATAFORSEO_PASSWORD length ${process.env.DATAFORSEO_PASSWORD?.length ?? 0}`)
@@ -754,7 +865,11 @@ async function main() {
       const cached = existsSync(file) ? readCache(file, p.slug) : null
       const wantPsi = psi && !psiStopped && (!cached || cached.checks.P5.evidence === "PageSpeed not run")
       let r: Result
-      if (cached && !wantPsi) {
+      if (rescanHtml) {
+        // A program with no cache keeps P5 and P6 as the scan leaves them (PageSpeed not run, P6 not asked).
+        const { result } = await scanIsolated(p, { scan: true, psi: false }, 120_000)
+        r = cached ? { ...result, checks: { ...result.checks, P5: cached.checks.P5, P6: cached.checks.P6 } } : result
+      } else if (cached && !wantPsi) {
         r = cached
       } else {
         const { result, psi429 } = await scanIsolated(p, { scan: !cached, psi: wantPsi }, wantPsi ? 240_000 : 120_000)

@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -228,6 +228,119 @@ test("brand-page readers", () => {
   assert.equal(selfServe(`<a href="https://zoom.us/webinar/register/1">Register</a>`, "https://brand.com"), null, "event registration")
   assert.equal(selfServe(`<a href="/newsletter">Sign up for our newsletter</a>`, "https://brand.com"), null)
   assert.ok(selfServe(`<a href="https://app.brand.com/register">Create account</a>`, "https://brand.com"), "the app subdomain counts")
+})
+
+test("fixes from the blind sample (SAMPLE-40.md): each miss and false positive, as found", () => {
+  // P1: currency after the number counts; statistics and savings do not.
+  assert.ok(hasPrice("Basic ab 1,90 € User/Monat"), "seatti")
+  assert.ok(hasPrice("Team 49 EUR per seat"))
+  assert.equal(hasPrice("if a customer from churning saves you $50K, then it could be a great fit"), null, "june")
+  assert.equal(hasPrice("Brands of Every Size $2B+ Annual Retail Ad Spend Managed $25B"), null, "quartile")
+  assert.ok(hasPrice("Pro $12/mo, save $50K in churn"), "a real price next to a statistic still counts")
+  // P2: "Try X free", "Install X Free", non-English trial phrases; a free demo is not a trial.
+  assert.ok(hasTrial("Try Duplicator free on your site"), "duplicator")
+  assert.ok(hasTrial("Install Duplicator Free"), "duplicator")
+  assert.ok(hasTrial("Dùng thử miễn phí"), "vbee")
+  assert.ok(hasTrial("Jetzt kostenlos testen"))
+  assert.equal(hasTrial("Get your free demo today"), null)
+  assert.equal(hasTrial("Miễn phí vận chuyển"), null, "free shipping is not a free plan")
+  // P3: a brand sibling host, an app-store install, and a link wrapped in a large inline SVG.
+  assert.equal(selfServe(`<a href="https://console.neon.tech/signup">Sign up</a>`, "https://neon.com", new Set(["neon", "brand"])), null, "neon is a dictionary word: across suffixes it does not prove the brand (a known miss)")
+  assert.equal(selfServe(`<a href="https://other.tech/signup">Sign up</a>`, "https://neon.com"), null, "an unrelated host")
+  assert.ok(selfServe(`<a href="https://apps.shopify.com/fast-bundle-product-bundles">Install Now</a>`, "https://fastbundle.co"), "fast-bundle")
+  assert.ok(selfServe(`<a href="/signup"><svg>${"<path d='M0 0'/>".repeat(80)}</svg>Get started</a>`, "https://klap.app"), "klap")
+  assert.ok(selfServe(`<a href="https://crayo.ai/signup">Make an account</a>`, "https://crayo.ai"), "crayo")
+  // A2: terms published on the page without a "terms" heading.
+  assert.ok(termsLink(`<h2>Become an affiliate</h2><p>20% recurring commissions for life.</p><p>Our tracking cookie lasts 30 days.</p>`, "https://replygain.com"), "replygain")
+  assert.ok(termsLink(`<p>Earn 30% of every payment for 12 months.</p><p>Referrals are tracked with a 90 day cookie.</p>`, "https://pumpgtm.com"), "pumpgtm")
+  assert.equal(termsLink(`<p>Earn 30% commission. Terms coming soon.</p>`, "https://brand.com"), null, "a figure with no concrete term")
+  assert.equal(termsLink(`<p>Our tracking cookie lasts 30 days.</p>`, "https://brand.com"), null, "a term with no commission figure")
+})
+
+test("review of the fixes (PR #364 r1): false positives and long digit runs", () => {
+  // Long digit runs: every reader stays linear (was quadratic: 1.2 s at 64k digits).
+  for (const text of ["$" + "1".repeat(64_000) + "K", "1".repeat(64_000), "1.".repeat(32_000) + " USD", "commission " + "9".repeat(64_000) + "%"]) {
+    const t0 = performance.now()
+    hasPrice(text)
+    termsLink(`<p>${text}</p>`, "https://brand.com")
+    hasTrial(text)
+    assert.ok(performance.now() - t0 < 150, `${text.slice(0, 12)}… took ${Math.round(performance.now() - t0)} ms`)
+  }
+  // P1: a reduction is not a price.
+  assert.equal(hasPrice("Customer acquisition cost reduced by 49 € with our platform. Contact sales for pricing."), null)
+  // P2: a free demo or free shipping after "try … free" is not a trial; CJK phrasings count.
+  assert.equal(hasTrial("Try our free demo today"), null)
+  assert.equal(hasTrial("Try our service for free shipping"), null)
+  assert.equal(hasTrial("Try our free online demo today"), null)
+  assert.equal(hasTrial("Try our service for free standard shipping"), null)
+  assert.ok(hasTrial("Start for free with our team"), "words after free that are not a demo")
+  assert.ok(hasTrial("無料トライアルを開始"))
+  assert.ok(hasTrial("立即免费试用"))
+  // P3: the public suffix list decides the name; app stores need the exact host, a listing and install wording.
+  assert.equal(selfServe(`<a href="https://unrelated.co.uk/signup">Sign up</a>`, "https://brand.co.uk"), null)
+  assert.equal(selfServe(`<a href="https://brand.io/signup">Sign up</a>`, "https://brand.co.uk", new Set(["neon", "brand"])), null)
+  assert.ok(selfServe(`<a href="https://ads.snapchat.com/getstarted">Get Started</a>`, "https://forbusiness.snapchat.com"), "another subdomain of the same domain")
+  assert.ok(selfServe(`<a href="https://app.n8n.cloud/register">Get started</a>`, "https://n8n.io", new Set(["neon", "brand"])), "a distinctive name under another suffix")
+  assert.equal(selfServe(`<a href="https://app.n8n.cloud/register">Get started</a>`, "https://n8n.io", null), null, "without a dictionary, no name is distinctive (fails closed)")
+  assert.equal(selfServe(`<a href="https://apps.shopify.com.evil.test/x">Install</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/">Browse apps</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/partners/brand-studio">Apps</a>`, "https://brand.com"), null, "a developer page")
+  assert.equal(selfServe(`<a href="https://wordpress.org/plugins/gdpr-cookie-compliance/">Powered by GDPR Cookie Compliance</a>`, "https://ninjapromo.io"), null, "ninja-promo: a third-party plugin in the footer")
+  assert.ok(selfServe(`<a href="https://wordpress.org/plugins/seo-by-rank-math/#reviews">WP.org</a>`, "https://rankmath.com"), "rank-math: the brand's own listing")
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/mylens-ai-webpage/phglephbecffklifllmgaojdpaaaaaaa">Chrome Extension</a>`, "https://mylens.ai"), "mylens")
+  assert.ok(selfServe(`<a href="https://apps.apple.com/app/suno-make-and-explore-music/id6480136315">iOS app</a>`, "https://suno.com"), "suno")
+  assert.equal(selfServe(`<a href="https://apps.apple.com/app/inbox-zero/id1">iOS app</a>`, "https://box.com"), null, "a short name is a whole word, not a substring")
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/bread-recipes">Install</a>`, "https://read.com"), null, "a substring is not the name")
+  assert.equal(selfServe(`<a href="https://wordpress.org/plugins/integration-for-rank-math/">Powered by Third Party</a>`, "https://rankmath.com"), null, "an integration by another developer")
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/unrelated/?ref=rankmath">Install</a>`, "https://rankmath.com"), null, "a tracking parameter is not the listing")
+  assert.equal(selfServe(`<a href="https://apps.shopify.com/unrelated/?ref=box">Install</a>`, "https://box.com"), null)
+  assert.ok(selfServe(`<a href="https://play.google.com/store/apps/details?id=com.datadog.app">Get it on Google Play</a>`, "https://www.datadog.com"), "the package id names the brand")
+  // A2: billing copy is not program terms; an unannounced window is not a term; "coming soon" applies first.
+  assert.equal(termsLink(`<p>$29 recurring subscription, paid monthly.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window to be announced.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window TBD.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>Affiliate program terms are coming soon. 30% commission, 60-day cookie.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>Affiliate program terms. Coming soon. Earn 30% commission, 60-day cookie.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>Coming soon. 30% commission, 60-day cookie.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Minimum payout to be announced.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Payouts via TBD.</p>`, "https://brand.com"), null)
+  assert.ok(termsLink(`<p>30% commission. Payouts via PayPal, minimum payout $50.</p>`, "https://brand.com"))
+  assert.ok(termsLink(`<p>Earn 40% recurring commission. Payouts via crypto or PayPal.</p>`, "https://brand.com"))
+  assert.ok(termsLink(`<p>Earn up to 40% commission. The minimum payout for affiliates is 50 USD.</p>`, "https://brand.com"))
+  assert.ok(termsLink(`<p>Earn 30% on every sale. Our cookie life is 30 days.</p>${"<p>Lorem ipsum dolor sit amet.</p>".repeat(10)}<p>New partner program dashboard coming soon.</p>`, "https://brand.com"), "burstyai: an unrelated 'coming soon' far away")
+  assert.ok(termsLink(`<p>30% commission on every sale. Attribution window of 60 days.</p>`, "https://brand.com"))
+})
+
+test("review of the fixes (PR #364 r3): store routes, valued terms, announcement distance, freebies", () => {
+  // The store matcher stays linear on a long listing identity (was cubic: 3.7 s at 1,600 words).
+  const t0 = performance.now()
+  selfServe(`<a href="https://apps.shopify.com/${Array(1600).fill("x").join("-")}">Install</a>`, "https://acme.com")
+  assert.ok(performance.now() - t0 < 50, `took ${Math.round(performance.now() - t0)} ms`)
+  // Store routes must be complete listing routes.
+  assert.equal(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math">Install</a>`, "https://rankmath.com"), null)
+  assert.equal(selfServe(`<a href="https://addons.mozilla.org/invalid/addon/rank-math/garbage">Install</a>`, "https://rankmath.com"), null)
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math-seo/${"a".repeat(32)}">Add to Chrome</a>`, "https://rankmath.com"))
+  assert.ok(selfServe(`<a href="https://addons.mozilla.org/en-US/firefox/addon/rank-math/">Add to Firefox</a>`, "https://rankmath.com"))
+  // A2 terms carry a value of the right kind.
+  assert.equal(termsLink(`<p>30% commission. Cookie duration details are in section 2.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Attribution window: see section 2.</p>`, "https://brand.com"), null)
+  assert.equal(termsLink(`<p>30% commission. Payouts via checklist to be determined.</p>`, "https://brand.com"), null)
+  assert.ok(termsLink(`<p>30% commission. Our cookie lasts 60 days.</p>`, "https://brand.com"))
+  assert.ok(termsLink(`<p>30% commission. Cookie window: 30-day.</p>`, "https://brand.com"))
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math-seo/${"b".repeat(32)}/reviews">4.8 on Google</a>`, "https://rankmath.com"), "a tab of the listing")
+  assert.equal(termsLink(`<p>30% commission. Paid monthly. ${"x".repeat(126)} Coming soon.</p>`, "https://brand.com"), null, "a marker at the window's edge")
+  // Page text joins buttons: "Start for free" followed by the next button's label is still a trial.
+  // Known limit: an unlisted modifier ("free video demo") is read as a trial; text alone cannot tell it from two buttons.
+  assert.ok(hasTrial("Start for Free Book a demo"))
+  assert.ok(hasTrial("Try Brex for free Log in"))
+  assert.ok(hasTrial("Try Duplicator free on your site"))
+  assert.ok(hasTrial("Install Duplicator Free"))
+  assert.ok(hasTrial("Start for free, no credit card"))
+})
+
+test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
+  assert.deepEqual(runOptions(["--rescan-html", "--psi", "--seo"]), { rescanHtml: true, psi: false, seo: false })
+  assert.deepEqual(runOptions(["--psi", "--seo"]), { rescanHtml: false, psi: true, seo: true })
 })
 
 test("program-page terms: a qualifying link or published terms, not a mention", () => {
