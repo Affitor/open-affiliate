@@ -4,6 +4,9 @@ url: https://get.nudgen.net
 category: Email Marketing
 tags: [email-marketing, email-retention, email-automation, saas]
 
+# Terms re-read by a maintainer on 2026-10-21: get.nudgen.net/robots.txt allows /affiliate, and the
+# Terms of Service (last updated October 21, 2026) do not bar automated access. The FAQ answers are
+# collapsed on the page and were opened one by one.
 # "Earn 10% recurring monthly commission for the life of every customer." (get.nudgen.net/affiliate, checked 2026-10-21)
 # "Each time your referral renews their subscription, you earn 10% recurring commission. For life, with no cap." (get.nudgen.net/affiliate, checked 2026-10-21)
 # "All commissions are recurring across all paid plans" (get.nudgen.net/affiliate, checked 2026-10-21)
@@ -21,9 +24,10 @@ commission:
 cookie_days: 30
 tracking_method: cookie
 
-# "the minimum payout threshold is $50. If your earnings are below this amount, they will automatically roll forward to the next month" (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
-# "Currently, we only allow payouts via PayPal." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
-# "paid monthly for as long as they stay subscribed." (get.nudgen.net/affiliate, checked 2026-10-21)
+# "$50 minimum payout threshold" (get.nudgen.net/affiliate, checked 2026-10-21)
+# "Yes, the minimum payout threshold is $50. If your earnings are below this amount, they will automatically roll forward to the next month until the threshold is met." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
+# "Currently, we only allow payouts via PayPal. Please ensure your PayPal email address is correctly configured in your partner dashboard to receive your monthly earnings." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
+# "Recurring commission on every referral you bring in and paid monthly for as long as they stay subscribed." (get.nudgen.net/affiliate, checked 2026-10-21)
 payout:
   minimum: 50
   currency: USD
@@ -32,10 +36,11 @@ payout:
   conditions: "Payouts are monthly by PayPal. The minimum is $50, and a lower balance rolls forward to the next month."
 
 signup_url: https://get.nudgen.net/affiliate
-# "You'll be redirected to your affiliate dashboard where you can sign up immediately. No manual approval needed." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
+# "Click the "Become a Partner" button on this page. You'll be redirected to your affiliate dashboard where you can sign up immediately. No manual approval needed." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
 approval: auto
 
-# "self-referrals are strictly prohibited" (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
+# "No, self-referrals are strictly prohibited and considered illegal within our program. Using your own affiliate link to create accounts for yourself or your own companies will result in disqualification and forfeiture of commissions." (get.nudgen.net/affiliate FAQ, checked 2026-10-21)
+# "We allow paid ads, social media, blogs, or email. You have full marketing freedom." (get.nudgen.net/affiliate, checked 2026-10-21)
 restrictions:
   - "Self-referrals are prohibited. Using your affiliate link for your own accounts or companies leads to disqualification and forfeiture of commissions."
 
@@ -67,8 +72,11 @@ agents:
     - "Running AI-assisted email campaigns for a growing business"
     - "Promoting an email product that pays lifetime recurring commission"
 
-verified: false
+verified: true
 submitted_by: "@toannhu96"
 created_at: "2026-10-21"
+updated_at: "2026-10-21"
+last_verified_at: "2026-10-21"
+status: active
 kind: affiliate
 source: community
