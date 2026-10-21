@@ -3,7 +3,8 @@
  * the way ora.ai reads a site (HTTP status, HTML links and text, PageSpeed).
  * Shadow only: nothing here changes a published score.
  *
- *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--psi] [--seo] [--rescan-html]
+ *   npx tsx scripts/oas-tier1.ts [--limit N] [--only slug] [--slugs file] [--out dir] [--psi] [--seo] [--rescan-html]
+ *     [--record dir | --replay dir]
  *
  * Every request names itself (UA "OpenAffiliate"), obeys the host's robots.txt,
  * and is refused for schema/blocked-hosts.json hosts at every redirect hop,
@@ -16,11 +17,15 @@
  * --seo adds P6 from DataForSEO (Google Ads search volume, worldwide, DATAFORSEO_LOGIN
  * and DATAFORSEO_PASSWORD): up to 1,000 brand names per request, a hard spend cap per
  * run, and every request's real cost logged to dataforseo-costs.json.
- * Writes .internal/oas/tier1/dry-run.json and distribution.md.
+ * Writes .internal/oas/tier1/dry-run.json and distribution.md (or under --out).
+ * --record saves every response the scan receives (robots.txt included); --replay serves
+ * those saved responses and fails any URL not saved, so two versions of the readers can
+ * be compared on the same bytes, without the network.
  */
 import { fork } from "node:child_process"
+import { createHash } from "node:crypto"
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
-import { join } from "node:path"
+import { join, resolve } from "node:path"
 import { parse as parseDomain } from "tldts"
 import { parse } from "yaml"
 import { blockedReason, REDIRECTS } from "./blocked-hosts"
@@ -130,6 +135,36 @@ const robotsCache = new Map<string, Promise<string | null>>()
 export function setFetcher(stub: typeof fetch): void {
   fetcher = stub
   robotsCache.clear()
+}
+
+/** The largest body any reader asks for (PageSpeed JSON): a recording keeps one byte more, so a cut is replayed as a cut. */
+const RECORD_BYTES = PSI_BYTES + 1
+const recordKey = (url: string) => createHash("sha256").update(url).digest("hex")
+const NULL_BODY = new Set([101, 204, 205, 304])
+
+/** Wraps a fetch: each response is saved under `dir` (status, Location, body up to RECORD_BYTES), then handed on unchanged. */
+export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch {
+  mkdirSync(dir, { recursive: true })
+  return async (input, init) => {
+    const url = String(input)
+    const res = await base(input, init)
+    const { text } = await readCapped(res, RECORD_BYTES)
+    const body = Buffer.from(text)
+    writeFileSync(join(dir, `${recordKey(url)}.json`), JSON.stringify({ url, status: res.status, location: res.headers.get("location") }))
+    writeFileSync(join(dir, `${recordKey(url)}.body`), body)
+    return new Response(NULL_BODY.has(res.status) ? null : body, { status: res.status, headers: res.headers })
+  }
+}
+
+/** Serves responses saved by recordingFetcher; a URL that was not saved fails like a network error. */
+export function replayFetcher(dir: string): typeof fetch {
+  return async (input) => {
+    const key = recordKey(String(input))
+    if (!existsSync(join(dir, `${key}.json`))) throw new Error("not recorded")
+    const meta = JSON.parse(readFileSync(join(dir, `${key}.json`), "utf8")) as { status: number; location: string | null }
+    const headers = new Headers(meta.location ? { location: meta.location } : {})
+    return new Response(NULL_BODY.has(meta.status) ? null : readFileSync(join(dir, `${key}.body`)), { status: meta.status, headers })
+  }
 }
 
 /** Reads at most `max` bytes of a body, then cancels the rest; `truncated` says whether anything was cut. */
@@ -809,6 +844,8 @@ export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, 
 async function child() {
   // An orphan (the parent died or was stopped) must not wait forever for a PageSpeed permit.
   process.once("disconnect", () => process.exit(1))
+  if (process.env.OAS_REPLAY) setFetcher(replayFetcher(process.env.OAS_REPLAY))
+  else if (process.env.OAS_RECORD) setFetcher(recordingFetcher(process.env.OAS_RECORD, fetcher))
   process.once("message", async ({ program, scan, psi }: { program: Program; scan: boolean; psi: boolean }) => {
     const result = scan
       ? await scanProgram(program).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
@@ -839,16 +876,26 @@ async function main() {
   const args = process.argv.slice(2)
   const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity
   const only = args.includes("--only") ? args[args.indexOf("--only") + 1] : null
+  const flag = (name: string) => (args.includes(name) ? resolve(args[args.indexOf(name) + 1]) : null)
+  // --slugs: one slug per line (a sample); --out: a separate output and cache, so a sample run never touches the registry run.
+  const slugs = flag("--slugs") ? new Set(readFileSync(flag("--slugs")!, "utf8").split("\n").map((l) => l.trim()).filter(Boolean)) : null
+  const record = flag("--record")
+  const replay = flag("--replay")
+  if (record && replay) throw new Error("--record and --replay are exclusive")
+  // Children inherit the environment: they install the recording or replaying fetcher.
+  if (record) process.env.OAS_RECORD = record
+  if (replay) process.env.OAS_REPLAY = replay
   const { rescanHtml, psi, seo } = runOptions(args)
   if (rescanHtml && (args.includes("--psi") || args.includes("--seo"))) console.log("--rescan-html: --psi and --seo ignored")
   // Lengths only, never values: confirms the credentials reached the run before any call.
   if (psi) console.log(`PAGESPEED_API_KEY length ${process.env.PAGESPEED_API_KEY?.length ?? 0}`)
   if (seo) console.log(`DATAFORSEO_LOGIN length ${process.env.DATAFORSEO_LOGIN?.length ?? 0}, DATAFORSEO_PASSWORD length ${process.env.DATAFORSEO_PASSWORD?.length ?? 0}`)
-  const out = join(process.cwd(), ".internal", "oas", "tier1")
+  const out = flag("--out") ?? join(process.cwd(), ".internal", "oas", "tier1")
   const cache = join(out, "cache")
   mkdirSync(cache, { recursive: true })
   const programs = readdirSync("programs").filter((f) => f.endsWith(".yaml"))
     .filter((f) => !only || f === `${only}.yaml`)
+    .filter((f) => !slugs || slugs.has(f.slice(0, -".yaml".length)))
     .slice(0, limit)
     .map((f) => loadProgram(join("programs", f)))
   const results: Result[] = []

@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  recordingFetcher, replayFetcher, runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -86,6 +86,23 @@ test("a robots.txt redirect to a blocked host is never requested; the site count
   assert.deepEqual(await politeGet("https://brand.test/"), { refused: "robots.txt unreachable" })
   assert.ok(!requested.some((u) => u.includes("partnerstack.com")), requested.join(", "))
   assert.ok(!requested.includes("https://brand.test/"), "the page itself is not requested either")
+})
+
+test("--record saves every response and --replay serves the same bytes without the network", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "oas-record-"))
+  const routes: Record<string, () => Response> = {
+    "https://brand.test/robots.txt": html("User-agent: *\nAllow: /"),
+    "https://brand.test/go": redirect("https://brand.test/pricing"),
+    "https://brand.test/pricing": html("<p>Pro $29/mo</p>"),
+  }
+  const live = (async (input: string | URL | Request) => (routes[String(input)] ?? html("", 404))()) as typeof fetch
+  setFetcher(recordingFetcher(dir, live))
+  const recorded = await politeGet("https://brand.test/go")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://brand.test/go"), recorded, "the redirect, robots.txt and page replay as recorded")
+  assert.equal((recorded as { url: string }).url, "https://brand.test/pricing")
+  assert.match(JSON.stringify(await politeGet("https://brand.test/other")), /fetch failed \(Error\)/, "a URL that was not recorded fails, never reaches the network")
+  rmSync(dir, { recursive: true, force: true })
 })
 
 test("a page redirect to a blocked host stops before the request", async () => {
