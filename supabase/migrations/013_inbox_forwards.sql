@@ -8,9 +8,10 @@
 -- timestamps.
 --
 -- status:
---   pending       no POST yet, or the first POST was refused with an HTTP
---                 error (nothing was sent); may be sent at any age
---   uncertain     a POST was made and its outcome is unknown; retried only
+--   pending       no POST yet, or the first POST was definitely refused (a
+--                 4xx other than 409/429); may be sent at any age
+--   uncertain     a POST was made and may have been accepted (no answer,
+--                 5xx, 409, 429); retried only
 --                 with the same Idempotency-Key and payload while
 --                 first_post_at is under 23 h old (Resend keeps keys 24 h)
 --   sent          Resend answered 2xx; never sent again

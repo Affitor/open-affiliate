@@ -56,7 +56,9 @@ function fakeResend(email: Email = {}, files: FakeFile[] = [], clock = { now: NO
   const calls: string[] = []
   const sends: { key: string | null; body: Record<string, unknown> }[] = []
   const keys = new Map<string, { body: string; at: number }>()
-  const state = { accepted: 0, loseResponses: 0, sendStatus: 200 }
+  // sendStatus: Resend refuses (nothing sent). acceptThenStatus: Resend accepts the
+  // send but answers with this status once (the accepted-but-5xx case).
+  const state = { accepted: 0, loseResponses: 0, sendStatus: 200, acceptThenStatus: 0 }
   const received = {
     from: "alice@sender.test",
     to: ["hello@openaffiliate.dev"],
@@ -111,6 +113,11 @@ function fakeResend(email: Email = {}, files: FakeFile[] = [], clock = { now: NO
       } else {
         if (key) keys.set(key, { body: String(init.body), at: clock.now })
         state.accepted++
+      }
+      if (state.acceptThenStatus) {
+        const status = state.acceptThenStatus
+        state.acceptThenStatus = 0
+        return Response.json({ name: "error" }, { status })
       }
       if (state.loseResponses > 0) {
         state.loseResponses--
@@ -309,11 +316,11 @@ test("attachments: included up to the cap, the rest listed by name; inline cid k
   assert.ok(!resend.calls.some((c) => c.startsWith("GET https://files.test/a1")), "the oversized file is never downloaded")
 })
 
-test("outage then late recovery: refused first POSTs keep it sendable at any age; one send", async () => {
+test("first POST refused with 422 → pending, sendable later at any age; one send", async () => {
   const clock = { now: NOW }
   const resend = fakeResend({}, [], clock)
-  resend.state.sendStatus = 503
-  for (const at of [0, 5 * 60_000, 2 * HOUR, 10 * HOUR, 20 * HOUR]) {
+  resend.state.sendStatus = 422
+  for (const at of [0, 5 * 60_000, 20 * HOUR]) {
     clock.now = NOW + at
     assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500, `at ${at}`)
     assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "pending")
@@ -321,13 +328,42 @@ test("outage then late recovery: refused first POSTs keep it sendable at any age
   }
   resend.state.sendStatus = 200
   clock.now = NOW + 27.6 * HOUR
-  const late = await handleInboundEmail(webhookAt(clock), deps(resend))
-  assert.equal(late.status, 200)
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
   assert.equal(resend.state.accepted, 1)
   clock.now = NOW + 40 * HOUR
   assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
   assert.equal(resend.state.accepted, 1, "a replay after it was sent sends nothing")
-  assert.equal(resend.sends.length, 6)
+})
+
+test("first POST accepted by Resend but answered 503 → uncertain; retry same key → one send", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.acceptThenStatus = 503
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  clock.now = NOW + 5 * 60_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.sends.length, 2)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("5xx or 429 on every POST for 23 h → needs_review, no POST after the key window", async () => {
+  for (const status of [503, 429]) {
+    const clock = { now: NOW }
+    const resend = fakeResend({}, [], clock)
+    resend.state.sendStatus = status
+    for (const at of [0, 2 * HOUR, 22 * HOUR]) {
+      clock.now = NOW + at
+      assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+      assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain", `${status} at ${at}`)
+    }
+    clock.now = NOW + 27.6 * HOUR
+    resend.state.sendStatus = 200
+    const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+    assert.deepEqual(await res.json(), { needsReview: true })
+    assert.equal(resend.sends.length, 3, `${status}: no POST after 23 h`)
+  }
 })
 
 test("outage of the receiving API (no POST yet) then recovery 27.6 h later → sent", async () => {

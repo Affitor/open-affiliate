@@ -273,10 +273,10 @@ function failureReason(error: unknown): string {
  * Ledger flow (one row per email id, see migration 013):
  * - sent or needs_review → 200, no POST, whatever the mail's age;
  * - held by another invocation → 409, Resend retries later;
- * - pending (never POSTed, or the first POST was refused with an HTTP error)
- *   → build and POST, at any age, so an outage followed by a late recovery
- *   still forwards once;
- * - uncertain (a POST went out, outcome unknown) → re-POST the same payload
+ * - pending (never POSTed, or the first POST was definitely refused: a 4xx
+ *   other than 409/429) → build and POST at any age, so a delayed delivery
+ *   or a read-side outage followed by a late recovery still forwards once;
+ * - uncertain (a POST went out, outcome unknown: no answer, 5xx, 409, 429) → re-POST the same payload
  *   with the same key only while the first POST is under 23 h old, i.e. while
  *   Resend still holds the key; after that, or if the payload would differ,
  *   needs_review: 200 without a POST, never a blind second send.
@@ -393,11 +393,15 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
       console.log("inbound-email: forwarded", emailId, forward.bytes)
       return json(200, { forwarded: true })
     }
-    // An HTTP error on the FIRST POST means Resend refused it: back to
-    // pending, so it can be sent later at any age. 409 (same key in flight or
-    // with another payload) and errors on a retry of an uncertain POST keep it
-    // uncertain. Status only: the response body can echo addresses.
-    if (row.status === "pending" && sent.status !== 409) onFailure = { status: "pending", first_post_at: null, payload_hash: null }
+    // Only a definite refusal of the FIRST POST (a 4xx other than 409 and
+    // 429) goes back to pending, to be sent later at any age. A 5xx, 409
+    // (same key in flight or with another payload) or 429 may still have
+    // been accepted, so it stays uncertain like a lost response: replayed
+    // under the same key for 23 h, then needs_review. A rare long outage thus
+    // ends in needs_review (the owner checks the Resend dashboard) rather
+    // than risking a second copy. Status only: the body can echo addresses.
+    const refused = sent.status >= 400 && sent.status < 500 && sent.status !== 409 && sent.status !== 429
+    if (row.status === "pending" && refused) onFailure = { status: "pending", first_post_at: null, payload_hash: null }
     throw new Error(`send ${sent.status}`)
   } catch (error) {
     await release(onFailure)
