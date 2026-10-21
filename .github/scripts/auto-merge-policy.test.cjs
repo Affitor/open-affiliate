@@ -367,9 +367,8 @@ commission:
   value: ${rate}
   currency: USD
   duration: 12 months
-  conditions: Paid 15 days after sale.
+  conditions: ${JSON.stringify(`Commissions are held 15 days after the sale for refunds and chargebacks. ${AFFITOR_SYNC.network_terms.payout_conditions}`)}
 cookie_days: 90
-attribution: last-click
 tracking_method: cookie
 payout:
   minimum: 50
@@ -577,6 +576,20 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
     files: [modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval_time: instant\n" }))],
   })
   assert.match(stale.reasons.join("\n"), /approval_time is "instant", Affitor says absent/)
+
+  // Affitor states no attribution model and no payout date: either one in a
+  // sync pull request is blocked.
+  for (const [head, reason] of [
+    [syncedYaml("alpha", { rate: 25, extra: "attribution: last-click\n" }), /attribution is "last-click", Affitor says absent/],
+    [
+      syncedYaml("alpha", { rate: 25 }).replace(/conditions: .*\n/, "conditions: Paid 15 days after sale.\n"),
+      /commission\.conditions is "Paid 15 days after sale\.", Affitor says "Commissions are held 15 days/,
+    ],
+  ]) {
+    const result = await evaluateSync({ files: [modified("alpha", syncedYaml("alpha"), head)] })
+    assert.equal(result.eligible, false)
+    assert.match(result.reasons.join("\n"), reason)
+  }
 
   // approval and payout.frequency are the data lane's: a sync that adds,
   // changes or deletes one is blocked; one it leaves alone passes.

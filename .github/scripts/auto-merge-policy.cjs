@@ -336,6 +336,7 @@ function affitorNotFound(body, config) {
 const ABSENT = Symbol("absent")
 // approval and payout.frequency are the data lane's (scripts/sync-affitor.ts).
 const UNPUBLISHED = [
+  "attribution",
   "approval_time",
   "marketing_materials",
   "api_available",
@@ -413,10 +414,11 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
     "commission.value": rate > 0 ? rate : fixed,
     "commission.currency": "USD",
     "commission.duration": duration,
+    // Mirrors affitorConditions() in scripts/sync-affitor.ts.
     "commission.conditions":
-      hold > 0 ? `Paid ${hold} ${hold === 1 ? "day" : "days"} after sale.` : null,
+      (hold > 0 ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : "") +
+      AFFITOR_SYNC.network_terms.payout_conditions,
     cookie_days: program.cookie_window_days ?? ABSENT,
-    attribution: "last-click",
     tracking_method: "cookie",
     "payout.minimum": program.payout_threshold ?? ABSENT,
     "payout.currency": "USD",
