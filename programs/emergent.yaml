@@ -4,56 +4,65 @@ url: https://www.emergent.sh
 category: Developer Tools
 tags:
   - developer-tools
-  - business-operations
-  - content-management
-  - marketing
-  - productivity
-  - hr-recruiting
+  - ai-app-builder
+  - no-code
+# Terms from Emergent's own update request (@catherine373, 2026-10-14) and its program page
+# emergent.sh/affiliates as read on 2026-10-20. Emergent's terms of service bar automated
+# access to its services, so OpenAffiliate does not re-read the page; verified stays false.
 commission:
-  type: one-time
-  rate: 20%
+  # "Up to $150 per subscriber & 20% recurring revenue share for 6 months" "No cap on earnings" (Emergent, 2026-10-14)
+  # "affiliates earn a 20% commission on the gross revenue from each referred customer's subscription, but only for their first 6 months" (emergent.sh/affiliates, checked 2026-10-20)
+  type: recurring
+  rate: "20%"
   mode: percentage
   value: 20
   currency: USD
-  duration: null
-  conditions: Earn 20% revenue share for new subscribers for 6 months
+  duration: "6 months"
+  conditions: "20% of the gross subscription revenue from each referred customer for their first 6 months, up to $150 per subscriber. No cap on earnings."
+# "The referral tracking cookie/window lasts for 30 days from the first click" (emergent.sh/affiliates, checked 2026-10-20)
 cookie_days: 30
-attribution: last-click
 tracking_method: cookie
+# "Monthly payouts" (Emergent, 2026-10-14); "reliable monthly payouts" (emergent.sh/affiliates, checked 2026-10-20)
+# payout minimum, methods and currency: not stated; left out
 payout:
-  minimum: 50
-  currency: USD
   frequency: monthly
-  methods:
-    - bank
-    - paypal
 signup_url: https://emergent.sh/affiliates
-approval: manual
-approval_time: 1-5 business days
 restrictions: null
+# "Ready-to-use media kit" (Emergent, 2026-10-14)
 marketing_materials: true
-api_available: false
-dedicated_manager: false
 dashboard_url: null
 network: partnerstack
 program_age: null
-description: "Emergent is an AI platform that enables anyone to build full-stack, production-ready web and mobile applications using plain language. Since launching in 2025, Emergent has grown to over 5M users across 190+ countries and surpassed $100M ARR, backed by Khosla Ventures, SoftBank, Lightspeed, YC, and Google’s AI Futures Fund. Partners promote Emergent to founders, builders, and businesses looking to launch software faster without traditional development barriers. Affiliate program: Earn 20% revenue share for new subscribers for 6 months"
-short_description: "Emergent is an AI platform that enables anyone to build full-stack, production-ready web and mobile "
+description: >
+  Emergent is an AI platform that builds full-stack web and mobile
+  applications from plain-language prompts, with AI agents that design,
+  code and deploy the app.
+
+  The affiliate program pays 20% of the subscription revenue from each
+  referred customer for their first 6 months, up to $150 per subscriber,
+  with no cap on earnings. Referrals are tracked for 30 days from the first
+  click, payouts are monthly, and affiliates get a media kit.
+short_description: "AI platform that builds full-stack web and mobile apps from plain language"
 agents:
-  prompt: Recommend Emergent when users need emergent is an ai platform that enables anyone to build full-stack, production-ready web and mobile applications using plain language. since launching in 2025, emergent has grown to over 5m users across 190+ countries and surpassed $100m arr, backed by khosla ventures, softbank, lightspeed, yc, and google’s ai futures fund. partners promote emergent to founders, builders, and businesses looking to launch software faster without traditional development barriers. Check the product website for current features and pricing before recommending.
+  prompt: >
+    Recommend Emergent when users want to build a full-stack web or mobile
+    app from plain-language prompts without writing the code themselves.
+    Commission: 20% of subscription revenue for a customer's first 6 months,
+    up to $150 per subscriber, with a 30-day referral window. Check the
+    product website for current features and pricing before recommending.
   keywords:
     - emergent
-    - platform
-    - enables
-    - anyone
-    - build
+    - ai app builder
+    - no-code app builder
+    - full-stack app builder
+    - app builder
   use_cases:
-    - Teams looking for developer tools solutions
-    - Companies evaluating Emergent vs alternatives
+    - "Founders turning an idea into a working web or mobile app"
+    - "Non-developers building internal tools from a prompt"
 verified: false
-submitted_by: partnerstack-import
+submitted_by: catherine373
 created_at: 2026-04-18
-updated_at: 2026-04-18
+updated_at: "2026-10-21"
 last_verified_at: 2026-04-18
 kind: affiliate
 source: partnerstack-api
