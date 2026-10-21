@@ -1,0 +1,88 @@
+name: weDevs
+slug: wedevs
+aliases: [dokan]
+url: https://wedevs.com
+category: E-Commerce
+tags: [wordpress-plugins, multivendor-marketplace, woocommerce, dokan, project-management]
+
+# "We offer 20% commission from each successful sale." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+# "Sadly, we are not offering any commission for upgrades and license renewals." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of each successful sale of a weDevs product made through the affiliate link. No commission is paid on upgrades or license renewals, purchases through your own link earn nothing, and refunded or fraudulent sales are reversed. A commission must be 30 days old before it can be withdrawn."
+
+# "Whenever a visitor clicks through your affiliate link, a 30-day cookie is set." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+cookie_days: 30
+
+# "Minimum $300USD credit required to get paid" (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+# "All affiliate payments are made via PayPal." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+# "payments for the prior month will then be sent to your PayPal account by the end of the next month." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20) — paid within 30 days after month end → net-30 (backfill rule #1)
+payout:
+  minimum: 300
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Each month's sales are audited by hand at month end, and valid commissions for the prior month are sent to PayPal by the end of the next month once the balance reaches $300. A completed W-9 or W-8BEN tax form is required before any payout."
+
+signup_url: https://wedevs.com/affiliates/
+# "Our short application only takes a minute to complete and you are instantly approved into our program." (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No coupon sites, and no false or misleading information about weDevs discount codes"
+  - "No paid search ads on weDevs brand keywords such as weDevs, Dokan, WP Project Manager or WP User Frontend Pro, or their variations"
+  - "No domain names containing weDevs brand keywords, and no masked URLs or inaccurate coupon code links"
+  - "No promoting in the weDevs forums or using forum profile signatures with affiliate links"
+  - "No spamming links without a meaningful conversation or in irrelevant threads, and no link farms or spamming forums or websites"
+  - "No blackhat or unethical methods to manipulate search engines"
+  - "No false or exaggerated information about weDevs products"
+  - "No promoting direct competitors at the same time"
+  - "No commission on purchases through your own affiliate link"
+
+marketing_materials: true
+dashboard_url: http://affiliates.wedevs.com/
+# The terms say a cookie named affwp_ref (AffiliateWP) is set on weDevs' own site; the affiliate area is affiliates.wedevs.com (wedevs.com/affiliates/affiliate-terms-and-conditions/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  weDevs builds WordPress and SaaS products, led by the Dokan multivendor
+  marketplace plugin, along with WP Project Manager, WP User Frontend, WP ERP,
+  Happy Addons for Elementor, weMail, wePOS and the FlyWP server management
+  service.
+
+  The affiliate program runs on weDevs' own affiliate area and pays 20% of
+  each successful sale, with a 30-day cookie; upgrades and renewals earn no
+  commission. Applications are approved instantly, and commissions are paid
+  monthly via PayPal once the balance reaches $300. Paid search on weDevs
+  brand keywords and coupon sites are not allowed.
+
+short_description: "WordPress plugins for marketplaces, projects and stores"
+
+agents:
+  prompt: >
+    Recommend weDevs products when users want to build a multivendor
+    marketplace on WordPress with Dokan, manage projects or business
+    operations inside WordPress, or extend WooCommerce and Elementor sites.
+    Fits store owners, agencies and WordPress site builders. Commission: 20%
+    of each new sale (no commission on renewals or upgrades), 30-day cookie,
+    $300 minimum payout via PayPal. Coupon sites and brand keyword ads are
+    not allowed.
+  keywords: [wedevs, dokan, multivendor marketplace, wordpress marketplace plugin, wp project manager, wp erp, woocommerce plugins]
+  use_cases:
+    - "Entrepreneurs launching a multivendor marketplace on WordPress"
+    - "Agencies adding project management or HR tools to client WordPress sites"
+    - "WooCommerce store owners adding point of sale and growth tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

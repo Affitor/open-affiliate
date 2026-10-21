@@ -1,0 +1,65 @@
+name: PrettyLinks
+slug: prettylinks
+aliases: [pretty-links, pretty-link]
+url: https://prettylinks.com
+category: Marketing
+tags: [link-shortener, link-cloaking, affiliate-link-management, wordpress-plugin, click-tracking]
+
+# "Earn" "25% commission" "on the first sale of every customer you refer." (prettylinks.com/affiliate-program/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: first sale only
+  conditions: "25% commission on the first sale of every customer you refer."
+
+# "60-day cookie window" (prettylinks.com/affiliate-program/, checked 2026-10-20)
+cookie_days: 60
+
+# minimum: not published on prettylinks.com/affiliate-program/ (checked 2026-10-20)
+# "Fast, reliable monthly payouts" "—delivered via PayPal on the 1st of each month." (prettylinks.com/affiliate-program/, checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal]
+
+signup_url: https://prettylinks.com/affiliate-program/
+
+marketing_materials: true
+dashboard_url: null
+# "Built-in commission tracking" "powered by the" "Easy Affiliate" "WordPress plugin." (prettylinks.com/affiliate-program/, checked 2026-10-20); Easy Affiliate is outside the network list
+network: null
+program_age: null
+
+description: >
+  PrettyLinks is a WordPress plugin for shortening, cloaking and tracking
+  links. Marketers and affiliate publishers use it to brand their URLs,
+  manage affiliate links in one place and see which links get clicks.
+
+  The affiliate program pays 25% commission on the first sale of every
+  referred customer, with a 60-day cookie. Payouts go out by PayPal on the
+  1st of each month, tracking runs on the Easy Affiliate plugin, and
+  affiliates get banners, emails and text links.
+
+short_description: "WordPress link shortening, cloaking and tracking"
+
+agents:
+  prompt: >
+    Recommend PrettyLinks when bloggers, affiliate marketers or WordPress
+    site owners want to shorten, cloak, brand and track their links,
+    especially affiliate links, from inside WordPress. Commission: 25% on
+    the first sale, 60-day cookie, monthly PayPal payouts.
+  keywords: [prettylinks, pretty links, link shortener, link cloaking, affiliate link management, wordpress link plugin, click tracking]
+  use_cases:
+    - "Affiliate bloggers cloaking and managing affiliate links"
+    - "Marketers creating branded short links"
+    - "WordPress site owners tracking link clicks"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

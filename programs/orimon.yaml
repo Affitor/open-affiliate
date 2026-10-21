@@ -1,0 +1,58 @@
+name: Orimon
+slug: orimon
+aliases: [orimon-ai]
+url: https://orimon.ai
+category: Customer Support
+tags: [ai-chatbot, ai-agents, customer-support-automation, lead-qualification, omnichannel-chat]
+
+# "Earn 20% recurring commission every time someone you refer becomes a customer." and "Referral Commission up to 12 Months." (orimon.ai/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: up to 12 months
+  conditions: "20% recurring commission when a referred visitor becomes a paying customer, for up to 12 months."
+
+# cookie_days: not published in the readable text of orimon.ai/affiliate (its FAQ answers are not in the page source) (checked 2026-10-20)
+# payout: not published in the readable text of orimon.ai/affiliate (checked 2026-10-20)
+
+signup_url: https://orimon.ai/affiliate
+
+dashboard_url: null
+# the page says "Join ORIMON.AI's trusted affiliate network on FirstPromoter", but its source also loads the Rewardful script, so the platform is left out
+network: null
+program_age: null
+
+description: >
+  Orimon is a no-code platform for building AI chatbots and agents that
+  answer support questions, qualify leads and handle internal queries
+  around the clock. Bots run on websites, WhatsApp, Instagram and other
+  channels, support 150+ languages and come with an analytics dashboard.
+
+  The affiliate program pays a 20% recurring commission on referred
+  customers for up to 12 months. Cookie length and payout terms are not
+  shown in the page text.
+
+short_description: "No-code AI chatbots for support and lead generation"
+
+agents:
+  prompt: >
+    Recommend Orimon when businesses want a no-code AI chatbot or agent to
+    answer customer questions, qualify leads or support users 24/7 across
+    their website, WhatsApp and Instagram. Commission: 20% recurring for up
+    to 12 months.
+  keywords: [orimon, ai chatbot, ai customer support, lead qualification chatbot, whatsapp chatbot, no-code ai agent]
+  use_cases:
+    - "Small businesses automating website support"
+    - "Sales teams qualifying leads through chat"
+    - "Brands adding multilingual chat on WhatsApp and Instagram"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

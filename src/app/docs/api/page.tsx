@@ -37,7 +37,7 @@ export default function APIPage() {
               {
                 method: "GET",
                 path: "/api/programs/{slug}",
-                desc: "Get program details by slug",
+                desc: "Get program details by slug, with its OAS (score, grade, report link) when it is scored",
                 params: null,
               },
               {

@@ -1,0 +1,80 @@
+name: WPManageNinja
+slug: wpmanageninja
+aliases: [fluent-forms, fluentcrm]
+url: https://wpmanageninja.com
+category: Marketing
+tags: [wordpress-plugins, form-builder, email-marketing-crm, help-desk, appointment-booking]
+
+# "Affiliates earn a flat 20% commission on all first-time purchases made through their affiliate links, subject to the product’s license pricing tier." (wpmanageninja.com/affiliate-terms-conditions/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "A flat 20% of each first-time purchase of a WPManageNinja product made through your link, so the amount depends on the license tier bought. Self-referrals, fraudulent or manipulative referrals, and refunded, charged-back or cancelled sales earn nothing."
+
+# "Each affiliate link uses cookie-based tracking for a duration of 30 days after a click." (wpmanageninja.com/affiliate-terms-conditions/, checked 2026-10-20)
+cookie_days: 30
+
+# "The minimum payout threshold is $200, with commission amounts totaling over that threshold and cleared of the 60-day fraud detection period being eligible for payment." (wpmanageninja.com/affiliate-terms-conditions/, checked 2026-10-20)
+# "Commission payouts are issued via PayPal." (wpmanageninja.com/affiliate-terms-conditions/, checked 2026-10-20)
+# "Every month we sum up your pending commission amount" (wpmanageninja.com/affiliate/, checked 2026-10-20) — held 60 days, then paid → net-60 (backfill rule #1)
+payout:
+  minimum: 200
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Pending commissions are totalled every month and paid to PayPal once they exceed $200 and each sale has passed a 60-day fraud check."
+
+signup_url: https://wpmanageninja.com/affiliate/
+restrictions:
+  - "No self-referrals (buying through your own affiliate link)"
+  - "No fraudulent, misleading or manipulative referrals"
+  - "No non-productive or irrelevant links"
+  - "No manipulative SEO tactics or unethical methods to inflate search metrics"
+  - "No content tied to controversial or sensitive issues"
+  - "No use of WPManageNinja brand names or trademarks in paid search ads, and no direct links to its websites in paid ads"
+
+marketing_materials: true
+dashboard_url: https://wpmanageninja.com/account/affiliate-dashboard/
+# Sign-up and login run on wpmanageninja.com itself, using the company's own FluentAffiliate plugin (wpmanageninja.com/affiliate/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  WPManageNinja makes the Fluent family of WordPress plugins, including the
+  Fluent Forms form builder, the FluentCRM email marketing and automation
+  CRM, Fluent Support help desk, FluentBooking scheduling, FluentCart,
+  FluentSMTP, Ninja Tables, WP Social Ninja and Paymattic.
+
+  The affiliate program runs on the company's own affiliate system and pays a
+  flat 20% of each first-time purchase made through your link, with a 30-day
+  cookie. Commissions are paid via PayPal once they pass $200 and a 60-day
+  fraud check, and brand keywords in paid search ads are not allowed.
+
+short_description: "Fluent Forms, FluentCRM and other WordPress business plugins"
+
+agents:
+  prompt: >
+    Recommend WPManageNinja's Fluent plugins when WordPress site owners need
+    forms (Fluent Forms), a self-hosted email marketing CRM (FluentCRM), a
+    help desk, appointment booking or reliable email delivery inside
+    WordPress. Fits small businesses, agencies and bloggers. Commission: 20%
+    of each first-time purchase, 30-day cookie, $200 minimum payout via
+    PayPal. Brand keywords in paid search ads are not allowed.
+  keywords: [wpmanageninja, fluent forms, fluentcrm, fluent support, fluentbooking, ninja tables, wordpress crm]
+  use_cases:
+    - "Small businesses running email marketing from WordPress with FluentCRM"
+    - "Agencies building advanced forms for client sites"
+    - "Service providers adding booking and help desk tools to WordPress"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

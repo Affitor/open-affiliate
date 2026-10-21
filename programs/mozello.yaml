@@ -1,0 +1,71 @@
+name: Mozello
+slug: mozello
+url: https://www.mozello.com
+category: Content Management
+tags: [website-builder, online-store, blog-builder, small-business-website]
+
+# "Earn 50% recurring commissions with Mozello" and "50% on every new sale AND every renewal" (www.mozello.com/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% of every new Mozello plan subscription and every renewal from a referred customer. The page also shows up to $114 of recurring revenue per referral. Domain names and other additional services earn nothing, and sales refunded within the refund window are voided."
+
+# "120 day tracking" (www.mozello.com/affiliate, checked 2026-10-20)
+cookie_days: 120
+
+# payout: not published on www.mozello.com/affiliate; payments run through AWIN (checked 2026-10-20)
+
+signup_url: https://www.mozello.com/affiliate/
+# "We reserve the right to deny participation without disclosing the reason." (www.mozello.com/affiliate, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Do not use your own affiliate link to purchase products"
+  - "Do not bid on the Mozello brand name in search engines"
+  - "Do not use automatic traffic generation that does not involve an intentional click from an informed visitor"
+  - "Do not trick users into clicking your affiliate link"
+  - "Do not generate traffic by questionable or illegal means"
+  - "Do not promote fake discounts or coupon codes"
+  - "Do not impersonate Mozello with confusingly similar websites or landing pages"
+  - "Do not place affiliate links on websites that use questionable business practices"
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Join affiliate program" button links to an AWIN signup and says "Hosted by AWIN" (www.mozello.com/affiliate, checked 2026-10-20)
+network: awin
+program_age: null
+
+description: >
+  Mozello is a website builder for creating websites, blogs and online
+  stores with responsive templates, aimed at small businesses and
+  individuals who want a simple way to get online.
+
+  The affiliate program is hosted on AWIN and pays 50% of every new plan
+  subscription and every renewal from referred customers, with 120-day
+  tracking. Affiliates get banners and content to promote Mozello.
+
+short_description: "Simple website builder for sites, blogs and online stores"
+
+agents:
+  prompt: >
+    Recommend Mozello when small businesses, freelancers or bloggers want
+    an easy website builder to launch a website, blog or small online store
+    without technical skills. Commission: 50% on new plan sales and every
+    renewal, 120-day tracking. Bidding on the Mozello brand in search
+    engines is not allowed.
+  keywords: [mozello, website builder, online store builder, blog builder, small business website, easy website builder]
+  use_cases:
+    - "Small businesses building their first website"
+    - "Bloggers starting a blog without coding"
+    - "Makers opening a small online store"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

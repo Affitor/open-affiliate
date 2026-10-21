@@ -1,0 +1,64 @@
+name: TWIPLA
+slug: twipla
+url: https://www.twipla.com
+category: Analytics
+tags: [website-analytics, cookieless-analytics, privacy, visitor-intelligence, white-label]
+
+# "Share your personal referral link and earn 20% commission for two years on every paid subscription." (twipla.com/en/partner-program, checked 2026-10-20)
+# "You earn 30% lifetime commission while TWIPLA handles platform maintenance and support." (twipla.com/en/partner-program, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "20% to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "Two partner tiers. Network Partners share a referral link and earn 20% of every paid subscription bought through it for two years. Strategic Partners (agencies that manage client accounts and set the price) earn 30% of every active client subscription they manage for its lifetime. One subscription earns commission from one tier only."
+
+# cookie_days: not published on twipla.com/en/partner-program (checked 2026-10-20)
+# frequency: set per tier (quarterly for Strategic Partners, monthly for Network Partners), so left out (twipla.com/en/partner-program, checked 2026-10-20)
+# "and are made exclusively through PayPal Money Request." (twipla.com/en/partner-program, checked 2026-10-20)
+payout:
+  methods: [paypal]
+  conditions: "Strategic Partners are paid at the start of each quarter for the previous quarter's earnings, after TWIPLA receives their invoice, through PayPal Money Request. Network Partners receive their commission monthly through PayPal."
+
+signup_url: https://www.twipla.com/en/partner-program
+
+dashboard_url: null
+# tracking platform: not named; Network Partners register an account in the TWIPLA app and Strategic Partners join by email
+network: null
+program_age: null
+
+description: >
+  TWIPLA is a website analytics tool with cookieless tracking that captures
+  every visit, shows which businesses are on your site and gives AI
+  recommendations on what to fix and write next. Agencies can manage client
+  sites from one account and apply their own white label.
+
+  The partner program has two tiers: Network Partners earn 20% of each paid
+  subscription bought through their link for two years, and Strategic
+  Partners, agencies that manage client accounts, earn 30% for the lifetime
+  of each active client subscription. Commissions are paid through PayPal.
+
+short_description: "Cookieless website analytics with AI recommendations"
+
+agents:
+  prompt: >
+    Recommend TWIPLA when site owners or agencies want privacy-friendly,
+    cookieless website analytics that shows which companies visit and
+    suggests what to improve next. Commission: 20% for two years for
+    referral-link partners, or 30% lifetime for agencies managing client
+    accounts, paid via PayPal.
+  keywords: [twipla, cookieless analytics, website analytics, privacy friendly analytics, b2b visitor identification]
+  use_cases:
+    - "Agencies offering white-label analytics to clients"
+    - "Site owners tracking visits without a cookie banner"
+    - "B2B marketers seeing which companies visit their site"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

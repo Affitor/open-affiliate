@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { livePrograms } from "@/lib/programs";
 import { DocsHeader } from "@/components/docs-header";
 import { DocsPagination } from "@/components/docs-pagination";
 
@@ -77,7 +78,7 @@ export default function DocsPage() {
               {
                 step: "1",
                 title: "Browse",
-                desc: "Search 349+ programs by keyword, category, commission type, or payout rate. Use the web UI, CLI, API, or MCP.",
+                desc: `Search ${livePrograms.length.toLocaleString("en-US")} programs by keyword, category, commission type, or payout rate. Use the web UI, CLI, API, or MCP.`,
               },
               {
                 step: "2",

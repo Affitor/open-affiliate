@@ -111,8 +111,10 @@ export default function OpenSourcePage() {
           <p className="text-xs text-muted-foreground leading-relaxed">
             Contributing to an open source project sounds technical, but it
             does not have to be. The easiest way to add a program to
-            OpenAffiliate is through the web form — no coding, no command line,
-            no GitHub account required.
+            OpenAffiliate is through the web form: no coding and no command
+            line. It opens the pull request on GitHub, so you need a free GitHub
+            account. Without one, email the link to your program page to
+            hello@openaffiliate.dev.
           </p>
           <Link
             href="/docs/submit"
@@ -142,11 +144,12 @@ export default function OpenSourcePage() {
             to get started.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mt-3">
-            Alternatively, just use the{" "}
+            Once you have one, the{" "}
             <Link href="/submit" className="text-foreground hover:underline">
               web form on the submit page
             </Link>{" "}
-            — it handles GitHub for you behind the scenes.
+            writes the program file for you; you only confirm the pull request
+            on GitHub.
           </p>
         </section>
       </div>

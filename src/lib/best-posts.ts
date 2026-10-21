@@ -1,4 +1,4 @@
-import { getBestList, listCommissionText, type BestList } from "./best-lists"
+import { countTitle, getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import { frequencyLabel } from "./claims/form"
@@ -11,6 +11,8 @@ import { post as freeAffiliatePrograms } from "../content/best/free-affiliate-pr
 import { post as highPayingAffiliatePrograms } from "../content/best/high-paying-affiliate-programs"
 import { post as lifetimeAffiliatePrograms } from "../content/best/lifetime-affiliate-programs"
 import { post as marketingAffiliatePrograms } from "../content/best/marketing-affiliate-programs"
+import { post as designAffiliatePrograms } from "../content/best/design-affiliate-programs"
+import { post as salesAffiliatePrograms } from "../content/best/sales-affiliate-programs"
 
 /**
  * Editorial posts on /best/<slug>. A post is a BestList (its filter, page URL,
@@ -59,6 +61,8 @@ export const POSTS: BestPost[] = [
   highPayingAffiliatePrograms,
   lifetimeAffiliatePrograms,
   marketingAffiliatePrograms,
+  designAffiliatePrograms,
+  salesAffiliatePrograms,
 ]
 
 /** Terms older than this at build time keep a program out of a post until it is re-checked. */
@@ -86,9 +90,18 @@ export interface PostSelection {
 /** Which of a post's programs the page shows on `asOf`. Page, twin and tests all call this. */
 export function postSelection(post: BestPost, asOf: Date = new Date()): PostSelection {
   const list = postList(post)
+  return selectPrograms(post.programs, asOf, (p) => (!list || !list.qualifies(p) ? "does not qualify for the list" : null))
+}
+
+/**
+ * The programs a post or guide shows on `asOf`: live, verified, with a
+ * commission figure and terms checked within TERMS_MAX_AGE_DAYS. `extra`
+ * adds a post's own rule (its list) and returns why a program fails it.
+ */
+export function selectPrograms(programs: PostProgram[], asOf: Date, extra: (p: Program) => string | null = () => null): PostSelection {
   const shown: PostSelection["shown"] = []
   const dropped: PostSelection["dropped"] = []
-  for (const copy of post.programs) {
+  for (const copy of programs) {
     const p = getProgram(copy.slug)
     const reason = !p
       ? "not in the registry"
@@ -96,13 +109,12 @@ export function postSelection(post: BestPost, asOf: Date = new Date()): PostSele
         ? `status ${p.status}`
         : !p.verified
           ? "not verified"
-          : !list || !list.qualifies(p)
-            ? "does not qualify for the list"
-            : commissionUnknown(p.commission)
+          : extra(p) ??
+            (commissionUnknown(p.commission)
               ? "publishes no commission figure"
               : termsAgeDays(p, asOf) > TERMS_MAX_AGE_DAYS
                 ? `terms last checked ${p.lastVerifiedAt ?? "never"}, over ${TERMS_MAX_AGE_DAYS} days`
-                : null
+                : null)
     if (reason || !p) dropped.push({ slug: copy.slug, reason: reason ?? "not in the registry" })
     else shown.push({ program: p, copy })
   }
@@ -138,8 +150,19 @@ export function postReady(selection: PostSelection): boolean {
   return selection.shown.length >= MIN_POST_PROGRAMS
 }
 
+/** The post's H1 and headline: "11 Best Recurring Affiliate Programs in 2026". */
 export function postTitle(post: BestPost, selection: PostSelection, asOf: Date = new Date()): string {
   return post.title(selection.shown.length, asOf.getUTCFullYear())
+}
+
+/**
+ * The post's <title>: its list's query, the programs shown (every one is
+ * verified, selectPrograms requires it) and the month of the newest check
+ * among them. "Recurring Affiliate Programs: 11 Verified (Oct 2026)".
+ */
+export function postPageTitle(post: BestPost, selection: PostSelection): string {
+  const n = selection.shown.length
+  return countTitle(postList(post)?.query ?? postTitle(post, selection), n, n, checkedRange(selection)?.[1] ?? null)
 }
 
 /**

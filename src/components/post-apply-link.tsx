@@ -1,23 +1,27 @@
 "use client";
 
-import { track } from "@/lib/track";
-import { AFFITOR_ATTR, AFFITOR_CLICK, isAffitorHref } from "@/lib/affitor-link";
+import { track, trackAffitorClick, trackApply } from "@/lib/track";
+import { AFFITOR_ATTR, isAffitorHref } from "@/lib/affitor-link";
 
 /**
  * A blog post's Apply link. It records blog_apply_click, not outbound_click:
  * outbound_click is the program page's apply count that claimed brands see
- * (claims/service.ts). A link to affitor.com also records AFFITOR_CLICK.
+ * (claims/service.ts). It also records apply_click, and AFFITOR_CLICK for a
+ * link to affitor.com.
  * rel has no "noreferrer", because some programs attribute by Referer.
  */
 export function PostApplyLink({
   href,
   slug,
+  network,
   post,
   children,
   className,
 }: {
   href: string;
   slug: string;
+  /** The program's network key, for apply_click. */
+  network?: string | null;
   post: string;
   children: React.ReactNode;
   className?: string;
@@ -32,7 +36,8 @@ export function PostApplyLink({
       className={className}
       onClick={() => {
         track("blog_apply_click", { slug, metadata: { post } });
-        if (affitor) track(AFFITOR_CLICK, { slug, metadata: { source: "blog", cta: "apply", post } });
+        trackApply(href, slug, network, "blog");
+        trackAffitorClick(href, "apply", slug);
       }}
     >
       {children}

@@ -54,6 +54,14 @@ agents:
     - Business owners automating repetitive work with AI
     - People with a product idea who are not developers
 
+conflicts:
+  - field: cookie_days
+    quote: "affitor.com/marketplace/build-to-own-replay FAQ: \"90-day attribution window, first-click\". Brand agreement build2own.dev/affiliates §3: \"mua trong 60 ngày kể từ lần bấm\" (60 days from the click, attributed by the buyer's email). Checked 2026-10-19."
+  - field: payout.minimum
+    quote: "affitor.com/marketplace/build-to-own-replay: \"Minimum payout $20 in USD\". Brand agreement build2own.dev/affiliates §5: \"Mốc rút tối thiểu $10\" (USD 10). Checked 2026-10-19."
+  - field: payout.frequency
+    quote: "affitor.com/marketplace/build-to-own-replay FAQ: \"Commissions are held 15 days after the sale, then paid once you reach the $20 minimum\" (net-30 under rule #1). Brand agreement build2own.dev/affiliates §4–5: \"Hoa hồng được giữ 30 ngày kể từ ngày mua\" and \"nhịp ngày 1 hàng tháng\" (held 30 days, paid on the 1st of each month). Checked 2026-10-19."
+
 not_published:
   payout.methods: "2026-10-18"
   restrictions: "2026-10-18"

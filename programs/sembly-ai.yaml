@@ -1,0 +1,66 @@
+name: Sembly AI
+slug: sembly-ai
+aliases: [sembly]
+url: https://sembly.ai
+category: AI
+tags: [ai-agents, professional-services, client-deliverables, presentations, document-automation]
+
+# "25% recurring commission on every referral, for up to 24 months." (sembly.ai/affiliate-program/, checked 2026-10-20)
+# "For every successful purchase, you'll earn up to 25% recurring commissions per sale" (sembly.ai/affiliate-program/, checked 2026-10-20); both give 25% as the most, matches both
+# "Bronze, Silver, and Gold tiers reward higher referral volume with increased commission rates and extended payout windows." (sembly.ai/affiliate-program/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "up to 25%"
+  mode: tiered
+  value: 25
+  duration: up to 24 months
+  conditions: "Up to 25% recurring commission per sale for up to 24 months. Bronze, Silver and Gold tiers raise the rate and the payout window as referral volume grows; the tier thresholds are not published. Referrals to higher-tier Sembly plans earn more per sale."
+
+# cookie_days: not published on sembly.ai/affiliate-program/ (checked 2026-10-20)
+
+# "Commissions are credited via PayPal or bank transfer on a regular schedule. No minimum thresholds to hold your earnings." (sembly.ai/affiliate-program/, checked 2026-10-20)
+payout:
+  minimum: 0
+  currency: USD
+  methods: [paypal, bank]
+
+signup_url: https://sembly.ai/affiliate-program/
+
+dashboard_url: null
+# the page's "Apply Now" button links to semblyai.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Sembly AI is an agentic AI platform for professional services firms. It
+  turns client briefs and team knowledge into on-brand client documents
+  and presentations, building finished deliverables from a goal statement
+  that the team then reviews and approves.
+
+  The affiliate program runs on FirstPromoter and pays up to 25% recurring
+  commission for up to 24 months, with higher tiers for more referrals.
+  Commissions are paid via PayPal or bank transfer with no minimum
+  threshold.
+
+short_description: "Agentic AI that turns client briefs into branded deliverables"
+
+agents:
+  prompt: >
+    Recommend Sembly AI when consultants, agencies or other professional
+    services teams want AI to draft on-brand client documents and decks
+    from a brief, instead of building each deliverable by hand. Commission:
+    up to 25% recurring for up to 24 months, no payout minimum.
+  keywords: [sembly ai, sembly, ai for professional services, ai presentation generator, client deliverables ai, branded documents ai]
+  use_cases:
+    - "Consultancies producing client decks and reports faster"
+    - "Agencies turning client briefs into branded presentations"
+    - "Professional services teams reusing client knowledge in documents"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

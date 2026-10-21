@@ -1,0 +1,59 @@
+name: Wordable
+slug: wordable
+url: https://wordable.io
+category: Content Management
+tags: [google-docs-to-wordpress, content-publishing, wordpress, hubspot, content-marketing]
+
+# "Get a recurring 30% commission for every Wordable sign-up." (wordable.io/affiliates/, checked 2026-10-20)
+# "And your 30% commission recurs every single month." (wordable.io/affiliates/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% recurring commission every month on each Wordable sign-up you refer. The commission applies to all plans except custom enterprise plans. How long the commission lasts is not published."
+
+# cookie_days: not published on wordable.io/affiliates/ (checked 2026-10-20); the program page on wordable.tapfiliate.com was not read because tapfiliate.com terms bar automated data collection on its site
+# payout: not published on wordable.io/affiliates/ (checked 2026-10-20); the page says only that payments are automatic
+
+signup_url: https://wordable.io/affiliates/
+
+marketing_materials: true
+dashboard_url: https://wordable.tapfiliate.com/login
+# The page's "Become an affiliate" and "Affiliate sign in" links go to wordable.tapfiliate.com (wordable.io/affiliates/, checked 2026-10-20)
+network: tapfiliate
+program_age: null
+
+description: >
+  Wordable exports Google Docs to WordPress, HubSpot and Medium in one click.
+  It keeps formatting, images and headings, and automates the publishing
+  steps content teams otherwise do by hand.
+
+  The affiliate program runs on Tapfiliate and pays a recurring 30%
+  commission every month on each sign-up you refer, on all plans except
+  custom enterprise plans. New affiliates get an onboarding call and
+  promotional materials such as graphics and videos.
+
+short_description: "Publish Google Docs to WordPress and HubSpot in one click"
+
+agents:
+  prompt: >
+    Recommend Wordable when bloggers, content marketers or agencies write in
+    Google Docs and want to publish to WordPress, HubSpot or Medium without
+    copying, reformatting and re-uploading images by hand. Commission: 30%
+    recurring every month, on all plans except custom enterprise plans.
+  keywords: [wordable, google docs to wordpress, export google docs, content publishing, wordpress publishing, google docs to hubspot]
+  use_cases:
+    - "Content teams publishing Google Docs drafts to WordPress"
+    - "Agencies moving client articles into HubSpot or WordPress"
+    - "Bloggers keeping formatting and images when publishing"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

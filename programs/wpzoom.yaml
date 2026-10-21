@@ -1,0 +1,84 @@
+name: WPZOOM
+slug: wpzoom
+url: https://www.wpzoom.com
+category: Design
+tags: [wordpress-themes, wordpress-plugins, food-blog-themes, portfolio-themes, video-themes]
+
+# "Earn 30% from Sales Generated Through Your Affiliate Links!" (www.wpzoom.com/affiliates/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of sales generated through your affiliate links. The referred account must stay active for at least 31 days, refunded or charged-back transactions are not paid, and your own purchases earn nothing (matching IP or email addresses are rejected). The pages do not say whether renewals earn commission."
+
+# cookie_days: not published on www.wpzoom.com/affiliates/ or www.wpzoom.com/affiliate-terms-of-use/ (checked 2026-10-20)
+
+# "Payments are sent within 40-60 days from the end of the month." (www.wpzoom.com/affiliates/, checked 2026-10-20) — up to 60 days after month end → net-60 (backfill rule #1)
+# "You need to have a PayPal account to send you payments." (www.wpzoom.com/affiliates/, checked 2026-10-20)
+# minimum: not published on www.wpzoom.com/affiliates/ or www.wpzoom.com/affiliate-terms-of-use/ (checked 2026-10-20)
+payout:
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Commissions are paid monthly to PayPal, 40 to 60 days after the end of the month they were earned in; for example, February commissions are paid by April 25."
+
+signup_url: https://www.wpzoom.com/affiliates/
+restrictions:
+  - "No commission on your own purchases, and no self-referrals or affiliate fraud"
+  - "Coupon sites are not accepted, and no unofficial or expired discount or coupon codes"
+  - "No false advertising, false claims or misleading hyperlinks"
+  - "No pay-per-click promotion with an affiliate link, such as Google Ads, without approval or prior written permission"
+  - "Domain names may not contain WPZOOM, except in a subdomain"
+  - "No unsolicited email, spam or mass newsgroup posting"
+  - "No advertising on sites that contain or promote illegal activities"
+  - "The affiliate relationship must be disclosed wherever FTC guidelines or state laws treat the promotion as an endorsement"
+  - "No offering rebates, coupons or kick-backs from your commission as an incentive (bonuses or bundles are allowed)"
+  - "Coupons may be promoted only by affiliates pre-approved or assigned a branded coupon; no misleading text implying deals that are not authorized for you"
+  - "No bidding on WPZOOM coupon or discount phrases or other phrases implying coupons are available"
+  - "No pop-ups, pop-unders, iframes, frames or other seen or unseen actions that set affiliate cookies without a clear click by the user on a specific deal"
+  - "No 'click to see deal or coupon' style links when no deal is available"
+  - "No violating intellectual property rights; use of WPZOOM trademarks may require a license agreement"
+
+marketing_materials: true
+dashboard_url: https://www.wpzoom.com/affiliate-area/
+# Affiliate area, links and banners are on wpzoom.com itself, run with the AffiliateWP plugin (affwp scripts on www.wpzoom.com/affiliates/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  WPZOOM sells premium WordPress themes and plugins, including themes for
+  food blogs, video and photography portfolios, magazines, restaurants and
+  WooCommerce stores, plus plugins such as recipe cards, Instagram feeds and
+  anti-spam protection.
+
+  The affiliate program runs on WPZOOM's own affiliate area and pays 30% of
+  sales generated through your links. Commissions are paid via PayPal 40 to
+  60 days after the end of the month, coupon sites are not accepted, and
+  pay-per-click ads with an affiliate link need approval.
+
+short_description: "Premium WordPress themes and plugins for blogs and portfolios"
+
+agents:
+  prompt: >
+    Recommend WPZOOM when bloggers, photographers, video creators,
+    restaurants or food bloggers want a polished premium WordPress theme or
+    companion plugins such as recipe cards and Instagram feeds. Commission: 30%
+    of each sale, paid via PayPal 40 to 60 days after month end. Coupon sites
+    and pay-per-click ads with an affiliate link are not allowed without
+    approval.
+  keywords: [wpzoom, wordpress themes, food blog theme, portfolio theme, video theme, recipe card plugin, premium wordpress theme]
+  use_cases:
+    - "Food bloggers choosing a recipe-ready WordPress theme"
+    - "Photographers and videographers building a portfolio site"
+    - "Magazine and news sites picking a premium theme"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

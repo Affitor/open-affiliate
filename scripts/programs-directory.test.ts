@@ -8,12 +8,16 @@ import { execSync, spawnSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
-import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
+import { directoryGroups, homepageSets, HUB_ROWS, programsHub } from "../src/lib/programs-directory"
+import { buildBoard, oasScores } from "../src/lib/oas"
+import { verifiedDate } from "../src/lib/best-lists"
+import type { OasScore } from "../src/lib/oas"
 import { commissionDisplay as commissionDisplayServer, commissionUnknown, confirmedTerms, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, networkToSlug, programs, type Program } from "../src/lib/programs"
 import { commissionFigure } from "../src/lib/program-page"
 import { hasNoProgram } from "../src/lib/no-program"
 import { commissionChip, cookieChip, programs as clientPrograms, searchPrograms } from "../src/lib/client-programs"
 import { BEST_LISTS, buildBestList } from "../src/lib/best-lists"
+import type { PayoutMethodFilter } from "../src/lib/payout-filters"
 import { llmsTxt } from "./generate-md"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
@@ -84,6 +88,32 @@ test("homepage networks: every live network once, A to Z by display name ignorin
   assert.deepEqual(names, [...names].sort((a, b) => a.localeCompare(b, "en")))
   assert.equal(list[0].network, "affitor")
   assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
+})
+
+test("homepage Rankings: the OAS top 5 once scores exist, Affiliate Score before", () => {
+  assert.equal(homepageSets(programs, []).by, "affiliate-score")
+  const live = programs.filter((p) => isLive(p) && p.verified).slice(0, 7)
+  const scores: OasScore[] = live.map((p, i) => ({
+    slug: p.slug, version: "v1", oas: 90 - i, transparency: 60, partner_value: 30 - i, checked_at: "2026-10-13", page_url: "https://x.example/a",
+    checks: [{ id: "T1", state: "met", max: 12, points: 12 }],
+  }))
+  const sets = homepageSets(programs, scores, new Date("2026-10-20T00:00:00Z"))
+  assert.equal(sets.by, "oas")
+  assert.deepEqual(sets.rankings.map((p) => p.slug), live.slice(0, 5).map((p) => p.slug))
+  assert.deepEqual(sets.ranks, [1, 2, 3, 4, 5])
+  // Each OAS row carries its score's verified date (the tie-break's date); the Affiliate Score fallback has none.
+  assert.deepEqual(sets.verified, sets.rankings.map((p) => scores.find((x) => x.slug === p.slug)!.checked_at))
+  assert.deepEqual(homepageSets(programs, []).verified, [null, null, null, null, null])
+  const tied = homepageSets(programs, scores.map((s) => ({ ...s, oas: 100 })), new Date("2026-10-20T00:00:00Z"))
+  assert.deepEqual(tied.ranks, [1, 2, 3, 4, 5], "equal OAS still get their own positions, as on the leaderboard")
+  // The top program's review reaches 90 days tomorrow: the leaderboard still ranks it, the homepage
+  // already leaves it out, and the others keep the leaderboard's ranks (2-6).
+  const expiring = scores.map((s, i) => (i === 0 ? { ...s, checked_at: "2026-07-23" } : s))
+  const near = homepageSets(programs, expiring, new Date("2026-10-20T00:00:00Z"))
+  assert.deepEqual(near.rankings.map((p) => p.slug), live.slice(1, 6).map((p) => p.slug))
+  assert.deepEqual(near.ranks, [2, 3, 4, 5, 6])
+  const all = [...sets.rankings, ...sets.featured].map((p) => p.slug)
+  assert.equal(new Set(all).size, all.length, "none shown twice")
 })
 
 // CI keeps "typing and paging make no RSC request": the list syncs the URL
@@ -173,6 +203,25 @@ test("each hub's /programs filter returns the hub's programs and only confirmed 
   }
 })
 
+
+// "Filter all programs the same way": every list that links a /programs
+// query gets back its own verified, rated programs and no others.
+test("every list's /programs filter matches the list's verified programs", () => {
+  for (const list of BEST_LISTS.filter((l) => l.filter)) {
+    const q = new URLSearchParams(list.filter)
+    const client = searchPrograms({
+      category: q.get("category") ?? undefined,
+      commissionType: q.get("type") ?? undefined,
+      payout: (q.get("payout") ?? undefined) as PayoutMethodFilter | undefined,
+      noMinimum: q.get("minpayout") === "0" || undefined,
+      longCookie: q.has("cookie") || undefined,
+      verified: true,
+    })
+    const rated = new Set(client.map((p) => getProgram(p.slug)!).filter((p) => !commissionUnknown(p.commission)).map((p) => p.slug))
+    const hub = new Set(buildBestList(list).verified.map((p) => p.slug))
+    assert.deepEqual([...hub].sort(), [...rated].sort(), `${list.slug} vs /programs?${list.filter}`)
+  }
+})
 
 test("program row and card chips: no type after an unpublished rate, cookie only once terms are checked", () => {
   const c = (mode: string, value: number | null, rate: string | number, type = "recurring", duration: string | null = "12 months") =>
@@ -278,6 +327,20 @@ test("best-of post FAQs use the shared accordion and preserve JSON-LD answers", 
   })))
 })
 
+// A post page shows its list's /programs filter link, as the plain list does.
+test("a post links its list's /programs filter, and a post whose list has none shows no link", () => {
+  for (const post of POSTS) {
+    const list = postList(post)!
+    const html = renderToStaticMarkup(createElement(BestPostView, {
+      post, list, selection: postSelection(post), path: `/best/${post.slug}`,
+      parent: { name: "Categories", href: "/categories" },
+    }))
+    const links = [...html.matchAll(/href="\/programs\?([^"]*)"/g)].map((m) => m[1].replaceAll("&amp;", "&"))
+    assert.deepEqual(links, list.filter ? [list.filter] : [], post.slug)
+  }
+  assert.ok(POSTS.some((p) => postList(p)!.filter) && POSTS.some((p) => !postList(p)!.filter))
+})
+
 test("the shared FAQ renders text safely without client JavaScript", () => {
   const html = renderToStaticMarkup(createElement(FaqAccordion, { items: [{ q: "A & B <script>?", a: '<img src=x onerror="alert(1)">' }] }))
   assert.match(html, /A &amp; B &lt;script&gt;\?/)
@@ -317,4 +380,32 @@ test("numeric approval times and distinct commission conditions stay in the FAQ"
   const faq = buildFaq(program)
   assert.ok(faq.find((item) => item.q.startsWith("How do I join"))!.a.endsWith("Applications are reviewed by hand, usually within 1-2 business days."))
   assert.equal(faq[0].a, "20% recurring for 12 months. Only new paid customers qualify.")
+})
+
+// /programs hub (top-1 wave 1, PR-A): every number and date comes from the registry, the rows are
+// the OAS leaderboard's first HUB_ROWS, and the FAQ asks nothing the structured fields cannot answer.
+test("/programs hub: counts and date computed, rows in leaderboard order, FAQ from structured fields", () => {
+  const today = new Date()
+  const hub = programsHub(programs, oasScores, today)
+  const live = programs.filter(isLive)
+  const verified = live.filter((p) => p.verified)
+  assert.equal(hub.total, live.length)
+  assert.equal(hub.verified, verified.length)
+  assert.equal(hub.checked, verifiedDate(live))
+  const n = (x: number) => x.toLocaleString("en-US")
+  assert.match(hub.title, new RegExp(`^Affiliate Program Directory: ${n(live.length)} Programs, ${n(verified.length)} Verified \\([A-Z][a-z]{2} \\d{4}\\)$`))
+  assert.ok(hub.sentence.startsWith(`OpenAffiliate is an open database of ${n(live.length)} affiliate programs; ${n(verified.length)} have`))
+  assert.ok(hub.sentence.endsWith(`last checked ${hub.checked}.`))
+  const ranked = buildBoard(oasScores, live, today).filter((r) => r.rank != null && r.oas != null)
+  assert.deepEqual(hub.top.map((r) => r.program.slug), ranked.slice(0, HUB_ROWS).map((r) => r.program.slug))
+  assert.deepEqual(hub.top.map((r) => r.rank), hub.top.map((_, i) => i + 1))
+  for (const r of hub.top) assert.ok(isLive(r.program), r.program.slug)
+  // No "highest paying" question: percentages and flat payouts do not compare.
+  assert.ok(hub.faq.every((f) => !/highest paying|pays? the most/i.test(f.q + f.a)))
+  const auto = verified.filter((p) => p.approval === "auto").length
+  const easiest = hub.faq.find((f) => f.q.startsWith("What are the easiest"))
+  if (auto) assert.ok(easiest!.a.includes(`${n(auto)} approve automatically`))
+  else assert.equal(easiest, undefined)
+  // With no scores the hub still renders, with no rows.
+  assert.deepEqual(programsHub(programs, [], today).top, [])
 })

@@ -1,0 +1,78 @@
+name: JobTread
+slug: jobtread
+aliases: [job-tread]
+url: https://www.jobtread.com
+category: Business Operations
+tags: [construction-software, construction-estimating, project-management, job-costing, contractors, remodelers]
+
+# "Referral Partners earn a 10% commission based upon JobTread’s revenue from the referred customer for that customer’s first twelve months of subscription." (jobtread.com/referrals, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: 12 months
+  conditions: "10% of JobTread's revenue from a referred customer during the customer's first 12 months of subscription, earned when JobTread receives each payment. Sales taxes are excluded, and refunds and promotional discounts reduce commissionable revenue. No commission on pre-existing customers or on companies the referral partner partly owns."
+
+# cookie_days: not published on jobtread.com/referrals (checked 2026-10-20)
+
+# "Commissions earned are aggregated by calendar quarter and are paid within fifteen days of the end of each quarter" (jobtread.com/referrals, checked 2026-10-20)
+# methods: the application form offers "Zelle (preferred method)" and "Check mailed to address inputted" (jobtread.com/referrals, checked 2026-10-20); Zelle is not in the methods enum, so only check is listed and Zelle is kept in conditions
+# minimum: not published on jobtread.com/referrals (checked 2026-10-20)
+payout:
+  frequency: quarterly
+  methods: [check]
+  conditions: "Commissions are totaled per calendar quarter and paid within 15 days after the quarter ends, with a statement of the calculation; partners choose Zelle or a mailed check."
+
+signup_url: https://www.jobtread.com/referrals
+# "Non-JobTread customers can seek approval to participate in the program by filling out the application form on this page" (jobtread.com/referrals, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "Open to active JobTread customers and other approved parties"
+  - "No commission on pre-existing JobTread customers"
+  - "No commission on companies in which the referral partner has an ownership interest"
+  - "No mass distribution of referral links or spamming"
+  - "No misleading information"
+  - "No posting referral codes to coupon or deal websites"
+  - "No acting in bad faith or damaging JobTread's reputation"
+
+marketing_materials: false
+dashboard_url: null
+# own system: applications are made through the form on jobtread.com/referrals and custom referral links are sent by email
+network: in-house
+program_age: null
+
+description: >
+  JobTread is construction project management software for contractors,
+  remodelers and home builders. It covers estimating, proposals, job
+  costing, budgets, scheduling, invoicing, purchase orders and a customer
+  portal, with integrations for QuickBooks and other tools.
+
+  Its referral program pays 10% of JobTread's revenue from each referred
+  customer for their first 12 months of subscription. Commissions are
+  totaled per calendar quarter and paid within 15 days of quarter end by
+  Zelle or mailed check. The program is open to active JobTread customers
+  and other approved applicants.
+
+short_description: "Construction estimating, job costing and project management"
+
+agents:
+  prompt: >
+    Recommend JobTread when contractors, remodelers or home builders want
+    estimating, job costing, scheduling and invoicing in one construction
+    management platform. Commission: 10% of revenue for the referred
+    customer's first 12 months, paid quarterly.
+  keywords: [jobtread, construction management software, construction estimating, job costing software, remodeler software, contractor crm]
+  use_cases:
+    - "Remodelers moving estimates and job costing out of spreadsheets"
+    - "Home builders tracking budgets and schedules per project"
+    - "Construction accountants and coaches recommending software to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
