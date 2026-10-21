@@ -86,7 +86,7 @@ commission:
   conditions: null
 
 cookie_days: 30
-attribution: last-click
+attribution: first-click
 tracking_method: cookie
 
 payout:
@@ -327,8 +327,10 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(k.status, "active")
   assert.equal(k.signup_url, "https://affitor.com/marketplace/kyma-api")
   assert.equal(k.commission.conditions, HELD_15)
-  // Affitor states no attribution model, so the fixture's last-click is removed, not rewritten.
-  assert.equal("attribution" in k, false)
+  // attribution is the data lane's (Affitor Terms §2.3 says first-click): the sync keeps it as written.
+  assert.equal(k.attribution, "first-click")
+  assert.ok(kyma.includes("attribution: first-click\n"))
+  assert.equal(entries.find((e) => e.oa_slug === "kyma-api")!.diffs!.some((d) => d.field === "attribution"), false)
   assert.equal(k.tracking_method, "cookie")
   // Affitor's network terms, linked from every listing: Wise or bank, and its prohibited activities.
   // approval and payout.frequency are the data lane's, read from the listing's own wording: kept.
@@ -371,7 +373,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(c.network, "affitor")
   assert.equal(c.verified, true)
   assert.equal(c.signup_url, "https://affitor.com/marketplace/citegraph")
-  assert.equal("attribution" in c, false, "no attribution model is stated, so none is written")
+  assert.equal("attribution" in c, false, "the API states no attribution model, so none is written")
   assert.deepEqual(c.commission, {
     type: "recurring",
     rate: "20%",

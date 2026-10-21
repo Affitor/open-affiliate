@@ -334,9 +334,10 @@ function affitorNotFound(body, config) {
 }
 
 const ABSENT = Symbol("absent")
-// approval and payout.frequency are the data lane's (scripts/sync-affitor.ts).
+// approval, payout.frequency and attribution are the data lane's
+// (scripts/sync-affitor.ts): not owned, so a sync pull request that adds,
+// changes or removes one is blocked.
 const UNPUBLISHED = [
-  "attribution",
   "approval_time",
   "marketing_materials",
   "api_available",

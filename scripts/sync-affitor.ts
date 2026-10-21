@@ -363,13 +363,13 @@ export type Edit = [path: string[], value: unknown]
 
 /**
  * Published by Affitor nowhere, so a verified listing may not show them:
- * empty over wrong. Affitor states no attribution model: a window length
- * says nothing about first or last click. `approval` and `payout.frequency`
- * are not here and not owned: the data lane reads them from each listing's own wording ("Once X
- * approves you", "held 31 days after the sale"), and the sync leaves them.
+ * empty over wrong. `approval`, `payout.frequency` and `attribution` are
+ * not here and not owned: the data lane reads them from the listing's own
+ * wording and Affitor's terms ("Once X approves you", "held 31 days after the
+ * sale", first-click in Terms §2.3), and the sync never adds, changes or
+ * removes them. The API states no attribution model.
  */
 const UNPUBLISHED = [
-  "attribution",
   "approval_time",
   "marketing_materials",
   "api_available",
@@ -670,7 +670,6 @@ function newListing(
     category,
     commission: {},
     cookie_days: null,
-    attribution: null,
     tracking_method: null,
     payout: {},
     signup_url: null,
