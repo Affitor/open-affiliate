@@ -8,7 +8,9 @@ import { execSync, spawnSync } from "node:child_process"
 import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
-import { directoryGroups, homepageSets } from "../src/lib/programs-directory"
+import { directoryGroups, homepageSets, HUB_ROWS, programsHub } from "../src/lib/programs-directory"
+import { buildBoard, oasScores } from "../src/lib/oas"
+import { verifiedDate } from "../src/lib/best-lists"
 import type { OasScore } from "../src/lib/oas"
 import { commissionDisplay as commissionDisplayServer, commissionUnknown, confirmedTerms, getProgram, IN_HOUSE, isLive, liveNetworks, networkName, networksByName, networkToSlug, programs, type Program } from "../src/lib/programs"
 import { commissionFigure } from "../src/lib/program-page"
@@ -378,4 +380,32 @@ test("numeric approval times and distinct commission conditions stay in the FAQ"
   const faq = buildFaq(program)
   assert.ok(faq.find((item) => item.q.startsWith("How do I join"))!.a.endsWith("Applications are reviewed by hand, usually within 1-2 business days."))
   assert.equal(faq[0].a, "20% recurring for 12 months. Only new paid customers qualify.")
+})
+
+// /programs hub (top-1 wave 1, PR-A): every number and date comes from the registry, the rows are
+// the OAS leaderboard's first HUB_ROWS, and the FAQ asks nothing the structured fields cannot answer.
+test("/programs hub: counts and date computed, rows in leaderboard order, FAQ from structured fields", () => {
+  const today = new Date()
+  const hub = programsHub(programs, oasScores, today)
+  const live = programs.filter(isLive)
+  const verified = live.filter((p) => p.verified)
+  assert.equal(hub.total, live.length)
+  assert.equal(hub.verified, verified.length)
+  assert.equal(hub.checked, verifiedDate(live))
+  const n = (x: number) => x.toLocaleString("en-US")
+  assert.match(hub.title, new RegExp(`^Affiliate Program Directory: ${n(live.length)} Programs, ${n(verified.length)} Verified \\([A-Z][a-z]{2} \\d{4}\\)$`))
+  assert.ok(hub.sentence.startsWith(`OpenAffiliate is an open database of ${n(live.length)} affiliate programs; ${n(verified.length)} have`))
+  assert.ok(hub.sentence.endsWith(`last checked ${hub.checked}.`))
+  const ranked = buildBoard(oasScores, live, today).filter((r) => r.rank != null && r.oas != null)
+  assert.deepEqual(hub.top.map((r) => r.program.slug), ranked.slice(0, HUB_ROWS).map((r) => r.program.slug))
+  assert.deepEqual(hub.top.map((r) => r.rank), hub.top.map((_, i) => i + 1))
+  for (const r of hub.top) assert.ok(isLive(r.program), r.program.slug)
+  // No "highest paying" question: percentages and flat payouts do not compare.
+  assert.ok(hub.faq.every((f) => !/highest paying|pays? the most/i.test(f.q + f.a)))
+  const auto = verified.filter((p) => p.approval === "auto").length
+  const easiest = hub.faq.find((f) => f.q.startsWith("What are the easiest"))
+  if (auto) assert.ok(easiest!.a.includes(`${n(auto)} approve automatically`))
+  else assert.equal(easiest, undefined)
+  // With no scores the hub still renders, with no rows.
+  assert.deepEqual(programsHub(programs, [], today).top, [])
 })

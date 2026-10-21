@@ -5,7 +5,7 @@ category: Infrastructure
 tags: [residential-proxies, proxies, web-scraping, datacenter-proxies, ipv6]
 
 commission:
-  # "Earn a 20% commission on every eligible payment from customers you refer, for as long as they stay TrueProxies customers" (trueproxies.com/affiliates, checked 2026-10-13)
+  # "Earn a 20% commission on every eligible payment from customers you refer, for as long as they stay TrueProxies customers" (trueproxies.com/affiliates, checked 2026-10-20)
   type: recurring
   rate: "20%"
   mode: percentage
@@ -14,21 +14,25 @@ commission:
   duration: lifetime
   conditions: "20% of every eligible payment for as long as the referred account stays a TrueProxies customer, with no cap. Each commission is held for 30 days before approval; balances under $50 carry forward to the next month."
 
-# "Referral link 30 days Works for 30 days from the first click." (trueproxies.com/affiliates, checked 2026-10-13)
+# "Works for 30 days from the first click." (trueproxies.com/affiliates, checked 2026-10-20)
 cookie_days: 30
-# "the first referral link a visitor opens counts" (trueproxies.com/affiliates, checked 2026-10-13)
+# "The first referral link a visitor opens counts." (trueproxies.com/affiliates, checked 2026-10-20)
 attribution: first-click
 tracking_method: cookie
 
-# "Payout minimum $50" "Payouts Monthly Once per calendar month, sent by hand." "Payout methods PayPal, USDT (TRC20) or bank transfer All payouts are in USD." (trueproxies.com/affiliates, checked 2026-10-13)
+# "Each commission is held for 30 days before it can be approved." (trueproxies.com/affiliates, checked 2026-10-20)
+# "Once per calendar month, when your approved earnings reach $50, a payout opens and we send it by hand." (trueproxies.com/affiliates, checked 2026-10-20)
+# "Choose PayPal, USDT (TRC20) or bank transfer. Payouts are in USD." (trueproxies.com/affiliates, checked 2026-10-20)
+# Held 30 days, then paid once the minimum is reached: net-30 (OAS rule #1).
 payout:
   minimum: 50
   currency: USD
-  frequency: monthly
+  frequency: net-30
   methods: [paypal, crypto, bank]
+  conditions: "Each commission is held for 30 days. We check suspicious referrals before approving them, for example an account created on the same network as yours, a disposable email address or a disputed payment. Once per calendar month, when your approved earnings reach $50, a payout opens and we send it by hand. Below $50, your earnings carry forward. We pay the sending fees; you pay any receiving or conversion fees."
 
 signup_url: https://trueproxies.com/affiliates/
-# "Anyone with a TrueProxies account and a verified email address. You join from the Affiliate page in your dashboard." (trueproxies.com/affiliates, checked 2026-10-13)
+# "Anyone with a TrueProxies account and a verified email address. You join from the Affiliate page in your dashboard." (trueproxies.com/affiliates, checked 2026-10-20)
 approval: auto
 restrictions:
   - "No self-referrals"
@@ -42,8 +46,11 @@ program_age: null
 
 description: >
   TrueProxies provides residential and datacenter proxies for web scraping,
-  data collection, ad verification and multi-account automation, with a
-  residential network of more than 16 million IPs.
+  data collection, ad verification and multi-account automation, with country
+  targeting, rotating and sticky sessions, and HTTP, HTTPS and SOCKS5 on every
+  plan. Plans include unlimited-bandwidth residential, pay-per-GB residential,
+  Residential IPv6 and Datacenter IPv6, with documentation at
+  docs.trueproxies.com.
 
   The affiliate program pays 20% of every eligible payment for as long as a
   referred customer stays, with no cap. Referral links track for 30 days from
@@ -51,7 +58,7 @@ description: >
   in USD by PayPal, USDT (TRC20) or bank transfer once the balance reaches $50.
   Anyone with a verified TrueProxies account can join from the dashboard.
 
-short_description: "Residential and datacenter proxies for data collection at scale"
+short_description: "Residential and datacenter proxies for web scraping and data collection"
 
 agents:
   prompt: >
@@ -68,8 +75,8 @@ agents:
 verified: true
 submitted_by: trueproxies
 created_at: "2026-10-13"
-updated_at: "2026-10-13"
-last_verified_at: "2026-10-13"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
 status: active
 kind: affiliate
 source: community

@@ -8,7 +8,8 @@ import { PostProgramBlock } from "@/components/post-program-block";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { livePrograms, categoryToSlug } from "@/lib/programs";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
-import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
+import { BEST_LISTS, bestPath, updatedText, type BestList } from "@/lib/best-lists";
+import { ChildLists } from "@/components/best-list-view";
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
@@ -18,6 +19,7 @@ import {
   earnText,
   payoutText,
   postFaq,
+  postPageTitle,
   postTitle,
   type BestPost,
   type PostSelection,
@@ -26,13 +28,14 @@ import {
 const SITE = "https://openaffiliate.dev";
 
 export function bestPostMetadata(post: BestPost, selection: PostSelection, path: string): Metadata {
-  const title = postTitle(post, selection);
+  // Absolute: postPageTitle is the whole tag, so the layout adds no suffix.
+  const title = postPageTitle(post, selection);
   return {
-    title,
+    title: { absolute: title },
     description: post.description,
     alternates: { canonical: path, types: { "text/markdown": `${SITE}${path}.md` } },
     openGraph: {
-      title: `${title} | OpenAffiliate`,
+      title,
       description: post.description,
       url: `${SITE}${path}`,
       siteName: "OpenAffiliate",
@@ -162,7 +165,7 @@ export function BestPostView({
           </Link>
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-4">{title}</h1>
           <p className="text-meta text-muted-foreground mt-3">
-            By the OpenAffiliate team{range && <> · Terms checked between <span className="whitespace-nowrap">{range[0]}</span> and <span className="whitespace-nowrap">{range[1]}</span></>}
+            By the OpenAffiliate team{range && <> · Updated <time dateTime={range[1]}>{updatedText(range[1])}</time> · Terms checked between <span className="whitespace-nowrap">{range[0]}</span> and <span className="whitespace-nowrap">{range[1]}</span></>}
           </p>
           <p className="text-lg leading-relaxed text-foreground/80 mt-5">{post.intro}</p>
           <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
@@ -276,7 +279,9 @@ export function BestPostView({
         <div className="mx-auto max-w-[760px]">
           <h2 className="text-lg font-semibold">How we chose</h2>
           <p className="text-base leading-relaxed text-foreground/80 mt-3">
-            {post.howWeChose} {FRESHNESS_RULE}
+            {post.howWeChose} {FRESHNESS_RULE} Every program here is also in the OpenAffiliate{" "}
+            <Link href="/programs" prefetch={false} className="underline underline-offset-4">affiliate program directory</Link>, with{" "}
+            {livePrograms.length.toLocaleString("en-US")} programs in all.
             {list.filter && (
               <>
                 {" "}
@@ -302,6 +307,8 @@ export function BestPostView({
           )}
         </div>
       </section>
+
+      <ChildLists list={list} narrow />
 
       {related.length > 0 && (
         <nav className="oa-band" aria-label="Keep reading">

@@ -115,7 +115,8 @@ export default function OpenSourcePage() {
             to your program page, no account and no coding. It joins the review
             queue with a status link, and a maintainer checks the terms on your
             page before anything is listed or scored. The full form, which opens
-            a pull request on GitHub, needs a free GitHub account.
+            a pull request on GitHub, needs a free GitHub account. You can also
+            email the link to your program page to hello@openaffiliate.dev.
           </p>
           <Link
             href="/docs/submit"

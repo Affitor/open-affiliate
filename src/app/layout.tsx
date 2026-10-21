@@ -23,7 +23,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    default: "OpenAffiliate: Open Affiliate Program Directory and Database",
     template: "%s | OpenAffiliate",
   },
   description:
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     canonical: "./",
   },
   openGraph: {
-    title: "OpenAffiliate: The Open Registry of Affiliate Programs",
+    title: "OpenAffiliate: Open Affiliate Program Directory and Database",
     description:
       "Discover, compare, and integrate affiliate programs. Built for developers and AI agents.",
     url: "https://openaffiliate.dev",
@@ -62,7 +62,8 @@ const FOOTER_COLUMNS: { title: string; links: { label: string; href: string }[] 
     title: "Registry",
     links: [
       { label: "Rankings", href: "/rankings" },
-      { label: "Programs", href: "/programs" },
+      // Intent anchor: on every page, it tells crawlers which page answers "affiliate program directory".
+      { label: "Affiliate program directory", href: "/programs" },
       { label: "All programs A–Z", href: "/programs/a-z" },
       { label: "Networks", href: "/networks" },
       { label: "Categories", href: "/categories" },
@@ -126,7 +127,7 @@ function Footer() {
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border pt-4">
           <p>
-            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
+            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer", "sitewide")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
           </p>
           <div className="flex items-center gap-4">
             <span>Open source · MIT</span>

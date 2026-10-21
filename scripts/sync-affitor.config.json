@@ -5,8 +5,9 @@
   "bot": "openaffiliate-sync[bot]",
   "label": "affitor-sync",
   "network_terms": {
-    "source": "Affitor's terms (https://affitor.com/terms, sections 7 and 8.3, effective 2026-01-28) and payout docs (https://affitor.com/docs/brand/quickstart/payouts), both linked from every marketplace listing; read 2026-10-19",
+    "source": "Affitor's terms (https://affitor.com/terms, sections 7 and 8.3, effective 2026-01-28) and payout docs (https://affitor.com/docs/brand/quickstart/payouts), both linked from every marketplace listing; read 2026-10-19. payout_conditions: the partner payout docs (https://affitor.com/docs/partners/payouts, last updated 2026-10-18; read 2026-10-21)",
     "payout_methods": ["wise", "bank"],
+    "payout_conditions": "For commissions approved on or after October 9, 2026 at 00:00 Pacific, withdrawals require the brand to have paid the covering invoice; earlier approved commissions became withdrawable on approval. At least $20 must be available before a withdrawal request. Withdrawals undergo team review, and Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation.",
     "restrictions": [
       "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing",
       "No self-referrals: do not refer yourself or your own accounts",

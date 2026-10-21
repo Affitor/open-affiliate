@@ -163,7 +163,7 @@ Five ways to add a program. Each needs only the brand's own program page as the 
 2. **Full web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
 3. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
 4. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
-5. **Email** -- send the program page link to hello@affitor.com.
+5. **Email** -- send the program page link to hello@openaffiliate.dev.
 
 What happens next:
 

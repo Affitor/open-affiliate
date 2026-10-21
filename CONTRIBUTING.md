@@ -12,9 +12,11 @@ This guide covers adding a program, correcting one, and what happens to it after
 | [Full web form](https://openaffiliate.dev/submit) | a GitHub account | the terms; the form writes the file and opens GitHub, where you create the pull request |
 | Pull request | a GitHub account | `programs/<slug>.yaml` (template below) |
 | [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) issue | a GitHub account | only the link to the program page |
-| Email to hello@affitor.com | nothing | the link to the program page |
+| Email to hello@openaffiliate.dev | nothing | the link to the program page |
 
 GitHub is faster than email and shows where your request stands.
+
+OpenAffiliate lists programs; to track and pay partners, run your program on [Affitor](https://affitor.com/?utm_source=openaffiliate&utm_medium=github&utm_campaign=contributing).
 
 ## The proof bar
 

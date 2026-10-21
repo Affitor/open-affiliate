@@ -227,10 +227,21 @@ export function affitorTerms(p: AffitorProgram): Terms | string {
       ? { rate: `${rate}%`, mode: "percentage" as const, value: rate }
       : { rate: `$${fixed}`, mode: "flat" as const, value: fixed }),
     duration,
-    // affitor.com/llms.txt words the hold as "paid 15 days after sale".
-    conditions: hold > 0 ? `Paid ${hold} ${hold === 1 ? "day" : "days"} after sale.` : null,
+    conditions: affitorConditions(hold),
     cookie_days: p.cookie_window_days ?? null,
   }
+}
+
+/**
+ * When a commission becomes withdrawable. default_hold_period_days is a hold
+ * against refunds and chargebacks (Affitor's terms, "Hold Period"), not a
+ * date the partner is paid: after it come brand funding, the $20 withdrawal
+ * minimum and team review, which the network's payout docs state for every
+ * program (config network_terms.payout_conditions).
+ */
+export function affitorConditions(hold: number): string {
+  const held = hold > 0 ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : ""
+  return held + NETWORK.payout_conditions
 }
 
 /** "Jobholler Partner Program" → "Jobholler": every OA page is titled "<name> Affiliate Program". */
@@ -352,9 +363,11 @@ export type Edit = [path: string[], value: unknown]
 
 /**
  * Published by Affitor nowhere, so a verified listing may not show them:
- * empty over wrong. `approval` and `payout.frequency` are not here and not
- * owned: the data lane reads them from each listing's own wording ("Once X
- * approves you", "held 31 days after the sale"), and the sync leaves them.
+ * empty over wrong. `approval`, `payout.frequency` and `attribution` are
+ * not here and not owned: the data lane reads them from the listing's own
+ * wording and Affitor's terms ("Once X approves you", "held 31 days after the
+ * sale", first-click in Terms §2.3), and the sync never adds, changes or
+ * removes them. The API states no attribution model.
  */
 const UNPUBLISHED = [
   "approval_time",
@@ -390,7 +403,6 @@ function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null):
     [["commission", "duration"], t.duration],
     [["commission", "conditions"], t.conditions],
     [["cookie_days"], t.cookie_days ?? DELETE],
-    [["attribution"], "last-click"],
     [["tracking_method"], "cookie"],
     [["payout", "minimum"], p.payout_threshold ?? DELETE],
     [["payout", "currency"], "USD"],
@@ -658,7 +670,6 @@ function newListing(
     category,
     commission: {},
     cookie_days: null,
-    attribution: null,
     tracking_method: null,
     payout: {},
     signup_url: null,
