@@ -15,9 +15,9 @@ import { hasNoProgram } from "../src/lib/no-program"
 import { existsSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { BestPostStandard } from "../src/components/best-post-standard"
-import { NOT_RECORDED, NOT_STATED, STATED_TWO_WAYS, approvalShort, cookieCell, payoutCell, picksSentence, standardFaq, typeSplit } from "../src/lib/best-standard"
+import { NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, STATED_TWO_WAYS, picksSentence, programDetails, prosCons, splitLink, standardFaq, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
-import { leadReceipt, parseNotes, parseReceipts, termNotes } from "../src/lib/term-receipts"
+import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
@@ -318,43 +318,41 @@ function renderStandard(post: (typeof POSTS)[number]) {
   return { html, selection }
 }
 
-test("a standard post: eight table columns, every anchor lands on a section, FAQ JSON-LD matches, Apply links carry the blog UTM", () => {
-  const standard = POSTS.filter((p) => p.layout === "standard")
-  assert.ok(standard.length > 0, "no post opts into the standard layout")
-  for (const post of standard) {
+const STANDARD = POSTS.filter((p) => p.layout === "standard")
+
+test("a standard post: a four-column table, one inline tracked link per program, no buttons, FAQ JSON-LD matches the FAQ box", () => {
+  assert.ok(STANDARD.length > 0, "no post opts into the standard layout")
+  for (const post of STANDARD) {
     assert.ok(post.lookFor && post.programs.every((p) => p.verdict), `${post.slug}: a standard post needs lookFor and a verdict per program`)
+    for (const p of post.programs) assert.ok(splitLink(p.why), `${post.slug}: ${p.slug} why needs exactly one {linked phrase}`)
+    for (const g of post.guides ?? []) assert.ok(GUIDES.some((x) => x.slug === g), `${post.slug}: guide ${g} does not exist`)
     const { html, selection } = renderStandard(post)
-    const table = html.match(/<table data-terms-table[\s\S]*?<\/thead>/)![0]
-    const heads = [...table.matchAll(/<th[^>]*scope="col"[^>]*>[\s\S]*?<button[^>]*>([^<]+)/g)].map((m) => m[1].trim())
-    assert.deepEqual(heads, ["Program", "Best for", "You earn", "Type", "Cookie", "Approval", "Payout", "Checked"])
+    const heads = [...html.match(/<table data-terms-table[\s\S]*?<\/thead>/)![0].matchAll(/<th[^>]*scope="col"[^>]*>([^<]+)</g)].map((m) => m[1])
+    assert.deepEqual(heads, ["Program", "Commission", "Cookie", "Payout"])
     const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
-    const anchors = [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1])
-    assert.ok(anchors.length > selection.shown.length * 2, `${post.slug}: too few in-page links`)
-    for (const a of anchors) assert.ok(ids.has(a), `${post.slug}: #${a} has no section`)
+    for (const a of [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1])) assert.ok(ids.has(a), `${post.slug}: #${a} has no section`)
     for (const { program } of selection.shown) {
       assert.ok(ids.has(program.slug), `${post.slug}: no section for ${program.slug}`)
-      const href = blogApplyHref(program, post.slug)
-      assert.ok(html.includes(`href="${href.replaceAll("&", "&amp;")}"`), `${post.slug}: no Apply link for ${program.slug}`)
+      const href = blogApplyHref(program, post.slug).replaceAll("&", "&amp;")
+      // The tracked Apply link sits inside the program's paragraph, exactly once; no button.
+      assert.equal(html.split(`href="${href}"`).length - 1, 1, `${post.slug}: ${program.slug} needs one inline Apply link`)
     }
+    assert.doesNotMatch(html, /data-capture-caption|data-receipt|data-toc|data-also-considered|id="what-changed"|data-quick-picks/)
     const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
     const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
     const faq = standardFaq(post, selection, typeSplit(post, selection))
     assert.ok(faq.length >= 5 && faq.length <= 7, `${post.slug}: ${faq.length} FAQ questions`)
     assert.deepEqual(faqLd.mainEntity.map((q: { name: string }) => q.name), faq.map((f) => f.q))
-    for (const q of faqLd.mainEntity) {
-      assert.equal(q["@type"], "Question")
-      assert.equal(q.acceptedAnswer["@type"], "Answer")
-      assert.doesNotMatch(q.acceptedAnswer.text, /undefined|NaN|null|\[object/)
-    }
+    const shownQs = [...html.match(/<aside[^>]*data-faq[\s\S]*?<\/aside>/)![0].matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].replaceAll("&#x27;", "'"))
+    assert.equal(shownQs.length, faq.length, `${post.slug}: the FAQ box shows ${shownQs.length} questions`)
+    for (const q of faqLd.mainEntity) assert.doesNotMatch(q.acceptedAnswer.text, /undefined|NaN|null|\[object/)
     assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>/g, ""), />[^<]*\b(undefined|NaN)\b[^<]*</)
-    assert.ok(html.includes("data-post-disclosure") && html.includes("data-how-we-chose") && html.includes("data-type-chart"))
-    // "What changed this month" sits at the bottom, after the FAQ.
-    if (html.includes('id="what-changed"')) assert.ok(html.indexOf('id="what-changed"') > html.indexOf('id="faq"'))
+    assert.ok(html.includes("data-post-disclosure") && html.includes("data-how-we-chose") && html.includes("data-read-more"))
   }
 })
 
-test("a standard post shows a capture or a stated fallback for every program, each capture on disk and in budget", () => {
-  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+test("a standard post shows a capture or a logo card for every program, each capture on disk and in budget", () => {
+  for (const post of STANDARD) {
     const { html, selection } = renderStandard(post)
     for (const { program } of selection.shown) {
       const c = CAPTURES[program.slug]
@@ -366,83 +364,50 @@ test("a standard post shows a capture or a stated fallback for every program, ea
         assert.equal(blockedReason(c.url), null, `${program.slug}: captured a blocked host`)
         assert.ok(html.includes(`alt="${program.name} affiliate page, captured `), `${program.slug}: no alt text`)
       } else {
-        assert.ok(CAPTURE_SKIPPED[program.slug], `${program.slug}: no capture and no stated reason`)
+        assert.ok(CAPTURE_SKIPPED[program.slug], `${program.slug}: no capture and no recorded reason`)
       }
     }
-    const fallbacks = (html.match(/data-capture-fallback/g) ?? []).length
-    assert.equal(fallbacks, selection.shown.filter(({ program }) => !CAPTURES[program.slug]).length)
+    assert.equal((html.match(/data-capture-fallback/g) ?? []).length, selection.shown.filter(({ program }) => !CAPTURES[program.slug]).length)
   }
 })
 
-test("receipts: only a quoted line with one source, attached to the next key, short, linked only to the brand's own site", () => {
-  const yaml = [
-    '# "earn up to $500 per sale" (brand.com/affiliates, checked 2026-10-13)',
-    "commission:",
-    "  type: one-time",
-    '# "30 days" (brand.com/a, checked 2026-10-13) vs "60 days" (brand.com/b, checked 2026-10-13)',
-    "",
-    '# cookie: "Your referrals have 60 days" (https://www.brand.com/faq, checked 2026-10-12)',
-    "cookie_days: 60",
-    '# "paid monthly" (other.com/terms, checked 2026-10-12)',
-    "",
-    "payout:",
-    `# "${"word ".repeat(30).trim()}" (brand.com/terms, checked 2026-10-12)`,
-    "approval: manual",
-  ].join("\n")
-  const r = parseReceipts(yaml, "https://brand.com")
-  assert.deepEqual(r.map((x) => [x.field, x.quote, x.href]), [
-    ["commission", "earn up to $500 per sale", "https://brand.com/affiliates"],
-    ["cookie", "Your referrals have 60 days", "https://www.brand.com/faq"],
-  ])
-  // A quote from another site (a directory, a network page) is never shown as the brand's.
-  assert.deepEqual(parseReceipts('# "a b c" (evil.com/x, checked 2026-10-12)\napproval: auto', "https://brand.com"), [])
-  // The commission quote leads even when short; the newest receipt wins within a field.
-  const many = parseReceipts(
-    '# "€20.00" and "€250.00" (b.com, checked 2026-10-12)\ncommission:\n# "after a sixty day wait" (b.com, checked 2026-10-12)\n# "paid on the first" (b.com, checked 2026-10-19)\npayout:',
-    "https://b.com",
-  )
-  assert.equal(leadReceipt(many)?.quote, "€20.00 … €250.00")
-  assert.equal(leadReceipt(many.filter((r) => r.field !== "commission"))?.quote, "paid on the first")
-  // A receipt for a fact the section leaves empty never leads.
-  assert.equal(leadReceipt(many.filter((r) => r.field !== "commission"), (f) => f !== "payout"), null)
-})
-
-test("empty terms are labelled the way the YAML backs them: two ways, not published, or not recorded", () => {
+test("program details leave out a term with no value, and say plainly when the brand states two", () => {
   const notes = parseNotes(
-    [
-      "# cookie window: not published on b.com/affiliates (checked 2026-10-12)",
-      "not_published:",
-      '  payout.methods: "2026-10-18"',
-      "conflicts:",
-      "  - field: payout.minimum",
-      '    quote: "x"',
-      "# Runs on a platform the network enum does not list",
-      "network: null",
-    ].join("\n"),
-    "https://b.com",
+    ["# cookie window: not published on b.com/affiliates (checked 2026-10-12)", "not_published:", '  payout.methods: "2026-10-18"', "conflicts:", "  - field: payout.minimum", '    quote: "x"'].join("\n"),
   )
   assert.deepEqual([...notes.notPublished].sort(), ["cookie_days", "payout.methods"])
   assert.deepEqual([...notes.conflicts], ["payout.minimum"])
-  assert.equal(notes.networkOutsideList, true)
-  assert.equal(parseNotes("network: null", "https://b.com").networkOutsideList, false)
-
-  // On the page: a field the brand states two ways never reads "Not stated by the brand".
-  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+  for (const post of STANDARD) {
     for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
-      const { conflicts, notPublished } = termNotes(p.slug, p.url)
-      if (p.cookieDays == null) {
-        const want = conflicts.has("cookie_days") ? STATED_TWO_WAYS : notPublished.has("cookie_days") ? NOT_STATED : NOT_RECORDED
-        assert.equal(cookieCell(p), want, `${p.slug}: cookie`)
+      const details = programDetails(p)
+      const text = details.map(([k, v]) => `${k}: ${v}`).join("\n")
+      assert.doesNotMatch(text, new RegExp(`${NOT_STATED}|${NOT_RECORDED}|${STATED_TWO_WAYS}`), `${p.slug}: an empty-term label in the details`)
+      const { conflicts } = termNotes(p.slug)
+      const cookie = details.find(([k]) => k === "Cookie duration")
+      if (p.cookieDays != null) assert.equal(cookie?.[1], `${p.cookieDays} days`, p.slug)
+      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /two different/, p.slug)
+      else assert.equal(cookie, undefined, `${p.slug}: a cookie bullet with no value on record`)
+      if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f)) && !p.payout.frequency && p.payout.minimum == null)
+        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /two different/, p.slug)
+      const { pros, cons } = prosCons(p)
+      assert.ok(pros.length <= PROS_CONS_MAX && cons.length <= PROS_CONS_MAX, p.slug)
+    }
+  }
+  // The FAQ never says "not published" for a term the brand states two ways.
+  for (const post of STANDARD) {
+    const selection = postSelection(post, new Date(post.checked))
+    const cookieAnswer = standardFaq(post, selection, typeSplit(post, selection)).find((f) => /cookies/i.test(f.q))!.a
+    for (const { program: p } of selection.shown) {
+      if (p.cookieDays == null && termNotes(p.slug).conflicts.has("cookie_days")) {
+        const sentence = cookieAnswer.split(". ").find((s) => s.includes(p.name)) ?? ""
+        assert.match(sentence, /two ways/, `${p.slug}: cookie FAQ`)
       }
-      if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f))) assert.ok(payoutCell(p).startsWith(STATED_TWO_WAYS), `${p.slug}: payout`)
-      if (approvalShort(p) === NOT_STATED) assert.ok(notPublished.has("approval"), `${p.slug}: approval not stated without a record`)
-      if (payoutCell(p).includes(NOT_STATED)) assert.ok(notPublished.has("payout.minimum") && notPublished.has("payout.methods"), `${p.slug}: payout not stated without a record`)
     }
   }
 })
 
 test("a standard post's intro, with its computed picks sentence, stays within eighty words", () => {
-  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+  for (const post of STANDARD) {
     const selection = postSelection(post, new Date(post.checked))
     const words = `${post.intro} ${picksSentence(post, selection) ?? ""}`.split(/\s+/).filter(Boolean).length
     assert.ok(words <= 80, `${post.slug}: intro is ${words} words`)
@@ -453,5 +418,6 @@ test("only the posts that opt in render the standard layout", () => {
   for (const post of POSTS) {
     if (post.layout === "standard") continue
     assert.equal(post.lookFor, undefined, `${post.slug}: lookFor without layout "standard" is never shown`)
+    assert.equal(post.guides, undefined, `${post.slug}: guides without layout "standard" are never shown`)
   }
 })

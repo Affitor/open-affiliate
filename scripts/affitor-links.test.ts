@@ -114,11 +114,7 @@ const PLAIN_ANCHORS = new Set([
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
-  "src/components/best-post-standard.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
-  "src/components/best-post-standard.tsx | t.href", // table of contents: anchors on the same page
-  "src/components/best-post-standard.tsx | capture.url", // the brand's affiliate page a capture shows (lib/best-captures.ts), as a caption
-  "src/components/best-post-standard.tsx | receipt.href", // the source of a quoted term, only on the brand's own site (lib/term-receipts.ts)
-  "src/components/sortable-terms-table.tsx | `#${r.slug}`", // table row: an anchor to the program's section
+  "src/components/best-post-standard.tsx | `#${p.slug}`", // comparison table rows: an anchor to the program's section on the same page
   "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
   "src/app/programs/[slug]/oas/page.tsx | url", // OAS evidence: a page the reviewer read; affitor.com pages render as text (evidenceLink)

@@ -1,22 +1,10 @@
 import { getBestList, updatedText } from "./best-lists"
-import {
-  FRESHNESS_RULE,
-  NOT_STATED,
-  POSTS,
-  TERMS_MAX_AGE_DAYS,
-  checkedRange,
-  earnText,
-  payoutText,
-  postTitle,
-  readyPost,
-  type BestPost,
-  type PostSelection,
-} from "./best-posts"
+import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type BestPost, type PostSelection } from "./best-posts"
 import { PAYOUT_METHODS } from "./claims/form"
-import { IN_HOUSE, commissionUnknown, isLive, livePrograms, networkName, programs, type Program } from "./programs"
+import { IN_HOUSE, isLive, livePrograms, networkName, programs, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
-import { leadReceipt, termNotes, type Receipt } from "./term-receipts"
+import { termNotes } from "./term-notes"
 
 /**
  * The data behind the standard "best X" layout (components/best-post-standard.tsx).
@@ -27,13 +15,6 @@ import { leadReceipt, termNotes, type Receipt } from "./term-receipts"
 /** One date format on a standard post: "Oct 13, 2026". */
 export const dateText = (iso: string) => updatedText(iso)
 
-/** "Oct 13 to Oct 19, 2026", or one date when both are the same day. */
-export function rangeText([from, to]: [string, string]): string {
-  if (from === to) return dateText(to)
-  const sameYear = from.slice(0, 4) === to.slice(0, 4)
-  return `${sameYear ? dateText(from).replace(/, \d{4}$/, "") : dateText(from)} to ${dateText(to)}`
-}
-
 const TYPE_LABEL: Record<string, string> = {
   "one-time": "One-time",
   recurring: "Recurring",
@@ -41,52 +22,31 @@ const TYPE_LABEL: Record<string, string> = {
   hybrid: "Hybrid",
 }
 
-/** "One-time", "Tiered", "Hybrid, for life": the commission type and, when recorded, how long it lasts. */
-export function typeText(p: Program): string {
-  const t = TYPE_LABEL[String(p.commission.type)] ?? String(p.commission.type)
-  const d = p.commission.duration
-  return d ? `${t}, ${d === "lifetime" ? "for life" : `for ${d}`}` : t
-}
-
 /**
- * What an empty term reads as, so a blank never claims more than the data:
+ * How the FAQ names a term the program has no value for, so a blank never
+ * claims more than the data:
  * - "Stated two ways": the field is in the YAML's `conflicts`;
  * - "Not stated by the brand": the verifier recorded it as unpublished
  *   (`not_published`, or a "not published" comment);
  * - "Not recorded": the registry simply has no value.
+ * The program details omit such a term instead, except one stated two ways.
  */
 export const STATED_TWO_WAYS = "Stated two ways"
 export const NOT_RECORDED = "Not recorded"
 export { NOT_STATED }
 
-/** The empty label for one schema field ("cookie_days", "approval", "payout.methods"). */
+/** The empty label for schema fields ("cookie_days", "approval", "payout.methods"). */
 export function emptyLabel(p: Program, ...fields: string[]): string {
-  const notes = termNotes(p.slug, p.url)
+  const notes = termNotes(p.slug)
   if (fields.some((f) => notes.conflicts.has(f))) return STATED_TWO_WAYS
   if (fields.every((f) => notes.notPublished.has(f))) return NOT_STATED
   return NOT_RECORDED
-}
-
-/** "45 days", or the empty label. */
-export function cookieCell(p: Program): string {
-  return p.cookieDays != null ? `${p.cookieDays} days` : emptyLabel(p, "cookie_days")
-}
-
-/** The table's short approval: "Automatic", "Manual", or the empty label. */
-export function approvalShort(p: Program): string {
-  return p.approval === "auto" ? "Automatic" : p.approval === "manual" ? "Manual" : emptyLabel(p, "approval")
 }
 
 /** "up to one week" from "Up to one week": the review time as it reads mid-sentence. */
 export function approvalTime(p: Program): string | null {
   const t = p.approvalTime?.trim()
   return t ? t[0].toLowerCase() + t.slice(1) : null
-}
-
-/** The block's approval fact, with the review time when the brand gives one. */
-export function approvalText(p: Program): string {
-  const time = approvalTime(p)
-  return time && p.approval ? `${approvalShort(p)}: ${time}` : approvalShort(p)
 }
 
 const METHOD = new Map(PAYOUT_METHODS)
@@ -102,47 +62,41 @@ function thirdPartyNetwork(p: Program): string | null {
   return p.network && p.network !== IN_HOUSE ? networkName(p.network) : null
 }
 
-/**
- * The payout fact, the same in the table and the section: schedule and
- * minimum, then methods ("Net 60, $100 minimum · PayPal or Bank"). With no
- * schedule or minimum: "Stated two ways" when the brand disagrees with
- * itself, "On CJ Affiliate's terms" for a program paid through a network,
- * else the empty label.
- */
-export function payoutCell(p: Program): string {
+const twoWays = (p: Program, ...fields: string[]) => fields.some((f) => termNotes(p.slug).conflicts.has(f))
+
+/** When and how much: "Net 60, $100 minimum", a two-ways note, "On CJ Affiliate's terms", or null. */
+function gettingPaid(p: Program): string | null {
   const timing = payoutText(p, "")
-  const methods = methodsText(p)
-  const notes = termNotes(p.slug, p.url)
-  const twoWays = ["payout.minimum", "payout.frequency"].some((f) => notes.conflicts.has(f))
+  if (timing) return timing
+  if (twoWays(p, "payout.minimum", "payout.frequency")) return "The brand's own pages give two different minimums and schedules"
   const net = thirdPartyNetwork(p)
-  const first = timing || (twoWays ? STATED_TWO_WAYS : methods ? "" : net ? `On ${net}'s terms` : emptyLabel(p, "payout.minimum", "payout.methods"))
-  return [first, methods].filter(Boolean).join(" · ")
+  return net ? `On ${net}'s terms` : null
 }
 
-/** The quote a program's section shows: commission first, else one for a fact the section shows filled in. */
-export function programReceipt(p: Program): Receipt | null {
-  const shows: Record<Receipt["field"], boolean> = {
-    commission: true,
-    cookie: p.cookieDays != null,
-    payout: p.payout.minimum != null || Boolean(p.payout.frequency),
-    approval: Boolean(p.approval),
+/**
+ * "Affiliate program details" for one program, from the registry. A term the
+ * program has no value for is left out; one the brand states two ways says so.
+ */
+export function programDetails(p: Program): [string, string][] {
+  const rows: [string, string | null][] = [
+    ["Commission rate", earnText(p)],
+    ["Getting paid", gettingPaid(p)],
+    ["Payment method", methodsText(p) ?? (twoWays(p, "payout.methods") ? "The brand's own pages name two different methods" : null)],
+    ["Cookie duration", p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? "The brand's own pages give two different windows" : null],
+    ["Approval", p.approval === "auto" ? "Automatic" : p.approval === "manual" ? `Manual${approvalTime(p) ? `, ${approvalTime(p)}` : ""}` : null],
+  ]
+  return rows.filter((r): r is [string, string] => Boolean(r[1]))
+}
+
+/** The comparison table's cells: Commission, Cookie, Payout ("—" when there is none on record). */
+export function tableRow(p: Program): { commission: string; cookie: string; payout: string } {
+  const paid = gettingPaid(p)
+  const methods = methodsText(p)
+  return {
+    commission: earnText(p),
+    cookie: p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? "Two values, see below" : "—",
+    payout: [twoWays(p, "payout.minimum", "payout.frequency") && !payoutText(p, "") ? "Two values, see below" : paid, methods].filter(Boolean).join(" · ") || "—",
   }
-  return leadReceipt(termNotes(p.slug, p.url).receipts, (f) => shows[f])
-}
-
-/** "Its own program", the network's name, "Not in our network list" when the YAML names a platform outside it, else "Not recorded". */
-export function runsOnText(p: Program): string {
-  if (p.network === IN_HOUSE) return "Its own program"
-  if (p.network) return networkName(p.network)
-  return termNotes(p.slug, p.url).networkOutsideList ? "Not in our network list" : NOT_RECORDED
-}
-
-
-const CONFLICT_LABEL: Record<string, string> = {
-  cookie_days: "cookie window",
-  "payout.minimum": "payout minimum",
-  "payout.frequency": "payout schedule",
-  "commission.rate": "commission",
 }
 
 /** Median cookie window among the registry's verified programs (null when none publish one). */
@@ -152,30 +106,30 @@ function medianCookie(): number | null {
 }
 const MEDIAN_COOKIE = medianCookie()
 
-/**
- * Good / Watch out for one program, from structured fields only: approval,
- * payout rules, cookie length against the registry median, assets, the
- * brand's restrictions as recorded, and terms the brand states two ways.
- */
-export function goodWatch(p: Program): { good: string[]; watch: string[] } {
-  const good: string[] = []
-  const watch: string[] = []
-  if (p.commission.duration === "lifetime") good.push("Pays a recurring share for the customer's lifetime")
-  if (p.approval === "auto") good.push("Approves applications automatically")
-  if (p.payout.minimum === 0) good.push("No payout minimum")
-  if (p.payout.frequency === "weekly") good.push("Pays weekly")
-  if (p.cookieDays != null && MEDIAN_COOKIE != null && p.cookieDays > MEDIAN_COOKIE)
-    good.push(`Cookie of ${p.cookieDays} days, longer than the registry median of ${MEDIAN_COOKIE}`)
-  const methods = p.payoutMethods ?? p.payout.methods ?? []
-  if (methods.length > 1) good.push(`Pays by ${methodsText(p)}`)
-  if (p.marketingMaterials) good.push("Banners and other marketing assets provided")
-  if (p.dedicatedManager) good.push("Dedicated affiliate manager")
+/** At most this many pros and cons per program: the short lists, not every rule. */
+export const PROS_CONS_MAX = 3
 
-  if (p.commission.type === "one-time") watch.push("Pays once per referral, with no recurring share")
-  if (p.commission.type === "tiered") watch.push("The top figure needs volume or a higher tier")
-  for (const r of p.restrictions ?? []) watch.push(r)
-  for (const f of termNotes(p.slug, p.url).conflicts) watch.push(`Its pages state the ${CONFLICT_LABEL[f] ?? f} two ways, so we show none`)
-  return { good: good.slice(0, 4), watch }
+/**
+ * Pros and cons for one program, from structured fields only: approval,
+ * payout rules, cookie length against the registry median, assets, and the
+ * brand's restrictions as recorded.
+ */
+export function prosCons(p: Program): { pros: string[]; cons: string[] } {
+  const pros: string[] = []
+  const cons: string[] = []
+  if (p.commission.duration === "lifetime") pros.push("Pays a recurring share for the customer's lifetime")
+  if (p.approval === "auto") pros.push("Approves applications automatically")
+  if (p.payout.minimum === 0) pros.push("No payout minimum")
+  if (p.payout.frequency === "weekly") pros.push("Pays weekly")
+  if (p.cookieDays != null && MEDIAN_COOKIE != null && p.cookieDays > MEDIAN_COOKIE)
+    pros.push(`Cookie of ${p.cookieDays} days, longer than the registry median of ${MEDIAN_COOKIE}`)
+  if (p.marketingMaterials) pros.push("Banners and other marketing assets provided")
+  if (p.dedicatedManager) pros.push("Dedicated affiliate manager")
+
+  if (p.commission.type === "one-time") cons.push("Pays once per referral, with no recurring share")
+  if (p.commission.type === "tiered") cons.push("The top figure needs volume or a higher tier")
+  for (const r of p.restrictions ?? []) cons.push(r)
+  return { pros: pros.slice(0, PROS_CONS_MAX), cons: cons.slice(0, PROS_CONS_MAX) }
 }
 
 /** The programs a standard post is about: the ones it shows plus every program its `considered` rule picks. */
@@ -187,63 +141,26 @@ function aboutPrograms(post: BestPost, selection: PostSelection): Program[] {
 export interface TypeSplit {
   rows: { type: string; label: string; count: number }[]
   total: number
-  asOf: string
 }
 
-/** Commission type of every live, verified program the post is about: the chart in "What to look for". */
+/** Commission type of every live, verified program the post is about, for the FAQ's registry-wide counts. */
 export function typeSplit(post: BestPost, selection: PostSelection): TypeSplit {
   const v = aboutPrograms(post, selection).filter((p) => isLive(p) && !hasNoProgram(p) && p.verified)
   const counts = new Map<string, number>()
   for (const p of v) counts.set(String(p.commission.type), (counts.get(String(p.commission.type)) ?? 0) + 1)
-  const rows = [...counts]
-    .map(([type, count]) => ({ type, label: TYPE_LABEL[type] ?? type, count }))
-    .sort((a, b) => b.count - a.count || a.label.localeCompare(b.label))
-  return { rows, total: v.length, asOf: v.map((p) => (p.lastVerifiedAt ?? "").slice(0, 10)).sort().at(-1) ?? "" }
-}
-
-export interface ConsideredGroup {
-  reason: string
-  /** A list the programs appear in instead, when that is the reason. */
-  link?: { href: string; label: string }
-  programs: { slug: string; name: string }[]
+  const rows = [...counts].map(([type, count]) => ({ type, label: TYPE_LABEL[type] ?? type, count })).sort((a, b) => b.count - a.count)
+  return { rows, total: v.length }
 }
 
 /**
- * "Also considered": every program the post is about but does not show,
- * grouped by the first reason the data gives, in this order: status, not
- * verified, no commission figure, stale terms, shown in another post, added
- * on or after the post's last pick. Anything left is "verified, not picked".
+ * The inline link in a "why" paragraph: ["Its ", "affiliate program", " pays …"].
+ * The words in {braces} become the link to the brand's affiliate page.
  */
-export function alsoConsidered(post: BestPost, selection: PostSelection, asOf: Date = new Date()): ConsideredGroup[] {
-  const shown = new Set(selection.shown.map((s) => s.program.slug))
-  const others = POSTS.filter((o) => o.slug !== post.slug).flatMap((o) => {
-    const ready = readyPost(o.slug)
-    return ready ? [{ post: o, slugs: new Set(ready.selection.shown.map((s) => s.program.slug)), title: postTitle(o, ready.selection) }] : []
-  })
-  const groups = new Map<string, ConsideredGroup>()
-  const add = (key: string, reason: string, p: Program, link?: ConsideredGroup["link"]) => {
-    if (!groups.has(key)) groups.set(key, { reason, link, programs: [] })
-    groups.get(key)!.programs.push({ slug: p.slug, name: p.name })
-  }
-  const maxAge = TERMS_MAX_AGE_DAYS * 86_400_000
-  const candidates = aboutPrograms(post, selection)
-    .filter((p) => !shown.has(p.slug))
-    .sort((a, b) => a.name.localeCompare(b.name, "en", { sensitivity: "base" }))
-  for (const p of candidates) {
-    const checked = Date.parse(p.lastVerifiedAt ?? "")
-    const other = others.find((o) => o.slugs.has(p.slug))
-    if (!isLive(p) || hasNoProgram(p)) add("status", "Paused, closed or no program found", p)
-    else if (!p.verified) add("unverified", "Terms not verified yet", p)
-    else if (commissionUnknown(p.commission)) add("nofigure", "No commission figure published", p)
-    else if (!Number.isFinite(checked) || asOf.getTime() - checked > maxAge) add("stale", `Terms last checked over ${TERMS_MAX_AGE_DAYS} days ago`, p)
-    else if (other) {
-      const list = getBestList(other.post.slug)
-      add(`post:${other.post.slug}`, "Covered in another of our lists", p, list ? { href: `/best/${list.slug}`, label: other.title } : undefined)
-    } else if (p.createdAt.slice(0, 10) >= post.checked) add("new", `Added on or after our last pick for this list (${dateText(post.checked)})`, p)
-    else add("rest", "Verified, not picked for this list", p)
-  }
-  return [...groups.values()]
+export function splitLink(text: string): [string, string, string] | null {
+  const m = text.match(/^([^{}]*)\{([^{}]+)\}([^{}]*)$/)
+  return m ? [m[1], m[2], m[3]] : null
 }
+
 
 /** "Our picks: Kinsta for WordPress agencies, …", from the picks the page shows. */
 export function picksSentence(post: BestPost, selection: PostSelection): string | null {
@@ -352,7 +269,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
   if (range) {
     faq.push({
       q: "When were these terms checked?",
-      a: `Each program's terms were checked on its own affiliate page between ${dateText(range[0])} and ${dateText(range[1])}; every section shows its own date and the quote we read. ${FRESHNESS_RULE}`,
+      a: `Each program's terms were checked on its own affiliate page between ${dateText(range[0])} and ${dateText(range[1])}. ${FRESHNESS_RULE}`,
     })
   }
   return [...faq, ...(post.faq ?? [])]

@@ -68,12 +68,14 @@ export interface BestPost {
    * original layout (components/best-post-view.tsx).
    */
   layout?: "standard"
-  /** Standard layout: the guidance section. */
+  /** Standard layout: the guidance section ("How to choose …"). */
   lookFor?: LookFor
+  /** Standard layout: guide slugs (/blog/<slug>) for the "Read more" box before the FAQ. */
+  guides?: string[]
   /**
    * Standard layout: the registry programs this post is about, beyond the
-   * ones it shows. Those not shown are listed under "Also considered" with
-   * the reason the data gives, and the verified ones feed the chart.
+   * ones it shows; the verified ones are the base of the FAQ's registry-wide
+   * counts.
    */
   considered?: (p: Program) => boolean
 }

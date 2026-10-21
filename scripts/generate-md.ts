@@ -60,7 +60,6 @@ import {
   VERIFIED_NOTE,
   bestListCopy,
   bestPath,
-  getBestList,
   otherLists,
   buildBestList,
   freshnessLine,
@@ -93,7 +92,7 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { alsoConsidered, approvalText, cookieCell, goodWatch, payoutCell, picksSentence, programReceipt, runsOnText, standardFaq, typeSplit, typeText } from "../src/lib/best-standard"
+import { picksSentence, programDetails, prosCons, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1327,45 +1326,46 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
  */
 function standardPostMd(post: BestPost, selection: PostSelection, path: string): string {
   const range = checkedRange(selection)
-  const split = typeSplit(post, selection)
   const lede = picksSentence(post, selection)
-  const rows = selection.shown
+  const table = [
+    "| Program | Commission | Cookie | Payout |",
+    "|---|---|---|---|",
+    ...selection.shown.map(({ program: p }) => {
+      const r = tableRow(p)
+      return `| [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) | ${mdEscape(r.commission)} | ${mdEscape(r.cookie)} | ${mdEscape(r.payout)} |`
+    }),
+  ].join("\n")
+  const programsMd = selection.shown
     .map(({ program: p, copy }, i) => {
-      const facts = mdEscape(
-        `you earn ${earnText(p)}, type: ${typeText(p)}, cookie: ${cookieCell(p)}, payout: ${payoutCell(p)}, approval: ${approvalText(p)}, runs on: ${runsOnText(p)}, terms checked ${checkedText(p)}`,
-      )
-      const { good, watch } = goodWatch(p)
-      const receipt = programReceipt(p)
+      const { pros, cons } = prosCons(p)
+      const why = `${mdEscapeProse(copy.why.replace(/[{}]/g, ""))} Affiliate page: ${mdUrl(blogApplyHref(p, post.slug))}`
+      // A numbered item per program (the machine-surface check reads "N. [Name](…/programs/<slug>.md)"), its body indented under it.
       return [
-        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${copy.verdict ? mdEscapeProse(copy.verdict) : ""}`,
-        `   ${facts}, apply: ${mdUrl(blogApplyHref(p, post.slug))}`,
-        `   ${mdEscapeProse(copy.why)}`,
-        good.length ? `   Good: ${mdEscape(good.join("; "))}.` : null,
-        watch.length ? `   Watch out: ${mdEscape(watch.join("; "))}.` : null,
-        receipt ? `   Source: "${mdEscape(receipt.quote)}" (${mdEscape(receipt.source)}, checked ${receipt.checked})` : null,
-      ].filter(Boolean).join("\n")
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)`,
+        why,
+        copy.verdict ? mdEscapeProse(copy.verdict) : null,
+        `Affiliate program details:\n\n${programDetails(p).map(([k, v]) => `- **${k}:** ${mdEscape(v)}`).join("\n")}`,
+        pros.length ? `Pros:\n\n${pros.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
+        cons.length ? `Cons:\n\n${cons.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((block, j) => (j === 0 ? block : block.replace(/^(?=.)/gm, "   ")))
+        .join("\n\n")
     })
-    .join("\n")
-  const lookFor = post.lookFor
-    ? [
-        mdEscapeProse(post.lookFor.intro),
-        ...post.lookFor.criteria.map((c) => `- **${mdEscape(c.name)}**: ${mdEscapeProse(c.text)}${c.link ? ` ${mdEscape(c.link.label)}: ${BASE}${c.link.href}` : ""}`),
-        `How ${(getBestList(post.slug)?.query ?? "these programs").toLowerCase()} pay, ${split.total} live verified programs, terms checked up to ${split.asOf}: ${split.rows.map((r) => `${r.label} ${r.count}`).join(", ")}.`,
-      ].join("\n\n")
+    .join("\n\n")
+  const howToChoose = post.lookFor
+    ? [mdEscapeProse(post.lookFor.intro), post.lookFor.criteria.map((c) => `- **${mdEscape(c.name)}:** ${mdEscapeProse(c.text)}${c.link ? ` ${mdEscape(c.link.label)}: ${BASE}${c.link.href}` : ""}`).join("\n")].join("\n\n")
     : null
-  const considered = alsoConsidered(post, selection)
-    .map((g) => `- ${mdEscape(g.reason)}${g.link ? ` (${mdEscape(g.link.label)}: ${BASE}${g.link.href})` : ""}: ${g.programs.map((p) => mdEscape(p.name)).join(", ")}`)
-    .join("\n")
-  const faq = standardFaq(post, selection, split, mdEscape)
+  const faq = standardFaq(post, selection, typeSplit(post, selection), mdEscape)
   return joinSections([
     `# ${mdHeading(postTitle(post, selection))}`,
-    range ? `By the OpenAffiliate team · Terms checked ${range[0]} to ${range[1]}` : null,
+    range ? `By the OpenAffiliate team · Updated ${range[1]}` : null,
     `> ${mdEscapeProse(post.intro)}${lede ? ` ${mdEscape(lede)}` : ""}`,
     DISCLOSURE,
-    section("Programs", rows),
-    post.lookFor ? section(mdEscape(post.lookFor.heading), lookFor) : null,
-    considered ? section("Also considered", considered) : null,
-    section("How we chose", `${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`),
+    section("Programs at a glance", table),
+    post.lookFor && howToChoose ? section(mdEscape(post.lookFor.heading), howToChoose) : null,
+    section("Programs", programsMd),
+    section("How we chose", `${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE} Rankings are never paid for.`),
     faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
   ].filter((x): x is string => Boolean(x)))
