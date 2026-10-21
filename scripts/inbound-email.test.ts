@@ -1,13 +1,16 @@
 import assert from "node:assert/strict"
 import { createHmac } from "node:crypto"
 import { test } from "node:test"
+import { createClient } from "@supabase/supabase-js"
 import {
   FORWARD_FROM,
   LOOP_HEADER,
   LEASE_MS,
   MAX_ATTACHMENTS,
   MAX_ATTACHMENT_BYTES,
+  supabaseLedger,
   type ForwardLedger,
+  type ForwardPatch,
   type ForwardRow,
   forwardAddress,
   handleInboundEmail,
@@ -130,32 +133,60 @@ function fakeResend(email: Email = {}, files: FakeFile[] = [], clock = { now: NO
   return { fetch: fetchFn, calls, sends, state, clock, ledger: memoryLedger() }
 }
 
-type MemoryRow = ForwardRow & { lease_until: number }
+type MemoryRow = ForwardRow & { lease_until: number; lease_token: string | null }
+type Held = { patch: ForwardPatch; run: () => void }
 
-/** In-memory oa_inbox_forwards with the same claim rule as the SQL (check-and-set in one step). */
+/**
+ * In-memory oa_inbox_forwards with the same rules as the SQL: claim is one
+ * check-and-set; transition applies only on matching token and status.
+ * control.hold(predicate) parks a matching transition until release(), and
+ * the fence is evaluated when it finally applies, like a PATCH that reaches
+ * Postgres late.
+ */
 function memoryLedger() {
   const rows = new Map<string, MemoryRow>()
-  const control = { failUpdates: false }
+  const control = {
+    failUpdates: false,
+    holdIf: null as ((patch: ForwardPatch) => boolean) | null,
+    held: [] as Held[],
+  }
   const ledger: ForwardLedger = {
-    async claim(emailId, nowMs, leaseMs) {
-      if (!rows.has(emailId)) rows.set(emailId, { status: "pending", first_post_at: null, payload_hash: null, lease_until: 0 })
+    async claim(emailId, token, nowMs, leaseMs) {
+      if (!rows.has(emailId)) {
+        rows.set(emailId, { status: "pending", first_post_at: null, payload_hash: null, lease_until: 0, lease_token: null })
+      }
       const row = rows.get(emailId)!
       const pick = (r: MemoryRow): ForwardRow => ({ status: r.status, first_post_at: r.first_post_at, payload_hash: r.payload_hash })
       if ((row.status === "pending" || row.status === "uncertain") && row.lease_until < nowMs) {
         row.lease_until = nowMs + leaseMs
+        row.lease_token = token
         return { claimed: true, row: pick(row) }
       }
       return { claimed: false, row: pick(row) }
     },
-    async update(emailId, patch) {
+    async transition(emailId, token, from, patch) {
       if (control.failUpdates) throw new Error("ledger update")
-      const row = rows.get(emailId)!
-      const { lease_until, ...rest } = patch
-      Object.assign(row, rest)
-      if (lease_until !== undefined) row.lease_until = Date.parse(lease_until)
+      const apply = () => {
+        const row = rows.get(emailId)
+        if (!row || row.lease_token !== token || row.status !== from) return false
+        const { lease_until, ...rest } = patch
+        Object.assign(row, rest)
+        if (lease_until !== undefined) row.lease_until = Date.parse(lease_until)
+        return true
+      }
+      if (control.holdIf?.(patch)) {
+        control.holdIf = null
+        return new Promise<boolean>((resolve) => control.held.push({ patch, run: () => resolve(apply()) }))
+      }
+      return apply()
     },
   }
   return Object.assign(ledger, { rows, control })
+}
+
+async function until(check: () => boolean) {
+  for (let i = 0; i < 200 && !check(); i++) await new Promise((resolve) => setTimeout(resolve, 5))
+  assert.ok(check(), "condition not reached")
 }
 
 function deps(resend: ReturnType<typeof fakeResend>, env: Record<string, string | undefined> = ENV, budgetMs?: number) {
@@ -466,7 +497,7 @@ test("concurrent webhooks → one POST; the other gets 409 and a later retry is 
 test("a crashed holder's lease runs out; the next attempt proceeds", async () => {
   const clock = { now: NOW }
   const resend = fakeResend({}, [], clock)
-  await resend.ledger.claim(EMAIL_ID, NOW, LEASE_MS)
+  await resend.ledger.claim(EMAIL_ID, "crashed-holder", NOW, LEASE_MS)
   assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 409)
   clock.now = NOW + LEASE_MS + 1
   assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
@@ -522,4 +553,107 @@ test("attachment set depends only on the listing: count cap, same payload whatev
   assert.deepEqual(one.sends[0].body, two.sends[0].body)
   assert.equal((one.sends[0].body.attachments as unknown[]).length, MAX_ATTACHMENTS)
   assert.match(String(one.sends[0].body.text), /Not attached \(limit 20 files, 10\.0 MB total\): f20\.pdf \(0\.0 MB\), f21\.pdf .*f24\.pdf \(0\.0 MB\)\n/)
+})
+
+test("stale holder: its late reset cannot overwrite sent; a replay at 25 h sends nothing", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.sendStatus = 401
+  resend.ledger.control.holdIf = (patch) => patch.status === "pending"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  // A's reset PATCH is stuck in transit; its lease runs out and B takes over.
+  resend.state.sendStatus = 200
+  clock.now = NOW + LEASE_MS + 1_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent", "the late reset matched no row")
+  clock.now = NOW + 25 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.sends.length, 2)
+})
+
+test("concurrent claim + late PATCH: a holder that lost the row does not POST", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.ledger.control.holdIf = (patch) => patch.status === "uncertain"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  clock.now = NOW + LEASE_MS + 1_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 500, "A's mark matched no row, so A stops")
+  assert.equal(resend.sends.length, 1)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+})
+
+test("needs_review is ACKed only once stored: write failure → 500, recovery → 200", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 1
+  await handleInboundEmail(webhookAt(clock), deps(resend))
+  clock.now = NOW + 24 * HOUR
+  resend.ledger.control.failUpdates = true
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  resend.ledger.control.failUpdates = false
+  clock.now += LEASE_MS + 1_000
+  const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+  assert.deepEqual([res.status, await res.json()], [200, { needsReview: true }])
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "needs_review")
+  assert.equal(resend.sends.length, 1)
+})
+
+test("sent but the ledger write fails → 200, no second POST now; a replay reuses the key", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.ledger.control.holdIf = (patch: ForwardPatch) => patch.status === "sent"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  resend.ledger.rows.get(EMAIL_ID)!.lease_token = "someone-else"
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 200)
+  assert.equal(resend.sends.length, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  clock.now = NOW + HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+})
+
+test("Supabase adapter: claim and every transition carry their fence in the PostgREST query", async () => {
+  const requests: { method: string; url: string; body: string }[] = []
+  let rowsBack: unknown[] = [{ email_id: EMAIL_ID }]
+  const fakeFetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    requests.push({ method: init?.method ?? "GET", url: decodeURIComponent(String(input)), body: String(init?.body ?? "") })
+    return new Response(JSON.stringify(rowsBack), { status: 200, headers: { "Content-Type": "application/json" } })
+  }) as typeof fetch
+  const ledger = supabaseLedger(
+    createClient("https://db.test", "service-role-test", { auth: { persistSession: false }, global: { fetch: fakeFetch } }),
+  )
+
+  rowsBack = [{ status: "pending", first_post_at: null, payload_hash: null }]
+  const claim = await ledger.claim(EMAIL_ID, "tok-1", NOW, LEASE_MS)
+  assert.equal(claim.claimed, true)
+  const [insert, take] = requests
+  assert.equal(insert.method, "POST")
+  assert.equal(take.method, "PATCH")
+  assert.match(take.url, new RegExp(`email_id=eq\\.${EMAIL_ID}`))
+  assert.match(take.url, /status=in\.\(pending,uncertain\)/)
+  assert.match(take.url, /lease_until=lt\./)
+  assert.equal(JSON.parse(take.body).lease_token, "tok-1")
+
+  requests.length = 0
+  rowsBack = [{ email_id: EMAIL_ID }]
+  assert.equal(await ledger.transition(EMAIL_ID, "tok-1", "uncertain", { status: "sent" }, NOW), true)
+  const [patch] = requests
+  assert.equal(patch.method, "PATCH")
+  for (const fence of [`email_id=eq.${EMAIL_ID}`, "lease_token=eq.tok-1", "status=eq.uncertain"]) assert.ok(patch.url.includes(fence), fence)
+
+  rowsBack = []
+  assert.equal(await ledger.transition(EMAIL_ID, "stale", "uncertain", { status: "pending" }, NOW), false, "0 rows changed → false")
 })

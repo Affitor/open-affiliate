@@ -17,8 +17,12 @@
 --   sent          Resend answered 2xx; never sent again
 --   needs_review  uncertain for 23 h, or a retry would change the payload;
 --                 never re-POSTed blindly, a person checks the Resend dashboard
--- lease_until: whoever moved it into the future holds the row and is the
--- only one allowed to POST; a crashed holder's lease simply runs out.
+-- lease_token, lease_until: a claim (only on pending/uncertain rows whose
+-- lease has run out) stamps a fresh random token and a 90 s lease. Every
+-- later write is fenced: WHERE email_id AND lease_token AND the expected
+-- status, and must change exactly one row. A holder whose lease ran out and
+-- was re-claimed can therefore change nothing, and no write ever starts from
+-- 'sent', so 'sent' is terminal.
 
 CREATE TABLE IF NOT EXISTS oa_inbox_forwards (
   email_id text PRIMARY KEY CHECK (email_id ~ '^[A-Za-z0-9-]{1,100}$'),
@@ -26,6 +30,7 @@ CREATE TABLE IF NOT EXISTS oa_inbox_forwards (
     CHECK (status IN ('pending', 'uncertain', 'sent', 'needs_review')),
   payload_hash text,
   first_post_at timestamptz,
+  lease_token uuid,
   lease_until timestamptz NOT NULL DEFAULT 'epoch',
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),

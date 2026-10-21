@@ -1,4 +1,4 @@
-import { createHash, createHmac, timingSafeEqual } from "node:crypto"
+import { createHash, createHmac, randomUUID, timingSafeEqual } from "node:crypto"
 import type { SupabaseClient } from "@supabase/supabase-js"
 
 /**
@@ -58,11 +58,18 @@ export type ForwardPatch = Partial<ForwardRow> & { lease_until?: string }
 export type ForwardLedger = {
   /**
    * Atomically take the row for this email (creating it as pending) if it is
-   * pending or uncertain and nobody else holds an unexpired lease. Returns
-   * the row either way so the caller can tell "already sent" from "busy".
+   * pending or uncertain and nobody else holds an unexpired lease, stamping
+   * it with `token`. Returns the row either way so the caller can tell
+   * "already sent" from "busy".
    */
-  claim(emailId: string, nowMs: number, leaseMs: number): Promise<{ claimed: boolean; row: ForwardRow | null }>
-  update(emailId: string, patch: ForwardPatch, nowMs: number): Promise<void>
+  claim(emailId: string, token: string, nowMs: number, leaseMs: number): Promise<{ claimed: boolean; row: ForwardRow | null }>
+  /**
+   * Fenced write: applies only if the row still carries `token` (nobody
+   * re-claimed it) and is still in `from`. True iff exactly one row changed.
+   * Nothing ever moves a row out of `sent`: no caller passes it as `from`,
+   * and claim() never matches it.
+   */
+  transition(emailId: string, token: string, from: ForwardStatus, patch: ForwardPatch, nowMs: number): Promise<boolean>
 }
 
 type ReceivedAttachment = {
@@ -318,9 +325,10 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
     return json(200, { dropped: true })
   }
 
+  const token = randomUUID()
   let claim: Awaited<ReturnType<ForwardLedger["claim"]>>
   try {
-    claim = await ledger.claim(emailId, deps.now(), LEASE_MS)
+    claim = await ledger.claim(emailId, token, deps.now(), LEASE_MS)
   } catch {
     console.error("inbound-email: failed", emailId, "ledger claim")
     return json(500, { error: "forward failed" })
@@ -330,12 +338,29 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
   if (row?.status === "needs_review") return json(200, { needsReview: true })
   if (!claim.claimed || !row) return json(409, { error: "in progress" })
 
-  const release = (patch: ForwardPatch = {}) =>
-    ledger.update(emailId, { ...patch, lease_until: new Date(deps.now()).toISOString() }, deps.now()).catch(() => {
-      console.error("inbound-email: ledger update failed", emailId)
-    })
+  // Every write below is fenced on our token and the state we expect; a
+  // false result means another invocation owns the row now.
+  let state: ForwardStatus = row.status
+  const move = async (patch: ForwardPatch): Promise<boolean> => {
+    try {
+      const done = await ledger.transition(emailId, token, state, patch, deps.now())
+      if (done && patch.status) state = patch.status
+      return done
+    } catch {
+      return false
+    }
+  }
+  const unlock = () => ({ lease_until: new Date(deps.now()).toISOString() })
+  // Best effort: if it fails the lease simply runs out.
+  const release = async (patch: ForwardPatch = {}) => {
+    if (!(await move({ ...patch, ...unlock() }))) console.error("inbound-email: ledger release failed", emailId)
+  }
+  // ACKed only once it is stored, so the case is never lost from the review queue.
   const needsReview = async (why: string) => {
-    await release({ status: "needs_review" })
+    if (!(await move({ status: "needs_review", ...unlock() }))) {
+      console.error("inbound-email: failed", emailId, "ledger needs_review")
+      return json(500, { error: "forward failed" })
+    }
     console.error("inbound-email: needs review", emailId, why)
     return json(200, { needsReview: true })
   }
@@ -366,16 +391,14 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
     if (row.status === "uncertain" && row.payload_hash !== hash) return needsReview("payload changed")
 
     // Durable before the POST: if we die mid-request, the next attempt knows
-    // a POST may have gone out and only replays it under the live key.
-    try {
-      await ledger.update(
-        emailId,
-        { status: "uncertain", payload_hash: hash, first_post_at: row.first_post_at ?? new Date(deps.now()).toISOString() },
-        deps.now(),
-      )
-    } catch {
-      throw new Error("ledger mark")
-    }
+    // a POST may have gone out and only replays it under the live key. If we
+    // lost the row meanwhile, we do not POST at all.
+    const marked = await move({
+      status: "uncertain",
+      payload_hash: hash,
+      first_post_at: row.first_post_at ?? new Date(deps.now()).toISOString(),
+    })
+    if (!marked) throw new Error("ledger mark")
 
     // A thrown fetch (no answer) leaves the row uncertain: it may have been accepted.
     const sent = await deps.fetch(`${RESEND_API}/emails`, {
@@ -389,7 +412,10 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
       signal: AbortSignal.timeout(15_000),
     })
     if (sent.ok) {
-      await release({ status: "sent" })
+      // The mail went out: 200 even if recording it fails. The row then stays
+      // uncertain, so a replay within 23 h hits the same key and later ones
+      // go to needs_review; never a second POST outside the key's life.
+      if (!(await move({ status: "sent", ...unlock() }))) console.error("inbound-email: sent but not recorded", emailId)
       console.log("inbound-email: forwarded", emailId, forward.bytes)
       return json(200, { forwarded: true })
     }
@@ -410,34 +436,43 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
   }
 }
 
-/** Supabase-backed ledger (service role). */
+/** Supabase-backed ledger (service role). Each request is capped at 5 s. */
 export function supabaseLedger(db: SupabaseClient): ForwardLedger {
   const table = () => db.from("oa_inbox_forwards")
   const columns = "status, first_post_at, payload_hash"
+  const cap = () => AbortSignal.timeout(5_000)
   return {
-    async claim(emailId, nowMs, leaseMs) {
+    async claim(emailId, token, nowMs, leaseMs) {
       const now = new Date(nowMs).toISOString()
-      const created = await table().upsert({ email_id: emailId }, { onConflict: "email_id", ignoreDuplicates: true })
+      const created = await table()
+        .upsert({ email_id: emailId }, { onConflict: "email_id", ignoreDuplicates: true })
+        .abortSignal(cap())
       if (created.error) throw new Error("ledger insert")
       // One UPDATE with the whole condition in its WHERE: Postgres re-checks
       // it on the locked row, so of two concurrent claims only one matches.
       const taken = await table()
-        .update({ lease_until: new Date(nowMs + leaseMs).toISOString(), updated_at: now })
+        .update({ lease_token: token, lease_until: new Date(nowMs + leaseMs).toISOString(), updated_at: now })
         .eq("email_id", emailId)
         .in("status", ["pending", "uncertain"])
         .lt("lease_until", now)
         .select(columns)
+        .abortSignal(cap())
       if (taken.error) throw new Error("ledger claim")
       if (taken.data?.length === 1) return { claimed: true, row: taken.data[0] as ForwardRow }
-      const current = await table().select(columns).eq("email_id", emailId).maybeSingle()
+      const current = await table().select(columns).eq("email_id", emailId).abortSignal(cap()).maybeSingle()
       if (current.error) throw new Error("ledger read")
       return { claimed: false, row: (current.data as ForwardRow | null) ?? null }
     },
-    async update(emailId, patch, nowMs) {
-      const { error } = await table()
+    async transition(emailId, token, from, patch, nowMs) {
+      const { data, error } = await table()
         .update({ ...patch, updated_at: new Date(nowMs).toISOString() })
         .eq("email_id", emailId)
+        .eq("lease_token", token)
+        .eq("status", from)
+        .select("email_id")
+        .abortSignal(cap())
       if (error) throw new Error("ledger update")
+      return data?.length === 1
     },
   }
 }

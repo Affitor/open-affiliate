@@ -130,8 +130,8 @@ test("013: oa_inbox_forwards is service-role only and holds no addresses or bodi
   assert.deepEqual(byTable.oa_inbox_forwards ?? [], [], "oa_inbox_forwards must have no policies")
   assert.match(sql, /ALTER TABLE oa_inbox_forwards ENABLE ROW LEVEL SECURITY;/i)
   assert.match(sql, /REVOKE ALL ON oa_inbox_forwards FROM anon, authenticated;/i)
-  const columns = [...sql.matchAll(/^  (\w+) (text|timestamptz)/gm)].map((m) => m[1])
-  assert.deepEqual(columns, ["email_id", "status", "payload_hash", "first_post_at", "lease_until", "created_at", "updated_at"])
+  const columns = [...sql.matchAll(/^  (\w+) (text|timestamptz|uuid)/gm)].map((m) => m[1])
+  assert.deepEqual(columns, ["email_id", "status", "payload_hash", "first_post_at", "lease_token", "lease_until", "created_at", "updated_at"])
 })
 
 test("claim_submit_edit is callable by service_role only", () => {
