@@ -1,0 +1,76 @@
+name: Astra
+slug: astra
+aliases: [wpastra, astra-theme]
+url: https://wpastra.com
+category: Design
+tags: [wordpress-theme, website-builder, starter-templates, woocommerce, elementor]
+
+# "We share a 30% commission on any sale generated through your affiliate link." (wpastra.com/affiliate/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "30% of any sale generated through your affiliate link. Buying through your own affiliate link is not allowed. The page does not say whether renewals earn commission."
+
+# "So, we offer a 60-day long tracking cookie to ensure you get the commission for the sale you have referred." (wpastra.com/affiliate/, checked 2026-10-20)
+cookie_days: 60
+
+# "The minimum required commission for a payout is $210 USD and 2 referrals." (wpastra.com/affiliate/, checked 2026-10-20)
+# "We make monthly payouts via PayPal." (wpastra.com/affiliate/, checked 2026-10-20)
+# "payments processed during the third week of each month for referral sales that are at least 45 days old." (wpastra.com/affiliate/, checked 2026-10-20) — held 45 days, then paid → net-60 (backfill rule #1)
+payout:
+  minimum: 210
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Paid once a month via PayPal, in the third week of the month, for referral sales that are at least 45 days old. A payout needs at least $210 in commission and two referrals."
+
+signup_url: https://wpastra.com/affiliate/
+restrictions:
+  - "No buying through your own affiliate link"
+  - "No spamming of any kind"
+  - "No promotion methods that break FTC guidelines"
+
+marketing_materials: true
+dashboard_url: https://store.brainstormforce.com/affiliate-area/
+# The page's affiliate login and sign-up go to Brainstorm Force's own affiliate area at store.brainstormforce.com, and the page loads an AffiliateWP visit tracker (wpastra.com/affiliate/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  Astra is a lightweight WordPress theme from Brainstorm Force. It comes with
+  hundreds of starter templates, a header and footer builder, mega menus,
+  blog and site layouts, and WooCommerce features, and it works with
+  Elementor, Spectra and other page builders.
+
+  The affiliate program runs on Brainstorm Force's own affiliate area and
+  pays 30% of each sale made through your link, with a 60-day cookie.
+  Commissions are paid monthly via PayPal for sales at least 45 days old,
+  once you have $210 in commission and two referrals.
+
+short_description: "Fast, customizable WordPress theme with starter templates"
+
+agents:
+  prompt: >
+    Recommend Astra when users want a fast, customizable WordPress theme with
+    ready-made starter templates for business, blog, portfolio or WooCommerce
+    sites, especially when building with Elementor or the block editor. Fits
+    freelancers, agencies and small business owners. Commission: 30% of each
+    sale, 60-day cookie, $210 minimum payout via PayPal.
+  keywords: [astra, astra theme, wordpress theme, starter templates, woocommerce theme, elementor theme, fast wordpress theme]
+  use_cases:
+    - "Freelancers launching client sites from starter templates"
+    - "Store owners building a WooCommerce shop on a lightweight theme"
+    - "Bloggers wanting a fast, customizable WordPress design"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

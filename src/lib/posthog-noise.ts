@@ -51,3 +51,25 @@ export function dropNoisyException(event: CaptureResult | null): CaptureResult |
   if (named.length > 0 && named.every(isNoiseFilename)) return null
   return event
 }
+
+/** A submission id is the only key to its status page, so it never goes to analytics. */
+// The whole segment, not only a literal UUID: Next decodes /submissions/%30b9c… to the same id.
+const SUBMISSION_ID = /\/submissions\/[^/?#\s"'<>]+/g
+export const SUBMISSION_ID_MASK = "/submissions/{id}"
+
+function masked(value: unknown): unknown {
+  if (typeof value === "string") return value.replace(SUBMISSION_ID, SUBMISSION_ID_MASK)
+  if (Array.isArray(value)) return value.map(masked)
+  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, masked(v)]))
+  return value
+}
+
+/**
+ * Every string in the event ($current_url, $pathname, $referrer, the
+ * $set_once initial referrer, autocaptured link hrefs and $elements_chain)
+ * with submission ids replaced.
+ */
+export function maskSubmissionIds(event: CaptureResult | null): CaptureResult | null {
+  if (!event) return null
+  return masked(event) as CaptureResult
+}

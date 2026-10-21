@@ -6,6 +6,11 @@ import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
 import { isAffitorHref } from "../src/lib/affitor-link"
 import { getProgram, isLive } from "../src/lib/programs"
+import { DISCLOSURE_SOURCE, GUIDES, guideCopyStrings, guidePath, guideSelection, guideTitle, registryFacts } from "../src/lib/guides"
+import { GuideView } from "../src/components/guide-view"
+import { blogEntries } from "../src/lib/blog"
+import { createElement } from "react"
+import { renderToStaticMarkup } from "react-dom/server"
 import { hasNoProgram } from "../src/lib/no-program"
 import {
   MIN_POST_PROGRAMS,
@@ -217,3 +222,80 @@ test("a per-category list is linked from its own category only", () => {
   assert.ok(otherLists(scoped).includes(unscoped))
 })
 
+
+// ---------- guides (/blog/<slug>) -------------------------------------------
+
+test("every guide names only programs the registry has, links only lists that exist, and carries no figures", () => {
+  assert.ok(GUIDES.length > 0)
+  assert.equal(new Set(GUIDES.map((g) => g.slug)).size, GUIDES.length, "two guides share a slug")
+  const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|half|dozen)\b/i
+  for (const g of GUIDES) {
+    assert.match(g.checked, /^\d{4}-\d{2}-\d{2}$/)
+    const slugs = g.programs.map((p) => p.slug)
+    assert.equal(new Set(slugs).size, slugs.length, `${g.slug}: a program appears twice`)
+    for (const slug of [...slugs, ...g.rules.map((r) => r.slug)]) assert.ok(getProgram(slug), `${g.slug}: ${slug} is not in the registry`)
+    for (const r of g.related) assert.ok(listSlugs.has(r), `${g.slug}: related ${r} is not a list`)
+    for (const st of g.sections.flatMap((s) => s.steps ?? [])) if (st.link) assert.match(st.link.href, /^\/(best\/[a-z0-9-]+|programs\?[a-z0-9=&]+)$/, `${g.slug}: step link ${st.link.href}`)
+    for (const text of guideCopyStrings(g)) {
+      assert.doesNotMatch(text.replace(/\bB2[BC]\b/g, ""), /\d/, `${g.slug}: a digit in copy: ${JSON.stringify(text)}`)
+      assert.doesNotMatch(text, NUMBER_WORDS, `${g.slug}: a spelled-out number in copy: ${JSON.stringify(text)}`)
+    }
+    assert.ok(g.description.length >= 120 && g.description.length <= 155, `${g.slug}: description is ${g.description.length} characters`)
+    const title = guideTitle(g, new Date(g.checked))
+    assert.ok(title.includes(String(new Date(g.checked).getUTCFullYear())) && title.length <= 44, `${g.slug}: title "${title}"`)
+  }
+})
+
+test("as of its check date, a guide shows every program it names, live, verified and fresh", () => {
+  for (const g of GUIDES) {
+    const asOf = new Date(g.checked)
+    const selection = guideSelection(g, asOf)
+    assert.deepEqual(selection.dropped, [], `${g.slug}: dropped ${JSON.stringify(selection.dropped)}`)
+    assert.ok(selection.shown.length >= 3, `${g.slug}: ${selection.shown.length} programs`)
+    for (const { program } of selection.shown) {
+      assert.ok(program.verified && isLive(program) && !hasNoProgram(program), `${g.slug}: ${program.slug}`)
+      assert.ok(Date.parse(program.lastVerifiedAt!) >= asOf.getTime() - 90 * 86_400_000, `${g.slug}: ${program.slug} terms are stale`)
+    }
+  }
+})
+
+test("a guide page: Apply links carry the guide's blog UTM, no Affitor link, the disclosure cites its source, FAQ in JSON-LD", () => {
+  for (const g of GUIDES) {
+    const selection = guideSelection(g, new Date(g.checked))
+    const html = renderToStaticMarkup(createElement(GuideView, { guide: g, selection, path: guidePath(g) }))
+    for (const { program } of selection.shown) {
+      const href = blogApplyHref(program, g.slug)
+      assert.equal(new URL(href).searchParams.get("utm_campaign"), g.slug)
+      assert.ok(html.includes(`href="${href.replaceAll("&", "&amp;")}"`), `${g.slug}: no Apply link for ${program.slug}`)
+    }
+    const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1].replaceAll("&amp;", "&"))
+    for (const h of hrefs) assert.ok(!isAffitorHref(h), `${g.slug}: Affitor link ${h}`)
+    assert.ok(hrefs.includes(DISCLOSURE_SOURCE.href), `${g.slug}: the disclosure does not cite its source`)
+    assert.ok(html.includes("data-post-disclosure") && html.includes("data-registry-facts"))
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
+    const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
+    assert.deepEqual(faqLd.mainEntity.map((q: { name: string }) => q.name), g.faq.map((f) => f.q))
+    for (const p of [...html.matchAll(/<p[^>]*>([^<]*)<\/p>/g)].map((m) => m[1])) assert.doesNotMatch(p, /undefined|NaN|null/)
+  }
+})
+
+test("registry facts add up and come from verified programs only", () => {
+  const f = registryFacts()
+  const verified = livePrograms.filter((p) => p.verified).length
+  assert.equal(f.verified, verified)
+  assert.equal(f.byType.reduce((a, t) => a + t.count, 0), verified)
+  assert.equal(f.approval.auto + f.approval.manual + f.approval.unknown, verified)
+  assert.ok(f.lifetime <= (f.byType.find((t) => t.type === "recurring")?.count ?? 0))
+  assert.ok(f.cookie && f.cookie.p25 <= f.cookie.median && f.cookie.median <= f.cookie.p75)
+  assert.match(f.asOf, /^\d{4}-\d{2}-\d{2}$/)
+})
+
+test("guides are on /blog, in the sitemap, and never under /best", () => {
+  const { posts } = blogEntries()
+  const urls = new Set(sitemap().map((e) => e.url))
+  for (const g of GUIDES) {
+    assert.ok(posts.some((e) => e.href === guidePath(g)), `${g.slug}: not on /blog`)
+    assert.ok(urls.has(`https://openaffiliate.dev${guidePath(g)}`), `${g.slug}: not in the sitemap`)
+    assert.ok(!listSlugs.has(g.slug), `${g.slug}: also a /best list slug`)
+  }
+})

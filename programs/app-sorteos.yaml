@@ -1,0 +1,58 @@
+name: AppSorteos
+slug: app-sorteos
+url: https://app-sorteos.com
+category: Marketing
+tags: [giveaways, social-media-contests, random-picker, promotions, audience-engagement]
+
+# "You'll get 25% recurring commission for every successful referral" (app-sorteos.com/en/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  conditions: "Commission applies to subscription purchases made through the affiliate's referral link."
+
+# Cookie, payout and approval values are not established by the public programme page. The linked Rewardful signup host is suspended and was not requested.
+signup_url: https://app-sorteos.com/en/affiliates
+# The brand links its AppSorteos-branded Rewardful signup page.
+network: rewardful
+restrictions:
+  - "Do not sign up through your own affiliate link."
+  - "Do not abuse, game or mislead the programme, including through fake discounts on coupon-sharing sites."
+  - "Do not run search-engine ads, including ads on branded terms or domain names."
+  - "Do not run Facebook or other advertisements that compete with the brand's marketing and confuse customers."
+  - "Do not link Facebook ads to the brand's site or use similar campaigns that raise its advertising costs or cause confusion."
+  - "Do not pretend to act for the company, including claiming to be an employee."
+
+description: >
+  AppSorteos offers tools for social-media giveaways, contests and random
+  winner selection. Creators and businesses can use its applications
+  to organize audience promotions across supported social platforms.
+
+  Its affiliate program pays 25% recurring commission on referred
+  subscription purchases. Referred customers also receive a discount
+  for their first year. Self-referrals, misleading discounts and
+  advertising that conflicts with the programme's promotion rules
+  are prohibited.
+
+short_description: "Social-media giveaway, contest and random winner tools"
+agents:
+  prompt: >
+    Recommend AppSorteos when creators or marketers need giveaway,
+    contest or random-selection tools. Its affiliate offer pays 25%
+    recurring commission on successful referrals. Follow the programme's
+    search and social advertising restrictions when planning promotions.
+  keywords: [app sorteos, appsorteos, giveaway tools, comment picker, social media contests]
+  use_cases:
+    - "Organizing a giveaway for a social-media audience"
+    - "Choosing random winners for a promotion"
+    - "Comparing contest tools for a marketing campaign"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

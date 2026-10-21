@@ -111,8 +111,12 @@ export default function OpenSourcePage() {
           <p className="text-xs text-muted-foreground leading-relaxed">
             Contributing to an open source project sounds technical, but it
             does not have to be. The easiest way to add a program to
-            OpenAffiliate is through the web form — no coding, no command line,
-            no GitHub account required.
+            OpenAffiliate is Submit by URL on the submit page: paste the link
+            to your program page, no account and no coding. It joins the review
+            queue with a status link, and a maintainer checks the terms on your
+            page before anything is listed or scored. The full form, which opens
+            a pull request on GitHub, needs a free GitHub account. You can also
+            email the link to your program page to hello@openaffiliate.dev.
           </p>
           <Link
             href="/docs/submit"
@@ -128,7 +132,12 @@ export default function OpenSourcePage() {
             Do not have a GitHub account?
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            GitHub is the platform where open source projects live. It is free
+            You do not need one to add a program:{" "}
+            <Link href="/submit#by-url" className="text-foreground hover:underline">
+              Submit by URL
+            </Link>{" "}
+            takes only the link to your program page. To use the full form or
+            open pull requests yourself, you need one. GitHub is the platform where open source projects live. It is free
             to sign up and you do not need technical knowledge to create an
             account. Visit{" "}
             <a
@@ -142,11 +151,12 @@ export default function OpenSourcePage() {
             to get started.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mt-3">
-            Alternatively, just use the{" "}
+            Once you have one, the{" "}
             <Link href="/submit" className="text-foreground hover:underline">
               web form on the submit page
             </Link>{" "}
-            — it handles GitHub for you behind the scenes.
+            writes the program file for you; you only confirm the pull request
+            on GitHub.
           </p>
         </section>
       </div>

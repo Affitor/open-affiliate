@@ -7,6 +7,7 @@ import { affitorUrl } from "@/lib/affitor-link";
 import { PostHogProvider } from "@/components/posthog-provider";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { WebMcpTools } from "@/components/webmcp-tools";
 import { serializeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 
@@ -22,7 +23,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "OpenAffiliate — The Open Registry of Affiliate Programs",
+    default: "OpenAffiliate: Open Affiliate Program Directory and Database",
     template: "%s | OpenAffiliate",
   },
   description:
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     canonical: "./",
   },
   openGraph: {
-    title: "OpenAffiliate: The Open Registry of Affiliate Programs",
+    title: "OpenAffiliate: Open Affiliate Program Directory and Database",
     description:
       "Discover, compare, and integrate affiliate programs. Built for developers and AI agents.",
     url: "https://openaffiliate.dev",
@@ -61,7 +62,8 @@ const FOOTER_COLUMNS: { title: string; links: { label: string; href: string }[] 
     title: "Registry",
     links: [
       { label: "Rankings", href: "/rankings" },
-      { label: "Programs", href: "/programs" },
+      // Intent anchor: on every page, it tells crawlers which page answers "affiliate program directory".
+      { label: "Affiliate program directory", href: "/programs" },
       { label: "All programs A–Z", href: "/programs/a-z" },
       { label: "Networks", href: "/networks" },
       { label: "Categories", href: "/categories" },
@@ -125,7 +127,7 @@ function Footer() {
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border pt-4">
           <p>
-            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
+            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer", "sitewide")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
           </p>
           <div className="flex items-center gap-4">
             <span>Open source · MIT</span>
@@ -182,6 +184,40 @@ const SITE_JSON_LD = {
         "query-input": "required name=search_term_string",
       },
     },
+    // The registry itself, and the two ways to query it. Only what is served:
+    // the data is MIT licensed (/about), the API and MCP are free and keyless.
+    {
+      "@type": "Dataset",
+      "@id": "https://openaffiliate.dev/#dataset",
+      name: "OpenAffiliate registry of affiliate programs",
+      description:
+        // Names no cookie, payout or approval term: this graph is on every unverified
+        // program page too, whose JSON-LD scripts/unconfirmed-checks.ts scans for one.
+        "Affiliate programs with their commission terms, verification dates and recommendation guidance for AI agents. One YAML file per program, community-maintained.",
+      url: "https://openaffiliate.dev/programs",
+      license: "https://opensource.org/licenses/MIT",
+      isAccessibleForFree: true,
+      creator: { "@id": "https://openaffiliate.dev/#organization" },
+      publisher: { "@id": "https://openaffiliate.dev/#organization" },
+      distribution: [
+        { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: "https://openaffiliate.dev/api/programs" },
+        { "@type": "DataDownload", encodingFormat: "text/plain", contentUrl: "https://openaffiliate.dev/llms-full.txt" },
+      ],
+    },
+    {
+      "@type": ["WebAPI", "Service"],
+      "@id": "https://openaffiliate.dev/#api",
+      name: "OpenAffiliate API",
+      description:
+        "REST API and MCP server for searching the registry and reading program terms; the one write queues a missing program for review. No authentication or API key.",
+      url: "https://openaffiliate.dev/docs/api",
+      documentation: "https://openaffiliate.dev/openapi.json",
+      provider: { "@id": "https://openaffiliate.dev/#organization" },
+      availableChannel: [
+        { "@type": "ServiceChannel", name: "REST API", serviceUrl: "https://openaffiliate.dev/api/programs" },
+        { "@type": "ServiceChannel", name: "MCP server", serviceUrl: "https://openaffiliate.dev/mcp" },
+      ],
+    },
   ],
 };
 
@@ -198,6 +234,7 @@ export default function RootLayout({
     >
       <head>
         <link rel="describedby" href="/llms.txt" type="text/plain" />
+        <link rel="ard" href="/.well-known/ard.json" type="application/json" />
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -212,6 +249,7 @@ export default function RootLayout({
             <Footer />
           </ThemeProvider>
         </PostHogProvider>
+        <WebMcpTools />
       </body>
     </html>
   );

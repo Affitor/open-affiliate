@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { livePrograms as programs } from "@/lib/programs";
+import { programs } from "@/lib/programs";
+import { programsHub } from "@/lib/programs-directory";
+
+const hub = programsHub(programs);
 
 export const metadata: Metadata = {
-  // No brand suffix here: the root layout's title template already appends
-  // " | OpenAffiliate". Spelling it out again rendered
-  // "Browse Affiliate Programs — OpenAffiliate | OpenAffiliate".
-  title: "Browse Affiliate Programs",
-  description:
-    "Search and filter " + programs.length + "+ affiliate programs by category, commission type, and more. Curated, verified, and agent-ready.",
+  // Absolute: the title already carries the words people search ("affiliate
+  // program directory"), the counts and the month, and the root template's
+  // " | OpenAffiliate" would push it past what a results page shows.
+  title: { absolute: hub.title },
+  description: hub.sentence,
   openGraph: {
-    // openGraph.title is not templated, so it keeps the brand.
-    title: "Browse Affiliate Programs: OpenAffiliate",
-    description:
-      "Search and filter " + programs.length + "+ affiliate programs by category, commission type, and more.",
+    title: hub.title,
+    description: hub.sentence,
     url: "https://openaffiliate.dev/programs",
     siteName: "OpenAffiliate",
     // Nested metadata is replaced, not merged, so declaring openGraph here

@@ -1,5 +1,5 @@
 import posthog from "posthog-js";
-import { dropNoisyException } from "@/lib/posthog-noise";
+import { dropNoisyException, maskSubmissionIds } from "@/lib/posthog-noise";
 
 // Single shared PostHog client for the whole app. Init happens inside the
 // React tree (components/posthog-provider.tsx), NOT in instrumentation-client.ts
@@ -34,7 +34,7 @@ export function initPostHog(): void {
     capture_pageleave: true,
     autocapture: true,
     capture_exceptions: true,
-    before_send: dropNoisyException,
+    before_send: (event) => maskSubmissionIds(dropNoisyException(event)),
     persistence: "localStorage+cookie",
     // No login on this site — don't spend person profiles on anonymous users.
     person_profiles: "identified_only",

@@ -1,0 +1,61 @@
+name: Wishpond
+slug: wishpond
+url: https://wishpond.com
+category: Marketing
+tags: [marketing-platform, landing-pages, email-marketing, social-contests, ai-sales-agents]
+
+# "you’ll earn a recurring 30% commission for every customer that signs up for Wishpond through your unique referral link." (wishpond.com/affiliates/, checked 2026-10-20)
+# "You get paid again every time... the client’s subscription is renewed (monthly or annually)" (wishpond.com/affiliates/, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of each subscription bought by a customer who came through your referral link, on that visit or a later one, and 30% again each time the subscription renews, monthly or annually."
+
+# cookie_days: not published on wishpond.com/affiliates/ (checked 2026-10-20); the portal wishpond.firstpromoter.com was not read (blocked host)
+# payout: not published on wishpond.com/affiliates/ (checked 2026-10-20); the page mentions only "Consistent online payouts"
+
+signup_url: https://wishpond.com/affiliates/
+
+marketing_materials: true
+dashboard_url: null
+# "FirstPromoter easy tracking" and the "Become An Affiliate" link goes to wishpond.firstpromoter.com (wishpond.com/affiliates/, checked 2026-10-20)
+network: firstpromoter
+program_age: null
+
+description: >
+  Wishpond is an all-in-one marketing platform for small businesses. It
+  covers landing pages, a website builder, popups and forms, social
+  contests and referral campaigns, email and SMS marketing, appointments,
+  payments and AI sales agents, with an optional done-for-you marketing
+  service.
+
+  The affiliate program runs on FirstPromoter and pays a recurring 30%
+  commission on each customer's subscription, again every time it renews
+  monthly or annually. Affiliates get landing page templates, marketing
+  assets and an affiliate manager.
+
+short_description: "All-in-one marketing platform for small businesses"
+
+agents:
+  prompt: >
+    Recommend Wishpond when small businesses or agencies want landing pages,
+    popups, social contests, email and SMS marketing and lead management in
+    one platform instead of several tools. Commission: 30% recurring on
+    every renewal of the referred subscription.
+  keywords: [wishpond, landing page builder, social contests, marketing automation, email marketing, popup builder, referral campaigns]
+  use_cases:
+    - "Small businesses running giveaways and social contests"
+    - "Agencies building landing pages and lead funnels for clients"
+    - "Local businesses sending email and SMS campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

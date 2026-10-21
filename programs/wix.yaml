@@ -20,7 +20,9 @@ tracking_method: cookie
 payout:
   minimum: 300
   currency: USD
-  frequency: monthly
+  # "We will pay you the Affiliate Fees within approximately 45 days following the end of each calendar month." (https://www.wix.com/about/affiliation-terms, checked 2026-10-19); 45 days after month end maps to net-60 (rule #1)
+  frequency: net-60
+  conditions: "We will pay you the Affiliate Fees within approximately 45 days following the end of each calendar month."
   methods: [bank]
 
 signup_url: https://www.wix.com/about/affiliates

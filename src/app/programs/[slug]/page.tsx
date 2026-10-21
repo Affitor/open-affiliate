@@ -47,7 +47,8 @@ import { claimsEnabledFor } from "@/lib/claims/rules";
 import { TrackView, TrackLink } from "./track-view";
 import { AffitorLink } from "@/components/affitor-link";
 import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl } from "@/lib/affitor-link";
-import { getOasScore, oasValue } from "@/lib/oas";
+import { getOasScore, isStale, OAS_IN_PROGRESS_TEXT, OAS_STALE_TEXT, oasValue, verdictText } from "@/lib/oas";
+import { OasGradeChip } from "@/components/oas-grade";
 
 export const revalidate = 86400;
 export const dynamicParams = true;
@@ -327,7 +328,7 @@ export default async function ProgramPage({
               )}
               {!paused && (
                 <div className="mt-5 flex items-center gap-2">
-                  <TrackLink href={applyCta.href} slug={slug} cta="apply" className={applyClass}>
+                  <TrackLink href={applyCta.href} slug={slug} network={program.network} cta="apply" className={applyClass}>
                     {applyCta.label}
                     <ExternalLink className="h-3.5 w-3.5" />
                   </TrackLink>
@@ -345,6 +346,7 @@ export default async function ProgramPage({
                   <TrackLink
                     href={alsoOn.href}
                     slug={slug}
+                    network="affitor"
                     cta="also_on"
                     className="flex items-center justify-center gap-1.5 rounded-lg border border-border h-10 text-sm font-medium hover:bg-muted/50 transition-colors"
                   >
@@ -473,16 +475,23 @@ export default async function ProgramPage({
             </section>
           )}
 
-          {/* The OAS embed, under the program's own content. Renders only once OAS is published. */}
+          {/* OAS below the program content (Sơn 19/10: "program detail thi phai thay program truoc, cai embed tu rank thi no o phia duoi"). */}
           {oas && (
             <section aria-labelledby="oas-heading" className="rounded-xl border border-border bg-card p-5">
               <h2 id="oas-heading" className="oa-label">OAS · OpenAffiliate Score</h2>
-              <p className="mt-2 font-mono text-display font-medium tabular-nums">
-                {oasValue(oas) == null ? "Scoring in progress" : <>{oasValue(oas)}<span className="ml-1 text-sm text-muted-foreground">/100</span></>}
-              </p>
-              <p className="mt-1 text-meta text-muted-foreground">How clearly {program.name} publishes its terms, from public pages only. Not how much it pays.</p>
-              <Link href={`/programs/${slug}/oas`} className="mt-3 inline-flex items-center gap-1 text-sm underline decoration-line-strong underline-offset-4 hover:decoration-current">
-                Full report <ArrowRight className="size-3.5" aria-hidden />
+              {oasValue(oas) == null ? (
+                <p className="mt-2 text-sm text-muted-foreground">
+                  {isStale(oas.checked_at, new Date()) ? OAS_STALE_TEXT : OAS_IN_PROGRESS_TEXT}
+                </p>
+              ) : (
+                <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span className="font-mono text-title font-medium">{oasValue(oas)}<span className="text-meta text-muted-foreground">/100</span></span>
+                  <OasGradeChip score={oasValue(oas)!} />
+                  <span className="text-sm text-muted-foreground">{verdictText(oas)}</span>
+                </div>
+              )}
+              <Link href={`/programs/${slug}/oas`} className="mt-3 inline-flex items-center gap-1 text-sm underline underline-offset-2 hover:text-foreground">
+                Full report <span aria-hidden>→</span>
               </Link>
             </section>
           )}

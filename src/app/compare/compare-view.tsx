@@ -2,6 +2,8 @@
 
 import { useState, useMemo, Suspense, useEffect } from "react";
 import { track } from "@/lib/track";
+import { frequencyLabel } from "@/lib/claims/form";
+import { payoutMinText } from "@/lib/rankings-terms";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -47,10 +49,13 @@ export interface CompareProgram {
   attribution?: string;
   trackingMethod?: string;
   payoutMinimum?: number;
+  payoutCurrency?: string;
   payoutFrequency?: string;
   approval?: string;
   approvalTime?: string;
   network: string;
+  /** The registry network key, for apply_click (network is the display name). */
+  networkKey?: string;
   marketingMaterials?: boolean;
   apiAvailable?: boolean;
   dedicatedManager?: boolean;
@@ -474,7 +479,7 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        {p.payoutMinimum != null ? `$${p.payoutMinimum}` : "—"}
+                        {payoutMinText(p.payoutMinimum, p.payoutCurrency) ?? "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -485,9 +490,9 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                     {selected.map((p) => (
                       <td
                         key={p.slug}
-                        className="py-3 px-4 text-center text-sm capitalize"
+                        className="py-3 px-4 text-center text-sm"
                       >
-                        {p.payoutFrequency ?? "—"}
+                        {p.payoutFrequency ? frequencyLabel(p.payoutFrequency) : "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}
@@ -588,6 +593,7 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                           source="compare"
                           slug={p.slug}
                           cta="join"
+                          applyNetwork={p.networkKey}
                           newTab
                           className="inline-flex items-center gap-1.5 rounded-lg bg-foreground text-background px-4 py-2 text-xs font-medium hover:bg-foreground/90 transition-colors"
                         >

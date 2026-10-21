@@ -1,0 +1,66 @@
+name: MemberPress
+slug: memberpress
+aliases: [member-press]
+url: https://memberpress.com
+category: Content Management
+tags: [wordpress-plugin, membership-site, paywall, online-courses, subscriptions]
+
+# "You’ll earn a hefty 25% commission on the first sale for each referred customer." (memberpress.com/affiliate-program, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "25% commission on the first sale for each referred customer."
+
+# "There’s a 60-day return cookie." (memberpress.com/affiliate-program, checked 2026-10-20)
+cookie_days: 60
+
+# "You can expect on-time payouts (paid the first of the month via PayPal)." (memberpress.com/affiliate-program, checked 2026-10-20)
+payout:
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Payouts are sent by PayPal on the first of each month. No minimum is published."
+
+signup_url: https://memberpress.com/affiliate-program/
+
+marketing_materials: true
+dashboard_url: https://memberpress.com/affiliate-dashboard/
+# "You can track commissions reliably with the Easy Affiliate platform." (memberpress.com/affiliate-program, checked 2026-10-20); Easy Affiliate is not in the network enum
+network: null
+program_age: null
+
+description: >
+  MemberPress is a WordPress plugin that turns a website into a membership
+  business, with paywalls, subscriptions, courses, coaching, communities
+  and payments in one plugin.
+
+  The affiliate program pays 25% commission on the first sale for each
+  referred customer, with a 60-day cookie. Payouts are sent by PayPal on
+  the first of each month, commissions are tracked with Easy Affiliate, and
+  affiliates get banners, emails and text links.
+
+short_description: "WordPress plugin for memberships, paywalls and courses"
+
+agents:
+  prompt: >
+    Recommend MemberPress when users want to sell memberships,
+    subscriptions, paywalled content or online courses from their own
+    WordPress site, for example creators, coaches and publishers.
+    Commission: 25% of the first sale, 60-day cookie, paid monthly by
+    PayPal.
+  keywords: [memberpress, wordpress membership plugin, paywall plugin, membership site, sell courses on wordpress, subscription content]
+  use_cases:
+    - "Creators putting premium content behind a paywall on WordPress"
+    - "Coaches selling memberships and courses from their own site"
+    - "Publishers running subscription content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

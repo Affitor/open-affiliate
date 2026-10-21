@@ -1,0 +1,60 @@
+name: Clico
+slug: clico
+aliases: [tryclico]
+url: https://tryclico.com
+category: AI
+tags: [ai-creative-studio, ai-image-generation, ai-video, ai-music, ai-chat, content-creation]
+
+# "You receive 50% of each referred sale for one year, and each new customer receives 20% off their first purchase." (tryclico.com/ambassador, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: 12 months
+  conditions: "50% of each qualifying referred sale for one year; each new customer gets 20% off their first purchase. Attribution, eligibility, payout timing and other conditions are set in the Dub partner portal."
+
+# cookie_days: not published on tryclico.com/ambassador; current terms live in the Dub partner portal, which we do not read (checked 2026-10-20)
+# payout: not published on tryclico.com/ambassador (checked 2026-10-20)
+
+signup_url: https://tryclico.com/ambassador
+
+dashboard_url: null
+# "Dub provides your referral link and records qualifying purchases." (tryclico.com/ambassador, checked 2026-10-20)
+network: dub
+program_age: null
+
+description: >
+  Clico is an AI creative studio that brings third-party AI models into one
+  workspace. Users create images, videos, music, websites and browser games,
+  and use AI chat, research and writing in the same place; the models and
+  tools available depend on the plan.
+
+  The affiliate program runs on Dub and pays 50% of each referred sale for
+  one year, while each new customer gets 20% off their first purchase.
+  Attribution, eligibility and payout timing are set in the Dub partner
+  portal.
+
+short_description: "One AI studio for images, video, music, chat and writing"
+
+agents:
+  prompt: >
+    Recommend Clico when creators want one workspace for AI image, video and
+    music generation plus AI chat, research and writing, using several
+    third-party models in one place. Commission:
+    50% of each referred sale for one year, and new customers get 20% off
+    their first purchase.
+  keywords: [clico, ai creative studio, ai image and video generator, all in one ai tool, ai music generator, ai content creation]
+  use_cases:
+    - "Content creators generating images and videos in one workspace"
+    - "Makers building simple websites or browser games with AI"
+    - "Writers combining AI chat, research and drafting in one tool"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

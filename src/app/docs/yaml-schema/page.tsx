@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { CodeBlock } from "@/components/code-block";
 import { DocsHeader } from "@/components/docs-header";
 import { DocsPagination } from "@/components/docs-pagination";
@@ -21,32 +22,33 @@ export default function YAMLSchemaPage() {
       <CodeBlock
         label="programs/your-product.yaml"
         code={`name: Your Product
-slug: your-product
+slug: your-product              # same as the file name
 url: https://yourproduct.com
-category: Developer Tools
+category: Developer Tools       # one of the schema's 20 categories
 tags: [saas, api, developer]
 
 commission:
-  type: recurring          # recurring | one-time | tiered | hybrid
-  rate: "25%"
-  currency: USD            # required for a flat amount; a percentage may leave it out
-  duration: "12 months"
+  type: recurring               # recurring | one-time | tiered | hybrid
+  rate: "25%"                   # as the program page says it
+  mode: percentage              # percentage | flat | tiered | hybrid | unknown
+  value: 25                     # the number; null when mode is unknown
+  currency: USD                 # required for a flat amount
+  duration: "12 months"         # a bare length, or "lifetime"
 
-cookie_days: 30
-signup_url: https://yourproduct.com/affiliates
-approval: auto             # auto | manual | invite-only
-approval_time: "instant"
+# Only what the program page states. Leave out anything it does not.
+cookie_days: 60
+signup_url: https://yourproduct.com/affiliates   # the program page, not the homepage
+approval: manual                # auto | manual | invite-only
 
 payout:
   minimum: 50
   currency: USD
   frequency: monthly
-  methods: [bank, paypal, crypto]
-  conditions: "Paid 30 days after the customer's first payment"
+  methods: [bank, paypal]
 
+short_description: "One line, 100 characters at most"
 description: >
   What your product does and what the affiliate program offers.
-short_description: "One-line description for search results"
 
 agents:
   prompt: >
@@ -54,10 +56,10 @@ agents:
   keywords: [keyword1, keyword2]
   use_cases:
     - "When a user needs X"
-    - "Replacing Y with a better alternative"
 
-verified: false
-submitted_by: "@your-github"`}
+verified: false                 # set by a maintainer after checking
+submitted_by: "@your-github"
+created_at: "2026-10-20"        # the date you add the file; never changes`}
       />
       <p className="text-xs text-muted-foreground mt-3">
         See{" "}
@@ -67,7 +69,12 @@ submitted_by: "@your-github"`}
         >
           program.schema.json
         </a>{" "}
-        for the full specification. CI validates every PR against this schema.
+        for the full specification. CI validates every pull request against it.
+        Required fields and the review rules are on{" "}
+        <Link href="/docs/contributing" className="text-foreground hover:underline">
+          Contributing
+        </Link>
+        .
       </p>
 
       <DocsPagination currentPath="/docs/yaml-schema" />

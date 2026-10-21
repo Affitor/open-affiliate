@@ -1,0 +1,9 @@
+# Blank issues stay on: the "Report an error" link on each OAS report opens a prefilled issue without a template.
+blank_issues_enabled: true
+contact_links:
+  - name: How to add a program
+    url: https://openaffiliate.dev/docs/submit
+    about: The five ways to add a program, what a maintainer checks, and how long it takes.
+  - name: How programs are scored (OAS)
+    url: https://openaffiliate.dev/docs/oas
+    about: The checks, the grades, the ranking order, and how to improve a score.

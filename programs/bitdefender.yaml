@@ -1,6 +1,6 @@
 name: Bitdefender
 slug: bitdefender
-url: https://www.bitdefender.com/en-us/business/campaign/ps-aff-compare-30?pid=PSAFFCOMPARE30
+url: https://www.bitdefender.com/
 category: Security
 tags:
   - security
@@ -24,7 +24,7 @@ payout:
   methods:
     - bank
     - paypal
-signup_url: https://www.bitdefender.com/en-us/business/campaign/ps-aff-compare-30?pid=PSAFFCOMPARE30/partner/affiliate
+signup_url: https://www.bitdefender.com/en-us/partners/affiliate-partners/
 approval: manual
 approval_time: 1-5 business days
 restrictions: null

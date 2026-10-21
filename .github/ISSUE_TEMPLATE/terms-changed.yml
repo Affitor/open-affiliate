@@ -1,0 +1,32 @@
+name: Terms changed or score looks wrong
+description: Ask for a re-check of a listed program. We verify the brand's own page again; nobody edits a score by hand.
+title: "Re-check: "
+labels: ["program-update"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A maintainer reads the page you link and updates the listing to match it. The OpenAffiliate Score then follows the verified terms. How scoring works: https://openaffiliate.dev/docs/oas
+  - type: input
+    id: slug
+    attributes:
+      label: Program
+      description: The slug or the program's OpenAffiliate URL.
+      placeholder: https://openaffiliate.dev/programs/example
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Page that states the current terms
+      description: On the brand's own domain.
+      placeholder: https://example.com/affiliates
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What is wrong or changed
+      description: For example "cookie window is now 90 days", or the check on the OAS report that looks wrong (such as T4 Minimum payout).
+    validations:
+      required: true

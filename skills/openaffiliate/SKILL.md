@@ -11,7 +11,8 @@ Use the same criteria for every program and network; no network is preferred.
 
 ## Find and compare programs
 
-Prefer the public, read-only MCP server at `https://openaffiliate.dev/mcp` (no API key):
+Prefer the public MCP server at `https://openaffiliate.dev/mcp` (no API key). Every tool is
+read-only except `submit_program`, which only adds a program to the review queue:
 
 ```sh
 claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
@@ -20,6 +21,8 @@ claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
 - `search_programs`: search with `query`, `category`, `commission_type` or `verified_only`.
 - `get_program`: pass `slug` for full terms, `restrictions` and `agentPrompt`.
 - `list_categories`: discover categories and current program counts.
+- `submit_program` and `get_submission_status`: queue a missing program for review and read its
+  status (see "When a program is missing").
 
 Search by the user's product, niche and commission preference. Fetch full details for
 shortlisted programs before comparing commission type, rate and duration, cookie window,
@@ -59,6 +62,29 @@ programs as active, or a listing whose status says there is no affiliate program
 
 ## OAS score
 
-Placeholder: the OAS score is not published yet. Do not invent a score, report URL or API
-field. Report the available program terms and cite the program page instead. Revisit this
-section when OpenAffiliate publishes its OAS contract.
+OAS, the OpenAffiliate Score, is 0 to 100 with a grade from A+ to F. It measures how
+clearly a program publishes its terms and whether three of them protect the affiliate
+(cookie of 60 days or more, minimum payout of USD 50 or less, paid at least monthly).
+It never reads the size of the commission, so do not present it as a measure of earnings.
+
+Read it from the `oas` object that `get_program` and `GET /api/programs/{slug}` return
+for scored programs. Quote `score` and `grade` only when `status` is `scored`, and always
+cite `reportUrl`. When `oas` is absent or `status` is `in_progress` or `stale`, say the
+program is not scored yet; never invent a score. `oasMachineChecks` are shown beside OAS
+and are not part of it. Rules: https://openaffiliate.dev/docs/oas
+
+## When a program is missing
+
+1. Look it up first with `search_programs` or `get_program`; a listed program needs no submission.
+2. If it is missing and the user wants it added, call `submit_program` with the brand's own
+   program page (`programUrl`; optional `termsUrl`, `name`, `note`). A network listing is not
+   proof. Never invent terms. The answer is a queued submission with an `id`, an existing
+   one for that domain, or the listing when the domain is already on OpenAffiliate.
+3. Tell the user it is queued, not listed: a maintainer verifies the terms on the brand's page
+   first, usually within a few days, and scoring is not instant. Read progress later with
+   `get_submission_status` and the `id`.
+
+Without MCP, the same queue is `POST https://openaffiliate.dev/api/submissions`, and a person
+can use https://openaffiliate.dev/submit. With GitHub access you can instead open a pull
+request or a Suggest a program issue at https://github.com/Affitor/open-affiliate, using only
+terms from the brand's own program page and leaving unstated terms empty.

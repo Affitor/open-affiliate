@@ -21,6 +21,8 @@ import {
   flatUsdPayout,
   verifiedDate,
   indexable,
+  listPageTitle,
+  TITLE_MAX as BEST_TITLE_MAX,
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
@@ -31,7 +33,8 @@ import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { outboundUrl } from "../src/lib/outbound-link";
 import { changelog } from "../src/lib/changelog";
 import { blogApplyHref } from "../src/lib/apply-cta";
-import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
+import { getPost, postPageTitle, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
+import { GUIDES, guidePath, guideSelection, guideTitle, type GuidePost } from "../src/lib/guides";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
 import { sectionProblems } from "./directory-checks";
@@ -349,7 +352,8 @@ for (const network of networks) {
 
 /**
  * Best-of lists: each is a config entry, so these hold every entry to what the
- * page promises. The <title> carries the layout's " | OpenAffiliate" suffix.
+ * page promises. A /best title is computed (query, count, month) with no suffix;
+ * a category title carries " | OpenAffiliate".
  */
 if (!llms.includes(`${BASE_URL}/best.md`)) fail("llms.txt does not link best.md");
 if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H1");
@@ -438,9 +442,9 @@ function checkListPage(list: BestList, path: string): void {
   const indexed = indexable(list);
   if (indexed && !sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
   if (!indexed && sitemapUrlSet.has(url)) fail(`sitemap lists ${url}, a noindex hub`);
-  const title = `${list.title} | OpenAffiliate`;
-  if (title.length > 60 || /[–—]/.test(title)) {
-    fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  const title = listPageTitle(list);
+  if (title.length > BEST_TITLE_MAX || /[–—]/.test(title)) {
+    fail(`${path} title must be ${BEST_TITLE_MAX} characters or fewer with no en or em dash: ${title}`);
   }
   if (list.description.length < 120 || list.description.length > 155) {
     fail(`${path} description is ${list.description.length} characters; keep it 120 to 155`);
@@ -468,6 +472,7 @@ function checkListPage(list: BestList, path: string): void {
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (htmlTitle(html) !== title) fail(`${htmlFile} <title> is "${htmlTitle(html)}", not "${title}"`);
   if (html.includes('<meta name="robots" content="noindex') === indexed) {
     fail(`${htmlFile} must ${indexed ? "not carry" : "carry"} a noindex robots meta`);
   }
@@ -583,12 +588,15 @@ function checkListPage(list: BestList, path: string): void {
 function checkPostPage(post: BestPost, selection: PostSelection, path: string): void {
   const url = `${BASE_URL}${path}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  // The H1 is postTitle; the <title> is postPageTitle (query, count, month).
   const title = postTitle(post, selection);
-  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  const pageTitle = postPageTitle(post, selection);
+  if (pageTitle.length > BEST_TITLE_MAX || /[–—]/.test(pageTitle)) fail(`${path} title must be ${BEST_TITLE_MAX} characters or fewer with no en or em dash: ${pageTitle}`);
   if (post.description.length < 120 || post.description.length > 155) fail(`${path} description is ${post.description.length} characters; keep it 120 to 155`);
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (htmlTitle(html) !== pageTitle) fail(`${htmlFile} <title> is "${htmlTitle(html)}", not "${pageTitle}"`);
   const want = selection.shown.map(({ program }) => program.slug);
   const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
   if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not postSelection's ${JSON.stringify(want)}`);
@@ -625,6 +633,47 @@ for (const list of BEST_LISTS) {
 for (const category of categories) {
   checkListPage(categoryList(category), `/categories/${categoryToSlug(category)}`);
 }
+
+/**
+ * A guide on /blog/<slug>: in the sitemap, prerendered with its H1 and the
+ * disclosure, the program blocks in guideSelection's order, every Apply link
+ * blogApplyHref with the guide's UTM, and a twin with the same programs.
+ */
+function checkGuidePage(guide: GuidePost): void {
+  const path = guidePath(guide);
+  const selection = guideSelection(guide);
+  const url = `${BASE_URL}${path}`;
+  if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  const title = guideTitle(guide);
+  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  if (guide.description.length < 120 || guide.description.length > 155) fail(`${path} description is ${guide.description.length} characters; keep it 120 to 155`);
+  const htmlFile = `${path.slice(1)}.html`;
+  if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
+  const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (!new RegExp(`<h1[^>]*>${title.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</h1>`).test(html)) fail(`${path} H1 is not "${title}"`);
+  if (!html.includes("data-post-disclosure") || !html.includes("data-registry-facts")) fail(`${path} has no disclosure or no registry facts`);
+  const want = selection.shown.map(({ program }) => program.slug);
+  const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
+  if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not guideSelection's ${JSON.stringify(want)}`);
+  for (const { program } of selection.shown) {
+    const href = blogApplyHref(program, guide.slug).replaceAll("&", "&amp;");
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${href}"`));
+    if (!tag) fail(`${path} has no Apply link for ${program.slug} with the blog UTM`);
+    if (!tag.includes('rel="sponsored nofollow noopener"')) fail(`${path} Apply link for ${program.slug} is not rel="sponsored nofollow noopener"`);
+  }
+  const mdFile = join(ROOT, "public", `${path.slice(1)}.md`);
+  if (!existsSync(mdFile)) fail(`${mdFile} was not generated`);
+  const md = readFileSync(mdFile, "utf8");
+  if (!md.startsWith(`# ${title}\n`)) fail(`${mdFile} does not start with the guide title`);
+  const twinOrder = [...md.matchAll(/^\d+\. \[[^\]\n]*\]\(https:\/\/openaffiliate\.dev\/programs\/([a-z0-9-]+)\.md\)/gm)].map((m) => m[1]);
+  if (twinOrder.join() !== want.join()) fail(`${mdFile} lists ${JSON.stringify(twinOrder)}, not guideSelection's ${JSON.stringify(want)}`);
+  for (const { program } of selection.shown) {
+    const autolink = `<${blogApplyHref(program, guide.slug).replace(/[\s<>[\]\\`]/g, encodeURIComponent)}>`;
+    if (!md.includes(autolink)) fail(`${mdFile} is missing the Apply link for ${program.slug}`);
+  }
+}
+
+for (const guide of GUIDES) checkGuidePage(guide);
 
 /**
  * listScore, and so high-paying qualification, reads structured fields only.
@@ -854,6 +903,12 @@ for (const file of readdirSync(PUBLIC, { recursive: true }) as string[]) {
 const STATIC = join(ROOT, ".next", "static");
 if (!existsSync(STATIC)) fail(".next/static is missing; the chunk check needs `npm run build` first");
 const shownBySlug = new Map(programs.map((p) => [p.slug, termsConfirmed(p)]));
+const programBySlug = new Map(programs.map((p) => [p.slug, p]));
+/** The programs a page's comparison table links to, looked up in the registry (never taken from the page's own claims). */
+function comparedPrograms(html: string): (typeof programs)[number][] {
+  const table = /<table data-compare[\s\S]*?<\/table>/.exec(html)?.[0] ?? "";
+  return [...table.matchAll(/href="\/programs\/([a-z0-9-]+)"/g)].flatMap((m) => programBySlug.get(m[1]) ?? []);
+}
 const shown = (slug: string) => shownBySlug.get(slug);
 let chunkCount = 0;
 let confirmedRecords = 0;
@@ -1399,7 +1454,7 @@ async function checkServedPages(): Promise<string> {
     let affitorOnProgramPages = 0;
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
-      const problems = termsHtmlProblems(program, html);
+      const problems = termsHtmlProblems(program, html, comparedPrograms(html));
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
       // The Affitor line and its secondary button, only where also_on says so.
       const also = alsoOnHtmlProblem(program, html);
@@ -1415,7 +1470,13 @@ async function checkServedPages(): Promise<string> {
       }
       if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
-    // Non-vacuity: the page check fails on a page that breaks the rule either way.
+    // Non-vacuity: the page check fails on a page that breaks the rule either way. Every probe runs
+    // with the page's own comparison context, as served, from a baseline the check passes.
+    const pageTermsProblems = (p: Program, html: string) => termsHtmlProblems(p, html, comparedPrograms(html));
+    for (const p of [off, on, dropped.p, onTime, withConditions]) {
+      const baseline = pageTermsProblems(p, kept.get(p)!);
+      if (baseline.length) fail(`probe baseline for ${p.slug} is not clean: ${baseline.join("; ")}`);
+    }
     const offHtml = kept.get(off)!;
     for (const [leak, extra] of [
       ["a cookie badge", `<div><svg></svg>${off.cookieDays}d cookie</div>`],
@@ -1433,26 +1494,26 @@ async function checkServedPages(): Promise<string> {
       ["a cookie window in its RSC payload", `<script>self.__next_f.push([1,"{\\"cookieDays\\":${off.cookieDays}}"])</script>`],
       ["a payout sentence in its RSC payload", `<script>self.__next_f.push([1,${JSON.stringify(`5:${JSON.stringify(["$", "p", null, { children: "Payouts are monthly with a $50 minimum." }])}\n`)}])</script>`],
     ]) {
-      if (termsHtmlProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
+      if (pageTermsProblems(off, offHtml + extra).length === 0) fail(`the page terms check passed an unverified page showing ${leak}`);
     }
     // A sentence the filter drops from this program's own prose, put back into the RSC payload.
     const flight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ children: dropped.s }))}])</script>`;
-    if (termsHtmlProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
+    if (pageTermsProblems(dropped.p, kept.get(dropped.p)! + flight).length === 0) {
       fail(`the page terms check passed ${dropped.p.slug} carrying a dropped sentence in its RSC payload`);
     }
     // An optional field rendered empty instead of left out.
     const emptyConditions = `<p class="text-[11px] text-muted-foreground/70 leading-relaxed border-t border-border/30 pt-2"></p>`;
-    if (termsHtmlProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
+    if (pageTermsProblems(off, offHtml + emptyConditions).length === 0) fail("the page terms check passed empty commission conditions");
     // On a verified page a conditions row is allowed, so only the empty-row rule can catch this one.
-    if (termsHtmlProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
+    if (pageTermsProblems(on, kept.get(on)! + `<p data-term="conditions" class="x"></p>`).length === 0) fail("the page terms check passed a verified page with empty commission conditions");
     const onHtml = kept.get(on)!;
-    if (termsHtmlProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
+    if (pageTermsProblems(on, onHtml.replaceAll(`>${on.cookieDays} days</dd>`, "></dd>")).length === 0) {
       fail("the page terms check passed a verified page with its cookie window removed");
     }
-    if (termsHtmlProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
+    if (pageTermsProblems(on, onHtml.replaceAll(`$${on.payout.minimum} minimum`, `$${(on.payout.minimum ?? 0) + 1} minimum`)).length === 0) {
       fail("the page terms check passed a verified page showing a different minimum payout");
     }
-    if (termsHtmlProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
+    if (pageTermsProblems(on, onHtml.replace(/data-term="approval"/g, 'data-term="gone"')).length === 0) {
       fail("the page terms check passed a verified page with its approval row removed");
     }
     // Rows that say more, or other, than the stored fields: the comparison is exact, not a prefix.
@@ -1465,14 +1526,14 @@ async function checkServedPages(): Promise<string> {
       ["extra words after its approval", rowValue(timeHtml, "approval", (v) => `${v} or automatically`)],
       ["its approval time removed", rowValue(timeHtml, "approval", (v) => v.replace(` (${onTime.approvalTime})`, ""))],
     ] as const) {
-      if (termsHtmlProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
+      if (pageTermsProblems(onTime, html).length === 0) fail(`the page terms check passed a verified page with ${what}`);
     }
     // Payout conditions: required as stored on a verified page, found anywhere on an unverified one.
     const conditionsHtml = kept.get(withConditions)!.replace(/<p data-term="payout-conditions"[^>]*>[\s\S]*?<\/p>/, "");
-    if (termsHtmlProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
+    if (pageTermsProblems(withConditions, conditionsHtml).length === 0) fail("the page terms check passed a verified page with its payout conditions removed");
     const offConditions = { ...off, payout: { ...off.payout, conditions: withConditions.payout.conditions } };
     const conditionsFlight = `<script>self.__next_f.push([1,${JSON.stringify(JSON.stringify({ payout: { conditions: withConditions.payout.conditions } }))}])</script>`;
-    if (termsHtmlProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
+    if (pageTermsProblems(offConditions, offHtml + conditionsFlight).length === 0) fail("the page terms check passed an unverified page carrying its payout conditions in its RSC payload");
     if (pausedJoinLabel(kept.get(pausedPage)! + `<a href="https://example.com">Apply &amp; earn 20%</a>`) === null) {
       fail("the paused-page check passed a paused page with a join button");
     }

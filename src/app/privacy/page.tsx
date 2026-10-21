@@ -3,15 +3,17 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Privacy",
   description:
-    "What OpenAffiliate stores when a brand claims its listing or signs in to manage it, why, for how long, and how to have it deleted.",
+    "What OpenAffiliate stores when a brand claims its listing, signs in to manage it, or someone submits a program, why, for how long, and how to have it deleted.",
   alternates: { canonical: "/privacy" },
 };
 
 const CONTACT = "support@affitor.com";
 
 /**
- * Covers the listing claim flow, the only place OpenAffiliate asks for
- * personal data. Retention is enforced by the daily pg_cron job in
+ * Covers the listing claim flow and program submissions, the only places
+ * OpenAffiliate asks for personal data. Submission retention lives in
+ * supabase/migrations/014_program_submissions.sql (pg_cron job and
+ * submission_submit). Retention is enforced by the daily pg_cron job in
  * supabase/migrations/009_program_claims.sql and 011_claim_accounts.sql and by
  * prune() in src/lib/claims/live.ts (RETENTION_DAYS); release() and
  * removeMember() clear addresses. Change the wording here and those cutoffs
@@ -22,8 +24,8 @@ export default function PrivacyPage() {
     <div className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="text-2xl font-bold tracking-tight">Privacy</h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        The one place OpenAffiliate asks for personal data is when a brand claims its program listing and its
-        team signs in to manage it. Readers never need an account. This page says what we keep, why, and for how
+        OpenAffiliate asks for personal data in two places: when a brand claims its program listing and its
+        team signs in to manage it, and, optionally, when someone submits a program. Readers never need an account. This page says what we keep, why, and for how
         long.
       </p>
 
@@ -79,6 +81,15 @@ export default function PrivacyPage() {
         <li>Sign-in codes are deleted within two days.</li>
         <li>Activity records, which hold only hashes, are deleted within 12 months.</li>
       </ul>
+
+      <h2 className="mt-8 text-lg font-semibold">When you submit a program</h2>
+      <p className="mt-2 text-sm text-muted-foreground">
+        A submission keeps the links, name and note you send, and the email address only if you give one. The
+        email is never shown and never returned by the API; it is there so we can reach you about that
+        submission. We keep a one-way hash of your IP address to limit abuse, not the address. The email is
+        removed within 30 days after the submission is listed or turned down, and the whole submission within
+        12 months.
+      </p>
 
       <h2 className="mt-8 text-lg font-semibold">Site analytics</h2>
       <p className="mt-2 text-sm text-muted-foreground">

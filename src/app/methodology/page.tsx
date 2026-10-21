@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { livePrograms } from "@/lib/programs";
-import { CHECK_IDS, CHECKS, oasScores, PART_MAX, TEAM_DISCLOSURE, type Part } from "@/lib/oas";
+import { buildBoard, CHECK_IDS, CHECKS, GRADE_BANDS, oasScores, PART_MAX, TEAM_DISCLOSURE, TIE_ORDER, type Part } from "@/lib/oas";
+import { scoreIndex } from "@/lib/score-index";
+import { ScoreYourProgram } from "@/components/score-your-program";
+import { OasGradeChip } from "@/components/oas-grade";
 
 export const metadata: Metadata = {
   title: "How We List and Rank Affiliate Programs",
@@ -9,6 +12,9 @@ export const metadata: Metadata = {
     "How OpenAffiliate lists affiliate programs: open YAML data, what verified means, how lists are ranked, and why listings are free and rankings never paid.",
   alternates: { canonical: "/methodology" },
 };
+
+// The Score your program box carries each program's current score.
+export const revalidate = 3600;
 
 const verified = livePrograms.filter((p) => p.verified).length;
 
@@ -100,7 +106,8 @@ export default function MethodologyPage() {
         </Link>
         , which adds the cookie window, how long commission lasts and how
         complete the listing is to the same commission; the homepage&apos;s
-        rankings, featured and top verified programs use the same score.
+        featured and top verified programs use the same score, and its
+        rankings use OAS once scores are published.
         Programs that publish
         no rate are left out of every /best list and placed last in their
         group on category pages.
@@ -131,13 +138,25 @@ export default function MethodologyPage() {
             are scored, and terms verified more than 90 days ago show Scoring in
             progress until we verify them again. Every program is scored and
             ranked by the same rules, whoever runs it and whatever network it
-            runs on. {TEAM_DISCLOSURE}
+            runs on. {TIE_ORDER} {TEAM_DISCLOSURE}
           </p>
+          <p className="mt-2 text-sm text-muted-foreground">Each score carries a letter, as a college grade does:</p>
+          <table className="mt-2 text-sm">
+            <tbody>
+              {GRADE_BANDS.map(([g, from], i) => (
+                <tr key={g} className="border-t border-border">
+                  <td className="py-1.5 pr-4"><OasGradeChip score={from} /></td>
+                  <td className="py-1.5 font-mono text-muted-foreground">{i === 0 ? `${from} to 100` : from === 0 ? `under ${GRADE_BANDS[i - 1][1]}` : `${from} to under ${GRADE_BANDS[i - 1][1]}`}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
           <p className="mt-2 text-sm text-muted-foreground">
             Not scored yet: refund and chargeback rules, and how well the
             application link works. A brand that finds a mistake can report it
             from its OAS report.
           </p>
+          <ScoreYourProgram index={scoreIndex(livePrograms, buildBoard(oasScores, livePrograms, new Date()))} className="mt-6" />
         </>
       )}
 
@@ -154,11 +173,12 @@ export default function MethodologyPage() {
         How do I add or correct a program?
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
-        Open a pull request that adds or edits its YAML file, or use{" "}
+        Open a pull request that adds or edits its YAML file, or{" "}
         <Link href="/submit" className={link}>
-          the submit form
+          submit it
         </Link>
-        , which writes the file and opens it on GitHub. To report an
+        : send the program page for review (no account needed), or use the
+        full form, which writes the file and opens it on GitHub. To report an
         error,{" "}
         <a
           href="https://github.com/Affitor/open-affiliate/issues/new"

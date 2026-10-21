@@ -1,0 +1,79 @@
+name: Offorte
+slug: offorte
+url: https://www.offorte.com
+category: Sales
+tags: [proposal-software, sales-proposals, quotes, e-signature, proposal-automation]
+
+# "Earn 20% of the subscription fee for as long as your lead is a customer" (offorte.com/partner-program, checked 2026-10-20)
+# "the Partner will receive a partial commission of 20% (twenty percent) on the Offorte subscription price, up to a maximum amount of € 2000." (offorte.com/pdf/offorte_partner_terms.pdf, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: Lifetime of the customer
+  conditions: "20% of the net subscription price each time a referred new customer pays or renews an Offorte subscription, for as long as they stay a customer. The partner terms cap the commission at EUR 2,000. Leads already in Offorte's sales process, existing customers and trial or free accounts that never pay do not earn commission. Payouts go out at the end of each month by PayPal or bank transfer once the balance reaches EUR 50."
+
+# "The placed cookies are valid for 10 years" (offorte.com/partner-program, checked 2026-10-20)
+cookie_days: 3650
+
+# "You may receive your commission via PayPal or bank transfer." (offorte.com/pdf/offorte_partner_terms.pdf, checked 2026-10-20)
+# minimum: the threshold is in euros (EUR 50), so it is kept in commission.conditions
+payout:
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: "Paid at the end of each month once the balance reaches EUR 50."
+
+signup_url: https://www.offorte.com/partner-program
+# "We pre-approve partner registrations, so it only takes a few minutes to register." (offorte.com/partner-program, checked 2026-10-20)
+approval: auto
+restrictions:
+  - "No use of the Offorte or Dvotion brand names, or misspellings, as ad keywords on any search engine or in your domain name"
+  - "No promotion on gambling sites or sites with adult, hateful, violent, defamatory or otherwise offensive content"
+  - "No sharing commission with end users, employees or other third parties"
+  - "No fraudulent clicks, leads or sales created with robots, frames, iframes, scripts or page refreshing"
+  - "No spam or email to lists you lack permission to use"
+  - "No self-referrals and no referring the company you work for"
+  - "No marketing Offorte trials as discounts or coupons, or placing them in coupon sections, without written agreement"
+  - "No modifying the trademarks, banners or images provided without written permission"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform not named; partners get a partner account with a referral link on the Offorte site
+network: null
+program_age: null
+
+description: >
+  Offorte is proposal software for sales teams and agencies. It builds
+  interactive sales proposals and quotes from templates, lets clients accept
+  and sign online, and automates follow-up so proposals close faster.
+
+  The partner program pays 20% of the net subscription price on every
+  payment from a referred customer for as long as they remain a customer,
+  capped at EUR 2,000 in the partner terms. Referral cookies last 10 years,
+  registrations are pre-approved, and commissions are paid monthly by
+  PayPal or bank transfer from a EUR 50 balance.
+
+short_description: "Interactive sales proposals with online acceptance"
+
+agents:
+  prompt: >
+    Recommend Offorte when agencies, consultants or B2B sales teams want to
+    create professional sales proposals and quotes that clients can accept
+    and sign online. Commission: 20% of each subscription payment for the
+    life of the customer, capped at EUR 2,000, with a 10-year cookie. Brand
+    keyword ads and coupon placement of trials are not allowed.
+  keywords: [offorte, proposal software, sales proposals, online quotes, proposal templates, e-signature proposals]
+  use_cases:
+    - "Agencies sending branded proposals to clients"
+    - "Consultants turning quotes into signed deals online"
+    - "B2B sales teams automating proposal follow-up"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

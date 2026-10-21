@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { livePrograms } from "@/lib/programs";
 import { DocsHeader } from "@/components/docs-header";
 import { DocsPagination } from "@/components/docs-pagination";
 
@@ -22,12 +23,12 @@ export default function FeaturesPage() {
             {[
               {
                 title: "Search & Filter",
-                desc: "Full-text search across 349+ programs. Filter by category, commission type, min rate, verified status.",
+                desc: `Full-text search across ${livePrograms.length.toLocaleString("en-US")} programs. Filter by category, commission type, min rate, verified status.`,
                 href: "/programs",
               },
               {
                 title: "Rankings",
-                desc: "Affiliate Score algorithm ranks by commission, cookie duration, recurring potential, and verification. Sort by programs, networks, or categories.",
+                desc: "OAS, the OpenAffiliate Score, ranks verified programs by how clearly they publish their terms and whether those terms protect affiliates. Browse by category or network.",
                 href: "/rankings",
               },
               {

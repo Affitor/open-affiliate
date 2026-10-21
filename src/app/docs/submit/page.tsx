@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AffitorLink } from "@/components/affitor-link";
 import { CodeBlock } from "@/components/code-block";
+import { affitorUrl } from "@/lib/affitor-link";
 import { DocsHeader } from "@/components/docs-header";
 import { DocsPagination } from "@/components/docs-pagination";
 
 export const metadata: Metadata = {
   title: "Submit a Program",
+  description:
+    "Add an affiliate program to OpenAffiliate: five ways in, what a maintainer checks, how long it takes, and what happens after merge.",
 };
+
+const link = "text-foreground hover:underline";
+const code = "bg-muted px-1.5 py-0.5 rounded text-xs";
 
 export default function SubmitPage() {
   return (
@@ -14,137 +21,161 @@ export default function SubmitPage() {
       <DocsHeader
         group="Guides"
         title="Submit a Program"
-        description="Add your affiliate program to the open registry."
+        description="Add a program, what we check, and how long it takes."
       />
 
       <div className="space-y-10">
-        {/* Agent flow */}
         <section>
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-[10px] font-mono bg-emerald-600/10 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded">
-              PRIMARY
-            </span>
-            <h2 id="agent-flow" className="text-lg font-semibold">Agent flow</h2>
-          </div>
+          <h2 id="ways" className="text-lg font-semibold mb-3">Five ways to add a program</h2>
           <p className="text-base text-muted-foreground mb-4">
-            Ask your AI agent to submit a program on your behalf. Add
-            OpenAffiliate to your MCP config, then describe what you want to
-            submit.
+            Listing is free. Every way ends in the same place: a program file in
+            the public repository, reviewed by a maintainer.
+          </p>
+          <div className="space-y-4 text-base text-muted-foreground">
+            <div>
+              <h3 id="by-url" className="text-sm font-semibold text-foreground mb-1">1. Submit by URL</h3>
+              <p>
+                On <Link href="/submit#by-url" className={link}>the submit page</Link>,
+                send your program page. No account is needed. It joins the review
+                queue with a status link; nothing is listed or scored, and no pull
+                request is opened for you, until a maintainer has verified the terms
+                on your page and added the program file. Agents use the same queue
+                through <code className={code}>submit_program</code> or{" "}
+                <code className={code}>POST /api/submissions</code>.
+              </p>
+            </div>
+            <div>
+              <h3 id="web-form" className="text-sm font-semibold text-foreground mb-1">2. Full form</h3>
+              <p>
+                <Link href="/submit" className={link}>The full form</Link> writes
+                the program file for you and opens GitHub, where you create the
+                pull request. You need a GitHub account: GitHub copies the
+                repository to your account before the pull request opens.
+              </p>
+            </div>
+            <div>
+              <h3 id="pull-request" className="text-sm font-semibold text-foreground mb-1">3. Pull request</h3>
+              <p>
+                Fork{" "}
+                <a href="https://github.com/Affitor/open-affiliate" className={link}>Affitor/open-affiliate</a>, add{" "}
+                <code className={code}>programs/your-product.yaml</code> and open a
+                pull request. The{" "}
+                <Link href="/docs/contributing" className={link}>Contributing</Link>{" "}
+                page lists the rules the file must pass.
+              </p>
+            </div>
+            <div>
+              <h3 id="suggest" className="text-sm font-semibold text-foreground mb-1">4. Suggest a program</h3>
+              <p>
+                Open a{" "}
+                <a href="https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml" className={link}>
+                  Suggest a program
+                </a>{" "}
+                issue with only the link to the program page. A maintainer writes
+                the file. This also needs a GitHub account.
+              </p>
+            </div>
+            <div>
+              <h3 id="email" className="text-sm font-semibold text-foreground mb-1">5. Email</h3>
+              <p>
+                Send the link to your program page to{" "}
+                <a href="mailto:hello@openaffiliate.dev" className={link}>hello@openaffiliate.dev</a>.
+                GitHub is faster and shows you where the request stands.
+              </p>
+            </div>
+          </div>
+          <p className="text-base text-muted-foreground mt-4">
+            OpenAffiliate lists programs; to track and pay partners, run your
+            program on{" "}
+            <AffitorLink href={affitorUrl("docs", "submit")} source="docs" cta="run_program" className={link}>
+              Affitor
+            </AffitorLink>
+            .
+          </p>
+        </section>
+
+        <section>
+          <h2 id="what-we-check" className="text-lg font-semibold mb-3">What a maintainer checks</h2>
+          <ul className="list-disc pl-5 space-y-2 text-base text-muted-foreground">
+            <li>
+              Every term comes from the brand&apos;s own program page or terms.
+              A listing on a network such as Dub or PartnerStack is not proof on
+              its own; link the page on the brand&apos;s domain.
+            </li>
+            <li>
+              A term the page does not state is left empty. Do not fill a cookie
+              window, a minimum payout or an approval time the brand does not
+              publish.
+            </li>
+            <li>
+              Descriptions are factual: what the product does and what the
+              program pays, without ranking words such as &ldquo;best&rdquo; or
+              &ldquo;reliable&rdquo;.
+            </li>
+            <li>
+              The file passes the automatic checks: schema, registry build and
+              a crawl of the signup URL.
+            </li>
+          </ul>
+          <p className="text-base text-muted-foreground mt-3">
+            Reviews usually take a few days. A pull request with the program
+            page linked in its description is the quickest to review.
+          </p>
+        </section>
+
+        <section>
+          <h2 id="after-merge" className="text-lg font-semibold mb-3">After merge</h2>
+          <ol className="list-decimal pl-5 space-y-2 text-base text-muted-foreground">
+            <li>
+              The program appears on the site after the next deploy, usually
+              within minutes, as not verified: its commission is marked
+              unconfirmed, and its cookie window, payout and approval stay hidden.
+            </li>
+            <li>
+              A maintainer verifies the terms on the program page and marks it
+              verified.
+            </li>
+            <li>
+              Once every check is assessed, the program gets an{" "}
+              <Link href="/docs/oas" className={link}>OpenAffiliate Score</Link>,
+              a report at <code className={code}>/programs/&lt;slug&gt;/oas</code>{" "}
+              and a place on <Link href="/rankings" className={link}>/rankings</Link>.
+              There is no instant score.
+            </li>
+          </ol>
+        </section>
+
+        <section>
+          <h2 id="agents" className="text-lg font-semibold mb-3">With an AI agent</h2>
+          <p className="text-base text-muted-foreground mb-4">
+            An agent should check first. If the program is missing, it sends the
+            brand&apos;s own program page with the MCP tool{" "}
+            <code className={code}>submit_program</code> or{" "}
+            <code className={code}>POST /api/submissions</code>, and reads the
+            result later with <code className={code}>get_submission_status</code>.
+            That only joins the review queue: nothing is listed or scored until a
+            maintainer verifies the terms. An agent with GitHub tools can open a
+            pull request or a Suggest a program issue instead, following the same
+            rules as a person.
           </p>
           <CodeBlock
-            label="mcp config"
-            code={`{
-  "mcpServers": {
-    "openaffiliate": {
-      "url": "https://openaffiliate.dev/mcp"
-    }
-  }
-}`}
+            label="check before submitting"
+            code={`curl -s https://openaffiliate.dev/api/programs/your-product
+# 404: not listed yet. 200: already listed; read its oas.reportUrl.`}
           />
-          <div className="mt-4 rounded-2xl border border-border/40 bg-muted/10 p-6">
-            <p className="text-xs text-muted-foreground mb-1 font-medium">
-              Example prompt
-            </p>
-            <p className="text-sm text-foreground">
-              &ldquo;Add the Notion affiliate program to OpenAffiliate&rdquo;
-            </p>
-          </div>
-          <p className="text-xs text-muted-foreground mt-3 leading-relaxed">
-            The agent looks up the program details, creates a YAML file
-            following the{" "}
-            <Link
-              href="/docs/yaml-schema"
-              className="text-foreground hover:underline"
-            >
-              schema
-            </Link>
-            , and opens a pull request on GitHub. CI validates the file and
-            verifies the signup URL automatically.
-          </p>
         </section>
 
-        {/* Human flow */}
         <section>
-          <h2 id="web-form" className="text-lg font-semibold mb-3">Web form</h2>
-          <p className="text-base text-muted-foreground mb-4">
-            Use the web form — no GitHub account needed. Fill in the program
-            details and we generate the YAML and open a pre-filled GitHub PR on
-            your behalf.
+          <h2 id="correct" className="text-lg font-semibold mb-3">Correct a listing</h2>
+          <p className="text-base text-muted-foreground">
+            Terms changed, or a score looks wrong? Open a{" "}
+            <a href="https://github.com/Affitor/open-affiliate/issues/new?template=terms-changed.yml" className={link}>
+              Terms changed
+            </a>{" "}
+            issue with the URL of the page that states the new terms, or use
+            Report an error on the program&apos;s OAS report. See{" "}
+            <Link href="/docs/oas#recheck" className={link}>re-checks</Link>.
           </p>
-          <Link
-            href="/submit"
-            className="inline-flex items-center rounded-lg border border-border/50 bg-muted/20 px-4 py-2 text-sm font-medium hover:bg-muted/40 transition-colors"
-          >
-            Open the submission form →
-          </Link>
-        </section>
-
-        {/* Developer flow */}
-        <section>
-          <h2 id="developer-flow" className="text-lg font-semibold mb-3">Developer flow</h2>
-          <p className="text-base text-muted-foreground mb-4">
-            Fork the repo, create a YAML file, and open a PR directly.
-          </p>
-          <div className="space-y-2 text-sm text-muted-foreground">
-            {[
-              {
-                step: "01",
-                content: (
-                  <>
-                    Fork{" "}
-                    <a
-                      href="https://github.com/Affitor/open-affiliate"
-                      className="text-foreground hover:underline"
-                    >
-                      Affitor/open-affiliate
-                    </a>{" "}
-                    on GitHub
-                  </>
-                ),
-              },
-              {
-                step: "02",
-                content: (
-                  <>
-                    Create{" "}
-                    <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
-                      programs/your-product.yaml
-                    </code>{" "}
-                    — see the{" "}
-                    <Link
-                      href="/docs/yaml-schema"
-                      className="text-foreground hover:underline"
-                    >
-                      YAML Schema
-                    </Link>{" "}
-                    for format
-                  </>
-                ),
-              },
-              {
-                step: "03",
-                content: (
-                  <>
-                    Open a pull request. See{" "}
-                    <Link
-                      href="/docs/contributing"
-                      className="text-foreground hover:underline"
-                    >
-                      Contributing
-                    </Link>{" "}
-                    for details
-                  </>
-                ),
-              },
-            ].map((item) => (
-              <div key={item.step} className="flex gap-3">
-                <span className="text-xs font-mono text-muted-foreground/50 mt-0.5">
-                  {item.step}
-                </span>
-                <p>{item.content}</p>
-              </div>
-            ))}
-          </div>
         </section>
       </div>
 

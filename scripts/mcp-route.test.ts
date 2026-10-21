@@ -34,6 +34,8 @@ import { categories, livePrograms, programs, termsConfirmed } from "../src/lib/p
 import { apiProgram } from "../src/lib/no-program"
 import { programMd } from "./generate-md"
 import { restGetProgram } from "./surface-test-helpers"
+import { hashIp, type SubmissionDeps } from "../src/lib/submissions/service"
+import { memoryStore } from "./submissions-memory"
 
 const PER_WINDOW = 1200
 const WINDOW_MS = 60_000
@@ -131,20 +133,25 @@ const HINTS = {
   idempotentHint: true,
   openWorldHint: false,
 }
+/** submit_program only queues: not read-only, never destructive, idempotent per domain while queued. */
+const SUBMIT_HINTS = { ...HINTS, readOnlyHint: false }
+const hintsFor = (name: string) => (name === "submit_program" ? SUBMIT_HINTS : HINTS)
 const TITLES = {
   search_programs: "Search Programs",
   get_program: "Get Program",
   list_categories: "List Categories",
+  submit_program: "Submit Program",
+  get_submission_status: "Get Submission Status",
 }
 
 /** Exercise the real handler and decode either JSON or Streamable HTTP SSE. */
-function rpcClient(base: string) {
-  const route = createMcpRoute(base)
+function rpcClient(base: string, submissions?: () => SubmissionDeps | null, headers: Record<string, string> = {}) {
+  const route = submissions ? createMcpRoute(base, submissions) : createMcpRoute(base)
   let id = 0
   return async <T>(method: string, params: Record<string, unknown>, schema: z.ZodType<T>): Promise<T> => {
     const res = await route.POST(new Request(`https://openaffiliate.dev${base}/mcp`, {
       method: "POST",
-      headers: { "content-type": "application/json", accept: "application/json, text/event-stream" },
+      headers: { "content-type": "application/json", accept: "application/json, text/event-stream", ...headers },
       body: JSON.stringify({ jsonrpc: "2.0", id: ++id, method, params }),
     }))
     assert.equal(res.status, 200, `${base}/mcp ${method}`)
@@ -247,15 +254,15 @@ for (const base of ["", "/api"]) {
     }, InitializeResultSchema)
     assert.equal(initialized.protocolVersion, "2025-06-18")
     assert.equal(initialized.serverInfo.name, "openaffiliate")
-    assert.equal(initialized.serverInfo.version, "0.1.2")
+    assert.equal(initialized.serverInfo.version, "0.1.3")
     assert.equal(initialized.serverInfo.title, "OpenAffiliate")
     assert.equal(initialized.serverInfo.websiteUrl, "https://openaffiliate.dev")
-    assert.match(initialized.serverInfo.description ?? "", /public, read-only registry/)
+    assert.match(initialized.serverInfo.description ?? "", /public registry.*submit a missing program for verification/)
     assert.deepEqual(initialized.serverInfo.icons, [{
       src: "https://openaffiliate.dev/favicon.svg", mimeType: "image/svg+xml", sizes: ["any"],
     }])
     assert.ok(existsSync(resolve("public/favicon.svg")))
-    for (const phrase of ["read-only", "no API key", "commission.mode", "commission.value", "commission.rate", "cookieDays", "get_program", "paused", "no_program", "markdownUrl"]) {
+    for (const phrase of ["read-only except submit_program", "only queues", "submit_program", "get_submission_status", "no API key", "commission.mode", "commission.value", "commission.rate", "cookieDays", "get_program", "paused", "no_program", "markdownUrl"]) {
       assert.ok(initialized.instructions?.includes(phrase), `Instructions missing ${phrase}`)
     }
     assert.ok(initialized.capabilities.tools)
@@ -266,7 +273,7 @@ for (const base of ["", "/api"]) {
     assert.deepEqual(tools.map((tool) => tool.name).sort(), Object.keys(TITLES).sort())
     for (const tool of tools) {
       assert.equal(tool.title, TITLES[tool.name as keyof typeof TITLES])
-      assert.deepEqual(tool.annotations, HINTS)
+      assert.deepEqual(tool.annotations, hintsFor(tool.name))
       assert.ok(tool.outputSchema)
       assert.equal(tool.outputSchema.type, "object")
     }
@@ -423,7 +430,7 @@ test("stdio mirrors server/tool titles and all four hints, with aligned patch ve
   const manifest = JSON.parse(readFileSync("packages/mcp/package.json", "utf8"))
   const registry = JSON.parse(readFileSync("packages/mcp/server.json", "utf8"))
   const lock = JSON.parse(readFileSync("package-lock.json", "utf8"))
-  assert.equal(manifest.version, "0.0.5")
+  assert.equal(manifest.version, "0.0.6")
   assert.equal(registry.version, manifest.version)
   assert.equal(registry.packages[0].version, manifest.version)
   assert.equal(lock.packages["packages/mcp"].version, manifest.version)
@@ -441,7 +448,7 @@ test("stdio mirrors server/tool titles and all four hints, with aligned patch ve
   assert.deepEqual(tools.map((tool) => tool.name).sort(), Object.keys(TITLES).sort())
   for (const tool of tools) {
     assert.equal(tool.title, TITLES[tool.name as keyof typeof TITLES])
-    assert.deepEqual(tool.annotations, HINTS)
+    assert.deepEqual(tool.annotations, hintsFor(tool.name))
   }
   const hosted = await rpcClient("")("tools/list", {}, ListToolsResultSchema)
   for (const [name, inputs] of [["search_programs", ["category", "commission_type", "verified_only"]], ["get_program", ["slug"]]] as const) {
@@ -451,4 +458,91 @@ test("stdio mirrors server/tool titles and all four hints, with aligned patch ve
       assert.equal(inputDescription(stdio, input), inputDescription(http, input), `${name}.${input} documentation must match across transports`)
     }
   }
+})
+
+test("submit_program queues through the shared service, takes the IP from the request, and get_submission_status reads it back", async () => {
+  const store = memoryStore()
+  const secret = "k".repeat(40)
+  const deps: SubmissionDeps = {
+    store,
+    secret,
+    programsOnDomain: (d) => (d === "vercel.com" ? [{ slug: "vercel", url: "https://vercel.com" }] : []),
+    reportUrl: () => null,
+    verifyTurnstile: async () => ({ success: true, hostname: "openaffiliate.dev", action: "submit-program" }),
+  }
+  const rpc = rpcClient("", () => deps, { "x-forwarded-for": "198.51.100.77, 10.0.0.1" })
+  const { tools } = await rpc("tools/list", {}, ListToolsResultSchema)
+  const tool = (name: string) => tools.find((entry) => entry.name === name)!
+  for (const phrase of [/verify/i, /Not instant/, /no score|nothing is listed/i, /get_program/]) {
+    assert.match(tool("submit_program").description ?? "", phrase)
+  }
+  const call = (name: string, args: Record<string, unknown>) => rpc("tools/call", { name, arguments: args }, CallToolResultSchema)
+
+  const queued = await call("submit_program", { programUrl: "https://brand.com/partners", contact: "me@brand.com" })
+  validates(tool("submit_program"), queued)
+  const body = queued.structuredContent as Record<string, unknown>
+  assert.equal(body.status, "queued")
+  assert.equal(body.statusUrl, `https://openaffiliate.dev/api/submissions/${body.id}`)
+  assert.ok(!JSON.stringify(queued).includes("me@brand.com"))
+  assert.equal(store.rows[0].source, "mcp", "MCP gets the stricter limits; it never passes Turnstile")
+  assert.equal(store.rows[0].ip_hash, hashIp(secret, "198.51.100.77"))
+
+  const read = await call("get_submission_status", { id: body.id })
+  validates(tool("get_submission_status"), read)
+  assert.equal((read.structuredContent as Record<string, unknown>).status, "queued")
+
+  const listed = await call("submit_program", { programUrl: "https://vercel.com/partners" })
+  assert.deepEqual(listed.structuredContent, { status: "listed", listingUrl: "https://openaffiliate.dev/programs/vercel" })
+
+  const refused = await call("submit_program", { programUrl: "http://brand.com" })
+  assert.equal(refused.isError, true)
+  assert.match(JSON.stringify(refused.content), /programUrl/)
+  const unknown = await call("get_submission_status", { id: "nope" })
+  assert.equal(unknown.isError, true)
+
+  // Strict input: an unknown key is refused, not dropped, and nothing is written.
+  const rowsBefore = store.rows.length
+  const typo = await rpc("tools/call", { name: "submit_program", arguments: { programUrl: "https://typo.com/", contactEmail: "me@typo.com" } }, CallToolResultSchema).catch((e: unknown) => e)
+  assert.ok(typo instanceof Error || (typo as CallToolResult).isError === true, "unknown key must be refused")
+  assert.equal(store.rows.length, rowsBefore)
+  const submitTool = tool("submit_program")
+  assert.equal((submitTool.inputSchema as { additionalProperties?: unknown }).additionalProperties, false)
+
+  // A web page on another site cannot submit through visitors' browsers; our own origin can.
+  const foreign = rpcClient("", () => deps, { "x-forwarded-for": "198.51.100.78", origin: "https://evil.example" })
+  const blocked = await foreign("tools/call", { name: "submit_program", arguments: { programUrl: "https://cross.com/" } }, CallToolResultSchema)
+  assert.equal(blocked.isError, true)
+  assert.match(JSON.stringify(blocked.content), /cross_origin/)
+  assert.equal(store.rows.length, rowsBefore)
+  const reads = await foreign("tools/call", { name: "get_submission_status", arguments: { id: body.id } }, CallToolResultSchema)
+  assert.notEqual(reads.isError, true, "reads stay open to every origin")
+  const own = rpcClient("", () => deps, { "x-forwarded-for": "198.51.100.79", origin: "https://openaffiliate.dev" })
+  const ok = await own("tools/call", { name: "submit_program", arguments: { programUrl: "https://own.com/" } }, CallToolResultSchema)
+  assert.notEqual(ok.isError, true)
+  assert.equal(store.rows.length, rowsBefore + 1)
+
+  // Disabled (no database or key): a clear error, no throw.
+  const off = rpcClient("", () => null)
+  const disabled = await off("tools/call", { name: "submit_program", arguments: { programUrl: "https://brand.com/" } }, CallToolResultSchema)
+  assert.equal(disabled.isError, true)
+  assert.match(JSON.stringify(disabled.content), /not enabled/)
+})
+
+test("every agent-facing doc tells agents they can submit, and none says MCP cannot", () => {
+  for (const path of ["skills/openaffiliate/SKILL.md", "AGENTS.md", "README.md", "src/app/docs/submit/page.tsx", "src/app/docs/mcp/page.tsx", "scripts/generate-md.ts"]) {
+    const text = readFileSync(path, "utf8")
+    assert.match(text, /submit_program/, `${path} must name submit_program`)
+    assert.doesNotMatch(text, /cannot add (a )?programs?|no submit tool|read-only: it can look a program up, not add|MCP server is read-only[;.]/i, `${path} still says agents cannot submit`)
+  }
+  // Discovery metadata (MCP registry server.json, embedded in ARD and the AI
+  // catalog; the site JSON-LD; the package): "read-only" only with its exception.
+  for (const path of ["packages/mcp/server.json", "packages/mcp/package.json", "src/app/layout.tsx", "scripts/generate-ard.ts", "src/lib/mcp-route.ts", "src/lib/openapi.ts", ...["skills/openaffiliate/SKILL.md", "AGENTS.md", "src/app/docs/mcp/page.tsx", "scripts/generate-md.ts"]]) {
+    const text = readFileSync(path, "utf8")
+    for (const m of text.matchAll(/read-only[^\n]{0,40}/gi)) {
+      if (path === "src/lib/mcp-route.ts" && /READ_ONLY|readOnlyHint/.test(m[0])) continue
+      assert.match(m[0], /except/i, `${path}: "${m[0]}" describes the API or MCP as read-only without the submit_program exception`)
+    }
+  }
+  const server = JSON.parse(readFileSync("packages/mcp/server.json", "utf8"))
+  assert.ok(server.description.length <= 100, "MCP registry descriptions are 100 characters at most")
 })

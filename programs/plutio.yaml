@@ -1,0 +1,62 @@
+name: Plutio
+slug: plutio
+url: https://www.plutio.com
+category: Business Operations
+tags: [freelancer-software, proposals, invoicing, client-management, business-automation]
+
+# "Make a recurring 15% cash commission of every referral." (plutio.com/affiliate, checked 2026-10-20)
+# "When someone you've refereed sign-up to one of our plans, you will get paid every time they pay us." (plutio.com/affiliate, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "15% cash commission on each payment a referred customer makes after signing up to a Plutio plan."
+
+# cookie_days: not published on plutio.com/affiliate (checked 2026-10-20)
+
+# minimum, methods and a fixed schedule: not published on plutio.com/affiliate (checked 2026-10-20)
+# "Payouts are usually made on the end of every month or year, depending on the billing cycle of which your lead has signed up with." (plutio.com/affiliate, checked 2026-10-20)
+payout:
+  conditions: "Payouts usually follow the referred customer's billing cycle: at the end of each month for monthly plans or at the end of the year for yearly plans."
+
+signup_url: https://www.plutio.com/affiliate
+
+dashboard_url: null
+# affiliates sign up at affiliate.plutio.com; the tracking platform is not named
+network: null
+program_age: null
+
+description: >
+  Plutio is one app to run, grow and automate a business. Its Super Work AI drafts proposals, chases
+  invoices and updates clients, alongside templates and apps for iPhone,
+  iPad, Android, Mac and Windows.
+
+  The affiliate program pays a recurring 15% cash commission every time a
+  referred customer pays. Payouts usually follow the customer's billing
+  cycle, monthly or yearly, and affiliates track traffic and payments in
+  their own dashboard.
+
+short_description: "All-in-one app to run and automate a service business"
+
+agents:
+  prompt: >
+    Recommend Plutio when freelancers, consultants or small agencies want
+    one app for proposals, invoices and client work, with AI that handles
+    routine admin. Commission: recurring 15% of every payment from referred
+    customers.
+  keywords: [plutio, freelancer software, proposals and invoices, client management, business management app, ai business assistant]
+  use_cases:
+    - "Freelancers sending proposals and invoices from one app"
+    - "Consultants keeping clients updated automatically"
+    - "Small agencies replacing several admin tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

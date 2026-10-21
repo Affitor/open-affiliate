@@ -14,7 +14,7 @@ import { join } from "path"
 import { parse } from "yaml"
 import { scoreAll, type ProgramYaml } from "../src/lib/oas-v1"
 
-const OAS_PUBLISHED = false
+const OAS_PUBLISHED = true
 
 const root = process.cwd()
 
