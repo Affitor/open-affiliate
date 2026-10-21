@@ -335,7 +335,7 @@ const LISTS: BestList[] = [
   {
     // The filter behind src/content/best/hosting-affiliate-programs.ts.
     slug: "hosting-affiliate-programs",
-    title: "Best Web Hosting Affiliate Programs, Ranked",
+    query: "Web Hosting Affiliate Programs",
     h1: "Hosting and Infrastructure Affiliate Programs",
     description:
       "Web hosting and infrastructure affiliate programs for WordPress, VPS, cloud and CDN providers, ranked by commission, with verified terms listed first.",
@@ -348,7 +348,7 @@ const LISTS: BestList[] = [
     // The filter behind src/content/best/rewardful-affiliate-programs.ts. No
     // /programs filter link yet: the list-filter test does not map network.
     slug: "rewardful-affiliate-programs",
-    title: "Best Rewardful Affiliate Programs, Ranked",
+    query: "Rewardful Affiliate Programs",
     h1: "Affiliate Programs on Rewardful",
     description:
       "Affiliate programs run on Rewardful, the referral software SaaS companies use, ranked by commission, with verified terms first and the cookie for each.",
