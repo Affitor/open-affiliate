@@ -158,29 +158,33 @@ export const TITLE_MAX = 60
 
 /**
  * A /best page's <title>, in the words people search: the query, how many
- * programs the page shows and how many of those are verified, and the month of
+ * programs the page states and how many of those are verified, and the month of
  * its newest verified check. "Recurring Affiliate Programs: 11 Verified (Oct 2026)".
- * Every number is the caller's count of what the page shows, never typed. The
- * longest form within TITLE_MAX wins: the counts are dropped before the month is.
+ * Every number is the caller's count of what the page states, never typed,
+ * and a 0 drops the count. The longest form within TITLE_MAX wins: the counts
+ * are dropped before the month is.
  */
 export function countTitle(query: string, shown: number, verified: number, checked: string | null): string {
   const month = checked ? ` (${monthYear(checked)})` : ""
   const counts =
-    verified === shown
-      ? [`${n(shown)} Verified`]
-      : [...(verified > 0 ? [`${plural(shown, "Program")}, ${n(verified)} Verified`] : []), plural(shown, "Program")]
+    shown === 0
+      ? []
+      : verified === shown
+        ? [`${n(shown)} Verified`]
+        : [...(verified > 0 ? [`${plural(shown, "Program")}, ${n(verified)} Verified`] : []), plural(shown, "Program")]
   return [...counts.map((c) => `${query}: ${c}${month}`), `${query}${month}`].find((t) => t.length <= TITLE_MAX) ?? query
 }
 
 /**
  * The full <title> of a list page (no layout suffix is added after it): a
- * category's fixed title plus " | OpenAffiliate", or countTitle over the rows
- * a /best list shows and its "Verified" date.
+ * category's fixed title plus " | OpenAffiliate", or countTitle over the counts
+ * a /best list states in its header (Programs, Verified) and its "Verified" date.
  */
 export function listPageTitle(list: BestList): string {
   if (list.title) return `${list.title} | OpenAffiliate`
-  const { rows, checked } = buildBestList(list)
-  return countTitle(list.query, rows.length, rows.filter((p) => p.verified).length, checked)
+  // The header stats' numbers (Programs, Verified), not the MAX_ROWS-capped rows: the title says what the page says.
+  const { total, verified, checked } = buildBestList(list)
+  return countTitle(list.query, total, verified.length, checked)
 }
 
 /** "Oct 20, 2026": the "Updated" line under a list or post H1. */
@@ -381,7 +385,7 @@ const LISTS: BestList[] = [
   },
   {
     slug: "paypal-affiliate-programs",
-    query: "Affiliate Programs Paying via PayPal",
+    query: "Affiliate Programs Paid via PayPal",
     h1: "Affiliate Programs That Pay via PayPal",
     description:
       "Affiliate programs that pay commissions through PayPal, ranked by commission, with the cookie window and payout terms we verified for each.",

@@ -52,15 +52,45 @@ test("directorySentence agrees in number with its counts", () => {
   assert.match(directorySentence([row(false, null)]), /of 1 affiliate program; 0 have their terms verified on the brand's own page\.$/)
 })
 
-test("every /best title fits, leads with its query and counts what the page shows", () => {
+test("countTitle: a 0 count is dropped, not printed", () => {
+  assert.equal(countTitle("SEO Affiliate Programs", 0, 0, "2026-10-20"), "SEO Affiliate Programs (Oct 2026)")
+  assert.equal(countTitle("SEO Affiliate Programs", 0, 0, null), "SEO Affiliate Programs")
+})
+
+/** The numbers a title states: "551 Verified" → [551, 551]; "48 Programs, 39 Verified" → [48, 39]; none → null. */
+function titleCounts(title: string): [number, number] | null {
+  const m = /: ([\d,]+) (Verified|Programs?)(?:, ([\d,]+) Verified)?/.exec(title)
+  if (!m) return null
+  const a = Number(m[1].replace(/,/g, ""))
+  return [a, m[2] === "Verified" ? a : m[3] ? Number(m[3].replace(/,/g, "")) : -1]
+}
+
+test("every /best title fits, leads with its query and states the page's own counts", () => {
   for (const list of BEST_LISTS) {
     const ready = readyPost(list.slug)
     const title = ready ? postPageTitle(ready.post, ready.selection) : listPageTitle(list)
     assert.ok(title.length <= TITLE_MAX, `${list.slug}: "${title}" is ${title.length} characters`)
     assert.ok(title.startsWith(list.query), `${list.slug}: "${title}" does not lead with "${list.query}"`)
-    const shown = ready ? ready.selection.shown.length : buildBestList(list).rows.length
-    if (title.includes(":")) assert.match(title, new RegExp(`: ${shown} (Verified|Programs?)\\b`), `${list.slug}: "${title}" does not count its ${shown} programs`)
+    const counts = titleCounts(title)
+    if (!counts) continue
+    if (ready) {
+      // A post states its blocks, all verified.
+      const n = ready.selection.shown.length
+      assert.deepEqual(counts, [n, n], `${list.slug}: "${title}" does not count its ${n} blocks`)
+    } else {
+      // A list states its header stats: Programs (total) and Verified.
+      const { total, verified } = buildBestList(list)
+      assert.equal(counts[0], total, `${list.slug}: "${title}" does not match the Programs stat ${total}`)
+      if (counts[1] !== -1) assert.equal(counts[1], verified.length, `${list.slug}: "${title}" does not match the Verified stat ${verified.length}`)
+    }
   }
+})
+
+test("a capped list's title states the Verified stat, not the row cap", () => {
+  const hub = BEST_LISTS[0]
+  const data = buildBestList(hub)
+  assert.ok(data.rows.length < data.verified.length, "the /best hub shows fewer rows than it has verified programs")
+  assert.deepEqual(titleCounts(listPageTitle(hub)), [data.verified.length, data.verified.length])
 })
 
 test("the recurring list is the parent of the per-category recurring lists", () => {
