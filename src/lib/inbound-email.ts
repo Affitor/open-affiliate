@@ -19,7 +19,13 @@ export const SUBJECT_TAG = "[OA inbox]"
 export const LOOP_HEADER = "X-OA-Inbox"
 /** Attachments are included until their total would pass this; the rest are listed by name. */
 export const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
+export const MAX_ATTACHMENTS = 20
 export const SIGNATURE_TOLERANCE_SECONDS = 5 * 60
+/** Latest send after receipt; must stay under Resend's 24 h Idempotency-Key life. */
+export const SEND_WINDOW_MS = 23 * 60 * 60 * 1000
+/** Reads from Resend share this; the send gets its own 15 s, inside maxDuration 60. */
+export const READ_BUDGET_MS = 40_000
+const DOWNLOAD_CONCURRENCY = 4
 
 const RESEND_API = "https://api.resend.com"
 const ADDRESS = /^[^\s@,;<>"]+@[^\s@,;<>"]+\.[^\s@,;<>"]+$/
@@ -30,6 +36,8 @@ export type InboundDeps = {
   fetch: typeof fetch
   /** Milliseconds since epoch. */
   now: () => number
+  /** Overrides READ_BUDGET_MS (tests). */
+  budgetMs?: number
 }
 
 type ReceivedAttachment = {
@@ -154,11 +162,15 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
     return json(200, { dropped: true })
   }
 
-  const api = (path: string, init: RequestInit = {}) =>
+  // One budget for every read from Resend (message, list, downloads), so the
+  // send below still fits inside the route's maxDuration.
+  const budget = AbortSignal.timeout(deps.budgetMs ?? READ_BUDGET_MS)
+  const within = (ms: number) => AbortSignal.any([budget, AbortSignal.timeout(ms)])
+  const api = (path: string, init: RequestInit = {}, signal = within(10_000)) =>
     deps.fetch(`${RESEND_API}${path}`, {
       ...init,
       headers: { Authorization: `Bearer ${apiKey}`, ...init.headers },
-      signal: AbortSignal.timeout(10_000),
+      signal,
     })
 
   try {
@@ -171,6 +183,8 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
       console.log("inbound-email: dropped (loop guard)", emailId)
       return json(200, { dropped: true })
     }
+    const receivedAt = Date.parse(email.created_at ?? "")
+    if (Number.isNaN(receivedAt)) throw new Error("fetch email no-created_at")
 
     let listed: ReceivedAttachment[] = []
     if ((email.attachments ?? []).length > 0) {
@@ -179,29 +193,53 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
       listed = ((await res.json()) as { data?: ReceivedAttachment[] }).data ?? []
     }
 
-    const attachments: Record<string, string>[] = []
+    // Which files go in is decided from the listing alone (declared size and
+    // count, in id order), never from how long downloads take, so every retry
+    // builds the same payload for the same Idempotency-Key.
+    const chosen: ReceivedAttachment[] = []
     const skipped: string[] = []
-    let total = 0
-    for (const item of listed) {
-      const name = oneLine(item.filename || "attachment")
-      const declared = typeof item.size === "number" ? item.size : Number.POSITIVE_INFINITY
-      if (!item.download_url || total + declared > MAX_ATTACHMENT_BYTES) {
-        skipped.push(`${name} (${Number.isFinite(declared) ? megabytes(declared) : "size unknown"})`)
+    let declaredTotal = 0
+    for (const item of [...listed].sort((a, b) => String(a.id).localeCompare(String(b.id), "en", { numeric: true }))) {
+      const declared = typeof item.size === "number" && item.size >= 0 ? item.size : Number.POSITIVE_INFINITY
+      if (!item.download_url || chosen.length >= MAX_ATTACHMENTS || declaredTotal + declared > MAX_ATTACHMENT_BYTES) {
+        skipped.push(`${oneLine(item.filename || "attachment")} (${Number.isFinite(declared) ? megabytes(declared) : "size unknown"})`)
         continue
       }
-      const file = await deps.fetch(item.download_url, { signal: AbortSignal.timeout(20_000) })
-      if (!file.ok) throw new Error(`download attachment ${file.status}`)
-      const bytes = Buffer.from(await file.arrayBuffer())
+      declaredTotal += declared
+      chosen.push(item)
+    }
+
+    // Parallel, a few at a time, all inside the budget. Any failure or timeout
+    // is a 500 (Resend retries), never a send with fewer files.
+    const files: Buffer[] = new Array(chosen.length)
+    let next = 0
+    await Promise.all(
+      Array.from({ length: Math.min(DOWNLOAD_CONCURRENCY, chosen.length) }, async () => {
+        while (next < chosen.length) {
+          const index = next++
+          const file = await deps.fetch(chosen[index].download_url!, { signal: within(20_000) })
+          if (!file.ok) throw new Error(`download attachment ${file.status}`)
+          files[index] = Buffer.from(await file.arrayBuffer())
+        }
+      }),
+    )
+
+    const attachments: Record<string, string>[] = []
+    let total = 0
+    chosen.forEach((item, index) => {
+      const name = oneLine(item.filename || "attachment")
+      const bytes = files[index]
+      // A file larger than it declared: listed instead (same bytes, same answer on every retry).
       if (total + bytes.length > MAX_ATTACHMENT_BYTES) {
         skipped.push(`${name} (${megabytes(bytes.length)})`)
-        continue
+        return
       }
       total += bytes.length
       const attachment: Record<string, string> = { filename: name, content: bytes.toString("base64") }
       if (item.content_type) attachment.content_type = item.content_type
       if (item.content_id) attachment.content_id = item.content_id
       attachments.push(attachment)
-    }
+    })
 
     const headerFrom = typeof email.headers?.from === "string" ? email.headers.from : email.from ?? ""
     const lines = [
@@ -209,7 +247,7 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
       `To: ${oneLine((email.to ?? []).join(", "))}`,
       ...((email.cc ?? []).length > 0 ? [`Cc: ${oneLine(email.cc!.join(", "))}`] : []),
       `Date: ${oneLine(email.created_at ?? "")}`,
-      ...(skipped.length > 0 ? [`Not attached (over ${megabytes(MAX_ATTACHMENT_BYTES)} total): ${skipped.join(", ")}`] : []),
+      ...(skipped.length > 0 ? [`Not attached (limit ${MAX_ATTACHMENTS} files, ${megabytes(MAX_ATTACHMENT_BYTES)} total): ${skipped.join(", ")}`] : []),
     ]
     const textBlock = `---------- Received at ${OWN_DOMAIN} ----------\n${lines.join("\n")}\n\n`
     const htmlBlock =
@@ -231,22 +269,39 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
     if (replyTo.length > 0) message.reply_to = replyTo
     if (attachments.length > 0) message.attachments = attachments
 
-    const sent = await api("/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // A webhook retried for the same email is sent once (Resend keeps keys 24 h).
-        "Idempotency-Key": `oa-inbox/${emailId}`,
+    // Resend keeps an Idempotency-Key for 24 h, but webhook retries run for
+    // ~27.5 h and the dashboard can replay a delivered webhook at any time.
+    // So nothing is sent later than 23 h after the mail was received: every
+    // send then falls inside the 24 h life of a key first used at or after
+    // receipt (the hour spare covers clock skew), and a retry or replay can
+    // never send twice. Trade-off: a mail whose attempts all failed for 23 h
+    // is not forwarded; it stays readable in the Resend dashboard.
+    if (deps.now() - receivedAt > SEND_WINDOW_MS) {
+      console.log("inbound-email: stale, skipped", emailId)
+      return json(200, { skipped: "stale" })
+    }
+
+    const sent = await api(
+      "/emails",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Idempotency-Key": `oa-inbox/${emailId}` },
+        body: JSON.stringify(message),
       },
-      body: JSON.stringify(message),
-    })
+      AbortSignal.timeout(15_000),
+    )
     // Status only: the response body can echo addresses.
     if (!sent.ok) throw new Error(`send ${sent.status}`)
     console.log("inbound-email: forwarded", emailId, total)
     return json(200, { forwarded: true })
   } catch (error) {
     // Message only: our own error strings carry statuses, never addresses or bodies.
-    const reason = error instanceof Error && /^(fetch|list|download|send) /.test(error.message) ? error.message : "network"
+    const reason =
+      error instanceof Error && /^(fetch|list|download|send) /.test(error.message)
+        ? error.message
+        : error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")
+          ? "timeout"
+          : "network"
     console.error("inbound-email: failed", emailId, reason)
     // 500 makes Resend retry; the idempotency key keeps a retry from sending twice.
     return json(500, { error: "forward failed" })

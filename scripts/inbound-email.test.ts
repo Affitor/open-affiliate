@@ -4,6 +4,7 @@ import { test } from "node:test"
 import {
   FORWARD_FROM,
   LOOP_HEADER,
+  MAX_ATTACHMENTS,
   MAX_ATTACHMENT_BYTES,
   forwardAddress,
   handleInboundEmail,
@@ -37,17 +38,27 @@ function webhook(data: Record<string, unknown> = {}, type = "email.received", he
 }
 
 type Email = Record<string, unknown>
+type FakeFile = { filename: string; size: number; content_id?: string; delayMs?: number; status?: number }
 
-/** A fake Resend: records every call, and like the real API sends once per Idempotency-Key. */
-function fakeResend(email: Email = {}, files: { filename: string; size: number; content_id?: string }[] = []) {
+const HOUR = 60 * 60 * 1000
+/** Resend keeps an Idempotency-Key this long (docs: idempotency-keys). */
+const KEY_LIFE_MS = 24 * HOUR
+
+/**
+ * A fake Resend on a shared clock: records every call and, like the real API,
+ * delivers once per Idempotency-Key while that key is younger than 24 h.
+ * `loseResponses` makes the next N accepted sends fail on the way back.
+ */
+function fakeResend(email: Email = {}, files: FakeFile[] = [], clock = { now: NOW }) {
   const calls: string[] = []
   const sends: { key: string | null; body: Record<string, unknown> }[] = []
-  const delivered = new Map<string, string>()
+  const keys = new Map<string, { body: string; at: number }>()
+  const state = { accepted: 0, loseResponses: 0 }
   const received = {
     from: "alice@sender.test",
     to: ["hello@openaffiliate.dev"],
     subject: "Hi",
-    created_at: "2026-10-20T00:00:00.000Z",
+    created_at: new Date(NOW).toISOString(),
     html: "<p>Hello</p>",
     text: "Hello",
     headers: { from: "Alice <alice@sender.test>" },
@@ -59,8 +70,18 @@ function fakeResend(email: Email = {}, files: { filename: string; size: number; 
     const url = String(input)
     calls.push(`${init?.method ?? "GET"} ${url}`)
     if (url.startsWith("https://files.test/")) {
-      const size = Number(new URL(url).searchParams.get("size"))
-      return new Response(new Uint8Array(size))
+      const file = files[Number(new URL(url).pathname.slice(2))]
+      if (file.delayMs) {
+        await new Promise<void>((resolve, reject) => {
+          const timer = setTimeout(resolve, file.delayMs)
+          init?.signal?.addEventListener("abort", () => {
+            clearTimeout(timer)
+            reject(init.signal!.reason)
+          })
+        })
+      }
+      if (file.status) return new Response("no", { status: file.status })
+      return new Response(new Uint8Array(file.size))
     }
     if (url === `https://api.resend.com/emails/receiving/${EMAIL_ID}?html_format=cid`) return Response.json(received)
     if (url === `https://api.resend.com/emails/receiving/${EMAIL_ID}/attachments`) {
@@ -73,28 +94,43 @@ function fakeResend(email: Email = {}, files: { filename: string; size: number; 
           size: f.size,
           content_type: "application/pdf",
           content_id: f.content_id ?? null,
-          download_url: `https://files.test/a${i}?size=${f.size}`,
+          download_url: `https://files.test/a${i}?sig=${Math.random()}`,
         })),
       })
     }
     if (url === "https://api.resend.com/emails" && init?.method === "POST") {
       const key = new Headers(init.headers).get("Idempotency-Key")
-      const body = JSON.parse(String(init.body))
-      sends.push({ key, body })
-      if (key && delivered.has(key)) {
-        assert.equal(delivered.get(key), String(init.body), "a retry must repeat the exact payload")
-      } else if (key) {
-        delivered.set(key, String(init.body))
+      sends.push({ key, body: JSON.parse(String(init.body)) })
+      const held = key ? keys.get(key) : undefined
+      if (held && clock.now - held.at < KEY_LIFE_MS) {
+        assert.equal(held.body, String(init.body), "a retry must repeat the exact payload")
+      } else {
+        if (key) keys.set(key, { body: String(init.body), at: clock.now })
+        state.accepted++
+      }
+      if (state.loseResponses > 0) {
+        state.loseResponses--
+        throw new TypeError("fetch failed")
       }
       return Response.json({ id: "sent_1" })
     }
     return new Response("unexpected", { status: 599 })
   }) as typeof fetch
-  return { fetch: fetchFn, calls, sends, delivered }
+  return { fetch: fetchFn, calls, sends, state, clock }
 }
 
-function deps(resend: ReturnType<typeof fakeResend>, env: Record<string, string | undefined> = ENV) {
-  return { env, fetch: resend.fetch, now: () => NOW }
+function deps(resend: ReturnType<typeof fakeResend>, env: Record<string, string | undefined> = ENV, budgetMs?: number) {
+  return { env, fetch: resend.fetch, now: () => resend.clock.now, budgetMs }
+}
+
+/** A webhook signed at the clock's current time. */
+function webhookAt(clock: { now: number }): Request {
+  const body = JSON.stringify({ type: "email.received", data: { email_id: EMAIL_ID, from: "alice@sender.test", subject: "Hi" } })
+  return new Request("https://openaffiliate.dev/api/inbound-email", {
+    method: "POST",
+    headers: sign(body, String(Math.floor(clock.now / 1000))),
+    body,
+  })
 }
 
 test("Svix reference vector verifies (docs.svix.com manual verification example)", () => {
@@ -149,7 +185,11 @@ test("other event types → 200, no send", async () => {
 })
 
 test("forwards to the fixed owner only, with tag, header block, reply-to and loop header", async () => {
-  const resend = fakeResend({ cc: ["bob@sender.test"], to: ["hello@openaffiliate.dev", "evil@attacker.test"] })
+  const resend = fakeResend({
+    cc: ["bob@sender.test"],
+    to: ["hello@openaffiliate.dev", "evil@attacker.test"],
+    created_at: "2026-10-20T00:00:00.000Z",
+  })
   const res = await handleInboundEmail(webhook(), deps(resend))
   assert.equal(res.status, 200)
   assert.equal(resend.sends.length, 1)
@@ -182,7 +222,7 @@ test("duplicate webhook delivery → one email (same Idempotency-Key, same paylo
   assert.equal(second.status, 200)
   assert.equal(resend.sends.length, 2)
   assert.equal(resend.sends[0].key, resend.sends[1].key)
-  assert.equal(resend.delivered.size, 1, "Resend delivers once per key")
+  assert.equal(resend.state.accepted, 1, "Resend delivers once per key")
 })
 
 test("loop guard: own-domain sender, tagged subject, or loop header → 200, no send", async () => {
@@ -229,8 +269,8 @@ test("attachments: included up to the cap, the rest listed by name; inline cid k
   assert.deepEqual(attachments.map((a) => a.filename), ["logo.png", "notes.pdf"])
   assert.equal(attachments[0].content_id, "img001")
   assert.equal(Buffer.from(attachments[1].content, "base64").length, 3000)
-  assert.match(String(resend.sends[0].body.text), /Not attached \(over 10\.0 MB total\): big\.zip \(10\.0 MB\)/)
-  assert.ok(!resend.calls.some((c) => c.includes("size=" + MAX_ATTACHMENT_BYTES)), "the oversized file is never downloaded")
+  assert.match(String(resend.sends[0].body.text), /Not attached \(limit 20 files, 10\.0 MB total\): big\.zip \(10\.0 MB\)/)
+  assert.ok(!resend.calls.some((c) => c.startsWith("GET https://files.test/a1")), "the oversized file is never downloaded")
 })
 
 test("Resend failure → 500 so the webhook is retried", async () => {
@@ -238,5 +278,97 @@ test("Resend failure → 500 so the webhook is retried", async () => {
   const failing = (async (input: RequestInfo | URL, init?: RequestInit) =>
     String(input).endsWith("/emails") ? new Response("{}", { status: 503 }) : resend.fetch(input, init)) as typeof fetch
   const res = await handleInboundEmail(webhook(), { env: ENV, fetch: failing, now: () => NOW })
+  assert.equal(resend.state.accepted, 0)
   assert.equal(res.status, 500)
+})
+
+test("retry 2 h after a lost response → same key, one accepted send", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [{ filename: "a.pdf", size: 1000 }], clock)
+  resend.state.loseResponses = 1
+  const first = await handleInboundEmail(webhookAt(clock), deps(resend))
+  assert.equal(first.status, 500, "a lost response is retried")
+  clock.now = NOW + 2 * HOUR
+  const retry = await handleInboundEmail(webhookAt(clock), deps(resend))
+  assert.equal(retry.status, 200)
+  assert.equal(resend.sends.length, 2)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("retry or replay later than 23 h after receipt → 200, no send", async () => {
+  for (const age of [23 * HOUR + 60_000, 27.6 * HOUR, 30 * 24 * HOUR]) {
+    const clock = { now: NOW + age }
+    const resend = fakeResend({}, [], clock)
+    const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+    assert.equal(res.status, 200, `age ${age}`)
+    assert.deepEqual(await res.json(), { skipped: "stale" })
+    assert.equal(resend.sends.length, 0)
+  }
+  // The window keeps every send inside the key's life: lost response at 22 h 59, retry at 23 h 01 sends nothing.
+  const clock = { now: NOW + 23 * HOUR - 60_000 }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 1
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  clock.now = NOW + 23 * HOUR + 60_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("clock skew: receipt a few minutes in our future still sends; 22 h 55 sends", async () => {
+  for (const age of [-5 * 60_000, 22 * HOUR + 55 * 60_000]) {
+    const clock = { now: NOW + age }
+    const resend = fakeResend({}, [], clock)
+    const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+    assert.equal(res.status, 200, `age ${age}`)
+    assert.equal(resend.state.accepted, 1, `age ${age}`)
+  }
+})
+
+test("missing receipt time → 500, no send", async () => {
+  const resend = fakeResend({ created_at: undefined })
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 500)
+  assert.equal(resend.sends.length, 0)
+})
+
+test("slow files: downloaded in parallel inside one budget", async () => {
+  const files = Array.from({ length: 8 }, (_, i) => ({ filename: `f${i}.pdf`, size: 10, delayMs: 100 }))
+  const resend = fakeResend({}, files)
+  const started = Date.now()
+  const res = await handleInboundEmail(webhook(), deps(resend, ENV, 1_000))
+  const elapsed = Date.now() - started
+  assert.equal(res.status, 200)
+  assert.equal((resend.sends[0].body.attachments as unknown[]).length, 8)
+  assert.ok(elapsed < 500, `8 × 100 ms at concurrency 4 took ${elapsed} ms`)
+})
+
+test("budget exceeded → 500 and no send with fewer files", async () => {
+  const resend = fakeResend({}, [
+    { filename: "fast.pdf", size: 10 },
+    { filename: "slow.pdf", size: 10, delayMs: 5_000 },
+  ])
+  const started = Date.now()
+  const res = await handleInboundEmail(webhook(), deps(resend, ENV, 200))
+  assert.equal(res.status, 500)
+  assert.equal(resend.sends.length, 0)
+  assert.ok(Date.now() - started < 2_000, "the budget aborts the slow download")
+})
+
+test("a failed download → 500, no send", async () => {
+  const resend = fakeResend({}, [{ filename: "a.pdf", size: 10 }, { filename: "b.pdf", size: 10, status: 403 }])
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 500)
+  assert.equal(resend.sends.length, 0)
+})
+
+test("attachment set depends only on the listing: count cap, same payload on every retry", async () => {
+  const files = Array.from({ length: 25 }, (_, i) => ({ filename: `f${String(i).padStart(2, "0")}.pdf`, size: 10, delayMs: (i % 3) * 5 }))
+  const resend = fakeResend({}, files)
+  await handleInboundEmail(webhook(), deps(resend))
+  await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(resend.state.accepted, 1)
+  assert.deepEqual(resend.sends[0].body, resend.sends[1].body)
+  assert.equal((resend.sends[0].body.attachments as unknown[]).length, MAX_ATTACHMENTS)
+  assert.match(String(resend.sends[0].body.text), /Not attached \(limit 20 files, 10\.0 MB total\): f20\.pdf \(0\.0 MB\), f21\.pdf .*f24\.pdf \(0\.0 MB\)\n/)
 })
