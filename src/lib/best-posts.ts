@@ -1,4 +1,4 @@
-import { getBestList, listCommissionText, type BestList } from "./best-lists"
+import { countTitle, getBestList, listCommissionText, type BestList } from "./best-lists"
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import { frequencyLabel } from "./claims/form"
@@ -150,8 +150,19 @@ export function postReady(selection: PostSelection): boolean {
   return selection.shown.length >= MIN_POST_PROGRAMS
 }
 
+/** The post's H1 and headline: "11 Best Recurring Affiliate Programs in 2026". */
 export function postTitle(post: BestPost, selection: PostSelection, asOf: Date = new Date()): string {
   return post.title(selection.shown.length, asOf.getUTCFullYear())
+}
+
+/**
+ * The post's <title>: its list's query, the programs shown (every one is
+ * verified, selectPrograms requires it) and the month of the newest check
+ * among them. "Recurring Affiliate Programs: 11 Verified (Oct 2026)".
+ */
+export function postPageTitle(post: BestPost, selection: PostSelection): string {
+  const n = selection.shown.length
+  return countTitle(postList(post)?.query ?? postTitle(post, selection), n, n, checkedRange(selection)?.[1] ?? null)
 }
 
 /**

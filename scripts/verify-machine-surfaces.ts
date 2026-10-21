@@ -21,6 +21,8 @@ import {
   flatUsdPayout,
   verifiedDate,
   indexable,
+  listPageTitle,
+  TITLE_MAX as BEST_TITLE_MAX,
   type BestList,
 } from "../src/lib/best-lists";
 import { hasNoProgram } from "../src/lib/no-program";
@@ -31,7 +33,7 @@ import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
 import { outboundUrl } from "../src/lib/outbound-link";
 import { changelog } from "../src/lib/changelog";
 import { blogApplyHref } from "../src/lib/apply-cta";
-import { getPost, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
+import { getPost, postPageTitle, postReady, postSelection, postTitle, type BestPost, type PostSelection } from "../src/lib/best-posts";
 import { GUIDES, guidePath, guideSelection, guideTitle, type GuidePost } from "../src/lib/guides";
 import { programMd } from "./generate-md";
 import { affitorAnchorProblems } from "./affitor-checks";
@@ -350,7 +352,8 @@ for (const network of networks) {
 
 /**
  * Best-of lists: each is a config entry, so these hold every entry to what the
- * page promises. The <title> carries the layout's " | OpenAffiliate" suffix.
+ * page promises. A /best title is computed (query, count, month) with no suffix;
+ * a category title carries " | OpenAffiliate".
  */
 if (!llms.includes(`${BASE_URL}/best.md`)) fail("llms.txt does not link best.md");
 if (!requireText("best.md").startsWith("# ")) fail("best.md must start with an H1");
@@ -439,9 +442,9 @@ function checkListPage(list: BestList, path: string): void {
   const indexed = indexable(list);
   if (indexed && !sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
   if (!indexed && sitemapUrlSet.has(url)) fail(`sitemap lists ${url}, a noindex hub`);
-  const title = `${list.title} | OpenAffiliate`;
-  if (title.length > 60 || /[–—]/.test(title)) {
-    fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  const title = listPageTitle(list);
+  if (title.length > BEST_TITLE_MAX || /[–—]/.test(title)) {
+    fail(`${path} title must be ${BEST_TITLE_MAX} characters or fewer with no en or em dash: ${title}`);
   }
   if (list.description.length < 120 || list.description.length > 155) {
     fail(`${path} description is ${list.description.length} characters; keep it 120 to 155`);
@@ -469,6 +472,7 @@ function checkListPage(list: BestList, path: string): void {
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (htmlTitle(html) !== title) fail(`${htmlFile} <title> is "${htmlTitle(html)}", not "${title}"`);
   if (html.includes('<meta name="robots" content="noindex') === indexed) {
     fail(`${htmlFile} must ${indexed ? "not carry" : "carry"} a noindex robots meta`);
   }
@@ -584,12 +588,15 @@ function checkListPage(list: BestList, path: string): void {
 function checkPostPage(post: BestPost, selection: PostSelection, path: string): void {
   const url = `${BASE_URL}${path}`;
   if (!sitemapUrlSet.has(url)) fail(`sitemap is missing ${url}`);
+  // The H1 is postTitle; the <title> is postPageTitle (query, count, month).
   const title = postTitle(post, selection);
-  if (`${title} | OpenAffiliate`.length > 60 || /[–—]/.test(title)) fail(`${path} title must be 60 characters or fewer with no en or em dash: ${title}`);
+  const pageTitle = postPageTitle(post, selection);
+  if (pageTitle.length > BEST_TITLE_MAX || /[–—]/.test(pageTitle)) fail(`${path} title must be ${BEST_TITLE_MAX} characters or fewer with no en or em dash: ${pageTitle}`);
   if (post.description.length < 120 || post.description.length > 155) fail(`${path} description is ${post.description.length} characters; keep it 120 to 155`);
   const htmlFile = `${path.slice(1)}.html`;
   if (!existsSync(join(BUILD_APP, htmlFile))) fail(`${htmlFile} was not prerendered`);
   const html = readFileSync(join(BUILD_APP, htmlFile), "utf8");
+  if (htmlTitle(html) !== pageTitle) fail(`${htmlFile} <title> is "${htmlTitle(html)}", not "${pageTitle}"`);
   const want = selection.shown.map(({ program }) => program.slug);
   const blocks = [...html.matchAll(/data-post-program="([a-z0-9-]+)"/g)].map((m) => m[1]);
   if (blocks.join() !== want.join()) fail(`${path} shows blocks ${JSON.stringify(blocks)}, not postSelection's ${JSON.stringify(want)}`);
