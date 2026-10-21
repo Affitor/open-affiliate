@@ -13,6 +13,8 @@ import { post as lifetimeAffiliatePrograms } from "../content/best/lifetime-affi
 import { post as marketingAffiliatePrograms } from "../content/best/marketing-affiliate-programs"
 import { post as designAffiliatePrograms } from "../content/best/design-affiliate-programs"
 import { post as salesAffiliatePrograms } from "../content/best/sales-affiliate-programs"
+import { post as hostingAffiliatePrograms } from "../content/best/hosting-affiliate-programs"
+import { post as rewardfulAffiliatePrograms } from "../content/best/rewardful-affiliate-programs"
 
 /**
  * Editorial posts on /best/<slug>. A post is a BestList (its filter, page URL,
@@ -63,6 +65,8 @@ export const POSTS: BestPost[] = [
   marketingAffiliatePrograms,
   designAffiliatePrograms,
   salesAffiliatePrograms,
+  hostingAffiliatePrograms,
+  rewardfulAffiliatePrograms,
 ]
 
 /** Terms older than this at build time keep a program out of a post until it is re-checked. */

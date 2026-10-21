@@ -333,6 +333,30 @@ const LISTS: BestList[] = [
     qualifies: (p) => p.category === "Sales",
   },
   {
+    // The filter behind src/content/best/hosting-affiliate-programs.ts.
+    slug: "hosting-affiliate-programs",
+    query: "Web Hosting Affiliate Programs",
+    h1: "Hosting and Infrastructure Affiliate Programs",
+    description:
+      "Web hosting and infrastructure affiliate programs for WordPress, VPS, cloud and CDN providers, ranked by commission, with verified terms listed first.",
+    summary: "are hosting and infrastructure services, going by their registry category",
+    criteria: "Programs listed in the Infrastructure category.",
+    filter: "category=Infrastructure",
+    qualifies: (p) => p.category === "Infrastructure",
+  },
+  {
+    // The filter behind src/content/best/rewardful-affiliate-programs.ts. No
+    // /programs filter link yet: the list-filter test does not map network.
+    slug: "rewardful-affiliate-programs",
+    query: "Rewardful Affiliate Programs",
+    h1: "Affiliate Programs on Rewardful",
+    description:
+      "Affiliate programs run on Rewardful, the referral software SaaS companies use, ranked by commission, with verified terms first and the cookie for each.",
+    summary: "run on Rewardful, going by their registry network",
+    criteria: "Programs whose registry network is Rewardful.",
+    qualifies: (p) => p.network === "rewardful",
+  },
+  {
     // No field records a sign-up fee or a purchase requirement. What is sourced
     // is automatic approval, on verified programs only; the criteria say so.
     slug: "free-affiliate-programs",
