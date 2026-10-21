@@ -114,7 +114,7 @@ export default function OpenSourcePage() {
             OpenAffiliate is through the web form: no coding and no command
             line. It opens the pull request on GitHub, so you need a free GitHub
             account. Without one, email the link to your program page to
-            hello@affitor.com.
+            hello@openaffiliate.dev.
           </p>
           <Link
             href="/docs/submit"

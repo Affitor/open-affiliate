@@ -10,7 +10,7 @@ export const AFFITOR_CLICK = "oa_to_affitor_click"
 export const AFFITOR_MARKETPLACE = "https://affitor.com/marketplace"
 
 /** Where on OA the click came from: the `source` property of AFFITOR_CLICK. */
-export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate" | "footer"
+export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate" | "footer" | "docs"
 
 /** Where a brand moves an existing program to Affitor (live, takes only UTM params). */
 export const AFFITOR_SWITCH = "https://affitor.com/switch"
