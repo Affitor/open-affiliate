@@ -12,7 +12,7 @@ const CONTACT = "support@affitor.com";
 /**
  * Covers the listing claim flow and program submissions, the only places
  * OpenAffiliate asks for personal data. Submission retention lives in
- * supabase/migrations/013_program_submissions.sql (pg_cron job and
+ * supabase/migrations/014_program_submissions.sql (pg_cron job and
  * submission_submit). Retention is enforced by the daily pg_cron job in
  * supabase/migrations/009_program_claims.sql and 011_claim_accounts.sql and by
  * prune() in src/lib/claims/live.ts (RETENTION_DAYS); release() and

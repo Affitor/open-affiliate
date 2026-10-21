@@ -1,5 +1,5 @@
 /**
- * Migration 013's two functions against a real Postgres: caps, the duplicate
+ * Migration 014's two functions against a real Postgres: caps, the duplicate
  * path, the concurrent last slot, a status change racing a submit, and that
  * anon/authenticated can neither read the table nor call the functions.
  *
@@ -85,7 +85,7 @@ before(async () => {
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO anon, authenticated, service_role;
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
   `])
-  for (const file of ["009_program_claims.sql", "013_program_submissions.sql"]) {
+  for (const file of ["009_program_claims.sql", "014_program_submissions.sql"]) {
     await psql(["-f", join(__dirname, "../supabase/migrations", file)])
   }
 })

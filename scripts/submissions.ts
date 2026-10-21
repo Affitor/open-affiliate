@@ -8,7 +8,7 @@
  *   npx tsx scripts/submissions.ts reject <id> <reason>     [--write]  # → rejected, reason from REASONS
  *
  * Without --write a change is only printed. Every change goes through
- * submission_set_status (migration 013): the same lock as a submit, and only
+ * submission_set_status (migration 014): the same lock as a submit, and only
  * from the status the row has. Nothing here writes YAML; a listed program is
  * added through oa-program-intake first, then marked here.
  *

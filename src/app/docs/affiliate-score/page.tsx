@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/code-block";
 export const metadata: Metadata = {
   title: "Affiliate Score",
   description:
-    "The older 0 to 100 score behind the /best list and the badge.",
+    "The older 0 to 100 score behind the /best list and the embeddable score badge.",
 };
 
 export default function AffiliateScorePage() {
@@ -16,7 +16,7 @@ export default function AffiliateScorePage() {
       <DocsHeader
         group="References"
         title="Affiliate Score"
-        description="The older 0 to 100 score behind the /best list and the badge."
+        description="The older 0 to 100 score behind the /best list and the embeddable score badge."
       />
 
       <div className="space-y-10">
@@ -32,7 +32,11 @@ export default function AffiliateScorePage() {
             <Link href="/best" className="text-foreground hover:underline">
               best affiliate programs
             </Link>{" "}
-            list, the featured programs on the homepage and the SVG badge.
+            list and the featured programs on the homepage, and the score
+            badge at <code className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">/api/badge/&lt;slug&gt;</code> shows it. The
+            README badge at <code className="text-xs font-mono bg-muted px-1.5 py-0.5 rounded">/badge/&lt;slug&gt;.svg</code> shows no
+            score: it shows the commission, its type and whether the terms are
+            verified.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mt-3">
             <Link href="/rankings" className="text-foreground hover:underline">

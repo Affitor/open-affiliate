@@ -1,6 +1,6 @@
 /**
  * In-memory SubmissionStore for tests: the same contract as the database
- * function submission_submit (migration 013), with a promise chain standing
+ * function submission_submit (migration 014), with a promise chain standing
  * in for its advisory lock. Keep the two in step.
  */
 import { randomUUID } from "node:crypto"

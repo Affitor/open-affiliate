@@ -12,7 +12,7 @@ import { HIDDEN_CHARACTER, pageKey, proseField, textField, type TurnstileResult 
  *
  * Routes: src/app/api/submissions/. MCP: submit_program and
  * get_submission_status in src/lib/mcp-route.ts. Table and the two locked
- * functions: supabase/migrations/013_program_submissions.sql.
+ * functions: supabase/migrations/014_program_submissions.sql.
  */
 
 export type SubmissionStatus = "queued" | "verifying" | "listed" | "rejected"
