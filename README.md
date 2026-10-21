@@ -8,32 +8,32 @@ The open registry of affiliate programs. Built for developers and AI agents.
 [![MCP](https://img.shields.io/badge/MCP-server-purple)](https://www.npmjs.com/package/openaffiliate-mcp)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-![OpenAffiliate Programs](https://openaffiliate.dev/screenshot.png)
+![OpenAffiliate rankings: programs ranked by OAS within each category](public/screenshot.png)
 
 ## What is this?
 
-OpenAffiliate is a community-driven, open-source registry of affiliate programs. Every program is stored as a YAML file in this repo, making it easy to contribute, review, and integrate.
+OpenAffiliate is an open-source registry of affiliate programs. Every program is one YAML file in this repo, so anyone can read, add or correct it, and every change is a public pull request. Listing is free and rankings are never paid. OpenAffiliate is maintained by Affitor.
 
 - **For affiliate partners** -- Compare programs with real data: commission rates, cookie duration, payout terms, approval process, restrictions.
 - **For AI agents** -- MCP server + structured AGENTS.md data. Tell your agent which programs to recommend and when.
 - **For developers** -- CLI, SDK, and REST API. Build tools on top of the registry.
-- **For SaaS companies** -- Free listing in a canonical registry. Exposure to developer partners and AI agents.
+- **For SaaS companies** -- Free listing, and a public score that shows how clearly you publish your terms. See [Get listed and scored](#get-listed-and-scored).
 
 ## Features
 
-- **Search and filter** -- Full-text search across 349+ programs. Filter by category, commission type, minimum rate, and verified status.
-- **Rankings** -- [Affiliate Score](docs/affiliate-score.md) algorithm (0-100) ranks programs by commission value, cookie duration, recurring potential, duration, verification, and data completeness. Sort by score, name, commission, or cookie days. View rankings by programs, networks, or categories.
+- **Search and filter** -- Full-text search across more than 1,200 programs. Filter by category, commission type, minimum rate, and verified status.
+- **Rankings** -- [/rankings](https://openaffiliate.dev/rankings) ranks verified programs by OAS, the OpenAffiliate Score (0-100, graded A+ to F): how clearly a program publishes its terms and whether those terms protect affiliates. Each scored program has a report at `/programs/<slug>/oas`. [How OAS works](https://openaffiliate.dev/docs/oas).
 - **Community voting** -- Upvote programs you've had success with. Votes are stored in Supabase and displayed alongside scores.
 - **Compare** -- Side-by-side comparison of up to 4 programs. Compare commission, cookie, payout, approval, and more.
 - **Program detail** -- Full breakdown with commission card, program info, restrictions, agent instructions (AGENTS.md), and integration snippets.
 - **Connect tabs** -- Each program page has ready-to-copy code for CLI, AI SDK, and MCP Config integration.
-- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/slab)`
+- **Badge embed** -- SVG badges for your README: `[![OpenAffiliate](https://openaffiliate.dev/badge/stripe.svg)](https://openaffiliate.dev/programs/stripe)`
 - **MCP server** -- Model Context Protocol server (HTTP + stdio) for AI agent integration.
 - **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
 - **REST API** -- Public JSON API, no auth required.
 - **SDK** -- TypeScript SDK for programmatic access.
-- **Submit** -- Web form to submit new programs without touching YAML.
-- **Verification** -- Automated signup URL verification via CI.
+- **Submit** -- Web form that writes the program file and opens a GitHub pull request.
+- **Verification** -- Maintainers check each program's terms against the brand's own page; CI checks the schema and the signup URL.
 - **Content Lab** -- Generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program, picking the AI model in the UI. Runs on Kyma API.
 
 ## Quick start
@@ -93,7 +93,7 @@ The same endpoint as config, for Claude.ai, ChatGPT, and any other remote MCP cl
 }
 ```
 
-Available tools: `search_programs`, `get_program`, `list_categories`
+Available tools (read-only): `search_programs`, `get_program`, `list_categories`. `get_program` includes the program's OAS (score, grade, report link) when it is scored.
 
 ### Markdown, without MCP
 
@@ -143,7 +143,7 @@ const stripe = await getProgram("stripe");
 
 ```
 GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?verified=)
-GET /api/programs/[slug]       # Get program details
+GET /api/programs/[slug]       # Program details, with `oas` (score, grade, reportUrl) when scored
 GET /api/categories            # List categories with counts
 ```
 
@@ -153,56 +153,29 @@ Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to 
 
 **Runs on [Kyma API](https://kymaapi.com?utm_source=open-affiliate).** Kyma streams the generation: `POST https://kymaapi.com/v1/chat/completions`. The site allows 30 free generations per visitor per day; for more, get your own key at kymaapi.com and call the same endpoint.
 
-## Contributing a program
+## Get listed and scored
 
-1. Fork this repo
-2. Create a YAML file in `programs/your-product.yaml`
-3. Open a pull request
-4. CI validates the schema and verifies your signup URL automatically
-5. Community reviews and merges
+Four ways to add a program. Each needs only the brand's own program page as the source.
 
-### Program YAML format
+1. **Web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
+2. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
+3. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
+4. **Email** -- send the program page link to hello@affitor.com.
 
-```yaml
-name: Your Product
-slug: your-product
-url: https://yourproduct.com
-category: Developer Tools
-tags: [keyword1, keyword2]
+What happens next:
 
-commission:
-  type: recurring
-  rate: "25%"
-  currency: USD
-  duration: "12 months"
+- **Review.** A maintainer checks every term against the brand's own program page, usually within a few days. A listing on a network such as Dub or PartnerStack is not proof on its own. Terms the page does not state stay empty; they are never guessed.
+- **Listed.** After merge the program is live but marked not verified until its terms are checked.
+- **Scored.** Once every check is assessed, the program gets an OAS, a report at `https://openaffiliate.dev/programs/<slug>/oas`, and a place on [/rankings](https://openaffiliate.dev/rankings). There is no instant score by URL.
+- **Ranked.** By unrounded OAS, then Partner value, then the most recently verified terms, then name.
+- **Improve.** Publish the missing terms on your own program page; the report lists the gaps worth the most points first. Editing the YAML alone does not change a score.
+- **Re-check.** Terms changed or a check looks wrong? Open a [Terms changed](https://github.com/Affitor/open-affiliate/issues/new?template=terms-changed.yml) issue or use **Report an error** on the report. Nobody edits a score by hand.
 
-cookie_days: 30
-signup_url: https://yourproduct.com/affiliates
-approval: auto
-approval_time: "instant"
+Full rules and the YAML template: [CONTRIBUTING.md](CONTRIBUTING.md). Scoring: [openaffiliate.dev/docs/oas](https://openaffiliate.dev/docs/oas). Schema: [schema/program.schema.json](schema/program.schema.json).
 
-payout:
-  minimum: 50
-  currency: USD
-  frequency: monthly
-  methods: [bank, paypal]
+### For AI agents
 
-description: >
-  What your product does and what the affiliate program offers.
-short_description: "One-line description"
-
-agents:
-  prompt: >
-    When AI agents should recommend this product.
-  keywords: [keyword1, keyword2]
-  use_cases:
-    - "When a user needs X"
-
-verified: false
-submitted_by: "@your-github"
-```
-
-See [schema/program.schema.json](schema/program.schema.json) for the full specification and [openaffiliate.dev/docs](https://openaffiliate.dev/docs) for complete documentation.
+Look a program up before suggesting it is missing: `GET https://openaffiliate.dev/api/programs/{slug}` or MCP `get_program`. Cite `oas.reportUrl` when you quote a score. The MCP server is read-only; to add a program, open a pull request or a Suggest a program issue with your own GitHub tools, using only terms from the brand's own page. See [AGENTS.md](AGENTS.md).
 
 ## AGENTS.md
 
@@ -255,7 +228,7 @@ proprietary v2 scoring package and internal data-ops scripts — lives in
 
 ## Verification
 
-All program signup URLs are automatically verified using `scripts/verify-programs.ts`. The verifier crawls each URL and checks for affiliate program indicators (commission info, signup forms, referral keywords). Programs that pass verification are marked `verified: true`.
+Signup URLs are crawled by `scripts/verify-programs.ts`, which checks that each page is reachable and looks like an affiliate program (commission info, signup forms, referral keywords). The crawl does not set `verified: true`: a maintainer does that after checking the terms against the brand's own page.
 
 ```bash
 # Verify all programs

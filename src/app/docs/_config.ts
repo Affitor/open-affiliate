@@ -27,16 +27,17 @@ export const docsNav: DocsSidebarGroup[] = [
       { title: "AI SDK", href: "/docs/ai-sdk", description: "Use the Vercel AI SDK to build AI-powered affiliate tools." },
       { title: "TypeScript SDK", href: "/docs/sdk", description: "Typed client for searching and querying programs." },
       { title: "YAML Schema", href: "/docs/yaml-schema", description: "The structure of a program entry in the registry." },
-      { title: "Affiliate Score", href: "/docs/affiliate-score", description: "How the scoring algorithm ranks programs from 0 to 100." },
+      { title: "OpenAffiliate Score (OAS)", href: "/docs/oas", description: "How a program gets scored and ranked, and how to improve a score." },
+      { title: "Affiliate Score", href: "/docs/affiliate-score", description: "The older 0 to 100 score behind the /best list and the badge." },
     ],
   },
   {
     label: "Guides",
     items: [
-      { title: "Submit a Program", href: "/docs/submit", description: "Add your affiliate program to the open registry." },
+      { title: "Submit a Program", href: "/docs/submit", description: "Add a program, what we check, and how long it takes." },
       { title: "What is Open Source?", href: "/docs/open-source", description: "Why the registry is open and what that means for you." },
       { title: "Content Scoring (SIFT)", href: "/docs/sift-scoring", description: "How AI scores social content relevance from 0 to 10." },
-      { title: "Contributing", href: "/docs/contributing", description: "How to contribute programs, fixes, and features." },
+      { title: "Contributing", href: "/docs/contributing", description: "The rules a program file must pass, and how to correct one." },
     ],
   },
 ];
