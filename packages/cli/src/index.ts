@@ -31,7 +31,7 @@ interface ProgramFull extends ProgramSummary {
   payoutMethods?: string[];
   network?: string;
   programAge?: string;
-  payout?: { minimum?: number; frequency?: string };
+  payout?: { minimum?: number; currency?: string; frequency?: string };
   /** Set instead of terms when the brand has no program to join. */
   answer?: string;
 }

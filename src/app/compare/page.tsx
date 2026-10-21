@@ -37,6 +37,7 @@ function toCompare(stored: Program): CompareProgram {
     attribution: p.attribution,
     trackingMethod: p.trackingMethod,
     payoutMinimum: p.payout.minimum,
+    payoutCurrency: p.payout.currency,
     payoutFrequency: p.payout.frequency,
     approval: p.approval,
     approvalTime: p.approvalTime,

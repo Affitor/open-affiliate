@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   // The root layout's title template appends " | OpenAffiliate" already.
   title: "Submit an Affiliate Program",
   description:
-    "Add your affiliate program to the OpenAffiliate registry. The form writes the program file and opens a GitHub pull request.",
+    "Add your affiliate program to the OpenAffiliate registry: send your program page for review, or write the program file and open a GitHub pull request.",
   openGraph: {
     // openGraph.title is not templated, so it keeps the brand.
     title: "Submit an Affiliate Program: OpenAffiliate",

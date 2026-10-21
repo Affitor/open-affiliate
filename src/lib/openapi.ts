@@ -1,4 +1,4 @@
-/** OpenAPI 3.1 describes the existing public, read-only REST surface. */
+/** OpenAPI 3.1 describes the public REST surface: registry reads, plus the one write that queues a submission. */
 const string = { type: "string" }
 const nullableString = { type: ["string", "null"] }
 const strings = { type: "array", items: string }
@@ -29,11 +29,20 @@ const apiVersion = {
   schema: { type: "string", enum: ["1"], default: "1" },
 }
 const unsupportedVersion = response("API-Version names a version this API does not serve.", ref("Error"))
+// The submission routes answer refusals as { error, message, field? } (the claim flow's shape).
+const submissionRefusal = (description: string) => response(description, ref("SubmissionError"))
+const rateLimitHeaders = {
+  ...headers,
+  "Retry-After": { description: "Seconds until the window that refused the request ends.", schema: { type: "integer", minimum: 0 } },
+  "RateLimit-Limit": { description: "Requests allowed in that window.", schema: { type: "integer", minimum: 0 } },
+  "RateLimit-Remaining": { description: "Requests left in that window (0 on a 429).", schema: { type: "integer", minimum: 0 } },
+  "RateLimit-Reset": { description: "Seconds until that window ends.", schema: { type: "integer", minimum: 0 } },
+}
 
 export const openapi = {
   openapi: "3.1.0",
   jsonSchemaDialect: "https://json-schema.org/draft/2020-12/schema",
-  info: { title: "OpenAffiliate REST API", version: "1.0.0", description: "Search the public affiliate program registry and read program terms. No authentication or API key is required. No write operations are exposed. " +
+  info: { title: "OpenAffiliate REST API", version: "1.0.0", description: "Search the public affiliate program registry and read program terms. No authentication or API key is required. The only write is POST /api/submissions, which queues a program for a maintainer to verify; it never lists or scores anything by itself. " +
     "Versioning: every response carries an API-Version header, currently 1, and a request may send API-Version: 1 to pin it (any other value returns 400 UNSUPPORTED_API_VERSION). Breaking changes ship only under a new major version; additive changes (new fields, parameters or endpoints) can arrive in the current one. " +
     "Deprecation: a field, parameter or endpoint is deprecated at least 90 days before it is removed. Its responses then carry a Deprecation header (RFC 9745) with the date it was deprecated and a Sunset header (RFC 8594) with the date it stops working, and the change is listed in the changelog at https://openaffiliate.dev/changelog." },
   servers: [{ url: "https://openaffiliate.dev" }],
@@ -62,6 +71,38 @@ export const openapi = {
         description: "Read a program, including paused entries and brands with no public program. Aliases resolve to the canonical slug in the 200 response. Unverified cookie, approval and payout terms are withheld. no_program and discontinued entries have neutral commission/payout placeholders, answer and alternatives rather than joinable terms.",
         parameters: [{ name: "slug", in: "path", required: true, description: "Canonical program slug or a registered alias.", schema: string }, apiVersion],
         responses: { "200": response("Program details or a no-program answer.", ref("Program")), "400": unsupportedVersion, "404": response("No program or alias matches the slug.", ref("Error")) },
+      },
+    },
+    "/api/submissions": {
+      post: {
+        operationId: "submitProgram", summary: "Submit a missing program for verification",
+        description: "Queue the brand's own affiliate program page for a maintainer to verify against the brand's published terms. Not instant: nothing is listed and no score exists until the terms are verified. Look the program up first (GET /api/programs?q= or /api/programs/{slug}). A domain already listed answers 200 with listingUrl; a domain already in the queue answers 200 with that submission (duplicate: true). The submitted URL is never fetched at submit time. The contact email is optional, never shown and never returned. Rate limited per address, per domain and site-wide; a 429 carries Retry-After.",
+        parameters: [apiVersion],
+        requestBody: { required: true, content: { "application/json": { schema: ref("SubmissionRequest") } } },
+        responses: {
+          "202": { ...response("Queued.", ref("SubmissionAccepted")), headers: rateLimitHeaders },
+          "200": { ...response("Already listed, or already in the queue.", ref("SubmissionAccepted")), headers: rateLimitHeaders },
+          "400": response("A field is invalid (SubmissionError, field names it), or API-Version is unsupported (Error).", { oneOf: [ref("SubmissionError"), ref("Error")] }),
+          "403": submissionRefusal("A Turnstile token was sent and did not pass."),
+          "413": submissionRefusal("The body is larger than 8 KB."),
+          "415": submissionRefusal("The body is not application/json."),
+          "429": { ...submissionRefusal("Rate limited."), headers: rateLimitHeaders },
+          "503": submissionRefusal("Submissions are not enabled on this deployment."),
+        },
+      },
+    },
+    "/api/submissions/{id}": {
+      get: {
+        operationId: "getSubmission", summary: "Read a submission's status",
+        description: "Status of a submission by the id POST /api/submissions returned: queued, verifying, listed (with listingUrl, and reportUrl once scored) or rejected (with a one-sentence reason). Never returns the contact, the submitted URL or the note.",
+        parameters: [{ name: "id", in: "path", required: true, description: "Submission id (a UUID).", schema: { type: "string", format: "uuid" } }, apiVersion],
+        responses: {
+          "200": response("The submission's status.", ref("Submission")),
+          "400": unsupportedVersion,
+          "404": submissionRefusal("No submission has this id."),
+          "429": { ...submissionRefusal("Too many reads from this address; retry after a minute."), headers: rateLimitHeaders },
+          "503": submissionRefusal("Submissions are not enabled on this deployment."),
+        },
       },
     },
     "/api/categories": {
@@ -127,7 +168,34 @@ export const openapi = {
         filters: object({ q: nullableString, category: nullableString, type: nullableString, sort: string }, ["q", "category", "type", "sort"]),
       }, ["programs", "total", "filters"]),
       CategoryList: object({ categories: { type: "array", items: object({ name: string, count: { type: "integer", minimum: 0 } }, ["name", "count"]) }, total: { type: "integer", minimum: 0 } }, ["categories", "total"]),
+      SubmissionRequest: object({
+        programUrl: { type: "string", maxLength: 500, description: "https:// link to the program page on the brand's own website." },
+        termsUrl: { type: "string", maxLength: 500, description: "https:// link to the page that states the terms, when different." },
+        name: { type: "string", maxLength: 100 },
+        contact: { type: "string", maxLength: 320, description: "Optional email; never shown, never returned, cleared 30 days after the submission is decided." },
+        note: { type: "string", maxLength: 1000 },
+        turnstileToken: { type: "string", description: "Sent by the openaffiliate.dev form only; API callers leave it out." },
+      }, ["programUrl"]),
+      SubmissionAccepted: object({
+        id: { type: "string", format: "uuid" },
+        status: { type: "string", enum: ["queued", "verifying", "listed"] },
+        statusUrl: string, duplicate: { type: "boolean" }, listingUrl: string, reportUrl: string,
+      }, ["status"]),
+      Submission: object({
+        id: { type: "string", format: "uuid" },
+        status: { type: "string", enum: ["queued", "verifying", "listed", "rejected"] },
+        reason: string, listingUrl: string, reportUrl: string, createdAt: string, updatedAt: string,
+      }, ["id", "status", "createdAt", "updatedAt"]),
+      SubmissionError: object({ error: string, message: string, field: string }, ["error", "message"]),
       Error: object({ error: object({ code: string, message: string, hint: string }, ["code", "message", "hint"]) }, ["error"]),
     },
   },
+}
+
+type Operation = { operationId: string; summary: string; description: string; parameters: { name: string; in: string; schema: { enum?: string[] } }[]; responses: Record<string, { headers?: Record<string, unknown> }> }
+
+/** Every operation in the document, with its path and method. */
+export function operations(): { path: string; method: string; op: Operation }[] {
+  return Object.entries(openapi.paths).flatMap(([path, item]) =>
+    Object.entries(item as Record<string, Operation>).map(([method, op]) => ({ path, method, op })))
 }
