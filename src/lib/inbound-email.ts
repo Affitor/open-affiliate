@@ -1,4 +1,5 @@
-import { createHmac, timingSafeEqual } from "node:crypto"
+import { createHash, createHmac, timingSafeEqual } from "node:crypto"
+import type { SupabaseClient } from "@supabase/supabase-js"
 
 /**
  * Mail sent to any address @openaffiliate.dev reaches Resend Inbound, which
@@ -8,8 +9,9 @@ import { createHmac, timingSafeEqual } from "node:crypto"
  *
  * Env: RESEND_INBOUND_WEBHOOK_SECRET (whsec_…, from the Resend webhook page),
  * OA_INBOX_FORWARD_TO (the owner inbox), OA_RESEND_API_KEY (shared with
- * claims; reading received mail needs a Full access key). Any missing → 500,
- * no send.
+ * claims; reading received mail needs a Full access key), and the claims
+ * Supabase pair for the forward ledger (supabase/migrations/013). Any
+ * missing → 500, no send.
  */
 
 export const OWN_DOMAIN = "openaffiliate.dev"
@@ -21,8 +23,14 @@ export const LOOP_HEADER = "X-OA-Inbox"
 export const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024
 export const MAX_ATTACHMENTS = 20
 export const SIGNATURE_TOLERANCE_SECONDS = 5 * 60
-/** Latest send after receipt; must stay under Resend's 24 h Idempotency-Key life. */
-export const SEND_WINDOW_MS = 23 * 60 * 60 * 1000
+/**
+ * A POST whose outcome is unknown is retried (same key, same payload) only
+ * while its first POST is younger than this: Resend keeps an Idempotency-Key
+ * for 24 h, so every retry still lands on the live key.
+ */
+export const UNCERTAIN_RETRY_MS = 23 * 60 * 60 * 1000
+/** How long a claim on a ledger row lasts; longer than maxDuration (60 s). */
+export const LEASE_MS = 90_000
 /** Reads from Resend share this; the send gets its own 15 s, inside maxDuration 60. */
 export const READ_BUDGET_MS = 40_000
 const DOWNLOAD_CONCURRENCY = 4
@@ -36,8 +44,25 @@ export type InboundDeps = {
   fetch: typeof fetch
   /** Milliseconds since epoch. */
   now: () => number
+  /** The forward ledger; null when its env is missing (→ 500, no send). */
+  ledger: ForwardLedger | null
   /** Overrides READ_BUDGET_MS (tests). */
   budgetMs?: number
+}
+
+export type ForwardStatus = "pending" | "uncertain" | "sent" | "needs_review"
+export type ForwardRow = { status: ForwardStatus; first_post_at: string | null; payload_hash: string | null }
+export type ForwardPatch = Partial<ForwardRow> & { lease_until?: string }
+
+/** The oa_inbox_forwards table (supabase/migrations/013_inbox_forwards.sql). */
+export type ForwardLedger = {
+  /**
+   * Atomically take the row for this email (creating it as pending) if it is
+   * pending or uncertain and nobody else holds an unexpired lease. Returns
+   * the row either way so the caller can tell "already sent" from "busy".
+   */
+  claim(emailId: string, nowMs: number, leaseMs: number): Promise<{ claimed: boolean; row: ForwardRow | null }>
+  update(emailId: string, patch: ForwardPatch, nowMs: number): Promise<void>
 }
 
 type ReceivedAttachment = {
@@ -125,12 +150,143 @@ function json(status: number, body: Record<string, unknown>): Response {
   return Response.json(body, { status })
 }
 
+/** Fetch the received mail and build the forward. Throws on any read failure. */
+async function buildForward(
+  emailId: string,
+  owner: string,
+  api: (path: string) => Promise<Response>,
+  deps: InboundDeps,
+  budget: AbortSignal,
+): Promise<{ loop: true } | { loop: false; body: string; bytes: number }> {
+  // cid keeps inline images as attachments (with content_id) instead of
+  // data: URIs, which Gmail does not render.
+  const got = await api(`/emails/receiving/${emailId}?html_format=cid`)
+  if (!got.ok) throw new Error(`fetch email ${got.status}`)
+  const email = (await got.json()) as ReceivedEmail
+  if (isLoop(email)) return { loop: true }
+
+  let listed: ReceivedAttachment[] = []
+  if ((email.attachments ?? []).length > 0) {
+    const res = await api(`/emails/receiving/${emailId}/attachments`)
+    if (!res.ok) throw new Error(`list attachments ${res.status}`)
+    listed = ((await res.json()) as { data?: ReceivedAttachment[] }).data ?? []
+  }
+
+  // Which files go in is decided from the listing alone (declared size and
+  // count, in id order), never from how long downloads take, so every retry
+  // builds the same payload for the same Idempotency-Key.
+  const chosen: ReceivedAttachment[] = []
+  const skipped: string[] = []
+  let declaredTotal = 0
+  for (const item of [...listed].sort((a, b) => String(a.id).localeCompare(String(b.id), "en", { numeric: true }))) {
+    const declared = typeof item.size === "number" && item.size >= 0 ? item.size : Number.POSITIVE_INFINITY
+    if (!item.download_url || chosen.length >= MAX_ATTACHMENTS || declaredTotal + declared > MAX_ATTACHMENT_BYTES) {
+      skipped.push(`${oneLine(item.filename || "attachment")} (${Number.isFinite(declared) ? megabytes(declared) : "size unknown"})`)
+      continue
+    }
+    declaredTotal += declared
+    chosen.push(item)
+  }
+
+  // A few at a time, inside the read budget. The first failure aborts every
+  // download in flight and stops the queue; we wait for all workers to stop
+  // before answering 500 (Resend retries). Never a send with fewer files.
+  const files: Buffer[] = new Array(chosen.length)
+  const batch = new AbortController()
+  let failure: unknown = null
+  let next = 0
+  await Promise.all(
+    Array.from({ length: Math.min(DOWNLOAD_CONCURRENCY, chosen.length) }, async () => {
+      while (!batch.signal.aborted && next < chosen.length) {
+        const index = next++
+        try {
+          const signal = AbortSignal.any([budget, batch.signal, AbortSignal.timeout(20_000)])
+          const file = await deps.fetch(chosen[index].download_url!, { signal })
+          if (!file.ok) throw new Error(`download attachment ${file.status}`)
+          files[index] = Buffer.from(await file.arrayBuffer())
+        } catch (error) {
+          if (!batch.signal.aborted) {
+            failure = error
+            batch.abort()
+          }
+        }
+      }
+    }),
+  )
+  if (failure) throw failure
+
+  const attachments: Record<string, string>[] = []
+  let total = 0
+  chosen.forEach((item, index) => {
+    const name = oneLine(item.filename || "attachment")
+    const bytes = files[index]
+    // A file larger than it declared: listed instead (same bytes, same answer on every retry).
+    if (total + bytes.length > MAX_ATTACHMENT_BYTES) {
+      skipped.push(`${name} (${megabytes(bytes.length)})`)
+      return
+    }
+    total += bytes.length
+    const attachment: Record<string, string> = { filename: name, content: bytes.toString("base64") }
+    if (item.content_type) attachment.content_type = item.content_type
+    if (item.content_id) attachment.content_id = item.content_id
+    attachments.push(attachment)
+  })
+
+  const headerFrom = typeof email.headers?.from === "string" ? email.headers.from : email.from ?? ""
+  const lines = [
+    `From: ${oneLine(headerFrom)}`,
+    `To: ${oneLine((email.to ?? []).join(", "))}`,
+    ...((email.cc ?? []).length > 0 ? [`Cc: ${oneLine(email.cc!.join(", "))}`] : []),
+    `Date: ${oneLine(email.created_at ?? "")}`,
+    ...(skipped.length > 0 ? [`Not attached (limit ${MAX_ATTACHMENTS} files, ${megabytes(MAX_ATTACHMENT_BYTES)} total): ${skipped.join(", ")}`] : []),
+  ]
+  const textBlock = `---------- Received at ${OWN_DOMAIN} ----------\n${lines.join("\n")}\n\n`
+  const htmlBlock =
+    `<div style="font:13px/1.5 sans-serif;color:#555;border-bottom:1px solid #ddd;padding:0 0 8px;margin:0 0 12px">` +
+    `<strong>Received at ${OWN_DOMAIN}</strong><br>${lines.map(escapeHtml).join("<br>")}</div>`
+
+  const replyTo = (email.reply_to?.length ? email.reply_to : [email.from ?? ""])
+    .map(oneLine)
+    .filter((address) => ADDRESS.test(bareAddress(address)))
+
+  const message: Record<string, unknown> = {
+    from: FORWARD_FROM,
+    to: [owner],
+    subject: `${SUBJECT_TAG} ${oneLine(email.subject || "(no subject)")}`,
+    text: textBlock + (email.text ?? ""),
+    headers: { [LOOP_HEADER]: emailId },
+  }
+  if (email.html) message.html = htmlBlock + email.html
+  if (replyTo.length > 0) message.reply_to = replyTo
+  if (attachments.length > 0) message.attachments = attachments
+  return { loop: false, body: JSON.stringify(message), bytes: total }
+}
+
+/** Fixed strings only: our own error messages carry statuses, never addresses or bodies. */
+function failureReason(error: unknown): string {
+  if (error instanceof Error && /^(fetch|list|download|send|ledger) /.test(error.message)) return error.message
+  if (error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")) return "timeout"
+  return "network"
+}
+
+/**
+ * Ledger flow (one row per email id, see migration 013):
+ * - sent or needs_review → 200, no POST, whatever the mail's age;
+ * - held by another invocation → 409, Resend retries later;
+ * - pending (never POSTed, or the first POST was refused with an HTTP error)
+ *   → build and POST, at any age, so an outage followed by a late recovery
+ *   still forwards once;
+ * - uncertain (a POST went out, outcome unknown) → re-POST the same payload
+ *   with the same key only while the first POST is under 23 h old, i.e. while
+ *   Resend still holds the key; after that, or if the payload would differ,
+ *   needs_review: 200 without a POST, never a blind second send.
+ */
 export async function handleInboundEmail(req: Request, deps: InboundDeps): Promise<Response> {
-  const { env } = deps
+  const { env, ledger } = deps
   const secret = env.RESEND_INBOUND_WEBHOOK_SECRET
   const apiKey = env.OA_RESEND_API_KEY
   const owner = forwardAddress(env.OA_INBOX_FORWARD_TO)
-  if (!secret || !apiKey || !owner) {
+  if (!secret || !apiKey || !owner || !ledger) {
     console.error("inbound-email: not configured")
     return json(500, { error: "not configured" })
   }
@@ -162,148 +318,122 @@ export async function handleInboundEmail(req: Request, deps: InboundDeps): Promi
     return json(200, { dropped: true })
   }
 
+  let claim: Awaited<ReturnType<ForwardLedger["claim"]>>
+  try {
+    claim = await ledger.claim(emailId, deps.now(), LEASE_MS)
+  } catch {
+    console.error("inbound-email: failed", emailId, "ledger claim")
+    return json(500, { error: "forward failed" })
+  }
+  const row = claim.row
+  if (row?.status === "sent") return json(200, { forwarded: "already" })
+  if (row?.status === "needs_review") return json(200, { needsReview: true })
+  if (!claim.claimed || !row) return json(409, { error: "in progress" })
+
+  const release = (patch: ForwardPatch = {}) =>
+    ledger.update(emailId, { ...patch, lease_until: new Date(deps.now()).toISOString() }, deps.now()).catch(() => {
+      console.error("inbound-email: ledger update failed", emailId)
+    })
+  const needsReview = async (why: string) => {
+    await release({ status: "needs_review" })
+    console.error("inbound-email: needs review", emailId, why)
+    return json(200, { needsReview: true })
+  }
+
+  const firstPostAt = row.status === "uncertain" ? Date.parse(row.first_post_at ?? "") : null
+  if (firstPostAt !== null && !(deps.now() - firstPostAt < UNCERTAIN_RETRY_MS)) {
+    return needsReview("uncertain past the key window")
+  }
+
   // One budget for every read from Resend (message, list, downloads), so the
   // send below still fits inside the route's maxDuration.
   const budget = AbortSignal.timeout(deps.budgetMs ?? READ_BUDGET_MS)
-  const within = (ms: number) => AbortSignal.any([budget, AbortSignal.timeout(ms)])
-  const api = (path: string, init: RequestInit = {}, signal = within(10_000)) =>
+  const api = (path: string) =>
     deps.fetch(`${RESEND_API}${path}`, {
-      ...init,
-      headers: { Authorization: `Bearer ${apiKey}`, ...init.headers },
-      signal,
+      headers: { Authorization: `Bearer ${apiKey}` },
+      signal: AbortSignal.any([budget, AbortSignal.timeout(10_000)]),
     })
 
+  let onFailure: ForwardPatch = {}
   try {
-    // cid keeps inline images as attachments (with content_id) instead of
-    // data: URIs, which Gmail does not render.
-    const got = await api(`/emails/receiving/${emailId}?html_format=cid`)
-    if (!got.ok) throw new Error(`fetch email ${got.status}`)
-    const email = (await got.json()) as ReceivedEmail
-    if (isLoop(email)) {
+    const forward = await buildForward(emailId, owner, api, deps, budget)
+    if (forward.loop) {
+      await release()
       console.log("inbound-email: dropped (loop guard)", emailId)
       return json(200, { dropped: true })
     }
-    const receivedAt = Date.parse(email.created_at ?? "")
-    if (Number.isNaN(receivedAt)) throw new Error("fetch email no-created_at")
+    const hash = createHash("sha256").update(forward.body).digest("hex")
+    if (row.status === "uncertain" && row.payload_hash !== hash) return needsReview("payload changed")
 
-    let listed: ReceivedAttachment[] = []
-    if ((email.attachments ?? []).length > 0) {
-      const res = await api(`/emails/receiving/${emailId}/attachments`)
-      if (!res.ok) throw new Error(`list attachments ${res.status}`)
-      listed = ((await res.json()) as { data?: ReceivedAttachment[] }).data ?? []
+    // Durable before the POST: if we die mid-request, the next attempt knows
+    // a POST may have gone out and only replays it under the live key.
+    try {
+      await ledger.update(
+        emailId,
+        { status: "uncertain", payload_hash: hash, first_post_at: row.first_post_at ?? new Date(deps.now()).toISOString() },
+        deps.now(),
+      )
+    } catch {
+      throw new Error("ledger mark")
     }
 
-    // Which files go in is decided from the listing alone (declared size and
-    // count, in id order), never from how long downloads take, so every retry
-    // builds the same payload for the same Idempotency-Key.
-    const chosen: ReceivedAttachment[] = []
-    const skipped: string[] = []
-    let declaredTotal = 0
-    for (const item of [...listed].sort((a, b) => String(a.id).localeCompare(String(b.id), "en", { numeric: true }))) {
-      const declared = typeof item.size === "number" && item.size >= 0 ? item.size : Number.POSITIVE_INFINITY
-      if (!item.download_url || chosen.length >= MAX_ATTACHMENTS || declaredTotal + declared > MAX_ATTACHMENT_BYTES) {
-        skipped.push(`${oneLine(item.filename || "attachment")} (${Number.isFinite(declared) ? megabytes(declared) : "size unknown"})`)
-        continue
-      }
-      declaredTotal += declared
-      chosen.push(item)
-    }
-
-    // Parallel, a few at a time, all inside the budget. Any failure or timeout
-    // is a 500 (Resend retries), never a send with fewer files.
-    const files: Buffer[] = new Array(chosen.length)
-    let next = 0
-    await Promise.all(
-      Array.from({ length: Math.min(DOWNLOAD_CONCURRENCY, chosen.length) }, async () => {
-        while (next < chosen.length) {
-          const index = next++
-          const file = await deps.fetch(chosen[index].download_url!, { signal: within(20_000) })
-          if (!file.ok) throw new Error(`download attachment ${file.status}`)
-          files[index] = Buffer.from(await file.arrayBuffer())
-        }
-      }),
-    )
-
-    const attachments: Record<string, string>[] = []
-    let total = 0
-    chosen.forEach((item, index) => {
-      const name = oneLine(item.filename || "attachment")
-      const bytes = files[index]
-      // A file larger than it declared: listed instead (same bytes, same answer on every retry).
-      if (total + bytes.length > MAX_ATTACHMENT_BYTES) {
-        skipped.push(`${name} (${megabytes(bytes.length)})`)
-        return
-      }
-      total += bytes.length
-      const attachment: Record<string, string> = { filename: name, content: bytes.toString("base64") }
-      if (item.content_type) attachment.content_type = item.content_type
-      if (item.content_id) attachment.content_id = item.content_id
-      attachments.push(attachment)
-    })
-
-    const headerFrom = typeof email.headers?.from === "string" ? email.headers.from : email.from ?? ""
-    const lines = [
-      `From: ${oneLine(headerFrom)}`,
-      `To: ${oneLine((email.to ?? []).join(", "))}`,
-      ...((email.cc ?? []).length > 0 ? [`Cc: ${oneLine(email.cc!.join(", "))}`] : []),
-      `Date: ${oneLine(email.created_at ?? "")}`,
-      ...(skipped.length > 0 ? [`Not attached (limit ${MAX_ATTACHMENTS} files, ${megabytes(MAX_ATTACHMENT_BYTES)} total): ${skipped.join(", ")}`] : []),
-    ]
-    const textBlock = `---------- Received at ${OWN_DOMAIN} ----------\n${lines.join("\n")}\n\n`
-    const htmlBlock =
-      `<div style="font:13px/1.5 sans-serif;color:#555;border-bottom:1px solid #ddd;padding:0 0 8px;margin:0 0 12px">` +
-      `<strong>Received at ${OWN_DOMAIN}</strong><br>${lines.map(escapeHtml).join("<br>")}</div>`
-
-    const replyTo = (email.reply_to?.length ? email.reply_to : [email.from ?? ""])
-      .map(oneLine)
-      .filter((address) => ADDRESS.test(bareAddress(address)))
-
-    const message: Record<string, unknown> = {
-      from: FORWARD_FROM,
-      to: [owner],
-      subject: `${SUBJECT_TAG} ${oneLine(email.subject || "(no subject)")}`,
-      text: textBlock + (email.text ?? ""),
-      headers: { [LOOP_HEADER]: emailId },
-    }
-    if (email.html) message.html = htmlBlock + email.html
-    if (replyTo.length > 0) message.reply_to = replyTo
-    if (attachments.length > 0) message.attachments = attachments
-
-    // Resend keeps an Idempotency-Key for 24 h, but webhook retries run for
-    // ~27.5 h and the dashboard can replay a delivered webhook at any time.
-    // So nothing is sent later than 23 h after the mail was received: every
-    // send then falls inside the 24 h life of a key first used at or after
-    // receipt (the hour spare covers clock skew), and a retry or replay can
-    // never send twice. Trade-off: a mail whose attempts all failed for 23 h
-    // is not forwarded; it stays readable in the Resend dashboard.
-    if (deps.now() - receivedAt > SEND_WINDOW_MS) {
-      console.log("inbound-email: stale, skipped", emailId)
-      return json(200, { skipped: "stale" })
-    }
-
-    const sent = await api(
-      "/emails",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Idempotency-Key": `oa-inbox/${emailId}` },
-        body: JSON.stringify(message),
+    // A thrown fetch (no answer) leaves the row uncertain: it may have been accepted.
+    const sent = await deps.fetch(`${RESEND_API}/emails`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+        "Idempotency-Key": `oa-inbox/${emailId}`,
       },
-      AbortSignal.timeout(15_000),
-    )
-    // Status only: the response body can echo addresses.
-    if (!sent.ok) throw new Error(`send ${sent.status}`)
-    console.log("inbound-email: forwarded", emailId, total)
-    return json(200, { forwarded: true })
+      body: forward.body,
+      signal: AbortSignal.timeout(15_000),
+    })
+    if (sent.ok) {
+      await release({ status: "sent" })
+      console.log("inbound-email: forwarded", emailId, forward.bytes)
+      return json(200, { forwarded: true })
+    }
+    // An HTTP error on the FIRST POST means Resend refused it: back to
+    // pending, so it can be sent later at any age. 409 (same key in flight or
+    // with another payload) and errors on a retry of an uncertain POST keep it
+    // uncertain. Status only: the response body can echo addresses.
+    if (row.status === "pending" && sent.status !== 409) onFailure = { status: "pending", first_post_at: null, payload_hash: null }
+    throw new Error(`send ${sent.status}`)
   } catch (error) {
-    // Message only: our own error strings carry statuses, never addresses or bodies.
-    const reason =
-      error instanceof Error && /^(fetch|list|download|send) /.test(error.message)
-        ? error.message
-        : error instanceof Error && (error.name === "TimeoutError" || error.name === "AbortError")
-          ? "timeout"
-          : "network"
-    console.error("inbound-email: failed", emailId, reason)
-    // 500 makes Resend retry; the idempotency key keeps a retry from sending twice.
+    await release(onFailure)
+    console.error("inbound-email: failed", emailId, failureReason(error))
     return json(500, { error: "forward failed" })
+  }
+}
+
+/** Supabase-backed ledger (service role). */
+export function supabaseLedger(db: SupabaseClient): ForwardLedger {
+  const table = () => db.from("oa_inbox_forwards")
+  const columns = "status, first_post_at, payload_hash"
+  return {
+    async claim(emailId, nowMs, leaseMs) {
+      const now = new Date(nowMs).toISOString()
+      const created = await table().upsert({ email_id: emailId }, { onConflict: "email_id", ignoreDuplicates: true })
+      if (created.error) throw new Error("ledger insert")
+      // One UPDATE with the whole condition in its WHERE: Postgres re-checks
+      // it on the locked row, so of two concurrent claims only one matches.
+      const taken = await table()
+        .update({ lease_until: new Date(nowMs + leaseMs).toISOString(), updated_at: now })
+        .eq("email_id", emailId)
+        .in("status", ["pending", "uncertain"])
+        .lt("lease_until", now)
+        .select(columns)
+      if (taken.error) throw new Error("ledger claim")
+      if (taken.data?.length === 1) return { claimed: true, row: taken.data[0] as ForwardRow }
+      const current = await table().select(columns).eq("email_id", emailId).maybeSingle()
+      if (current.error) throw new Error("ledger read")
+      return { claimed: false, row: (current.data as ForwardRow | null) ?? null }
+    },
+    async update(emailId, patch, nowMs) {
+      const { error } = await table()
+        .update({ ...patch, updated_at: new Date(nowMs).toISOString() })
+        .eq("email_id", emailId)
+      if (error) throw new Error("ledger update")
+    },
   }
 }
