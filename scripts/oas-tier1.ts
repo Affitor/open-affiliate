@@ -145,26 +145,27 @@ let recordSeq = 0
 /**
  * Wraps a fetch: each response's status and Location are saved under `dir`, and its body exactly as the reader
  * consumes it (raw bytes, appended chunk by chunk, read only when the reader asks), with a failure that ended the
- * stream, so a replay reads the same bytes and fails the same way. Each response writes its own temporary files and
- * renames them into place only when the stream ends, is cancelled or fails: two responses for one URL never mix, and
- * an unfinished capture (a killed child) does not exist for a replay.
+ * stream, so a replay reads the same bytes and fails the same way. Each response writes its own body file; when the
+ * stream ends, is cancelled or fails, one manifest naming that file is renamed into place (a single atomic step), so
+ * two responses for one URL never pair one's status with the other's body, across processes too, and an unfinished
+ * capture (a killed child) does not exist for a replay.
  */
 export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch {
   mkdirSync(dir, { recursive: true })
   return async (input, init) => {
     const url = String(input)
     const res = await base(input, init)
-    const file = join(dir, recordKey(url))
-    const tmp = `${file}.${process.pid}.${recordSeq++}.tmp`
+    const key = recordKey(url)
+    const bodyName = `${key}.${process.pid}.${recordSeq++}.body`
     let error: string | null = null
     let done = false
-    writeFileSync(`${tmp}.body`, "")
+    writeFileSync(join(dir, bodyName), "")
     const finish = () => {
       if (done) return
       done = true
-      writeFileSync(`${tmp}.json`, JSON.stringify({ url, status: res.status, location: res.headers.get("location"), error }))
-      renameSync(`${tmp}.body`, `${file}.body`)
-      renameSync(`${tmp}.json`, `${file}.json`)
+      const manifest = join(dir, `${bodyName}.json.tmp`)
+      writeFileSync(manifest, JSON.stringify({ url, status: res.status, location: res.headers.get("location"), error, body: bodyName }))
+      renameSync(manifest, join(dir, `${key}.json`))
     }
     const reader = res.body?.getReader()
     if (!reader || NULL_BODY.has(res.status)) {
@@ -186,7 +187,7 @@ export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch 
           finish()
           return controller.close()
         }
-        appendFileSync(`${tmp}.body`, chunk.value)
+        appendFileSync(join(dir, bodyName), chunk.value)
         controller.enqueue(chunk.value)
       },
       cancel: (reason) => {
@@ -203,10 +204,11 @@ export function replayFetcher(dir: string): typeof fetch {
   return async (input) => {
     const key = recordKey(String(input))
     if (!existsSync(join(dir, `${key}.json`))) throw new Error("not recorded")
-    const meta = JSON.parse(readFileSync(join(dir, `${key}.json`), "utf8")) as { status: number; location: string | null; error?: string | null }
+    const meta = JSON.parse(readFileSync(join(dir, `${key}.json`), "utf8")) as { status: number; location: string | null; error?: string | null; body?: string }
     const headers = new Headers(meta.location ? { location: meta.location } : {})
     if (NULL_BODY.has(meta.status)) return new Response(null, { status: meta.status, headers })
-    const bytes = readFileSync(join(dir, `${key}.body`))
+    // The manifest names its own body file (recordings before it used one file per URL).
+    const bytes = readFileSync(join(dir, meta.body && /^[0-9a-f]{64}\.\d+\.\d+\.body$/.test(meta.body) ? meta.body : `${key}.body`))
     // The bytes first, then the end or the recorded failure, on separate reads (as the stream delivered them live).
     let sent = false
     const body = new ReadableStream<Uint8Array>({

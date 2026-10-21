@@ -571,6 +571,22 @@ test("review of PR #365 r3: concurrent and unfinished recordings, risk-free", as
   await Promise.all([x.arrayBuffer(), y.arrayBuffer()])
   const replayed = await (await replayFetcher(dir)("https://same.test/robots.txt")).arrayBuffer()
   assert.equal(replayed.byteLength, 977 * 1024)
+  // Two captures of one URL finishing in either order: the manifest and its body always belong together.
+  const welcome = (async () => new Response("Welcome")) as typeof fetch
+  let n = 0
+  const priceThenFail = (async () => new Response(new ReadableStream<Uint8Array>({
+    pull(c) { if (n++ === 0) c.enqueue(new TextEncoder().encode("Pro $29/mo")); else c.error(new TypeError("reset")) } }, { highWaterMark: 0 }))) as typeof fetch
+  const ra = await recordingFetcher(dir, welcome)("https://pair.test/p")
+  const rb = await recordingFetcher(dir, priceThenFail)("https://pair.test/p")
+  const rbr = rb.body!.getReader()
+  await rbr.read()
+  await ra.text() // A finishes after B started: A's manifest wins, with A's body
+  const pa = await replayFetcher(dir)("https://pair.test/p")
+  assert.equal(await pa.text(), "Welcome")
+  await assert.rejects(rbr.read()) // B fails: B's manifest wins, with B's body and failure
+  const pb = (await replayFetcher(dir)("https://pair.test/p")).body!.getReader()
+  assert.equal(new TextDecoder().decode((await pb.read()).value), "Pro $29/mo")
+  await assert.rejects(pb.read())
   // An unfinished capture does not replay.
   const hanging = (async () => new Response(new ReadableStream<Uint8Array>({ start(c) { c.enqueue(new TextEncoder().encode("Pro $29/mo")) } }))) as typeof fetch
   const r = await recordingFetcher(dir, hanging)("https://hang.test/p")
