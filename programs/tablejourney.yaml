@@ -7,7 +7,7 @@ tags: [travel, food-travel, food-tours, hotels, mcp, ai-agents]
 
 commission:
   type: tiered
-  rate: "50% of the commission TableJourney is paid; 60% in a calendar month with over $500 confirmed"
+  rate: "50% of TableJourney's commission, 60% in a month above $500"
   mode: percentage
   value: 50
   currency: USD
