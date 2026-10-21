@@ -5,7 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
 import { programs, livePrograms, categories, categoryToSlug, affiliateScore, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
-import { freshnessLine } from "@/lib/best-lists";
+import { directorySentence, freshnessLine } from "@/lib/best-lists";
 import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
 import { blogEntries } from "@/lib/blog";
@@ -18,7 +18,21 @@ import { OasGradeChip } from "@/components/oas-grade";
 // unvisited for two days (an accepted case).
 export const revalidate = 3600;
 
+// The count sentence: computed from the registry at build time, never typed.
+const DESCRIPTION = directorySentence(programs);
+const TITLE = "OpenAffiliate: Open Affiliate Program Directory and Database";
+
 export const metadata: Metadata = {
+  description: DESCRIPTION,
+  // A page's openGraph replaces the layout's whole object, so every field is set here.
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: "https://openaffiliate.dev",
+    siteName: "OpenAffiliate",
+    type: "website",
+  },
+  twitter: { card: "summary", title: TITLE, description: DESCRIPTION },
   alternates: {
     canonical: "/",
     types: {
@@ -69,7 +83,7 @@ export default function Home() {
       <section className="oa-band py-14 md:py-20" data-scale="marketing">
         <div className="grid items-end gap-10 lg:grid-cols-[minmax(0,1fr)_380px] lg:gap-14">
           <div>
-            <p className="oa-label">The open registry of affiliate programs</p>
+            <p className="oa-label">Open affiliate program directory and database</p>
             <h1 className="text-hero-sm md:text-hero font-semibold tracking-[-0.035em] mt-4 max-w-[760px]">
               Affiliate programs worth promoting, with terms you can check.
             </h1>
@@ -83,7 +97,8 @@ export default function Home() {
                 prefetch={false}
                 className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
               >
-                Browse programs <ArrowRight className="size-4" aria-hidden />
+                {/* The first link after the H1: the hub, in the words people search. */}
+                Browse the affiliate program directory <ArrowRight className="size-4" aria-hidden />
               </Link>
               <Link
                 href="/docs"
@@ -140,7 +155,7 @@ export default function Home() {
       </section>
 
       <section id="home-featured" className="oa-band">
-        <SectionHead title="Verified programs" note="Terms checked on the brand's own page, by Affiliate Score" href="/programs" link="All programs" />
+        <SectionHead title="Verified programs" note="Terms checked on the brand's own page, by Affiliate Score" href="/programs" link={`Full list of ${livePrograms.length.toLocaleString("en-US")} affiliate programs`} />
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((program) => (
             <Link

@@ -116,6 +116,17 @@ export function freshnessLine(rows: Pick<Program, "status" | "verified" | "lastV
   ].join(" · ")
 }
 
+/**
+ * The homepage meta description: the freshnessLine numbers as one sentence an
+ * answer engine can quote. Counted from the registry at build time, never typed.
+ */
+export function directorySentence(rows: Pick<Program, "status" | "verified" | "lastVerifiedAt">[]): string {
+  const live = rows.filter((p) => (p.status ?? "active") === "active")
+  const checked = verifiedDate(live)
+  const verified = live.filter((p) => p.verified).length.toLocaleString("en-US")
+  return `OpenAffiliate is an open directory and database of ${live.length.toLocaleString("en-US")} affiliate programs; ${verified} have their terms verified on the brand's own page${checked ? `, last checked ${checked}` : ""}.`
+}
+
 /** Shown with every list, because it describes the shared rules above. */
 export const SHARED_RULES =
   "Verified programs come first, then the rest, each ranked by commission; tiered or mixed deals come after single rates, and programs that do not publish a rate are left out."
