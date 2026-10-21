@@ -31,6 +31,7 @@ jobs:
       - run: npx tsx --test scripts/sync-affitor.test.ts
       - run: npx tsx --test scripts/verify-programs.test.ts
       - run: npx tsx --test scripts/claims.test.ts scripts/claims-apply.test.ts
+      - run: npx tsx --test scripts/inbound-email.test.ts
       - run: npx tsx --test scripts/check-type-scale.test.ts
       - run: npm run check:type-scale
       - run: npx tsc --noEmit
