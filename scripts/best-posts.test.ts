@@ -22,6 +22,7 @@ const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKE
 import { AFFITOR_LINE, AFFITOR_NETWORK_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
+import { NETWORK_META } from "../src/lib/network-meta"
 import { programs as allPrograms } from "../src/lib/programs"
 import { blockedReason } from "./blocked-hosts"
 import {
@@ -375,6 +376,7 @@ test("every public/logos/*.png is a PNG file", () => {
 })
 
 test("standard sections: Affitor-network programs disclose it; requirements are a detail, not a con; no software network stands in for payout terms", () => {
+  assert.ok(SOFTWARE_NETWORKS.includes("Rewardful") && SOFTWARE_NETWORKS.includes("FirstPromoter") && !SOFTWARE_NETWORKS.includes("Lemon Squeezy"), "network-meta kinds changed")
   const byslug = (slug: string) => allPrograms.find((x) => x.slug === slug)!
   // Classification on fixtures.
   const fixture = { ...byslug("cloudtalk"), restrictions: ["No bidding on brand keywords.", "Use at least one website with real traffic.", "Affiliates must disclose the link.", "Open only to paying customers"] }
@@ -393,7 +395,8 @@ test("standard sections: Affitor-network programs disclose it; requirements are 
           assert.ok(!cons.includes(r.trim().replace(/\.$/, "")), `${p.slug}: a requirement listed as a con: ${r}`)
       }
       const text = [tableRow(p).payout, ...programDetails(p).map(([, v]) => v)].join(" ")
-      assert.doesNotMatch(text, /On (Rewardful|FirstPromoter|Tolt|Tapfiliate|Lemon Squeezy|Creem)'s terms/, `${p.slug}: tracking software shown as the payer`)
+      // The software set comes from network-meta (Lemon Squeezy is a merchant of record that pays affiliates, so it is "marketplace", not here).
+      for (const name of SOFTWARE_NETWORKS) assert.ok(!text.includes(`On ${name}'s terms`), `${p.slug}: tracking software ${name} shown as the payer`)
       assert.doesNotMatch(text, /see full terms/, `${p.slug}: points to full terms the page does not link`)
     }
   }
@@ -431,6 +434,7 @@ function renderStandard(post: (typeof POSTS)[number]) {
 }
 
 const STANDARD = POSTS.filter((p) => p.layout === "standard")
+const SOFTWARE_NETWORKS = Object.values(NETWORK_META).filter((m) => m.kind === "software").map((m) => m.name)
 
 test("a standard post: a four-column table, one inline tracked link per program, no buttons, FAQ JSON-LD matches the FAQ box", () => {
   assert.ok(STANDARD.length > 0, "no post opts into the standard layout")

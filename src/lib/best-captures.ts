@@ -64,6 +64,28 @@ export const CAPTURES: Record<string, Capture> = {
   cloudtalk: program("cloudtalk", "https://www.cloudtalk.io/affiliate-program/"),
   "housecall-pro": program("housecall-pro", "https://www.housecallpro.com/paid-affiliates/"),
   seerist: program("seerist", `${AFFITOR_MARKETPLACE}/seerist`),
+  // Phase 1b (high-paying, beginners, free posts), captured 2026-10-21.
+  dreamhost: program("dreamhost", "https://www.dreamhost.com/affiliates/"),
+  moz: program("moz", "https://moz.com/moz-affiliate"),
+  interserver: program("interserver", "https://www.interserver.net/affiliate.html"),
+  "wp-engine": program("wp-engine", "https://wpengine.com/affiliate-program/"),
+  elementor: program("elementor", "https://elementor.com/affiliates/signup/"),
+  "creative-fuel": program("creative-fuel", "https://creativefuel.ai/affiliates"),
+  storychief: program("storychief", "https://www.storychief.io/partnership-program"),
+  craft: program("craft", "https://www.craft.do/affiliates"),
+  "se-ranking": program("se-ranking", "https://seranking.com/affiliate.html"),
+  "eleven-labs-inc": program("eleven-labs-inc", "https://elevenlabs.io/affiliates"),
+  uptimerobot: program("uptimerobot", "https://uptimerobot.com/affiliate/"),
+  "simplybook-me": program("simplybook-me", "https://simplybook.me/en/affiliate-program"),
+  pixelcut: program("pixelcut", "https://www.pixelcut.ai/affiliate"),
+  xtiles: program("xtiles", "https://xtiles.app/en/affiliate/"),
+  metricool: program("metricool", "https://metricool.com/affiliate-program/"),
+  thematic: program("thematic", "https://hellothematic.com/thematic-affiliate-squad/"),
+  "copyspace-ai": program("copyspace-ai", "https://www.copyspace.ai/affiliates"),
+  revid: program("revid", "https://www.revid.ai/affiliates"),
+  vidyo: program("vidyo", "https://quso.ai/affiliate-program"),
+  voila: program("voila", "https://www.getvoila.ai/affiliate-program"),
+  vsub: program("vsub", "https://vsub.io/affiliate"),
 }
 
 /** Why a program on a standard post has no capture (a record; the page shows the logo card). */
@@ -82,6 +104,14 @@ export const CAPTURE_SKIPPED: Record<string, string> = {
   "streak-crm-for-gmail": "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
   tresorit: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
   "beautiful-ai": "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  marketerhire: "marketerhire.com is on our blocked-hosts list (website terms restrict automated access)",
+  rippling: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  saleshandy: "saleshandy.com is on our blocked-hosts list (website terms restrict automated access)",
+  melio: "melio.com is on our blocked-hosts list (website terms restrict automated access)",
+  "speak-ai": "speakai.co is on our blocked-hosts list (website terms restrict automated access)",
+  "cal-com": "cal.com is on our blocked-hosts list (website terms restrict automated access)",
+  // 2026-10-21: the signup page is served with its styles from getrewardful.com, a blocked host, so it rendered unstyled; not used.
+  manatal: "its signup page loads its styles from a blocked host and rendered unstyled",
 }
 
 /** "kinsta.com/affiliates": the URL as a caption shows it. */
