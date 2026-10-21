@@ -5,16 +5,17 @@ url: https://jgcore.com
 category: Business Operations
 tags: ["website-course", "claude", "cv-templates", "tariff-refund", "care-home-software", "law-firm-software", "uk", "in-house"]
 
-# "Up to 40% of every sale, depending on the product" (jgcore.com/earn, checked 2026-10-19)
-# "The Website System (£4,950) earns you £990 per sale at 20%." (jgcore.com/earn, checked 2026-10-19)
+# "up to 40% of every sale, depending on the product" (jgcore.com/earn, checked 2026-10-21)
+# Per-product rates and windows: the "What you earn" table on jgcore.com/earn, checked 2026-10-21.
 commission:
   type: hybrid
   rate: "up to 40%"
+  mode: percentage
+  value: 40
   currency: GBP
-  duration: "one-off sales; subscriptions for the first 12 months"
-  conditions: "One affiliate account covers every JG Core company listed on jgcore.com/earn, each product at its own rate: up to 40% on JG Core Academy packs, 20% on the Website System (£990 per £4,950 sale), 35% on Core Careers CV templates, and 20% of every paid invoice for the first 12 months on Revitaco and Instrukt software subscriptions. A £25 first-sale bonus applies on eligible products, once per affiliate. Commission is on the price actually paid, excluding VAT and fees, at the rate shown when the sale happens. Rates and prices can change; rate cuts get 14 days' notice. Each commission is held 30 days."
+  conditions: "One affiliate account covers every JG Core company on jgcore.com/earn, each product at its own rate. JG Core Academy: 40% on the packs (£50-£150); 20% on the Website System (£4,950, so £990 per sale); 10%, up to £2,500 per sale, on Website: Build and Handover, Get Found, Checkout, Operator and Content Engine (by application); 10% of every paid invoice for the first 3 months on the Website: Monthly Retainer (£2,000 a month). CoreFi: 30% on Company Report, Report Plus and Due Diligence Dossier; 25% of every paid invoice for the first 12 months on CoreFi and CoreFi Private subscriptions. Core Careers: 35% on CV templates. Supercargo: 40% on the IEEPA Tariff Refund Kit, 20% on the Duty & Landed Cost Audit. Revitaco and Instrukt: 20% of every paid invoice for the first 12 months. A £25 first-sale bonus applies on eligible products, once per affiliate. Referral window: 60 days, or 90 days on the Website System, the five Website/Done-for-you service products, the Monthly Retainer and the Supercargo audit. Commission is on the price actually paid, excluding VAT, at the rate shown when the sale happens. Rates and prices can change; rate cuts get 14 days' notice. Each commission is held 30 days."
 
-# "60-day referral window; the last affiliate link clicked gets the credit" (jgcore.com/earn, checked 2026-10-19)
+# "60-day referral window; the last affiliate link clicked gets the credit" (jgcore.com/earn); 90 days on some products, see conditions
 cookie_days: 60
 
 payout:
@@ -35,7 +36,7 @@ dashboard_url: https://jgcore.com/earn/dashboard
 network: in-house
 program_age: null
 
-short_description: "One affiliate programme for every JG Core company: AI website-building courses, CV templates, tariff refunds and UK B2B software."
+short_description: "One affiliate account for every JG Core company: AI website courses, CV templates and UK software"
 description: >
   JG Core Ltd (UK) runs one in-house affiliate programme across its companies: JG Core Academy
   (step-by-step packs and the Website System for building and running a business website with
@@ -50,3 +51,6 @@ agents:
     - "A creator teaching people to build websites with AI wants a course to recommend"
     - "A careers or job-search creator wants CV templates to recommend"
     - "A consultant serving UK care homes or law firms wants a software referral programme"
+
+verified: false
+created_at: 2026-10-18
