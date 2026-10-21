@@ -394,7 +394,7 @@ export function hasPrice(text: string, html = "", skip?: (before: string) => boo
 }
 
 // Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
-const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|(?<!\brisk[\s\u00a0\u2010-\u2015-]{0,2})free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
+const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 // A negation right after the phrase: "free to try? No", "Free to try: No", "is unavailable", "is no longer available".
@@ -402,7 +402,10 @@ const NEGATED_AFTER = /^\W{0,3}(?:[?:]\s*(?:no|not)\b|(?:is|are)\s+(?:(?:current
 /** Trial or free-plan wording, skipping negated mentions before or after it ("no free trial", "free plan is no longer available"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
-    if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
+    const before = text.slice(Math.max(0, m.index! - 20), m.index)
+    if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(before)) continue
+    // "Risk-free", "risk free", "risk – free" in any spelling is a money-back guarantee, not a free trial or plan.
+    if (/^free/i.test(m[0]) && /\brisk[^a-z0-9]*$/i.test(before)) continue
     if (NEGATED_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 40))) continue
     // Only named freebies are skipped. Page text loses element boundaries, so the word after a "Start for free"
     // button is usually the next button's label: requiring "free" to end the phrase dropped 63 real readings.
