@@ -372,7 +372,10 @@ export function termsHtmlProblems(p: Program, html: string, compared: Program[] 
       if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
     const frequency = p.payout.frequency ? frequencyLabel(p.payout.frequency) : null
-    const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
+    // The minimum in the program's own currency: "$50" for USD (or none stored), "50 EUR" otherwise.
+    const cur = p.payout.currency
+    const amount = p.payout.minimum == null ? "" : !cur || cur === "USD" ? `$${p.payout.minimum.toLocaleString("en-US")}` : `${p.payout.minimum.toLocaleString("en-US")} ${cur}`
+    const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a ${amount} minimum`
     const minimum = min && !frequency ? min.charAt(0).toUpperCase() + min.slice(1) : min
     const payout = [frequency, minimum].filter(Boolean).join(", ")
     if (payout && termRow(own, "payout", "Payout") !== payout) {
