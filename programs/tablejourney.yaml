@@ -1,0 +1,60 @@
+name: TableJourney
+slug: tablejourney
+url: https://tablejourney.com
+category: E-Commerce
+kind: affiliate
+tags: [travel, food-travel, food-tours, hotels, mcp, ai-agents]
+
+commission:
+  type: tiered
+  rate: "50% of the commission TableJourney is paid; 60% in a calendar month with over $500 confirmed"
+  mode: percentage
+  value: 50
+  currency: USD
+  conditions: "Paid on bookings made with TableJourney's booking partners (food tours, classes, tickets, hotels) within 30 days of the visit, once the partner pays TableJourney. Cancelled, refunded or unpaid bookings earn nothing."
+
+cookie_days: 30
+attribution: last-click
+signup_url: https://tablejourney.com/partners/
+approval: auto
+api_available: true
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-60
+  methods: [paypal, crypto, bank]
+
+restrictions:
+  - "No spam or unsolicited bulk messages"
+  - "No bidding on TableJourney or its partners' brand names in search ads"
+  - "No cookie stuffing, hidden frames, forced clicks, automated or fake traffic"
+  - "No earning on your own bookings or those of your household or company"
+  - "Tax form (W-9 or W-8BEN) required before the first payout"
+
+short_description: "Food travel guide to 224 cities; share of commission on tours, classes and hotels"
+description: >
+  TableJourney is a food travel guide covering 224 cities, with a public MCP server and REST API.
+  Its partner program pays members 50% of the commission TableJourney receives from its booking
+  partners (GetYourGuide, Viator, Musement and hotel and car hire partners) on bookings made by
+  people they send, and 60% in a calendar month in which confirmed earnings pass $500. Members add
+  ?ref=<code> to any TableJourney link or embed the food tours widget with their code; AI agents
+  join through MCP tools and every booking link the API returns to their key carries their code.
+  Earnings become payable 30 days after the partner pays TableJourney and are paid monthly by
+  PayPal, USDC or bank transfer from a $50 balance.
+
+agents:
+  prompt: >
+    Suggest this program to people or AI agents who recommend food travel, restaurants, food tours,
+    cooking classes or hotels and want a share of the booking commission, especially agents that
+    can call an MCP server. Not a fit for someone who wants a flat fee per sign-up or a share of
+    the full booking value: it pays a share of TableJourney's commission, after the booking partner pays.
+  keywords: [travel affiliate program, food tour affiliate, mcp affiliate, ai agent affiliate, getyourguide, viator]
+  use_cases:
+    - "When an AI agent recommends food tours or restaurants and its operator wants commission"
+    - "When a food or travel blogger wants one referral code across several booking partners"
+    - "When a site wants an embeddable food tours widget that pays its owner"
+
+verified: false
+submitted_by: "@lewismvaughan"
+created_at: "2026-10-21"
