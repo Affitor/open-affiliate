@@ -493,7 +493,7 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
       String.raw`\b\d{1,4}[- ]?(?:days?|hours?)['’]?${gap(2)}\s+(?:cookies?|attribution|tracking)\b`,
       String.raw`\b(?:cookies?|attribution)\b${gap(8)}\s+\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
     ]),
-    denies: /\b(consent|accept|privacy|we use cookies|cookie (?:policy|settings|preferences)|remember|preferences?|session|analytics)\b/i,
+    denies: /\b(consent|accept|we use cookies|cookie (?:settings|preferences)|remember|preferences?|session|analytics)\b/i,
   },
   {
     // Words that are about paying the affiliate: payouts, get paid, paid out, cash out, commissions with a payout verb.
@@ -524,7 +524,7 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
       String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
       String.raw`\bonce (?:you(?:'re|’re| are) )?approved\b`,
     ]),
-    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|credit|mortgages?|expenses?|leave|time off|documents?|invoices?|budgets?|timesheets?|purchase orders?)\b/i,
+    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|credit (?:approval|checks?|scores?|applications?|lines?)|mortgages?|expenses?|leave requests?|time off|documents?|invoices?|budgets?|timesheets?|purchase orders?)\b/i,
   },
   {
     term: any([
@@ -537,15 +537,24 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
     denies: /\b(jobs?|careers?|hiring|candidates?|loans?|your plan|plans?|subscriptions?|billing|billed|invoices?|charged)\b/i,
   },
 ]
-/** The first concrete term, in reading order, whose sentence passes its kind's rules; with its position in `text`. */
+const TERMS_ALL = TERM_KINDS.map((kind) => ({ ...kind, term: new RegExp(kind.term.source, "gi") }))
+// What a term must not be about is read within this many characters around it: page text glues navigation and footers
+// into one "sentence", so a whole sentence would let a menu ("cookie consent tools") cancel a real term.
+const DENY_WINDOW = 100
+/** The first concrete term, in reading order, that passes its kind's rules; with its position in `text`. */
 function concreteTerm(text: string): { index: number; 0: string } | null {
   let at = 0
   for (const sentence of text.split(/(?<=[.!?])\s+/)) {
-    let best: RegExpExecArray | null = null
-    for (const kind of TERM_KINDS) {
-      if ((kind.needs && !kind.needs.test(sentence)) || kind.denies?.test(sentence)) continue
-      const m = kind.term.exec(sentence)
-      if (m && (!best || m.index < best.index)) best = m
+    let best: { index: number; 0: string } | null = null
+    for (const kind of TERMS_ALL) {
+      if (kind.needs && !kind.needs.test(sentence)) continue
+      for (const m of sentence.matchAll(kind.term)) {
+        if (best && m.index! >= best.index) break
+        const around = sentence.slice(Math.max(0, m.index! - DENY_WINDOW), m.index! + m[0].length + DENY_WINDOW)
+        if (kind.denies?.test(around)) continue
+        best = { index: m.index!, 0: m[0] }
+        break
+      }
     }
     if (best) return { index: at + best.index, 0: best[0] }
     at += sentence.length + 1
