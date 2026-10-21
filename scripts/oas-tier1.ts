@@ -331,13 +331,16 @@ export function hasPrice(text: string, html = ""): string | null {
 }
 
 // Also "Try Duplicator free", "Install X Free", "free version", and the common non-English phrasings.
-const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
+const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|free to try|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
-/** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
+// A negation right after the phrase: "free to try? No", "the free plan is no longer available".
+const NEGATED_AFTER = /^\W{0,3}(?:\?\s*no\b|(?:is|are) no longer\b|(?:is|are)n'?t available|(?:is|are) not available|no longer available)/i
+/** Trial or free-plan wording, skipping negated mentions before or after it ("no free trial", "free plan is no longer available"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
     if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
+    if (NEGATED_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 40))) continue
     // Only named freebies are skipped. Page text loses element boundaries, so the word after a "Start for free"
     // button is usually the next button's label: requiring "free" to end the phrase dropped 63 real readings.
     if (NOT_TRIAL_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 30))) continue
@@ -346,10 +349,18 @@ export function hasTrial(text: string): string | null {
   return null
 }
 
-const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|make an account|register|join (?:now|free)|install now)\b/i
+// Buying on the brand's own site is also starting without sales (rubric P3: "start without booking a demo or contacting sales").
+const SIGNUP_TEXT = /\b(sign ?up|get started|start (?:for )?free|start (?:your )?(?:free )?trial|try (?:it )?(?:for )?free|create (?:an |your )?account|make an account|register|join (?:now|free)|install now|buy now|purchase now|get it now|add to cart)\b/i
+// "Start creating free": a start into the product, unless the link goes to a marketing page about it.
+const START_TEXT = /\bstart (?:creating|designing|building|writing|editing)(?: (?:for free|free|now))?\b/i
+const MARKETING_PATH = /^\/(?:blog|templates|gallery|features|docs|learn|examples)(?:\/|$)/i
+// Merchandise is not the product.
+const MERCH = /\b(merch|swag|apparel|t-?shirts?|shirts?|hoodies?|mugs?|stickers?)\b/i
 const SIGNUP_HREF = /\/(sign-?up|register|join|get-started|start|onboarding)(\/|$|\?)/i
-// Sales, event and newsletter calls to action are not a buyer signing up.
-const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|sales|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
+// Sales, event and newsletter calls to action are not a buyer signing up. "Sales" vetoes link text; in a path only as a
+// sales-contact shape, so a product page such as /sales-tracking is not vetoed.
+const NOT_SIGNUP = /\b(demo|webinar|event|newsletter|subscribe|contact|talk|book|schedule|waitlist|meeting)\b|zoom\.us|calendly\.com|eventbrite\.|lu\.ma\/|\/meetings\//i
+const SALES_PATH = /(?:contact|talk)-?(?:to-?)?sales|sales-(?:call|demo)/i
 // App stores are self-serve: installing is signing up. Exact store host and a listing path, never the store's home.
 /** A store listing's identity (its slug or package id), from the fields each store uses; null for anything else. */
 function listingId(u: URL): string | null {
@@ -414,53 +425,92 @@ function brandHost(href: string, base: string, words: Set<string> | null = syste
 export function selfServe(html: string, base: string, words: Set<string> | null = systemWords()): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
-    if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
+    if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target) || /\bsales\b/i.test(l.text)) return false
+    const path = new URL(l.href).pathname
+    if (SALES_PATH.test(decoded(path))) return false
     if (appStore(l.href, base)) return true
-    return brandHost(l.href, base, words) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+    if (MERCH.test(l.text) || MERCH.test(decoded(path))) return false
+    const start = START_TEXT.test(l.text) && !MARKETING_PATH.test(path)
+    return brandHost(l.href, base, words) && (SIGNUP_TEXT.test(l.text) || start || SIGNUP_HREF.test(path))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
 
 const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}(terms|agreement|conditions)|(terms|agreement|conditions)[\w\s-]{0,30}(affiliate|partner|referral|ambassador|program)/i
 // Bounded figures ("30%", "$25"), never a run of digits matched from every position.
-const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\d.,]{0,9}(?![\d.,]))`
+// Statistics are not rates: an amount followed by "+" ("$25,000+ earned", as "$2B+" is not a price), and a share of
+// people ("100% of clients happy"), which stat cards put right next to commission wording.
+const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%(?!\s+of\s+(?:our\s+|all\s+)?(?:clients|customers|users|partners|merchants|businesses|companies|members|creators)\b)|[$€£]\s?\d[\d.,]{0,9}(?![\d.,])(?!\s?\+))`
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
-const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
+const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(?:(?:commission|revenue share|rev share)\\w*|earn(?:s|ing)?\\b)[^.]{0,40}?${FIGURE}`, "i")
 // A concrete term carries its value: a number of days, an amount, a schedule or a named method.
 const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
 const CONCRETE_TERM = new RegExp([
   String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
+  // "60-day return cookie": up to two words between, none of them a consent or analytics cookie kind.
+  String.raw`\b\d{1,4}[- ]day(?: (?!(?:consent|session|analytics|preferences?|functional|essential|necessary|advertising|marketing)\b)[a-z]+){1,2} cookie`,
   String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
   String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
   String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
-  String.raw`\bminimum payout[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|dollars?)\b)`,
+  String.raw`\b(?:minimum payout|payout minimum|payout threshold|minimum threshold)[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|dollars?)\b)`,
+  // "Payments are made every two months", "payouts twice a month through PayPal": a schedule or a method, ≤ 4 words on.
+  String.raw`\b(?:payments?|payouts?)(?:\s+\S+){0,4}?\s+(?:monthly|weekly|bi-?weekly|twice a month|every (?:month|week|two (?:weeks|months)|\d{1,3} (?:days|weeks|months)))\b`,
+  String.raw`\b(?:payments?|payouts?)(?:\s+\S+){0,4}?\s+(?:via|through)\s+${PAY_METHOD}`,
+  // "We store your referred users' cookies for 120 days".
+  String.raw`\bcookies?(?:\s+\S+){0,6}?\s+for\s+\d{1,4}[\s-]?days?\b`,
   String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
 ].join("|"), "i")
+/**
+ * Terms that count only in a sentence about the program (rubric A2 "approval", "payout"): "applications are
+ * reviewed" or "paid via PayPal" also describe job applications and buyers paying.
+ */
+const PROGRAM_SENTENCE = /\b(affiliate|partner|referral|ambassador|program|commission|payout|earnings)/i
+const PROGRAM_TERM = new RegExp([
+  String.raw`\bapplications? (?:are|is|will be|get) (?:manually |personally )?(?:reviewed|approved)`,
+  String.raw`\bapproval (?:is )?required`,
+  String.raw`\brequires? (?:manual )?approval`,
+  String.raw`\b(?:manual|instant|automatic) approval`,
+  String.raw`\bwe review (?:every|each|all) applications?`,
+  String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
+  String.raw`\bonce (?:you(?:'re| are) )?approved\b`,
+  String.raw`\bcommissions? (?:are |is )?paid (?:out )?(?:monthly|weekly|bi-?weekly)`,
+  String.raw`\b(?:receive|get) (?:your )?(?:monthly|weekly) commissions?`,
+  String.raw`\b(?:receive|get) (?:your )?commissions? (?:monthly|weekly)`,
+  String.raw`\bpaid (?:on )?the (?:first|1st|15th|last) (?:day |business day )?of (?:the|each|every) month`,
+  String.raw`\bpaid(?:\s+\S+){0,6}?\s+via\s+${PAY_METHOD}`,
+  String.raw`\b${PAY_METHOD} account\b[^.]{0,30}\b(?:get|be) paid`,
+].join("|"), "i")
+/** The first program term in a sentence that names the program, with its position in `text`. */
+function programTerm(text: string): { index: number; 0: string } | null {
+  let at = 0
+  for (const sentence of text.split(/(?<=[.!?])\s+/)) {
+    const m = PROGRAM_SENTENCE.test(sentence) ? PROGRAM_TERM.exec(sentence) : null
+    if (m) return { index: at + m.index, 0: m[0] }
+    at += sentence.length + 1
+  }
+  return null
+}
 // Terms announced, not published: an announcement within the window cancels the inline reading (precision first).
 const NOT_YET = /coming soon|to be announced|\btb[ad]\b/i
-const TERMS_CONTENT = [/(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
  * A link to the program's terms or agreement (a site-wide Terms of Service link
- * does not count), or terms published on the page itself: the heading wording plus
- * at least two concrete terms, and not an announcement that they are coming.
+ * does not count), or terms published on the page itself: a commission figure plus one
+ * concrete term (decision 20/10 18:00), and not an announcement that they are coming.
  */
 export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
-  const text = visibleText(html)
+  // The page's own summary counts as its text ("earn up to 30% CPA!" in the meta description).
+  const meta = /<meta\s+[^>]{0,200}?name=["']description["'][^>]{0,40}?content=["']([^"']{0,500})["']/i.exec(html)?.[1] ?? ""
+  const text = `${meta} ${visibleText(html)}`
   // Markers found once over the whole text, then compared by distance: a window slice could cut one in half.
   const markers = [...text.matchAll(new RegExp(NOT_YET.source, "gi"))].map((m) => m.index!)
   const announced = (at: number) => markers.some((m) => Math.abs(m - at) <= 150)
-  const inline = TERMS_LINK.exec(text)
-  if (inline && !announced(inline.index) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
-    return `on page: ${inline[0]}`
-  }
-  // Terms published on the page without a "terms" heading: a commission figure next to commission wording,
-  // plus at least one concrete term (cookie or attribution window, payout schedule or method).
+  // A terms heading alone ("partnership terms") is not published terms: the figure and the concrete term are.
   const figure = COMMISSION_FIGURE.exec(text)
-  const concrete = CONCRETE_TERM.exec(text)
+  const concrete = CONCRETE_TERM.exec(text) ?? programTerm(text)
   return figure && concrete && !announced(figure.index) && !announced(concrete.index) ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 

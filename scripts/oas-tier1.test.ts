@@ -355,6 +355,54 @@ test("review of the fixes (PR #364 r3): store routes, valued terms, announcement
   assert.ok(hasTrial("Start for free, no credit card"))
 })
 
+test("v2 readers follow the grader rubric, each with its boundary (spec 2026-10-20-OAS-V2-DISCOVERY §2)", () => {
+  const terms = (body: string, head = "") => termsLink(`<html><head>${head}</head><body>${body}</body></html>`, "https://brand.com")
+  // A2 approval ("concrete term: … approval"), only in a sentence about the program.
+  assert.ok(terms(`<p>Earn 30% commission. Affiliate applications are reviewed within 48 hours.</p>`))
+  assert.ok(terms(`<p>Earn 25% commission. Once approved, we'll set you up with a referral link.</p>`))
+  assert.equal(terms(`<p>Earn 30% commission. Job applications are reviewed by our HR team.</p>`), null, "a job application is not program approval")
+  // A2 payout ("payout"): schedule or method, in a sentence about the program; buyer payment does not count.
+  assert.ok(terms(`<p>Recurring 20% commission. Receive monthly commissions.</p>`), "hello-bar")
+  assert.ok(terms(`<p>25% commission on the first sale. Affiliates are paid the first of the month via PayPal.</p>`), "memberpress")
+  assert.ok(terms(`<p>25% lifetime commission. Payments are made every two months.</p>`), "fast-bundle")
+  assert.ok(terms(`<p>30% commission. Payouts twice a month through PayPal.</p>`), "se-ranking")
+  assert.equal(terms(`<p>Plans from $29. You can pay via PayPal or card.</p>`), null, "buyer payment")
+  assert.equal(terms(`<p>Earn 20% commission. Monthly commissions add up.</p>`), null, "accrual without a receive or paid verb")
+  // A2 cookie ("cookie window"), up to two words between, never a consent or analytics cookie.
+  assert.ok(terms(`<p>25% commission and a 60-day return cookie.</p>`), "memberpress")
+  assert.ok(terms(`<p>30% commission. We store your referred users' cookies for 120 days.</p>`), "se-ranking")
+  assert.equal(terms(`<p>30% commission. We set a 30-day analytics cookie.</p>`), null, "an analytics cookie")
+  // A2 figure: the meta description is the page's own text; statistics are not rates.
+  assert.ok(terms(`<p>Payouts via PayPal, payout minimum $100.</p>`, `<meta name="description" content="Join and earn up to 30% CPA!">`), "common-ninja")
+  assert.equal(terms(`<p>$25,000+ earned in commission 100% of clients happy. You'll receive your payment every 3 months.</p>`), null, "aisdr: stat cards")
+  assert.equal(terms(`<p>Earn recurring commissions. Read our partnership terms.</p>`), null, "wisestamp: a terms heading without a figure")
+  // P2 ("free trial … or a free plan/tier"): "free to try", negated before or after.
+  assert.ok(hasTrial("Boolvideo is free to try"))
+  assert.equal(hasTrial("Our app is not free to try"), null)
+  assert.equal(hasTrial("Free to try? No, plans start at $9."), null)
+  assert.equal(hasTrial("The free plan is no longer available."), null)
+  // P3 purchase and start ("start without booking a demo or contacting sales"), brand host only.
+  assert.ok(selfServe(`<a href="https://www.literatureandlatte.com/store/scrivener">BUY NOW</a>`, "https://www.literatureandlatte.com"))
+  assert.equal(selfServe(`<a href="https://readymode.chargifypay.com/subscribe/x">Buy now</a>`, "https://www.readymode.com"), null, "a third-party checkout")
+  assert.equal(selfServe(`<a href="https://brand.com/merch/hoodie">Buy now</a>`, "https://brand.com"), null, "merchandise")
+  assert.ok(selfServe(`<a href="https://www.freemockup.video/app/">Start creating free</a>`, "https://www.freemockup.video"))
+  assert.equal(selfServe(`<a href="https://brand.com/blog/start-creating">Start creating now</a>`, "https://brand.com"), null, "a marketing page")
+  // The sales veto: link text, and only sales-contact shapes in a path.
+  assert.ok(selfServe(`<a href="https://sellercenter.io/sales-tracking">Start for Free</a>`, "https://sellercenter.io"))
+  assert.equal(selfServe(`<a href="https://brand.com/contact-sales">Get started</a>`, "https://brand.com"), null)
+  assert.equal(selfServe(`<a href="https://brand.com/start">Talk to sales</a>`, "https://brand.com"), null)
+})
+
+test("v2 readers stay linear on 2 MB inputs", () => {
+  const big = 2_000_000
+  for (const text of ["payments ".repeat(big / 9), "paid ".repeat(big / 5) + " via", "cookies ".repeat(big / 8), "payments " + "x".repeat(big), "commission " + "9% ".repeat(big / 3), "free to try ".repeat(big / 12)]) {
+    const t0 = performance.now()
+    termsLink(`<p>${text}</p>`, "https://brand.com")
+    hasTrial(text)
+    assert.ok(performance.now() - t0 < 1500, `${text.slice(0, 16)}… took ${Math.round(performance.now() - t0)} ms`)
+  }
+})
+
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
   assert.deepEqual(runOptions(["--rescan-html", "--psi", "--seo"]), { rescanHtml: true, psi: false, seo: false })
   assert.deepEqual(runOptions(["--psi", "--seo"]), { rescanHtml: false, psi: true, seo: true })
