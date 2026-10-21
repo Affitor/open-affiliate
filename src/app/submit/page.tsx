@@ -88,8 +88,8 @@ export default function SubmitPage() {
         </a>{" "}
         with just its program page link (also on GitHub), or email that link
         to{" "}
-        <a href="mailto:hello@affitor.com" className="underline underline-offset-2 hover:text-foreground">
-          hello@affitor.com
+        <a href="mailto:hello@openaffiliate.dev" className="underline underline-offset-2 hover:text-foreground">
+          hello@openaffiliate.dev
         </a>
         .
       </p>

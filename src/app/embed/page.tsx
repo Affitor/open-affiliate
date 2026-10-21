@@ -123,8 +123,8 @@ curl "https://openaffiliate.dev/api/programs?category=SaaS&limit=10"`}
         <footer className="mt-16 rounded border border-neutral-200 bg-neutral-50 p-6 text-sm text-neutral-600">
           <strong>Need more?</strong> OpenAffiliate Pro unlocks per-domain license keys, usage
           analytics, realtime program change webhooks, and custom enrichment. Contact{" "}
-          <a href="mailto:hello@affitor.com" className="text-blue-600 underline">
-            hello@affitor.com
+          <a href="mailto:hello@openaffiliate.dev" className="text-blue-600 underline">
+            hello@openaffiliate.dev
           </a>
           .
         </footer>

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AffitorLink } from "@/components/affitor-link";
 import { CodeBlock } from "@/components/code-block";
+import { affitorUrl } from "@/lib/affitor-link";
 import { DocsHeader } from "@/components/docs-header";
 import { DocsPagination } from "@/components/docs-pagination";
 
@@ -65,11 +67,19 @@ export default function SubmitPage() {
               <h3 id="email" className="text-sm font-semibold text-foreground mb-1">4. Email</h3>
               <p>
                 Send the link to your program page to{" "}
-                <a href="mailto:hello@affitor.com" className={link}>hello@affitor.com</a>.
+                <a href="mailto:hello@openaffiliate.dev" className={link}>hello@openaffiliate.dev</a>.
                 GitHub is faster and shows you where the request stands.
               </p>
             </div>
           </div>
+          <p className="text-base text-muted-foreground mt-4">
+            OpenAffiliate lists programs; to track and pay partners, run your
+            program on{" "}
+            <AffitorLink href={affitorUrl("docs", "submit")} source="docs" cta="run_program" className={link}>
+              Affitor
+            </AffitorLink>
+            .
+          </p>
         </section>
 
         <section>
