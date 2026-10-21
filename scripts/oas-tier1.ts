@@ -375,12 +375,13 @@ function brandHost(href: string, base: string, words: Set<string> | null = syste
   const name = b.domainWithoutSuffix?.toLowerCase() ?? ""
   return name === a.domainWithoutSuffix?.toLowerCase() && name.length >= 3 && !!words && !words.has(name.replace(/-/g, ""))
 }
-export function selfServe(html: string, base: string): string | null {
+/** `words`: the dictionary that decides which names are distinctive across suffixes (injected in tests; none fails closed). */
+export function selfServe(html: string, base: string, words: Set<string> | null = systemWords()): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
     if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
     if (appStore(l.href, base)) return true
-    return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+    return brandHost(l.href, base, words) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
