@@ -325,11 +325,18 @@ const APP_STORE: Record<string, RegExp> = {
   "marketplace.visualstudio.com": /^\/items$/,
   "addons.mozilla.org": /\/addon\/[\w-]+/,
 }
-// A store badge often has no text; with text, it names installing or getting the app.
-const STORE_TEXT = /^$|\b(install|add to|get|download|try|start|available on|app store|google play|chrome web store)\b/i
-const appStore = (l: { href: string; text: string }) => {
-  const u = new URL(l.href)
-  return u.protocol === "https:" && (APP_STORE[u.hostname]?.test(u.pathname) ?? false) && STORE_TEXT.test(l.text.trim())
+/**
+ * The brand's own store listing: the listing names the brand (".../seo-by-rank-math" for
+ * rankmath.com). A third-party plugin credited in a footer or a developer page is not.
+ * Names under four characters must be a whole listing word, not a substring.
+ */
+const appStore = (href: string, base: string) => {
+  const u = new URL(href)
+  if (u.protocol !== "https:" || !(APP_STORE[u.hostname]?.test(u.pathname) ?? false)) return false
+  const name = parseDomain(new URL(base).hostname, { allowPrivateDomains: true }).domainWithoutSuffix?.toLowerCase()
+  if (!name) return false
+  const listing = decoded(u.pathname + u.search).toLowerCase()
+  return name.length >= 4 ? listing.replace(/[^a-z0-9]/g, "").includes(name.replace(/[^a-z0-9]/g, "")) : listing.split(/[^a-z0-9]+/).includes(name)
 }
 /**
  * Same site, or a sibling registrable domain with the same name under another suffix
@@ -345,7 +352,7 @@ export function selfServe(html: string, base: string): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
     if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
-    if (appStore(l)) return true
+    if (appStore(l.href, base)) return true
     return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
@@ -357,7 +364,7 @@ const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
 const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
 const CONCRETE_TERM = /\b\d{1,4}[- ]day (?:cookie|attribution|tracking)|\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d|\bpaid (?:out )?(?:monthly|weekly|every|via)|\bpayouts? (?:are )?(?:sent |made |paid )?(?:monthly|weekly|on the|via|through)|\bminimum payout|\b(?:paypal|wise|bank transfer|stripe) (?:payouts?|payments?)|\battribution (?:window|duration)[^.]{0,20}\d/i
-// Terms announced, not published: neither inline reading counts.
+// Terms announced, not published: neither inline reading counts when this is near it.
 const NOT_YET = /(terms|program|agreement|commission)[^.]{0,60}(coming soon|to be announced|\btb[ad]\b)|(coming soon|to be announced)[^.]{0,60}(terms|program|agreement)/i
 const TERMS_CONTENT = [/(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%/, /\bcommission/i, /\bcookie/i, /\b(payout|paid out|payment|paid monthly|net[- ]?\d+)\b/i]
 /**
@@ -369,16 +376,16 @@ export function termsLink(html: string, base: string): string | null {
   const found = links(html, base).find((l) => TERMS_LINK.test(l.text) || TERMS_LINK.test(decoded(new URL(l.href).pathname).replace(/[-_/]/g, " ")))
   if (found) return `${found.text || "link"} → ${found.href}`.slice(0, 120)
   const text = visibleText(html)
-  if (NOT_YET.test(text)) return null
+  const announced = (at: number) => NOT_YET.test(text.slice(Math.max(0, at - 150), at + 150))
   const inline = TERMS_LINK.exec(text)
-  if (inline && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
+  if (inline && !announced(inline.index) && TERMS_CONTENT.filter((re) => re.test(text)).length >= 2) {
     return `on page: ${inline[0]}`
   }
   // Terms published on the page without a "terms" heading: a commission figure next to commission wording,
   // plus at least one concrete term (cookie or attribution window, payout schedule or method).
   const figure = COMMISSION_FIGURE.exec(text)
   const concrete = CONCRETE_TERM.exec(text)
-  return figure && concrete ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
+  return figure && concrete && !announced(figure.index) && !announced(concrete.index) ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 
 /**
