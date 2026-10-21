@@ -8,7 +8,8 @@ This guide covers adding a program, correcting one, and what happens to it after
 
 | Way | You need | You give |
 |---|---|---|
-| [Web form](https://openaffiliate.dev/submit) | a GitHub account | the terms; the form writes the file and opens GitHub, where you create the pull request |
+| [Submit by URL](https://openaffiliate.dev/submit#by-url), MCP `submit_program` or `POST /api/submissions` | nothing | the link to the program page; it joins the review queue with a status link, and nothing is listed, scored or opened as a pull request until a maintainer verifies the terms |
+| [Full web form](https://openaffiliate.dev/submit) | a GitHub account | the terms; the form writes the file and opens GitHub, where you create the pull request |
 | Pull request | a GitHub account | `programs/<slug>.yaml` (template below) |
 | [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) issue | a GitHub account | only the link to the program page |
 | Email to hello@affitor.com | nothing | the link to the program page |

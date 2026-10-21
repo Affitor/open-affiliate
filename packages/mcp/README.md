@@ -40,6 +40,8 @@ For Claude Code, Cursor, and local tools:
 | `search_programs` | Search by keyword, category, commission type, verified status |
 | `get_program` | Get full details including agent instructions, restrictions, signup URL |
 | `list_categories` | List all categories with program counts |
+| `submit_program` | Queue a missing program (the brand's own program page) for a maintainer to verify; not instant, nothing is listed or scored until the terms are verified |
+| `get_submission_status` | Read a submission by id: queued, verifying, listed or rejected |
 
 ## Examples
 

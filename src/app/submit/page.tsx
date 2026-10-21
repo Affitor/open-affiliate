@@ -73,10 +73,18 @@ export default function SubmitPage() {
     <div className="mx-auto max-w-3xl px-6 py-10">
       <h1 className="text-2xl font-bold tracking-tight">Submit a program</h1>
       <p className="text-sm text-muted-foreground mt-2">
-        Add your affiliate program to the open registry. This form writes the
-        program file and opens GitHub, where you create the pull request. You
-        need a GitHub account: GitHub copies the repository to your account
-        before the pull request opens.
+        Add your affiliate program to the open registry.
+        {TURNSTILE_SITE_KEY && (
+          <>
+            {" "}The quickest way is Submit by URL below: send your program page,
+            no account needed. It joins the review queue; nothing is listed or
+            scored, and no pull request is opened, until a maintainer has
+            verified the terms on your page.
+          </>
+        )}{" "}
+        The full form writes the program file and opens GitHub, where you create
+        the pull request. That form needs a GitHub account: GitHub copies the
+        repository to your account before the pull request opens.
       </p>
       <p className="text-sm text-muted-foreground mt-2">
         A maintainer checks every term against your program page before

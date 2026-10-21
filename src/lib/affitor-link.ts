@@ -52,7 +52,7 @@ export const FOR_BRANDS = {
   description:
     "Add your affiliate program to OpenAffiliate, the open registry people and AI agents search, or launch a program on Affitor.",
   body:
-    "OpenAffiliate is an open registry of affiliate programs that people and AI agents search. Submit your program, or correct an existing listing, and the change lands as a public pull request. If you don't run a program yet, Affitor, the affiliate network for SaaS that maintains OpenAffiliate, lets you launch one: connect Stripe, set revenue share, CPC or CPL commissions, and share your program link with partners.",
+    "OpenAffiliate is an open registry of affiliate programs that people and AI agents search. Submit your program, or correct an existing listing: a maintainer checks it against your own program page, and every change to the registry lands as a public pull request. If you don't run a program yet, Affitor, the affiliate network for SaaS that maintains OpenAffiliate, lets you launch one: connect Stripe, set revenue share, CPC or CPL commissions, and share your program link with partners.",
   submit: "Submit your program",
   /** The link to /for-brands in the program page's brand box. */
   programPageLink: "List your program",

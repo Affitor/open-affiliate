@@ -31,16 +31,28 @@ export default function SubmitPage() {
           </p>
           <div className="space-y-4 text-base text-muted-foreground">
             <div>
-              <h3 id="web-form" className="text-sm font-semibold text-foreground mb-1">1. Web form</h3>
+              <h3 id="by-url" className="text-sm font-semibold text-foreground mb-1">1. Submit by URL</h3>
               <p>
-                <Link href="/submit" className={link}>The submit form</Link> writes
+                On <Link href="/submit#by-url" className={link}>the submit page</Link>,
+                send your program page. No account is needed. It joins the review
+                queue with a status link; nothing is listed or scored, and no pull
+                request is opened for you, until a maintainer has verified the terms
+                on your page and added the program file. Agents use the same queue
+                through <code className={code}>submit_program</code> or{" "}
+                <code className={code}>POST /api/submissions</code>.
+              </p>
+            </div>
+            <div>
+              <h3 id="web-form" className="text-sm font-semibold text-foreground mb-1">2. Full form</h3>
+              <p>
+                <Link href="/submit" className={link}>The full form</Link> writes
                 the program file for you and opens GitHub, where you create the
                 pull request. You need a GitHub account: GitHub copies the
                 repository to your account before the pull request opens.
               </p>
             </div>
             <div>
-              <h3 id="pull-request" className="text-sm font-semibold text-foreground mb-1">2. Pull request</h3>
+              <h3 id="pull-request" className="text-sm font-semibold text-foreground mb-1">3. Pull request</h3>
               <p>
                 Fork{" "}
                 <a href="https://github.com/Affitor/open-affiliate" className={link}>Affitor/open-affiliate</a>, add{" "}
@@ -51,7 +63,7 @@ export default function SubmitPage() {
               </p>
             </div>
             <div>
-              <h3 id="suggest" className="text-sm font-semibold text-foreground mb-1">3. Suggest a program</h3>
+              <h3 id="suggest" className="text-sm font-semibold text-foreground mb-1">4. Suggest a program</h3>
               <p>
                 Open a{" "}
                 <a href="https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml" className={link}>
@@ -62,7 +74,7 @@ export default function SubmitPage() {
               </p>
             </div>
             <div>
-              <h3 id="email" className="text-sm font-semibold text-foreground mb-1">4. Email</h3>
+              <h3 id="email" className="text-sm font-semibold text-foreground mb-1">5. Email</h3>
               <p>
                 Send the link to your program page to{" "}
                 <a href="mailto:hello@affitor.com" className={link}>hello@affitor.com</a>.

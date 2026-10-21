@@ -157,12 +157,13 @@ Visit [openaffiliate.dev/content-lab](https://openaffiliate.dev/content-lab) to 
 
 ## Get listed and scored
 
-Four ways to add a program. Each needs only the brand's own program page as the source.
+Five ways to add a program. Each needs only the brand's own program page as the source.
 
-1. **Web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
-2. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
-3. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
-4. **Email** -- send the program page link to hello@affitor.com.
+1. **Submit by URL** -- send the program page at [openaffiliate.dev/submit](https://openaffiliate.dev/submit#by-url), with MCP `submit_program`, or `POST /api/submissions`. No account needed. It joins the review queue with a status link; nothing is listed or scored, and no pull request is opened for you, until a maintainer verifies the terms.
+2. **Full web form** -- [openaffiliate.dev/submit](https://openaffiliate.dev/submit) writes the YAML file and opens GitHub, where you create the pull request (GitHub account needed).
+3. **Pull request** -- add `programs/<slug>.yaml` following [CONTRIBUTING.md](CONTRIBUTING.md).
+4. **Issue** -- [Suggest a program](https://github.com/Affitor/open-affiliate/issues/new?template=suggest-a-program.yml) with just the program page link.
+5. **Email** -- send the program page link to hello@affitor.com.
 
 What happens next:
 
