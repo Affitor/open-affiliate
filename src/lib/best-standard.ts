@@ -5,7 +5,8 @@ import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type Be
 import { IN_HOUSE, isLive, livePrograms, networkName, programs, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
-import { conflictValues, termNotes } from "./term-notes"
+import { termNotes } from "./term-notes"
+import { minimumAmount } from "./rankings-terms"
 
 /**
  * The data behind the standard "best X" layout (components/best-post-standard.tsx).
@@ -75,23 +76,31 @@ function thirdPartyNetwork(p: Program): string | null {
 
 const twoWays = (p: Program, ...fields: string[]) => fields.some((f) => termNotes(p.slug).conflicts.has(f))
 
-/** Both values of a conflicting field when its quote names them ("30 or 60 days"), else null. */
-function bothValues(p: Program, field: string): string | null {
-  const quote = termNotes(p.slug).conflictQuotes.get(field)
-  return quote ? conflictValues(quote, field) : null
+/**
+ * The values the brand states for a conflicting field, as the verifier
+ * recorded them in `conflicts[].values` (never read from the quote text):
+ * minimums are numbers in the program's payout currency ("$40 or $80",
+ * "40 or 80 CHF"), other fields short phrases ("30 days or 60 days").
+ * Null when the field has no recorded values.
+ */
+export function twoValueText(values: (string | number)[] | undefined, field: string, currency: string | null | undefined): string | null {
+  if (!values || values.length < 2) return null
+  const shown = values.map((v) => (typeof v === "number" && field === "payout.minimum" ? minimumAmount(v, currency) : String(v)))
+  return shown.length < 3 ? shown.join(" or ") : `${shown.slice(0, -1).join(", ")} or ${shown.at(-1)}`
 }
+
+const bothValues = (p: Program, field: string) => twoValueText(termNotes(p.slug).conflictValues.get(field), field, p.payout.currency)
 
 /**
  * The payout terms the brand states two ways, from the fields actually in
- * conflict: "$40 or $80 minimum, and two different schedules"; null when none.
+ * conflict: "two minimums ($40 or $80) and two schedules"; null when none.
  */
 function payoutTwoWays(p: Program): string | null {
-  const min = twoWays(p, "payout.minimum")
-  const freq = twoWays(p, "payout.frequency")
-  if (!min && !freq) return null
-  const minText = min ? (bothValues(p, "payout.minimum") ? `${bothValues(p, "payout.minimum")} minimum` : "two different minimums") : null
-  const freqText = freq ? "two different schedules" : null
-  return [minText, freqText].filter(Boolean).join(", and ")
+  const parts = [
+    twoWays(p, "payout.minimum") ? `two minimums${bothValues(p, "payout.minimum") ? ` (${bothValues(p, "payout.minimum")})` : ""}` : null,
+    twoWays(p, "payout.frequency") ? "two schedules" : null,
+  ].filter(Boolean)
+  return parts.length ? `The brand gives ${parts.join(" and ")}` : null
 }
 
 /** When and how much: "Net 60, $100 minimum", the terms stated two ways, "On CJ Affiliate's terms", or null. */
@@ -99,16 +108,17 @@ function gettingPaid(p: Program): string | null {
   const timing = payoutText(p, "")
   if (timing) return timing
   const two = payoutTwoWays(p)
-  if (two) return `${two[0].toUpperCase()}${two.slice(1)}; the brand's own pages differ`
+  if (two) return two
   const net = thirdPartyNetwork(p)
   return net ? `On ${net}'s terms` : null
 }
 
-/** "45 days", or both values when the brand states two ("30 or 60 days; the brand's own pages differ"), or null. */
+/** "45 days", both recorded values when the brand states two ("30 days or 60 days; the brand gives both"), or null. */
 function cookieDetail(p: Program): string | null {
   if (p.cookieDays != null) return `${p.cookieDays} days`
   if (!twoWays(p, "cookie_days")) return null
-  return `${bothValues(p, "cookie_days") ?? "Two different windows"}; the brand's own pages differ`
+  const both = bothValues(p, "cookie_days")
+  return both ? `${both}; the brand gives both` : "The brand gives two different windows"
 }
 
 /**
@@ -119,7 +129,7 @@ export function programDetails(p: Program): [string, string][] {
   const rows: [string, string | null][] = [
     ["Commission rate", earnText(p)],
     ["Getting paid", gettingPaid(p)],
-    ["Payment method", methodsText(p) ?? (twoWays(p, "payout.methods") ? "The brand's own pages name two different methods" : null)],
+    ["Payment method", methodsText(p) ?? (twoWays(p, "payout.methods") ? "The brand names two different methods" : null)],
     ["Cookie duration", cookieDetail(p)],
     ["Approval", p.approval === "auto" ? "Automatic" : p.approval === "manual" ? `Manual${approvalTime(p) ? `, ${approvalTime(p)}` : ""}` : null],
   ]
@@ -128,14 +138,10 @@ export function programDetails(p: Program): [string, string][] {
 
 /** The comparison table's cells: Commission, Cookie, Payout ("—" when there is none on record). */
 export function tableRow(p: Program): { commission: string; cookie: string; payout: string } {
-  const timing = payoutText(p, "")
-  const two = timing ? null : payoutTwoWays(p)
-  const net = thirdPartyNetwork(p)
-  const paid = timing || (two ? `${two[0].toUpperCase()}${two.slice(1)}` : net ? `On ${net}'s terms` : null)
   return {
     commission: earnText(p),
     cookie: p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? (bothValues(p, "cookie_days") ?? "Two values") : "—",
-    payout: [paid, methodsText(p)].filter(Boolean).join(" · ") || "—",
+    payout: [gettingPaid(p), methodsText(p)].filter(Boolean).join(" · ") || "—",
   }
 }
 
@@ -173,7 +179,9 @@ export function prosCons(p: Program): { pros: string[]; cons: string[] } {
   if (p.commission.type === "one-time") cons.push("Pays once per referral, with no recurring share")
   if (p.commission.type === "tiered") cons.push("The top figure needs volume or a higher tier")
   cons.push(...restrictions.filter((r) => !forbids(r)))
-  return { pros: pros.slice(0, PROS_CONS_MAX), cons: cons.slice(0, PROS_CONS_MAX) }
+  // Restrictions are stored as sentences; the lists read as fragments, without a final period.
+  const fragment = (t: string) => t.trim().replace(/\.$/, "")
+  return { pros: pros.slice(0, PROS_CONS_MAX), cons: cons.slice(0, PROS_CONS_MAX).map(fragment) }
 }
 
 /** The programs a standard post is about: the ones it shows plus every program its `considered` rule picks. */
@@ -281,7 +289,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
         ? `${withCookie.length} of the ${shown.length} programs here publish a cookie window: ${andList(withCookie.map((p) => `${name(p)} (${p.cookieDays} days)`))}. `
         : "None of the programs here has a cookie window on record. ") +
       blanks(shown.filter((p) => p.cookieDays == null), (p) => emptyLabel(p, "cookie_days"), {
-        [STATED_TWO_WAYS]: ["states its cookie window two ways on its own pages; its section gives both", "state their cookie window two ways on their own pages; each section gives both"],
+        [STATED_TWO_WAYS]: ["gives two different cookie windows, as its section shows", "give two different cookie windows each, as their sections show"],
         [NOT_STATED]: ["does not publish one", "do not publish one"],
         [NOT_RECORDED]: ["has none on our record", "have none on our record"],
       })

@@ -18,9 +18,10 @@ import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
-import { conflictValues, parseNotes, termNotes } from "../src/lib/term-notes"
+import { parseNotes, termNotes } from "../src/lib/term-notes"
+import { programs as allPrograms } from "../src/lib/programs"
 import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
@@ -388,10 +389,10 @@ test("program details leave out a term with no value, and say plainly when the b
       const { conflicts } = termNotes(p.slug)
       const cookie = details.find(([k]) => k === "Cookie duration")
       if (p.cookieDays != null) assert.equal(cookie?.[1], `${p.cookieDays} days`, p.slug)
-      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /the brand.s own pages differ/, p.slug)
+      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /the brand gives/i, p.slug)
       else assert.equal(cookie, undefined, `${p.slug}: a cookie bullet with no value on record`)
       if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f)) && !p.payout.frequency && p.payout.minimum == null)
-        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /the brand.s own pages differ/, p.slug)
+        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /^The brand gives two/, p.slug)
       const { pros, cons } = prosCons(p)
       assert.ok(pros.length <= PROS_CONS_MAX && cons.length <= PROS_CONS_MAX, p.slug)
     }
@@ -403,7 +404,7 @@ test("program details leave out a term with no value, and say plainly when the b
     for (const { program: p } of selection.shown) {
       if (p.cookieDays == null && termNotes(p.slug).conflicts.has("cookie_days")) {
         const sentence = cookieAnswer.split(". ").find((s) => s.includes(p.name)) ?? ""
-        assert.match(sentence, /two ways/, `${p.slug}: cookie FAQ`)
+        assert.match(sentence, /two different cookie windows/, `${p.slug}: cookie FAQ`)
       }
     }
   }
@@ -434,12 +435,34 @@ test("a standard post ends with the Affitor line, one Read more box of five post
   }
 })
 
-test("two-value terms name both values from the conflict quote, and prohibitions lead the cons", () => {
-  assert.equal(conflictValues('site says both "30-Day Cookie Duration" (list) and "The affiliate cookies have a 60-day lifespan." (FAQ). Checked 2026-10-18.', "cookie_days"), "30 or 60 days")
-  assert.equal(conflictValues('a: "returns to purchase in 30days, you get credit" and "cookies and IPs are stored indefinitely". Checked 2026-10-17.', "cookie_days"), "30 days or indefinitely")
-  assert.equal(conflictValues('a: "The minimum amount for payout will be $80." b: "the minimum payout value ($40 minimum)". Checked 2026-10-18.', "payout.minimum"), "$40 or $80")
-  assert.equal(conflictValues('a: "monthly" b: "on request". Checked 2026-10-18.', "payout.frequency"), null)
-  assert.equal(conflictValues('only one "30-day" value', "cookie_days"), null)
+test("two-value terms show only the values recorded in conflicts[].values, in the field's currency; prohibitions lead the cons", () => {
+  // Values come from the structured field, never from the quote text.
+  assert.equal(twoValueText(["30 days", "60 days"], "cookie_days", "USD"), "30 days or 60 days")
+  assert.equal(twoValueText(["30 days", "indefinitely"], "cookie_days", "USD"), "30 days or indefinitely")
+  assert.equal(twoValueText([40, 80], "payout.minimum", "USD"), "$40 or $80")
+  assert.equal(twoValueText([40, 80], "payout.minimum", "CHF"), "40 CHF or 80 CHF")
+  assert.equal(twoValueText(undefined, "payout.minimum", "USD"), null)
+  assert.deepEqual(parseNotes('conflicts:\n  - field: payout.minimum\n    quote: "a: \\"Minimum $80\\" b: \\"$40 minimum\\""\n').conflictValues.size, 0)
+  assert.deepEqual(parseNotes('conflicts:\n  - field: cookie_days\n    quote: "x"\n    values: [30 days, 60 days]\n').conflictValues.get("cookie_days"), ["30 days", "60 days"])
+  // Across the registry: a conflict with no recorded values never puts a figure in its cell or detail.
+  let checked = 0
+  for (const p of allPrograms) {
+    const { conflicts, conflictValues } = termNotes(p.slug)
+    if (conflicts.has("cookie_days") && p.cookieDays == null && !conflictValues.has("cookie_days")) {
+      checked++
+      assert.equal(tableRow(p).cookie, "Two values", p.slug)
+      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Cookie duration")?.[1] ?? "", /\d/, p.slug)
+    }
+    if (conflicts.has("payout.minimum") && p.payout.minimum == null && !p.payout.frequency && !conflictValues.has("payout.minimum")) {
+      checked++
+      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Getting paid")?.[1] ?? "", /\d/, p.slug)
+    }
+  }
+  assert.ok(checked > 0, "no registry conflict without values was checked")
+  // The two programs on the hosting post carry recorded values.
+  const verpex = allPrograms.find((x) => x.slug === "verpex")!
+  assert.equal(tableRow(verpex).cookie, "30 days or indefinitely")
+  assert.match(tableRow(verpex).payout, /^The brand gives two minimums \(\$40 or \$80\) and two schedules/)
   for (const post of STANDARD) {
     for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
       const { cons } = prosCons(p)

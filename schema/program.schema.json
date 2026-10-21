@@ -472,6 +472,12 @@
           "quote": {
             "type": "string",
             "description": "What each page says, with where, e.g. 'Terms: 60-day cookie; PartnerStack listing: 90 days.'"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 2,
+            "items": { "type": ["string", "number"] },
+            "description": "Optional. The values the brand states, one per statement, written by the verifier from the quote: numbers for payout.minimum (in the program's payout.currency), short phrases otherwise (e.g. [\"30 days\", \"60 days\"], [\"30 days\", \"indefinitely\"]). Pages show the two values only from here; without it they say the brand gives two values."
           }
         }
       }
