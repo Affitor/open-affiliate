@@ -12,6 +12,17 @@ import { blogEntries } from "../src/lib/blog"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { hasNoProgram } from "../src/lib/no-program"
+import { existsSync, statSync } from "node:fs"
+import { join } from "node:path"
+import { BestPostStandard } from "../src/components/best-post-standard"
+import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
+
+const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
+import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
+import { parseNotes, termNotes } from "../src/lib/term-notes"
+import { programs as allPrograms } from "../src/lib/programs"
+import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
   POSTS,
@@ -297,5 +308,184 @@ test("guides are on /blog, in the sitemap, and never under /best", () => {
     assert.ok(posts.some((e) => e.href === guidePath(g)), `${g.slug}: not on /blog`)
     assert.ok(urls.has(`https://openaffiliate.dev${guidePath(g)}`), `${g.slug}: not in the sitemap`)
     assert.ok(!listSlugs.has(g.slug), `${g.slug}: also a /best list slug`)
+  }
+})
+
+// ---------- standard "best X" layout (components/best-post-standard.tsx) ----
+
+function renderStandard(post: (typeof POSTS)[number]) {
+  const list = postList(post)!
+  const selection = postSelection(post, new Date(post.checked))
+  const html = renderToStaticMarkup(
+    createElement(BestPostStandard, { post, list, selection, path: bestPath(list), parent: { name: "Best Affiliate Programs", href: "/best" } }),
+  )
+  return { html, selection }
+}
+
+const STANDARD = POSTS.filter((p) => p.layout === "standard")
+
+test("a standard post: a four-column table, one inline tracked link per program, no buttons, FAQ JSON-LD matches the FAQ box", () => {
+  assert.ok(STANDARD.length > 0, "no post opts into the standard layout")
+  for (const post of STANDARD) {
+    assert.ok(post.lookFor && post.programs.every((p) => p.verdict), `${post.slug}: a standard post needs lookFor and a verdict per program`)
+    for (const p of post.programs) assert.ok(splitLink(p.why), `${post.slug}: ${p.slug} why needs exactly one {linked phrase}`)
+    for (const g of post.guides ?? []) assert.ok(GUIDES.some((x) => x.slug === g), `${post.slug}: guide ${g} does not exist`)
+    const { html, selection } = renderStandard(post)
+    const heads = [...html.match(/<table data-terms-table[\s\S]*?<\/thead>/)![0].matchAll(/<th[^>]*scope="col"[^>]*>([^<]+)</g)].map((m) => m[1])
+    assert.deepEqual(heads, ["Program", "Commission", "Cookie", "Payout"])
+    const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
+    for (const a of [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1])) assert.ok(ids.has(a), `${post.slug}: #${a} has no section`)
+    for (const { program } of selection.shown) {
+      assert.ok(ids.has(program.slug), `${post.slug}: no section for ${program.slug}`)
+      const href = blogApplyHref(program, post.slug).replaceAll("&", "&amp;")
+      // The tracked Apply link sits inside the program's paragraph, exactly once; no button.
+      assert.equal(html.split(`href="${href}"`).length - 1, 1, `${post.slug}: ${program.slug} needs one inline Apply link`)
+    }
+    assert.doesNotMatch(html, /data-capture-caption|data-receipt|data-toc|data-also-considered|id="what-changed"|data-quick-picks/)
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
+    const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
+    const faq = standardFaq(post, selection, typeSplit(post, selection))
+    assert.ok(faq.length >= 5 && faq.length <= 7, `${post.slug}: ${faq.length} FAQ questions`)
+    assert.deepEqual(faqLd.mainEntity.map((q: { name: string }) => q.name), faq.map((f) => f.q))
+    const shownQs = [...html.match(/<aside[^>]*data-faq[\s\S]*?<\/aside>/)![0].matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].replaceAll("&#x27;", "'"))
+    assert.equal(shownQs.length, faq.length, `${post.slug}: the FAQ box shows ${shownQs.length} questions`)
+    for (const q of faqLd.mainEntity) assert.doesNotMatch(q.acceptedAnswer.text, /undefined|NaN|null|\[object/)
+    assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>/g, ""), />[^<]*\b(undefined|NaN)\b[^<]*</)
+    assert.ok(html.includes("data-post-disclosure") && html.includes("data-how-we-chose") && html.includes("data-read-more"))
+  }
+})
+
+test("a standard post shows a capture or a logo card for every program, each capture on disk and in budget", () => {
+  for (const post of STANDARD) {
+    const { html, selection } = renderStandard(post)
+    for (const { program } of selection.shown) {
+      const c = CAPTURES[program.slug]
+      if (c) {
+        const file = join(process.cwd(), "public", c.src)
+        assert.ok(existsSync(file), `${program.slug}: ${c.src} is missing`)
+        assert.ok(statSync(file).size < 120_000, `${program.slug}: ${c.src} is over 120 KB`)
+        assert.match(c.captured, /^\d{4}-\d{2}-\d{2}$/)
+        assert.equal(blockedReason(c.url), null, `${program.slug}: captured a blocked host`)
+        assert.ok(html.includes(`alt="${program.name} affiliate page, captured `), `${program.slug}: no alt text`)
+      } else {
+        assert.ok(CAPTURE_SKIPPED[program.slug], `${program.slug}: no capture and no recorded reason`)
+      }
+    }
+    assert.equal((html.match(/data-capture-fallback/g) ?? []).length, selection.shown.filter(({ program }) => !CAPTURES[program.slug]).length)
+  }
+})
+
+test("program details leave out a term with no value, and say plainly when the brand states two", () => {
+  const notes = parseNotes(
+    ["# cookie window: not published on b.com/affiliates (checked 2026-10-12)", "not_published:", '  payout.methods: "2026-10-18"', "conflicts:", "  - field: payout.minimum", '    quote: "x"'].join("\n"),
+  )
+  assert.deepEqual([...notes.notPublished].sort(), ["cookie_days", "payout.methods"])
+  assert.deepEqual([...notes.conflicts], ["payout.minimum"])
+  for (const post of STANDARD) {
+    for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
+      const details = programDetails(p)
+      const text = details.map(([k, v]) => `${k}: ${v}`).join("\n")
+      assert.doesNotMatch(text, new RegExp(`${NOT_STATED}|${NOT_RECORDED}|${STATED_TWO_WAYS}`), `${p.slug}: an empty-term label in the details`)
+      const { conflicts } = termNotes(p.slug)
+      const cookie = details.find(([k]) => k === "Cookie duration")
+      if (p.cookieDays != null) assert.equal(cookie?.[1], `${p.cookieDays} days`, p.slug)
+      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /the brand gives/i, p.slug)
+      else assert.equal(cookie, undefined, `${p.slug}: a cookie bullet with no value on record`)
+      if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f)) && !p.payout.frequency && p.payout.minimum == null)
+        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /^The brand gives two/, p.slug)
+      const { pros, cons } = prosCons(p)
+      assert.ok(pros.length <= PROS_CONS_MAX && cons.length <= PROS_CONS_MAX, p.slug)
+    }
+  }
+  // The FAQ never says "not published" for a term the brand states two ways.
+  for (const post of STANDARD) {
+    const selection = postSelection(post, new Date(post.checked))
+    const cookieAnswer = standardFaq(post, selection, typeSplit(post, selection)).find((f) => /cookies/i.test(f.q))!.a
+    for (const { program: p } of selection.shown) {
+      if (p.cookieDays == null && termNotes(p.slug).conflicts.has("cookie_days")) {
+        const sentence = cookieAnswer.split(". ").find((s) => s.includes(p.name)) ?? ""
+        assert.match(sentence, /two different cookie windows/, `${p.slug}: cookie FAQ`)
+      }
+    }
+  }
+})
+
+test("a standard post ends with the Affitor line, one Read more box of five posts, then the FAQ", () => {
+  const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|half|dozen)\b/i
+  const line = `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after}`
+  assert.doesNotMatch(line, /\d|\$|free|price|pricing|guarantee/i)
+  assert.doesNotMatch(line, NUMBER_WORDS)
+  for (const post of STANDARD) {
+    const { html, selection } = renderStandard(post)
+    const links = readMoreLinks(post)
+    assert.equal(links.length, READ_MORE_COUNT, `${post.slug}: Read more lists ${links.length} posts`)
+    for (const l of links) assert.match(l.href, /^\/(best|blog)\/[a-z0-9-]+$/, l.href)
+    assert.equal((html.match(/data-read-more/g) ?? []).length, 1, `${post.slug}: Read more appears more than once`)
+    const box = html.match(/<aside[^>]*data-read-more[\s\S]*?<\/aside>/)![0]
+    assert.deepEqual([...box.matchAll(/href="([^"]+)"/g)].map((m) => m[1]), links.map((l) => l.href))
+    const affitor = blogAffitorHref(post.slug)
+    assert.equal(new URL(affitor).searchParams.get("utm_medium"), "blog")
+    assert.equal(new URL(affitor).searchParams.get("utm_campaign"), post.slug)
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${affitor.replaceAll("&", "&amp;")}"`))
+    assert.ok(tag && tag.includes(`${AFFITOR_ATTR}="blog"`), `${post.slug}: no tracked Affitor marketplace link`)
+    // Order at the end: last program, Affitor line, Read more, FAQ.
+    const last = html.lastIndexOf(`data-post-program="${selection.shown.at(-1)!.program.slug}"`)
+    const at = [html.indexOf("data-affitor-line"), html.indexOf("data-read-more"), html.indexOf("data-faq")]
+    assert.ok(last < at[0] && at[0] < at[1] && at[1] < at[2], `${post.slug}: end blocks out of order ${JSON.stringify([last, ...at])}`)
+  }
+})
+
+test("two-value terms show only the values recorded in conflicts[].values, in the field's currency; prohibitions lead the cons", () => {
+  // Values come from the structured field, never from the quote text.
+  assert.equal(twoValueText(["30 days", "60 days"], "cookie_days", "USD"), "30 days or 60 days")
+  assert.equal(twoValueText(["30 days", "indefinitely"], "cookie_days", "USD"), "30 days or indefinitely")
+  assert.equal(twoValueText([40, 80], "payout.minimum", "USD"), "$40 or $80")
+  assert.equal(twoValueText([40, 80], "payout.minimum", "CHF"), "40 CHF or 80 CHF")
+  assert.equal(twoValueText(undefined, "payout.minimum", "USD"), null)
+  assert.deepEqual(parseNotes('conflicts:\n  - field: payout.minimum\n    quote: "a: \\"Minimum $80\\" b: \\"$40 minimum\\""\n').conflictValues.size, 0)
+  assert.deepEqual(parseNotes('conflicts:\n  - field: cookie_days\n    quote: "x"\n    values: [30 days, 60 days]\n').conflictValues.get("cookie_days"), ["30 days", "60 days"])
+  // Across the registry: a conflict with no recorded values never puts a figure in its cell or detail.
+  let checked = 0
+  for (const p of allPrograms) {
+    const { conflicts, conflictValues } = termNotes(p.slug)
+    if (conflicts.has("cookie_days") && p.cookieDays == null && !conflictValues.has("cookie_days")) {
+      checked++
+      assert.equal(tableRow(p).cookie, "Two values", p.slug)
+      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Cookie duration")?.[1] ?? "", /\d/, p.slug)
+    }
+    if (conflicts.has("payout.minimum") && p.payout.minimum == null && !p.payout.frequency && !conflictValues.has("payout.minimum")) {
+      checked++
+      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Getting paid")?.[1] ?? "", /\d/, p.slug)
+    }
+  }
+  assert.ok(checked > 0, "no registry conflict without values was checked")
+  // The two programs on the hosting post carry recorded values.
+  const verpex = allPrograms.find((x) => x.slug === "verpex")!
+  assert.equal(tableRow(verpex).cookie, "30 days or indefinitely")
+  assert.match(tableRow(verpex).payout, /^The brand gives two minimums \(\$40 or \$80\) and two schedules/)
+  for (const post of STANDARD) {
+    for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
+      const { cons } = prosCons(p)
+      const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r)
+      const firstOther = cons.findIndex((c) => !forbids(c))
+      if (firstOther >= 0) assert.ok(cons.slice(firstOther).every((c) => !forbids(c)), `${p.slug}: a prohibition after other cons`)
+      assert.doesNotMatch(tableRow(p).payout + programDetails(p).map((d) => d[1]).join(" "), /\bBank\b/, `${p.slug}: "Bank" should read "bank transfer"`)
+    }
+  }
+})
+
+test("a standard post's intro, with its computed picks sentence, stays within eighty words", () => {
+  for (const post of STANDARD) {
+    const selection = postSelection(post, new Date(post.checked))
+    const words = `${post.intro} ${picksSentence(post, selection) ?? ""}`.split(/\s+/).filter(Boolean).length
+    assert.ok(words <= 80, `${post.slug}: intro is ${words} words`)
+  }
+})
+
+test("only the posts that opt in render the standard layout", () => {
+  for (const post of POSTS) {
+    if (post.layout === "standard") continue
+    assert.equal(post.lookFor, undefined, `${post.slug}: lookFor without layout "standard" is never shown`)
+    assert.equal(post.guides, undefined, `${post.slug}: guides without layout "standard" are never shown`)
   }
 })

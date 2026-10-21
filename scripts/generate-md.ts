@@ -92,6 +92,9 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
+import { AFFITOR_LINE, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
+
 const BASE = "https://openaffiliate.dev"
 
 /**
@@ -1289,6 +1292,7 @@ function bestListMd(list: BestList, path: string): string {
  * page's blogApplyHref.
  */
 function bestPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  if (post.layout === "standard") return standardPostMd(post, selection, path)
   const range = checkedRange(selection)
   const rows = selection.shown
     .map(({ program: p, copy }, i) => {
@@ -1310,6 +1314,61 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
       "How we chose",
       [`${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`, ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
     ),
+    faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
+    section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ].filter((x): x is string => Boolean(x)))
+}
+
+/**
+ * The twin of a standard post (components/best-post-standard.tsx), in the
+ * page's order: intro, programs with verdict, facts, Good / Watch out and the
+ * quote we checked, what to look for with the chart's counts, also
+ * considered, how we chose, FAQ. Every figure from the same functions.
+ */
+function standardPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  const range = checkedRange(selection)
+  const lede = picksSentence(post, selection)
+  const table = [
+    "| Program | Commission | Cookie | Payout |",
+    "|---|---|---|---|",
+    ...selection.shown.map(({ program: p }) => {
+      const r = tableRow(p)
+      return `| [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) | ${mdEscape(r.commission)} | ${mdEscape(r.cookie)} | ${mdEscape(r.payout)} |`
+    }),
+  ].join("\n")
+  const programsMd = selection.shown
+    .map(({ program: p, copy }, i) => {
+      const { pros, cons } = prosCons(p)
+      const why = `${mdEscapeProse(copy.why.replace(/[{}]/g, ""))} Affiliate page: ${mdUrl(blogApplyHref(p, post.slug))}`
+      // A numbered item per program (the machine-surface check reads "N. [Name](…/programs/<slug>.md)"), its body indented under it.
+      return [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)`,
+        why,
+        copy.verdict ? mdEscapeProse(copy.verdict) : null,
+        `Affiliate program details:\n\n${programDetails(p).map(([k, v]) => `- **${k}:** ${mdEscape(v)}`).join("\n")}`,
+        pros.length ? `Pros:\n\n${pros.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
+        cons.length ? `Cons:\n\n${cons.map((t) => `- ${mdEscape(t)}`).join("\n")}` : null,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((block, j) => (j === 0 ? block : block.replace(/^(?=.)/gm, "   ")))
+        .join("\n\n")
+    })
+    .join("\n\n")
+  const howToChoose = post.lookFor
+    ? [mdEscapeProse(post.lookFor.intro), post.lookFor.criteria.map((c) => `- **${mdEscape(c.name)}:** ${mdEscapeProse(c.text)}${c.link ? ` ${mdEscape(c.link.label)}: ${BASE}${c.link.href}` : ""}`).join("\n")].join("\n\n")
+    : null
+  const faq = standardFaq(post, selection, typeSplit(post, selection), mdEscape)
+  return joinSections([
+    `# ${mdHeading(postTitle(post, selection))}`,
+    range ? `By the OpenAffiliate team · Updated ${range[1]}` : null,
+    `> ${mdEscapeProse(post.intro)}${lede ? ` ${mdEscape(lede)}` : ""}`,
+    DISCLOSURE,
+    section("Programs at a glance", table),
+    post.lookFor && howToChoose ? section(mdEscape(post.lookFor.heading), howToChoose) : null,
+    section("Programs", programsMd),
+    section("How we chose", `${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE} Rankings are never paid for.`),
+    `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", post.slug, AFFITOR_MARKETPLACE))}`,
+    section("Read more", readMoreLinks(post).map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")),
     faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
   ].filter((x): x is string => Boolean(x)))
