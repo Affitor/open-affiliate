@@ -5,7 +5,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import {
   cwv, distribution, hasPrice, hasTrial, loadProgram, p6Check, refreshP6, seoQuery, politeGet, PSI_GAP_MS, psiSlot, scanIsolated, searchVolumes, seoKeyword, pricingLink, readCache, readCapped, robotsAllows, runPsi, scanProgram,
-  recordingFetcher, replayFetcher, runOptions, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
+  discover, discoverIsolated, discoveryCandidates, recordingFetcher, replayFetcher, runOptions, withDiscovered, selfServe, termsLink, tier1Score, setFetcher, visibleText, type Result,
 } from "./oas-tier1"
 
 /** A stub network: answers by URL, records every request, and follows redirects itself unless asked not to, like fetch. */
@@ -71,6 +71,50 @@ test("each program runs in its own process with a hard time limit", async () => 
   assert.ok(Date.now() - started < 5000)
   assert.equal(result.slug, "hang")
   for (const check of Object.values(result.checks)) assert.match(check.evidence!, /timed out after 1\.5s/)
+})
+
+test("phase 2 cannot erase phase 1: a stalled discovery returns nothing and every reading stands", async () => {
+  const phase1: Result = { slug: "x", network: "in-house", checkedAt: "", checks: {
+    P1: { state: "met", evidence: "$9" }, P2: { state: "not_met" }, P3: { state: "unknown", evidence: "page longer than the read limit" },
+    P5: { state: "unknown" }, P6: { state: "unknown" }, A1: { state: "met", evidence: "https://x.test/affiliates" }, A2: { state: "not_met" } } }
+  const started = Date.now()
+  // TEST-NET-1 never answers: the discovery child can only end by its own limit.
+  const found = await discoverIsolated({ slug: "x", url: "https://192.0.2.1/" }, ["https://192.0.2.1/pricing"], ["P2", "P3"], 1500)
+  assert.ok(Date.now() - started < 5000)
+  assert.deepEqual(found, {})
+  assert.deepEqual(withDiscovered(phase1, found), phase1)
+  // A positive reading replaces not_met or unknown only; met stays as phase 1 read it.
+  const merged = withDiscovered(phase1, { P1: { state: "met", evidence: "other" }, P2: { state: "met", evidence: "free plan (on /plans)" }, P3: { state: "not_met" } })
+  assert.equal(merged.checks.P1.evidence, "$9")
+  assert.equal(merged.checks.P2.state, "met")
+  assert.deepEqual(merged.checks.P3, phase1.checks.P3)
+  assert.deepEqual(merged.checks.A1, phase1.checks.A1)
+})
+
+test("discovery candidates: pricing kinds first, shorter path, A-Z, three at most, never a page already read or another site", () => {
+  const home = { url: "https://brand.com/", html: [
+    '<a href="/shop">Shop</a>', '<a href="/blog/pricing-guide">Guide</a>', '<a href="/plugin/kit/pricing/">Kit pricing</a>',
+    '<a href="/free-trial?utm=x">Trial</a>', '<a href="/pricing">Pricing</a>', '<a href="/store/app">Store</a>', '<a href="/buy">Buy</a>',
+    '<a href="https://other.com/pricing">Other</a>', '<a href="/download">Download</a>',
+  ].join("") }
+  const got = discoveryCandidates([home], ["https://brand.com", "https://brand.com/pricing"], new Set())
+  assert.deepEqual(got, ["https://brand.com/buy", "https://brand.com/store/app", "https://brand.com/plugin/kit/pricing"])
+  assert.ok(!got.some((u) => u.includes("shop") || u.includes("other.com")))
+})
+
+test("discovery reads only the brand's pages, skips merchandise, and only adds readings", async () => {
+  network({
+    "https://brand.com/robots.txt": html(""),
+    "https://brand.com/store/merch": html("<title>Merch store</title><p>Pro plan $29/mo</p>"),
+    "https://brand.com/store/app": html("<p>Company merch T-shirt $29</p><p>Start your 14-day free trial</p>"),
+    "https://brand.com/buy": redirect("https://reseller.example/buy"),
+    "https://reseller.example/robots.txt": html(""),
+    "https://reseller.example/buy": html("<p>Pro $19/mo</p>"),
+  })
+  const found = await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/buy", "https://brand.com/store/app", "https://brand.com/store/merch"], ["P1", "P2", "P3"], new Set())
+  assert.equal(found.P1, undefined, "the reseller's price, the merch page and the merch price all ignored")
+  assert.match(found.P2!.evidence!, /14-day free trial \(on https:\/\/brand\.com\/store\/app\)/)
+  assert.equal(found.P3, undefined)
 })
 
 test("robots wildcards match in bounded time (no regex backtracking)", () => {

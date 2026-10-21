@@ -316,11 +316,12 @@ const NOT_A_PRICE = /\b(save[sd]?|saving|off|discount|over|up to|worth|raised|fu
  * discount or other marketing figure, or a non-zero JSON-LD offer (pages that
  * draw prices with script often publish one).
  */
-export function hasPrice(text: string, html = ""): string | null {
+export function hasPrice(text: string, html = "", skip?: (before: string) => boolean): string | null {
   for (const m of text.matchAll(PRICE)) {
     // "1,90" (comma decimals) and "1,900" both read as a positive amount; only zero is not a price.
     const amount = Number((m[1] ?? m[2]).replace(/[.,](?=\d{3}\b)/g, "").replace(",", "."))
-    if (!(amount > 0) || NOT_A_PRICE.test(text.slice(Math.max(0, m.index! - 40), m.index))) continue
+    const before = text.slice(Math.max(0, m.index! - 40), m.index)
+    if (!(amount > 0) || NOT_A_PRICE.test(before) || skip?.(before)) continue
     return text.slice(Math.max(0, m.index! - 30), m.index! + 40).trim()
   }
   for (const ld of html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
@@ -544,8 +545,9 @@ const unknown = (why: string): Check => ({ state: "unknown", evidence: why })
 const isPage = (p: Page | Refused): p is Page => "status" in p
 const gone = (status: number) => status === 404 || status === 410
 
-export async function scanProgram(p: Program): Promise<Result> {
+export async function scanProgram(p: Program, found: { candidates: string[] } = { candidates: [] }): Promise<Result> {
   const checks: Record<string, Check> = {}
+  const read: string[] = []
   if (!p.url) {
     for (const id of ["P1", "P2", "P3", "P5"]) checks[id] = unknown("no brand URL")
   } else {
@@ -555,10 +557,12 @@ export async function scanProgram(p: Program): Promise<Result> {
       for (const id of ["P1", "P2", "P3", "P5"]) checks[id] = unknown(why)
     } else {
       // A linked pricing page, else the conventional /pricing path (one request).
-      const found = await politeGet(pricingLink(home.html, home.url) ?? new URL("/pricing", home.url).href)
-      const pricing = isPage(found) && found.status === 200 ? found : null
+      const pricingUrl = pricingLink(home.html, home.url) ?? new URL("/pricing", home.url).href
+      const fetched = await politeGet(pricingUrl)
+      const pricing = isPage(fetched) && fetched.status === 200 ? fetched : null
+      read.push(p.url, home.url, pricingUrl, ...(isPage(fetched) ? [fetched.url] : []))
       // Absent (404/410) is a reading; refused, blocked or erroring is not, so a miss stays unknown.
-      const unread = pricing || (isPage(found) && gone(found.status)) ? null : isPage(found) ? `pricing page HTTP ${found.status}` : `pricing page: ${found.refused}`
+      const unread = pricing || (isPage(fetched) && gone(fetched.status)) ? null : isPage(fetched) ? `pricing page HTTP ${fetched.status}` : `pricing page: ${fetched.refused}`
       // A page longer than the read limit was not read in full: what was found counts, a miss is unknown.
       const cut = home.truncated || pricing?.truncated ? "page longer than the read limit" : null
       const miss = (fallback: string): Check => (unread ? unknown(unread) : cut ? unknown(cut) : { state: "not_met", evidence: fallback })
@@ -571,6 +575,7 @@ export async function scanProgram(p: Program): Promise<Result> {
       const signup = selfServe(home.html, home.url) ?? (pricing ? selfServe(pricing.html, pricing.url) : null)
       checks.P3 = signup ? { state: "met", evidence: signup } : miss("no sign-up link")
       checks.P5 = unknown("PageSpeed not run")
+      found.candidates = discoveryCandidates([home, ...(pricing ? [pricing] : [])], read)
     }
   }
   checks.P6 = unknown("DataForSEO not run")
@@ -579,6 +584,8 @@ export async function scanProgram(p: Program): Promise<Result> {
     checks.A2 = unknown("no program URL")
   } else {
     const page = await politeGet(p.signup_url)
+    // Phase 2 never re-reads the listed program page either.
+    found.candidates = found.candidates.filter((u) => normalUrl(u) !== normalUrl(p.signup_url!) && (!isPage(page) || normalUrl(u) !== normalUrl(page.url)))
     if (!isPage(page)) {
       checks.A1 = unknown(page.refused)
       checks.A2 = unknown(page.refused)
@@ -606,6 +613,83 @@ export async function scanProgram(p: Program): Promise<Result> {
     }
   }
   return { slug: p.slug, network: p.network ?? "unknown", checkedAt: new Date().toISOString(), checks }
+}
+
+// ---------- phase 2: bounded discovery (P1 / P2 / P3) ----------
+
+const PRICING_SEGMENTS = new Set(["pricing", "plans", "buy", "store"])
+const START_SEGMENTS = new Set(["trial", "free-trial", "get-started", "download"])
+export const DISCOVERY_PAGES = 3
+/** Scheme, host and path, without query, fragment or trailing slash: two links to one page are one candidate. */
+const normalUrl = (url: string) => {
+  try {
+    const u = new URL(url)
+    return `${u.protocol}//${u.host}${u.pathname.replace(/\/+$/, "")}`
+  } catch {
+    return url
+  }
+}
+
+/**
+ * Pages worth reading for P1 / P2 / P3 that phase 1 did not read: links on the homepage and pricing page to a brand
+ * host whose path has a pricing segment (kind 1) or a trial / start segment (kind 2). Kind 1 first, then the shorter
+ * path, then A–Z; at most three. "shop" is not a candidate (usually merchandise on software sites).
+ */
+export function discoveryCandidates(pages: { html: string; url: string }[], read: string[], words: Set<string> | null = systemWords()): string[] {
+  if (!pages.length) return []
+  const seen = new Set(read.map(normalUrl))
+  const kinds = new Map<string, number>()
+  for (const page of pages) {
+    for (const l of links(page.html, page.url)) {
+      let u: URL
+      try {
+        u = new URL(l.href)
+      } catch {
+        continue
+      }
+      if (!/^https?:$/.test(u.protocol) || !brandHost(l.href, pages[0].url, words)) continue
+      const key = normalUrl(l.href)
+      if (seen.has(key) || kinds.has(key)) continue
+      const segments = u.pathname.toLowerCase().split("/").filter(Boolean)
+      const kind = segments.some((s) => PRICING_SEGMENTS.has(s)) ? 1 : segments.some((s) => START_SEGMENTS.has(s)) ? 2 : 0
+      if (kind) kinds.set(key, kind)
+    }
+  }
+  const path = (u: string) => new URL(u).pathname
+  return [...kinds]
+    .sort(([a, ka], [b, kb]) => ka - kb || path(a).length - path(b).length || (a < b ? -1 : a > b ? 1 : 0))
+    .slice(0, DISCOVERY_PAGES)
+    .map(([u]) => u)
+}
+
+/**
+ * Reads the candidate pages for the checks phase 1 did not meet. Only positive readings come back: a page that fails,
+ * redirects off the brand, or is about merchandise adds nothing, and nothing here turns a reading into unknown.
+ */
+export async function discover(p: Program, candidates: string[], wanted: ("P1" | "P2" | "P3")[], words: Set<string> | null = systemWords()): Promise<Record<string, Check>> {
+  const out: Record<string, Check> = {}
+  for (const url of candidates.slice(0, DISCOVERY_PAGES)) {
+    if (wanted.every((id) => out[id])) break
+    const page = await politeGet(url)
+    if (!isPage(page) || page.status !== 200 || !p.url || !brandHost(page.url, p.url, words)) continue
+    const title = /<title[^>]*>([\s\S]{0,200}?)<\/title>/i.exec(page.html)?.[1] ?? ""
+    if (MERCH.test(decoded(new URL(page.url).pathname)) || MERCH.test(title)) continue
+    const text = visibleText(page.html)
+    const on = (evidence: string): Check => ({ state: "met", evidence: `${evidence} (on ${page.url})`.slice(0, 160) })
+    if (wanted.includes("P1") && !out.P1) {
+      const price = hasPrice(text, page.html, (before) => MERCH.test(before))
+      if (price) out.P1 = on(price)
+    }
+    if (wanted.includes("P2") && !out.P2) {
+      const trial = hasTrial(text)
+      if (trial) out.P2 = on(trial)
+    }
+    if (wanted.includes("P3") && !out.P3) {
+      const signup = selfServe(page.html, page.url, words)
+      if (signup) out.P3 = on(signup)
+    }
+  }
+  return out
 }
 
 let psiStopped: string | null = null
@@ -868,22 +952,22 @@ const failed = (slug: string, network: string, why: string): Result =>
  * Scans one program in a child process (same tsx flags), killed after `ms`: CPU or
  * memory spent on one hostile response ends with that program as unknown.
  */
-export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, ms: number): Promise<{ result: Result; psi429: boolean }> {
+export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, ms: number): Promise<{ result: Result; psi429: boolean; candidates: string[] }> {
   return new Promise((resolve) => {
     const child = fork(__filename, ["--child"], { execArgv: process.execArgv, stdio: ["ignore", "ignore", "ignore", "ipc"] })
     let done = false
-    const finish = (result: Result, psi429 = false) => {
+    const finish = (result: Result, psi429 = false, candidates: string[] = []) => {
       if (done) return
       done = true
       clearTimeout(timer)
       child.kill("SIGKILL")
-      resolve({ result, psi429 })
+      resolve({ result, psi429, candidates })
     }
     const timer = setTimeout(() => finish(failed(p.slug, p.network ?? "unknown", `scan timed out after ${ms / 1000}s`)), ms)
-    child.on("message", (m: { result?: Result; psi429?: boolean; psiReady?: boolean }) => {
+    child.on("message", (m: { result?: Result; psi429?: boolean; psiReady?: boolean; candidates?: string[] }) => {
       // A child asks before each PageSpeed call; the parent paces the whole run.
       if (m.psiReady) psiSlot().then(() => child.connected && child.send({ psiGo: true }))
-      else if (m.result) finish(m.result, m.psi429)
+      else if (m.result) finish(m.result, m.psi429, Array.isArray(m.candidates) ? m.candidates : [])
     })
     child.once("exit", () => finish(failed(p.slug, p.network ?? "unknown", "scan process exited")))
     child.once("error", (error) => finish(failed(p.slug, p.network ?? "unknown", `scan process failed (${error.name})`)))
@@ -891,14 +975,49 @@ export function scanIsolated(p: Program, mode: { scan: boolean; psi: boolean }, 
   })
 }
 
+/** Phase 2 in its own child and deadline: a timeout, crash or error returns no readings, so phase 1 stands as it was. */
+export function discoverIsolated(p: Program, candidates: string[], wanted: ("P1" | "P2" | "P3")[], ms = 60_000): Promise<Record<string, Check>> {
+  return new Promise((resolve) => {
+    const child = fork(__filename, ["--child"], { execArgv: process.execArgv, stdio: ["ignore", "ignore", "ignore", "ipc"] })
+    let done = false
+    const finish = (found: Record<string, Check>) => {
+      if (done) return
+      done = true
+      clearTimeout(timer)
+      child.kill("SIGKILL")
+      resolve(found)
+    }
+    const timer = setTimeout(() => finish({}), ms)
+    child.on("message", (m: { discovered?: Record<string, Check> }) => {
+      if (m.discovered) finish(Object.fromEntries(Object.entries(m.discovered).filter(([id, c]) => wanted.includes(id as "P1") && c?.state === "met")))
+    })
+    child.once("exit", () => finish({}))
+    child.once("error", () => finish({}))
+    child.send({ program: p, discover: { candidates, wanted } })
+  })
+}
+
+/** Merges phase 2 into phase 1: a positive reading replaces not_met or unknown; nothing else changes. */
+export function withDiscovered(r: Result, found: Record<string, Check>): Result {
+  const checks = { ...r.checks }
+  for (const [id, c] of Object.entries(found)) if (checks[id] && checks[id].state !== "met" && c.state === "met") checks[id] = c
+  return { ...r, checks }
+}
+
 async function child() {
   // An orphan (the parent died or was stopped) must not wait forever for a PageSpeed permit.
   process.once("disconnect", () => process.exit(1))
   if (process.env.OAS_REPLAY) setFetcher(replayFetcher(process.env.OAS_REPLAY))
   else if (process.env.OAS_RECORD) setFetcher(recordingFetcher(process.env.OAS_RECORD, fetcher))
-  process.once("message", async ({ program, scan, psi }: { program: Program; scan: boolean; psi: boolean }) => {
+  process.once("message", async ({ program, scan, psi, discover: phase2 }: { program: Program; scan: boolean; psi: boolean; discover?: { candidates: string[]; wanted: ("P1" | "P2" | "P3")[] } }) => {
+    if (phase2) {
+      const discovered = await discover(program, phase2.candidates, phase2.wanted).catch(() => ({}))
+      process.send!({ discovered }, () => process.exit(0))
+      return
+    }
+    const found = { candidates: [] as string[] }
     const result = scan
-      ? await scanProgram(program).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
+      ? await scanProgram(program, found).catch((error: Error) => failed(program.slug, program.network ?? "unknown", `scan error (${error.name})`))
       : failed(program.slug, program.network ?? "unknown", "PageSpeed not run") // PageSpeed only: the caller keeps its cached checks
     const permit = () => new Promise<void>((resolve) => {
       process.on("message", function go(m: { psiGo?: boolean }) {
@@ -909,7 +1028,7 @@ async function child() {
       process.send!({ psiReady: true })
     })
     if (psi && result.checks.P5.evidence === "PageSpeed not run") await runPsi(program, result, permit).catch(() => {})
-    process.send!({ result, psi429: psiStopped !== null }, () => process.exit(0))
+    process.send!({ result, psi429: psiStopped !== null, candidates: found.candidates }, () => process.exit(0))
   })
 }
 
@@ -962,14 +1081,21 @@ async function main() {
       const cached = existsSync(file) ? readCache(file, p.slug) : null
       const wantPsi = psi && !psiStopped && (!cached || cached.checks.P5.evidence === "PageSpeed not run")
       let r: Result
+      // Phase 2 after a page scan: up to three more pages for the P1 / P2 / P3 readings phase 1 did not meet.
+      const phase2 = async (result: Result, candidates: string[]) => {
+        const wanted = (["P1", "P2", "P3"] as const).filter((id) => result.checks[id].state !== "met")
+        return wanted.length && candidates.length ? withDiscovered(result, await discoverIsolated(p, candidates, [...wanted])) : result
+      }
       if (rescanHtml) {
         // A program with no cache keeps P5 and P6 as the scan leaves them (PageSpeed not run, P6 not asked).
-        const { result } = await scanIsolated(p, { scan: true, psi: false }, 120_000)
+        const { result: scanned, candidates } = await scanIsolated(p, { scan: true, psi: false }, 120_000)
+        const result = await phase2(scanned, candidates)
         r = cached ? { ...result, checks: { ...result.checks, P5: cached.checks.P5, P6: cached.checks.P6 } } : result
       } else if (cached && !wantPsi) {
         r = cached
       } else {
-        const { result, psi429 } = await scanIsolated(p, { scan: !cached, psi: wantPsi }, wantPsi ? 240_000 : 120_000)
+        const { result: scanned, psi429, candidates } = await scanIsolated(p, { scan: !cached, psi: wantPsi }, wantPsi ? 240_000 : 120_000)
+        const result = cached ? scanned : await phase2(scanned, candidates)
         r = cached && wantPsi ? { ...cached, checks: { ...cached.checks, P5: result.checks.P5 } } : result
         if (psi429 && !psiStopped) psiStopped = `PageSpeed 429 at ${p.slug}`
       }
