@@ -13,7 +13,8 @@ import { readdirSync, readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { parse } from "yaml"
-import { freshnessLine } from "../src/lib/best-lists"
+import { directorySentence, freshnessLine } from "../src/lib/best-lists"
+import sitemap from "../src/app/sitemap"
 import { programs } from "../src/lib/programs"
 import registry from "../src/lib/registry.json"
 import { programMd } from "./generate-md"
@@ -123,4 +124,39 @@ test("REST and MCP give a no-program brand statusCheckedAt, never lastVerifiedAt
       assert.equal(body.statusCheckedAt, p.lastVerifiedAt, `${p.slug} statusCheckedAt`)
     }
   }
+})
+
+// The homepage meta description says the same numbers, as one sentence.
+test("the homepage count sentence equals the registry's", () => {
+  const y = fromYaml()
+  const n = (x: number) => x.toLocaleString("en-US")
+  assert.equal(
+    directorySentence(programs),
+    `OpenAffiliate is an open directory and database of ${n(y.live)} affiliate programs; ${n(y.verified)} have their terms verified on the brand's own page, last checked ${y.checked}.`
+  )
+})
+
+// A program URL's lastmod is the latest date its own YAML carries, never an
+// older one, and the OAS report pages stay out of the sitemap (they stay live).
+test("sitemap: program lastmod is the YAML's latest date; no OAS report URLs", () => {
+  const day = (d: unknown) => (d instanceof Date ? d.toISOString() : String(d)).slice(0, 10)
+  const dir = join(root, "programs")
+  const want = new Map<string, string | undefined>(
+    readdirSync(dir)
+      .filter((f) => f.endsWith(".yaml"))
+      .map((f) => {
+        const r = parse(readFileSync(join(dir, f), "utf8")) as Record<string, unknown>
+        const dates = [r.created_at, r.updated_at, r.last_verified_at].filter((d) => d != null && d !== "").map(day).sort()
+        return [`https://openaffiliate.dev/programs/${f.slice(0, -".yaml".length)}`, dates.at(-1)] as const
+      })
+  )
+  const entries = sitemap()
+  assert.deepEqual(entries.filter((e) => /\/programs\/[^/]+\/oas$/.test(e.url)).map((e) => e.url), [])
+  let seen = 0
+  for (const e of entries) {
+    if (!want.has(e.url)) continue
+    assert.equal(e.lastModified, want.get(e.url), e.url)
+    seen++
+  }
+  assert.equal(seen, want.size)
 })
