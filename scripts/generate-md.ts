@@ -60,6 +60,7 @@ import {
   VERIFIED_NOTE,
   bestListCopy,
   bestPath,
+  getBestList,
   otherLists,
   buildBestList,
   freshnessLine,
@@ -78,6 +79,7 @@ import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
+  NOT_STATED,
   checkedRange,
   checkedText,
   cookieText,
@@ -91,6 +93,9 @@ import {
   type BestPost,
   type PostSelection,
 } from "../src/lib/best-posts"
+
+import { alsoConsidered, approvalText, goodWatch, methodsText, picksSentence, runsOnText, standardFaq, typeSplit, typeText } from "../src/lib/best-standard"
+import { leadReceipt, termReceipts } from "../src/lib/term-receipts"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1289,6 +1294,7 @@ function bestListMd(list: BestList, path: string): string {
  * page's blogApplyHref.
  */
 function bestPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  if (post.layout === "standard") return standardPostMd(post, selection, path)
   const range = checkedRange(selection)
   const rows = selection.shown
     .map(({ program: p, copy }, i) => {
@@ -1310,6 +1316,59 @@ function bestPostMd(post: BestPost, selection: PostSelection, path: string): str
       "How we chose",
       [`${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`, ...(post.leftOut ?? []).map(l => `Left out: ${mdEscape(l.name)}, ${mdEscapeProse(l.reason)}`)].join("\n\n"),
     ),
+    faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
+    section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ].filter((x): x is string => Boolean(x)))
+}
+
+/**
+ * The twin of a standard post (components/best-post-standard.tsx), in the
+ * page's order: intro, programs with verdict, facts, Good / Watch out and the
+ * quote we checked, what to look for with the chart's counts, also
+ * considered, how we chose, FAQ. Every figure from the same functions.
+ */
+function standardPostMd(post: BestPost, selection: PostSelection, path: string): string {
+  const range = checkedRange(selection)
+  const split = typeSplit(post, selection)
+  const lede = picksSentence(post, selection)
+  const rows = selection.shown
+    .map(({ program: p, copy }, i) => {
+      const methods = methodsText(p)
+      const facts = mdEscape(
+        `you earn ${earnText(p)}, type: ${typeText(p)}, cookie: ${cookieText(p, NOT_STATED)}, payout: ${payoutText(p, NOT_STATED)}${methods ? ` (${methods})` : ""}, approval: ${approvalText(p)}, runs on: ${runsOnText(p)}, terms checked ${checkedText(p)}`,
+      )
+      const { good, watch } = goodWatch(p)
+      const receipt = leadReceipt(termReceipts(p.slug, p.url))
+      return [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${copy.verdict ? mdEscapeProse(copy.verdict) : ""}`,
+        `   ${facts}, apply: ${mdUrl(blogApplyHref(p, post.slug))}`,
+        `   ${mdEscapeProse(copy.why)}`,
+        good.length ? `   Good: ${mdEscape(good.join("; "))}.` : null,
+        watch.length ? `   Watch out: ${mdEscape(watch.join("; "))}.` : null,
+        receipt ? `   Source: "${mdEscape(receipt.quote)}" (${mdEscape(receipt.source)}, checked ${receipt.checked})` : null,
+      ].filter(Boolean).join("\n")
+    })
+    .join("\n")
+  const lookFor = post.lookFor
+    ? [
+        mdEscapeProse(post.lookFor.intro),
+        ...post.lookFor.criteria.map((c) => `- **${mdEscape(c.name)}**: ${mdEscapeProse(c.text)}${c.link ? ` ${mdEscape(c.link.label)}: ${BASE}${c.link.href}` : ""}`),
+        `How ${(getBestList(post.slug)?.query ?? "these programs").toLowerCase()} pay, ${split.total} live verified programs, terms checked up to ${split.asOf}: ${split.rows.map((r) => `${r.label} ${r.count}`).join(", ")}.`,
+      ].join("\n\n")
+    : null
+  const considered = alsoConsidered(post, selection)
+    .map((g) => `- ${mdEscape(g.reason)}${g.link ? ` (${mdEscape(g.link.label)}: ${BASE}${g.link.href})` : ""}: ${g.programs.map((p) => mdEscape(p.name)).join(", ")}`)
+    .join("\n")
+  const faq = standardFaq(post, selection, split, mdEscape)
+  return joinSections([
+    `# ${mdHeading(postTitle(post, selection))}`,
+    range ? `By the OpenAffiliate team · Terms checked ${range[0]} to ${range[1]}` : null,
+    `> ${mdEscapeProse(post.intro)}${lede ? ` ${mdEscape(lede)}` : ""}`,
+    DISCLOSURE,
+    section("Programs", rows),
+    post.lookFor ? section(mdEscape(post.lookFor.heading), lookFor) : null,
+    considered ? section("Also considered", considered) : null,
+    section("How we chose", `${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE}`),
     faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
   ].filter((x): x is string => Boolean(x)))

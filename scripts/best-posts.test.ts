@@ -12,6 +12,13 @@ import { blogEntries } from "../src/lib/blog"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { hasNoProgram } from "../src/lib/no-program"
+import { existsSync, statSync } from "node:fs"
+import { join } from "node:path"
+import { BestPostStandard } from "../src/components/best-post-standard"
+import { standardFaq, typeSplit } from "../src/lib/best-standard"
+import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
+import { leadReceipt, parseReceipts } from "../src/lib/term-receipts"
+import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
   POSTS,
@@ -297,5 +304,104 @@ test("guides are on /blog, in the sitemap, and never under /best", () => {
     assert.ok(posts.some((e) => e.href === guidePath(g)), `${g.slug}: not on /blog`)
     assert.ok(urls.has(`https://openaffiliate.dev${guidePath(g)}`), `${g.slug}: not in the sitemap`)
     assert.ok(!listSlugs.has(g.slug), `${g.slug}: also a /best list slug`)
+  }
+})
+
+// ---------- standard "best X" layout (components/best-post-standard.tsx) ----
+
+function renderStandard(post: (typeof POSTS)[number]) {
+  const list = postList(post)!
+  const selection = postSelection(post, new Date(post.checked))
+  const html = renderToStaticMarkup(
+    createElement(BestPostStandard, { post, list, selection, path: bestPath(list), parent: { name: "Best Affiliate Programs", href: "/best" } }),
+  )
+  return { html, selection }
+}
+
+test("a standard post: eight table columns, every anchor lands on a section, FAQ JSON-LD matches, Apply links carry the blog UTM", () => {
+  const standard = POSTS.filter((p) => p.layout === "standard")
+  assert.ok(standard.length > 0, "no post opts into the standard layout")
+  for (const post of standard) {
+    assert.ok(post.lookFor && post.programs.every((p) => p.verdict), `${post.slug}: a standard post needs lookFor and a verdict per program`)
+    const { html, selection } = renderStandard(post)
+    const table = html.match(/<table data-terms-table[\s\S]*?<\/thead>/)![0]
+    const heads = [...table.matchAll(/<th[^>]*scope="col"[^>]*>[\s\S]*?<button[^>]*>([^<]+)/g)].map((m) => m[1].trim())
+    assert.deepEqual(heads, ["Program", "Best for", "You earn", "Type", "Cookie", "Approval", "Payout", "Checked"])
+    const ids = new Set([...html.matchAll(/\sid="([^"]+)"/g)].map((m) => m[1]))
+    const anchors = [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1])
+    assert.ok(anchors.length > selection.shown.length * 2, `${post.slug}: too few in-page links`)
+    for (const a of anchors) assert.ok(ids.has(a), `${post.slug}: #${a} has no section`)
+    for (const { program } of selection.shown) {
+      assert.ok(ids.has(program.slug), `${post.slug}: no section for ${program.slug}`)
+      const href = blogApplyHref(program, post.slug)
+      assert.ok(html.includes(`href="${href.replaceAll("&", "&amp;")}"`), `${post.slug}: no Apply link for ${program.slug}`)
+    }
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
+    const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
+    const faq = standardFaq(post, selection, typeSplit(post, selection))
+    assert.ok(faq.length >= 5 && faq.length <= 7, `${post.slug}: ${faq.length} FAQ questions`)
+    assert.deepEqual(faqLd.mainEntity.map((q: { name: string }) => q.name), faq.map((f) => f.q))
+    for (const q of faqLd.mainEntity) {
+      assert.equal(q["@type"], "Question")
+      assert.equal(q.acceptedAnswer["@type"], "Answer")
+      assert.doesNotMatch(q.acceptedAnswer.text, /undefined|NaN|null|\[object/)
+    }
+    assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>/g, ""), />[^<]*\b(undefined|NaN)\b[^<]*</)
+    assert.ok(html.includes("data-post-disclosure") && html.includes("data-how-we-chose") && html.includes("data-type-chart"))
+    // "What changed this month" sits at the bottom, after the FAQ.
+    if (html.includes('id="what-changed"')) assert.ok(html.indexOf('id="what-changed"') > html.indexOf('id="faq"'))
+  }
+})
+
+test("a standard post shows a capture or a stated fallback for every program, each capture on disk and in budget", () => {
+  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+    const { html, selection } = renderStandard(post)
+    for (const { program } of selection.shown) {
+      const c = CAPTURES[program.slug]
+      if (c) {
+        const file = join(process.cwd(), "public", c.src)
+        assert.ok(existsSync(file), `${program.slug}: ${c.src} is missing`)
+        assert.ok(statSync(file).size < 120_000, `${program.slug}: ${c.src} is over 120 KB`)
+        assert.match(c.captured, /^\d{4}-\d{2}-\d{2}$/)
+        assert.equal(blockedReason(c.url), null, `${program.slug}: captured a blocked host`)
+        assert.ok(html.includes(`alt="${program.name} affiliate page, captured `), `${program.slug}: no alt text`)
+      } else {
+        assert.ok(CAPTURE_SKIPPED[program.slug], `${program.slug}: no capture and no stated reason`)
+      }
+    }
+    const fallbacks = (html.match(/data-capture-fallback/g) ?? []).length
+    assert.equal(fallbacks, selection.shown.filter(({ program }) => !CAPTURES[program.slug]).length)
+  }
+})
+
+test("receipts: only a quoted line with one source, attached to the next key, short, linked only to the brand's own site", () => {
+  const yaml = [
+    '# "earn up to $500 per sale" (brand.com/affiliates, checked 2026-10-13)',
+    "commission:",
+    "  type: one-time",
+    '# "30 days" (brand.com/a, checked 2026-10-13) vs "60 days" (brand.com/b, checked 2026-10-13)',
+    "",
+    '# cookie: "Your referrals have 60 days" (https://www.brand.com/faq, checked 2026-10-12)',
+    "cookie_days: 60",
+    '# "paid monthly" (other.com/terms, checked 2026-10-12)',
+    "",
+    "payout:",
+    `# "${"word ".repeat(30).trim()}" (brand.com/terms, checked 2026-10-12)`,
+    "approval: manual",
+  ].join("\n")
+  const r = parseReceipts(yaml, "https://brand.com")
+  assert.deepEqual(r.map((x) => [x.field, x.quote, x.href]), [
+    ["commission", "earn up to $500 per sale", "https://brand.com/affiliates"],
+    ["cookie", "Your referrals have 60 days", "https://www.brand.com/faq"],
+  ])
+  assert.equal(parseReceipts('# "a b c" (evil.com/x, checked 2026-10-12)\napproval: auto', "https://brand.com")[0].href, null)
+  const lead = leadReceipt(parseReceipts('# "€20.00" and "€250.00" (b.com, checked 2026-10-12)\ncommission:\n# "after a sixty day wait" (b.com, checked 2026-10-12)\npayout:', "https://b.com"))
+  assert.equal(lead?.field, "payout")
+})
+
+test("only the posts that opt in render the standard layout", () => {
+  for (const post of POSTS) {
+    if (post.layout === "standard") continue
+    assert.equal(post.lookFor, undefined, `${post.slug}: lookFor without layout "standard" is never shown`)
   }
 })

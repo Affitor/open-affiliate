@@ -30,6 +30,15 @@ export interface PostProgram {
   why: string
   /** When the program is the wrong pick, said plainly. */
   notFor?: string
+  /** One sentence on who should pick it; the standard layout opens the program's section with it. */
+  verdict?: string
+}
+
+/** "What to look for in X programs" on a standard post: the criteria that matter in this niche. */
+export interface LookFor {
+  heading: string
+  intro: string
+  criteria: { name: string; text: string; link?: { href: string; label: string } }[]
 }
 
 export interface BestPost {
@@ -53,6 +62,20 @@ export interface BestPost {
   related: string[]
   /** The registry category whose /categories page links to this post under "Posts about". */
   category?: string
+  /**
+   * "standard" renders the post with the standard "best X" structure
+   * (components/best-post-standard.tsx). Without it the post keeps the
+   * original layout (components/best-post-view.tsx).
+   */
+  layout?: "standard"
+  /** Standard layout: the guidance section. */
+  lookFor?: LookFor
+  /**
+   * Standard layout: the registry programs this post is about, beyond the
+   * ones it shows. Those not shown are listed under "Also considered" with
+   * the reason the data gives, and the verified ones feed the chart.
+   */
+  considered?: (p: Program) => boolean
 }
 
 export const POSTS: BestPost[] = [
@@ -204,17 +227,20 @@ export function earnText(p: Program): string {
   return c.type === "recurring" && !saysHow && length.startsWith("for ") ? `${typed} ${length}` : `${typed}, ${length}`
 }
 
-export function cookieText(p: Program): string {
-  return p.cookieDays != null ? `${p.cookieDays} days` : "Not published"
+/** An empty term on a standard post: the brand does not publish it, and we never fill a guess. */
+export const NOT_STATED = "Not stated by the brand"
+
+export function cookieText(p: Program, empty = "Not published"): string {
+  return p.cookieDays != null ? `${p.cookieDays} days` : empty
 }
 
-export function payoutText(p: Program): string {
+export function payoutText(p: Program, empty = "Not published"): string {
   const f = p.payout.frequency
   const parts = [
     f ? frequencyLabel(f) : null,
     p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null ? `${minimumAmount(p.payout.minimum, p.payout.currency)} minimum` : null,
   ].filter(Boolean)
-  if (!parts.length) return "Not published"
+  if (!parts.length) return empty
   const text = parts.join(", ")
   return text[0].toUpperCase() + text.slice(1)
 }
@@ -279,10 +305,11 @@ export function copyStrings(post: BestPost): string[] {
     post.description,
     post.intro,
     post.howWeChose,
-    ...post.programs.flatMap((p) => [p.bestFor, p.why, p.notFor ?? ""]),
+    ...post.programs.flatMap((p) => [p.bestFor, p.why, p.notFor ?? "", p.verdict ?? ""]),
     ...post.picks.map((p) => p.label),
     ...(post.leftOut ?? []).flatMap((l) => [l.name, l.reason]),
     ...(post.faq ?? []).flatMap((f) => [f.q, f.a]),
     ...(post.affitor ? [post.affitor.before, post.affitor.anchor, post.affitor.after] : []),
+    ...(post.lookFor ? [post.lookFor.heading, post.lookFor.intro, ...post.lookFor.criteria.flatMap((c) => [c.name, c.text, c.link?.label ?? ""])] : []),
   ].filter(Boolean)
 }

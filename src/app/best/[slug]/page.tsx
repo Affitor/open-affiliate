@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { TrackPageView } from "@/components/track-page-view";
 import { BestListView, bestListMetadata } from "@/components/best-list-view";
 import { BestPostView, bestPostMetadata } from "@/components/best-post-view";
+import { BestPostStandard } from "@/components/best-post-standard";
 import { BEST_INDEX, BEST_LISTS, bestPath, getBestList } from "@/lib/best-lists";
 import { readyPost } from "@/lib/best-posts";
 
@@ -36,7 +37,9 @@ export default async function BestListPage({
   return (
     <>
       <TrackPageView />
-      {ready ? (
+      {ready?.post.layout === "standard" ? (
+        <BestPostStandard post={ready.post} list={list} selection={ready.selection} path={bestPath(list)} parent={parent} />
+      ) : ready ? (
         <BestPostView post={ready.post} list={list} selection={ready.selection} path={bestPath(list)} parent={parent} />
       ) : (
         <BestListView list={list} path={bestPath(list)} parent={parent} />
