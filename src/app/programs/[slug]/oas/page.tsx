@@ -8,6 +8,7 @@ import { ShareButton } from "@/components/share-button";
 import { OasGradeChip } from "@/components/oas-grade";
 import { categoryToSlug, getProgram, livePrograms } from "@/lib/programs";
 import { isAffitorHref } from "@/lib/affitor-link";
+import { machineChecks, provenanceOf } from "@/lib/oas-machine";
 import {
   buildBoard,
   categoryRank,
@@ -178,6 +179,8 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
   const value = oasValue(score);
   const scored = value != null;
+  // Hidden a day before it lapses: the page is cached for up to a day (revalidate).
+  const machine = machineChecks(slug, new Date(), revalidate / 86400);
   const board = buildBoard(oasScores, livePrograms, new Date());
   const row = board.find((r) => r.program.slug === slug);
   const rankLine = rankText(categoryRank(board, slug));
@@ -306,6 +309,25 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
         <div className="flex items-baseline justify-between gap-3 mb-3"><h3 id="v-h" className="font-semibold">Partner value</h3>{partTotal("partner_value", v)}</div>
         <Accordion groups={v} date={score.checked_at} pageUrl={score.page_url} scored={scored} />
       </section>
+
+      {machine.length > 0 && (
+        <section className="mt-12" aria-labelledby="machine-h">
+          <h2 id="machine-h" className="text-lg font-semibold">Machine checks · not counted in OAS</h2>
+          <p className="text-meta text-muted-foreground mt-1">
+            Read automatically from public data, measured {machine[0].measuredAt}, valid until {machine[0].validUntil}. They inform the next OAS version and do not change this score.
+          </p>
+          <ul className="mt-4 divide-y divide-border border-y border-border">
+            {machine.map((c) => (
+              <li key={c.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-1 py-3">
+                <span className="font-medium">{c.label}</span>
+                <span className={`font-mono text-sm ${c.met ? "text-good" : "text-muted-foreground"}`}>{c.met ? "Met" : "Not met"}</span>
+                <span className="col-span-2 text-sm text-muted-foreground">{c.reading}</span>
+                <span className="col-span-2 text-meta text-muted-foreground break-all">{provenanceOf(c)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <div className="mt-10 border-t border-border pt-6 text-meta text-muted-foreground max-w-3xl">
         <p>

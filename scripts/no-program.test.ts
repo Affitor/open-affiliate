@@ -19,6 +19,7 @@ import { test } from "node:test"
 import { parse } from "yaml"
 import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
 import { oasSummary } from "../src/lib/oas"
+import { machineChecks } from "../src/lib/oas-machine"
 import { buildFaq } from "../src/lib/program-seo"
 import { getProgram, isLive, programs } from "../src/lib/programs"
 import { getRelatedPrograms } from "../src/components/related-programs"
@@ -86,9 +87,11 @@ test("the CLI already on npm reads a no-program response without crashing or pri
 test("a live program keeps its terms on both surfaces", async () => {
   const live = programs.find((p) => isLive(p) && p.verified)!
   // Terms unchanged; a scored program also carries the OAS its page shows (oas-surfaces.test.ts).
-  const { oas, ...terms } = apiProgram(live) as typeof live & { oas?: unknown }
+  const { oas, oasMachineChecks, ...terms } = apiProgram(live) as typeof live & { oas?: unknown; oasMachineChecks?: unknown }
   assert.deepEqual(terms, live)
   assert.deepEqual(oas, oasSummary(live.slug) ?? undefined)
+  const machine = machineChecks(live.slug)
+  assert.deepEqual(oasMachineChecks, machine.length ? machine : undefined)
   const body = await mcpGetProgram(live.slug)
   assert.deepEqual(body.commission, JSON.parse(JSON.stringify(live.commission)))
   assert.equal("answer" in body, false)

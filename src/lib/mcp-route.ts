@@ -268,6 +268,23 @@ const programOutputSchema = {
     version: z.string().describe("Scoring method version, such as v1"),
     reportUrl: z.string().describe("The program's full OAS report"),
   }).optional().describe("OAS, the OpenAffiliate Score: how clearly the program publishes its terms and protects its partners. Omitted when the program is not scored or OAS is not published"),
+  oasMachineChecks: z.array(z.object({
+    id: z.enum(["A1", "P5", "P6"]).describe("A1 program page is live; P5 Core Web Vitals (mobile); P6 estimated monthly brand-query search volume (Google Ads, worldwide)"),
+    label: z.string().describe("The check's name as the report shows it"),
+    met: z.boolean().describe("True when the check is met"),
+    reading: z.string().describe("What was measured, in words, naming its data and thresholds"),
+    source: z.enum(["http", "pagespeed", "dataforseo"]).describe("Where the reading comes from"),
+    target: z.string().describe("What was measured: the listed program URL (A1), the brand URL (P5) or the exact search query (P6)"),
+    measurement: z.union([
+      z.object({ status: z.literal(200).describe("HTTP status of the listed program page") }),
+      z.object({ data: z.literal("field").describe("Real-user data (Chrome UX Report)"), notGood: z.array(z.string()).describe("Core Web Vitals not in the good range; empty when all are") }),
+      z.object({ data: z.literal("lab").describe("Lab test, no real-user data"), lcpMs: z.number().describe("Largest Contentful Paint, ms"), cls: z.number().describe("Cumulative Layout Shift"), tbtMs: z.number().describe("Total Blocking Time, ms, standing in for INP") }),
+      z.object({ scope: z.literal("worldwide").describe("Search volume scope"), threshold: z.number().describe("Monthly searches the check requires"), reached: z.boolean().describe("Whether the estimate reaches the threshold") }),
+    ]).describe("The typed measurement behind the reading"),
+    ruleset: z.string().describe("The rule set that produced the reading"),
+    measuredAt: z.string().describe("Measurement date, YYYY-MM-DD"),
+    validUntil: z.string().describe("First day the reading lapses (90 days after measuredAt), YYYY-MM-DD"),
+  })).optional().describe("Machine checks shown on the OAS report, not counted in OAS; omitted when there are none to show"),
   kind: z.enum(["affiliate", "referral", "creator-payout", "revenue-share", "cashback", "partner-network"]).optional()
     .describe("Income program model: affiliate commissions, customer referrals, creator payouts, revenue sharing, cashback or a partner network; omitted when unspecified or discontinued/no_program"),
   statusCheckedAt: z.string().optional().describe("YYYY-MM-DD date the discontinued/no_program status was checked, not verification of terms; omitted for other statuses or when no check date is stored"),

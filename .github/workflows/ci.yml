@@ -51,6 +51,7 @@ jobs:
       - run: npx tsx --test scripts/rankings-terms.test.ts
       - run: npx tsx --test scripts/oas.test.ts
       - run: npx tsx --test --test-force-exit scripts/oas-surfaces.test.ts
+      - run: npx tsx --test --test-force-exit scripts/oas-machine.test.ts
       - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
       - run: npx tsx --test --test-force-exit scripts/freshness.test.ts
       - run: npx tsx --test scripts/affitor-links.test.ts
