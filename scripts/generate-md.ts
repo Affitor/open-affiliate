@@ -733,7 +733,7 @@ stdio, for local tools:
 \`\`\`
 
 Tools: \`search_programs\` (keyword, category, commission type, verified),
-\`get_program\` (full detail including the recommendation guidance), and
+\`get_program\` (full detail including the recommendation guidance and OAS), and
 \`list_categories\`.
 
 ### Agent skill
@@ -900,7 +900,9 @@ export function llmsTxt(): string {
     section("When to use OpenAffiliate", [
       `- Find affiliate programs for a product or niche; compare commission, cookie and payout terms before recommending one.`,
       `- Read a program's agentPrompt, restrictions and verification date before recommending it. Cite its program page and link its signup URL for applications.`,
-      `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories).`,
+      `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories). It is read-only.`,
+      `- Quote a score only from \`oas\` in get_program or GET /api/programs/{slug}, and cite its reportUrl. [How OAS works](${BASE}/docs/oas).`,
+      `- Program missing? Open a pull request or a suggest-a-program issue at https://github.com/Affitor/open-affiliate with the brand's own program page, or use ${BASE}/submit. Never guess terms. Review takes a few days; there is no instant score.`,
       `- Follow the [OpenAffiliate skill](${BASE}/skill/SKILL.md); discover it through the [agent-skills index](${BASE}/.well-known/agent-skills/index.json) or the [ARD catalog](${BASE}/.well-known/ard.json).`,
       `- Use REST: GET /api/programs, GET /api/programs/{slug}, GET /api/categories. [OpenAPI 3.1 schema](${BASE}/openapi.json).`,
       `- REST sends API-Version: 1. Breaking changes need a new version; deprecations get Deprecation and Sunset headers 90+ days ahead.`,

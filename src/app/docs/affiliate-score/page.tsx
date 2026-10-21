@@ -7,7 +7,7 @@ import { CodeBlock } from "@/components/code-block";
 export const metadata: Metadata = {
   title: "Affiliate Score",
   description:
-    "How the Affiliate Score algorithm ranks programs from 0 to 100.",
+    "The older 0 to 100 score behind the /best list and the badge.",
 };
 
 export default function AffiliateScorePage() {
@@ -16,7 +16,7 @@ export default function AffiliateScorePage() {
       <DocsHeader
         group="References"
         title="Affiliate Score"
-        description="How the Affiliate Score algorithm ranks programs from 0 to 100."
+        description="The older 0 to 100 score behind the /best list and the badge."
       />
 
       <div className="space-y-10">
@@ -27,8 +27,23 @@ export default function AffiliateScorePage() {
           </h2>
           <p className="text-base text-muted-foreground leading-relaxed">
             The Affiliate Score is a composite metric (0-100) that ranks
-            affiliate programs based on their value to affiliates. It is used
-            across rankings, recommendations, and comparisons.
+            affiliate programs based on their value to affiliates. It orders
+            the main{" "}
+            <Link href="/best" className="text-foreground hover:underline">
+              best affiliate programs
+            </Link>{" "}
+            list, the featured programs on the homepage and the SVG badge.
+          </p>
+          <p className="text-base text-muted-foreground leading-relaxed mt-3">
+            <Link href="/rankings" className="text-foreground hover:underline">
+              /rankings
+            </Link>{" "}
+            and the homepage rankings use a different score:{" "}
+            <Link href="/docs/oas" className="text-foreground hover:underline">
+              OAS, the OpenAffiliate Score
+            </Link>
+            , which reads how clearly a program publishes its terms and never
+            the size of the commission.
           </p>
           <p className="text-base text-muted-foreground leading-relaxed mt-3">
             Every input is a structured field of the program&apos;s YAML file.
