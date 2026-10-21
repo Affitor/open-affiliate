@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { commissionChip, cookieChip } from "@/lib/program-chips";
+import { payoutMinText } from "@/lib/rankings-terms";
 import {
   networkToSlug,
   slugToNetwork,
@@ -276,7 +277,7 @@ export default async function NetworkPage({
                         <span className={`font-mono text-meta ${chip === "Rate not published" ? "text-muted-foreground" : "font-medium"}`}>{chip}</span>
                       </td>
                       <td className="py-2.5 px-3 hidden sm:table-cell font-mono text-xs text-muted-foreground">{cookieChip(program)}</td>
-                      <td className="py-2.5 px-3 hidden md:table-cell font-mono text-xs text-muted-foreground">{program.payout.minimum != null ? `$${program.payout.minimum}` : "—"}</td>
+                      <td className="py-2.5 px-3 hidden md:table-cell font-mono text-xs text-muted-foreground">{payoutMinText(program.payout.minimum, program.payout.currency) ?? "—"}</td>
                       <td className="py-2.5 px-3 hidden lg:table-cell text-meta text-muted-foreground">{program.category}</td>
                     </tr>
                   );

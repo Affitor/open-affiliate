@@ -32,11 +32,21 @@ export function recurringText(months: number | null | undefined): string {
   return months >= 24 && months % 12 === 0 ? `${months / 12} years` : `${months} months`
 }
 
+/**
+ * A payout minimum in the program's own currency: "$50" for US dollars, "50 EUR"
+ * for any other code. The schema defaults payout.currency to USD, so a minimum
+ * stored with no currency reads as dollars. Every surface that prints
+ * payout.minimum words the amount here.
+ */
+export function minimumAmount(minimum: number, currency: string | null | undefined): string {
+  return !currency || currency === "USD" ? `$${minimum.toLocaleString("en-US")}` : `${minimum.toLocaleString("en-US")} ${currency}`
+}
+
 /** "$50", "None" for a zero minimum, null when the program does not publish one. */
 export function payoutMinText(minimum: number | null | undefined, currency: string | null | undefined): string | null {
   if (minimum == null) return null
   if (minimum === 0) return "None"
-  return !currency || currency === "USD" ? `$${minimum.toLocaleString("en-US")}` : `${minimum.toLocaleString("en-US")} ${currency}`
+  return minimumAmount(minimum, currency)
 }
 
 /**

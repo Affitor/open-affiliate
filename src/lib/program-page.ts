@@ -3,6 +3,7 @@ import { namesTerm, proseSentences, statesTerms, termsConfirmed } from "@/lib/co
 import { hasNoProgram } from "@/lib/no-program"
 import { frequencyLabel } from "@/lib/claims/form"
 import { isPaused } from "@/lib/program-seo"
+import { minimumAmount } from "@/lib/rankings-terms"
 
 /**
  * Wording for the human-first program page (approved mock B+, 2026-10-17):
@@ -126,12 +127,12 @@ export function answerParts(p: Program, noProgramHeadline: string): { before: st
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
-/** "Monthly, from a $50 minimum"; null when neither is stored. */
+/** "Monthly, from a $50 minimum", or "from a 50 EUR minimum" in another currency; null when neither is stored. */
 export function payoutText(p: Program): string | null {
   const parts: string[] = []
   if (p.payout?.frequency) parts.push(frequencyLabel(p.payout.frequency))
   if (p.payout?.minimum != null) {
-    const min = p.payout.minimum === 0 ? "no minimum" : `from a $${p.payout.minimum} minimum`
+    const min = p.payout.minimum === 0 ? "no minimum" : `from a ${minimumAmount(p.payout.minimum, p.payout.currency)} minimum`
     parts.push(parts.length ? min : min.charAt(0).toUpperCase() + min.slice(1))
   }
   return parts.length ? parts.join(", ") : null

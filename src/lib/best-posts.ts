@@ -2,6 +2,7 @@ import { countTitle, getBestList, listCommissionText, type BestList } from "./be
 import { commissionUnknown, getProgram, isLive, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import { frequencyLabel } from "./claims/form"
+import { minimumAmount } from "./rankings-terms"
 import type { Faq } from "./program-seo"
 import { post as aiAffiliatePrograms } from "../content/best/ai-affiliate-programs"
 import { post as recurringAffiliatePrograms } from "../content/best/recurring-affiliate-programs"
@@ -211,7 +212,7 @@ export function payoutText(p: Program): string {
   const f = p.payout.frequency
   const parts = [
     f ? frequencyLabel(f) : null,
-    p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null && p.payout.currency === "USD" ? `$${p.payout.minimum} minimum` : null,
+    p.payout.minimum === 0 ? "no minimum" : p.payout.minimum != null ? `${minimumAmount(p.payout.minimum, p.payout.currency)} minimum` : null,
   ].filter(Boolean)
   if (!parts.length) return "Not published"
   const text = parts.join(", ")
