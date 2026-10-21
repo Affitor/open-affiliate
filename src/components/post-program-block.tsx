@@ -38,6 +38,7 @@ export function PostProgramBlock({ program, copy, index, campaign }: { program: 
         <PostApplyLink
           href={blogApplyHref(program, campaign)}
           slug={program.slug}
+          network={program.network}
           post={campaign}
           className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-3 text-meta font-medium text-primary-foreground hover:bg-primary/90"
         >

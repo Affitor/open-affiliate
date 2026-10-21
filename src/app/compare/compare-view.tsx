@@ -52,6 +52,8 @@ export interface CompareProgram {
   approval?: string;
   approvalTime?: string;
   network: string;
+  /** The registry network key, for apply_click (network is the display name). */
+  networkKey?: string;
   marketingMaterials?: boolean;
   apiAvailable?: boolean;
   dedicatedManager?: boolean;
@@ -589,6 +591,7 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                           source="compare"
                           slug={p.slug}
                           cta="join"
+                          applyNetwork={p.networkKey}
                           newTab
                           className="inline-flex items-center gap-1.5 rounded-lg bg-foreground text-background px-4 py-2 text-xs font-medium hover:bg-foreground/90 transition-colors"
                         >

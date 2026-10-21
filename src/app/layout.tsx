@@ -127,7 +127,7 @@ function Footer() {
         </div>
         <div className="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-border pt-4">
           <p>
-            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
+            OpenAffiliate is maintained by <AffitorLink href={affitorUrl("footer", "sitewide")} source="footer" cta="maintainer" className="text-foreground underline underline-offset-4 decoration-line-strong hover:decoration-current">Affitor</AffitorLink>. Listings are free; rankings are never paid.
           </p>
           <div className="flex items-center gap-4">
             <span>Open source · MIT</span>

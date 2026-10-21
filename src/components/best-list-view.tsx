@@ -231,6 +231,7 @@ export function BestListView({
                         source="list"
                         slug={program.slug}
                         cta="sign_up"
+                        applyNetwork={program.network ?? IN_HOUSE}
                         newTab
                         className="whitespace-nowrap underline decoration-line-strong underline-offset-4 hover:decoration-current"
                       >

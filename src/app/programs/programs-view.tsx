@@ -25,7 +25,7 @@ import {
   type SortOption,
 } from "@/lib/client-programs";
 import { networkName } from "@/lib/network-meta";
-import { track } from "@/lib/track";
+import { capture, track } from "@/lib/track";
 import { LONG_COOKIE_DAYS, type PayoutMethodFilter } from "@/lib/payout-filters";
 
 const PAGE_SIZE_OPTIONS = [25, 50, 100] as const;
@@ -246,6 +246,20 @@ function ProgramsContent() {
     }, 800);
     return () => clearTimeout(timer);
   }, [query, filtered.length]);
+
+  // directory_filter: one event per change of category or type, after the
+  // reader settles (a quick run of changes sends only the last). The values
+  // the page opened with (from the URL) are not a change.
+  const lastFilter = useRef({ category: selectedCategory, type: selectedType });
+  useEffect(() => {
+    const last = lastFilter.current;
+    if (last.category === selectedCategory && last.type === selectedType) return;
+    const timer = setTimeout(() => {
+      lastFilter.current = { category: selectedCategory, type: selectedType };
+      capture("directory_filter", { category: selectedCategory || null, type: selectedType || null });
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [selectedCategory, selectedType]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
   const currentPage = Math.min(page, totalPages);

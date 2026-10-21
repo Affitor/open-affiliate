@@ -7,6 +7,7 @@ import { Turnstile } from "@/components/turnstile";
 import { Input } from "@/components/ui/input";
 import { AffitorLink } from "@/components/affitor-link";
 import { affitorUrl } from "@/lib/affitor-link";
+import { capture } from "@/lib/track";
 import { changesFrom, touchesMoney, type ProgramValues } from "@/lib/claims/form";
 import {
   EarnSection,
@@ -51,6 +52,16 @@ async function fetchOwner(slug: string): Promise<{ stats: Stats | null } | null>
     return null;
   }
 }
+
+// Funnel events by claims action: a claim starts when its first step is
+// accepted and is done when the server confirms the owner. A report is not a claim.
+const CLAIM_EVENTS: Record<string, [event: string, method: string]> = {
+  "send-code": ["claim_start", "email"],
+  "dns-start": ["claim_start", "dns"],
+  manual: ["claim_start", "manual"],
+  verify: ["claim_done", "email"],
+  "dns-check": ["claim_done", "dns"],
+};
 
 export function ClaimFlow({
   slug,
@@ -132,8 +143,11 @@ export function ClaimFlow({
         body: JSON.stringify({ slug, ...body }),
       });
       const data = await res.json().catch(() => ({}));
-      if (res.ok) onOk(data);
-      else setError(res.status === 503 ? "Claims are not available right now." : (data.message ?? "Something went wrong. Try again."));
+      if (res.ok) {
+        const funnel = CLAIM_EVENTS[action];
+        if (funnel && !body.report) capture(funnel[0], { slug, method: funnel[1] });
+        onOk(data);
+      } else setError(res.status === 503 ? "Claims are not available right now." : (data.message ?? "Something went wrong. Try again."));
     } catch {
       setError("Network error. Try again.");
     } finally {

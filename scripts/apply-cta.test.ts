@@ -81,6 +81,8 @@ test("a live Affitor program applies on Affitor, with UTM added at render time",
     cta.href,
     "https://affitor.com/marketplace/citegraph?utm_source=openaffiliate&utm_medium=apply&utm_campaign=citegraph",
   )
+  // Elsewhere the medium is the surface, as for a brand's own link.
+  assert.equal(new URL(applyButton(program({}), "compare").href).searchParams.get("utm_medium"), "compare")
 })
 
 test("the campaign is the OA slug, not the Affitor marketplace slug", () => {

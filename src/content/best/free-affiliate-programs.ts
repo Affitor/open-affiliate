@@ -12,7 +12,7 @@ export const post: BestPost = {
   description:
     "Free affiliate programs to join today: the brand pays you, not the other way round, and each one approves new affiliates automatically. Terms checked.",
   intro:
-    "A free affiliate program is one you can join without paying and without waiting for someone to approve you. Joining normally costs nothing, because the brand pays you for the customers you send; check each program's full terms for who can join.We do not record sign-up fees, so this list checks the part we can: every program below approves new affiliates automatically, on terms we verified on its own page. Each block shows the commission, the cookie window and the payout minimum where the program publishes them, and the day we last checked the terms.",
+    "A free affiliate program is one you can join without paying and without waiting for someone to approve you. Joining normally costs nothing, because the brand pays you for the customers you send; check each program's full terms for who can join. We do not record sign-up fees, so this list checks the part we can: every program below approves new affiliates automatically, on terms we verified on its own page. Each block shows the commission, the cookie window and the payout minimum where the program publishes them, and the day we last checked the terms.",
   programs: [
     {
       slug: "speak-ai",
