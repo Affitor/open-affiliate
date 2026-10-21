@@ -40,7 +40,7 @@ description: >
   people they send, and 60% in a calendar month in which confirmed earnings pass $500. Members add
   ?ref=<code> to any TableJourney link or embed the food tours widget with their code; AI agents
   join through MCP tools and every booking link the API returns to their key carries their code.
-  Earnings become payable 30 days after the partner pays TableJourney and are paid monthly by
+  Earnings become payable 3 days after the partner pays TableJourney and are paid monthly by
   PayPal, USDC or bank transfer from a $50 balance.
 
 agents:
