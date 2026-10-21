@@ -515,6 +515,49 @@ test("review of PR #365 r1: discovery and recording", async () => {
   assert.throws(() => runOptions(["--replay", "x", "--psi"]), /cannot run/)
 })
 
+test("review of PR #365 r2: boundaries across sentences and subjects", async () => {
+  const terms = (body: string) => termsLink(`<p>${body}</p>`, "https://brand.com")
+  assert.equal(terms("Our service costs $29 per customer. Affiliate payouts monthly."), null, "a price per customer is not a commission")
+  assert.equal(terms("Earn 30% commission. We use cookies to enhance your browsing experience. These cookies expire after 30 days."), null, "consent in the sentence before")
+  assert.equal(terms("Earn 30% commission. Essential cookies last 30 days."), null, "an essential cookie")
+  assert.equal(terms("Earn 30% commission. Job applications for open engineering and design positions across all our locations are first screened by a recruiter and then require manual approval."), null, "a far job subject")
+  assert.equal(terms("Earn 30% commission. Employment applications require manual approval."), null)
+  assert.equal(terms("Earn 20% commission. For your plan, the details about accessing our collection of premium downloadable resources and product features are available here, while payments are processed monthly."), null, "a far buyer subject")
+  assert.equal(terms("Earn 20% commission. Customer payments are processed monthly."), null, "a buyer's payment")
+  assert.equal(hasTrial("Free to try is currently unavailable."), null)
+  // Real terms these guards must keep.
+  assert.ok(terms("Partner with us: earn 10% on attributed sales. Applications are reviewed manually; there is no automatic approval."), "csv-safecheck")
+  assert.ok(terms("Our affiliates earn 25% lifetime commission. Payments are made every two months."), "fast-bundle")
+  assert.ok(terms("Earn up to $2,000. We use cookies to track your referrals. The cookies last for 90 days after someone clicks your link."), "easydmarc")
+  assert.ok(terms("For a $30 subscription your commission is 100% which is $30. Commissions become available for payment monthly."), "startmail")
+  assert.ok(terms("Earn up to 50%. 45-Day Cookie Policy We save cookies for 45 days, so if a visitor buys you earn."), "wpmet")
+  // A title is read whole for the merchandise veto.
+  network({ "https://brand.com/robots.txt": html(""), "https://brand.com/store": html(`<title>${"Brand ".repeat(350)} merch</title><p>$29</p>`) })
+  assert.equal((await discover({ slug: "b", url: "https://brand.com" }, ["https://brand.com/store"], ["P1"], new Set())).P1, undefined)
+})
+
+test("review of PR #365 r2: a recorded stream failure replays as a failure; recording appends", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "oas-fail-"))
+  const failing = (async (input: string | URL | Request) => {
+    if (String(input).endsWith("robots.txt")) return new Response("")
+    const body = new ReadableStream<Uint8Array>({ start(c) { c.enqueue(new TextEncoder().encode("Pro $29/mo")); c.error(new Error("reset")) } })
+    return new Response(body)
+  }) as typeof fetch
+  setFetcher(recordingFetcher(dir, failing))
+  const live = await politeGet("https://fail.test/p")
+  setFetcher(replayFetcher(dir))
+  assert.deepEqual(await politeGet("https://fail.test/p"), live)
+  assert.match(JSON.stringify(live), /read failed/)
+  // 4 MB in 1 KiB chunks: appended, not rewritten (linear).
+  const chunked = (async (input: string | URL | Request) => String(input).endsWith("robots.txt") ? new Response("") : new Response(new ReadableStream<Uint8Array>({
+    start(c) { const k = new Uint8Array(1024).fill(97); for (let i = 0; i < 1400; i++) c.enqueue(k); c.close() } }))) as typeof fetch
+  setFetcher(recordingFetcher(dir, chunked))
+  const t0 = performance.now()
+  await politeGet("https://big.test/p")
+  assert.ok(performance.now() - t0 < 2000, `${Math.round(performance.now() - t0)} ms`)
+  rmSync(dir, { recursive: true, force: true })
+})
+
 test("--rescan-html makes no PageSpeed or DataForSEO call, whatever else is on the line", () => {
   assert.deepEqual(runOptions(["--rescan-html", "--psi", "--seo"]), { rescanHtml: true, psi: false, seo: false })
   assert.deepEqual(runOptions(["--psi", "--seo"]), { rescanHtml: false, psi: true, seo: true })

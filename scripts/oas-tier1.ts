@@ -24,7 +24,7 @@
  */
 import { fork } from "node:child_process"
 import { createHash } from "node:crypto"
-import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import { parse as parseDomain } from "tldts"
 import { parse } from "yaml"
@@ -143,7 +143,8 @@ const NULL_BODY = new Set([101, 204, 205, 304])
 
 /**
  * Wraps a fetch: each response's status and Location are saved under `dir`, and its body exactly as the reader
- * consumes it (raw bytes, as far as the reader reads before it stops or cancels), so a replay reads the same bytes.
+ * consumes it (raw bytes, appended chunk by chunk, read only when the reader asks), with a failure that ended the
+ * stream, so a replay reads the same bytes and fails the same way.
  */
 export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch {
   mkdirSync(dir, { recursive: true })
@@ -151,26 +152,27 @@ export function recordingFetcher(dir: string, base: typeof fetch): typeof fetch 
     const url = String(input)
     const res = await base(input, init)
     const file = join(dir, recordKey(url))
-    writeFileSync(`${file}.json`, JSON.stringify({ url, status: res.status, location: res.headers.get("location") }))
-    const chunks: Uint8Array[] = []
-    const save = () => writeFileSync(`${file}.body`, Buffer.concat(chunks))
-    save() // a body the reader cancels at once (a redirect) is recorded as empty
+    const meta = { url, status: res.status, location: res.headers.get("location"), error: null as string | null }
+    writeFileSync(`${file}.json`, JSON.stringify(meta))
+    writeFileSync(`${file}.body`, "") // a body the reader cancels at once (a redirect) is recorded as empty
     const reader = res.body?.getReader()
     if (!reader || NULL_BODY.has(res.status)) return new Response(null, { status: res.status, headers: res.headers })
     const body = new ReadableStream<Uint8Array>({
       async pull(controller) {
-        const { done, value } = await reader.read()
-        if (done) {
-          save()
-          controller.close()
+        let chunk: ReadableStreamReadResult<Uint8Array>
+        try {
+          chunk = await reader.read()
+        } catch (error) {
+          writeFileSync(`${file}.json`, JSON.stringify({ ...meta, error: (error as Error).name || "Error" }))
+          controller.error(error)
           return
         }
-        chunks.push(value)
-        save()
-        controller.enqueue(value)
+        if (chunk.done) return controller.close()
+        appendFileSync(`${file}.body`, chunk.value)
+        controller.enqueue(chunk.value)
       },
       cancel: (reason) => reader.cancel(reason),
-    })
+    }, { highWaterMark: 0 })
     return new Response(body, { status: res.status, headers: res.headers })
   }
 }
@@ -180,9 +182,22 @@ export function replayFetcher(dir: string): typeof fetch {
   return async (input) => {
     const key = recordKey(String(input))
     if (!existsSync(join(dir, `${key}.json`))) throw new Error("not recorded")
-    const meta = JSON.parse(readFileSync(join(dir, `${key}.json`), "utf8")) as { status: number; location: string | null }
+    const meta = JSON.parse(readFileSync(join(dir, `${key}.json`), "utf8")) as { status: number; location: string | null; error?: string | null }
     const headers = new Headers(meta.location ? { location: meta.location } : {})
-    return new Response(NULL_BODY.has(meta.status) ? null : readFileSync(join(dir, `${key}.body`)), { status: meta.status, headers })
+    if (NULL_BODY.has(meta.status)) return new Response(null, { status: meta.status, headers })
+    const bytes = readFileSync(join(dir, `${key}.body`))
+    // A stream that failed while recording fails again after the same bytes.
+    const body = new ReadableStream<Uint8Array>({
+      start(controller) {
+        if (bytes.length) controller.enqueue(new Uint8Array(bytes))
+        if (meta.error) {
+          const error = new Error("recorded stream failure")
+          error.name = meta.error
+          controller.error(error)
+        } else controller.close()
+      },
+    })
+    return new Response(body, { status: meta.status, headers })
   }
 }
 
@@ -355,7 +370,7 @@ const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free fore
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
 // A negation right after the phrase: "free to try? No", "Free to try: No", "is unavailable", "is no longer available".
-const NEGATED_AFTER = /^\W{0,3}(?:[?:]\s*(?:no|not)\b|(?:is|are)\s+(?:no longer|not)\b|(?:is|are)n'?t\b|(?:is|are)\s+unavailable|no longer available|unavailable|not anymore)/i
+const NEGATED_AFTER = /^\W{0,3}(?:[?:]\s*(?:no|not)\b|(?:is|are)\s+(?:(?:currently|temporarily|now|presently)\s+)?(?:no longer|not|unavailable)\b|(?:is|are)n'?t\b|no longer available|unavailable|not anymore)/i
 /** Trial or free-plan wording, skipping negated mentions before or after it ("no free trial", "free plan is no longer available"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
@@ -462,15 +477,14 @@ const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}
 // people ("100% of clients happy"), which stat cards put right next to commission wording.
 const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%(?!\s+of\s+(?:our\s+|all\s+)?(?:clients|customers|users|partners|merchants|businesses|companies|members|creators)\b)|[$€£]\s?\d[\d.,]{0,9}(?![\d.,])(?!\s?\+))`
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
-// The commission figure: next to commission wording, after "earn" or "pays you", as a share of what referrals pay
-// ("30% of every payment"), or per referral ("$15 for every new subscriber"). Not a discount ("25% off") or a product
-// claim ("99.9% uptime"); generic verbs ("customers get 99% satisfaction") do not make a figure a commission.
+// The commission figure: next to commission wording, after "earn" or "pays you", or as a share of what referrals pay
+// ("30% of every payment"). Not a discount ("25% off"), a product claim ("99.9% uptime") or a price ("$29 per
+// customer"); generic verbs ("customers get 99% satisfaction") do not make a figure a commission.
 const NOT_RATE = String.raw`(?!\s*(?:off|discount|uptime|accura\w*|faster|fewer|more|less|cheaper|savings?|satisf\w*)\b)`
 const COMMISSION_FIGURE = new RegExp([
   String.raw`${FIGURE}[^.]{0,60}\b(?:commission|revenue share|rev share)`,
   String.raw`\b(?:(?:commission|revenue share|rev share)\w*|earn(?:s|ing)?|pays? you)\b[^.]{0,40}?${FIGURE}${NOT_RATE}`,
   String.raw`${FIGURE}\s+(?:of|from|on)\s+(?:each|every|all|the|their|any|what)\b[^.]{0,30}?\b(?:sales?|payments?|purchases?|subscriptions?|orders?|referrals?|revenue|spend|they pay)\b`,
-  String.raw`${FIGURE}\s+(?:per|for (?:each|every)(?: new)?)\s+(?:sales?|referrals?|sign-?ups?|customers?|subscribers?|deals?|leads?|purchases?)\b`,
 ].join("|"), "i")
 // A concrete term carries its value: a number of days, an amount, a schedule, a named method, or an approval rule.
 const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
@@ -486,14 +500,23 @@ const any = (parts: string[]) => new RegExp(parts.join("|"), "i")
  * consent banner, an approval of jobs or loans, a payment that is the buyer's bill. Terms that also describe buyers
  * ("paid monthly") or jobs ("applications are reviewed") need a sentence that names the program.
  */
-const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
+// Program words: an ambiguous approval or payment phrase counts only near one.
+const PROGRAM_WORDS = /\b(affiliat|partner|referr|ambassador|program|commission|payout|earn|reward)/i
+/**
+ * `needs`: a program word in the same sentence. `near`: a program word within 300 characters (page text glues menus
+ * into sentences, so "near" is the honest unit). `denies`: read within `window` characters around the term, across
+ * sentence boundaries ("We use cookies… These cookies expire after 30 days"). `subject`: the words just before it.
+ */
+const TERM_KINDS: { term: RegExp; needs?: RegExp; near?: RegExp; denies?: RegExp; window?: number; subject?: RegExp }[] = [
   {
     // "30-day cookie", "90-Days Cookie Duration", "120 days' cookie tracking", "Cookie window 60 days", "cookie duration is 24 hours".
     term: any([
       String.raw`\b\d{1,4}[- ]?(?:days?|hours?)['’]?${gap(2)}\s+(?:cookies?|attribution|tracking)\b`,
       String.raw`\b(?:cookies?|attribution)\b${gap(8)}\s+\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
     ]),
-    denies: /\b(consent|accept|we use cookies|cookie (?:settings|preferences)|remember|preferences?|session|analytics)\b/i,
+    // "We use cookies to track your referrals" introduces the referral cookie, not a banner.
+    denies: /\b(consent|accept|we use cookies(?! to track (?:your )?(?:referrals?|clicks?|affiliate|sales))|cookie (?:settings|preferences)|remember|preferences?|session|analytics|essential|necessary|functional|browsing experience)\b/i,
+    window: 100,
   },
   {
     // Words that are about paying the affiliate: payouts, get paid, paid out, cash out, commissions with a payout verb.
@@ -512,7 +535,10 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
   {
     // "Payments are made every two months": the affiliate's money, unless the sentence is the buyer's bill.
     term: any([String.raw`\bpayments? (?:are|is|will be) (?:made|sent|processed|issued)\b${gap(6, false)}\s+${METHOD_OR_SCHEDULE}`]),
-    denies: /\b(your plan|plans?|subscriptions?|billing|billed|invoices?|cards?|charged|customers? pay)\b/i,
+    near: PROGRAM_WORDS,
+    denies: /\b(your plan|billing|billed|invoices?|charged|credit cards?)\b/i,
+    window: 200,
+    subject: /\b(customers?|clients?|subscriptions?|subscribers?|buyers?|users?|plan|tenants?|members?)['’]?s?\s*$/i,
   },
   {
     // Approval rules: "no automatic approval", "automatically approved", "once approved", unless jobs, loans or documents.
@@ -524,7 +550,9 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
       String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
       String.raw`\bonce (?:you(?:'re|’re| are) )?approved\b`,
     ]),
-    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|credit (?:approval|checks?|scores?|applications?|lines?)|mortgages?|expenses?|leave requests?|time off|documents?|invoices?|budgets?|timesheets?|purchase orders?)\b/i,
+    near: PROGRAM_WORDS,
+    denies: /\b(jobs?|careers?|hiring|candidates?|employment|applicants?|recruit\w*|positions?|loans?|credit (?:approval|checks?|scores?|applications?|lines?)|mortgages?|expenses?|leave requests?|time off|documents?|invoices?|budgets?|timesheets?|purchase orders?)\b/i,
+    window: 200,
   },
   {
     term: any([
@@ -533,14 +561,15 @@ const TERM_KINDS: { term: RegExp; needs?: RegExp; denies?: RegExp }[] = [
       String.raw`\b(?:paid|payments?)\b${gap(8)}\s+${METHOD_OR_SCHEDULE}`,
       String.raw`\b${PAY_METHOD} account\b[^.]{0,30}\b(?:get|be) paid`,
     ]),
-    needs: /\b(affiliat|partner|referr|ambassador|program|commission|payout|earn|reward)/i,
-    denies: /\b(jobs?|careers?|hiring|candidates?|loans?|your plan|plans?|subscriptions?|billing|billed|invoices?|charged)\b/i,
+    needs: PROGRAM_WORDS,
+    // Not "subscriptions": affiliate pages name them constantly ("commission on subscriptions"); the subject check
+    // below catches the buyer's own payments.
+    denies: /\b(jobs?|careers?|hiring|candidates?|employment|applicants?|loans?|your plan|billing|billed|invoices?|charged)\b/i,
+    window: 200,
+    subject: /\b(customers?|clients?|subscriptions?|subscribers?|buyers?|users?|plan|tenants?|members?)['’]?s?\s*$/i,
   },
 ]
 const TERMS_ALL = TERM_KINDS.map((kind) => ({ ...kind, term: new RegExp(kind.term.source, "gi") }))
-// What a term must not be about is read within this many characters around it: page text glues navigation and footers
-// into one "sentence", so a whole sentence would let a menu ("cookie consent tools") cancel a real term.
-const DENY_WINDOW = 100
 /** The first concrete term, in reading order, that passes its kind's rules; with its position in `text`. */
 function concreteTerm(text: string): { index: number; 0: string } | null {
   let at = 0
@@ -550,8 +579,11 @@ function concreteTerm(text: string): { index: number; 0: string } | null {
       if (kind.needs && !kind.needs.test(sentence)) continue
       for (const m of sentence.matchAll(kind.term)) {
         if (best && m.index! >= best.index) break
-        const around = sentence.slice(Math.max(0, m.index! - DENY_WINDOW), m.index! + m[0].length + DENY_WINDOW)
-        if (kind.denies?.test(around)) continue
+        const abs = at + m.index!
+        const w = kind.window ?? 100
+        if (kind.denies?.test(text.slice(Math.max(0, abs - w), abs + m[0].length + w))) continue
+        if (kind.near && !kind.near.test(text.slice(Math.max(0, abs - 300), abs + m[0].length + 300))) continue
+        if (kind.subject?.test(text.slice(Math.max(0, abs - 30), abs))) continue
         best = { index: m.index!, 0: m[0] }
         break
       }
@@ -561,6 +593,7 @@ function concreteTerm(text: string): { index: number; 0: string } | null {
   }
   return null
 }
+
 // Terms announced, not published: an announcement within the window cancels the inline reading (precision first).
 const NOT_YET = /coming soon|to be announced|\btb[ad]\b/i
 /**
@@ -732,7 +765,7 @@ export function discoveryCandidates(pages: { html: string; url: string }[], read
     .map(([u]) => u)
 }
 
-/** The page's <title> text, by a forward scan (no regex over the document), at most 2,000 characters. */
+/** The page's whole <title> text, by a forward scan (no regex over the document). */
 export function titleOf(html: string): string {
   const lower = html.toLowerCase()
   for (let at = lower.indexOf("<title"); at !== -1; at = lower.indexOf("<title", at + 6)) {
@@ -741,7 +774,7 @@ export function titleOf(html: string): string {
     const open = lower.indexOf(">", at)
     if (open === -1) return ""
     const close = lower.indexOf("</title", open)
-    return html.slice(open + 1, close === -1 ? Math.min(html.length, open + 2001) : Math.min(close, open + 2001))
+    return html.slice(open + 1, close === -1 ? html.length : close)
   }
   return ""
 }
