@@ -46,6 +46,8 @@ test("a host on the list and every subdomain is blocked; look-alikes are not", (
     "https://MARKET.PartnerStack.com./page",
     "https://dub.co/x",
     "https://partners.dub.co/acme",
+    "https://spectrtech.gumroad.com/affiliates",
+    "https://whop.com/payload-f126/affiliates",
   ]) assert.ok(blockedReason(url), url)
   for (const url of ["https://notpartnerstack.com/", "https://partnerstack.com.evil.example/", "https://dub.com/", "https://p.example/?r=partnerstack.com", "not a url"]) {
     assert.equal(blockedReason(url), null, url)

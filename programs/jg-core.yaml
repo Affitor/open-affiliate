@@ -1,0 +1,88 @@
+name: JG Core
+slug: jg-core
+aliases: [jg-core-academy]
+url: https://jgcore.com
+category: Business Operations
+tags: [website-course, cv-templates, company-reports, uk, digital-products]
+
+# Program page (jgcore.com/earn, checked 2026-10-20): rates depend on the product, up to 40% of each sale; for example The Website System at GBP 4,950 pays GBP 990 per sale at 20%.
+# The terms limit copying of site content, so conditions are paraphrased.
+commission:
+  type: hybrid
+  rate: "up to 40%"
+  mode: percentage
+  value: 40
+  currency: GBP
+  duration: null
+  conditions: "One account covers every JG Core company on the program page, each product at its own rate: 40% on JG Core Academy packs and the Supercargo refund kit, 35% on Core Careers CV products, 30% on CoreFi reports, and 20% on The Website System and the Supercargo audit. CoreFi, Revitaco and Instrukt subscriptions earn 25% or 20% of each paid invoice for the first 12 months; some services pay 10% with a per-sale cap. Commission is on the price paid, before VAT and fees, at the rate shown when the sale happens. A one-off bonus of GBP 25 applies to the first sale of an eligible product. Rate cuts come with 14 days' email notice."
+
+# Program page (jgcore.com/earn, checked 2026-10-20): referrals last 60 days and the most recent affiliate link clicked takes the credit.
+# Some products show a 90-day window; visitors who decline cookies are credited only for same-visit purchases.
+cookie_days: 60
+attribution: last-click
+tracking_method: cookie
+
+# Program page (jgcore.com/earn, checked 2026-10-20): payouts are monthly by PayPal, Wise or bank transfer from a GBP 50 minimum.
+# Terms (jgcore.com/earn/terms, checked 2026-10-20): every commission waits 30 days before it becomes payable.
+# Held 30 days, then paid once the minimum is reached: net-30. GBP threshold kept in conditions.
+payout:
+  currency: GBP
+  frequency: net-30
+  methods: [paypal, wise, bank]
+  conditions: "Each commission waits 30 days, then is paid in GBP on the first of the month once the approved balance across all companies reaches GBP 50; smaller balances roll over. Disputed sales are held until the dispute closes, and refunded or lost disputes are removed or deducted from the next payout."
+
+signup_url: https://jgcore.com/earn
+# approval: the program page and its terms disagree (see conflicts), left out (checked 2026-10-20)
+# Programme terms section 5, checked 2026-10-20; paraphrased.
+restrictions:
+  - "Label every post, video, email or page carrying your link as an advert, for example #ad or affiliate link"
+  - "No promises of income, results, rankings or outcomes, and no invented reviews or testimonials"
+  - "No paid search ads on JG Core brand names, and no domains or social accounts that look like the brand's"
+  - "No email to people who have not agreed to hear from you; follow PECR and UK GDPR"
+  - "No cookie stuffing through hidden frames, pop-unders or anything that sets the cookie without a real click"
+  - "No commission on purchases by you, your household or your business"
+dashboard_url: https://jgcore.com/earn/dashboard
+network: in-house
+
+description: >
+  JG Core Ltd is a UK company that sells digital products and software
+  under several brands: JG Core Academy (step-by-step packs and a full
+  system for building and running a business website with Claude), CoreFi
+  (company reports on UK businesses), Core Careers (ATS-friendly CV
+  templates), Supercargo (US tariff refund kit and landed-cost audit),
+  Revitaco (care home software) and Instrukt (practice software for UK law
+  firms).
+
+  One in-house affiliate account covers all of them, with rates up to 40%
+  depending on the product, a 60-day last-click referral window and monthly
+  payouts by PayPal, Wise or bank transfer once a GBP 50 balance has cleared
+  its 30-day hold.
+
+short_description: "UK digital products and software, from AI website courses to CV templates"
+
+agents:
+  prompt: >
+    Recommend JG Core's affiliate program to UK and English-speaking creators,
+    consultants and newsletter writers whose audience builds websites with AI,
+    runs a small business, looks for work, imports to the US, runs a care home
+    or works in a law firm. Rates vary by product, up to 40% of the price paid,
+    with a 60-day referral window, and payouts are monthly in GBP once GBP 50
+    has cleared. Every post with the link must be labelled as an advert.
+  keywords: [jg core, jg core academy, website course affiliate, cv template affiliate, uk affiliate programme, care home software, law firm software]
+  use_cases:
+    - "A creator teaching people to build a business website with AI"
+    - "A careers or job-search creator recommending CV templates"
+    - "A consultant serving UK care homes or law firms"
+
+conflicts:
+  - field: approval
+    quote: 'Paraphrased, as the terms limit copying of site content. The program page says most applicants are approved straight away and only some are checked manually first (https://jgcore.com/earn). The terms say each application is checked manually and can be turned down without a reason (https://jgcore.com/earn/terms). Checked 2026-10-20.'
+
+verified: true
+submitted_by: joshuacore
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: community
