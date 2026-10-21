@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Turnstile } from "@/components/turnstile";
+import { AffitorLink } from "@/components/affitor-link";
+import { SUBMISSION_AFFITOR, affitorUrl } from "@/lib/affitor-link";
 
 type Result =
   | { kind: "queued" | "duplicate"; id: string; status: string }
@@ -117,6 +119,15 @@ export function SubmitByUrl({ siteKey }: { siteKey: string }) {
             </p>
           )}
           {result.kind === "error" && <p className="text-red-600 dark:text-red-400">{result.message}</p>}
+          {result.kind !== "error" && (
+            <p className="mt-2 text-muted-foreground">
+              {SUBMISSION_AFFITOR.line}{" "}
+              <AffitorLink href={affitorUrl("submission", "confirmation")} source="submission" cta="confirmation" className="underline underline-offset-2">
+                {SUBMISSION_AFFITOR.cta}
+              </AffitorLink>
+              .
+            </p>
+          )}
         </div>
       )}
     </section>

@@ -7,7 +7,7 @@ import { DocsPagination } from "@/components/docs-pagination";
 export const metadata: Metadata = {
   title: "Submit a Program",
   description:
-    "Add an affiliate program to OpenAffiliate: four ways in, what a maintainer checks, how long it takes, and what happens after merge.",
+    "Add an affiliate program to OpenAffiliate: five ways in, what a maintainer checks, how long it takes, and what happens after merge.",
 };
 
 const link = "text-foreground hover:underline";
@@ -24,7 +24,7 @@ export default function SubmitPage() {
 
       <div className="space-y-10">
         <section>
-          <h2 id="ways" className="text-lg font-semibold mb-3">Four ways to add a program</h2>
+          <h2 id="ways" className="text-lg font-semibold mb-3">Five ways to add a program</h2>
           <p className="text-base text-muted-foreground mb-4">
             Listing is free. Every way ends in the same place: a program file in
             the public repository, reviewed by a maintainer.

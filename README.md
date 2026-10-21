@@ -32,7 +32,7 @@ OpenAffiliate is an open-source registry of affiliate programs. Every program is
 - **CLI** -- `npx openaffiliate` with `--json` output for scripting and agent consumption.
 - **REST API** -- Public JSON API, no auth required.
 - **SDK** -- TypeScript SDK for programmatic access.
-- **Submit** -- Web form that writes the program file and opens a GitHub pull request.
+- **Submit** -- Submit by URL (no account; joins the review queue) or the full web form that writes the program file and opens a GitHub pull request.
 - **Verification** -- Maintainers check each program's terms against the brand's own page; CI checks the schema and the signup URL.
 - **Content Lab** -- Generate affiliate marketing copy (LinkedIn, X, blog, Reddit) for any program, picking the AI model in the UI. Runs on Kyma API.
 

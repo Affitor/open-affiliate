@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AffitorLink } from "@/components/affitor-link";
+import { SUBMISSION_AFFITOR, affitorUrl } from "@/lib/affitor-link";
 import { liveSubmissionDeps } from "@/lib/submissions/live";
 import { statusPageBody } from "@/lib/submissions/service";
 
@@ -41,6 +43,13 @@ export default async function SubmissionPage({ params }: { params: Promise<{ id:
           )}
         </p>
       )}
+      <p className="mt-6 text-sm text-muted-foreground">
+        {SUBMISSION_AFFITOR.line}{" "}
+        <AffitorLink href={affitorUrl("submission", "status")} source="submission" cta="status" className="underline underline-offset-2">
+          {SUBMISSION_AFFITOR.cta}
+        </AffitorLink>
+        .
+      </p>
       <p className="mt-6 text-meta text-muted-foreground">
         Sent {String(body.createdAt).slice(0, 10)} · updated {String(body.updatedAt).slice(0, 10)} ·{" "}
         <Link href="/submit" className="underline underline-offset-2">Submit another program</Link>

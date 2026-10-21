@@ -10,7 +10,17 @@ export const AFFITOR_CLICK = "oa_to_affitor_click"
 export const AFFITOR_MARKETPLACE = "https://affitor.com/marketplace"
 
 /** Where on OA the click came from: the `source` property of AFFITOR_CLICK. */
-export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate" | "footer"
+export type AffitorSource = "program_page" | "for_brands" | "claim" | "compare" | "list" | "blog" | "migrate" | "footer" | "submission"
+
+/**
+ * The one line for marketers after a submission and on its status page
+ * (Sơn, 20/10): OpenAffiliate is a listing; tracking and partner payouts are
+ * Affitor. Marketing words, no pricing.
+ */
+export const SUBMISSION_AFFITOR = {
+  line: "OpenAffiliate gets your program found by people and AI agents. Want referral tracking and partner payouts too?",
+  cta: "Run your program on Affitor",
+} as const
 
 /** Where a brand moves an existing program to Affitor (live, takes only UTM params). */
 export const AFFITOR_SWITCH = "https://affitor.com/switch"

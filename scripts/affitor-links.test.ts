@@ -10,7 +10,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import { test } from "node:test"
-import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
+import { AFFITOR_SWITCH, FOR_BRANDS, SUBMISSION_AFFITOR, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
@@ -136,7 +136,7 @@ test("served-HTML check: an untracked Affitor link or one without the UTM fails"
 
 // cos-oa 13/10: no pricing in the copy this PR adds; copy already live keeps its wording.
 test("/for-brands and the new program-page link state no pricing; /for-brands is in the sitemap", () => {
-  for (const [key, text] of Object.entries(FOR_BRANDS)) {
+  for (const [key, text] of Object.entries({ ...FOR_BRANDS, ...Object.fromEntries(Object.entries(SUBMISSION_AFFITOR).map(([k, v]) => [`submission.${k}`, v])) })) {
     assert.doesNotMatch(text, /\$|%|\bfree\b|\bfees?\b|pric|\bcost|\bpaid\b|\bpay\b|subscription|guarantee/i, `FOR_BRANDS.${key}`)
   }
   assert.ok(sitemap().some((e) => e.url === "https://openaffiliate.dev/for-brands"))
