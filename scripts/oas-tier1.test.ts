@@ -561,6 +561,7 @@ test("review of PR #365 r2: a recorded stream failure replays as a failure; reco
 test("review of PR #365 r3: concurrent and unfinished recordings, risk-free", async () => {
   // A money-back guarantee is not a free trial.
   assert.equal(hasTrial("100% risk-free to try. All plans come with a 30-day money-back guarantee. Plans start at $29/month."), null)
+  for (const v of ["risk free to try", "risk\u2011free to try", "risk\u2013free to try", "Risk-Free to try"]) assert.equal(hasTrial(`100% ${v}. 30-day money-back guarantee.`), null, v)
   assert.ok(hasTrial("Boolvideo is free to try"))
   const dir = mkdtempSync(join(tmpdir(), "oas-conc-"))
   // Two responses for one URL at once: each recording is whole, never interleaved.
