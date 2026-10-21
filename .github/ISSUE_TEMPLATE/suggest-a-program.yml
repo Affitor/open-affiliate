@@ -1,0 +1,24 @@
+name: Suggest a program
+description: Ask us to add an affiliate program. Only the link to its program page is needed.
+title: "Add program: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Give the brand's own affiliate program page. A maintainer reads the terms there and writes the program file. A listing on a network such as Dub or PartnerStack is not enough on its own.
+        Check first that the program is not already listed: https://openaffiliate.dev/programs
+  - type: input
+    id: program-page
+    attributes:
+      label: Program page
+      description: The page on the brand's domain that states the commission and terms.
+      placeholder: https://example.com/affiliates
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else (optional)
+      description: For example a separate terms page, or whether you run this program.
+    validations:
+      required: false

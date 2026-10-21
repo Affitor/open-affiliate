@@ -59,6 +59,21 @@ programs as active, or a listing whose status says there is no affiliate program
 
 ## OAS score
 
-Placeholder: the OAS score is not published yet. Do not invent a score, report URL or API
-field. Report the available program terms and cite the program page instead. Revisit this
-section when OpenAffiliate publishes its OAS contract.
+OAS, the OpenAffiliate Score, is 0 to 100 with a grade from A+ to F. It measures how
+clearly a program publishes its terms and whether three of them protect the affiliate
+(cookie of 60 days or more, minimum payout of USD 50 or less, paid at least monthly).
+It never reads the size of the commission, so do not present it as a measure of earnings.
+
+Read it from the `oas` object that `get_program` and `GET /api/programs/{slug}` return
+for scored programs. Quote `score` and `grade` only when `status` is `scored`, and always
+cite `reportUrl`. When `oas` is absent or `status` is `in_progress` or `stale`, say the
+program is not scored yet; never invent a score. `oasMachineChecks` are shown beside OAS
+and are not part of it. Rules: https://openaffiliate.dev/docs/oas
+
+## When a program is missing
+
+The MCP server is read-only and cannot add programs. If the user wants one added, send them
+to https://openaffiliate.dev/submit, or, with GitHub access, open a pull request or a
+Suggest a program issue at https://github.com/Affitor/open-affiliate using only terms from
+the brand's own program page (a network listing is not proof). Leave unstated terms empty.
+A maintainer reviews every addition, usually within a few days, and scoring is not instant.
