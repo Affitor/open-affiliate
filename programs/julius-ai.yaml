@@ -15,14 +15,30 @@ commission:
   value: 50
   currency: USD
   duration: "12 months"
-  conditions: "50% of every payment for 12 months, capped at $25,000 per customer. Partners also earn 5% of every sale made by partners they refer, on top of that partner's commission. New users get 50% off their first month. A separate Creator Program pays 30%."
+  conditions: "50% of every payment for 12 months, capped at $25,000 per customer. Partners also earn 5% of every sale made by partners they refer, for one year, on top of that partner's commission. New users get 50% off their first month. A separate Creator Program pays 30%."
+
+# "60-day, last-click attribution window" (julius.ai/affiliate, checked 2026-10-20)
 attribution: last-click
-tracking_method: cookie
+cookie_days: 60
+
+# "We process payments monthly for the previous month's referrals automatically." (julius.ai/affiliate, checked 2026-10-20)
+# "We process payments at the end of every month, with no minimums." (partners.dub.co/julius, checked 2026-10-20)
+# payout methods and currency: not published on julius.ai/affiliate, julius.ai/affiliate/tos.html or partners.dub.co/julius (checked 2026-10-20)
+payout:
+  minimum: 0
+  frequency: monthly
+  conditions: "Payments are processed monthly for the previous month's referrals, automatically. Rewards are earned only after any refund, chargeback, cancellation or dispute period has passed."
+
 signup_url: https://partners.dub.co/julius
-restrictions: null
-marketing_materials: true
-api_available: false
-dedicated_manager: false
+# Partner Terms and Conditions (julius.ai/affiliate/tos.html, checked 2026-10-20)
+restrictions:
+  - "No self-referrals, duplicate accounts or referrals of accounts you control"
+  - "No paid advertising (paid search, paid social, display, sponsored or native ads) without prior written approval"
+  - "No bidding on or targeting Julius AI's name, product names, trademarks, misspellings or branded keywords"
+  - "No coupon, deal, cashback or loyalty sites or discount extensions without prior written approval"
+  - "No spam, purchased lists, scraped contacts, bots, automated bulk messages or unsolicited outreach"
+  - "Disclose your relationship with Julius AI and that you may receive compensation"
+
 dashboard_url: null
 network: dub
 program_age: null
@@ -40,7 +56,7 @@ agents:
   use_cases:
   - Analysts exploring data conversationally
   - Ops teams replacing manual SQL queries
-verified: true
+verified: false
 submitted_by: community
 created_at: '2026-04-18'
 updated_at: "2026-10-20"
