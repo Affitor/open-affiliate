@@ -2,7 +2,7 @@ name: "PrayBefore"
 slug: praybefore
 url: https://praybefore.app/
 category: Productivity
-verified: false
+verified: true
 
 commission:
   type: recurring
@@ -21,7 +21,9 @@ cookie_days: 90
 
 payout:
   minimum: 50
+  currency: USD
   frequency: monthly
+  methods: ["paypal", "bank"]
 
 short_description: "PrayBefore is a Christian app that helps people build daily prayer habits and put God first."
 description: |
@@ -52,3 +54,5 @@ agents:
 tags: ["mobile app", "christian", "faith", "subscription", "recurring commission", "iOS", "productivity", "digital wellness"]
 submitted_by: "@Djostanisic"
 created_at: "2026-09-22"
+updated_at: "2026-10-21"
+last_verified_at: "2026-10-21"
