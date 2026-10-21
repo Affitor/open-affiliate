@@ -299,15 +299,13 @@ export function hasPrice(text: string, html = ""): string | null {
 const TRIAL = /(?:\b(?:free trial|\d+[- ]day (?:free )?trial|free plan|free forever|free tier|forever free|free version|free account|start (?:for )?free|try (?:it )?(?:for )?free|(?:try|install) (?:[\w.-]+ ){1,3}(?:for )?free|free to start|get started (?:for )?free|free\s+[$€£]0\b|[$€£]0\s*\/\s*(?:mo|month)|dùng thử miễn phí|gói miễn phí|kostenlos testen|gratis testen|essai gratuit|prueba gratis|prueba gratuita|teste grátis|teste gratuito|prova gratuita)|無料トライアル|免费试用)/gi
 // "Try our free demo", "for free shipping": free, but not a trial or a plan.
 const NOT_TRIAL_AFTER = /^\s*(?:(?:online|live|personal|personalized|custom|standard|express|instant|quick|guided|interactive|product|1:1)\s+){0,2}(?:demo|shipping|delivery|consultation|quote|assessment|audit|estimate|sample|webinar|guide|e-?book|report|template|tool)s?\b/i
-const FREE_ENDS = /^(?:\s*$|\s*[.,!?;:)|\-–—]|\s+(?:today|now|for|with|and|or|on|in|at|no|forever|to|first)\b)/i
 /** Trial or free-plan wording, skipping negated mentions ("no free trial"). */
 export function hasTrial(text: string): string | null {
   for (const m of text.matchAll(TRIAL)) {
     if (/\b(no|not|without|never)\b[\w\s-]{0,12}$/i.test(text.slice(Math.max(0, m.index! - 20), m.index))) continue
-    const after = text.slice(m.index! + m[0].length, m.index! + m[0].length + 30)
-    if (NOT_TRIAL_AFTER.test(after)) continue
-    // "Try our free video demo": a "free" that qualifies another noun is a freebie, not a trial or plan.
-    if (/free$/i.test(m[0]) && !FREE_ENDS.test(after)) continue
+    // Only named freebies are skipped. Page text loses element boundaries, so the word after a "Start for free"
+    // button is usually the next button's label: requiring "free" to end the phrase dropped 63 real readings.
+    if (NOT_TRIAL_AFTER.test(text.slice(m.index! + m[0].length, m.index! + m[0].length + 30))) continue
     return m[0]
   }
   return null
@@ -324,8 +322,9 @@ function listingId(u: URL): string | null {
   switch (u.hostname) {
     case "apps.shopify.com": return seg.length === 1 ? seg[0] : null
     case "wordpress.org": return seg[0] === "plugins" && seg.length === 2 ? seg[1] : null
-    case "chromewebstore.google.com": return seg[0] === "detail" && seg.length === 3 && /^[a-p]{32}$/.test(seg[2]) ? seg[1] : null
-    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" && seg.length === 4 && /^[a-p]{32}$/.test(seg[3]) ? seg[2] : null
+    // The 32-letter extension id is required; a tab after it ("/reviews") is the same listing.
+    case "chromewebstore.google.com": return seg[0] === "detail" && /^[a-p]{32}$/.test(seg[2] ?? "") ? seg[1] : null
+    case "chrome.google.com": return seg[0] === "webstore" && seg[1] === "detail" && /^[a-p]{32}$/.test(seg[3] ?? "") ? seg[2] : null
     case "apps.apple.com": { const i = seg.indexOf("app"); return i >= 0 && /^id\d+$/.test(seg[i + 2] ?? "") ? seg[i + 1] : null }
     case "play.google.com": return u.pathname === "/store/apps/details" ? u.searchParams.get("id") : null
     case "marketplace.atlassian.com": return seg[0] === "apps" && /^\d+$/.test(seg[1] ?? "") ? seg[2] ?? null : null
@@ -395,8 +394,8 @@ const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue 
 const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
 const CONCRETE_TERM = new RegExp([
   String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
-  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}\s?(?:days?|months?|hours?)\b`,
-  String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}\s?(?:days?|months?|hours?)\b`,
+  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
+  String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
   String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,

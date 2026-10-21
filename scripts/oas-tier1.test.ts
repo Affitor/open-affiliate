@@ -325,10 +325,13 @@ test("review of the fixes (PR #364 r3): store routes, valued terms, announcement
   assert.equal(termsLink(`<p>30% commission. Attribution window: see section 2.</p>`, "https://brand.com"), null)
   assert.equal(termsLink(`<p>30% commission. Payouts via checklist to be determined.</p>`, "https://brand.com"), null)
   assert.ok(termsLink(`<p>30% commission. Our cookie lasts 60 days.</p>`, "https://brand.com"))
+  assert.ok(termsLink(`<p>30% commission. Cookie window: 30-day.</p>`, "https://brand.com"))
+  assert.ok(selfServe(`<a href="https://chromewebstore.google.com/detail/rank-math-seo/${"b".repeat(32)}/reviews">4.8 on Google</a>`, "https://rankmath.com"), "a tab of the listing")
   assert.equal(termsLink(`<p>30% commission. Paid monthly. ${"x".repeat(126)} Coming soon.</p>`, "https://brand.com"), null, "a marker at the window's edge")
-  // A "free" that qualifies another noun is a freebie.
-  assert.equal(hasTrial("Try our free video demo today"), null)
-  assert.equal(hasTrial("Try our service for free worldwide shipping"), null)
+  // Page text joins buttons: "Start for free" followed by the next button's label is still a trial.
+  // Known limit: an unlisted modifier ("free video demo") is read as a trial; text alone cannot tell it from two buttons.
+  assert.ok(hasTrial("Start for Free Book a demo"))
+  assert.ok(hasTrial("Try Brex for free Log in"))
   assert.ok(hasTrial("Try Duplicator free on your site"))
   assert.ok(hasTrial("Install Duplicator Free"))
   assert.ok(hasTrial("Start for free, no credit card"))
