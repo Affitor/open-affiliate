@@ -4,25 +4,32 @@ import { livePrograms, programs } from "@/lib/programs";
 import { programsHub } from "@/lib/programs-directory";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { FaqAccordion } from "@/components/faq-accordion";
-import { ProgramsView } from "./programs-view";
-import { TopPrograms } from "./top-programs";
+import { searchPrograms } from "@/lib/client-programs";
+import { ProgramsView, type InitialRow } from "./programs-view";
 
-// Hourly, like /rankings: the top rows are the OAS leaderboard, whose scores
-// expire 90 days after their verification date (isStale reads today).
+// Hourly: the count sentence and the "Updated" date read the registry as of today.
 export const revalidate = 3600;
+
+/** The list's first page size (PAGE_SIZE_OPTIONS[0] in programs-view.tsx). */
+const FIRST_PAGE = 25;
 
 const SITE = "https://openaffiliate.dev";
 
 /**
- * The directory hub. The H1, the count sentence, the top programs by OAS (plain
- * links) and the FAQ are server-rendered, so they are in the raw HTML a crawler
- * reads. The interactive list renders in the browser (it reads the URL inside
- * its own Suspense) and keeps its URL state. Every live program as a plain link
- * lives on /programs/a-z (redesign r3), linked from here and every footer.
+ * The directory hub. The H1, the count sentence, the list's first page (plain
+ * links in the list's fallback, in the list's default order) and the FAQ are
+ * server-rendered, so they are in the raw HTML a crawler reads. The
+ * interactive list renders in the browser (it reads the URL inside its own
+ * Suspense) and keeps its URL state. The OAS ranking lives on /rankings, not
+ * here. Every live program as a plain link lives on /programs/a-z, linked
+ * from here and every footer.
  */
 export default function ProgramsPage() {
   const hub = programsHub(programs);
   const url = `${SITE}/programs`;
+  const initial: InitialRow[] = searchPrograms({ sort: "relevance" })
+    .slice(0, FIRST_PAGE)
+    .map((p) => ({ slug: p.slug, name: p.name, shortDescription: p.shortDescription }));
   return (
     <div className="oa-frame">
       <script
@@ -44,13 +51,13 @@ export default function ProgramsPage() {
                 publisher: { "@id": `${SITE}/#organization` },
                 mainEntity: {
                   "@type": "ItemList",
-                  name: "Affiliate programs by OAS",
+                  name: "Affiliate program directory",
                   numberOfItems: hub.total,
-                  itemListElement: hub.top.map((r, i) => ({
+                  itemListElement: initial.map((r, i) => ({
                     "@type": "ListItem",
                     position: i + 1,
-                    url: `${SITE}/programs/${r.program.slug}`,
-                    name: r.program.name,
+                    url: `${SITE}/programs/${r.slug}`,
+                    name: r.name,
                   })),
                 },
               },
@@ -72,8 +79,7 @@ export default function ProgramsPage() {
           </p>
         )}
       </header>
-      <ProgramsView />
-      <TopPrograms rows={hub.top} />
+      <ProgramsView initial={initial} />
       <section aria-labelledby="programs-faq-h" className="oa-band">
         <h2 id="programs-faq-h" className="text-title font-semibold tracking-[-0.02em] mb-4">Questions about affiliate programs</h2>
         <div className="max-w-3xl">
