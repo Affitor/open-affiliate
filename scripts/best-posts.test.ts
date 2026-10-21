@@ -12,7 +12,8 @@ import { blogEntries } from "../src/lib/blog"
 import { createElement } from "react"
 import { renderToStaticMarkup } from "react-dom/server"
 import { hasNoProgram } from "../src/lib/no-program"
-import { existsSync, statSync } from "node:fs"
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs"
+import { parse as parseYaml } from "yaml"
 import { join } from "node:path"
 import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
@@ -311,6 +312,76 @@ test("guides are on /blog, in the sitemap, and never under /best", () => {
   }
 })
 
+// ---------- conflicts[].values: the set comes from the raw YAML, not from term-notes ----
+
+/** Every (slug, field) whose YAML records a conflict with no `values`, read straight from programs/*.yaml. */
+function conflictsWithoutValues(): { slug: string; field: string }[] {
+  const dir = join(process.cwd(), "programs")
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".yaml"))
+    .flatMap((f) => {
+      const doc = parseYaml(readFileSync(join(dir, f), "utf8")) as { slug?: string; conflicts?: { field?: string; values?: unknown }[] }
+      return (doc?.conflicts ?? []).filter((c) => c.field && c.values === undefined).map((c) => ({ slug: String(doc.slug ?? f.replace(/\.yaml$/, "")), field: String(c.field) }))
+    })
+}
+
+/**
+ * Where a renderer shows a figure for a term whose conflict has no recorded
+ * values (only for programs whose registry field is empty, so the page must
+ * fall back to words). `render` is injectable so the check itself is tested.
+ */
+function figureLeaks(render: { cookie: (p: (typeof allPrograms)[number]) => string; details: (p: (typeof allPrograms)[number]) => [string, string][] }) {
+  const bySlug = new Map(allPrograms.map((p) => [p.slug, p]))
+  const leaks: string[] = []
+  let checked = 0
+  for (const { slug, field } of conflictsWithoutValues()) {
+    const p = bySlug.get(slug)
+    if (!p) continue
+    if (field === "cookie_days" && p.cookieDays == null) {
+      checked++
+      const shown = [render.cookie(p), render.details(p).find(([k]) => k === "Cookie duration")?.[1] ?? ""]
+      if (shown.some((t) => /\d/.test(t))) leaks.push(`${slug} cookie: ${shown.join(" | ")}`)
+    }
+    if (field === "payout.minimum" && p.payout.minimum == null && !p.payout.frequency) {
+      checked++
+      const paid = render.details(p).find(([k]) => k === "Getting paid")?.[1] ?? ""
+      if (/\d/.test(paid)) leaks.push(`${slug} payout: ${paid}`)
+    }
+  }
+  return { leaks, checked }
+}
+
+test("the no-figure check catches a renderer that reads figures out of quote text", () => {
+  // An injected parser: pull the first figures out of the conflict quote, as the removed one did.
+  const quoteOf = (slug: string, field: string) => {
+    const doc = parseYaml(readFileSync(join(process.cwd(), "programs", `${slug}.yaml`), "utf8")) as { conflicts?: { field: string; quote: string }[] }
+    return doc.conflicts?.find((c) => c.field === field)?.quote ?? ""
+  }
+  const figures = (t: string) => (t.match(/[$€£]?\d+(?:\s?-?days?)?/g) ?? []).slice(0, 2).join(" or ")
+  const injected = figureLeaks({
+    cookie: (p) => figures(quoteOf(p.slug, "cookie_days")) || tableRow(p).cookie,
+    details: (p) => programDetails(p).map(([k, v]) => [k, k === "Getting paid" ? figures(quoteOf(p.slug, "payout.minimum")) || v : v] as [string, string]),
+  })
+  assert.ok(injected.leaks.length > 0, "the check did not catch figures parsed from quotes")
+})
+
+test("conflicts[].values items match their field: numbers for payout.minimum, a unit or a word for cookie_days", () => {
+  const dir = join(process.cwd(), "programs")
+  let seen = 0
+  for (const f of readdirSync(dir).filter((x) => x.endsWith(".yaml"))) {
+    const doc = parseYaml(readFileSync(join(dir, f), "utf8")) as { conflicts?: { field: string; values?: unknown[] }[] }
+    for (const c of doc?.conflicts ?? []) {
+      if (c.values === undefined) continue
+      seen++
+      assert.ok(Array.isArray(c.values) && c.values.length >= 2, `${f} ${c.field}: values needs two or more items`)
+      if (c.field === "payout.minimum") assert.ok(c.values.every((v) => typeof v === "number" && v >= 0), `${f}: payout.minimum values are numbers in payout.currency`)
+      else if (c.field === "cookie_days") assert.ok(c.values.every((v) => typeof v === "string" && /^(\d+ (day|days|hours?)|indefinitely|lifetime|session)$/.test(v)), `${f}: cookie_days values read like "30 days" or "indefinitely"`)
+      else assert.ok(c.values.every((v) => typeof v === "string" && v.trim().length > 0), `${f} ${c.field}: values are short phrases`)
+    }
+  }
+  assert.ok(seen > 0)
+})
+
 // ---------- standard "best X" layout (components/best-post-standard.tsx) ----
 
 function renderStandard(post: (typeof POSTS)[number]) {
@@ -445,20 +516,9 @@ test("two-value terms show only the values recorded in conflicts[].values, in th
   assert.deepEqual(parseNotes('conflicts:\n  - field: payout.minimum\n    quote: "a: \\"Minimum $80\\" b: \\"$40 minimum\\""\n').conflictValues.size, 0)
   assert.deepEqual(parseNotes('conflicts:\n  - field: cookie_days\n    quote: "x"\n    values: [30 days, 60 days]\n').conflictValues.get("cookie_days"), ["30 days", "60 days"])
   // Across the registry: a conflict with no recorded values never puts a figure in its cell or detail.
-  let checked = 0
-  for (const p of allPrograms) {
-    const { conflicts, conflictValues } = termNotes(p.slug)
-    if (conflicts.has("cookie_days") && p.cookieDays == null && !conflictValues.has("cookie_days")) {
-      checked++
-      assert.equal(tableRow(p).cookie, "Two values", p.slug)
-      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Cookie duration")?.[1] ?? "", /\d/, p.slug)
-    }
-    if (conflicts.has("payout.minimum") && p.payout.minimum == null && !p.payout.frequency && !conflictValues.has("payout.minimum")) {
-      checked++
-      assert.doesNotMatch(programDetails(p).find(([k]) => k === "Getting paid")?.[1] ?? "", /\d/, p.slug)
-    }
-  }
-  assert.ok(checked > 0, "no registry conflict without values was checked")
+  const real = figureLeaks({ cookie: (p) => tableRow(p).cookie, details: programDetails })
+  assert.ok(real.checked > 0, "no registry conflict without values was checked")
+  assert.deepEqual(real.leaks, [])
   // The two programs on the hosting post carry recorded values.
   const verpex = allPrograms.find((x) => x.slug === "verpex")!
   assert.equal(tableRow(verpex).cookie, "30 days or indefinitely")
@@ -469,7 +529,7 @@ test("two-value terms show only the values recorded in conflicts[].values, in th
       const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r)
       const firstOther = cons.findIndex((c) => !forbids(c))
       if (firstOther >= 0) assert.ok(cons.slice(firstOther).every((c) => !forbids(c)), `${p.slug}: a prohibition after other cons`)
-      assert.doesNotMatch(tableRow(p).payout + programDetails(p).map((d) => d[1]).join(" "), /\bBank\b/, `${p.slug}: "Bank" should read "bank transfer"`)
+      assert.doesNotMatch(tableRow(p).payout + programDetails(p).map((d) => d[1]).join(" "), /\b[Bb]ank\b(?! transfer)/, `${p.slug}: "Bank" should read "bank transfer"`)
     }
   }
 })
