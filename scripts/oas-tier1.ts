@@ -347,12 +347,26 @@ const appStore = (href: string, base: string) => {
   if (words.some((w) => THIRD_PARTY.has(w))) return false
   return words.some((_, i) => words.slice(i).some((__, j) => words.slice(i, i + j + 1).join("") === name))
 }
+/**
+ * A link on the brand's own page to another host of the brand: the same registrable domain
+ * ("ads.snapchat.com" from "forbusiness.snapchat.com"), or the same distinctive name under
+ * another suffix ("app.n8n.cloud" from "n8n.io"). A name that is a dictionary word ("brand")
+ * does not prove the brand across suffixes; without a dictionary, nothing does.
+ */
+function brandHost(href: string, base: string, words: Set<string> | null = systemWords()): boolean {
+  if (sameSite(href, base)) return true
+  const [a, b] = [href, base].map((u) => parseDomain(new URL(u).hostname, { allowPrivateDomains: true }))
+  if (!a.domain || !b.domain) return false
+  if (a.domain === b.domain) return true
+  const name = b.domainWithoutSuffix?.toLowerCase() ?? ""
+  return name === a.domainWithoutSuffix?.toLowerCase() && name.length >= 3 && !!words && !words.has(name.replace(/-/g, ""))
+}
 export function selfServe(html: string, base: string): string | null {
   const found = links(html, base).find((l) => {
     const target = decoded(l.href)
     if (NOT_SIGNUP.test(l.text) || NOT_SIGNUP.test(target)) return false
     if (appStore(l.href, base)) return true
-    return sameSite(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
+    return brandHost(l.href, base) && (SIGNUP_TEXT.test(l.text) || SIGNUP_HREF.test(new URL(l.href).pathname))
   })
   return found ? `${found.text || "link"} → ${found.href}`.slice(0, 120) : null
 }
@@ -363,15 +377,15 @@ const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%|[$€£]\s?\d[\
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
 const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(commission|revenue share|rev share|earn)\\w*[^.]{0,40}?${FIGURE}`, "i")
 // A concrete term carries its value: a number of days, an amount, a schedule or a named method.
-const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|bank transfer|wire|ach|direct deposit)`
+const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)`
 const CONCRETE_TERM = new RegExp([
   String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
   String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\d`,
   String.raw`\battribution (?:window|duration)[^.]{0,20}\d`,
-  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|every (?:month|week|\d{1,3} days))`,
+  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
   String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
   String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
-  String.raw`\bminimum payout[^.]{0,20}[$€£]\s?\d`,
+  String.raw`\bminimum payout[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|dollars?)\b)`,
   String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
 ].join("|"), "i")
 // Terms announced, not published: an announcement within the window cancels the inline reading (precision first).
