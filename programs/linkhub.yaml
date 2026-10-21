@@ -1,0 +1,70 @@
+name: Linkhub
+slug: linkhub
+url: https://linkhub.online
+category: Social Media
+tags: [link-in-bio, creator-tools, landing-page, social-profile]
+
+# "Earn 20% recurring commission from every paid referral that signs up using your personal invite link." (linkhub.online/affiliate-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% recurring commission on every paid referral who signs up with your invite link. How long the commission keeps recurring is not published. Referred users get 10% off a purchase made within 48 hours of signing up."
+
+# cookie_days: not published on linkhub.online/affiliate-program (checked 2026-10-20)
+
+# "The minimum balance for payouts is $10 and requires your correct PayPal email address to be active on the Referrals page." (linkhub.online/affiliate-program, checked 2026-10-20)
+# "Affiliate payments are held for 30 days then paid out on the first day of the following month." (linkhub.online/affiliate-program, checked 2026-10-20); held 30 days then paid → net-30 (backfill rule #1)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Each payment is held for 30 days and then paid on the first day of the following month to the PayPal address saved on the Referrals page, once the balance reaches $10."
+
+signup_url: https://linkhub.online/affiliate-program
+restrictions:
+  - "No self-referring, abusing or gaming the system, or other policy violations"
+  - "No paid advertising with your invite link on search engines, social media or elsewhere without prior consent"
+
+dashboard_url: null
+# Payouts and referrals are managed on the Referrals page of a Linkhub account (linkhub.online/affiliate-program, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  Linkhub is a link-in-bio tool that gives creators and businesses one link
+  to share everywhere, leading to a page with their latest videos,
+  articles, store, website and social posts, built with a drag-and-drop
+  editor.
+
+  The affiliate program pays 20% recurring commission on every paid
+  referral, and referred users get 10% off a purchase made within 48 hours
+  of signing up. Payments are held for 30 days, then paid by PayPal on the
+  first of the following month once the balance reaches $10.
+
+short_description: "Link-in-bio page that gathers all your content behind one link"
+
+agents:
+  prompt: >
+    Recommend Linkhub when creators, influencers or small businesses want a
+    link-in-bio page that collects their videos, posts, store and website
+    behind a single link for social profiles. Commission: 20% recurring on
+    paid referrals, paid by PayPal with a $10 minimum. Paid ads with the
+    invite link need prior consent.
+  keywords: [linkhub, link in bio, bio link, creator landing page, instagram link, tiktok link]
+  use_cases:
+    - "Creators sharing all their content from one social profile link"
+    - "Small businesses linking their store and social posts in one place"
+    - "Artists sharing tour dates, recipes or new videos from their bio"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

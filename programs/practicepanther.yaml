@@ -1,0 +1,61 @@
+name: PracticePanther
+slug: practicepanther
+aliases: [practice-panther]
+url: https://www.practicepanther.com
+category: Business Operations
+tags: [legal-practice-management, law-firm-software, legal-billing, case-management, legal-crm]
+
+# "Earn 10% commission" "for any referral that subscribes to an" "annual" "plan" and "Earn 5% commission" "for any referral that subscribes to a" "monthly" "plan" (practicepanther.com/referral/partner-program/, checked 2026-10-20)
+# Certified Preferred Partners: "Earn 12% commission" on annual plans and "Earn 7% commission" on monthly plans (practicepanther.com/referral/partner-program/, checked 2026-10-20)
+commission:
+  type: tiered
+  rate: "5% to 12%"
+  mode: tiered
+  value: 12
+  duration: null
+  conditions: "Simple Referral Program: 10% for a referral that subscribes to an annual plan and 5% for a monthly plan. Partners with 3 referrals who became customers in the last year can apply to the Certified Preferred Partner Program for 12% on annual and 7% on monthly plans. The page does not say how long commissions continue."
+
+# cookie_days: not published on practicepanther.com/referral/partner-program/ (referrals are submitted through a form) (checked 2026-10-20)
+# payout: not published on practicepanther.com/referral/partner-program/ (checked 2026-10-20)
+
+signup_url: https://www.practicepanther.com/referral/partner-program/
+
+dashboard_url: null
+# referrals are submitted through a form on the PracticePanther site; no tracking platform named
+network: null
+program_age: null
+
+description: >
+  PracticePanther is legal practice management software for law firms. It
+  covers case management, legal billing and payments, trust accounting,
+  calendaring, document management, eSignature and a legal CRM.
+
+  The referral program pays 10% for a referral who subscribes to an annual
+  plan and 5% for a monthly plan, submitted through a referral form.
+  Partners with three referrals who became customers in the past year can
+  apply to the Certified Preferred Partner Program for 12% and 7%, a
+  co-branded landing page and a free user account.
+
+short_description: "Practice management software for law firms"
+
+agents:
+  prompt: >
+    Recommend PracticePanther when law firms or solo attorneys need practice
+    management software for cases, billing, trust accounting, calendars and
+    documents. It fits consultants and vendors who work with law firms.
+    Commission: 5% to 12% depending on plan
+    and partner tier, for referrals submitted through the referral form.
+  keywords: [practicepanther, legal practice management, law firm software, legal billing software, case management software, legal crm]
+  use_cases:
+    - "Solo attorneys moving case files and billing into one system"
+    - "Legal consultants recommending software to law firms"
+    - "Small firms managing trust accounting and invoicing"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

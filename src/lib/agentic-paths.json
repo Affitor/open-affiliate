@@ -1219,6 +1219,7 @@
     "/programs/zonka-feedback.md",
     "/programs/zoominfo.md",
     "/rankings.md",
+    "/rankings/leaderboard.md",
     "/skill/SKILL.md",
     "/verified.md"
   ],
@@ -1243,6 +1244,7 @@
     "/docs/contributing",
     "/docs/features",
     "/docs/mcp",
+    "/docs/oas",
     "/docs/open-source",
     "/docs/quickstart",
     "/docs/sdk",
@@ -1265,6 +1267,8 @@
     "/programs/[slug]/oas",
     "/programs/a-z",
     "/rankings",
+    "/rankings/commission",
+    "/rankings/leaderboard",
     "/saved",
     "/submit"
   ],

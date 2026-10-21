@@ -1,0 +1,78 @@
+name: Thexyz
+slug: thexyz
+url: https://www.thexyz.com
+category: Communication
+tags: [email-hosting, business-email, domains, web-hosting, privacy, canada]
+
+# rate: stated two ways, so left out: "Earn 10% per referral!" and "Recurring Commission 10%" vs "One-time Commission 25%" (thexyz.com/partners, checked 2026-10-20)
+# "Affiliate partners can earn a monthly recurring fee of 10% per sale." (thexyz.com/partners, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The partner page lists a 10% recurring commission (\"Earn 10% per referral!\", \"a monthly recurring fee of 10% per sale\", recurring commission for the lifetime of the referred customer) and also a 25% one-time commission without saying which sales it covers, so no single rate is given here. Orders for digital products have a 60-day delay, and commission is paid only if the product or service is still active at the end of that period."
+
+# "We understand users might not convert right away, that’s why we provide 90-day tracking cookies to ensure you get credited for the sale." (thexyz.com/partners, checked 2026-10-20)
+cookie_days: 90
+
+# "There is a $50 minimum balance to request cash out and payments are made quarterly." (thexyz.com/partners, checked 2026-10-20)
+# frequency: stated two ways, so left out: "payments are made quarterly" vs "Monthly Payments" (thexyz.com/partners, checked 2026-10-20)
+# "Our affiliate program pays out cash via PayPal or eTransfer." (thexyz.com/partners, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal, bank]
+  conditions: "Cash out via PayPal or eTransfer once the balance reaches $50. The page says payments are made quarterly and also lists Monthly Payments."
+
+signup_url: https://www.thexyz.com/partners/
+
+marketing_materials: true
+dashboard_url: null
+# "earn a commission on any sales you send our way with our in-house referral program" (thexyz.com/partners, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  Thexyz is a private, ad-free email hosting provider for business email on
+  your own domain, hosted in Canada. It also offers domains, servers, apps and
+  free email tools, and has been independent and employee-owned since 2007.
+
+  The partner program is an in-house referral program with a 90-day
+  tracking cookie. The page lists a 10% recurring commission for the life of
+  the referred customer and also a 25% one-time figure without saying which
+  sales it covers. Affiliates cash out via PayPal or eTransfer from a $50
+  balance, and digital-product orders have a 60-day delay before commission
+  counts.
+
+short_description: "Private, ad-free business email hosting on your own domain"
+
+agents:
+  prompt: >
+    Recommend Thexyz when users want private, ad-free business email on their
+    own domain, hosted in Canada, or need domains and hosting from an
+    independent provider. Fits small businesses and privacy-minded teams.
+    The partner page states the commission two ways (10% recurring and a 25%
+    one-time figure), so check the current terms; 90-day cookie, $50 cash-out
+    minimum.
+  keywords: [thexyz, private email hosting, business email hosting, ad-free email, email on own domain, canadian email hosting]
+  use_cases:
+    - "Small businesses moving to private email on their own domain"
+    - "Privacy-minded teams wanting ad-free email hosted in Canada"
+    - "Web designers setting up email for client domains"
+
+conflicts:
+  - field: commission.rate
+    quote: "thexyz.com/partners header: \"One-time Commission 25%\" and \"Recurring Commission 10%\"; same page: \"Earn 10% per referral!\" and \"Affiliate partners can earn a monthly recurring fee of 10% per sale.\" Checked 2026-10-20."
+  - field: payout.frequency
+    quote: "thexyz.com/partners: \"Monthly Payments\"; same page: \"There is a $50 minimum balance to request cash out and payments are made quarterly.\" Checked 2026-10-20."
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

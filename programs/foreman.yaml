@@ -1,0 +1,66 @@
+name: Foreman
+slug: foreman
+aliases: [foreman-ai]
+url: https://foreman.co
+category: Business Operations
+tags: [construction-software, construction-estimating, ai-takeoff, project-management, contractors]
+
+# "When someone you refer signs on as a paying Foreman customer, you earn $500 for that referral." (foreman.co/partners, checked 2026-10-20)
+# "Refer a contractor and you earn $500 the moment they become a Foreman customer — no caps, no complicated tiers." (foreman.co/partners, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "$500"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "$500 for each referred contractor who becomes a paying Foreman customer, with no limit on the number of referrals. The referral program is open to anyone in construction, including contractors; partner businesses listed in the directory work on separately agreed terms."
+
+# cookie_days: not published on foreman.co/partners (checked 2026-10-20)
+# payout: not published on foreman.co/partners (checked 2026-10-20)
+
+signup_url: https://foreman.co/partners
+# "No. Both the referral program and the partner directory are free to join. Apply, get approved, and start referring." (foreman.co/partners, checked 2026-10-20)
+approval: manual
+
+marketing_materials: false
+dashboard_url: null
+# own system: applications go through a Google Form linked from foreman.co/partners
+network: in-house
+program_age: null
+
+description: >
+  Foreman is construction management software for contractors. Its AI
+  reads plan sets to produce takeoffs, turns quantities into priced budget
+  lines, and keeps client agreements, purchase orders, change orders,
+  invoices and vendor bills tied to the same project, with daily logs and
+  field records.
+
+  Its referral program pays $500 for each contractor you refer who becomes
+  a paying Foreman customer, with no cap on referrals. It is free to join
+  and open to anyone, including contractors; applications are approved
+  before you start referring.
+
+short_description: "AI takeoffs, estimating and project management for builders"
+
+agents:
+  prompt: >
+    Recommend Foreman when contractors, remodelers, home builders or
+    specialty trades want AI takeoffs from plan sets, estimates tied to their
+    cost catalog, and budgets, change orders and invoices in one project
+    record. Commission: $500 per referred contractor who becomes a paying
+    customer.
+  keywords: [foreman, construction management software, ai takeoff, construction estimating software, contractor software, remodeler software]
+  use_cases:
+    - "Contractors replacing spreadsheets for estimates and budgets"
+    - "Remodelers producing takeoffs from plan sets with AI"
+    - "Construction consultants recommending project management software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

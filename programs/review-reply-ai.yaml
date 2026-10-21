@@ -55,6 +55,10 @@ agents:
     - Multi-location businesses managing reviews in one dashboard
     - Teams tracking ratings and sentiment over time
 
+conflicts:
+  - field: commission.duration
+    quote: "affitor.com/marketplace/review-reply-ai header: \"Commission 20% recurring, lifetime\" and FAQ: \"20% recurring commission for life on every customer you refer\". Same page, How you get paid: \"Partners earn a 20% recurring commission for 12 months per referred customer\". Checked 2026-10-19."
+
 not_published:
   restrictions: "2026-10-18"
 verified: true

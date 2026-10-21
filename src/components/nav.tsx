@@ -18,9 +18,10 @@ function GitHubIcon({ className }: { className?: string }) {
 // Explore is intentionally absent. The page still works at /explore and is
 // linked from content that points at it, but it is not promoted in the nav
 // until its thumbnails and load time are good enough to send people to.
-// Rankings, Submit and Docs live in the footer. Rankings moves to the front of
-// the nav when OAS publishes (#285); until then the order stays.
+// Rankings leads the nav once OAS is published (Sơn 19/10); Submit and Docs live in
+// the footer (Registry column).
 const NAV_LINKS = [
+  { label: "Rankings", href: "/rankings" },
   { label: "Programs", href: "/programs" },
   { label: "Networks", href: "/networks" },
   { label: "Categories", href: "/categories" },

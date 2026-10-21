@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { track } from "@/lib/track";
-import { AFFITOR_ATTR, AFFITOR_CLICK, isAffitorHref } from "@/lib/affitor-link";
+import { track, trackAffitorClick, trackApply } from "@/lib/track";
+import { AFFITOR_ATTR, isAffitorHref } from "@/lib/affitor-link";
 
 export function TrackView({ slug }: { slug: string }) {
   useEffect(() => {
@@ -11,15 +11,19 @@ export function TrackView({ slug }: { slug: string }) {
   return null;
 }
 
+/** A program page Apply link: outbound_click (the count claimed brands see), apply_click, and AFFITOR_CLICK for affitor.com. */
 export function TrackLink({
   href,
   slug,
+  network,
   cta,
   children,
   className,
 }: {
   href: string;
   slug: string;
+  /** The program's network key, for apply_click. */
+  network?: string | null;
   /** Which button, for AFFITOR_CLICK when the link goes to affitor.com. */
   cta: string;
   children: React.ReactNode;
@@ -35,7 +39,8 @@ export function TrackLink({
       onClick={() => {
         track("outbound_click", { slug })
         track("cta_oa_program", { slug })
-        if (isAffitorHref(href)) track(AFFITOR_CLICK, { slug, metadata: { source: "program_page", cta } })
+        trackApply(href, slug, network, "program_page")
+        trackAffitorClick(href, cta, slug)
       }}
     >
       {children}

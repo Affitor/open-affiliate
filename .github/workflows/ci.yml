@@ -31,6 +31,8 @@ jobs:
       - run: npx tsx --test scripts/sync-affitor.test.ts
       - run: npx tsx --test scripts/verify-programs.test.ts
       - run: npx tsx --test scripts/claims.test.ts scripts/claims-apply.test.ts
+      - run: npx tsx --test scripts/inbound-email.test.ts
+      - run: npx tsx --test scripts/submit-yaml.test.ts
       - run: npx tsx --test scripts/check-type-scale.test.ts
       - run: npm run check:type-scale
       - run: npx tsc --noEmit
@@ -39,6 +41,7 @@ jobs:
       - run: npx tsx --test scripts/agent-skills.test.ts
       - run: npx tsx --test scripts/agent-readiness.test.ts
       - run: npx tsx --test scripts/oas-tier1.test.ts
+      - run: npx tsx --test scripts/compare-terms.test.ts
       # After the build: it reads the registry that prebuild regenerates.
       - run: npx tsx --test --test-force-exit scripts/no-program.test.ts
       - run: npx tsx --test --test-force-exit scripts/program-aliases.test.ts
@@ -49,11 +52,14 @@ jobs:
       - run: npx tsx --test scripts/commission-order.test.ts
       - run: npx tsx --test scripts/rankings-terms.test.ts
       - run: npx tsx --test scripts/oas.test.ts
+      - run: npx tsx --test --test-force-exit scripts/oas-surfaces.test.ts
+      - run: npx tsx --test --test-force-exit scripts/oas-machine.test.ts
       - run: npx tsx --test --test-force-exit scripts/confirmed-terms.test.ts
       - run: npx tsx --test --test-force-exit scripts/freshness.test.ts
       - run: npx tsx --test scripts/affitor-links.test.ts
       - run: npx tsx --test scripts/programs-directory.test.ts
       - run: npx tsx --test --test-force-exit scripts/best-posts.test.ts
+      - run: npx tsx --test --test-force-exit scripts/best-titles.test.ts
       - run: npm run verify:client-registry
       - run: npm run verify:machine-surfaces
 

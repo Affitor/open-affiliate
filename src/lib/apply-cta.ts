@@ -47,7 +47,8 @@ export function checkTermsLabel(brand: string): string {
  */
 export function applyButton(program: Program, surface: OutboundSurface): { label: string; href: string } {
   if (program.network === "affitor" && isLive(program) && program.signupUrl) {
-    return { label: "Apply on Affitor", href: affitorHref(program.signupUrl, program.slug) }
+    // The program page's button keeps utm_medium=apply; elsewhere the medium is the surface, as for brand links.
+    return { label: "Apply on Affitor", href: affitorHref(program.signupUrl, program.slug, surface === "program_page" ? "apply" : surface) }
   }
   return {
     label: isUnverified(program) ? checkTermsLabel(program.name) : applyEarnLabel(program.commission),
@@ -70,8 +71,8 @@ export function blogApplyHref(program: Program, post: string): string {
 }
 
 /** An Affitor marketplace link with the apply UTM, which the YAML never stores. */
-function affitorHref(url: string, slug: string): string {
-  return affitorUrl("apply", slug, url)
+function affitorHref(url: string, slug: string, placement = "apply"): string {
+  return affitorUrl(placement, slug, url)
 }
 
 /**

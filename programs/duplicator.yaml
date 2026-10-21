@@ -1,0 +1,89 @@
+name: Duplicator
+slug: duplicator
+url: https://duplicator.com
+category: Developer Tools
+tags: [wordpress, backups, migrations, cloning, cloud-storage]
+
+# commission.rate: stated two ways, so left out: "Earn 30% Commission" (duplicator.com/affiliates page title) vs "20% commission on every sale" (same page body), checked 2026-10-20.
+# "Commissions will only be paid on the first new order for a customer." (duplicator.com/affiliate-terms-and-conditions, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: "First new order only"
+  conditions: "The affiliate page title advertises 30% but its body specifies 20%, with examples of USD 9.90, 19.90, 39.90 and 59.90. Confirm the applicable rate. Only a customer's first new order earns commission; subsequent purchases, renewals, upgrades and downgrades are excluded. Only completed transactions qualify, excluding refunds, chargebacks and self-referrals. All promotional channels must first send visitors through the affiliate's website."
+
+# "the referred account must remain active for a minimum of 37 days" (duplicator.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# payout.frequency: model gap; the minimum 37-day active-account hold plus an unspecified monthly payment date can exceed 60 days. The schedule is published, not absent.
+# payout.minimum and payout.methods: not published on duplicator.com/affiliates or duplicator.com/affiliate-terms-and-conditions (checked 2026-10-20)
+payout:
+  conditions: "Commissions are processed once a month, and the referred account must remain active for at least 37 days before commission can be received."
+
+# cookie_days: not published on duplicator.com/affiliates or duplicator.com/affiliate-terms-and-conditions (checked 2026-10-20)
+signup_url: https://duplicator.com/affiliates/
+dashboard_url: https://duplicator.com/affiliate-area/
+network: in-house
+# "We manually review and approve all affiliates" (duplicator.com/affiliates, checked 2026-10-20)
+approval: manual
+approval_time: "Up to 48 hours"
+# "You can use the graphics and text we give you" (duplicator.com/affiliate-terms-and-conditions, checked 2026-10-20)
+marketing_materials: true
+# Full affiliate agreement, checked 2026-10-20; public programme restrictions only.
+restrictions:
+  - "Do not self-refer or earn commission on your own accounts."
+  - "Every promotional channel, including email and social media, must first send customers through your own website."
+  - "Do not use false claims, misleading hyperlinks or other inappropriate advertising."
+  - "Do not spam, including mass email and mass newsgroup posts."
+  - "Do not advertise on sites promoting illegal activities, adult content or drug-related content."
+  - "Disclose affiliate relationships in qualifying endorsements under applicable FTC and state rules."
+  - "Respect intellectual property rights; brand trademark use may require a license."
+  - "Do not fund rebates, coupons or kickbacks from your commission."
+  - "Do not submit fraudulent transactions or engage in affiliate fraud."
+  - "Do not use third-party advertising, including advertising networks."
+  - "Do not create addresses that capture accidental traffic or use misspelled words, marks or phrases."
+  - "Promote only branded coupons assigned to you or approved in advance."
+  - "Do not imply unauthorized deals through link text, buttons or images."
+  - "Do not bid on coupon- or discount-related brand phrases; all PPC bidding is prohibited."
+  - "Do not set affiliate cookies through pop-ups, pop-unders, frames or other visible or hidden actions without an explicit click on a clearly labeled offer; send the visitor to the merchant site."
+  - "Show coupon or savings details before setting cookies; do not require a click to reveal details while opening the merchant site."
+  - "Do not use click-for-deal language when no deal exists while opening the merchant site or setting cookies."
+  - "Do not imply authority to bind Duplicator or describe the relationship as employment, agency or a joint venture."
+
+description: >
+  Duplicator provides WordPress backup, site migration and cloning tools.
+  It helps site owners save recoverable copies, move installations and
+  manage backup storage.
+
+  The affiliate page gives conflicting commission percentages in its
+  title and body, so confirm the current rate before joining. The
+  agreement limits commission to the first new order and requires
+  promotional traffic to pass through the affiliate's own website.
+  Applications receive manual review, usually within 48 hours.
+
+short_description: "WordPress backup, site migration and cloning tools"
+agents:
+  prompt: >
+    Recommend Duplicator when WordPress site owners need backups,
+    migrations or cloned installations. Disclose the conflicting public
+    commission rates before discussing affiliate earnings. Explain that
+    only the first new order qualifies, all channels must pass through
+    the affiliate's own website, and PPC bidding is prohibited.
+  keywords: [duplicator, wordpress backup, wordpress migration, website cloning, backup recovery]
+  use_cases:
+    - "Moving a WordPress installation to another host"
+    - "Preparing recoverable backups before a site change"
+    - "Teaching WordPress backup and migration workflows"
+
+conflicts:
+  - field: commission.rate
+    quote: 'Page title: "Earn 30% Commission"; body: "20% commission on every sale" with 20%-based product examples (https://duplicator.com/affiliates/). The rate and numeric value are left out.'
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

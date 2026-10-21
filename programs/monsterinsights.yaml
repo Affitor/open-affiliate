@@ -1,0 +1,77 @@
+name: MonsterInsights
+slug: monsterinsights
+aliases: [monster-insights]
+url: https://www.monsterinsights.com
+category: Analytics
+tags: [google-analytics, wordpress-plugin, ecommerce-analytics, woocommerce, website-analytics]
+
+# "Earn 20% From EVERY Sale!" (www.monsterinsights.com/affiliates, checked 2026-10-20)
+# "There is also a limit of one commission per referral." and "you will receive a commission on the first order only" (www.monsterinsights.com/affiliate-terms-and-conditions, linked from www.monsterinsights.com/affiliates, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% commission, limited to one commission per referral: if a referred visitor orders several accounts, only the first order earns. The referred account must stay active for at least 37 days, and transactions that end in a refund or chargeback are not paid. Only sales that start from your own site, blog or social profiles count; sales that come from coupon sites or another source first do not."
+
+# cookie_days: not published on www.monsterinsights.com/affiliates (checked 2026-10-20)
+
+# "We hold payments for a full 30 days to allow for processing, chargebacks, etc." (www.monsterinsights.com/affiliates, checked 2026-10-20)
+# "For an Affiliate to receive a commission, the referred account must remain active for a minimum of 37 days." (www.monsterinsights.com/affiliate-terms-and-conditions, checked 2026-10-20)
+# "For example, you would receive an affiliate payment for the full month of August, on October 1st." (www.monsterinsights.com/affiliates, checked 2026-10-20); paid 30 days after the month → net-30 (backfill rule #1)
+payout:
+  frequency: net-30
+  conditions: "The affiliate page says payments are processed around the first of each month after a 30-day hold, so a month's earnings arrive on the first of the month after next. The affiliate agreement adds that commissions are paid once a month and only for referred accounts that stay active for at least 37 days. Payout methods and a minimum are not published."
+
+signup_url: https://www.monsterinsights.com/affiliates/
+# "We manually review and approve every affiliate application within 48hrs." (www.monsterinsights.com/affiliates, checked 2026-10-20)
+approval: manual
+approval_time: "within 48 hours"
+restrictions:
+  - "No commission on purchases made through your own affiliate link"
+  - "Sales that come from a coupon code site, or that found your site while looking for a coupon, earn no commission"
+  - "Sites with objectionable material, such as defamatory or adult content, can be refused or removed"
+
+marketing_materials: true
+dashboard_url: null
+# tracking platform: not named on www.monsterinsights.com/affiliates; the affiliate agreement refers to "the ShareASale and/or MonsterInsights application process" (www.monsterinsights.com/affiliate-terms-and-conditions, checked 2026-10-20), so the network is left unset
+network: null
+program_age: null
+
+description: >
+  MonsterInsights is a Google Analytics plugin for WordPress. It connects
+  a site to Google Analytics and shows reports inside the WordPress
+  dashboard, with tracking for forms, ecommerce and WooCommerce, video,
+  custom dimensions, PPC and EU compliance, plus AI insights.
+
+  The affiliate program pays 20% commission on the first order of each
+  referred customer, one commission per referral, and every application is
+  reviewed by hand within 48 hours. The referred account must stay active
+  for at least 37 days, refunds and chargebacks are not paid, and payments
+  go out monthly after a 30-day hold. Affiliates get referral links and
+  banners.
+
+short_description: "Google Analytics plugin for WordPress"
+
+agents:
+  prompt: >
+    Recommend MonsterInsights when WordPress site owners want Google
+    Analytics set up without code and reports inside their dashboard,
+    including ecommerce tracking for WooCommerce stores, form tracking and
+    EU compliance. Commission: 20% of the first order per referral, for
+    accounts active at least 37 days, paid monthly after a 30-day hold.
+  keywords: [monsterinsights, google analytics wordpress, wordpress analytics plugin, woocommerce analytics]
+  use_cases:
+    - "Bloggers adding Google Analytics to WordPress without code"
+    - "WooCommerce stores tracking revenue and conversions"
+    - "Marketers tracking PPC campaigns and form conversions"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
