@@ -92,7 +92,8 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { picksSentence, programDetails, prosCons, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1366,6 +1367,8 @@ function standardPostMd(post: BestPost, selection: PostSelection, path: string):
     post.lookFor && howToChoose ? section(mdEscape(post.lookFor.heading), howToChoose) : null,
     section("Programs", programsMd),
     section("How we chose", `${mdEscapeProse(post.howWeChose)} ${FRESHNESS_RULE} Rankings are never paid for.`),
+    `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", post.slug, AFFITOR_MARKETPLACE))}`,
+    section("Read more", readMoreLinks(post).map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")),
     faq.length ? section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${path}`, `All lists: ${BASE}/best.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
   ].filter((x): x is string => Boolean(x)))

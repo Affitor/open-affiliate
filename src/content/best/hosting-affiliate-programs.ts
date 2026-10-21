@@ -47,7 +47,7 @@ export const post: BestPost = {
     ],
   },
   considered: (p) => p.category === "Infrastructure" && p.tags.some((t) => /hosting$/.test(t) && t !== "email-hosting"),
-  guides: ["how-to-start-affiliate-marketing", "affiliate-marketing-for-bloggers", "make-money-with-affiliate-marketing"],
+  guides: ["how-to-start-affiliate-marketing", "affiliate-marketing-for-bloggers"],
   programs: [
     {
       slug: "nestify",

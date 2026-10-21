@@ -1,10 +1,11 @@
-import { getBestList, updatedText } from "./best-lists"
+import { BEST_LISTS, bestPath, getBestList, updatedText } from "./best-lists"
+import { GUIDES, guidePath, guideTitle } from "./guides"
 import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type BestPost, type PostSelection } from "./best-posts"
-import { PAYOUT_METHODS } from "./claims/form"
+
 import { IN_HOUSE, isLive, livePrograms, networkName, programs, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
-import { termNotes } from "./term-notes"
+import { conflictValues, termNotes } from "./term-notes"
 
 /**
  * The data behind the standard "best X" layout (components/best-post-standard.tsx).
@@ -49,12 +50,22 @@ export function approvalTime(p: Program): string | null {
   return t ? t[0].toLowerCase() + t.slice(1) : null
 }
 
-const METHOD = new Map(PAYOUT_METHODS)
+/** How a payout method reads in a sentence: "PayPal or bank transfer". */
+const METHOD_TEXT: Record<string, string> = {
+  paypal: "PayPal",
+  bank: "bank transfer",
+  wise: "Wise",
+  stripe: "Stripe",
+  crypto: "crypto",
+  check: "check",
+}
 
-/** "PayPal or Bank" from payout methods; null when none is recorded. */
+/** "PayPal or bank transfer" from payout methods; null when none is recorded. */
 export function methodsText(p: Program): string | null {
-  const m = (p.payoutMethods ?? p.payout.methods ?? []).map((x) => METHOD.get(x.toLowerCase()) ?? x)
-  return m.length ? m.join(" or ") : null
+  const m = (p.payoutMethods ?? p.payout.methods ?? []).map((x) => METHOD_TEXT[x.toLowerCase()] ?? x)
+  if (!m.length) return null
+  const text = m.length < 3 ? m.join(" or ") : `${m.slice(0, -1).join(", ")} or ${m.at(-1)}`
+  return text[0].toUpperCase() + text.slice(1)
 }
 
 /** A third-party network the program runs on (not in-house, not unknown). */
@@ -64,13 +75,40 @@ function thirdPartyNetwork(p: Program): string | null {
 
 const twoWays = (p: Program, ...fields: string[]) => fields.some((f) => termNotes(p.slug).conflicts.has(f))
 
-/** When and how much: "Net 60, $100 minimum", a two-ways note, "On CJ Affiliate's terms", or null. */
+/** Both values of a conflicting field when its quote names them ("30 or 60 days"), else null. */
+function bothValues(p: Program, field: string): string | null {
+  const quote = termNotes(p.slug).conflictQuotes.get(field)
+  return quote ? conflictValues(quote, field) : null
+}
+
+/**
+ * The payout terms the brand states two ways, from the fields actually in
+ * conflict: "$40 or $80 minimum, and two different schedules"; null when none.
+ */
+function payoutTwoWays(p: Program): string | null {
+  const min = twoWays(p, "payout.minimum")
+  const freq = twoWays(p, "payout.frequency")
+  if (!min && !freq) return null
+  const minText = min ? (bothValues(p, "payout.minimum") ? `${bothValues(p, "payout.minimum")} minimum` : "two different minimums") : null
+  const freqText = freq ? "two different schedules" : null
+  return [minText, freqText].filter(Boolean).join(", and ")
+}
+
+/** When and how much: "Net 60, $100 minimum", the terms stated two ways, "On CJ Affiliate's terms", or null. */
 function gettingPaid(p: Program): string | null {
   const timing = payoutText(p, "")
   if (timing) return timing
-  if (twoWays(p, "payout.minimum", "payout.frequency")) return "The brand's own pages give two different minimums and schedules"
+  const two = payoutTwoWays(p)
+  if (two) return `${two[0].toUpperCase()}${two.slice(1)}; the brand's own pages differ`
   const net = thirdPartyNetwork(p)
   return net ? `On ${net}'s terms` : null
+}
+
+/** "45 days", or both values when the brand states two ("30 or 60 days; the brand's own pages differ"), or null. */
+function cookieDetail(p: Program): string | null {
+  if (p.cookieDays != null) return `${p.cookieDays} days`
+  if (!twoWays(p, "cookie_days")) return null
+  return `${bothValues(p, "cookie_days") ?? "Two different windows"}; the brand's own pages differ`
 }
 
 /**
@@ -82,7 +120,7 @@ export function programDetails(p: Program): [string, string][] {
     ["Commission rate", earnText(p)],
     ["Getting paid", gettingPaid(p)],
     ["Payment method", methodsText(p) ?? (twoWays(p, "payout.methods") ? "The brand's own pages name two different methods" : null)],
-    ["Cookie duration", p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? "The brand's own pages give two different windows" : null],
+    ["Cookie duration", cookieDetail(p)],
     ["Approval", p.approval === "auto" ? "Automatic" : p.approval === "manual" ? `Manual${approvalTime(p) ? `, ${approvalTime(p)}` : ""}` : null],
   ]
   return rows.filter((r): r is [string, string] => Boolean(r[1]))
@@ -90,12 +128,14 @@ export function programDetails(p: Program): [string, string][] {
 
 /** The comparison table's cells: Commission, Cookie, Payout ("—" when there is none on record). */
 export function tableRow(p: Program): { commission: string; cookie: string; payout: string } {
-  const paid = gettingPaid(p)
-  const methods = methodsText(p)
+  const timing = payoutText(p, "")
+  const two = timing ? null : payoutTwoWays(p)
+  const net = thirdPartyNetwork(p)
+  const paid = timing || (two ? `${two[0].toUpperCase()}${two.slice(1)}` : net ? `On ${net}'s terms` : null)
   return {
     commission: earnText(p),
-    cookie: p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? "Two values, see below" : "—",
-    payout: [twoWays(p, "payout.minimum", "payout.frequency") && !payoutText(p, "") ? "Two values, see below" : paid, methods].filter(Boolean).join(" · ") || "—",
+    cookie: p.cookieDays != null ? `${p.cookieDays} days` : twoWays(p, "cookie_days") ? (bothValues(p, "cookie_days") ?? "Two values") : "—",
+    payout: [paid, methodsText(p)].filter(Boolean).join(" · ") || "—",
   }
 }
 
@@ -126,9 +166,13 @@ export function prosCons(p: Program): { pros: string[]; cons: string[] } {
   if (p.marketingMaterials) pros.push("Banners and other marketing assets provided")
   if (p.dedicatedManager) pros.push("Dedicated affiliate manager")
 
+  // The brand's prohibitions ("No …", "Do not …") lead: they are what a partner must not do.
+  const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r.trim())
+  const restrictions = p.restrictions ?? []
+  cons.push(...restrictions.filter(forbids))
   if (p.commission.type === "one-time") cons.push("Pays once per referral, with no recurring share")
   if (p.commission.type === "tiered") cons.push("The top figure needs volume or a higher tier")
-  for (const r of p.restrictions ?? []) cons.push(r)
+  cons.push(...restrictions.filter((r) => !forbids(r)))
   return { pros: pros.slice(0, PROS_CONS_MAX), cons: cons.slice(0, PROS_CONS_MAX) }
 }
 
@@ -237,7 +281,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
         ? `${withCookie.length} of the ${shown.length} programs here publish a cookie window: ${andList(withCookie.map((p) => `${name(p)} (${p.cookieDays} days)`))}. `
         : "None of the programs here has a cookie window on record. ") +
       blanks(shown.filter((p) => p.cookieDays == null), (p) => emptyLabel(p, "cookie_days"), {
-        [STATED_TWO_WAYS]: ["states its cookie window two ways on its own pages, so we show none", "state their cookie window two ways on their own pages, so we show none"],
+        [STATED_TWO_WAYS]: ["states its cookie window two ways on its own pages; its section gives both", "state their cookie window two ways on their own pages; each section gives both"],
         [NOT_STATED]: ["does not publish one", "do not publish one"],
         [NOT_RECORDED]: ["has none on our record", "have none on our record"],
       })
@@ -273,4 +317,26 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
     })
   }
   return [...faq, ...(post.faq ?? [])]
+}
+
+/**
+ * The one line at the end of a standard post that points partners to the
+ * Affitor marketplace (Shopify ends its posts the same way with its own
+ * product). It says only what affitor.com says (one partner account, many
+ * programs) and who runs it; no pricing, no promises.
+ */
+export const AFFITOR_LINE = {
+  before: "Looking for more programs to promote? The ",
+  anchor: "Affitor marketplace",
+  after: " lets you apply to many affiliate programs from one partner account. It is run by the team that maintains OpenAffiliate.",
+} as const
+
+/** How many posts the "Read more" box at the end lists. */
+export const READ_MORE_COUNT = 5
+
+/** The post's related /best lists, then its guides, the first READ_MORE_COUNT that exist. */
+export function readMoreLinks(post: BestPost): { href: string; label: string }[] {
+  const lists = post.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug)).map((l) => ({ href: bestPath(l), label: l.h1 }))
+  const guides = (post.guides ?? []).flatMap((slug) => GUIDES.filter((g) => g.slug === slug)).map((g) => ({ href: guidePath(g), label: guideTitle(g) }))
+  return [...lists, ...guides].slice(0, READ_MORE_COUNT)
 }

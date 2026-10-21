@@ -6,11 +6,12 @@ import { PostApplyLink } from "@/components/post-apply-link";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { type Program } from "@/lib/programs";
 import { blogApplyHref } from "@/lib/apply-cta";
-import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
-import { GUIDES, guidePath, guideTitle } from "@/lib/guides";
+import { type BestList } from "@/lib/best-lists";
 import { FRESHNESS_RULE, checkedRange, postTitle, type BestPost, type PostProgram, type PostSelection } from "@/lib/best-posts";
-import { dateText, picksSentence, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "@/lib/best-standard";
+import { AFFITOR_LINE, dateText, picksSentence, programDetails, prosCons, readMoreLinks, splitLink, standardFaq, tableRow, typeSplit } from "@/lib/best-standard";
 import { CAPTURES } from "@/lib/best-captures";
+import { AffitorLink } from "@/components/affitor-link";
+import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
 
 const SITE = "https://openaffiliate.dev";
 
@@ -150,8 +151,7 @@ export function BestPostStandard({
   const url = `${SITE}${path}`;
   const { shown } = selection;
   const lede = picksSentence(post, selection);
-  const relatedLinks = post.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug)).map((l) => ({ href: bestPath(l), label: l.h1 }));
-  const guideLinks = (post.guides ?? []).flatMap((slug) => GUIDES.filter((g) => g.slug === slug)).map((g) => ({ href: guidePath(g), label: guideTitle(g) }));
+  const readMore = readMoreLinks(post);
   const th = "border border-border bg-sunk px-3 py-2.5 text-left text-sm font-semibold";
   const td = "border border-border px-3 py-2.5 text-sm text-foreground/80 align-top";
 
@@ -235,7 +235,10 @@ export function BestPostStandard({
                 return (
                   <tr key={p.slug}>
                     <th scope="row" className={`${td} text-left font-medium text-foreground`}>
-                      <a href={`#${p.slug}`} className="hover:underline underline-offset-4">{p.name}</a>
+                      <a href={`#${p.slug}`} className="flex items-center gap-2 hover:underline underline-offset-4">
+                        <ProgramLogo slug={p.slug} name={p.name} size={24} className="shrink-0" />
+                        {p.name}
+                      </a>
                     </th>
                     <td className={td}>{row.commission}</td>
                     <td className={td}>{row.cookie}</td>
@@ -250,7 +253,10 @@ export function BestPostStandard({
               const row = tableRow(p);
               return (
                 <li key={p.slug} className="border-b border-border py-3 text-sm">
-                  <a href={`#${p.slug}`} className="font-semibold underline underline-offset-4">{p.name}</a>
+                  <a href={`#${p.slug}`} className="flex items-center gap-2 font-semibold underline underline-offset-4">
+                    <ProgramLogo slug={p.slug} name={p.name} size={24} className="shrink-0" />
+                    {p.name}
+                  </a>
                   <p className="mt-1 text-foreground/80">{row.commission}</p>
                   <p className="text-muted-foreground">Cookie: {row.cookie} · Payout: {row.payout}</p>
                 </li>
@@ -278,8 +284,6 @@ export function BestPostStandard({
             </section>
           )}
 
-          <ReadMore id="read-more-lists" links={relatedLinks} />
-
           {shown.map(({ program, copy }, i) => (
             <ProgramSection key={program.slug} program={program} copy={copy} index={i} campaign={post.slug} />
           ))}
@@ -295,7 +299,15 @@ export function BestPostStandard({
             </p>
           </section>
 
-          <ReadMore id="read-more-guides" links={guideLinks} />
+          <p data-affitor-line className={`${prose} mt-10 border-t border-border pt-6`}>
+            {AFFITOR_LINE.before}
+            <AffitorLink href={affitorUrl("blog", post.slug, AFFITOR_MARKETPLACE)} source="blog" cta="marketplace" newTab className={linkClass}>
+              {AFFITOR_LINE.anchor}
+            </AffitorLink>
+            {AFFITOR_LINE.after}
+          </p>
+
+          <ReadMore id="read-more" links={readMore} />
 
           <Tinted id="faq" aria-labelledby="faq-title" data-faq>
             <h2 id="faq-title" className="text-subtitle font-semibold">{list.query} FAQ</h2>

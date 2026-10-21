@@ -15,9 +15,12 @@ import { hasNoProgram } from "../src/lib/no-program"
 import { existsSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { BestPostStandard } from "../src/components/best-post-standard"
-import { NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, STATED_TWO_WAYS, picksSentence, programDetails, prosCons, splitLink, standardFaq, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
+
+const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
+import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
-import { parseNotes, termNotes } from "../src/lib/term-notes"
+import { conflictValues, parseNotes, termNotes } from "../src/lib/term-notes"
 import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
@@ -385,10 +388,10 @@ test("program details leave out a term with no value, and say plainly when the b
       const { conflicts } = termNotes(p.slug)
       const cookie = details.find(([k]) => k === "Cookie duration")
       if (p.cookieDays != null) assert.equal(cookie?.[1], `${p.cookieDays} days`, p.slug)
-      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /two different/, p.slug)
+      else if (conflicts.has("cookie_days")) assert.match(cookie?.[1] ?? "", /the brand.s own pages differ/, p.slug)
       else assert.equal(cookie, undefined, `${p.slug}: a cookie bullet with no value on record`)
       if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f)) && !p.payout.frequency && p.payout.minimum == null)
-        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /two different/, p.slug)
+        assert.match(details.find(([k]) => k === "Getting paid")?.[1] ?? "", /the brand.s own pages differ/, p.slug)
       const { pros, cons } = prosCons(p)
       assert.ok(pros.length <= PROS_CONS_MAX && cons.length <= PROS_CONS_MAX, p.slug)
     }
@@ -402,6 +405,48 @@ test("program details leave out a term with no value, and say plainly when the b
         const sentence = cookieAnswer.split(". ").find((s) => s.includes(p.name)) ?? ""
         assert.match(sentence, /two ways/, `${p.slug}: cookie FAQ`)
       }
+    }
+  }
+})
+
+test("a standard post ends with the Affitor line, one Read more box of five posts, then the FAQ", () => {
+  const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|half|dozen)\b/i
+  const line = `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after}`
+  assert.doesNotMatch(line, /\d|\$|free|price|pricing|guarantee/i)
+  assert.doesNotMatch(line, NUMBER_WORDS)
+  for (const post of STANDARD) {
+    const { html, selection } = renderStandard(post)
+    const links = readMoreLinks(post)
+    assert.equal(links.length, READ_MORE_COUNT, `${post.slug}: Read more lists ${links.length} posts`)
+    for (const l of links) assert.match(l.href, /^\/(best|blog)\/[a-z0-9-]+$/, l.href)
+    assert.equal((html.match(/data-read-more/g) ?? []).length, 1, `${post.slug}: Read more appears more than once`)
+    const box = html.match(/<aside[^>]*data-read-more[\s\S]*?<\/aside>/)![0]
+    assert.deepEqual([...box.matchAll(/href="([^"]+)"/g)].map((m) => m[1]), links.map((l) => l.href))
+    const affitor = blogAffitorHref(post.slug)
+    assert.equal(new URL(affitor).searchParams.get("utm_medium"), "blog")
+    assert.equal(new URL(affitor).searchParams.get("utm_campaign"), post.slug)
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${affitor.replaceAll("&", "&amp;")}"`))
+    assert.ok(tag && tag.includes(`${AFFITOR_ATTR}="blog"`), `${post.slug}: no tracked Affitor marketplace link`)
+    // Order at the end: last program, Affitor line, Read more, FAQ.
+    const last = html.lastIndexOf(`data-post-program="${selection.shown.at(-1)!.program.slug}"`)
+    const at = [html.indexOf("data-affitor-line"), html.indexOf("data-read-more"), html.indexOf("data-faq")]
+    assert.ok(last < at[0] && at[0] < at[1] && at[1] < at[2], `${post.slug}: end blocks out of order ${JSON.stringify([last, ...at])}`)
+  }
+})
+
+test("two-value terms name both values from the conflict quote, and prohibitions lead the cons", () => {
+  assert.equal(conflictValues('site says both "30-Day Cookie Duration" (list) and "The affiliate cookies have a 60-day lifespan." (FAQ). Checked 2026-10-18.', "cookie_days"), "30 or 60 days")
+  assert.equal(conflictValues('a: "returns to purchase in 30days, you get credit" and "cookies and IPs are stored indefinitely". Checked 2026-10-17.', "cookie_days"), "30 days or indefinitely")
+  assert.equal(conflictValues('a: "The minimum amount for payout will be $80." b: "the minimum payout value ($40 minimum)". Checked 2026-10-18.', "payout.minimum"), "$40 or $80")
+  assert.equal(conflictValues('a: "monthly" b: "on request". Checked 2026-10-18.', "payout.frequency"), null)
+  assert.equal(conflictValues('only one "30-day" value', "cookie_days"), null)
+  for (const post of STANDARD) {
+    for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
+      const { cons } = prosCons(p)
+      const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r)
+      const firstOther = cons.findIndex((c) => !forbids(c))
+      if (firstOther >= 0) assert.ok(cons.slice(firstOther).every((c) => !forbids(c)), `${p.slug}: a prohibition after other cons`)
+      assert.doesNotMatch(tableRow(p).payout + programDetails(p).map((d) => d[1]).join(" "), /\bBank\b/, `${p.slug}: "Bank" should read "bank transfer"`)
     }
   }
 })
