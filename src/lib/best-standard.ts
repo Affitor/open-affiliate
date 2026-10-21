@@ -139,8 +139,9 @@ function payoutTwoWays(p: Program): string | null {
 /** When and how much: "Net 60, $100 minimum", the terms stated two ways, "On CJ Affiliate's terms", or null. */
 function gettingPaid(p: Program): string | null {
   const timing = payoutText(p, "")
-  if (timing) return timing
   const two = payoutTwoWays(p)
+  // A conflict still shows next to the terms that are on record: "$200 minimum; the brand gives two schedules".
+  if (timing) return two ? `${timing}; ${two[0].toLowerCase()}${two.slice(1)}` : timing
   if (two) return two
   const net = thirdPartyNetwork(p)
   return net ? `On ${net}'s terms` : null

@@ -7,7 +7,7 @@ tags: [content-marketing, content-calendar, multi-channel-publishing, seo-conten
 commission:
   type: recurring
   # "earn 50% on their first invoice, then 20% for as long as they stay" (storychief.io/partnership-program, checked 2026-10-13)
-  rate: "50%"
+  rate: "50% then 20%"
   mode: percentage
   value: 50
   currency: USD
@@ -66,7 +66,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-13"
-updated_at: "2026-10-18"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-13"
 status: active
 kind: affiliate

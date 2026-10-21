@@ -13,9 +13,9 @@ export const post: BestPost = {
   layout: "standard",
   title: (n, year) => `${n} Affiliate Programs for Beginners in ${year}`,
   description:
-    "Affiliate programs for beginners that approve you automatically and list no high payout minimum, so you start the day you sign up and get paid sooner.",
+    "Affiliate programs for beginners that approve new affiliates automatically, so you can get your link the day you sign up. Terms checked on each brand page.",
   intro:
-    "When you are new, the first hurdle is often the application. Every program below approves new affiliates automatically on its own terms and lists no high payout minimum, so you can start the day you sign up.",
+    "When you are new, the first hurdle is often the application. Every program below approves new affiliates automatically on its own terms, so you can start the day you sign up.",
   lookFor: {
     heading: "How to choose your first affiliate program",
     intro: "Your first program should be easy to join and easy to explain. Check these before you sign up:",
@@ -109,6 +109,6 @@ export const post: BestPost = {
     { label: "Best for small businesses", slug: "simplybook-me" },
   ],
   howWeChose:
-    "We started from the programs in our registry whose verified terms say they approve new affiliates automatically and do not set a high payout minimum, then picked and ordered a mix across SEO, AI, sales, developer and small business tools that a new site or channel can promote.",
+    "We started from the programs in our registry whose verified terms say they approve new affiliates automatically, then picked and ordered a mix across SEO, AI, sales, developer and small business tools that a new site or channel can promote.",
   related: ["free-affiliate-programs", "recurring-affiliate-programs", "saas-affiliate-programs"],
 }

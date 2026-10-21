@@ -405,6 +405,19 @@ test("standard sections: Affitor-network programs disclose it; requirements are 
   assert.match(tableRow(byslug("raycast")).commission, /length not recorded/)
 })
 
+test("a payout conflict shows next to the payout terms that are on record", () => {
+  // Every program whose payout.frequency or payout.minimum is in conflict says so in Getting paid, even when other payout terms are shown.
+  let seen = 0
+  for (const { slug, field } of conflictsWithoutValues().filter((c) => c.field === "payout.frequency" || c.field === "payout.minimum")) {
+    const p = allPrograms.find((x) => x.slug === slug)
+    if (!p) continue
+    seen++
+    const paid = programDetails(p).find(([k]) => k === "Getting paid")?.[1] ?? ""
+    assert.match(paid, field === "payout.frequency" ? /two schedules/ : /two minimums/, `${slug}: ${paid}`)
+  }
+  assert.ok(seen > 0)
+})
+
 test("conflicts[].values items match their field: numbers for payout.minimum, a unit or a word for cookie_days", () => {
   const dir = join(process.cwd(), "programs")
   let seen = 0
