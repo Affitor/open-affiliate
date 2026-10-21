@@ -534,4 +534,15 @@ test("every agent-facing doc tells agents they can submit, and none says MCP can
     assert.match(text, /submit_program/, `${path} must name submit_program`)
     assert.doesNotMatch(text, /cannot add (a )?programs?|no submit tool|read-only: it can look a program up, not add|MCP server is read-only[;.]/i, `${path} still says agents cannot submit`)
   }
+  // Discovery metadata (MCP registry server.json, embedded in ARD and the AI
+  // catalog; the site JSON-LD; the package): "read-only" only with its exception.
+  for (const path of ["packages/mcp/server.json", "packages/mcp/package.json", "src/app/layout.tsx", "scripts/generate-ard.ts", "src/lib/mcp-route.ts", "src/lib/openapi.ts", ...["skills/openaffiliate/SKILL.md", "AGENTS.md", "src/app/docs/mcp/page.tsx", "scripts/generate-md.ts"]]) {
+    const text = readFileSync(path, "utf8")
+    for (const m of text.matchAll(/read-only[^\n]{0,40}/gi)) {
+      if (path === "src/lib/mcp-route.ts" && /READ_ONLY|readOnlyHint/.test(m[0])) continue
+      assert.match(m[0], /except/i, `${path}: "${m[0]}" describes the API or MCP as read-only without the submit_program exception`)
+    }
+  }
+  const server = JSON.parse(readFileSync("packages/mcp/server.json", "utf8"))
+  assert.ok(server.description.length <= 100, "MCP registry descriptions are 100 characters at most")
 })

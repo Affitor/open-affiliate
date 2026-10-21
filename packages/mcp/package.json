@@ -1,7 +1,7 @@
 {
   "name": "openaffiliate-mcp",
   "version": "0.0.6",
-  "description": "MCP server for the OpenAffiliate registry. Search affiliate programs from Claude, Cursor, or any MCP client.",
+  "description": "MCP server for the OpenAffiliate registry. Search affiliate programs, or submit a missing one for review, from Claude, Cursor, or any MCP client.",
   "type": "module",
   "bin": {
     "openaffiliate-mcp": "./dist/index.js"
