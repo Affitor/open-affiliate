@@ -15,9 +15,9 @@ import { hasNoProgram } from "../src/lib/no-program"
 import { existsSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { BestPostStandard } from "../src/components/best-post-standard"
-import { standardFaq, typeSplit } from "../src/lib/best-standard"
+import { NOT_RECORDED, NOT_STATED, STATED_TWO_WAYS, approvalShort, cookieCell, payoutCell, picksSentence, standardFaq, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
-import { leadReceipt, parseReceipts } from "../src/lib/term-receipts"
+import { leadReceipt, parseNotes, parseReceipts, termNotes } from "../src/lib/term-receipts"
 import { blockedReason } from "./blocked-hosts"
 import {
   MIN_POST_PROGRAMS,
@@ -394,9 +394,59 @@ test("receipts: only a quoted line with one source, attached to the next key, sh
     ["commission", "earn up to $500 per sale", "https://brand.com/affiliates"],
     ["cookie", "Your referrals have 60 days", "https://www.brand.com/faq"],
   ])
-  assert.equal(parseReceipts('# "a b c" (evil.com/x, checked 2026-10-12)\napproval: auto', "https://brand.com")[0].href, null)
-  const lead = leadReceipt(parseReceipts('# "€20.00" and "€250.00" (b.com, checked 2026-10-12)\ncommission:\n# "after a sixty day wait" (b.com, checked 2026-10-12)\npayout:', "https://b.com"))
-  assert.equal(lead?.field, "payout")
+  // A quote from another site (a directory, a network page) is never shown as the brand's.
+  assert.deepEqual(parseReceipts('# "a b c" (evil.com/x, checked 2026-10-12)\napproval: auto', "https://brand.com"), [])
+  // The commission quote leads even when short; the newest receipt wins within a field.
+  const many = parseReceipts(
+    '# "€20.00" and "€250.00" (b.com, checked 2026-10-12)\ncommission:\n# "after a sixty day wait" (b.com, checked 2026-10-12)\n# "paid on the first" (b.com, checked 2026-10-19)\npayout:',
+    "https://b.com",
+  )
+  assert.equal(leadReceipt(many)?.quote, "€20.00 … €250.00")
+  assert.equal(leadReceipt(many.filter((r) => r.field !== "commission"))?.quote, "paid on the first")
+  // A receipt for a fact the section leaves empty never leads.
+  assert.equal(leadReceipt(many.filter((r) => r.field !== "commission"), (f) => f !== "payout"), null)
+})
+
+test("empty terms are labelled the way the YAML backs them: two ways, not published, or not recorded", () => {
+  const notes = parseNotes(
+    [
+      "# cookie window: not published on b.com/affiliates (checked 2026-10-12)",
+      "not_published:",
+      '  payout.methods: "2026-10-18"',
+      "conflicts:",
+      "  - field: payout.minimum",
+      '    quote: "x"',
+      "# Runs on a platform the network enum does not list",
+      "network: null",
+    ].join("\n"),
+    "https://b.com",
+  )
+  assert.deepEqual([...notes.notPublished].sort(), ["cookie_days", "payout.methods"])
+  assert.deepEqual([...notes.conflicts], ["payout.minimum"])
+  assert.equal(notes.networkOutsideList, true)
+  assert.equal(parseNotes("network: null", "https://b.com").networkOutsideList, false)
+
+  // On the page: a field the brand states two ways never reads "Not stated by the brand".
+  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+    for (const { program: p } of postSelection(post, new Date(post.checked)).shown) {
+      const { conflicts, notPublished } = termNotes(p.slug, p.url)
+      if (p.cookieDays == null) {
+        const want = conflicts.has("cookie_days") ? STATED_TWO_WAYS : notPublished.has("cookie_days") ? NOT_STATED : NOT_RECORDED
+        assert.equal(cookieCell(p), want, `${p.slug}: cookie`)
+      }
+      if (["payout.minimum", "payout.frequency"].some((f) => conflicts.has(f))) assert.ok(payoutCell(p).startsWith(STATED_TWO_WAYS), `${p.slug}: payout`)
+      if (approvalShort(p) === NOT_STATED) assert.ok(notPublished.has("approval"), `${p.slug}: approval not stated without a record`)
+      if (payoutCell(p).includes(NOT_STATED)) assert.ok(notPublished.has("payout.minimum") && notPublished.has("payout.methods"), `${p.slug}: payout not stated without a record`)
+    }
+  }
+})
+
+test("a standard post's intro, with its computed picks sentence, stays within eighty words", () => {
+  for (const post of POSTS.filter((p) => p.layout === "standard")) {
+    const selection = postSelection(post, new Date(post.checked))
+    const words = `${post.intro} ${picksSentence(post, selection) ?? ""}`.split(/\s+/).filter(Boolean).length
+    assert.ok(words <= 80, `${post.slug}: intro is ${words} words`)
+  }
 })
 
 test("only the posts that opt in render the standard layout", () => {

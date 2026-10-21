@@ -15,7 +15,7 @@ export const post: BestPost = {
   description:
     "The best web hosting affiliate programs for managed WordPress, shared, VPS, cloud and edge hosting, with verified terms and the day we checked each.",
   intro:
-    "The right hosting affiliate program depends on who reads you: WordPress agencies, small business owners, developers or bloggers. Below are picks for each, every program side by side, then a section per program with its terms, its rules, the quote we read on its own affiliate page and the day we read it.",
+    "The right hosting affiliate program depends on who reads you. Below, every program side by side, then a section per program with its terms, its rules and the dated quote we read on its own affiliate page.",
   lookFor: {
     heading: "What to look for in hosting affiliate programs",
     intro:
@@ -110,7 +110,7 @@ export const post: BestPost = {
       slug: "verpex",
       bestFor: "Best for budget hosting content",
       verdict: "A ladder by plan type and monthly referrals, with high top figures for reseller and managed servers and small fixed amounts on entry plans.",
-      why: "Verpex is a web hosting provider for small businesses and personal websites, with WordPress, Linux, Windows and cloud hosting, reseller hosting and managed servers. Its program on Post Affiliate Pro pays once per new hosting customer, on the first deposit only, by plan type and by how many customers you refer each month. Domain names earn nothing. Payouts go by PayPal, bank transfer via Wise or account credit.",
+      why: "Verpex is a web hosting provider for small businesses and personal websites, with WordPress, Linux, Windows and cloud hosting, reseller hosting and managed servers. Its program pays once per new hosting customer, on the first deposit only, by plan type and by how many customers you refer each month. Domain names earn nothing. Payouts go by PayPal, bank transfer via Wise or account credit.",
     },
   ],
   picks: [

@@ -11,14 +11,19 @@ import { serializeJsonLd } from "@/lib/json-ld";
 import { livePrograms, type Program } from "@/lib/programs";
 import { applyButton, blogApplyHref } from "@/lib/apply-cta";
 import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
-import { DISCLOSURE, FRESHNESS_RULE, NOT_STATED, checkedRange, checkedText, cookieText, earnText, payoutText, postTitle, type BestPost, type PostProgram, type PostSelection } from "@/lib/best-posts";
+import { DISCLOSURE, FRESHNESS_RULE, checkedRange, checkedText, earnText, postTitle, type BestPost, type PostProgram, type PostSelection } from "@/lib/best-posts";
 import {
   alsoConsidered,
   approvalShort,
   approvalText,
   dateText,
   goodWatch,
-  methodsText,
+  NOT_RECORDED,
+  NOT_STATED,
+  STATED_TWO_WAYS,
+  cookieCell,
+  payoutCell,
+  programReceipt,
   picksSentence,
   rangeText,
   runsOnText,
@@ -28,7 +33,6 @@ import {
   type TypeSplit,
 } from "@/lib/best-standard";
 import { CAPTURES, CAPTURE_SKIPPED, captureHost } from "@/lib/best-captures";
-import { leadReceipt, termReceipts } from "@/lib/term-receipts";
 
 const SITE = "https://openaffiliate.dev";
 
@@ -46,23 +50,24 @@ export function PostByline({ editor, updated, checked }: { editor?: { name: stri
   );
 }
 
+/** "General hosting reviews" from "general hosting reviews". */
+const capitalize = (t: string) => t.charAt(0).toUpperCase() + t.slice(1);
+
 const FIELD_LABEL = { commission: "You earn", cookie: "Cookie", payout: "Payout", approval: "Approval" } as const;
 
 /** One program's section: verdict, capture, why, six facts, Good / Watch out, the quote we checked, one Apply button. */
 function ProgramSection({ program, copy, index, campaign }: { program: Program; copy: PostProgram; index: number; campaign: string }) {
   const capture = CAPTURES[program.slug];
-  const receipt = leadReceipt(termReceipts(program.slug, program.url));
   const { good, watch } = goodWatch(program);
-  const methods = methodsText(program);
-  const payout = payoutText(program, NOT_STATED);
   const facts: [string, string][] = [
     ["You earn", earnText(program)],
     ["Type", typeText(program)],
-    ["Cookie", cookieText(program, NOT_STATED)],
-    ["Payout", methods ? (payout === NOT_STATED ? methods : `${payout} · ${methods}`) : payout],
+    ["Cookie", cookieCell(program)],
+    ["Payout", payoutCell(program)],
     ["Approval", approvalText(program)],
     ["Runs on", runsOnText(program)],
   ];
+  const receipt = programReceipt(program);
   const label = program.network === "affitor" ? applyButton(program, "blog").label : `Apply on ${program.name}`;
   return (
     <section id={program.slug} data-post-program={program.slug} className="scroll-mt-20 border-t border-border py-10 first-of-type:border-t-0 first-of-type:pt-0">
@@ -134,7 +139,7 @@ function ProgramSection({ program, copy, index, campaign }: { program: Program; 
           <p className="text-foreground/80">&ldquo;{receipt.quote}&rdquo;</p>
           <footer className="mt-1 text-meta text-muted-foreground">
             {receipt.field !== "commission" && <>Source for {FIELD_LABEL[receipt.field]}: </>}
-            {receipt.href ? <a href={receipt.href} rel="nofollow noopener" target="_blank" className="underline underline-offset-4 decoration-border hover:text-foreground">{receipt.source}</a> : receipt.source}, checked {dateText(receipt.checked)}
+            <a href={receipt.href} rel="nofollow noopener" target="_blank" className="underline underline-offset-4 decoration-border hover:text-foreground">{receipt.source}</a>, checked {dateText(receipt.checked)}
           </footer>
         </blockquote>
       )}
@@ -232,13 +237,13 @@ export function BestPostStandard({
     name: p.name,
     logo: <ProgramLogo slug={p.slug} name={p.name} size={24} className="shrink-0" />,
     cells: [
-      { text: copy.bestFor.replace(/^best for\s+/i, ""), sort: copy.bestFor },
+      { text: capitalize(copy.bestFor.replace(/^best for\s+/i, "")), sort: copy.bestFor },
       // "You earn" sorts back to the page order: mixed flat, tiered and percentage figures have no one scale.
       { text: earnText(p), sort: i },
       { text: typeText(p), sort: typeText(p) },
-      { text: cookieText(p, NOT_STATED), sort: p.cookieDays ?? null },
+      { text: cookieCell(p), sort: p.cookieDays ?? null },
       { text: approvalShort(p), sort: p.approval === "auto" ? 0 : p.approval === "manual" ? 1 : null },
-      { text: payoutText(p, NOT_STATED), sort: p.payout.minimum ?? null },
+      { text: payoutCell(p), sort: p.payout.minimum ?? null },
       { text: dateText(checkedText(p)), sort: checkedText(p) },
     ],
   }));
@@ -367,7 +372,18 @@ export function BestPostStandard({
           <div className="mx-auto max-w-[760px] lg:max-w-[920px]">
             <h2 className="text-lg font-semibold">Side by side</h2>
             <SortableTermsTable columns={columns} rows={rows} />
-            <p className="mt-2 text-meta text-muted-foreground">{NOT_STATED}: the brand does not publish it, and we never fill in a guess.</p>
+            <dl data-empty-labels className="mt-2 space-y-0.5 text-meta text-muted-foreground">
+              {[
+                [NOT_STATED, "the brand does not publish it."],
+                [STATED_TWO_WAYS, "the brand's own pages disagree; the section says how."],
+                [NOT_RECORDED, "we have no value on record yet."],
+              ].map(([label, meaning]) => (
+                <div key={label}>
+                  <dt className="inline font-medium">{label}:</dt> <dd className="inline">{meaning}</dd>
+                </div>
+              ))}
+            </dl>
+            <p className="text-meta text-muted-foreground">We never fill in a guess.</p>
           </div>
         </section>
 

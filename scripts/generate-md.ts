@@ -79,7 +79,6 @@ import { applyButton, blogApplyHref } from "../src/lib/apply-cta"
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
-  NOT_STATED,
   checkedRange,
   checkedText,
   cookieText,
@@ -94,8 +93,7 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { alsoConsidered, approvalText, goodWatch, methodsText, picksSentence, runsOnText, standardFaq, typeSplit, typeText } from "../src/lib/best-standard"
-import { leadReceipt, termReceipts } from "../src/lib/term-receipts"
+import { alsoConsidered, approvalText, cookieCell, goodWatch, payoutCell, picksSentence, programReceipt, runsOnText, standardFaq, typeSplit, typeText } from "../src/lib/best-standard"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1333,12 +1331,11 @@ function standardPostMd(post: BestPost, selection: PostSelection, path: string):
   const lede = picksSentence(post, selection)
   const rows = selection.shown
     .map(({ program: p, copy }, i) => {
-      const methods = methodsText(p)
       const facts = mdEscape(
-        `you earn ${earnText(p)}, type: ${typeText(p)}, cookie: ${cookieText(p, NOT_STATED)}, payout: ${payoutText(p, NOT_STATED)}${methods ? ` (${methods})` : ""}, approval: ${approvalText(p)}, runs on: ${runsOnText(p)}, terms checked ${checkedText(p)}`,
+        `you earn ${earnText(p)}, type: ${typeText(p)}, cookie: ${cookieCell(p)}, payout: ${payoutCell(p)}, approval: ${approvalText(p)}, runs on: ${runsOnText(p)}, terms checked ${checkedText(p)}`,
       )
       const { good, watch } = goodWatch(p)
-      const receipt = leadReceipt(termReceipts(p.slug, p.url))
+      const receipt = programReceipt(p)
       return [
         `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${copy.verdict ? mdEscapeProse(copy.verdict) : ""}`,
         `   ${facts}, apply: ${mdUrl(blogApplyHref(p, post.slug))}`,

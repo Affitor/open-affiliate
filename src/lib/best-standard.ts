@@ -5,8 +5,8 @@ import {
   POSTS,
   TERMS_MAX_AGE_DAYS,
   checkedRange,
-  cookieText,
   earnText,
+  payoutText,
   postTitle,
   readyPost,
   type BestPost,
@@ -16,7 +16,7 @@ import { PAYOUT_METHODS } from "./claims/form"
 import { IN_HOUSE, commissionUnknown, isLive, livePrograms, networkName, programs, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import type { Faq } from "./program-seo"
-import { termConflicts } from "./term-receipts"
+import { leadReceipt, termNotes, type Receipt } from "./term-receipts"
 
 /**
  * The data behind the standard "best X" layout (components/best-post-standard.tsx).
@@ -48,9 +48,33 @@ export function typeText(p: Program): string {
   return d ? `${t}, ${d === "lifetime" ? "for life" : `for ${d}`}` : t
 }
 
-/** The table's short approval: "Automatic", "Manual", or not stated. */
+/**
+ * What an empty term reads as, so a blank never claims more than the data:
+ * - "Stated two ways": the field is in the YAML's `conflicts`;
+ * - "Not stated by the brand": the verifier recorded it as unpublished
+ *   (`not_published`, or a "not published" comment);
+ * - "Not recorded": the registry simply has no value.
+ */
+export const STATED_TWO_WAYS = "Stated two ways"
+export const NOT_RECORDED = "Not recorded"
+export { NOT_STATED }
+
+/** The empty label for one schema field ("cookie_days", "approval", "payout.methods"). */
+export function emptyLabel(p: Program, ...fields: string[]): string {
+  const notes = termNotes(p.slug, p.url)
+  if (fields.some((f) => notes.conflicts.has(f))) return STATED_TWO_WAYS
+  if (fields.every((f) => notes.notPublished.has(f))) return NOT_STATED
+  return NOT_RECORDED
+}
+
+/** "45 days", or the empty label. */
+export function cookieCell(p: Program): string {
+  return p.cookieDays != null ? `${p.cookieDays} days` : emptyLabel(p, "cookie_days")
+}
+
+/** The table's short approval: "Automatic", "Manual", or the empty label. */
 export function approvalShort(p: Program): string {
-  return p.approval === "auto" ? "Automatic" : p.approval === "manual" ? "Manual" : NOT_STATED
+  return p.approval === "auto" ? "Automatic" : p.approval === "manual" ? "Manual" : emptyLabel(p, "approval")
 }
 
 /** "up to one week" from "Up to one week": the review time as it reads mid-sentence. */
@@ -61,9 +85,8 @@ export function approvalTime(p: Program): string | null {
 
 /** The block's approval fact, with the review time when the brand gives one. */
 export function approvalText(p: Program): string {
-  const base = approvalShort(p)
   const time = approvalTime(p)
-  return time && base !== NOT_STATED ? `${base}: ${time}` : base
+  return time && p.approval ? `${approvalShort(p)}: ${time}` : approvalShort(p)
 }
 
 const METHOD = new Map(PAYOUT_METHODS)
@@ -74,13 +97,46 @@ export function methodsText(p: Program): string | null {
   return m.length ? m.join(" or ") : null
 }
 
-/** "Its own program", the network's name, or "Not recorded" when the registry has no network. */
-export function runsOnText(p: Program): string {
-  if (!p.network) return "Not recorded"
-  return p.network === IN_HOUSE ? "Its own program" : networkName(p.network)
+/** A third-party network the program runs on (not in-house, not unknown). */
+function thirdPartyNetwork(p: Program): string | null {
+  return p.network && p.network !== IN_HOUSE ? networkName(p.network) : null
 }
 
-export { cookieText, NOT_STATED }
+/**
+ * The payout fact, the same in the table and the section: schedule and
+ * minimum, then methods ("Net 60, $100 minimum · PayPal or Bank"). With no
+ * schedule or minimum: "Stated two ways" when the brand disagrees with
+ * itself, "On CJ Affiliate's terms" for a program paid through a network,
+ * else the empty label.
+ */
+export function payoutCell(p: Program): string {
+  const timing = payoutText(p, "")
+  const methods = methodsText(p)
+  const notes = termNotes(p.slug, p.url)
+  const twoWays = ["payout.minimum", "payout.frequency"].some((f) => notes.conflicts.has(f))
+  const net = thirdPartyNetwork(p)
+  const first = timing || (twoWays ? STATED_TWO_WAYS : methods ? "" : net ? `On ${net}'s terms` : emptyLabel(p, "payout.minimum", "payout.methods"))
+  return [first, methods].filter(Boolean).join(" · ")
+}
+
+/** The quote a program's section shows: commission first, else one for a fact the section shows filled in. */
+export function programReceipt(p: Program): Receipt | null {
+  const shows: Record<Receipt["field"], boolean> = {
+    commission: true,
+    cookie: p.cookieDays != null,
+    payout: p.payout.minimum != null || Boolean(p.payout.frequency),
+    approval: Boolean(p.approval),
+  }
+  return leadReceipt(termNotes(p.slug, p.url).receipts, (f) => shows[f])
+}
+
+/** "Its own program", the network's name, "Not in our network list" when the YAML names a platform outside it, else "Not recorded". */
+export function runsOnText(p: Program): string {
+  if (p.network === IN_HOUSE) return "Its own program"
+  if (p.network) return networkName(p.network)
+  return termNotes(p.slug, p.url).networkOutsideList ? "Not in our network list" : NOT_RECORDED
+}
+
 
 const CONFLICT_LABEL: Record<string, string> = {
   cookie_days: "cookie window",
@@ -118,7 +174,7 @@ export function goodWatch(p: Program): { good: string[]; watch: string[] } {
   if (p.commission.type === "one-time") watch.push("Pays once per referral, with no recurring share")
   if (p.commission.type === "tiered") watch.push("The top figure needs volume or a higher tier")
   for (const r of p.restrictions ?? []) watch.push(r)
-  for (const f of termConflicts(p.slug, p.url)) watch.push(`Its pages state the ${CONFLICT_LABEL[f] ?? f} two ways, so we show none`)
+  for (const f of termNotes(p.slug, p.url).conflicts) watch.push(`Its pages state the ${CONFLICT_LABEL[f] ?? f} two ways, so we show none`)
   return { good: good.slice(0, 4), watch }
 }
 
@@ -230,39 +286,65 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
       `Across the ${split.total} verified programs this post draws from, ${recurringAll} list a recurring commission.`,
   })
 
+  // An empty term is said the way the data backs it: unpublished, stated two ways, or not on record.
+  const blanks = (ps: Program[], label: (p: Program) => string, says: Record<string, [string, string]>) =>
+    Object.entries(says)
+      .map(([l, [one, many]]) => {
+        const group = ps.filter((p) => label(p) === l)
+        return group.length ? `${andList(group.map(name))} ${group.length === 1 ? one : many}. ` : ""
+      })
+      .join("")
+
   const auto = shown.filter((p) => p.approval === "auto")
   const manual = shown.filter((p) => p.approval === "manual")
-  const unstated = shown.length - auto.length - manual.length
   faq.push({
     q: `Which ${niche} approve you automatically?`,
-    a:
+    a: (
       (auto.length ? `${andList(auto.map(name))} ${auto.length === 1 ? "approves" : "approve"} applications automatically. ` : "None of the programs here states automatic approval. ") +
       (manual.length
         ? `${andList(manual.map((p) => (approvalTime(p) ? `${name(p)} (${esc(approvalTime(p)!)})` : name(p))))} ${manual.length === 1 ? "reviews" : "review"} applications by hand. `
         : "") +
-      (unstated ? `The other ${unstated} do not say.` : ""),
+      blanks(shown.filter((p) => !p.approval), (p) => emptyLabel(p, "approval"), {
+        [STATED_TWO_WAYS]: ["states it two ways", "state it two ways"],
+        [NOT_STATED]: ["does not publish how it approves", "do not publish how they approve"],
+        [NOT_RECORDED]: ["has no approval details on our record", "have no approval details on our record"],
+      })
+    ).trim(),
   })
 
   const withCookie = shown.filter((p) => p.cookieDays != null)
   faq.push({
     q: `How long do cookies last on ${niche}?`,
-    a: withCookie.length
-      ? `${withCookie.length} of the ${shown.length} programs here publish a cookie window: ${andList(withCookie.map((p) => `${name(p)} (${p.cookieDays} days)`))}. The others do not publish one, so we show none rather than guess.`
-      : "None of the programs here publishes a cookie window.",
+    a: (
+      (withCookie.length
+        ? `${withCookie.length} of the ${shown.length} programs here publish a cookie window: ${andList(withCookie.map((p) => `${name(p)} (${p.cookieDays} days)`))}. `
+        : "None of the programs here has a cookie window on record. ") +
+      blanks(shown.filter((p) => p.cookieDays == null), (p) => emptyLabel(p, "cookie_days"), {
+        [STATED_TWO_WAYS]: ["states its cookie window two ways on its own pages, so we show none", "state their cookie window two ways on their own pages, so we show none"],
+        [NOT_STATED]: ["does not publish one", "do not publish one"],
+        [NOT_RECORDED]: ["has none on our record", "have none on our record"],
+      })
+    ).trim(),
   })
 
   const noMin = shown.filter((p) => p.payout.minimum === 0)
   const paysBy = (p: Program, m: string) => (p.payoutMethods ?? p.payout.methods ?? []).some((x) => x.toLowerCase() === m)
   const paypal = shown.filter((p) => paysBy(p, "paypal"))
   const bank = shown.filter((p) => paysBy(p, "bank"))
-  const none = shown.filter((p) => !(p.payoutMethods ?? p.payout.methods ?? []).length)
+  const noMethod = shown.filter((p) => !(p.payoutMethods ?? p.payout.methods ?? []).length)
+  const viaNetwork = noMethod.filter((p) => thirdPartyNetwork(p))
   faq.push({
     q: `How do ${niche} pay out?`,
     a:
       (paypal.length ? `${paypal.length} of the ${shown.length} programs here pay by PayPal: ${andList(paypal.map(name))}. ` : "") +
       (bank.length ? `${andList(bank.map(name))} ${bank.length === 1 ? "lists" : "list"} bank transfer. ` : "") +
       (noMin.length ? `${andList(noMin.map(name))} ${noMin.length === 1 ? "has" : "have"} no payout minimum. ` : "") +
-      (none.length ? `${andList(none.map(name))} ${none.length === 1 ? "publishes" : "publish"} no payout method. ` : "") +
+      viaNetwork.map((p) => `${name(p)} pays on ${esc(thirdPartyNetwork(p)!)}'s terms. `).join("") +
+      blanks(noMethod.filter((p) => !viaNetwork.includes(p)), (p) => emptyLabel(p, "payout.methods"), {
+        [STATED_TWO_WAYS]: ["states its payout method two ways", "state their payout method two ways"],
+        [NOT_STATED]: ["publishes no payout method", "publish no payout method"],
+        [NOT_RECORDED]: ["has no payout method on our record", "have no payout method on our record"],
+      }) +
       "Each section shows the minimum, schedule and currency the brand publishes.",
   })
 

@@ -33,6 +33,8 @@ restrictions:
   - "No banner farms, spyware, or sites with violent, discriminatory, illegal or pornographic content"
 
 conflicts:
+  - field: cookie_days
+    quote: "affiliates.verpex.com/affiliates: \"returns to purchase in 30days, you get credit\" and \"cookies and IPs are stored indefinitely\". Checked 2026-10-17."
   - field: payout.minimum
     quote: "verpex.com/affiliates-terms-conditions: \"The minimum amount for payout will be $80.\" affiliates.verpex.com/affiliates/faq.php: \"the minimum payout value ($40 minimum)\". Checked 2026-10-18."
   - field: payout.frequency
@@ -78,7 +80,7 @@ not_published:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-17"
-updated_at: "2026-10-18"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-17"
 status: active
 kind: affiliate
