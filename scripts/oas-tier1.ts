@@ -443,46 +443,70 @@ const TERMS_LINK = /(affiliate|partner|referral|ambassador|program)[\w\s-]{0,30}
 // people ("100% of clients happy"), which stat cards put right next to commission wording.
 const FIGURE = String.raw`(?:(?<![\d.])\d{1,4}(?:\.\d{1,2})?\s?%(?!\s+of\s+(?:our\s+|all\s+)?(?:clients|customers|users|partners|merchants|businesses|companies|members|creators)\b)|[$€£]\s?\d[\d.,]{0,9}(?![\d.,])(?!\s?\+))`
 // A figure next to commission wording: "recurring" or "per sale" alone is also how a subscription is billed.
-const COMMISSION_FIGURE = new RegExp(`${FIGURE}[^.]{0,60}\\b(commission|revenue share|rev share)|\\b(?:(?:commission|revenue share|rev share)\\w*|earn(?:s|ing)?\\b)[^.]{0,40}?${FIGURE}`, "i")
-// A concrete term carries its value: a number of days, an amount, a schedule or a named method.
-const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
-const CONCRETE_TERM = new RegExp([
-  String.raw`\b\d{1,4}[- ]day (?:cookie|attribution|tracking)`,
-  // "60-day return cookie": up to two words between, none of them a consent or analytics cookie kind.
-  String.raw`\b\d{1,4}[- ]day(?: (?!(?:consent|session|analytics|preferences?|functional|essential|necessary|advertising|marketing)\b)[a-z]+){1,2} cookie`,
-  String.raw`\bcookie (?:life|duration|window|lasts)[^.]{0,30}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
-  String.raw`\battribution (?:window|duration)[^.]{0,20}\b\d{1,4}[\s-]?(?:days?|months?|hours?)\b`,
-  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:monthly|weekly|bi-?weekly|every (?:month|week|\d{1,3} (?:days|weeks)))`,
-  String.raw`\b(?:paid|payouts?)(?: out| are| is)?(?: sent| made| paid)? (?:via|through|by|with) ${PAY_METHOD}`,
-  String.raw`\bpayouts? (?:are )?(?:sent |made |paid )?on the (?:\d{1,2}(?:st|nd|rd|th)?|first|last|15th)`,
-  String.raw`\b(?:minimum payout|payout minimum|payout threshold|minimum threshold)[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|dollars?)\b)`,
-  // "Payments are made every two months", "payouts twice a month through PayPal": a schedule or a method, ≤ 4 words on.
-  String.raw`\b(?:payments?|payouts?)(?:\s+\S+){0,4}?\s+(?:monthly|weekly|bi-?weekly|twice a month|every (?:month|week|two (?:weeks|months)|\d{1,3} (?:days|weeks|months)))\b`,
-  String.raw`\b(?:payments?|payouts?)(?:\s+\S+){0,4}?\s+(?:via|through)\s+${PAY_METHOD}`,
-  // "We store your referred users' cookies for 120 days".
-  String.raw`\bcookies?(?:\s+\S+){0,6}?\s+for\s+\d{1,4}[\s-]?days?\b`,
-  String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
+// The commission figure: next to commission wording, after an earning verb ("you'll receive 20%"), or as a share of
+// what referrals pay ("30% of every payment"). Not a discount ("25% off") or a product claim ("99.9% uptime").
+const NOT_RATE = String.raw`(?!\s*(?:off|discount|uptime|accura\w*|faster|fewer|more|less|cheaper|savings?)\b)`
+const COMMISSION_FIGURE = new RegExp([
+  String.raw`${FIGURE}[^.]{0,60}\b(?:commission|revenue share|rev share)`,
+  String.raw`\b(?:(?:commission|revenue share|rev share)\w*|earn(?:s|ing)?|get|receive|make|pays? you)\b[^.]{0,40}?${FIGURE}${NOT_RATE}`,
+  String.raw`${FIGURE}\s+(?:of|from|on)\s+(?:each|every|all|the|their|any|what)\b[^.]{0,30}?\b(?:sales?|payments?|purchases?|subscriptions?|orders?|referrals?|revenue|spend|they pay)\b`,
 ].join("|"), "i")
-/**
- * Terms that count only in a sentence about the program (rubric A2 "approval", "payout"): "applications are
- * reviewed" or "paid via PayPal" also describe job applications and buyers paying.
- */
-const PROGRAM_SENTENCE = /\b(affiliate|partner|referral|ambassador|program|commission|payout|earnings)/i
-const PROGRAM_TERM = new RegExp([
-  String.raw`\bapplications? (?:are|is|will be|get) (?:manually |personally )?(?:reviewed|approved)`,
+// A concrete term carries its value: a number of days, an amount, a schedule, a named method, or an approval rule.
+const PAY_METHOD = String.raw`(?:paypal|wise|payoneer|stripe|tipalti|revolut|venmo|bank(?: transfer| account)?|wire(?: transfer)?|ach|direct deposit|crypto(?:currency)?|usdt|usdc|bitcoin|btc|check|cheque)\b`
+// A schedule, not a noun it qualifies: "a monthly plan" is what the buyer pays, "monthly performance bonuses" are not payouts.
+const SCHEDULE = String.raw`(?:monthly|weekly|bi-?weekly|twice a month|every (?:month|week|two (?:weeks|months)|\d{1,3} (?:days|weeks|months))|(?:on )?the (?:first|1st|15th|last|end) (?:day |business day )?of (?:the|each|every) month)\b(?!\s+(?:plans?|subscriptions?|subscribers?|fees?|prices?|pricing|billing|payments? plan|performance|bonus(?:es)?|reports?|newsletters?|updates?|webinars?|challenges?))`
+// Up to n words (letters, digits, currency, apostrophes), never a consent-banner word: the gap a term may span.
+const gap = (n: number, amounts = true) =>
+  String.raw`(?:\s+(?!(?:consent|session|analytics|preferences?|functional|essential|necessary|advertising|marketing|accept|privacy|settings)\b)${amounts ? "[a-z0-9$€£'’:,;()-]+" : "[a-z'’:,;()-]+"}){0,${n}}?`
+const CONCRETE_TERM = new RegExp([
+  // Cookie or attribution window with its length: "30-day cookie", "90-Days Cookie Duration", "120 days' cookie tracking",
+  // "Cookie window 60 days", "cookies are set to a lengthy 60 days".
+  String.raw`\b\d{1,4}[- ]?days?['’]?${gap(2)}\s+(?:cookies?|attribution|tracking)\b`,
+  String.raw`\b(?:cookies?|attribution)\b${gap(8)}\s+\d{1,4}[\s-]?(?:days?|months?)\b`,
+  // Payout schedule or method. "Payouts", "get paid", "paid out", "cash out" and "payments are made / sent /
+  // processed" describe paying the affiliate (a buyer is "billed" or "charged"); their gap holds no amount, so an
+  // earnings calculator ("Payout $348 Monthly") is not a schedule. "Commissions" alone often means a recurring rate
+  // ("commission each month for a year"), so it needs a payout verb.
+  String.raw`\b(?:payouts?|payments? (?:are|is|will be) (?:made|sent|processed|issued)|get paid|paid out|cash(?:-| )?out)\b${gap(6, false)}\s+(?:${SCHEDULE}|(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD})`,
+  String.raw`\bcommissions?\b${gap(6)}\s+(?:are|is|will be|get|gets)\s+(?:paid|sent|credited|distributed|issued|transferred|deposited)(?:\s+out)?${gap(4)}\s+(?:${SCHEDULE}|(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD})`,
+  String.raw`\b(?:receive|get) (?:your )?(?:monthly |weekly )?commissions?(?: payments?)?${gap(3, false)}\s+${SCHEDULE}`,
+  String.raw`\b(?:receive|get) (?:your )?(?:monthly|weekly) commissions?\b`,
+  String.raw`\b(?:minimum payout|payout minimum|payout threshold|payment minimum|minimum threshold)[^.]{0,40}(?:[$€£]\s?\d|\b\d[\d,.]{0,8}\s?(?:USD|EUR|GBP|ZAR|dollars?)\b)`,
+  String.raw`\b[A-Z]{3}\s?\d[\d,.]{0,8} minimum payout`,
+  String.raw`\bno minimum (?:payout|threshold)`,
+  String.raw`\bnet[- ]?(?:15|30|45|60|90)\b[^.]{0,30}\b(?:payouts?|payments?|paid)\b|\b(?:payouts?|payments?|paid)\b[^.]{0,30}\bnet[- ]?(?:15|30|45|60|90)\b`,
+  String.raw`\b${PAY_METHOD} (?:payouts?|payments?)`,
+  // Approval rules (A2 reads only the program page): "no automatic approval", "automatically approved", "once approved".
   String.raw`\bapproval (?:is )?required`,
   String.raw`\brequires? (?:manual )?approval`,
   String.raw`\b(?:manual|instant|automatic) approval`,
-  String.raw`\bwe review (?:every|each|all) applications?`,
+  String.raw`\b(?:automatically|instantly|manually) approved`,
   String.raw`\bapproved within \d{1,3} (?:hours?|days?|business days?)`,
-  String.raw`\bonce (?:you(?:'re| are) )?approved\b`,
-  String.raw`\bcommissions? (?:are |is )?paid (?:out )?(?:monthly|weekly|bi-?weekly)`,
-  String.raw`\b(?:receive|get) (?:your )?(?:monthly|weekly) commissions?`,
-  String.raw`\b(?:receive|get) (?:your )?commissions? (?:monthly|weekly)`,
-  String.raw`\bpaid (?:on )?the (?:first|1st|15th|last) (?:day |business day )?of (?:the|each|every) month`,
-  String.raw`\bpaid(?:\s+\S+){0,6}?\s+via\s+${PAY_METHOD}`,
+  String.raw`\bonce (?:you(?:'re|’re| are) )?approved\b`,
+].join("|"), "i")
+/**
+ * Terms that count only in a sentence about the program: "applications are reviewed" also describes job
+ * applications, and "paid" or "payments" also describe buyers paying.
+ */
+const PROGRAM_SENTENCE = /\b(affiliat|partner|referr|ambassador|program|commission|payout|earn|reward)/i
+const PROGRAM_TERM = new RegExp([
+  String.raw`\bapplications? (?:are|is|will be|get) (?:manually |personally )?(?:reviewed|approved)`,
+  String.raw`\bwe review (?:every|each|all) applications?`,
+  String.raw`\b(?:paid|payments?)\b${gap(8)}\s+${SCHEDULE}`,
+  String.raw`\b(?:paid|payments?)\b${gap(8)}\s+(?:via|through|by|with|to your)\s+(?:direct )?${PAY_METHOD}`,
   String.raw`\b${PAY_METHOD} account\b[^.]{0,30}\b(?:get|be) paid`,
 ].join("|"), "i")
+// A cookie term inside a consent banner ("accept cookies for 30 days") is not a referral window.
+const CONSENT_BEFORE = /\b(consent|accept|privacy|we use cookies|cookie (?:policy|settings|preferences))\b[^.]{0,60}$/i
+const CONCRETE_ALL = new RegExp(CONCRETE_TERM.source, "gi")
+/** The first concrete term that is not a consent-banner cookie, with its position in `text`. */
+function concreteTerm(text: string): { index: number; 0: string } | null {
+  for (const m of text.matchAll(CONCRETE_ALL)) {
+    if (/cookie/i.test(m[0]) && CONSENT_BEFORE.test(text.slice(Math.max(0, m.index! - 80), m.index))) continue
+    return { index: m.index!, 0: m[0] }
+  }
+  return null
+}
 /** The first program term in a sentence that names the program, with its position in `text`. */
 function programTerm(text: string): { index: number; 0: string } | null {
   let at = 0
@@ -511,7 +535,7 @@ export function termsLink(html: string, base: string): string | null {
   const announced = (at: number) => markers.some((m) => Math.abs(m - at) <= 150)
   // A terms heading alone ("partnership terms") is not published terms: the figure and the concrete term are.
   const figure = COMMISSION_FIGURE.exec(text)
-  const concrete = CONCRETE_TERM.exec(text) ?? programTerm(text)
+  const concrete = concreteTerm(text) ?? programTerm(text)
   return figure && concrete && !announced(figure.index) && !announced(concrete.index) ? `on page: ${figure[0]} · ${concrete[0]}`.slice(0, 120) : null
 }
 
