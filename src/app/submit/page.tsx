@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/client-programs";
 import { APPROVALS, FREQUENCIES } from "@/lib/claims/form";
-import { httpsUrl, missingFields, rateOf, SHORT_DESCRIPTION_MAX, slugOf, submitYaml, type SubmitValues } from "@/lib/submit-yaml";
+import { fieldErrors, githubNewFileUrl, missingFields, SHORT_DESCRIPTION_MAX, slugOf, submitYaml, type SubmitValues } from "@/lib/submit-yaml";
 
 export default function SubmitPage() {
   useEffect(() => { track("page_view"); }, []);
@@ -52,21 +52,18 @@ export default function SubmitPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const yaml = generateYaml();
+  const github = githubNewFileUrl(form, yaml);
+
   const openGitHubPR = () => {
-    const yaml = generateYaml();
-    const filename = `programs/${slugOf(form.slug)}.yaml`;
-    const body = encodeURIComponent(
-      `## New program: ${form.name}\n\n- Website: ${httpsUrl(form.url)}\n- Program page (source of every term): ${httpsUrl(form.signupUrl)}\n- Commission: ${rateOf(form.commissionRate)} ${form.commissionType}\n- Category: ${form.category}\n\nEvery term in the file is stated on the program page above. Terms the page does not state are left out.`
-    );
-    const title = encodeURIComponent(`Add ${form.name} to registry`);
-    window.open(
-      `https://github.com/Affitor/open-affiliate/new/main?filename=${filename}&value=${encodeURIComponent(yaml)}&message=${title}&description=${body}`,
-      "_blank"
-    );
+    // Too long for GitHub's URL: copy the file first, then open the page with its name only.
+    if (!github.withContent) copyYaml();
+    window.open(github.url, "_blank");
   };
 
   const missing = missingFields(form);
-  const isValid = missing.length === 0;
+  const errors = fieldErrors(form);
+  const isValid = missing.length === 0 && Object.keys(errors).length === 0;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-10">
@@ -144,6 +141,7 @@ export default function SubmitPage() {
               onChange={(e) => updateField("url", e.target.value)}
               className="bg-muted/50 border-border/50"
             />
+              <FieldError text={errors.url} />
           </div>
 
           <div>
@@ -159,6 +157,7 @@ export default function SubmitPage() {
               onChange={(e) => updateField("signupUrl", e.target.value)}
               className="bg-muted/50 border-border/50"
             />
+              <FieldError text={errors.signupUrl} />
           </div>
 
           <div>
@@ -211,6 +210,7 @@ export default function SubmitPage() {
                 onChange={(e) => updateField("commissionRate", e.target.value)}
                 className="bg-muted/50 border-border/50"
               />
+              <FieldError text={errors.commissionRate} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">
@@ -222,6 +222,7 @@ export default function SubmitPage() {
                 onChange={(e) => updateField("currency", e.target.value)}
                 className="bg-muted/50 border-border/50"
               />
+              <FieldError text={errors.currency} />
             </div>
           </div>
 
@@ -240,6 +241,7 @@ export default function SubmitPage() {
                 onChange={(e) => updateField("cookieDays", e.target.value)}
                 className="bg-muted/50 border-border/50"
               />
+              <FieldError text={errors.cookieDays} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">
@@ -251,6 +253,7 @@ export default function SubmitPage() {
                 onChange={(e) => updateField("payoutMinimum", e.target.value)}
                 className="bg-muted/50 border-border/50"
               />
+              <FieldError text={errors.payoutMinimum} />
             </div>
             <div>
               <label className="text-xs text-muted-foreground mb-1.5 block">
@@ -408,8 +411,16 @@ export default function SubmitPage() {
             {copied ? "Copied" : "Copy YAML"}
           </button>
         </div>
-        {!isValid && (
+        {missing.length > 0 && (
           <p className="text-xs text-muted-foreground">Still needed: {missing.join(", ")}.</p>
+        )}
+        {isValid && !github.withContent && (
+          <p className="text-xs text-muted-foreground">
+            This file is too long to pass to GitHub in a link. Open GitHub PR
+            copies the YAML and opens an empty file named{" "}
+            <code className="font-mono">programs/{slugOf(form.slug)}.yaml</code>:
+            paste it there, then create the pull request.
+          </p>
         )}
       </div>
 
@@ -447,4 +458,9 @@ export default function SubmitPage() {
       </div>
     </div>
   );
+}
+
+/** What to change in one field, shown under it; nothing when the field is fine. */
+function FieldError({ text }: { text?: string }) {
+  return text ? <p className="text-xs text-red-600 dark:text-red-400 mt-1.5">{text}</p> : null;
 }

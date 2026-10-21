@@ -13,7 +13,7 @@ import { join } from "node:path"
 import { test } from "node:test"
 import Ajv2020 from "ajv/dist/2020"
 import { parse } from "yaml"
-import { missingFields, submitYaml, SHORT_DESCRIPTION_MAX, type SubmitValues } from "../src/lib/submit-yaml"
+import { fieldErrors, GITHUB_URL_MAX, githubNewFileUrl, missingFields, submitYaml, SHORT_DESCRIPTION_MAX, type SubmitValues } from "../src/lib/submit-yaml"
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { evaluateAutoMergePolicy } = require("../.github/scripts/auto-merge-policy.cjs")
 
@@ -91,7 +91,77 @@ const files = Object.fromEntries(Object.entries(cases).map(([k, v]) => [k, submi
 
 test("the form says what is missing, and nothing once every required field is filled", () => {
   assert.ok(missingFields(base).length >= 7)
-  for (const v of Object.values(cases)) assert.deepEqual(missingFields(v), [])
+  for (const v of Object.values(cases)) {
+    assert.deepEqual(missingFields(v), [])
+    assert.deepEqual(fieldErrors(v), {})
+  }
+})
+
+/** One registry build over the given files in a temp programs folder; returns its exit code and output. */
+function buildRegistry(contents: string[]): { status: number | null; out: string } {
+  const dir = mkdtempSync(join(tmpdir(), "oa-submit-"))
+  try {
+    mkdirSync(join(dir, "programs"))
+    mkdirSync(join(dir, "src/lib"), { recursive: true })
+    mkdirSync(join(dir, "public/logos"), { recursive: true })
+    symlinkSync(join(root, "schema"), join(dir, "schema"))
+    for (const content of contents) writeFileSync(join(dir, "programs", `${parse(content).slug}.yaml`), content)
+    const run = spawnSync(join(root, "node_modules/.bin/tsx"), [join(root, "scripts/build-registry.ts")], { cwd: dir, encoding: "utf8" })
+    return { status: run.status, out: `${run.stdout}\n${run.stderr}` }
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+}
+
+// Inputs a person really types that the registry gate rejects (PR #367 review r1).
+// Each must be flagged on its field, and the registry must agree that the file would fail.
+const ok = cases["only the required fields"]
+const rejected: [string, Partial<SubmitValues>, keyof SubmitValues, RegExp | null][] = [
+  ["program page on a bare subdomain", { signupUrl: "partners.acme-test-one.com" }, "signupUrl", /bare homepage/],
+  ["program page equal to the website", { signupUrl: "acme-test-one.com" }, "signupUrl", /identical to url|bare homepage/],
+  ["rate that states a payout term", { commissionRate: "30% commission, paid monthly" }, "commissionRate", /withholds/],
+  ["rate paid in store credit", { commissionRate: "$20 store credit" }, "commissionRate", /gift card, voucher or credit/],
+  ["currency that is not a code", { currency: "USD: foo" }, "currency", null],
+  ["cookie days that are not a number", { cookieDays: "thirty" }, "cookieDays", null],
+]
+
+for (const [name, change, field, gate] of rejected) {
+  test(`flagged before GitHub: ${name}`, () => {
+    const v = { ...ok, ...change }
+    assert.ok(fieldErrors(v)[field], JSON.stringify(fieldErrors(v)))
+    if (gate) {
+      const run = buildRegistry([submitYaml(v, new Date("2026-10-20T12:00:00Z"))])
+      assert.equal(run.status, 1, run.out)
+      assert.match(run.out, gate)
+    }
+  })
+}
+
+test("a currency is always written as a quoted string", () => {
+  const p = parse(submitYaml({ ...ok, currency: "null", payoutMinimum: "10" }))
+  assert.equal(p.commission.currency, "NULL")
+  assert.equal(p.payout.currency, "NULL")
+})
+
+test("a file too long for a GitHub link opens the empty file page instead of failing with 414", () => {
+  const short = githubNewFileUrl(ok, submitYaml(ok))
+  assert.equal(short.withContent, true)
+  assert.ok(short.url.length <= GITHUB_URL_MAX)
+  assert.match(short.url, /&value=/)
+  // The review's case: 8,360 characters of description, a valid 8.7 KB file, an 11,718-character URL.
+  const long = { ...ok, description: "A typical product helps developers build and publish reliable applications. ".repeat(110) }
+  const yaml = submitYaml(long)
+  assert.ok(Buffer.byteLength(yaml) < 20_000)
+  const fallback = githubNewFileUrl(long, yaml)
+  assert.equal(fallback.withContent, false)
+  assert.equal(fallback.url, "https://github.com/Affitor/open-affiliate/new/main?filename=programs%2Facme-test-one.yaml")
+  // Characters that grow when percent-encoded: decided on the encoded length, at the boundary.
+  for (let n = 1; n < 2000; n += 37) {
+    const v = { ...ok, description: "é—\"#&".repeat(n) }
+    const r = githubNewFileUrl(v, submitYaml(v))
+    assert.ok(r.url.length <= GITHUB_URL_MAX, `${n}: ${r.url.length}`)
+    assert.equal(r.withContent, r.url.includes("&value="))
+  }
 })
 
 test("every generated file passes the JSON schema", () => {
@@ -137,16 +207,6 @@ test("the auto-merge policy finds nothing wrong with the file's shape", () => {
 })
 
 test("the registry build accepts the files", () => {
-  const dir = mkdtempSync(join(tmpdir(), "oa-submit-"))
-  try {
-    mkdirSync(join(dir, "programs"))
-    mkdirSync(join(dir, "src/lib"), { recursive: true })
-    mkdirSync(join(dir, "public/logos"), { recursive: true })
-    symlinkSync(join(root, "schema"), join(dir, "schema"))
-    for (const content of Object.values(files)) writeFileSync(join(dir, "programs", `${parse(content).slug}.yaml`), content)
-    const run = spawnSync(join(root, "node_modules/.bin/tsx"), [join(root, "scripts/build-registry.ts")], { cwd: dir, encoding: "utf8" })
-    assert.equal(run.status, 0, `${run.stdout}\n${run.stderr}`)
-  } finally {
-    rmSync(dir, { recursive: true, force: true })
-  }
+  const run = buildRegistry(Object.values(files))
+  assert.equal(run.status, 0, run.out)
 })
