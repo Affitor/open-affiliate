@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import Link from "next/link";
 import { BookOpen } from "lucide-react";
 import { track } from "@/lib/track";
@@ -8,6 +8,10 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { categories as registryCategories } from "@/lib/client-programs";
 import { FREQUENCIES } from "@/lib/claims/form";
+import { SubmitByUrl } from "@/components/submit-by-url";
+
+// Inlined at build; without it the page offers only the GitHub path.
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
 
 export default function SubmitPage() {
   useEffect(() => { track("page_view"); }, []);
@@ -125,6 +129,12 @@ created_at: "${new Date().toISOString().split("T")[0]}"`;
         <BookOpen className="h-3.5 w-3.5" />
         Read the submission guide — including how to let your AI agent submit for you
       </Link>
+
+      {TURNSTILE_SITE_KEY && (
+        <Suspense fallback={null}>
+          <SubmitByUrl siteKey={TURNSTILE_SITE_KEY} />
+        </Suspense>
+      )}
 
       <div className="mt-8 space-y-6">
         {/* Basic Info */}

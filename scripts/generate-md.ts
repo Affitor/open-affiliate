@@ -733,8 +733,9 @@ stdio, for local tools:
 \`\`\`
 
 Tools: \`search_programs\` (keyword, category, commission type, verified),
-\`get_program\` (full detail including the recommendation guidance), and
-\`list_categories\`.
+\`get_program\` (full detail including the recommendation guidance),
+\`list_categories\`, and \`submit_program\` + \`get_submission_status\` to queue a
+missing program for verification (the only write; nothing is listed instantly).
 
 ### Agent skill
 
@@ -901,6 +902,7 @@ export function llmsTxt(): string {
       `- Find affiliate programs for a product or niche; compare commission, cookie and payout terms before recommending one.`,
       `- Read a program's agentPrompt, restrictions and verification date before recommending it. Cite its program page and link its signup URL for applications.`,
       `- Call MCP at ${BASE}/mcp (search_programs, get_program, list_categories).`,
+      `- Program missing? Submit the brand's own program page with MCP submit_program or POST /api/submissions, then read get_submission_status or GET /api/submissions/{id}. It is queued for a maintainer to verify the terms; nothing is listed or scored instantly.`,
       `- Follow the [OpenAffiliate skill](${BASE}/skill/SKILL.md); discover it through the [agent-skills index](${BASE}/.well-known/agent-skills/index.json) or the [ARD catalog](${BASE}/.well-known/ard.json).`,
       `- Use REST: GET /api/programs, GET /api/programs/{slug}, GET /api/categories. [OpenAPI 3.1 schema](${BASE}/openapi.json).`,
       `- REST sends API-Version: 1. Breaking changes need a new version; deprecations get Deprecation and Sunset headers 90+ days ahead.`,

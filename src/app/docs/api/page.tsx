@@ -20,7 +20,9 @@ export default function APIPage() {
         Download the <a href="/openapi.json" className="underline">OpenAPI 3.1 specification</a> for parameter and response schemas.
         Unknown parameters, and sort, verified, limit or offset values the API does not recognise, are ignored rather than
         rejected; a category or type no program has returns an empty list; an unknown slug or API path returns HTTP 404.
-        Errors use <code>{'{ "error": { "code": "...", "message": "...", "hint": "..." } }'}</code>.
+        Errors use <code>{'{ "error": { "code": "...", "message": "...", "hint": "..." } }'}</code>; the submission
+        endpoints answer <code>{'{ "error": "...", "message": "...", "field": "..." }'}</code> instead, where field names the
+        input to fix.
       </p>
 
       <div className="space-y-10">
@@ -44,6 +46,18 @@ export default function APIPage() {
                 method: "GET",
                 path: "/api/categories",
                 desc: "List all categories with program counts",
+                params: null,
+              },
+              {
+                method: "POST",
+                path: "/api/submissions",
+                desc: "Submit a missing program: the brand's own program page, queued for a maintainer to verify the terms. Not instant; nothing is listed or scored until verified. Returns 202 with an id and statusUrl, or 200 when the domain is already listed or queued. Rate limited per address and per domain (429 with Retry-After).",
+                params: '{ "programUrl": "https://brand.com/affiliates", "termsUrl"?, "name"?, "contact"? (never shown), "note"? }',
+              },
+              {
+                method: "GET",
+                path: "/api/submissions/{id}",
+                desc: "A submission's status: queued, verifying, listed (with listingUrl and, once scored, reportUrl) or rejected (with a reason)",
                 params: null,
               },
             ].map((item) => (

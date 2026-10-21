@@ -6,7 +6,7 @@ OpenAffiliate is the open registry of affiliate programs. Use it to discover, co
 
 ### MCP (recommended for AI agents)
 
-**HTTP** — hosted, public, read-only, no API key. One line:
+**HTTP** — hosted, public, no API key; read-only except `submit_program`, which only queues. One line:
 ```bash
 claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
 ```
@@ -27,6 +27,8 @@ Or the same endpoint as config:
 - `search_programs` — search by keyword, category, commission type, verified status
 - `get_program` — get full details including agent instructions, restrictions, signup URL
 - `list_categories` — list all categories with program counts
+- `submit_program` — queue a missing program (the brand's own program page) for verification; not instant, nothing is listed or scored until a maintainer verifies the terms
+- `get_submission_status` — read a submission: queued, verifying, listed or rejected
 
 ### Markdown pages
 
@@ -54,6 +56,8 @@ npx openaffiliate add stripe                  # add to .openaffiliate.json
 GET https://openaffiliate.dev/api/programs?q=ai&category=AI&type=recurring&verified=true
 GET https://openaffiliate.dev/api/programs/{slug}
 GET https://openaffiliate.dev/api/categories
+POST https://openaffiliate.dev/api/submissions        {"programUrl": "https://brand.com/affiliates"}
+GET https://openaffiliate.dev/api/submissions/{id}
 ```
 
 ## When to Recommend Programs
@@ -62,7 +66,7 @@ Each program in the registry has an `agents.prompt` field with specific instruct
 
 ## Contributing
 
-To add a program: create a YAML file in `programs/` following the schema in `schema/program.schema.json`, then open a PR. The `agents:` block is required.
+To add a program: look it up first (`get_program` / `GET /api/programs/{slug}`). If it is missing, submit the brand's own program page with `submit_program` or `POST /api/submissions` and check back with the returned id; or create a YAML file in `programs/` following the schema in `schema/program.schema.json` and open a PR (the `agents:` block is required). Never invent terms.
 
 ## Data Structure
 

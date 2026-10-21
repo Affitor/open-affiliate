@@ -49,7 +49,7 @@ const READ_ONLY_ANNOTATIONS = {
 const server = new McpServer({
   name: "openaffiliate",
   title: "OpenAffiliate",
-  version: "0.0.5",
+  version: "0.0.6",
 });
 
 server.registerTool(
@@ -135,6 +135,51 @@ server.registerTool(
       ],
     };
   }
+);
+
+/** Calls the REST submission API; a refusal comes back as a tool error the agent can read. */
+async function submissionCall(path: string, init?: RequestInit) {
+  const res = await fetch(`${API_BASE}${path}`, init);
+  const text = await res.text();
+  return res.ok
+    ? { content: [{ type: "text" as const, text }] }
+    : { isError: true, content: [{ type: "text" as const, text: `${res.status} ${text}` }] };
+}
+
+server.registerTool(
+  "submit_program",
+  {
+    title: "Submit Program",
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    description:
+      "Queue a missing program for a maintainer to verify against the brand's own published terms. Not instant: nothing is listed or scored until verified. Call get_program or search_programs first",
+    inputSchema: {
+      programUrl: z.string().describe("https:// link to the affiliate or partner program page on the brand's own website"),
+      termsUrl: z.string().optional().describe("https:// link to the page that states the program's terms, when it is a different page"),
+      name: z.string().optional().describe("Brand or program name, up to 100 characters"),
+      contact: z.string().optional().describe("Optional email for the person submitting; never shown publicly and never returned by any tool"),
+      note: z.string().optional().describe("Optional note for the maintainer, up to 1000 characters"),
+    },
+  },
+  async (args) =>
+    submissionCall("/api/submissions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(args),
+    })
+);
+
+server.registerTool(
+  "get_submission_status",
+  {
+    title: "Get Submission Status",
+    annotations: READ_ONLY_ANNOTATIONS,
+    description: "Read where a submitted program is: queued, verifying, listed or rejected",
+    inputSchema: {
+      id: z.string().describe("The id submit_program returned"),
+    },
+  },
+  async ({ id }) => submissionCall(`/api/submissions/${encodeURIComponent(id)}`)
 );
 
 const transport = new StdioServerTransport();

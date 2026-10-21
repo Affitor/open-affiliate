@@ -60,7 +60,7 @@ npx openaffiliate add supabase
 
 ### MCP (for AI agents)
 
-**Hosted HTTP endpoint** — public, read-only, no API key. One line:
+**Hosted HTTP endpoint** — public, no API key; read-only except `submit_program`, which only queues. One line:
 
 ```bash
 claude mcp add --transport http openaffiliate https://openaffiliate.dev/mcp
@@ -93,7 +93,7 @@ The same endpoint as config, for Claude.ai, ChatGPT, and any other remote MCP cl
 }
 ```
 
-Available tools: `search_programs`, `get_program`, `list_categories`
+Available tools: `search_programs`, `get_program`, `list_categories`, `submit_program`, `get_submission_status` (the last two queue a missing program for verification; nothing is listed instantly)
 
 ### Markdown, without MCP
 
@@ -145,6 +145,8 @@ const stripe = await getProgram("stripe");
 GET /api/programs              # List all (supports ?q=, ?category=, ?type=, ?verified=)
 GET /api/programs/[slug]       # Get program details
 GET /api/categories            # List categories with counts
+POST /api/submissions          # Submit a missing program by URL (queued for verification)
+GET /api/submissions/[id]      # Read a submission's status
 ```
 
 ### Content Lab

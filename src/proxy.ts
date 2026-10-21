@@ -33,7 +33,8 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
               // One id per (ip, user-agent) pair, hashed so no raw IP is stored.
               distinct_id: "api:" + Array.from(new Uint8Array(hash).slice(0, 8), (b) => b.toString(16).padStart(2, "0")).join(""),
               properties: {
-                path: pathname,
+                // A submission id is the only key to its status, so it stays out of analytics.
+                path: pathname.replace(/^\/api\/submissions\/[^/]+/, "/api/submissions/{id}"),
                 q: searchParams.get("q"),
                 utm_source: searchParams.get("utm_source"),
                 src: searchParams.get("src"),

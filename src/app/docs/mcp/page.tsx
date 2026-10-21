@@ -23,7 +23,7 @@ export default function MCPPage() {
           </h2>
           <p className="text-base text-muted-foreground mb-3">
             Hosted at <code className="text-xs">https://openaffiliate.dev/mcp</code>.
-            Public, read-only, no API key. One line in Claude Code:
+            Public, no API key; read-only except <code>submit_program</code>, which only queues. One line in Claude Code:
           </p>
           <CodeBlock
             label="terminal"
@@ -95,6 +95,14 @@ url = "https://openaffiliate.dev/mcp"`}
               {
                 name: "list_categories",
                 desc: "List all categories with program counts",
+              },
+              {
+                name: "submit_program",
+                desc: "Queue a missing program (the brand's own program page) for verification. The only write; nothing is listed or scored until a maintainer verifies the terms",
+              },
+              {
+                name: "get_submission_status",
+                desc: "Read a submission: queued, verifying, listed or rejected",
               },
             ].map((tool) => (
               <div key={tool.name} className="flex items-start gap-3 text-xs">
