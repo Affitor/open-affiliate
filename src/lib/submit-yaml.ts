@@ -56,8 +56,12 @@ export function rateOf(raw: string): string {
 }
 
 const list = (s: string) => s.split(",").map((x) => x.trim()).filter(Boolean)
-/** A JSON string is a valid YAML double-quoted scalar, so quotes and colons in a name cannot break the file. */
-const q = (s: string) => JSON.stringify(s)
+/**
+ * Every value the file holds goes through here. JSON is valid YAML, so a string
+ * is always a double-quoted string: a slug "true", "null", "365" or "0x1f", or a
+ * name with quotes and colons, can never be read back as another type.
+ */
+const q = (x: string | number | boolean | null) => JSON.stringify(x)
 const whole = (s: string) => (/^\d+$/.test(s.trim()) ? Number(s.trim()) : null)
 const amount = (s: string) => (/^\d+(\.\d+)?$/.test(s.trim()) ? Number(s.trim()) : null)
 
@@ -122,26 +126,26 @@ export function submitYaml(v: SubmitValues, today: Date = new Date()): string {
 
   const out = [
     `name: ${q(v.name.trim())}`,
-    `slug: ${slugOf(v.slug)}`,
-    `url: ${httpsUrl(v.url)}`,
+    `slug: ${q(slugOf(v.slug))}`,
+    `url: ${q(httpsUrl(v.url))}`,
     `category: ${q(v.category)}`,
-    `verified: false`,
+    `verified: ${q(false)}`,
     ``,
     `commission:`,
-    `  type: ${v.commissionType}`,
+    `  type: ${q(v.commissionType)}`,
     `  rate: ${q(rate)}`,
-    `  mode: ${mode}`,
-    `  value: ${value ?? "null"}`,
+    `  mode: ${q(mode)}`,
+    `  value: ${q(value)}`,
     `  currency: ${q(currency)}`,
   ]
-  if (cookie != null) out.push(`cookie_days: ${cookie}`)
+  if (cookie != null) out.push(`cookie_days: ${q(cookie)}`)
   if (minimum != null || v.payoutFrequency) {
     out.push(`payout:`)
-    if (minimum != null) out.push(`  minimum: ${minimum}`, `  currency: ${q(currency)}`)
-    if (v.payoutFrequency) out.push(`  frequency: ${v.payoutFrequency}`)
+    if (minimum != null) out.push(`  minimum: ${q(minimum)}`, `  currency: ${q(currency)}`)
+    if (v.payoutFrequency) out.push(`  frequency: ${q(v.payoutFrequency)}`)
   }
-  out.push(``, `signup_url: ${httpsUrl(v.signupUrl)}`)
-  if (v.approval) out.push(`approval: ${v.approval}`)
+  out.push(``, `signup_url: ${q(httpsUrl(v.signupUrl))}`)
+  if (v.approval) out.push(`approval: ${q(v.approval)}`)
   out.push(
     ``,
     `short_description: ${q(v.shortDescription.trim().slice(0, SHORT_DESCRIPTION_MAX))}`,
@@ -153,7 +157,7 @@ export function submitYaml(v: SubmitValues, today: Date = new Date()): string {
   if (keywords.length) out.push(`  keywords: [${keywords.map(q).join(", ")}]`)
   if (tags.length) out.push(``, `tags: [${tags.map(q).join(", ")}]`)
   if (v.submittedBy.trim()) out.push(`submitted_by: ${q(v.submittedBy.trim())}`)
-  out.push(`created_at: "${today.toISOString().slice(0, 10)}"`)
+  out.push(`created_at: ${q(today.toISOString().slice(0, 10))}`)
   return out.join("\n") + "\n"
 }
 

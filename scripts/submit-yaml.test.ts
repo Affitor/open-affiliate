@@ -137,6 +137,71 @@ for (const [name, change, field, gate] of rejected) {
   })
 }
 
+// YAML 1.1 and 1.2 read these plain words as booleans, null, numbers, infinities or dates.
+// Typed into the slug, name, GitHub name, keywords or tags, every one must come back as the
+// string that was typed, and the file must still pass all three gates (PR #367 review r2).
+const YAML_TRAPS = ["true", "false", "null", "365", "yes", "no", "on", "off", "y", "n", "True", "NULL", "Off",
+  "~", ".inf", "-.inf", ".nan", "007", "0x1f", "0o17", "1e3", "1_000", "1.5", "-1", "2026-10-20", "12:30", "0", "<<"]
+
+test("slugs the review found (true, false, null, 365) stay strings and pass every gate", () => {
+  const contents = ["true", "false", "null", "365"].map((slug, i) => {
+    const v = { ...ok, name: slug, slug, url: `review${i}-sample.com`, signupUrl: `review${i}-sample.com/affiliates` }
+    assert.deepEqual(fieldErrors(v), {})
+    const content = submitYaml(v, new Date("2026-10-20T12:00:00Z"))
+    const p = parse(content)
+    assert.equal(p.slug, slug)
+    assert.ok(validate(p), JSON.stringify(validate.errors))
+    const policy = evaluateAutoMergePolicy({
+      pullRequest: { base: { ref: "main" }, draft: false, labels: [] },
+      files: [{ filename: `programs/${slug}.yaml`, status: "added", additions: content.split("\n").length, deletions: 0, content }],
+    })
+    assert.deepEqual(policy.reasons, [], slug)
+    return content
+  })
+  const run = buildRegistry(contents)
+  assert.equal(run.status, 0, run.out)
+})
+
+test("words YAML reads as other types come back as the strings typed, and the files pass the schema and the registry", () => {
+  const seen = new Set<string>()
+  const contents: string[] = []
+  YAML_TRAPS.forEach((word, i) => {
+    const v = {
+      ...ok,
+      name: word,
+      slug: word,
+      url: `trap${i}-sample.com`,
+      signupUrl: `trap${i}-sample.com/affiliates`,
+      shortDescription: word,
+      description: word,
+      agentPrompt: word,
+      keywords: `${word}, kw`,
+      tags: word,
+      submittedBy: word,
+    }
+    const p = parse(submitYaml(v, new Date("2026-10-20T12:00:00Z")))
+    for (const key of ["name", "short_description", "description", "submitted_by"]) assert.equal(p[key], word, `${word}: ${key}`)
+    assert.equal(p.agents.prompt, word)
+    assert.deepEqual(p.agents.keywords, [word, "kw"])
+    assert.deepEqual(p.tags, [word])
+    assert.equal(typeof p.url, "string")
+    assert.equal(typeof p.created_at, "string")
+    assert.equal(p.verified, false)
+    assert.equal(p.commission.value, 30)
+    // The slug is the cleaned name; when one is left it is the same string, never another type.
+    const slug: unknown = p.slug
+    if (!slug) return
+    assert.equal(typeof slug, "string", word)
+    assert.ok(validate(p), `${word}: ${JSON.stringify(validate.errors)}`)
+    if (!seen.has(slug as string)) {
+      seen.add(slug as string)
+      contents.push(submitYaml(v, new Date("2026-10-20T12:00:00Z")))
+    }
+  })
+  const run = buildRegistry(contents)
+  assert.equal(run.status, 0, run.out)
+})
+
 test("a currency is always written as a quoted string", () => {
   const p = parse(submitYaml({ ...ok, currency: "null", payoutMinimum: "10" }))
   assert.equal(p.commission.currency, "NULL")
