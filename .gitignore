@@ -93,9 +93,11 @@ reports/
 /public/categories/
 /public/networks/
 /public/best/
+/public/blog/
 /public/skill/SKILL.md
 /public/.well-known/agent-skills/
 /public/.well-known/ard.json
 /public/.well-known/ai-catalog.json
 /.Codex-lock/
+/public/rankings/
 *.bak

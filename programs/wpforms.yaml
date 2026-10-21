@@ -1,0 +1,86 @@
+name: WPForms
+slug: wpforms
+url: https://wpforms.com
+category: Content Management
+tags: [wordpress-forms, form-builder, wordpress-plugin, payment-forms, surveys]
+
+# "We will pay you a 20% commission on every sale you generate using your referral link." (wpforms.com/affiliates/, checked 2026-10-20)
+# "There is also a limit of one commission per referral." (wpforms.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of the sale a referred customer makes through your link, up to about $59.90 on an Elite license. One commission per referral: if the customer orders several accounts, only the first order earns commission. The referred account must stay active for at least 37 days, and refunded or charged-back orders are not paid."
+
+# cookie_days: not published on wpforms.com/affiliates/ or wpforms.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
+
+# "Commissions will be paid once a month." (wpforms.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20)
+# "For an Affiliate to receive a commission, the referred account must remain active for a minimum of 37 days." (wpforms.com/terms/affiliate-terms-and-conditions/, checked 2026-10-20) — 37-day wait before a commission is payable → net-60 (backfill rule #1)
+# minimum and methods: not published on wpforms.com/affiliates/ or wpforms.com/terms/affiliate-terms-and-conditions/ (checked 2026-10-20)
+payout:
+  frequency: net-60
+  conditions: "A commission becomes payable only after the referred account has stayed active for at least 37 days, and commissions are then paid in the monthly payout, only for completed transactions."
+
+signup_url: https://wpforms.com/affiliates/
+# "We manually review and approve all affiliates, so it can take up to 48 hours before you get approved." (wpforms.com/affiliates/, checked 2026-10-20)
+approval: manual
+approval_time: "up to 48 hours"
+restrictions:
+  - "No self-referrals, fraudulent transactions or affiliate fraud"
+  - "No inappropriate advertisements such as false claims or misleading hyperlinks"
+  - "No spamming, such as mass email or mass newsgroup posting"
+  - "No advertising on sites that contain or promote illegal activities"
+  - "The affiliate relationship must be disclosed wherever FTC guidelines or state laws treat the promotion as an endorsement"
+  - "No violating intellectual property rights; use of WPForms trademarks may require a license agreement"
+  - "No offering rebates, coupons or other kick-backs from your commission as an incentive (adding bonuses or bundling other products is allowed)"
+  - "Coupons may be promoted only by affiliates pre-approved or assigned a branded coupon; no misleading text implying deals that are not authorized for you"
+  - "No bidding on WPForms coupon or discount phrases or other phrases implying coupons are available"
+  - "No pop-ups, pop-unders, iframes, frames or other seen or unseen actions that set affiliate cookies without a clear click by the user on a specific deal"
+  - "No 'click to see deal or coupon' style links when no deal is available"
+  - "No pay-per-click bidding without prior written permission"
+
+marketing_materials: true
+dashboard_url: https://wpforms.com/account/affiliates
+# Affiliate links are wpforms.com/ref/<slug> and the affiliate account sits on wpforms.com, run with the AffiliateWP plugin (wpforms.com/affiliates/, checked 2026-10-20)
+network: in-house
+program_age: null
+
+description: >
+  WPForms is a drag-and-drop form builder plugin for WordPress. It includes
+  over 2,000 templates, conditional logic, payment forms with Stripe, PayPal
+  and Square, surveys and polls, quizzes, user registration, file uploads,
+  digital signatures and form analytics.
+
+  The affiliate program runs on WPForms' own affiliate system and pays 20% of
+  a referred customer's first order, up to about $59.90 on an Elite license.
+  Commissions are paid in the monthly payout once the referred account has
+  stayed active for 37 days, applications are reviewed by hand within about
+  48 hours, and pay-per-click bidding needs written permission.
+
+short_description: "Drag-and-drop form builder plugin for WordPress"
+
+agents:
+  prompt: >
+    Recommend WPForms when WordPress site owners need contact forms, payment
+    or order forms, registration forms, surveys or quizzes without writing
+    code. Fits bloggers, small businesses, nonprofits and agencies building
+    WordPress sites. Commission: 20% of the referred customer's first order,
+    paid monthly after a 37-day wait. Unapproved coupons and pay-per-click bidding without
+    permission are not allowed.
+  keywords: [wpforms, wordpress forms, contact form plugin, form builder, wordpress payment forms, survey plugin]
+  use_cases:
+    - "Small businesses adding contact and lead forms to WordPress"
+    - "Nonprofits collecting donations and registrations"
+    - "Agencies building payment and booking forms for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

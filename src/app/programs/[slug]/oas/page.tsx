@@ -3,24 +3,31 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Check, ChevronDown, Clock, ExternalLink, Minus, Star } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { categoryToSlug, getProgram, IN_HOUSE, livePrograms } from "@/lib/programs";
-import { networkName } from "@/lib/network-meta";
+import { PromptToImprove } from "@/components/prompt-to-improve";
+import { ShareButton } from "@/components/share-button";
+import { OasGradeChip } from "@/components/oas-grade";
+import { categoryToSlug, getProgram, livePrograms } from "@/lib/programs";
 import { isAffitorHref } from "@/lib/affitor-link";
+import { machineChecks, provenanceOf } from "@/lib/oas-machine";
 import {
   buildBoard,
   categoryRank,
   CHECKS,
   getOasScore,
   GROUPS,
+  fixItems,
+  improvePrompt,
   improveText,
+  isStale,
+  verdictText,
   NOT_ASSESSED,
   oasScores,
   oasValue,
   PART_MAX,
   partEarned,
   rankText,
-  round1,
   TEAM_DISCLOSURE,
+  round1,
   UNRANKED_TEXT,
   type CheckGroup,
   type OasCheck,
@@ -31,6 +38,8 @@ import {
 export const revalidate = 86400;
 
 const REPO = "https://github.com/Affitor/open-affiliate";
+
+const host = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
 
 function readableDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric", timeZone: "UTC" });
@@ -170,18 +179,22 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
   const value = oasValue(score);
   const scored = value != null;
+  // Hidden a day before it lapses: the page is cached for up to a day (revalidate).
+  const machine = machineChecks(slug, new Date(), revalidate / 86400);
   const board = buildBoard(oasScores, livePrograms, new Date());
   const row = board.find((r) => r.program.slug === slug);
   const rankLine = rankText(categoryRank(board, slug));
   const unranked = row?.unranked;
-  const network = program.network && program.network !== IN_HOUSE ? networkName(program.network) : null;
   const t = groupsOf(score, "transparency");
   const v = groupsOf(score, "partner_value");
-  const strongest = scored ? [...t, ...v].filter((g) => g.max > 0 && g.earned / g.max >= 0.8) : [];
-  const fixes = score.checks
-    .filter((c) => c.state === "not_met" || c.state === "not_public")
-    .sort((a, b) => b.max - a.max);
-  const recoverable = round1(fixes.reduce((a, c) => a + c.max, 0));
+  const items = fixItems(score);
+  const waiting = score.checks.filter((c) => c.state === "checking");
+  const verdict = verdictText(score);
+  // Every term read, but verified more than 90 days ago: no score until we verify it again.
+  // Stale is checked first: every term may also read as not assessed once it is old.
+  const stale = !scored && isStale(score.checked_at, new Date());
+  const prompt = stale ? "" : improvePrompt(program, score);
+  const domain = host(program.url);
   const errorUrl = reportErrorUrl(program.name, slug);
 
   const partTotal = (part: Part, groups: Group[]) => (
@@ -204,97 +217,122 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
       <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_400px] gap-8 lg:gap-12 mt-6 items-start">
         <div>
-          <div className="flex items-center gap-4">
-            <ProgramLogo slug={program.slug} name={program.name} size={64} className="shrink-0 rounded-[14px] border border-border bg-white" />
-            <div className="min-w-0">
-              <p className="oa-label">OAS report · OpenAffiliate Score</p>
-              <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-1">{program.name}</h1>
-            </div>
+          <div className="flex flex-wrap items-center gap-3">
+            <ProgramLogo slug={program.slug} name={program.name} size={32} className="shrink-0 rounded-lg border border-border bg-white" />
+            <span className="font-mono text-sm text-muted-foreground">{domain}</span>
+            <ShareButton path={`/programs/${slug}/oas`} title={`${program.name} OAS report`} />
           </div>
-          <p className="text-base text-foreground/80 mt-5 max-w-xl">
-            How clearly the program publishes the terms an affiliate needs, and whether three of them protect the affiliate. Not how much it pays.
+          <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-4">
+            {program.name}: {(verdict ?? (stale ? "Terms to verify again" : "Scoring in progress")).toLowerCase()}
+          </h1>
+          <div className="flex items-end gap-4 mt-5">
+            {scored ? (
+              <p className="flex items-baseline gap-x-2">
+                <span className="font-mono font-medium text-[52px] sm:text-[76px] leading-none tracking-[-0.05em]">{value}</span>
+                <span className="font-mono text-subtitle text-muted-foreground">/100</span>
+                <OasGradeChip score={value!} className="ml-1 self-center" />
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground max-w-md">
+                {stale
+                  ? `Its terms were last verified ${readableDate(score.checked_at)}, more than 90 days ago. The score returns once we verify them again.`
+                  : `Some of its terms are not read yet. The score appears once every term is read; nothing is counted against ${program.name} meanwhile.`}
+              </p>
+            )}
+          </div>
+          {rankLine ? (
+            <p className="inline-flex items-center gap-1.5 mt-3 text-sm font-medium"><Star className="h-3.5 w-3.5" aria-hidden />{rankLine}</p>
+          ) : unranked && unranked !== "checking" ? (
+            <p className="text-sm text-muted-foreground mt-3">{UNRANKED_TEXT[unranked]}</p>
+          ) : null}
+          {prompt && <PromptToImprove slug={slug} text={prompt} />}
+          <p className="mt-4 text-meta text-muted-foreground">
+            Terms checked {readableDate(score.checked_at)}
+            {score.page_url && <> on {evidenceLink(score.page_url, host(score.page_url), "underline underline-offset-2 hover:text-foreground")}</>}
+            {" · "}
+            <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>
           </p>
-          <p className="flex flex-wrap gap-x-5 gap-y-1.5 mt-4 text-meta text-muted-foreground">
-            <span>Terms verified <span className="text-foreground font-medium">{readableDate(score.checked_at)}</span></span>
-            <span>Rubric <span className="text-foreground font-medium">OAS {score.version}</span></span>
-            <span>{network ? <>Runs on <span className="text-foreground font-medium">{network}</span></> : <>Runs <span className="text-foreground font-medium">directly</span></>}</span>
-          </p>
-          {strongest.length > 0 && (
-            <div className="mt-6">
-              <p className="oa-label">Strongest</p>
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {strongest.slice(0, 4).map((g) => (
-                  <span key={g.key} className="inline-flex items-center gap-1 rounded-md border border-good-line bg-good-bg px-2 py-0.5 text-xs text-good">
-                    <Check className="h-3 w-3" aria-hidden />{g.name}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
 
-        <aside aria-label="Score" className="rounded-xl border border-border bg-card p-5 sm:p-6">
-          <p className="oa-label">OAS · OpenAffiliate Score</p>
-          {scored ? (
-            <p className="flex flex-wrap items-baseline gap-x-2 mt-2">
-              <span className="font-mono font-medium text-[52px] sm:text-[76px] leading-none tracking-[-0.05em]">{value}</span>
-              <span className="font-mono text-subtitle text-muted-foreground">/100</span>
-            </p>
-          ) : (
-            <>
-              <p className="text-title font-semibold tracking-tight mt-2">Scoring in progress</p>
-              <p className="text-sm text-muted-foreground mt-1.5">Some of its terms are not checked yet. The score appears once every check is assessed; nothing is counted against {program.name} meanwhile.</p>
-            </>
-          )}
-          {rankLine ? (
-            <p className="inline-flex items-center gap-1.5 mt-3.5 text-sm font-medium"><Star className="h-3.5 w-3.5" aria-hidden />{rankLine}</p>
-          ) : unranked && unranked !== "checking" ? (
-            <p className="text-sm text-muted-foreground mt-3.5">{UNRANKED_TEXT[unranked]}</p>
-          ) : null}
-          <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-border">
-            <div><p className="oa-label">Transparency</p><p className="mt-1">{partTotal("transparency", t)}</p></div>
-            <div><p className="oa-label">Partner value</p><p className="mt-1">{partTotal("partner_value", v)}</p></div>
-          </div>
-          <a href={errorUrl} target="_blank" rel="noopener" className="mt-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground">
-            Report an error <ExternalLink className="h-3 w-3" aria-hidden />
-          </a>
+        <aside aria-label="Score by part" className="border-t border-border">
+          {([["transparency", t, "terms published"], ["partner_value", v, "partner terms met"]] as const).map(([part, groups, what]) => (
+            <div key={part} className="flex items-start justify-between gap-3 border-b border-border py-3.5">
+              <div>
+                <p className="font-medium">{part === "transparency" ? "Transparency" : "Partner value"}</p>
+                <p className="text-meta text-muted-foreground">
+                  {groups.reduce((a, g) => a + g.met, 0)} of {groups.reduce((a, g) => a + g.assessed, 0)} {what}
+                </p>
+              </div>
+              {partTotal(part, groups)}
+            </div>
+          ))}
         </aside>
       </div>
 
-      {fixes.length > 0 && (
-        <details className="group mt-10 rounded-xl border border-border bg-card">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-4 sm:px-5 py-3.5 font-medium hover:bg-sunk [&::-webkit-details-marker]:hidden">
-            {/* No point total while scoring: it would read as a score. */}
-            {`${fixes.length} ${fixes.length === 1 ? "way" : "ways"} to add ${scored ? `up to ${recoverable} points` : "points"}`}
-            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform group-open:rotate-180" aria-hidden />
-          </summary>
-          <p className="border-t border-border px-4 sm:px-5 py-2.5 text-meta text-muted-foreground">Biggest first. A term that is not published counts once it is, and we verify it again.</p>
-          <ul>
-            {fixes.map((c) => (
-              <li key={c.id} className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-3.5 border-t border-border px-4 sm:px-5 py-2.5 text-sm">
-                <span>{CHECKS[c.id].label}{c.state === "not_public" && <span className="ml-2 rounded-full border border-border px-2 py-0.5 text-xs text-muted-foreground">Not published</span>}</span>
-                <span className="hidden sm:block text-meta text-muted-foreground">{CHECKS[c.id].group}</span>
-                <span className="font-mono text-meta">+{round1(c.max)}</span>
+      {!stale && <section className="mt-12" aria-labelledby="fix-h">
+        <h2 id="fix-h" className="text-lg font-semibold">{items.length ? "Fix these gaps first" : waiting.length ? "Terms we have not read yet" : "Nothing to fix"}</h2>
+        <p className="text-meta text-muted-foreground mt-1">
+          {items.length ? "Biggest first. A term counts once it is published and we verify it again." : waiting.length ? "The score appears once every term is read." : "Every term OAS checks is published and meets the partner checks."}
+        </p>
+        {items.length > 0 && (
+          <ol className="mt-3 border-t border-border">
+            {items.map((f, i) => (
+              <li key={f.id} className="grid grid-cols-[28px_minmax(0,1fr)] sm:grid-cols-[36px_minmax(0,1fr)_auto] gap-x-3 gap-y-1 border-b border-border py-4">
+                <span className="font-mono text-meta text-muted-foreground pt-0.5">{String(i + 1).padStart(2, "0")}</span>
+                <div className="min-w-0">
+                  <p className="font-medium">{f.label} <span className="ml-1.5 rounded-md border border-border px-1.5 py-0.5 text-xs font-normal text-muted-foreground">{f.group}</span></p>
+                  <p className="text-sm text-foreground/80 mt-1">{f.fix}</p>
+                </div>
+                <p className="col-start-2 sm:col-start-3 sm:row-start-1 font-mono text-meta sm:text-right whitespace-nowrap">
+                  +{f.points}{f.extra && <span className="block text-muted-foreground">{f.extra}</span>}
+                </p>
               </li>
             ))}
+          </ol>
+        )}
+        {!items.length && waiting.length > 0 && (
+          <ul className="mt-3 border-t border-border">
+            {waiting.map((c) => (
+              <li key={c.id} className="flex items-center gap-3 border-b border-border py-3 text-sm"><Clock className="h-4 w-4 text-muted-foreground" aria-hidden />{CHECKS[c.id].label}</li>
+            ))}
           </ul>
-        </details>
-      )}
+        )}
+      </section>}
 
-      <section className="mt-10" aria-labelledby="t-h">
-        <div className="flex items-baseline justify-between gap-3 mb-3"><h2 id="t-h" className="text-lg font-semibold">Transparency</h2>{partTotal("transparency", t)}</div>
+      <h2 className="text-lg font-semibold mt-12">Audit the checks behind the score</h2>
+      <p className="text-meta text-muted-foreground mt-1">Every check, what we read and where.</p>
+      <section className="mt-5" aria-labelledby="t-h">
+        <div className="flex items-baseline justify-between gap-3 mb-3"><h3 id="t-h" className="font-semibold">Transparency</h3>{partTotal("transparency", t)}</div>
         <Accordion groups={t} date={score.checked_at} pageUrl={score.page_url} scored={scored} />
       </section>
       <section className="mt-8" aria-labelledby="v-h">
-        <div className="flex items-baseline justify-between gap-3 mb-3"><h2 id="v-h" className="text-lg font-semibold">Partner value</h2>{partTotal("partner_value", v)}</div>
+        <div className="flex items-baseline justify-between gap-3 mb-3"><h3 id="v-h" className="font-semibold">Partner value</h3>{partTotal("partner_value", v)}</div>
         <Accordion groups={v} date={score.checked_at} pageUrl={score.page_url} scored={scored} />
       </section>
 
-      <div className="mt-10 border-t border-border pt-6 text-meta text-muted-foreground max-w-3xl space-y-2">
+      {machine.length > 0 && (
+        <section className="mt-12" aria-labelledby="machine-h">
+          <h2 id="machine-h" className="text-lg font-semibold">Machine checks · not counted in OAS</h2>
+          <p className="text-meta text-muted-foreground mt-1">
+            Read automatically from public data, measured {machine[0].measuredAt}, valid until {machine[0].validUntil}. They inform the next OAS version and do not change this score.
+          </p>
+          <ul className="mt-4 divide-y divide-border border-y border-border">
+            {machine.map((c) => (
+              <li key={c.id} className="grid grid-cols-[minmax(0,1fr)_auto] items-baseline gap-x-4 gap-y-1 py-3">
+                <span className="font-medium">{c.label}</span>
+                <span className={`font-mono text-sm ${c.met ? "text-good" : "text-muted-foreground"}`}>{c.met ? "Met" : "Not met"}</span>
+                <span className="col-span-2 text-sm text-muted-foreground">{c.reading}</span>
+                <span className="col-span-2 text-meta text-muted-foreground break-all">{provenanceOf(c)}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      <div className="mt-10 border-t border-border pt-6 text-meta text-muted-foreground max-w-3xl">
         <p>
-          Transparency: 8 checks, 70 points. Partner value: 3 checks, 30 points. OAS is one fixed number, computed from the terms OpenAffiliate verified on the program&rsquo;s own page. Each check is Met, Not met, or Not published (0 points until published); a score appears only once every check is assessed, and until then the report says Scoring in progress. Not scored: commission size, recurring or one-time, network, popularity, claiming, or any payment to OpenAffiliate.
+          OAS reads only the terms verified on the program&rsquo;s own page: Transparency (70) and Partner value (30), never the commission size. {TEAM_DISCLOSURE} Found a mistake? <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>.
         </p>
-        <p>{TEAM_DISCLOSURE} Found a mistake? <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>.</p>
       </div>
     </div>
   );

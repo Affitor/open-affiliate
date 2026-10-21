@@ -15,6 +15,11 @@ import {
   CHECK_IDS,
   CHECKS,
   improveText,
+  fixItems,
+  verdictText,
+  oasGrade,
+  GRADE_BANDS,
+  improvePrompt,
   isStale,
   oasScores,
   oasValue,
@@ -23,10 +28,15 @@ import {
   round1,
   type CheckState,
   type OasScore,
+  TIE_ORDER,
   type ProgramRef,
 } from "../src/lib/oas"
 import { isScored, scoreAll, scoreProgram, type ProgramYaml } from "../src/lib/oas-v1"
 import { NOT_PUBLISHED_FIELDS, notPublishedProblems, payoutLagProblems } from "./program-rules"
+import { matchPrograms, scoreIndex, type ScoreEntry } from "../src/lib/score-index"
+import { leaderRows } from "../src/app/rankings/leaderboard/rows"
+import { livePrograms } from "../src/lib/programs"
+import { leaderboardMd, rankingsMd } from "./generate-md"
 
 const TODAY = new Date("2026-10-20T00:00:00Z")
 
@@ -141,9 +151,30 @@ test("a conflict fails the term's T check and its V pair, with the agree fix", (
   assert.equal(s.oas, 80)
 })
 
-test("a Not published V check shows how to publish the term", () => {
+test("a Not published V check says publish the term at the bar, not just publish it", () => {
   const v2 = scoreProgram(yaml("p", { payout: { frequency: "monthly", methods: ["paypal"] } }), TODAY).checks.find((c) => c.id === "V2")!
-  assert.equal(improveText(v2), CHECKS.T4.fix)
+  assert.equal(improveText(v2), "Publish a minimum payout of USD 50 or less, or say there is none.")
+})
+
+test("Fix these gaps first: a term missing from both parts is one item with both point values, biggest first", () => {
+  // Minimum payout not published (T4 + V2) and approval not published (T7).
+  const s = scoreProgram(yaml("p", { payout: { currency: "USD", frequency: "monthly", methods: ["paypal"] }, approval: undefined }), TODAY)
+  const items = fixItems(s)
+  assert.deepEqual(items.map((f) => [f.id, f.points, f.extra]), [["T4", 10, "+10 more if it is USD 50 or less"], ["T7", 6, null]])
+  assert.equal(items[0].fix, CHECKS.T4.fix)
+  // A published minimum above the bar: only V2 is open, with its own fix.
+  const high = scoreProgram(yaml("p", { payout: { minimum: 100, currency: "USD", frequency: "monthly", methods: ["paypal"] } }), TODAY)
+  assert.deepEqual(fixItems(high).map((f) => [f.id, f.fix, f.extra]), [["V2", CHECKS.V2.fix, null]])
+  assert.deepEqual(fixItems(scoreProgram(yaml("p"), TODAY)), [], "a full score has nothing to fix")
+})
+
+test("Prompt to improve: what to publish, where, and how to ask for a re-check", () => {
+  const s = { ...scoreProgram(yaml("p", { payout: { currency: "USD", frequency: "monthly", methods: ["paypal"] } }), TODAY), page_url: "https://p.example/affiliates" }
+  const text = improvePrompt({ name: "P", slug: "p" }, s, TODAY)
+  assert.match(text, /^# Raise P's OpenAffiliate Score \(OAS \d+\/100\)/)
+  assert.match(text, /from https:\/\/p\.example\/affiliates\./)
+  assert.match(text, /1\. Minimum payout: Publish the minimum payout, or say there is none\. \(\+10, \+10 more if it is USD 50 or less\)/)
+  assert.match(text, /https:\/\/openaffiliate\.dev\/programs\/p\/oas/)
 })
 
 test("held out: points spread inside the part, parts stay /70 and /30, weights unrounded", () => {
@@ -203,15 +234,15 @@ test("same input, same score", () => {
   assert.deepEqual(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), scoreProgram(yaml("p", { cookie_days: 30 }), TODAY))
 })
 
-test("ranking: ties share a rank and every network ranks alike; scoring, no apply link and stale get no rank", () => {
+test("ranking: every position is unique, every network ranks alike; scoring, no apply link and stale get no rank", () => {
   const score = (slug: string, over: Partial<ProgramYaml> = {}) => scoreProgram(yaml(slug, over), TODAY)
   const scores = [
     score("top"),
     score("tie-a", { cookie_days: 30 }),
     score("tie-b", { cookie_days: 30 }),
     score("third", { cookie_days: 30, approval: undefined }),
-    score("kyma-api"),
-    score("on-affitor"),
+    score("kyma-api", { cookie_days: 30 }),
+    score("on-affitor", { cookie_days: 30 }),
     score("scoring", { last_verified_at: "2026-01-01" }),
     score("no-apply", { signup_url: null }),
     { ...score("stale"), checked_at: "2026-06-01" },
@@ -221,7 +252,8 @@ test("ranking: ties share a rank and every network ranks alike; scoring, no appl
   const board = buildBoard(scores, programs, TODAY)
   const by = Object.fromEntries(board.map((r) => [r.program.slug, r]))
   assert.equal(board.length, 9)
-  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["kyma-api", 1], ["on-affitor", 1], ["top", 1], ["tie-a", 4], ["tie-b", 4], ["third", 6]])
+  // Equal OAS, Partner value and verified date: name A to Z decides, and each still gets its own position.
+  assert.deepEqual(board.filter((r) => r.rank != null).map((r) => [r.program.slug, r.rank]), [["top", 1], ["kyma-api", 2], ["on-affitor", 3], ["tie-a", 4], ["tie-b", 5], ["third", 6]])
   // Kyma API and programs on the Affitor network rank like any other (Sơn 19/10: the team tag is gone).
   assert.equal(by["kyma-api"].unranked, null)
   assert.equal(by["on-affitor"].unranked, null)
@@ -229,8 +261,8 @@ test("ranking: ties share a rank and every network ranks alike; scoring, no appl
   assert.equal(by["no-apply"].unranked, "no-apply-link")
   assert.equal(by["stale"].unranked, "checking")
   assert.equal(by["stale"].oas, null)
-  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 4, of: 5, category: "AI" })
-  assert.deepEqual(categoryRank(board, "kyma-api"), { rank: 1, of: 5, category: "AI" })
+  assert.deepEqual(categoryRank(board, "tie-b"), { rank: 5, of: 5, category: "AI" })
+  assert.deepEqual(categoryRank(board, "kyma-api"), { rank: 2, of: 5, category: "AI" })
   assert.equal(categoryRank(board, "scoring"), null)
 })
 
@@ -435,4 +467,142 @@ test("oas-scores.json: [] while OAS_PUBLISHED is false, and well formed", () => 
       assert.equal(s.oas, round1(s.transparency! + s.partner_value!), `${s.slug} oas`)
     }
   }
+})
+
+test("tie-break (TIE-BREAK.md): OAS unrounded, then Partner value, then newest verification, then name A to Z; positions unique", () => {
+  const named = (slug: string, name: string, category = "AI"): ProgramRef => ({ slug, name, category, network: null })
+  const s = (slug: string, over: Partial<OasScore> = {}): OasScore => ({ ...scoreProgram(yaml(slug), TODAY), ...over })
+  // Same OAS 90 for all but the first; they differ only in the later keys.
+  const scores = [
+    s("best", { oas: 90.4 }),
+    s("pv-high", { oas: 90, partner_value: 30, transparency: 60 }),
+    s("pv-low-new", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-10-15" }),
+    s("pv-low-old", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-10-01" }),
+    s("zz-alpha", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-09-30" }),
+    s("aa-zulu", { oas: 90, partner_value: 20, transparency: 70, checked_at: "2026-09-30" }),
+  ]
+  const refs = [named("best", "Best"), named("pv-high", "Pv High", "Marketing"), named("pv-low-new", "Pv Low New"), named("pv-low-old", "Pv Low Old", "Marketing"), named("zz-alpha", "Alpha"), named("aa-zulu", "Zulu")]
+  const board = buildBoard(scores, refs, TODAY)
+  assert.deepEqual(board.map((r) => [r.program.slug, r.rank]),
+    [["best", 1], ["pv-high", 2], ["pv-low-new", 3], ["pv-low-old", 4], ["zz-alpha", 5], ["aa-zulu", 6]])
+  // Category positions follow the same order, unique too.
+  assert.deepEqual(["best", "pv-low-new", "zz-alpha", "aa-zulu"].map((slug) => categoryRank(board, slug)!.rank), [1, 2, 3, 4])
+  assert.deepEqual(["pv-high", "pv-low-old"].map((slug) => categoryRank(board, slug)!.rank), [1, 2])
+  assert.ok(TIE_ORDER.includes("Partner value") && TIE_ORDER.includes("most recently verified") && TIE_ORDER.includes("A to Z"))
+})
+
+test("tie-break: unrounded OAS decides before every later key, and the slug settles identical rows whatever the input order", () => {
+  const named = (slug: string, name: string): ProgramRef => ({ slug, name, category: "AI", network: null })
+  const s = (slug: string, over: Partial<OasScore>): OasScore => ({ ...scoreProgram(yaml(slug), TODAY), ...over })
+  // 90.2 beats 90.1 although every later key favours the 90.1 (rounding both to 90 would flip them).
+  const decimals = [
+    s("low-decimal", { oas: 90.1, partner_value: 30, transparency: 60.1, checked_at: "2026-10-19" }),
+    s("high-decimal", { oas: 90.2, partner_value: 10, transparency: 80.2, checked_at: "2026-09-01" }),
+  ]
+  const refs = [named("low-decimal", "Abe"), named("high-decimal", "Zed")]
+  assert.deepEqual(buildBoard(decimals, refs, TODAY).map((r) => r.program.slug), ["high-decimal", "low-decimal"])
+  // Identical score, Partner value, date and name: the slug decides, for any input order.
+  const twin = (slug: string) => s(slug, { oas: 80, partner_value: 20, transparency: 60, checked_at: "2026-10-10" })
+  const twins = [twin("same-c"), twin("same-a"), twin("same-b")]
+  const twinRefs = ["same-c", "same-a", "same-b"].map((slug) => named(slug, "Same Name"))
+  for (const order of [[0, 1, 2], [2, 1, 0], [1, 2, 0]]) {
+    const board = buildBoard(order.map((i) => twins[i]), order.map((i) => twinRefs[i]), TODAY)
+    assert.deepEqual(board.map((r) => [r.program.slug, r.rank]), [["same-a", 1], ["same-b", 2], ["same-c", 3]], `input order ${order}`)
+  }
+})
+
+test("every shown verified date is the score's own, the one the tie-break orders by", (t) => {
+  if (!oasScores.length) return t.skip("OAS is not published in this build")
+  const scoreDate = new Map(oasScores.map((s) => [s.slug, s.checked_at]))
+  for (const row of leaderRows().rows) assert.equal(row.checked, (scoreDate.get(row.slug) ?? "").slice(0, 10), row.slug)
+  // The registry's date usually matches; give a ranked and a not-ranked score their own date to prove
+  // which source every surface reads (each line must exist, so a missing row cannot pass silently).
+  const board = buildBoard(oasScores, livePrograms, new Date())
+  const live = new Set(leaderRows().rows.map((r) => r.slug))
+  const rankedProbe = board.find((r) => r.rank != null && live.has(r.program.slug))!.score
+  const unrankedProbe = board.find((r) => r.unranked === "checking" && r.score.checks.some((c) => c.state === "checking") && live.has(r.program.slug))?.score
+  const probes = [rankedProbe, ...(unrankedProbe ? [unrankedProbe] : [])]
+  const saved = probes.map((p) => p.checked_at)
+  try {
+    for (const p of probes) p.checked_at = "2026-10-19"
+    const rows = leaderRows().rows
+    const lb = leaderboardMd()!.split("\n")
+    const rk = rankingsMd().split("\n")
+    for (const p of probes) {
+      assert.equal(rows.find((r) => r.slug === p.slug)?.checked, "2026-10-19", `table ${p.slug}`)
+      for (const [name, lines] of [["leaderboard.md", lb], ["rankings.md", rk]] as const) {
+        const line = lines.find((l) => l.includes(`/programs/${p.slug}/oas)`))
+        assert.ok(line, `${name} has a line for ${p.slug}`)
+        assert.ok(line.includes("verified 2026-10-19"), `${name} ${p.slug}`)
+      }
+    }
+  } finally {
+    probes.forEach((p, i) => (p.checked_at = saved[i]))
+  }
+  const md = leaderboardMd()!
+  const ranks = rankingsMd()
+  for (const s of oasScores.slice(0, 50)) {
+    const line = md.split("\n").find((l) => l.includes(`/programs/${s.slug}/oas)`))
+    if (line && s.checked_at) assert.ok(line.includes(`verified ${s.checked_at}`), `leaderboard.md ${s.slug}`)
+    const rline = ranks.split("\n").find((l) => l.includes(`/programs/${s.slug}/oas)`))
+    if (rline && s.checked_at) assert.ok(rline.includes(`verified ${s.checked_at}`), `rankings.md ${s.slug}`)
+  }
+})
+
+test("Score your program: a name or domain finds the program and its score, nothing else is fetched", () => {
+  const index: ScoreEntry[] = [
+    ["cal-com", "Cal.com", "cal.com", 100],
+    ["calendly", "Calendly", "calendly.com", "scoring"],
+    ["calilio", "Calilio", "calilio.com", null],
+    ["local", "Localist", "localist.com", 80],
+  ]
+  assert.deepEqual(matchPrograms(index, "cal.com").map((e) => e[0])[0], "cal-com", "exact domain first")
+  assert.deepEqual(matchPrograms(index, "https://www.cal.com/pricing").map((e) => e[0])[0], "cal-com", "a pasted URL reads as its domain")
+  assert.deepEqual(matchPrograms(index, "Cal").map((e) => e[0]), ["cal-com", "calendly", "calilio", "local"], "prefix before anywhere, then A to Z")
+  assert.deepEqual(matchPrograms(index, "c"), [], "one character matches nothing")
+  assert.deepEqual(matchPrograms(index, "nothing-like-it"), [])
+  const board = buildBoard([scoreProgram(yaml("cal-com"), TODAY), scoreProgram(yaml("calendly", { last_verified_at: "2026-01-01" }), TODAY)], [P("cal-com"), P("calendly")], TODAY)
+  assert.deepEqual(
+    scoreIndex([{ slug: "cal-com", name: "Cal.com", url: "https://www.cal.com" }, { slug: "calendly", name: "Calendly", url: "https://calendly.com" }, { slug: "calilio", name: "Calilio", url: "not a url" }], board),
+    [["cal-com", "Cal.com", "cal.com", 100], ["calendly", "Calendly", "calendly.com", "scoring"], ["calilio", "Calilio", "", null]],
+  )
+})
+
+test("the report's one line comes from the two parts, not the total", () => {
+  assert.equal(verdictText(scoreProgram(yaml("p"), TODAY), TODAY), "Every term published, partner terms met")
+  assert.equal(verdictText(scoreProgram(yaml("p", { cookie_days: 30 }), TODAY), TODAY), "Every term published, partner terms to improve")
+  assert.equal(verdictText(scoreProgram(yaml("p", { approval: undefined }), TODAY), TODAY), "Terms to publish")
+  assert.equal(verdictText(scoreProgram(yaml("p", { last_verified_at: "2026-01-01" }), TODAY), TODAY), null)
+})
+
+test("letter grade, Foothill style: every band boundary, no C-, F under 60", () => {
+  const cases: [number, string][] = [
+    [100, "A+"], [97, "A+"], [96.9, "A"], [94, "A"], [93.9, "A-"], [90, "A-"],
+    [89.9, "B+"], [87, "B+"], [86.9, "B"], [84, "B"], [83.9, "B-"], [80, "B-"],
+    [79.9, "C+"], [77, "C+"], [76.9, "C"], [70, "C"],
+    [69.9, "D+"], [67, "D+"], [66.9, "D"], [64, "D"], [63.9, "D-"], [60, "D-"],
+    [59.9, "F"], [0, "F"],
+  ]
+  for (const [n, g] of cases) assert.equal(oasGrade(n), g, String(n))
+  assert.deepEqual(GRADE_BANDS.map(([g]) => g), ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "D+", "D", "D-", "F"])
+})
+
+test("pages that disagree on a term: one item, the partner points only if the agreed value clears the bar", () => {
+  const conflict = (field: string, quote: string) => [{ field, quote }]
+  for (const [id, pair, over, bar] of [
+    ["T3", "V1", { conflicts: conflict("cookie_days", "Terms: 30 days; listing: 90 days.") }, "if it is 60 days or more"],
+    ["T4", "V2", { payout: { minimum: 100, currency: "USD", frequency: "monthly", methods: ["paypal"] }, conflicts: conflict("payout.minimum", "Terms: $100; FAQ: $30.") }, "if it is USD 50 or less"],
+    ["T6", "V3", { conflicts: conflict("payout.frequency", "Terms: monthly; FAQ: quarterly.") }, "if payment is at least monthly"],
+  ] as const) {
+    const items = fixItems(scoreProgram(yaml("p", over as Partial<ProgramYaml>), TODAY))
+    const item = items.find((f) => f.id === id)!
+    assert.equal(item.fix, AGREE_FIX, id)
+    assert.equal(item.extra, `+10 more ${bar}`, id)
+    assert.equal(items.some((f) => f.id === pair), false, `${pair} is not a second item promising the same action`)
+  }
+})
+
+test("Prompt to improve is empty when there is nothing to publish or read (a stale full score)", () => {
+  const stale = { ...scoreProgram(yaml("p"), TODAY), checked_at: "2026-07-01" }
+  assert.equal(improvePrompt({ name: "P", slug: "p" }, stale, TODAY), "")
 })

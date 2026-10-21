@@ -1,0 +1,659 @@
+import assert from "node:assert/strict"
+import { createHmac } from "node:crypto"
+import { test } from "node:test"
+import { createClient } from "@supabase/supabase-js"
+import {
+  FORWARD_FROM,
+  LOOP_HEADER,
+  LEASE_MS,
+  MAX_ATTACHMENTS,
+  MAX_ATTACHMENT_BYTES,
+  supabaseLedger,
+  type ForwardLedger,
+  type ForwardPatch,
+  type ForwardRow,
+  forwardAddress,
+  handleInboundEmail,
+  isLoop,
+  verifySvixSignature,
+} from "../src/lib/inbound-email"
+
+const SECRET = "whsec_" + Buffer.from("test-secret-for-inbound-email-32b").toString("base64")
+const NOW = 1_760_000_000_000
+const OWNER = "owner@example.com"
+const ENV = { RESEND_INBOUND_WEBHOOK_SECRET: SECRET, OA_RESEND_API_KEY: "re_test", OA_INBOX_FORWARD_TO: OWNER }
+const EMAIL_ID = "56761188-7520-42d8-8898-ff6fc54ce618"
+
+function sign(body: string, timestamp = String(NOW / 1000), id = "msg_1", secret = SECRET): Record<string, string> {
+  const key = Buffer.from(secret.slice(6), "base64")
+  const sig = createHmac("sha256", key).update(`${id}.${timestamp}.${body}`).digest("base64")
+  return { "svix-id": id, "svix-timestamp": timestamp, "svix-signature": `v1,${sig}` }
+}
+
+function webhook(data: Record<string, unknown> = {}, type = "email.received", headers?: Record<string, string>): Request {
+  const body = JSON.stringify({
+    type,
+    created_at: "2026-10-20T00:00:00.000Z",
+    data: { email_id: EMAIL_ID, from: "alice@sender.test", to: ["hello@openaffiliate.dev"], subject: "Hi", ...data },
+  })
+  return new Request("https://openaffiliate.dev/api/inbound-email", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...(headers ?? sign(body)) },
+    body,
+  })
+}
+
+type Email = Record<string, unknown>
+type FakeFile = { filename: string; size: number; content_id?: string; delayMs?: number; status?: number }
+
+const HOUR = 60 * 60 * 1000
+/** Resend keeps an Idempotency-Key this long (docs: idempotency-keys). */
+const KEY_LIFE_MS = 24 * HOUR
+
+/**
+ * A fake Resend on a shared clock: records every call and, like the real API,
+ * delivers once per Idempotency-Key while that key is younger than 24 h.
+ * `loseResponses` makes the next N accepted sends fail on the way back.
+ */
+function fakeResend(email: Email = {}, files: FakeFile[] = [], clock = { now: NOW }) {
+  const calls: string[] = []
+  const sends: { key: string | null; body: Record<string, unknown> }[] = []
+  const keys = new Map<string, { body: string; at: number }>()
+  // sendStatus: Resend refuses (nothing sent). acceptThenStatus: Resend accepts the
+  // send but answers with this status once (the accepted-but-5xx case).
+  const state = { accepted: 0, loseResponses: 0, sendStatus: 200, acceptThenStatus: 0 }
+  const received = {
+    from: "alice@sender.test",
+    to: ["hello@openaffiliate.dev"],
+    subject: "Hi",
+    created_at: new Date(NOW).toISOString(),
+    html: "<p>Hello</p>",
+    text: "Hello",
+    headers: { from: "Alice <alice@sender.test>" },
+    reply_to: [],
+    attachments: files.map((f, i) => ({ id: `a${i}`, filename: f.filename, size: f.size })),
+    ...email,
+  }
+  const fetchFn = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    const url = String(input)
+    calls.push(`${init?.method ?? "GET"} ${url}`)
+    if (url.startsWith("https://files.test/")) {
+      const file = files[Number(new URL(url).pathname.slice(2))]
+      if (file.delayMs) {
+        await new Promise<void>((resolve, reject) => {
+          const timer = setTimeout(resolve, file.delayMs)
+          init?.signal?.addEventListener("abort", () => {
+            clearTimeout(timer)
+            reject(init.signal!.reason)
+          })
+        })
+      }
+      if (file.status) return new Response("no", { status: file.status })
+      return new Response(new Uint8Array(file.size))
+    }
+    if (url === `https://api.resend.com/emails/receiving/${EMAIL_ID}?html_format=cid`) return Response.json(received)
+    if (url === `https://api.resend.com/emails/receiving/${EMAIL_ID}/attachments`) {
+      return Response.json({
+        object: "list",
+        has_more: false,
+        data: files.map((f, i) => ({
+          id: `a${i}`,
+          filename: f.filename,
+          size: f.size,
+          content_type: "application/pdf",
+          content_id: f.content_id ?? null,
+          download_url: `https://files.test/a${i}?sig=${Math.random()}`,
+        })),
+      })
+    }
+    if (url === "https://api.resend.com/emails" && init?.method === "POST") {
+      const key = new Headers(init.headers).get("Idempotency-Key")
+      sends.push({ key, body: JSON.parse(String(init.body)) })
+      if (state.sendStatus !== 200) return Response.json({ name: "error" }, { status: state.sendStatus })
+      const held = key ? keys.get(key) : undefined
+      if (held && clock.now - held.at < KEY_LIFE_MS) {
+        assert.equal(held.body, String(init.body), "a retry must repeat the exact payload")
+      } else {
+        if (key) keys.set(key, { body: String(init.body), at: clock.now })
+        state.accepted++
+      }
+      if (state.acceptThenStatus) {
+        const status = state.acceptThenStatus
+        state.acceptThenStatus = 0
+        return Response.json({ name: "error" }, { status })
+      }
+      if (state.loseResponses > 0) {
+        state.loseResponses--
+        throw new TypeError("fetch failed")
+      }
+      return Response.json({ id: "sent_1" })
+    }
+    return new Response("unexpected", { status: 599 })
+  }) as typeof fetch
+  return { fetch: fetchFn, calls, sends, state, clock, ledger: memoryLedger() }
+}
+
+type MemoryRow = ForwardRow & { lease_until: number; lease_token: string | null }
+type Held = { patch: ForwardPatch; run: () => void }
+
+/**
+ * In-memory oa_inbox_forwards with the same rules as the SQL: claim is one
+ * check-and-set; transition applies only on matching token and status.
+ * control.hold(predicate) parks a matching transition until release(), and
+ * the fence is evaluated when it finally applies, like a PATCH that reaches
+ * Postgres late.
+ */
+function memoryLedger() {
+  const rows = new Map<string, MemoryRow>()
+  const control = {
+    failUpdates: false,
+    holdIf: null as ((patch: ForwardPatch) => boolean) | null,
+    held: [] as Held[],
+  }
+  const ledger: ForwardLedger = {
+    async claim(emailId, token, nowMs, leaseMs) {
+      if (!rows.has(emailId)) {
+        rows.set(emailId, { status: "pending", first_post_at: null, payload_hash: null, lease_until: 0, lease_token: null })
+      }
+      const row = rows.get(emailId)!
+      const pick = (r: MemoryRow): ForwardRow => ({ status: r.status, first_post_at: r.first_post_at, payload_hash: r.payload_hash })
+      if ((row.status === "pending" || row.status === "uncertain") && row.lease_until < nowMs) {
+        row.lease_until = nowMs + leaseMs
+        row.lease_token = token
+        return { claimed: true, row: pick(row) }
+      }
+      return { claimed: false, row: pick(row) }
+    },
+    async transition(emailId, token, from, patch) {
+      if (control.failUpdates) throw new Error("ledger update")
+      const apply = () => {
+        const row = rows.get(emailId)
+        if (!row || row.lease_token !== token || row.status !== from) return false
+        const { lease_until, ...rest } = patch
+        Object.assign(row, rest)
+        if (lease_until !== undefined) row.lease_until = Date.parse(lease_until)
+        return true
+      }
+      if (control.holdIf?.(patch)) {
+        control.holdIf = null
+        return new Promise<boolean>((resolve) => control.held.push({ patch, run: () => resolve(apply()) }))
+      }
+      return apply()
+    },
+  }
+  return Object.assign(ledger, { rows, control })
+}
+
+async function until(check: () => boolean) {
+  for (let i = 0; i < 200 && !check(); i++) await new Promise((resolve) => setTimeout(resolve, 5))
+  assert.ok(check(), "condition not reached")
+}
+
+function deps(resend: ReturnType<typeof fakeResend>, env: Record<string, string | undefined> = ENV, budgetMs?: number) {
+  return { env, fetch: resend.fetch, now: () => resend.clock.now, ledger: resend.ledger, budgetMs }
+}
+
+/** A webhook signed at the clock's current time. */
+function webhookAt(clock: { now: number }): Request {
+  const body = JSON.stringify({ type: "email.received", data: { email_id: EMAIL_ID, from: "alice@sender.test", subject: "Hi" } })
+  return new Request("https://openaffiliate.dev/api/inbound-email", {
+    method: "POST",
+    headers: sign(body, String(Math.floor(clock.now / 1000))),
+    body,
+  })
+}
+
+test("Svix reference vector verifies (docs.svix.com manual verification example)", () => {
+  const headers = {
+    id: "msg_loFOjxBNrRLzqYUf",
+    timestamp: "1731705121",
+    signature: "v1,rAvfW3dJ/X/qxhsaXPOyyCGmRKsaKWcsNccKXlIktD0=",
+  }
+  const payload = '{"event_type":"ping","data":{"success":true}}'
+  assert.equal(verifySvixSignature("whsec_plJ3nmyCDGBKInavdOK15jsl", headers, payload, 1731705121_000), true)
+  assert.equal(verifySvixSignature("whsec_plJ3nmyCDGBKInavdOK15jsl", headers, payload + " ", 1731705121_000), false)
+  // Several signatures in the header: any one matching is enough.
+  const multi = { ...headers, signature: `v1,AAAA v2,BBBB ${headers.signature}` }
+  assert.equal(verifySvixSignature("whsec_plJ3nmyCDGBKInavdOK15jsl", multi, payload, 1731705121_000), true)
+})
+
+test("bad signature → 401, nothing fetched or sent", async () => {
+  const resend = fakeResend()
+  const forged = sign("{}", String(NOW / 1000), "msg_1", "whsec_" + Buffer.from("another-secret").toString("base64"))
+  const res = await handleInboundEmail(webhook({}, "email.received", forged), deps(resend))
+  assert.equal(res.status, 401)
+  assert.deepEqual(resend.calls, [])
+})
+
+test("missing signature headers → 401", async () => {
+  const resend = fakeResend()
+  const res = await handleInboundEmail(webhook({}, "email.received", {}), deps(resend))
+  assert.equal(res.status, 401)
+  assert.deepEqual(resend.calls, [])
+})
+
+test("stale or future timestamp → 401", async () => {
+  for (const offset of [-301, 301]) {
+    const resend = fakeResend()
+    const body = JSON.stringify({ type: "email.received", data: { email_id: EMAIL_ID } })
+    const req = new Request("https://x.test/api/inbound-email", {
+      method: "POST",
+      headers: sign(body, String(NOW / 1000 + offset)),
+      body,
+    })
+    const res = await handleInboundEmail(req, deps(resend))
+    assert.equal(res.status, 401, `offset ${offset}`)
+    assert.deepEqual(resend.calls, [])
+  }
+})
+
+test("other event types → 200, no send", async () => {
+  const resend = fakeResend()
+  const res = await handleInboundEmail(webhook({}, "email.delivered"), deps(resend))
+  assert.equal(res.status, 200)
+  assert.deepEqual(resend.calls, [])
+})
+
+test("forwards to the fixed owner only, with tag, header block, reply-to and loop header", async () => {
+  const resend = fakeResend({
+    cc: ["bob@sender.test"],
+    to: ["hello@openaffiliate.dev", "evil@attacker.test"],
+    created_at: "2026-10-20T00:00:00.000Z",
+  })
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 200)
+  assert.equal(resend.sends.length, 1)
+  const { key, body } = resend.sends[0]
+  assert.equal(key, `oa-inbox/${EMAIL_ID}`)
+  assert.equal(body.from, FORWARD_FROM)
+  assert.deepEqual(body.to, [OWNER])
+  assert.equal(body.cc, undefined)
+  assert.equal(body.bcc, undefined)
+  assert.deepEqual(body.reply_to, ["alice@sender.test"])
+  assert.equal(body.subject, "[OA inbox] Hi")
+  assert.deepEqual(body.headers, { [LOOP_HEADER]: EMAIL_ID })
+  assert.match(String(body.text), /^---------- Received at openaffiliate\.dev ----------\nFrom: Alice <alice@sender\.test>\nTo: hello@openaffiliate\.dev, evil@attacker\.test\nCc: bob@sender\.test\nDate: 2026-10-20T00:00:00\.000Z\n\nHello$/)
+  assert.match(String(body.html), /From: Alice &#60;alice@sender\.test&#62;/)
+  assert.match(String(body.html), /<p>Hello<\/p>$/)
+})
+
+test("original Reply-To wins over From; header injection in the subject is flattened", async () => {
+  const resend = fakeResend({ reply_to: ["support@sender.test"], subject: "Hi\r\nBcc: x@attacker.test" })
+  await handleInboundEmail(webhook(), deps(resend))
+  assert.deepEqual(resend.sends[0].body.reply_to, ["support@sender.test"])
+  assert.equal(resend.sends[0].body.subject, "[OA inbox] Hi Bcc: x@attacker.test")
+})
+
+test("duplicate webhook delivery → one POST; the ledger answers the second", async () => {
+  const resend = fakeResend({}, [{ filename: "a.pdf", size: 1000 }])
+  const first = await handleInboundEmail(webhook(), deps(resend))
+  const second = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(first.status, 200)
+  assert.equal(second.status, 200)
+  assert.deepEqual(await second.json(), { forwarded: "already" })
+  assert.equal(resend.sends.length, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+})
+
+test("loop guard: own-domain sender, tagged subject, or loop header → 200, no send", async () => {
+  for (const data of [{ from: "inbox@openaffiliate.dev" }, { from: "x@mail.openaffiliate.dev" }, { subject: "[OA inbox] Hi" }]) {
+    const resend = fakeResend()
+    const res = await handleInboundEmail(webhook(data), deps(resend))
+    assert.equal(res.status, 200)
+    assert.deepEqual(resend.calls, [], JSON.stringify(data))
+  }
+  // Caught only after fetching: the header is not in the webhook payload.
+  const resend = fakeResend({ headers: { from: "x@y.test", "x-oa-inbox": "abc" } })
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 200)
+  assert.equal(resend.sends.length, 0)
+  assert.equal(isLoop({ from: "Someone <someone@OpenAffiliate.dev>" }), true)
+  assert.equal(isLoop({ from: "someone@notopenaffiliate.dev" }), false)
+})
+
+test("missing or malformed env → 500, nothing fetched or sent", async () => {
+  for (const env of [
+    { ...ENV, OA_INBOX_FORWARD_TO: undefined },
+    { ...ENV, OA_INBOX_FORWARD_TO: "a@x.test, b@y.test" },
+    { ...ENV, RESEND_INBOUND_WEBHOOK_SECRET: undefined },
+    { ...ENV, OA_RESEND_API_KEY: undefined },
+  ]) {
+    const resend = fakeResend()
+    const res = await handleInboundEmail(webhook(), deps(resend, env))
+    assert.equal(res.status, 500)
+    assert.deepEqual(resend.calls, [])
+  }
+  const resend = fakeResend()
+  const res = await handleInboundEmail(webhook(), { ...deps(resend), ledger: null })
+  assert.equal(res.status, 500, "no ledger (Supabase env missing) → no send")
+  assert.deepEqual(resend.calls, [])
+  assert.equal(forwardAddress(" owner@example.com "), "owner@example.com")
+  assert.equal(forwardAddress("Owner <owner@example.com>"), null)
+})
+
+test("attachments: included up to the cap, the rest listed by name; inline cid kept", async () => {
+  const resend = fakeResend({}, [
+    { filename: "logo.png", size: 2000, content_id: "img001" },
+    { filename: "big.zip", size: MAX_ATTACHMENT_BYTES },
+    { filename: "notes.pdf", size: 3000 },
+  ])
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 200)
+  const attachments = resend.sends[0].body.attachments as Record<string, string>[]
+  assert.deepEqual(attachments.map((a) => a.filename), ["logo.png", "notes.pdf"])
+  assert.equal(attachments[0].content_id, "img001")
+  assert.equal(Buffer.from(attachments[1].content, "base64").length, 3000)
+  assert.match(String(resend.sends[0].body.text), /Not attached \(limit 20 files, 10\.0 MB total\): big\.zip \(10\.0 MB\)/)
+  assert.ok(!resend.calls.some((c) => c.startsWith("GET https://files.test/a1")), "the oversized file is never downloaded")
+})
+
+test("first POST refused with 422 → pending, sendable later at any age; one send", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.sendStatus = 422
+  for (const at of [0, 5 * 60_000, 20 * HOUR]) {
+    clock.now = NOW + at
+    assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500, `at ${at}`)
+    assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "pending")
+    assert.equal(resend.ledger.rows.get(EMAIL_ID)!.first_post_at, null)
+  }
+  resend.state.sendStatus = 200
+  clock.now = NOW + 27.6 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+  clock.now = NOW + 40 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1, "a replay after it was sent sends nothing")
+})
+
+test("first POST accepted by Resend but answered 503 → uncertain; retry same key → one send", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.acceptThenStatus = 503
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  clock.now = NOW + 5 * 60_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.sends.length, 2)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("5xx or 429 on every POST for 23 h → needs_review, no POST after the key window", async () => {
+  for (const status of [503, 429]) {
+    const clock = { now: NOW }
+    const resend = fakeResend({}, [], clock)
+    resend.state.sendStatus = status
+    for (const at of [0, 2 * HOUR, 22 * HOUR]) {
+      clock.now = NOW + at
+      assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+      assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain", `${status} at ${at}`)
+    }
+    clock.now = NOW + 27.6 * HOUR
+    resend.state.sendStatus = 200
+    const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+    assert.deepEqual(await res.json(), { needsReview: true })
+    assert.equal(resend.sends.length, 3, `${status}: no POST after 23 h`)
+  }
+})
+
+test("outage of the receiving API (no POST yet) then recovery 27.6 h later → sent", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  const down = (async () => new Response("{}", { status: 503 })) as typeof fetch
+  assert.equal((await handleInboundEmail(webhookAt(clock), { ...deps(resend), fetch: down })).status, 500)
+  clock.now = NOW + 27.6 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("delayed first delivery (30 days after receipt) → sent", async () => {
+  const clock = { now: NOW + 30 * 24 * HOUR }
+  const resend = fakeResend({}, [], clock)
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("lost response, retry 2 h later → same key and payload, one accepted send", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [{ filename: "a.pdf", size: 1000 }], clock)
+  resend.state.loseResponses = 1
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  clock.now = NOW + 2 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.sends.length, 2)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+})
+
+test("lost response, then nothing answers for 23 h → needs_review, no blind re-POST", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 3
+  for (const at of [0, 5 * 60_000, 10 * HOUR]) {
+    clock.now = NOW + at
+    assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  }
+  assert.equal(resend.state.accepted, 1)
+  for (const at of [23 * HOUR + 60_000, 27.6 * HOUR, 30 * 24 * HOUR]) {
+    clock.now = NOW + at
+    const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+    assert.equal(res.status, 200, `at ${at}`)
+    assert.deepEqual(await res.json(), { needsReview: true })
+  }
+  assert.equal(resend.sends.length, 3, "no POST after the key window")
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "needs_review")
+})
+
+test("an HTTP error on a retry of an uncertain POST keeps it uncertain (it may have been accepted)", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 1
+  await handleInboundEmail(webhookAt(clock), deps(resend))
+  resend.state.sendStatus = 429
+  clock.now = NOW + HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  const row = resend.ledger.rows.get(EMAIL_ID)!
+  assert.equal(row.status, "uncertain")
+  assert.equal(row.first_post_at, new Date(NOW).toISOString(), "the window still counts from the first POST")
+})
+
+test("a retry whose payload would differ → needs_review, no POST", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 1
+  await handleInboundEmail(webhookAt(clock), deps(resend))
+  resend.ledger.rows.get(EMAIL_ID)!.payload_hash = "something-else"
+  clock.now = NOW + HOUR
+  const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+  assert.deepEqual(await res.json(), { needsReview: true })
+  assert.equal(resend.sends.length, 1)
+})
+
+test("ledger write fails before the POST → 500, no POST", async () => {
+  const resend = fakeResend()
+  resend.ledger.control.failUpdates = true
+  assert.equal((await handleInboundEmail(webhook(), deps(resend))).status, 500)
+  assert.equal(resend.sends.length, 0)
+})
+
+test("concurrent webhooks → one POST; the other gets 409 and a later retry is answered from the ledger", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [{ filename: "a.pdf", size: 10, delayMs: 50 }], clock)
+  const [a, b] = await Promise.all([
+    handleInboundEmail(webhookAt(clock), deps(resend)),
+    handleInboundEmail(webhookAt(clock), deps(resend)),
+  ])
+  assert.deepEqual([a.status, b.status].sort(), [200, 409])
+  assert.equal(resend.sends.length, 1)
+  clock.now = NOW + 5 * 60_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.sends.length, 1)
+})
+
+test("a crashed holder's lease runs out; the next attempt proceeds", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  await resend.ledger.claim(EMAIL_ID, "crashed-holder", NOW, LEASE_MS)
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 409)
+  clock.now = NOW + LEASE_MS + 1
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+})
+
+test("slow files: downloaded in parallel inside one budget", async () => {
+  const files = Array.from({ length: 8 }, (_, i) => ({ filename: `f${i}.pdf`, size: 10, delayMs: 100 }))
+  const resend = fakeResend({}, files)
+  const started = Date.now()
+  const res = await handleInboundEmail(webhook(), deps(resend, ENV, 1_000))
+  const elapsed = Date.now() - started
+  assert.equal(res.status, 200)
+  assert.equal((resend.sends[0].body.attachments as unknown[]).length, 8)
+  assert.ok(elapsed < 500, `8 × 100 ms at concurrency 4 took ${elapsed} ms`)
+})
+
+test("budget exceeded → 500 and no send with fewer files", async () => {
+  const resend = fakeResend({}, [
+    { filename: "fast.pdf", size: 10 },
+    { filename: "slow.pdf", size: 10, delayMs: 5_000 },
+  ])
+  const started = Date.now()
+  const res = await handleInboundEmail(webhook(), deps(resend, ENV, 200))
+  assert.equal(res.status, 500)
+  assert.equal(resend.sends.length, 0)
+  assert.ok(Date.now() - started < 2_000, "the budget aborts the slow download")
+})
+
+test("a failed download → 500, no send, and no new download starts after it", async () => {
+  const files = [
+    { filename: "bad.pdf", size: 10, status: 403 },
+    ...Array.from({ length: 7 }, (_, i) => ({ filename: `f${i}.pdf`, size: 10, delayMs: 15 })),
+  ]
+  const resend = fakeResend({}, files)
+  const res = await handleInboundEmail(webhook(), deps(resend))
+  assert.equal(res.status, 500)
+  const startedAtResponse = resend.calls.filter((c) => c.includes("files.test")).length
+  await new Promise((resolve) => setTimeout(resolve, 80))
+  const startedLater = resend.calls.filter((c) => c.includes("files.test")).length
+  assert.equal(startedLater, startedAtResponse, "no download starts after the handler answered")
+  assert.ok(startedAtResponse <= 4, `at most one round of workers started (${startedAtResponse})`)
+  assert.equal(resend.sends.length, 0)
+})
+
+test("attachment set depends only on the listing: count cap, same payload whatever the download timing", async () => {
+  const make = (shift: number) =>
+    Array.from({ length: 25 }, (_, i) => ({ filename: `f${String(i).padStart(2, "0")}.pdf`, size: 10, delayMs: ((i + shift) % 3) * 5 }))
+  const one = fakeResend({}, make(0))
+  const two = fakeResend({}, make(1))
+  await handleInboundEmail(webhook(), deps(one))
+  await handleInboundEmail(webhook(), deps(two))
+  assert.deepEqual(one.sends[0].body, two.sends[0].body)
+  assert.equal((one.sends[0].body.attachments as unknown[]).length, MAX_ATTACHMENTS)
+  assert.match(String(one.sends[0].body.text), /Not attached \(limit 20 files, 10\.0 MB total\): f20\.pdf \(0\.0 MB\), f21\.pdf .*f24\.pdf \(0\.0 MB\)\n/)
+})
+
+test("stale holder: its late reset cannot overwrite sent; a replay at 25 h sends nothing", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.sendStatus = 401
+  resend.ledger.control.holdIf = (patch) => patch.status === "pending"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  // A's reset PATCH is stuck in transit; its lease runs out and B takes over.
+  resend.state.sendStatus = 200
+  clock.now = NOW + LEASE_MS + 1_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent", "the late reset matched no row")
+  clock.now = NOW + 25 * HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.sends.length, 2)
+})
+
+test("concurrent claim + late PATCH: a holder that lost the row does not POST", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.ledger.control.holdIf = (patch) => patch.status === "uncertain"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  clock.now = NOW + LEASE_MS + 1_000
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 500, "A's mark matched no row, so A stops")
+  assert.equal(resend.sends.length, 1)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "sent")
+})
+
+test("needs_review is ACKed only once stored: write failure → 500, recovery → 200", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.state.loseResponses = 1
+  await handleInboundEmail(webhookAt(clock), deps(resend))
+  clock.now = NOW + 24 * HOUR
+  resend.ledger.control.failUpdates = true
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 500)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  resend.ledger.control.failUpdates = false
+  clock.now += LEASE_MS + 1_000
+  const res = await handleInboundEmail(webhookAt(clock), deps(resend))
+  assert.deepEqual([res.status, await res.json()], [200, { needsReview: true }])
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "needs_review")
+  assert.equal(resend.sends.length, 1)
+})
+
+test("sent but the ledger write fails → 200, no second POST now; a replay reuses the key", async () => {
+  const clock = { now: NOW }
+  const resend = fakeResend({}, [], clock)
+  resend.ledger.control.holdIf = (patch: ForwardPatch) => patch.status === "sent"
+  const a = handleInboundEmail(webhookAt(clock), deps(resend))
+  await until(() => resend.ledger.control.held.length === 1)
+  resend.ledger.rows.get(EMAIL_ID)!.lease_token = "someone-else"
+  resend.ledger.control.held[0].run()
+  assert.equal((await a).status, 200)
+  assert.equal(resend.sends.length, 1)
+  assert.equal(resend.ledger.rows.get(EMAIL_ID)!.status, "uncertain")
+  clock.now = NOW + HOUR
+  assert.equal((await handleInboundEmail(webhookAt(clock), deps(resend))).status, 200)
+  assert.equal(resend.state.accepted, 1)
+  assert.equal(resend.sends[0].key, resend.sends[1].key)
+})
+
+test("Supabase adapter: claim and every transition carry their fence in the PostgREST query", async () => {
+  const requests: { method: string; url: string; body: string }[] = []
+  let rowsBack: unknown[] = [{ email_id: EMAIL_ID }]
+  const fakeFetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+    requests.push({ method: init?.method ?? "GET", url: decodeURIComponent(String(input)), body: String(init?.body ?? "") })
+    return new Response(JSON.stringify(rowsBack), { status: 200, headers: { "Content-Type": "application/json" } })
+  }) as typeof fetch
+  const ledger = supabaseLedger(
+    createClient("https://db.test", "service-role-test", { auth: { persistSession: false }, global: { fetch: fakeFetch } }),
+  )
+
+  rowsBack = [{ status: "pending", first_post_at: null, payload_hash: null }]
+  const claim = await ledger.claim(EMAIL_ID, "tok-1", NOW, LEASE_MS)
+  assert.equal(claim.claimed, true)
+  const [insert, take] = requests
+  assert.equal(insert.method, "POST")
+  assert.equal(take.method, "PATCH")
+  assert.match(take.url, new RegExp(`email_id=eq\\.${EMAIL_ID}`))
+  assert.match(take.url, /status=in\.\(pending,uncertain\)/)
+  assert.match(take.url, /lease_until=lt\./)
+  assert.equal(JSON.parse(take.body).lease_token, "tok-1")
+
+  requests.length = 0
+  rowsBack = [{ email_id: EMAIL_ID }]
+  assert.equal(await ledger.transition(EMAIL_ID, "tok-1", "uncertain", { status: "sent" }, NOW), true)
+  const [patch] = requests
+  assert.equal(patch.method, "PATCH")
+  for (const fence of [`email_id=eq.${EMAIL_ID}`, "lease_token=eq.tok-1", "status=eq.uncertain"]) assert.ok(patch.url.includes(fence), fence)
+
+  rowsBack = []
+  assert.equal(await ledger.transition(EMAIL_ID, "stale", "uncertain", { status: "pending" }, NOW), false, "0 rows changed → false")
+})

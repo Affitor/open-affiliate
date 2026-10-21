@@ -41,6 +41,7 @@ function toCompare(stored: Program): CompareProgram {
     approval: p.approval,
     approvalTime: p.approvalTime,
     network: networkName(p.network ?? IN_HOUSE),
+    networkKey: p.network ?? IN_HOUSE,
     marketingMaterials: p.marketingMaterials,
     apiAvailable: p.apiAvailable,
     dedicatedManager: p.dedicatedManager,

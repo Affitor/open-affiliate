@@ -7,6 +7,8 @@ import {
   programs,
   type Program,
 } from "./programs"
+import { oasSummary } from "./oas"
+import { machineChecks } from "./oas-machine"
 
 /**
  * A brand with no affiliate program to join: none could be found on its own
@@ -132,7 +134,13 @@ const NO_COMMISSION = {
  * alternatives; its check date is statusCheckedAt, never lastVerifiedAt.
  */
 export function apiProgram(p: Program): Program | Record<string, unknown> {
-  if (!hasNoProgram(p)) return confirmedTerms(p)
+  if (!hasNoProgram(p)) {
+    // The score the program page shows; left out while OAS is unpublished or the program is unscored.
+    const oas = oasSummary(p.slug)
+    const machine = machineChecks(p.slug)
+    if (!oas) return confirmedTerms(p)
+    return machine.length ? { ...confirmedTerms(p), oas, oasMachineChecks: machine } : { ...confirmedTerms(p), oas }
+  }
   const out: Record<string, unknown> = { ...p }
   for (const key of TERM_FIELDS) delete out[key]
   // Its date dates the status check ("No (checked <date>)"), not verified

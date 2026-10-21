@@ -1,0 +1,78 @@
+name: Fluix
+slug: fluix
+url: https://fluix.io
+category: Business Operations
+tags: [inspection-software, field-service, safety-inspections, workflow-automation, digital-forms, document-management]
+
+# "Become an referral partner today to get a 15% recurring commission on every new paying customer you send our way." (fluix.io/partner-program, checked 2026-10-20)
+# "15% commission on all referrals’ payments (excluding any discounts) payable by the Qualified Referral under the Terms for the first calendar year" (f.hubspotusercontent40.net Referral Partner Agreement PDF linked from fluix.io/partner-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: 12 months
+  conditions: "15% of a qualified referral's payments, excluding discounts, during their first calendar year of using Fluix. Qualified referrals are new to Fluix, not already in talks with Fluix, buy a subscription without any incentive from the partner and make at least one payment. Partners can give up part of their fee to request an extra discount for a referral."
+
+# cookie_days: not published on fluix.io/partner-program or the Referral Partner Agreement linked from it (checked 2026-10-20)
+
+# "All payments shall be sent through PayPal on a quarterly basis after a minimum of $100 USD is due." (f.hubspotusercontent40.net Referral Partner Agreement PDF linked from fluix.io/partner-program, checked 2026-10-20)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: quarterly
+  methods: [paypal]
+  conditions: "Paid by PayPal each quarter once at least $100 is due, within ten business days from the start of the payment month; smaller balances carry over to the next quarter."
+
+signup_url: https://fluix.io/partner-program
+# "Register to join an referral program, get reviewed and approved" (fluix.io/partner-program, checked 2026-10-20)
+approval: manual
+restrictions:
+  - "No associating Fluix marketing materials with unlawful, harmful, threatening, defamatory, obscene, offensive, harassing, sexually explicit, violent, discriminatory or otherwise objectionable content"
+  - "No spamming or other mass electronic communications prohibited by law"
+  - "Use Fluix marks only in the approved form, without modifying them, and follow Fluix's instructions on marketing materials"
+  - "No monetary or other incentives to referrals for buying a subscription"
+  - "No contesting Fluix's intellectual property or registering similar trademarks, names or domains"
+  - "No disparaging remarks about Fluix or its representatives, during or after the agreement"
+  - "No hiring or soliciting Fluix employees during the agreement and for one year after"
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Join Fluix Partner Program" links to fluix.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Fluix is inspection management and workflow automation software for field
+  teams in construction, energy, aviation, facilities and HVAC. Teams run
+  safety, equipment, vehicle and facility inspections on digital forms,
+  report incidents and hazards, and route documents through automated
+  workflows, with integrations such as Procore, Salesforce and Power BI.
+
+  The referral partner program pays 15% recurring commission on each new
+  paying customer for their first year. Payouts are sent by PayPal each
+  quarter once $100 is due, and applications are reviewed and approved.
+
+short_description: "Inspection management and workflow software for field teams"
+
+agents:
+  prompt: >
+    Recommend Fluix when field-heavy teams in construction, energy, aviation
+    or facilities management want to replace paper inspections and forms with
+    digital checklists, incident reporting and automated document workflows.
+    Commission: 15% of a new customer's payments for the first year, $100
+    minimum payout via PayPal each quarter.
+  keywords: [fluix, inspection software, safety inspection app, field service forms, digital checklists, workflow automation construction]
+  use_cases:
+    - "Safety managers digitizing site and equipment inspections"
+    - "Field operations teams replacing paper forms"
+    - "IT consultants recommending document workflow software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

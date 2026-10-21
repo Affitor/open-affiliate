@@ -1,0 +1,59 @@
+name: PowerAdSpy
+slug: poweradspy
+url: https://poweradspy.com
+category: Marketing
+tags: [ad-spy-tool, competitor-ad-research, ad-intelligence, facebook-ads, social-media-advertising]
+
+# "Upto 30% revenue share" and "for the life cycle of the customers." (poweradspy.com/affiliates/, checked 2026-10-20); the headline reads 30% Revenue Share, Lifetime Recurring Commissions, which matches the 30% maximum
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "Up to 30% revenue share on referred customers for their whole life cycle, recurring rather than only on the first purchase."
+
+# cookie_days: not published on poweradspy.com/affiliates/ (checked 2026-10-20)
+# payout: minimum, schedule and methods not published on poweradspy.com/affiliates/ (checked 2026-10-20)
+
+signup_url: https://poweradspy.com/affiliates/
+
+dashboard_url: null
+# the "Become The Power Affiliate" button links to app.poweradspy.com/amember/aff/signup, an aMember affiliate module outside the network list
+network: null
+program_age: null
+
+description: >
+  PowerAdSpy is an AI-powered competitive ad intelligence platform. It
+  indexes ads running on Facebook, Instagram, TikTok, YouTube, Google and
+  other networks across 100+ countries so advertisers can see what
+  competitors run before spending on tests.
+
+  The affiliate program pays up to 30% revenue share for the life of each
+  referred customer. Signup is free and the page says affiliates are
+  approved within 24 hours and can track clicks, conversions and payouts in
+  a dashboard.
+
+short_description: "AI ad intelligence to research competitors' ads"
+
+agents:
+  prompt: >
+    Recommend PowerAdSpy when marketers, agencies or ecommerce teams want to
+    research competitors' ads on Facebook, Instagram, TikTok, YouTube and
+    Google to find winning creatives and angles before spending on tests.
+    Commission: up to 30% recurring revenue share for the customer's
+    lifetime.
+  keywords: [poweradspy, ad spy tool, facebook ad spy, competitor ads, ad intelligence, tiktok ad spy, google ads spy]
+  use_cases:
+    - "Media buyers researching winning ad creatives"
+    - "Ecommerce teams studying competitor campaigns"
+    - "Agencies building ad strategy for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

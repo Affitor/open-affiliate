@@ -1,15 +1,15 @@
 import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
 import { AffitorLink } from "@/components/affitor-link";
-import { PostApplyLink } from "@/components/post-apply-link";
+import { PostProgramBlock } from "@/components/post-program-block";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { networkName, IN_HOUSE, livePrograms, categoryToSlug } from "@/lib/programs";
+import { livePrograms, categoryToSlug } from "@/lib/programs";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
-import { applyButton, blogApplyHref } from "@/lib/apply-cta";
-import { BEST_LISTS, bestPath, type BestList } from "@/lib/best-lists";
+import { BEST_LISTS, bestPath, updatedText, type BestList } from "@/lib/best-lists";
+import { ChildLists } from "@/components/best-list-view";
 import {
   DISCLOSURE,
   FRESHNESS_RULE,
@@ -19,6 +19,7 @@ import {
   earnText,
   payoutText,
   postFaq,
+  postPageTitle,
   postTitle,
   type BestPost,
   type PostSelection,
@@ -27,13 +28,14 @@ import {
 const SITE = "https://openaffiliate.dev";
 
 export function bestPostMetadata(post: BestPost, selection: PostSelection, path: string): Metadata {
-  const title = postTitle(post, selection);
+  // Absolute: postPageTitle is the whole tag, so the layout adds no suffix.
+  const title = postPageTitle(post, selection);
   return {
-    title,
+    title: { absolute: title },
     description: post.description,
     alternates: { canonical: path, types: { "text/markdown": `${SITE}${path}.md` } },
     openGraph: {
-      title: `${title} | OpenAffiliate`,
+      title,
       description: post.description,
       url: `${SITE}${path}`,
       siteName: "OpenAffiliate",
@@ -163,7 +165,7 @@ export function BestPostView({
           </Link>
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-4">{title}</h1>
           <p className="text-meta text-muted-foreground mt-3">
-            By the OpenAffiliate team{range && <> · Terms checked between <span className="whitespace-nowrap">{range[0]}</span> and <span className="whitespace-nowrap">{range[1]}</span></>}
+            By the OpenAffiliate team{range && <> · Updated <time dateTime={range[1]}>{updatedText(range[1])}</time> · Terms checked between <span className="whitespace-nowrap">{range[0]}</span> and <span className="whitespace-nowrap">{range[1]}</span></>}
           </p>
           <p className="text-lg leading-relaxed text-foreground/80 mt-5">{post.intro}</p>
           <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
@@ -253,44 +255,7 @@ export function BestPostView({
       <section className="oa-band">
         <div className="mx-auto max-w-[760px]">
           {shown.map(({ program, copy }, i) => (
-            <section key={program.slug} id={program.slug} data-post-program={program.slug} className="scroll-mt-20 border-t border-border py-8 first:border-t-0 first:pt-0">
-              <div className="flex items-center gap-3">
-                <span className="font-mono text-meta text-muted-foreground">{i + 1}</span>
-                <ProgramLogo slug={program.slug} name={program.name} size={40} className="shrink-0" />
-                <div>
-                  <h2 className="text-lg font-semibold">{program.name}</h2>
-                  <p className="text-sm text-muted-foreground">{copy.bestFor}</p>
-                </div>
-              </div>
-              <p className="text-base leading-relaxed text-foreground/80 mt-4">{copy.why}</p>
-              {copy.notFor && <p className="text-sm text-muted-foreground mt-2"><span className="font-medium text-foreground">Not for:</span> {copy.notFor}</p>}
-              <dl className="mt-4 grid grid-cols-2 overflow-hidden rounded-xl border border-border bg-card sm:grid-cols-4">
-                {[
-                  ["You earn", earnText(program)],
-                  ["Cookie", cookieText(program)],
-                  ["Payout", payoutText(program)],
-                  ["Runs on", program.network && program.network !== IN_HOUSE ? networkName(program.network) : "Its own program"],
-                ].map(([dt, dd]) => (
-                  <div key={dt} className="border-border px-3 py-2.5 [&:nth-child(n+3)]:border-t sm:[&:nth-child(n+3)]:border-t-0 even:border-l sm:border-l sm:first:border-l-0">
-                    <dt className="oa-label">{dt}</dt>
-                    <dd className="mt-1 text-sm">{dd}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
-                <Link href={`/programs/${program.slug}`} className="underline underline-offset-4 decoration-border hover:decoration-foreground">Full terms</Link>
-                <PostApplyLink
-                  href={blogApplyHref(program, post.slug)}
-                  slug={program.slug}
-                  post={post.slug}
-                  className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary px-3 text-meta font-medium text-primary-foreground hover:bg-primary/90"
-                >
-                  {applyButton(program, "blog").label}
-                  <ExternalLink className="size-3" aria-hidden />
-                </PostApplyLink>
-                <span className="text-meta text-muted-foreground">Terms checked {checkedText(program)}</span>
-              </div>
-            </section>
+            <PostProgramBlock key={program.slug} program={program} copy={copy} index={i} campaign={post.slug} />
           ))}
           {post.affitor && (
             <p className="mt-2 text-sm">
@@ -314,7 +279,9 @@ export function BestPostView({
         <div className="mx-auto max-w-[760px]">
           <h2 className="text-lg font-semibold">How we chose</h2>
           <p className="text-base leading-relaxed text-foreground/80 mt-3">
-            {post.howWeChose} {FRESHNESS_RULE}
+            {post.howWeChose} {FRESHNESS_RULE} Every program here is also in the OpenAffiliate{" "}
+            <Link href="/programs" prefetch={false} className="underline underline-offset-4">affiliate program directory</Link>, with{" "}
+            {livePrograms.length.toLocaleString("en-US")} programs in all.
             {list.filter && (
               <>
                 {" "}
@@ -340,6 +307,8 @@ export function BestPostView({
           )}
         </div>
       </section>
+
+      <ChildLists list={list} narrow />
 
       {related.length > 0 && (
         <nav className="oa-band" aria-label="Keep reading">

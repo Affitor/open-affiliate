@@ -5,11 +5,12 @@ import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 import type { BlogEntry } from "@/lib/blog";
 import { ProgramLogo } from "@/components/program-logo";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { networkName, IN_HOUSE, termsConfirmed } from "@/lib/programs";
+import { networkName, IN_HOUSE, livePrograms, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { AffitorLink } from "@/components/affitor-link";
 import {
   BEST_INDEX,
+  BEST_LISTS,
   MIN_SAMPLE,
   SHARED_RULES,
   bestListCopy,
@@ -18,7 +19,11 @@ import {
   indexable,
   otherLists,
   buildBestList,
+  childLists,
   listCommissionText,
+  listPageTitle,
+  nounOf,
+  updatedText,
   type BestList,
 } from "@/lib/best-lists";
 
@@ -26,10 +31,10 @@ const SITE = "https://openaffiliate.dev";
 
 /** `path` is the page's own path; its markdown twin is the same path plus ".md". */
 export function bestListMetadata(list: BestList, path: string): Metadata {
-  // The root layout's title template appends " | OpenAffiliate";
-  // openGraph.title is not templated, so it adds its own.
+  // Absolute: listPageTitle is the whole tag, so the layout adds no suffix.
+  const title = listPageTitle(list);
   return {
-    title: list.title,
+    title: { absolute: title },
     description: list.description,
     ...(indexable(list) ? {} : { robots: { index: false, follow: true } }),
     alternates: {
@@ -37,7 +42,7 @@ export function bestListMetadata(list: BestList, path: string): Metadata {
       types: { "text/markdown": `${SITE}${path}.md` },
     },
     openGraph: {
-      title: `${list.title} | OpenAffiliate`,
+      title,
       description: list.description,
       url: `${SITE}${path}`,
       siteName: "OpenAffiliate",
@@ -74,6 +79,8 @@ export function BestListView({
   ];
   // Category pages link every list from their "Posts about" block and /blog; list pages keep their siblings.
   const siblings = related ? [] : otherLists(list);
+  // A category page whose query a wider /best list answers links to it (SaaS: the category vs every saas-tagged program).
+  const wider = related ? BEST_LISTS.find((l) => l.answersFor === related.category) : undefined;
 
   return (
     <div className="oa-frame">
@@ -136,6 +143,11 @@ export function BestListView({
           </Link>
         </nav>
         <h1 className="mt-3 text-title md:text-display font-semibold tracking-[-0.03em]">{list.h1}</h1>
+        {data.checked && (
+          <p className="mt-2 font-mono text-meta text-muted-foreground tabular-nums">
+            Updated <time dateTime={data.checked}>{updatedText(data.checked)}</time>
+          </p>
+        )}
         <dl className="mt-4 inline-grid max-w-full grid-cols-2 overflow-hidden rounded-xl border border-border bg-card sm:grid-cols-4">
           {stats.map(({ label, value }, i) => (
             <div key={label} className={`min-w-0 px-4 py-2.5 ${i % 2 ? "border-l border-border" : ""} ${i > 1 ? "border-t border-border sm:border-t-0" : ""} ${i === 2 ? "sm:border-l" : ""}`}>
@@ -219,6 +231,7 @@ export function BestListView({
                         source="list"
                         slug={program.slug}
                         cta="sign_up"
+                        applyNetwork={program.network ?? IN_HOUSE}
                         newTab
                         className="whitespace-nowrap underline decoration-line-strong underline-offset-4 hover:decoration-current"
                       >
@@ -233,10 +246,24 @@ export function BestListView({
         </div>
       </section>
 
+      <ChildLists list={list} />
+
       <section className="oa-band" aria-labelledby="about-list-h">
         <h2 id="about-list-h" className="oa-label mb-3 border-b border-line-strong pb-2">About this list</h2>
         <div className="max-w-3xl space-y-2 text-sm text-foreground/80">
           <p>{intro}</p>
+          <p>
+            {wider && (
+              <>
+                This category holds only the programs filed under {related!.category}. For {related!.category} tools in every
+                category, see{" "}
+                <Link href={bestPath(wider)} className="underline underline-offset-4">{nounOf(wider.query)}</Link>.{" "}
+              </>
+            )}
+            Every program here is also in the OpenAffiliate{" "}
+            <Link href="/programs" prefetch={false} className="underline underline-offset-4">affiliate program directory</Link>, with{" "}
+            {livePrograms.length.toLocaleString("en-US")} programs in all.
+          </p>
           <p className="text-meta text-muted-foreground">
             <span className="font-medium text-foreground">How we picked:</span> {list.criteria} {list.rules ?? SHARED_RULES}
             {list.filter && (
@@ -286,5 +313,28 @@ export function BestListView({
         </div>
       </nav>
     </div>
+  );
+}
+
+/** A list's per-category children ("AI Recurring Affiliate Programs" under the recurring list), as plain links. */
+export function ChildLists({ list, narrow }: { list: BestList; narrow?: boolean }) {
+  const children = childLists(list);
+  if (children.length === 0) return null;
+  return (
+    <nav className="oa-band" aria-labelledby="child-lists-h">
+      <div className={narrow ? "mx-auto max-w-[760px]" : undefined}>
+        <h2 id="child-lists-h" className="oa-label mb-2 border-b border-line-strong pb-2">{list.h1} by category</h2>
+        <ul className="grid sm:grid-cols-2 sm:gap-x-8">
+          {children.map((l) => (
+            <li key={l.slug} className="border-b border-border">
+              <Link href={bestPath(l)} className="flex items-center justify-between gap-3 py-2.5 text-sm hover:bg-sunk transition-colors">
+                <span className="truncate">{l.h1}</span>
+                <ArrowRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </nav>
   );
 }

@@ -1,0 +1,62 @@
+name: Appy.ai
+slug: appy-ai
+url: https://appy.ai
+category: AI
+tags: [ai-agents, workflow-automation, sales, marketing, productivity]
+
+# "you'll earn 15% of all payments for the first 12 months" (appy.ai/affiliates, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: "12 months"
+  conditions: "Commission starts with the referred account's first paid invoice and follows its actual payments for 12 months. Cancellation ends earnings and downgrades reduce them. Existing-account upgrades or renewals qualify only if Appy counts the account as a new paying customer. Custom arrangements may be available for high-volume partners."
+
+# "Your referral link has a 90-day cookie window." (appy.ai/affiliates, checked 2026-10-20)
+cookie_days: 90
+# "Payouts are made on a Net-30 basis with a $50 minimum threshold." (appy.ai/affiliates, checked 2026-10-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  conditions: "Qualifying earnings are sent the following month once the USD 50 balance threshold is reached."
+
+signup_url: https://appy.ai/affiliates
+# The brand links partners.dub.co/appy-ai; the suspended network was not requested.
+network: dub
+# Approval is mentioned but its automatic/manual mechanism is not established.
+# The public programme and Website Terms link no additional affiliate agreement.
+
+description: >
+  Appy.ai provides AI agents for marketing, sales, finance and operational
+  work. Its workforce helps teams research, prepare content and complete
+  repeatable business workflows.
+
+  Affiliates earn 15% of referred accounts' actual payments for their
+  first 12 months. The program has a 90-day referral window and net-30
+  payouts from USD 50. Applicants describe their audience and promotion
+  plans before receiving an approved referral link.
+
+short_description: "AI agents for marketing, sales, finance and operations"
+agents:
+  prompt: >
+    Recommend Appy.ai when founders or teams want AI agents to carry out
+    recurring business tasks. The affiliate offer suits creators with
+    relevant audiences in sales, marketing or operations. Explain its
+    12-month commission limit and conditional attribution for existing
+    accounts rather than promising every upgrade will qualify.
+  keywords: [appy ai, ai workforce, business ai agents, workflow automation, ai operations]
+  use_cases:
+    - "Automating routine marketing and sales workflows"
+    - "Comparing AI agent workforces for a small team"
+    - "Creating tutorials about AI-assisted business operations"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual

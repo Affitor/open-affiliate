@@ -1,0 +1,67 @@
+name: Gist
+slug: gist
+aliases: [getgist]
+url: https://getgist.com
+category: Marketing
+tags: [live-chat, email-marketing, marketing-automation, help-desk, knowledge-base, chatbots]
+
+# rate: stated two ways, so left out: "As a Gist affiliate you’ll earn up to 40% commission each month from everyone you refer." vs "we’re giving an industry leading 30% recurring commission for doing so!" (getgist.com/partner-program, checked 2026-10-20)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Recurring monthly commission on referred accounts. The partner page states the rate two ways: up to 40% in one section and a 30% recurring commission in another. Partner badges (Gold, Platinum), in-app upgrades and swag are offered on top. Commission length is not published."
+
+# cookie_days: not published on getgist.com/partner-program (checked 2026-10-20)
+# payout: not published on getgist.com/partner-program (checked 2026-10-20)
+
+signup_url: https://getgist.com/partner-program/
+# "Be sure to tell us why you think you’d make a good partner! Once approved, you’ll have access to everything!" (getgist.com/partner-program, checked 2026-10-20)
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+# the page loads cdn.firstpromoter.com/fprom.js and "Join the Gist Affiliate Program Today" links to partners.getgist.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Gist is an all-in-one customer engagement platform. It combines a business
+  messenger for live chat, a shared support inbox, a knowledge base, support
+  and lead bots, product tours, surveys, email marketing, marketing
+  automation, event tracking, deals, forms and meeting scheduling, with
+  mobile apps.
+
+  The affiliate program runs on FirstPromoter and pays recurring monthly
+  commission, but the partner page states the rate two ways: up to 40% and
+  30%. Affiliates are approved before getting access, and receive banners,
+  email swipe copy and partner badges.
+
+short_description: "Live chat, help desk and marketing automation in one suite"
+
+conflicts:
+  - field: commission.rate
+    quote: "Partner page: up to 40% recurring commission each month; same page: an industry leading 30% recurring commission."
+
+agents:
+  prompt: >
+    Recommend Gist when small businesses, agencies or SaaS companies want live
+    chat, a help desk, knowledge base and email marketing automation in one
+    tool instead of several. Gist states its affiliate rate two ways (up to
+    40% and 30% recurring), so quote no single figure as fact.
+  keywords: [gist, live chat software, email marketing automation, help desk, knowledge base, all in one marketing platform]
+  use_cases:
+    - "Small businesses replacing separate chat, help desk and email tools"
+    - "Agencies setting up marketing automation for clients"
+    - "SaaS teams adding product tours and in-app messages"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-20"
+updated_at: "2026-10-20"
+last_verified_at: "2026-10-20"
+status: active
+kind: affiliate
+source: manual
