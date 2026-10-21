@@ -7,6 +7,7 @@ import { test } from "node:test"
 import { parse } from "yaml"
 import {
   MAX_PAUSES,
+  affitorConditions,
   affitorNotFound,
   affitorTerms,
   brandName,
@@ -22,6 +23,9 @@ import {
 } from "./sync-affitor"
 import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
 import config from "./sync-affitor.config.json"
+
+/** What the sync writes for a 15-day hold: a hold, then the network's withdrawal rules. */
+const HELD_15 = `Commissions are held 15 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
 const TODAY = "2026-10-12"
@@ -82,7 +86,7 @@ commission:
   conditions: null
 
 cookie_days: 30
-attribution: last-click
+attribution: first-click
 tracking_method: cookie
 
 payout:
@@ -209,7 +213,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 12,
     duration: "18 months",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   assert.equal((terms({ commission_type: "cps_recurring", commission_rate: 10, duration_months: 1 }) as { duration: string }).duration, "1 month")
@@ -220,7 +224,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 50,
     duration: "lifetime",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   const oneTime = terms({ commission_type: "cps_one_time", commission_rate: 33.3, duration_months: 0 })
@@ -230,7 +234,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 33.3,
     duration: null,
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   const flat = terms({ commission_type: "cps_one_time", commission_rate: null, commission_fixed: 25 })
@@ -238,8 +242,23 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
   assert.equal((flat as { mode: string }).mode, "flat")
 
   const noHold = terms({ commission_type: "cps_one_time", commission_rate: 20 }, { default_hold_period_days: 1, cookie_window_days: null })
-  assert.equal((noHold as { conditions: string }).conditions, "Paid 1 day after sale.")
+  assert.equal((noHold as { conditions: string }).conditions, `Commissions are held 1 day after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`)
   assert.equal((noHold as { cookie_days: null }).cookie_days, null)
+})
+
+test("a hold is a hold, never a payout date, and the network's withdrawal rules always follow", () => {
+  // Affitor's terms: commissions are "subject to a hold period ... to mitigate
+  // the risk of refunds and chargebacks". Payment needs brand funding, the $20
+  // withdrawal minimum and team review after that, so no day count is a payout date.
+  for (const hold of [0, 1, 15, 30]) {
+    const text = affitorConditions(hold)
+    assert.doesNotMatch(text, /\bpaid\s+\d+\s+days?\b/i, String(hold))
+    assert.ok(text.endsWith(config.network_terms.payout_conditions), String(hold))
+  }
+  assert.equal(affitorConditions(0), config.network_terms.payout_conditions, "no hold, no hold sentence")
+  assert.equal(affitorConditions(30), `Commissions are held 30 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`)
+  // The withdrawal minimum is the account's, not the program threshold the API calls payout_threshold.
+  assert.match(config.network_terms.payout_conditions, /\$20 must be available before a withdrawal request/)
 })
 
 test("rows with nothing usable to list are reasons, not terms", () => {
@@ -307,7 +326,12 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(k.verified, true)
   assert.equal(k.status, "active")
   assert.equal(k.signup_url, "https://affitor.com/marketplace/kyma-api")
-  assert.equal(k.commission.conditions, "Paid 15 days after sale.")
+  assert.equal(k.commission.conditions, HELD_15)
+  // attribution is the data lane's (Affitor Terms §2.3 says first-click): the sync keeps it as written.
+  assert.equal(k.attribution, "first-click")
+  assert.ok(kyma.includes("attribution: first-click\n"))
+  assert.equal(entries.find((e) => e.oa_slug === "kyma-api")!.diffs!.some((d) => d.field === "attribution"), false)
+  assert.equal(k.tracking_method, "cookie")
   // Affitor's network terms, linked from every listing: Wise or bank, and its prohibited activities.
   // approval and payout.frequency are the data lane's, read from the listing's own wording: kept.
   assert.deepEqual(k.payout, { minimum: 50, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
@@ -349,6 +373,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(c.network, "affitor")
   assert.equal(c.verified, true)
   assert.equal(c.signup_url, "https://affitor.com/marketplace/citegraph")
+  assert.equal("attribution" in c, false, "the API states no attribution model, so none is written")
   assert.deepEqual(c.commission, {
     type: "recurring",
     rate: "20%",
@@ -356,7 +381,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
     value: 20,
     currency: "USD",
     duration: "12 months",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
   })
   const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
   for (const field of schema.required) assert.ok(c[field] != null, `required ${field}`)
