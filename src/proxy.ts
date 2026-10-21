@@ -39,7 +39,7 @@ export function proxy(request: NextRequest, event: NextFetchEvent) {
                 utm_source: searchParams.get("utm_source"),
                 src: searchParams.get("src"),
                 user_agent: userAgent,
-                referer: request.headers.get("referer"),
+                referer: request.headers.get("referer")?.replace(/\/submissions\/[^/?#]+/g, "/submissions/{id}") ?? null,
                 $process_person_profile: false,
               },
             }),

@@ -333,6 +333,13 @@ const submissionOutputSchema = {
   updatedAt: z.string().optional().describe("When its status last changed, ISO 8601"),
 };
 
+const SUBMIT_ORIGINS: ReadonlySet<string> = new Set(["https://openaffiliate.dev", "https://www.openaffiliate.dev"]);
+const crossOriginAnswer = (): Answer => ({
+  status: 403,
+  body: { error: "cross_origin", message: "submit_program cannot be called from a web page on another site. Use https://openaffiliate.dev/submit." },
+  headers: {},
+});
+
 /** An Answer as a tool result: a refusal is an error the agent reads, a result is structured content. */
 function toolResult(a: Answer) {
   const text = JSON.stringify(a.body, null, 2);
@@ -528,21 +535,30 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         "Send the brand's own program or partners page, never a network or review site. Never invent terms. Then call get_submission_status with the returned id.",
       annotations: SUBMIT_ANNOTATIONS,
       outputSchema: submissionOutputSchema,
-      inputSchema: {
+      // Strict at registration: the SDK strips unknown keys before the
+      // callback sees them, so a typo like contactEmail would vanish silently.
+      inputSchema: z.object({
         programUrl: z.string().describe("https:// link to the affiliate or partner program page on the brand's own website"),
         termsUrl: z.string().optional().describe("https:// link to the page that states the program's terms, when it is a different page"),
         name: z.string().optional().describe("Brand or program name, up to 100 characters"),
         contact: z.string().optional().describe("Optional email for the person submitting; never shown publicly and never returned by any tool"),
         note: z.string().optional().describe("Optional note for the maintainer, up to 1000 characters"),
-      },
+      }).strict(),
     },
     async (args, extra) => {
       const deps = submissions();
       if (!deps) return toolResult(disabledAnswer());
+      const headers = headersOf(extra.requestInfo?.headers);
+      // This endpoint answers any origin (CORS *) for the read tools. A write
+      // from a web page would let any site submit from its visitors'
+      // addresses, so a browser Origin other than ours is refused. Agents and
+      // desktop clients send no Origin.
+      const origin = headers.get("origin");
+      if (origin !== null && !SUBMIT_ORIGINS.has(origin)) return toolResult(crossOriginAnswer());
       const input = readInput(args);
       if ("status" in input && "body" in input) return toolResult(input);
       try {
-        const ip = clientIp(headersOf(extra.requestInfo?.headers));
+        const ip = clientIp(headers);
         return toolResult(await submit(input, { ip, source: "mcp", statusBase: "https://openaffiliate.dev" }, deps));
       } catch (err) {
         logFailure("mcp-submit", err);
@@ -560,9 +576,9 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
         "Do not use to look up listed programs; call get_program for those.",
       annotations: READ_ONLY_ANNOTATIONS,
       outputSchema: submissionOutputSchema,
-      inputSchema: {
+      inputSchema: z.object({
         id: z.string().describe("The id submit_program returned"),
-      },
+      }).strict(),
     },
     async ({ id }) => {
       const deps = submissions();

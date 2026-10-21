@@ -19,14 +19,35 @@ import { outcomeOf } from "../src/lib/submissions/live"
 
 const run = promisify(execFile)
 const URL_ = process.env.SUBMISSIONS_PG_URL ?? ""
-// localhost or a Unix socket only, never a host given in the query string.
-const local =
-  /^postgres(ql)?:\/\/(localhost|127\.0\.0\.1)?(:\d+)?\/[a-z0-9_]+_test(\?|$)/.test(URL_) &&
-  [...new URLSearchParams(URL_.split("?")[1] ?? "").entries()].every(([k, v]) => k !== "host" || v.startsWith("/"))
-const skip = !URL_ ? "SUBMISSIONS_PG_URL not set" : !local ? "SUBMISSIONS_PG_URL must be a local *_test database" : false
+
+/**
+ * The test drops and recreates the public schema, so the URL may name only a
+ * local Unix socket and a *_test database, with no other connection
+ * parameter: libpq would honour hostaddr, dbname, service and the rest over
+ * what the path says. psql also runs with every PG* variable removed, and
+ * the live connection is checked again before anything is dropped.
+ */
+export function localTestUrl(url: string): boolean {
+  const m = /^postgresql:\/\/\/([a-z0-9_]+_test)\?([^#]*)$/.exec(url)
+  if (!m) return false
+  const params = new URLSearchParams(m[2])
+  const keys = [...params.keys()]
+  if (new Set(keys).size !== keys.length || !keys.includes("host")) return false
+  return keys.every((k) => {
+    const v = params.get(k) ?? ""
+    if (k === "host") return /^\/[A-Za-z0-9_./-]+$/.test(v) && !v.includes("..")
+    if (k === "port") return /^\d{2,5}$/.test(v)
+    if (k === "user") return /^[a-z0-9_]+$/.test(v)
+    return false
+  })
+}
+
+const skip = !URL_ ? "SUBMISSIONS_PG_URL not set" : !localTestUrl(URL_) ? "SUBMISSIONS_PG_URL must be postgresql:///<name>_test?host=/socket/dir[&port=][&user=]" : false
+const env = Object.fromEntries(Object.entries(process.env).filter(([k]) => !k.startsWith("PG"))) as NodeJS.ProcessEnv
+const psql = (args: string[]) => run("psql", [URL_, "-v", "ON_ERROR_STOP=1", "-qtAX", ...args], { env })
 
 async function sql(query: string, role = "postgres"): Promise<string> {
-  const { stdout } = await run("psql", [URL_, "-v", "ON_ERROR_STOP=1", "-qtAX", "-c", `SET ROLE ${role}; ${query}`])
+  const { stdout } = await psql(["-c", `SET ROLE ${role}; ${query}`])
   return stdout.trim()
 }
 
@@ -49,7 +70,10 @@ const submit = async (...args: Parameters<typeof submitCall>) => JSON.parse(awai
 
 before(async () => {
   if (skip) return
-  await run("psql", [URL_, "-v", "ON_ERROR_STOP=1", "-qtAX", "-c", `
+  // The connection psql actually made: a Unix socket (no server address) and a *_test database.
+  const [db, socket] = (await psql(["-c", "SELECT current_database(), inet_server_addr() IS NULL"])).stdout.trim().split("|")
+  if (!/_test$/.test(db) || socket !== "t") throw new Error("refusing to reset: not a local *_test database over a Unix socket")
+  await psql(["-c", `
     DROP SCHEMA public CASCADE; CREATE SCHEMA public;
     DO $$ BEGIN
       IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'anon') THEN CREATE ROLE anon NOLOGIN; END IF;
@@ -62,8 +86,30 @@ before(async () => {
     ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO anon, authenticated, service_role;
   `])
   for (const file of ["009_program_claims.sql", "013_program_submissions.sql"]) {
-    await run("psql", [URL_, "-v", "ON_ERROR_STOP=1", "-qtAX", "-f", join(__dirname, "../supabase/migrations", file)])
+    await psql(["-f", join(__dirname, "../supabase/migrations", file)])
   }
+})
+
+test("the reset guard accepts only a local socket URL for a *_test database", () => {
+  for (const ok of [
+    "postgresql:///oa_submissions_test?host=/tmp/pg",
+    "postgresql:///oa_submissions_test?host=/tmp/claude-501/oas&port=54329&user=postgres",
+  ]) assert.equal(localTestUrl(ok), true, ok)
+  for (const bad of [
+    "postgresql://localhost/oa_test?hostaddr=203.0.113.10&dbname=production&user=postgres",
+    "postgresql:///oa_test?host=/tmp/pg&hostaddr=203.0.113.10",
+    "postgresql:///oa_test?host=/tmp/pg&dbname=production",
+    "postgresql:///oa_test?host=/tmp/pg&service=prod",
+    "postgresql:///oa_test?host=db.example.com",
+    "postgresql:///oa_test?host=/tmp/pg&host=db.example.com",
+    "postgresql:///oa_test?host=/tmp/../etc",
+    "postgresql:///oa_test",
+    "postgresql://localhost/oa_test",
+    "postgresql://user:pw@db.example.com/oa_test",
+    "postgresql:///production?host=/tmp/pg",
+    "postgres:///oa_test?host=/tmp/pg",
+    "postgresql:///oa_test?host=/tmp/pg&options=-c%20search_path%3Dx",
+  ]) assert.equal(localTestUrl(bad), false, bad)
 })
 
 const reset = () => sql("TRUNCATE program_submissions; TRUNCATE claim_events;")

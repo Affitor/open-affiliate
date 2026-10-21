@@ -153,13 +153,14 @@ server.registerTool(
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "Queue a missing program for a maintainer to verify against the brand's own published terms. Not instant: nothing is listed or scored until verified. Call get_program or search_programs first",
-    inputSchema: {
+    // Strict: unknown keys are refused, not silently dropped.
+    inputSchema: z.object({
       programUrl: z.string().describe("https:// link to the affiliate or partner program page on the brand's own website"),
       termsUrl: z.string().optional().describe("https:// link to the page that states the program's terms, when it is a different page"),
       name: z.string().optional().describe("Brand or program name, up to 100 characters"),
       contact: z.string().optional().describe("Optional email for the person submitting; never shown publicly and never returned by any tool"),
       note: z.string().optional().describe("Optional note for the maintainer, up to 1000 characters"),
-    },
+    }).strict(),
   },
   async (args) =>
     submissionCall("/api/submissions", {
@@ -175,9 +176,9 @@ server.registerTool(
     title: "Get Submission Status",
     annotations: READ_ONLY_ANNOTATIONS,
     description: "Read where a submitted program is: queued, verifying, listed or rejected",
-    inputSchema: {
+    inputSchema: z.object({
       id: z.string().describe("The id submit_program returned"),
-    },
+    }).strict(),
   },
   async ({ id }) => submissionCall(`/api/submissions/${encodeURIComponent(id)}`)
 );

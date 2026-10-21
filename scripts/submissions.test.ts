@@ -16,6 +16,7 @@ import {
   publicSubmission,
   readAllowed,
   status,
+  statusPageBody,
   submittedUrl,
   type ListedProgram,
   type SubmissionDeps,
@@ -421,4 +422,16 @@ test("queue CLI: plans only allowed moves from the row's own status", async () =
   assert.equal(typeof (await plan(store, "reject", [q, "constructor"], exists)), "string")
   assert.equal(typeof (await plan(store, "reject", [r, "spam"], exists)), "string", "a final row does not move")
   assert.equal(typeof (await plan(store, "take", ["nope"], exists)), "string")
+})
+
+test("status page data: null (404) for a malformed, unknown or pruned id; a database failure throws", async () => {
+  const { store, deps } = setup()
+  const a = await handlePost(post({ programUrl: "https://brand.com/" }), deps)
+  assert.equal((await statusPageBody(String(a.body.id), deps))?.status, "queued")
+  assert.equal(await statusPageBody("nope", deps), null)
+  assert.equal(await statusPageBody("00000000-0000-4000-8000-000000000000", deps), null)
+  store.rows.length = 0 // pruned by retention
+  assert.equal(await statusPageBody(String(a.body.id), deps), null)
+  const broken: SubmissionDeps = { ...deps, store: { ...deps.store, get: async () => { throw Object.assign(new Error("x"), { code: "PGRST000" }) } } }
+  await assert.rejects(statusPageBody("00000000-0000-4000-8000-000000000001", broken), /unavailable/)
 })

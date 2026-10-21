@@ -361,6 +361,22 @@ export async function status(id: string, deps: SubmissionDeps): Promise<Answer> 
 }
 
 /**
+ * The /submissions/{id} page's data: the public body, or null for a page
+ * that should 404 (malformed, unknown or pruned id). A database failure
+ * throws; the page calls notFound() itself, outside any try.
+ */
+export async function statusPageBody(id: string, deps: SubmissionDeps): Promise<Record<string, unknown> | null> {
+  let a: Answer
+  try {
+    a = await status(id, deps)
+  } catch (err) {
+    logFailure("status-page", err)
+    throw new Error("submission status unavailable")
+  }
+  return a.status === 200 ? a.body : null
+}
+
+/**
  * Per-instance flood guard for the status read (fixed window, the pattern
  * mcp-route.ts uses). Not a quota: the read is one indexed select by id.
  */

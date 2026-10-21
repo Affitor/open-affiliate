@@ -500,6 +500,27 @@ test("submit_program queues through the shared service, takes the IP from the re
   const unknown = await call("get_submission_status", { id: "nope" })
   assert.equal(unknown.isError, true)
 
+  // Strict input: an unknown key is refused, not dropped, and nothing is written.
+  const rowsBefore = store.rows.length
+  const typo = await rpc("tools/call", { name: "submit_program", arguments: { programUrl: "https://typo.com/", contactEmail: "me@typo.com" } }, CallToolResultSchema).catch((e: unknown) => e)
+  assert.ok(typo instanceof Error || (typo as CallToolResult).isError === true, "unknown key must be refused")
+  assert.equal(store.rows.length, rowsBefore)
+  const submitTool = tool("submit_program")
+  assert.equal((submitTool.inputSchema as { additionalProperties?: unknown }).additionalProperties, false)
+
+  // A web page on another site cannot submit through visitors' browsers; our own origin can.
+  const foreign = rpcClient("", () => deps, { "x-forwarded-for": "198.51.100.78", origin: "https://evil.example" })
+  const blocked = await foreign("tools/call", { name: "submit_program", arguments: { programUrl: "https://cross.com/" } }, CallToolResultSchema)
+  assert.equal(blocked.isError, true)
+  assert.match(JSON.stringify(blocked.content), /cross_origin/)
+  assert.equal(store.rows.length, rowsBefore)
+  const reads = await foreign("tools/call", { name: "get_submission_status", arguments: { id: body.id } }, CallToolResultSchema)
+  assert.notEqual(reads.isError, true, "reads stay open to every origin")
+  const own = rpcClient("", () => deps, { "x-forwarded-for": "198.51.100.79", origin: "https://openaffiliate.dev" })
+  const ok = await own("tools/call", { name: "submit_program", arguments: { programUrl: "https://own.com/" } }, CallToolResultSchema)
+  assert.notEqual(ok.isError, true)
+  assert.equal(store.rows.length, rowsBefore + 1)
+
   // Disabled (no database or key): a clear error, no throw.
   const off = rpcClient("", () => null)
   const disabled = await off("tools/call", { name: "submit_program", arguments: { programUrl: "https://brand.com/" } }, CallToolResultSchema)
