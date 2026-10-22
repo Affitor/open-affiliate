@@ -30,6 +30,8 @@ import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
+import { joinThrough } from "../src/lib/program-page";
+import { networkName as programNetworkName } from "../src/lib/program-seo";
 import { outboundUrl } from "../src/lib/outbound-link";
 import { changelog } from "../src/lib/changelog";
 import { blogApplyHref } from "../src/lib/apply-cta";
@@ -814,6 +816,21 @@ function alsoOnHtmlProblem(program: Program, html: string): string | null {
   const shown = html.includes(`>${also.line}</p>`) && html.includes(`href="${also.href.replaceAll("&", "&amp;")}"`);
   return shown ? null : `does not show "${also.line}" with its Affitor button`;
 }
+/**
+ * A program on Affitor is listed like every other (Sơn, 2026-10-18 and 2026-10-21): no
+ * Affitor badge or team note on its page, and its network in the same "Join through"
+ * row any network gets.
+ */
+const unescapeHtml = (t: string) => t.replaceAll("&#x27;", "'").replaceAll("&quot;", '"').replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
+function networkLabelProblem(program: Program, html: string): string | null {
+  // A badge is its own element; prose such as "the program runs on Affitor" states the network like any other.
+  const label = html.match(/>\s*Runs on Affitor\s*<|maintains OpenAffiliate/);
+  if (label) return `shows "${label[0]}"`;
+  const row = html.match(/data-term="network"[^>]*><dt[^>]*>Join through<\/dt><dd[^>]*>([^<]*)<\/dd>/);
+  const expected = joinThrough(program, programNetworkName(program));
+  if (!row) return "has no Join through row";
+  return unescapeHtml(row[1]) === expected ? null : `shows Join through "${unescapeHtml(row[1])}", expected "${expected}"`;
+}
 for (const program of termsPages) {
   const problem = alsoOnMdProblem(program, requireText(join("programs", `${program.slug}.md`)));
   if (problem) fail(`programs/${program.slug}.md ${problem}`);
@@ -1452,8 +1469,12 @@ async function checkServedPages(): Promise<string> {
     if (!dropped) fail("no unverified program has a dropped sentence to probe the prose check with");
     const kept = new Map<Program, string>();
     let affitorOnProgramPages = 0;
+    let affitorNetworkPage: [Program, string] | null = null;
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
+      const label = networkLabelProblem(program, html);
+      if (label) fail(`${page} ${label}`);
+      if (program.network === "affitor" && !affitorNetworkPage) affitorNetworkPage = [program, html];
       const problems = termsHtmlProblems(program, html, comparedPrograms(html));
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
       // The Affitor line and its secondary button, only where also_on says so.
@@ -1470,6 +1491,13 @@ async function checkServedPages(): Promise<string> {
       }
       if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
+    // Non-vacuity for the network label: an Affitor program page with a badge, or with another Join through value, fails.
+    {
+      if (!affitorNetworkPage) fail("no program on the Affitor network to probe the network label check with");
+      const [p, html] = affitorNetworkPage as [Program, string];
+      if (networkLabelProblem(p, html + `<span class="badge">Runs on Affitor</span>`) === null) fail(`the network label check passed ${p.slug} with a Runs on Affitor badge`);
+      if (networkLabelProblem(p, html.replace(/(data-term="network"[^>]*><dt[^>]*>Join through<\/dt><dd[^>]*>)[^<]*/, "$1Affitor, the network that maintains it")) === null) fail(`the network label check passed ${p.slug} with a changed Join through row`);
+    }
     // Non-vacuity: the page check fails on a page that breaks the rule either way. Every probe runs
     // with the page's own comparison context, as served, from a baseline the check passes.
     const pageTermsProblems = (p: Program, html: string) => termsHtmlProblems(p, html, comparedPrograms(html));
