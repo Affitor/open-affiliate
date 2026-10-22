@@ -146,7 +146,7 @@ export default async function ProgramPage({
   // The brand on Affitor too: one line under its own terms, and a secondary button.
   const alsoOn = alsoOnAffitor(program);
   const claimable = !program.claimedBy && claimsEnabledFor(program);
-  // Claim spec v4 §3: a program already on Affitor gets a chip instead of the offer line.
+  // A program already on Affitor gets no offer line and no chip (Sơn, 2026-10-18: no label).
   const onAffitor = program.network === "affitor" || Boolean(alsoOn);
   // A brand running its program elsewhere can move it to Affitor; not one already there, nor our own.
   const canMoveToAffitor = !noProgram && !onAffitor;
@@ -503,7 +503,6 @@ export default async function ProgramPage({
                 <>
                   <div className="flex flex-wrap items-center gap-2">
                     <ClaimChip program={program} />
-                    {onAffitor && <Badge variant="outline" className="text-xs text-muted-foreground">Runs on Affitor</Badge>}
                   </div>
                   <p className="text-sm text-muted-foreground">{program.name}&apos;s team keeps this page up to date. Every change is reviewed before it goes live.</p>
                   {/* Claim spec v4 §7.2: a dispute goes to the manual review queue. */}
@@ -519,11 +518,8 @@ export default async function ProgramPage({
                   {claimable ? (
                     <>
                       <p className="text-sm text-muted-foreground">Claim this page to keep your terms up to date and add more programs.</p>
-                      {onAffitor ? (
-                        <Badge variant="outline" className="text-xs text-muted-foreground">Runs on Affitor</Badge>
-                      ) : (
-                        <p className="text-sm text-muted-foreground">Works with the Affitor network.</p>
-                      )}
+                      {/* No badge for a program on Affitor: it is listed like every other (Sơn, 2026-10-18); its network shows in "Join through". */}
+                      {!onAffitor && <p className="text-sm text-muted-foreground">Works with the Affitor network.</p>}
                       <div className="flex flex-wrap items-center gap-4">
                         <Link href={`/programs/${program.slug}/claim`} className="inline-flex items-center rounded-lg border border-border h-9 px-3.5 text-sm font-medium hover:bg-muted/50 transition-colors">
                           Claim this page

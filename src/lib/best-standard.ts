@@ -80,9 +80,6 @@ function thirdPartyNetwork(p: Program): string | null {
   return p.network && p.network !== IN_HOUSE && networkKind(p.network) === "marketplace" ? networkName(p.network) : null
 }
 
-/** The line every section of a program on the Affitor network carries, so the link into Affitor is disclosed where it sits. */
-export const AFFITOR_NETWORK_LINE = "Runs on Affitor, the affiliate network that maintains OpenAffiliate."
-
 /**
  * The commission as the standard layout shows it: earnText, with its pointer
  * to full terms (which this layout does not link) said as what the data
@@ -283,7 +280,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
       (recurring.length
         ? `On this page, ${andList(recurring.map((p) => `${name(p)} (${esc(earnShown(p))})`))} ${recurring.length === 1 ? "pays" : "pay"} a recurring share. `
         : "None of the programs on this page pays a recurring share. ") +
-      (rest.length ? `The other ${rest.length} list their commission as ${andList(restTypes)}, with no recurring length on record; each section gives the details. ` : "") +
+      (rest.length ? `${rest.length === 1 ? `The other program lists its` : `The other ${rest.length} list their`} commission as ${andList(restTypes)}, with no recurring length on record; each section gives the details. ` : "") +
       `Across the ${split.total} verified programs this post draws from, ${recurringAll} list a recurring commission.`,
   })
 
@@ -333,14 +330,20 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
   const paypal = shown.filter((p) => paysBy(p, "paypal"))
   const bank = shown.filter((p) => paysBy(p, "bank"))
   const noMethod = shown.filter((p) => !(p.payoutMethods ?? p.payout.methods ?? []).length)
-  const viaNetwork = noMethod.filter((p) => thirdPartyNetwork(p))
+  // A program with its own schedule on record is not "on the network's terms" (its section shows the schedule).
+  const viaNetwork = noMethod.filter((p) => thirdPartyNetwork(p) && !p.payout.frequency)
   faq.push({
     q: `How do ${niche} pay out?`,
     a:
       (paypal.length ? `${paypal.length} of the ${shown.length} programs here pay by PayPal: ${andList(paypal.map(name))}. ` : "") +
       (bank.length ? `${andList(bank.map(name))} ${bank.length === 1 ? "lists" : "list"} bank transfer. ` : "") +
       (noMin.length ? `${andList(noMin.map(name))} ${noMin.length === 1 ? "has" : "have"} no payout minimum. ` : "") +
-      viaNetwork.map((p) => `${name(p)} pays on ${esc(thirdPartyNetwork(p)!)}'s terms. `).join("") +
+      [...new Set(viaNetwork.map((p) => thirdPartyNetwork(p)!))]
+        .map((net) => {
+          const on = viaNetwork.filter((p) => thirdPartyNetwork(p) === net)
+          return `${andList(on.map(name))} ${on.length === 1 ? "pays" : "pay"} on ${esc(net)}'s terms. `
+        })
+        .join("") +
       blanks(noMethod.filter((p) => !viaNetwork.includes(p)), (p) => emptyLabel(p, "payout.methods"), {
         [STATED_TWO_WAYS]: ["states its payout method two ways", "state their payout method two ways"],
         [NOT_STATED]: ["publishes no payout method", "publish no payout method"],
@@ -363,12 +366,13 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
  * The one line at the end of a standard post that points partners to the
  * Affitor marketplace (Shopify ends its posts the same way with its own
  * product). It says only what affitor.com says (one partner account, many
- * programs) and who runs it; no pricing, no promises.
+ * programs); no pricing, no promises, and no team note: programs on Affitor
+ * are listed and ranked like every other (Sơn, 2026-10-18 and 2026-10-21).
  */
 export const AFFITOR_LINE = {
   before: "Looking for more programs to promote? The ",
   anchor: "Affitor marketplace",
-  after: " lets you apply to many affiliate programs from one partner account. It is run by the team that maintains OpenAffiliate.",
+  after: " lets you apply to many affiliate programs from one partner account.",
 } as const
 
 /** How many posts the "Read more" box at the end lists. */

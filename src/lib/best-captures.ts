@@ -86,6 +86,29 @@ export const CAPTURES: Record<string, Capture> = {
   vidyo: program("vidyo", "https://quso.ai/affiliate-program"),
   voila: program("voila", "https://www.getvoila.ai/affiliate-program"),
   vsub: program("vsub", "https://vsub.io/affiliate"),
+  // Phase 1c (AI, marketing, design posts), captured 2026-10-21.
+  runway: program("runway", "https://runway.com/affiliate-program"),
+  heygen: program("heygen", "https://www.heygen.com/geniverse/social-creator-program"),
+  adcreative: program("adcreative", "https://www.adcreative.ai/affiliate"),
+  synthesia: program("synthesia", "https://www.synthesia.io/partners/affiliates"),
+  "opus-clip": program("opus-clip", "https://www.opus.pro/affiliate"),
+  clickfunnels: program("clickfunnels", "https://www.clickfunnels.com/affiliate-program"),
+  nightwatch: program("nightwatch", "https://nightwatch.io/seo-affiliate-program/"),
+  seobility: program("seobility", "https://www.seobility.net/en/affiliates/"),
+  "frase-io": program("frase-io", "https://www.frase.io/partners/affiliates"),
+  wisepops: program("wisepops", "https://wisepops.com/partner-program"),
+  databox: program("databox", "https://databox.com/affiliate-program"),
+  foreplay: program("foreplay", "https://www.foreplay.co/affiliates"),
+  themify: program("themify", "https://themify.me/affiliates"),
+  brandbird: program("brandbird", "https://www.brandbird.app/affiliates"),
+  "pineapple-builder": program("pineapple-builder", "https://www.pineapplebuilder.com/affiliates"),
+  strikingly: program("strikingly", "https://www.strikingly.com/affiliate-program"),
+  templatemonster: program("templatemonster", "https://affiliates.templatemonster.com/affiliates/"),
+  "beaver-builder": program("beaver-builder", "https://www.wpbeaverbuilder.com/affiliates/"),
+  visme: program("visme", "https://www.visme.co/partners/"),
+  pikzels: program("pikzels", "https://pikzels.com/affiliate"),
+  fotor: program("fotor", "https://www.fotor.com/affiliates.html"),
+  "kyma-api": program("kyma-api", `${AFFITOR_MARKETPLACE}/kyma-api`),
 }
 
 /** Why a program on a standard post has no capture (a record; the page shows the logo card). */
@@ -112,6 +135,12 @@ export const CAPTURE_SKIPPED: Record<string, string> = {
   "cal-com": "cal.com is on our blocked-hosts list (website terms restrict automated access)",
   // 2026-10-21: the signup page is served with its styles from getrewardful.com, a blocked host, so it rendered unstyled; not used.
   manatal: "its signup page loads its styles from a blocked host and rendered unstyled",
+  reclaim: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  gamma: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  "campaign-monitor-by-marigold": "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  teikametrics: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  later: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
+  envato: "envato.com is on our blocked-hosts list (website terms restrict automated access)",
 }
 
 /** "kinsta.com/affiliates": the URL as a caption shows it. */
