@@ -85,7 +85,7 @@ export const post: BestPost = {
   affitor: {
     before: "Notroa and Dalilou are listed on the ",
     anchor: "Affitor marketplace",
-    after: ", the affiliate network for SaaS that maintains OpenAffiliate, along with other SaaS programs you can apply to from one account.",
+    after: ", an affiliate network for SaaS, along with other SaaS programs you can apply to from one account.",
   },
   related: ["sales-recurring-affiliate-programs", "saas-affiliate-programs", "recurring-affiliate-programs"],
   category: "Sales",

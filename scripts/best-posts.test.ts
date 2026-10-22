@@ -19,7 +19,7 @@ import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { AFFITOR_LINE, AFFITOR_NETWORK_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { NETWORK_META } from "../src/lib/network-meta"
@@ -397,7 +397,7 @@ test("every public/logos/*.png is a PNG file", () => {
   assert.deepEqual(bad, [], "these .png files are not PNG images (an HTML page saved as a logo shows as a broken image)")
 })
 
-test("standard sections: Affitor-network programs disclose it; requirements are a detail, not a con; no software network stands in for payout terms", () => {
+test("standard sections: no team note on any program or post; requirements are a detail, not a con; no software network stands in for payout terms", () => {
   assert.ok(SOFTWARE_NETWORKS.includes("Rewardful") && SOFTWARE_NETWORKS.includes("FirstPromoter") && !SOFTWARE_NETWORKS.includes("Lemon Squeezy"), "network-meta kinds changed")
   const byslug = (slug: string) => allPrograms.find((x) => x.slug === slug)!
   // Classification on fixtures.
@@ -409,8 +409,8 @@ test("standard sections: Affitor-network programs disclose it; requirements are 
     const { html, selection } = renderStandard(post)
     for (const { program: p } of selection.shown) {
       const section = html.slice(html.indexOf(`data-post-program="${p.slug}"`)).split("data-post-program=")[1] ?? ""
-      if (p.network === "affitor") assert.ok(section.includes(AFFITOR_NETWORK_LINE), `${post.slug}: ${p.slug} runs on Affitor without saying so`)
-      else assert.ok(!section.includes(AFFITOR_NETWORK_LINE), `${post.slug}: ${p.slug} is not on Affitor`)
+      // Programs on Affitor are listed like every other: no section carries a team note (Sơn, 2026-10-18 and 2026-10-21).
+      assert.doesNotMatch(section, TEAM_NOTE, `${post.slug}: ${p.slug} carries a team note`)
       const { cons } = prosCons(p)
       for (const r of p.restrictions ?? []) {
         if (/^(use|have|must|be|apply|promote|share|affiliates must|applicants must|applicants need|website must)\b/i.test(r.trim()))
@@ -489,6 +489,8 @@ function renderStandard(post: (typeof POSTS)[number]) {
 }
 
 const STANDARD = POSTS.filter((p) => p.layout === "standard")
+/** A team note on a post ("maintains OpenAffiliate", "run by the team"); no-program.test.ts also greps every source file for the other wording. */
+const TEAM_NOTE = /maintains? OpenAffiliate|same\s?team|run by the team|data-affitor-network/i
 const SOFTWARE_NETWORKS = Object.values(NETWORK_META).filter((m) => m.kind === "software").map((m) => m.name)
 
 test("a standard post: a four-column table, one inline tracked link per program, no buttons, FAQ JSON-LD matches the FAQ box", () => {
@@ -581,6 +583,8 @@ test("a standard post ends with the Affitor line, one Read more box of five post
   const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|hundred|thousand|million|half|dozen)\b/i
   const line = `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after}`
   assert.doesNotMatch(line, /\d|\$|free|price|pricing|guarantee/i)
+  assert.doesNotMatch(line, TEAM_NOTE)
+  for (const post of POSTS) for (const t of copyStrings(post)) assert.doesNotMatch(t, TEAM_NOTE, `${post.slug}: a team note in copy`)
   assert.doesNotMatch(line, NUMBER_WORDS)
   for (const post of STANDARD) {
     const { html, selection } = renderStandard(post)

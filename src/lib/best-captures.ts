@@ -108,6 +108,7 @@ export const CAPTURES: Record<string, Capture> = {
   visme: program("visme", "https://www.visme.co/partners/"),
   pikzels: program("pikzels", "https://pikzels.com/affiliate"),
   fotor: program("fotor", "https://www.fotor.com/affiliates.html"),
+  "kyma-api": program("kyma-api", `${AFFITOR_MARKETPLACE}/kyma-api`),
 }
 
 /** Why a program on a standard post has no capture (a record; the page shows the logo card). */

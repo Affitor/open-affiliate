@@ -76,6 +76,12 @@ export const post: BestPost = {
       why: "ElevenLabs covers lifelike speech, voice cloning, music and sound effects, plus voice agents and an API for developers. Its {creator affiliate program} pays a share of every payment for a referral's first year, at a lower rate on the Business plan.",
     },
     {
+      slug: "kyma-api",
+      bestFor: "Best for developer audiences",
+      verdict: "A fit for newsletters and channels about building with AI rather than using it; it is an API, not an app.",
+      why: "Kyma API gives developers one account, key and balance for chat, reasoning, image, video and audio models. Its {affiliate program} pays a share of what each referred customer spends, recurring for a fixed period.",
+    },
+    {
       slug: "gamma",
       bestFor: "Best for presentations",
       verdict: "A natural pick for founders and marketers who make decks and one-pagers.",
@@ -99,7 +105,7 @@ export const post: BestPost = {
     { label: "Best for voice and audio", slug: "eleven-labs-inc" },
     { label: "Best for marketers", slug: "adcreative" },
     { label: "Best for presentations", slug: "gamma" },
-    { label: "Best for training video", slug: "synthesia" },
+    { label: "Best for developers", slug: "kyma-api" },
   ],
   howWeChose:
     "We started from the AI programs in the OpenAffiliate registry whose terms we have verified on the brand's own page, then our editors picked and ordered them, starting with the programs readers find us for in search. Commission size is shown, not scored: a higher rate is not always a better fit for your audience. We left out Jasper: its old affiliate agreement is still online, but its application now leads to a partner program for agencies, not independent affiliates.",

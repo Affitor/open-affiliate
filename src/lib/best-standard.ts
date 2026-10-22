@@ -80,9 +80,6 @@ function thirdPartyNetwork(p: Program): string | null {
   return p.network && p.network !== IN_HOUSE && networkKind(p.network) === "marketplace" ? networkName(p.network) : null
 }
 
-/** The line every section of a program on the Affitor network carries, so the link into Affitor is disclosed where it sits. */
-export const AFFITOR_NETWORK_LINE = "Runs on Affitor, the affiliate network that maintains OpenAffiliate."
-
 /**
  * The commission as the standard layout shows it: earnText, with its pointer
  * to full terms (which this layout does not link) said as what the data
@@ -369,12 +366,13 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
  * The one line at the end of a standard post that points partners to the
  * Affitor marketplace (Shopify ends its posts the same way with its own
  * product). It says only what affitor.com says (one partner account, many
- * programs) and who runs it; no pricing, no promises.
+ * programs); no pricing, no promises, and no team note: programs on Affitor
+ * are listed and ranked like every other (Sơn, 2026-10-18 and 2026-10-21).
  */
 export const AFFITOR_LINE = {
   before: "Looking for more programs to promote? The ",
   anchor: "Affitor marketplace",
-  after: " lets you apply to many affiliate programs from one partner account. It is run by the team that maintains OpenAffiliate.",
+  after: " lets you apply to many affiliate programs from one partner account.",
 } as const
 
 /** How many posts the "Read more" box at the end lists. */

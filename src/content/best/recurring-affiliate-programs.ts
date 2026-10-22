@@ -106,6 +106,12 @@ export const post: BestPost = {
       verdict: "A Mac-only tool with a discount for your referrals, so it suits developer and productivity audiences on macOS.",
       why: "Raycast is a productivity launcher for macOS built for developers. Its {affiliate program} pays a recurring share of Pro subscriptions, paid in pounds sterling through Wise, and your referrals get a discount when they sign up.",
     },
+    {
+      slug: "kyma-api",
+      bestFor: "Best for developers building with AI",
+      verdict: "A fit for newsletters and channels about building with AI; it is an API, not an app, so it suits technical readers.",
+      why: "Kyma API gives developers one account, key and balance for chat, reasoning, image, video and audio models. Its {affiliate program} pays a share of what each referred customer spends, recurring for a fixed period.",
+    },
   ],
   picks: [
     { label: "Best for creators", slug: "convertkit" },
