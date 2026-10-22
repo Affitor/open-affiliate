@@ -1,15 +1,19 @@
-import { FaqAccordion } from "@/components/faq-accordion";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import { PostProgramBlock } from "@/components/post-program-block";
+import { ArrowLeft } from "lucide-react";
+import { PostApplyLink } from "@/components/post-apply-link";
+import { AffitorLink } from "@/components/affitor-link";
+import { PostByline, ReadMore, SHORT_DISCLOSURE, Tinted, linkClass, prose } from "@/components/best-post-standard";
 import { serializeJsonLd } from "@/lib/json-ld";
-import { getProgram } from "@/lib/programs";
-import { BEST_LISTS, bestPath } from "@/lib/best-lists";
-import { DISCLOSURE, type PostSelection } from "@/lib/best-posts";
+import { getProgram, type Program } from "@/lib/programs";
+import { blogApplyHref } from "@/lib/apply-cta";
+import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
+import { type PostProgram, type PostSelection } from "@/lib/best-posts";
+import { AFFITOR_LINE, guideReadMoreLinks, programDetails, splitLink } from "@/lib/best-standard";
 import { DISCLOSURE_SOURCE, guideTitle, registryFacts, type GuidePost } from "@/lib/guides";
 
 const SITE = "https://openaffiliate.dev";
+const h2 = "text-subtitle font-semibold tracking-[-0.02em]";
 
 export function guideMetadata(guide: GuidePost, path: string): Metadata {
   const title = guideTitle(guide);
@@ -28,12 +32,12 @@ export function guideMetadata(guide: GuidePost, path: string): Metadata {
   };
 }
 
-/** "Recurring 304 of 442": the registry's verified programs, from structured fields only. */
-function RegistryFacts() {
+/** "Pay a recurring commission: 304 of 442": the registry's verified programs, from structured fields only. */
+export function registryFactRows(): [string, string][] {
   const f = registryFacts();
   const recurring = f.byType.find((t) => t.type === "recurring")?.count ?? 0;
   const oneTime = f.byType.find((t) => t.type === "one-time")?.count ?? 0;
-  const rows: [string, string][] = [
+  return [
     ["Pay a recurring commission", `${recurring} of ${f.verified}`],
     ["Pay for the customer's lifetime", `${f.lifetime} of ${f.verified}`],
     ["Pay once per sale", `${oneTime} of ${f.verified}`],
@@ -48,72 +52,95 @@ function RegistryFacts() {
     ["Review applications by hand", `${f.approval.manual} of ${f.verified}`],
     ["Pay by PayPal", `${f.payout.paypal} of ${f.verified}`],
   ];
+}
+
+function RegistryFacts() {
   return (
-    <section className="oa-band" aria-labelledby="registry-facts-h">
-      <div className="mx-auto max-w-[760px]">
-        <h2 id="registry-facts-h" className="text-lg font-semibold">What the registry shows</h2>
-        <p className="text-meta text-muted-foreground mt-1">
-          Verified programs in the OpenAffiliate registry, terms checked up to {f.asOf}.
-        </p>
-        <dl data-registry-facts className="mt-4 overflow-hidden rounded-xl border border-border bg-card">
-          {rows.map(([dt, dd]) => (
-            <div key={dt} className="grid grid-cols-[minmax(0,1fr)_auto] gap-4 border-t border-border px-4 py-2.5 first:border-t-0">
-              <dt className="text-sm text-foreground/80">{dt}</dt>
-              <dd className="whitespace-nowrap font-mono text-sm tabular-nums">{dd}</dd>
-            </div>
-          ))}
-        </dl>
-        <p className="text-meta text-muted-foreground mt-2">
-          <Link href="/programs?type=recurring" prefetch={false} className="underline underline-offset-4">Browse recurring programs</Link>
-          {" · "}
-          <Link href="/programs?cookie=90" prefetch={false} className="underline underline-offset-4">Programs with a long cookie</Link>
-        </p>
-      </div>
+    <section id="registry" className="scroll-mt-20 pt-12">
+      <h2 className={h2}>What the registry shows</h2>
+      <p className={`${prose} mt-4`}>Verified programs in the OpenAffiliate registry, terms checked up to {registryFacts().asOf}:</p>
+      <ul data-registry-facts className={`${prose} mt-3 list-disc space-y-1.5 pl-5`}>
+        {registryFactRows().map(([label, value]) => (
+          <li key={label}>
+            <strong className="font-semibold text-foreground">{label}:</strong> {value}
+          </li>
+        ))}
+      </ul>
     </section>
   );
 }
 
-/** A guide post on /blog/<slug>, in the same frame as the /best posts. */
+/** A program a guide names, compact: its name, the why with the affiliate page linked inline, and its details. */
+function GuideProgram({ program, copy, campaign }: { program: Program; copy: PostProgram; campaign: string }) {
+  const parts = splitLink(copy.why);
+  return (
+    <section id={program.slug} data-post-program={program.slug} className="scroll-mt-20 pt-8">
+      <h3 className="text-lg font-semibold">{program.name}</h3>
+      <p className={`${prose} mt-3`}>
+        {parts ? (
+          <>
+            {parts[0]}
+            <PostApplyLink href={blogApplyHref(program, campaign)} slug={program.slug} network={program.network} post={campaign} className={linkClass}>
+              {parts[1]}
+            </PostApplyLink>
+            {parts[2]}
+          </>
+        ) : (
+          copy.why
+        )}
+      </p>
+      <ul data-details className={`${prose} mt-3 list-disc space-y-1.5 pl-5`}>
+        {programDetails(program).map(([label, value]) => (
+          <li key={label}>
+            <strong className="font-semibold text-foreground">{label}:</strong> {value}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+
+/** "Lunacal: adding your coupon code …" → ["Lunacal", "adding your coupon code …"]. */
+function ruleParts(text: string): [string, string] | null {
+  const i = text.indexOf(": ");
+  return i > 0 && i < 40 ? [text.slice(0, i), text.slice(i + 2)] : null;
+}
+
+/** A guide post on /blog/<slug>, in the visual language of the standard /best posts. */
 export function GuideView({ guide, selection, path }: { guide: GuidePost; selection: PostSelection; path: string }) {
   const title = guideTitle(guide);
   const url = `${SITE}${path}`;
-  const related = guide.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug));
   // A rule quotes a program in the registry; one that left the registry is dropped with it.
   const rules = guide.rules.filter((r) => getProgram(r.slug));
   const [first, ...rest] = guide.sections;
+  const readMore = guideReadMoreLinks(guide);
 
-  const sectionBand = (s: GuidePost["sections"][number]) => (
-    <section key={s.heading} className="oa-band">
-      <div className="mx-auto max-w-[760px]">
-        <h2 className="text-lg font-semibold">{s.heading}</h2>
-        {s.paragraphs.map((p) => (
-          <p key={p} className="text-base leading-relaxed text-foreground/80 mt-3">{p}</p>
-        ))}
-        {s.steps && (
-          <ol className="mt-4 space-y-5">
-            {s.steps.map((st, i) => (
-              <li key={st.title} className="grid grid-cols-[28px_minmax(0,1fr)] gap-x-3">
-                <span className="font-mono text-meta text-muted-foreground pt-0.5">{i + 1}</span>
-                <div>
-                  <h3 className="font-semibold">{st.title}</h3>
-                  <p className="text-base leading-relaxed text-foreground/80 mt-1">{st.text}</p>
-                  {st.link && (
-                    <Link href={st.link.href} prefetch={false} className="mt-1 inline-flex items-center gap-1 text-sm underline underline-offset-4">
-                      {st.link.label}
-                      <ArrowRight className="size-3" aria-hidden />
-                    </Link>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ol>
-        )}
-      </div>
+  const sectionBlock = (s: GuidePost["sections"][number]) => (
+    <section key={s.heading} className="scroll-mt-20 pt-12">
+      <h2 className={h2}>{s.heading}</h2>
+      {s.paragraphs.map((p) => (
+        <p key={p} className={`${prose} mt-4`}>{p}</p>
+      ))}
+      {s.steps && (
+        <ol data-steps className={`${prose} mt-4 list-decimal space-y-3 pl-5`}>
+          {s.steps.map((st) => (
+            <li key={st.title}>
+              <strong className="font-semibold text-foreground">{st.title}:</strong> {st.text}
+              {st.link && (
+                <>
+                  {" "}
+                  <Link href={st.link.href} prefetch={false} className={linkClass}>{st.link.label}</Link>.
+                </>
+              )}
+            </li>
+          ))}
+        </ol>
+      )}
     </section>
   );
 
   return (
-    <article className="oa-frame">
+    <article className="oa-frame" data-post-layout="guide">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -147,91 +174,110 @@ export function GuideView({ guide, selection, path }: { guide: GuidePost; select
           }),
         }}
       />
-      <header className="oa-band pt-12 pb-10">
+      <header className="oa-band pt-12 pb-8">
         <div className="mx-auto max-w-[760px]">
           <Link href="/blog" className="inline-flex items-center gap-1.5 text-meta text-muted-foreground hover:text-foreground transition-colors">
             <ArrowLeft className="size-3.5" aria-hidden />
             Blog
           </Link>
           <h1 className="text-title md:text-display font-semibold tracking-[-0.03em] mt-4">{title}</h1>
-          <p className="text-meta text-muted-foreground mt-3">By the OpenAffiliate team · Updated {guide.checked}</p>
-          <p className="text-lg leading-relaxed text-foreground/80 mt-5">{guide.answer}</p>
-          <p data-post-disclosure className="text-sm text-muted-foreground mt-5 rounded-xl border border-border bg-sunk px-4 py-3">
-            {DISCLOSURE}
-          </p>
+          <PostByline updated={guide.checked} />
+          <p data-post-intro className="text-lg leading-relaxed text-foreground/80 mt-5">{guide.answer}</p>
+          <p data-post-disclosure className="text-sm text-muted-foreground mt-4">{SHORT_DISCLOSURE}</p>
         </div>
       </header>
 
-      {first && sectionBand(first)}
-      <RegistryFacts />
-      {rest.map(sectionBand)}
-
-      {selection.shown.length > 0 && (
-        <section className="oa-band">
-          <div className="mx-auto max-w-[760px]">
-            <h2 className="text-lg font-semibold">Programs to start with</h2>
-            <p className="text-base leading-relaxed text-foreground/80 mt-3 mb-6">{guide.programsIntro}</p>
-            {selection.shown.map(({ program, copy }, i) => (
-              <PostProgramBlock key={program.slug} program={program} copy={copy} index={i} campaign={guide.slug} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {rules.length > 0 && (
-        <section className="oa-band">
-          <div className="mx-auto max-w-[760px]">
-            <h2 className="text-lg font-semibold">Rules that trip people up</h2>
-            <p className="text-base leading-relaxed text-foreground/80 mt-3">{guide.rulesIntro}</p>
-            <ul className="mt-3 list-disc space-y-2 pl-5 text-base text-foreground/80">
-              {rules.map((r) => (
-                <li key={r.text}>
-                  {r.text}{" "}
-                  <Link href={`/programs/${r.slug}`} className="text-sm underline underline-offset-4 decoration-border">Terms</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </section>
-      )}
-
-      <section className="oa-band">
+      <div className="oa-band">
         <div className="mx-auto max-w-[760px]">
-          <h2 className="text-lg font-semibold">Disclose every affiliate link</h2>
-          <p className="text-base leading-relaxed text-foreground/80 mt-3">
-            {guide.disclosure} Source:{" "}
-            <a href={DISCLOSURE_SOURCE.href} rel="noopener" className="underline underline-offset-4">{DISCLOSURE_SOURCE.label}</a>.
+          <Tinted aria-labelledby="takeaways-title" data-takeaways>
+            <h2 id="takeaways-title" className="text-subtitle font-semibold">Key takeaways</h2>
+            <ul className={`${prose} mt-3 list-disc space-y-2 pl-5`}>
+              {guide.takeaways.map((t) => <li key={t}>{t}</li>)}
+            </ul>
+          </Tinted>
+
+          {first && sectionBlock(first)}
+          <RegistryFacts />
+          {rest.map(sectionBlock)}
+
+          {selection.shown.length > 0 && (
+            <section id="programs" className="scroll-mt-20 pt-12">
+              <h2 className={h2}>Programs to start with</h2>
+              <p className={`${prose} mt-4`}>{guide.programsIntro}</p>
+              {selection.shown.map(({ program, copy }) => (
+                <GuideProgram key={program.slug} program={program} copy={copy} campaign={guide.slug} />
+              ))}
+            </section>
+          )}
+
+          {rules.length > 0 && (
+            <section id="rules" className="scroll-mt-20 pt-12">
+              <h2 className={h2}>Rules that trip people up</h2>
+              <p className={`${prose} mt-4`}>{guide.rulesIntro}</p>
+              <ul data-rules className={`${prose} mt-3 list-disc space-y-2 pl-5`}>
+                {rules.map((r) => {
+                  const parts = ruleParts(r.text);
+                  return (
+                    <li key={r.text}>
+                      {parts ? (
+                        <>
+                          <strong className="font-semibold text-foreground">{parts[0]}:</strong> {parts[1]}
+                        </>
+                      ) : (
+                        r.text
+                      )}{" "}
+                      <Link href={`/programs/${r.slug}`} className={linkClass}>Terms</Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          )}
+
+          {guide.mistakes.length > 0 && (
+            <section id="common-mistakes" className="scroll-mt-20 pt-12">
+              <h2 className={h2}>Common mistakes</h2>
+              <ul data-mistakes className={`${prose} mt-4 list-disc space-y-2 pl-5`}>
+                {guide.mistakes.map((m) => (
+                  <li key={m.lead}>
+                    <strong className="font-semibold text-foreground">{m.lead}:</strong> {m.text}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <section id="disclosure" className="scroll-mt-20 pt-12">
+            <h2 className={h2}>Disclose every affiliate link</h2>
+            <p className={`${prose} mt-4`}>
+              {guide.disclosure} Source:{" "}
+              <a href={DISCLOSURE_SOURCE.href} rel="noopener" className={linkClass}>{DISCLOSURE_SOURCE.label}</a>.
+            </p>
+          </section>
+
+          <p data-affitor-line className={`${prose} mt-10 border-t border-border pt-6`}>
+            {AFFITOR_LINE.before}
+            <AffitorLink href={affitorUrl("blog", guide.slug, AFFITOR_MARKETPLACE)} source="blog" cta="marketplace" newTab className={linkClass}>
+              {AFFITOR_LINE.anchor}
+            </AffitorLink>
+            {AFFITOR_LINE.after}
           </p>
+
+          <ReadMore id="read-more" links={readMore} />
+
           {guide.faq.length > 0 && (
-            <>
-              <h2 className="text-lg font-semibold mt-10">FAQ</h2>
-              <div className="mt-2">
-                <FaqAccordion items={guide.faq} />
-              </div>
-            </>
+            <Tinted id="faq" aria-labelledby="faq-title" data-faq>
+              <h2 id="faq-title" className="text-subtitle font-semibold">FAQ</h2>
+              {guide.faq.map((f) => (
+                <div key={f.q} className="mt-5">
+                  <h3 className="text-base font-semibold">{f.q}</h3>
+                  <p className={`${prose} mt-2`}>{f.a}</p>
+                </div>
+              ))}
+            </Tinted>
           )}
         </div>
-      </section>
-
-      {related.length > 0 && (
-        <nav className="oa-band" aria-label="Keep reading">
-          <div className="mx-auto max-w-[760px]">
-            <p className="oa-label">Keep reading</p>
-            <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
-              {related.map((l) => (
-                <Link
-                  key={l.slug}
-                  href={bestPath(l)}
-                  className="inline-flex h-9 items-center justify-between gap-2 rounded-lg border border-line-strong bg-card px-3.5 text-sm font-medium hover:bg-sunk transition-colors"
-                >
-                  {l.h1}
-                  <ArrowRight className="size-3.5" aria-hidden />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </nav>
-      )}
+      </div>
     </article>
   );
 }

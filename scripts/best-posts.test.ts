@@ -19,7 +19,7 @@ import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { requires, AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { requires, AFFITOR_LINE, guideReadMoreLinks, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { NETWORK_META } from "../src/lib/network-meta"
@@ -272,22 +272,47 @@ test("as of its check date, a guide shows every program it names, live, verified
   }
 })
 
-test("a guide page: Apply links carry the guide's blog UTM, no Affitor link, the disclosure cites its source, FAQ in JSON-LD", () => {
+test("a guide page: takeaways at the top, compact programs with one tracked link each, the Affitor line, Read more and the FAQ at the end", () => {
   for (const g of GUIDES) {
     const selection = guideSelection(g, new Date(g.checked))
     const html = renderToStaticMarkup(createElement(GuideView, { guide: g, selection, path: guidePath(g) }))
-    for (const { program } of selection.shown) {
+    assert.ok(g.takeaways.length >= 3 && g.takeaways.length <= 5, `${g.slug}: ${g.takeaways.length} takeaways`)
+    assert.ok(g.mistakes.length >= 3 && g.mistakes.length <= 5, `${g.slug}: ${g.mistakes.length} common mistakes`)
+    for (const { program, copy } of selection.shown) {
       const href = blogApplyHref(program, g.slug)
       assert.equal(new URL(href).searchParams.get("utm_campaign"), g.slug)
-      assert.ok(html.includes(`href="${href.replaceAll("&", "&amp;")}"`), `${g.slug}: no Apply link for ${program.slug}`)
+      assert.ok(splitLink(copy.why), `${g.slug}: ${program.slug} has no {link} in its why`)
+      // The tracked Apply link sits inside the program's paragraph, exactly once; no button.
+      assert.equal(html.split(`href="${href.replaceAll("&", "&amp;")}"`).length - 1, 1, `${g.slug}: ${program.slug} needs one inline Apply link`)
     }
+    // One Affitor link: the marketplace line, blog medium, the guide's slug as campaign, tracked.
     const hrefs = [...html.matchAll(/href="([^"]+)"/g)].map((m) => m[1].replaceAll("&amp;", "&"))
-    for (const h of hrefs) assert.ok(!isAffitorHref(h), `${g.slug}: Affitor link ${h}`)
+    const affitor = blogAffitorHref(g.slug)
+    assert.equal(new URL(affitor).searchParams.get("utm_medium"), "blog")
+    assert.equal(new URL(affitor).searchParams.get("utm_campaign"), g.slug)
+    const programHrefs = new Set(selection.shown.map(({ program }) => blogApplyHref(program, g.slug)))
+    assert.deepEqual(hrefs.filter((h) => isAffitorHref(h) && !programHrefs.has(h)), [affitor], `${g.slug}: Affitor links`)
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${affitor.replaceAll("&", "&amp;")}"`))
+    assert.ok(tag && tag.includes(`${AFFITOR_ATTR}="blog"`), `${g.slug}: the marketplace link is not tracked`)
     assert.ok(hrefs.includes(DISCLOSURE_SOURCE.href), `${g.slug}: the disclosure does not cite its source`)
-    assert.ok(html.includes("data-post-disclosure") && html.includes("data-registry-facts"))
+    assert.ok(html.includes("data-post-disclosure") && html.includes("data-registry-facts") && html.includes("data-takeaways") && html.includes("data-mistakes"))
+    // Read more: one box, five links (related lists, then other guides).
+    const links = guideReadMoreLinks(g)
+    assert.equal(links.length, READ_MORE_COUNT, `${g.slug}: Read more lists ${links.length}`)
+    assert.equal((html.match(/data-read-more/g) ?? []).length, 1)
+    const box = html.match(/<aside[^>]*data-read-more[\s\S]*?<\/aside>/)![0]
+    assert.deepEqual([...box.matchAll(/href="([^"]+)"/g)].map((m) => m[1]), links.map((l) => l.href))
+    // Order: takeaways first; at the end the Affitor line, Read more, FAQ.
+    const at = ["data-takeaways", "data-post-program", "data-mistakes", "data-affitor-line", "data-read-more", "data-faq"].map((k) => html.indexOf(k))
+    assert.ok(at.every((x, i) => x > 0 && (i === 0 || at[i - 1] < x)), `${g.slug}: blocks out of order ${JSON.stringify(at)}`)
+    // The Shopify-style frame: no buttons, no "Keep reading" rail, no team note.
+    assert.doesNotMatch(html, /Keep reading|data-quick-picks|data-toc|rounded-lg border border-line-strong/)
+    assert.doesNotMatch(html, TEAM_NOTE)
     const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
     const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
     assert.deepEqual(faqLd.mainEntity.map((q: { name: string }) => q.name), g.faq.map((f) => f.q))
+    const shownQs = [...html.match(/<aside[^>]*data-faq[\s\S]*?<\/aside>/)![0].matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].replaceAll("&#x27;", "'"))
+    assert.deepEqual(shownQs, g.faq.map((f) => f.q))
     for (const p of [...html.matchAll(/<p[^>]*>([^<]*)<\/p>/g)].map((m) => m[1])) assert.doesNotMatch(p, /undefined|NaN|null/)
   }
 })

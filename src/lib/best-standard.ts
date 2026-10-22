@@ -1,5 +1,5 @@
 import { BEST_LISTS, bestPath, getBestList, updatedText } from "./best-lists"
-import { GUIDES, guidePath, guideTitle } from "./guides"
+import { GUIDES, guidePath, guideTitle, type GuidePost } from "./guides"
 import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type BestPost, type PostSelection } from "./best-posts"
 
 import { IN_HOUSE, isLive, livePrograms, networkName, programs, type Program } from "./programs"
@@ -382,6 +382,13 @@ export const AFFITOR_LINE = {
 
 /** How many posts the "Read more" box at the end lists. */
 export const READ_MORE_COUNT = 5
+
+/** A guide's related /best lists, then the other guides in GUIDES order, the first READ_MORE_COUNT. */
+export function guideReadMoreLinks(guide: GuidePost): { href: string; label: string }[] {
+  const lists = guide.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug)).map((l) => ({ href: bestPath(l), label: l.h1 }))
+  const guides = GUIDES.filter((g) => g.slug !== guide.slug).map((g) => ({ href: guidePath(g), label: guideTitle(g) }))
+  return [...lists, ...guides].slice(0, READ_MORE_COUNT)
+}
 
 /** The post's related /best lists, then its guides, the first READ_MORE_COUNT that exist. */
 export function readMoreLinks(post: BestPost): { href: string; label: string }[] {
