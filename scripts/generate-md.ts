@@ -92,7 +92,7 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { AFFITOR_LINE, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, guideReadMoreLinks, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const BASE = "https://openaffiliate.dev"
@@ -1374,54 +1374,65 @@ function standardPostMd(post: BestPost, selection: PostSelection, path: string):
   ].filter((x): x is string => Boolean(x)))
 }
 
-/** The twin of a guide (/blog/<slug>): the page's text, its registry facts and programs, each Apply link the page's blogApplyHref. */
+/**
+ * The twin of a guide (/blog/<slug>), in the page's order (components/guide-view.tsx):
+ * answer, key takeaways, sections with the registry facts after the first,
+ * programs with their details, rules, common mistakes, disclosure, the
+ * Affitor line, Read more and the FAQ. Each Apply link is the page's blogApplyHref.
+ */
 function guideMd(g: GuidePost): string {
   const selection = guideSelection(g)
   const f = registryFacts()
   const count = (t: string) => f.byType.find(x => x.type === t)?.count ?? 0
   const facts = [
-    `- Pay a recurring commission: ${count("recurring")} of ${f.verified}`,
-    `- Pay for the customer's lifetime: ${f.lifetime} of ${f.verified}`,
-    `- Pay once per sale: ${count("one-time")} of ${f.verified}`,
-    f.cookie ? `- Publish a cookie window: ${f.cookie.published} of ${f.verified}` : null,
-    f.cookie ? `- Median cookie window: ${f.cookie.median} days` : null,
-    f.cookie ? `- Middle half of cookie windows: ${f.cookie.p25} to ${f.cookie.p75} days` : null,
-    `- Approve every applicant automatically: ${f.approval.auto} of ${f.verified}`,
-    `- Review applications by hand: ${f.approval.manual} of ${f.verified}`,
-    `- Pay by PayPal: ${f.payout.paypal} of ${f.verified}`,
+    `- **Pay a recurring commission:** ${count("recurring")} of ${f.verified}`,
+    `- **Pay for the customer's lifetime:** ${f.lifetime} of ${f.verified}`,
+    `- **Pay once per sale:** ${count("one-time")} of ${f.verified}`,
+    f.cookie ? `- **Publish a cookie window:** ${f.cookie.published} of ${f.verified}` : null,
+    f.cookie ? `- **Median cookie window:** ${f.cookie.median} days` : null,
+    f.cookie ? `- **Middle half of cookie windows:** ${f.cookie.p25} to ${f.cookie.p75} days` : null,
+    `- **Approve every applicant automatically:** ${f.approval.auto} of ${f.verified}`,
+    `- **Review applications by hand:** ${f.approval.manual} of ${f.verified}`,
+    `- **Pay by PayPal:** ${f.payout.paypal} of ${f.verified}`,
   ].filter(Boolean).join("\n")
   const sections = g.sections.map(s =>
     section(
-      s.heading,
+      mdEscape(s.heading),
       [
         ...s.paragraphs.map(mdEscapeProse),
-        ...(s.steps ?? []).map((st, i) => `${i + 1}. **${mdEscape(st.title)}.** ${mdEscapeProse(st.text)}${st.link ? ` [${mdEscape(st.link.label)}](${BASE}${st.link.href})` : ""}`),
-      ].join("\n\n"),
+        (s.steps ?? []).map((st, i) => `${i + 1}. **${mdEscape(st.title)}:** ${mdEscapeProse(st.text)}${st.link ? ` [${mdEscape(st.link.label)}](${BASE}${st.link.href})` : ""}`).join("\n"),
+      ].filter(Boolean).join("\n\n"),
     ),
   )
-  const rows = selection.shown
-    .map(({ program: p, copy }, i) => {
-      const terms = mdEscape(`you earn ${earnText(p)}, cookie: ${cookieText(p)}, payout: ${payoutText(p)}, terms checked ${checkedText(p)}`)
-      return [
-        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md) — ${mdEscape(copy.bestFor)}. ${terms}, apply: ${mdUrl(blogApplyHref(p, g.slug))}`,
-        `   ${mdEscapeProse(copy.why)}${copy.notFor ? ` Not for: ${mdEscapeProse(copy.notFor)}` : ""}`,
-      ].join("\n")
-    })
-    .join("\n")
+  const programsMd = selection.shown
+    .map(({ program: p, copy }, i) =>
+      [
+        `${i + 1}. [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)`,
+        `${mdEscapeProse(copy.why.replace(/[{}]/g, ""))} Affiliate page: ${mdUrl(blogApplyHref(p, g.slug))}`,
+        programDetails(p).map(([k, v]) => `- **${k}:** ${mdEscape(v)}`).join("\n"),
+      ]
+        .map((block, j) => (j === 0 ? block : block.replace(/^(?=.)/gm, "   ")))
+        .join("\n\n"),
+    )
+    .join("\n\n")
   return joinSections([
     `# ${mdHeading(guideTitle(g))}`,
     `By the OpenAffiliate team · Updated ${g.checked}`,
     `> ${mdEscapeProse(g.answer)}`,
     DISCLOSURE,
+    section("Key takeaways", g.takeaways.map(t => `- ${mdEscapeProse(t)}`).join("\n")),
     sections[0] ?? null,
-    section("What the registry shows", `Verified programs in the OpenAffiliate registry, terms checked up to ${f.asOf}.\n\n${facts}`),
+    section("What the registry shows", `Verified programs in the OpenAffiliate registry, terms checked up to ${f.asOf}:\n\n${facts}`),
     ...sections.slice(1),
-    rows ? section("Programs to start with", `${mdEscapeProse(g.programsIntro)}\n\n${rows}`) : null,
-    g.rules.length ? section("Rules that trip people up", [mdEscapeProse(g.rulesIntro), ...g.rules.map(r => `- ${mdEscapeProse(r.text)} [Terms](${BASE}/programs/${r.slug}.md)`)].join("\n\n")) : null,
+    programsMd ? section("Programs to start with", `${mdEscapeProse(g.programsIntro)}\n\n${programsMd}`) : null,
+    g.rules.length ? section("Rules that trip people up", [mdEscapeProse(g.rulesIntro), g.rules.map(r => `- ${mdEscapeProse(r.text)} [Terms](${BASE}/programs/${r.slug}.md)`).join("\n")].join("\n\n")) : null,
+    g.mistakes.length ? section("Common mistakes", g.mistakes.map(m => `- **${mdEscape(m.lead)}:** ${mdEscapeProse(m.text)}`).join("\n")) : null,
     section("Disclose every affiliate link", `${mdEscapeProse(g.disclosure)} Source: [${mdEscape(DISCLOSURE_SOURCE.label)}](${DISCLOSURE_SOURCE.href})`),
+    `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", g.slug, AFFITOR_MARKETPLACE))}`,
+    section("Read more", guideReadMoreLinks(g).map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")),
     g.faq.length ? section("FAQ", g.faq.map(q => `### ${q.q.replace(/#/g, "\\#")}\n\n${mdEscapeProse(q.a)}`).join("\n\n")) : null,
     section("Links", [`HTML: ${BASE}${guidePath(g)}`, `All guides and lists: ${BASE}/blog.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
-  ])
+  ].filter((x): x is string => Boolean(x)))
 }
 
 const CHANGELOG_TAG: Record<string, string> = {

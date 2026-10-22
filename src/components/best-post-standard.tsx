@@ -31,11 +31,11 @@ export function PostByline({ editor, updated }: { editor?: { name: string; href:
   );
 }
 
-const prose = "text-base leading-relaxed text-foreground/80";
-const linkClass = "font-medium text-foreground underline underline-offset-4";
+export const prose = "text-base leading-relaxed text-foreground/80";
+export const linkClass = "font-medium text-foreground underline underline-offset-4";
 
 /** A tinted box: "Read more" links and the FAQ. */
-function Tinted({ children, ...rest }: { children: React.ReactNode } & React.HTMLAttributes<HTMLElement>) {
+export function Tinted({ children, ...rest }: { children: React.ReactNode } & React.HTMLAttributes<HTMLElement>) {
   return (
     <aside {...rest} className="my-10 border-t-2 border-good bg-sunk px-5 py-6 sm:px-7">
       {children}
@@ -43,7 +43,7 @@ function Tinted({ children, ...rest }: { children: React.ReactNode } & React.HTM
   );
 }
 
-function ReadMore({ links, id }: { links: { href: string; label: string }[]; id: string }) {
+export function ReadMore({ links, id }: { links: { href: string; label: string }[]; id: string }) {
   if (!links.length) return null;
   return (
     <Tinted aria-labelledby={id} data-read-more>

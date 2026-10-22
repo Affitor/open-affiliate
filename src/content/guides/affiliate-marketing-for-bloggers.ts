@@ -13,6 +13,12 @@ export const guide: GuidePost = {
     "Affiliate marketing for bloggers: the posts that earn, how to pick programs by cookie window and payout terms, and where to place and disclose links.",
   answer:
     "Affiliate marketing suits a blog because a post can keep bringing readers from search long after you publish it. You write reviews, comparisons and how-to posts that link to products you use, and earn a commission when a reader buys. This guide covers the posts that earn, how to choose programs by cookie window and payout terms, and how to place and disclose links, with programs whose terms suit a blog.",
+  takeaways: [
+    "Reviews, comparisons, best-of lists and tutorials earn because they reach a reader right before a purchase.",
+    "On a blog, a long cookie window and a commission that keeps paying are worth more than a high one-time rate.",
+    "Put links where the reader decides, and the disclosure near the top of the post, before the first link.",
+    "Read where links may go: some programs allow them only on domains you own, others ban paid ads or coupon sites.",
+  ],
   sections: [
     {
       heading: "Posts that earn",
@@ -55,31 +61,27 @@ export const guide: GuidePost = {
     },
   ],
   programsIntro:
-    "Programs whose terms suit a blog: links on your own site, a long cookie window, or a commission that keeps paying. Each block shows the terms we verified and the day we last checked them.",
+    "Programs whose terms suit a blog: links on your own site, a long cookie window, or a commission that keeps paying. Each one lists the terms we verified on its own page.",
   programs: [
     {
       slug: "wp-engine",
       bestFor: "Best for WordPress and web design blogs",
-      why: "WP Engine is a managed WordPress hosting platform for small businesses, agencies and enterprises, with WooCommerce and headless options and add-ons such as site monitoring and edge security. It pays once per new hosting plan: a fixed amount for a Lite plan, and for other plans a fixed amount or the first month's payment, whichever is higher, with no commission on upgrades or add-ons. It pays monthly once a referral has stayed in good standing for a set period, and applications are reviewed by hand.",
-      notFor: "Linking straight from social or ads: affiliate links must sit on domains you own, social traffic must go through your own landing page, and direct linking is forbidden.",
+      why: "WP Engine is a managed WordPress hosting platform for small businesses, agencies and enterprises, with WooCommerce and headless options. Its {affiliate program} pays once per new hosting plan, a fixed amount or the first month's payment, whichever is higher, with no commission on upgrades or add-ons, and applications are reviewed by hand.",
     },
     {
       slug: "ghost",
       bestFor: "Best for established newsletter writers",
-      why: "Ghost is an open-source publishing platform for creators, publishers and businesses, with websites, newsletters and paid memberships in one product, and Ghost(Pro) is its managed hosting. It pays a share of every payment a referred Ghost(Pro) customer makes for as long as they stay, rising if they upgrade, with monthly payouts to Wise or a bank account once you pass the minimum.",
-      notFor: "New blogs: applicants need their own Ghost publication with original content and an established audience of the size its terms set, and accounts with no successful referrals are suspended.",
+      why: "Ghost is an open-source publishing platform with websites, newsletters and paid memberships in one product, and Ghost(Pro) is its managed hosting. Its {referral program} pays a share of every payment a referred Ghost(Pro) customer makes for as long as they stay, and asks applicants for their own Ghost publication with an established audience.",
     },
     {
       slug: "poptin",
       bestFor: "Best for blogs about growing an email list",
-      why: "Poptin provides popups, forms and email marketing tools that help site owners capture leads, segment audiences and build conversion campaigns. It pays a share of transactions from new customers you refer, recurring while their subscriptions are active. You request payment through PayPal once your balance passes the minimum, and payment is handled within a set period after the request.",
-      notFor: "Paid ads without approval: paid ads, Poptin's creative assets and branded advertising all need approval first.",
+      why: "Poptin provides popups, forms and email marketing tools that help site owners capture leads and build conversion campaigns. Its {affiliate program} pays a share of transactions from new customers you refer, recurring while their subscriptions are active, and you request payment once your balance passes the minimum.",
     },
     {
       slug: "benchmark-email",
       bestFor: "Best for newsletter and small business blogs",
-      why: "Benchmark Email is email marketing software for small businesses, with a drag-and-drop editor, templates, an AI assistant, signup forms, segmentation, reporting and list verification, and a free plan. Its program on Trackdesk pays a share of every monthly payment from a referred customer on a monthly plan for up to a set number of months while they stay, or a one-time share on an annual plan once the customer stays active for a set period, paid monthly via PayPal.",
-      notFor: "Brand-term ads: no bidding on or using Benchmark brand terms, their misspellings or brand-plus-modifier terms in any paid ad channel, brand terms must be negative keywords, and no direct linking from paid ads.",
+      why: "Benchmark Email is email marketing software for small businesses, with a drag-and-drop editor, templates, an AI assistant, signup forms and a free plan. Its {affiliate program} on Trackdesk pays a share of every monthly payment from a referred customer for a set number of months, or a one-time share on an annual plan.",
     },
   ],
   rulesIntro: "Rules from the programs above that matter on a blog, in their own terms:",
@@ -88,6 +90,24 @@ export const guide: GuidePost = {
     { slug: "ghost", text: "Ghost: accounts with no successful referrals are suspended." },
     { slug: "poptin", text: "Poptin: no unsolicited emails, forum posts or social media messages promoting Poptin." },
     { slug: "benchmark-email", text: "Benchmark Email: promotional email only to opt-in recipients." },
+  ],
+  mistakes: [
+    {
+      lead: "Writing posts nobody searches for",
+      text: "Posts earn when they answer a buying question. Start from what readers type before they buy, such as a comparison or a review.",
+    },
+    {
+      lead: "Burying the link",
+      text: "One clear link next to the product's name, in a comparison table or at the tutorial step, beats a list of links at the end.",
+    },
+    {
+      lead: "Recommending only the program that pays most",
+      text: "Say who a product is not for. Readers who trust your judgment come back, and the post keeps earning.",
+    },
+    {
+      lead: "Leaving old posts alone",
+      text: "Programs change their terms. Update the posts that earn when a commission, cookie or rule changes.",
+    },
   ],
   disclosure:
     "In the US, the FTC's Endorsement Guides use a blog as their own example: a blogger whose reviews include affiliate links, and who receives a portion of each sale, should clearly and conspicuously disclose the compensation. Put the disclosure where readers see it before they click.",
