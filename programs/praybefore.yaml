@@ -23,7 +23,8 @@ payout:
   minimum: 50
   currency: USD
   frequency: monthly
-  methods: ["paypal", "bank"]
+  # payout.methods left out: only the FAQ states it ("PayPal or a bank transfer"), and affiliate-i18n.js marks
+  # payout methods as a placeholder FAQ answer (TODO(affiliate-policy)); the Affiliate Program Terms name none. Checked 2026-10-21.
 
 short_description: "PrayBefore is a Christian app that helps people build daily prayer habits and put God first."
 description: |
