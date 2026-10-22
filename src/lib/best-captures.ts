@@ -171,3 +171,29 @@ export const CAPTURE_SKIPPED: Record<string, string> = {
 export function captureHost(url: string): string {
   return url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")
 }
+
+/**
+ * Networks' public pages for partners on /best/affiliate-networks, captured
+ * 2026-10-21 with every blocked host aborted and a request log per page. A
+ * network whose host is blocked (PartnerStack, Dub) has a reason instead.
+ */
+const network = (key: string, url: string): Capture => ({
+  src: `/media/best/networks/${key}-partner-page.webp`,
+  url,
+  captured: "2026-10-21",
+  width: 1200,
+  height: 813,
+})
+
+export const NETWORK_CAPTURES: Record<string, Capture> = {
+  impact: network("impact", "https://impact.com/partners/affiliate-partners/"),
+  "cj-affiliate": network("cj-affiliate", "https://www.cj.com/publisher"),
+  awin: network("awin", "https://www.awin.com/us/publishers/content-creator-influencer"),
+  lemonsqueezy: network("lemonsqueezy", "https://docs.lemonsqueezy.com/help/affiliates/becoming-an-affiliate"),
+  affitor: network("affitor", `${AFFITOR_MARKETPLACE}`),
+}
+
+export const NETWORK_CAPTURE_SKIPPED: Record<string, string> = {
+  partnerstack: "partnerstack.com is on our blocked-hosts list (its platform terms bar automated access)",
+  dub: "dub.co is on our blocked-hosts list (Dub network listings are never fetched by our lanes)",
+}
