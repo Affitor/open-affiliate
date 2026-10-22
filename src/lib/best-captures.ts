@@ -109,6 +109,23 @@ export const CAPTURES: Record<string, Capture> = {
   pikzels: program("pikzels", "https://pikzels.com/affiliate"),
   fotor: program("fotor", "https://www.fotor.com/affiliates.html"),
   "kyma-api": program("kyma-api", `${AFFITOR_MARKETPLACE}/kyma-api`),
+  // Phase 1d (sales, rewardful posts), captured 2026-10-21.
+  notroa: program("notroa", `${AFFITOR_MARKETPLACE}/notroa`),
+  mailshake: program("mailshake", "https://mailshake.com/affiliate-program/"),
+  salesblink: program("salesblink", "https://affiliate.salesblink.io/program"),
+  close: program("close", "https://close.com/partners"),
+  hunter: program("hunter", "https://hunter.io/affiliate-program"),
+  pumpgtm: program("pumpgtm", "https://pumpgtm.com/ambassadors"),
+  "capsule-and-transpond": program("capsule-and-transpond", "https://capsulecrm.com/partner-program/affiliate/"),
+  dalilou: program("dalilou", `${AFFITOR_MARKETPLACE}/dalilou`),
+  fullenrich: program("fullenrich", "https://fullenrich.com/affiliates"),
+  "talkio-ai": program("talkio-ai", "https://www.talkio.ai/partners/affiliates"),
+  bannerbear: program("bannerbear", "https://www.bannerbear.com/affiliate/"),
+  nuelink: program("nuelink", "https://nuelink.com/affiliate"),
+  ocoya: program("ocoya", "https://www.ocoya.com/affiliates"),
+  mindstamp: program("mindstamp", "https://mindstamp.com/affiliates"),
+  podia: program("podia", "https://www.podia.com/affiliates"),
+  transistor: program("transistor", "https://transistor.fm/affiliates/"),
 }
 
 /** Why a program on a standard post has no capture (a record; the page shows the logo card). */
@@ -141,6 +158,13 @@ export const CAPTURE_SKIPPED: Record<string, string> = {
   teikametrics: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
   later: "its affiliate page is on PartnerStack, which is on our blocked-hosts list",
   envato: "envato.com is on our blocked-hosts list (website terms restrict automated access)",
+  // 2026-10-21: affiliate.decktopus.com is a Rewardful-hosted portal (CNAME domains.rewardful.com); never requested.
+  decktopus: "its affiliate pages are hosted by Rewardful, which is on our blocked-hosts list",
+  "originality-ai": "originality.ai is on our blocked-hosts list (website terms restrict automated access)",
+  // 2026-10-21: outranking.io/affiliate-program answered 521 (origin down).
+  outranking: "the page did not load when we captured it, so we show the logo instead",
+  // 2026-10-21: the only affiliate page the brand publishes is its terms document.
+  "neurith-tools": "its only affiliate page is a terms document, so we show the logo instead",
 }
 
 /** "kinsta.com/affiliates": the URL as a caption shows it. */

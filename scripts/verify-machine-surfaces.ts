@@ -30,7 +30,7 @@ import { LLMS_MAX_BYTES } from "./llms-budget";
 import { namesTerm, termsConfirmed } from "../src/lib/confirmed-terms";
 import { chunkScan, droppedSentences, termsApiProblems, termsHtmlProblems, termsMdProblems } from "./unconfirmed-checks";
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta";
-import { joinThrough } from "../src/lib/program-page";
+import { joinThrough, statedTwoWays } from "../src/lib/program-page";
 import { networkName as programNetworkName } from "../src/lib/program-seo";
 import { outboundUrl } from "../src/lib/outbound-link";
 import { changelog } from "../src/lib/changelog";
@@ -822,6 +822,29 @@ function alsoOnHtmlProblem(program: Program, html: string): string | null {
  * row any network gets.
  */
 const unescapeHtml = (t: string) => t.replaceAll("&#x27;", "'").replaceAll("&quot;", '"').replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
+/** A term row's value as served: "<div data-term=\"cookie\" …><dt>Cookie</dt><dd>60 days</dd></div>". */
+function rowValue(html: string, term: string): string | null {
+  const m = html.match(new RegExp(`data-term="${term}"[^>]*><dt[^>]*>[^<]*</dt><dd[^>]*>([^<]*)</dd>`))
+  return m ? unescapeHtml(m[1]) : null
+}
+/**
+ * A term the brand states two ways is blank in the registry; the page says so
+ * ("30 days or 60 days; the brand gives both") and never reads "Not published"
+ * (#394 r1 P2, the program-page twin of the /best rule).
+ */
+function conflictRowProblems(program: Program, html: string): string[] {
+  if (!termsConfirmed(program)) return [];
+  const problems: string[] = [];
+  if (program.cookieDays == null && statedTwoWays(program, "cookie_days")) {
+    const cookie = rowValue(html, "cookie");
+    if (!cookie || /not published/i.test(cookie)) problems.push(`cookie is stated two ways but the row reads ${JSON.stringify(cookie)}`);
+  }
+  if (program.payout.minimum == null && statedTwoWays(program, "payout.minimum")) {
+    const payout = rowValue(html, "payout");
+    if (!payout || !/minimum/i.test(payout)) problems.push(`the payout minimum is stated two ways but the row reads ${JSON.stringify(payout)}`);
+  }
+  return problems;
+}
 function networkLabelProblem(program: Program, html: string): string | null {
   // A badge is its own element; prose such as "the program runs on Affitor" states the network like any other.
   const label = html.match(/>\s*Runs on Affitor\s*<|maintains OpenAffiliate/);
@@ -1470,10 +1493,14 @@ async function checkServedPages(): Promise<string> {
     const kept = new Map<Program, string>();
     let affitorOnProgramPages = 0;
     let affitorNetworkPage: [Program, string] | null = null;
+    let conflictPage: [Program, string] | null = null;
     await fetchAll(base, [...bySlug.keys()], (page, html) => {
       const program = bySlug.get(page)!;
       const label = networkLabelProblem(program, html);
       if (label) fail(`${page} ${label}`);
+      const twoWays = conflictRowProblems(program, html);
+      if (twoWays.length) fail(`${page} ${twoWays.join("; ")}`);
+      if (program.cookieDays == null && statedTwoWays(program, "cookie_days") && termsConfirmed(program) && !conflictPage) conflictPage = [program, html];
       if (program.network === "affitor" && !affitorNetworkPage) affitorNetworkPage = [program, html];
       const problems = termsHtmlProblems(program, html, comparedPrograms(html));
       if (problems.length) fail(`${page} ${problems.join("; ")}`);
@@ -1491,6 +1518,13 @@ async function checkServedPages(): Promise<string> {
       }
       if (program === off || program === on || program === dropped.p || program === alsoOnBase || program === onTime || program === pausedPage || program === withConditions) kept.set(program, html);
     });
+    // Non-vacuity for the conflict rows: a page whose cookie row reads "Not published" for a cookie stated two ways fails.
+    {
+      if (!conflictPage) fail("no verified program with a cookie stated two ways to probe the conflict row check with");
+      const [p, html] = conflictPage as [Program, string];
+      const broken = html.replace(/(data-term="cookie"[^>]*><dt[^>]*>[^<]*<\/dt><dd[^>]*>)[^<]*/, "$1Not published");
+      if (conflictRowProblems(p, broken).length === 0) fail(`the conflict row check passed ${p.slug} with its cookie row reading Not published`);
+    }
     // Non-vacuity for the network label: an Affitor program page with a badge, or with another Join through value, fails.
     {
       if (!affitorNetworkPage) fail("no program on the Affitor network to probe the network label check with");
