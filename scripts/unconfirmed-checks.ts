@@ -373,17 +373,17 @@ export function termsHtmlProblems(p: Program, html: string, compared: Program[] 
       if (termRow(own, "cookie", "Cookie") !== want) problems.push(`does not show its cookie window (${p.cookieDays} days)`)
     }
     // A term the brand states two ways is blank and says so (conflicts in the YAML), never left out silently.
-    const frequency = p.payout.frequency
-      ? frequencyLabel(p.payout.frequency)
-      : statedTwoWays(p, "payout.frequency") ? "two schedules, as the brand states them" : null
+    const frequency = p.payout.frequency ? frequencyLabel(p.payout.frequency) : null
     // The minimum in the program's own currency: "$50" for USD (or none stored), "50 EUR" otherwise.
     const cur = p.payout.currency
     const amount = p.payout.minimum == null ? "" : !cur || cur === "USD" ? `$${p.payout.minimum.toLocaleString("en-US")}` : `${p.payout.minimum.toLocaleString("en-US")} ${cur}`
+    const min = p.payout.minimum == null ? null : p.payout.minimum === 0 ? "no minimum" : `from a ${amount} minimum`
     const both = bothValues(p, "payout.minimum")
-    const min = p.payout.minimum != null
-      ? p.payout.minimum === 0 ? "no minimum" : `from a ${amount} minimum`
-      : statedTwoWays(p, "payout.minimum") ? both ? `a ${both} minimum; the brand gives both` : "two minimums, as the brand states them" : null
-    const joined = [frequency, min].filter(Boolean).join(", ")
+    const two = [
+      p.payout.minimum == null && statedTwoWays(p, "payout.minimum") ? `two minimums${both ? ` (${both})` : ""}` : null,
+      !p.payout.frequency && statedTwoWays(p, "payout.frequency") ? "two schedules" : null,
+    ].filter(Boolean)
+    const joined = [[frequency, min].filter(Boolean).join(", "), two.length ? `the brand gives ${two.join(" and ")}` : ""].filter(Boolean).join("; ")
     const payout = joined && joined.charAt(0).toUpperCase() + joined.slice(1)
     if (payout && termRow(own, "payout", "Payout") !== payout) {
       problems.push(`does not show its payout ("${payout}": frequency ${p.payout.frequency ?? "none"}, minimum ${p.payout.minimum ?? "none"})`)

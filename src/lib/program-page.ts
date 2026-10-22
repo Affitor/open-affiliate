@@ -134,14 +134,16 @@ export function payoutText(p: Program): string | null {
   // Only confirmed terms say two ways: confirmedTerms removed an unverified program's payout, conflicts included.
   const twoWays = (field: string) => termsConfirmed(p) && !hasNoProgram(p) && statedTwoWays(p, field)
   if (p.payout?.frequency) parts.push(frequencyLabel(p.payout.frequency))
-  else if (twoWays("payout.frequency")) parts.push("two schedules, as the brand states them")
   if (p.payout?.minimum != null) {
     parts.push(p.payout.minimum === 0 ? "no minimum" : `from a ${minimumAmount(p.payout.minimum, p.payout.currency)} minimum`)
-  } else if (twoWays("payout.minimum")) {
-    const both = bothValues(p, "payout.minimum")
-    parts.push(both ? `a ${both} minimum; the brand gives both` : "two minimums, as the brand states them")
   }
-  const text = parts.join(", ")
+  // As on the /best posts: the terms on record, then "the brand gives two minimums ($30 or $100) and two schedules".
+  const both = bothValues(p, "payout.minimum")
+  const two = [
+    p.payout?.minimum == null && twoWays("payout.minimum") ? `two minimums${both ? ` (${both})` : ""}` : null,
+    !p.payout?.frequency && twoWays("payout.frequency") ? "two schedules" : null,
+  ].filter(Boolean)
+  const text = [parts.join(", "), two.length ? `the brand gives ${two.join(" and ")}` : ""].filter(Boolean).join("; ")
   return text ? text.charAt(0).toUpperCase() + text.slice(1) : null
 }
 
