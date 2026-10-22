@@ -9,6 +9,7 @@ commission:
   rate: "up to 25% of net"
   mode: tiered
   value: 25
+  currency: USD
   duration: "12 months"
   conditions: "Share of the net received on real, paid customer sales: up to 25% on hosting for 12 months, up to 15% on website packages, up to 10% on website, app and other service invoices (each paid invoice). Total payout for one sale never exceeds 25% of its net."
 
