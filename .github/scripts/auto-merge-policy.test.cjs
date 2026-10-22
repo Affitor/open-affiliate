@@ -371,7 +371,7 @@ commission:
 cookie_days: 90
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: ${AFFITOR_SYNC.network_terms.payout_minimum}
   currency: USD
   methods: ${JSON.stringify(AFFITOR_SYNC.network_terms.payout_methods)}
 restrictions: ${JSON.stringify(AFFITOR_SYNC.network_terms.restrictions)}
