@@ -334,7 +334,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(k.tracking_method, "cookie")
   // Affitor's network terms, linked from every listing: Wise or bank, and its prohibited activities.
   // approval and payout.frequency are the data lane's, read from the listing's own wording: kept.
-  assert.deepEqual(k.payout, { minimum: 50, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
+  assert.deepEqual(k.payout, { minimum: config.network_terms.payout_minimum, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
   assert.equal(k.approval, "auto")
   assert.deepEqual(k.restrictions, config.network_terms.restrictions)
   for (const gone of ["approval_time", "program_age", "marketing_materials"]) assert.equal(gone in k, false)
@@ -1102,6 +1102,40 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   assert.equal(refreshed.length, 4)
   assert.ok(refreshed.every((f) => f.status === "modified"))
   assert.deepEqual(await lane(refreshed, moved), { eligible: true, reasons: [], programCount: 4, pauses: 0, newSlugs: [] })
+  // payout.minimum is the network minimum every listing publishes ("Minimum payout $20 combined across all your
+  // programs"), whatever payout_threshold says, set or not (cos-oa 2026-10-21: the public page wins).
+  for (const f of [...created.filter((x) => x.status === "added"), ...refreshed]) {
+    assert.equal(parse(f.content!).payout.minimum, config.network_terms.payout_minimum, f.filename)
+  }
+  // A pull request that writes the API's payout_threshold as the minimum is out of the lane.
+  const threshold = refreshed.map((f) => (f.filename === "programs/citegraph.yaml" ? { ...f, content: f.content!.replace(/^  minimum: \d+$/m, "  minimum: 50") } : f))
+  assert.notEqual(threshold.find((f) => f.filename === "programs/citegraph.yaml")!.content, refreshed.find((f) => f.filename === "programs/citegraph.yaml")!.content)
+  assert.equal((await lane(threshold, moved)).eligible, false)
+
+  // A listing whose conflicts name cookie_days and payout.minimum (the brand's page and Affitor's disagree)
+  // keeps both blank: the sync writes nothing over them, and a pull request that fills them is out of the lane.
+  const synced = created.find((f) => f.filename === "programs/citegraph.yaml")!.content!
+  const twoWays =
+    synced.replace(/^cookie_days: \d+\n/m, "").replace(/^  minimum: \d+\n/m, "") +
+    'conflicts:\n  - field: cookie_days\n    quote: "Brand page: 60 days. Affitor: 90 days."\n    values: ["60 days", "90 days"]\n' +
+    '  - field: payout.minimum\n    quote: "Brand page: $50. Affitor: $20."\n    values: [20, 50]\n'
+  assert.ok(!/^cookie_days:/m.test(twoWays) && !/^  minimum:/m.test(twoWays))
+  const kept = dirWith({ "citegraph.yaml": twoWays })
+  assert.deepEqual(
+    (await pullRequestFiles(kept, rows, TODAY)).filter((f) => f.filename === "programs/citegraph.yaml"),
+    [],
+    "the sync rewrote a term the listing records as stated two ways",
+  )
+  const filled = {
+    filename: "programs/citegraph.yaml",
+    status: "modified",
+    baseContent: twoWays,
+    content: twoWays.replace("tracking_method: cookie\n", "cookie_days: 90\ntracking_method: cookie\n"),
+  }
+  assert.notEqual(filled.content, twoWays)
+  const verdictFilled = await lane([filled], rows)
+  assert.equal(verdictFilled.eligible, false)
+  assert.match(verdictFilled.reasons.join("\n"), /cookie_days is 90, Affitor says/)
 
   // The same pull request after Affitor changed again: blocked, and why.
   const verdict = await lane(refreshed, rows)

@@ -389,12 +389,27 @@ export function networkRestrictions(current: unknown): unknown[] {
 }
 
 /**
- * Every field the sync owns, at the value Affitor states; `restrictions` is
- * the listing's current list, which the network's items are added to. Dates
- * are set separately, only on change.
+ * Terms the sync owns that the data lane can find stated two ways: when the
+ * listing's `conflicts` names one (the brand's page and Affitor's disagree),
+ * the field stays blank, as the registry requires, instead of Affitor's value.
  */
-function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null): Edit[] {
-  return [
+export const TWO_WAY_TERMS = ["cookie_days", "payout.minimum"]
+
+/** The owned terms a listing records as stated two ways (`conflicts[].field`). */
+export function twoWayTerms(conflicts: unknown): Set<string> {
+  const fields = Array.isArray(conflicts) ? conflicts.map((c) => (c && typeof c === "object" ? (c as { field?: unknown }).field : null)) : []
+  return new Set(TWO_WAY_TERMS.filter((f) => fields.includes(f)))
+}
+
+/**
+ * Every field the sync owns, at the value Affitor states; `restrictions` is
+ * the listing's current list, which the network's items are added to; a term
+ * in `conflicts` stays blank. Dates are set separately, only on change.
+ */
+function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null, conflicts: unknown = null): Edit[] {
+  const twoWays = twoWayTerms(conflicts)
+  const blankIfTwoWays = (edit: Edit): Edit => (twoWays.has(edit[0].join(".")) ? [edit[0], DELETE] : edit)
+  const fields: Edit[] = [
     [["commission", "type"], t.type],
     [["commission", "rate"], t.rate],
     [["commission", "mode"], t.mode],
@@ -404,7 +419,9 @@ function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null):
     [["commission", "conditions"], t.conditions],
     [["cookie_days"], t.cookie_days ?? DELETE],
     [["tracking_method"], "cookie"],
-    [["payout", "minimum"], p.payout_threshold ?? DELETE],
+    // The minimum every listing publishes ("Minimum payout $20 combined across all your programs"), not the
+    // API's payout_threshold, which no public page states (cos-oa 2026-10-21: the public page wins).
+    [["payout", "minimum"], NETWORK.payout_minimum],
     [["payout", "currency"], "USD"],
     [["payout", "methods"], NETWORK.payout_methods],
     [["signup_url"], MARKETPLACE + p.slug],
@@ -415,6 +432,7 @@ function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null):
     [["restrictions"], networkRestrictions(restrictions)],
     ...UNPUBLISHED.map((k): Edit => [[k], DELETE]),
   ]
+  return fields.map(blankIfTwoWays)
 }
 
 /**
@@ -1008,7 +1026,7 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
     if (entry.action === "take-over" && program && terms && listing) {
       const { text, diffs } = edit(
         readFileSync(listing.path, "utf8"),
-        ownedFields(program, terms, listing.data.restrictions),
+        ownedFields(program, terms, listing.data.restrictions, listing.data.conflicts),
         [
           [["updated_at"], o.today],
           [["last_verified_at"], o.today],
