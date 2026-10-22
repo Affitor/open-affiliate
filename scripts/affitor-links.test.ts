@@ -115,6 +115,7 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
   "src/components/best-post-standard.tsx | `#${p.slug}`", // comparison table rows: an anchor to the program's section on the same page
+  "src/components/best-networks-post.tsx | `#${e.network}`", // networks table rows: an anchor to the network's section on the same page
   "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
   "src/app/programs/[slug]/oas/page.tsx | url", // OAS evidence: a page the reviewer read; affitor.com pages render as text (evidenceLink)
@@ -127,9 +128,10 @@ test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   for (const file of files) {
     const text = readFileSync(file, "utf8")
     const rel = relative(root, file)
-    // A hard-coded affitor.com page link skips affitorUrl(); data (network-meta) and mailto: are not links.
+    // A hard-coded affitor.com page link skips affitorUrl(); data (network-meta, and network-terms'
+    // citations of each network's own pages, never rendered as links) and mailto: are not links.
     for (const m of text.matchAll(/https:\/\/(?:[\w-]+\.)?affitor\.com[^\s"'`]*/g)) {
-      assert.ok(rel === "src/lib/network-meta.ts", `${rel}: hard-coded ${m[0]}; use affitorUrl() and AffitorLink`)
+      assert.ok(rel === "src/lib/network-meta.ts" || rel === "src/lib/network-terms.ts", `${rel}: hard-coded ${m[0]}; use affitorUrl() and AffitorLink`)
     }
     for (const m of text.matchAll(/<a\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
       const key = `${rel} | ${m[1].trim()}`

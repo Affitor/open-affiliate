@@ -20,7 +20,9 @@ import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affito
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
 import { requires, AFFITOR_LINE, guideReadMoreLinks, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
-import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
+import { CAPTURES, CAPTURE_SKIPPED, NETWORK_CAPTURES, NETWORK_CAPTURE_SKIPPED } from "../src/lib/best-captures"
+import { NETWORKS_POST, NETWORKS_POST_PATH, networkEntries, networkReadMoreLinks, networksFaq } from "../src/lib/networks-post"
+import { BestNetworksPost, networkHref } from "../src/components/best-networks-post"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { NETWORK_META } from "../src/lib/network-meta"
 import { programs as allPrograms } from "../src/lib/programs"
@@ -678,4 +680,74 @@ test("only the posts that opt in render the standard layout", () => {
     assert.equal(post.lookFor, undefined, `${post.slug}: lookFor without layout "standard" is never shown`)
     assert.equal(post.guides, undefined, `${post.slug}: guides without layout "standard" are never shown`)
   }
+})
+
+// ---------- /best/affiliate-networks -----------------------------------------
+
+test("the networks post lists only networks that pay partners, with terms quoted from their own unblocked pages", () => {
+  const entries = networkEntries()
+  assert.ok(entries.length >= 5, `${entries.length} networks`)
+  const keys = entries.map((e) => e.network)
+  for (const [key, meta] of Object.entries(NETWORK_META)) {
+    if (meta.kind !== "marketplace") assert.ok(!keys.includes(key), `${key} is ${meta.kind}, not a network`)
+  }
+  // Most live programs first.
+  for (let i = 1; i < entries.length; i++) assert.ok(entries[i - 1].programs >= entries[i].programs)
+  for (const e of entries) {
+    const website = NETWORK_META[e.network].website!
+    // A network's terms are read only when its host is not blocked, and every blocked one says so.
+    assert.equal(e.terms === null, blockedReason(website) !== null, `${e.network}: terms ${e.terms ? "read" : "missing"} but host ${blockedReason(website) ? "blocked" : "allowed"}`)
+    for (const c of e.terms ? [e.terms.join, e.terms.paid] : []) {
+      assert.equal(blockedReason(c.source), null, `${e.network}: ${c.source} is blocked`)
+      assert.match(c.checked, /^\d{4}-\d{2}-\d{2}$/)
+      assert.ok(Date.parse(NETWORKS_POST.checked) - Date.parse(c.checked) <= 90 * 86_400_000, `${e.network}: terms read ${c.checked}`)
+      assert.ok(c.quote.length > 10 && c.text.length > 10)
+    }
+    const capture = NETWORK_CAPTURES[e.network]
+    if (capture) {
+      assert.equal(blockedReason(capture.url), null, `${e.network}: captured a blocked host`)
+      assert.ok(existsSync(join(process.cwd(), "public", capture.src)), `${e.network}: ${capture.src} missing`)
+    } else assert.ok(NETWORK_CAPTURE_SKIPPED[e.network], `${e.network}: no capture and no recorded reason`)
+    for (const p of e.examples) assert.ok(p.verified && p.network === e.network)
+  }
+  const NUMBER_WORDS = /\b(two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|fifteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|hundred|thousand|million|half|dozen)\b/i
+  const p = NETWORKS_POST
+  for (const t of [p.description, p.intro, p.lookFor.heading, p.lookFor.intro, ...p.lookFor.criteria.flatMap((c) => [c.name, c.text]), ...p.networks.flatMap((n) => [n.why, n.verdict]), p.softwareHeading, p.softwareText, p.howWeChose]) {
+    assert.doesNotMatch(t.replace(/\bB2[BC]\b/g, ""), /\d/, `a digit in copy: ${t}`)
+    assert.doesNotMatch(t, NUMBER_WORDS, `a spelled-out number in copy: ${t}`)
+    assert.doesNotMatch(t, TEAM_NOTE)
+  }
+  assert.ok(p.description.length >= 120 && p.description.length <= 155, `description is ${p.description.length} characters`)
+})
+
+test("the networks post page: one tracked link per network, example programs tracked, the end blocks, FAQ in JSON-LD", () => {
+  const html = renderToStaticMarkup(createElement(BestNetworksPost, { path: NETWORKS_POST_PATH }))
+  const entries = networkEntries()
+  for (const e of entries) {
+    const section = html.slice(html.indexOf(`data-post-network="${e.network}"`)).split("data-post-network=")[1] ?? ""
+    const href = networkHref(e, NETWORKS_POST.slug).replaceAll("&", "&amp;")
+    assert.equal(section.split(`href="${href}"`).length - 1, 1, `${e.network}: one inline link to its page for partners`)
+    for (const p of e.examples) assert.ok(section.includes(`href="${blogApplyHref(p, NETWORKS_POST.slug).replaceAll("&", "&amp;")}"`), `${e.network}: ${p.slug} is not linked`)
+    assert.doesNotMatch(section, TEAM_NOTE)
+  }
+  // Affitor's section reads like every other: no label beyond its name.
+  const affitor = html.slice(html.indexOf('data-post-network="affitor"')).split("data-post-network=")[1] ?? ""
+  assert.doesNotMatch(affitor, TEAM_NOTE)
+  assert.doesNotMatch(affitor, /Runs on Affitor|maintain|our own/i)
+  const links = networkReadMoreLinks()
+  assert.equal(links.length, READ_MORE_COUNT)
+  const box = html.match(/<aside[^>]*data-read-more[\s\S]*?<\/aside>/)![0]
+  assert.deepEqual([...box.matchAll(/href="([^"]+)"/g)].map((m) => m[1]), links.map((l) => l.href))
+  const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${blogAffitorHref(NETWORKS_POST.slug).replaceAll("&", "&amp;")}"`) && t.includes(`${AFFITOR_ATTR}="blog"`))
+  assert.ok(tag, "no tracked Affitor marketplace line")
+  const last = html.lastIndexOf(`data-post-network="${entries.at(-1)!.network}"`)
+  const at = [html.indexOf("data-software"), html.indexOf("data-affitor-line"), html.indexOf("data-read-more"), html.indexOf("data-faq")]
+  assert.ok(last < at[0] && at.every((x, i) => i === 0 || at[i - 1] < x), `blocks out of order ${JSON.stringify([last, ...at])}`)
+  const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
+  const faq = networksFaq(entries)
+  assert.deepEqual(ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage").mainEntity.map((q: { name: string }) => q.name), faq.map((f) => f.q))
+  assert.doesNotMatch(html.replace(/<script[\s\S]*?<\/script>/g, ""), />[^<]*\b(undefined|NaN|null)\b[^<]*</)
+  // In the blog index and the sitemap.
+  assert.ok(blogEntries().posts.some((e) => e.href === NETWORKS_POST_PATH))
+  assert.ok(sitemap().some((e) => e.url === `https://openaffiliate.dev${NETWORKS_POST_PATH}`))
 })
