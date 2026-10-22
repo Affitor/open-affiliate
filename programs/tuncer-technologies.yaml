@@ -24,7 +24,7 @@ payout:
   methods: [bank, paypal]
   conditions: "Every commission is pending for 30 days after the customer's payment, then approved. Approved commission is paid weekly once the approved balance is at least USD 25 or PHP 1,000. GCash and Maya (PHP) are also offered."
 
-signup_url: https://partners.tuncertech.com/
+signup_url: https://partners.tuncertech.com/signup
 approval: auto
 restrictions:
   - "No paid ads on brand names, trademarks or misspellings"
