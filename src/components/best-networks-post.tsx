@@ -27,7 +27,8 @@ function NetworkSection({ entry: e, index, post }: { entry: NetworkEntry; index:
   const capture = NETWORK_CAPTURES[e.network];
   const parts = splitLink(e.copy.why);
   const link = (text: string) => (
-    <PostApplyLink href={networkHref(e, post)} slug={e.network} network={e.network} post={post} className={linkClass}>
+    // "network:<key>", so apply_click never counts a network as a program.
+    <PostApplyLink href={networkHref(e, post)} slug={`network:${e.network}`} network={e.network} post={post} className={linkClass}>
       {text}
     </PostApplyLink>
   );

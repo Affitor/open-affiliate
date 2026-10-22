@@ -11,6 +11,7 @@ import { AffitorLink } from "@/components/affitor-link";
 import { ReadMore, Tinted, linkClass, prose } from "@/components/best-post-standard";
 import { AFFITOR_LINE, listCampaign, listReadMoreLinks } from "@/lib/best-standard";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
+import { NETWORKS_POST_PATH, networkPostTitle } from "@/lib/networks-post";
 import {
   BEST_INDEX,
   BEST_LISTS,
@@ -290,6 +291,22 @@ export function BestListView({
       {!related && (
         <div className="oa-band" data-list-end>
           <div className="mx-auto max-w-[760px]">
+            {/* The hub is the parent of every list: it links each one, one line each (Read more alone would leave most out). */}
+            {list === BEST_INDEX && (
+              <section data-all-lists aria-labelledby="all-lists-h" className="mb-10">
+                <h2 id="all-lists-h" className="text-subtitle font-semibold">All lists</h2>
+                <ul className={`${prose} mt-3 list-disc space-y-1.5 pl-5`}>
+                  {BEST_LISTS.filter((l) => l !== BEST_INDEX).map((l) => (
+                    <li key={l.slug}>
+                      <Link href={bestPath(l)} className={linkClass}>{l.h1}</Link>
+                    </li>
+                  ))}
+                  <li>
+                    <Link href={NETWORKS_POST_PATH} className={linkClass}>{networkPostTitle()}</Link>
+                  </li>
+                </ul>
+              </section>
+            )}
             <p data-affitor-line className={`${prose} border-t border-border pt-6`}>
               {AFFITOR_LINE.before}
               <AffitorLink href={affitorUrl("blog", listCampaign(list), AFFITOR_MARKETPLACE)} source="blog" cta="marketplace" newTab className={linkClass}>

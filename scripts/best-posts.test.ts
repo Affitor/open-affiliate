@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
+import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
 import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
@@ -732,6 +732,8 @@ test("the networks post page: one tracked link per network, example programs tra
     for (const p of e.examples) assert.ok(section.includes(`href="${blogApplyHref(p, NETWORKS_POST.slug).replaceAll("&", "&amp;")}"`), `${e.network}: ${p.slug} is not linked`)
     assert.doesNotMatch(section, TEAM_NOTE)
   }
+  // A network's own link is counted apart from programs in apply_click.
+  assert.match(readFileSync(join(process.cwd(), "src/components/best-networks-post.tsx"), "utf8"), /slug=\{`network:\$\{e\.network\}`\}/)
   // Affitor's section reads like every other: no label beyond its name.
   const affitor = html.slice(html.indexOf('data-post-network="affitor"')).split("data-post-network=")[1] ?? ""
   assert.doesNotMatch(affitor, TEAM_NOTE)
@@ -752,6 +754,7 @@ test("the networks post page: one tracked link per network, example programs tra
   // In the blog index and the sitemap.
   assert.ok(blogEntries().posts.some((e) => e.href === NETWORKS_POST_PATH))
   assert.ok(sitemap().some((e) => e.url === `https://openaffiliate.dev${NETWORKS_POST_PATH}`))
+})
 
 // ---------- ranked lists (no editorial post) ---------------------------------
 
@@ -777,6 +780,15 @@ test("a ranked list ends like a post: the Affitor line, Read more (5) and the FA
     assert.deepEqual(shownQs, faqLd.mainEntity.map((q: { name: string }) => q.name), `${list.slug}: FAQ box and JSON-LD differ`)
     assert.doesNotMatch(html, /aria-label="More lists"|<details\b/)
     assert.doesNotMatch(html, TEAM_NOTE)
+  }
+  // The hub links every list (and the networks post), one line each, above its end blocks.
+  const hub = renderToStaticMarkup(createElement(BestListView, { list: BEST_INDEX, path: "/best", parent: { name: "Categories", href: "/categories" } }))
+  const all = hub.match(/<section[^>]*data-all-lists[\s\S]*?<\/section>/)![0]
+  const hrefs = [...all.matchAll(/href="([^"]+)"/g)].map((m) => m[1])
+  assert.deepEqual(hrefs, [...BEST_LISTS.filter((l) => l !== BEST_INDEX).map(bestPath), NETWORKS_POST_PATH])
+  assert.ok(hub.indexOf("data-all-lists") < hub.indexOf("data-affitor-line"))
+  for (const list of ranked.filter((l) => l !== BEST_INDEX)) {
+    assert.doesNotMatch(renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "Best", href: "/best" } })), /data-all-lists/, `${list.slug}: only the hub lists every list`)
   }
   const category = renderToStaticMarkup(createElement(BestListView, { list: categoryList("AI"), path: "/categories/ai", parent: { name: "Categories", href: "/categories" }, related: { category: "AI", entries: [] } }))
   assert.doesNotMatch(category, /data-affitor-line|data-read-more/)

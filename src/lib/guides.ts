@@ -141,7 +141,7 @@ export function registryFacts(): RegistryFacts {
     verified: v.length,
     byType: [...types].map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count),
     // Any commission type that pays for the customer's lifetime (hybrid and tiered deals included).
-    lifetime: v.filter((p) => /lifetime/i.test(String(p.commission.duration ?? ""))).length,
+    lifetime: v.filter((p) => /lifetime/i.test(String(p.commission.duration ?? "")) && !/conditional|up to/i.test(String(p.commission.duration ?? ""))).length,
     cookie: cookies.length ? { published: cookies.length, p25: quantile(cookies, 0.25), median: quantile(cookies, 0.5), p75: quantile(cookies, 0.75) } : null,
     approval: {
       auto: v.filter((p) => p.approval === "auto").length,

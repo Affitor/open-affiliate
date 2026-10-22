@@ -55,6 +55,7 @@ import {
   type PaidBy,
 } from "../src/lib/programs"
 import {
+  BEST_INDEX,
   BEST_LISTS,
   SHARED_RULES,
   VERIFIED_NOTE,
@@ -1272,6 +1273,10 @@ function bestListMd(list: BestList, path: string): string {
       data.checked ? `Verified ${mdEscape(data.checked)}: ${VERIFIED_NOTE}` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
+    // The hub links every list, one line each, above its end blocks (as the page does).
+    list === BEST_INDEX
+      ? section("All lists", [...BEST_LISTS.filter((l) => l !== BEST_INDEX).map((l) => `- [${mdEscape(l.h1)}](${BASE}${bestPath(l)}.md)`), `- [${mdEscape(networkPostTitle())}](${BASE}${NETWORKS_POST_PATH}.md)`].join("\n"))
+      : null,
     // A ranked list ends like a post: the Affitor line, Read more, then the FAQ. A category keeps its other lists.
     ranked ? `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", listCampaign(list), AFFITOR_MARKETPLACE))}` : null,
     ranked ? section("Read more", listReadMoreLinks(list).map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")) : null,
