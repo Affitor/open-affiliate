@@ -70,6 +70,8 @@ import {
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
 import { blogEntries, type BlogEntry } from "../src/lib/blog"
 import { DISCLOSURE_SOURCE, GUIDES, guidePath, guideSelection, guideTitle, registryFacts, type GuidePost } from "../src/lib/guides"
+import { NETWORKS_POST, NETWORKS_POST_PATH, networkEntries, networkPath, networkPostTitle, networkReadMoreLinks, networksFaq, softwareEntries } from "../src/lib/networks-post"
+import type { NetworkClaim } from "../src/lib/network-terms"
 import { directoryGroups } from "../src/lib/programs-directory"
 import { buildBoard, oasGrade, oasScores, oasSummary, TEAM_DISCLOSURE, TIE_ORDER, UNRANKED_TEXT } from "../src/lib/oas"
 import { machineChecks, provenanceOf } from "../src/lib/oas-machine"
@@ -92,8 +94,9 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { AFFITOR_LINE, listCampaign, listReadMoreLinks, guideReadMoreLinks, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, earnShown, guideReadMoreLinks, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit, listCampaign, listReadMoreLinks } from "../src/lib/best-standard"
 import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
+import { outboundUrl } from "../src/lib/outbound-link"
 
 const BASE = "https://openaffiliate.dev"
 
@@ -1381,6 +1384,56 @@ function standardPostMd(post: BestPost, selection: PostSelection, path: string):
 }
 
 /**
+ * The twin of /best/affiliate-networks (components/best-networks-post.tsx), in
+ * the page's order. What each network's pages say is quoted with its source and
+ * the day we read it, which the page keeps out of sight.
+ */
+function networksPostMd(): string {
+  const post = NETWORKS_POST
+  const entries = networkEntries(post)
+  const table = [
+    "| Network | Programs here | How partners get paid |",
+    "|---|---|---|",
+    ...entries.map((e) => `| [${mdEscape(e.name)}](${BASE}${networkPath(e.network)}.md) | ${e.programs} | ${mdEscape(e.terms ? e.terms.paid.text : "Each program's own terms")} |`),
+  ].join("\n")
+  const claim = (label: string, c: NetworkClaim) => `- **${label}:** ${mdEscape(c.text)} Source: "${mdEscape(c.quote)}" (${c.source}, read ${c.checked})`
+  const sections = entries
+    .map((e, i) =>
+      [
+        `${i + 1}. [${mdEscape(e.name)}](${BASE}${networkPath(e.network)}.md)`,
+        `${mdEscapeProse(e.copy.why.replace(/[{}]/g, ""))} Page for partners: ${mdUrl(e.network === "affitor" ? affitorUrl("blog", post.slug, AFFITOR_MARKETPLACE) : outboundUrl(e.copy.partnerUrl, "blog", post.slug, e.network))}`,
+        mdEscapeProse(e.copy.verdict),
+        [
+          `- **Programs in OpenAffiliate:** ${e.programs} live, ${e.verified} verified`,
+          e.terms ? claim("How partners get paid", e.terms.paid) : "- **How partners get paid:** not read; each program's own terms apply",
+          e.terms ? claim("Joining", e.terms.join) : "- **Joining:** not read; each program's own terms apply",
+        ].join("\n"),
+        e.examples.length ? `Example programs:\n\n${e.examples.map((p) => `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md): ${mdEscape(earnShown(p))}, affiliate page: ${mdUrl(blogApplyHref(p, post.slug))}`).join("\n")}` : null,
+      ]
+        .filter((x): x is string => Boolean(x))
+        .map((block, j) => (j === 0 ? block : block.replace(/^(?=.)/gm, "   ")))
+        .join("\n\n"),
+    )
+    .join("\n\n")
+  const faq = networksFaq(entries, mdEscape)
+  return joinSections([
+    `# ${mdHeading(networkPostTitle(entries))}`,
+    `By the OpenAffiliate team · Updated ${post.checked}`,
+    `> ${mdEscapeProse(post.intro)}`,
+    DISCLOSURE,
+    section("Networks at a glance", table),
+    section(mdEscape(post.lookFor.heading), [mdEscapeProse(post.lookFor.intro), post.lookFor.criteria.map((c) => `- **${mdEscape(c.name)}:** ${mdEscapeProse(c.text)}${c.link ? ` ${mdEscape(c.link.label)}: ${BASE}${c.link.href}` : ""}`).join("\n")].join("\n\n")),
+    section("Networks", sections),
+    section(mdEscape(post.softwareHeading), [mdEscapeProse(post.softwareText), softwareEntries().map((s) => `- [${mdEscape(s.name)}](${BASE}${networkPath(s.network)}.md): ${s.programs} programs`).join("\n")].join("\n\n")),
+    section("How we chose", `${mdEscapeProse(post.howWeChose)} Rankings are never paid for.`),
+    `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", post.slug, AFFITOR_MARKETPLACE))}`,
+    section("Read more", networkReadMoreLinks().map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")),
+    section("FAQ", faq.map((f) => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
+    section("Links", [`HTML: ${BASE}${NETWORKS_POST_PATH}`, `All networks: ${BASE}/networks.md`, `Registry entry point: ${BASE}/llms.txt`].join("\n")),
+  ])
+}
+
+/**
  * The twin of a guide (/blog/<slug>), in the page's order (components/guide-view.tsx):
  * answer, key takeaways, sections with the registry facts after the first,
  * programs with their details, rules, common mistakes, disclosure, the
@@ -1495,6 +1548,7 @@ function main(): void {
   write("changelog.md", changelogMd())
   write("blog.md", blogMd())
   for (const g of GUIDES) write(`${guidePath(g).slice(1)}.md`, guideMd(g))
+  write(`${NETWORKS_POST_PATH.slice(1)}.md`, networksPostMd())
   for (const list of BEST_LISTS) {
     const post = getPost(list.slug)
     const selection = post ? postSelection(post) : null
