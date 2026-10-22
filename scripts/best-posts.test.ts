@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
+import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
 import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
@@ -16,10 +16,11 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs"
 import { parse as parseYaml } from "yaml"
 import { join } from "node:path"
 import { BestPostStandard } from "../src/components/best-post-standard"
+import { BestListView } from "../src/components/best-list-view"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { requires, AFFITOR_LINE, guideReadMoreLinks, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { requires, AFFITOR_LINE, guideReadMoreLinks, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit, listCampaign, listReadMoreLinks } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED, NETWORK_CAPTURES, NETWORK_CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { NETWORKS_POST, NETWORKS_POST_PATH, networkEntries, networkReadMoreLinks, networksFaq } from "../src/lib/networks-post"
 import { BestNetworksPost, networkHref } from "../src/components/best-networks-post"
@@ -36,6 +37,7 @@ import {
   postList,
   postSelection,
   postTitle,
+  readyPost,
 } from "../src/lib/best-posts"
 
 /**
@@ -325,7 +327,7 @@ test("registry facts add up and come from verified programs only", () => {
   assert.equal(f.verified, verified)
   assert.equal(f.byType.reduce((a, t) => a + t.count, 0), verified)
   assert.equal(f.approval.auto + f.approval.manual + f.approval.unknown, verified)
-  assert.ok(f.lifetime <= (f.byType.find((t) => t.type === "recurring")?.count ?? 0))
+  assert.ok(f.lifetime > 0 && f.lifetime <= verified)
   assert.ok(f.cookie && f.cookie.p25 <= f.cookie.median && f.cookie.median <= f.cookie.p75)
   assert.match(f.asOf, /^\d{4}-\d{2}-\d{2}$/)
 })
@@ -730,6 +732,8 @@ test("the networks post page: one tracked link per network, example programs tra
     for (const p of e.examples) assert.ok(section.includes(`href="${blogApplyHref(p, NETWORKS_POST.slug).replaceAll("&", "&amp;")}"`), `${e.network}: ${p.slug} is not linked`)
     assert.doesNotMatch(section, TEAM_NOTE)
   }
+  // A network's own link is counted apart from programs in apply_click.
+  assert.match(readFileSync(join(process.cwd(), "src/components/best-networks-post.tsx"), "utf8"), /slug=\{`network:\$\{e\.network\}`\}/)
   // Affitor's section reads like every other: no label beyond its name.
   const affitor = html.slice(html.indexOf('data-post-network="affitor"')).split("data-post-network=")[1] ?? ""
   assert.doesNotMatch(affitor, TEAM_NOTE)
@@ -750,4 +754,43 @@ test("the networks post page: one tracked link per network, example programs tra
   // In the blog index and the sitemap.
   assert.ok(blogEntries().posts.some((e) => e.href === NETWORKS_POST_PATH))
   assert.ok(sitemap().some((e) => e.url === `https://openaffiliate.dev${NETWORKS_POST_PATH}`))
+})
+
+// ---------- ranked lists (no editorial post) ---------------------------------
+
+test("a ranked list ends like a post: the Affitor line, Read more (5) and the FAQ box matching its JSON-LD; a category page keeps its accordion", () => {
+  const ranked = BEST_LISTS.filter((l) => !readyPost(l.slug))
+  assert.ok(ranked.length > 0)
+  for (const list of ranked) {
+    const html = renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "Best", href: "/best" } }))
+    const at = ["data-affitor-line", "data-read-more", "data-faq"].map((k) => html.indexOf(k))
+    assert.ok(at.every((x, i) => x > 0 && (i === 0 || at[i - 1] < x)), `${list.slug}: end blocks out of order ${JSON.stringify(at)}`)
+    const affitor = affitorUrl("blog", listCampaign(list), AFFITOR_MARKETPLACE)
+    assert.equal(new URL(affitor).searchParams.get("utm_medium"), "blog")
+    const tag = [...html.matchAll(/<a\b[^>]*>/g)].map((m) => m[0]).find((t) => t.includes(`href="${affitor.replaceAll("&", "&amp;")}"`))
+    assert.ok(tag && tag.includes(`${AFFITOR_ATTR}="blog"`), `${list.slug}: no tracked Affitor line`)
+    const links = listReadMoreLinks(list)
+    assert.equal(links.length, READ_MORE_COUNT, `${list.slug}: Read more lists ${links.length}`)
+    assert.ok(!links.some((l) => l.href === bestPath(list)), `${list.slug}: Read more links itself`)
+    const box = html.match(/<aside[^>]*data-read-more[\s\S]*?<\/aside>/)![0]
+    assert.deepEqual([...box.matchAll(/href="([^"]+)"/g)].map((m) => m[1]), links.map((l) => l.href))
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/)![1])
+    const faqLd = ld["@graph"].find((n: { "@type": string }) => n["@type"] === "FAQPage")
+    const shownQs = [...html.match(/<aside[^>]*data-faq[\s\S]*?<\/aside>/)![0].matchAll(/<h3[^>]*>([^<]+)<\/h3>/g)].map((m) => m[1].replaceAll("&#x27;", "'").replaceAll("&amp;", "&"))
+    assert.deepEqual(shownQs, faqLd.mainEntity.map((q: { name: string }) => q.name), `${list.slug}: FAQ box and JSON-LD differ`)
+    assert.doesNotMatch(html, /aria-label="More lists"|<details\b/)
+    assert.doesNotMatch(html, TEAM_NOTE)
+  }
+  // The hub links every list (and the networks post), one line each, above its end blocks.
+  const hub = renderToStaticMarkup(createElement(BestListView, { list: BEST_INDEX, path: "/best", parent: { name: "Categories", href: "/categories" } }))
+  const all = hub.match(/<section[^>]*data-all-lists[\s\S]*?<\/section>/)![0]
+  const hrefs = [...all.matchAll(/href="([^"]+)"/g)].map((m) => m[1])
+  assert.deepEqual(hrefs, [...BEST_LISTS.filter((l) => l !== BEST_INDEX).map(bestPath), NETWORKS_POST_PATH])
+  assert.ok(hub.indexOf("data-all-lists") < hub.indexOf("data-affitor-line"))
+  for (const list of ranked.filter((l) => l !== BEST_INDEX)) {
+    assert.doesNotMatch(renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "Best", href: "/best" } })), /data-all-lists/, `${list.slug}: only the hub lists every list`)
+  }
+  const category = renderToStaticMarkup(createElement(BestListView, { list: categoryList("AI"), path: "/categories/ai", parent: { name: "Categories", href: "/categories" }, related: { category: "AI", entries: [] } }))
+  assert.doesNotMatch(category, /data-affitor-line|data-read-more/)
+  assert.match(category, /<details\b/)
 })

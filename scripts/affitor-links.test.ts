@@ -122,6 +122,51 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/[slug]/oas/page.tsx | errorUrl", // "Report an error": a prefilled GitHub issue
 ])
 
+// A next/link <Link> is never tracked, so its computed href must be an internal path: a template
+// starting with "/", an internal path helper, or a URL's pathname pass; any other expression is
+// reviewed here as built from site data (internal paths), never a brand's or affitor.com page.
+const INTERNAL_LINK = /^(`\/|(bestPath|networkPath|guidePath)\(|new URL\(.*\)\.pathname$|NETWORKS_POST_PATH$)/
+const REVIEWED_LINKS = new Set([
+  "src/app/blog/page.tsx | e.href", // blogEntries(): /best and /blog paths
+  "src/app/changelog/page.tsx | entry.link.href", // changelog entries: internal pages
+  "src/app/docs/features/page.tsx | f.href",
+  "src/app/docs/features/page.tsx | i.href",
+  "src/app/docs/page.tsx | link.href",
+  "src/app/docs/quickstart/page.tsx | link.href",
+  "src/app/layout.tsx | href", // footer list
+  "src/app/page.tsx | e.href", // homepage posts: blogEntries()
+  "src/app/page.tsx | href",
+  "src/app/rankings/leaderboard/leaderboard-table.tsx | full",
+  "src/app/rankings/leaderboard/leaderboard-table.tsx | slug ? `${basePath}?category=${slug}` : basePath",
+  "src/components/best-list-view.tsx | e.href", // category "Posts about": blogEntries()
+  "src/components/best-list-view.tsx | parent.href", // breadcrumb
+  "src/components/best-networks-post.tsx | c.link.href", // how-to-choose links: /networks, /best
+  "src/components/best-post-standard.tsx | c.link.href", // how-to-choose links: /best, /networks, /programs filters
+  "src/components/best-post-standard.tsx | editor.href", // an editor's bio page
+  "src/components/best-post-standard.tsx | l.href", // Read more: /best and /blog paths
+  "src/components/best-post-standard.tsx | parent.href",
+  "src/components/best-post-view.tsx | moreHref",
+  "src/components/best-post-view.tsx | parent.href",
+  "src/components/docs-pagination.tsx | next.href",
+  "src/components/docs-pagination.tsx | prev.href",
+  "src/components/docs-sidebar.tsx | item.href",
+  "src/components/guide-view.tsx | st.link.href", // step links: /best lists and /programs filters (best-posts test)
+  "src/components/nav.tsx | href",
+  "src/components/score-your-program.tsx | hrefOf(m)",
+  "src/components/sift-charts.tsx | href",
+])
+
+test("every computed <Link> href is an internal path or reviewed as one", () => {
+  for (const file of sourceFiles(join(root, "src"))) {
+    const rel = relative(root, file)
+    for (const m of readFileSync(file, "utf8").matchAll(/<Link\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
+      const expr = m[1].trim()
+      if (INTERNAL_LINK.test(expr)) continue
+      assert.ok(REVIEWED_LINKS.has(`${rel} | ${expr}`), `${rel} | ${expr}: a <Link> with a computed href; make it an internal path or review it into REVIEWED_LINKS`)
+    }
+  }
+})
+
 test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   const files = sourceFiles(join(root, "src")).filter((f) => !f.endsWith("src/lib/affitor-link.ts"))
   let tracked = 0
