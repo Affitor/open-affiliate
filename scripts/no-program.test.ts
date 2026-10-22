@@ -142,6 +142,17 @@ test("no source file marks a program as same team or keeps a team out of the ran
   assert.equal(grep.stdout.trim(), "")
 })
 
+test("program-level pages carry no maintainer note; it stays on site-level pages", () => {
+  // Sơn 2026-10-21: no team note on any program. The site-level sentence stays on rankings, docs/oas, methodology, about and the footer.
+  const programPages = ["src/app/programs/[slug]/page.tsx", "src/app/programs/[slug]/oas/page.tsx"]
+  for (const file of programPages) {
+    const source = readFileSync(join(__dirname, "..", file), "utf8")
+    assert.doesNotMatch(source, /TEAM_DISCLOSURE|maintained by Affitor|maintains OpenAffiliate/i, `${file}: a maintainer note on a program page`)
+  }
+  for (const file of ["src/app/rankings/page.tsx", "src/app/docs/oas/page.tsx", "src/app/methodology/page.tsx"])
+    assert.match(readFileSync(join(__dirname, "..", file), "utf8"), /TEAM_DISCLOSURE/, `${file}: the site-level disclosure is gone`)
+})
+
 test("a category with no qualifying program gets no alternatives", () => {
   const p = noProgram[0]
   assert.deepEqual(noProgramAlternatives({ ...p, category: "No Such Category" }), [])

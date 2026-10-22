@@ -371,7 +371,10 @@ function networkRestrictions(current) {
   return [...own, ...network]
 }
 
-function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
+/** Mirrors TWO_WAY_TERMS in scripts/sync-affitor.ts: owned terms a listing's conflicts keep blank. */
+const TWO_WAY_TERMS = ["cookie_days", "payout.minimum"]
+
+function affitorOwnedFields(program, marketplace, baseRestrictions = null, baseConflicts = null) {
   const policy = program.default_policy ?? {}
   const numbers = {
     commission_rate: policy.commission_rate,
@@ -421,7 +424,8 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
       AFFITOR_SYNC.network_terms.payout_conditions,
     cookie_days: program.cookie_window_days ?? ABSENT,
     tracking_method: "cookie",
-    "payout.minimum": program.payout_threshold ?? ABSENT,
+    // Mirrors ownedFields(): the network minimum every listing publishes, never payout_threshold.
+    "payout.minimum": AFFITOR_SYNC.network_terms.payout_minimum,
     "payout.currency": "USD",
     "payout.methods": AFFITOR_SYNC.network_terms.payout_methods,
     signup_url: marketplace + program.slug,
@@ -431,6 +435,10 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
     status_note: ABSENT,
     restrictions: networkRestrictions(baseRestrictions),
     ...Object.fromEntries(UNPUBLISHED.map((key) => [key, ABSENT])),
+    // Mirrors ownedFields(): a term the listing records as stated two ways stays blank.
+    ...Object.fromEntries(
+      TWO_WAY_TERMS.filter((key) => Array.isArray(baseConflicts) && baseConflicts.some((c) => isRecord(c) && c.field === key)).map((key) => [key, ABSENT])
+    ),
   }
 }
 
@@ -730,7 +738,12 @@ async function evaluateAffitorSyncPolicy({
       if (data.is_platform_program) {
         reasons.push(`${slug} is Affitor's own platform program: ${name}`)
       }
-      const owned = affitorOwnedFields(data, config.marketplace, base === null ? null : valueAt(base, ["restrictions"]))
+      const owned = affitorOwnedFields(
+        data,
+        config.marketplace,
+        base === null ? null : valueAt(base, ["restrictions"]),
+        base === null ? null : valueAt(base, ["conflicts"])
+      )
       const expected = alsoOn ? alsoOnOwnedFields(owned) : owned
       if (typeof expected === "string") {
         reasons.push(`Affitor's terms for ${slug} are unusable (${expected}): ${name}`)

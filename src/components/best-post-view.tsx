@@ -68,6 +68,48 @@ function shortDate(iso: string): string {
   return new Date(`${iso}T12:00:00Z`).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
 }
 
+/** "What changed this month": programs on the post's list added or re-checked in the 30 days up to `until`. */
+export function MonthChanges({ post, list, until }: { post: BestPost; list: BestList; until: string | undefined }) {
+  const month = monthChanges(list, until);
+  if (!month || (month.added.length === 0 && month.rechecked.length === 0)) return null;
+  // A post tied to a registry category links "more" to that category; a cross-category list has no such page.
+  const moreHref = post.category ? `/categories/${categoryToSlug(post.category)}` : null;
+  type Change = { slug: string; name: string; d: string };
+  const columns: { name: string; rows: Change[] }[] = [{ name: "Added", rows: month.added }, { name: "Terms re-checked", rows: month.rechecked }];
+  const changeList = (rows: Change[]) => (
+    <ul className="mt-2 border-t border-border">
+      {rows.slice(0, 6).map((r) => (
+        <li key={r.slug} className="flex justify-between gap-3 border-b border-border py-2 text-sm">
+          <Link href={`/programs/${r.slug}`} className="hover:underline underline-offset-4">{r.name}</Link>
+          <span className="font-mono text-meta text-muted-foreground">{shortDate(r.d)}</span>
+        </li>
+      ))}
+    </ul>
+  );
+  return (
+    <section id="what-changed" className="oa-band scroll-mt-20">
+      <div className="mx-auto max-w-[760px]">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 className="text-lg font-semibold">What changed this month</h2>
+          <span className="text-meta text-muted-foreground">{shortDate(month.from)} to {shortDate(until!)}</span>
+        </div>
+        <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs {post.category ? "in this category" : "that fit this list"} on OpenAffiliate, not only the ones above.</p>
+        <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:gap-8">
+          {columns.map(({ name, rows }) => (
+            <div key={name}>
+              <p className="oa-label">{name} · {rows.length}</p>
+              {changeList(rows)}
+              {rows.length > 6 && (moreHref
+                ? <Link href={moreHref} className="mt-2 inline-block text-meta text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground">and {rows.length - 6} more</Link>
+                : <p className="mt-2 text-meta text-muted-foreground">and {rows.length - 6} more</p>)}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 /** An editorial post on a list URL, in the redesign's framed layout. */
 export function BestPostView({
   post,
@@ -93,22 +135,6 @@ export function BestPostView({
     return s ? [{ label: pick.label, ...s }] : [];
   });
   const related = post.related.flatMap((slug) => BEST_LISTS.filter((l) => l.slug === slug));
-  const month = monthChanges(list, range?.[1]);
-  // A post tied to a registry category links "more" to that category; a cross-category list has no such page.
-  const moreHref = post.category ? `/categories/${categoryToSlug(post.category)}` : null;
-  type Change = { slug: string; name: string; d: string };
-  const columns: { name: string; rows: Change[] }[] = month ? [{ name: "Added", rows: month.added }, { name: "Terms re-checked", rows: month.rechecked }] : [];
-  const changeList = (rows: Change[]) => (
-    <ul className="mt-2 border-t border-border">
-      {rows.slice(0, 6).map((r) => (
-        <li key={r.slug} className="flex justify-between gap-3 border-b border-border py-2 text-sm">
-          <Link href={`/programs/${r.slug}`} className="hover:underline underline-offset-4">{r.name}</Link>
-          <span className="font-mono text-meta text-muted-foreground">{shortDate(r.d)}</span>
-        </li>
-      ))}
-    </ul>
-  );
-
   return (
     <article className="oa-frame">
       <script
@@ -194,28 +220,7 @@ export function BestPostView({
         </section>
       )}
 
-      {month && (month.added.length > 0 || month.rechecked.length > 0) && (
-        <section className="oa-band">
-          <div className="mx-auto max-w-[760px]">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <h2 className="text-lg font-semibold">What changed this month</h2>
-              <span className="text-meta text-muted-foreground">{shortDate(month.from)} to {shortDate(range![1])}</span>
-            </div>
-            <p className="text-meta text-muted-foreground mt-1">Across all {month.total} live programs {post.category ? "in this category" : "that fit this list"} on OpenAffiliate, not only the ones above.</p>
-            <div className="mt-3 grid gap-6 sm:grid-cols-2 sm:gap-8">
-              {columns.map(({ name, rows }) => (
-                <div key={name}>
-                  <p className="oa-label">{name} · {rows.length}</p>
-                  {changeList(rows)}
-                  {rows.length > 6 && (moreHref
-                    ? <Link href={moreHref} className="mt-2 inline-block text-meta text-muted-foreground underline underline-offset-4 decoration-border hover:text-foreground">and {rows.length - 6} more</Link>
-                    : <p className="mt-2 text-meta text-muted-foreground">and {rows.length - 6} more</p>)}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <MonthChanges post={post} list={list} until={range?.[1]} />
 
       <section className="oa-band">
         <div className="mx-auto max-w-[760px]">

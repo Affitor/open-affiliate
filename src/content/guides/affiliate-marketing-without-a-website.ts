@@ -9,12 +9,18 @@ import type { GuidePost } from "@/lib/guides"
  */
 export const guide: GuidePost = {
   slug: "affiliate-marketing-without-a-website",
-  checked: "2026-10-20",
+  checked: "2026-10-21",
   title: (year) => `Affiliate Marketing Without a Website (${year})`,
   description:
     "You can do affiliate marketing without a website, through a newsletter, videos or social posts, if you follow each program's rules on where you promote.",
   answer:
     "Yes, you can do affiliate marketing without a website. A newsletter, a video channel, a social account or an online community can all carry affiliate links. The catch is that every program decides where you may promote it, so the first step is reading its rules: some ban paid ads, some want traffic to go through your own content first, and some ban coupon sites.",
+  takeaways: [
+    "You can earn without a website: a newsletter, a video channel, a social account or a community can carry affiliate links.",
+    "Every program decides where you may promote it, so read its restrictions before you post a link.",
+    "Paid ads, coupon sites and unsolicited messages are the rules that most often cost people their commission.",
+    "Disclose the commission where people see it before the link, on every platform.",
+  ],
   sections: [
     {
       heading: "Where you can promote without a site",
@@ -56,25 +62,22 @@ export const guide: GuidePost = {
     {
       slug: "decktopus",
       bestFor: "Best for business and education audiences",
-      why: "Decktopus is an AI presentation maker that generates complete decks from prompts, with custom branding, layouts and speaker notes. It pays a recurring commission on each sale, monthly via PayPal, and approval is automatic.",
-      notFor: "Paid search straight to the brand: bidding on Decktopus brand terms and misspellings is not allowed unless the traffic goes to your own site first.",
+      why: "Decktopus is an AI presentation maker that generates complete decks from prompts, with custom branding, layouts and speaker notes. Its {affiliate program} pays a recurring commission on each sale, and approval is automatic.",
     },
     {
       slug: "originality-ai",
       bestFor: "Best for writers and editors",
-      why: "Originality.ai is an AI content detector and plagiarism checker for publishers, agencies and schools that also checks facts, grammar, readability and editorial guidelines. It pays a recurring share of what referred customers spend for up to a year, monthly, and approval is automatic.",
-      notFor: "Google Ads: you cannot send Google Ads traffic straight to Originality.ai with an affiliate link.",
+      why: "Originality.ai is an AI content detector and plagiarism checker for publishers, agencies and schools that also checks facts, grammar, readability and editorial guidelines. Its {affiliate program} pays a recurring share of what referred customers spend for up to a year, and approval is automatic.",
     },
     {
       slug: "copyspace-ai",
       bestFor: "Best for SEO and blogging communities",
-      why: "CopySpace.ai is an AI tool for SEO blogging that researches a topic, writes long-form articles and publishes them with one click, with a free trial. It pays a share of every referral's payments for the lifetime of the customer, and approval is instant after a short application form.",
+      why: "CopySpace.ai is an AI tool for SEO blogging that researches a topic, writes long-form articles and publishes them with one click. Its {affiliate program} pays a share of every referral's payments for the lifetime of the customer, and approval is instant after a short form.",
     },
     {
       slug: "strikingly",
       bestFor: "Best for people who want a site later",
-      why: "Strikingly is a website builder for launching simple, mobile-ready websites without code, and its yearly plans include a free domain. It pays a share of a referred user's first payment, reviewed after the trial and a holding period, and approval is automatic.",
-      notFor: "Brand-term paid search: bidding on Strikingly brand terms or misspellings is not allowed.",
+      why: "Strikingly is a website builder for launching simple, mobile-ready websites without code, and its yearly plans include a free domain. Its {affiliate program} pays a share of a referred user's first payment, reviewed after the trial and a holding period, and approval is automatic.",
     },
   ],
   rulesIntro: "Real rules from the programs above, in their own terms:",
@@ -82,6 +85,24 @@ export const guide: GuidePost = {
     { slug: "decktopus", text: "Decktopus: no spamming or unsolicited commercial email, and no advertising that conceals or misrepresents your identity." },
     { slug: "strikingly", text: "Strikingly: no brand terms in your site URL, redirect pages or domain forwarding, and no cookie stuffing." },
     { slug: "originality-ai", text: "Originality.ai: no Google Ads that send traffic directly to Originality.ai with an affiliate link." },
+  ],
+  mistakes: [
+    {
+      lead: "Dropping links where nobody asked",
+      text: "A link in an unrelated thread or a cold message reads as spam, and many programs' terms ban it outright.",
+    },
+    {
+      lead: "Sending paid ads straight to the brand",
+      text: "Many programs ban search ads on their name, and some require ad traffic to reach your own content first.",
+    },
+    {
+      lead: "Posting codes on coupon sites",
+      text: "Many programs ban coupon and deal sites, and a code posted there can void your commissions.",
+    },
+    {
+      lead: "Assuming a website is optional",
+      text: "Few programs say so outright. When the terms are silent, check the application form or ask the affiliate team before relying on social posts alone.",
+    },
   ],
   disclosure:
     "In the US, the FTC's Endorsement Guides say that a connection your audience would not expect, such as being paid for a sale, must be disclosed clearly and conspicuously, wherever the recommendation appears. On a social post, a video or a newsletter, put the disclosure where people see it before the link.",

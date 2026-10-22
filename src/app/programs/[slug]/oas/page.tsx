@@ -26,7 +26,6 @@ import {
   PART_MAX,
   partEarned,
   rankText,
-  TEAM_DISCLOSURE,
   round1,
   UNRANKED_TEXT,
   type CheckGroup,
@@ -331,7 +330,7 @@ export default async function OasReportPage({ params }: { params: Promise<{ slug
 
       <div className="mt-10 border-t border-border pt-6 text-meta text-muted-foreground max-w-3xl">
         <p>
-          OAS reads only the terms verified on the program&rsquo;s own page: Transparency (70) and Partner value (30), never the commission size. {TEAM_DISCLOSURE} Found a mistake? <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>.
+          OAS reads only the terms verified on the program&rsquo;s own page: Transparency (70) and Partner value (30), never the commission size. Found a mistake? <a href={errorUrl} target="_blank" rel="noopener" className="underline underline-offset-2 hover:text-foreground">Report an error</a>.
         </p>
       </div>
     </div>

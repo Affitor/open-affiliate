@@ -1,6 +1,7 @@
 import { BEST_INDEX, BEST_LISTS, bestPath, buildBestList, type BestList } from "./best-lists"
 import { postTitle, readyPost } from "./best-posts"
 import { GUIDES, guidePath, guideSelection, guideTitle, type GuidePost } from "./guides"
+import { NETWORKS_POST, NETWORKS_POST_PATH, networkEntries, networkPostTitle } from "./networks-post"
 
 /**
  * The /blog index: every guide (/blog/<slug>), every editorial post and every
@@ -44,6 +45,12 @@ function entry(list: BestList): BlogEntry {
       }
 }
 
+/** /best/affiliate-networks: an editorial post about networks; its "programs" count is the networks it shows. */
+function networksEntry(): BlogEntry {
+  const shown = networkEntries().length
+  return { kind: "post", href: NETWORKS_POST_PATH, title: networkPostTitle(), date: NETWORKS_POST.checked, category: null, programs: shown, verified: shown }
+}
+
 function guideEntry(g: GuidePost): BlogEntry {
   const shown = guideSelection(g).shown.length
   return { kind: "post", href: guidePath(g), title: guideTitle(g), date: g.checked, category: null, programs: shown, verified: shown }
@@ -61,7 +68,7 @@ export function blogEntries(): { posts: BlogEntry[]; lists: BlogEntry[] } {
   // The hub (/best) first among lists on equal dates: it is the parent of every other list.
   const all = [BEST_INDEX, ...BEST_LISTS.filter((l) => l !== BEST_INDEX)].map(entry)
   return {
-    posts: newestFirst([...GUIDES.map(guideEntry), ...all.filter((e) => e.kind === "post")]),
+    posts: newestFirst([...GUIDES.map(guideEntry), networksEntry(), ...all.filter((e) => e.kind === "post")]),
     lists: newestFirst(all.filter((e) => e.kind === "list")),
   }
 }
