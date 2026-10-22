@@ -1,78 +1,110 @@
 import type { BestPost } from "@/lib/best-posts"
 
 /**
- * Editorial copy for /best/rewardful-affiliate-programs. No figures in here:
- * every number on the page is read from the registry at build, and
- * scripts/best-posts.test.ts fails on a digit or a spelled-out number in copy.
+ * Editorial copy for /best/rewardful-affiliate-programs, on the standard
+ * "best X" layout. No figures in here: every number on the page is read from
+ * the registry at build, and scripts/best-posts.test.ts fails on a digit or a
+ * spelled-out number in copy. In each `why`, the words in {braces} become the
+ * link to the brand's affiliate page (the tracked Apply link). Rewardful is
+ * tracking software, so each brand's own terms apply.
  */
 export const post: BestPost = {
   slug: "rewardful-affiliate-programs",
   checked: "2026-10-20",
+  layout: "standard",
   title: (n, year) => `${n} Best Rewardful Affiliate Programs in ${year}`,
   description:
     "The best affiliate programs that run on Rewardful, from presentation and language tools to social, podcast and SEO software, with verified terms for each.",
   intro:
-    "Rewardful is affiliate and referral tracking software that SaaS companies use to run their own programs, so each program below is run by the brand itself, with its own terms. Many pay a share of every payment for months or for the life of the customer. Every program here runs on Rewardful in the OpenAffiliate registry, picked across presentation, language learning, social media, video, creator, podcast and SEO tools. Each block shows how the program pays, as published in its own terms, and the day we last checked it.",
+    "Rewardful is affiliate tracking software that SaaS companies use to run their own programs, so each program below is run by the brand itself, with its own terms. Many pay a share of every payment for months or for life.",
+  lookFor: {
+    heading: "How to choose a Rewardful affiliate program",
+    intro: "Rewardful only tracks referrals; the brand sets and pays the terms. Check these before you apply:",
+    criteria: [
+      {
+        name: "How long it pays",
+        text: "Some programs pay for a year and some for the life of the customer. On a tool customers keep, the length matters more than the rate.",
+        link: { href: "/best/lifetime-affiliate-programs", label: "See lifetime programs" },
+      },
+      {
+        name: "Who pays you",
+        text: "Each brand pays its own affiliates, usually by PayPal once a month, with its own minimum, so the terms differ from program to program.",
+      },
+      {
+        name: "Rules on ads",
+        text: "Most of these brands bar paid search on their name, and several bar paid ads of any kind.",
+      },
+      {
+        name: "Fit with your readers",
+        text: "A podcast host suits podcasters and a social scheduler suits social media managers. Match the tool to the audience before the rate.",
+      },
+      {
+        name: "Where signups count",
+        text: "Some programs credit only web signups, not app store installs, so send readers to the brand's website.",
+      },
+    ],
+  },
+  guides: ["how-to-start-affiliate-marketing", "make-money-with-affiliate-marketing"],
   programs: [
     {
       slug: "decktopus",
       bestFor: "Best for presentation and pitch content",
-      why: "Decktopus is an AI presentation maker that generates complete decks from prompts, with custom branding, layouts and speaker notes. It pays a recurring commission on each sale, monthly via PayPal, and approval is automatic.",
-      notFor: "Brand-keyword PPC: bidding on Decktopus brand terms and misspellings is not allowed unless the traffic goes to your own site first, with negative keywords for the brand.",
+      verdict: "A recurring share with automatic approval, a fit for presentation and pitch content.",
+      why: "Decktopus is an AI presentation maker that generates complete decks from prompts, with custom branding, layouts and speaker notes. Its {affiliate program} pays a recurring commission on each sale, monthly via PayPal, and approval is automatic.",
     },
     {
       slug: "talkio-ai",
       bestFor: "Best for language learning audiences",
-      why: "Talkio AI is an AI language tutor for speaking practice: learners hold real conversations with AI tutors and get instant pronunciation feedback in many languages and dialects, in the browser or in the iPhone and Android apps. It pays a share of every payment a referral makes in their first year, not just the first one, monthly via PayPal, and applications are reviewed.",
-      notFor: "App store links: only web signups are credited, so referrals must go to the Talkio website. Coupon, deal and discount code sites and bidding on Talkio brand keywords are not allowed.",
+      verdict: "A year of payments on each referral; only web signups are credited.",
+      why: "Talkio AI is an AI language tutor for speaking practice: learners hold real conversations with AI tutors and get instant pronunciation feedback in many languages, in the browser or in the mobile apps. Its {affiliate program} pays a share of every payment a referral makes in their first year, and applications are reviewed.",
     },
     {
       slug: "bannerbear",
       bestFor: "Best for developer and automation content",
-      why: "Bannerbear automates creative production, generating images and other visual assets from templates for developers and operations teams who connect creative work to their automation. It pays a monthly recurring commission on each customer who signs up through your link, for as long as their account is active. Its public page does not publish an attribution window, payout minimum, methods or schedule.",
-      notFor: "Google Ads: no Google Ads on brand or non-brand keywords.",
+      verdict: "A lifetime share for developer and automation content; Google Ads are not allowed.",
+      why: "Bannerbear automates creative production, generating images and other visual assets from templates for developers and operations teams. Its {affiliate program} pays a monthly recurring commission on each customer who signs up through your link, for as long as their account is active.",
     },
     {
       slug: "nuelink",
       bestFor: "Best for social media schedulers",
-      why: "Nuelink is a social media scheduling and automation tool for Facebook, Instagram, X, LinkedIn, Google My Business and Pinterest, with AI features. It pays a share of whatever a referred customer pays every month for as long as they stay subscribed, upgrades included, after a refund period, by PayPal. You need an active Nuelink account, free or paid, to join.",
-      notFor: "Paid ads: promotion has to be organic.",
+      verdict: "A lifetime share and a long cookie; promotion has to be organic.",
+      why: "Nuelink is a social media scheduling and automation tool for Facebook, Instagram, X, LinkedIn, Google My Business and Pinterest, with AI features. Its {affiliate program} pays a share of whatever a referred customer pays every month for as long as they stay subscribed, upgrades included, after a refund period.",
     },
     {
       slug: "ocoya",
       bestFor: "Best for social media managers",
-      why: "Ocoya is an AI-powered social media management tool that plans and schedules posts across Facebook, Instagram, X, LinkedIn, TikTok, YouTube Shorts, Pinterest, Threads, Bluesky and more from one calendar, with a design studio, a social inbox, link-in-bio pages, workflows, an API and an MCP server. It pays a share of each referred subscription every billing cycle for as long as the customer stays, referred customers get a discount at checkout, and payouts go by PayPal.",
-      notFor: "Branded search ads: bidding on Ocoya and related keywords is not allowed.",
+      verdict: "A lifetime share for social media managers, with a discount for your referrals.",
+      why: "Ocoya is an AI-powered social media management tool that plans and schedules posts across the major networks from one calendar, with a design studio, a social inbox, link-in-bio pages, workflows and an API. Its {affiliate program} pays a share of each referred subscription every billing cycle for as long as the customer stays, and referred customers get a discount.",
     },
     {
       slug: "mindstamp",
       bestFor: "Best for training and video marketing content",
-      why: "Mindstamp is interactive video software for training, marketing, sales, education and support: teams add questions, branching, buttons and lead capture to videos and see what each viewer watched, answered and did. It pays a share of each paid referral for the first year of the account, once the customer stays paid for a minimum period, monthly through PayPal.",
-      notFor: "Paid advertising: referral links cannot be used in paid ads.",
+      verdict: "A year of payments on each paid referral; referral links cannot be used in paid ads.",
+      why: "Mindstamp is interactive video software for training, marketing, sales and support: teams add questions, branching, buttons and lead capture to videos and see what each viewer did. Its {affiliate program} pays a share of each paid referral for the first year of the account, once the customer stays paid for a minimum period.",
     },
     {
       slug: "podia",
       bestFor: "Best for course creators and coaches",
-      why: "Podia is an all-in-one platform for creators to sell online courses, digital downloads, coaching and events, run a free or paid community, and send email marketing from their own Podia website. It pays a share of every sale made through your link for up to a year, paid out after a waiting period, and it reviews applications and welcomes reviews, tutorials and comparisons.",
-      notFor: "Coupon sites: Podia does not offer special discounts and does not work with coupon sites.",
+      verdict: "A fit for course creators and coaches; it does not work with coupon sites.",
+      why: "Podia is an all-in-one platform for creators to sell courses, digital downloads, coaching and events, run a community and send email marketing from their own Podia website. Its {affiliate program} pays a share of every sale made through your link for up to a year, after a waiting period, and welcomes reviews, tutorials and comparisons.",
     },
     {
       slug: "outranking",
       bestFor: "Best for SEO writers and agencies",
-      why: "Outranking is an AI-powered SEO content platform that helps writers, SEO managers and agencies research a topic, build SEO briefs, write first drafts with AI, score content against on-page SEO factors and optimize for missing keywords, with keyword clustering and content planning. It pays a share of each purchase and again on every renewal for as long as the customer stays active, via PayPal.",
-      notFor: "Brand-term bidding: bidding on Outranking brand terms in paid search is not allowed.",
+      verdict: "A lifetime share for SEO writers and agencies.",
+      why: "Outranking is an AI-powered SEO content platform that helps writers and agencies research a topic, build briefs, write first drafts and optimize against on-page SEO factors. Its {affiliate program} pays a share of each purchase and again on every renewal for as long as the customer stays active.",
     },
     {
       slug: "transistor",
       bestFor: "Best for podcasters",
-      why: "Transistor is a podcast hosting platform for unlimited shows on one account, with video podcast hosting, private podcasts for teams, distribution to podcast apps, AI transcription, analytics, a podcast website builder, an embeddable player and dynamic ad insertion. It pays every month on each referred customer for as long as they keep paying, through PayPal, and affiliates get brand assets and a dashboard.",
-      notFor: "Ads of any kind that compete with its marketing: search ads, Facebook ads and ads linking to its site are not allowed.",
+      verdict: "A lifetime share for podcast audiences; ads that compete with its marketing are not allowed.",
+      why: "Transistor is a podcast hosting platform for unlimited shows on one account, with video podcasts, private podcasts for teams, distribution to podcast apps, transcription, analytics and a website builder. Its {affiliate program} pays every month on each referred customer for as long as they keep paying, and affiliates get brand assets and a dashboard.",
     },
     {
       slug: "originality-ai",
       bestFor: "Best for publishers and content agencies",
-      why: "Originality.ai is an AI content detector and plagiarism checker for content publishers, agencies and schools, which also checks facts, grammar, readability and editorial guidelines, with bulk scans, browser and Docs extensions, an API and an MCP server. It pays a recurring share of what referred customers spend for up to a year, monthly, and approval is automatic.",
-      notFor: "Google Ads: you cannot send Google Ads traffic straight to Originality.ai with an affiliate link.",
+      verdict: "A year of payments with automatic approval, a fit for publishers and content agencies.",
+      why: "Originality.ai is an AI content detector and plagiarism checker for publishers, agencies and schools, which also checks facts, grammar and readability, with bulk scans, extensions and an API. Its {affiliate program} pays a recurring share of what referred customers spend for up to a year.",
     },
   ],
   picks: [

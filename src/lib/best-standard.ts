@@ -93,8 +93,13 @@ export function earnShown(p: Program): string {
 
 /** A restriction that forbids something: "No …", "Do not …", "Never …". */
 const forbids = (r: string) => /^(no|do not|don't|never|not)\b/i.test(r.trim())
-/** A restriction that asks something of the partner (conservative: only these openings): "Use …", "Affiliates must …". */
-const requires = (r: string) => /^(use|have|must|be|apply|promote|share|you must|affiliates must|applicants must|applicants need|website must|your (site|website) must)\b/i.test(r.trim())
+/**
+ * A restriction that asks something of the partner (conservative: only these openings): "Use …",
+ * "Affiliates must …", and disclosure rules ("Always disclose …", "Affiliate program, not a paid
+ * sponsorship"), which are conditions of taking part, not drawbacks.
+ */
+export const requires = (r: string) =>
+  /^(use|have|must|be|apply|promote|share|always|disclose|you must|you should|affiliates must|affiliates should|applicants must|applicants need|website must|your (site|website) must|affiliate program, not)\b/i.test(r.trim())
 /** Restrictions read as fragments in lists, without a final period. */
 const fragment = (t: string) => t.trim().replace(/\.$/, "")
 

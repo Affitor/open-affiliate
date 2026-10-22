@@ -20,6 +20,8 @@ tracking_method: cookie
 payout:
   # "Commission is paid if the due commission amount is greater than $30 USD." (https://www.synthesia.io/terms/affiliate-terms, checked 2026-10-18)
   minimum: 30
+  # the same quote states the currency: "$30 USD"
+  currency: USD
   # "Due commission is paid within the first five business days of each month." (https://www.synthesia.io/terms/affiliate-terms, checked 2026-10-18)
   frequency: monthly
 
@@ -57,7 +59,7 @@ agents:
 verified: true
 submitted_by: community
 created_at: '2026-04-18'
-updated_at: "2026-10-18"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-12"
 kind: affiliate
 source: community

@@ -4,6 +4,7 @@ import { hasNoProgram } from "@/lib/no-program"
 import { frequencyLabel } from "@/lib/claims/form"
 import { isPaused } from "@/lib/program-seo"
 import { minimumAmount } from "@/lib/rankings-terms"
+import registryData from "@/lib/registry.json"
 
 /**
  * Wording for the human-first program page (approved mock B+, 2026-10-17):
@@ -130,12 +131,45 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 /** "Monthly, from a $50 minimum", or "from a 50 EUR minimum" in another currency; null when neither is stored. */
 export function payoutText(p: Program): string | null {
   const parts: string[] = []
+  // Only confirmed terms say two ways: confirmedTerms removed an unverified program's payout, conflicts included.
+  const twoWays = (field: string) => termsConfirmed(p) && !hasNoProgram(p) && statedTwoWays(p, field)
   if (p.payout?.frequency) parts.push(frequencyLabel(p.payout.frequency))
   if (p.payout?.minimum != null) {
-    const min = p.payout.minimum === 0 ? "no minimum" : `from a ${minimumAmount(p.payout.minimum, p.payout.currency)} minimum`
-    parts.push(parts.length ? min : min.charAt(0).toUpperCase() + min.slice(1))
+    parts.push(p.payout.minimum === 0 ? "no minimum" : `from a ${minimumAmount(p.payout.minimum, p.payout.currency)} minimum`)
   }
-  return parts.length ? parts.join(", ") : null
+  // As on the /best posts: the terms on record, then "the brand gives two minimums ($30 or $100) and two schedules".
+  const both = bothValues(p, "payout.minimum")
+  const two = [
+    p.payout?.minimum == null && twoWays("payout.minimum") ? `two minimums${both ? ` (${both})` : ""}` : null,
+    !p.payout?.frequency && twoWays("payout.frequency") ? "two schedules" : null,
+  ].filter(Boolean)
+  const text = [parts.join(", "), two.length ? `the brand gives ${two.join(" and ")}` : ""].filter(Boolean).join("; ")
+  return text ? text.charAt(0).toUpperCase() + text.slice(1) : null
+}
+
+/**
+ * The terms a program's YAML lists in `conflicts` (the brand states them two
+ * ways), with the values the verifier recorded, read from the registry (the
+ * page renders on demand too, so never from the YAML files). The same rule as
+ * the /best posts: such a field is blank, and the page says the brand gives
+ * two values instead of "Not published".
+ */
+type RawConflict = { field?: unknown; values?: unknown }
+const CONFLICTS = new Map(
+  (registryData.programs as unknown as { slug: string; conflicts?: RawConflict[] }[]).map((e) => [e.slug, e.conflicts ?? []]),
+)
+function conflictOf(p: Program, field: string): RawConflict | undefined {
+  return CONFLICTS.get(p.slug)?.find((c) => c.field === field)
+}
+export function statedTwoWays(p: Program, field: string): boolean {
+  return Boolean(conflictOf(p, field))
+}
+/** "30 days or 60 days", "$30 or $100": the recorded values, or null when none were recorded. */
+export function bothValues(p: Program, field: string): string | null {
+  const v = conflictOf(p, field)?.values
+  if (!Array.isArray(v) || v.length < 2 || !v.every((x) => typeof x === "string" || typeof x === "number")) return null
+  const shown = v.map((x) => (typeof x === "number" && field === "payout.minimum" ? minimumAmount(x, p.payout.currency) : String(x)))
+  return `${shown.slice(0, -1).join(", ")} or ${shown.at(-1)}`
 }
 
 const METHODS: Record<string, string> = { paypal: "PayPal", bank: "Bank transfer", wire: "Wire transfer", ach: "ACH", sepa: "SEPA" }
@@ -157,7 +191,11 @@ export function approvalText(p: Program): string | null {
 export function cookieText(p: Program): string | null {
   // Same rule as payout and approval: only confirmed terms (confirmedTerms removed the rest).
   if (!termsConfirmed(p) || hasNoProgram(p)) return null
-  if (p.cookieDays == null) return "Not published"
+  if (p.cookieDays == null) {
+    if (!statedTwoWays(p, "cookie_days")) return "Not published"
+    const both = bothValues(p, "cookie_days")
+    return both ? `${both}; the brand gives both` : "Stated two ways by the brand"
+  }
   return p.cookieDays === 0 ? "Code-based, no cookie" : `${p.cookieDays} days`
 }
 
