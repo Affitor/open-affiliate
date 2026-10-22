@@ -283,7 +283,7 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
       (recurring.length
         ? `On this page, ${andList(recurring.map((p) => `${name(p)} (${esc(earnShown(p))})`))} ${recurring.length === 1 ? "pays" : "pay"} a recurring share. `
         : "None of the programs on this page pays a recurring share. ") +
-      (rest.length ? `The other ${rest.length} list their commission as ${andList(restTypes)}, with no recurring length on record; each section gives the details. ` : "") +
+      (rest.length ? `${rest.length === 1 ? `The other program lists its` : `The other ${rest.length} list their`} commission as ${andList(restTypes)}, with no recurring length on record; each section gives the details. ` : "") +
       `Across the ${split.total} verified programs this post draws from, ${recurringAll} list a recurring commission.`,
   })
 
@@ -333,14 +333,20 @@ export function standardFaq(post: BestPost, selection: PostSelection, split: Typ
   const paypal = shown.filter((p) => paysBy(p, "paypal"))
   const bank = shown.filter((p) => paysBy(p, "bank"))
   const noMethod = shown.filter((p) => !(p.payoutMethods ?? p.payout.methods ?? []).length)
-  const viaNetwork = noMethod.filter((p) => thirdPartyNetwork(p))
+  // A program with its own schedule on record is not "on the network's terms" (its section shows the schedule).
+  const viaNetwork = noMethod.filter((p) => thirdPartyNetwork(p) && !p.payout.frequency)
   faq.push({
     q: `How do ${niche} pay out?`,
     a:
       (paypal.length ? `${paypal.length} of the ${shown.length} programs here pay by PayPal: ${andList(paypal.map(name))}. ` : "") +
       (bank.length ? `${andList(bank.map(name))} ${bank.length === 1 ? "lists" : "list"} bank transfer. ` : "") +
       (noMin.length ? `${andList(noMin.map(name))} ${noMin.length === 1 ? "has" : "have"} no payout minimum. ` : "") +
-      viaNetwork.map((p) => `${name(p)} pays on ${esc(thirdPartyNetwork(p)!)}'s terms. `).join("") +
+      [...new Set(viaNetwork.map((p) => thirdPartyNetwork(p)!))]
+        .map((net) => {
+          const on = viaNetwork.filter((p) => thirdPartyNetwork(p) === net)
+          return `${andList(on.map(name))} ${on.length === 1 ? "pays" : "pay"} on ${esc(net)}'s terms. `
+        })
+        .join("") +
       blanks(noMethod.filter((p) => !viaNetwork.includes(p)), (p) => emptyLabel(p, "payout.methods"), {
         [STATED_TWO_WAYS]: ["states its payout method two ways", "state their payout method two ways"],
         [NOT_STATED]: ["publishes no payout method", "publish no payout method"],

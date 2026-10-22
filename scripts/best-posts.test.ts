@@ -352,6 +352,28 @@ function figureLeaks(render: { cookie: (p: (typeof allPrograms)[number]) => stri
   return { leaks, checked }
 }
 
+test("no program records a payout, cookie or approval term it also lists as stated two ways", () => {
+  // A conflict means the brand states two values, so the field stays blank (with `values` when they compare);
+  // a recorded value next to a conflict would show one of the two as the term. (commission.rate is required
+  // by the schema, so its conflicts keep a placeholder such as "varies"; restrictions are a list, not a term.)
+  const TERMS = new Set(["cookie_days", "payout.minimum", "payout.frequency", "payout.methods", "approval"])
+  const dir = join(process.cwd(), "programs")
+  const at = (doc: unknown, path: string) => path.split(".").reduce<unknown>((o, k) => (o == null ? undefined : (o as Record<string, unknown>)[k]), doc)
+  const both = readdirSync(dir)
+    .filter((f) => f.endsWith(".yaml"))
+    .flatMap((f) => {
+      const doc = parseYaml(readFileSync(join(dir, f), "utf8")) as { conflicts?: { field?: string }[] }
+      return (doc?.conflicts ?? [])
+        .filter((c) => TERMS.has(String(c.field)))
+        .filter((c) => {
+          const v = at(doc, String(c.field))
+          return v != null && v !== "" && !(Array.isArray(v) && v.length === 0)
+        })
+        .map((c) => `${f}: ${c.field} = ${JSON.stringify(at(doc, String(c.field)))}`)
+    })
+  assert.deepEqual(both, [], "blank these fields, or fix the value and drop the conflict")
+})
+
 test("the no-figure check catches a renderer that reads figures out of quote text", () => {
   // An injected parser: pull the first figures out of the conflict quote, as the removed one did.
   const quoteOf = (slug: string, field: string) => {
@@ -403,6 +425,26 @@ test("standard sections: Affitor-network programs disclose it; requirements are 
   // Fathom records its commission length as unpublished; Raycast simply has none on record.
   assert.match(tableRow(byslug("fathom-analytics")).commission, /length not published/)
   assert.match(tableRow(byslug("raycast")).commission, /length not recorded/)
+})
+
+test("the payout FAQ says a program pays on its network's terms only when it has no schedule of its own", () => {
+  let checked = 0
+  for (const post of STANDARD) {
+    const selection = postSelection(post, new Date(post.checked))
+    const a = standardFaq(post, selection, typeSplit(post, selection)).find((f) => /pay out\?$/.test(f.q))!.a
+    const onTerms = [...a.matchAll(/([^.]*) pays? on [^.]*'s terms\./g)].map((m) => m[1]).join(" | ")
+    for (const { program: p } of selection.shown) {
+      if (!onTerms.includes(p.name)) continue
+      checked++
+      assert.ok(!p.payout.frequency, `${post.slug}: ${p.slug} has a ${p.payout.frequency} schedule on record but the FAQ says it pays on its network's terms`)
+    }
+  }
+  // Reclaim (PartnerStack, a monthly schedule on record, no method) is not "on PartnerStack's terms".
+  const ai = STANDARD.find((p) => p.slug === "ai-affiliate-programs")!
+  const sel = postSelection(ai, new Date(ai.checked))
+  assert.ok(sel.shown.some((s) => s.program.slug === "reclaim" && s.program.payout.frequency))
+  assert.doesNotMatch(standardFaq(ai, sel, typeSplit(ai, sel)).find((f) => /pay out\?$/.test(f.q))!.a, /Reclaim AI pays on/)
+  assert.ok(checked > 0, "no post has a program paid on its network's terms")
 })
 
 test("a payout conflict shows next to the payout terms that are on record", () => {
