@@ -19,7 +19,7 @@ import { BestPostStandard } from "../src/components/best-post-standard"
 import { AFFITOR_ATTR, AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const blogAffitorHref = (slug: string) => affitorUrl("blog", slug, AFFITOR_MARKETPLACE)
-import { AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { requires, AFFITOR_LINE, NOT_RECORDED, NOT_STATED, PROS_CONS_MAX, READ_MORE_COUNT, STATED_TWO_WAYS, picksSentence, readMoreLinks, requirementsText, twoValueText, programDetails, prosCons, splitLink, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { CAPTURES, CAPTURE_SKIPPED } from "../src/lib/best-captures"
 import { parseNotes, termNotes } from "../src/lib/term-notes"
 import { NETWORK_META } from "../src/lib/network-meta"
@@ -405,6 +405,11 @@ test("standard sections: no team note on any program or post; requirements are a
   assert.deepEqual(prosCons(fixture).cons, ["No bidding on brand keywords", ...(fixture.commission.type === "one-time" ? ["Pays once per referral, with no recurring share"] : fixture.commission.type === "tiered" ? ["The top figure needs volume or a higher tier"] : []), "Open only to paying customers"].slice(0, PROS_CONS_MAX))
   assert.equal(requirementsText(fixture), "Use at least one website with real traffic; Affiliates must disclose the link")
   assert.equal(requirementsText({ ...fixture, restrictions: ["No spam"] }), null)
+  // Disclosure rules are conditions of taking part, not drawbacks (#394 r1 P3-3: Runway, Pineapple Builder, Podia).
+  const disclosure = ["Affiliate program, not a paid sponsorship", "Always disclose your affiliate relationship", "Affiliates should promote the product regularly to stay active"]
+  const withDisclosure = { ...fixture, restrictions: ["No spam.", ...disclosure] }
+  for (const d of disclosure) assert.ok(!prosCons(withDisclosure).cons.includes(d), `a disclosure rule listed as a con: ${d}`)
+  assert.equal(requirementsText(withDisclosure), disclosure.join("; "))
   for (const post of STANDARD) {
     const { html, selection } = renderStandard(post)
     for (const { program: p } of selection.shown) {
@@ -413,7 +418,7 @@ test("standard sections: no team note on any program or post; requirements are a
       assert.doesNotMatch(section, TEAM_NOTE, `${post.slug}: ${p.slug} carries a team note`)
       const { cons } = prosCons(p)
       for (const r of p.restrictions ?? []) {
-        if (/^(use|have|must|be|apply|promote|share|affiliates must|applicants must|applicants need|website must)\b/i.test(r.trim()))
+        if (requires(r))
           assert.ok(!cons.includes(r.trim().replace(/\.$/, "")), `${p.slug}: a requirement listed as a con: ${r}`)
       }
       const text = [tableRow(p).payout, ...programDetails(p).map(([, v]) => v)].join(" ")
