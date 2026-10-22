@@ -92,7 +92,7 @@ import {
   type PostSelection,
 } from "../src/lib/best-posts"
 
-import { AFFITOR_LINE, guideReadMoreLinks, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
+import { AFFITOR_LINE, listCampaign, listReadMoreLinks, guideReadMoreLinks, picksSentence, programDetails, prosCons, readMoreLinks, standardFaq, tableRow, typeSplit } from "../src/lib/best-standard"
 import { AFFITOR_MARKETPLACE, affitorUrl } from "../src/lib/affitor-link"
 
 const BASE = "https://openaffiliate.dev"
@@ -1240,6 +1240,7 @@ export function leaderboardMd(): string | null {
  * other list, so adding a list never grows the index.
  */
 function bestListMd(list: BestList, path: string): string {
+  const ranked = !path.startsWith("/categories/")
   const data = buildBestList(list)
   const { intro, faq } = bestListCopy(data, mdEscape)
   const rows = data.rows
@@ -1268,16 +1269,21 @@ function bestListMd(list: BestList, path: string): string {
       data.checked ? `Verified ${mdEscape(data.checked)}: ${VERIFIED_NOTE}` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
+    // A ranked list ends like a post: the Affitor line, Read more, then the FAQ. A category keeps its other lists.
+    ranked ? `${AFFITOR_LINE.before}${AFFITOR_LINE.anchor}${AFFITOR_LINE.after} ${mdUrl(affitorUrl("blog", listCampaign(list), AFFITOR_MARKETPLACE))}` : null,
+    ranked ? section("Read more", listReadMoreLinks(list).map((l) => `- [${mdEscape(l.label)}](${BASE}${l.href}.md)`).join("\n")) : null,
     section("FAQ", faq.map(f => `### ${f.q.replace(/#/g, "\\#")}\n\n${f.a}`).join("\n\n")),
-    section(
-      "Other lists",
-      otherLists(list)
-        .map(l => {
-          const other = buildBestList(l)
-          return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`
-        })
-        .join("\n"),
-    ),
+    ranked
+      ? null
+      : section(
+          "Other lists",
+          otherLists(list)
+            .map(l => {
+              const other = buildBestList(l)
+              return `- [${l.h1}](${BASE}${bestPath(l)}.md) — ${programCount(other.total)}, ${other.verified.length} verified`
+            })
+            .join("\n"),
+        ),
     section("Links", [
       `HTML: ${BASE}${path}`,
       `All categories: ${BASE}/categories`,
@@ -1391,7 +1397,7 @@ function guideMd(g: GuidePost): string {
     f.cookie ? `- **Publish a cookie window:** ${f.cookie.published} of ${f.verified}` : null,
     f.cookie ? `- **Median cookie window:** ${f.cookie.median} days` : null,
     f.cookie ? `- **Middle half of cookie windows:** ${f.cookie.p25} to ${f.cookie.p75} days` : null,
-    `- **Approve every applicant automatically:** ${f.approval.auto} of ${f.verified}`,
+    `- **Approve applications automatically:** ${f.approval.auto} of ${f.verified}`,
     `- **Review applications by hand:** ${f.approval.manual} of ${f.verified}`,
     `- **Pay by PayPal:** ${f.payout.paypal} of ${f.verified}`,
   ].filter(Boolean).join("\n")

@@ -1,6 +1,5 @@
 import { confirmedTerms, livePrograms } from "./programs"
 import { paysBy } from "./payout-filters"
-import { isLifetime } from "./commission-order"
 import { selectPrograms, type PostProgram, type PostSelection } from "./best-posts"
 import type { Faq } from "./program-seo"
 import { guide as howToStart } from "../content/guides/how-to-start-affiliate-marketing"
@@ -141,7 +140,8 @@ export function registryFacts(): RegistryFacts {
     asOf: v.map((p) => (p.lastVerifiedAt ?? "").slice(0, 10)).sort().at(-1) ?? "",
     verified: v.length,
     byType: [...types].map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count),
-    lifetime: v.filter(isLifetime).length,
+    // Any commission type that pays for the customer's lifetime (hybrid and tiered deals included).
+    lifetime: v.filter((p) => /lifetime/i.test(String(p.commission.duration ?? ""))).length,
     cookie: cookies.length ? { published: cookies.length, p25: quantile(cookies, 0.25), median: quantile(cookies, 0.5), p75: quantile(cookies, 0.75) } : null,
     approval: {
       auto: v.filter((p) => p.approval === "auto").length,

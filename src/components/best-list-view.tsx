@@ -8,6 +8,9 @@ import { serializeJsonLd } from "@/lib/json-ld";
 import { networkName, IN_HOUSE, livePrograms, termsConfirmed } from "@/lib/programs";
 import { applyButton } from "@/lib/apply-cta";
 import { AffitorLink } from "@/components/affitor-link";
+import { ReadMore, Tinted, linkClass, prose } from "@/components/best-post-standard";
+import { AFFITOR_LINE, listCampaign, listReadMoreLinks } from "@/lib/best-standard";
+import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
 import {
   BEST_INDEX,
   BEST_LISTS,
@@ -284,13 +287,40 @@ export function BestListView({
         </div>
       </section>
 
-      <section className="oa-band" aria-labelledby="list-faq-h">
-        <div className="max-w-3xl">
-          <h2 id="list-faq-h" className="text-lg font-semibold mb-3">{list.h1} FAQ</h2>
-          <FaqAccordion items={faq} />
+      {!related && (
+        <div className="oa-band" data-list-end>
+          <div className="mx-auto max-w-[760px]">
+            <p data-affitor-line className={`${prose} border-t border-border pt-6`}>
+              {AFFITOR_LINE.before}
+              <AffitorLink href={affitorUrl("blog", listCampaign(list), AFFITOR_MARKETPLACE)} source="blog" cta="marketplace" newTab className={linkClass}>
+                {AFFITOR_LINE.anchor}
+              </AffitorLink>
+              {AFFITOR_LINE.after}
+            </p>
+            <ReadMore id="read-more" links={listReadMoreLinks(list)} />
+            <Tinted id="faq" aria-labelledby="list-faq-h" data-faq>
+              <h2 id="list-faq-h" className="text-subtitle font-semibold">{list.h1} FAQ</h2>
+              {faq.map((f) => (
+                <div key={f.q} className="mt-5">
+                  <h3 className="text-base font-semibold">{f.q}</h3>
+                  <p className={`${prose} mt-2`}>{f.a}</p>
+                </div>
+              ))}
+            </Tinted>
+          </div>
         </div>
-      </section>
+      )}
 
+      {related && (
+        <section className="oa-band" aria-labelledby="list-faq-h">
+          <div className="max-w-3xl">
+            <h2 id="list-faq-h" className="text-lg font-semibold mb-3">{list.h1} FAQ</h2>
+            <FaqAccordion items={faq} />
+          </div>
+        </section>
+      )}
+
+      {related && (
       <nav className="oa-band" aria-label="More lists">
         {siblings.length > 0 && (
           <>
@@ -312,6 +342,7 @@ export function BestListView({
           <Link href="/categories" className="underline decoration-line-strong underline-offset-4 hover:decoration-current">Browse by category</Link>
         </div>
       </nav>
+      )}
     </div>
   );
 }

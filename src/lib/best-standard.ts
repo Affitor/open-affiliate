@@ -1,4 +1,4 @@
-import { BEST_LISTS, bestPath, getBestList, updatedText } from "./best-lists"
+import { BEST_LISTS, bestPath, getBestList, updatedText, BEST_INDEX, otherLists, type BestList } from "./best-lists"
 import { GUIDES, guidePath, guideTitle, type GuidePost } from "./guides"
 import { FRESHNESS_RULE, NOT_STATED, checkedRange, earnText, payoutText, type BestPost, type PostSelection } from "./best-posts"
 
@@ -382,6 +382,18 @@ export const AFFITOR_LINE = {
 
 /** How many posts the "Read more" box at the end lists. */
 export const READ_MORE_COUNT = 5
+
+/** A ranked list's Read more: other lists in its scope, then guides, READ_MORE_COUNT in all (three lists, two guides when both exist). */
+export function listReadMoreLinks(list: BestList): { href: string; label: string }[] {
+  const lists = otherLists(list).map((l) => ({ href: bestPath(l), label: l.h1 }))
+  const guides = GUIDES.map((g) => ({ href: guidePath(g), label: guideTitle(g) }))
+  return [...lists.slice(0, 3), ...guides.slice(0, 2), ...lists.slice(3), ...guides.slice(2)].slice(0, READ_MORE_COUNT)
+}
+
+/** The utm_campaign of a ranked list's Affitor line: its slug, "best" for the hub. */
+export function listCampaign(list: BestList): string {
+  return list === BEST_INDEX ? "best" : list.slug
+}
 
 /** A guide's related /best lists, then the other guides in GUIDES order, the first READ_MORE_COUNT. */
 export function guideReadMoreLinks(guide: GuidePost): { href: string; label: string }[] {

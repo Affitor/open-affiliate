@@ -9,7 +9,7 @@ import { getProgram, type Program } from "@/lib/programs";
 import { blogApplyHref } from "@/lib/apply-cta";
 import { AFFITOR_MARKETPLACE, affitorUrl } from "@/lib/affitor-link";
 import { type PostProgram, type PostSelection } from "@/lib/best-posts";
-import { AFFITOR_LINE, guideReadMoreLinks, programDetails, splitLink } from "@/lib/best-standard";
+import { AFFITOR_LINE, dateText, guideReadMoreLinks, programDetails, splitLink } from "@/lib/best-standard";
 import { DISCLOSURE_SOURCE, guideTitle, registryFacts, type GuidePost } from "@/lib/guides";
 
 const SITE = "https://openaffiliate.dev";
@@ -48,7 +48,7 @@ export function registryFactRows(): [string, string][] {
           ["Middle half of cookie windows", `${f.cookie.p25} to ${f.cookie.p75} days`],
         ] as [string, string][])
       : []),
-    ["Approve every applicant automatically", `${f.approval.auto} of ${f.verified}`],
+    ["Approve applications automatically", `${f.approval.auto} of ${f.verified}`],
     ["Review applications by hand", `${f.approval.manual} of ${f.verified}`],
     ["Pay by PayPal", `${f.payout.paypal} of ${f.verified}`],
   ];
@@ -58,7 +58,7 @@ function RegistryFacts() {
   return (
     <section id="registry" className="scroll-mt-20 pt-12">
       <h2 className={h2}>What the registry shows</h2>
-      <p className={`${prose} mt-4`}>Verified programs in the OpenAffiliate registry, terms checked up to {registryFacts().asOf}:</p>
+      <p className={`${prose} mt-4`}>Verified programs in the OpenAffiliate registry, terms checked up to {dateText(registryFacts().asOf)}:</p>
       <ul data-registry-facts className={`${prose} mt-3 list-disc space-y-1.5 pl-5`}>
         {registryFactRows().map(([label, value]) => (
           <li key={label}>
