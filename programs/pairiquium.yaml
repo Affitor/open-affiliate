@@ -1,7 +1,7 @@
 name: Pairiquium
 slug: pairiquium
 url: https://pairiquium.com
-category: SaaS
+category: Infrastructure
 
 commission:
   type: one-time

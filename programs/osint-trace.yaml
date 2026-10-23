@@ -1,7 +1,7 @@
 name: OSINT Trace
 slug: osint-trace
 url: https://osinttrace.com
-category: SaaS
+category: Security
 
 commission:
   type: recurring

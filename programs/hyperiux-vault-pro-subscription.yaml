@@ -1,7 +1,7 @@
 name: Hyperiux Vault Pro Subscription
 slug: hyperiux-vault-pro-subscription
 url: https://vault.hyperiux.com
-category: SaaS
+category: Developer Tools
 
 commission:
   type: recurring
