@@ -411,6 +411,7 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null, baseC
   }
   const [type, duration] = kinds[policy.commission_type]
   const hold = program.default_hold_period_days ?? 0
+  const named = new Set(Array.isArray(baseConflicts) ? baseConflicts.filter(isRecord).map((c) => c.field) : [])
   return {
     "commission.type": type,
     "commission.rate": rate > 0 ? `${rate}%` : `$${fixed}`,
@@ -420,8 +421,13 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null, baseC
     "commission.duration": duration,
     // Mirrors affitorConditions() in scripts/sync-affitor.ts.
     "commission.conditions":
-      (hold > 0 ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : "") +
-      AFFITOR_SYNC.network_terms.payout_conditions,
+      (hold > 0 && !named.has("payout.frequency") ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : "") +
+      (named.has("payout.minimum")
+        ? AFFITOR_SYNC.network_terms.payout_conditions
+            .split(/(?<=\.) /)
+            .filter((sentence) => !sentence.includes(`$${AFFITOR_SYNC.network_terms.payout_minimum}`))
+            .join(" ")
+        : AFFITOR_SYNC.network_terms.payout_conditions),
     cookie_days: program.cookie_window_days ?? ABSENT,
     tracking_method: "cookie",
     // Mirrors ownedFields(): the network minimum every listing publishes, never payout_threshold.

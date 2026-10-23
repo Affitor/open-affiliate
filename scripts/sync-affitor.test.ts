@@ -4,7 +4,7 @@ import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { basename, join } from "node:path"
 import { test } from "node:test"
-import { parse } from "yaml"
+import { parse, parseDocument } from "yaml"
 import {
   MAX_PAUSES,
   affitorConditions,
@@ -25,6 +25,14 @@ import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
 import config from "./sync-affitor.config.json"
 
 /** What the sync writes for a 15-day hold: a hold, then the network's withdrawal rules. */
+/** A listing's commission.conditions lines, however the YAML folds them. */
+const conditionsBlock = (yaml: string): string => yaml.match(/^  conditions:.*\n(?: {4,}.*\n)*/m)![0]
+/** The listing with other conditions, written the way the sync writes YAML. */
+function withConditions(yaml: string, conditions: string): string {
+  const doc = parseDocument(yaml)
+  doc.setIn(["commission", "conditions"], conditions)
+  return doc.toString({ lineWidth: 100, flowCollectionPadding: false })
+}
 const HELD_15 = `Commissions are held 15 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
@@ -259,6 +267,13 @@ test("a hold is a hold, never a payout date, and the network's withdrawal rules 
   assert.equal(affitorConditions(30), `Commissions are held 30 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`)
   // The withdrawal minimum is the account's, not the program threshold the API calls payout_threshold.
   assert.match(config.network_terms.payout_conditions, /\$20 must be available before a withdrawal request/)
+  // A term the listing records as stated two ways keeps its figure out of the prose too.
+  const minimum = `$${config.network_terms.payout_minimum}`
+  const noMinimum = affitorConditions(30, [{ field: "payout.minimum" }])
+  assert.ok(noMinimum.startsWith("Commissions are held 30 days") && !noMinimum.includes(minimum), noMinimum)
+  assert.ok(noMinimum.includes("Withdrawals undergo team review"), "only the minimum sentence is left out")
+  assert.equal(affitorConditions(30, [{ field: "payout.frequency" }]), config.network_terms.payout_conditions, "no hold sentence")
+  assert.equal(affitorConditions(30, [{ field: "cookie_days" }]), affitorConditions(30), "other conflicts change nothing")
 })
 
 test("rows with nothing usable to list are reasons, not terms", () => {
@@ -1116,10 +1131,14 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   // keeps both blank: the sync writes nothing over them, and a pull request that fills them is out of the lane.
   const synced = created.find((f) => f.filename === "programs/citegraph.yaml")!.content!
   const twoWays =
-    synced.replace(/^cookie_days: \d+\n/m, "").replace(/^  minimum: \d+\n/m, "") +
+    synced
+      .replace(/^cookie_days: \d+\n/m, "")
+      .replace(/^  minimum: \d+\n/m, "")
+      .replace(conditionsBlock(synced), conditionsBlock(withConditions(synced, affitorConditions(15, [{ field: "payout.minimum" }])))) +
     'conflicts:\n  - field: cookie_days\n    quote: "Brand page: 60 days. Affitor: 90 days."\n    values: ["60 days", "90 days"]\n' +
     '  - field: payout.minimum\n    quote: "Brand page: $50. Affitor: $20."\n    values: [20, 50]\n'
   assert.ok(!/^cookie_days:/m.test(twoWays) && !/^  minimum:/m.test(twoWays))
+  assert.ok(!(parse(twoWays).commission.conditions as string).includes(`$${config.network_terms.payout_minimum}`))
   const kept = dirWith({ "citegraph.yaml": twoWays })
   assert.deepEqual(
     (await pullRequestFiles(kept, rows, TODAY)).filter((f) => f.filename === "programs/citegraph.yaml"),
@@ -1136,6 +1155,10 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   const verdictFilled = await lane([filled], rows)
   assert.equal(verdictFilled.eligible, false)
   assert.match(verdictFilled.reasons.join("\n"), /cookie_days is 90, Affitor says/)
+  // ...and so is one that puts the minimum back into the conditions.
+  const prose = { ...filled, content: twoWays.replace(conditionsBlock(twoWays), conditionsBlock(synced)) }
+  assert.notEqual(prose.content, twoWays)
+  assert.equal((await lane([prose], rows)).eligible, false)
 
   // The same pull request after Affitor changed again: blocked, and why.
   const verdict = await lane(refreshed, rows)
