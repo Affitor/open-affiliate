@@ -8,6 +8,8 @@
  * Detection only: these patterns flag a disagreement for a person to fix from
  * the brand's page. Nothing here may be used to fill a field from prose
  * (lessons 13/10 and 21/10, #184/#171/#389).
+ *
+ * Scope: honest drift by maintainers and sync bots, not adversarial prose written to slip past the patterns.
  */
 import assert from "node:assert/strict"
 import { test } from "node:test"
@@ -52,9 +54,9 @@ const MINIMUM_FORMS = [
   // "once $50 is reached"
   String.raw`\bonce\s+${MONEY}\s+is reached`,
 ].map((s) => new RegExp(s, "gi"))
-const NO_MINIMUM = /\bno (?:payout )?minimum\b|\bno (?:payout )?thresholds?\b/i
+const NO_MINIMUM = /\b(?:no|zero) (?:payout )?minimum\b|\bno (?:payout )?thresholds?\b/i
 const BY_WIRE = /\b(?:wire|bank transfer|bank wire)/i
-const METHOD = /\b(?:paypal|wise|payoneer|stripe|crypto|check|account credit|credits)\b/g
+const METHOD = /\b(?:paypal|wise|payoneer|stripe|crypto|check|account credit|credits|wire|bank transfer|bank wire)\b/g
 
 type Figure = { amount: number; currency: string }
 const SYMBOL: Record<string, string> = { "€": "EUR", "£": "GBP" }
@@ -82,14 +84,19 @@ export function minimumMismatches(docs: [string, Doc][]): string[] {
     if (typeof min !== "number") continue
     const currency = (d.payout?.currency ?? "USD").toUpperCase()
     const dollar = ["CAD", "AUD"].includes(currency) ? currency : "USD"
-    // A wire or bank-transfer minimum is a second, higher floor for that method (Icons8, pCloud, Rocket.net),
-    // and a sentence naming two methods gives one floor each ("Wise with no minimum, or PayPal with a $200 minimum").
-    const perMethod = (s: string) => BY_WIRE.test(s) || new Set(s.toLowerCase().match(METHOD) ?? []).size > 1
-    const text = [d.commission?.conditions, d.payout?.conditions].flatMap(sentences).filter((s) => !perMethod(s)).join(" ")
-    const stated = statedMinimums(text, dollar).filter((f) => f.currency === currency || f.currency === "*")
-    // One matching statement does not excuse another that contradicts it (Codex r1 #410).
-    const off = stated.filter((f) => f.amount !== min)
-    if (off.length) out.push(`${slug}: payout.minimum ${min} ${currency}, conditions also state ${off.map((f) => f.amount).join(" / ")}`)
+    const off: Figure[] = []
+    for (const s of [d.commission?.conditions, d.payout?.conditions].flatMap(sentences)) {
+      const stated = statedMinimums(s, dollar).filter((f) => f.currency === currency || f.currency === "*")
+      const amounts = new Set(stated.map((f) => f.amount))
+      // A wire or bank-transfer floor above the minimum is that method's own (Icons8, pCloud, Rocket.net).
+      if (BY_WIRE.test(s) && stated.every((f) => f.amount > min)) continue
+      // Two methods with two different floors give one each ("Wise with no minimum, or PayPal with a $200 minimum").
+      // A sentence with one figure is always checked, whatever methods it names (Codex r2 #410).
+      if (amounts.size > 1 && new Set(s.toLowerCase().match(METHOD) ?? []).size > 1) continue
+      // One matching statement does not excuse another that contradicts it (Codex r1 #410).
+      off.push(...stated.filter((f) => f.amount !== min))
+    }
+    if (off.length) out.push(`${slug}: payout.minimum ${min} ${currency}, conditions also state ${[...new Set(off.map((f) => f.amount))].join(" / ")}`)
   }
   return out
 }
@@ -167,12 +174,20 @@ const FIGURES: Record<string, (s: string) => string[]> = {
 const TWO_WAYS = /\b(?:stated|states|gives?|given|lists?|listed|sets?) [^.;]{0,40}\btwo ways\b|\btwo ways\b/i
 
 /** Every value of the conflict appears in the sentence: a number as a standalone figure, a phrase as text. */
-function namesValues(s: string, values: unknown[] | undefined): boolean {
+function namesValues(s: string, field: string, values: unknown[] | undefined): boolean {
   if (!values?.length) return false
   const text = s.toLowerCase().replace(/,(?=\d{3})/g, "")
+  // Each value must appear in the field's unit, so "$50 processing fee" or "after 50 days" does not name a $50 minimum.
+  const unit: Record<string, (n: string) => RegExp> = {
+    "payout.minimum": (n) => new RegExp(`(?:[$€£]\\s?${n}(?![\\d.])|(?<![\\d.])${n}\\s?(?:usd|eur|gbp|cad|aud|chf)\\b)(?!\\s+(?:\\w+\\s+)?fees?\\b)`),
+    cookie_days: (n) => new RegExp(`(?<![\\d.])${n}[- ]days?\\b`),
+    "commission.rate": (n) => new RegExp(`(?<![\\d.])${n}\\s?%`),
+    "commission.duration": (n) => new RegExp(`(?<![\\d.])${n}[- ](?:months?|years?)\\b`),
+  }
+  if (field === "payout.minimum" && !/\bminimum|\bthreshold/.test(text)) return false
   return values.every((v) => {
-    const n = String(v).match(/^\d+(?:\.\d+)?/)?.[0]
-    return n ? new RegExp(`(?<![\\d.])${n.replace(".", "\\.")}(?![\\d]|\\.\\d)`).test(text) : text.includes(String(v).toLowerCase())
+    const n = String(v).match(/^\d+(?:\.\d+)?/)?.[0]?.replace(".", "\\.")
+    return n && unit[field] ? unit[field](n).test(text) : text.includes(String(v).toLowerCase())
   })
 }
 
@@ -188,7 +203,7 @@ export function conflictStatements(docs: [string, Doc][]): string[] {
       for (const [name, get] of PROSE)
         for (const s of sentences(get(d))) {
           const found = new Set(figures(s))
-          if (found.size > 0 && !TWO_WAYS.test(s) && !namesValues(s, c.values)) out.push(`${slug} ${name} states ${field} ${[...found].join(" / ")}: ${s.trim()}`)
+          if (found.size > 0 && !TWO_WAYS.test(s) && !namesValues(s, field, c.values)) out.push(`${slug} ${name} states ${field} ${[...found].join(" / ")}: ${s.trim()}`)
         }
     }
   }
@@ -321,4 +336,14 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   assert.equal(minimumMismatches(doc({ ...seerist, payout: { minimum: 20, currency: "USD" }, commission: { conditions: `${seerist.commission!.conditions} Minimum payout is $50.` } })).length, 1)
   // A sentence giving one floor per method is not a contradiction (Browse AI).
   assert.equal(minimumMismatches(doc({ payout: { minimum: 0, currency: "USD" }, commission: { conditions: "Paid monthly via Wise with no minimum, or via PayPal on request with a $200 minimum." } })).length, 0)
+  // A wire floor above the minimum is that method's own (Icons8).
+  assert.equal(minimumMismatches(doc({ payout: { minimum: 50, currency: "USD" }, commission: { conditions: "Wire transfers need a $1,000 minimum." } })).length, 0)
+
+  // Codex r2 #410, each failed before the fix:
+  // P2-1: a sentence with one figure is checked whatever methods it names.
+  for (const s of ["Minimum payout is $50 via Wise, and PayPal is not supported.", "Minimum payout is $50 via Wise, and promotional credits cannot be withdrawn."])
+    assert.equal(minimumMismatches(doc({ ...seerist, payout: { minimum: 20, currency: "USD" }, commission: { conditions: `${seerist.commission!.conditions} ${s}` } })).length, 1, s)
+  // P2-2: a recorded value counts only in the field's unit, not as a fee or a day count.
+  for (const s of ["Minimum payout is $20, with a $50 processing fee.", "Minimum payout is $20 after 50 days."])
+    assert.equal(conflictStatements(doc({ ...webzon, agents: {}, commission: { conditions: s } })).length, 1, s)
 })
