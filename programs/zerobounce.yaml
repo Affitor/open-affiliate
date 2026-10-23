@@ -14,7 +14,7 @@ tags: [email-verification, email-validation, email-deliverability, email-warmup,
 # the page also says affiliates "graduate to the next tier for even better commission rates", but no tier table is published (zerobounce.net/affiliate-program, checked 2026-10-17)
 commission:
   type: recurring
-  rate: "18%"
+  rate: "18% then 5%"
   mode: percentage
   value: 18
   currency: USD

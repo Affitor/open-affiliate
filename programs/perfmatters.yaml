@@ -8,7 +8,7 @@ tags: [wordpress-plugin, web-performance, core-web-vitals, lazy-loading, script-
 # "Besides the one-time commission, we also pay 10% recurring commissions for the lifetime of the customer." (perfmatters.io/affiliate-tos/, checked 2026-10-20)
 commission:
   type: hybrid
-  rate: "20%"
+  rate: "20% then 10%"
   mode: percentage
   value: 20
   duration: lifetime
