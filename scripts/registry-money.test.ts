@@ -114,39 +114,79 @@ export function minimumMismatches(docs: [string, Doc][]): string[] {
 
 // ---------- commission rate step-down ----------
 
-const STEP_DOWN = [
-  // "50% of the first invoice, then 20% of every invoice after it"
-  /(\d+(?:\.\d+)?)%[^.;]{0,120}?\bfirst\b[^.;]{0,60}?\bthen\s+(\d+(?:\.\d+)?)%/i,
-  // "40% on the first year ...; 15% of ... after the first year"
-  // (a period, not "for 12 months after the first attributed sale", which is a length: AppQR)
-  /()(\d+(?:\.\d+)?)%[^.;%]{0,60}?\bafter the first (?:year|month|\d+ (?:months|years))\b/i,
-]
+// Broad on purpose (Codex r5 #410): phrasing-by-phrasing patterns kept missing step-downs, so every
+// single-percentage rate whose conditions name another percentage next to a step word is a hit, and a
+// person reviews each one into the lists below.
+const STEP_WORD = /\b(?:first|then|after|renew\w*|subsequent|thereafter|year 2|second year)\b/i
 
-/**
- * Instapage (unverified, imported from PartnerStack) lists three plan-specific rates (40% then 15% on
- * annual plans, 30% on monthly ones) under type one-time and a 12-month duration; which rate string fits
- * needs a maintainer reading the brand's page. Remove it from here when fixed.
- */
-const OPEN_RATE = new Set(["instapage"])
-
-/** Programs with a single-percentage rate whose conditions step that rate down to another percentage. */
-export function rateMismatches(docs: [string, Doc][]): string[] {
+/** Programs with a single-percentage rate whose conditions name 2+ distinct percentages and a step word. */
+export function multiRateHits(docs: [string, Doc][]): string[] {
   const out: string[] = []
   for (const [slug, d] of docs) {
-    if (OPEN_RATE.has(slug)) continue
-    const rate = String(d.commission?.rate ?? "")
-    if (!/^\d+(?:\.\d+)?%$/.test(rate.trim())) continue
-    for (const s of sentences(d.commission?.conditions).flatMap((x) => x.split(/;\s*/))) {
-      const m = STEP_DOWN.map((re) => s.match(re)).find(Boolean)
-      // A single percentage is wrong whichever step it holds ("20%" or "10%" for "20% then 10%"): only a
-      // rate carrying both passes (Codex r4 #410). The "after the first" form names only the later rate.
-      if (m && (!m[1] || parseFloat(m[1]) !== parseFloat(m[2]))) {
-        out.push(`${slug}: rate "${rate}", conditions: ${s.trim()}`)
-        break
-      }
-    }
+    if (!/^\d+(?:\.\d+)?%$/.test(String(d.commission?.rate ?? "").trim())) continue
+    const text = String(d.commission?.conditions ?? "")
+    const percents = new Set([...text.matchAll(/(\d+(?:\.\d+)?)\s?%/g)].map((m) => parseFloat(m[1])))
+    if (percents.size > 1 && STEP_WORD.test(text)) out.push(slug)
   }
   return out
+}
+
+/**
+ * Hits that are real bugs but need a maintainer reading the brand's page. Remove one when fixed.
+ */
+const OPEN_RATE: Record<string, string> = {
+  instapage: "unverified PartnerStack import: 40% then 15% on annual plans and 30% on monthly ones, under type one-time with a 12-month duration",
+  "auware-by-buyist": "unverified: 35% through 6/30 and 30% thereafter, a dated promotion; which rate is current needs the page",
+  evolve: "unverified: 20% year 1, 15% year 2, 10% year 3 under rate 20% and type one-time",
+  lindy: "unverified: 30% in year 1 and 15% recurring in year 2 under rate 30% and type one-time",
+  salesrabbit: "15% in year 1 and 7.5% in year 2 (PartnerStack listing) under rate 15%; no receipt in the file to write the step from",
+  "workwise-compliance": "unverified: 25% of the initial order and 10% of renewals under rate 25% and type one-time",
+  zep: "unverified: up to 20% recurring or 35% of the first 12 months, two models under one rate",
+}
+
+/** Hits reviewed as correct: the single rate is the program's rate, and the other percentages are not a step-down of it. */
+const REVIEWED_MULTI_RATE: Record<string, string> = {
+  "123formbuilder": "50% is a power-affiliate tier after 10 referrals in a month",
+  airia: "the extra 20% was a PartnerStack bonus that ended March 2026",
+  brand24: "25% and 30% are volume tiers",
+  castos: "10% is on production and launch services, a different product",
+  clico: "20% is the customer's discount",
+  convertkit: "after 12 months only Bronze/Silver/Gold status pays; the 12-month duration already bounds the 50%",
+  "creatify-ai": "the extra 5% is a monthly-sales bonus",
+  cyberforward: "25% is a bonus rate for a quarter after five customers",
+  dext: "70% is the annual-plan rate, a plan split, not a step",
+  "eleven-labs-inc": "11% is the Business-plan rate, a plan split (also in OPEN_FIELD_CONFLICTS)",
+  fastmail: "10% is the customer's discount",
+  "hix-ai": "10% is the second-tier share on sub-affiliates",
+  "hosting-com": "20% is for other products (reseller, Windows, domains)",
+  "julius-ai": "5% is second-tier, 50% off is the customer's discount, 30% is a separate Creator Program",
+  kittl: "growing to 50% is a volume tier",
+  later: "25% and 30% are volume tiers",
+  "learnworlds-top-user-rated-online-course-platform-lms": "30% vs 25% split by referral date and source, not a step",
+  logoai: "20% is the customer's discount",
+  manychat: "40% and 50% are volume tiers",
+  "merlin-ai": "10% is for special-price plans, a plan split",
+  monica: "70% is the share of in-app purchases commission is calculated on",
+  mylens: "10% is the customer's discount",
+  "oakhampton-operations-twin": "25% is a bonus rate for a quarter after five clients",
+  openart: "30% is an invitation-only raise",
+  pandadoc: "25%-45% is a range, not a step",
+  "pineapple-builder": "10% is the customer's discount",
+  plansom: "30% is an invitation-only Elite rate",
+  "press-mage": "25% and 30% are invitation-only levels",
+  reelscut: "15% is the customer's discount",
+  scalenut: "30%-50% headline and 40% Premium tier, not a step",
+  seedprod: "20% is for RafflePress, a different product",
+  sendible: "30% is the Top Affiliates tier after 100 customers",
+  simpletexting: "'up to 10-15%' is a range on the same page",
+  simvoly: "50% is a dated promotion",
+  "snov-io": "20% is on LinkedIn Automation slots, an add-on",
+  "spiky-ai": "20% is the reseller rate",
+  subclip: "10% is the customer's welcome offer",
+  thrivecart: "30%-55% are volume tiers",
+  tidio: "25% is the agency program",
+  "zeemo-ai": "10% is the customer's discount",
+  zenrows: "40% is a featured-partner tier, 15% is sales-assisted deals",
 }
 
 // ---------- a term stated two ways ----------
@@ -253,8 +293,11 @@ test("payout.minimum equals the minimum its own conditions state", () => {
   assert.deepEqual(minimumMismatches(registry()), [], "fix the field or the sentence from the brand's page; never copy a figure from prose")
 })
 
-test("a single-percentage commission.rate is not stepped down by its own conditions", () => {
-  assert.deepEqual(rateMismatches(registry()), [], 'write the step into the rate ("50% then 20%"), as the page states it')
+test("a single-percentage commission.rate next to other percentages in its conditions is a reviewed case", () => {
+  const hits = multiRateHits(registry())
+  const listed = [...Object.keys(OPEN_RATE), ...Object.keys(REVIEWED_MULTI_RATE)]
+  assert.deepEqual(hits.filter((s) => !listed.includes(s)), [], 'a step-down: write both steps into the rate ("50% then 20%"); otherwise add the slug to REVIEWED_MULTI_RATE with the reason')
+  assert.deepEqual(listed.filter((s) => !hits.includes(s)), [], "no longer a hit: remove these from OPEN_RATE / REVIEWED_MULTI_RATE")
 })
 
 /**
@@ -320,13 +363,19 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   assert.equal(minimumMismatches(doc({ payout: { minimum: 110, currency: "USD" }, commission: { conditions: "Minimum payout is 100 EUR or 110 USD." } })).length, 0)
   // StoryChief, 2026-10-21: rate "50%", conditions "50% ... then 20%".
   const storychief: Doc = { commission: { rate: "50%", conditions: "50% of the referred client's first invoice, then 20% of every invoice after it." } }
-  assert.equal(rateMismatches(doc(storychief)).length, 1)
-  assert.equal(rateMismatches(doc({ commission: { ...storychief.commission, rate: "50% then 20%" } })).length, 0)
-  // Codex r4 #410, each failed before the fix: keeping only the later rate fails too.
-  assert.equal(rateMismatches(doc({ commission: { ...storychief.commission, rate: "20%" } })).length, 1)
+  assert.equal(multiRateHits(doc(storychief)).length, 1)
+  assert.equal(multiRateHits(doc({ commission: { ...storychief.commission, rate: "50% then 20%" } })).length, 0)
+  // Codex r4 #410: keeping only the later rate fails too.
+  assert.equal(multiRateHits(doc({ commission: { ...storychief.commission, rate: "20%" } })).length, 1)
   const perfmatters = "20% on the first sale of any plan, then 10% recurring on the customer's renewals for their lifetime."
-  assert.equal(rateMismatches(doc({ commission: { rate: "10%", conditions: perfmatters } })).length, 1)
-  assert.equal(rateMismatches(doc({ commission: { rate: "20% then 10%", conditions: perfmatters } })).length, 0)
+  assert.equal(multiRateHits(doc({ commission: { rate: "10%", conditions: perfmatters } })).length, 1)
+  assert.equal(multiRateHits(doc({ commission: { rate: "20% then 10%", conditions: perfmatters } })).length, 0)
+  // Codex r5 #410: a semicolon and "after the first invoice" no longer hide the step.
+  const r5 = "50% of the referred client's first invoice; 20% of every invoice after the first invoice for as long as the client stays a customer."
+  assert.equal(multiRateHits(doc({ commission: { rate: "20%", conditions: r5 } })).length, 1)
+  assert.equal(multiRateHits(doc({ commission: { rate: "50% then 20%", conditions: r5 } })).length, 0)
+  // One percentage, or no step word, is not a hit (AppQR: a length after the first sale).
+  assert.equal(multiRateHits(doc({ commission: { rate: "30%", conditions: "30% recurring commission on eligible payments for 12 months after the first attributed sale." } })).length, 0)
   // #403: minimum in conflicts, conditions still state the Affitor $20.
   const twoWays: Doc = { payout: { currency: "USD" }, commission: { conditions: "At least $20 must be available before a withdrawal request." }, conflicts: [{ field: "payout.minimum" }] }
   assert.equal(conflictStatements(doc(twoWays)).length, 1)
