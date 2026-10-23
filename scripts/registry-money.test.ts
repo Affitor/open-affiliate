@@ -118,7 +118,8 @@ const STEP_DOWN = [
   // "50% of the first invoice, then 20% of every invoice after it"
   /(\d+(?:\.\d+)?)%[^.;]{0,120}?\bfirst\b[^.;]{0,60}?\bthen\s+(\d+(?:\.\d+)?)%/i,
   // "40% on the first year ...; 15% of ... after the first year"
-  /()(\d+(?:\.\d+)?)%[^.;%]{0,60}?\bafter the first\b/i,
+  // (a period, not "for 12 months after the first attributed sale", which is a length: AppQR)
+  /()(\d+(?:\.\d+)?)%[^.;%]{0,60}?\bafter the first (?:year|month|\d+ (?:months|years))\b/i,
 ]
 
 /**
@@ -135,10 +136,11 @@ export function rateMismatches(docs: [string, Doc][]): string[] {
     if (OPEN_RATE.has(slug)) continue
     const rate = String(d.commission?.rate ?? "")
     if (!/^\d+(?:\.\d+)?%$/.test(rate.trim())) continue
-    const value = parseFloat(rate)
     for (const s of sentences(d.commission?.conditions).flatMap((x) => x.split(/;\s*/))) {
       const m = STEP_DOWN.map((re) => s.match(re)).find(Boolean)
-      if (m && parseFloat(m[2]) !== value) {
+      // A single percentage is wrong whichever step it holds ("20%" or "10%" for "20% then 10%"): only a
+      // rate carrying both passes (Codex r4 #410). The "after the first" form names only the later rate.
+      if (m && (!m[1] || parseFloat(m[1]) !== parseFloat(m[2]))) {
         out.push(`${slug}: rate "${rate}", conditions: ${s.trim()}`)
         break
       }
@@ -320,6 +322,11 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   const storychief: Doc = { commission: { rate: "50%", conditions: "50% of the referred client's first invoice, then 20% of every invoice after it." } }
   assert.equal(rateMismatches(doc(storychief)).length, 1)
   assert.equal(rateMismatches(doc({ commission: { ...storychief.commission, rate: "50% then 20%" } })).length, 0)
+  // Codex r4 #410, each failed before the fix: keeping only the later rate fails too.
+  assert.equal(rateMismatches(doc({ commission: { ...storychief.commission, rate: "20%" } })).length, 1)
+  const perfmatters = "20% on the first sale of any plan, then 10% recurring on the customer's renewals for their lifetime."
+  assert.equal(rateMismatches(doc({ commission: { rate: "10%", conditions: perfmatters } })).length, 1)
+  assert.equal(rateMismatches(doc({ commission: { rate: "20% then 10%", conditions: perfmatters } })).length, 0)
   // #403: minimum in conflicts, conditions still state the Affitor $20.
   const twoWays: Doc = { payout: { currency: "USD" }, commission: { conditions: "At least $20 must be available before a withdrawal request." }, conflicts: [{ field: "payout.minimum" }] }
   assert.equal(conflictStatements(doc(twoWays)).length, 1)
