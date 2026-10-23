@@ -13,7 +13,7 @@ commission:
   value: 20
   currency: USD
   duration: 12 months
-  conditions: Paid 15 days after sale.
+  conditions: Commissions are held 15 days after the sale for refunds and chargebacks. For commissions approved on or after October 9, 2026 at 00:00 Pacific, withdrawals require the brand to have paid the covering invoice; earlier approved commissions became withdrawable on approval. Withdrawals undergo team review, and Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation.
 
 # cookie_days: stated two ways ("Attribution window 90 days" on affitor.com/marketplace/webzon-ai, "60 Days Attribution Window" on webzon.ai/affiliate), see conflicts (checked 2026-10-21)
 # attribution left out: Affitor publishes no model; the brand's page says "We use a 60-day first-click attribution window." (webzon.ai/affiliate, checked 2026-10-20)
@@ -71,8 +71,8 @@ conflicts:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-14"
-updated_at: "2026-10-21"
-last_verified_at: "2026-10-20"
+updated_at: "2026-10-23"
+last_verified_at: "2026-10-23"
 kind: affiliate
 source: affitor-api
 status: active
