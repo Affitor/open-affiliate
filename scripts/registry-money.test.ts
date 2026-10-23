@@ -114,19 +114,30 @@ export function minimumMismatches(docs: [string, Doc][]): string[] {
 
 // ---------- commission rate step-down ----------
 
-// Broad on purpose (Codex r5 #410): phrasing-by-phrasing patterns kept missing step-downs, so every
-// single-percentage rate whose conditions name another percentage next to a step word is a hit, and a
-// person reviews each one into the lists below.
-const STEP_WORD = /\b(?:first|then|after|renew\w*|subsequent|thereafter|year 2|second year)\b/i
+// Broad on purpose (Codex r5/r6 #410): wording-based patterns kept missing step-downs, so every
+// single-percentage rate whose conditions name any other percentage is a hit, and a person reviews each
+// one into the lists below. Spelled-out percentages count too ("twenty percent", "ten per cent").
+const UNITS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen"]
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"]
+const WORD_PERCENT = new RegExp(String.raw`\b(?:(${TENS.slice(2).join("|")})(?:[- ](${UNITS.slice(1, 10).join("|")}))?|(${UNITS.join("|")}))\s+per\s?cent\b`, "gi")
 
-/** Programs with a single-percentage rate whose conditions name 2+ distinct percentages and a step word. */
+/** "twenty-five percent" → "25%", "10 percent" → "10%"; everything else unchanged. */
+export function normalisePercents(text: string): string {
+  return text
+    .replace(WORD_PERCENT, (_, tens?: string, unit?: string, small?: string) =>
+      small ? `${UNITS.indexOf(small.toLowerCase())}%` : `${TENS.indexOf(tens!.toLowerCase()) * 10 + (unit ? UNITS.indexOf(unit.toLowerCase()) : 0)}%`,
+    )
+    .replace(/(\d+(?:\.\d+)?)\s+per\s?cent\b/gi, "$1%")
+}
+
+/** Programs with a single-percentage rate whose conditions name 2+ distinct percentages. */
 export function multiRateHits(docs: [string, Doc][]): string[] {
   const out: string[] = []
   for (const [slug, d] of docs) {
     if (!/^\d+(?:\.\d+)?%$/.test(String(d.commission?.rate ?? "").trim())) continue
-    const text = String(d.commission?.conditions ?? "")
+    const text = normalisePercents(String(d.commission?.conditions ?? ""))
     const percents = new Set([...text.matchAll(/(\d+(?:\.\d+)?)\s?%/g)].map((m) => parseFloat(m[1])))
-    if (percents.size > 1 && STEP_WORD.test(text)) out.push(slug)
+    if (percents.size > 1) out.push(slug)
   }
   return out
 }
@@ -142,6 +153,10 @@ const OPEN_RATE: Record<string, string> = {
   salesrabbit: "15% in year 1 and 7.5% in year 2 (PartnerStack listing) under rate 15%; no receipt in the file to write the step from",
   "workwise-compliance": "unverified: 25% of the initial order and 10% of renewals under rate 25% and type one-time",
   zep: "unverified: up to 20% recurring or 35% of the first 12 months, two models under one rate",
+  convertkit: "50% for the first 12 months, then +10/15/20% recurring by status: a step-down the rate does not carry",
+  "canvas-score-by-roya-com": "unverified: 50% of payment 1, then 15% on payments 2-6 (plus $10 per trial)",
+  outgrow: "unverified: 20% on the sale, then 10% recurring for active partners",
+  thryv: "unverified: rate is the agency partners' 'up to 30%'; affiliates earn 15%",
 }
 
 /** Hits reviewed as correct: the single rate is the program's rate, and the other percentages are not a step-down of it. */
@@ -151,7 +166,6 @@ const REVIEWED_MULTI_RATE: Record<string, string> = {
   brand24: "25% and 30% are volume tiers",
   castos: "10% is on production and launch services, a different product",
   clico: "20% is the customer's discount",
-  convertkit: "after 12 months only Bronze/Silver/Gold status pays; the 12-month duration already bounds the 50%",
   "creatify-ai": "the extra 5% is a monthly-sales bonus",
   cyberforward: "25% is a bonus rate for a quarter after five customers",
   dext: "70% is the annual-plan rate, a plan split, not a step",
@@ -187,6 +201,37 @@ const REVIEWED_MULTI_RATE: Record<string, string> = {
   tidio: "25% is the agency program",
   "zeemo-ai": "10% is the customer's discount",
   zenrows: "40% is a featured-partner tier, 15% is sales-assisted deals",
+  // Added in r6, when the step-word requirement was dropped.
+  aiseo: "'up to 48%' is an unexplained headline figure",
+  boomerang: "20% is second-tier; 40%-50% is the separate agency program",
+  bouncer: "40% and 30% (+10% customer discount) are the agency partner page",
+  "campaign-monitor-by-marigold": "30% is for Essentials and Premier orders, a plan split",
+  "capsule-and-transpond": "25% and 30% are volume tiers",
+  catalister: "10% is on credit purchases; 35%/40% and 15%/20% are volume tiers",
+  cloudtask: "15% is the brand's own commission the 20% is taken from",
+  "help-scout": "20% is a volume tier",
+  "influencer-hero": "'up to 30%' is the top tier",
+  jubilee: "30% and 35% are volume tiers",
+  linkhub: "10% is the customer's discount",
+  "live-tennis-api": "10% is the customer's discount",
+  nicejob: "'up to 25%' is the top tier",
+  ocoya: "20% is the customer's discount",
+  "pabbly-connect": "20% is for one-time and lifetime plans, a plan split",
+  paykickstart: "40% is the reseller program",
+  pixverse: "35% is a volume tier",
+  quillbot: "10%/15%/20% by billing period, a plan split; the rate is the lowest",
+  "rank-prompt": "the 10% lifetime offer is a second listing offer stated in conditions, not a later step",
+  "respond-io": "15%-40% are partner tiers",
+  salesforge: "20% is white-label partnerships",
+  salesmsg: "20% is certified resellers",
+  "site-pro": "25% is the accounting software and payments before March 2025",
+  socialbee: "10% is on ConciergeBee services, a different product",
+  spocket: "25%-50% are tiers and headline figures",
+  thordata: "30% is the listing's rate for one product, stated in conditions as a source difference",
+  trainual: "20% is the partner program",
+  "tresl-inc": "10% to 20% is a range",
+  uniqode: "30% and 35% are tiers; the page's flat 30% is stated in conditions",
+  veed: "'up to 50%' is a bonus tier",
 }
 
 // ---------- a term stated two ways ----------
@@ -374,7 +419,14 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   const r5 = "50% of the referred client's first invoice; 20% of every invoice after the first invoice for as long as the client stays a customer."
   assert.equal(multiRateHits(doc({ commission: { rate: "20%", conditions: r5 } })).length, 1)
   assert.equal(multiRateHits(doc({ commission: { rate: "50% then 20%", conditions: r5 } })).length, 0)
-  // One percentage, or no step word, is not a hit (AppQR: a length after the first sale).
+  // Codex r6 #410: no step word, and a spelled-out percentage, are hits too.
+  for (const c of [
+    "50% of the referred client's initial invoice; 20% of ongoing invoices for as long as the client stays a customer.",
+    "50% of the referred client's first invoice, then twenty percent of every invoice for as long as the client stays a customer.",
+  ])
+    assert.equal(multiRateHits(doc({ commission: { rate: "50%", conditions: c } })).length, 1, c)
+  assert.equal(normalisePercents("twenty-five percent, ten per cent, 7 percent, ninety nine percent"), "25%, 10%, 7%, 99%")
+  // One percentage is not a hit (AppQR: a length after the first sale).
   assert.equal(multiRateHits(doc({ commission: { rate: "30%", conditions: "30% recurring commission on eligible payments for 12 months after the first attributed sale." } })).length, 0)
   // #403: minimum in conflicts, conditions still state the Affitor $20.
   const twoWays: Doc = { payout: { currency: "USD" }, commission: { conditions: "At least $20 must be available before a withdrawal request." }, conflicts: [{ field: "payout.minimum" }] }
