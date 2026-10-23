@@ -1,18 +1,20 @@
 import { confirmedTerms, livePrograms } from "./programs"
 import { paysBy } from "./payout-filters"
-import { isLifetime } from "./commission-order"
 import { selectPrograms, type PostProgram, type PostSelection } from "./best-posts"
 import type { Faq } from "./program-seo"
 import { guide as howToStart } from "../content/guides/how-to-start-affiliate-marketing"
 import { guide as whatIs } from "../content/guides/what-is-affiliate-marketing"
 import { guide as withoutAWebsite } from "../content/guides/affiliate-marketing-without-a-website"
+import { guide as forBloggers } from "../content/guides/affiliate-marketing-for-bloggers"
+import { guide as makeMoney } from "../content/guides/make-money-with-affiliate-marketing"
 
 /**
  * Guide posts on /blog/<slug>: how-to articles about affiliate marketing. The
  * copy in src/content/guides/ holds words only; every figure on the page (the
  * registry facts, each program's terms) is read from the registry at build,
  * and scripts/best-posts.test.ts fails on a digit or a spelled-out number in
- * copy. Guides carry no Affitor link.
+ * copy. The page ends like a standard /best post: one Affitor marketplace
+ * line, one "Read more" box and the FAQ.
  */
 export interface GuideStep {
   title: string
@@ -25,6 +27,12 @@ export interface GuideSection {
   heading: string
   paragraphs: string[]
   steps?: GuideStep[]
+}
+
+/** A bullet that opens with a bold phrase: "**Joining too many programs at once:** …". */
+export interface GuidePoint {
+  lead: string
+  text: string
 }
 
 /** A program's own rule, quoted from its YAML restrictions or conditions. */
@@ -41,12 +49,16 @@ export interface GuidePost {
   description: string
   /** The first lines: the answer to the query, before anything else. */
   answer: string
+  /** The "Key takeaways" box under the answer: three to five bullets. */
+  takeaways: string[]
   sections: GuideSection[]
   /** Shown above the program blocks. */
   programsIntro: string
   programs: PostProgram[]
   rulesIntro: string
   rules: GuideRule[]
+  /** "Common mistakes": what beginners get wrong on this topic. */
+  mistakes: GuidePoint[]
   /** What the law says about disclosure; the page cites DISCLOSURE_SOURCE after it. */
   disclosure: string
   faq: Faq[]
@@ -54,7 +66,7 @@ export interface GuidePost {
   related: string[]
 }
 
-export const GUIDES: GuidePost[] = [howToStart, whatIs, withoutAWebsite]
+export const GUIDES: GuidePost[] = [howToStart, whatIs, withoutAWebsite, forBloggers, makeMoney]
 
 /**
  * The primary source for every guide's disclosure paragraph: the FTC's
@@ -90,11 +102,13 @@ export function guideCopyStrings(g: GuidePost): string[] {
   return [
     g.description,
     g.answer,
+    ...g.takeaways,
     ...g.sections.flatMap((s) => [s.heading, ...s.paragraphs, ...(s.steps ?? []).flatMap((st) => [st.title, st.text, st.link?.label ?? ""])]),
     g.programsIntro,
-    ...g.programs.flatMap((p) => [p.bestFor, p.why, p.notFor ?? ""]),
+    ...g.programs.flatMap((p) => [p.bestFor, p.why, p.verdict ?? "", p.notFor ?? ""]),
     g.rulesIntro,
     ...g.rules.map((r) => r.text),
+    ...g.mistakes.flatMap((m) => [m.lead, m.text]),
     g.disclosure,
     ...g.faq.flatMap((f) => [f.q, f.a]),
   ].filter(Boolean)
@@ -126,7 +140,8 @@ export function registryFacts(): RegistryFacts {
     asOf: v.map((p) => (p.lastVerifiedAt ?? "").slice(0, 10)).sort().at(-1) ?? "",
     verified: v.length,
     byType: [...types].map(([type, count]) => ({ type, count })).sort((a, b) => b.count - a.count),
-    lifetime: v.filter(isLifetime).length,
+    // Any commission type that pays for the customer's lifetime (hybrid and tiered deals included).
+    lifetime: v.filter((p) => /lifetime/i.test(String(p.commission.duration ?? "")) && !/conditional|up to/i.test(String(p.commission.duration ?? ""))).length,
     cookie: cookies.length ? { published: cookies.length, p25: quantile(cookies, 0.25), median: quantile(cookies, 0.5), p75: quantile(cookies, 0.75) } : null,
     approval: {
       auto: v.filter((p) => p.approval === "auto").length,

@@ -9,7 +9,7 @@
 export interface Terms {
   verified?: boolean;
   cookieDays?: number | null;
-  payout?: { minimum?: number | null; frequency?: string | null } | null;
+  payout?: { minimum?: number | null; currency?: string | null; frequency?: string | null } | null;
   approval?: string | null;
   approvalTime?: string | null;
 }
@@ -27,8 +27,13 @@ export function cookieCell(p: Terms): string {
   return p.cookieDays != null ? `${p.cookieDays}d` : "—";
 }
 
+/** The minimum in the program's own currency: "$50" for USD or no currency, "50 EUR" otherwise (as on the site). */
+function minimumAmount(minimum: number, currency: string | null | undefined): string {
+  return !currency || currency === "USD" ? `$${minimum.toLocaleString("en-US")}` : `${minimum.toLocaleString("en-US")} ${currency}`;
+}
+
 export function payoutText(p: Terms): string {
-  const parts = [p.payout?.minimum != null ? `$${p.payout.minimum} min` : null, p.payout?.frequency];
+  const parts = [p.payout?.minimum != null ? `${minimumAmount(p.payout.minimum, p.payout.currency)} min` : null, p.payout?.frequency];
   return parts.filter(Boolean).join(" / ") || missing(p);
 }
 

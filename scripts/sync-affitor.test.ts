@@ -4,9 +4,10 @@ import { createRequire } from "node:module"
 import { tmpdir } from "node:os"
 import { basename, join } from "node:path"
 import { test } from "node:test"
-import { parse } from "yaml"
+import { parse, parseDocument } from "yaml"
 import {
   MAX_PAUSES,
+  affitorConditions,
   affitorNotFound,
   affitorTerms,
   brandName,
@@ -22,6 +23,17 @@ import {
 } from "./sync-affitor"
 import { networkHowToJoin, networkKind, networkName } from "../src/lib/programs"
 import config from "./sync-affitor.config.json"
+
+/** What the sync writes for a 15-day hold: a hold, then the network's withdrawal rules. */
+/** A listing's commission.conditions lines, however the YAML folds them. */
+const conditionsBlock = (yaml: string): string => yaml.match(/^  conditions:.*\n(?: {4,}.*\n)*/m)![0]
+/** The listing with other conditions, written the way the sync writes YAML. */
+function withConditions(yaml: string, conditions: string): string {
+  const doc = parseDocument(yaml)
+  doc.setIn(["commission", "conditions"], conditions)
+  return doc.toString({ lineWidth: 100, flowCollectionPadding: false })
+}
+const HELD_15 = `Commissions are held 15 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`
 
 const LIST = "https://api.affitor.com/api/marketplace/programs"
 const TODAY = "2026-10-12"
@@ -82,7 +94,7 @@ commission:
   conditions: null
 
 cookie_days: 30
-attribution: last-click
+attribution: first-click
 tracking_method: cookie
 
 payout:
@@ -209,7 +221,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 12,
     duration: "18 months",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   assert.equal((terms({ commission_type: "cps_recurring", commission_rate: 10, duration_months: 1 }) as { duration: string }).duration, "1 month")
@@ -220,7 +232,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 50,
     duration: "lifetime",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   const oneTime = terms({ commission_type: "cps_one_time", commission_rate: 33.3, duration_months: 0 })
@@ -230,7 +242,7 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
     mode: "percentage",
     value: 33.3,
     duration: null,
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
     cookie_days: 90,
   })
   const flat = terms({ commission_type: "cps_one_time", commission_rate: null, commission_fixed: 25 })
@@ -238,8 +250,30 @@ test("each Affitor commission type maps to the terms Affitor states", () => {
   assert.equal((flat as { mode: string }).mode, "flat")
 
   const noHold = terms({ commission_type: "cps_one_time", commission_rate: 20 }, { default_hold_period_days: 1, cookie_window_days: null })
-  assert.equal((noHold as { conditions: string }).conditions, "Paid 1 day after sale.")
+  assert.equal((noHold as { conditions: string }).conditions, `Commissions are held 1 day after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`)
   assert.equal((noHold as { cookie_days: null }).cookie_days, null)
+})
+
+test("a hold is a hold, never a payout date, and the network's withdrawal rules always follow", () => {
+  // Affitor's terms: commissions are "subject to a hold period ... to mitigate
+  // the risk of refunds and chargebacks". Payment needs brand funding, the $20
+  // withdrawal minimum and team review after that, so no day count is a payout date.
+  for (const hold of [0, 1, 15, 30]) {
+    const text = affitorConditions(hold)
+    assert.doesNotMatch(text, /\bpaid\s+\d+\s+days?\b/i, String(hold))
+    assert.ok(text.endsWith(config.network_terms.payout_conditions), String(hold))
+  }
+  assert.equal(affitorConditions(0), config.network_terms.payout_conditions, "no hold, no hold sentence")
+  assert.equal(affitorConditions(30), `Commissions are held 30 days after the sale for refunds and chargebacks. ${config.network_terms.payout_conditions}`)
+  // The withdrawal minimum is the account's, not the program threshold the API calls payout_threshold.
+  assert.match(config.network_terms.payout_conditions, /\$20 must be available before a withdrawal request/)
+  // A term the listing records as stated two ways keeps its figure out of the prose too.
+  const minimum = `$${config.network_terms.payout_minimum}`
+  const noMinimum = affitorConditions(30, [{ field: "payout.minimum" }])
+  assert.ok(noMinimum.startsWith("Commissions are held 30 days") && !noMinimum.includes(minimum), noMinimum)
+  assert.ok(noMinimum.includes("Withdrawals undergo team review"), "only the minimum sentence is left out")
+  assert.equal(affitorConditions(30, [{ field: "payout.frequency" }]), config.network_terms.payout_conditions, "no hold sentence")
+  assert.equal(affitorConditions(30, [{ field: "cookie_days" }]), affitorConditions(30), "other conflicts change nothing")
 })
 
 test("rows with nothing usable to list are reasons, not terms", () => {
@@ -307,10 +341,15 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(k.verified, true)
   assert.equal(k.status, "active")
   assert.equal(k.signup_url, "https://affitor.com/marketplace/kyma-api")
-  assert.equal(k.commission.conditions, "Paid 15 days after sale.")
+  assert.equal(k.commission.conditions, HELD_15)
+  // attribution is the data lane's (Affitor Terms §2.3 says first-click): the sync keeps it as written.
+  assert.equal(k.attribution, "first-click")
+  assert.ok(kyma.includes("attribution: first-click\n"))
+  assert.equal(entries.find((e) => e.oa_slug === "kyma-api")!.diffs!.some((d) => d.field === "attribution"), false)
+  assert.equal(k.tracking_method, "cookie")
   // Affitor's network terms, linked from every listing: Wise or bank, and its prohibited activities.
   // approval and payout.frequency are the data lane's, read from the listing's own wording: kept.
-  assert.deepEqual(k.payout, { minimum: 50, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
+  assert.deepEqual(k.payout, { minimum: config.network_terms.payout_minimum, currency: "USD", frequency: "monthly", methods: ["wise", "bank"] })
   assert.equal(k.approval, "auto")
   assert.deepEqual(k.restrictions, config.network_terms.restrictions)
   for (const gone of ["approval_time", "program_age", "marketing_materials"]) assert.equal(gone in k, false)
@@ -349,6 +388,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
   assert.equal(c.network, "affitor")
   assert.equal(c.verified, true)
   assert.equal(c.signup_url, "https://affitor.com/marketplace/citegraph")
+  assert.equal("attribution" in c, false, "the API states no attribution model, so none is written")
   assert.deepEqual(c.commission, {
     type: "recurring",
     rate: "20%",
@@ -356,7 +396,7 @@ test("one run: take-over, create, conflict, slug-collision, skip and pause", asy
     value: 20,
     currency: "USD",
     duration: "12 months",
-    conditions: "Paid 15 days after sale.",
+    conditions: HELD_15,
   })
   const schema = JSON.parse(readFileSync(join(process.cwd(), "schema", "program.schema.json"), "utf8"))
   for (const field of schema.required) assert.ok(c[field] != null, `required ${field}`)
@@ -1077,6 +1117,48 @@ test("the affitor-sync merge lane accepts what the sync writes, and only while t
   assert.equal(refreshed.length, 4)
   assert.ok(refreshed.every((f) => f.status === "modified"))
   assert.deepEqual(await lane(refreshed, moved), { eligible: true, reasons: [], programCount: 4, pauses: 0, newSlugs: [] })
+  // payout.minimum is the network minimum every listing publishes ("Minimum payout $20 combined across all your
+  // programs"), whatever payout_threshold says, set or not (cos-oa 2026-10-21: the public page wins).
+  for (const f of [...created.filter((x) => x.status === "added"), ...refreshed]) {
+    assert.equal(parse(f.content!).payout.minimum, config.network_terms.payout_minimum, f.filename)
+  }
+  // A pull request that writes the API's payout_threshold as the minimum is out of the lane.
+  const threshold = refreshed.map((f) => (f.filename === "programs/citegraph.yaml" ? { ...f, content: f.content!.replace(/^  minimum: \d+$/m, "  minimum: 50") } : f))
+  assert.notEqual(threshold.find((f) => f.filename === "programs/citegraph.yaml")!.content, refreshed.find((f) => f.filename === "programs/citegraph.yaml")!.content)
+  assert.equal((await lane(threshold, moved)).eligible, false)
+
+  // A listing whose conflicts name cookie_days and payout.minimum (the brand's page and Affitor's disagree)
+  // keeps both blank: the sync writes nothing over them, and a pull request that fills them is out of the lane.
+  const synced = created.find((f) => f.filename === "programs/citegraph.yaml")!.content!
+  const twoWays =
+    synced
+      .replace(/^cookie_days: \d+\n/m, "")
+      .replace(/^  minimum: \d+\n/m, "")
+      .replace(conditionsBlock(synced), conditionsBlock(withConditions(synced, affitorConditions(15, [{ field: "payout.minimum" }])))) +
+    'conflicts:\n  - field: cookie_days\n    quote: "Brand page: 60 days. Affitor: 90 days."\n    values: ["60 days", "90 days"]\n' +
+    '  - field: payout.minimum\n    quote: "Brand page: $50. Affitor: $20."\n    values: [20, 50]\n'
+  assert.ok(!/^cookie_days:/m.test(twoWays) && !/^  minimum:/m.test(twoWays))
+  assert.ok(!(parse(twoWays).commission.conditions as string).includes(`$${config.network_terms.payout_minimum}`))
+  const kept = dirWith({ "citegraph.yaml": twoWays })
+  assert.deepEqual(
+    (await pullRequestFiles(kept, rows, TODAY)).filter((f) => f.filename === "programs/citegraph.yaml"),
+    [],
+    "the sync rewrote a term the listing records as stated two ways",
+  )
+  const filled = {
+    filename: "programs/citegraph.yaml",
+    status: "modified",
+    baseContent: twoWays,
+    content: twoWays.replace("tracking_method: cookie\n", "cookie_days: 90\ntracking_method: cookie\n"),
+  }
+  assert.notEqual(filled.content, twoWays)
+  const verdictFilled = await lane([filled], rows)
+  assert.equal(verdictFilled.eligible, false)
+  assert.match(verdictFilled.reasons.join("\n"), /cookie_days is 90, Affitor says/)
+  // ...and so is one that puts the minimum back into the conditions.
+  const prose = { ...filled, content: twoWays.replace(conditionsBlock(twoWays), conditionsBlock(synced)) }
+  assert.notEqual(prose.content, twoWays)
+  assert.equal((await lane([prose], rows)).eligible, false)
 
   // The same pull request after Affitor changed again: blocked, and why.
   const verdict = await lane(refreshed, rows)

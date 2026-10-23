@@ -334,7 +334,9 @@ function affitorNotFound(body, config) {
 }
 
 const ABSENT = Symbol("absent")
-// approval and payout.frequency are the data lane's (scripts/sync-affitor.ts).
+// approval, payout.frequency and attribution are the data lane's
+// (scripts/sync-affitor.ts): not owned, so a sync pull request that adds,
+// changes or removes one is blocked.
 const UNPUBLISHED = [
   "approval_time",
   "marketing_materials",
@@ -369,7 +371,10 @@ function networkRestrictions(current) {
   return [...own, ...network]
 }
 
-function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
+/** Mirrors TWO_WAY_TERMS in scripts/sync-affitor.ts: owned terms a listing's conflicts keep blank. */
+const TWO_WAY_TERMS = ["cookie_days", "payout.minimum"]
+
+function affitorOwnedFields(program, marketplace, baseRestrictions = null, baseConflicts = null) {
   const policy = program.default_policy ?? {}
   const numbers = {
     commission_rate: policy.commission_rate,
@@ -406,6 +411,7 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
   }
   const [type, duration] = kinds[policy.commission_type]
   const hold = program.default_hold_period_days ?? 0
+  const named = new Set(Array.isArray(baseConflicts) ? baseConflicts.filter(isRecord).map((c) => c.field) : [])
   return {
     "commission.type": type,
     "commission.rate": rate > 0 ? `${rate}%` : `$${fixed}`,
@@ -413,12 +419,19 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
     "commission.value": rate > 0 ? rate : fixed,
     "commission.currency": "USD",
     "commission.duration": duration,
+    // Mirrors affitorConditions() in scripts/sync-affitor.ts.
     "commission.conditions":
-      hold > 0 ? `Paid ${hold} ${hold === 1 ? "day" : "days"} after sale.` : null,
+      (hold > 0 && !named.has("payout.frequency") ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : "") +
+      (named.has("payout.minimum")
+        ? AFFITOR_SYNC.network_terms.payout_conditions
+            .split(/(?<=\.) /)
+            .filter((sentence) => !sentence.includes(`$${AFFITOR_SYNC.network_terms.payout_minimum}`))
+            .join(" ")
+        : AFFITOR_SYNC.network_terms.payout_conditions),
     cookie_days: program.cookie_window_days ?? ABSENT,
-    attribution: "last-click",
     tracking_method: "cookie",
-    "payout.minimum": program.payout_threshold ?? ABSENT,
+    // Mirrors ownedFields(): the network minimum every listing publishes, never payout_threshold.
+    "payout.minimum": AFFITOR_SYNC.network_terms.payout_minimum,
     "payout.currency": "USD",
     "payout.methods": AFFITOR_SYNC.network_terms.payout_methods,
     signup_url: marketplace + program.slug,
@@ -428,6 +441,10 @@ function affitorOwnedFields(program, marketplace, baseRestrictions = null) {
     status_note: ABSENT,
     restrictions: networkRestrictions(baseRestrictions),
     ...Object.fromEntries(UNPUBLISHED.map((key) => [key, ABSENT])),
+    // Mirrors ownedFields(): a term the listing records as stated two ways stays blank.
+    ...Object.fromEntries(
+      TWO_WAY_TERMS.filter((key) => Array.isArray(baseConflicts) && baseConflicts.some((c) => isRecord(c) && c.field === key)).map((key) => [key, ABSENT])
+    ),
   }
 }
 
@@ -727,7 +744,12 @@ async function evaluateAffitorSyncPolicy({
       if (data.is_platform_program) {
         reasons.push(`${slug} is Affitor's own platform program: ${name}`)
       }
-      const owned = affitorOwnedFields(data, config.marketplace, base === null ? null : valueAt(base, ["restrictions"]))
+      const owned = affitorOwnedFields(
+        data,
+        config.marketplace,
+        base === null ? null : valueAt(base, ["restrictions"]),
+        base === null ? null : valueAt(base, ["conflicts"])
+      )
       const expected = alsoOn ? alsoOnOwnedFields(owned) : owned
       if (typeof expected === "string") {
         reasons.push(`Affitor's terms for ${slug} are unusable (${expected}): ${name}`)

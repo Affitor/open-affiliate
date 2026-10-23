@@ -10,7 +10,7 @@ import assert from "node:assert/strict"
 import { readdirSync, readFileSync, statSync } from "node:fs"
 import { join, relative } from "node:path"
 import { test } from "node:test"
-import { AFFITOR_SWITCH, FOR_BRANDS, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
+import { AFFITOR_SWITCH, FOR_BRANDS, SUBMISSION_AFFITOR, affitorUrl, isAffitorHref } from "../src/lib/affitor-link"
 import { alsoOnAffitor, applyButton } from "../src/lib/apply-cta"
 import { programs } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
@@ -110,15 +110,65 @@ const PLAIN_ANCHORS = new Set([
   "src/app/programs/a-z/letter-bar.tsx | `#${id}`", // A–Z letter jump: an anchor on the same page
   "src/app/page.tsx | `/networks/${networkToSlug(network)}`", // homepage networks band, internal (N-2)
   "src/app/programs/a-z/page.tsx | `/programs/${slug}`", // A–Z directory, internal (N-2)
-  "src/app/programs/top-programs.tsx | `/programs/${slug}`", // /programs top rows by OAS, internal
+  "src/app/programs/programs-view.tsx | `/programs/${r.slug}`", // /programs first page, server-rendered in the list's fallback, internal
   "src/components/affitor-link.tsx | href",
   "src/app/programs/[slug]/track-view.tsx | href",
   "src/components/best-post-view.tsx | `#${program.slug}`", // quick picks: an anchor on the same page
+  "src/components/best-post-standard.tsx | `#${p.slug}`", // comparison table rows: an anchor to the program's section on the same page
+  "src/components/best-networks-post.tsx | `#${e.network}`", // networks table rows: an anchor to the network's section on the same page
   "src/components/post-apply-link.tsx | href", // records blog_apply_click, and AFFITOR_CLICK + AFFITOR_ATTR for affitor.com
   "src/app/account/account-flow.tsx | c.prUrl", // a change's GitHub pull request, rendered only when it matches PR_URL
   "src/app/programs/[slug]/oas/page.tsx | url", // OAS evidence: a page the reviewer read; affitor.com pages render as text (evidenceLink)
   "src/app/programs/[slug]/oas/page.tsx | errorUrl", // "Report an error": a prefilled GitHub issue
 ])
+
+// A next/link <Link> is never tracked, so its computed href must be an internal path: a template
+// starting with "/" (not "//" or "/\\", which browsers read as another host), an internal path helper, or a URL's pathname pass; any other expression is
+// reviewed here as built from site data (internal paths), never a brand's or affitor.com page.
+const INTERNAL_LINK = /^(`\/(?![\/\\])|(bestPath|networkPath|guidePath)\(|new URL\(.*\)\.pathname$|NETWORKS_POST_PATH$)/
+const REVIEWED_LINKS = new Set([
+  "src/app/blog/page.tsx | e.href", // blogEntries(): /best and /blog paths
+  "src/app/changelog/page.tsx | entry.link.href", // changelog entries: internal pages
+  "src/app/docs/features/page.tsx | f.href",
+  "src/app/docs/features/page.tsx | i.href",
+  "src/app/docs/page.tsx | link.href",
+  "src/app/docs/quickstart/page.tsx | link.href",
+  "src/app/layout.tsx | href", // footer list
+  "src/app/page.tsx | e.href", // homepage posts: blogEntries()
+  "src/app/page.tsx | href",
+  "src/app/rankings/leaderboard/leaderboard-table.tsx | full",
+  "src/app/rankings/leaderboard/leaderboard-table.tsx | slug ? `${basePath}?category=${slug}` : basePath",
+  "src/components/best-list-view.tsx | e.href", // category "Posts about": blogEntries()
+  "src/components/best-list-view.tsx | parent.href", // breadcrumb
+  "src/components/best-networks-post.tsx | c.link.href", // how-to-choose links: /networks, /best
+  "src/components/best-post-standard.tsx | c.link.href", // how-to-choose links: /best, /networks, /programs filters
+  "src/components/best-post-standard.tsx | editor.href", // an editor's bio page
+  "src/components/best-post-standard.tsx | l.href", // Read more: /best and /blog paths
+  "src/components/best-post-standard.tsx | parent.href",
+  "src/components/best-post-view.tsx | moreHref",
+  "src/components/best-post-view.tsx | parent.href",
+  "src/components/docs-pagination.tsx | next.href",
+  "src/components/docs-pagination.tsx | prev.href",
+  "src/components/docs-sidebar.tsx | item.href",
+  "src/components/guide-view.tsx | st.link.href", // step links: /best lists and /programs filters (best-posts test)
+  "src/components/nav.tsx | href",
+  "src/components/score-your-program.tsx | hrefOf(m)",
+  "src/components/sift-charts.tsx | href",
+])
+
+test("every computed <Link> href is an internal path or reviewed as one", () => {
+  assert.ok(INTERNAL_LINK.test("`/programs/${slug}`"))
+  assert.equal(INTERNAL_LINK.test("`//brand.com/${slug}`"), false, "a protocol-relative template is another host")
+  assert.equal(INTERNAL_LINK.test("`/\\\\brand.com/${slug}`"), false, "a browser reads /\\ as //")
+  for (const file of sourceFiles(join(root, "src"))) {
+    const rel = relative(root, file)
+    for (const m of readFileSync(file, "utf8").matchAll(/<Link\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
+      const expr = m[1].trim()
+      if (INTERNAL_LINK.test(expr)) continue
+      assert.ok(REVIEWED_LINKS.has(`${rel} | ${expr}`), `${rel} | ${expr}: a <Link> with a computed href; make it an internal path or review it into REVIEWED_LINKS`)
+    }
+  }
+})
 
 test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   const files = sourceFiles(join(root, "src")).filter((f) => !f.endsWith("src/lib/affitor-link.ts"))
@@ -126,9 +176,10 @@ test("every computed anchor href is tracked or reviewed as not Affitor", () => {
   for (const file of files) {
     const text = readFileSync(file, "utf8")
     const rel = relative(root, file)
-    // A hard-coded affitor.com page link skips affitorUrl(); data (network-meta) and mailto: are not links.
+    // A hard-coded affitor.com page link skips affitorUrl(); data (network-meta, and network-terms'
+    // citations of each network's own pages, never rendered as links) and mailto: are not links.
     for (const m of text.matchAll(/https:\/\/(?:[\w-]+\.)?affitor\.com[^\s"'`]*/g)) {
-      assert.ok(rel === "src/lib/network-meta.ts", `${rel}: hard-coded ${m[0]}; use affitorUrl() and AffitorLink`)
+      assert.ok(rel === "src/lib/network-meta.ts" || rel === "src/lib/network-terms.ts", `${rel}: hard-coded ${m[0]}; use affitorUrl() and AffitorLink`)
     }
     for (const m of text.matchAll(/<a\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
       const key = `${rel} | ${m[1].trim()}`
@@ -161,7 +212,7 @@ test("served-HTML check: an untracked Affitor link or one without the UTM fails"
 
 // cos-oa 13/10: no pricing in the copy this PR adds; copy already live keeps its wording.
 test("/for-brands and the new program-page link state no pricing; /for-brands is in the sitemap", () => {
-  for (const [key, text] of Object.entries(FOR_BRANDS)) {
+  for (const [key, text] of Object.entries({ ...FOR_BRANDS, ...Object.fromEntries(Object.entries(SUBMISSION_AFFITOR).map(([k, v]) => [`submission.${k}`, v])) })) {
     assert.doesNotMatch(text, /\$|%|\bfree\b|\bfees?\b|pric|\bcost|\bpaid\b|\bpay\b|subscription|guarantee/i, `FOR_BRANDS.${key}`)
   }
   assert.ok(sitemap().some((e) => e.url === "https://openaffiliate.dev/for-brands"))

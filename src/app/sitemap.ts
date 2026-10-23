@@ -12,6 +12,7 @@ import { docsNav } from "@/app/docs/_config";
 import { BEST_LISTS, bestPath, buildBestList, indexable } from "@/lib/best-lists";
 import { GUIDES, guidePath } from "@/lib/guides";
 import { blogEntries } from "@/lib/blog";
+import { NETWORKS_POST, NETWORKS_POST_PATH } from "@/lib/networks-post";
 import { changelog } from "@/lib/changelog";
 
 const BASE_URL = "https://openaffiliate.dev";
@@ -102,6 +103,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "weekly" as const,
     priority: 0.8,
   }));
+
+  // /best/affiliate-networks: an editorial post with its own route, not a list.
+  bestPages.push({ url: `${BASE_URL}${NETWORKS_POST_PATH}`, lastModified: NETWORKS_POST.checked, changeFrequency: "monthly" as const, priority: 0.8 });
 
   const guidePages: MetadataRoute.Sitemap = GUIDES.map((g) => ({
     url: `${BASE_URL}${guidePath(g)}`,

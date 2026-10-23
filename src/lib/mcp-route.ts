@@ -4,11 +4,23 @@ import { z } from "zod";
 import { livePrograms, categories, confirmedPitch, termsConfirmed } from "@/lib/programs";
 import { resolveProgram } from "@/lib/program-aliases";
 import { apiProgram } from "@/lib/no-program";
+import { liveSubmissionDeps } from "@/lib/submissions/live";
+import {
+  clientIp,
+  disabledAnswer,
+  logFailure,
+  readInput,
+  serverError,
+  status as submissionStatus,
+  submit,
+  type Answer,
+  type SubmissionDeps,
+} from "@/lib/submissions/service";
 
 /**
  * The hosted MCP server, as route handlers.
  *
- * Two paths serve the same three tools:
+ * Two paths serve the same tools:
  *
  *   /mcp      — canonical. `claude mcp add --transport http openaffiliate
  *               https://openaffiliate.dev/mcp` is the whole install.
@@ -145,18 +157,19 @@ function tooManyRequests(): Response {
 const SERVER_INFO: Implementation = {
   name: "openaffiliate",
   title: "OpenAffiliate",
-  description: "Discover affiliate programs in a public, read-only registry with commission terms, signup links, and recommendation guidance.",
-  version: "0.1.2",
+  description: "Discover affiliate programs in a public registry with commission terms, signup links, and recommendation guidance; submit a missing program for verification.",
+  version: "0.1.3",
   websiteUrl: "https://openaffiliate.dev",
   icons: [{ src: "https://openaffiliate.dev/favicon.svg", mimeType: "image/svg+xml", sizes: ["any"] }],
 };
 
 const INSTRUCTIONS =
-  "OpenAffiliate is a public, read-only affiliate program registry; no API key or account is required. " +
+  "OpenAffiliate is a public affiliate program registry; no API key or account is required. Every tool is read-only except submit_program, which only queues a program for a maintainer to verify. " +
   "Read commission.mode and commission.value for the figure and its units (percentage or flat currency amount); commission.rate preserves the raw source wording, and unknown mode means no figure is published. " +
   "cookieDays is omitted until the program's terms are verified. " +
   "Use search_programs for active listings and get_program for full details, including paused, discontinued, or no_program entries; check status and agentPrompt before recommending. " +
-  "Cite the returned markdownUrl when referencing a program.";
+  "Cite the returned markdownUrl when referencing a program. " +
+  "If a program is missing, call submit_program with the brand's own program page, then get_submission_status with the returned id; nothing is listed or scored until its terms are verified.";
 
 const READ_ONLY_ANNOTATIONS = {
   readOnlyHint: true,
@@ -298,13 +311,63 @@ const programOutputSchema = {
   markdownUrl: markdownUrlSchema,
 };
 
+const SUBMIT_ANNOTATIONS = {
+  readOnlyHint: false,
+  destructiveHint: false,
+  // The same domain while it is queued returns the same submission.
+  idempotentHint: true,
+  openWorldHint: false,
+};
+
+const submissionStatusSchema = z.enum(["queued", "verifying", "listed", "rejected"])
+  .describe("queued: waiting for a maintainer; verifying: terms being checked on the brand's own page; listed: on OpenAffiliate; rejected: see reason");
+const submissionOutputSchema = {
+  id: z.string().optional().describe("Submission id for get_submission_status; omitted when the domain is already listed"),
+  status: submissionStatusSchema,
+  statusUrl: z.string().optional().describe("REST URL that returns this submission's status"),
+  duplicate: z.boolean().optional().describe("True when this domain was already in the queue; the existing submission is returned"),
+  listingUrl: z.string().optional().describe("The program's page on openaffiliate.dev when it is listed"),
+  reportUrl: z.string().optional().describe("The program's OAS report when it is scored"),
+  reason: z.string().optional().describe("Why a submission was rejected, in one sentence"),
+  createdAt: z.string().optional().describe("When the submission was made, ISO 8601"),
+  updatedAt: z.string().optional().describe("When its status last changed, ISO 8601"),
+};
+
+const SUBMIT_ORIGINS: ReadonlySet<string> = new Set(["https://openaffiliate.dev", "https://www.openaffiliate.dev"]);
+const crossOriginAnswer = (): Answer => ({
+  status: 403,
+  body: { error: "cross_origin", message: "submit_program cannot be called from a web page on another site. Use https://openaffiliate.dev/submit." },
+  headers: {},
+});
+
+/** An Answer as a tool result: a refusal is an error the agent reads, a result is structured content. */
+function toolResult(a: Answer) {
+  const text = JSON.stringify(a.body, null, 2);
+  if (a.status >= 400) {
+    const retry = a.headers["Retry-After"];
+    return {
+      isError: true,
+      content: [{ type: "text" as const, text: retry ? `${text}\nRetry after ${retry} seconds, or submit at https://openaffiliate.dev/submit` : text }],
+    };
+  }
+  return { structuredContent: a.body, content: [{ type: "text" as const, text }] };
+}
+
+function headersOf(raw: Record<string, string | string[] | undefined> | undefined): Headers {
+  const headers = new Headers();
+  for (const [key, value] of Object.entries(raw ?? {})) {
+    if (value !== undefined) headers.set(key, Array.isArray(value) ? value.join(", ") : value);
+  }
+  return headers;
+}
+
 function categoryCounts() {
   const counts: Record<string, number> = {};
   for (const p of livePrograms) counts[p.category] = (counts[p.category] ?? 0) + 1;
   return categories.map((name) => ({ name, count: counts[name] ?? 0 }));
 }
 
-function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]>[0]) {
+function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]>[0], submissions: () => SubmissionDeps | null) {
   server.registerTool(
     "search_programs",
     {
@@ -462,6 +525,73 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
     }
   );
 
+  server.registerTool(
+    "submit_program",
+    {
+      title: "Submit Program",
+      description:
+        "Use when get_program and search_programs do not find a brand's affiliate program: queues the brand's own program page for a maintainer to verify against the brand's published terms. " +
+        "Not instant: nothing is listed and no score exists until the terms are verified. A domain already listed returns its listingUrl instead; a domain already queued returns the existing submission. " +
+        "Send the brand's own program or partners page, never a network or review site. Never invent terms. Then call get_submission_status with the returned id.",
+      annotations: SUBMIT_ANNOTATIONS,
+      outputSchema: submissionOutputSchema,
+      // Strict at registration: the SDK strips unknown keys before the
+      // callback sees them, so a typo like contactEmail would vanish silently.
+      inputSchema: z.object({
+        programUrl: z.string().describe("https:// link to the affiliate or partner program page on the brand's own website"),
+        termsUrl: z.string().optional().describe("https:// link to the page that states the program's terms, when it is a different page"),
+        name: z.string().optional().describe("Brand or program name, up to 100 characters"),
+        contact: z.string().optional().describe("Optional email for the person submitting; never shown publicly and never returned by any tool"),
+        note: z.string().optional().describe("Optional note for the maintainer, up to 1000 characters"),
+      }).strict(),
+    },
+    async (args, extra) => {
+      const deps = submissions();
+      if (!deps) return toolResult(disabledAnswer());
+      const headers = headersOf(extra.requestInfo?.headers);
+      // This endpoint answers any origin (CORS *) for the read tools. A write
+      // from a web page would let any site submit from its visitors'
+      // addresses, so a browser Origin other than ours is refused. Agents and
+      // desktop clients send no Origin.
+      const origin = headers.get("origin");
+      if (origin !== null && !SUBMIT_ORIGINS.has(origin)) return toolResult(crossOriginAnswer());
+      const input = readInput(args);
+      if ("status" in input && "body" in input) return toolResult(input);
+      try {
+        const ip = clientIp(headers);
+        return toolResult(await submit(input, { ip, source: "mcp", statusBase: "https://openaffiliate.dev" }, deps));
+      } catch (err) {
+        logFailure("mcp-submit", err);
+        return toolResult(serverError());
+      }
+    }
+  );
+
+  server.registerTool(
+    "get_submission_status",
+    {
+      title: "Get Submission Status",
+      description:
+        "Use with an id from submit_program to read where a submitted program is: queued, verifying, listed (with listingUrl and, once scored, reportUrl) or rejected (with reason). " +
+        "Do not use to look up listed programs; call get_program for those.",
+      annotations: READ_ONLY_ANNOTATIONS,
+      outputSchema: submissionOutputSchema,
+      inputSchema: z.object({
+        id: z.string().describe("The id submit_program returned"),
+      }).strict(),
+    },
+    async ({ id }) => {
+      const deps = submissions();
+      if (!deps) return toolResult(disabledAnswer());
+      try {
+        return toolResult(await submissionStatus(id, deps));
+      } catch (err) {
+        logFailure("mcp-status", err);
+        return toolResult(serverError());
+      }
+    }
+  );
+
   server.registerResource(
     "categories",
     "openaffiliate://categories",
@@ -483,9 +613,9 @@ function registerTools(server: Parameters<Parameters<typeof createMcpHandler>[0]
  * /api/mcp — and must match the route's own directory or mcp-handler will not
  * recognise the request.
  */
-export function createMcpRoute(basePath: string) {
+export function createMcpRoute(basePath: string, submissions: () => SubmissionDeps | null = liveSubmissionDeps) {
   const handler = createMcpHandler(
-    registerTools,
+    (server) => registerTools(server, submissions),
     {
       // mcp-handler 1.1 forwards serverInfo and the remaining options to
       // McpServer before connect, including icons and instructions.

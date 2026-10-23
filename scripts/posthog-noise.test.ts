@@ -64,3 +64,37 @@ test("keeps the OA → Affitor click event", () => {
   }
   assert.equal(dropNoisyException(event), event)
 })
+
+test("submission ids never reach analytics, in any property", async () => {
+  const { maskSubmissionIds } = await import("../src/lib/posthog-noise")
+  const id = "0b9c2c1e-5a3f-4c7d-9e2b-1f0a8d6c4b3a"
+  const event = {
+    event: "$pageview",
+    uuid: "u",
+    properties: {
+      $current_url: `https://openaffiliate.dev/submissions/${id}?x=1`,
+      $pathname: `/submissions/${id}`,
+      $referrer: `https://openaffiliate.dev/submissions/${id}`,
+      $elements: [{ attr__href: `/submissions/${id}` }],
+      $elements_chain: `a:href="/submissions/${id}"`,
+      kept: "/programs/vercel",
+    },
+    $set_once: { $initial_referrer: `https://openaffiliate.dev/api/submissions/${id}` },
+  }
+  const out = maskSubmissionIds(event as never)
+  assert.ok(!JSON.stringify(out).includes(id))
+  assert.equal((out as typeof event).properties.kept, "/programs/vercel")
+  assert.equal((out as typeof event).properties.$pathname, "/submissions/{id}")
+  assert.equal(maskSubmissionIds(null), null)
+  // Percent-encoded, as Next would still decode it to the same id.
+  const encoded = maskSubmissionIds({ event: "$pageview", uuid: "u", properties: { $current_url: "https://openaffiliate.dev/submissions/%30b9c2c1e-5a3f-4c7d-9e2b-1f0a8d6c4b3a" } } as never)
+  assert.equal((encoded as unknown as { properties: { $current_url: string } }).properties.$current_url, "https://openaffiliate.dev/submissions/{id}")
+})
+
+test("masking keeps the event timestamp a Date", async () => {
+  const { maskSubmissionIds } = await import("../src/lib/posthog-noise")
+  const timestamp = new Date("2026-10-23T00:00:00Z")
+  const out = maskSubmissionIds({ event: "$pageview", uuid: "u", timestamp, properties: {} } as never)
+  assert.equal(out?.timestamp, timestamp)
+  assert.equal(JSON.stringify(out?.timestamp), JSON.stringify(timestamp))
+})

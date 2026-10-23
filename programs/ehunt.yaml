@@ -11,7 +11,8 @@ commission:
   rate: "At least 30%"
   mode: percentage
   value: 30
-  duration: "Up to 6 months; conditional lifetime extension"
+  # duration from the quote above ("for up to 6 months"); the possible lifetime extension is conditional and stays in conditions
+  duration: "Up to 6 months"
   conditions: "Commission applies to referred users' paid subscriptions for up to six months. The page offers a possible lifetime extension when unspecified conditions are met. The stated percentage is a floor, not a guaranteed fixed rate."
 
 # "The cookie duration is 7 days" (ehunt.ai/affiliate, checked 2026-10-20)
@@ -62,7 +63,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-20"
-updated_at: "2026-10-20"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-20"
 status: active
 kind: affiliate

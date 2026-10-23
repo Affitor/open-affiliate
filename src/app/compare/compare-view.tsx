@@ -3,6 +3,7 @@
 import { useState, useMemo, Suspense, useEffect } from "react";
 import { track } from "@/lib/track";
 import { frequencyLabel } from "@/lib/claims/form";
+import { payoutMinText } from "@/lib/rankings-terms";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -48,6 +49,7 @@ export interface CompareProgram {
   attribution?: string;
   trackingMethod?: string;
   payoutMinimum?: number;
+  payoutCurrency?: string;
   payoutFrequency?: string;
   approval?: string;
   approvalTime?: string;
@@ -477,7 +479,7 @@ function CompareContent({ programs }: { programs: CompareProgram[] }) {
                         key={p.slug}
                         className="py-3 px-4 text-center text-sm font-medium"
                       >
-                        {p.payoutMinimum != null ? `$${p.payoutMinimum}` : "—"}
+                        {payoutMinText(p.payoutMinimum, p.payoutCurrency) ?? "—"}
                       </td>
                     ))}
                     {selected.length < MAX_COMPARE && <td />}

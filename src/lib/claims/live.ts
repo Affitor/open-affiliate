@@ -13,6 +13,7 @@ import {
   type EditRow,
   type MemberRow,
   type SigninCodeRow,
+  type TurnstileResult,
 } from "./service"
 
 /**
@@ -231,6 +232,28 @@ function supabaseStore(db: SupabaseClient): ClaimStore {
   }
 }
 
+/** Cloudflare's siteverify answer for a token, or null when it could not be reached. */
+export async function siteverify(secretKey: string, token: string, ip: string): Promise<TurnstileResult | null> {
+  const form = new URLSearchParams({ secret: secretKey, response: token })
+  if (ip !== "unknown") form.set("remoteip", ip)
+  try {
+    const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
+      method: "POST",
+      body: form,
+      signal: AbortSignal.timeout(5000),
+    })
+    if (!res.ok) return null
+    const result = (await res.json()) as { success?: unknown; hostname?: unknown; action?: unknown }
+    return {
+      success: result.success === true,
+      hostname: typeof result.hostname === "string" ? result.hostname : undefined,
+      action: typeof result.action === "string" ? result.action : undefined,
+    }
+  } catch {
+    return null
+  }
+}
+
 /** The real dependencies, or null when any claim secret is missing (routes answer 503). */
 export function liveClaimDeps(
   getProgram: (slug: string) => ClaimProgram | undefined,
@@ -254,26 +277,7 @@ export function liveClaimDeps(
     programsOnDomain,
     allPrograms,
     afterResponse,
-    async verifyTurnstile(token, ip) {
-      const form = new URLSearchParams({ secret: env.TURNSTILE_SECRET_KEY!, response: token })
-      if (ip !== "unknown") form.set("remoteip", ip)
-      try {
-        const res = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", {
-          method: "POST",
-          body: form,
-          signal: AbortSignal.timeout(5000),
-        })
-        if (!res.ok) return null
-        const result = (await res.json()) as { success?: unknown; hostname?: unknown; action?: unknown }
-        return {
-          success: result.success === true,
-          hostname: typeof result.hostname === "string" ? result.hostname : undefined,
-          action: typeof result.action === "string" ? result.action : undefined,
-        }
-      } catch {
-        return null
-      }
-    },
+    verifyTurnstile: (token, ip) => siteverify(env.TURNSTILE_SECRET_KEY!, token, ip),
     async sendEmail(mail) {
       // Only mail someone asked for. Outreach never goes through this sender
       // (Resend's acceptable-use policy forbids it on this shared account).

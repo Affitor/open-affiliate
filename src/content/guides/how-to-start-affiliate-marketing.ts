@@ -7,12 +7,18 @@ import type { GuidePost } from "@/lib/guides"
  */
 export const guide: GuidePost = {
   slug: "how-to-start-affiliate-marketing",
-  checked: "2026-10-20",
+  checked: "2026-10-21",
   title: (year) => `How to Start Affiliate Marketing in ${year}`,
   description:
     "How to start affiliate marketing step by step: pick a topic, join programs that approve you today, and see how real programs pay, with verified terms.",
   answer:
     "To start affiliate marketing, pick a topic you know, choose where you will publish, join programs that will approve you now, and write content that helps a reader decide what to buy, with a clear note that you earn a commission. This guide walks through each step and shows how real programs in the OpenAffiliate registry pay, using terms we verified and dated.",
+  takeaways: [
+    "Start with a topic you already know and a place you will publish for months, not with the highest commission.",
+    "Programs that approve automatically give you a link the day you sign up; many others review every application by hand.",
+    "Before you write, check how a program pays: the commission type, the cookie window and the payout minimum.",
+    "Disclose the commission near the link, then keep what brings sales and drop what does not.",
+  ],
   sections: [
     {
       heading: "How affiliate marketing works",
@@ -55,30 +61,27 @@ export const guide: GuidePost = {
     },
   ],
   programsIntro:
-    "These programs approve new affiliates automatically, on terms we verified, so you can get a link the day you sign up. Each block shows how it pays and the day we last checked it.",
+    "These programs approve new affiliates automatically, on terms we verified, so you can get a link the day you sign up. Each one lists how it pays, from its own terms.",
   programs: [
     {
       slug: "vidiq",
       bestFor: "Best for YouTube creators",
-      why: "vidIQ is a YouTube growth tool with keyword research, an AI coach, daily video ideas, an AI thumbnail maker, video audits and a browser extension that shows video and channel stats. It pays a share of net receipts on the subscriptions referred users buy, at a higher rate as your sales grow, in US dollars by PayPal, electronic funds transfer or check, a set time after each month ends.",
-      notFor: "Brand-term PPC: bidding on vidIQ, its domain names or misspellings is not allowed.",
+      why: "vidIQ is a YouTube growth tool with keyword research, an AI coach, daily video ideas, an AI thumbnail maker, video audits and a browser extension with video and channel stats. Its {affiliate program} pays a share of net receipts on the subscriptions referred users buy, at a higher rate as your sales grow.",
     },
     {
       slug: "lunacal",
       bestFor: "Best for small business and booking content",
-      why: "Lunacal provides calendar scheduling, appointment booking and customizable booking pages for businesses. It pays a recurring commission on eligible paid subscriptions from new customers you refer, with no expiry on the commission window, and pays out once your accrued commission reaches its minimum.",
-      notFor: "Coupon sites: adding your coupon code to coupon websites disqualifies your membership and commissions.",
+      why: "Lunacal provides calendar scheduling, appointment booking and customizable booking pages for businesses. Its {affiliate program} pays a recurring commission on eligible paid subscriptions from new customers you refer, with no expiry on the commission window.",
     },
     {
       slug: "wordai",
       bestFor: "Best for content writers and SEO blogs",
-      why: "WordAi is an AI text rewriter for content writers and SEO work. It rewrites text the way a human would, fixes spelling and grammar as it goes, and adds related keywords. It pays a share of every subscription payment from each customer you refer, for life, and your affiliate link comes with your WordAi account, along with banners, email swipes and a dashboard.",
+      why: "WordAi is an AI text rewriter for content writers and SEO work that rewrites text the way a human would, fixes spelling and grammar, and adds related keywords. Its {affiliate program} pays a share of every subscription payment from each customer you refer, for life, and the link comes with your WordAi account.",
     },
     {
       slug: "trueproxies",
       bestFor: "Best for developer and data audiences",
-      why: "TrueProxies provides residential and datacenter proxies for web scraping, data collection, ad verification and multi-account automation. It pays a share of every eligible payment for as long as a referred customer stays, with no cap. Each commission is held for a period before approval, and anyone with a verified TrueProxies account can join from the dashboard.",
-      notFor: "Self-referrals and brand-term search ads: neither is allowed.",
+      why: "TrueProxies provides residential and datacenter proxies for web scraping, data collection, ad verification and automation. Its {affiliate program} pays a share of every eligible payment for as long as a referred customer stays, with no cap, after each commission clears a holding period.",
     },
   ],
   rulesIntro:
@@ -87,6 +90,24 @@ export const guide: GuidePost = {
     { slug: "lunacal", text: "Lunacal: adding your coupon code to coupon websites disqualifies your membership and commissions." },
     { slug: "vidiq", text: "vidIQ: no bidding on vidIQ, its domain names or misspellings in pay-per-click campaigns, and no unsolicited commercial email." },
     { slug: "trueproxies", text: "TrueProxies: no self-referrals, and no spam in email, messages, comments or forums." },
+  ],
+  mistakes: [
+    {
+      lead: "Joining too many programs at once",
+      text: "Each program has its own dashboard, rules and payout minimum. A few that fit your topic are easier to promote well than a long list you never use.",
+    },
+    {
+      lead: "Choosing by the headline rate",
+      text: "A high rate on a product your readers do not need earns nothing. Fit with your audience and how long the commission lasts matter more.",
+    },
+    {
+      lead: "Skipping the restrictions",
+      text: "Brand-name search ads, coupon sites and unsolicited email are banned by many programs, and breaking a rule can cost you the commission.",
+    },
+    {
+      lead: "Hiding the disclosure",
+      text: "A note in the footer is not enough. Say you earn a commission near the link, before the reader clicks.",
+    },
   ],
   disclosure:
     "In the US, the FTC's Endorsement Guides say that a connection your audience would not expect, such as being paid for a sale, must be disclosed clearly and conspicuously. Their own example is a blogger whose reviews include affiliate links: the reviews should clearly and conspicuously disclose the compensation.",
@@ -101,7 +122,7 @@ export const guide: GuidePost = {
     },
     {
       q: "How long until my first commission?",
-      a: "It depends on each program's terms. The cookie window decides how long a click counts, some programs hold a commission through a waiting period, as TrueProxies does, and a payout minimum can delay the first payment. Each program block shows its cookie and payout terms.",
+      a: "It depends on each program's terms. The cookie window decides how long a click counts, some programs hold a commission through a waiting period, as TrueProxies does, and a payout minimum can delay the first payment. Each program's details on this page show its cookie and payout terms.",
     },
     {
       q: "Which commission type is better for a beginner?",

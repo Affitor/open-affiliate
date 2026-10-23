@@ -1,6 +1,7 @@
 import { commissionDisplay, commissionUnknown, isCreditReward, isLive, IN_HOUSE, networkName as displayName, type Program } from "@/lib/programs"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "@/lib/no-program"
 import { frequencyLabel } from "@/lib/claims/form"
+import { minimumAmount } from "@/lib/rankings-terms"
 
 const SITE = "https://openaffiliate.dev"
 
@@ -89,7 +90,7 @@ export function seoDescription(p: Program): string {
   parts.push(earn ? `Earn ${earn} promoting ${p.name}.` : `${p.name} affiliate program terms.`)
   const terms: string[] = []
   if (p.cookieDays) terms.push(`${p.cookieDays}-day cookie`)
-  if (p.payout?.minimum) terms.push(`$${p.payout.minimum} minimum payout`)
+  if (p.payout?.minimum) terms.push(`${minimumAmount(p.payout.minimum, p.payout.currency)} minimum payout`)
   const net = networkName(p)
   if (terms.length) parts.push(`${terms.join(", ")}${net && p.network !== IN_HOUSE ? ` via ${net}` : ""}.`)
   parts.push("How to join and similar programs.")
@@ -141,7 +142,7 @@ export function buildFaq(p: Program): Faq[] {
     const freq = p.payout?.frequency ? frequencyLabel(p.payout.frequency) : "Paid"
     faq.push({
       q: `When do ${name} affiliates get paid?`,
-      a: `${freq}${methods}${p.payout?.minimum ? `, once you reach the $${p.payout.minimum} minimum` : ""}.`,
+      a: `${freq}${methods}${p.payout?.minimum ? `, once you reach the ${minimumAmount(p.payout.minimum, p.payout.currency)} minimum` : ""}.`,
     })
   }
   const net = networkName(p)

@@ -367,12 +367,11 @@ commission:
   value: ${rate}
   currency: USD
   duration: 12 months
-  conditions: Paid 15 days after sale.
+  conditions: ${JSON.stringify(`Commissions are held 15 days after the sale for refunds and chargebacks. ${AFFITOR_SYNC.network_terms.payout_conditions}`)}
 cookie_days: 90
-attribution: last-click
 tracking_method: cookie
 payout:
-  minimum: 50
+  minimum: ${AFFITOR_SYNC.network_terms.payout_minimum}
   currency: USD
   methods: ${JSON.stringify(AFFITOR_SYNC.network_terms.payout_methods)}
 restrictions: ${JSON.stringify(AFFITOR_SYNC.network_terms.restrictions)}
@@ -577,6 +576,29 @@ test("affitor-sync: a term that differs from the API, or a field the sync does n
     files: [modified("alpha", syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "approval_time: instant\n" }))],
   })
   assert.match(stale.reasons.join("\n"), /approval_time is "instant", Affitor says absent/)
+
+  // attribution is the data lane's: a sync pull request that adds, changes or
+  // removes it is blocked, and so is a hold written as a payout date.
+  const firstClick = syncedYaml("alpha", { extra: "attribution: first-click\n" })
+  for (const [base, head, reason] of [
+    [syncedYaml("alpha"), syncedYaml("alpha", { rate: 25, extra: "attribution: last-click\n" }), /changes attribution, which the sync does not own/],
+    [firstClick, syncedYaml("alpha", { rate: 25, extra: "attribution: last-click\n" }), /changes attribution, which the sync does not own/],
+    [firstClick, syncedYaml("alpha", { rate: 25 }), /changes attribution, which the sync does not own/],
+    [
+      syncedYaml("alpha"),
+      syncedYaml("alpha", { rate: 25 }).replace(/conditions: .*\n/, "conditions: Paid 15 days after sale.\n"),
+      /commission\.conditions is "Paid 15 days after sale\.", Affitor says "Commissions are held 15 days/,
+    ],
+  ]) {
+    const result = await evaluateSync({ files: [modified("alpha", base, head)] })
+    assert.equal(result.eligible, false)
+    assert.match(result.reasons.join("\n"), reason)
+  }
+  // A hand-written first-click that the sync leaves alone is no reason to block.
+  const keptFirstClick = await evaluateSync({
+    files: [modified("alpha", firstClick, syncedYaml("alpha", { rate: 25, date: "2026-10-13", extra: "attribution: first-click\n" })), SYNC_FILES[1]],
+  })
+  assert.deepEqual(keptFirstClick.reasons, [])
 
   // approval and payout.frequency are the data lane's: a sync that adds,
   // changes or deletes one is blocked; one it leaves alone passes.

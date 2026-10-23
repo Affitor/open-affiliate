@@ -227,10 +227,28 @@ export function affitorTerms(p: AffitorProgram): Terms | string {
       ? { rate: `${rate}%`, mode: "percentage" as const, value: rate }
       : { rate: `$${fixed}`, mode: "flat" as const, value: fixed }),
     duration,
-    // affitor.com/llms.txt words the hold as "paid 15 days after sale".
-    conditions: hold > 0 ? `Paid ${hold} ${hold === 1 ? "day" : "days"} after sale.` : null,
+    conditions: affitorConditions(hold),
     cookie_days: p.cookie_window_days ?? null,
   }
+}
+
+/**
+ * When a commission becomes withdrawable. default_hold_period_days is a hold
+ * against refunds and chargebacks (Affitor's terms, "Hold Period"), not a
+ * date the partner is paid: after it come brand funding, the $20 withdrawal
+ * minimum and team review, which the network's payout docs state for every
+ * program (config network_terms.payout_conditions). A term the listing's
+ * `conflicts` names (payout.frequency for the hold, payout.minimum for the
+ * $20) is left out of the prose too, as its field is left blank.
+ */
+export function affitorConditions(hold: number, conflicts: unknown = null): string {
+  const named = conflictFields(conflicts)
+  const held = hold > 0 && !named.has("payout.frequency") ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : ""
+  const minimum = `$${NETWORK.payout_minimum}`
+  const network = named.has("payout.minimum")
+    ? NETWORK.payout_conditions.split(/(?<=\.) /).filter((sentence: string) => !sentence.includes(minimum)).join(" ")
+    : NETWORK.payout_conditions
+  return held + network
 }
 
 /** "Jobholler Partner Program" → "Jobholler": every OA page is titled "<name> Affiliate Program". */
@@ -352,9 +370,11 @@ export type Edit = [path: string[], value: unknown]
 
 /**
  * Published by Affitor nowhere, so a verified listing may not show them:
- * empty over wrong. `approval` and `payout.frequency` are not here and not
- * owned: the data lane reads them from each listing's own wording ("Once X
- * approves you", "held 31 days after the sale"), and the sync leaves them.
+ * empty over wrong. `approval`, `payout.frequency` and `attribution` are
+ * not here and not owned: the data lane reads them from the listing's own
+ * wording and Affitor's terms ("Once X approves you", "held 31 days after the
+ * sale", first-click in Terms §2.3), and the sync never adds, changes or
+ * removes them. The API states no attribution model.
  */
 const UNPUBLISHED = [
   "approval_time",
@@ -376,23 +396,44 @@ export function networkRestrictions(current: unknown): unknown[] {
 }
 
 /**
- * Every field the sync owns, at the value Affitor states; `restrictions` is
- * the listing's current list, which the network's items are added to. Dates
- * are set separately, only on change.
+ * Terms the sync owns that the data lane can find stated two ways: when the
+ * listing's `conflicts` names one (the brand's page and Affitor's disagree),
+ * the field stays blank, as the registry requires, instead of Affitor's value.
  */
-function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null): Edit[] {
-  return [
+export const TWO_WAY_TERMS = ["cookie_days", "payout.minimum"]
+
+/** The owned terms a listing records as stated two ways (`conflicts[].field`). */
+export function twoWayTerms(conflicts: unknown): Set<string> {
+  const fields = conflictFields(conflicts)
+  return new Set(TWO_WAY_TERMS.filter((f) => fields.has(f)))
+}
+
+/** Every field a listing's `conflicts` names. */
+function conflictFields(conflicts: unknown): Set<unknown> {
+  return new Set(Array.isArray(conflicts) ? conflicts.map((c) => (c && typeof c === "object" ? (c as { field?: unknown }).field : null)) : [])
+}
+
+/**
+ * Every field the sync owns, at the value Affitor states; `restrictions` is
+ * the listing's current list, which the network's items are added to; a term
+ * in `conflicts` stays blank. Dates are set separately, only on change.
+ */
+function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null, conflicts: unknown = null): Edit[] {
+  const twoWays = twoWayTerms(conflicts)
+  const blankIfTwoWays = (edit: Edit): Edit => (twoWays.has(edit[0].join(".")) ? [edit[0], DELETE] : edit)
+  const fields: Edit[] = [
     [["commission", "type"], t.type],
     [["commission", "rate"], t.rate],
     [["commission", "mode"], t.mode],
     [["commission", "value"], t.value],
     [["commission", "currency"], "USD"],
     [["commission", "duration"], t.duration],
-    [["commission", "conditions"], t.conditions],
+    [["commission", "conditions"], affitorConditions(p.default_hold_period_days ?? 0, conflicts)],
     [["cookie_days"], t.cookie_days ?? DELETE],
-    [["attribution"], "last-click"],
     [["tracking_method"], "cookie"],
-    [["payout", "minimum"], p.payout_threshold ?? DELETE],
+    // The minimum every listing publishes ("Minimum payout $20 combined across all your programs"), not the
+    // API's payout_threshold, which no public page states (cos-oa 2026-10-21: the public page wins).
+    [["payout", "minimum"], NETWORK.payout_minimum],
     [["payout", "currency"], "USD"],
     [["payout", "methods"], NETWORK.payout_methods],
     [["signup_url"], MARKETPLACE + p.slug],
@@ -403,6 +444,7 @@ function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null):
     [["restrictions"], networkRestrictions(restrictions)],
     ...UNPUBLISHED.map((k): Edit => [[k], DELETE]),
   ]
+  return fields.map(blankIfTwoWays)
 }
 
 /**
@@ -658,7 +700,6 @@ function newListing(
     category,
     commission: {},
     cookie_days: null,
-    attribution: null,
     tracking_method: null,
     payout: {},
     signup_url: null,
@@ -997,7 +1038,7 @@ export async function run(o: RunOptions): Promise<{ entries: Entry[]; written: s
     if (entry.action === "take-over" && program && terms && listing) {
       const { text, diffs } = edit(
         readFileSync(listing.path, "utf8"),
-        ownedFields(program, terms, listing.data.restrictions),
+        ownedFields(program, terms, listing.data.restrictions, listing.data.conflicts),
         [
           [["updated_at"], o.today],
           [["last_verified_at"], o.today],

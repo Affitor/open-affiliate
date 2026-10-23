@@ -10,7 +10,8 @@ commission:
   rate: "30%"
   mode: percentage
   value: 30
-  duration: "Lifetime of the referred subscription"
+  # "30% recurring commission, forever": paid for the lifetime of the referred subscription
+  duration: lifetime
   conditions: >
     Applies to eligible paid subscriptions from new customers referred
     through the affiliate link. Self-referrals do not qualify and may be
@@ -59,7 +60,7 @@ agents:
 verified: true
 submitted_by: affitor
 created_at: "2026-10-19"
-updated_at: "2026-10-19"
+updated_at: "2026-10-21"
 last_verified_at: "2026-10-19"
 status: active
 kind: affiliate
