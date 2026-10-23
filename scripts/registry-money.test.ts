@@ -85,14 +85,25 @@ export function minimumMismatches(docs: [string, Doc][]): string[] {
     const currency = (d.payout?.currency ?? "USD").toUpperCase()
     const dollar = ["CAD", "AUD"].includes(currency) ? currency : "USD"
     const off: Figure[] = []
-    for (const s of [d.commission?.conditions, d.payout?.conditions].flatMap(sentences)) {
-      const stated = statedMinimums(s, dollar).filter((f) => f.currency === currency || f.currency === "*")
+    const minimums = (t: string) => statedMinimums(t, dollar).filter((f) => f.currency === currency || f.currency === "*")
+    // A floor above the minimum in a clause about wire or bank transfer alone is that method's own (Icons8,
+    // pCloud, Rocket.net's "PayPal is the default; wire transfer … $1,000"); a clause naming any other
+    // method is checked (Codex r3 #410).
+    const wireOnly = (c: string) => {
+      const m = c.toLowerCase().match(METHOD) ?? []
+      return m.length > 0 && m.every((x) => BY_WIRE.test(x)) && minimums(c).every((f) => f.amount > min)
+    }
+    for (const sentence of [d.commission?.conditions, d.payout?.conditions].flatMap(sentences)) {
+      const s = sentence.split(/;\s*/).filter((c) => !wireOnly(c)).join("; ")
+      const stated = minimums(s)
       const amounts = new Set(stated.map((f) => f.amount))
-      // A wire or bank-transfer floor above the minimum is that method's own (Icons8, pCloud, Rocket.net).
-      if (BY_WIRE.test(s) && stated.every((f) => f.amount > min)) continue
-      // Two methods with two different floors give one each ("Wise with no minimum, or PayPal with a $200 minimum").
-      // A sentence with one figure is always checked, whatever methods it names (Codex r2 #410).
-      if (amounts.size > 1 && new Set(s.toLowerCase().match(METHOD) ?? []).size > 1) continue
+      const methods = new Set(s.toLowerCase().match(METHOD) ?? [])
+      // Two methods with two different floors give one each ("Wise with no minimum, or PayPal with a $200
+      // minimum"): payout.minimum must be one of them (Codex r3 #410). One figure is always checked (r2).
+      if (amounts.size > 1 && methods.size > 1) {
+        if (!amounts.has(min)) off.push(...stated)
+        continue
+      }
       // One matching statement does not excuse another that contradicts it (Codex r1 #410).
       off.push(...stated.filter((f) => f.amount !== min))
     }
@@ -338,6 +349,11 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   assert.equal(minimumMismatches(doc({ payout: { minimum: 0, currency: "USD" }, commission: { conditions: "Paid monthly via Wise with no minimum, or via PayPal on request with a $200 minimum." } })).length, 0)
   // A wire floor above the minimum is that method's own (Icons8).
   assert.equal(minimumMismatches(doc({ payout: { minimum: 50, currency: "USD" }, commission: { conditions: "Wire transfers need a $1,000 minimum." } })).length, 0)
+  // Codex r3 #410, each failed before the fix:
+  // P2-1: per-method floors still have to include payout.minimum (Browse AI shape with minimum 50).
+  assert.equal(minimumMismatches(doc({ payout: { minimum: 50, currency: "USD" }, commission: { conditions: "Paid monthly via Wise with no minimum, or via PayPal on request with a $200 minimum." } })).length, 1)
+  // P2-2: a floor shared with another method is not a wire-only floor.
+  assert.equal(minimumMismatches(doc({ ...seerist, payout: { minimum: 20, currency: "USD" }, commission: { conditions: `${seerist.commission!.conditions} Minimum payout is $50 via Wise or bank transfer.` } })).length, 1)
 
   // Codex r2 #410, each failed before the fix:
   // P2-1: a sentence with one figure is checked whatever methods it names.
