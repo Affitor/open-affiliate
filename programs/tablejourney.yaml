@@ -5,6 +5,8 @@ category: E-Commerce
 kind: affiliate
 tags: [travel, food-travel, food-tours, hotels, mcp, ai-agents]
 
+# "you earn 50% of that commission, or 60% for a calendar month in which your confirmed earnings pass $500." (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
+# "Bookings the partner cancels, refunds or does not pay us for earn nothing" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
 commission:
   type: tiered
   rate: "50% of TableJourney's commission, 60% in a month above $500"
@@ -13,12 +15,18 @@ commission:
   currency: USD
   conditions: "Paid on bookings made with TableJourney's booking partners (food tours, classes, hotels, car hire, eSIM) within 30 days of the visit, once the partner pays TableJourney. Cancelled, refunded or unpaid bookings earn nothing."
 
+# "books with one of our booking partners within 30 days" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
 cookie_days: 30
+# "If another member's link is used later, that member's link counts instead." (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
 attribution: last-click
 signup_url: https://tablejourney.com/partners/
+# "no website, follower count or approval needed" (tablejourney.com/partners/, checked 2026-10-23)
 approval: auto
+# "join, confirm and track earnings over the API. Or connect our MCP server with your key" (tablejourney.com/partners/, checked 2026-10-23)
 api_available: true
 
+# "Earnings become payable 3 days after the partner has paid us. We pay once a month, by PayPal, in crypto … or by bank transfer" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
+# "when your payable balance is at least $10 (PayPal or crypto), $25 (Bitcoin) or $50 (bank transfer)" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
 payout:
   minimum: 10
   currency: USD
@@ -26,6 +34,9 @@ payout:
   methods: [paypal, crypto, bank]
   conditions: "Earnings become payable 3 days after the booking partner pays TableJourney, usually after the trip. Paid once a month when the payable balance is at least $10 by PayPal or crypto (USDC, ETH or SOL; $25 for BTC), or $50 by bank transfer. A tax form is required before the first payout."
 
+# "Bidding on 'TableJourney' or our partners' brand names in search ads." / "Earning on your own bookings, or on bookings by people in your household or company." (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
+# "Before the first payout we ask for your tax form (W-9, or W-8BEN / W-8BEN-E outside the US)" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
+# "Spam, unsolicited bulk messages" / "Cookie stuffing, hidden frames, forced clicks, automated or fake traffic" (tablejourney.com/partners/terms/, version 2026-10-21, checked 2026-10-23)
 restrictions:
   - "No spam or unsolicited bulk messages"
   - "No bidding on TableJourney or its partners' brand names in search ads"
@@ -56,6 +67,8 @@ agents:
     - "When a food or travel blogger wants one referral code across several booking partners"
     - "When a site wants an embeddable food tours widget that pays its owner"
 
-verified: false
+verified: true
 submitted_by: "@lewismvaughan"
 created_at: "2026-10-21"
+updated_at: "2026-10-23"
+last_verified_at: "2026-10-23"
