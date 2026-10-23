@@ -60,7 +60,10 @@ export const SUBMISSION_ID_MASK = "/submissions/{id}"
 function masked(value: unknown): unknown {
   if (typeof value === "string") return value.replace(SUBMISSION_ID, SUBMISSION_ID_MASK)
   if (Array.isArray(value)) return value.map(masked)
-  if (value && typeof value === "object") return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, masked(v)]))
+  // Plain objects only: the event's timestamp is a Date, and copying its (empty) own keys sent `{}`,
+  // which PostHog drops. Web events went to ~0 on 21/10 after this mask shipped.
+  if (value && typeof value === "object" && [Object.prototype, null].includes(Object.getPrototypeOf(value)))
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, masked(v)]))
   return value
 }
 
