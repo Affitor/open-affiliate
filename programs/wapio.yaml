@@ -28,8 +28,9 @@ restrictions:
 
 description: >
   Wapio is a WhatsApp REST API for developers, agencies and SaaS teams. It
-  connects a number by QR code and sends messages through the API and
-  webhooks, with plans from $6 per month and no Wapio per-message markup.
+  connects a number by QR code, sends messages through the REST API and
+  offers webhooks, with plans from $6 per month and no Wapio per-message
+  markup.
   New users get a three-day trial without a credit card.
 
   The affiliate program pays 30% of eligible collected subscription revenue,
