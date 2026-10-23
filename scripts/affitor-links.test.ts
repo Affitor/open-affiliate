@@ -123,9 +123,9 @@ const PLAIN_ANCHORS = new Set([
 ])
 
 // A next/link <Link> is never tracked, so its computed href must be an internal path: a template
-// starting with "/" (not "//", which is another host), an internal path helper, or a URL's pathname pass; any other expression is
+// starting with "/" (not "//" or "/\\", which browsers read as another host), an internal path helper, or a URL's pathname pass; any other expression is
 // reviewed here as built from site data (internal paths), never a brand's or affitor.com page.
-const INTERNAL_LINK = /^(`\/(?!\/)|(bestPath|networkPath|guidePath)\(|new URL\(.*\)\.pathname$|NETWORKS_POST_PATH$)/
+const INTERNAL_LINK = /^(`\/(?![\/\\])|(bestPath|networkPath|guidePath)\(|new URL\(.*\)\.pathname$|NETWORKS_POST_PATH$)/
 const REVIEWED_LINKS = new Set([
   "src/app/blog/page.tsx | e.href", // blogEntries(): /best and /blog paths
   "src/app/changelog/page.tsx | entry.link.href", // changelog entries: internal pages
@@ -159,6 +159,7 @@ const REVIEWED_LINKS = new Set([
 test("every computed <Link> href is an internal path or reviewed as one", () => {
   assert.ok(INTERNAL_LINK.test("`/programs/${slug}`"))
   assert.equal(INTERNAL_LINK.test("`//brand.com/${slug}`"), false, "a protocol-relative template is another host")
+  assert.equal(INTERNAL_LINK.test("`/\\\\brand.com/${slug}`"), false, "a browser reads /\\ as //")
   for (const file of sourceFiles(join(root, "src"))) {
     const rel = relative(root, file)
     for (const m of readFileSync(file, "utf8").matchAll(/<Link\s[^>]*?href=\{((?:[^{}]|\{[^{}]*\})*)\}/g)) {
