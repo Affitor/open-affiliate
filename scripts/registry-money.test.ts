@@ -54,6 +54,7 @@ const MINIMUM_FORMS = [
 ].map((s) => new RegExp(s, "gi"))
 const NO_MINIMUM = /\bno (?:payout )?minimum\b|\bno (?:payout )?thresholds?\b/i
 const BY_WIRE = /\b(?:wire|bank transfer|bank wire)/i
+const METHOD = /\b(?:paypal|wise|payoneer|stripe|crypto|check|account credit|credits)\b/g
 
 type Figure = { amount: number; currency: string }
 const SYMBOL: Record<string, string> = { "€": "EUR", "£": "GBP" }
@@ -73,7 +74,7 @@ export function statedMinimums(text: string, dollar = "USD"): Figure[] {
   return out
 }
 
-/** Programs whose conditions state a minimum, none of which is payout.minimum. */
+/** Programs whose conditions state a minimum other than payout.minimum (every stated minimum must match). */
 export function minimumMismatches(docs: [string, Doc][]): string[] {
   const out: string[] = []
   for (const [slug, d] of docs) {
@@ -81,11 +82,14 @@ export function minimumMismatches(docs: [string, Doc][]): string[] {
     if (typeof min !== "number") continue
     const currency = (d.payout?.currency ?? "USD").toUpperCase()
     const dollar = ["CAD", "AUD"].includes(currency) ? currency : "USD"
-    // A wire or bank-transfer minimum is a second, higher floor for that method (Icons8, pCloud, Rocket.net).
-    const text = [d.commission?.conditions, d.payout?.conditions].flatMap(sentences).filter((s) => !BY_WIRE.test(s)).join(" ")
+    // A wire or bank-transfer minimum is a second, higher floor for that method (Icons8, pCloud, Rocket.net),
+    // and a sentence naming two methods gives one floor each ("Wise with no minimum, or PayPal with a $200 minimum").
+    const perMethod = (s: string) => BY_WIRE.test(s) || new Set(s.toLowerCase().match(METHOD) ?? []).size > 1
+    const text = [d.commission?.conditions, d.payout?.conditions].flatMap(sentences).filter((s) => !perMethod(s)).join(" ")
     const stated = statedMinimums(text, dollar).filter((f) => f.currency === currency || f.currency === "*")
-    if (stated.length && !stated.some((f) => f.amount === min))
-      out.push(`${slug}: payout.minimum ${min} ${currency}, conditions state ${stated.map((f) => f.amount).join(" / ")}`)
+    // One matching statement does not excuse another that contradicts it (Codex r1 #410).
+    const off = stated.filter((f) => f.amount !== min)
+    if (off.length) out.push(`${slug}: payout.minimum ${min} ${currency}, conditions also state ${off.map((f) => f.amount).join(" / ")}`)
   }
   return out
 }
@@ -155,36 +159,36 @@ const FIGURES: Record<string, (s: string) => string[]> = {
 }
 
 /**
- * A sentence that says the term is stated two ways, or whose source it is ("the terms say ..."), is
- * the allowed form; the bug is an unattributed figure such as Affitor's "At least $20 must be available"
- * on a listing whose brand page states another minimum (#403).
+ * The bug is an unattributed figure such as Affitor's "At least $20 must be available" on a listing whose
+ * brand page states another minimum (#403). A sentence is allowed only when it says the term is stated
+ * two ways, or names every value recorded in `conflicts[].values`. Words like "both", "while" or a second
+ * amount are not enough ("… for both individuals and businesses", "$20, with a $5 fee"; Codex r1 #410).
  */
-const TWO_WAYS =
-  /two ways|\bboth\b|\bwhile\b|\bwhereas\b|\binstead\b|\banother\b|\bdisagree|\bconflict|\bseparately\b|\b(?:page|terms|agreement|FAQ|listing|headline|guide|policy|help center)\b[^.;]{0,25}\b(?:says?|lists?|states?|gives?|offers?|advertises?|sets?|describes?|limits?)\b/i
+const TWO_WAYS = /\b(?:stated|states|gives?|given|lists?|listed|sets?) [^.;]{0,40}\btwo ways\b|\btwo ways\b/i
 
-/** Every figure of the term's unit in a sentence, wherever it stands: two of them name both values. */
-const UNIT: Record<string, RegExp> = {
-  "payout.minimum": new RegExp(MONEY, "gi"),
-  cookie_days: /\b\d+[- ]days?\b/gi,
-  "commission.rate": /\b\d+(?:\.\d+)?\s?%/g,
-  "commission.duration": /\b(?:lifetime|for life|\d+[- ](?:months?|years?))\b/gi,
-  "payout.frequency": /\b(?:net[- ]?\d+|monthly|weekly|bi-weekly|quarterly|twice a month|held \d+ days?)\b/gi,
+/** Every value of the conflict appears in the sentence: a number as a standalone figure, a phrase as text. */
+function namesValues(s: string, values: unknown[] | undefined): boolean {
+  if (!values?.length) return false
+  const text = s.toLowerCase().replace(/,(?=\d{3})/g, "")
+  return values.every((v) => {
+    const n = String(v).match(/^\d+(?:\.\d+)?/)?.[0]
+    return n ? new RegExp(`(?<![\\d.])${n.replace(".", "\\.")}(?![\\d]|\\.\\d)`).test(text) : text.includes(String(v).toLowerCase())
+  })
 }
 
 /** Sentences that state one figure for a term the program records as stated two ways. */
 export function conflictStatements(docs: [string, Doc][]): string[] {
   const out: string[] = []
   for (const [slug, d] of docs) {
-    for (const field of new Set((d.conflicts ?? []).map((c) => String(c.field)))) {
+    for (const c of d.conflicts ?? []) {
+      const field = String(c.field)
       const figures = FIGURES[field]
       // An open field conflict: the prose agrees with the recorded value, and both wait on one decision.
       if (!figures || OPEN_FIELD_CONFLICTS.some((o) => o.startsWith(`${slug}: ${field} =`))) continue
       for (const [name, get] of PROSE)
         for (const s of sentences(get(d))) {
           const found = new Set(figures(s))
-          // A sentence naming both values ("60 days on the brand's page and 90 days on Affitor") is allowed.
-          const named = new Set((s.match(UNIT[field]) ?? []).map((x) => x.toLowerCase().replace(/[^a-z0-9.]/g, "")))
-          if (found.size > 0 && named.size < 2 && !TWO_WAYS.test(s)) out.push(`${slug} ${name} states ${field} ${[...found].join(" / ")}: ${s.trim()}`)
+          if (found.size > 0 && !TWO_WAYS.test(s) && !namesValues(s, c.values)) out.push(`${slug} ${name} states ${field} ${[...found].join(" / ")}: ${s.trim()}`)
         }
     }
   }
@@ -225,8 +229,38 @@ test("a single-percentage commission.rate is not stepped down by its own conditi
   assert.deepEqual(rateMismatches(registry()), [], 'write the step into the rate ("50% then 20%"), as the page states it')
 })
 
-test("no prose field states one figure for a term recorded as stated two ways", () => {
-  assert.deepEqual(conflictStatements(registry()), [], "remove the figure, or name both values in one sentence")
+/**
+ * (program, field) pairs whose prose gives each source's figure in its own sentence ("the affiliate page
+ * offers 20% for up to 3 years", "the terms limit commission to the first 12 months") while the conflict
+ * records no `values`. None is the #403 shape (an unattributed figure), but none meets the rule either.
+ * Fix each by recording `conflicts[].values` from the quote (a verifier's job) or by saying "stated two
+ * ways" in the sentence, then remove it here. Listed in the PR that added this test.
+ */
+const OPEN_TWO_WAY = [
+  "ai-video-cut commission.rate",
+  "contentstudio commission.duration",
+  "contentstudio commission.rate",
+  "duplicator commission.rate",
+  "klenty commission.duration",
+  "klenty payout.minimum",
+  "nitropack payout.frequency",
+  "personizely commission.duration",
+  "personizely commission.rate",
+  "servebolt commission.rate",
+  "servebolt payout.minimum",
+  "sharetribe cookie_days",
+  "sked-social commission.rate",
+  "superscale commission.duration",
+  "thexyz commission.rate",
+  "verpex cookie_days",
+  "zeemo-ai commission.duration",
+]
+
+test("no prose field states one figure for a term recorded as stated two ways, apart from the open list", () => {
+  const hits = conflictStatements(registry())
+  const pair = (h: string) => h.split(" ")[0] + " " + h.split(" states ")[1].split(" ")[0]
+  assert.deepEqual(hits.filter((h) => !OPEN_TWO_WAY.includes(pair(h))), [], "remove the figure, or name both recorded values in one sentence")
+  assert.deepEqual(OPEN_TWO_WAY.filter((p) => !hits.some((h) => pair(h) === p)), [], "fixed: remove these from OPEN_TWO_WAY")
 })
 
 test("commission.rate and commission.duration in conflicts carry no value, apart from the open list", () => {
@@ -263,8 +297,28 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   // #403: minimum in conflicts, conditions still state the Affitor $20.
   const twoWays: Doc = { payout: { currency: "USD" }, commission: { conditions: "At least $20 must be available before a withdrawal request." }, conflicts: [{ field: "payout.minimum" }] }
   assert.equal(conflictStatements(doc(twoWays)).length, 1)
-  // Webzon AI's form, both values in one sentence, passes.
-  const webzon: Doc = { agents: { prompt: "The cookie window is stated as 60 days on the brand's page and 90 days on Affitor, and the payout minimum as $50 on the brand's page and $20 on Affitor." }, conflicts: [{ field: "payout.minimum" }, { field: "cookie_days" }] }
+  // Webzon AI's form, both recorded values in one sentence, passes.
+  const webzon: Doc = {
+    agents: { prompt: "The cookie window is stated as 60 days on the brand's page and 90 days on Affitor, and the payout minimum as $50 on the brand's page and $20 on Affitor." },
+    conflicts: [{ field: "payout.minimum", values: [20, 50] }, { field: "cookie_days", values: ["60 days", "90 days"] }],
+  }
   assert.deepEqual(conflictStatements(doc(webzon)), [])
   assert.equal(conflictStatements(doc({ ...webzon, agents: { prompt: "Pays 20% with a 90-day cookie." } })).length, 1)
+  // Saying "two ways" is the other allowed form.
+  assert.deepEqual(conflictStatements(doc({ ...twoWays, commission: { conditions: "The minimum payout is stated two ways: $20 and $50." } })), [])
+
+  // Codex r1 #410, each failed before the fix:
+  // P2-1: "both", "while", "instead" do not excuse one figure.
+  for (const s of [
+    "At least $20 must be available before a withdrawal request for both individuals and businesses.",
+    "At least $20 must be available before a withdrawal request, while fees vary.",
+    "At least $20 must be available before a withdrawal request instead of $10 last year.",
+  ])
+    assert.equal(conflictStatements(doc({ ...webzon, agents: {}, commission: { conditions: s } })).length, 1, s)
+  // P2-2: a second amount that is not the other recorded value does not excuse the first.
+  assert.equal(conflictStatements(doc({ ...webzon, agents: {}, commission: { conditions: "Minimum payout is $20, with a $5 processing fee." } })).length, 1)
+  // P2-3: one matching minimum does not hide a contradictory one.
+  assert.equal(minimumMismatches(doc({ ...seerist, payout: { minimum: 20, currency: "USD" }, commission: { conditions: `${seerist.commission!.conditions} Minimum payout is $50.` } })).length, 1)
+  // A sentence giving one floor per method is not a contradiction (Browse AI).
+  assert.equal(minimumMismatches(doc({ payout: { minimum: 0, currency: "USD" }, commission: { conditions: "Paid monthly via Wise with no minimum, or via PayPal on request with a $200 minimum." } })).length, 0)
 })
