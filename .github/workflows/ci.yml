@@ -29,6 +29,7 @@ jobs:
       - run: npx tsx --test scripts/posthog-noise.test.ts
       - run: npx tsx --test scripts/apply-cta.test.ts
       - run: npx tsx --test scripts/sync-affitor.test.ts
+      - run: npx tsx --test scripts/registry-money.test.ts
       - run: npx tsx --test scripts/verify-programs.test.ts
       - run: npx tsx --test scripts/claims.test.ts scripts/claims-apply.test.ts scripts/submissions.test.ts scripts/submissions-sql.test.ts
       - run: npx tsx --test scripts/inbound-email.test.ts
