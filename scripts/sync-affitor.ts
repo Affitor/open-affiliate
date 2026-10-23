@@ -237,11 +237,18 @@ export function affitorTerms(p: AffitorProgram): Terms | string {
  * against refunds and chargebacks (Affitor's terms, "Hold Period"), not a
  * date the partner is paid: after it come brand funding, the $20 withdrawal
  * minimum and team review, which the network's payout docs state for every
- * program (config network_terms.payout_conditions).
+ * program (config network_terms.payout_conditions). A term the listing's
+ * `conflicts` names (payout.frequency for the hold, payout.minimum for the
+ * $20) is left out of the prose too, as its field is left blank.
  */
-export function affitorConditions(hold: number): string {
-  const held = hold > 0 ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : ""
-  return held + NETWORK.payout_conditions
+export function affitorConditions(hold: number, conflicts: unknown = null): string {
+  const named = conflictFields(conflicts)
+  const held = hold > 0 && !named.has("payout.frequency") ? `Commissions are held ${hold} ${hold === 1 ? "day" : "days"} after the sale for refunds and chargebacks. ` : ""
+  const minimum = `$${NETWORK.payout_minimum}`
+  const network = named.has("payout.minimum")
+    ? NETWORK.payout_conditions.split(/(?<=\.) /).filter((sentence: string) => !sentence.includes(minimum)).join(" ")
+    : NETWORK.payout_conditions
+  return held + network
 }
 
 /** "Jobholler Partner Program" → "Jobholler": every OA page is titled "<name> Affiliate Program". */
@@ -397,8 +404,13 @@ export const TWO_WAY_TERMS = ["cookie_days", "payout.minimum"]
 
 /** The owned terms a listing records as stated two ways (`conflicts[].field`). */
 export function twoWayTerms(conflicts: unknown): Set<string> {
-  const fields = Array.isArray(conflicts) ? conflicts.map((c) => (c && typeof c === "object" ? (c as { field?: unknown }).field : null)) : []
-  return new Set(TWO_WAY_TERMS.filter((f) => fields.includes(f)))
+  const fields = conflictFields(conflicts)
+  return new Set(TWO_WAY_TERMS.filter((f) => fields.has(f)))
+}
+
+/** Every field a listing's `conflicts` names. */
+function conflictFields(conflicts: unknown): Set<unknown> {
+  return new Set(Array.isArray(conflicts) ? conflicts.map((c) => (c && typeof c === "object" ? (c as { field?: unknown }).field : null)) : [])
 }
 
 /**
@@ -416,7 +428,7 @@ function ownedFields(p: AffitorProgram, t: Terms, restrictions: unknown = null, 
     [["commission", "value"], t.value],
     [["commission", "currency"], "USD"],
     [["commission", "duration"], t.duration],
-    [["commission", "conditions"], t.conditions],
+    [["commission", "conditions"], affitorConditions(p.default_hold_period_days ?? 0, conflicts)],
     [["cookie_days"], t.cookie_days ?? DELETE],
     [["tracking_method"], "cookie"],
     // The minimum every listing publishes ("Minimum payout $20 combined across all your programs"), not the
