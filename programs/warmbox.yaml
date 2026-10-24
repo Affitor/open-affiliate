@@ -19,9 +19,9 @@ commission:
 cookie_days: 45
 
 # "Affiliate partners are paid on the 1st of each month. First commissions are paid out after 30 days." (warmbox.ai/affiliate, checked 2026-10-24)
-# frequency: left out; a 30-day wait followed by the next 1st-of-month payment can run past 60 days, so the schedule stays in conditions (backfill rule #1)
+# frequency: left out; a 30-day wait followed by the next 1st-of-month payment can reach 60 or 61 days, so the schedule stays in conditions (backfill rule #1)
 # minimum: not published on warmbox.ai/affiliate (checked 2026-10-24); the page refers to separate affiliate T&Cs that it does not link, so no not-published marker
-# methods: stated two ways, so left out: "get paid on Paypal or Stripe as you go." (warmbox.ai/affiliate) vs "Make sure your bank allows international money transfers." (warmbox.ai/affiliate), checked 2026-10-24
+# methods: left out; the page says "get paid on Paypal or Stripe as you go." but also asks affiliates to "Make sure your bank allows international money transfers." (warmbox.ai/affiliate, checked 2026-10-24)
 payout:
   conditions: "Affiliate partners are paid on the 1st of each month, and first commissions are paid out after 30 days. The program page names PayPal or Stripe for payouts in one place and asks affiliates to make sure their bank accepts international transfers in another."
 
@@ -70,7 +70,3 @@ last_verified_at: "2026-10-24"
 status: active
 kind: affiliate
 source: manual
-conflicts:
-  - field: payout.methods
-    quote: 'warmbox.ai/affiliate, "Track & earn money": "get paid on Paypal or Stripe as you go." warmbox.ai/affiliate FAQ, "When are affiliates paid?": "Make sure your bank allows international money transfers." Checked 2026-10-24.'
-    values: ["PayPal or Stripe", "bank transfer"]

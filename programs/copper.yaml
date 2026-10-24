@@ -6,14 +6,14 @@ category: CRM
 tags: [crm, google-workspace, gmail-crm, sales-pipeline, project-management, small-business]
 
 # "Earn a 15% commission on both monthly and annual Copper subscriptions." (copper.com/partners, checked 2026-10-24)
-# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote
+# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote (the same FAQ ends "ensuring a consistent revenue stream", which could also suggest recurring)
 commission:
   type: one-time
   rate: "15%"
   mode: percentage
   value: 15
   duration: null
-  conditions: "Referral partners earn 15% commission on both monthly and annual Copper subscriptions. How long commission lasts is not published. A separate affiliate partner track for content creators pays CPC or CPL commissions whose amounts are not published."
+  conditions: "Referral partners earn 15% commission on both monthly and annual Copper subscriptions. How long commission lasts is not published. A separate affiliate partner track for content creators pays CPC or CPL commissions whose amounts are not published. Accepted referral partners must check in monthly for their first 3 months, onboard one client within 4 months and complete a short Copper course in their first month; joining is free, but a partner who needs a demo account must buy one business license."
 
 # "With monthly payouts and a 90-day tracking cookie, your earnings are calculated and paid regularly" (copper.com/partners, checked 2026-10-24)
 cookie_days: 90
@@ -25,6 +25,7 @@ payout:
 
 signup_url: https://www.copper.com/partners
 # "Apply for Copper's referral and solutions partner program by filling out the form; our team will follow up." (copper.com/partners, checked 2026-10-24)
+# "The straightforward selection process requires a monthly check-in for the first 3 months, onboarding 1 client in 4 months" (copper.com/partners, checked 2026-10-24)
 approval: manual
 
 dashboard_url: null
@@ -41,8 +42,10 @@ description: >
   Copper's partner program pays referral partners 15% commission on both
   monthly and annual Copper subscriptions, with a 90-day tracking cookie
   and monthly payouts. Applications go through a form and Copper's team
-  follows up; content creators can join a separate affiliate track paid
-  per click or per lead.
+  follows up. Accepted partners check in monthly for three months, onboard
+  one client within four months and take a short Copper course; a demo
+  account requires buying a business license. Content creators can join a
+  separate affiliate track paid per click or per lead.
 
 short_description: "CRM built for teams that work in Google Workspace"
 
@@ -52,7 +55,9 @@ agents:
     Google Workspace want a CRM that works inside their inbox to manage
     contacts, deals and projects. Fits agencies, consultants and service
     businesses. Commission for referral partners: 15% on monthly and annual
-    subscriptions, 90-day cookie, paid monthly.
+    subscriptions, 90-day cookie, paid monthly. Partners must onboard one
+    client within four months, check in monthly at first and complete a
+    short Copper course.
   keywords: [copper, copper crm, google workspace crm, gmail crm, crm for agencies, crm for small business]
   use_cases:
     - "Teams on Google Workspace choosing a CRM that runs in Gmail"
