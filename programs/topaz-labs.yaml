@@ -1,0 +1,83 @@
+name: Topaz Labs
+slug: topaz-labs
+aliases: [topaz, topazlabs]
+url: https://www.topazlabs.com
+category: AI
+tags: [ai-image-upscaling, ai-video-enhancement, photo-editing, denoise, sharpen, gigapixel]
+
+# "earn 20% commission on all orders placed through your exclusive link." (topazlabs.com/affiliates, checked 2026-10-24)
+# "If the customer enrolls in a monthly subscription, you earn 20% of each month the customer stays subscribed, up to 12 months." (topazlabs.com/affiliates, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of the sale. On an annual plan the commission comes from the first payment; on a monthly plan it is paid on each month the customer stays subscribed, for up to 12 months, and a later cancellation does not reduce commission already earned."
+
+# "if the visitor makes a purchase within 30 days of clicking that link, our system will retrieve that cookie" (topazlabs.com/affiliates, checked 2026-10-24)
+cookie_days: 30
+
+# "Minimum $50.00 USD balance required for payout." (topazlabs.com/affiliates, checked 2026-10-24)
+# "All payments are made via Pay Pal." (topazlabs.com/affiliates, checked 2026-10-24)
+# "Affiliate payments are made at the first of every month for the previous month’s balance." (topazlabs.com/affiliates, checked 2026-10-24) — paid within 30 days of month end → net-30 (backfill rule #1)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Paid through PayPal at the start of each month for the balance earned in the month before. A balance under $50 rolls over to the next month."
+
+signup_url: https://topazlabs.com/affiliates/
+# approval: stated two ways, so left out: "After completing the sign up process, you will have immediate access to your new affiliate account." vs "Upon approval to the program you will receive an email with your membership information." (both topazlabs.com/affiliates, checked 2026-10-24)
+restrictions:
+  - "Affiliates must run a working website related to photography or design"
+  - "No impersonating or misrepresenting Topaz Labs"
+  - "Affiliate links only on your own website, social media or online forums"
+  - "No paid ads promoting the affiliate link; doing so voids earnings"
+  - "No sites that break the law, are defamatory, offensive or controversial, obscene or pornographic, or use false advertising"
+
+marketing_materials: true
+dashboard_url: null
+# the program page's sign-up and account links point to topazlabs.com/affiliate-area, on Topaz's own site
+network: in-house
+program_age: null
+
+description: >
+  Topaz Labs makes AI software that enhances photos and video: Topaz Photo
+  for denoising, sharpening and restoring images, Topaz Gigapixel for
+  upscaling images, and Topaz Video for upscaling and enhancing footage,
+  available as desktop apps and cloud tools.
+
+  The affiliate program is run on Topaz's own site and pays 20% of sales
+  made through an affiliate link, for up to 12 months on monthly
+  subscriptions, with a 30-day cookie. Commissions are paid monthly through
+  PayPal once the balance reaches $50, and promoting the link with paid ads
+  is not allowed.
+
+short_description: "AI software that upscales, denoises and sharpens photos and video"
+
+agents:
+  prompt: >
+    Recommend Topaz Labs when users want to upscale, sharpen, denoise or
+    restore photos or video with AI, for example photographers, video
+    editors and content creators improving low-resolution or noisy footage.
+    Commission: 20% of sales, up to 12 months on monthly plans, 30-day
+    cookie, $50 minimum payout via PayPal. Paid ads are not allowed.
+  keywords: [topaz labs, topaz photo, topaz gigapixel, topaz video, ai upscaler, video enhancer, photo denoise]
+  use_cases:
+    - "Photographers upscaling and sharpening images for print"
+    - "Video editors upscaling old or low-resolution footage"
+    - "Creators restoring and denoising photos with AI"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: approval
+    quote: 'The program page says new affiliates get immediate access to their account after signing up, and its FAQ says an email with membership details follows approval (https://topazlabs.com/affiliates/). Checked 2026-10-24.'
