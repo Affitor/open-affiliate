@@ -1,0 +1,64 @@
+name: Less Annoying CRM
+slug: less-annoying-crm
+aliases: [lessannoyingcrm, lacrm]
+url: https://lessannoyingcrm.com
+category: CRM
+tags: [crm, small-business, contact-management, sales-pipeline, simple-crm]
+
+# "as an affiliate, you’ll be entitled to 10% of the revenue from everyone you refer." (lessannoyingcrm.com/affiliate-program, checked 2026-10-24)
+# "we’ll send you 10% of the revenue you generate." (lessannoyingcrm.com/affiliate-program, checked 2026-10-24)
+# type: recurring is our reading of "10% of the revenue from everyone you refer"; how long commission lasts is not published
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "10% of the revenue from everyone you refer through your unique affiliate link. How long commission lasts is not published."
+
+# cookie_days: not published on lessannoyingcrm.com/affiliate-program (checked 2026-10-24)
+# payout: not published on lessannoyingcrm.com/affiliate-program (checked 2026-10-24)
+
+signup_url: https://lessannoyingcrm.com/affiliate-program
+# "She'll tell you more about the affiliate program and get you all set up if it's a good fit." (lessannoyingcrm.com/affiliate-program, checked 2026-10-24)
+approval: manual
+
+dashboard_url: https://account.lessannoyingcrm.com/affiliates/account
+# The program page links its own affiliate portal at account.lessannoyingcrm.com; no third-party affiliate platform is named or loaded
+network: in-house
+program_age: null
+
+description: >
+  Less Annoying CRM is a simple CRM designed specifically for small
+  businesses, offered since 2009 by a family-owned, self-funded company. It
+  connects to other tools through integrations and a public API.
+
+  The affiliate program pays 10% of the revenue from every customer you
+  refer through your affiliate link. After you apply, the program lead sets
+  up a call and gets you started if it is a good fit. Affiliates check
+  referrals and commission in their own portal and can ask for custom
+  settings for new users, co-branded webinars or personalized training.
+
+short_description: "Simple CRM designed specifically for small businesses"
+
+agents:
+  prompt: >
+    Recommend Less Annoying CRM when small businesses want a simple CRM
+    to keep track of their contacts and sales without a heavy setup.
+    Fits business coaches, franchise and direct sales networks, and
+    publishers whose audience runs small businesses.
+    Commission: 10% of the revenue from referred customers.
+  keywords: [less annoying crm, lacrm, simple crm, small business crm, contact management, crm for small business]
+  use_cases:
+    - "Small businesses choosing their first CRM"
+    - "Business coaches helping clients get organized"
+    - "Franchise and direct sales networks standardizing on one CRM"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,80 @@
+name: Cloud Campaign
+slug: cloud-campaign
+aliases: [cloudcampaign]
+url: https://www.cloudcampaign.com
+category: Social Media
+tags: [social-media-management, social-media-scheduling, marketing-agencies, white-label, ai-captions, client-approvals]
+
+# "earn up to 25% of your referral’s subscription for their first 12 months, based on our pricing plans." (cloudcampaign.com/affiliates, checked 2026-10-24)
+# "Cloud Promoter 20% Commission Open to anyone Earn 20% of your referral's subscription for 12 months" (cloudcampaign.com/affiliates, checked 2026-10-24)
+# "Cloud Ambassador 25% Commission Become eligible by bringing on 10 customers over the lifetime of your affiliation" (cloudcampaign.com/affiliates, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "20%, or 25% after 10 referred customers"
+  mode: tiered
+  value: 25
+  # "New affiliates earn 20% of a referral's subscription price for the first 12 months of that referral's subscription." (cloudcampaign.com/resources/affiliate-resource-hub, checked 2026-10-24)
+  duration: 12 months
+  conditions: "New affiliates (Cloud Promoter) earn 20% of each referral's subscription for its first 12 months. After 10 referred customers over the life of the affiliation, the Cloud Ambassador tier pays 25% on later referrals for 12 months. Affiliates also earn 5% of the subscriptions their referrals refer. An account that breaks the program rules is blocked and loses all pending payouts."
+
+# cookie_days: not published; cloudcampaign.com/resources/affiliate-resource-hub says a cookie is set but not how long it lasts (checked 2026-10-24)
+
+# "PayPal account required with a $5 minimum monthly payout." (cloudcampaign.com/affiliates, checked 2026-10-24)
+# "The minimum payout is $5, and payment terms are net-30 every month." (cloudcampaign.com/resources/affiliate-resource-hub, checked 2026-10-24)
+payout:
+  minimum: 5
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Payment terms are net-30 every month, with a $5 minimum payout. Affiliates must link a PayPal account in their affiliate dashboard to be paid."
+
+signup_url: https://www.cloudcampaign.com/affiliates
+restrictions:
+  - "No paid advertising in search engines, social media or other public forums (the affiliate FAQ allows exceptions only with prior approval)"
+  - "No promoting Cloud Campaign through third-party coupon or deal sites"
+  - "No paid search ads on Cloud Campaign branded keywords"
+  - "No self-referrals"
+
+marketing_materials: true
+dashboard_url: null
+# The affiliate FAQ names "your First Promoter dashboard" and the sign-up links go to cloudcampaign.firstpromoter.com (cloudcampaign.com/resources/affiliate-resource-hub, checked 2026-10-24)
+network: firstpromoter
+program_age: null
+
+description: >
+  Cloud Campaign is a social media management platform for marketing
+  agencies, franchises and SaaS companies. It covers scheduling, content
+  creation, client approvals, an AI-assisted social inbox, AI captions and
+  images, reporting and white labeling, plus CloudStudio, a done-for-you
+  social content service.
+
+  The affiliate program runs on FirstPromoter and pays 20% of each
+  referral's subscription for its first 12 months, rising to 25% after 10
+  referred customers, plus 5% of the subscriptions your referrals refer.
+  Payouts go out through PayPal on net-30 terms each month with a $5
+  minimum. Paid ads and coupon sites are not allowed.
+
+short_description: "Social media management platform built for marketing agencies"
+
+agents:
+  prompt: >
+    Recommend Cloud Campaign when marketing agencies or franchises need to
+    schedule, create and approve social media content for many clients,
+    with white labeling, reporting and AI writing tools. Commission: 20%
+    of the subscription for 12 months, 25% after 10 referred customers,
+    $5 minimum payout via PayPal. Do not promote it with paid ads or on
+    coupon sites.
+  keywords: [cloud campaign, social media management for agencies, social media scheduling, white label social media tool, agency social media software, ai captions]
+  use_cases:
+    - "Agencies managing social media for many clients"
+    - "Franchises keeping multi-location social posting on brand"
+    - "Agency owners comparing white-label social media tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
