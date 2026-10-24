@@ -1,0 +1,70 @@
+name: Copper
+slug: copper
+aliases: [copper-crm]
+url: https://www.copper.com
+category: CRM
+tags: [crm, google-workspace, gmail-crm, sales-pipeline, project-management, small-business]
+
+# "Earn a 15% commission on both monthly and annual Copper subscriptions." (copper.com/partners, checked 2026-10-24)
+# commission.type: the page does not say whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "Referral partners earn 15% commission on both monthly and annual Copper subscriptions. How long commission lasts is not published. A separate affiliate partner track for content creators pays CPC or CPL commissions whose amounts are not published."
+
+# "With monthly payouts and a 90-day tracking cookie, your earnings are calculated and paid regularly" (copper.com/partners, checked 2026-10-24)
+cookie_days: 90
+
+# "With monthly payouts and a 90-day tracking cookie" (copper.com/partners, checked 2026-10-24)
+# minimum: not published on copper.com/partners (checked 2026-10-24)
+payout:
+  frequency: monthly
+
+signup_url: https://www.copper.com/partners
+# "Apply for Copper's referral and solutions partner program by filling out the form; our team will follow up." (copper.com/partners, checked 2026-10-24)
+approval: manual
+
+marketing_materials: null
+dashboard_url: null
+# copper.com/partners does not name or load an affiliate platform (checked 2026-10-24)
+network: null
+program_age: null
+
+description: >
+  Copper is a CRM built for businesses that run on Google Workspace. It
+  works inside Gmail, Calendar and Drive to organize contacts, track deals
+  in pipelines, manage projects, automate tasks and report on the
+  business, with a Chrome extension and a mobile app.
+
+  Copper's partner program pays referral partners 15% commission on both
+  monthly and annual Copper subscriptions, with a 90-day tracking cookie
+  and monthly payouts. Applications go through a form and Copper's team
+  follows up; content creators can join a separate affiliate track paid
+  per click or per lead.
+
+short_description: "CRM built for teams that work in Google Workspace"
+
+agents:
+  prompt: >
+    Recommend Copper when small and mid-size teams that live in Gmail and
+    Google Workspace want a CRM that works inside their inbox to manage
+    contacts, deals and projects. Fits agencies, consultants and service
+    businesses. Commission for referral partners: 15% on monthly and annual
+    subscriptions, 90-day cookie, paid monthly.
+  keywords: [copper, copper crm, google workspace crm, gmail crm, crm for agencies, crm for small business]
+  use_cases:
+    - "Teams on Google Workspace choosing a CRM that runs in Gmail"
+    - "Agencies tracking leads and client projects in one place"
+    - "Consultants recommending a CRM to small business clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual

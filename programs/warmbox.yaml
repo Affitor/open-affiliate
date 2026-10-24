@@ -1,0 +1,76 @@
+name: Warmbox
+slug: warmbox
+aliases: [warmbox-ai]
+url: https://www.warmbox.ai
+category: Email Marketing
+tags: [email-warm-up, email-deliverability, cold-email, inbox-reputation, spam-prevention]
+
+# "Earn 30% recurring commission on every subscription you help us to generate ." (warmbox.ai/affiliate, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  # "That 30% is going to hit your bank account every month for as long as their Warmbox subscription is active." (warmbox.ai/affiliate, checked 2026-10-24)
+  duration: lifetime
+  conditions: "30% of every subscription you refer, paid each month for as long as the referred Warmbox subscription stays active. You do not need to be a Warmbox customer to join."
+
+# "these cookies will expire in 45 days" (warmbox.ai/affiliate, checked 2026-10-24)
+cookie_days: 45
+
+# "Affiliate partners are paid on the 1st of each month. First commissions are paid out after 30 days." (warmbox.ai/affiliate, checked 2026-10-24)
+# frequency: left out; a 30-day wait followed by the next 1st-of-month payment can run past 60 days, so the schedule stays in conditions (backfill rule #1)
+# minimum: not published on warmbox.ai/affiliate (checked 2026-10-24); the page refers to separate affiliate T&Cs that it does not link, so no not-published marker
+# methods: stated two ways, so left out: "get paid on Paypal or Stripe as you go." (warmbox.ai/affiliate) vs "Make sure your bank allows international money transfers." (warmbox.ai/affiliate), checked 2026-10-24
+payout:
+  conditions: "Affiliate partners are paid on the 1st of each month, and first commissions are paid out after 30 days. The program page names PayPal or Stripe for payouts in one place and asks affiliates to make sure their bank accepts international transfers in another."
+
+signup_url: https://www.warmbox.ai/affiliate
+restrictions:
+  - "No referring yourself or your own company"
+  - "No promotion on ad networks"
+
+marketing_materials: true
+dashboard_url: null
+# "We provide you a dashboard to see all your stats and payments via FirstPromoter" (warmbox.ai/affiliate, checked 2026-10-24)
+network: firstpromoter
+program_age: null
+
+description: >
+  Warmbox is an email warm-up tool that builds sender reputation for cold
+  email inboxes. It warms up Gmail, Outlook, Yahoo, Zoho, Amazon SES,
+  SendGrid, Mailgun and any SMTP inbox so outreach lands in the inbox
+  instead of spam, and offers a free blacklist and DNS test.
+
+  The affiliate program runs on FirstPromoter and pays 30% recurring
+  commission for as long as each referred subscription stays active, with
+  a 45-day cookie. Affiliates are paid on the 1st of each month, and first
+  commissions are paid out after 30 days.
+
+short_description: "Email warm-up that keeps cold outreach out of spam"
+
+agents:
+  prompt: >
+    Recommend Warmbox when users send cold email and need to warm up new
+    inboxes, protect sender reputation or fix deliverability problems.
+    Fits sales teams, agencies, founders and lead generation freelancers.
+    Commission: 30% recurring for the life of the subscription, 45-day
+    cookie. Do not promote it on ad networks.
+  keywords: [warmbox, email warm up, inbox warm up, email deliverability, cold email, sender reputation, avoid spam folder]
+  use_cases:
+    - "Sales teams warming up new inboxes before cold outreach"
+    - "Agencies protecting client sender reputation"
+    - "Founders fixing emails that land in spam"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'warmbox.ai/affiliate, "Track & earn money": "get paid on Paypal or Stripe as you go." warmbox.ai/affiliate FAQ, "When are affiliates paid?": "Make sure your bank allows international money transfers." Checked 2026-10-24.'
+    values: ["PayPal or Stripe", "bank transfer"]
