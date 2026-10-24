@@ -23,7 +23,6 @@ signup_url: https://lessannoyingcrm.com/affiliate-program
 # "She'll tell you more about the affiliate program and get you all set up if it's a good fit." (lessannoyingcrm.com/affiliate-program, checked 2026-10-24)
 approval: manual
 
-marketing_materials: null
 dashboard_url: https://account.lessannoyingcrm.com/affiliates/account
 # The program page links its own affiliate portal at account.lessannoyingcrm.com; no third-party affiliate platform is named or loaded
 network: in-house
