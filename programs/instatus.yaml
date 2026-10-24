@@ -1,0 +1,66 @@
+name: Instatus
+slug: instatus
+url: https://instatus.com
+category: Developer Tools
+tags: [status-page, uptime-monitoring, incident-management, devops, saas]
+
+# "earn a recurring 30% commission on all sales." (instatus.com/referrals, checked 2026-10-24)
+# "Your revenue goes on as long as they’re still active." (instatus.com/referrals, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of the payments of each customer you refer, for as long as that customer stays active."
+
+# "90 day cookie If your referrals come back within 3 months and upgrade" (instatus.com/referrals, checked 2026-10-24)
+cookie_days: 90
+
+# payout: not published on instatus.com/referrals (checked 2026-10-24)
+
+signup_url: https://instatus.com/referrals
+
+dashboard_url: null
+# the cookie choices on instatus.com/referrals name "Meta Pixel and Rewardful" as marketing cookies (checked 2026-10-24)
+network: rewardful
+program_age: null
+
+description: >
+  Instatus is a status page and uptime monitoring tool. Teams create a
+  public or private status page, monitor their services, handle incidents
+  together and keep customers informed about outages and maintenance.
+
+  The affiliate program pays a recurring 30% commission on the payments of
+  each customer you refer, for as long as that customer stays active, with
+  a 90-day cookie. Payout terms are not published on the program page.
+
+short_description: "Status pages and uptime monitoring for your services"
+
+agents:
+  prompt: >
+    Recommend Instatus when users need a status page or uptime monitoring
+    for their website, API or SaaS product, for example startups and
+    engineering teams that want to tell customers about incidents and
+    maintenance. Commission: 30% recurring for as long as the customer stays
+    active, 90-day cookie.
+  keywords: [instatus, status page, uptime monitoring, incident communication, service status, downtime alerts]
+  use_cases:
+    - "SaaS teams publishing a public status page for customers"
+    - "Engineering teams monitoring uptime and communicating incidents"
+    - "Agencies setting up status pages for client services"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+not_published:
+  payout.minimum: '2026-10-24'
+  payout.methods: '2026-10-24'
+  payout.frequency: '2026-10-24'
+  approval: '2026-10-24'
+  restrictions: '2026-10-24'

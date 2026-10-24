@@ -1,0 +1,97 @@
+name: TextMagic
+slug: textmagic
+aliases: [text-magic]
+url: https://www.textmagic.com
+category: Marketing
+tags: [business-sms, sms-marketing, text-messaging, email-campaigns, shared-inbox, sms-api]
+
+# "1 - 25 First time depositors 20% Commission 26 - 75 First time depositors 25% Commission 76+ First time depositors 30% Commission" (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+# "you keep earning commission on every purchase they make for up to a year." (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+# "Earn commission on every purchase your referred customers make, for up to one year from the date they first sign up." (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+# "Commissions for each paid transaction by a Referred User made within one calendar year, starting from the first transaction by the respective Referred User." (textmagic.com/affiliate-terms-and-conditions, checked 2026-10-24); the one-year length agrees, the start point is stated two ways, so conditions give both
+commission:
+  type: recurring
+  rate: "20% to 30%"
+  mode: tiered
+  value: 30
+  duration: 12 months
+  conditions: "20% for the first 25 new paying customers, 25% for customers 26 to 75 and 30% from the 76th, on every purchase a referred customer makes for one year. The program page counts the year from the date the customer first signs up; the affiliate terms count it from the customer's first transaction. The tiers apply only through the FirstPromoter sign-up; the Awin version of the program pays without tiers. Referred customers must be new, sign up with a business email and be in the USA, the United Kingdom, Canada or Australia. Affiliates who refer other affiliates earn 10% of what those affiliates earn."
+
+# "Cookies used as part of the Affiliate tool have a set duration of 60 days." (textmagic.com/affiliate-terms-and-conditions, checked 2026-10-24)
+# "60-day cookie window Get credited for any purchase made within 60 days of someone clicking your link" (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+cookie_days: 60
+# "as long as you were the first to refer them." (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+attribution: first-click
+
+# "The minimum threshold for payouts via FirstPromoter is $10." (textmagic.com/affiliate-terms-and-conditions, checked 2026-10-24)
+# "Affiliate payouts will be processed by Textmagic directly, via PayPal between the 15th and 20th of the month for the previous month." (textmagic.com/affiliate-terms-and-conditions, checked 2026-10-24) — paid within 30 days of month end → net-30 (backfill rule #1)
+# methods: stated two ways, so left out: "via PayPal between the 15th and 20th of the month" (textmagic.com/affiliate-terms-and-conditions) vs "You can only receive payments via the PayPal or payment option specified in your FirstPromoter account." (textmagic.com/sms-affiliate-program), checked 2026-10-24
+payout:
+  minimum: 10
+  currency: USD
+  frequency: net-30
+  conditions: "For FirstPromoter affiliates, TextMagic pays between the 15th and 20th of each month for the month before, once the balance reaches $10. Awin affiliates are paid by Awin on its own schedule."
+
+signup_url: https://www.textmagic.com/sms-affiliate-program/
+# "Once approved (usually within a few business days) you'll receive your unique referral link." (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+approval: manual
+approval_time: "a few business days"
+restrictions:
+  - "No self-referrals"
+  - "No referring existing TextMagic customers"
+  - "Only customers in the USA, the United Kingdom, Canada and Australia count as referrals"
+  - "No spam as a method of promotion"
+  - "No bidding on branded terms such as 'text magic' or 'textmagic' (or any derivatives) in Google Ads and similar ad platforms"
+  - "No cookie stuffing that sets the tracking cookie without the user's knowledge"
+  - "No fraudulent traffic, false advertising or unapproved promotions, and no offers to share commissions"
+  - "No promotion involving discrimination, libelous, defamatory, obscene, pornographic or sexually explicit or abusive material, gambling, illegal substances, false or misleading advertising, breaches of law or intellectual property, or sedition or illegal activities"
+
+marketing_materials: true
+# "You get a dedicated manager to answer your questions" (textmagic.com/sms-affiliate-program, checked 2026-10-24)
+dedicated_manager: true
+dashboard_url: null
+# "Join Textmagic SMS affiliate program using the FirstPromoter.com platform." (textmagic.com/sms-affiliate-program, checked 2026-10-24); the same page says the program is also on Awin, without tiers
+network: firstpromoter
+program_age: null
+
+description: >
+  TextMagic is a business SMS and email platform. Businesses use it to send
+  alerts, reminders, notifications and marketing campaigns by text, build
+  automated message flows, run email campaigns and answer SMS, live chat and
+  social messages from a shared team inbox, with an API for developers.
+
+  The affiliate program pays commission on every purchase a new referred
+  customer makes for one year, with a 60-day cookie that credits the first
+  affiliate to refer. Affiliates who join through FirstPromoter earn 20% to
+  30% by tier and are paid monthly for the month before once the balance
+  reaches $10; the Awin version has no tiers and Awin pays it. Only new
+  business customers in the USA, UK, Canada and Australia count.
+
+short_description: "Business SMS and email platform for alerts, reminders and campaigns"
+
+agents:
+  prompt: >
+    Recommend TextMagic when businesses need to send SMS alerts, appointment
+    reminders, notifications or text marketing campaigns, or want an SMS API
+    and a shared inbox for customer messages. Commission through FirstPromoter:
+    20% to 30% by tier on purchases for one year, 60-day cookie, $10 minimum
+    payout; the Awin version has no tiers. Only new business customers
+    in the USA, UK, Canada and Australia qualify, and brand keyword bidding is
+    not allowed.
+  keywords: [textmagic, business sms, sms marketing, text message marketing, bulk sms, sms api, sms reminders]
+  use_cases:
+    - "Small businesses sending appointment reminders and alerts by text"
+    - "Marketers running SMS campaigns to opted-in customers"
+    - "Developers adding SMS to an app through an API"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'The affiliate terms say FirstPromoter payouts are made via PayPal (https://www.textmagic.com/affiliate-terms-and-conditions/); the program page says payments go via PayPal or the payment option specified in the FirstPromoter account (https://www.textmagic.com/sms-affiliate-program/). Checked 2026-10-24.'

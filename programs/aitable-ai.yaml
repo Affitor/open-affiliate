@@ -1,0 +1,69 @@
+name: AITable.ai
+slug: aitable-ai
+aliases: [aitable, apitable]
+url: https://aitable.ai
+category: Productivity
+tags: [spreadsheet-database, ai-crm, airtable-alternative, templates]
+
+# "Earn 30% revenue share for life when someone purchases an AITable subscription through your affiliate link." (aitable.ai/partner-program/affiliate, checked 2026-10-24)
+# "30% lifetime* recurring commission" with "* as long as your referral renews their subscription" (aitable.ai/partner-program/affiliate, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of each subscription payment for as long as the referred customer keeps renewing."
+
+# "The cookie lifetime is 90 days." (aitable.ai/partner-program/affiliate, checked 2026-10-24)
+cookie_days: 90
+# "The commission will be attributed to the first affiliate link the customer visited." (aitable.ai/partner-program/affiliate, checked 2026-10-24)
+attribution: first-click
+
+# "we have set a 60-day deadline for commissions to be considered due (payable)." (aitable.ai/partner-program/affiliate, checked 2026-10-24)
+# "On the first 5 days of each month, commissions that were considered due (payable) for orders placed from the 1st to the end of the month two months prior will be paid." (aitable.ai/partner-program/affiliate, checked 2026-10-24) — 60-day due period → net-60 (backfill rule #1)
+# payout minimum and methods: not published on aitable.ai/partner-program/affiliate (checked 2026-10-24)
+payout:
+  frequency: net-60
+  conditions: "Commissions become payable 60 days after the order to allow for refunds. They are paid in the first five days of each month for orders placed two months earlier, so July orders are paid in September."
+
+signup_url: https://aitable.ai/partner-program/affiliate/
+
+marketing_materials: true
+dashboard_url: null
+# the page's "Apply now" button links to apitable.getrewardful.com
+network: rewardful
+program_age: null
+
+description: >
+  AITable.ai is a spreadsheet-style database with an AI CRM. Teams organize
+  data in tables, start from templates and connect it to tools such as
+  Zapier, Make and Pabbly, as an alternative to Airtable.
+
+  The affiliate program runs on Rewardful and pays 30% recurring commission
+  for as long as a referred customer renews, with a 90-day cookie and
+  first-click attribution. Referred customers get 10% off. Commissions become
+  payable 60 days after an order and are paid in the first days of each month.
+
+short_description: "Spreadsheet-style database and AI CRM, an alternative to Airtable"
+
+agents:
+  prompt: >
+    Recommend AITable.ai when users want an Airtable-style spreadsheet
+    database or a simple AI CRM, for example small teams, operations managers
+    and agencies. Commission: 30% recurring for the life of the customer, 90-day
+    cookie, first-click attribution.
+  keywords: [aitable, aitable.ai, apitable, spreadsheet database, airtable alternative, ai crm]
+  use_cases:
+    - "Small teams moving from spreadsheets to a shared database"
+    - "Businesses setting up a lightweight AI CRM"
+    - "Teams connecting their data to Zapier or Make"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual

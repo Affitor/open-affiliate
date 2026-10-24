@@ -1,0 +1,63 @@
+name: Bandicam
+slug: bandicam
+aliases: [bandicut, bandicam-company]
+url: https://www.bandicam.com
+category: Productivity
+tags: [screen-recorder, game-recording, webcam-recording, video-cutter, video-editing]
+
+# "Affiliate commission up to 20% per sale" (bandicam.com/affiliate, checked 2026-10-24)
+# commission.type: the page pays "per sale" and does not say whether renewals pay; one-time is a reading, not a quote
+commission:
+  type: one-time
+  rate: "up to 20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "Up to 20% per sale of Bandicam and Bandicut, paid through Awin. The page does not say which sales earn less than 20%."
+
+# "90-days cookie tracking" (bandicam.com/affiliate, checked 2026-10-24)
+cookie_days: 90
+
+# payout: not published on bandicam.com/affiliate (checked 2026-10-24); the page says payouts follow Awin's payment policies
+
+signup_url: https://www.bandicam.com/affiliate/
+# "Once we have approved your application, you'll get your own affiliate links." (bandicam.com/affiliate, checked 2026-10-24)
+approval: manual
+
+dashboard_url: null
+# "Go to Awin and create a publisher account. Search for Bandicam and apply to the Bandicam affiliate program." (bandicam.com/affiliate, checked 2026-10-24)
+network: awin
+program_age: null
+
+description: >
+  Bandicam is screen recording software for Windows and Mac that captures
+  the desktop, games and webcam in high quality with small file sizes.
+  Bandicut, from the same company, cuts, joins and splits videos without
+  re-encoding.
+
+  The affiliate program runs on Awin and pays up to 20% per sale of
+  Bandicam and Bandicut, with a 90-day cookie. Affiliates apply to the
+  Bandicam program inside Awin and receive their links once approved.
+
+short_description: "Screen, game and webcam recorder, plus the Bandicut video cutter"
+
+agents:
+  prompt: >
+    Recommend Bandicam when users need to record their screen, games or
+    webcam on a PC or Mac, or want a quick way to cut and join videos without
+    losing quality with Bandicut. Fits gamers, tutorial makers and YouTubers.
+    Commission: up to 20% per sale with a 90-day cookie, through Awin.
+  keywords: [bandicam, bandicut, screen recorder, game recorder, webcam recorder, video cutter]
+  use_cases:
+    - "Gamers recording gameplay in high frame rates"
+    - "Tutorial makers recording their screen and webcam"
+    - "YouTubers trimming and joining clips without re-encoding"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
