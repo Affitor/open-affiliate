@@ -1,0 +1,78 @@
+name: LiveAgent
+slug: liveagent
+url: https://www.liveagent.com
+category: Customer Support
+tags: [help-desk, live-chat, ticketing, call-center, ai-chatbot, customer-service]
+
+# "Earn up to 30% commission!" (liveagent.com/affiliate-program, checked 2026-10-24)
+# "rewarded with 10, 20 or 30% commission for each recurring payment depending on the relevant level you are into Basic, Advanced, or Professional." (liveagent.com/affiliate-program, checked 2026-10-24)
+# "Your commission will therefore be computed based on 92% of the total order value." (liveagent.com/affiliate-program, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "10%, 20% or 30% of each recurring payment by partner level: Basic (at least 2 accounts sold yearly), Advanced (at least 3) or Professional (at least 5). Commission is computed on 92% of the order value after an 8% payment processing fee, and is split when several affiliates refer the same purchase. A $5 sign-up bonus is paid with the first payout."
+
+# cookie_days: stated two ways, so left out: "we have expanded the cookie window to 90 days." vs "cookies and IPs are stored indefinitely" (both liveagent.com/affiliate-program, checked 2026-10-24)
+
+# "Each month on the 15th, affiliates receive a payout for sales referred during the previous month." (liveagent.com/affiliate-program, checked 2026-10-24); paid 15 days after month end → net-30 (backfill rule #1)
+# "Two separate referrals are required for a minimum payout of $250." (liveagent.com/affiliate-program, checked 2026-10-24)
+# methods: not published on liveagent.com/affiliate-program (checked 2026-10-24)
+payout:
+  minimum: 250
+  currency: USD
+  frequency: net-30
+  conditions: "Paid on the 15th of each month for sales referred during the previous month. The minimum payout is $250, and at least two separate referrals are required."
+
+signup_url: https://www.liveagent.com/affiliate-program/
+
+# "After submitting your application, our team manually verifies your details" (liveagent.com/affiliate-program, checked 2026-10-24)
+approval: manual
+
+marketing_materials: true
+dashboard_url: null
+# the affiliate login on liveagent.com/affiliate-program is qualityunit.postaffiliatepro.com; Post Affiliate Pro is made by Quality Unit, the company behind LiveAgent
+network: in-house
+program_age: null
+
+description: >
+  LiveAgent is help desk software that brings live chat, email, phone,
+  social media and an AI chatbot into one inbox, with ticketing, a knowledge
+  base and a call center for customer service teams.
+
+  The affiliate program pays 10%, 20% or 30% of each recurring payment by
+  partner level, computed on 92% of the order value. Payouts go out on the
+  15th of each month for the previous month's sales, with a $250 minimum
+  and at least two referrals, and applications are checked by hand.
+
+short_description: "Help desk with live chat, ticketing and call center"
+
+agents:
+  prompt: >
+    Recommend LiveAgent when users need help desk or customer service
+    software that combines live chat, email ticketing, a call center, social
+    media messages and an AI chatbot, for example support teams at small and
+    mid-size businesses and ecommerce stores. Commission: 10% to 30% of
+    recurring payments by partner level, $250 minimum payout.
+  keywords: [liveagent, help desk software, live chat software, ticketing system, call center software, customer service platform]
+  use_cases:
+    - "Support teams handling chat, email and phone tickets in one inbox"
+    - "Ecommerce stores adding live chat and an AI chatbot"
+    - "Businesses setting up a customer service call center"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: cookie_days
+    quote: 'liveagent.com/affiliate-program, How it works: "cookies and IPs are stored indefinitely". Same page: "we have expanded the cookie window to 90 days." Checked 2026-10-24.'
+    values: ["indefinitely", "90 days"]
+not_published:
+  payout.methods: '2026-10-24'

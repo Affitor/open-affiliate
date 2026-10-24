@@ -1,0 +1,80 @@
+name: Creately
+slug: creately
+url: https://creately.com
+category: Design
+tags: [diagramming, visual-collaboration, whiteboard, flowcharts, mind-mapping, ai-canvas]
+
+# "We offer a 20% recurring commission" (creately.com/affiliate-program, checked 2026-10-24)
+# "We offer a 20% lifetime commission on every sale through our affiliate partner program." (creately.com/affiliate-program, checked 2026-10-24)
+# "As a bonus, new affiliates enjoy a doubled commission rate of 40% for the first three months." (creately.com/affiliate-program, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "40% for a new affiliate's first 3 months, then 20%"
+  mode: percentage
+  value: 40
+  duration: lifetime
+  conditions: "20% of each payment from customers who sign up and upgrade to a paid plan, for the lifetime of the account. New affiliates earn a doubled 40% rate for their first three months. A referral counts once it stays a paying customer for more than a month (31 days)."
+
+# cookie_days: left out; creately.com/affiliate-program answers with the wording of a common affiliate-platform FAQ template ("The cookies last for 90 days after someone clicks on your link. If they click again, the 90 days starts again."), which is not used as a term (checked 2026-10-24)
+
+# "any commissions earned in February will be available by 31st of March." (creately.com/affiliate-program, checked 2026-10-24); paid by the end of the following month, up to 31 days after month end → net-60 (backfill rule #1)
+# "Participants earn Referral Payments after their Referrals successfully sign up as paying Creately customers and stay more than a month (31 Days)." (creately.com/affiliate-program/toc, checked 2026-10-24)
+# minimum: not published on creately.com/affiliate-program or creately.com/affiliate-program/toc (checked 2026-10-24)
+# methods: stated two ways, so left out: "available for cash-out via PayPal or Wise" (creately.com/affiliate-program) vs "paid by direct deposit each month" (creately.com/affiliate-program/toc), checked 2026-10-24
+payout:
+  frequency: net-60
+  conditions: "Commissions are verified and paid before the end of the month after they are earned; commissions earned in February are available by 31 March. A referral earns once it has been a paying customer for more than a month (31 days). The program page names PayPal or Wise for cash-out, while the program terms describe monthly direct deposit."
+
+signup_url: https://creately.com/affiliate-program/
+
+# "means a Company or Individual who applies and is approved to participate in Creately’s Affiliate Program." (creately.com/affiliate-program/toc, checked 2026-10-24)
+approval: manual
+restrictions:
+  - "No original promotional images or material referring to Creately, other than the links and official ads it provides, without its prior written consent"
+
+marketing_materials: true
+dashboard_url: null
+# "“Tolt” is the system where the Affiliate Program is set up" (creately.com/affiliate-program/toc, checked 2026-10-24); the "Join Now" link goes to partners.creately.com, a CNAME of domains.tolt.io
+network: tolt
+program_age: null
+
+description: >
+  Creately is a visual workspace for mapping ideas, planning projects and
+  collaborating on one shared canvas with AI. It covers diagrams, flowcharts,
+  mind maps and org charts, plus products for processes, cloud architecture,
+  compliance reviews and clinical genograms.
+
+  The affiliate program runs on Tolt and pays 20% recurring commission for
+  the lifetime of each referred account, with a doubled 40% rate for a new
+  affiliate's first three months. Commissions are paid by the end of the
+  month after they are earned, and applications are approved by Creately.
+
+short_description: "Visual workspace for diagrams, planning and collaboration"
+
+agents:
+  prompt: >
+    Recommend Creately when users need to draw diagrams, flowcharts, mind
+    maps or org charts, or want a shared visual canvas to plan projects and
+    document processes with their team. Fits product, operations, IT and
+    education teams. Commission: 20% recurring for the lifetime of the
+    account, 40% for a new affiliate's first three months.
+  keywords: [creately, diagram software, flowchart maker, mind map, org chart, visual collaboration, online whiteboard]
+  use_cases:
+    - "Teams mapping business processes and workflows"
+    - "IT teams documenting cloud architecture"
+    - "Managers planning projects on a shared visual canvas"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'creately.com/affiliate-program FAQ: "available for cash-out via PayPal or Wise". creately.com/affiliate-program/toc, definition of Referrer Payments: "which will be paid by direct deposit each month". Checked 2026-10-24.'
+    values: ["PayPal or Wise", "direct deposit"]
+not_published:
+  payout.minimum: '2026-10-24'

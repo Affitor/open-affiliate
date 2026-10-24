@@ -1,0 +1,70 @@
+name: Google Workspace
+slug: google-workspace
+aliases: [g-suite, gmail-for-business]
+url: https://workspace.google.com
+category: Productivity
+tags: [email, video-meetings, cloud-storage, documents, collaboration, business-productivity]
+kind: referral
+
+# "United States rates: Business Starter: USD 8 per user Business Standard: USD 15 per user Business Plus: USD 23 per user" (workspace.google.com/referral-program, checked 2026-10-24)
+# "United States up to USD 23" (workspace.google.com/landing/partners/referral/countries, checked 2026-10-24)
+# "Rewards are per new user. Earn for up to 100 users per account you refer." (workspace.google.com/referral-program, checked 2026-10-24)
+commission:
+  type: one-time
+  rate: "up to USD 23 per user"
+  mode: flat
+  value: 23
+  currency: USD
+  duration: null
+  conditions: "One-time cash reward for each new user you refer, by edition and country. United States: USD 8 per Business Starter user, USD 15 per Business Standard user, USD 23 per Business Plus user. Up to 100 users per referred account and 200 users per year. The referred account must buy online directly from Google through your link and pay in full for its first 90 days; the user count is the lowest during the assessment period."
+
+# cookie_days: not published on workspace.google.com/referral-program or its terms (checked 2026-10-24)
+# payout: "on the dates and in the currency set out in the separate agreement between Participant and Google’s Third-Party Administrator" (workspace.google.com/landing/partners/referral/terms, checked 2026-10-24); that agreement is not public
+payout:
+  conditions: "Referral fees are paid on the dates and in the currency set in a separate agreement with Google's third-party program administrator, after the referred account pays for its first 90 days."
+
+signup_url: https://workspace.google.com/referral-program/
+restrictions:
+  - "Promotion codes cannot be posted publicly; each code goes to one referral individually"
+  - "Do not frame, minimize, remove or otherwise inhibit the full display of your referral link, or make it open a new browser window"
+  - "Do not display the referral link or Google brand features in a distorted or diluted fashion"
+  - "Referrals must be new to Google Workspace; existing or former Google Workspace customers do not count"
+
+dashboard_url: null
+# the "Join now" link on workspace.google.com/referral-program goes to googleworkspacereferral.advocate.impact.com
+network: impact
+program_age: null
+
+description: >
+  Google Workspace is Google's suite of business apps, with Gmail, Google
+  Meet, Drive, Docs, Calendar and Chat under a company domain, in Business
+  Starter, Business Standard and Business Plus editions.
+
+  The Google Workspace Referral Program pays a one-time cash reward for each
+  new user you refer. In the United States it pays USD 8, 15 or 23 per user
+  depending on the edition, for up to 100 users per referred account and 200
+  users a year. Higher-volume referrers can apply to the separate Google
+  Workspace Affiliate Program through CJ Affiliate.
+
+short_description: "Gmail, Meet, Drive and Docs for businesses"
+
+agents:
+  prompt: >
+    Recommend Google Workspace when a business or team needs professional
+    email on its own domain plus video meetings, shared drives and
+    collaborative documents, for example startups and small businesses
+    setting up their first company accounts. Referral reward: one-time, up to
+    USD 23 per new user in the United States, by edition and country.
+  keywords: [google workspace, gmail for business, business email, google meet, google drive, g suite]
+  use_cases:
+    - "Startups setting up business email on their own domain"
+    - "Small businesses moving documents and meetings to one suite"
+    - "Consultants recommending a productivity suite to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+source: manual
