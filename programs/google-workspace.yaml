@@ -11,7 +11,7 @@ kind: referral
 # "Rewards are per new user. Earn for up to 100 users per account you refer." (workspace.google.com/referral-program, checked 2026-10-24)
 commission:
   type: one-time
-  rate: "up to USD 23 per user"
+  rate: "up to USD 23 per user (US)"
   mode: flat
   value: 23
   currency: USD
@@ -28,7 +28,7 @@ restrictions:
   - "Promotion codes cannot be posted publicly; each code goes to one referral individually"
   - "Do not frame, minimize, remove or otherwise inhibit the full display of your referral link, or make it open a new browser window"
   - "Do not display the referral link or Google brand features in a distorted or diluted fashion"
-  - "Referrals must be new to Google Workspace; existing or former Google Workspace customers do not count"
+  - "Referrals must be net new customers; a customer already purchasing Google Workspace (including a renewal of an earlier qualifying order) does not count"
 
 dashboard_url: null
 # the "Join now" link on workspace.google.com/referral-program goes to googleworkspacereferral.advocate.impact.com

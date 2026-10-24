@@ -19,10 +19,11 @@ commission:
 
 # "Minimum payout $50" (scrapingbee.com/affiliates, checked 2026-10-24)
 # "Payment are made through Paypal, so you need an account in order to receive your commission." (scrapingbee.com/affiliates, checked 2026-10-24)
-# frequency: not published; the page states only "Payout are pending for 30 days to take into account refunds (up to 60 days)" (scrapingbee.com/affiliates, checked 2026-10-24)
+# "Payout are pending for 30 days to take into account refunds (up to 60 days)" (scrapingbee.com/affiliates, checked 2026-10-24); held up to 60 days after the sale → net-60 (backfill rule #1)
 payout:
   minimum: 50
   currency: USD
+  frequency: net-60
   methods: [paypal]
   conditions: "Payouts are pending for 30 days to allow for refunds (up to 60 days). You must refer at least 2 customers before receiving payouts, and ScrapingBee may ask for due diligence and KYC before paying."
 
@@ -79,4 +80,3 @@ kind: affiliate
 source: manual
 not_published:
   cookie_days: '2026-10-24'
-  payout.frequency: '2026-10-24'

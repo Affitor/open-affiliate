@@ -11,7 +11,7 @@ commission:
   type: recurring
   rate: "40% for a new affiliate's first 3 months, then 20%"
   mode: percentage
-  value: 40
+  value: 20
   duration: lifetime
   conditions: "20% of each payment from customers who sign up and upgrade to a paid plan, for the lifetime of the account. New affiliates earn a doubled 40% rate for their first three months. A referral counts once it stays a paying customer for more than a month (31 days)."
 

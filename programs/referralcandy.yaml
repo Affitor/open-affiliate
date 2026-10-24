@@ -11,7 +11,7 @@ commission:
   type: one-time
   rate: "$100 per demo call + $100 per activation"
   mode: flat
-  value: 200
+  value: 100
   currency: USD
   duration: null
   conditions: "For merchants who already run referrals on ReferralCandy: $100 cash when a merchant you introduce completes a demo call, and another $100 when they activate their ReferralCandy campaign, up to $200 per merchant. Each reward is paid once ReferralCandy confirms that step; one reward per step per merchant."
