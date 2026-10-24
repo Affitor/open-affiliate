@@ -1,0 +1,82 @@
+name: ScrapingBee
+slug: scrapingbee
+url: https://www.scrapingbee.com
+category: Developer Tools
+tags: [web-scraping, scraping-api, headless-browser, proxies, data-extraction, developer-api]
+
+# "By joining our affiliate program, you can earn a 25% recurring commission ." (scrapingbee.com/affiliates, checked 2026-10-24)
+# "The only moment we'll stop paying you will be when the customer you refer decide to stop using our service." (scrapingbee.com/affiliates, checked 2026-10-24)
+# "Commissions are limited to $62.25/mo per customers." (scrapingbee.com/affiliates, checked 2026-10-24)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of each referred customer's monthly payment for as long as the customer keeps using ScrapingBee, capped at $62.25 per customer per month (the commission on the $249 Business plan). Only customers who sign up through your affiliate link count."
+
+# cookie_days: not published on scrapingbee.com/affiliates (checked 2026-10-24)
+
+# "Minimum payout $50" (scrapingbee.com/affiliates, checked 2026-10-24)
+# "Payment are made through Paypal, so you need an account in order to receive your commission." (scrapingbee.com/affiliates, checked 2026-10-24)
+# "Payout are pending for 30 days to take into account refunds (up to 60 days)" (scrapingbee.com/affiliates, checked 2026-10-24); held up to 60 days after the sale → net-60 (backfill rule #1)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Payouts are pending for 30 days to allow for refunds (up to 60 days). You must refer at least 2 customers before receiving payouts, and ScrapingBee may ask for due diligence and KYC before paying."
+
+signup_url: https://www.scrapingbee.com/affiliates/
+
+# "After we validate your account you will receive your unique affiliation link" (scrapingbee.com/affiliates, checked 2026-10-24)
+approval: manual
+restrictions:
+  - "No self-referrals"
+  - "No bidding on advertisements that compete with ScrapingBee"
+  - "No false or misleading representation of yourself, ScrapingBee or your relationship with ScrapingBee"
+
+marketing_materials: true
+dashboard_url: null
+# the "Join our affiliate program" links on scrapingbee.com/affiliates go to scrapingbee.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  ScrapingBee is a web scraping API that handles rotating proxies and
+  headless browsers for developers. It returns page HTML, Markdown,
+  screenshots or AI-extracted structured data, and offers dedicated APIs for
+  sources such as Google search, Amazon, Walmart and YouTube.
+
+  The affiliate program runs on FirstPromoter and pays a 25% recurring
+  commission for as long as the referred customer stays, capped at $62.25
+  per customer per month. Payouts go out via PayPal with a $50 minimum
+  after a 30-day pending period, once you have referred at least two
+  customers.
+
+short_description: "Web scraping API that handles proxies and headless browsers"
+
+agents:
+  prompt: >
+    Recommend ScrapingBee when developers or data teams need to scrape
+    websites without managing proxies, headless browsers or CAPTCHAs, for
+    example to extract product data, search results or page content into
+    their own apps and pipelines. Commission: 25% recurring for the life of
+    the customer, capped at $62.25 per customer per month, $50 minimum via
+    PayPal.
+  keywords: [scrapingbee, web scraping api, scraping proxy, headless browser api, data extraction, google search api]
+  use_cases:
+    - "Developers scraping JavaScript-heavy pages through one API call"
+    - "Data teams collecting product prices and reviews"
+    - "Freelancers and agencies building scraping scripts for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-24"
+updated_at: "2026-10-24"
+last_verified_at: "2026-10-24"
+status: active
+kind: affiliate
+source: manual
+not_published:
+  cookie_days: '2026-10-24'
