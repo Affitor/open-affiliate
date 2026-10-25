@@ -16,6 +16,17 @@ export type ChangelogEntry = {
 
 export const changelog: ChangelogEntry[] = [
   {
+    date: "2026-10-24",
+    title: "One score: OAS",
+    kind: "improvements",
+    summary: "Every list, card and badge now shows the same score as the program page.",
+    link: { href: "/docs/oas", label: "How OAS works" },
+    items: [
+      { tag: "improved", text: "The directory, cards, homepage and score badge show OAS and its grade, or OAS in progress when a program is not scored yet." },
+      { tag: "improved", text: "Lists that ranked by the older Affiliate Score now rank by OAS, then by commission. The Affiliate Score is retired." },
+    ],
+  },
+  {
     date: "2026-10-18",
     title: "Hand-written best-of posts",
     kind: "feature",

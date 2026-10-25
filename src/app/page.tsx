@@ -3,14 +3,14 @@ import Link from "next/link";
 import { TrackPageView } from "@/components/track-page-view";
 import { ArrowRight, Check } from "lucide-react";
 import { ProgramLogo } from "@/components/program-logo";
-import { programs, livePrograms, categories, categoryToSlug, affiliateScore, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
+import { programs, livePrograms, categories, categoryToSlug, confirmedPitch, termsConfirmed, UNCONFIRMED, IN_HOUSE, networkName, networksByName, networkToSlug } from "@/lib/programs";
 import type { Program } from "@/lib/programs";
 import { directorySentence, freshnessLine } from "@/lib/best-lists";
 import { commissionChip } from "@/lib/program-chips";
 import { homepageSets } from "@/lib/programs-directory";
 import { blogEntries } from "@/lib/blog";
-import { getOasScore, oasValue } from "@/lib/oas";
-import { OasGradeChip } from "@/components/oas-grade";
+import { programOas } from "@/lib/oas";
+import { OasScoreCell } from "@/components/oas-grade";
 
 // Hourly, like /rankings. The OAS preview also leaves out programs within two
 // days of their 90-day expiry (homepageSets), so it does not show a score its
@@ -61,8 +61,8 @@ function cookieShort(program: Program): string {
 }
 
 export default function Home() {
-  // Rankings top 5 (by OAS once it is published, else Affiliate Score), then 6
-  // verified programs by Affiliate Score, none shown twice (homepageSets).
+  // Rankings top 5 (by OAS; by commission while nothing is scored), then 6
+  // verified programs by OAS then commission, none shown twice (homepageSets).
   const { rankings, ranks, verified, featured, by } = homepageSets(programs);
   const byOas = by === "oas";
   const networks = networksByName();
@@ -126,7 +126,7 @@ export default function Home() {
       </section>
 
       <section id="home-rankings" className="oa-band">
-        <SectionHead title="Rankings" note={byOas ? "Top programs by OAS, the OpenAffiliate Score" : "Top programs by Affiliate Score"} href="/rankings" link="All rankings" />
+        <SectionHead title="Rankings" note={byOas ? "Top programs by OAS, the OpenAffiliate Score" : "Top programs by commission"} href="/rankings" link="All rankings" />
         <ol className="border-t border-line-strong">
           {rankings.map((program, i) => (
             <li key={program.slug} className="border-b border-border">
@@ -142,12 +142,7 @@ export default function Home() {
                   {commissionChip(program.commission, true)}
                 </span>
                 <span className="hidden text-meta text-muted-foreground sm:block">{program.category}</span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-sm border border-line-strong font-mono text-xs font-semibold tabular-nums" title={byOas ? "OAS" : "Affiliate Score"}>
-                    {byOas ? oasValue(getOasScore(program.slug)!) : affiliateScore(program)}
-                  </span>
-                  {byOas && <OasGradeChip score={oasValue(getOasScore(program.slug)!)!} />}
-                </span>
+                <OasScoreCell score={programOas(program)} />
               </Link>
             </li>
           ))}
@@ -155,7 +150,7 @@ export default function Home() {
       </section>
 
       <section id="home-featured" className="oa-band">
-        <SectionHead title="Verified programs" note="Terms checked on the brand's own page, by Affiliate Score" href="/programs" link={`Full list of ${livePrograms.length.toLocaleString("en-US")} affiliate programs`} />
+        <SectionHead title="Verified programs" note="Terms checked on the brand's own page, by OAS" href="/programs" link={`Full list of ${livePrograms.length.toLocaleString("en-US")} affiliate programs`} />
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
           {featured.map((program) => (
             <Link

@@ -1,5 +1,5 @@
 import {
-  affiliateScore,
+  byOas,
   commissionDisplay,
   commissionLabel,
   confirmedTerms,
@@ -71,9 +71,8 @@ export function noProgramAlternatives(current: Program, limit = 4): Program[] {
     .map((p) => ({
       program: p,
       overlap: [...keywordWords([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => want.has(w)).length,
-      score: affiliateScore(p),
     }))
-    .sort((a, b) => b.overlap - a.overlap || b.score - a.score)
+    .sort((a, b) => b.overlap - a.overlap || byOas(a.program, b.program))
     .slice(0, limit)
     .map((x) => x.program)
 }

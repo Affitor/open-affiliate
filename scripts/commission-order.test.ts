@@ -121,7 +121,7 @@ test("commissions commissionRank cannot rank score 0", () => {
 })
 
 test("lists and category pages order each group by commissionRank, and the cap tie-break is exercised", () => {
-  const lists = [...BEST_LISTS.filter((l) => !l.rank), ...categories.map(categoryList)]
+  const lists = [...BEST_LISTS.filter((l) => !l.order), ...categories.map(categoryList)]
   let capTies = 0
   for (const list of lists) {
     const rows = buildBestList(list).rows
@@ -254,8 +254,8 @@ test("searchPrograms leaves livePrograms alone, so one request cannot reorder th
   const commission = slugs(searchPrograms({ sort: "commission_desc" }))
   searchPrograms({ sort: "za" })
   assert.deepEqual(slugs(livePrograms), base)
-  // Relevance breaks Affiliate Score ties by the base order, so a reordered
-  // base would show here.
+  // Relevance (byOas) is a total order, but a sort that mutated the base
+  // would still show here.
   assert.deepEqual(slugs(searchPrograms({})), relevance)
   assert.deepEqual(slugs(searchPrograms({ sort: "commission_desc" })), commission)
 })

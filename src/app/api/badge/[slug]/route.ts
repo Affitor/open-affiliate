@@ -2,11 +2,13 @@ import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { parse as parseYaml } from "yaml"
 import { termsConfirmed } from "@/lib/confirmed-terms"
-import { affiliateScore, getProgram } from "@/lib/programs"
+import { getProgram } from "@/lib/programs"
+import { programOas } from "@/lib/oas"
+import { gradeFamily, oasGrade, type OasGrade } from "@/lib/oas-grade"
 
 /**
  * The subset of a program YAML this route reads, for presentation only: the
- * score is the site's own affiliateScore over the registry entry. Typing it
+ * score is the program's OAS, as its page shows it (programOas). Typing it
  * beats `Record<string, unknown>`, which made every field `unknown` and
  * produced eight type errors downstream.
  */
@@ -26,12 +28,13 @@ type ProgramYaml = {
 }
 
 type Commission = NonNullable<ProgramYaml["commission"]>
-type Tier = "S" | "A" | "B" | "C" | "D"
+/** OAS and its grade, or both null while the score is in progress (no other number stands in). */
+type Score = { total: number | null; grade: OasGrade | null }
 
 /**
  * GET /api/badge/[slug].svg
  *
- * Returns an SVG "Affiliate Score" badge for a program. Pure HTTP — no JS on
+ * Returns an SVG OAS badge for a program (OAS and grade, or "in progress"). Pure HTTP — no JS on
  * the consumer side — works in GitHub READMEs, Markdown docs, Notion, etc.
  *
  * Query params (all optional):
@@ -39,7 +42,7 @@ type Tier = "S" | "A" | "B" | "C" | "D"
  *   ?theme   = light | dark | flat                     (default: light)
  *   ?style   = pill | card                             (default: pill)
  *   ?size    = sm | md | lg                            (default: md, card only)
- *   ?brand   = 1 to force brand color, 0 to force tier (default: auto)
+ *   ?brand   = 1 to force brand color, 0 to force grade (default: auto)
  *
  * Cached aggressively at the edge. Score changes are low-frequency (we re-
  * verify programs every ~30 days), so a 1-hour cache is plenty.
@@ -75,8 +78,8 @@ export async function GET(
   if (program.status === "no_program") return svgError("no affiliate program", 200)
   if (program.status === "paused") return svgError("program status unclear", 200)
 
-  const total = affiliateScore(stored)
-  const score = { total, tier: tierOf(total) }
+  const total = programOas(stored)
+  const score: Score = { total, grade: total == null ? null : oasGrade(total) }
 
   const svg = renderBadge({ slug: slugClean, program, score, variant, theme, style, size, brandOverride })
 
@@ -106,7 +109,7 @@ async function loadProgram(slug: string): Promise<ProgramYaml | null> {
 interface RenderArgs {
   slug: string
   program: ProgramYaml
-  score: { total: number; tier: Tier }
+  score: Score
   variant: Variant
   theme: Theme
   style: Style
@@ -139,14 +142,14 @@ const SIZE_TOKENS: Record<Size, {
 }
 
 /**
- * Blends the program's brand color with the tier accent when available.
- * Falls back cleanly to tier color when no brand color in YAML.
+ * Blends the program's brand color with the grade accent when available.
+ * Falls back cleanly to grade color when no brand color in YAML.
  *
  * Rules:
- *   - If `?brand=0` → always tier color
+ *   - If `?brand=0` → always grade color
  *   - If `?brand=1` + brand_color present → always brand color
  *   - Default (auto): brand_color if available AND contrast is OK against surface,
- *     else tier color
+ *     else grade color
  */
 function resolveAccent(args: RenderArgs, defaultTierAccent: string): string {
   const brand = typeof args.program.brand_color === "string" ? args.program.brand_color : null
@@ -181,9 +184,9 @@ function resolveLogoUrl(program: ProgramYaml): string | null {
 }
 
 function renderBadge(args: RenderArgs): string {
-  const label = args.variant === "score" ? "Affiliate Score" : args.variant === "commission" ? "Commission" : "Cookie"
+  const label = args.variant === "score" ? "OAS" : args.variant === "commission" ? "Commission" : "Cookie"
   const value = args.variant === "score"
-    ? `${args.score.total.toFixed(0)} · ${args.score.tier}`
+    ? args.score.total == null ? "in progress" : `${args.score.total} · ${args.score.grade}`
     : args.variant === "commission"
     ? `${(args.program.commission?.rate ?? "unknown").toString()}${termsConfirmed(args.program) ? "" : " (unconfirmed)"}`
     : termsConfirmed(args.program) && args.program.cookie_days ? `${args.program.cookie_days}d` : "—"
@@ -251,13 +254,19 @@ const CARD_THEMES: Record<Theme, CardTheme> = {
   },
 }
 
-// Tier determines the accent color — signals quality at a glance
-const TIER_ACCENT: Record<string, string> = {
-  S: "#10b981", // emerald — elite
-  A: "#22c55e", // green — strong
-  B: "#3b82f6", // blue — good
-  C: "#f59e0b", // amber — ok
-  D: "#64748b", // slate — weak
+// The grade family sets the accent, in the hues of the site's grade chip
+// (components/oas-grade.tsx); slate while the score is in progress.
+const GRADE_ACCENT: Record<string, string> = {
+  A: "#10b981", // emerald
+  B: "#65a30d", // lime
+  C: "#d97706", // amber
+  D: "#ea580c", // orange
+  F: "#dc2626", // red
+}
+const IN_PROGRESS_ACCENT = "#64748b"
+
+function gradeAccent(score: Score): string {
+  return score.grade ? GRADE_ACCENT[gradeFamily(score.grade)] : IN_PROGRESS_ACCENT
 }
 
 function renderPill(args: RenderArgs, label: string, value: string): string {
@@ -266,7 +275,7 @@ function renderPill(args: RenderArgs, label: string, value: string): string {
   const valueW = textWidth(value) + 16
   const totalW = labelW + valueW
   const h = 22
-  const tierAccent = args.variant === "score" ? TIER_ACCENT[args.score.tier] ?? t.valueBg : t.valueBg
+  const tierAccent = args.variant === "score" ? gradeAccent(args.score) : t.valueBg
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${totalW}" height="${h}" viewBox="0 0 ${totalW} ${h}">
   <title>${escapeXml(label)}: ${escapeXml(value)} — openaffiliate.dev</title>
@@ -291,12 +300,13 @@ function renderPill(args: RenderArgs, label: string, value: string): string {
 
 function renderCard(args: RenderArgs, _label: string, _value: string): string {
   const t = CARD_THEMES[args.theme]
-  const tierAccent = TIER_ACCENT[args.score.tier] ?? "#3b82f6"
+  const tierAccent = gradeAccent(args.score)
   const accent = resolveAccent(args, tierAccent)
   const s = SIZE_TOKENS[args.size]
   const name = String(args.program.name ?? args.slug)
-  const scoreStr = args.score.total.toFixed(0)
-  const tier = args.score.tier
+  const scored = args.score.total != null
+  const scoreStr = scored ? String(args.score.total) : "—"
+  const tier = args.score.grade
   const logoUrl = resolveLogoUrl(args.program)
   const maxNameChars = args.size === "sm" ? 18 : args.size === "lg" ? 28 : 22
 
@@ -309,7 +319,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
   // Ring geometry
   const r = s.ringR
   const circ = 2 * Math.PI * r
-  const filled = (Math.max(0, Math.min(100, args.score.total)) / 100) * circ
+  const filled = (Math.max(0, Math.min(100, args.score.total ?? 0)) / 100) * circ
 
   // Surface gradient + accent-tinted glow + accent-tinted shadow (dark only)
   const glowOpacity = args.theme === "dark" ? "0.18" : "0.12"
@@ -363,10 +373,10 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
              font-family="${FONT_STACK}">${escapeXml(name.charAt(0).toUpperCase())}</text>`
     : ""
 
-  // Tier pill top-right
+  // Grade pill top-right, only once there is a grade
   const tierPillX = s.w - (args.size === "sm" ? 42 : 52)
   const tierPillW = args.size === "sm" ? 28 : 42
-  const tierPill = `
+  const tierPill = !tier ? "" : `
     <g transform="translate(${tierPillX}, ${s.padX - 4})">
       <rect width="${tierPillW}" height="${args.size === "sm" ? 18 : 22}" rx="${args.size === "sm" ? 9 : 11}" fill="${accent}"/>
       <text x="${tierPillW / 2}" y="${args.size === "sm" ? 12.5 : 15}" text-anchor="middle"
@@ -394,7 +404,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
       <text y="${s.scoreY + 14}" text-anchor="middle" fill="${t.fgSubtle}" font-size="${args.size === "sm" ? 8 : 9}" font-weight="500"
             font-family="${FONT_STACK}"
             style="font-feature-settings:'tnum'"
-            letter-spacing="0.08em">/ 100</text>
+            letter-spacing="0.08em">${scored ? "/ 100" : "in progress"}</text>
     </g>
   `
 
@@ -402,7 +412,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
   const content = `
     <text x="${contentX}" y="${rowEyebrow}" fill="${t.fgSubtle}" font-size="${s.eyebrowFs}" font-weight="600"
           font-family="${FONT_STACK}" letter-spacing="0.1em">
-      AFFILIATE SCORE
+      OAS
     </text>
     <text x="${contentX}" y="${rowName}" fill="${t.fg}" font-size="${s.nameFs}" font-weight="700"
           font-family="${FONT_STACK}"
@@ -422,7 +432,7 @@ function renderCard(args: RenderArgs, _label: string, _value: string): string {
   `
 
   // Accessibility: provide title + desc so screen readers announce the badge
-  const titleText = `${name}: Affiliate Score ${scoreStr} out of 100, tier ${tier}.`
+  const titleText = scored ? `${name}: OAS ${scoreStr} out of 100, grade ${tier}.` : `${name}: OAS in progress.`
   const descText = metaLine
     ? `${titleText} ${metaLine}. Verified affiliate program listed on openaffiliate.dev.`
     : `${titleText} Listed on openaffiliate.dev.`
@@ -482,15 +492,6 @@ function escapeXml(s: string): string {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&apos;")
-}
-
-/** The badge's grade bands over the 0-100 score. */
-function tierOf(total: number): Tier {
-  if (total >= 85) return "S"
-  if (total >= 70) return "A"
-  if (total >= 55) return "B"
-  if (total >= 40) return "C"
-  return "D"
 }
 
 function svgError(message: string, status: number): Response {

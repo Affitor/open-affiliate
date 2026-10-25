@@ -1,4 +1,5 @@
 import { gradeFamily, oasGrade } from "@/lib/oas-grade";
+import { OAS_NONE, OAS_NONE_TITLE } from "@/lib/oas-shown";
 
 /**
  * The letter beside an OAS, coloured by family as Sơn asked (19/10 13:2x): A green, B lime,
@@ -19,4 +20,20 @@ export function OasGradeChip({ score, className = "" }: { score: number; classNa
       {g}
     </span>
   );
+}
+
+/**
+ * The one public score in a list cell: the OAS and its grade, or "—" with the
+ * title "OAS in progress". Never another number in its place.
+ */
+export function OasScoreCell({ score, className = "" }: { score: number | null; className?: string }) {
+  if (score == null) {
+    return <span className={`font-mono text-xs text-muted-foreground ${className}`} title={OAS_NONE_TITLE}>{OAS_NONE}</span>
+  }
+  return (
+    <span className={`inline-flex items-center gap-1.5 font-mono text-xs font-semibold tabular-nums ${className}`} title="OAS">
+      {score}
+      <OasGradeChip score={score} />
+    </span>
+  )
 }

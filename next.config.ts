@@ -43,6 +43,8 @@ export const nextConfig: NextConfig = {
     const aliases: Record<string, string> = registry.aliases;
     return [
       ...["/for-agents", "/for-agents/"].map((source) => ({ source, destination: "/docs/mcp", permanent: false })),
+      // The retired Affiliate Score's page: OAS is the one score now.
+      { source: "/docs/affiliate-score", destination: "/docs/oas", statusCode: 301 },
       ...Object.entries(aliases).flatMap(([alias, slug]) =>
         ["", ".md"].map((ext) => ({
           source: `/programs/${alias}${ext}`,

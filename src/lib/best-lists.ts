@@ -1,5 +1,5 @@
 import {
-  affiliateScore,
+  byOas,
   categoryToSlug,
   commissionDisplay,
   commissionUnknown,
@@ -23,8 +23,8 @@ import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filt
  *     (every list ranks by it, and "Not published" cannot be ranked);
  *   - verified programs first, then by commissionRank (structured fields
  *     only: a single percentage or a flat US-dollar amount; listScore without
- *     its cap, so $10,000 comes before $550), or by the list's own `rank`,
- *     through compareCommission, the order every commission surface shares;
+ *     its cap, so $10,000 comes before $550), through compareCommission, the
+ *     order every commission surface shares, or by the list's own `order`;
  *   - ties go to lifetime recurring deals, then the name, then the slug;
  *   - at most MAX_ROWS rows.
  */
@@ -46,8 +46,8 @@ export interface BestList {
   /** The filter in plain words, shown under "How we picked". Keep it in step with qualifies. */
   criteria: string
   qualifies: (p: Program) => boolean
-  /** Order within the verified and unverified groups; commissionRank when absent. */
-  rank?: (p: Program) => number
+  /** Order within the verified and unverified groups; compareCommission on commissionRank when absent. */
+  order?: (a: Program, b: Program) => number
   /** How the list is ordered, in plain words; SHARED_RULES when absent. */
   rules?: string
   /** What the FAQ calls these programs; the H1 in lower case when absent. */
@@ -203,17 +203,14 @@ const LISTS: BestList[] = [
     query: "Best Affiliate Programs",
     h1: "Best Affiliate Programs",
     description:
-      "The best affiliate programs with terms checked on each brand's own page, ranked by Affiliate Score: commission, cookie window and commission duration.",
+      "The best affiliate programs with terms checked on each brand's own page, ranked by OAS, the score for clear, partner-friendly terms, then commission.",
     summary: "have terms verified against the program's own affiliate page",
     noun: "verified affiliate programs",
     criteria: "Programs whose terms we verified on their own affiliate page.",
     rules:
-      "Ranked by Affiliate Score, which weighs commission, cookie window and how long commission lasts; programs that do not publish a rate are left out.",
+      "Ranked by OAS, how clearly a program publishes its terms and whether they protect the affiliate; programs not scored yet follow, by commission. Programs that do not publish a rate are left out.",
     qualifies: (p) => p.verified,
-    rank: (p) => {
-      const score = affiliateScore(p)
-      return Number.isFinite(score) ? score : -1
-    },
+    order: byOas,
   },
   {
     slug: "high-paying-affiliate-programs",
@@ -576,7 +573,7 @@ export function nounOf(h1: string): string {
 
 /**
  * The commission score lists filter on, from structured fields only, through
- * the same rankedCommission the Affiliate Score uses: commissionRank capped at
+ * the same rankedCommission commissionRank uses: commissionRank capped at
  * 100. A single percentage (mode "percentage") scores its value, and a flat
  * amount in explicit US dollars scores through commissionRank's dollar
  * mapping. Everything else scores 0: tiered, hybrid and unknown modes, flat
@@ -670,7 +667,7 @@ const built = new Map<string, BestListData>()
 export function buildBestList(list: BestList): BestListData {
   const cached = built.get(list.slug)
   if (cached) return cached
-  const rank = list.rank ?? commissionRank
+  const order = list.order ?? ((a: Program, b: Program) => compareCommission(a, b, commissionRank))
   const qualifying = livePrograms
     .filter((p) => (list.directory || !commissionUnknown(p.commission)) && list.qualifies(p))
     .sort(
@@ -679,7 +676,7 @@ export function buildBestList(list: BestList): BestListData {
         // A directory keeps programs that publish no rate: they go last in
         // their group, not mixed in with tiered deals that also score 0.
         Number(commissionUnknown(a.commission)) - Number(commissionUnknown(b.commission)) ||
-        compareCommission(a, b, rank)
+        order(a, b)
     )
   const rows = list.directory ? qualifying : qualifying.slice(0, MAX_ROWS)
   const verified = qualifying.filter((p) => p.verified)

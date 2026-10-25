@@ -1,5 +1,6 @@
 /**
- * Writes src/lib/oas-scores.json from programs/*.yaml (run in prebuild, before
+ * Writes src/lib/oas-scores.json from programs/*.yaml (run first in prebuild,
+ * before build-registry.ts, which ships each score to the browser, and
  * generate-md.ts). It reads the YAML files themselves, not the mapped programs
  * or the committed registry.json (spec 7b.1).
  *

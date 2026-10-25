@@ -28,7 +28,6 @@ export const docsNav: DocsSidebarGroup[] = [
       { title: "TypeScript SDK", href: "/docs/sdk", description: "Typed client for searching and querying programs." },
       { title: "YAML Schema", href: "/docs/yaml-schema", description: "The structure of a program entry in the registry." },
       { title: "OpenAffiliate Score (OAS)", href: "/docs/oas", description: "How a program gets scored and ranked, and how to improve a score." },
-      { title: "Affiliate Score", href: "/docs/affiliate-score", description: "The older 0 to 100 score behind the /best list and the embeddable score badge." },
     ],
   },
   {

@@ -356,13 +356,12 @@ async function buildRegistry(): Promise<void> {
 
   writeFileSync(OUTPUT_FILE, JSON.stringify(registry, null, 2) + "\n")
 
-  // The Affiliate Score reads fields the browser's copy leaves out (the
-  // description, agent prompt and signup URL). So the score ships precomputed,
-  // by the site's own affiliateScore over the registry.json just written:
-  // lists rank exactly as the server does. The commission order key ships
-  // the same way: it reads `kind`, which the browser's copy leaves out.
+  // OAS ships as the program page reads it (oasCell over oas-scores.json,
+  // which build-oas writes first in prebuild), so the browser's lists show and
+  // order by the same number. The commission order key ships precomputed: it
+  // reads `kind`, which the browser's copy leaves out.
   const site = await import("../src/lib/programs")
-  const scoreBySlug = new Map(site.programs.map((p) => [p.slug, site.affiliateScore(p)]))
+  const oas = await import("../src/lib/oas")
   const commissionRankBySlug = new Map(site.programs.map((p) => [p.slug, site.commissionRank(p)]))
 
   // Client-side catalog pages need filtering and comparison fields, not the
@@ -394,7 +393,7 @@ async function buildRegistry(): Promise<void> {
       network: p.network ?? null,
       createdAt: p.created_at ?? "",
       source: p.source,
-      score: scoreBySlug.get(p.slug),
+      oas: oas.oasCell(oas.getOasScore(p.slug)),
       commissionRank: commissionRankBySlug.get(p.slug),
       // The /programs payout filters; like the cookie, only for confirmed terms.
       payoutMethods: termsConfirmed(p) && p.payout?.methods?.length ? p.payout.methods : undefined,
