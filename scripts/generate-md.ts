@@ -41,7 +41,7 @@ import { compareText } from "../src/lib/commission-order"
 import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText, type CommissionGroup } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
-  affiliateScore,
+  byOas,
   commissionDisplay,
   formatCommissionDisplay,
   getCategoryStats,
@@ -114,11 +114,10 @@ const BASE = "https://openaffiliate.dev"
  * reader takes in before deciding whether to follow the link. Nothing computes
  * it, and saying so is more useful than inventing a formula.
  *
- * Ties at the boundary are broken alphabetically, which matters more than the
- * number does: ranks 10-15 currently all score 79, so three tied programs are
- * shown and three are not, decided by name alone. The section says
- * "highest-scoring", so that is worth knowing — being listed here is free
- * promotion, and the cut is partly arbitrary.
+ * The order is the site's byOas: OAS high to low, then programs not scored
+ * yet, by commission. Ties at the boundary go to commission and then the name,
+ * which is worth knowing: being listed here is free promotion, and the cut is
+ * partly arbitrary.
  */
 const VERIFIED_SAMPLE = 12
 
@@ -815,27 +814,12 @@ function docsMd(): string {
 // ---------- llms.txt --------------------------------------------------------
 
 function verifiedByScore(): Program[] {
-  // affiliateScore returns NaN for a program with no cookie_days
-  // (Math.min(undefined / 90, 1)). NaN subtraction is NaN, which is falsy, so
-  // `||` would fall through for that pair only — a comparator that is
-  // non-transitive for some pairs and consistent for others, which leaves the
-  // sort order implementation-defined. The index would then list the wrong
-  // twelve, and no check would notice, because the checks count rows rather
-  // than identify them. One program in the registry hits this today
-  // (unverified, so latent). Non-finite sorts last.
-  const score = new Map(
-    sitePrograms.map(p => {
-      const s = affiliateScore(p)
-      return [p.slug, Number.isFinite(s) ? s : -1] as const
-    }),
-  )
+  // The site's own order (byOas: OAS, programs not scored yet after, then
+  // commission), over the site's programs, so the index and the pages agree.
+  const site = new Map(sitePrograms.map(p => [p.slug, p] as const))
   return programs
     .filter(listedVerified)
-    .sort(
-      (a, b) =>
-        (score.get(b.slug) ?? -1) - (score.get(a.slug) ?? -1) ||
-        a.name.localeCompare(b.name),
-    )
+    .sort((a, b) => byOas(site.get(a.slug)!, site.get(b.slug)!))
 }
 
 /**
@@ -848,7 +832,7 @@ function verifiedMd(): string {
     `# Verified affiliate programs`,
     [
       `> The ${programCount(verified.length)} OpenAffiliate has checked against the`,
-      `> program's own page, highest Affiliate Score first. The other`,
+      `> program's own page, highest OAS first, then by commission. The other`,
       `> ${livePrograms.length - verified.length} live programs are community-submitted`,
       `> and unconfirmed.`,
     ].join("\n"),
@@ -955,7 +939,7 @@ export function llmsTxt(): string {
         : "Verified programs",
       [
         verified.length > VERIFIED_SAMPLE
-          ? `Highest-scoring ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
+          ? `Highest OAS ${VERIFIED_SAMPLE} of ${verified.length} verified. Full list: ${BASE}/verified.md`
           : `All ${verified.length} verified. Also at ${BASE}/verified.md`,
         ``,
         verified.length

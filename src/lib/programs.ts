@@ -2,6 +2,8 @@ import { formatFlat, formatPercentage } from "./commission-mode"
 import registryData from "./registry.json"
 import { networkKind, networkName } from "./network-meta"
 import { commissionUnknown, compareCommission, compareText } from "./commission-order"
+import { programOas } from "./oas"
+import { compareByOas } from "./oas-shown"
 import { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, termsConfirmed, UNCONFIRMED, UNCONFIRMED_NOTE } from "./confirmed-terms"
 
 /**
@@ -184,8 +186,8 @@ export { confirmedPitch, confirmedPrompt, confirmedProse, confirmedProseList, te
 /**
  * The program as a reader may see it: unconfirmed cookie window, payout and
  * approval left out, along with the sentences of free text that state them
- * (see confirmed-terms.ts). For display and API output only; affiliateScore
- * and list ranking take the stored program.
+ * (see confirmed-terms.ts). For display and API output only; list ranking
+ * takes the stored program.
  */
 export function confirmedTerms(p: Program): Program {
   if (termsConfirmed(p)) return p
@@ -289,8 +291,8 @@ export function formatCommissionDisplay(value: number, flat: boolean): string {
  * (mode "flat", currency "USD"). Null for everything else: tiered, hybrid and
  * unknown modes, a flat amount in another or no currency, and referral rewards
  * (kind "referral": credit or gift cards). The rate text is never read.
- * listScore (best-lists.ts) and affiliateScore both go through here, so a list
- * and the Affiliate Score cannot disagree on what counts as cash.
+ * listScore (best-lists.ts) and commissionRank both go through here, so every
+ * list agrees on what counts as cash.
  */
 export function rankedCommission(p: Pick<Program, "commission" | "kind">): Program["commission"] | null {
   const c = p.commission
@@ -300,62 +302,11 @@ export function rankedCommission(p: Pick<Program, "commission" | "kind">): Progr
 }
 
 /**
- * Affiliate Score (0–100), from structured fields only: the rate text is
- * never read, so rewording it cannot move a program.
- *
- * | Component          | Max | Formula                                               |
- * |--------------------|-----|-------------------------------------------------------|
- * | Commission value   |  40 | rankedCommission only, otherwise 0                    |
- * |                    |     | Percentage: min(value/50,1)×40                        |
- * |                    |     | Flat USD: $1-49→8, $50-99→16, $100-499→28, $500+→40  |
- * | Cookie window      |  15 | min(days/90,1) × 15, once terms are confirmed; else 0 |
- * | Type + Duration    |  25 | one-time:5, hybrid:5, tiered:12                       |
- * |                    |     | recurring:18, rec/12mo:21, rec/24mo:23, rec/lifetime:25|
- * | Verified           |  10 | 10 if verified                                        |
- * | Completeness       |  10 | +4 description, +3 agent prompt, +3 signup URL        |
- * | **Total**          | 100 |                                                       |
+ * The order every ranked list shares: OAS, the one public score, high to low;
+ * programs with no OAS after; then the commission order (commission-order.ts).
  */
-export function affiliateScore(p: Program): number {
-  // Commission value (max 40)
-  const c = rankedCommission(p)
-  const value = c?.value ?? 0
-  let commScore = 0
-  if (c && Number.isFinite(value) && value > 0) {
-    commScore =
-      c.mode === "percentage"
-        ? Math.min(value / 50, 1) * 40
-        : value >= 500 ? 40 : value >= 100 ? 28 : value >= 50 ? 16 : 8
-  }
-
-  // Cookie window (max 15). An unverified program's stored window is usually
-  // an import default, and no surface shows it (confirmed-terms.ts), so it
-  // counts as unknown here too.
-  const cookieScore = termsConfirmed(p) ? Math.min((p.cookieDays ?? 0) / 90, 1) * 15 : 0
-
-  // Type + Duration (max 25)
-  let typeScore: number
-  if (p.commission.type === "recurring") {
-    const dur = p.commission.duration?.toLowerCase().trim() ?? ""
-    if (dur === "lifetime") typeScore = 25
-    else if (dur.includes("24")) typeScore = 23
-    else if (dur.includes("12")) typeScore = 21
-    else typeScore = 18
-  } else if (p.commission.type === "tiered") {
-    typeScore = 12
-  } else {
-    typeScore = 5
-  }
-
-  // Verified (max 10)
-  const verifiedScore = p.verified ? 10 : 0
-
-  // Completeness (max 10)
-  let completeness = 0
-  if (p.description && p.description.length > 20) completeness += 4
-  if (p.agentPrompt && p.agentPrompt.length > 10) completeness += 3
-  if (p.signupUrl) completeness += 3
-
-  return Math.round(commScore + cookieScore + typeScore + verifiedScore + completeness)
+export function byOas(a: Program, b: Program): number {
+  return compareByOas(a, b, programOas, commissionRank)
 }
 
 export function searchPrograms(query: string, category?: string): Program[]
@@ -414,7 +365,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
       //   (1) source priority — recently-added batches use community /
       //       yc-directory; the original bulk import used partnerstack-api
       //       or legacy. Newer source > older source.
-      //   (2) affiliate score — higher-quality programs surface first.
+      //   (2) OAS, then commission (byOas).
       {
         const sourceWeight = (s: string | undefined): number => {
           // Higher = shown first when created_at ties.
@@ -442,7 +393,7 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
           if (byDate !== 0) return byDate
           const bySource = sourceWeight(b.source) - sourceWeight(a.source)
           if (bySource !== 0) return bySource
-          return affiliateScore(b) - affiliateScore(a)
+          return byOas(a, b)
         })
       }
       break
@@ -453,10 +404,10 @@ export function searchPrograms(queryOrOptions: string | SearchOptions, category?
         results.sort((a, b) => {
           const aName = a.name.toLowerCase().includes(q) ? 1 : 0
           const bName = b.name.toLowerCase().includes(q) ? 1 : 0
-          return bName - aName || affiliateScore(b) - affiliateScore(a)
+          return bName - aName || byOas(a, b)
         })
       } else {
-        results.sort((a, b) => affiliateScore(b) - affiliateScore(a))
+        results.sort(byOas)
       }
       break
   }

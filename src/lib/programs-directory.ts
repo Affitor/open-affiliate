@@ -1,5 +1,4 @@
-import { affiliateScore, isLive, type Program } from "./programs"
-import { byScore } from "./score-order"
+import { byOas, isLive, type Program } from "./programs"
 import { buildBoard, isStale, oasScores, type OasScore } from "./oas"
 import { verifiedDate } from "./best-lists"
 import type { Faq } from "./program-seo"
@@ -36,10 +35,10 @@ export function directoryGroups(programs: Pick<Program, "slug" | "name" | "statu
 
 /**
  * The homepage's two program sets, disjoint: the Rankings preview, then 6
- * Featured verified live programs by Affiliate Score, skipping any already
- * shown. Once OAS is published the preview is the top 5 of the OAS
+ * Featured verified live programs in byOas order (OAS, then commission),
+ * skipping any already shown. The preview is the top 5 of the OAS
  * leaderboard, so the number on the homepage is the one each program page and
- * report shows; until then it is the top 5 by Affiliate Score.
+ * report shows; with no scores yet it is the top 5 by commission.
  *
  * Pages refresh on their own schedules (homepage hourly, program page and
  * report daily), so the preview leaves out any program whose review reaches
@@ -52,14 +51,14 @@ export function homepageSets(
   programs: Program[],
   scores: OasScore[] = oasScores,
   today: Date = new Date(),
-): { rankings: Program[]; ranks: number[]; verified: (string | null)[]; featured: Program[]; by: "oas" | "affiliate-score" } {
-  const ranked = programs.filter(isLive).sort(byScore(affiliateScore))
+): { rankings: Program[]; ranks: number[]; verified: (string | null)[]; featured: Program[]; by: "oas" | "commission" } {
+  const ranked = programs.filter(isLive).sort(byOas)
   const bySlug = new Map(programs.map((p) => [p.slug, p]))
   const horizon = new Date(today.getTime() + HOME_LOOKAHEAD_DAYS * 864e5)
   const board = buildBoard(scores, ranked, today)
     .filter((r) => r.rank != null && !isStale(r.score.checked_at, horizon))
     .slice(0, 5)
-  const by = board.length ? "oas" : "affiliate-score"
+  const by = board.length ? "oas" : "commission"
   const rankings = board.length ? board.map((r) => bySlug.get(r.program.slug)!) : ranked.slice(0, 5)
   const ranks = board.length ? board.map((r) => r.rank!) : rankings.map((_, i) => i + 1)
   // Each OAS row shows the score's verified date, the one the tie-break orders by.

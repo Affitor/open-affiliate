@@ -14,7 +14,7 @@
  */
 
 import { fetchSocialItems } from "../src/lib/social"
-import { programs, affiliateScore } from "../src/lib/programs"
+import { programs, byOas } from "../src/lib/programs"
 
 const CONCURRENCY = 3
 
@@ -40,7 +40,7 @@ async function main() {
 
   const target = all
     ? programs
-    : [...programs].sort((a, b) => affiliateScore(b) - affiliateScore(a)).slice(0, top)
+    : [...programs].sort(byOas).slice(0, top)
 
   console.log(`Backfilling ${target.length} programs (concurrency=${CONCURRENCY})`)
 

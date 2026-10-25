@@ -244,12 +244,11 @@ export default function OasDocsPage() {
         <section>
           <h2 id="other-scores" className="text-lg font-semibold mb-3">Other scores on the site</h2>
           <p className="text-base text-muted-foreground leading-relaxed">
-            <Link href="/docs/affiliate-score" className={link}>Affiliate Score</Link>{" "}
-            is the older 0 to 100 score built from commission, cookie and
-            duration. It still orders the main /best list and the featured
-            programs on the homepage, and the score badge at{" "}
+            OAS is the one score on the site: the directory, the homepage,
+            /rankings, the main /best list and the score badge at{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs">/api/badge/&lt;slug&gt;</code>{" "}
-            shows it. The README badge at{" "}
+            all show or order by it, and a program without one shows
+            &ldquo;OAS in progress&rdquo;, never another number. The README badge at{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs">/badge/&lt;slug&gt;.svg</code>{" "}
             shows the commission, its type and whether the terms are verified,
             not a score. /rankings uses OAS.{" "}

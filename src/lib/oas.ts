@@ -11,6 +11,8 @@ import { compareText } from "./commission-order"
 import { oasGrade } from "./oas-grade"
 export { GRADE_BANDS, oasGrade, type OasGrade } from "./oas-grade"
 import scoresFile from "./oas-scores.json"
+import { isStale, shownOas, STALE_DAYS, type OasCell } from "./oas-shown"
+export { isStale, shownOas, STALE_DAYS, type OasCell } from "./oas-shown"
 
 /** not_public reads "Not published"; held_out is a check v1 does not assess (it never blocks a score). */
 export type CheckState = "met" | "not_met" | "not_public" | "checking" | "held_out"
@@ -66,9 +68,6 @@ export interface CheckDef {
 }
 
 export const OAS_VERSION = "v1"
-
-/** Terms verified longer ago than this show Scoring in progress until they are verified again. */
-export const STALE_DAYS = 90
 
 export const PART_MAX: Record<Part, number> = { transparency: 70, partner_value: 30 }
 
@@ -218,13 +217,17 @@ export function round1(n: number): number {
  * Held-out checks never block it.
  */
 export function oasValue(s: OasScore, today: Date = new Date()): number | null {
-  if (s.oas == null || s.checks.some((c) => c.state === "checking") || isStale(s.checked_at, today)) return null
-  return s.oas
+  return shownOas(oasCell(s), today)
 }
 
-/** Terms verified STALE_DAYS or more before today, or never: from the start of lapseDate(), exactly. */
-export function isStale(checkedAt: string | null | undefined, today: Date): boolean {
-  return !checkedAt || today.getTime() - Date.parse(checkedAt) >= STALE_DAYS * 864e5
+/**
+ * The score before the freshness check: what build-registry ships to the browser,
+ * so the /programs list reads it through shownOas exactly as this page does.
+ * Undefined while any check is still Checking, or with no score or verified date.
+ */
+export function oasCell(s: OasScore | undefined): OasCell | undefined {
+  if (!s || s.oas == null || !s.checked_at || s.checks.some((c) => c.state === "checking")) return undefined
+  return { score: s.oas, checkedAt: s.checked_at }
 }
 
 export function partEarned(s: OasScore, part: Part): number {
@@ -318,8 +321,15 @@ export function rankText(r: { rank: number; of: number; category: string } | nul
 
 export const oasScores: OasScore[] = scoresFile as OasScore[]
 
+const scoreBySlug = new Map(oasScores.map((s) => [s.slug, s]))
+
 export function getOasScore(slug: string): OasScore | undefined {
-  return oasScores.find((s) => s.slug === slug)
+  return scoreBySlug.get(slug)
+}
+
+/** The program's OAS as its page shows it, or null ("OAS in progress"). */
+export function programOas(p: { slug: string }, today: Date = new Date()): number | null {
+  return shownOas(oasCell(getOasScore(p.slug)), today)
 }
 
 /** What a program without a current score says instead, on the page and every machine surface. */

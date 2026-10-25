@@ -1,4 +1,4 @@
-import { affiliateScore, isLive, networksByProgramCount, networkToSlug, type Program } from "./programs"
+import { byOas, isLive, networksByProgramCount, networkToSlug, type Program } from "./programs"
 import { hasNoProgram } from "./no-program"
 import { termsConfirmed } from "./confirmed-terms"
 import { networkKind, networkName } from "./network-meta"
@@ -136,7 +136,7 @@ export interface NetworkEntry {
   verified: number
   /** What the network's own pages say; null when we do not read them (its host is on schema/blocked-hosts.json). */
   terms: NetworkTerms | null
-  /** Up to EXAMPLES verified programs with fresh terms, highest affiliate score first. */
+  /** Up to EXAMPLES verified programs with fresh terms, in byOas order (OAS, then commission). */
   examples: Program[]
 }
 
@@ -153,7 +153,7 @@ export function networkEntries(post: NetworksPost = NETWORKS_POST, asOf: Date = 
       const programs = byNetwork.get(copy.network)!
       const examples = programs
         .filter((p) => p.verified && isLive(p) && termsConfirmed(p) && !hasNoProgram(p) && fresh(p, asOf))
-        .sort((a, b) => affiliateScore(b) - affiliateScore(a) || a.slug.localeCompare(b.slug))
+        .sort(byOas)
         .slice(0, EXAMPLES)
       return {
         network: copy.network,

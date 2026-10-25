@@ -159,7 +159,7 @@ if (!verifiedSection) fail("llms.txt has no 'Verified programs' section");
 // Leading whitespace is insignificant in Markdown, and a single space in
 // front of a second claim hid it from a column-zero anchor: the verifier saw
 // only the true claim and passed at 6665 bytes. Lines are trimmed first.
-const claimPattern = /^(?:Highest-scoring (\d+) of (\d+)|All (\d+)) verified\./;
+const claimPattern = /^(?:Highest OAS (\d+) of (\d+)|All (\d+)) verified\./;
 const claims = verifiedSection
   .split("\n")
   .map((line) => claimPattern.exec(line.trim()))

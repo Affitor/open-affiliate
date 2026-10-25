@@ -1,7 +1,6 @@
 import { readFileSync } from "node:fs"
 import { gzipSync } from "node:zlib"
 import {
-  affiliateScore as fullAffiliateScore,
   commissionRank as fullCommissionRank,
   categories as fullCategories,
   commissionDisplay as fullCommissionDisplay,
@@ -10,8 +9,9 @@ import {
   programs as allPrograms,
 } from "../src/lib/programs"
 import { confirmedPitch, termsConfirmed } from "../src/lib/confirmed-terms"
+import { getOasScore, oasCell, programOas as fullProgramOas } from "../src/lib/oas"
 import {
-  affiliateScore as clientAffiliateScore,
+  programOas as clientProgramOas,
   categories as clientCategories,
   commissionDisplay as clientCommissionDisplay,
   commissionLabel as clientCommissionLabel,
@@ -72,7 +72,7 @@ for (const fullProgram of fullPrograms) {
     network: fullProgram.network ?? null,
     createdAt: fullProgram.createdAt,
     source: fullProgram.source,
-    score: fullAffiliateScore(fullProgram),
+    oas: oasCell(getOasScore(fullProgram.slug)),
     commissionRank: fullCommissionRank(fullProgram),
     payoutMethods: termsConfirmed(fullProgram) && fullProgram.payoutMethods?.length ? fullProgram.payoutMethods : undefined,
     payoutMinimum: termsConfirmed(fullProgram) ? fullProgram.payout.minimum : undefined,
@@ -97,11 +97,7 @@ for (const fullProgram of fullPrograms) {
     ["cookieDays", clientProgram.cookieDays, termsConfirmed(fullProgram) ? fullProgram.cookieDays : undefined],
     ["verified", clientProgram.verified, fullProgram.verified],
     ["network", clientProgram.network, fullProgram.network],
-    [
-      "affiliateScore",
-      clientAffiliateScore(clientProgram),
-      fullAffiliateScore(fullProgram),
-    ],
+    ["oas", clientProgramOas(clientProgram), fullProgramOas(fullProgram)],
     ["commissionRank", clientProgram.commissionRank, fullCommissionRank(fullProgram)],
     [
       "commissionDisplay",

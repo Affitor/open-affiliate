@@ -509,12 +509,12 @@ function ProgramsContent() {
           </div>
         ) : (
           <div className="overflow-hidden rounded-xl border border-border bg-card [&>div:last-child]:border-b-0">
-            <div className="hidden grid-cols-[32px_minmax(0,1fr)_130px_minmax(0,190px)_136px_44px_36px] gap-3 border-b border-border bg-sunk px-3 py-2 md:grid" aria-hidden>
+            <div className="hidden grid-cols-[32px_minmax(0,1fr)_130px_minmax(0,190px)_136px_64px_36px] gap-3 border-b border-border bg-sunk px-3 py-2 md:grid" aria-hidden>
               <span className="oa-label col-span-2">Program</span>
               <span className="oa-label">Category</span>
               <span className="oa-label">Commission</span>
               <span className="oa-label">Cookie</span>
-              <span className="oa-label">Score</span>
+              <span className="oa-label">OAS</span>
               <span />
             </div>
             {paginated.map((program) => (

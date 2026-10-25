@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js"
 import {
   livePrograms,
   formatCommissionDisplay,
-  affiliateScore,
+  byOas,
   commissionStats,
   rateBasis,
   confirmedTerms,
@@ -28,7 +28,6 @@ export interface Opportunity {
   commissionType: string
   /** Null when not published, or not shown because the program is unverified. */
   cookieDays: number | null
-  affiliateScore: number
   verifiedContent: number
   totalContent: number
   avgSiftScore: number
@@ -160,7 +159,6 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
       commission: program ? String(program.commission.rate) : "—",
       commissionType: program?.commission.type ?? "unknown",
       cookieDays: program ? (confirmedTerms(program).cookieDays ?? null) : null,
-      affiliateScore: program ? affiliateScore(program) : 0,
       verifiedContent: verified,
       totalContent: data.scores.length,
       avgSiftScore: Math.round(avgScore * 10) / 10,
@@ -173,7 +171,9 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
 
   // Gap opportunities: high-value programs with little verified content
   const opportunities = allProgramsWithData
-    .filter((p) => p._program && p.affiliateScore >= 50 && p.verifiedContent <= 3)
+    .filter((p) => p._program && rankedCommission(p._program) && p.verifiedContent <= 3)
+    .sort((a, b) => byOas(a._program!, b._program!))
+    .slice(0, 12)
     .map((p) => {
       // The figure only when the structured fields give one (rankedCommission):
       // a gift card, a tiered deal or a flat amount in another currency is never
@@ -191,12 +191,10 @@ export function buildSiftInsights(scoredRows: ScoredRow[], totalContent: number)
         _program: undefined,
       }
     })
-    .sort((a, b) => b.affiliateScore - a.affiliateScore)
-    .slice(0, 12)
 
   // High-value verified: programs with strong content AND good commissions
   const highValueVerified = allProgramsWithData
-    .filter((p) => p._program && p.verifiedContent >= 3 && p.affiliateScore >= 40)
+    .filter((p) => p._program && rankedCommission(p._program) && p.verifiedContent >= 3)
     .map((p) => ({
       ...p,
       reason: `${p.verifiedContent} verified pieces (avg ${p.avgSiftScore}) — proven content patterns to replicate`,
