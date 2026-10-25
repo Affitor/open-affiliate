@@ -25,7 +25,7 @@ test("008 does not grant execute to anon or public", () => {
 })
 
 test("API route no longer attaches duplicate program registry fields", () => {
-  assert.doesNotMatch(route, /affiliateScore|commissionDisplay|from "@\/lib\/programs"/)
+  assert.doesNotMatch(route, /commissionDisplay|from "@\/lib\/programs"/)
   assert.match(route, /fetchSiftRankings/)
   assert.match(route, /SIFT_RANKINGS_CACHE_HEADERS/)
 })

@@ -24,7 +24,7 @@ import { ClaimChip } from "@/components/claim-chip";
 import { EarningsCalculator } from "@/components/earnings-calculator";
 import { serializeJsonLd } from "@/lib/json-ld";
 import { seoTitle, seoDescription, buildFaq, programJsonLd, networkName } from "@/lib/program-seo";
-import { programs, getProgram, affiliateScore, IN_HOUSE, categoryToSlug, confirmedTerms, networkHowToJoin, UNCONFIRMED_NOTE } from "@/lib/programs";
+import { programs, getProgram, byOas, IN_HOUSE, categoryToSlug, confirmedTerms, networkHowToJoin, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { outboundUrl } from "@/lib/outbound-link";
 import { noProgramHeadline } from "@/lib/no-program";
@@ -55,7 +55,7 @@ export const dynamicParams = true;
 
 export function generateStaticParams() {
   const top = [...programs]
-    .sort((a, b) => affiliateScore(b) - affiliateScore(a))
+    .sort(byOas)
     .slice(0, 50);
   return top.map((p) => ({ slug: p.slug }));
 }

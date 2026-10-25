@@ -6,9 +6,9 @@
     "packages/*"
   ],
   "scripts": {
-    "predev": "npm run registry:build && npm run md:build",
+    "predev": "npx tsx scripts/build-oas.ts && npm run registry:build && npm run md:build",
     "dev": "next dev",
-    "prebuild": "npx tsx scripts/build-registry.ts && npx tsx scripts/build-oas.ts && npx tsx scripts/generate-md.ts",
+    "prebuild": "npx tsx scripts/build-oas.ts && npx tsx scripts/build-registry.ts && npx tsx scripts/generate-md.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

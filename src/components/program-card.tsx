@@ -3,7 +3,8 @@ import { Check } from "lucide-react"
 import { ProgramLogo } from "@/components/program-logo"
 import { SaveButton } from "@/components/save-button"
 import { ImpressionTracker } from "@/components/impression-tracker"
-import { affiliateScore, commissionChip, cookieChip, type Program } from "@/lib/client-programs"
+import { OasScoreCell } from "@/components/oas-grade"
+import { commissionChip, cookieChip, programOas, type Program } from "@/lib/client-programs"
 
 /** Verified is the one emerald mark (OA-DESIGN §1.3): a check after the name, nothing louder. */
 function VerifiedMark() {
@@ -20,12 +21,9 @@ function CommissionChip({ program }: { program: Program }) {
   )
 }
 
+/** The program page's OAS and grade, or "—" (OAS in progress). */
 function ScoreChip({ program }: { program: Program }) {
-  return (
-    <span className="inline-flex h-[22px] min-w-9 items-center justify-center rounded-[5px] border border-line-strong px-1.5 font-mono text-xs font-semibold tabular-nums" title="Affiliate Score">
-      {affiliateScore(program)}
-    </span>
-  )
+  return <OasScoreCell score={programOas(program)} />
 }
 
 export function ProgramCardGrid({ program }: { program: Program }) {
@@ -61,7 +59,7 @@ export function ProgramCardGrid({ program }: { program: Program }) {
  */
 export function ProgramRowList({ program }: { program: Program }) {
   return (
-    <div className="group relative grid grid-cols-[32px_minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-3 py-2.5 transition-colors hover:bg-sunk md:grid-cols-[32px_minmax(0,1fr)_130px_minmax(0,190px)_136px_44px_auto]">
+    <div className="group relative grid grid-cols-[32px_minmax(0,1fr)_auto] items-center gap-3 border-b border-border px-3 py-2.5 transition-colors hover:bg-sunk md:grid-cols-[32px_minmax(0,1fr)_130px_minmax(0,190px)_136px_64px_auto]">
       <ImpressionTracker slug={program.slug} />
       <ProgramLogo slug={program.slug} name={program.name} size={32} className="shrink-0" />
       <div className="min-w-0">

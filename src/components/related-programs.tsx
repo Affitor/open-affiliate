@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Check } from "lucide-react"
 import { ProgramLogo } from "@/components/program-logo"
-import { programs, affiliateScore, isLive, type Program } from "@/lib/programs"
+import { programs, byOas, isLive, type Program } from "@/lib/programs"
 import { hasNoProgram, keywordWords as words, noProgramAlternatives } from "@/lib/no-program"
 import { commissionFigure, pageState } from "@/lib/program-page"
 
@@ -21,10 +21,10 @@ export function getRelatedPrograms(current: Program, limit = 4): Program[] {
     // Agent keywords say what the product does ("keyword-research", "ai-seo"); tags are often generic.
     const kwOverlap = [...words([...(p.agentKeywords ?? []), ...p.tags])].filter((w) => currentWords.has(w)).length
     relevance += Math.min(kwOverlap, 3)
-    return { program: p, relevance, score: affiliateScore(p) }
+    return { program: p, relevance }
   })
 
-  scored.sort((a, b) => b.relevance - a.relevance || b.score - a.score)
+  scored.sort((a, b) => b.relevance - a.relevance || byOas(a.program, b.program))
   return scored.slice(0, limit).map((s) => s.program)
 }
 

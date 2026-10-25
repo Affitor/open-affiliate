@@ -30,7 +30,7 @@ const checkList = (part: Part) =>
  * labels from the program page, src/lib/program-seo.ts and
  * src/lib/confirmed-terms.ts, brands with no
  * program from src/lib/no-program.ts, ranking from src/lib/best-lists.ts and
- * affiliateScore in src/lib/programs.ts, OAS from src/lib/oas.ts and
+ * byOas in src/lib/programs.ts, OAS from src/lib/oas.ts and
  * src/lib/oas-v1.ts (shown only once scores are published).
  * Change one of those and this page changes with it.
  */
@@ -101,13 +101,12 @@ export default function MethodologyPage() {
           best affiliate programs
         </Link>{" "}
         list ranks verified programs by{" "}
-        <Link href="/docs/affiliate-score" className={link}>
-          Affiliate Score
+        <Link href="/docs/oas" className={link}>
+          OAS
         </Link>
-        , which adds the cookie window, how long commission lasts and how
-        complete the listing is to the same commission; the homepage&apos;s
-        featured and top verified programs use the same score, and its
-        rankings use OAS once scores are published.
+        , then programs not scored yet by the same commission; the
+        homepage&apos;s rankings and featured programs, and the /programs
+        directory, use the same order.
         Programs that publish
         no rate are left out of every /best list and placed last in their
         group on category pages.

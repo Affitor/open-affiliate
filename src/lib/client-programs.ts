@@ -1,5 +1,6 @@
 import registryData from "./client-registry.json"
 import { compareCommission, compareText } from "./commission-order"
+import { compareByOas, shownOas, type OasCell } from "./oas-shown"
 import { LONG_COOKIE_DAYS, paysBy, type PayoutMethodFilter } from "./payout-filters"
 
 export const IN_HOUSE = "in-house"
@@ -30,8 +31,8 @@ export interface ClientProgram {
   network?: string | null
   createdAt: string
   source?: string
-  /** Affiliate Score, computed at build time from the stored program. */
-  score: number
+  /** The program's OAS before the freshness check (oasCell in oas.ts); absent while not scored. */
+  oas?: OasCell
   /**
    * Commission order key, computed at build time by commissionRank: it reads
    * `kind`, which this registry leaves out. 0 for unpublished, tiered, hybrid,
@@ -65,7 +66,7 @@ interface SearchOptions {
 
 // Paused, discontinued and no_program entries are not listed or ranked; their own page still renders.
 // build-registry writes `status` only when it is not active. Through `unknown`:
-// the committed client-registry.json can predate a field (`score`), and
+// the committed client-registry.json can predate a field (`oas`), and
 // prebuild and predev regenerate it before anything reads it.
 export const allPrograms = registryData.programs as unknown as ClientProgram[]
 export const programs = allPrograms.filter((p) => !p.status)
@@ -75,13 +76,14 @@ export function getProgram(slug: string): ClientProgram | undefined {
   return programs.find((program) => program.slug === slug)
 }
 
-/**
- * Precomputed by build-registry with the site's own affiliateScore, which
- * reads the description, agent prompt and signup URL that this registry
- * leaves out, so the score cannot be recomputed here.
- */
-export function affiliateScore(program: ClientProgram): number {
-  return program.score
+/** The OAS the program page shows, or null ("OAS in progress"): the same rule (oas-shown.ts). */
+export function programOas(program: ClientProgram, today: Date = new Date()): number | null {
+  return shownOas(program.oas, today)
+}
+
+/** OAS high to low, no OAS after, then commission: the server's byOas (programs.ts). */
+export function byOas(a: ClientProgram, b: ClientProgram): number {
+  return compareByOas(a, b, (p) => programOas(p), (p) => p.commissionRank)
 }
 
 /**
@@ -178,12 +180,12 @@ export function searchPrograms(
           compareText(b.createdAt, a.createdAt) ||
           (sourceWeight[b.source ?? ""] ?? 2) -
             (sourceWeight[a.source ?? ""] ?? 2) ||
-          affiliateScore(b) - affiliateScore(a)
+          byOas(a, b)
       )
     }
     default:
       if (!options.query) {
-        return results.sort((a, b) => affiliateScore(b) - affiliateScore(a))
+        return results.sort(byOas)
       }
       {
         const query = options.query.toLowerCase()
@@ -191,7 +193,7 @@ export function searchPrograms(
           (a, b) =>
             Number(b.name.toLowerCase().includes(query)) -
               Number(a.name.toLowerCase().includes(query)) ||
-            affiliateScore(b) - affiliateScore(a)
+            byOas(a, b)
         )
       }
   }

@@ -20,7 +20,7 @@ export default function EmbedPage(): JSX.Element {
         <header className="mb-10">
           <p className="text-sm font-medium uppercase tracking-wide text-blue-600">Embed</p>
           <h1 className="mt-2 text-4xl font-semibold tracking-tight">
-            Show your Affiliate Score anywhere.
+            Show your OAS anywhere.
           </h1>
           <p className="mt-3 text-lg text-neutral-600">
             SVG badges, interactive widgets, and direct API reads. Free for public use.
@@ -31,23 +31,23 @@ export default function EmbedPage(): JSX.Element {
           <Live>
             <img
               src="/api/badge/stripe"
-              alt="Stripe affiliate score"
+              alt="Stripe OAS"
               style={{ height: 22, imageRendering: "pixelated" }}
             />
             <img
               src="/api/badge/stripe?theme=dark"
-              alt="Stripe affiliate score (dark)"
+              alt="Stripe OAS (dark)"
               style={{ height: 22 }}
             />
             <img src="/api/badge/stripe?style=card" alt="Stripe card" style={{ height: 88 }} />
           </Live>
           <Snippet lang="md">
-            {`![Affiliate Score](https://openaffiliate.dev/api/badge/stripe)
-![Affiliate Score](https://openaffiliate.dev/api/badge/stripe?theme=dark)
-![Affiliate Score](https://openaffiliate.dev/api/badge/stripe?style=card)`}
+            {`![OAS](https://openaffiliate.dev/api/badge/stripe)
+![OAS](https://openaffiliate.dev/api/badge/stripe?theme=dark)
+![OAS](https://openaffiliate.dev/api/badge/stripe?style=card)`}
           </Snippet>
           <Snippet lang="html">
-            {`<img src="https://openaffiliate.dev/api/badge/stripe" alt="Affiliate Score" />`}
+            {`<img src="https://openaffiliate.dev/api/badge/stripe" alt="OAS" />`}
           </Snippet>
           <Note>
             Query params: <code>variant</code> (score | commission | cookie) ·{" "}

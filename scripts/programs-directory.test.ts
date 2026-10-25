@@ -90,8 +90,8 @@ test("homepage networks: every live network once, A to Z by display name ignorin
   assert.equal(list.reduce((a, n) => a + n.programs.length, 0), programs.filter(isLive).length)
 })
 
-test("homepage Rankings: the OAS top 5 once scores exist, Affiliate Score before", () => {
-  assert.equal(homepageSets(programs, []).by, "affiliate-score")
+test("homepage Rankings: the OAS top 5 once scores exist, commission order before", () => {
+  assert.equal(homepageSets(programs, []).by, "commission")
   const live = programs.filter((p) => isLive(p) && p.verified).slice(0, 7)
   const scores: OasScore[] = live.map((p, i) => ({
     slug: p.slug, version: "v1", oas: 90 - i, transparency: 60, partner_value: 30 - i, checked_at: "2026-10-13", page_url: "https://x.example/a",
@@ -101,7 +101,7 @@ test("homepage Rankings: the OAS top 5 once scores exist, Affiliate Score before
   assert.equal(sets.by, "oas")
   assert.deepEqual(sets.rankings.map((p) => p.slug), live.slice(0, 5).map((p) => p.slug))
   assert.deepEqual(sets.ranks, [1, 2, 3, 4, 5])
-  // Each OAS row carries its score's verified date (the tie-break's date); the Affiliate Score fallback has none.
+  // Each OAS row carries its score's verified date (the tie-break's date); the commission fallback has none.
   assert.deepEqual(sets.verified, sets.rankings.map((p) => scores.find((x) => x.slug === p.slug)!.checked_at))
   assert.deepEqual(homepageSets(programs, []).verified, [null, null, null, null, null])
   const tied = homepageSets(programs, scores.map((s) => ({ ...s, oas: 100 })), new Date("2026-10-20T00:00:00Z"))

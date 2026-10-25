@@ -58,7 +58,7 @@ export const openapi = {
           parameter("type", "Filter by commission type.", { type: "string", enum: ["recurring", "one-time", "tiered", "hybrid"] }),
           parameter("verified", "true restricts results to verified entries; false or omission does not filter verification status.", { type: "boolean", default: false }),
           parameter("include_description", "Include description text in keyword matching (descriptions are always returned).", { type: "boolean", default: false }),
-          parameter("sort", "Result order. relevance uses keyword relevance when q is present.", { type: "string", enum: ["relevance", "az", "za", "commission_desc", "newest"], default: "relevance" }),
+          parameter("sort", "Result order. relevance puts name matches first when q is present, then orders by OAS (programs not scored yet after, by commission).", { type: "string", enum: ["relevance", "az", "za", "commission_desc", "newest"], default: "relevance" }),
           parameter("limit", "Maximum results, capped at 500. Zero or omission means all remaining results.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
           parameter("offset", "Skip this many results before applying limit.", { type: "integer", minimum: 0, maximum: Number.MAX_SAFE_INTEGER, default: 0 }),
         ],
