@@ -16,7 +16,6 @@ payout:
   frequency: "on-request"
 
 signup_url: "https://finestcv.com/affiliate"
-approval: "auto"
 
 short_description: "CV review and job search tools with 20% commission on a new customer's first eligible upgrade."
 description: "FinestCV helps job seekers review CVs, compare them with target roles, build stronger applications, track jobs and prepare for interviews. Affiliates earn 20% of collected revenue on the first eligible paid upgrade by a newly referred customer. Commission is held for 30 days. Affiliates can request a manually reviewed PayPal withdrawal once available earnings reach £50. Existing customers, self-referrals, customers attributed to another affiliate, and refunded or charged-back purchases do not qualify."
