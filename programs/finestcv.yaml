@@ -10,6 +10,8 @@ commission:
   mode: "percentage"
   value: 20
   currency: "GBP"
+cookie_days: 30
+
 payout:
   minimum: 50
   currency: "GBP"
