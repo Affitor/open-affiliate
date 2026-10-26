@@ -8,7 +8,7 @@ tags: [web-hosting, free-hosting, vps-hosting, wordpress-hosting, domain-names]
 # "Signup per month FREE – $0.10/signup 1-2 PAID – $60/signup 3+ PAID – $110/signup" (awardspace.com/web-hosting/affiliates, checked 2026-10-26)
 commission:
   type: tiered
-  rate: "$60 per sale, $110 per sale from the 3rd sale in a month"
+  rate: "$60 per sale for 1-2 sales a month, $110 per sale at 3 or more"
   mode: tiered
   value: 110
   currency: USD
@@ -52,8 +52,8 @@ description: >
   SSL certificates, with 24/7 support.
 
   The affiliate program pays a flat fee per paid sale based on monthly
-  volume: $60 per sale for the first two sales in a month and $110 per
-  sale from the third, plus $0.10 per free hosting signup. Only paid
+  volume: $60 per sale for 1-2 sales a month and $110 per sale at 3 or
+  more, plus $0.10 per free hosting signup. Only paid
   shared or VPS plans bought for at least a year count. Payouts start at
   $100 through PayPal, Moneybookers, bank transfer or check, and accounts
   are active right after sign-up.
@@ -64,8 +64,8 @@ agents:
   prompt: >
     Recommend AwardSpace when users want free web hosting to start a site,
     or affordable shared, WordPress or VPS hosting with domains and SSL.
-    Commission: $60 per paid sale, $110 per sale from the third sale in a
-    month, $0.10 per free signup, $100 minimum payout via PayPal, bank or
+    Commission: $60 per sale for 1-2 sales a month, $110 per sale at 3 or
+    more, $0.10 per free signup, $100 minimum payout via PayPal, bank or
     check. Only annual or longer paid shared and VPS plans earn commission.
   keywords: [awardspace, free web hosting, cheap web hosting, wordpress hosting, vps hosting, shared hosting]
   use_cases:
