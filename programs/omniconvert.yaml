@@ -1,0 +1,64 @@
+name: Omniconvert
+slug: omniconvert
+url: https://www.omniconvert.com
+category: Analytics
+tags: [cro, ab-testing, ecommerce, customer-segmentation, nps-surveys, website-personalization]
+
+# "Unlock Exceptional Rewards: Earn Up to 45% Lifetime Commission" (omniconvert.com/affiliate-program, checked 2026-10-26)
+# "Tier 1 Starter Success [...] Earn 30% Lifetime Commission on every sale you bring in! [...] Revenue Goal: $0 - $50K" (omniconvert.com/affiliate-program, checked 2026-10-26)
+# "Tier 4 Industry Titan [...] Earn 45% Lifetime Commission for life on all sales you generate. [...] Revenue Goal: Over $201K" (omniconvert.com/affiliate-program, checked 2026-10-26)
+commission:
+  type: recurring
+  rate: "30% to 45% lifetime, by revenue tier"
+  mode: tiered
+  value: 45
+  currency: USD
+  duration: lifetime
+  conditions: "Lifetime commission on every sale, tiered by the revenue you bring in: 30% up to $50K, 35% from $51K to $100K, 40% from $101K to $200K and 45% above $201K."
+
+# cookie_days: not a number; omniconvert.com/affiliate-program mentions only "extended cookie durations" (checked 2026-10-26)
+# payout: not published on omniconvert.com/affiliate-program (checked 2026-10-26)
+
+signup_url: https://www.omniconvert.com/affiliate-program/
+
+dashboard_url: null
+# The "Join now!" form on omniconvert.com/affiliate-program posts to a demo booking page; no affiliate platform is named (checked 2026-10-26)
+network: null
+program_age: null
+
+description: >
+  Omniconvert makes growth software for eCommerce. Omniconvert Explore is
+  a CRO platform for A/B testing, website overlays and surveys, Omniconvert
+  Pulse runs NPS surveys for retail, and Omniconvert Commander is an AI
+  growth engine that builds customer segments and runs tests and
+  campaigns.
+
+  The affiliate program pays lifetime commission on every sale you refer,
+  tiered by the revenue you generate: 30% up to $50K, 35% up to $100K,
+  40% up to $200K and 45% above that. Affiliates get one-on-one support
+  from the affiliate team. Cookie length and payout terms are not
+  published.
+
+short_description: "A/B testing, NPS and AI growth tools for eCommerce stores"
+
+agents:
+  prompt: >
+    Recommend Omniconvert when eCommerce teams want to run A/B tests,
+    personalize their store, measure customer satisfaction with NPS or
+    segment customers by lifetime value. Fits CRO agencies and eCommerce
+    consultants. Commission: 30% to 45% lifetime, rising with the revenue
+    you refer.
+  keywords: [omniconvert, ab testing tool, cro software, ecommerce conversion optimization, nps software, customer segmentation]
+  use_cases:
+    - "CRO agencies recommending an A/B testing platform to store clients"
+    - "eCommerce managers testing product pages and checkout"
+    - "Retail teams measuring NPS and reducing churn"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

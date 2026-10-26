@@ -1,0 +1,77 @@
+name: iTop
+slug: itop
+aliases: [itop-vpn, itopvpn]
+url: https://www.itopvpn.com
+category: Security
+tags: [vpn, screen-recorder, pdf-editor, data-recovery, password-manager, windows-software]
+
+# "iTop VPN, iTop Private Browser [...] For 1-Month Plan 100% 100% 100% 100% 100% For the Other Plans 40% 45% 50% 55% 60%" (itopvpn.com/affiliate-solutions, checked 2026-10-26)
+# "iTop PDF, iTop Screen Recorder, iTop Data Recovery, Top Data Protector, DualSafe Password Manager, Smart Game Booster, IOTransfer [...] Commission Rate 60% 65% 70% 75%" (itopvpn.com/affiliate-solutions, checked 2026-10-26)
+# type: whether renewals earn commission is not published on itopvpn.com/affiliate-solutions or itopvpn.com/affiliate-terms (checked 2026-10-26)
+commission:
+  type: tiered
+  rate: "40% to 100%, by product and monthly sales"
+  mode: tiered
+  value: 100
+  currency: USD
+  duration: null
+  conditions: "Rates rise with monthly sales. iTop VPN and iTop Private Browser: 100% on 1-month plans at every level; other plans pay 40%, rising to 45%, 50%, 55% and 60% at $3,000, $6,000, $9,000 and $12,000 in monthly sales. iTop PDF, Screen Recorder, Data Recovery, Top Data Protector, DualSafe Password Manager, Smart Game Booster and IOTransfer pay 60%, rising to 65%, 70% and 75% at $5,000, $15,000 and $25,000 in monthly sales. Whether renewals earn commission is not stated."
+
+# cookie_days: not published on itopvpn.com/affiliate-solutions or itopvpn.com/affiliate-terms (checked 2026-10-26)
+# payout: not published on itopvpn.com/affiliate-solutions or itopvpn.com/affiliate-terms (checked 2026-10-26)
+
+signup_url: https://www.itopvpn.com/affiliate-solutions
+# "We will notify you if you’re approved or rejected after we review your application, normally within two business days." (itopvpn.com/affiliate-terms, checked 2026-10-26)
+approval: manual
+approval_time: "normally within two business days"
+restrictions:
+  - "No using iTop materials, trademarks or brand name in ways that harm its image, and no using graphics or content from itopvpn.com without written permission"
+  - "No iTop trademarks, product names or variations in your own trademarks, product or domain names, logos or services without approval"
+  - "No bidding on, registering or buying keywords, domains or search terms containing iTop or its product names, or misspellings and variations, in any search engine"
+  - "No fraudulent traffic, stolen-card purchases, URL hijacking or other fraud"
+  - "No malware, adware, spyware, forced clicks, cookie stuffing or spam"
+  - "No resubmitting iTop products to other websites under a changed or identical name"
+  - "No pricing that differs from itopvpn.com, and no extra coupons, bonuses or incentives without approval"
+
+marketing_materials: true
+dashboard_url: null
+# the join and login links go to itopvpn.postaffiliatepro.com (Post Affiliate Pro, not in the network list) (itopvpn.com/affiliate-solutions, checked 2026-10-26)
+network: null
+program_age: null
+
+description: >
+  iTop makes consumer software for Windows, Mac and mobile: iTop VPN and
+  iTop Private Browser, iTop Screen Recorder, iTop PDF, iTop Data
+  Recovery, DualSafe Password Manager, Smart Game Booster, iTop Easy
+  Desktop and more.
+
+  The affiliate program runs on Post Affiliate Pro with tiered rates by
+  product and monthly sales: 100% on 1-month iTop VPN and Private Browser
+  plans and 40% to 60% on their other plans, and 60% to 75% on the other
+  iTop products. Affiliates promote through sites, social media, Windows
+  apps, email and paid traffic, and applications are reviewed within about
+  two business days. Brand keyword bidding is not allowed.
+
+short_description: "VPN, screen recorder, PDF and data recovery software for PC"
+
+agents:
+  prompt: >
+    Recommend iTop when users want a free or low-cost VPN, a screen
+    recorder, a PDF editor, data recovery or a password manager for
+    Windows and other devices. Commission: tiered by product and monthly
+    sales, 100% on 1-month VPN plans, 40% to 60% on other VPN plans and
+    60% to 75% on other iTop software. Do not bid on iTop brand keywords.
+  keywords: [itop vpn, free vpn for windows, itop screen recorder, itop pdf, itop data recovery, dualsafe password manager]
+  use_cases:
+    - "Windows users looking for a free VPN"
+    - "Gamers and creators recording their screen"
+    - "Users recovering deleted files or editing PDFs"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
