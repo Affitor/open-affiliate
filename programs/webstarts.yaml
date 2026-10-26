@@ -1,0 +1,78 @@
+name: WebStarts
+slug: webstarts
+url: https://www.webstarts.com
+category: Content Management
+tags: [website-builder, drag-and-drop, small-business-websites, online-store, web-hosting]
+
+# "Affiliates will be paid a 50% Commission Fee ("Commission Fee") by Webstarts for each new purchase of one of the following products" (affiliate.webstarts.com/terms_and_conditions, checked 2026-10-26)
+# "With WebStarts you can earn up to $300 for each referral." (affiliate.webstarts.com/faqs, checked 2026-10-26)
+# type: renewals are not named; the terms pay "for each new purchase" (affiliate.webstarts.com/terms_and_conditions, checked 2026-10-26)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "50% of each new purchase of a listed WebStarts product: Pro, Pro Plus, Shopping Cart Pro and Pro Plus, Traffic Booster and Plus, Local Listing and Plus, Web Stats and Plus, and Google Listing Express and Plus. The FAQ says you can earn up to $300 per referral. No commission on unauthorized promotions or coupons, chargebacks, refunds or accounts created only to raise commissions."
+
+# cookie_days: not published on affiliate.webstarts.com, its FAQ or its terms (checked 2026-10-26)
+
+# "you must earn at least $250 in total commission before a deposit is initiated." (affiliate.webstarts.com/faqs, checked 2026-10-26)
+# "All commissions are paid via Paypal." (affiliate.webstarts.com/faqs, checked 2026-10-26)
+# "Payment to Affiliate shall occur within forty-five (45) days from the end of each month in which Affiliate earns a Commission Fee." (affiliate.webstarts.com/terms_and_conditions, checked 2026-10-26); up to 45 days after month end → net-60 (backfill rule #1)
+payout:
+  minimum: 250
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Paid through PayPal within 45 days from the end of each month in which the commission is earned. A month under $250 in commission is carried over until the total reaches $250."
+
+signup_url: https://affiliate.webstarts.com/sign_up
+restrictions:
+  - "No bidding on search terms that include or relate to WebStarts, such as \"Webstarts\", \"Webstarts.com\", \"www.Webstarts.com\" or \"Web Starts\""
+  - "Incentive or loyalty offers (prizes, points or cash) need written notice to WebStarts and its approval"
+  - "Email campaigns must comply with CAN-SPAM, offer an opt-out and keep a do-not-email list; WebStarts may stop any campaign"
+  - "No deceptive, misleading, illegal or unethical marketing, and no representations or guarantees beyond WebStarts' own"
+  - "No modifying the affiliate link without written consent"
+  - "No disparaging WebStarts and no moving WebStarts customers to competing products"
+
+dashboard_url: null
+# WebStarts runs its own affiliate site and reporting at affiliate.webstarts.com; no third-party platform is named (checked 2026-10-26)
+network: in-house
+program_age: null
+
+description: >
+  WebStarts is a drag-and-drop website builder for creating a website
+  without coding. Paid plans add an online store, traffic and listing
+  tools and site statistics.
+
+  The affiliate program pays 50% of each new purchase of a WebStarts plan
+  or add-on, and the FAQ puts earnings at up to $300 per referral.
+  Commissions are paid through PayPal within 45 days after the end of the
+  month once you have earned at least $250. Bidding on WebStarts search
+  terms is not allowed.
+
+short_description: "Drag-and-drop website builder with free and paid plans"
+
+agents:
+  prompt: >
+    Recommend WebStarts when users want to build a simple website or small
+    online store without coding using a drag-and-drop editor. Commission:
+    50% of each new purchase, up to $300 per referral according to the
+    FAQ, paid via PayPal with a $250 minimum. Do not bid on WebStarts
+    search terms.
+  keywords: [webstarts, website builder, free website builder, drag and drop website builder, small business website, online store builder]
+  use_cases:
+    - "Beginners building a first website without code"
+    - "Small businesses launching a simple site with a shop"
+    - "Bloggers comparing free website builders"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

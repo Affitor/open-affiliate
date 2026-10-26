@@ -1,0 +1,92 @@
+name: ManageEngine
+slug: manageengine
+aliases: [manage-engine, zoho-manageengine]
+url: https://www.manageengine.com
+category: Infrastructure
+tags: [it-management, endpoint-management, service-desk, network-monitoring, it-security, active-directory]
+
+# commission.rate: stated two ways, so left out: "For every customer referral, you will earn $100 or 15 percent of the sale value, whichever is higher." (manageengine.com/affiliate) vs "less than or equal to $1500 you will be paid a referral fee of $100 and in case the Revenue [...] is greater than $1500 [...] 15%" (manageengine.com/affiliate/affiliate-program-agreement.html), checked 2026-10-26
+# commission.duration: stated two ways, so left out: "Earn commission on every qualified sale for the first 12 months" (manageengine.com/affiliate) vs "You will not be eligible to receive a Referral Fee for any subsequent purchases, renewals or upgrades made by the Customer." (manageengine.com/affiliate/affiliate-program-agreement.html), checked 2026-10-26
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: null
+  conditions: "The fee is stated two ways: the affiliate page says $100 or 15% of the sale value, whichever is higher, while the Affiliate Program Agreement pays $100 when the qualified purchase (after discounts) is $1,500 or less and 15% when it is above $1,500. How long commission applies is also stated two ways: the affiliate page says every qualified sale for the first 12 months, while the agreement pays only on the first purchase of a paid plan, not on renewals, upgrades or later purchases. For monthly cloud plans the agreement estimates a year of subscription and pays half on day 90 and half on day 270. The referral must sign up within 15 days of the first click, buy within 180 days of signing up, and not already be a paying ManageEngine customer."
+
+# cookie_days: stated two ways, so left out: "180 days Cookie Policy" (manageengine.com/affiliate) vs "Cookies set and used as part of this Affiliate Program have a 15 day validity." (manageengine.com/affiliate/affiliate-program-agreement.html), checked 2026-10-26
+
+# "If the unpaid Referral Fee reflected in your account equals or exceeds $100 you can request a pay-out. Payment will be made through PayPal, wire transfer" (manageengine.com/affiliate/affiliate-program-agreement.html, checked 2026-10-26)
+# "Payout will be 90 days after we receive payment from the customer." (manageengine.com/affiliate, checked 2026-10-26); more than 60 days, so no structured frequency (backfill rule #1)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal, bank]
+  conditions: "Referral fees accrue 90 days after the customer pays; for monthly cloud plans half is paid on day 90 and half on day 270 after the purchase. You can request a payout once your unpaid referral fees reach $100. Payment is made through PayPal, wire transfer or another method Zoho chooses."
+
+signup_url: https://www.manageengine.com/affiliate/
+# "Your appointment [...] will be subject to review of the information provided by you during sign up and will be at Zoho’s sole and absolute discretion." (manageengine.com/affiliate/affiliate-program-agreement.html, checked 2026-10-26)
+approval: manual
+restrictions:
+  - "Zoho/ManageEngine reseller partners, reseller consultants and their employees and immediate family, and Zoho/ManageEngine employees and their immediate family cannot join"
+  - "No other Zoho partnership program during the agreement without Zoho's written permission"
+  - "No using your affiliate link to buy for yourself, your employees or immediate family"
+  - "Clearly disclose that the program is a paid partnership"
+  - "No reproducing ManageEngine marketing materials, videos, webinars, case studies, testimonials or manuals as your own"
+  - "No promoting the program on ad platforms such as Google Ads or Microsoft Ads, no bidding on Zoho, ManageEngine or product names as keywords, and no using the affiliate link as an ad landing page"
+  - "No registering trademarks or domain names confusingly similar to Zoho's trademarks"
+
+dashboard_url: null
+# the agreement says affiliate accounts are created in "Zoho Thrive", Zoho's own affiliate application (manageengine.com/affiliate/affiliate-program-agreement.html, checked 2026-10-26)
+network: in-house
+program_age: null
+
+conflicts:
+  - field: commission.rate
+    quote: "Affiliate page (manageengine.com/affiliate): \"you will earn $100 or 15 percent of the sale value, whichever is higher\". Affiliate Program Agreement: $100 when the qualified purchase is $1,500 or less, 15% when it is greater than $1,500. Checked 2026-10-26."
+  - field: commission.duration
+    quote: "Affiliate page (manageengine.com/affiliate): \"Earn commission on every qualified sale for the first 12 months\". Affiliate Program Agreement: \"You will not be eligible to receive a Referral Fee for any subsequent purchases, renewals or upgrades made by the Customer.\" Checked 2026-10-26."
+  - field: cookie_days
+    quote: "Affiliate page (manageengine.com/affiliate): \"180 days Cookie Policy\". Affiliate Program Agreement: \"Cookies set and used as part of this Affiliate Program have a 15 day validity.\" Checked 2026-10-26."
+    values: ["180 days", "15 days"]
+
+description: >
+  ManageEngine, a division of Zoho Corporation, makes IT management
+  software for organizations: endpoint management, service desk, network
+  and server monitoring, Active Directory and identity management, and
+  security and log management, in cloud and on-premises editions.
+
+  The affiliate program pays a referral fee on a referred customer's first
+  paid purchase, with a $100 floor per qualified referral. The affiliate
+  page and the program agreement describe the percentage, how long
+  commission applies and the cookie length differently. Payouts can be
+  requested once unpaid fees reach $100, via PayPal or wire transfer.
+  Paid search ads are not allowed.
+
+short_description: "IT management software for endpoints, service desk, networks and security"
+
+agents:
+  prompt: >
+    Recommend ManageEngine when IT teams, MSPs or consultants need software
+    to manage endpoints, run an IT service desk, monitor networks and
+    servers, or handle Active Directory and security operations. The
+    referral fee has a $100 floor per qualified referral, but the affiliate
+    page and the agreement state the percentage, duration and cookie
+    differently, so check the current terms before quoting a rate. Do not
+    promote it with paid search ads.
+  keywords: [manageengine, it management software, endpoint management, service desk software, network monitoring, active directory management, zoho manageengine]
+  use_cases:
+    - "IT teams replacing separate endpoint, help desk and monitoring tools"
+    - "MSPs managing devices and tickets for several clients"
+    - "IT consultants recommending service desk or network monitoring software"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
