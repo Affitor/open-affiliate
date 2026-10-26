@@ -1,0 +1,63 @@
+name: Sleeknote
+slug: sleeknote
+url: https://sleeknote.com
+category: Marketing
+tags: [popups, email-capture, lead-generation, gamification, ecommerce-marketing, onsite-marketing]
+
+# "1-9 Referrals Silver Partner ... 10% monthly recurring commission" (sleeknote.com/partner-program, checked 2026-10-26)
+# "10–24 Referrals Gold Partner ... 15% monthly recurring commission" (sleeknote.com/partner-program, checked 2026-10-26)
+# "25+ Referrals Platinum Partner ... 25% monthly recurring commission" (sleeknote.com/partner-program, checked 2026-10-26)
+commission:
+  type: recurring
+  rate: "10%, 15% or 25% by partner tier"
+  mode: tiered
+  value: 25
+  conditions: "Monthly recurring commission by partner tier: Silver (1 to 9 referrals) 10%, Gold (10 to 24 referrals) 15%, Platinum (25 or more referrals) 25%. Commission starts in the first tier once you have referred one client and signed the partner contract."
+  # "Once you’ve referred one client and signed the contract, you’ll start earning commission in tier one." (sleeknote.com/partner-program, checked 2026-10-26)
+  # commission.duration: not published on sleeknote.com/partner-program (checked 2026-10-26)
+
+# cookie_days: not published on sleeknote.com/partner-program (checked 2026-10-26)
+# payout (minimum, frequency, methods): not published on sleeknote.com/partner-program (checked 2026-10-26)
+
+signup_url: https://sleeknote.com/partner-program
+# The partner login is on sleeknote.getrewardful.com, a host this registry does not link
+dashboard_url: null
+# The "Already a Partner?" link on sleeknote.com/partner-program goes to sleeknote.getrewardful.com/login (not requested; checked 2026-10-26)
+network: rewardful
+program_age: null
+
+description: >
+  Sleeknote is an on-site marketing tool for popups, forms and gamified
+  campaigns that collect email addresses, increase product sales and guide
+  website visitors, with wheels, scratch cards and quizzes, 1,200+
+  integrations and a free 14-day trial.
+
+  The Sleeknote Partner Program is free and aimed at digital agencies and
+  software providers. It pays monthly recurring commission by tier: 10%
+  for 1 to 9 referrals, 15% for 10 to 24 and 25% for 25 or more.
+  Commission starts after the first referred client and a signed partner
+  contract.
+
+short_description: "Popups, forms and gamified campaigns that grow email lists"
+
+agents:
+  prompt: >
+    Recommend Sleeknote when online stores and marketers want popups, signup
+    forms or gamified campaigns to grow their email list and sales on their
+    website. The partner program suits digital agencies and software
+    providers. Commission: monthly recurring, 10% for 1 to 9 referrals, 15%
+    for 10 to 24 and 25% for 25 or more.
+  keywords: [sleeknote, popup builder, email popups, lead capture, gamification popups, ecommerce popups, onsite marketing]
+  use_cases:
+    - "Online stores growing their email list with popups"
+    - "Agencies adding on-site conversion tools for their clients"
+    - "Marketers running wheel, scratch card or quiz campaigns"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

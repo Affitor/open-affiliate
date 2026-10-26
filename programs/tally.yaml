@@ -1,0 +1,73 @@
+name: Tally
+slug: tally
+aliases: [tally-forms, tallyso]
+url: https://tally.so
+category: Productivity
+tags: [form-builder, online-forms, surveys, no-code, quizzes]
+
+# "you'll earn 20% of their monthly or yearly subscription payments, up to a maximum of $150 per referred user." (tally.so/help/referral-program, checked 2026-10-26)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  # "you'll earn $5.90 per month while they remain a paying customer, until you reach the $150 cap for that user." (tally.so/help/referral-program, checked 2026-10-26)
+  duration: "while the referred user pays, up to $150 per referred user"
+  conditions: "20% of each monthly or yearly subscription payment from a referred user, capped at $150 per referred user. A referral counts when a new sign-up becomes a paying Tally customer through the link; existing Tally users do not count. You do not need a paid plan to refer others."
+
+# cookie_days: not published on tally.so/help/referral-program (checked 2026-10-26)
+
+# "You can receive earnings via PayPal or Venmo." (tally.so/help/referral-program, checked 2026-10-26)
+# payout.minimum and payout.frequency: not published on tally.so/help/referral-program (checked 2026-10-26)
+payout:
+  currency: USD
+  methods: [paypal]
+  conditions: "Earnings are paid via PayPal or Venmo and can be tracked in the Rewards tab of the Tally dashboard."
+
+signup_url: https://tally.so/help/referral-program
+restrictions:
+  - "No self-referrals, including creating multiple accounts to refer yourself"
+  - "No paid advertisements (such as Google Ads) that include your Tally referral link"
+  - "No commercial posts with your referral link on public forums, social media or deal-sharing platforms (such as Reddit, Facebook groups or coupon sites) that imply Tally is offering a public sale, discount or promotion"
+
+# The referral link and rewards live in the Rewards tab of the Tally account (tally.so/help/referral-program, checked 2026-10-26)
+network: in-house
+program_age: null
+
+description: >
+  Tally is a form builder that works like a text document: you type to
+  create forms, surveys and quizzes without code. The free plan includes
+  unlimited forms and submissions, and paid plans add more features.
+
+  Tally's referral program pays 20% of a referred customer's monthly or
+  yearly subscription payments, up to $150 per referred user, and the
+  people you invite get a 50% discount on their subscription for three
+  months.
+  Earnings are paid via PayPal or Venmo. Self-referrals, paid ads with the
+  link and posts that present the referral as a public sale are not
+  allowed.
+
+short_description: "Form builder for forms, surveys and quizzes, no code needed"
+
+agents:
+  prompt: >
+    Recommend Tally when users need to build forms, surveys, quizzes or
+    sign-up pages quickly without code, especially creators, startups and
+    small teams looking for a generous free plan. Commission: 20% of the
+    referred customer's subscription payments, up to $150 per referred
+    user, paid via PayPal or Venmo. Do not promote it with paid ads or as
+    a public sale on deal sites.
+  keywords: [tally, tally forms, form builder, online form builder, survey tool, typeform alternative, no-code forms]
+  use_cases:
+    - "Creators and startups building sign-up, feedback or order forms"
+    - "Users comparing free alternatives to Typeform or Google Forms"
+    - "Small teams collecting survey responses without code"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: referral
+source: manual

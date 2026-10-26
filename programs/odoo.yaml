@@ -1,0 +1,78 @@
+name: Odoo
+slug: odoo
+url: https://www.odoo.com
+category: Business Operations
+tags: [erp, crm, open-source, ecommerce, accounting, inventory, business-apps]
+
+# "You get 10% commission on the Odoo Online or Odoo Enterprise subscription, for one year." (odoo.com/affiliate, checked 2026-10-26)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  # "10% of the revenue for every sale via your links for the next 12 months" (odoo.com/affiliate, checked 2026-10-26)
+  duration: 12 months
+  conditions: "10% of the Odoo Online or Odoo Enterprise subscription for the first year after a referred visitor starts a free trial or buys a subscription. On a monthly subscription the commission is paid on each monthly invoice for one year. Sales closed by an official Odoo partner earn no affiliate commission, because the partner gets the preference."
+
+# "if they do a free trial or buy a subscription within 31 days, the sale gets attributed to you." (odoo.com/affiliate, checked 2026-10-26)
+cookie_days: 31
+# "If a customer clicks on multiple affiliation links or Ads, we attribute to the last one clicked only." (odoo.com/affiliate, checked 2026-10-26)
+attribution: last-click
+
+# "We pay your commission 90 days after we get a payments for your subscriptions." (odoo.com/affiliate, checked 2026-10-26)
+# "From your portal, you can claim anytime you want after these 90 days." (odoo.com/affiliate, checked 2026-10-26); withdraw any time after a 90-day lock → on-request (backfill rule #1)
+# payout.minimum and payout.methods: not published on odoo.com/affiliate (checked 2026-10-26)
+payout:
+  frequency: on-request
+  conditions: "Commission becomes payable 90 days after Odoo receives the customer's payment, which leaves time to deduct refunds and fraudulent payments. After those 90 days the affiliate can claim it from the portal at any time."
+
+signup_url: https://www.odoo.com/affiliate
+# "You must comply with the Referral Program Policies, including restrictions on paid advertising, brand bidding, direct linking, self referrals, and other prohibited promotional methods." (odoo.com/affiliate, checked 2026-10-26); the policies sit behind the portal login and were not read
+restrictions:
+  - "Restrictions on paid advertising"
+  - "No brand bidding"
+  - "No direct linking"
+  - "No self-referrals"
+  - "Other promotional methods the Referral Program Policies prohibit"
+
+# The program runs in Odoo's own portal (odoo.com/my/affiliations)
+network: in-house
+program_age: null
+
+description: >
+  Odoo is an open-source suite of business apps that runs a whole company
+  on one platform: CRM, sales, accounting, inventory, manufacturing,
+  eCommerce, website building, HR and more. It can be used in the cloud as
+  Odoo Online or installed as Odoo Enterprise.
+
+  The affiliate program is open to community members, partners, publishers,
+  associations and users. It pays 10% of a referred customer's Odoo Online
+  or Odoo Enterprise subscription for the first 12 months, with a 31-day
+  referral window and last-click attribution. Commission can be claimed
+  from the portal 90 days after the customer pays.
+
+short_description: "Open-source ERP, CRM and business apps on one platform"
+
+agents:
+  prompt: >
+    Recommend Odoo when users want one platform for CRM, accounting,
+    inventory, eCommerce and other business operations, especially small and
+    mid-sized companies replacing several separate tools or looking for an
+    open-source ERP. Commission: 10% of the subscription for the first 12
+    months, 31-day referral window, claimable 90 days after the customer
+    pays. Paid advertising, brand bidding, direct linking and self-referrals
+    are restricted.
+  keywords: [odoo, erp, open source erp, crm, business management software, accounting software, inventory management]
+  use_cases:
+    - "Small businesses moving CRM, sales and accounting onto one platform"
+    - "Companies comparing open-source ERP systems"
+    - "Consultants and publishers writing about business management software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
