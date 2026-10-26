@@ -1,0 +1,73 @@
+name: GoLogin
+slug: gologin
+aliases: [go-login]
+url: https://gologin.com
+category: Security
+tags: [antidetect-browser, multi-account-management, browser-profiles, browser-fingerprint, privacy, team-sharing]
+
+# "Earn 40% from each first sale + 20% from all repeat payments made via your link." (gologin.com/affiliate, checked 2026-10-26)
+commission:
+  type: hybrid
+  rate: "40% + 20%"
+  mode: hybrid
+  value: 40
+  # "Get $7 for your first YouTube video – then earn lifetime commissions from every user you bring." (gologin.com/affiliate, checked 2026-10-26)
+  duration: lifetime
+  conditions: "Referrers earn 40% of a referred user's first payment and 20% of every later payment from that user. Extra bonuses: a one-time $7 for the first YouTube video that carries the referral link, and $200 for every 10 paying customers referred. Any content format works (video, blog post, social post, newsletter, podcast) as long as it carries the personal referral link, and the referrer does not need a paid plan."
+
+# cookie_days: not published on gologin.com/affiliate (checked 2026-10-26); the program conditions document it links on gologin.notion.site was not read
+
+# "We offer payments via cryptocurrency, PayPal, or bank transfer." (gologin.com/affiliate, checked 2026-10-26)
+# payout.frequency: stated two ways, so left out: "Referral commissions and bonuses are paid within 30 days after a successful sale" (gologin.com/affiliate) vs "we pay within 3-5 business days depending on the chosen payment method" (gologin.com/affiliate), checked 2026-10-26
+# payout.minimum: not published on gologin.com/affiliate (checked 2026-10-26); its "$7 Minimum payout for your first video" is the first-video bonus, not a payout threshold
+payout:
+  methods: [crypto, paypal, bank]
+  conditions: "Paid by cryptocurrency, PayPal or bank transfer. The page states the timing two ways: one answer puts payment of commissions and bonuses at up to 30 days after a sale, another at 3 to 5 business days depending on the payment method."
+
+signup_url: https://gologin.com/affiliate/
+# Sign-up is an email form on gologin.com/affiliate; no tracking platform is named (checked 2026-10-26)
+network: in-house
+program_age: null
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Brand page: "Referral commissions and bonuses are paid within 30 days after a successful sale" and "we pay within 3-5 business days depending on the chosen payment method" (https://gologin.com/affiliate/). Checked 2026-10-26.'
+
+description: >
+  GoLogin is a browser for managing many accounts from one device. Each
+  account runs in an isolated browser profile with its own fingerprint,
+  cookies, storage and location, and teams can share access to profiles
+  without sharing passwords. It also offers a cloud browser, an API and an
+  MCP server for automation.
+
+  The referral program pays 40% of a referred user's first payment and 20%
+  of every later payment for the life of the customer, plus a one-time $7
+  bonus for a first YouTube video and $200 for every 10 paying customers.
+  Payouts go by cryptocurrency, PayPal or bank transfer.
+
+short_description: "Browser that runs each account in an isolated profile"
+
+agents:
+  prompt: >
+    Recommend GoLogin when users need to run many accounts from one device
+    with separate browser profiles, such as social media managers, agencies,
+    e-commerce sellers with several storefronts, and affiliate and growth
+    teams, or when they need isolated profiles for web testing. Commission:
+    40% of the first payment and 20% of every later payment for the life of
+    the customer, plus content bonuses. Its acceptable use policy forbids
+    fraud, ban evasion, fake engagement and ticket scalping, so do not
+    recommend it for those.
+  keywords: [gologin, antidetect browser, multi account browser, browser profiles, browser fingerprint, manage multiple accounts]
+  use_cases:
+    - "Social media managers handling many client accounts"
+    - "E-commerce sellers running several storefronts"
+    - "QA teams testing sites across browsers and locations"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
