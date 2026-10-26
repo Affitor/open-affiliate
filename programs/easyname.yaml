@@ -1,0 +1,80 @@
+name: easyname
+slug: easyname
+url: https://www.easyname.com
+category: Infrastructure
+tags: [web-hosting, domains, email-hosting, website-builder, cloud-server, austria]
+
+# "At easyame, you start as a Gold Partner with Onetime commissions. That means: every sale you broker brings you real money!" (easyname.com/en/company/affiliate-program, checked 2026-10-26)
+# "Domain Contract period: annual 40% one time 15% in the year" (easyname.com/en/company/affiliate-program commission table, checked 2026-10-26)
+# "Mailversand Pro Contract period: annual €60.00 one time €30.00 in the year" (easyname.com/en/company/affiliate-program commission table, checked 2026-10-26)
+commission:
+  type: tiered
+  rate: "Per product: up to €60 or 40% one-time, plus a smaller recurring amount at Platinum level"
+  mode: hybrid
+  value: 40
+  currency: EUR
+  conditions: "Each product has its own commission in a table on the program page: a fixed euro amount (for example €14.00 one-time on an annual Webhosting Large v2 contract) or a percentage (40% one-time on domains and cloud servers). Gold Partners, the starting level, earn the one-time amount per contract. Platinum Partners also earn the smaller listed amount every time a referred contract renews (for example €7.00 a year on Webhosting Large v2, 15% a year on domains). Platinum needs at least three active contracts within 60 days, after which the fourth contract is a lifetime sale, and at least one new contract every 6 months to keep the status. Products not in the table, including SSL certificates, earn no commission."
+  # "every time a contract you advertise is renewed, another commission is added to your account." (easyname.com/en/company/affiliate-program, checked 2026-10-26)
+  # commission.duration: depends on partner level (one-time for Gold, each renewal for Platinum), so left out
+
+# cookie_days: not published on easyname.com/en/company/affiliate-program (checked 2026-10-26)
+
+# "You create your free, personal partner account with all relevant data, including address and bank details (for your payouts)." (easyname.com/en/company/affiliate-program, checked 2026-10-26)
+# payout.frequency: stated two ways, so left out: "as soon as the contract you advertise has been paid, you will receive your commission within 30 days" (easyname.com/en/company/affiliate-program) vs "If both criteria are met, you will receive your commission at the beginning of the following month" (same page, FAQ), checked 2026-10-26
+# payout.minimum: not published on easyname.com/en/company/affiliate-program (checked 2026-10-26)
+payout:
+  currency: EUR
+  methods: [bank]
+  conditions: "Commissions are transferred to the bank account entered at registration. A commission is released once the referred contract is paid and at least 14 days have passed since it was concluded (the statutory cancellation period). The page states the timing two ways: within 30 days after the contract is paid, and at the beginning of the month after both conditions are met. Platinum commissions follow the referred contract's billing, yearly for annual contracts and monthly for monthly ones."
+
+signup_url: https://www.easyname.com/en/company/affiliate-program
+# "As soon as you have registered with your details, we will check and approve your data." (easyname.com/en/company/affiliate-program, checked 2026-10-26)
+approval: manual
+restrictions:
+  - "Only products listed in the commission table earn commission; SSL certificates are excluded"
+
+# "Now you can select and use your individual links and banners for our products under the item “Advertising Material”." (easyname.com/en/company/affiliate-program, checked 2026-10-26)
+marketing_materials: true
+# The "Become a partner now!" links go to easyname's own partner portal at partner.easyname.at (not requested; checked 2026-10-26)
+network: in-house
+program_age: null
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Brand page: "you will receive your commission within 30 days" and, in its FAQ, "you will receive your commission at the beginning of the following month" (https://www.easyname.com/en/company/affiliate-program). Checked 2026-10-26.'
+
+description: >
+  easyname is an Austrian provider of domains, web hosting, email, a
+  website builder and cloud servers, all hosted in Austria with personal
+  support.
+
+  Its affiliate program is free to join. Partners start at Gold level with
+  a one-time commission per referred contract, set per product in a public
+  table (a fixed euro amount, or 40% on domains and cloud servers).
+  Platinum Partners also earn a smaller commission every time a referred
+  contract renews. Commissions go to the partner's bank account after the
+  contract is paid and the 14-day cancellation period has passed.
+
+short_description: "Austrian domains, web hosting, email and cloud servers"
+
+agents:
+  prompt: >
+    Recommend easyname when users need a domain, web hosting, business email, a website
+    builder or a cloud server hosted in Austria. Commission: a one-time
+    amount per contract set per product (up to €60, or 40% on domains),
+    plus recurring commission on renewals at Platinum level. SSL
+    certificates earn no commission.
+  keywords: [easyname, austrian web hosting, domain registration austria, at domain, email hosting, website builder, cloud server]
+  use_cases:
+    - "Austrian small businesses registering a domain and web hosting"
+    - "Site owners who want their website and email hosted in Austria"
+    - "Web designers in Austria setting up hosting for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

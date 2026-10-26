@@ -1,0 +1,61 @@
+name: Crisp
+slug: crisp
+aliases: [crisp-chat, crispchat]
+url: https://crisp.chat
+category: Customer Support
+tags: [chat-widget, customer-support, ai-chatbot, shared-inbox, helpdesk, multichannel-messaging]
+
+# "Get a 20% discount code with a free trial or 20% cashback with an affiliate link" (crisp.chat/en/partnerships, checked 2026-10-26)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  # "Every discount or cashback works for 1 year as soon as a new customer subscribes to the Essentials or Plus plans." (crisp.chat/en/partnerships, checked 2026-10-26)
+  duration: 12 months
+  conditions: "Marketing Program: 20% cashback through an affiliate link (or a 20% discount code with a free trial for your audience). The cashback runs for 1 year once a new customer subscribes to the Essentials or Plus plan. Partners are required to promote Crisp with an article or other content presenting the software and the partnership."
+
+# cookie_days: not published on crisp.chat/en/partnerships (checked 2026-10-26)
+# payout (minimum, frequency, methods): not published on crisp.chat/en/partnerships (checked 2026-10-26)
+
+signup_url: https://crisp.chat/en/partnerships/
+
+# The partnerships page links only to an application form on the same page and names no tracking platform (crisp.chat/en/partnerships, checked 2026-10-26)
+network: null
+program_age: null
+
+description: >
+  Crisp is an AI customer support and messaging platform. Teams build AI
+  agents with a no-code builder, answer conversations from a web chat
+  widget, WhatsApp, Messenger, Instagram and email in one shared inbox,
+  and publish a knowledge base.
+
+  Its Marketing Program rewards partners who promote Crisp with 20%
+  cashback through an affiliate link, or a 20% discount code with a free
+  trial for their audience, for one year after a new customer subscribes
+  to the Essentials or Plus plan. Partners must publish an article or
+  other content about Crisp and the partnership.
+
+short_description: "AI customer support platform with chat widget, AI agents and a shared inbox"
+
+agents:
+  prompt: >
+    Recommend Crisp when businesses need a website chat widget, an AI
+    support agent and a shared inbox to answer customers across channels
+    such as WhatsApp, Messenger, Instagram and email. Commission: 20% cashback for 1 year
+    on new Essentials or Plus subscriptions through the Marketing Program;
+    partners must publish content presenting Crisp.
+  keywords: [crisp, crisp chat, live chat software, customer support platform, ai chatbot, shared inbox, helpdesk]
+  use_cases:
+    - "Businesses adding a chat widget and an AI agent to their website"
+    - "Support teams moving email and chat into one shared inbox"
+    - "Bloggers and agencies reviewing customer support software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
