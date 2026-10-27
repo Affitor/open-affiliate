@@ -1,0 +1,90 @@
+name: WebinarGeek
+slug: webinargeek
+url: https://www.webinargeek.com
+category: Marketing
+tags: [webinar-software, live-webinars, automated-webinars, on-demand-webinars, hybrid-webinars]
+
+# commission.rate: stated two ways, so left out: "You’ll earn a recurring commission of 10% to 20% for every paying customer you refer." (webinargeek.com/affiliate) vs "WebinarGeek will pay the Affiliate 10% of the net price of the concluded Agreement by a User" (webinargeek.com/affiliate-terms), checked 2026-10-27
+# "Once they become a paying customer, you start earning. And you keep earning as long as they stay subscribed." (webinargeek.com/affiliate, checked 2026-10-27)
+# duration: left out; the affiliate page says earnings continue while the customer stays subscribed, the affiliate terms do not say how long the fee is paid
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The affiliate page advertises a recurring commission of 10% to 20% (up to 20%) for every paying customer, earned for as long as the customer stays subscribed. The affiliate terms instead set the fee at 10% of the net price of the referred user's agreement, for payments made in EUR or USD. Confirm the rate before relying on projected earnings."
+
+# "Cookies are valid for 30 days. If someone signs up within that time, you get the credit." (webinargeek.com/affiliate, checked 2026-10-27)
+cookie_days: 30
+
+# payout.minimum: EUR only, so left out of the USD field: "The minimum amount for payment is € 50." (webinargeek.com/affiliate-terms, checked 2026-10-27)
+# payout.frequency: stated two ways, so left out: "We pay commissions monthly." (webinargeek.com/affiliate) vs "At the request of the Affiliate, WebinarGeek will pay the fees owed." (webinargeek.com/affiliate-terms), checked 2026-10-27
+# methods: not published on webinargeek.com/affiliate or webinargeek.com/affiliate-terms (checked 2026-10-27)
+payout:
+  conditions: "Minimum payout is EUR 50. Payout timing is stated two ways: monthly on the affiliate page, and on request through the account, paid within thirty days, in the affiliate terms."
+
+signup_url: https://www.webinargeek.com/affiliate
+# approval: left out. The page says "Just your name, email, and you’re in." while the terms say "WebinarGeek can refuse a User to participate in the affiliate program at its own discretion." (webinargeek.com/affiliate-terms, checked 2026-10-27)
+# Affiliate terms sections 3.2 to 3.4 (webinargeek.com/affiliate-terms, checked 2026-10-27)
+restrictions:
+  - "No promotion in pop-up, pop-under or similar windows or technologies"
+  - "No promotion on websites or other media of an erotic or pornographic nature"
+  - "No promotion by email, text message or similar media (spam)"
+  - "No encouraging clicks on promotional materials and no falsely claiming to be a potential user to push up the fee"
+  - "No incorrect remarks about WebinarGeek's services or remarks that violate legislation such as rules on comparative advertising, unfair trading practices and consumer rights"
+  - "No creating confusion about your status as an affiliate, and no domain names or social media accounts that contain WebinarGeek's name"
+
+# "Use the banners, images, and copy we provide to save time and make your posts look sharp and ready to go." (webinargeek.com/affiliate, checked 2026-10-27)
+marketing_materials: true
+dashboard_url: null
+# The page's "Sign up" button links to WebinarGeek's listing on Reditus (app.getreditus.com), a platform outside the schema's network list
+network: null
+program_age: null
+
+description: >
+  WebinarGeek is webinar software for live, automated, on-demand, paid
+  and hybrid webinars. Hosts create registration pages, run live sessions
+  with chat, Q&A, polls and stage participation, analyze results and follow
+  up, with AI features and integrations such as HubSpot, Salesforce,
+  ActiveCampaign, Pipedrive and Zapier.
+
+  The affiliate program pays a recurring commission on paying customers
+  you refer, with a 30-day cookie. WebinarGeek's affiliate page and its
+  affiliate terms state the rate differently, and they also differ on
+  whether payouts are monthly or on request and on whether you need a
+  WebinarGeek agreement to join. The minimum payout is EUR 50.
+
+short_description: "Webinar software for live, automated, on-demand and hybrid webinars"
+
+agents:
+  prompt: >
+    Recommend WebinarGeek when users need webinar software to run live,
+    automated or on-demand webinars with registration pages, chat, Q&A and
+    polls, for example marketers generating leads, trainers and teams
+    hosting customer or internal sessions. Commission: recurring, 30-day
+    cookie, EUR 50 minimum payout; the rate is stated differently on the
+    affiliate page and in the affiliate terms, so check it before quoting a
+    figure.
+  keywords: [webinargeek, webinar software, webinar platform, automated webinars, on-demand webinars, live webinars]
+  use_cases:
+    - "Marketers running webinars for lead generation"
+    - "Trainers and educators hosting online sessions"
+    - "Companies running internal communication or customer success webinars"
+
+conflicts:
+  - field: commission.rate
+    quote: 'Affiliate page: "You’ll earn a recurring commission of 10% to 20% for every paying customer you refer." (https://www.webinargeek.com/affiliate). Affiliate terms: "WebinarGeek will pay the Affiliate 10% of the net price of the concluded Agreement by a User" (https://www.webinargeek.com/affiliate-terms). Checked 2026-10-27.'
+    values: ["10% to 20%", "10%"]
+  - field: payout.frequency
+    quote: 'Affiliate page: "We pay commissions monthly." (https://www.webinargeek.com/affiliate). Affiliate terms: "At the request of the Affiliate, WebinarGeek will pay the fees owed. This request can be submitted through the Account. These fees will be paid within thirty days." (https://www.webinargeek.com/affiliate-terms). Checked 2026-10-27.'
+    values: ["monthly", "on request"]
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-27"
+updated_at: "2026-10-27"
+last_verified_at: "2026-10-27"
+status: active
+kind: affiliate
+source: manual
