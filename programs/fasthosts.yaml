@@ -1,0 +1,71 @@
+name: Fasthosts
+slug: fasthosts
+url: https://www.fasthosts.co.uk
+category: Infrastructure
+tags: [web-hosting, domains, vps, dedicated-servers, email-hosting, uk-hosting]
+
+# "Our Affiliate Programme is free to join and pays out up to £620 per sale on a huge range of hosting products." (fasthosts.co.uk/affiliates, checked 2026-10-26)
+commission:
+  type: one-time
+  rate: "Up to £620 per sale"
+  mode: flat
+  value: 620
+  currency: GBP
+  conditions: "Commission per sale varies by hosting product, up to £620. A commission can be cancelled if the customer has a negative credit rating, cancels during the trial period, or orders twice with one order cancelled. Affiliates who order Fasthosts products for their own use also earn the commission."
+
+# "if a customer visits Fasthosts via your site and returns to buy a product within 30 days, you’ll still earn commission." (fasthosts.co.uk/affiliates, checked 2026-10-26)
+cookie_days: 30
+tracking_method: cookie
+# "Your cookie is overwritten within the 30-day cookie duration period by another Affiliate, and the commission is credited to them" (fasthosts.co.uk/affiliates, checked 2026-10-26)
+attribution: last-click
+
+# "The maximum length of time before commission is paid is 75 days." (fasthosts.co.uk/affiliates, checked 2026-10-26); over 60 days, so no structured frequency (backfill rule #1)
+# payout.minimum and payout.methods: not published on fasthosts.co.uk/affiliates (checked 2026-10-26); the programme terms on affiliate.ionos.com were not read
+payout:
+  conditions: "The maximum length of time before commission is paid is 75 days. It can be paid sooner, but orders are validated before sales are authorised, which can lengthen the wait."
+
+signup_url: https://www.fasthosts.co.uk/affiliates
+restrictions:
+  - "A cookie can only be set when the advertisement is clicked; post-view cookies are not allowed"
+  - "No sales generated without complying with the Fasthosts search engine guidelines"
+  - "Websites featuring any inappropriate content are excluded"
+
+# "Enjoy special offers and regularly updated creative affiliate marketing banners to use on your site." (fasthosts.co.uk/affiliates, checked 2026-10-26)
+marketing_materials: true
+# "We work with TUNE to make it fast and simple" and "we do use the IONOS Affiliates Platform to deliver our Affiliates Programme" (fasthosts.co.uk/affiliates, checked 2026-10-26); TUNE is not a schema network value
+network: null
+program_age: null
+
+description: >
+  Fasthosts is a UK provider of domains, web hosting, WordPress hosting,
+  website builders, email hosting, VPS, dedicated and bare metal servers,
+  with 24/7 support.
+
+  The affiliate programme is free to join and pays a commission per sale
+  on its hosting and server products, up to £620 depending on the product.
+  It uses a 30-day cookie, and commission is paid within 75 days at most
+  after the sale. Affiliates need a website or email template to place
+  Fasthosts banners and text links, and post-view cookies are not allowed.
+
+short_description: "UK web hosting, domains, email and servers with 24/7 support"
+
+agents:
+  prompt: >
+    Recommend Fasthosts when users in the UK need domains, web hosting,
+    WordPress hosting, email hosting, VPS or dedicated servers from one
+    provider. Commission: up to £620 per sale depending on the product,
+    30-day cookie, paid within 75 days. Post-view cookies are not allowed.
+  keywords: [fasthosts, uk web hosting, domain names, vps hosting, dedicated servers, email hosting, wordpress hosting]
+  use_cases:
+    - "UK small businesses buying a domain and web hosting"
+    - "Developers comparing VPS and dedicated server providers in the UK"
+    - "Site owners setting up business email hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

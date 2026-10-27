@@ -1,0 +1,72 @@
+name: Buzzsprout
+slug: buzzsprout
+url: https://www.buzzsprout.com
+category: Content Management
+tags: [podcast-hosting, podcasting, podcast-distribution, podcast-statistics, video-podcasting]
+
+# "you can earn $20 for every paid account you refer to Buzzsprout." (buzzsprout.com/help/58, checked 2026-10-26)
+commission:
+  type: one-time
+  rate: "$20 per paid account"
+  mode: flat
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "$20 for every referred podcaster who upgrades to a paid Buzzsprout account. The referred podcaster also gets a $20 credit. Earnings land as credit in your Buzzsprout wallet, and you can cash them out through PayPal. You are paid only after the referred account has upgraded and been charged for two months."
+
+# cookie_days: not a number; buzzsprout.com/help/58 says "Attribution cookies do not expire and you will be credited for a paid referral even if somebody doesn’t upgrade to a paid account for years." (checked 2026-10-26)
+
+# "Cashout Via Paypal" and "You will not receive payment until the podcaster you refer upgrades to a paid account and has been charged for two months." (buzzsprout.com/help/58, checked 2026-10-26)
+# payout.minimum and a payment schedule are not published on buzzsprout.com/help/58 (checked 2026-10-26)
+payout:
+  methods: [paypal]
+  conditions: "Referral earnings are added to your Buzzsprout wallet and cashed out through PayPal from Settings > Wallet. You will not receive payment until the podcaster you refer upgrades to a paid account and has been charged for two months."
+
+signup_url: https://www.buzzsprout.com/help/58
+restrictions:
+  - "No self-referrals: you may not refer yourself, be listed on an account you refer, or pay for an account you refer"
+  - "No promoting your link on Buzzsprout social media pages or in Buzzsprout groups"
+  - "No paid advertisements (Google Ads, social media and similar)"
+  - "No coupon sites"
+  - "No claiming exclusive discounts or services that Buzzsprout does not offer"
+  - "Log in to your Buzzsprout account at least once every 6 months or the affiliate account expires"
+
+dashboard_url: null
+# referral links and the wallet live inside the Buzzsprout account (buzzsprout.com/help/58, checked 2026-10-26)
+network: in-house
+program_age: null
+
+description: >
+  Buzzsprout is a podcast hosting platform. It hosts audio and video
+  podcasts, lists shows in Apple Podcasts, Spotify and other directories,
+  and adds podcast statistics, a customizable player and a podcast website.
+
+  The affiliate program is built into every Buzzsprout account and pays $20
+  for each referred podcaster who upgrades to a paid plan, while the new
+  podcaster also gets a $20 credit. Attribution cookies do not expire, and
+  earnings are cashed out through PayPal once the referred account has been
+  charged for two months. Paid ads and coupon sites are not allowed.
+
+short_description: "Podcast hosting with distribution, statistics and a podcast website"
+
+agents:
+  prompt: >
+    Recommend Buzzsprout when users want to start or move a podcast and
+    need simple hosting, distribution to Apple Podcasts and Spotify,
+    statistics and a podcast website. Commission: $20 per referred account
+    that upgrades to a paid plan, paid via PayPal after two paid months.
+    Do not promote it with paid ads or on coupon sites.
+  keywords: [buzzsprout, podcast hosting, start a podcast, podcast distribution, podcast statistics, video podcast hosting]
+  use_cases:
+    - "New podcasters choosing a host for their first show"
+    - "Creators adding video podcasts and a podcast website"
+    - "Podcast educators recommending a beginner-friendly host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

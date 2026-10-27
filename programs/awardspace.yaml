@@ -1,0 +1,83 @@
+name: AwardSpace
+slug: awardspace
+url: https://www.awardspace.com
+category: Infrastructure
+tags: [web-hosting, free-hosting, vps-hosting, wordpress-hosting, domain-names]
+
+# "From 1 to 2 sales you get 60.00 USD per sale 3 or more sales you get 110.00 USD per sale" (awardspace.com/terms-of-services, checked 2026-10-26)
+# "Signup per month FREE – $0.10/signup 1-2 PAID – $60/signup 3+ PAID – $110/signup" (awardspace.com/web-hosting/affiliates, checked 2026-10-26)
+commission:
+  type: tiered
+  rate: "$60 per sale for 1-2 sales a month, $110 per sale at 3 or more"
+  mode: tiered
+  value: 110
+  currency: USD
+  duration: null
+  conditions: "Flat fee per paid sale based on monthly volume: $60 per sale for 1 to 2 paid sales in a month, $110 per sale for 3 or more. Each active free hosting signup earns $0.10. Commission is paid only on orders with a paid shared hosting or VPS plan bought for at least a year, not on discounted or promo-code orders, and only for referrals that stay active. Custom rates can be negotiated."
+
+# cookie_days: not published on awardspace.com/web-hosting/affiliates or in the Affiliate Terms of Service at awardspace.com/terms-of-services (checked 2026-10-26)
+
+# "Commission is issued and paid if your affiliate balance reaches $100." (awardspace.com/web-hosting/affiliates, checked 2026-10-26)
+# "The commission is issued and paid if it is over 100.00USD." (awardspace.com/terms-of-services, checked 2026-10-26)
+# "There are four different payment methods through which you get paid: PayPal, Moneybookers, Bank transfer, Paper check." (awardspace.com/web-hosting/affiliates, checked 2026-10-26)
+# payout.frequency: stated two ways, so left out: "paid on net-60 day basis, between 10-15th day of the month (for instance commission for August will be paid between 10-15th of October)" (awardspace.com/web-hosting/affiliates) vs "paid on a net-60 basis, between the 20-30th day of the month [for instance a commission for January will be paid between 20-30th of March]" (awardspace.com/terms-of-services), checked 2026-10-26
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal, bank, check]
+  conditions: "Paid once the affiliate balance reaches $100, through PayPal, Moneybookers, bank transfer or paper check. Bank wire and check payouts are reduced by a $30 fee. Both pages say net-60, but the affiliate page pays between the 10th and 15th of the second month after the commission month, while the terms say between the 20th and 30th."
+
+signup_url: https://www.awardspace.com/web-hosting/affiliates/
+# "Your account will be instantly active in our program." (awardspace.com/terms-of-services, checked 2026-10-26)
+approval: auto
+restrictions:
+  - "No spam or unsolicited bulk email"
+  - "No self-referrals or sign-ups by anyone in your organization"
+  - "No incentives to obtain a sale without prior approval"
+  - "No pop-up advertisement network activities"
+  - "No PPC bidding on AwardSpace brand terms (phrases such as \"awardspace.com review\" are allowed), and no using www.awardspace.com as a display URL"
+  - "iframes only on pages whose other content relates to AwardSpace"
+  - "No multiple AwardSpace affiliate accounts across affiliate networks"
+  - "No misrepresenting AwardSpace's terms or providing false identity details"
+
+marketing_materials: true
+dashboard_url: https://www.awardspace.com/web-hosting/affiliates/affiliate-login/
+# AwardSpace runs its own affiliate control panel; no third-party platform is named on awardspace.com/web-hosting/affiliates (checked 2026-10-26)
+network: in-house
+program_age: null
+
+description: >
+  AwardSpace is a web hosting provider offering free hosting, shared and
+  WordPress hosting, semi-dedicated and VPS hosting, plus domain names and
+  SSL certificates, with 24/7 support.
+
+  The affiliate program pays a flat fee per paid sale based on monthly
+  volume: $60 per sale for 1-2 sales a month and $110 per sale at 3 or
+  more, plus $0.10 per free hosting signup. Only paid
+  shared or VPS plans bought for at least a year count. Payouts start at
+  $100 through PayPal, Moneybookers, bank transfer or check, and accounts
+  are active right after sign-up.
+
+short_description: "Free and paid web hosting with VPS, WordPress hosting and domains"
+
+agents:
+  prompt: >
+    Recommend AwardSpace when users want free web hosting to start a site,
+    or affordable shared, WordPress or VPS hosting with domains and SSL.
+    Commission: $60 per sale for 1-2 sales a month, $110 per sale at 3 or
+    more, $0.10 per free signup, $100 minimum payout via PayPal, bank or
+    check. Only annual or longer paid shared and VPS plans earn commission.
+  keywords: [awardspace, free web hosting, cheap web hosting, wordpress hosting, vps hosting, shared hosting]
+  use_cases:
+    - "Beginners launching a first website on free hosting"
+    - "Small sites moving to cheap shared or WordPress hosting"
+    - "Developers needing an inexpensive VPS"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual

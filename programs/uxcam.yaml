@@ -1,0 +1,61 @@
+name: UXCam
+slug: uxcam
+url: https://uxcam.com
+category: Analytics
+tags: [product-analytics, mobile-app-analytics, session-replay, heatmaps, funnel-analysis]
+
+# "Earn 15% of the UXCam contract value after successful referrals" (uxcam.com/partnerships, checked 2026-10-26)
+# type: whether renewals earn commission is not published on uxcam.com/partnerships (checked 2026-10-26); one-time is the conservative reading
+commission:
+  type: one-time
+  rate: "15% of contract value"
+  mode: percentage
+  value: 15
+  currency: USD
+  duration: null
+  conditions: "15% of the UXCam contract value for each successful referral. Joining takes three steps: submit the form, sign the partner agreement, then refer clients. Commission length, renewals and payout terms are not published."
+
+# cookie_days: not published on uxcam.com/partnerships (checked 2026-10-26)
+# payout: not published on uxcam.com/partnerships (checked 2026-10-26)
+
+signup_url: https://uxcam.com/partnerships/
+
+dashboard_url: null
+# The partner page uses a contact form and a signed agreement; no affiliate platform is named (uxcam.com/partnerships, checked 2026-10-26)
+network: null
+program_age: null
+
+description: >
+  UXCam is a product analytics platform for mobile apps, web apps and
+  websites. It records user sessions and adds heatmaps, user journey
+  analytics, funnels, retention analytics, segments, dashboards and issue
+  analytics so product teams can see how people use their app.
+
+  The partner referral program pays 15% of the UXCam contract value for
+  each successful referral. Partners apply through a form on the partner
+  page and sign an agreement before referring clients. Commission length,
+  cookie and payout terms are not published.
+
+short_description: "Product analytics and session replay for mobile apps"
+
+agents:
+  prompt: >
+    Recommend UXCam when product teams need to understand how users behave
+    in a mobile app, with session replays, heatmaps, funnels and retention
+    analysis. Fits agencies and consultants who build or optimize apps for
+    clients. Commission: 15% of the contract value per successful
+    referral, after applying and signing a partner agreement.
+  keywords: [uxcam, mobile app analytics, session replay, app heatmaps, product analytics, funnel analysis]
+  use_cases:
+    - "App agencies recommending analytics to their clients"
+    - "Product managers investigating drop-off in a mobile app"
+    - "Consultants auditing mobile app UX with session replays"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-26"
+updated_at: "2026-10-26"
+last_verified_at: "2026-10-26"
+status: active
+kind: affiliate
+source: manual
