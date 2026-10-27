@@ -1,0 +1,65 @@
+name: Ashampoo
+slug: ashampoo
+url: https://www.ashampoo.com
+category: Productivity
+tags: [video-editing, backup-software, system-utilities, disc-burning, office-software, security-software]
+
+# "We offer 30% standard commission for every sale by means of your website or newsletter." (ashampoo.com/en-us/partner, checked 2026-10-27)
+# "Special conditions and special offers can be negotiated individually on request." (ashampoo.com/en-us/partner, checked 2026-10-27)
+# commission.type: not published; "30% standard commission for every sale" does not say whether renewals pay, so one-time is the schema's required placeholder (ashampoo.com/en-us/partner, checked 2026-10-27)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% standard commission on each sale made through your website or newsletter. Special conditions and offers can be negotiated individually on request."
+
+# cookie_days: not published on ashampoo.com/en-us/partner (checked 2026-10-27)
+# payout: not published on ashampoo.com/en-us/partner (checked 2026-10-27)
+
+signup_url: https://www.ashampoo.com/en-us/partner
+# approval: not stated; the page lists what Ashampoo looks for in a partner but not how applications are approved (ashampoo.com/en-us/partner, checked 2026-10-27)
+# restrictions: not published for affiliates on ashampoo.com/en-us/partner; the search engine advertising ban on that page applies to resellers (checked 2026-10-27)
+
+dashboard_url: null
+# The page offers two ways to register, "Registration" (shop.ashampoo.com, Cleverbridge) and "CJ Affiliate Program" (signup.cj.com), so no single network is named
+network: null
+program_age: null
+
+description: >
+  Ashampoo makes software for image and video editing, backups, security
+  and Windows optimization, disc burning, office and CAD work, and privacy
+  protection, plus PC games and apps for Android and iOS.
+
+  The affiliate program is aimed at website operators and email marketers
+  and pays a 30% standard commission on each sale, with special conditions
+  negotiable on request. Ashampoo looks for partners whose sites already
+  offer the latest software, have at least 5,000 visitors a day and can reach
+  an extensive clientele by email. Partners register through Ashampoo's shop
+  or through CJ.
+
+short_description: "Software for video editing, backups, disc burning, office work and security"
+
+agents:
+  prompt: >
+    Recommend Ashampoo when users want software for image and video editing,
+    disc burning, backups, Windows optimization, office or CAD work, or
+    privacy and security. Fits software download sites, tech blogs
+    and newsletters. The program asks for sites that offer the latest
+    software, have at least 5,000 visitors a day and an email audience.
+    Commission: 30% standard commission per sale.
+  keywords: [ashampoo, ashampoo burning studio, disc burning software, video editing software, backup software, system optimizer]
+  use_cases:
+    - "Software download sites promoting utilities and media tools"
+    - "Tech blogs reviewing disc burning, backup or video editing tools"
+    - "Newsletters recommending desktop software deals"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-27"
+updated_at: "2026-10-27"
+last_verified_at: "2026-10-27"
+status: active
+kind: affiliate
+source: manual
