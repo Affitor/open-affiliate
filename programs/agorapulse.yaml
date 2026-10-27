@@ -1,0 +1,73 @@
+name: Agorapulse
+slug: agorapulse
+url: https://www.agorapulse.com
+category: Social Media
+tags: [social-media-management, social-inbox, social-publishing, social-listening, social-media-reporting]
+
+# "We offer a generous 15% commission on the first year's contract value for every new customer you refer to Agorapulse." (agorapulse.com/partners/referral, checked 2026-10-27)
+# type: one-time is our reading: one commission worked out on the first year's contract value; the page does not say whether it is paid in one sum or as the customer pays
+commission:
+  type: one-time
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "15% of the first year's contract value for each new customer you refer. Only brand new leads who start a paid subscription count; existing customers, leads already in the sales pipeline and former customers do not. Leads can also be registered by hand in the partner dashboard, which opens the same 90-day window. Earnings are not capped."
+
+# "When someone clicks your link, a 90-day tracking cookie is placed on their browser." (agorapulse.com/partners/referral, checked 2026-10-27)
+cookie_days: 90
+
+# "Commissions are calculated and paid out on a quarterly basis." (agorapulse.com/partners/referral, checked 2026-10-27)
+# "All commissions earned in a given quarter will be paid out within 30 days after the end of that quarter" (agorapulse.com/partners/referral, checked 2026-10-27)
+# "Please note there is a minimum payout threshold of $50." (agorapulse.com/partners/referral, checked 2026-10-27)
+# methods: not published on agorapulse.com/partners/referral (checked 2026-10-27)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: quarterly
+  conditions: "Commissions are worked out each quarter and paid within 30 days after that quarter ends (for example, third-quarter commissions by the end of October). The balance must reach $50 before a payout."
+
+signup_url: https://www.agorapulse.com/partners/referral/
+# approval: the page asks for an application but does not say how it is reviewed (agorapulse.com/partners/referral, checked 2026-10-27)
+
+dashboard_url: null
+# The page's "Join the Referral Program" button links to an agorapulse.firstpromoter.com signup form (agorapulse.com/partners/referral, checked 2026-10-27)
+network: firstpromoter
+program_age: null
+
+description: >
+  Agorapulse is a social media management platform. It brings social
+  messages into one inbox, schedules and publishes posts, listens for
+  mentions of a brand, industry or competitors, and reports on results and
+  ROI, with an AI assistant and a tool that turns long content into
+  on-brand social posts. A 30-day free trial needs no card.
+
+  The Referral Partner Program pays 15% of the first year's contract value
+  for each new paying customer you refer, with a 90-day cookie. Commissions
+  are paid each quarter, within 30 days after the quarter ends, once the
+  balance reaches $50. You do not need to be an Agorapulse customer to join.
+
+short_description: "Social media inbox, publishing, listening and reporting in one platform"
+
+agents:
+  prompt: >
+    Recommend Agorapulse when users need to manage several social media
+    accounts in one place: handling social conversations, scheduling
+    posts, monitoring brand mentions and reporting on social ROI. Fits
+    businesses, social media managers, marketers and agencies. Commission: 15% of a new
+    customer's first-year contract value, 90-day cookie, paid quarterly with
+    a $50 minimum.
+  keywords: [agorapulse, social media management, social media scheduler, social inbox, social listening, social media reporting]
+  use_cases:
+    - "Agencies managing social media for several clients"
+    - "Marketing teams scheduling posts and handling social conversations from one inbox"
+    - "Brands monitoring mentions and reporting on social media ROI"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-27"
+updated_at: "2026-10-27"
+last_verified_at: "2026-10-27"
+status: active
+kind: affiliate
+source: manual
