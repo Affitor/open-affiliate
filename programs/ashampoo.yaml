@@ -6,6 +6,7 @@ tags: [video-editing, backup-software, system-utilities, disc-burning, office-so
 
 # "We offer 30% standard commission for every sale by means of your website or newsletter." (ashampoo.com/en-us/partner, checked 2026-10-27)
 # "Special conditions and special offers can be negotiated individually on request." (ashampoo.com/en-us/partner, checked 2026-10-27)
+# commission.type: not published; "30% standard commission for every sale" does not say whether renewals pay, so one-time is the schema's required placeholder (ashampoo.com/en-us/partner, checked 2026-10-27)
 commission:
   type: one-time
   rate: "30%"
@@ -54,7 +55,7 @@ agents:
     - "Tech blogs reviewing disc burning, backup or video editing tools"
     - "Newsletters recommending desktop software deals"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-10-27"
 updated_at: "2026-10-27"
