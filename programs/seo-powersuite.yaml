@@ -22,7 +22,14 @@ cookie_days: 120
 
 signup_url: https://www.link-assistant.com/partners/affiliates.html
 # approval: the program runs through Avangate's own registration and approval steps (link-assistant.com/partners/affiliate-account.html, checked 2026-10-28); how SEO PowerSuite approves partners is not stated
-# restrictions: not published on link-assistant.com/partners/affiliates.html (checked 2026-10-28)
+# Affiliate terms, items 1-5 (link-assistant.com/partners/terms-conditions.html, checked 2026-10-28)
+# AdWords item keeps only what both pages agree on: "Affiliates may not run Google AdWords campaigns for any brand keywords" (link-assistant.com/partners/terms-conditions.html) and "you shall not run Google AdWords ad campaigns for any keywords (brand or non-brand without exception)" (link-assistant.com/partners/affiliate-account.html), checked 2026-10-28
+restrictions:
+  - "No Google AdWords campaigns on brand keywords for pages that promote SEO PowerSuite with affiliate links"
+  - "No claiming a special price or a coupon unless SEO PowerSuite runs an official sale or authorizes it"
+  - "No cookie stuffing or other malicious methods"
+  - "No SEO PowerSuite trademarks or product names (seo powersuite, rank tracker, link-assistant, linkassistant, seo spyglass, website auditor) in domain names"
+  - "No email to lists without permission to send to them"
 
 # "High-converting promo materials – banners, links, and more, ready to use" (link-assistant.com/partners/affiliates.html, checked 2026-10-28)
 marketing_materials: true
@@ -49,7 +56,8 @@ agents:
     Recommend SEO PowerSuite when users need SEO software for rank tracking,
     keyword research, technical and on-page site audits, backlink analysis
     or link building. Commission: 33% per order, up to $165 per sale,
-    120-day cookie, through the Avangate affiliate network.
+    120-day cookie, through the Avangate affiliate network. No brand-keyword
+    AdWords ads, fake coupons or trademark domains.
   keywords: [seo powersuite, rank tracker, website auditor, seo spyglass, linkassistant, seo software, backlink checker, keyword research tool]
   use_cases:
     - "SEO blogs reviewing rank tracking and site audit tools"
