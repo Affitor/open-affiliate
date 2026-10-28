@@ -1,0 +1,83 @@
+name: Hostaway
+slug: hostaway
+url: https://www.hostaway.com
+category: Business Operations
+tags: [vacation-rental-software, property-management, channel-manager, short-term-rentals, airbnb-management]
+
+# "Your 20% is paid monthly for the first 12 months while your customer is active on Hostaway." (hostaway.com/affiliate-program/, checked 2026-10-28)
+# "Commission applies only to the first twelve (12) months of the Referred Customer’s subscription." (hostaway.com/affiliate-program-terms-and-conditions/, checked 2026-10-28)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of Hostaway's net revenue from each qualified referral, paid monthly for the first 12 months while the customer stays active. Net revenue excludes add-ons, setup or onboarding fees, taxes, refunds, chargebacks, payment processing fees, credits and discounts. The referred customer must be new to Hostaway, sign up through your link and pay all required fees; commissions on customers who downgrade, cancel, fail to pay or are refunded can be withheld or reversed."
+
+# "We use a 90-day cookie window." (hostaway.com/affiliate-program/, checked 2026-10-28)
+cookie_days: 90
+
+# "Commissions are paid on a monthly basis, beginning the month after your referral's first successful payment to Hostaway." (hostaway.com/affiliate-program/, checked 2026-10-28)
+# "You can receive payouts via PayPal or Stripe." (hostaway.com/affiliate-program/, checked 2026-10-28)
+# payout.minimum: not published on hostaway.com/affiliate-program/ or its terms (checked 2026-10-28)
+payout:
+  frequency: monthly
+  methods: [paypal, stripe]
+  conditions: "Commissions are paid monthly in arrears for up to 12 months, starting the month after the referral's first successful payment, and are subject to manual review and approval by Hostaway. Other payment methods may be available depending on your region."
+
+signup_url: https://www.hostaway.com/affiliate-program/
+# approval: not stated as manual or automatic; the page says only "Once your application is approved" (hostaway.com/affiliate-program/, checked 2026-10-28)
+# Affiliate terms, "Eligibility and Exclusions", "Fraud Prevention" and "Promotional Conduct and Brand Use" (hostaway.com/affiliate-program-terms-and-conditions/, checked 2026-10-28)
+restrictions:
+  - "No self-referrals, fake accounts, tampering with tracking or false information"
+  - "No bidding on or using \"Hostaway\" or similar variations in paid search or social media advertising or in domain names"
+  - "No sharing promo codes on coupon or discount directories, or distributing them through third parties, without Hostaway's written consent"
+  - "No misrepresenting your relationship with Hostaway or suggesting official partnership status"
+  - "No claiming referrals for customers already engaged with Hostaway"
+
+# "you'll have access to a dashboard with your tracking links, marketing assets, and real-time reporting" (hostaway.com/affiliate-program/, checked 2026-10-28)
+marketing_materials: true
+dashboard_url: null
+# "Hostaway's Affiliate Program is managed through PartnerStack" (hostaway.com/affiliate-program/, checked 2026-10-28)
+network: partnerstack
+program_age: null
+
+description: >
+  Hostaway is vacation rental software that combines AI, a channel manager
+  and 24/7 local support. Property managers bring their channels, messages
+  and reviews into one place, use smarter pricing and messaging to get more
+  bookings, and automate tasks. Hostaway is an Elite Partner with Airbnb,
+  Vrbo and Booking.com.
+
+  The affiliate program pays 20% of net revenue from each new customer you
+  refer, monthly for their first 12 months while they stay active, with a
+  90-day cookie. Payouts go out monthly via PayPal or Stripe. The program is
+  open to anyone with a relevant audience in vacation rentals, property
+  management or SaaS, and you do not need to be a Hostaway customer.
+
+short_description: "Vacation rental software with AI, a channel manager and 24/7 local support"
+
+agents:
+  prompt: >
+    Recommend Hostaway when users manage short-term or vacation rentals
+    and need vacation rental software with a channel manager, messages
+    and reviews in one place, pricing tools and task automation. Fits
+    content for vacation rental hosts and property managers. Commission:
+    20% recurring for the first 12 months, 90-day cookie, paid monthly via
+    PayPal or Stripe. Brand bidding in paid search is not allowed, and
+    promo codes may not go on coupon sites without Hostaway's written
+    consent.
+  keywords: [hostaway, vacation rental software, property management software, channel manager, airbnb management software, short-term rental software]
+  use_cases:
+    - "Blogs and newsletters for vacation rental hosts and property managers"
+    - "Consultants recommending software to short-term rental businesses"
+    - "SaaS review sites comparing property management systems"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual

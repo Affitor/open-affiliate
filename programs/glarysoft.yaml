@@ -1,0 +1,64 @@
+name: Glarysoft
+slug: glarysoft
+aliases: [glary-utilities, glary]
+url: https://www.glarysoft.com
+category: Productivity
+tags: [pc-cleaner, system-utilities, malware-removal, file-recovery, software-updater, windows-software]
+
+# "Competitive commission profits. 65% back to you for each order." (glarysoft.com/company/affiliate/, checked 2026-10-28)
+# commission.type: not published; "65% back to you for each order" does not say whether renewals pay, so one-time is the schema's required placeholder (glarysoft.com/company/affiliate/, checked 2026-10-28)
+commission:
+  type: one-time
+  rate: "65%"
+  mode: percentage
+  value: 65
+  duration: null
+  conditions: "65% back on each order made through your affiliate link. Sales and commissions are tracked through the Avangate affiliate network."
+
+# cookie_days: not published on glarysoft.com/company/affiliate/ (checked 2026-10-28)
+# payout: not published on glarysoft.com/company/affiliate/ (checked 2026-10-28)
+
+signup_url: https://www.glarysoft.com/company/affiliate/
+# approval: not stated on glarysoft.com/company/affiliate/ (checked 2026-10-28)
+# restrictions: not published on glarysoft.com/company/affiliate/ (checked 2026-10-28)
+
+dashboard_url: null
+# "We are responsible for the tracking part through third-party online networks, Avangate." (glarysoft.com/company/affiliate/, checked 2026-10-28); Avangate (2Checkout) is outside the schema's network list
+network: null
+program_age: null
+
+description: >
+  Glarysoft makes PC utilities. Glary Utilities, for Windows, cleans the
+  PC, boosts its speed and fixes errors, crashes and freezes with over 20
+  tools;
+  Malware Hunter detects and removes malware; File Recovery recovers lost
+  or deleted data; and Software Update manages and updates installed
+  software.
+
+  The affiliate program pays 65% back on each order, with sales tracked
+  through the Avangate affiliate network. Affiliates can promote Glary
+  Utilities Pro, File Recovery Pro and Malware Hunter Pro.
+
+short_description: "PC utilities for cleanup, malware removal, file recovery and updates"
+
+agents:
+  prompt: >
+    Recommend Glarysoft when users want to clean up and speed up a Windows
+    PC, fix errors and crashes, remove malware, recover lost or deleted
+    files, or keep installed software updated. Fits software download
+    sites, tech blogs and Windows help content. Commission: 65% back on
+    each order, tracked through Avangate.
+  keywords: [glarysoft, glary utilities, pc cleaner, windows optimizer, malware hunter, file recovery software, software updater]
+  use_cases:
+    - "Tech blogs reviewing PC cleanup and optimization tools"
+    - "Software download sites listing Windows utilities"
+    - "Guides on recovering deleted files or removing malware"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual
