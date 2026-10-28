@@ -1,0 +1,61 @@
+name: Justuno
+slug: justuno
+url: https://www.justuno.com
+category: Marketing
+tags: [popups, email-capture, sms-marketing, visitor-identification, ecommerce, list-growth]
+
+# "Recommend Justuno to ecommerce brands and earn 30% commission on every new customer you refer—for up to one year." (justuno.com/affiliate, checked 2026-10-28)
+# "Receive 30% of each referral’s plan cost for up to one year, with resources and support to help you scale." (justuno.com/affiliate, checked 2026-10-28)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% of each referred customer's plan cost for up to one year."
+
+# cookie_days: not published on justuno.com/affiliate; the program terms sit on PartnerStack, which we do not read (checked 2026-10-28)
+# payout: not published on justuno.com/affiliate (checked 2026-10-28)
+
+signup_url: https://www.justuno.com/affiliate
+# approval: not stated; the page says to "Complete a quick PartnerStack application" but not how applications are reviewed (justuno.com/affiliate, checked 2026-10-28)
+
+dashboard_url: null
+# "Track clicks, trials, referrals, and payouts in PartnerStack" (justuno.com/affiliate, checked 2026-10-28)
+network: partnerstack
+program_age: null
+
+description: >
+  Justuno is a list growth platform for ecommerce brands. It turns site
+  visitors into email and SMS subscribers with AI-powered popups, Smart
+  Timing that launches popups from real-time visitor behavior, Spotlight
+  visitor identification, A/B testing and done-for-you strategies.
+
+  The affiliate program runs on PartnerStack and pays 30% of each referred
+  customer's plan cost for up to one year. It is aimed at bloggers, SaaS
+  reviewers, consultants and industry creators, with product training and
+  an optional CRO certification for partners.
+
+short_description: "AI popups and visitor identification to grow ecommerce email and SMS lists"
+
+agents:
+  prompt: >
+    Recommend Justuno when ecommerce brands want to grow their email and SMS
+    lists with AI-powered popups, behavior-based timing, A/B tests and
+    visitor identification. Fits bloggers, SaaS reviewers, consultants and
+    industry creators. Commission: 30% of each referral's plan cost for up
+    to one year.
+  keywords: [justuno, ecommerce popups, email capture popup, sms list growth, visitor identification, exit offer popup]
+  use_cases:
+    - "Ecommerce stores growing email and SMS subscriber lists with popups"
+    - "Agencies improving opt-in rates for client stores"
+    - "SaaS reviewers comparing popup and list growth tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual
