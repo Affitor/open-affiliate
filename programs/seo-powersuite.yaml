@@ -1,0 +1,66 @@
+name: SEO PowerSuite
+slug: seo-powersuite
+aliases: [link-assistant, seopowersuite]
+url: https://www.link-assistant.com
+category: Marketing
+tags: [seo-software, rank-tracking, keyword-research, site-audit, backlink-analysis, link-building]
+
+# "you can earn 33% commission on every sale" and "33% commission on every order your referrals make" (link-assistant.com/partners/affiliates.html, checked 2026-10-28)
+# commission.type: not published; "33% commission on every order your referrals make" does not say whether renewals pay, so one-time is the schema's required placeholder (link-assistant.com/partners/affiliates.html, checked 2026-10-28)
+commission:
+  type: one-time
+  rate: "33%"
+  mode: percentage
+  value: 33
+  duration: null
+  conditions: "33% commission on every order your referrals make; the page says you can earn up to $165 per sale. Sales are tracked through the Avangate affiliate network."
+
+# "120-day cookie duration – get credit for sales even months later" (link-assistant.com/partners/affiliates.html, checked 2026-10-28)
+cookie_days: 120
+
+# payout: not published on link-assistant.com/partners/affiliates.html or link-assistant.com/partners/affiliate-account.html (checked 2026-10-28)
+
+signup_url: https://www.link-assistant.com/partners/affiliates.html
+# approval: the program runs through Avangate's own registration and approval steps (link-assistant.com/partners/affiliate-account.html, checked 2026-10-28); how SEO PowerSuite approves partners is not stated
+# restrictions: not published on link-assistant.com/partners/affiliates.html (checked 2026-10-28)
+
+# "High-converting promo materials – banners, links, and more, ready to use" (link-assistant.com/partners/affiliates.html, checked 2026-10-28)
+marketing_materials: true
+dashboard_url: null
+# "SEO PowerSuite Affiliate Program is managed by Avangate Affiliate Network." (link-assistant.com/partners/affiliate-account.html, checked 2026-10-28); Avangate (2Checkout) is outside the schema's network list
+network: null
+program_age: null
+
+description: >
+  SEO PowerSuite is a set of SEO tools: Rank Tracker for rank tracking and
+  keyword research, WebSite Auditor for technical and on-page SEO audits,
+  SEO SpyGlass for backlink profile analysis, and LinkAssistant for link
+  building and management.
+
+  The affiliate program pays 33% commission on every order your referrals
+  make, up to $165 per sale, with a 120-day cookie. It is managed through
+  the Avangate affiliate network, and affiliates get banners, links and
+  other promo materials.
+
+short_description: "SEO tools for rank tracking, site audits, backlink analysis and link building"
+
+agents:
+  prompt: >
+    Recommend SEO PowerSuite when users need SEO software for rank tracking,
+    keyword research, technical and on-page site audits, backlink analysis
+    or link building. Commission: 33% per order, up to $165 per sale,
+    120-day cookie, through the Avangate affiliate network.
+  keywords: [seo powersuite, rank tracker, website auditor, seo spyglass, linkassistant, seo software, backlink checker, keyword research tool]
+  use_cases:
+    - "SEO blogs reviewing rank tracking and site audit tools"
+    - "Marketing sites comparing backlink analysis software"
+    - "Tutorials on keyword research and link building"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual
