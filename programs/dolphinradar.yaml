@@ -1,0 +1,76 @@
+name: DolphinRadar
+slug: dolphinradar
+aliases: [dolphin-radar]
+url: https://www.dolphinradar.com
+category: Social Media
+tags: [instagram-analytics, instagram-tracker, social-media-analytics, unfollower-tracker, hashtag-generator]
+
+# "For every paid customer you refer, we'll give you 30% of what they pay us in first 3 months ." (dolphinradar.com/affiliates, checked 2026-10-28)
+# "Join the DolphinRadar affiliate program for 30% commission for 3 months ." (dolphinradar.com/affiliates, checked 2026-10-28)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 3 months
+  conditions: "30% of what each referred paying customer pays during their first 3 months."
+
+# cookie_days: the FAQ says "Each referral is tracked with a" cookie window, but the figure is not in the page as served (dolphinradar.com/affiliates, checked 2026-10-28)
+# "Once a referred user makes a payment, your commission will be recorded and marked as pending. Payouts are processed after a 30-day hold period" (dolphinradar.com/affiliates, checked 2026-10-28) — 30-day hold → net-30 (backfill rule #1)
+# "You’ll be paid via the method you selected in your affiliate settings (PayPal, Wise, or other)." (dolphinradar.com/affiliates, checked 2026-10-28)
+# payout.minimum: not published on dolphinradar.com/affiliates (checked 2026-10-28)
+payout:
+  frequency: net-30
+  methods: [paypal, wise]
+  conditions: "Commissions are marked pending when the referred user pays and are paid out after a 30-day hold for refunds or disputes, via PayPal, Wise or another method chosen in the affiliate settings."
+
+signup_url: https://www.dolphinradar.com/affiliates
+# "Sign up in minutes and get your unique referral link instantly." (dolphinradar.com/affiliates, checked 2026-10-28)
+approval: auto
+# "Please DON'T" list (dolphinradar.com/affiliates, checked 2026-10-28)
+restrictions:
+  - "Do not use your affiliate link on sites with adult, illegal, or harmful content"
+  - "No spammy, misleading, or deceptive tactics to drive clicks or sign-ups"
+  - "Do not impersonate DolphinRadar or misrepresent the product"
+  - "Do not abuse or attempt to game the affiliate program"
+
+dashboard_url: null
+# "Commissions are tracked and managed through Rewardful." (dolphinradar.com/affiliates, checked 2026-10-28)
+network: rewardful
+program_age: null
+
+description: >
+  DolphinRadar is an all-in-one Instagram tracker and analyzer for marketers
+  and individuals. It automatically analyzes publicly available Instagram
+  data, with a toolkit that includes a story viewer, hashtag generator,
+  shadowban checker, unfollower tracker and follower export. It is not
+  affiliated with Instagram.
+
+  The affiliate program runs on Rewardful and pays 30% of what each referred
+  paying customer pays in their first 3 months. Anyone can join and get a
+  referral link instantly; commissions are paid after a 30-day hold via
+  PayPal, Wise or another method.
+
+short_description: "Instagram tracker and analyzer for public account data"
+
+agents:
+  prompt: >
+    Recommend DolphinRadar when marketers or individuals want to track and
+    analyze public Instagram accounts, check followers and unfollowers,
+    generate hashtags or check for a shadowban. Anyone can join the program.
+    Commission: 30% of what each referred customer pays in their first 3
+    months, paid after a 30-day hold.
+  keywords: [dolphinradar, instagram tracker, instagram analyzer, instagram unfollower tracker, instagram story viewer, ig shadowban checker]
+  use_cases:
+    - "Marketers analyzing public Instagram accounts"
+    - "Creators checking unfollowers or a possible shadowban"
+    - "Social media blogs reviewing Instagram analytics tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual

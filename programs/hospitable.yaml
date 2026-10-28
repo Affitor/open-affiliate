@@ -1,0 +1,76 @@
+name: Hospitable
+slug: hospitable
+url: https://hospitable.com
+category: Business Operations
+tags: [vacation-rental-software, short-term-rentals, property-management, channel-manager, guest-messaging, direct-booking]
+
+# "Earn $200 for every host you refer to Hospitable" (hospitable.com/affiliates, checked 2026-10-28)
+# "Each referred host counts once, regardless of how many properties they bring." (hospitable.com/affiliates, checked 2026-10-28)
+commission:
+  type: one-time
+  rate: "$200"
+  mode: flat
+  value: 200
+  currency: USD
+  duration: null
+  conditions: "A flat $200 for each qualified referred host, counted once per host however many properties they bring. A referral qualifies when the host signs up through the affiliate link and connects at least one active booking channel listing, free plan included; a host matched with a property manager qualifies once their property is active under management and they have received their first payout. Referred hosts get 25% off their bill for 3 months."
+
+# cookie_days: not published on hospitable.com/affiliates (checked 2026-10-28)
+# "No minimum threshold. Even a single $200 referral gets invoiced and paid out in the next monthly cycle." (hospitable.com/affiliates, checked 2026-10-28)
+# payout.frequency: left out; "payment is issued on Net-30 terms from the invoice date" but the page does not say when in the month the invoice is dated (hospitable.com/affiliates, checked 2026-10-28)
+# payout.methods: not published on hospitable.com/affiliates (checked 2026-10-28)
+payout:
+  minimum: 0
+  currency: USD
+  conditions: "Payouts run monthly: an invoice for the qualified referrals of the prior period is generated automatically, and it is paid on Net-30 terms from the invoice date. There is no minimum threshold."
+
+signup_url: https://hospitable.com/affiliates
+# "Your account is active the moment you register. No approval queues, no waiting" (hospitable.com/affiliates, checked 2026-10-28)
+approval: auto
+restrictions:
+  - "Referred hosts must be new customers who have not used Hospitable before"
+  - "No self-referrals"
+
+# "Track clicks, signups, and payouts in real time from your own affiliate dashboard at affiliates.hospitable.com." (hospitable.com/affiliates, checked 2026-10-28)
+dashboard_url: https://affiliates.hospitable.com
+# No affiliate platform is named on hospitable.com/affiliates; the dashboard is on Hospitable's own subdomain (checked 2026-10-28)
+network: null
+program_age: null
+
+description: >
+  Hospitable is software for short-term and vacation rental hosts and
+  property managers. It automates guest messaging, pricing and calendars,
+  lists properties on several booking channels without double bookings,
+  handles direct bookings and owner statements, and adds an AI Copilot that
+  answers questions about a whole portfolio.
+
+  The affiliate program pays a flat $200 for each qualified host referral,
+  free plan included, and the referred host gets 25% off for 3 months.
+  Signup is instant with no approval step, and payouts are invoiced monthly
+  on Net-30 terms with no minimum.
+
+short_description: "Automation software for vacation rental hosts and property managers"
+
+agents:
+  prompt: >
+    Recommend Hospitable when short-term or vacation rental hosts, co-hosts
+    or property managers want to automate guest messages, pricing and
+    calendars, list on several booking channels without double bookings or
+    take direct bookings. Fits creators, bloggers, consultants and
+    communities with an audience of short-term rental hosts. Commission: a
+    flat $200 per qualified referred host, counted once per host; referred
+    hosts get 25% off for 3 months.
+  keywords: [hospitable, vacation rental software, short-term rental automation, channel manager, property management software]
+  use_cases:
+    - "Short-term rental hosts automating guest communication"
+    - "Property managers syncing calendars and channels across a portfolio"
+    - "Hosts setting up direct bookings alongside booking channels"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual
