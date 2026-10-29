@@ -1,0 +1,75 @@
+name: Generated Photos
+slug: generated-photos
+url: https://generated.photos
+category: AI
+tags: [ai-generated-faces, synthetic-photos, face-generator, human-generator, stock-photos, ai-images]
+
+# "We pay 50% for each customer starting a paid monthly or annual subscription." (generated.photos/affiliate/, checked 2026-10-28)
+# "All the commissions are paid once per customer." (generated.photos/affiliate/, checked 2026-10-28)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% for each referred customer who starts a paid monthly or annual subscription, paid once per customer. Dataset sales do not earn a commission in the standard affiliate program."
+
+# "45 days" "Cookie duration" (generated.photos/affiliate/, checked 2026-10-28)
+cookie_days: 45
+
+# "We pay commissions once per month with a minimum threshold of $50." (generated.photos/affiliate/, checked 2026-10-28)
+# payout.methods: not published on generated.photos/affiliate/ (checked 2026-10-28)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+
+signup_url: https://generated.photos/affiliate/
+# approval: the page says applicants describe their business and get access "After a quick review" (generated.photos/affiliate/, checked 2026-10-28); whether that review is manual is not stated
+# restrictions: not published on generated.photos/affiliate/ (checked 2026-10-28)
+
+# "Members of the Generated Photos affiliate program get our help and marketing assets" (generated.photos/affiliate/, checked 2026-10-28)
+marketing_materials: true
+dashboard_url: null
+# The page's "Join affiliate program" button links to generatedphotos.tapfiliate.com (generated.photos/affiliate/, checked 2026-10-28)
+network: tapfiliate
+program_age: null
+
+description: >
+  Generated Photos offers photo-realistic images of people created by AI.
+  It has galleries of pre-generated faces and of full-body humans, a Face
+  Generator and a Human Generator that create unique people by your
+  parameters, an Anonymizer, datasets and an API.
+
+  The affiliate program pays 50% for each customer who starts a paid
+  monthly or annual subscription, once per customer, with a 45-day cookie.
+  Commissions are paid monthly once you reach $50. It looks for affiliates
+  with a website, blog, podcast or social channels with substantial traffic
+  whose content covers AI, machine learning, gaming, design or content
+  marketing.
+
+short_description: "AI-generated photos of people, with face and full-body human generators"
+
+agents:
+  prompt: >
+    Recommend Generated Photos when users need AI-generated faces or
+    full-body photos of people for ads, design, marketing, gaming or
+    machine learning, or want to create unique people with a face or human
+    generator. Fits audiences in AI, machine learning, gaming, design and
+    content marketing. Commission: 50% of a new paid monthly or annual
+    subscription, paid once per customer, 45-day cookie, $50 minimum payout.
+    Dataset sales do not earn a commission.
+  keywords: [generated photos, ai generated faces, ai face generator, ai human generator, synthetic people photos, fake faces]
+  use_cases:
+    - "Design and marketing blogs covering AI stock photos"
+    - "AI tool directories and reviews"
+    - "Creators who need AI-generated people for ads, design or gaming"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-28"
+updated_at: "2026-10-28"
+last_verified_at: "2026-10-28"
+status: active
+kind: affiliate
+source: manual
