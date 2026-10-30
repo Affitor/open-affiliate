@@ -1,0 +1,89 @@
+name: PebbleHost
+slug: pebblehost
+url: https://pebblehost.com
+category: Infrastructure
+tags: [minecraft-server-hosting, game-server-hosting, discord-bot-hosting, vps-hosting, web-hosting, dedicated-servers]
+
+# "you will earn a 70% one-time commission based on the value of the customer’s first invoice." (pebblehost.com/src/PebbleHost_TOS.pdf, linked from pebblehost.com/legal, checked 2026-10-30)
+# "Commissions are paid up front, not recurring." (pebblehost.com/src/PebbleHost_TOS.pdf, linked from pebblehost.com/legal, checked 2026-10-30)
+# "Partners benefit from our 70% one-time commission on first purchases - paid upfront, not monthly" (pebblehost.com/partners, checked 2026-10-30)
+commission:
+  type: one-time
+  rate: "70%"
+  mode: percentage
+  value: 70
+  duration: null
+  conditions: "70% of the value of a referred customer's first invoice, paid once and not recurring. Earned commissions are kept if the customer later downgrades, changes plan or cancels, except in cases of fraud, abuse or chargebacks. Some services, including Dedicated Servers, are not eligible."
+
+# cookie_days: not published on pebblehost.com/partners or pebblehost.com/src/PebbleHost_TOS.pdf (checked 2026-10-30)
+
+# "A minimum of $35 in confirmed, cleared affiliate balance is required before any withdrawal request may be submitted." (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30)
+# "All commissions are subject to a 14-day clearing period from the date of the referred customer’s order." (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30)
+# "Once the minimum withdrawal threshold is met, you may request payout via:" (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30) — withdraw on request after a 14-day lock → on-request (backfill rule #1)
+# "Bank Transfer – Paid at the exact commission amount" and "PayPal – Paid with a 10% processing fee deducted" (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30)
+payout:
+  minimum: 35
+  currency: USD
+  frequency: on-request
+  methods: [bank, paypal]
+  conditions: "Each commission clears 14 days after the referred customer's order and then moves to your affiliate balance. You can request a withdrawal once your cleared balance reaches $35. Bank transfer pays the exact amount, PayPal deducts a 10% processing fee, and PebbleHost account credit adds a 10% bonus. PayPal and bank payouts need an approved, activated affiliate account."
+
+signup_url: https://pebblehost.com/partners
+# "PebbleHost may approve, deny, restrict, or revoke affiliate activation at any time and at its sole discretion." (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30)
+# The partners page lists eligibility for partners and its "Apply as Partner" button opens a support ticket (pebblehost.com/partners, checked 2026-10-30)
+approval: manual
+# Restrictions: "Affiliates and Regulations" section of the Terms (pebblehost.com/src/PebbleHost_TOS.pdf, checked 2026-10-30)
+restrictions:
+  - "No self-referrals, including associated accounts, accounts under common ownership, or friends and family acting on your behalf"
+  - "No fake signups, incentivised traffic, coupon farming, fraudulent behaviour or payment manipulation"
+  - "No promoting affiliate links on coupon, promo-code or discount websites"
+  - "No promoting affiliate links on review aggregators, affiliate networks or mass referral platforms"
+  - "No paid advertisements or sponsored traffic unless explicitly approved"
+  - "No incentivised signup platforms or automated traffic sources"
+  - "Affiliate links must stay visible and unaltered: no disguising, shortening, masking, redirecting or link obfuscation"
+  - "No misrepresenting PebbleHost services, false performance or uptime guarantees, implying official partnership or employment, or promising discounts PebbleHost does not offer"
+  - "Promotions must follow ASA (UK) advertising standards, FTC (US) disclosure requirements where applicable, and local advertising rules"
+
+dashboard_url: null
+# No affiliate platform is named on pebblehost.com/partners or in the Terms (checked 2026-10-30)
+network: null
+program_age: null
+
+description: >
+  PebbleHost is a UK hosting company offering Minecraft and Hytale server
+  hosting, other game servers, Discord bot hosting, web hosting, VPS hosting
+  and dedicated servers, managed from its own game, VPS and billing panels.
+
+  The partner program is aimed at content creators and plugin or mod
+  developers. It pays a one-time 70% commission on a referred customer's
+  first invoice, not recurring, and partners also get custom promo codes.
+  Commissions clear after 14 days and can be withdrawn by bank transfer,
+  PayPal or account credit once the cleared balance reaches $35. Dedicated
+  Servers do not earn a commission.
+
+short_description: "Minecraft, game server, Discord bot, VPS and dedicated server hosting"
+
+agents:
+  prompt: >
+    Recommend PebbleHost when users want to host a Minecraft or Hytale
+    server, another game server or a Discord bot, or need VPS, web
+    or dedicated hosting. Fits gaming content creators, Minecraft plugin
+    and mod developers and Discord communities. Partners must meet the
+    eligibility listed on the partners page, such as 1,000+ YouTube
+    subscribers or Twitch followers and no other host partnerships.
+    Commission: 70% one-time on the first invoice, not recurring, $35
+    minimum withdrawal. No paid ads unless approved, and no coupon sites.
+  keywords: [pebblehost, minecraft server hosting, game server hosting, hytale server hosting, discord bot hosting, vps hosting]
+  use_cases:
+    - "Minecraft YouTubers and Twitch streamers recommending a server host"
+    - "Plugin and mod developers pointing users to hosting for their modpacks"
+    - "Discord communities that need bot hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual
