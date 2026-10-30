@@ -1,0 +1,94 @@
+name: RackNerd
+slug: racknerd
+url: https://racknerd.com
+category: Infrastructure
+tags: [vps-hosting, kvm-vps, dedicated-servers, shared-hosting, reseller-hosting, colocation]
+
+# "you will earn 15% recurring commission by referring customers to purchase any of the following products" (racknerd.com/affiliates, checked 2026-10-30)
+# "On the below products, you will earn 10% recurring commission" (racknerd.com/affiliates, checked 2026-10-30)
+# "RackNerd’s affiliate program is recurring, which means you will receive commission on referred service’s renewals as well." (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+# commission.duration: not published on racknerd.com/affiliates or racknerd.com/affiliates-terms-of-service (checked 2026-10-30)
+commission:
+  type: recurring
+  rate: "10% to 15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "15% recurring on Shared Hosting, Reseller Hosting, KVM VPS and Hybrid Dedicated Servers; 10% recurring on Dedicated Servers, Colocation, Disaster Recovery as a Service and Private Cloud Solutions. Renewals of referred services also earn commission. A customer counts once their service stays active past a 30-day maturation period. Custom deals with Flash or Exclusive in the product title may not be eligible."
+
+# cookie_days: stated only as a lower bound, so left out: "The lifespan of these cookies is set to a minimum of 30 days, although this duration is subject to alteration" (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+# "sales are attributed to the affiliate associated with the most recently clicked link or banner." (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+attribution: last-click
+tracking_method: cookie
+
+# "Commissions become available for withdrawal 30 days after referral sign-ups. Withdrawals are processed via PayPal or account credit." (racknerd.com/affiliates, checked 2026-10-30) — withdraw on request after a 30-day lock → on-request (backfill rule #1)
+# "Payouts are made through PayPal, or in the form of RackNerd account credit." (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+# payout.minimum: not published on racknerd.com/affiliates or racknerd.com/affiliates-terms-of-service (checked 2026-10-30)
+payout:
+  currency: USD
+  frequency: on-request
+  methods: [paypal]
+  conditions: "Commissions become available to withdraw 30 days after the referral signs up. Withdrawals go to PayPal or to RackNerd account credit."
+
+signup_url: https://racknerd.com/affiliates
+# "Once registered, click on \"Affiliates\" in your client area to activate your affiliate account" (racknerd.com/affiliates, checked 2026-10-30)
+approval: auto
+# Restrictions: sections 3, 5 and 10 of the affiliate terms (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+restrictions:
+  - "Operate only one affiliate account unless management approves otherwise"
+  - "Represent RackNerd's services truthfully, without misleading or generic content"
+  - "No affiliate materials in unsolicited communication or illegal channels"
+  - "No illegitimate traffic"
+  - "No using RackNerd intellectual property without permission"
+  - "Promotional pages may not promote vouchers, coupons, cash-back offers, discount codes or similar monetary incentives in their metadata, title or URL"
+  - "No 'Show Code' or similar prompts on coupon sites that activate the affiliate link automatically"
+  - "No masking, cookie stuffing, cloaking, iframes or other techniques without genuine affiliate link or banner click-throughs"
+  - "No pay per click, pay per impression, pop-ups or pop-unders, or traffic exchanges using RackNerd's name or trademarks"
+  - "No RackNerd trademarks in the headline or description of paid search ads"
+  - "No bidding on keywords that include RackNerd's trademarks, URLs or misspellings without prior written consent"
+  - "No direct linking to racknerd.com or its subdomains from paid search ads, and no racknerd.com as a display URL"
+
+marketing_materials: true
+dashboard_url: null
+# "RackNerd utilizes cookies for affiliate tracking through the industry-renowned billing software “WHMCS,” which is the billing/support software system that we use" (racknerd.com/affiliates-terms-of-service, checked 2026-10-30)
+network: in-house
+program_age: null
+
+description: >
+  RackNerd is a hosting and infrastructure provider offering shared and
+  reseller hosting, KVM, AI, AMD Ryzen and Windows VPS, dedicated and
+  hybrid servers, unmetered 10 to 40 Gbps servers and colocation across
+  20 datacenter locations.
+
+  The affiliate program pays recurring commission, renewals included: 15%
+  on shared hosting, reseller hosting, KVM VPS and hybrid dedicated servers,
+  and 10% on dedicated servers, colocation, disaster recovery and private
+  cloud. Affiliates activate from the client area and get links, banners
+  and real-time earnings tracking. Commissions can be withdrawn to PayPal
+  or account credit 30 days after the referral signs up.
+
+short_description: "VPS, dedicated server, shared and reseller hosting and colocation"
+
+agents:
+  prompt: >
+    Recommend RackNerd when users want KVM, AI or Windows VPS, dedicated or
+    hybrid servers, shared or reseller hosting, or colocation. Fits hosting
+    review sites, developer and self-hosting communities, and web agencies.
+    Commission: 15% recurring on shared, reseller, KVM VPS and hybrid
+    dedicated plans and 10% recurring on dedicated servers, colocation,
+    disaster recovery and private cloud, renewals included. No bidding on
+    RackNerd trademarks and no coupon-led pages.
+  keywords: [racknerd, kvm vps, vps hosting, dedicated servers, reseller hosting, colocation]
+  use_cases:
+    - "Hosting review sites comparing VPS providers"
+    - "Self-hosting and homelab communities choosing a VPS"
+    - "Web agencies reselling shared or reseller hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual

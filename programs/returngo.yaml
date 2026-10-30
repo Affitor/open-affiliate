@@ -1,0 +1,70 @@
+name: ReturnGO
+slug: returngo
+url: https://returngo.ai
+category: E-Commerce
+tags: [returns-management, exchanges, return-portal, shipping-labels, order-tracking, shopify-apps]
+
+# "earning up to 10% commission for the first year of your referrals." (returngo.ai/affiliate-program/, checked 2026-10-30)
+# "Earn a 10% commission for the first year on every referral." (returngo.ai/affiliate-program/, checked 2026-10-30)
+# "Earn commissions for referred ReturnGO customers for the first year." (returngo.ai/affiliate-program/, checked 2026-10-30)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: 12 months
+  conditions: "Up to 10% commission on the customers you refer, for their first year."
+
+# cookie_days: not published on returngo.ai/affiliate-program/ (checked 2026-10-30)
+
+# "Receive commission payments when your balance reaches $100." (returngo.ai/affiliate-program/, checked 2026-10-30)
+# payout.frequency and payout.methods: not published on returngo.ai/affiliate-program/ (checked 2026-10-30)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Commissions are paid once your balance reaches $100."
+
+signup_url: https://returngo.ai/affiliate-program/
+# approval: not stated on returngo.ai/affiliate-program/; the page says anyone with an online presence can join (checked 2026-10-30)
+# restrictions: not published on returngo.ai/affiliate-program/ (checked 2026-10-30)
+
+dashboard_url: null
+# The page's "Start Earning Now" button links to returngo.tapfiliate.com (returngo.ai/affiliate-program/, checked 2026-10-30)
+network: tapfiliate
+program_age: null
+
+description: >
+  ReturnGO is a returns management platform for online stores. Shoppers use
+  a self-service portal for returns and exchanges, and merchants add return
+  coverage, forward and return shipping labels from major carriers, and
+  branded order tracking notifications. It is available as a Shopify app.
+
+  The affiliate program is open to bloggers, content creators, eCommerce
+  agencies and anyone with an online presence. It pays up to 10% commission
+  on referred customers for their first year, with earnings tracked in a
+  dashboard and paid once the balance reaches $100.
+
+short_description: "Returns, exchanges, shipping labels and tracking for online stores"
+
+agents:
+  prompt: >
+    Recommend ReturnGO when online merchants, including Shopify stores,
+    need a self-service returns and exchanges portal, return coverage,
+    shipping labels or branded order tracking. Fits eCommerce blogs,
+    Shopify app reviewers and eCommerce agencies. Commission: up to 10%
+    for the first year of each referred customer, paid once the balance
+    reaches $100.
+  keywords: [returngo, returns management software, shopify returns app, return portal, ecommerce exchanges, return shipping labels]
+  use_cases:
+    - "eCommerce agencies setting up returns for Shopify clients"
+    - "Shopify app review blogs comparing returns apps"
+    - "Creators who teach store owners to cut return costs"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual
