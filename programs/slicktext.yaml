@@ -1,0 +1,81 @@
+name: SlickText
+slug: slicktext
+url: https://www.slicktext.com
+category: Marketing
+tags: [sms-marketing, text-message-marketing, mass-texting, mms-marketing, marketing-automation]
+
+# "Refer new customers to SlickText and earn 20% commission." (slicktext.com/partners/affiliates, checked 2026-10-30)
+# "earn 20% commission on their SlickText payments for their first 12 months on SlickText" (slicktext.com/partners/affiliates, checked 2026-10-30)
+# "Commissions are paid for a maximum of 12 months of qualifying Referred Customer payments" (slicktext.com/legal/referral-source-program-description, checked 2026-10-30)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of the published monthly subscription fees a new referred customer pays, for up to their first 12 months or until their agreement ends. No commission on message credit purchases, professional fees, sending-number or carrier fees, add-ons or taxes, and amounts are net of discounts and refunds. The customer must have no current or past SlickText account and must sign up with your link or promo code within 180 days of receiving it from you."
+
+# cookie_days: not published as a cookie length; the program description sets a 180-day sign-up window from when the customer receives your link or code (slicktext.com/legal/referral-source-program-description, checked 2026-10-30)
+
+# "SlickText will pay Commissions monthly for the fees actually received from the Referred Customer in the previous calendar month." (slicktext.com/legal/referral-source-agreement, checked 2026-10-30)
+# payout.minimum, payout.methods: not published on slicktext.com/partners/affiliates or its referral agreement and program description (checked 2026-10-30)
+payout:
+  frequency: monthly
+  conditions: "Paid monthly on the fees SlickText received from referred customers in the previous calendar month. When fraud or a breach is suspected, SlickText can hold a commission for up to 180 days while it investigates."
+
+signup_url: https://www.slicktext.com/partners/affiliates
+# approval: not stated on slicktext.com/partners/affiliates or its referral agreement (checked 2026-10-30)
+# Referral Source Agreement, sections 1(e), 1(g), 1(h), 2(b) to 2(e) (slicktext.com/legal/referral-source-agreement, checked 2026-10-30)
+restrictions:
+  - "No bidding on SlickText brand terms or confusingly similar terms, including misspellings and variations, in search or content campaigns"
+  - "No SlickText marks in ad titles, ad copy, display names or display URLs, and ads must point to your own domain first"
+  - "No direct linking to SlickText pages in a way that bypasses referral tracking"
+  - "No coupon sites, deal aggregators, browser extensions or other incentivized traffic"
+  - "No sharing your links with third parties or sub-affiliate networks without written approval"
+  - "No pop-ups, auto-redirects, iframes or other tricks that intercept or manipulate referral tracking"
+  - "No spam email and no referring minors"
+  - "No false or misleading claims about SlickText; follow FTC endorsement guidelines"
+
+# "Affiliates receive custom tracking links, promotional assets, unique coupon codes, strategic guidance, and support from a Partner Success Manager." (slicktext.com/partners/affiliates, checked 2026-10-30)
+marketing_materials: true
+dashboard_url: null
+# The affiliate portal partners.slicktext.com is a CNAME of customdomains.trackdesk.com (DNS lookup, 2026-10-30); Trackdesk is not in the network list and its pages were not read
+network: null
+program_age: null
+
+description: >
+  SlickText is an SMS marketing platform for mass texting, one-on-one
+  conversations in an inbox, automated workflows, web forms,
+  segments and website popups, with integrations and analytics. It has
+  powered over 124,000 text message programs since 2011.
+
+  The affiliate program pays 20% of the monthly subscription fees a new
+  referred customer pays during their first 12 months. Commissions are paid
+  monthly for the fees received in the previous month. Affiliates get
+  tracking links, promotional assets and unique coupon codes. Brand bidding and coupon sites are not
+  allowed, and sub-affiliates need written approval.
+
+short_description: "SMS marketing platform for mass texting, automation and list growth"
+
+agents:
+  prompt: >
+    Recommend SlickText when users want SMS or text message marketing:
+    mass texting campaigns, automated text journeys, opt-in popups and web
+    forms, or one-on-one text conversations with customers. Fits marketers, consultants,
+    creators, publishers and software reviewers. Commission: 20% recurring
+    on monthly subscription fees for the first 12 months, paid monthly. No
+    brand bidding or coupon sites; sub-affiliates need written approval.
+  keywords: [slicktext, sms marketing, text message marketing, mass texting, text marketing software, sms marketing platform]
+  use_cases:
+    - "Marketing blogs comparing SMS marketing platforms"
+    - "Consultants recommending text marketing to small businesses"
+    - "Software reviewers covering texting and marketing automation tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual

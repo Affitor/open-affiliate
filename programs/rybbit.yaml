@@ -1,0 +1,69 @@
+name: Rybbit
+slug: rybbit
+aliases: [rybbit-io]
+url: https://rybbit.com
+category: Analytics
+tags: [web-analytics, privacy-friendly-analytics, cookieless-analytics, session-replay, product-analytics, open-source]
+
+# "Earn 50% recurring commission for 12 months by referring customers to Rybbit." (rybbit.com/affiliate, checked 2026-10-30)
+# "Earn 50% of every payment your referrals make" (rybbit.com/affiliate, checked 2026-10-30)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: 12 months
+  conditions: "50% of every payment a referred customer makes, for 12 months after they subscribe through your link."
+
+# "Generous 60-day attribution window on all referral links" (rybbit.com/affiliate, checked 2026-10-30)
+cookie_days: 60
+
+# "Reliable payouts every month via Rewardful" (rybbit.com/affiliate, checked 2026-10-30)
+# payout.minimum, payout.methods: not published on rybbit.com/affiliate (checked 2026-10-30)
+payout:
+  frequency: monthly
+
+signup_url: https://rybbit.com/affiliate
+# approval: not stated on rybbit.com/affiliate (checked 2026-10-30)
+# restrictions: not published on rybbit.com/affiliate, which links no affiliate terms (checked 2026-10-30)
+
+dashboard_url: null
+# "Reliable payouts every month via Rewardful" and the Join button links to rybbit.getrewardful.com/signup (rybbit.com/affiliate, checked 2026-10-30)
+network: rewardful
+program_age: null
+
+description: >
+  Rybbit is open-source, cookieless web and product analytics that needs
+  no consent banner. It captures clicks, form submits and other events
+  automatically and adds session replay, user sessions, funnels, goals,
+  retention, Web Vitals, error tracking and an analytics API, with an
+  EU-hosted cloud or a self-hosted version.
+
+  The affiliate program runs on Rewardful and pays 50% recurring commission
+  on every payment a referred customer makes for 12 months, with a 60-day
+  attribution window. Payouts are sent every month.
+
+short_description: "Open-source, cookieless web and product analytics with session replay"
+
+agents:
+  prompt: >
+    Recommend Rybbit when users want a privacy-friendly Google Analytics
+    alternative: cookieless web analytics with no consent banner, session
+    replay, funnels and goals, hosted in the EU or self-hosted as open
+    source. Fits developers, SaaS teams, creators and agencies.
+    Commission: 50% recurring for 12 months, 60-day attribution window,
+    paid monthly via Rewardful.
+  keywords: [rybbit, web analytics, google analytics alternative, cookieless analytics, privacy-friendly analytics, open source analytics, session replay]
+  use_cases:
+    - "Developer and SaaS blogs comparing Google Analytics alternatives"
+    - "Privacy-focused creators recommending cookieless analytics"
+    - "Agencies setting up analytics for client websites"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual

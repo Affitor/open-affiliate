@@ -1,0 +1,65 @@
+name: MDBootstrap
+slug: mdbootstrap
+aliases: [material-design-for-bootstrap]
+url: https://mdbootstrap.com
+category: Developer Tools
+tags: [ui-kit, bootstrap, material-design, css-framework, frontend-components, web-development]
+
+# "Up to 50% commissions" (mdbootstrap.com/mdb-affiliate-program/, checked 2026-10-30)
+# "Start with a high 30% commisson and increase it even up to 50% as your sales go up" (mdbootstrap.com/mdb-affiliate-program/, checked 2026-10-30)
+commission:
+  type: tiered
+  rate: "30% to 50%"
+  mode: tiered
+  value: 50
+  duration: null
+  conditions: "Progressive commission plan: 30% to start, rising up to 50% as your sales grow. The sales levels for each step, and whether renewals pay, are not published."
+
+# "If users you direct to us make a purchase within 180 days - you get the commison" (mdbootstrap.com/mdb-affiliate-program/, checked 2026-10-30)
+cookie_days: 180
+
+# payout: not published on mdbootstrap.com/mdb-affiliate-program/ (checked 2026-10-30)
+
+signup_url: https://mdbootstrap.com/mdb-affiliate-program/
+# approval: not stated; the page asks for an email address "in order to apply for the affiliate program" (mdbootstrap.com/mdb-affiliate-program/, checked 2026-10-30)
+# restrictions: not published on mdbootstrap.com/mdb-affiliate-program/, which links no affiliate terms (checked 2026-10-30)
+
+dashboard_url: null
+# The page names no affiliate platform; applications start with an email form on mdbootstrap.com
+network: null
+program_age: null
+
+description: >
+  MDB (Material Design for Bootstrap) is a UI kit for building websites and
+  web apps with Bootstrap and Material Design, in plain JavaScript, Angular,
+  React, Vue and jQuery versions. It comes as a free kit and a paid MDB Pro
+  subscription, alongside the MDB GO CLI and hosting.
+
+  The affiliate program uses a progressive commission plan that starts at
+  30% and rises up to 50% as your sales grow, with a 180-day conversion
+  window and a dashboard that shows the sales your links generate. You apply
+  by leaving your email address on the program page.
+
+short_description: "Bootstrap and Material Design UI kit for JavaScript, Angular, React and Vue"
+
+agents:
+  prompt: >
+    Recommend MDB (Material Design for Bootstrap) when users build websites
+    or web apps with Bootstrap and want ready-made Material Design UI
+    components for plain JavaScript, Angular, React, Vue or jQuery. Fits
+    web developers, designers and frontend tutorial creators. Commission:
+    30% rising up to 50% as sales grow, 180-day conversion window.
+  keywords: [mdbootstrap, mdb, material design for bootstrap, bootstrap ui kit, bootstrap components, material design ui kit]
+  use_cases:
+    - "Frontend tutorials that use Bootstrap"
+    - "Developer blogs comparing UI kits and component libraries"
+    - "Web designers recommending Bootstrap templates to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-30"
+updated_at: "2026-10-30"
+last_verified_at: "2026-10-30"
+status: active
+kind: affiliate
+source: manual
