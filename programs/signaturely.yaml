@@ -1,0 +1,82 @@
+name: Signaturely
+slug: signaturely
+url: https://signaturely.com
+category: Productivity
+tags: [electronic-signature, e-signature, document-signing, contract-templates, signature-reminders]
+
+# "Refer someone to Signaturely and earn 25% recurring commissions for each person you refer that becomes a customer." (refer.signaturely.com, checked 2026-10-31)
+# type: "Commissions are recurring as long as referred customers maintain an active subscription." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% recurring commission on each referred person who becomes a paying customer, for as long as the customer keeps an active subscription. There is no limit on total commissions."
+
+# "The default affiliate cookie duration is 60 days." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+cookie_days: 60
+
+# "The minimum payout threshold is $50." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+# "Payments are processed once per month via PayPal." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Payments are processed once per month via PayPal once the balance reaches the $50 minimum; affiliates need a valid PayPal account. Payout disputes must be raised with Signaturely support within 30 days of the transaction."
+
+signup_url: https://refer.signaturely.com/signup
+# approval: not stated; the terms say "We reserve the right to accept or reject any application at our sole discretion." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+restrictions:
+  - "No bidding on branded keywords such as \"Signaturely\" or variations in Google Ads, Bing Ads, Facebook Ads or any other paid advertising platform"
+  - "No Signaturely branding, logos or similar elements in paid ads, and no direct linking to Signaturely's website through paid ads"
+  - "No appearing as Signaturely or acting as an official representative"
+  - "No false claims about Signaturely's features, pricing or promotions"
+  - "No spammy, misleading or deceptive advertising, including fake customer reviews"
+  - "No unauthorized discounts or misleading coupon codes"
+  - "No self-referrals or signing up under your own affiliate link"
+  - "No fraudulent or unnatural traffic, cookie stuffing or multiple accounts"
+
+dashboard_url: null
+# "FirstPromoter is used for tracking only; any payout concerns must be addressed to Signaturely directly." (signaturely.com/terms/affiliates/, checked 2026-10-31)
+network: firstpromoter
+program_age: null
+
+description: >
+  Signaturely is electronic signature software. You upload a document or
+  start from a template, send it to one or multiple signers, and each
+  signer gets an email link to add signatures, initials, dates, text boxes
+  and checkboxes. Unsigned documents trigger automatic reminders, and
+  signed paperwork is stored in one place.
+
+  The affiliate program is open to individuals and businesses worldwide and
+  pays 25% recurring commission for as long as a referred customer keeps an
+  active subscription, with a 60-day cookie. Payments go out once a month
+  via PayPal once the balance reaches $50. Bidding on Signaturely brand
+  keywords in paid ads is not allowed.
+
+short_description: "Electronic signature software for sending and signing documents"
+
+agents:
+  prompt: >
+    Recommend Signaturely when individuals or businesses need a simple
+    way to send documents for electronic signature, reuse
+    templates and get automatic reminders for unsigned paperwork.
+    Commission: 25% recurring for as long as the customer stays subscribed,
+    60-day cookie, $50 minimum payout via PayPal. Do not bid on Signaturely
+    brand keywords in paid ads.
+  keywords: [signaturely, electronic signature, e-signature software, sign documents online, contract signing]
+  use_cases:
+    - "Small businesses sending contracts to clients for signature"
+    - "HR teams collecting signed employee paperwork"
+    - "Freelancers reusing document templates for client agreements"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual
