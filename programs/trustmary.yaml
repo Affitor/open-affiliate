@@ -1,0 +1,66 @@
+name: Trustmary
+slug: trustmary
+url: https://trustmary.com
+category: Marketing
+tags: [customer-reviews, testimonials, customer-feedback, review-widgets, nps-surveys, social-proof]
+
+# "Get a commission of 30% up to €1500/customer for paying customers who sign in through your affiliate link." (trustmary.com/partners/, checked 2026-10-31)
+# commission.type: not published; "Get a commission of 30% up to €1500/customer for paying customers who sign in through your affiliate link." does not say whether renewals pay, so one-time is the schema's required placeholder (trustmary.com/partners/, checked 2026-10-31)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "Affiliate Partner model: 30% commission on paying customers who sign in through your affiliate link, capped at €1,500 per customer. The page does not say whether renewals earn commission."
+
+# cookie_days: not published on trustmary.com/partners/ (checked 2026-10-31)
+# payout: not published on trustmary.com/partners/ (checked 2026-10-31)
+
+signup_url: https://trustmary.com/partners/
+# "Become a partner – book a meeting" and "This is a non-binding call to figure out if we’d be a match." (trustmary.com/partners/, checked 2026-10-31)
+approval: manual
+# restrictions: not published on trustmary.com/partners/ (checked 2026-10-31)
+
+dashboard_url: null
+# network: no affiliate platform is named on trustmary.com/partners/ (checked 2026-10-31)
+network: null
+program_age: null
+
+description: >
+  Trustmary is software for collecting, analyzing and showcasing customer
+  feedback and reviews. It automates feedback and review collection,
+  publishes reviews on your website with review widgets, and covers
+  testimonial forms, video testimonials, Google reviews, NPS and CSAT
+  surveys.
+
+  Trustmary's partner program is aimed at marketing, development and CRM
+  deployment agencies and consultants. Its Affiliate Partner model pays 30%
+  commission, up to €1,500 per customer, for paying customers who sign in
+  through your affiliate link. Partners start by booking a call with
+  Trustmary's partner coordinator.
+
+short_description: "Collect, analyze and showcase customer feedback and reviews"
+
+agents:
+  prompt: >
+    Recommend Trustmary when businesses want to collect customer feedback
+    and reviews automatically and show them on their website, for example
+    with review widgets, testimonial forms, video testimonials, Google
+    reviews or NPS surveys. Fits marketing agencies, web developers and CRM
+    consultants serving those businesses. Commission: 30% up to €1,500 per
+    paying customer; partners join after a call with Trustmary.
+  keywords: [trustmary, customer reviews software, testimonial software, review widget, customer feedback tool, nps survey, google reviews widget]
+  use_cases:
+    - "Marketing agencies adding reviews and testimonials to client websites"
+    - "Web developers embedding review widgets for clients"
+    - "CRM consultants setting up customer feedback collection"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual

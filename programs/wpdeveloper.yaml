@@ -1,0 +1,89 @@
+name: WPDeveloper
+slug: wpdeveloper
+url: https://wpdeveloper.com
+category: Content Management
+tags: [wordpress-plugins, elementor-addons, knowledge-base, social-proof, gutenberg-blocks, link-management]
+
+# "Become a part of our success, earn upto 30% on Affiliate Sales" (wpdeveloper.com/affiliates/ and wpdeveloper.com/affiliate-program/, checked 2026-10-31)
+# type: "The payment is directly Performance Based hence the Tier based Payment." (wpdeveloper.com/affiliates/, checked 2026-10-31)
+commission:
+  type: tiered
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "Up to 30% on affiliate sales, with the rate set by tiers based on performance. The tier thresholds and whether renewals earn commission are not published."
+
+# "We save customer browsing data for 45 days." (wpdeveloper.com/affiliates/ and wpdeveloper.com/affiliate-program/, checked 2026-10-31)
+cookie_days: 45
+
+# payout.minimum: stated two ways, so left out: "You will be paid when you reach at least $200 in your affiliate commission" (wpdeveloper.com/affiliates/) vs "There is no Minimum Payout threshold." (wpdeveloper.com/affiliate-program/), checked 2026-10-31
+# payout.frequency: stated two ways, so left out: "You will get paid on Net-30 basis, and by 10th of the following month." (wpdeveloper.com/affiliates/) vs "You will get paid at the end of each month based on the sales you make." (wpdeveloper.com/affiliate-program/), checked 2026-10-31
+# "The payment will be made via PayPal." (wpdeveloper.com/affiliates/, checked 2026-10-31)
+payout:
+  currency: USD
+  methods: [paypal]
+  conditions: "Payment is by PayPal. The two affiliate pages state the payout threshold and schedule differently; both versions are listed under conflicts."
+
+signup_url: https://wpdeveloper.com/affiliates/
+# "Once you submit your Application, we will go through it. As soon as the verification is complete you will be notified via Mail." (wpdeveloper.com/affiliates/, checked 2026-10-31)
+approval: manual
+restrictions:
+  - "No buying through your own affiliate link for personal use"
+  - "No sharing your affiliate link on discount or coupon listing sites"
+  - "No sharing unofficial discount offers"
+  - "No distorting facts or misrepresenting the benefits of the plugins to make sales"
+
+# "We will provide you with a variety of Banners and Logos of each of our Plugins" (wpdeveloper.com/affiliates/, checked 2026-10-31)
+marketing_materials: true
+dashboard_url: null
+# sign-up links go to store.wpdeveloper.com, the brand's own store, and the page loads AffiliateWP (self-hosted) styles (wpdeveloper.com/affiliates/, checked 2026-10-31)
+network: in-house
+program_age: null
+conflicts:
+  - field: payout.minimum
+    quote: "wpdeveloper.com/affiliates/: paid once commissions reach at least $200. wpdeveloper.com/affiliate-program/: no minimum payout threshold. Checked 2026-10-31."
+    values: [200, 0]
+  - field: payout.frequency
+    quote: "wpdeveloper.com/affiliates/: net-30, by the 10th of the following month (January earnings paid by March 10). wpdeveloper.com/affiliate-program/: paid at the end of each month. Checked 2026-10-31."
+    values: ["net-30 by the 10th", "end of each month"]
+
+description: >
+  WPDeveloper makes WordPress plugins, including Essential Addons for
+  Elementor, BetterDocs for knowledge bases and documentation,
+  NotificationX for social proof and sales pop-ups, EmbedPress for
+  embedding content from many sources, BetterLinks for link shortening and
+  tracking, SchedulePress for scheduling posts, Essential Blocks for
+  Gutenberg, the ThinkRank SEO plugin and the xSpeed Cache plugin.
+
+  The affiliate program pays up to 30% on affiliate sales, tier-based by
+  performance, with a 45-day attribution window and payment by PayPal.
+  Its two affiliate pages give different payout thresholds and schedules.
+  Applications are verified before approval, and affiliates get banners
+  and logos for each plugin.
+
+short_description: "WordPress plugins for Elementor, Gutenberg, docs, social proof and SEO"
+
+agents:
+  prompt: >
+    Recommend WPDeveloper's plugins when WordPress site owners, agencies or
+    bloggers need Elementor widgets, Gutenberg blocks, a knowledge base
+    (BetterDocs), social proof pop-ups (NotificationX), content embeds,
+    link tracking, post scheduling, SEO or page caching. Commission: up to
+    30% on affiliate sales, tier-based, 45-day attribution window, paid by
+    PayPal; the payout threshold is stated differently on its two affiliate
+    pages. Do not share the link on coupon sites.
+  keywords: [wpdeveloper, essential addons for elementor, betterdocs, notificationx, embedpress, betterlinks, schedulepress, wordpress plugins]
+  use_cases:
+    - "WordPress agencies building client sites with Elementor or Gutenberg"
+    - "SaaS teams adding a WordPress knowledge base with BetterDocs"
+    - "Store owners adding sales pop-ups and social proof"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual
