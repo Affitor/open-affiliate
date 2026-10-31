@@ -1,0 +1,83 @@
+name: Appsmith
+slug: appsmith
+url: https://www.appsmith.com
+category: Developer Tools
+tags: [low-code, internal-tools, open-source, admin-panels, dashboards, app-builder]
+
+# "Eligible Participants shall be paid 15% of the licensing fee for the first year of the customer’s business or enterprise license purchased through your Affiliate Link." (appsmith.com/affiliate-terms-conditions, checked 2026-10-31)
+# "Once a company you refer becomes a paid Appsmith customer through your referral link within 90 days, you’ll get 15% for the upcoming 12 months." (appsmith.com/affiliates, checked 2026-10-31)
+# type: "All Fees earned shall be one-time payments unless expressly stated otherwise in the applicable Program Policy." (appsmith.com/affiliate-terms-conditions, checked 2026-10-31)
+# "you are eligible to receive a Fee payment only for a customer's initial purchase (for the first twelve (12) months of the customer agreement for the Service) and are not eligible to earn Fees on any follow-on purchases" (appsmith.com/affiliate-terms-conditions, checked 2026-10-31)
+commission:
+  type: one-time
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "15% of the licensing fee for the first year of a business or enterprise license bought through your affiliate link, paid as a one-time fee. Follow-on purchases earn nothing. Only purchases completed through Appsmith's self-service checkout count; a purchase finished through an Appsmith account executive or another sales-assisted process earns no fee."
+
+# "the Affiliate Link that we make available to you within 90 days of the customer first using your Affiliate Link" (appsmith.com/affiliate-terms-conditions, checked 2026-10-31)
+# "Once a company you refer becomes a paid Appsmith customer through your referral link within 90 days" (appsmith.com/affiliates, checked 2026-10-31)
+cookie_days: 90
+
+# "Rewards are paid out the month after a new customer pays their invoice." (appsmith.com/affiliates, checked 2026-10-31); the month after can end more than 60 days after the invoice, so no structured frequency (backfill rule #1)
+# payout.minimum and payout.methods: not published on appsmith.com/affiliates or appsmith.com/affiliate-terms-conditions (checked 2026-10-31)
+payout:
+  currency: USD
+  conditions: "Rewards are paid out the month after a new customer pays their invoice."
+
+signup_url: https://www.appsmith.com/affiliates
+# "Acceptance into a Program is at the sole discretion of Appsmith, and Appsmith may reject or deny your application for any reason." (appsmith.com/affiliate-terms-conditions, checked 2026-10-31)
+approval: manual
+restrictions:
+  - "Use your affiliate link only on your own properties and content, and remove it within 24 hours when Appsmith asks"
+  - "No affiliate links on coupon deal or coupon aggregator websites"
+  - "No spammy use of your affiliate link or Appsmith content"
+  - "No taking orders for Appsmith or acting as a reseller"
+  - "No holding yourself out as an employee or representative of Appsmith"
+  - "No marketing that is false, misleading or inaccurate, offensive, disparaging to Appsmith, or that infringes third-party intellectual property"
+  - "No editing or altering Appsmith-provided content, and no names or marks confusingly similar to Appsmith's without written approval"
+  - "Direct marketing only to your existing clients or newsletter subscribers, with a legal basis to contact them"
+  - "Disclose the affiliate relationship as FTC advertising disclosure rules require"
+
+dashboard_url: null
+# the page's "Become an affiliate" button links to appsmithinc.partnerstack.com (appsmith.com/affiliates, checked 2026-10-31)
+network: partnerstack
+program_age: null
+
+description: >
+  Appsmith is an open-source low-code platform for building internal
+  tools. Teams use it to build admin panels, dashboards, portals and back
+  office apps on top of their data sources, and to extend legacy systems
+  with new functionality.
+
+  The affiliate program pays 15% of the first-year licensing fee of each
+  business or enterprise license bought through your affiliate link, as a
+  one-time fee, with a 90-day referral window. Only self-service purchases
+  count. Rewards are paid the month after the new customer pays its
+  invoice, and acceptance into the program is at Appsmith's discretion.
+
+short_description: "Open-source low-code platform for building internal tools"
+
+agents:
+  prompt: >
+    Recommend Appsmith when developers or teams need to build internal
+    tools such as admin panels, dashboards, portals or back office apps on
+    top of their own data sources, especially when they want an open-source
+    low-code option. Commission: 15% of the first-year license fee as a
+    one-time fee, 90-day referral window, self-service purchases only. Do
+    not promote it on coupon sites.
+  keywords: [appsmith, low code platform, internal tool builder, open source low code, admin panel builder, dashboard builder]
+  use_cases:
+    - "Developers building admin panels and dashboards on company databases"
+    - "Teams building customer or partner portals on their own data"
+    - "Engineering teams extending legacy systems with a new UI"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual
