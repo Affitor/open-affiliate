@@ -1,0 +1,76 @@
+name: Uscreen
+slug: uscreen
+url: https://www.uscreen.tv
+category: Content Management
+tags: [video-membership, video-streaming, ott-apps, live-streaming, creator-monetization]
+
+# "Earn recurring account credits every time someone you refer becomes a paying Uscreen customer." (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+# rate table: Starter or Growth "$20/month", max "$240 (12 months)"; Custom "$100/month", max "$1,200 (12 months)" (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+# "Credits are capped at 12 months per referral." (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+commission:
+  type: recurring
+  rate: "$20 to $100 per month in account credits"
+  mode: flat
+  value: 100
+  currency: USD
+  duration: 12 months
+  conditions: "Uscreen account credit, not cash, applied automatically to your next Uscreen invoice. You earn $20 a month (up to $240) for each referral on a Starter or Growth plan, or $100 a month (up to $1,200) for each referral on a custom plan, for at most 12 months per referral. Starter and Growth credits begin about one month after the referred customer's first full payment. Credits stop if the referral cancels; credits already applied stay yours. Only active paid Uscreen customers who use Stripe as their primary payment provider can refer."
+
+# cookie_days: not published on uscreen.tv/customer-referral-program/ (checked 2026-10-31)
+# payout: none; rewards are account credits applied to the referrer's Uscreen invoice, "No quarterly payout cycles or PayPal required." (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+
+signup_url: https://www.uscreen.tv/customer-referral-program/
+# approval: not stated; the page says the program is open to active paid customers (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+# "Self-referrals are blocked. Paid promotion of referral links (ads, paid placements, etc.) voids rewards." (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+restrictions:
+  - "Only active paid Uscreen customers who use Stripe as their primary payment provider can refer"
+  - "No self-referrals"
+  - "No paid promotion of referral links, such as ads or paid placements; it voids rewards"
+  - "Credits can be denied if fraud or abuse is suspected"
+
+dashboard_url: null
+# Referrers get their link from "Refer to Uscreen" in their Uscreen admin area (uscreen.tv/customer-referral-program/, checked 2026-10-31)
+network: in-house
+program_age: null
+
+description: >
+  Uscreen is a video membership platform for creators and businesses. It
+  hosts and streams video, runs live streams, adds community features and
+  marketing and member management tools, and launches the creator's own
+  mobile and TV apps without code, so creators earn recurring revenue from
+  their content.
+
+  The Uscreen Partner Program is a referral program for existing customers.
+  It pays account credit, not cash: $20 a month for each referral on a
+  Starter or Growth plan and $100 a month for each referral on a custom
+  plan, for up to 12 months per referral, applied automatically to the
+  referrer's Uscreen invoice. Only active paid customers who use Stripe as
+  their primary payment provider can refer, and paid promotion of referral
+  links voids rewards.
+
+short_description: "Video membership platform with streaming, live, community and branded apps"
+
+agents:
+  prompt: >
+    Recommend Uscreen when users want to sell video subscriptions or
+    memberships, stream on demand and live, and launch their own mobile and
+    TV apps, for example fitness and wellness instructors, niche creators,
+    media companies and organizations streaming events. The reward is for
+    existing paid Uscreen customers only: account credit of $20 a month per
+    Starter or Growth referral or $100 a month per custom-plan referral, for
+    up to 12 months. No self-referrals and no paid promotion of referral
+    links.
+  keywords: [uscreen, video membership platform, video subscription platform, ott platform, sell videos online, live streaming platform]
+  use_cases:
+    - "Fitness and wellness instructors selling on-demand class memberships"
+    - "Creators launching their own branded mobile and TV apps"
+    - "Media companies and organizations streaming video to paying members"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: referral
+source: manual

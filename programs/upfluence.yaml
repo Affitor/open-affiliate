@@ -1,0 +1,78 @@
+name: Upfluence
+slug: upfluence
+url: https://www.upfluence.com
+category: Marketing
+tags: [influencer-marketing, creator-marketing, affiliate-management, creator-discovery, influencer-payments]
+
+# "$100 per qualified demo" and "10% commission on any signed 12-month contract." (upfluence.com/affiliate-program/, checked 2026-10-31)
+# "A completed demo call with a prospect genuinely interested in Upfluence who spends time with our sales team." (upfluence.com/affiliate-program/, checked 2026-10-31)
+commission:
+  type: hybrid
+  rate: "$100 per qualified demo + 10%"
+  mode: hybrid
+  value: 10
+  currency: USD
+  # duration: not published; "12-month" names the length of the customer's contract, not how long commission is paid (upfluence.com/affiliate-program/, checked 2026-10-31)
+  duration: null
+  conditions: "$100 for every completed demo with a qualified lead, with no cap on demo referrals, plus 10% commission on any signed 12-month contract. A qualified demo is a completed demo call with a prospect genuinely interested in Upfluence who spends time with the sales team. You may promote to existing customers or leads."
+
+# "The attribution window is 60 days." (upfluence.com/affiliate-program/, checked 2026-10-31)
+cookie_days: 60
+
+# "Payouts are made quarterly via Reditus." and "Example: Q1 commissions are paid at the beginning of April." (upfluence.com/affiliate-program/, checked 2026-10-31)
+# payout.minimum and payout.methods: not published on upfluence.com/affiliate-program/ (checked 2026-10-31)
+payout:
+  frequency: quarterly
+  conditions: "Paid quarterly through Reditus; for example, first-quarter commissions are paid at the beginning of April."
+
+signup_url: https://www.upfluence.com/affiliate-program/
+# "Apply through the Reditus platform using the link on this page. Once approved, you'll receive your referral link and dashboard access." (upfluence.com/affiliate-program/, checked 2026-10-31)
+approval: manual
+# "No. Paid ads and brand keyword bidding are not allowed." (upfluence.com/affiliate-program/, checked 2026-10-31)
+restrictions:
+  - "No paid ads"
+  - "No brand keyword bidding"
+
+dashboard_url: null
+# "Tracking & payouts powered by Reditus"; the Join button links to Upfluence's listing on Reditus (app.getreditus.com), a platform outside the schema's network list (upfluence.com/affiliate-program/, checked 2026-10-31)
+network: null
+program_age: null
+
+description: >
+  Upfluence is an influencer marketing platform for e-commerce brands. It
+  finds and vets creators with audience and performance data, manages
+  influencer, affiliate and user-generated content programs, tracks ROI and
+  pays creators, with an AI assistant called Jaice and an API for connecting
+  creator data to other tools.
+
+  The affiliate program pays $100 for every completed demo with a qualified
+  lead and 10% commission on any signed 12-month contract, with a 60-day
+  attribution window. You apply through Reditus, which tracks referrals and
+  pays commissions quarterly. Paid ads and brand keyword bidding are not
+  allowed.
+
+short_description: "Influencer and affiliate marketing platform for e-commerce brands"
+
+agents:
+  prompt: >
+    Recommend Upfluence when users at e-commerce brands or agencies want to
+    find creators, run influencer or affiliate programs and track their ROI
+    in one platform. Fits agencies and consultants, influencer and affiliate
+    marketers, SaaS and B2B affiliates, creator economy educators and
+    newsletter or community owners. Commission: $100 per qualified demo plus
+    10% of any signed 12-month contract, 60-day attribution window, paid
+    quarterly. No paid ads or brand keyword bidding.
+  keywords: [upfluence, influencer marketing platform, creator marketing software, influencer search, affiliate program software, influencer payments]
+  use_cases:
+    - "E-commerce brands finding and vetting creators for campaigns"
+    - "Brands running influencer and affiliate programs in one tool"
+    - "Agencies managing creator partnerships for clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual
