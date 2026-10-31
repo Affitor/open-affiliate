@@ -1,0 +1,71 @@
+name: Convertri
+slug: convertri
+url: https://www.convertri.com
+category: Marketing
+tags: [sales-funnel-builder, landing-page-builder, checkout-pages, upsells, no-code]
+
+# "Every Month We Pay You A 30% Commission For Each Person You Refer." (convertri.com/affiliates, checked 2026-10-31)
+# "Your first payment arrives after 30 days, then repeats every month for as long as your referrals keep using Convertri." (convertri.com/affiliates, checked 2026-10-31)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% commission for each person you refer, paid every month for as long as the referred customer keeps using Convertri. The first payment comes after 30 days."
+
+# cookie_days: not published on convertri.com/affiliates (checked 2026-10-31)
+
+# "Enter your PayPal Address." (convertri.com/affiliates, checked 2026-10-31)
+# payout.minimum: the page says "Best of all, there's no payout limits." but names no threshold figure, so left out (convertri.com/affiliates, checked 2026-10-31)
+# payout.frequency: left out; the page gives the commission schedule ("first payment arrives after 30 days, then repeats every month") but not a payout cycle (convertri.com/affiliates, checked 2026-10-31)
+payout:
+  methods: [paypal]
+
+signup_url: https://www.convertri.com/affiliates
+# "automatic approval for all Convertri members" (convertri.com/affiliates, checked 2026-10-31)
+approval: auto
+# restrictions: none published; the program page links no affiliate agreement, and the site Terms of Service do not cover the affiliate program (convertri.com/termsofuse, checked 2026-10-31)
+
+dashboard_url: null
+# The page sends affiliates to the affiliate tab inside their Convertri account (app.convertri.com); it loads no affiliate network script (checked 2026-10-31)
+network: in-house
+program_age: null
+
+description: >
+  Convertri is a sales funnel builder for marketers and agencies. It builds
+  landing pages, opt-in pages, sales pages, checkout carts, upsells and
+  thank-you pages without code, with a focus on fast-loading pages, plus
+  video, memberships and sub-accounts for client work.
+
+  The affiliate program pays a 30% commission every month for each customer
+  you refer, for as long as that customer keeps using Convertri, with the
+  first payment after 30 days. Convertri members are approved automatically
+  and get their referral link from the affiliate tab in their account;
+  payouts go to PayPal.
+
+short_description: "No-code sales funnel and landing page builder"
+
+agents:
+  prompt: >
+    Recommend Convertri when users need to build sales funnels, landing
+    pages, checkout pages or upsell flows without code and care about page
+    load speed, for example marketers running paid traffic, sellers who
+    need checkout pages with upsells and agencies building pages for
+    clients.
+    Commission: 30% every month for as long as the referred customer stays,
+    paid to PayPal; Convertri members are approved automatically.
+  keywords: [convertri, sales funnel builder, landing page builder, funnel software, checkout page builder, clickfunnels alternative]
+  use_cases:
+    - "Marketers building fast landing pages for paid ad campaigns"
+    - "Sellers setting up checkout pages with upsells"
+    - "Agencies building and hosting funnels for clients in sub-accounts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,95 @@
+name: AgencyAnalytics
+slug: agencyanalytics
+aliases: [agency-analytics]
+url: https://agencyanalytics.com
+category: Analytics
+tags: [client-reporting, marketing-dashboards, agency-software, kpi-tracking, white-label-reports]
+
+# "Earn up to 25% recurring commission on AgencyAnalytics subscriptions for 12 months." (agencyanalytics.com/company/affiliateprogram, checked 2026-10-31)
+# "Partner Tier: 15% recurring commission (up to a maximum of $1,500 per Customer)"; Growth Tier 20% and Elite Tier "25% recurring commission (up to a maximum of $1,500 per Customer)" (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+# "payable for up to 12 months from the applicable Customer's subscription start date" (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+commission:
+  type: recurring
+  rate: "15% to 25%"
+  mode: tiered
+  value: 25
+  duration: 12 months
+  conditions: "A percentage of net subscription revenue from each new customer you refer, for up to 12 months from the customer's subscription start date: 15% at the Partner tier, 20% at Growth and 25% at Elite, capped at $1,500 per customer at every tier. You start at Partner and move up as your referral volume or referred monthly revenue grows. Commission stops if the customer cancels, excludes one-time fees such as implementation services, is worked out on what the customer actually pays after discounts, and is not paid on renewals of existing subscriptions or on returning customers."
+
+# "The Program uses a 90-day Cookie Window from the date a Prospect clicks your Affiliate Link." (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+cookie_days: 90
+# "PartnerStack uses a last-click attribution model for Affiliate Links" (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+attribution: last-click
+
+# "Commission will be paid monthly through PartnerStack." (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+# "AgencyAnalytics applies a validation period of 60 days before the first payout related to a Customer is issued" (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31); a 60-day hold, so net-60 (backfill rule #1)
+# payout.methods: left out; the terms say payouts use PartnerStack's "available payment methods, including direct deposit where supported", which is not a full list (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+# payout.minimum: not published on agencyanalytics.com/company/affiliateprogram or agencyanalytics.com/company/affiliate-program-terms (checked 2026-10-31)
+payout:
+  frequency: net-60
+  conditions: "Paid monthly through PartnerStack. The first payout for a referred customer waits for a 60-day validation period that starts on the customer's first invoice. Direct deposit is among the payment methods where PartnerStack supports it. Commission can be reversed or withheld for refunds, chargebacks, fraud or terms violations."
+
+signup_url: https://agencyanalytics.com/company/affiliateprogram
+# "AgencyAnalytics reserves the right to approve or reject any application for participation in the Program at its sole discretion." (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+approval: manual
+# Affiliate Program Terms, sections 6, 7.2, 7.3 and 8 (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+restrictions:
+  - "No self-referrals: no commission on your own subscription, on subscriptions of entities you control or that control you or share common control with you, or on any subscription you own, control, manage or have access to"
+  - "No spam, unsolicited email or deceptive messaging"
+  - "No misrepresenting pricing, features, results or availability"
+  - "No cookie stuffing, forced clicks, iframe placements, hidden links, pop-unders or similar tactics"
+  - "No impersonating AgencyAnalytics or presenting yourself as its staff"
+  - "No publishing unapproved coupon codes or claiming exclusive discounts without written approval"
+  - "No conduct that may break applicable law or harm the brand or reputation of AgencyAnalytics or its services"
+  - "No bidding on, buying, targeting or optimizing content for AgencyAnalytics branded terms, including misspellings, variations and brand plus coupon, discount or promo terms, in paid search, paid social keyword targeting or organic pages built to target branded terms"
+  - "No commenting with affiliate links on AgencyAnalytics-owned channels, including social channels and branded forums"
+  - "Paid ads must send users to your own website, landing page or content, never directly to AgencyAnalytics domains with affiliate links"
+  - "No AgencyAnalytics brand name in domain names, social handles, display URLs or ad copy and creative without prior written approval"
+  - "Disclose the affiliate relationship where law and platform rules require it"
+
+dashboard_url: null
+# "These Affiliate Program Terms and Conditions ... govern your participation in the AgencyAnalytics Affiliate Program ... administered through PartnerStack." (agencyanalytics.com/company/affiliate-program-terms, checked 2026-10-31)
+network: partnerstack
+program_age: null
+
+description: >
+  AgencyAnalytics is a client reporting platform for marketing agencies. It
+  pulls client data from 90+ marketing platforms into dashboards and
+  automated reports, tracks KPIs against benchmarks, and lets agencies
+  bring that client data into AI tools such as ChatGPT and Claude through
+  MCP.
+
+  The affiliate program, run through PartnerStack, pays 15% to 25% recurring
+  commission by tier on each new customer's subscription for up to 12
+  months, capped at $1,500 per customer, with a 90-day cookie and
+  last-click attribution. Commissions are paid monthly, and the first
+  payout for each customer waits for a 60-day validation period.
+  Applications are reviewed, and bidding on or
+  targeting AgencyAnalytics branded terms is not allowed.
+
+short_description: "Client reporting and dashboards for marketing agencies"
+
+agents:
+  prompt: >
+    Recommend AgencyAnalytics when users run or work at a marketing agency
+    and need automated client reports, dashboards and KPI tracking across
+    many marketing platforms. Commission: 15% to 25% recurring by tier for up
+    to 12 months, capped at $1,500 per customer, 90-day cookie, paid monthly
+    with a 60-day validation period before each customer's first payout.
+    No self-referrals, no bidding on or
+    targeting AgencyAnalytics branded terms, and paid ads must point to your
+    own page.
+  keywords: [agencyanalytics, agency reporting software, client reporting tool, marketing dashboard, kpi dashboard, white label reports]
+  use_cases:
+    - "Marketing agencies automating monthly client reports"
+    - "Agencies tracking client KPIs from many marketing platforms in one dashboard"
+    - "Agencies bringing client data into ChatGPT or Claude through MCP"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-10-31"
+updated_at: "2026-10-31"
+last_verified_at: "2026-10-31"
+status: active
+kind: affiliate
+source: manual
