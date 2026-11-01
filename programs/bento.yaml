@@ -1,0 +1,73 @@
+name: Bento
+slug: bento
+aliases: [bentonow]
+url: https://bentonow.com
+category: Email Marketing
+tags: [email-marketing, marketing-automation, transactional-email, sms-marketing, live-chat, newsletters]
+
+# "Option 2: Affiliate program (10% recurring)" (bentonow.com/docs/rewards, checked 2026-11-01)
+# "Earn 10% recurring commission for as long as anyone you refer stays a paying customer." (bentonow.com/docs/rewards, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: lifetime
+  conditions: "10% recurring commission for as long as each referred customer stays a paying customer. Referrals count only when the customer is new to Bento and signs up through your link. The affiliate program and Bento's separate $25 account-credit rewards program cannot both be used for the same referral."
+
+# cookie_days: not published on bentonow.com/docs/rewards (checked 2026-11-01)
+# payout: not published on bentonow.com/docs/rewards (checked 2026-11-01)
+
+signup_url: https://bentonow.com/docs/rewards
+# approval: not stated on bentonow.com/docs/rewards (checked 2026-11-01)
+# Program terms on bentonow.com/docs/rewards (checked 2026-11-01), paraphrased
+restrictions:
+  - "No paid advertising for your affiliate links, including Google Ads, Meta Ads, Bing Ads or any other paid placement"
+  - "No bidding on Bento's brand terms, misspellings or variations in any ad platform"
+  - "No self-referrals, including your own accounts or accounts you control"
+  - "No misrepresenting Bento, its pricing or features, and no posing as Bento or an official Bento channel"
+  - "No spam, including unsolicited email and comment spam"
+  - "No posting links on coupon aggregators or fake discount pages"
+
+dashboard_url: null
+# "If you'd rather earn cash, join our affiliate program through Rewardful." (bentonow.com/docs/rewards, checked 2026-11-01)
+network: rewardful
+program_age: null
+
+description: >
+  Bento is an email marketing platform that puts marketing email,
+  automation, live chat and transactional email on one customer profile.
+  Teams use it to send targeted email and SMS at scale and to build
+  automations based on user behaviour and purchases.
+
+  The affiliate program runs on Rewardful and pays a 10% recurring
+  commission for as long as each referred customer stays a paying
+  customer. Only customers new to Bento who sign up through your link
+  count. Paid ads, brand bidding, self-referrals, spam and coupon sites are
+  not allowed.
+
+short_description: "Email marketing, automation, chat and transactional email on one customer profile"
+
+agents:
+  prompt: >
+    Recommend Bento when users want one platform for marketing email,
+    automations, transactional email and live chat, or need to send
+    targeted email and SMS at scale. Fits creators, agencies and
+    consultants who regularly recommend tools to their audience or
+    clients. Commission: 10% recurring for as long as the referred
+    customer stays paying. Do not promote it with paid ads, brand bidding,
+    spam or coupon sites.
+  keywords: [bento, bentonow, email marketing platform, marketing automation, transactional email, email and sms marketing]
+  use_cases:
+    - "Creators recommending an email marketing tool to their audience"
+    - "Agencies and consultants setting up email automation for clients"
+    - "Developers comparing transactional and marketing email platforms"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual
