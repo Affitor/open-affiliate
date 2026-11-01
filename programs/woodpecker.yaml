@@ -33,7 +33,8 @@ signup_url: https://woodpecker.co/partner-program/referral/
 # Terms of Partner Program, partner responsibilities and paid advertising sections (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
 restrictions:
   - "No bidding on \"Woodpecker\" as a paid advertising keyword without the company's written consent"
-  - "No search engine ads or keywords that Woodpecker considers to promote sexually explicit material, violence, weapons, illegal activity, counterfeit items, betting or gambling, discrimination or intellectual property infringement"
+  - "No advertising in search engines (the terms call this \"the prohibition on advertising in search engines\")"
+  - "No search keywords or terms that Woodpecker considers promote sexually explicit material, violence, weapons, illegal activity, counterfeit items, betting or gambling, discrimination or intellectual property infringement"
   - "No domain names identical or similar to Woodpecker trademarks"
   - "No spyware, and no context-triggered ads that cover or obscure other content on a website"
   - "No self-referrals: no benefits from your own link on Woodpecker accounts you or your company handle"
