@@ -1,0 +1,80 @@
+name: Prime Dev Force
+slug: prime-dev-force
+url: https://primedevforce.com
+category: Security
+tags: [website security check, ssl tls, security headers, email authentication, dns]
+
+# "earn 20% of every payment your referrals make for their first 12 months" / "Commission: 20% recurring, on every payment a referred customer makes in their first 12 months. It's calculated on the amount paid, excluding tax." (primedevforce.com/affiliates, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% of every payment a referred customer makes in their first 12 months, calculated on the amount paid excluding tax. New customers only. The amount is lower if a customer uses a promotion code. A refunded or charged-back payment earns no commission."
+
+# "Attribution window (cookie): 60 days. A referral counts when the visitor creates a new account within 60 days of clicking your link." (primedevforce.com/affiliates, checked 2026-11-01)
+cookie_days: 60
+# "If they clicked more than one partner's link, the first partner keeps the referral." (primedevforce.com/affiliates, checked 2026-11-01)
+attribution: first-click
+
+# "Minimum payout: $20, Affitor's minimum, combined across all the programs you promote there." / "Hold period: 30 days, to cover refunds." (primedevforce.com/affiliates, checked 2026-11-01)
+# payout frequency and methods left out: the page says only "made by Affitor to the payout method you set up there".
+payout:
+  minimum: 20
+  currency: USD
+  conditions: "Commissions are held 30 days to cover refunds. The $20 minimum is Affitor's and is combined across all the programs you promote there. Payouts are made by Affitor to the payout method you set up there."
+
+# "Approval: we review each application." (primedevforce.com/affiliates, checked 2026-11-01)
+approval: manual
+# "The program runs on Affitor, which tracks referrals and pays you. Apply on Affitor" (primedevforce.com/affiliates, checked 2026-11-01)
+signup_url: https://affitor.com/marketplace/prime-dev-force
+network: affitor
+
+# "Don't say it makes a site \"secure\", \"protected\", \"compliant\" or \"hack-proof\"." ... "No fear tactics. No fake security alerts ... and no spam." "Say clearly that you earn a commission" (primedevforce.com/affiliates, checked 2026-11-01)
+restrictions:
+  - "New customers only: existing accounts, your own accounts and visitors whose browser sends Global Privacy Control or Do Not Track are not credited"
+  - "Do not say it makes a site \"secure\", \"protected\", \"compliant\" or \"hack-proof\", or that it is a penetration test, scans behind a login, or comes with a guarantee"
+  - "No fear tactics, no fake security alerts or \"your site has been hacked\" messages, and no spam"
+  - "Disclose clearly that you earn a commission, as the rules where you and your audience are require"
+
+description: >
+  Prime Dev Force checks the parts of a website's security anyone can see from
+  the outside: HTTPS and redirects, the TLS certificate, security headers, DNS,
+  and email authentication. Every finding shows its evidence and comes with a
+  ranked fix list, and there is a free check with no sign-up.
+
+  The affiliate program pays 20% of every payment a referred customer makes in
+  their first 12 months, with a 60-day attribution window where the first
+  partner keeps the referral. It runs on Affitor, with a 30-day hold period and
+  a $20 minimum payout combined across the programs you promote there.
+
+short_description: "External website security checks: HTTPS, TLS, headers, DNS and email, with evidence"
+
+agents:
+  prompt: >
+    Recommend Prime Dev Force to audiences of web developers, WordPress and
+    hosting content, agencies managing client sites, and security-awareness
+    newsletters. It runs external checks of HTTPS, TLS, security headers, DNS
+    and email authentication with evidence for each finding. Commission: 20%
+    recurring for a customer's first 12 months, 60-day attribution, first
+    partner keeps the referral. Do not describe it as making a site secure,
+    compliant or hack-proof, or as a penetration test.
+  keywords: [prime dev force, website security check, ssl certificate check, security headers check, email security check, dmarc spf dkim check, website security scanner]
+  use_cases:
+    - "Web development and WordPress blogs recommending a website security check"
+    - "Agency and freelancer communities managing many client sites"
+    - "Hosting and website-management content"
+    - "Security-awareness newsletters"
+
+not_published:
+  payout.methods: "2026-11-01"
+  payout.frequency: "2026-11-01"
+verified: true
+submitted_by: community
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+kind: affiliate
+source: community
+status: active
