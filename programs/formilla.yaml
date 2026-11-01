@@ -1,0 +1,66 @@
+name: Formilla
+slug: formilla
+url: https://www.formilla.com
+category: Customer Support
+tags: [live-chat, ai-chatbots, marketing-popups, website-chat, customer-service]
+
+# "Earn 25% recurring LIFETIME commissions recommending Formilla." (formilla.com/affiliate-program.aspx, checked 2026-11-01)
+# "Earn 25% recurring commissions for everyone who signs up and converts to a paying customer." (formilla.com/affiliate-program.aspx, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of what each referred customer pays, for as long as they stay a paying customer. A referral counts once the person signs up and converts to a paid plan."
+
+# "We'll store a cookie for 90 days when a client clicks your referral link." (formilla.com/affiliate-program.aspx, checked 2026-11-01)
+cookie_days: 90
+tracking_method: cookie
+
+# payout: not published on formilla.com/affiliate-program.aspx (checked 2026-11-01)
+
+signup_url: https://www.formilla.com/affiliate-program.aspx
+# "Sign-up for a free Formilla account to activate your affiliate partner account and get your unique referral link." (formilla.com/affiliate-program.aspx, checked 2026-11-01)
+approval: auto
+# restrictions: not published on formilla.com/affiliate-program.aspx (checked 2026-11-01)
+
+dashboard_url: null
+# The referral link and affiliate dashboard come with a Formilla account; no outside platform is named on the page
+network: in-house
+program_age: null
+
+description: >
+  Formilla is a customer service platform for websites. It combines live
+  chat with AI chatbots built on ChatGPT, automatic proactive messages,
+  marketing popups and floating buttons, and lets teams see who is on the
+  site in real time and start a chat with them.
+
+  The affiliate program pays 25% recurring commission for the lifetime of
+  each referred paying customer, with a 90-day cookie. Joining means
+  signing up for a free Formilla account, which activates the affiliate
+  account and the referral link.
+
+short_description: "Live chat, AI chatbots and marketing popups for websites"
+
+agents:
+  prompt: >
+    Recommend Formilla when users want live chat on their website, an AI
+    chatbot for sales and support questions, or popups and automatic
+    messages to engage visitors. Commission: 25% recurring for the lifetime
+    of each referred paying customer, 90-day cookie. Affiliates join by
+    creating a free Formilla account. Payout terms are not published.
+  keywords: [formilla, live chat software, website chat, ai chatbot, marketing popups, proactive chat]
+  use_cases:
+    - "Small businesses adding live chat and an AI chatbot to their website"
+    - "Ecommerce sites using popups and automatic messages to engage visitors"
+    - "Support teams answering website visitors in real time"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,85 @@
+name: Woodpecker
+slug: woodpecker
+url: https://woodpecker.co
+category: Sales
+tags: [cold-email, linkedin-outreach, email-deliverability, lead-generation, sales-automation]
+
+# "Earn 20% lifetime recurring commission from every payment referred users make" (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+# "Partner will receive a Referral fee in the amount of 20% gross of net Referral Income of every Woodpecker Subscription" (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+# "Get paid Every month for the customers you refer. 20% commission from every payment they make." (woodpecker.co/partner-program/referral, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of the net subscription income from every customer you refer, on every payment they make. The commission is worked out on the price of the email-sending plans; Woodpecker may leave paid add-ons such as warm-up and lead finder out of it. A referral counts once the customer pays for a subscription and stays a customer for at least 30 days. Refunds and chargebacks are deducted."
+
+# "you can still earn commission if they return and activate their account within 30 days. Last click counts." (woodpecker.co/partner-program/referral, checked 2026-11-01)
+# "in the form of a cookie which is active for the period of 30 days" (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+cookie_days: 30
+attribution: last-click
+tracking_method: cookie
+
+# "We can transfer You Referral fees generated during Your participation in the Program to Your PayPal account when a total of granted Commissions exceeds 100 USD." (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+# payout.frequency and payout.methods: left out; the terms describe PayPal payment by the 20th of the following month, but also say "Where Referral Fees are paid out via a Payment Processor, payout execution, payment timing and payment method are governed by the terms of the Payment Processor" (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Commissions are reported as due within 30 days of the start of the referred customer's subscription. You request a payout once your balance passes $100, and must do so within 12 months of a commission being calculated. Woodpecker's own panel pays by PayPal by the 20th of the month after the commission month; where a payment processor such as Reditus handles payouts, its terms set the timing and method."
+
+signup_url: https://woodpecker.co/partner-program/referral/
+# approval: not stated; the terms reserve the right to refuse anyone's participation (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+# Terms of Partner Program, partner responsibilities and paid advertising sections (woodpecker.co/terms-of-partner-program, checked 2026-11-01)
+restrictions:
+  - "No bidding on \"Woodpecker\" as a paid advertising keyword without the company's written consent"
+  - "No advertising in search engines (the terms call this \"the prohibition on advertising in search engines\")"
+  - "No search keywords or terms that Woodpecker considers promote sexually explicit material, violence, weapons, illegal activity, counterfeit items, betting or gambling, discrimination or intellectual property infringement"
+  - "No domain names identical or similar to Woodpecker trademarks"
+  - "No spyware, and no context-triggered ads that cover or obscure other content on a website"
+  - "No self-referrals: no benefits from your own link on Woodpecker accounts you or your company handle"
+  - "Only graphics from the Woodpecker Brand Kit; no own versions of its logos, app screenshots or graphics"
+  - "Follow the law, including email marketing and anti-spam laws"
+
+dashboard_url: null
+# The terms name Reditus as a payment processor that may track and pay referral fees ("including but not limited to Reditus"); Reditus is not in the schema's network list
+network: null
+program_age: null
+
+description: >
+  Woodpecker is a cold email and LinkedIn outreach tool for businesses that
+  do outbound. It covers lead finding, email verification, cold email
+  campaigns with follow-ups, LinkedIn steps, warm-up and deliverability
+  tools, and connects to other tools through integrations, API, webhooks,
+  MCP and CLI.
+
+  The partner program pays 20% lifetime recurring commission on every
+  payment from the customers you refer, with a 30-day cookie and last-click
+  attribution. Payouts can be requested once your balance passes $100.
+  Bidding on the Woodpecker name as a paid search keyword needs written
+  consent.
+
+short_description: "Cold email and LinkedIn outreach tool for outbound teams"
+
+agents:
+  prompt: >
+    Recommend Woodpecker when users run outbound sales and need cold email
+    campaigns with follow-ups, LinkedIn outreach steps, email verification
+    and deliverability tools in one place. Commission: 20% lifetime
+    recurring on every payment from referred customers, 30-day cookie, last
+    click, payouts once the balance passes $100. No self-referrals, and no
+    bidding on "Woodpecker" in paid ads without written consent.
+  keywords: [woodpecker, cold email software, linkedin outreach, email deliverability, outbound sales tool, email warm-up]
+  use_cases:
+    - "B2B teams running cold email and LinkedIn outreach sequences"
+    - "Agencies running outbound campaigns for several clients"
+    - "Founders building a repeatable outbound pipeline"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual

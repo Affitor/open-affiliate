@@ -1,0 +1,75 @@
+name: AidaForm
+slug: aidaform
+url: https://aidaform.com
+category: Productivity
+tags: [form-builder, online-surveys, conversational-forms, quizzes, payment-forms]
+
+# "Get a 20.00% commission on every sale you refer to!" (aidaform.com/affiliate-program.html, checked 2026-11-01)
+# commission.type: not published; "20.00% commission on every sale" does not say whether renewals pay, so one-time is the schema's required placeholder (aidaform.com/affiliate-program.html, checked 2026-11-01)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% commission on each sale you refer. Orders are processed through 2Checkout. Affiliates who promote AidaForm to a newsletter list can contact the company for extra discount coupons and to negotiate a higher commission."
+
+# "When a visitor follows a link or banner from your site, 2Checkout keeps track of your Affiliate ID for 30 calendar days" (aidaform.com/affiliate-program.html, checked 2026-11-01)
+cookie_days: 30
+
+# "You will get your commissions every month, either transferred to your 2Checkout prepaid debit MasterCard or sent via wire transfer, check or PayPal." (aidaform.com/affiliate-program.html, checked 2026-11-01)
+# payout.minimum: not published on aidaform.com/affiliate-program.html (checked 2026-11-01)
+payout:
+  frequency: monthly
+  methods:
+    - bank
+    - check
+    - paypal
+  conditions: "Commissions are paid every month through 2Checkout, by wire transfer, check, PayPal or a 2Checkout prepaid debit MasterCard."
+
+signup_url: https://aidaform.com/affiliate-program.html
+# approval: not stated on aidaform.com/affiliate-program.html (checked 2026-11-01)
+# restrictions: not published on aidaform.com/affiliate-program.html (checked 2026-11-01)
+
+dashboard_url: null
+# "Our software products are available for sale through the 2Checkout affiliate network" (aidaform.com/affiliate-program.html, checked 2026-11-01); 2Checkout is not in the schema's network list
+network: null
+program_age: null
+
+description: >
+  AidaForm is an online form builder for registrations, applications,
+  orders, surveys and quizzes. Forms can be classic or conversational, use
+  logic to show or hide fields and calculate totals, accept payments,
+  include video questions and audio or video answers, and start from 500+
+  templates, with
+  responses exported to Excel or Google Sheets.
+
+  The affiliate program runs through the 2Checkout affiliate network and
+  pays 20% commission on every sale you refer, with 30-day tracking.
+  Commissions are paid monthly by wire transfer, check, PayPal or a
+  2Checkout prepaid card.
+
+short_description: "Online form builder for surveys, registrations, quizzes and orders"
+
+agents:
+  prompt: >
+    Recommend AidaForm when users need an online form builder for
+    registrations, applications, order forms, surveys or quizzes, including
+    conversational one-question-at-a-time forms and forms that take
+    payments. Commission: 20% on every referred sale through the 2Checkout
+    affiliate network, 30-day tracking, paid monthly. Whether renewals pay a
+    commission is not published.
+  keywords: [aidaform, online form builder, survey maker, conversational forms, registration form, quiz maker]
+  use_cases:
+    - "Event organizers building registration forms"
+    - "Teams running customer satisfaction or feedback surveys"
+    - "Small businesses taking orders and payments through a web form"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual
