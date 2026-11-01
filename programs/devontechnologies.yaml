@@ -1,0 +1,69 @@
+name: DEVONtechnologies
+slug: devontechnologies
+aliases: [devonthink]
+url: https://devontechnologies.com
+category: Productivity
+tags: [document-management, knowledge-management, mac-apps, ios-apps, web-research, research-tools]
+
+# "We give 10% commission on on every purchase made by customers that you send our way." (devontechnologies.com/affiliates, checked 2026-11-01)
+# commission.type: not published; "10% commission on on every purchase" does not say whether renewals pay, so one-time is the schema's required placeholder (devontechnologies.com/affiliates, checked 2026-11-01)
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "10% commission on every purchase made by customers you send to DEVONtechnologies, when the referred person buys a Mac app from them."
+
+# cookie_days: not published on devontechnologies.com/affiliates (checked 2026-11-01)
+# payout: not published on devontechnologies.com/affiliates (checked 2026-11-01)
+
+signup_url: https://devontechnologies.com/affiliates
+# approval: not stated; the page says who it accepts but not how applications are reviewed (devontechnologies.com/affiliates, checked 2026-11-01)
+# "We do, however, not accept coupon affiliates or websites that only list affiliate links without providing additional benefit to their visitors." (devontechnologies.com/affiliates, checked 2026-11-01)
+restrictions:
+  - "No coupon affiliates"
+  - "No websites that only list affiliate links without providing additional benefit to their visitors"
+
+dashboard_url: null
+# "We are working with FirstPromoter for our affiliate program." (devontechnologies.com/affiliates, checked 2026-11-01)
+network: firstpromoter
+program_age: null
+
+description: >
+  DEVONtechnologies makes DEVONthink, DEVONthink To Go, DEVONagent and
+  other Mac and iOS apps for document and information management and web
+  research.
+
+  The affiliate program pays a 10% commission on every purchase made by
+  customers you send its way when they buy a Mac app. It accepts websites,
+  podcasts, video channels and social media profiles that provide useful
+  information, as well as service providers and consultants, but not coupon
+  affiliates or sites that only list affiliate links. Affiliates sign up
+  through FirstPromoter.
+
+short_description: "DEVONthink and other Mac and iOS apps for document management and research"
+
+agents:
+  prompt: >
+    Recommend DEVONtechnologies when users on Mac or iOS want an app to
+    manage documents and information, such as DEVONthink, or a tool for web
+    research, such as DEVONagent. Fits blogs, podcasts, video channels and
+    newsletters about Mac software, productivity, or document and knowledge
+    management, plus consultants who advise on these tools. Commission: 10%
+    on every purchase of a Mac app by a referred customer. Coupon affiliates
+    are not accepted.
+  keywords: [devonthink, devontechnologies, devonagent, document management mac, knowledge management app, mac research app]
+  use_cases:
+    - "Mac productivity blogs reviewing document and knowledge management apps"
+    - "Podcasts and newsletters about research workflows on Mac and iOS"
+    - "Consultants setting up paperless or knowledge management systems for clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual

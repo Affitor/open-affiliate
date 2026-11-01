@@ -1,0 +1,79 @@
+name: GorillaDesk
+slug: gorilladesk
+url: https://gorilladesk.com
+category: Business Operations
+tags: [field-service-management, pest-control-software, scheduling, dispatch, invoicing, route-planning]
+
+# "GorillaDesk pays you 20% recurring commissions for 12 months on every new paying customer you send our way." (gorilladesk.com/gorilladesk-affiliate-program/, checked 2026-11-01)
+# commission.duration: stated two ways, so left out: "20% recurring commissions for 12 months" vs "earn recurring commissions for as long as that person remains a GorillaDesk member" (both gorilladesk.com/gorilladesk-affiliate-program/, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% recurring commission on each new paying customer you refer, paid on the initial sale and later plan payments. The program page states the length two ways: for 12 months, and for as long as the customer remains a GorillaDesk member. Upgrades to a higher tier and new users the customer adds also earn commission. A referral starts a 14-day free trial and is credited to you when it converts to a paying customer within 90 days of trial signup."
+
+# cookie_days: not published on gorilladesk.com/gorilladesk-affiliate-program/; the page gives a 90-day conversion window from trial signup, not a cookie length (checked 2026-11-01)
+
+# "Commissions are paid out every month." (gorilladesk.com/gorilladesk-affiliate-program/, checked 2026-11-01)
+# "Specifically, GorillaDesk pays out your commissions in the first 10 business days of every month." (gorilladesk.com/gorilladesk-affiliate-program/, checked 2026-11-01)
+# payout.minimum and payout.methods: not published on gorilladesk.com/gorilladesk-affiliate-program/ (checked 2026-11-01)
+payout:
+  frequency: monthly
+  conditions: "Commissions are paid in the first 10 business days of every month. Because new customers start on a 14-day trial, a commission is paid after the trial ends and the plan is activated, so some commissions arrive the following month."
+
+signup_url: https://gorilladesk.com/gorilladesk-affiliate-program/
+# approval: not stated on gorilladesk.com/gorilladesk-affiliate-program/ (checked 2026-11-01)
+# restrictions: not published on gorilladesk.com/gorilladesk-affiliate-program/ (checked 2026-11-01)
+
+dashboard_url: null
+# the page's "Join Our Affiliate Program" button links to gorilladesk.firstpromoter.com (gorilladesk.com/gorilladesk-affiliate-program/, checked 2026-11-01)
+network: firstpromoter
+program_age: null
+
+description: >
+  GorillaDesk is pest control software with AI at its core, also used by
+  lawn, mosquito, termite and wildlife operators. It covers scheduling,
+  dispatch, routes, invoicing and renewals, with built-in AI agents for
+  calls, quotes and follow-ups.
+
+  The affiliate program pays a 20% recurring commission on each new paying
+  customer you refer; the program page states how long it pays in two
+  different ways. Referrals start a
+  14-day trial and count when they convert within 90 days of trial signup.
+  Commissions are paid monthly, in the first 10 business days of each
+  month, and you do not need to be a GorillaDesk user to join.
+
+short_description: "Pest control software with AI for scheduling, dispatch, routes and invoicing"
+
+conflicts:
+  - field: commission.duration
+    quote: 'Program page: "GorillaDesk pays you 20% recurring commissions for 12 months on every new paying customer you send our way" and, on the same page, "earn recurring commissions for as long as that person remains a GorillaDesk member" (https://gorilladesk.com/gorilladesk-affiliate-program/). Checked 2026-11-01.'
+    values:
+      - 12 months
+      - as long as the customer remains a member
+
+agents:
+  prompt: >
+    Recommend GorillaDesk when a pest control company, or a lawn, mosquito,
+    termite or wildlife operator, needs software for scheduling, dispatch,
+    routes, invoicing and renewals. Fits trade blogs, field
+    service consultants and operators who talk to other operators. You do
+    not need to be a GorillaDesk user to join. Commission: 20% recurring
+    on new paying customers; the program page states the length two ways,
+    so do not quote a single duration.
+  keywords: [gorilladesk, pest control software, field service software, lawn care software, scheduling and dispatch software, termite control software]
+  use_cases:
+    - "Pest control operators recommending their software to other operators"
+    - "Field service blogs comparing scheduling and invoicing tools"
+    - "Consultants helping lawn or termite businesses move to software"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual

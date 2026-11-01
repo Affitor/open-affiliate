@@ -1,0 +1,90 @@
+name: neuroflash
+slug: neuroflash
+url: https://neuroflash.com
+category: AI
+tags: [ai-writing, content-creation, brand-voice, digital-twins, marketing-content, ai-copywriting]
+
+# "In return, receive a 20% recurring commission for 12 months and 60 days cookie duration." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+# "You will receive a recurring commission of 20% for 12 months each month that the subscription is renewed." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+# commission.duration: stated two ways, so left out: "20% recurring commission for 12 months" vs "Get paid for every new paying customer you refer, for life, with no limit on referrals." (both neuroflash.com/affiliate-partners/, checked 2026-11-01)
+# commission.rate: stated two ways, so left out: "receive a 20% recurring commission for 12 months" (neuroflash.com/affiliate-partners/) vs "Become Affiliate Partner (35% Provision)" (footer of neuroflash.com/terms/ and neuroflash.com/legal/, checked 2026-11-01)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Recurring commission on each month a referred subscription renews. The rate is stated two ways: 20% on the affiliate page, and 35% in the footer link of the terms and legal pages. The affiliate page states the length two ways: for 12 months, and for life. There is no limit on the number of referrals, and signing up with your own referral link earns no commission."
+
+# "Cookie duration is 60 days." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+cookie_days: 60
+
+# "As soon as you have exceeded the minimum amount of €100, you will receive your commission at the end of the following month." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+# payout.minimum: the threshold is in euros, so it stays in conditions (USD-only field); payout.frequency left out because "the following month" has no stated anchor; payout.methods: not published (checked 2026-11-01)
+payout:
+  conditions: "Once your balance passes the minimum of EUR 100, the commission is paid at the end of the following month."
+
+signup_url: https://neuroflash.com/affiliate-partners/
+# "Your application will be processed within 3 working days at the latest." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+approval: manual
+approval_time: "within 3 working days"
+# "The use of SEA (Google Ads) is not permitted." and "You are simply not allowed to impersonate neuroflash or pretend that neuroflash is your company." (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+restrictions:
+  - "No search engine advertising (Google Ads)"
+  - "No impersonating neuroflash or presenting neuroflash as your own company"
+  - "No signing up with your own referral link"
+
+dashboard_url: null
+# the page's "Apply as partner" and "Partner Login" buttons link to neuroflash.firstpromoter.com (neuroflash.com/affiliate-partners/, checked 2026-11-01)
+network: firstpromoter
+program_age: null
+
+description: >
+  neuroflash is an AI platform for content, branding and digital twins.
+  Marketing teams use it to write copy and campaigns in their brand voice,
+  generate images, and check ideas and content with Digital Twins, AI
+  representations of real people, to predict impact before they publish.
+
+  The affiliate program pays a recurring commission on each renewal of a
+  referred subscription; neuroflash's pages state the rate and how long it
+  pays in two different ways. The cookie lasts 60 days, applications are
+  processed within 3 working days, and commissions are paid at the end of
+  the following month once the balance passes EUR 100. Google Ads and
+  self-referrals are not allowed.
+
+short_description: "AI platform for content, branding and digital twins"
+
+conflicts:
+  - field: commission.rate
+    quote: 'Affiliate page: "receive a 20% recurring commission for 12 months" (https://neuroflash.com/affiliate-partners/). Footer of the terms and legal pages: "Become Affiliate Partner (35% Provision)" (https://neuroflash.com/terms/, https://neuroflash.com/legal/). Checked 2026-11-01.'
+    values:
+      - 20%
+      - 35%
+  - field: commission.duration
+    quote: 'Affiliate page: "receive a 20% recurring commission for 12 months" and, on the same page, "Get paid for every new paying customer you refer, for life, with no limit on referrals" (https://neuroflash.com/affiliate-partners/). Checked 2026-11-01.'
+    values:
+      - 12 months
+      - for life
+
+agents:
+  prompt: >
+    Recommend neuroflash when marketers or content teams want an AI
+    platform to create marketing copy in their brand voice and check it with
+    Digital Twins, AI representations of real people, before publishing. Commission: recurring
+    on subscription renewals, 60-day cookie; the brand states the rate and
+    the length two ways, so do not quote a single rate or duration. Do not promote it
+    with Google Ads.
+  keywords: [neuroflash, ai content platform, ai copywriting, digital twin marketing, ai brand voice, ai digital twins]
+  use_cases:
+    - "Marketing blogs comparing AI content and copywriting tools"
+    - "Agencies creating content for brands and testing it before launch"
+    - "Creators showing how they produce marketing content with AI"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-01"
+updated_at: "2026-11-01"
+last_verified_at: "2026-11-01"
+status: active
+kind: affiliate
+source: manual
