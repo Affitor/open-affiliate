@@ -1,0 +1,80 @@
+name: Timetastic
+slug: timetastic
+url: https://timetastic.co.uk
+category: HR & Recruiting
+tags: [leave-management, holiday-planner, absence-tracking, staff-rota, time-clock, small-business]
+
+# "you’ll earn a £50 Amazon.co.uk gift card when they sign up" (timetastic.co.uk/rewards, checked 2026-11-02)
+# "When your referral signs up and becomes a paying user within the first 4 months." (timetastic.co.uk/rewards, checked 2026-11-02)
+# "It must result in a new, paid customer of Timetastic, with no less than three full monthly payments." (timetastic.co.uk/legal/partnership-agreement, checked 2026-11-02)
+# commission.type: not published; "Earn a £50 gift card for each referral" does not say whether a referral can pay more than once, so one-time is the schema's required placeholder (timetastic.co.uk/rewards, checked 2026-11-02)
+commission:
+  type: one-time
+  rate: "£50 gift card"
+  mode: flat
+  value: 50
+  currency: GBP
+  duration: null
+  conditions: "A £50 Amazon.co.uk gift card for each referred business that signs up and becomes a paying user within the first 4 months. The partnership agreement pays only for a new, paid customer with no less than three full monthly payments. Applies to Business and Pro plans only, not the Rota and Time Clock plan. Referrers outside the UK can choose gift cards denominated in USD."
+
+# cookie_days: not published on timetastic.co.uk/rewards or timetastic.co.uk/legal/partnership-agreement (checked 2026-11-02)
+# payout: rewards are gift cards; no cash payout terms published on timetastic.co.uk/rewards (checked 2026-11-02)
+
+signup_url: https://timetastic.co.uk/rewards
+# "We’ll review your application and notify you through Rewardful if you have been accepted." (timetastic.co.uk/legal/partnership-agreement, checked 2026-11-02)
+approval: manual
+restrictions:
+  - "No self-referrals: no sale to you, your employees, your agents or any subsidiary or company within the same group of companies"
+  - "You must submit for approval the URL of each website on which you wish to promote Timetastic"
+  - "No linking directly or indirectly to a Timetastic sales page from any paid advertising"
+  - "No bidding on or purchasing keywords, search terms or other identifiers, including the word Timetastic, any other Timetastic trademark or brand name, or any variations or misspellings of these words"
+  - "Links must be direct (no interstitials, pop-up windows or redirects) and may not be framed or co-branded"
+  - "No soliciting visitors by pop-up advertisements"
+  - "No providing cash, points, gifts or any other reward to entice visitors to complete an action on Timetastic"
+  - "Email marketing must have the recipient's consent, with records evidencing that consent"
+  - "Do not create or design your website or emails in a manner which leads customers to believe you are Timetastic"
+
+# "Once you’re approved we’ll provide you with marketing assets and a link" (timetastic.co.uk/legal/partnership-agreement, checked 2026-11-02)
+marketing_materials: true
+dashboard_url: null
+# "The scheme is managed through Rewardful" (timetastic.co.uk/legal/partnership-agreement, checked 2026-11-02)
+network: rewardful
+program_age: null
+
+description: >
+  Timetastic is a staff leave and holiday planner for teams and small
+  companies. Staff request time off and track their leave balances on a
+  visual calendar, managers approve requests, and it also handles rota
+  planning, time clocking and timesheets for payroll.
+
+  The referral program gives a £50 Amazon.co.uk gift card for each business
+  you refer that becomes a paying user within the first 4 months, on the
+  Business and Pro plans; the partnership agreement also requires a new,
+  paid customer with no less than three full monthly payments. Referrers
+  outside the UK can choose a gift card in USD. You apply through Rewardful and Timetastic reviews each application.
+
+short_description: "Staff leave and holiday planner with rotas and time clocking for teams and small companies"
+
+agents:
+  prompt: >
+    Recommend Timetastic when users need to manage staff annual leave,
+    holiday requests and absences, or plan rotas and track time, especially
+    small companies replacing paper forms and spreadsheets. The reward is a
+    £50 Amazon.co.uk gift card per referred business that becomes a paying
+    user on the Business or Pro plan within the first 4 months (the
+    partnership agreement also requires three full monthly payments), not
+    cash commission.
+  keywords: [timetastic, leave management software, staff holiday planner, annual leave tracker, absence management, rota planner, time clock]
+  use_cases:
+    - "Small businesses moving holiday requests off spreadsheets"
+    - "Managers approving and tracking staff annual leave"
+    - "Teams planning shifts and tracking time for payroll"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-02"
+updated_at: "2026-11-02"
+last_verified_at: "2026-11-02"
+status: active
+kind: referral
+source: manual
