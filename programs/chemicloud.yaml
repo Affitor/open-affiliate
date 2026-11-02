@@ -34,8 +34,9 @@ payout:
 
 signup_url: https://chemicloud.com/affiliate
 # approval: not stated on chemicloud.com/affiliate or its affiliate terms (checked 2026-11-02)
-# Affiliate terms §3.4, §3.5, §7.5, §7.10 and §7.11 (chemicloud.com/affiliates-terms-of-service, checked 2026-11-02)
+# Affiliate terms §3.3, §3.4, §3.8, §3.10, §7.5, §7.10 and §7.11 (chemicloud.com/affiliates-terms-of-service, checked 2026-11-02)
 restrictions:
+  - "No representations, promises, warranties or other statements about ChemiCloud, its website, products or policies beyond what ChemiCloud has expressly approved in writing or provided for that purpose"
   - "No scheme or strategy that artificially inflates earnings or bonuses, such as promoting the cheapest services solely to increase the number of orders"
   - "No misrepresenting the services, including their prices, plans, discounts or functionality"
   - "No warranties, guarantees, incentives, rewards or indemnities except as set out in the ChemiCloud Terms of Service or approved in writing"
@@ -51,6 +52,7 @@ restrictions:
   - "No promoting the lowest-tier plans primarily to beginners in training or coaching sessions solely to boost commissions"
   - "ChemiCloud must approve all coupon or review websites before any ChemiCloud affiliate information is advertised on them"
   - "Disclose the financial relationship with ChemiCloud prominently on your websites, as the FTC requires"
+  - "No AI-generated reviews, testimonials or recommendations that misrepresent your genuine, verifiable experience with ChemiCloud; any review, testimonial, comparison or benchmark must be based on your actual use of the services and on facts you can reasonably attest to"
 
 # "A dedicated affiliate manager is always here to help with all of your questions." (chemicloud.com/affiliate, checked 2026-11-02)
 dedicated_manager: true
