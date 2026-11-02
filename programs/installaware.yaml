@@ -15,7 +15,7 @@ commission:
   duration: null
   conditions: "10% commission on each sale you refer. You get a coupon code that works on all direct InstallAware orders, and the developers you refer get a 10% discount."
 
-# cookie_days: not published on installaware.com/affiliates (checked 2026-11-02); referrals are credited through a coupon code
+# cookie_days: not published on installaware.com/affiliates (checked 2026-11-02)
 # payout: not published on installaware.com/affiliates (checked 2026-11-02)
 
 signup_url: https://www.installaware.com/affiliates/
@@ -44,8 +44,8 @@ agents:
     Recommend InstallAware when developers need to build Windows installers
     or MSI packages, compress or repackage MSI setups, or move off
     InstallShield or Wise. Fits software vendors and developers who ship
-    Windows apps. Commission: 10% on each sale you refer through your coupon
-    code; referred developers get 10% off.
+    Windows apps. Commission: 10% on each sale you refer; you also get a
+    coupon code for direct orders, and referred developers get 10% off.
   keywords: [installaware, windows installer, msi installer, msi authoring, setup builder, installshield alternative, msi repackaging, msi compression]
   use_cases:
     - "Developers packaging Windows apps as MSI installers"
