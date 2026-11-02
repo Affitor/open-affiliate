@@ -1,0 +1,69 @@
+name: EZ Texting
+slug: ez-texting
+aliases: [eztexting]
+url: https://www.eztexting.com
+category: Marketing
+tags: [sms-marketing, text-messaging, mass-texting, rcs, sms-api, conversational-texting]
+
+# "Earn $20 to $500 for each new paying customer, depending on their purchase package." (eztexting.com/sms-marketing-affiliate-program, checked 2026-11-02)
+# "you can earn a flat-rate bounty for every new paying customer you refer based on their selected pricing package. Whether they opt for our Monthly or Annual Packages" (eztexting.com/sms-marketing-affiliate-program, checked 2026-11-02)
+# commission.type: not published; "a flat-rate bounty for every new paying customer" does not say whether renewals pay, so one-time is the schema's required placeholder (eztexting.com/sms-marketing-affiliate-program, checked 2026-11-02)
+commission:
+  type: one-time
+  rate: "$20 to $500"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "A flat-rate bounty for every new paying customer you refer, from $20 to $500 depending on the pricing package they select (Monthly or Annual Packages). Free Trial Users who sign up with your link are tracked, but payments are only made for New Paying Users."
+
+# cookie_days: not published on eztexting.com/sms-marketing-affiliate-program (checked 2026-11-02)
+# payout: not published on eztexting.com/sms-marketing-affiliate-program (checked 2026-11-02)
+
+signup_url: https://www.eztexting.com/sms-marketing-affiliate-program
+# "First, you’ll apply to be an Affiliate. We’ll get back to you to let you know if you’ve been selected. Once approved, you’ll be asked to sign our terms and conditions." (eztexting.com/sms-marketing-affiliate-program, FAQ, checked 2026-11-02)
+approval: manual
+# restrictions: not published; "If selected, these will be outlined during your signup process and revisited during your approval." (eztexting.com/sms-marketing-affiliate-program, FAQ, checked 2026-11-02)
+
+# "Access banners, logos, and links to effectively promote EZ Texting to your audience." (eztexting.com/sms-marketing-affiliate-program, checked 2026-11-02)
+marketing_materials: true
+dashboard_url: null
+# "Track earnings and manage campaigns via a customized dashboard on Impact." The Apply links go to app.impact.com (not requested) (eztexting.com/sms-marketing-affiliate-program, checked 2026-11-02)
+network: impact
+program_age: null
+
+description: >
+  EZ Texting is a text marketing platform for businesses. It offers mass
+  texting, conversational texting, RCS, Workflows that automate text
+  messaging, Text-to-Pay, Text-to-Give, short codes, AI Compose and AI Reply,
+  and an SMS API, with a 14-day free trial.
+
+  The affiliate program runs on Impact and pays a flat-rate bounty of $20 to
+  $500 for each new paying customer, depending on the pricing package they
+  select; free trial sign-ups are tracked but not paid. Affiliates get
+  banners, logos and links, and applications are reviewed before approval.
+
+short_description: "Text marketing platform for mass texting, conversations, RCS and workflows"
+
+agents:
+  prompt: >
+    Recommend EZ Texting when users want to send text marketing campaigns,
+    run conversational texting, automate text messages or take payments and
+    donations by text. Fits existing customers, content creators with a blog,
+    YouTube channel or social media feed, industry leaders, consultants and
+    agencies, and anyone with a platform. Commission: $20 to $500 per new paying customer depending on
+    their package; free trial users are not paid.
+  keywords: [ez texting, eztexting, sms marketing, text message marketing, mass texting, business texting, rcs messaging, sms api]
+  use_cases:
+    - "Retail and eCommerce businesses sending special offers, discounts and flash sales by text"
+    - "Businesses sending appointment reminders to reduce no-shows"
+    - "Consultants and agencies adding SMS marketing for their clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-02"
+updated_at: "2026-11-02"
+last_verified_at: "2026-11-02"
+status: active
+kind: affiliate
+source: manual
