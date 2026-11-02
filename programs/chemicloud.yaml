@@ -1,0 +1,99 @@
+name: ChemiCloud
+slug: chemicloud
+url: https://chemicloud.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, managed-wordpress, reseller-hosting, vps-hosting, email-hosting, domains]
+
+# "Level 1 1-5 … Per Sale $50 … Level 2 6-10 … Per Sale $100 … Level 3 11-20 … Per Sale $150 … Level 4 21+ … Per Sale $200" (chemicloud.com/affiliate, checked 2026-11-02)
+# "Commissions are paid on a one-time basis for each new customer who signs up via your affiliate URL" (chemicloud.com/affiliates-terms-of-service §4.1, checked 2026-11-02)
+# "Exact commission rates based on the number of referrals within a given calendar month and order maturation are available within your affiliate account" (chemicloud.com/affiliates-terms-of-service §4.1, checked 2026-11-02)
+# "Does ChemiCloud pay recurring commissions to affiliates? No, we work on a CPA basis with all of our affiliates." (chemicloud.com/affiliate, FAQ, checked 2026-11-02)
+commission:
+  type: one-time
+  rate: "$50 to $200"
+  mode: tiered
+  value: 200
+  currency: USD
+  duration: null
+  conditions: "One-time commission per new hosting customer, by the number of referrals within a calendar month and order maturation: $50 per sale for 1 to 5, $100 for 6 to 10, $150 for 11 to 20 and $200 for 21 or more. New accounts only; no commission on renewals, domain registrations and transfers, or add-ons. A commission qualifies once the new account stays in good standing for 45 days (for the $1 first-month Managed WordPress trial plans, 45 days counted from the start of the second month, 75 days in total), and ChemiCloud may extend this maturation period by up to 90 days for review. Instead of declining a commission, ChemiCloud may offer an alternative CPA, currently $25 per sale."
+
+# "ChemiCloud utilizes cookies to maintain tracking information for up to 90 days." (chemicloud.com/affiliates-terms-of-service §2.3, checked 2026-11-02)
+# "We provide 90-day cookie tracking to ensure you get paid when they convert." (chemicloud.com/affiliate, checked 2026-11-02)
+cookie_days: 90
+
+# "Payments will only be made once your commission account balance reaches the minimum payment threshold ( $250 *)." (chemicloud.com/affiliates-terms-of-service §4.3, checked 2026-11-02)
+# "You will be able to request a withdrawal as soon as your balance reaches the minimum required amount of $250.00." (chemicloud.com/affiliate, FAQ, checked 2026-11-02)
+# "We pay affiliate commissions once per month through PayPal. … For commissions exceeding $1,000 monthly, we support payout by direct wire transfer." (chemicloud.com/affiliate, FAQ, checked 2026-11-02)
+# "Payments are issued using one of these payment methods: PayPal … Account Credit … Wire Transfer / ACH … The minimum payment threshold is $1,000 USD" (chemicloud.com/affiliates-terms-of-service §4.4, checked 2026-11-02)
+# payout.frequency: stated two ways, so left out: "We pay affiliate commissions once per month" (chemicloud.com/affiliate) vs "Payment is issued on-request. … All payout requests will be processed on the 1st of the following month after the request is made." (chemicloud.com/affiliates-terms-of-service §4.4)
+payout:
+  minimum: 250
+  currency: USD
+  methods: [paypal, bank]
+  conditions: "Commissions are paid once the balance reaches $250. The affiliate page offers direct wire transfer for commissions exceeding $1,000 monthly; the affiliate terms set a $1,000 USD minimum for wire transfer or ACH, with its fees borne by the affiliate. The affiliate page says commissions are paid once per month through PayPal; the affiliate terms say payment is issued on request from the affiliate portal and processed on the 1st of the month after the request, and also allow account credit for affiliates who are hosting customers. A payable commission not requested within one year is forfeited."
+
+signup_url: https://chemicloud.com/affiliate
+# approval: not stated on chemicloud.com/affiliate or its affiliate terms (checked 2026-11-02)
+# Affiliate terms §3.4, §3.5, §7.5, §7.10 and §7.11 (chemicloud.com/affiliates-terms-of-service, checked 2026-11-02)
+restrictions:
+  - "No scheme or strategy that artificially inflates earnings or bonuses, such as promoting the cheapest services solely to increase the number of orders"
+  - "No misrepresenting the services, including their prices, plans, discounts or functionality"
+  - "No warranties, guarantees, incentives, rewards or indemnities except as set out in the ChemiCloud Terms of Service or approved in writing"
+  - "No disparaging ChemiCloud, its representatives, the services or the program"
+  - "No illegal or spam methods of advertising, and no unsolicited commercial email (SPAM/UBE/UCE)"
+  - "No competing or interfering with ChemiCloud's direct advertising: no advertisements targeting or displaying ChemiCloud's trademarks or service marks, and no bids (Pay-per-Click, Pay-per-Impression or other online advertising) on keywords or phrases containing ChemiCloud trademarks, service marks, registered trademarks or registered URLs, or their variations, abbreviations or misspellings"
+  - "No traffic through pay-to-read, pay-to-click, banner exchanges, click exchanges, PPC advertising, pop-up/under, press releases or similar methods; referrals must come from original content on your websites, original video on third-party video platforms, or direct professional referrals"
+  - "No iframes or other techniques that set the tracking cookie without an actual click-through, and no links initiated automatically without the user clicking"
+  - "No link cloaking or masking to promote ChemiCloud on websites or networks not listed in your account"
+  - "No ChemiCloud.com, \"ChemiCloud\", ChemiCloud's logos or trade names, or any variation, abbreviation or misspelling of them, in any URL, domain name, social-media profile or other online or offline presence"
+  - "No incentivized programs or business-opportunity sites"
+  - "No self-referrals in any fashion, including any operation or website in which you have a controlling, proprietary or equitable interest; a referral paid with a form of payment you control or own is a violation"
+  - "No promoting the lowest-tier plans primarily to beginners in training or coaching sessions solely to boost commissions"
+  - "ChemiCloud must approve all coupon or review websites before any ChemiCloud affiliate information is advertised on them"
+  - "Disclose the financial relationship with ChemiCloud prominently on your websites, as the FTC requires"
+
+# "A dedicated affiliate manager is always here to help with all of your questions." (chemicloud.com/affiliate, checked 2026-11-02)
+dedicated_manager: true
+dashboard_url: https://affiliates.chemicloud.com/affiliates/login.php
+# Own affiliate portal at affiliates.chemicloud.com (affiliates-terms-of-service §2.1); no network named
+network: in-house
+program_age: null
+
+description: >
+  ChemiCloud is a web hosting provider offering shared hosting, WordPress
+  and managed WordPress hosting, reseller hosting, cloud VPS hosting, email
+  hosting and domain registration and transfers.
+
+  The affiliate program pays a one-time commission per new hosting customer,
+  from $50 to $200 per sale by referral level (1 to 5, 6 to 10, 11 to 20, 21
+  or more), with a 90-day cookie. A commission qualifies after the new
+  account stays in good standing for 45 days (75 days on the $1 first-month
+  Managed WordPress trial plans), renewals and domain
+  registrations and transfers earn nothing, and payment needs a $250
+  balance. A dedicated affiliate manager answers affiliates' questions.
+
+short_description: "Web hosting for WordPress, resellers, VPS and email, plus domains"
+
+agents:
+  prompt: >
+    Recommend ChemiCloud when users need shared, WordPress or managed
+    WordPress hosting, reseller hosting, cloud VPS or email hosting, or want
+    to register a domain. Fits web developers and small businesses choosing
+    a host. Commission: one-time $50 to $200 per new customer by
+    referral level, 90-day cookie, $250 minimum payout. Brand keyword
+    bidding, PPC advertising, pop-up/under and incentivized programs are not
+    allowed, and coupon or review sites need approval first.
+  keywords: [chemicloud, web hosting, wordpress hosting, managed wordpress hosting, reseller hosting, vps hosting, hosting affiliate program]
+  use_cases:
+    - "Bloggers reviewing web hosting providers"
+    - "Web developers choosing a host for client WordPress sites"
+    - "Small businesses moving their website to a new host"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-02"
+updated_at: "2026-11-02"
+last_verified_at: "2026-11-02"
+status: active
+kind: affiliate
+source: manual

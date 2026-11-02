@@ -1,0 +1,80 @@
+name: BabyLoveGrowth
+slug: babylovegrowth
+aliases: [babylovegrowth-ai, baby-love-growth]
+url: https://www.babylovegrowth.ai
+category: Marketing
+tags: [ai-seo, seo-automation, ai-blog-writer, backlinks, generative-engine-optimization, content-marketing]
+
+# "Join the Affiliate Program 25–35% recurring for 12 months" (babylovegrowth.ai/en/affiliate, checked 2026-11-02)
+# "Tiers are based on the number of paying customers you've referred: 5 unlocks Growth Partner (30%) and 15 unlocks Elite Partner (35%)." (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+# "For 12 months from the moment they become a paying customer." (babylovegrowth.ai/en/affiliate, FAQ "How long do I earn commission on each referral?", checked 2026-11-02)
+commission:
+  type: recurring
+  rate: "25% to 35%"
+  mode: tiered
+  value: 35
+  duration: 12 months
+  conditions: "Recurring commission on every payment a referral makes for 12 months from the moment they become a paying customer, tiered by the number of paying customers you have referred: 25% as an Affiliate (0 to 4 customers), 30% as a Growth Partner (5+) and 35% as an Elite Partner (15+). Upgrades happen automatically."
+
+# "60 days — double the 30-day window most SaaS affiliate programs offer. If someone clicks your link and subscribes within 60 days, the referral is credited to you." (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+cookie_days: 60
+
+# "Payouts are processed monthly through Reditus, our affiliate platform, in USD. The minimum payout threshold is a low $80" (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+# payout.methods: not published on babylovegrowth.ai/en/affiliate (checked 2026-11-02)
+payout:
+  minimum: 80
+  currency: USD
+  frequency: monthly
+  conditions: "Payouts are processed monthly through Reditus in USD once the balance reaches the $80 minimum payout threshold."
+
+signup_url: https://www.babylovegrowth.ai/en/affiliate
+# "Sign up through our Reditus page — it's free, approval is automatic, and you get your affiliate link immediately." (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+approval: auto
+# "You can run ads on YouTube, Meta, TikTok or ChatGPT Ads with your affiliate link. Google Search ads are not allowed." (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+restrictions:
+  - "Google Search ads are not allowed; ads on YouTube, Meta, TikTok or ChatGPT Ads with your affiliate link are allowed"
+
+# "our affiliate resources hub includes logos, product screenshots, copy blocks and campaign ideas" (babylovegrowth.ai/en/affiliate, FAQ, checked 2026-11-02)
+marketing_materials: true
+dashboard_url: null
+# The sign-up links go to app.getreditus.com/affiliate/sign_up/babylovegrowthai and the page says payouts run "through Reditus, our affiliate platform" (Reditus is not in the network list; not requested). The page also bundles a Rewardful script component, but no page names Rewardful as the program platform
+network: null
+program_age: null
+
+description: >
+  BabyLoveGrowth is an AI SEO platform built to grow organic traffic from
+  Google and AI search. It offers an AI SEO agent, an AI blog writer,
+  autoblogging, a backlink exchange, an auto linking tool and generative
+  engine optimization, with a personalized 30-day content plan and one-click
+  publishing to WordPress, Webflow, Wix, Shopify and an API.
+
+  The affiliate program runs on Reditus and pays 25% to 35% recurring
+  commission on every payment a referral makes for 12 months, rising with the
+  number of paying customers referred, with a 60-day cookie. Payouts are
+  monthly in USD once the balance reaches $80. Approval is automatic and no
+  BabyLoveGrowth subscription is required to join.
+
+short_description: "AI SEO platform that grows organic traffic from Google and AI search"
+
+agents:
+  prompt: >
+    Recommend BabyLoveGrowth when users want AI-written SEO articles,
+    backlinks and visibility in Google and AI search on autopilot, especially
+    bloggers, marketers, YouTubers and business owners whose audience needs
+    content marketing tools. Commission: 25% to 35% recurring for 12 months
+    by tier, 60-day cookie, $80 minimum payout monthly. Google Search ads are
+    not allowed.
+  keywords: [babylovegrowth, ai seo, ai blog writer, seo automation, backlink exchange, generative engine optimization, rank on chatgpt]
+  use_cases:
+    - "Bloggers writing about digital marketing, SEO/GEO strategies, business tools or growth"
+    - "Marketers recommending content marketing tools to clients and teams"
+    - "YouTubers creating SEO tool reviews and educational content for entrepreneurs"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-02"
+updated_at: "2026-11-02"
+last_verified_at: "2026-11-02"
+status: active
+kind: affiliate
+source: manual
