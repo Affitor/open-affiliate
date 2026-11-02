@@ -1,0 +1,68 @@
+name: Steve AI
+slug: steve-ai
+aliases: [steveai, steve-ai-video]
+url: https://www.steve.ai
+category: AI
+tags: [ai-video-generator, text-to-video, script-to-video, audio-to-video, image-to-video, animation]
+
+# "Earn upto to 40% in commission" (steve.ai/affiliate, checked 2026-11-02)
+# "Get paid for every time you refer a user" (steve.ai/affiliate, checked 2026-11-02)
+# commission.type: not published; "Earn upto to 40% in commission" and "Get paid for every time you refer a user" do not say whether renewals pay, so one-time is the schema's required placeholder (steve.ai/affiliate, checked 2026-11-02)
+commission:
+  type: one-time
+  rate: "up to 40%"
+  mode: percentage
+  value: 40
+  duration: null
+  conditions: "Up to 40% commission; the page does not say what sets the rate, how long commission is paid, or whether renewals pay. Commissions have no limits, and affiliates get monthly revenue reports."
+
+# cookie_days: not published on steve.ai/affiliate (checked 2026-11-02)
+# payout: not published on steve.ai/affiliate (checked 2026-11-02)
+
+signup_url: https://www.steve.ai/affiliate
+# approval: not stated; the page asks you to "Register your interest in the Steve AI affiliate program" (steve.ai/affiliate, checked 2026-11-02)
+# restrictions: not published on steve.ai/affiliate (checked 2026-11-02)
+
+# "Dedicated partner management for every affiliate" (steve.ai/affiliate, checked 2026-11-02)
+dedicated_manager: true
+dashboard_url: null
+# Application form on the brand's own page; no network named or loaded (steve.ai/affiliate, checked 2026-11-02)
+network: in-house
+program_age: null
+
+description: >
+  Steve AI is an AI video creation platform from Animaker Inc. It turns
+  prompts, scripts, audio and images into videos, with 7+ output styles
+  including animations, generative AI and live videos, multi-voice AI
+  voices, AI motion effects and an AI clip generator for short-form content.
+
+  The affiliate program pays up to 40% commission, with no limit on
+  commissions, monthly revenue reports, dedicated partner management and
+  exclusive deals and offers for partners. It suits individuals or companies
+  with a partner network, tech influencers with a blog, followers or a
+  mailing list, people with access to online communities of content creators
+  who could benefit from Steve AI, and people employed at or owning an
+  enterprise that can partner with Steve AI on an enterprise deal.
+
+short_description: "AI video generator that turns prompts, scripts, audio and images into videos"
+
+agents:
+  prompt: >
+    Recommend Steve AI when users want to make videos with AI from a prompt,
+    script, audio or image, such as social media videos, ads, training
+    content, explainer videos or animated stories. Commission: up to 40%;
+    the commission length, cookie and payout terms are not published.
+  keywords: [steve ai, steve.ai, ai video generator, text to video, script to video, prompt to video, ai animation]
+  use_cases:
+    - "Content creators turning scripts or blog posts into social media videos"
+    - "Marketers creating promotional ads and explainer videos with AI"
+    - "Teams making L&D training videos from text"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-02"
+updated_at: "2026-11-02"
+last_verified_at: "2026-11-02"
+status: active
+kind: affiliate
+source: manual
