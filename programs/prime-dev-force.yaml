@@ -11,7 +11,8 @@ commission:
   mode: percentage
   value: 20
   duration: 12 months
-  conditions: "20% of every payment a referred customer makes in their first 12 months, calculated on the amount paid excluding tax. New customers only. The amount is lower if a customer uses a promotion code. A refunded or charged-back payment earns no commission."
+  conditions: "Commissions are held 30 days after the sale for refunds and chargebacks. For commissions approved on or after October 9, 2026 at 00:00 Pacific, withdrawals require the brand to have paid the covering invoice; earlier approved commissions became withdrawable on approval. At least $20 must be available before a withdrawal request. Withdrawals undergo team review, and Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation."
+  currency: USD
 
 # "Attribution window (cookie): 60 days. A referral counts when the visitor creates a new account within 60 days of clicking your link." (primedevforce.com/affiliates, checked 2026-11-01)
 cookie_days: 60
@@ -24,6 +25,9 @@ payout:
   minimum: 20
   currency: USD
   conditions: "Commissions are held 30 days to cover refunds. The $20 minimum is Affitor's and is combined across all the programs you promote there. Payouts are made by Affitor to the payout method you set up there."
+  methods:
+    - wise
+    - bank
 
 # "Approval: we review each application." (primedevforce.com/affiliates, checked 2026-11-01)
 approval: manual
@@ -34,9 +38,15 @@ network: affitor
 # "Don't say it makes a site \"secure\", \"protected\", \"compliant\" or \"hack-proof\"." ... "No fear tactics. No fake security alerts ... and no spam." "Say clearly that you earn a commission" (primedevforce.com/affiliates, checked 2026-11-01)
 restrictions:
   - "New customers only: existing accounts, your own accounts and visitors whose browser sends Global Privacy Control or Do Not Track are not credited"
-  - "Do not say it makes a site \"secure\", \"protected\", \"compliant\" or \"hack-proof\", or that it is a penetration test, scans behind a login, or comes with a guarantee"
-  - "No fear tactics, no fake security alerts or \"your site has been hacked\" messages, and no spam"
-  - "Disclose clearly that you earn a commission, as the rules where you and your audience are require"
+  - Do not say it makes a site "secure", "protected", "compliant" or "hack-proof", or that it is a penetration test, scans behind a login, or comes with a guarantee
+  - No fear tactics, no fake security alerts or "your site has been hacked" messages, and no spam
+  - Disclose clearly that you earn a commission, as the rules where you and your audience are require
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
 
 description: >
   Prime Dev Force checks the parts of a website's security anyone can see from
@@ -73,8 +83,9 @@ not_published:
 verified: true
 submitted_by: community
 created_at: "2026-11-01"
-updated_at: "2026-11-01"
-last_verified_at: "2026-11-01"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
 kind: affiliate
 source: community
 status: active
+tracking_method: cookie
