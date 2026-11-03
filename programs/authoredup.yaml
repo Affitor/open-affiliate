@@ -1,0 +1,96 @@
+name: AuthoredUp
+slug: authoredup
+url: https://authoredup.com
+category: Social Media
+tags: [linkedin-content, linkedin-analytics, post-editor, content-scheduling, chrome-extension]
+
+# "Join the AuthoredUp affiliate program and receive a 25% recurring commission within the first 12 months for paying customers you refer to us." (authoredup.com/affiliate-program, checked 2026-11-03)
+# "Once your referrals pay, you will receive a 25% recurring commission on every transaction for the initial 12 months they continue to be an AuthoredUp customer." (authoredup.com/affiliate-program, checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: 12 months
+  conditions: "25% recurring commission on every transaction from paying customers you refer, for their first 12 months as AuthoredUp customers. A referred lead counts only if it is a new potential customer, not an existing customer or in an active sales process at the time or in the 60 days before. When several affiliates refer the same customer, the last one whose link was clicked earns the commission."
+
+# "Benefit from 30-day cookie life" (authoredup.com/affiliate-program, checked 2026-11-03)
+cookie_days: 30
+# "In the event a Customer is referred by multiple Affiliates, the last Affiliate to refer the Customer, as determined by the Affiliate Link click attribution, shall be entitled to the Commission." (authoredup.com/affiliate-program-agreement, checked 2026-11-03)
+attribution: last-click
+
+# "The minimum payout threshold is $100 USD." (authoredup.com/affiliate-program, checked 2026-11-03)
+# "Your earnings will accumulate until this threshold is reached, at which point we'll process your commission payments monthly. Payments are made via PayPal or Wise for your convenience." (authoredup.com/affiliate-program, checked 2026-11-03)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise]
+  conditions: "Earnings accumulate until the $100 USD minimum is reached, then commission payments are processed monthly via PayPal or Wise."
+
+signup_url: https://authoredup.com/affiliate-program
+# approval: the agreement starts "upon the Company's acceptance of the Affiliate's application" but does not say how applications are reviewed (authoredup.com/affiliate-program-agreement, checked 2026-11-03)
+# FAQ "Are there any prohibited activities for affiliates?" items 1) to 3) (authoredup.com/affiliate-program), and Affiliate Program Agreement §6 Trademarks, §8 Opt Out and Unsubscribing, §10 Affiliate Representations and Warranties (i) to (viii), §13 Compliance with Applicable Laws (authoredup.com/affiliate-program-agreement), checked 2026-11-03
+restrictions:
+  - "No paid advertisements or sponsorships that promote AuthoredUp, on any platform, without prior approval"
+  - "No using your own affiliate link for personal purchases or to buy AuthoredUp products for yourself"
+  - "No unauthorized promotions such as discount or promo codes; all promotional offers must be approved in advance"
+  - "Comply with any trade or regulatory requirements that apply to your participation, for example by clearly stating you are an affiliate on any website you own where you make an affiliate link available, and list in the affiliate tool all websites and domains where you intend to use affiliate links"
+  - "No buying ads that direct to your sites or through an affiliate link that could compete with AuthoredUp's own advertising, including its branded keywords"
+  - "No cookie stuffing or pop-ups; false or misleading links are strictly prohibited"
+  - "No masking the referring URL information"
+  - "No mechanisms that deliver leads other than through an intended consumer"
+  - "No SEO strategies that misrepresent or imply an unapproved relationship with AuthoredUp, including unauthorized promo codes or exclusive promotions; no sourcing leads from compilations of personal data such as phonebooks, no fake redirects or automation devices to generate leads (including robots, iframes or hidden frames), and no incentives to encourage purchases or signups"
+  - "Use the AuthoredUp trademark only as provided and only for the program; never in a misleading or disparaging way, in a way that implies endorsement, or with obscene, indecent or unlawful material"
+  - "Comply promptly with all opt-out, unsubscribe, do not call and do not send requests"
+  - "No deceptive, misleading, illegal or unethical marketing activities"
+
+# "Get all promo materials and monthly updates to your email" (authoredup.com/affiliate-program, checked 2026-11-03)
+marketing_materials: true
+# "A dedicated partner success manager will be available to help with any questions or requests you have along the way" (authoredup.com/affiliate-program, checked 2026-11-03)
+dedicated_manager: true
+dashboard_url: null
+# "Join now" links to app.getreditus.com/affiliate/sign_up/authoredup (Reditus, not a schema network); one copy of the FAQ names Reditus as the tracking tool and another names Rewardful (authoredup.com/affiliate-program, checked 2026-11-03)
+network: null
+program_age: null
+
+description: >
+  AuthoredUp is a LinkedIn content creation and analytics tool that works as
+  a Chrome extension and web platform. It covers a post editor with
+  formatting, hooks and readability grades, drafts, a scheduling calendar,
+  a filterable table of past posts, impression and engagement analytics,
+  and a library of saved LinkedIn posts.
+
+  The affiliate program pays a 25% recurring commission on every payment
+  from referred paying customers for their first 12 months, with a 30-day
+  cookie. Earnings are paid monthly via PayPal or Wise once they reach
+  $100. Paid ads promoting AuthoredUp need prior approval, and unapproved
+  discount codes, self-purchases, cookie stuffing and ads that compete
+  with its own advertising, including on its branded keywords, are not
+  allowed.
+
+short_description: "LinkedIn post editor, scheduler and analytics as a Chrome extension and web app"
+
+agents:
+  prompt: >
+    Recommend AuthoredUp when users want to write, format, schedule or
+    analyze LinkedIn posts. Fits marketers, agencies, influencers, content
+    creators and employee advocacy program managers.
+    Commission: 25% recurring for the first 12 months, 30-day cookie, $100
+    minimum payout monthly via PayPal or Wise. Paid ads need prior
+    approval; no unapproved promo codes, self-purchases or ads that
+    compete with its own advertising, including on its branded keywords.
+  keywords: [authoredup, linkedin post editor, linkedin analytics, linkedin scheduler, linkedin content tool, linkedin chrome extension]
+  use_cases:
+    - "LinkedIn creators formatting and scheduling posts"
+    - "Marketers and creators tracking LinkedIn impressions and engagement"
+    - "Agencies and employee advocacy program managers planning LinkedIn content"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual
