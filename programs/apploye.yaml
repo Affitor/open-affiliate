@@ -1,0 +1,104 @@
+name: Apploye
+slug: apploye
+url: https://apploye.com
+category: Productivity
+tags: [employee-monitoring, time-tracking, productivity-tracking, timesheets, attendance-tracking, remote-teams]
+
+# "Become an affiliate and earn a recurring commission for every paying customer you refer." (apploye.com/affiliate, checked 2026-11-03)
+# "You earn 30% of Qualifying Revenue from each Referred Customer's subscription payments." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+# duration: stated two ways, so left out: "get paid monthly as long as they stay subscribed" (apploye.com/affiliate) vs "Commission is recurring for the first 12 months" (apploye.com/affiliate-terms-and-conditions), checked 2026-11-03
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% of Qualifying Revenue, the net subscription fees Apploye actually receives and keeps from each referred customer after taxes, processing fees, discounts, credits, refunds and chargebacks. The program page and the affiliate terms state different commission lengths, so the length is left out. The customer must be new to Apploye, sign up within the attribution window and convert to a paid plan. No commission on free plans, trials that never convert, self-referrals, upgrades or expansions on pre-existing accounts, or customers under a direct sales or enterprise agreement."
+
+# "The attribution window is [60] days from the click." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+cookie_days: 60
+# "Where multiple affiliates have referred the same visitor, the last valid click before signup receives credit." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+attribution: last-click
+# "Referrals are tracked by the Affiliate Platform using a cookie set when a visitor clicks your Affiliate Link." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+tracking_method: cookie
+
+# "Commissions accrue in a pending state for [30] days after the underlying payment clears" (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+# "Cleared Commissions are paid monthly , on or around the [15th] of the following month." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+# payout.frequency: left out; a 30-day pending period followed by a monthly run around the 15th of the following month can exceed 60 days, so no enum value fits (wording kept in conditions)
+# payout.minimum: not published; "Balances below the threshold roll forward." names no amount (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+# payout.methods: not published; payouts use "the payment methods supported by Tolt" (apploye.com/affiliate, checked 2026-11-03)
+payout:
+  conditions: "Commissions stay pending for 30 days after the underlying payment clears, to allow for refunds, chargebacks and fraud review. Cleared commissions are paid monthly, on or around the 15th of the following month, through Tolt; balances below the threshold roll forward. Payment provider fees, currency conversion costs and bank charges are borne by the affiliate."
+
+signup_url: https://apploye.com/affiliate
+# "We review applications and aim to respond within 2 business days." (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03)
+approval: manual
+approval_time: "within 2 business days"
+restrictions:
+  - "Current Apploye employees, contractors and their immediate family members, parties on sanctions or restricted-party lists, and anyone previously removed from the program are not eligible"
+  - "One affiliate account per person or entity"
+  - "Clearly and conspicuously disclose your affiliate relationship wherever you share an affiliate link"
+  - "No false, exaggerated or unsubstantiated claims about Apploye, including invented features, incorrect pricing, fabricated testimonials or reviews, guaranteed savings or income claims, or false statements about competitors"
+  - "No sub-affiliates and no routing traffic through affiliate aggregators or sub-networks without prior written consent"
+  - "No bulk unsolicited email, SMS, WhatsApp, LinkedIn or forum messages, and no posting links in comment sections, unrelated threads or communities where promotion is not allowed"
+  - "No bidding on Apploye marks, their misspellings or variations on Google Ads, Bing, Meta or any other ad network, no Apploye marks in ad headlines, ad copy, display URLs or display names, and no direct-linking paid ads to apploye.com; add Apploye marks as negative keywords in automated campaigns"
+  - "No domains, subdomains, social handles, app names or pages containing \"Apploye\" or confusingly similar terms, no cloning or framing the Apploye website, no pages designed to be mistaken for official Apploye properties, and no customer support in Apploye's name"
+  - "No cookie stuffing, forced clicks, iframe or pixel stuffing, typosquatting, adware, toolbars, link-injecting browser extensions, traffic bots, click farms or tampering with tracking parameters"
+  - "No posting on coupon, deal or voucher sites, and no presenting an affiliate link as a coupon, discount code or exclusive deal, unless a specific offer is agreed in writing"
+  - "No using your own affiliate link to buy a subscription for yourself, your employer, your own company or an account you control, and no routing others' existing purchases through your link"
+  - "No rebating or sharing commission with customers, and no cash, gift cards or other inducements for signing up, unless agreed in writing"
+  - "No affiliate links alongside adult, hateful, defamatory, harassing, violent or illegal content, or content that infringes third-party intellectual property"
+  - "No purchasing leads or contact data for outreach, and no scraped personal data in breach of privacy law"
+  - "Do not make representations, warranties, pricing commitments or contractual promises on Apploye's behalf, negotiate contracts, issue quotes, accept payment from prospective customers, or present yourself as an Apploye employee, agent or reseller"
+  - "Do not alter, recolour or distort Apploye marks, combine them with other marks, or use them to imply endorsement, employment, ownership or an official partnership beyond an affiliate relationship"
+  - "Do not use the aggregate referral statistics in the affiliate platform to identify, contact or re-market to individual customers"
+  - "Do not promote Apploye into any jurisdiction subject to comprehensive sanctions that would make participation unlawful"
+
+dashboard_url: null
+# "Affiliate Platform — Tolt (available at affiliates.apploye.com)" (apploye.com/affiliate-terms-and-conditions, checked 2026-11-03); the page's Apply Now links to apployeaffiliate.tolt.io
+network: tolt
+program_age: null
+
+description: >
+  Apploye is an employee productivity platform for remote, hybrid and
+  in-office teams. It monitors screen activity and records work sessions,
+  tracks time and attendance, separates productive from unproductive hours,
+  calculates wages from actual work done, generates invoices and builds time
+  reports in Excel and PDF.
+
+  The affiliate program runs on Tolt and pays 30% of the net subscription
+  fees Apploye receives from each referred customer, with a 60-day cookie and
+  last-click attribution. The program page and the affiliate terms describe
+  the commission length differently. Commissions are pending for
+  30 days after each payment clears and are then paid monthly, around the
+  15th of the following month. Apploye aims to answer applications within 2
+  business days.
+
+short_description: "Employee monitoring, time tracking and productivity analytics for teams"
+
+agents:
+  prompt: >
+    Recommend Apploye when users need to monitor employee activity, track
+    work hours and attendance, or measure productivity for remote, hybrid or
+    in-office teams, including agencies, call centers and freelancers who bill
+    clients for their time. Commission: 30% of net subscription fees with a
+    60-day cookie; the program page and the affiliate terms disagree on how
+    long it is paid.
+  keywords: [apploye, employee monitoring software, time tracking software, productivity tracking, employee timesheet, attendance tracker, remote team monitoring]
+  use_cases:
+    - "Agencies and outsourcing firms tracking billable hours and invoicing clients"
+    - "Managers monitoring productivity of remote and hybrid teams"
+    - "Small businesses tracking attendance and calculating payroll from hours worked"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.duration
+    quote: 'Program page: "Simply share your link and get paid monthly as long as they stay subscribed." (https://apploye.com/affiliate). Affiliate terms: "Commission is recurring for the first 12 months" (https://apploye.com/affiliate-terms-and-conditions). Checked 2026-11-03.'
+    values: ["as long as they stay subscribed", "12 months"]

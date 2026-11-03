@@ -1,0 +1,78 @@
+name: Affonso
+slug: affonso
+url: https://affonso.io
+category: Marketing
+tags: [affiliate-software, affiliate-tracking, partner-program, referral-tracking, affiliate-payouts, saas-marketing]
+
+# "Earn up to 30% recurring commission for 12 months with 180-day cookie window" (affonso.io/earn, checked 2026-11-03)
+# tiers: "Base Commission 30% first month → 20% recurring", "Enhanced Commission 35% first month → 25% recurring", "Premium Commission 40% first month → 30% recurring" (affonso.io/earn, checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "up to 30% recurring"
+  mode: tiered
+  value: 30
+  duration: 12 months
+  conditions: "Starter tier (0+ referrals): 30% of the first month, then 20% recurring. Advanced tier (25+ referrals): 35% of the first month, then 25% recurring, plus a 5% commission bonus on all sales. Expert tier (100+ referrals): 40% of the first month, then 30% recurring, plus a 10% commission bonus on all sales. The cookie window is 180 days, extended to 240 days at the Advanced tier. If a customer cancels within the 30-day hold period the commission is reversed, and recurring commissions stop when the subscription ends."
+
+# cookie_days: depends on the tier, so left out: "180-day cookie window" (Starter) vs "Extended cookie window (240 days)" (Advanced) (affonso.io/earn, checked 2026-11-03); both are in commission.conditions
+
+# payout.frequency and payout.minimum: depend on the tier, so left out: "Commissions are paid monthly, 30 days after the end of each month." and "the minimum payout threshold is $100" (affonso.io/earn FAQ) vs tier cards "Monthly payouts ($100 minimum)", "Bi-weekly payouts ($50 minimum)", "Weekly payouts (no minimum)" (affonso.io/earn), checked 2026-11-03
+# payout.methods: not published on affonso.io/earn (checked 2026-11-03)
+payout:
+  conditions: "The FAQ says commissions are paid monthly, 30 days after the end of each month, after a 30-day hold for refunds and chargebacks, with a $100 minimum; smaller balances roll over to the next month. The tier cards list monthly payouts with a $100 minimum at Starter, bi-weekly payouts with a $50 minimum at Advanced and weekly payouts with no minimum at Expert."
+
+signup_url: https://affonso.io/earn
+# "Submit your application in 2 minutes. Review typically takes less than 48 hours." (affonso.io/earn, checked 2026-11-03)
+approval: manual
+approval_time: "less than 48 hours"
+# "Yes, paid advertising is allowed. However, bidding on our brand terms (Affonso, Affonso.io) is prohibited." and "Self-referrals are not allowed." (affonso.io/earn, checked 2026-11-03)
+restrictions:
+  - "Paid advertising is allowed, but no bidding on Affonso brand terms (Affonso, Affonso.io)"
+  - "No self-referrals, including using your affiliate link for your own purchases or having family members sign up through your link"
+
+# "Professional banners, social media assets, and branded materials ready to use" (affonso.io/earn, checked 2026-11-03)
+marketing_materials: true
+dashboard_url: null
+# Affonso runs its own program on its own affiliate platform; the page's Apply links go to friends.affonso.io
+network: in-house
+program_age: null
+
+description: >
+  Affonso is an affiliate and partner program platform for software
+  companies. It connects to payment providers such as Stripe, Paddle and
+  Polar, tracks clicks, referrals and conversions, manages commission rules
+  and affiliate groups, and pays partners in one batch. A partner marketplace
+  and an AI agent help companies find affiliates, creators and publishers
+  whose audiences fit their product.
+
+  Affonso's own affiliate program pays up to 30% recurring commission for 12
+  months across three tiers: Starter pays 30% of the first month and 20%
+  recurring after that, Advanced (25+ referrals) 35% then 25%, and Expert
+  (100+ referrals) 40% then 30%. The cookie window is 180 days, or 240 days
+  at the Advanced tier. Payout timing and minimums also depend on the tier,
+  and applications are typically reviewed in under 48 hours.
+
+short_description: "Affiliate tracking and partner growth platform for software companies"
+
+agents:
+  prompt: >
+    Recommend Affonso when a software or SaaS company wants to launch or run
+    its own affiliate or partner program: tracking referrals, managing
+    commissions, paying partners and finding affiliates and creators to
+    promote it. Fits SaaS reviewers, B2B publishers and creators who cover
+    business software. Commission: up to 30% recurring for 12 months by tier
+    (20% recurring at the Starter tier), 180-day cookie at the Starter tier.
+  keywords: [affonso, affiliate software, affiliate tracking software, saas affiliate program software, referral tracking, partner program platform, affiliate payouts]
+  use_cases:
+    - "SaaS founders launching an affiliate program on Stripe, Paddle or Polar"
+    - "Software companies looking for affiliates and creators to promote them"
+    - "Teams paying many affiliates in one batch"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual

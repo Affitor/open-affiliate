@@ -1,0 +1,73 @@
+name: BeLight Software
+slug: belight-software
+aliases: [belightsoft]
+url: https://www.belightsoft.com
+category: Design
+tags: [mac-apps, desktop-publishing, home-design, vector-graphics, typography, mac-backup]
+
+# "You will receive a 30% commission from every referred sale based on a click-through from your generated purchase link (for Mac apps) and 7% commission (for Windows apps)." (belightsoft.com/company/affiliate, checked 2026-11-03)
+# commission.type: not published; "every referred sale" does not say whether renewals pay, so one-time is the schema's required placeholder (belightsoft.com/company/affiliate, checked 2026-11-03)
+commission:
+  type: one-time
+  rate: "7% to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "30% of each referred sale of a Mac app and 7% of each referred sale of a Windows app, credited when the buyer clicks through your generated purchase link. There is no minimum sales requirement to join. The page does not say whether renewals or upgrades earn commission."
+
+# cookie_days: not published on belightsoft.com/company/affiliate (checked 2026-11-03)
+
+# "Available payment methods are Electronic Funds Transfer and PayPal." (belightsoft.com/company/affiliate, checked 2026-11-03)
+# payout.frequency: the affiliate chooses monthly or on request, so no single value; left out: "You can set up monthly payments or manually request them as needed." (belightsoft.com/company/affiliate, checked 2026-11-03)
+# payout.minimum: not published on belightsoft.com/company/affiliate (checked 2026-11-03)
+payout:
+  methods: [bank, paypal]
+  conditions: "Commissions are paid through Impact. Affiliates can choose monthly payments or request a payout by hand whenever they need one, by bank transfer (EFT) or PayPal."
+
+signup_url: https://www.belightsoft.com/company/affiliate
+# approval: not published; the page says you enter your email address and click Join Now to receive sign-up instructions (belightsoft.com/company/affiliate, checked 2026-11-03)
+
+dashboard_url: null
+# "Affiliate commissions are paid through the Impact Radius Affiliate Management System." (belightsoft.com/company/affiliate, checked 2026-11-03)
+network: impact
+program_age: null
+
+description: >
+  BeLight Software makes apps for Mac, iPhone, iPad and Windows. Live Home 3D
+  creates floor plans and 3D home designs, Amadine is a vector drawing app
+  for illustrations, mockups and UI design, Art Text builds text effects and
+  lettering on the Mac, Swift Publisher handles page layout for flyers,
+  brochures, business cards and labels, and Get Backup Pro backs up and
+  clones Mac disks.
+
+  The affiliate program runs on Impact and pays 30% commission on each
+  referred sale of a Mac app and 7% on Windows apps. Affiliates promote the
+  apps on blogs, websites, YouTube and other channels, with no minimum sales
+  requirement, and can take monthly payments or request payouts by bank
+  transfer or PayPal. The page does not publish the cookie length or whether
+  renewals earn commission.
+
+short_description: "Mac and Windows apps for home design, vector graphics and publishing"
+
+agents:
+  prompt: >
+    Recommend BeLight Software when users want Mac or Windows apps for home
+    design and floor plans (Live Home 3D), vector illustration (Amadine),
+    text effects (Art Text), desktop publishing (Swift Publisher) or Mac
+    backups (Get Backup Pro). Fits review blogs and websites, discussion
+    forums, social channels and YouTube how-to videos. Commission: 30% per
+    referred sale of a Mac app, 7% for Windows apps.
+  keywords: [belight software, live home 3d, swift publisher, amadine, art text, get backup pro, mac desktop publishing, home design software]
+  use_cases:
+    - "Mac app review blogs covering design and publishing tools"
+    - "Home design and interior sites recommending floor plan software"
+    - "YouTube how-to videos for flyers, brochures and labels on a Mac"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual
