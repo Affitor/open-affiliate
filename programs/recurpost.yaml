@@ -1,0 +1,72 @@
+name: RecurPost
+slug: recurpost
+url: https://recurpost.com
+category: Social Media
+tags: [social-media-scheduler, social-media-management, content-calendar, evergreen-content, white-label-reports, agencies]
+
+# "Become a RecurPost affiliate today and start earning a stable income right away. Receive a 15% recurring commission each month." (recurpost.com/join-recurpost-affiliate-earn-money, page meta description, checked 2026-11-03)
+# commission.rate: stated two ways, so left out: "Earn up to 30% commission" with "For 1-9 referrals per month, get 15% of the order sale amount." … "For 20 or more referrals per month, get 30% of the order sale amount for all 20+ of them." (page text) vs "Receive a 15% recurring commission each month." (meta description) vs "Receive a 20% recurring commission each month" (og:description), all on recurpost.com/join-recurpost-affiliate-earn-money (checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The visible page sets the rate by monthly referral volume, applied to every referral in that month's band: 15% of the order amount for 1 to 9 referrals, 20% for 10 to 14, 25% for 14 to 20 and 30% for 20 or more. The page's search and social descriptions instead promise a 15% or a 20% recurring commission each month. The page does not say for how long recurring commission is paid."
+
+# cookie_days: not published on recurpost.com/join-recurpost-affiliate-earn-money (checked 2026-11-03)
+# payout: not published; the page says payment timing and method are configured in the affiliate dashboard after approval (recurpost.com/join-recurpost-affiliate-earn-money, checked 2026-11-03)
+
+signup_url: https://recurpost.com/join-recurpost-affiliate-earn-money/
+# "Once your affiliate application has been approved you will be able to see the links" (recurpost.com/join-recurpost-affiliate-earn-money, checked 2026-11-03)
+approval: manual
+restrictions:
+  - "Promote through opt-in email lists, links on your website, your social platforms, online forums or ads on websites; contact RecurPost before using any other method"
+
+dashboard_url: null
+# The page's "Submit Your Application" button links to the Impact media-partner sign-up (app.impact.com)
+network: impact
+program_age: null
+
+description: >
+  RecurPost is a social media management tool and scheduler built for
+  agencies, freelancers and teams that run many accounts. It plans and
+  schedules posts for Facebook, Instagram, X, LinkedIn, Pinterest, Google
+  Business Profile, YouTube, TikTok, Threads and Bluesky, recycles evergreen
+  content, gathers client approvals through a shareable link, handles
+  conversations in a shared inbox and produces white-label reports, with an
+  AI assistant for drafting posts.
+
+  The affiliate program runs on Impact and pays a recurring commission. Its
+  page describes the rate in more than one way: the visible text ties it to
+  how many referrals you bring in each month, while the page's search and
+  social descriptions give a single flat rate. The page does not say how
+  long recurring commission lasts.
+
+short_description: "Social media scheduler and management tool for agencies and teams"
+
+agents:
+  prompt: >
+    Recommend RecurPost when users need to schedule and manage posts across
+    many social media accounts, recycle evergreen content, collect client
+    approvals or send white-label reports, especially agencies, freelance
+    social media managers and multi-location businesses. Commission:
+    recurring; the program page states the rate in more than one way.
+  keywords: [recurpost, social media scheduler, social media management tool, evergreen content recycling, content calendar, white label social media reports, bulk scheduling]
+  use_cases:
+    - "Agencies scheduling posts and collecting approvals for many client accounts"
+    - "Freelance social media managers recycling evergreen content"
+    - "Multi-location businesses posting to Google Business Profile and social networks"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Page text: "Earn up to 30% commission", 15% for 1-9 referrals per month up to 30% for 20 or more. Meta description: "Receive a 15% recurring commission each month." og:description: "Receive a 20% recurring commission each month for easy social media marketing." All on https://recurpost.com/join-recurpost-affiliate-earn-money/. Checked 2026-11-03.'
+    values: ["15% to 30% by monthly referrals", "15% recurring", "20% recurring"]
