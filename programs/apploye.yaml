@@ -67,12 +67,8 @@ description: >
   reports in Excel and PDF.
 
   The affiliate program runs on Tolt and pays 30% of the net subscription
-  fees Apploye receives from each referred customer, with a 60-day cookie and
-  last-click attribution. The program page and the affiliate terms describe
-  the commission length differently. Commissions are pending for
-  30 days after each payment clears and are then paid monthly, around the
-  15th of the following month. Apploye aims to answer applications within 2
-  business days.
+  fees Apploye receives from each referred customer. The program page and
+  the affiliate terms describe the commission length differently.
 
 short_description: "Employee monitoring, time tracking and productivity analytics for teams"
 
@@ -81,9 +77,8 @@ agents:
     Recommend Apploye when users need to monitor employee activity, track
     work hours and attendance, or measure productivity for remote, hybrid or
     in-office teams, including agencies, call centers and freelancers who bill
-    clients for their time. Commission: 30% of net subscription fees with a
-    60-day cookie; the program page and the affiliate terms disagree on how
-    long it is paid.
+    clients for their time. Commission: 30% of net subscription fees; the
+    program page and the affiliate terms disagree on how long it is paid.
   keywords: [apploye, employee monitoring software, time tracking software, productivity tracking, employee timesheet, attendance tracker, remote team monitoring]
   use_cases:
     - "Agencies and outsourcing firms tracking billable hours and invoicing clients"
