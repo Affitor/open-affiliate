@@ -19,7 +19,7 @@ commission:
 conflicts:
   - field: cookie_days
     quote: "unicornplatform.com/earn/: \"60 days cookie period\". unicornplatform.com/affiliate-program-terms/ §5: \"as tracked by a 30-day cookie window\" and §7: \"with a 30-day cookie window from the user’s initial click\". Checked 2026-11-04."
-    values: [60, 30]
+    values: ["60 days", "30 days"]
 
 # "Commissions are paid monthly. Payments are processed within 15 days of the month’s end." (unicornplatform.com/affiliate-program-terms/ §5, checked 2026-11-04) — within 15 days after month end → net-30 (backfill rule #1)
 # "Cash out in one click (Bank, Paypal, Wise)." (unicornplatform.com/earn/, checked 2026-11-04)
