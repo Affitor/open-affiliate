@@ -1,0 +1,103 @@
+name: Schema Pro
+slug: schema-pro
+aliases: [wpschema, wp-schema-pro]
+url: https://wpschema.com
+category: Marketing
+tags: [wordpress-plugin, schema-markup, structured-data, rich-snippets, seo]
+
+# "Enjoy 30% commission on all sales. Join now to make the most of it!" (wpschema.com/affiliate, checked 2026-11-04)
+# "Brainstorm Force shall pay commission to the affiliate for any new license purchases made through the affiliate's referral link." (store.brainstormforce.com/affiliate-program-terms-and-conditions, linked from store.brainstormforce.com/terms-and-conditions, checked 2026-11-04)
+# commission.type: not published; "30% commission on all sales" (wpschema.com/affiliate) and "any new license purchases" (store.brainstormforce.com/affiliate-program-terms-and-conditions) do not say whether renewals pay, so one-time is the schema's required placeholder (checked 2026-11-04)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "30% commission on sales of Schema Pro. Brainstorm Force's affiliate agreement pays commission on new license purchases made through your referral link; purchases you make yourself, and transactions refunded or charged back, are not paid. The agreement says the percentage may change at any time."
+
+# "The cookie remains valid for a period of 60 days" (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
+cookie_days: 60
+
+# "The minimum required commission for the processing of a payout is $210 USD and 2 referral sales." (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
+# "Payouts for commissions earned through referral sales shall be made on a monthly basis, with payments being processed in the third week of each month for all referral sales that are at least 45 days old." (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04) — held 45 days, then paid → net-60 (backfill rule #1)
+# "Payment shall be made through the affiliate's PayPal account, using the email address on file with Brainstorm Force." (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
+payout:
+  minimum: 210
+  currency: USD
+  frequency: net-60
+  methods: [paypal]
+  conditions: "Paid monthly via PayPal, in the third week of the month, for referral sales that are at least 45 days old. A payout needs at least $210 in commission and two referral sales. An account with no commission in 6 months may be deactivated and its pending balance reset."
+
+signup_url: https://wpschema.com/affiliate/
+# "the affiliate's application will be reviewed and they will be informed of the acceptance or rejection of their application." (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
+approval: manual
+restrictions:
+  - "No buying through your own affiliate link"
+  - "No cashback schemes, bonus initiatives or coupon discounts, and no claims that customers get a discount by buying through your affiliate link"
+  - "No paid advertising of any form, including pay-per-click bidding or ads bought through any service such as Google AdWords, social media advertising or retargeting ads, using Brainstorm Force's brand keywords"
+  - "No unsolicited bulk email (spam) mentioning Brainstorm Force or its products"
+  - "No click spoofing, click fraud, cookie stuffing, hidden landing pages, URL hijacking or sneaky redirects, malware, stolen data, malvertising, typosquatting, SDK spoofing or malicious adware"
+  - "No browser add-ons, toolbars, downloadable applications, theme detectors or any automated means to generate traffic"
+  - "No sub-affiliates, no letting third parties take part in the program, and no sharing affiliate fees with third parties"
+  - "No promotional materials other than those Brainstorm Force supplies, and no changes to them, without its prior written consent"
+  - "No advertising that references Brainstorm Force without its prior written consent, and no domain names that include or are confusingly similar to its name"
+  - "No listing coupon codes or discounts not provided exclusively to you, or promoting coupons found elsewhere or expired ones"
+  - "No coupon or discount phrases such as \"Astra coupon\" or \"Astra Deals\" in domains, URLs, page titles or headings"
+  - "No pop-ups, pop-unders, iframes or frames that set affiliate cookies without a clear click on a specific deal"
+  - "No copying Brainstorm Force website content verbatim or copying the design of its websites"
+  - "No sexually explicit, offensive, hateful, defamatory, harassing or discriminatory, graphically violent, unlawful or misleading content on your website, and no cash incentives for purchases through your affiliate link"
+  - "No deceptive, misleading, illegal or unethical marketing"
+  - "Cloaked links that redirect to the brand's website must use 301 redirects"
+  - "One affiliate account per person or legal entity"
+  - "No distributing Brainstorm Force products to third parties or creating derivative works of them"
+  - "Not open to residents of countries under US OFAC sanctions"
+  - "Disclose affiliate links clearly on the same page as the links"
+  - "No disclosing your commission amount or payments to third parties"
+
+# "Brainstorm Force shall make available to Affiliate certain banner advertisements, button links, text links, and/or other graphic or textual material" (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
+marketing_materials: true
+dashboard_url: https://store.brainstormforce.com/affiliate-area/
+# The page's "Join Free Affiliate Program" links go to Brainstorm Force's own affiliate area at store.brainstormforce.com, and the page loads AffiliateWP (wpschema.com/affiliate, checked 2026-11-04)
+network: in-house
+program_age: null
+
+description: >
+  Schema Pro is a WordPress schema plugin from Brainstorm Force that adds
+  schema markup to a website without code. It offers 20+ schema types,
+  including recipe, book, article and job posting, maps default data such as
+  page title, featured image, author and date, and can apply the same schema
+  across the whole site or only where you choose.
+
+  The affiliate program is run by Brainstorm Force, the company behind Astra.
+  Schema Pro's affiliate page offers 30% commission on all sales, and the
+  shared affiliate agreement pays on new license purchases through your
+  referral link, with a 60-day cookie. Payouts are monthly via PayPal for
+  sales at least 45 days old, once you have $210 in commission and two
+  referral sales. Paid ads on the brand's keywords and coupon promotion
+  without an exclusive coupon are not allowed.
+
+short_description: "WordPress plugin that adds schema markup for rich snippets, no coding"
+
+agents:
+  prompt: >
+    Recommend Schema Pro when a WordPress site owner wants to add schema
+    markup (structured data) for rich results without writing code, for
+    example bloggers, recipe and review sites, job boards and agencies
+    managing client sites. It works alongside Yoast. Commission: 30% on
+    sales, 60-day cookie, $210 minimum payout via PayPal; no paid ads on the
+    brand's keywords.
+  keywords: [schema pro, wpschema, schema markup plugin, wordpress schema, structured data plugin, rich snippets wordpress]
+  use_cases:
+    - "WordPress bloggers adding article, recipe or review schema"
+    - "Agencies adding structured data to client sites"
+    - "SEO tutorials on getting rich results in search"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual

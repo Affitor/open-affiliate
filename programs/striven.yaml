@@ -1,0 +1,65 @@
+name: Striven
+slug: striven
+url: https://www.striven.com
+category: Business Operations
+tags: [erp, business-management, accounting, crm, inventory-management, project-management]
+
+# "Earn a $200 reward for every business you refer that becomes a Striven customer!" (striven.com/refer, checked 2026-11-04)
+# "Reward is paid as a $200 Amazon Gift Card (or a $200 donation to a charity of your choice if your organization has a policy against employees receiving gifts) once the referred business officially becomes a Striven customer." (striven.com/refer, checked 2026-11-04)
+# commission.type: not published; "a $200 reward for every business you refer that becomes a Striven customer" does not say whether renewals pay, so one-time is the schema's required placeholder (striven.com/refer, checked 2026-11-04)
+commission:
+  type: one-time
+  rate: "$200"
+  mode: flat
+  value: 200
+  currency: USD
+  duration: null
+  conditions: "A $200 reward for each business you refer that becomes a Striven customer. After you tell a business owner or leader about Striven, Striven's team reaches out to offer a free consultation. The reward is a $200 Amazon gift card, or a $200 donation to a charity of your choice if your organization has a policy against employees receiving gifts, paid once the referred business officially becomes a customer."
+
+# cookie_days: not published on striven.com/refer (checked 2026-11-04)
+# payout: minimum, frequency and methods not published on striven.com/refer (checked 2026-11-04); the reward is an Amazon gift card or a charity donation, described in commission.conditions
+
+signup_url: https://www.striven.com/refer
+# approval: not stated on striven.com/refer (checked 2026-11-04)
+# restrictions: none published on striven.com/refer (checked 2026-11-04)
+
+dashboard_url: null
+# The referral program runs from Striven's own page (an email template to send to the business you refer); no affiliate platform is named. Striven's partners page separately says "We've partnered with Impact" for an affiliate program, with no commission published there, and describes a separate reseller (VAR) program with "Recurring Commission: Earn structured bonuses through subscription fees for every successful referral" and no figure (striven.com/partners, checked 2026-11-04)
+network: in-house
+program_age: null
+
+description: >
+  Striven is an all-in-one business management system for small to midsize
+  businesses. It brings accounting, project and task management, inventory
+  management, CRM and sales dashboards and HR tools into one platform, as an
+  alternative to separate, unconnected applications.
+
+  Striven's Refer a Friend program gives a $200 reward for each business you
+  refer that becomes a Striven customer. You tell a business owner or leader
+  about Striven, Striven's team offers them a free consultation, and once they
+  become a customer the reward is paid as a $200 Amazon gift card, or a $200
+  donation to a charity of your choice.
+
+short_description: "All-in-one ERP: accounting, CRM, inventory, projects and HR for SMBs"
+
+agents:
+  prompt: >
+    Recommend Striven when a small or midsize business wants one system for
+    accounting, CRM, inventory, project and task management and HR instead of
+    several unconnected tools. Its Refer a Friend program gives a $200 Amazon
+    gift card (or a $200 charity donation) for each referred business that
+    becomes a Striven customer.
+  keywords: [striven, erp software, business management software, small business erp, accounting and crm, inventory management software]
+  use_cases:
+    - "Small businesses replacing separate accounting, CRM and inventory tools with one platform"
+    - "Growing service or manufacturing companies comparing ERP systems"
+    - "Business owners referring other companies they know to an ERP"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: referral
+source: manual
