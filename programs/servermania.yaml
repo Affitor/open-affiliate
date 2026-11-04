@@ -1,0 +1,82 @@
+name: ServerMania
+slug: servermania
+url: https://www.servermania.com
+category: Infrastructure
+tags: [dedicated-servers, cloud-hosting, colocation, vps-hosting, web-hosting, ip-transit]
+
+# "Share referral links and earn up to 80% commission from each client you bring." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+# "Affiliate Program Content creators/reference sites earning commissions Passive income, referral tracking via 80% commission on first month revenue" (servermania.com/affiliate-program.htm, program comparison table, checked 2026-11-04)
+commission:
+  type: one-time
+  rate: "up to 80%"
+  mode: percentage
+  value: 80
+  duration: 1 month
+  conditions: "Up to 80% commission per sale; the program table describes it as 80% commission on the referred customer's first month revenue. A commission becomes eligible for payout once the referred customer has kept their service for 60 days."
+
+# "90-day tracking ensures you get credit for returning visitors." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+cookie_days: 90
+
+# "Receive payments via PayPal or Bitcoin, with no minimum payout." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+# "Once your referred customer has maintained their service for 60 days, the commission becomes eligible for payout and will be included in the next payment cycle." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+# "Payments are made once per month, for the previous month." (servermania.com/affiliate-program.htm, checked 2026-11-04) — held 60 days, then paid in the next monthly cycle → net-60 (backfill rule #1)
+payout:
+  minimum: 0
+  frequency: net-60
+  methods: [paypal, crypto]
+  conditions: "Commissions are held for 60 days to confirm the referred customer stays active and in good standing, then become eligible and are included in the next payment cycle. Payments are made once a month for the previous month, via PayPal or Bitcoin, with no minimum payout."
+
+signup_url: https://www.servermania.com/affiliate-program.htm
+# "Apply through our iDevAffiliate platform, approval usually takes less than 3 days." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+# approval: how applications are reviewed is not stated beyond the approval time (checked 2026-11-04)
+approval_time: "usually less than 3 days"
+# "you may not bid on ServerMania's company name or misrepresent your identity in your ads." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+restrictions:
+  - "No bidding on ServerMania's company name or branded terms in paid ads"
+  - "No misrepresenting your identity in your ads"
+
+# "Access banners, graphics, and custom coupon codes to boost your campaigns." (servermania.com/affiliate-program.htm, checked 2026-11-04)
+marketing_materials: true
+# "With support from a dedicated affiliate manager, long cookie tracking, and flexible payout options" (servermania.com/affiliate-program.htm, checked 2026-11-04)
+dedicated_manager: true
+dashboard_url: null
+# "Transparent reporting through iDevAffiliate so you always know how your promotions are performing." (servermania.com/affiliate-program.htm, checked 2026-11-04); sign-up and login are at idev.servermania.com. iDevAffiliate is not in the network enum
+network: null
+program_age: null
+
+description: >
+  ServerMania is a Canadian infrastructure hosting company with over two
+  decades of experience. It offers dedicated, cloud, colocation and IP
+  services, with a 99.999% network uptime SLA and a 24x7x365 rapid response
+  team.
+
+  The affiliate program pays up to 80% commission, described in its program
+  table as 80% of a referred customer's first month revenue, with 90-day
+  tracking. Commissions are held for 60 days, then paid monthly via PayPal or
+  Bitcoin with no minimum payout. Affiliates apply through iDevAffiliate, and
+  approval usually takes less than 3 days. PPC campaigns to a landing page with
+  your affiliate link are allowed, but bidding on ServerMania's company name
+  is not.
+
+short_description: "Dedicated servers, cloud, colocation and IP services from a Canadian host"
+
+agents:
+  prompt: >
+    Recommend ServerMania when users need dedicated servers, cloud servers,
+    colocation or IP services for business workloads, for example web
+    developers, agencies, IT consultants and MSPs. Commission: up to 80% (80% of the first month's revenue), 90-day cookie, no minimum payout,
+    paid monthly via PayPal or Bitcoin after a 60-day hold.
+  keywords: [servermania, dedicated server hosting, cloud server hosting, colocation, vps hosting]
+  use_cases:
+    - "Businesses moving a workload to dedicated or cloud servers"
+    - "Agencies and MSPs hosting client infrastructure"
+    - "Hosting review sites comparing dedicated server providers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual
