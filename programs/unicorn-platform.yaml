@@ -47,8 +47,8 @@ restrictions:
 # "An essential collection of banners" (unicornplatform.com/earn/, checked 2026-11-04)
 marketing_materials: true
 dashboard_url: null
-# The earn page's sign-up links to unicorn-platform.tolt.io (Tolt, not a schema network)
-network: null
+# The earn page's sign-up links go to unicorn-platform.tolt.io, Unicorn Platform's Tolt portal (unicornplatform.com/earn/, checked 2026-11-04)
+network: tolt
 program_age: null
 
 description: >
