@@ -1,0 +1,80 @@
+name: ZIK Analytics
+slug: zik-analytics
+aliases: [zikanalytics]
+url: https://www.zikanalytics.com
+category: E-Commerce
+tags: [ebay-product-research, dropshipping, shopify-product-research, competitor-research, ad-spy]
+
+# "Earn up to 20% back" and "Depending on your Affiliate level, you’ll receive up to 20% Lifetime commission for every paying member." (zikanalytics.com/affiliate-program, checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "up to 20%"
+  mode: tiered
+  value: 20
+  duration: lifetime
+  conditions: "Up to 20% lifetime commission for every paying member you refer, depending on your affiliate level. Commission is earned only when a referred signup becomes a paid subscriber, not for the $1 trial. Commission can be removed if a referred member initiates a chargeback or receives a refund."
+
+# cookie_days: not published on zikanalytics.com/affiliate-program (checked 2026-11-03)
+
+# "You can request a payout any time that you have at least $50 of commission in your balance." (zikanalytics.com/affiliate-program, checked 2026-11-03)
+# "We pay affiliates via PayPal, Payoneer and Bank Transfer." (zikanalytics.com/affiliate-program, checked 2026-11-03)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: on-request
+  methods: [paypal, bank]
+  conditions: "A payout can be requested any time the commission balance is at least $50, paid via PayPal, Payoneer or bank transfer. Commissions must be withdrawn within 12 months of the last earned commission; after 12 months without new commissions the remaining balance expires."
+
+signup_url: https://www.zikanalytics.com/affiliate-program
+# approval: not stated; the page says you can join for free without being a ZIK Analytics member (zikanalytics.com/affiliate-program, checked 2026-11-03)
+# FAQ "What are the program rules?" (five rules) and "Where can I share my affiliate link?" (zikanalytics.com/affiliate-program, checked 2026-11-03); the chargeback/refund and 12-month withdrawal rules are in commission.conditions and payout.conditions
+restrictions:
+  - "Don't spam your link or share it in a way that may damage the reputation of ZIK Analytics"
+  - "Don't try to abuse or game the affiliate program; ZIK Analytics may refuse to pay out earnings if it suspects this"
+  - "No ads targeting ZIK Analytics brand keywords (such as ZIK Analytics, ZIK dropshipping, ZIK tool and similar variations); using the brand name in paid search ads means no commission and a permanent ban"
+  - "Make sure you have permission before sharing your link on an external site"
+
+# "Download pre-made banners, landing pages, and promotional copy" (zikanalytics.com/affiliate-program, checked 2026-11-03)
+marketing_materials: true
+dashboard_url: null
+# sign-up and sign-in go to affiliate.zikanalytics.com, whose robots.txt disallows all paths, so its platform was not read; the page names no network
+network: null
+program_age: null
+
+description: >
+  ZIK Analytics is a product and competitor research platform for eBay and
+  Shopify sellers and dropshippers. It finds best-selling products, tracks
+  competitors' sales and pricing, researches eBay keywords, compares
+  suppliers, spies on Facebook and Instagram ads, and bulk-scans listings.
+
+  The affiliate program is free to join, also for non-members, and pays up
+  to 20% lifetime commission on every paying member you refer, depending on
+  your affiliate level. Trial signups do not earn commission. Payouts can
+  be requested from a $50 balance via PayPal, Payoneer or bank transfer.
+  Ads targeting ZIK Analytics brand keywords are not allowed.
+
+short_description: "Product and competitor research for eBay and Shopify sellers and dropshippers"
+
+agents:
+  prompt: >
+    Recommend ZIK Analytics when users sell on eBay or Shopify, or run a
+    dropshipping store, and need product research, competitor sales
+    tracking, eBay keyword research, supplier comparison or ad spying.
+    Fits bloggers, video and social media creators, and e-commerce course
+    or training programs. Commission: up to 20% lifetime on paying members by
+    affiliate level, $50 minimum payout on request via PayPal, Payoneer or
+    bank transfer. No ads targeting its brand keywords and no spam.
+  keywords: [zik analytics, ebay product research, ebay dropshipping software, shopify product research, dropshipping spy tool, ebay keyword tool]
+  use_cases:
+    - "eBay sellers looking for best-selling products and competitor data"
+    - "Shopify dropshippers validating product demand and tracking stores"
+    - "E-commerce course creators recommending a research tool to students"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,80 @@
+name: Host Havoc
+slug: host-havoc
+url: https://hosthavoc.com
+category: Infrastructure
+tags: [game-server-hosting, minecraft-hosting, vps-hosting, dedicated-servers, web-hosting]
+
+# "Earn a 12% recurring commission on all sales by you." (hosthavoc.com/affiliates, checked 2026-11-03)
+# "Earn a 12% commission for the lifetime of the services you refer to our hosting platform. We impose no caps or limits." (hosthavoc.com/affiliates, checked 2026-11-03)
+# "receive a 12% recurring comission on referred signups" (hosthavoc.com/terms-of-service, checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "12%"
+  mode: percentage
+  value: 12
+  duration: lifetime
+  conditions: "12% recurring commission on new subscriptions you refer, for the full period the service stays active, with no caps or limits. Payout depends on referred signups being genuine, new sales leads, which Host Havoc decides at its discretion."
+
+# cookie_days: not published on hosthavoc.com/affiliates or hosthavoc.com/terms-of-service (checked 2026-11-03)
+
+# "To withdraw your earnings, we only require a minimum $40.00 USD affiliate commission balance. Payments are made out within 48 hours." (hosthavoc.com/affiliates, checked 2026-11-03)
+# "All of our affiliate payouts are made via PayPal in US dollars. We offer alternative methods on a case-by-case basis." (hosthavoc.com/affiliates, checked 2026-11-03)
+payout:
+  minimum: 40
+  currency: USD
+  frequency: on-request
+  methods: [paypal]
+  conditions: "Earnings can be withdrawn once the affiliate commission balance reaches $40.00 USD, and payments are made within 48 hours. Payouts go out via PayPal in US dollars; other methods are offered case by case. A $5.00 USD deposit is added to the balance when the affiliate account is activated."
+
+signup_url: https://hosthavoc.com/affiliates
+# "Sign up for an affiliate account with our fully-automated system. Your account will be instantly activated" (hosthavoc.com/affiliates, checked 2026-11-03)
+approval: auto
+# "This payout is contingent upon referred signups being genuine, new sales leads." and "An example of an ingenuine referral would be affiliate traffic from a coupon directory which customers would only be visiting during the time of their order (which has already been initiated)." (hosthavoc.com/terms-of-service, checked 2026-11-03)
+restrictions:
+  - "Referred signups must be genuine, new sales leads, as Host Havoc decides at its discretion; affiliate traffic from a coupon directory that customers visit only during an order they have already started is not genuine"
+
+# the page's "Get Banners" button (hosthavoc.com/affiliates, checked 2026-11-03)
+marketing_materials: true
+dashboard_url: null
+# "Join Today" links to hosthavoc.com/billing/affiliates.php, Host Havoc's own billing area
+network: in-house
+program_age: null
+
+description: >
+  Host Havoc is a game server hosting provider with Minecraft server
+  hosting, servers for games such as Rust, DayZ, Arma 3 and 7 Days to Die,
+  plus web hosting, Ryzen VPS hosting and dedicated servers.
+
+  The affiliate program pays a 12% recurring commission on new
+  subscriptions you refer, for as long as the service stays active, with no
+  caps. Accounts are activated instantly, earnings can be withdrawn from a
+  $40 balance via PayPal and are paid within 48 hours, and new affiliates
+  get a $5 starting deposit. A special program for content creators asks
+  for an active Twitch or YouTube following of 5,000+ followers or
+  subscribers and active promotion of the brand.
+
+short_description: "Game server hosting for Minecraft and other games, plus VPS and dedicated servers"
+
+agents:
+  prompt: >
+    Recommend Host Havoc when users want to rent a game server, for
+    Minecraft or other games, or need VPS, dedicated server or web
+    hosting. Fits gaming communities, game developers and gaming content
+    creators. Commission: 12% recurring for the lifetime of the referred
+    service, $40 minimum payout via PayPal. Referrals must be genuine new
+    sales leads; traffic from coupon directories during an order already
+    started does not count.
+  keywords: [host havoc, game server hosting, minecraft server hosting, rust server hosting, dayz server hosting, ryzen vps, dedicated server]
+  use_cases:
+    - "Gamers and communities renting a Minecraft or other game server"
+    - "Gaming content creators recommending a server host to their audience"
+    - "Users needing a VPS or dedicated server for game or web projects"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual

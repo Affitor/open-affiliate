@@ -1,0 +1,84 @@
+name: Deepbrid
+slug: deepbrid
+url: https://www.deepbrid.com
+category: Productivity
+tags: [download-manager, cloud-downloader, usenet, video-streaming, cloud-storage]
+
+# "30% First Purchase Earn 30% on every new customer's first order" (deepbrid.com/affiliates, checked 2026-11-03)
+# "20% Recurring Sales Keep earning on all future purchases Lifetime earnings Renewals included Upgrades count" (deepbrid.com/affiliates, checked 2026-11-03)
+# "You'll earn commissions on all their purchases, not just the first one — for life." (deepbrid.com/affiliates, checked 2026-11-03)
+commission:
+  type: recurring
+  rate: "30% first sale, 20% recurring"
+  mode: tiered
+  value: 30
+  duration: lifetime
+  conditions: "30% on each new customer's first order, then 20% on all of that customer's future purchases, renewals and upgrades for life. A user who signs up through your link stays tagged to your account permanently. No caps on earnings."
+
+# "90 Day Cookie Extended tracking window for conversions" (deepbrid.com/affiliates, checked 2026-11-03)
+cookie_days: 90
+# "Last-click model" (deepbrid.com/affiliates, checked 2026-11-03)
+attribution: last-click
+
+# "Payments are processed on the 7th of every month for the previous month's confirmed earnings. Choose between PayPal, Bitcoin, Bank Wire, or Account Credits." (deepbrid.com/affiliates, checked 2026-11-03) — 7 days after month end → net-30 (backfill rule #1)
+# payout.minimum: stated two ways, so left out: "$20 Minimum Low threshold to receive payments" and "Minimum payout is just $20." (deepbrid.com/affiliates) vs "No minimum" in the First Purchase commission card (deepbrid.com/affiliates), checked 2026-11-03
+payout:
+  frequency: net-30
+  methods: [paypal, crypto, bank]
+  conditions: "Paid on the 7th of each month for the previous month's confirmed earnings, by PayPal, Bitcoin, bank wire or Deepbrid account credits, with no transaction fees. The payment section names a $20 minimum payout, while the First Purchase commission card says no minimum."
+
+signup_url: https://www.deepbrid.com/affiliates
+# "Simply create a Deepbrid account — the affiliate dashboard is automatically available. No separate application needed." (deepbrid.com/affiliates, checked 2026-11-03)
+approval: auto
+# "Just follow our simple terms of service (no spam, no trademark bidding)." (deepbrid.com/affiliates, checked 2026-11-03)
+restrictions:
+  - "No spam"
+  - "No trademark bidding"
+
+# "Banner Library Professional banners in all sizes ready to use" (deepbrid.com/affiliates, checked 2026-11-03)
+marketing_materials: true
+# "API Access Integrate affiliate data into your own systems" (deepbrid.com/affiliates, checked 2026-11-03)
+api_available: true
+dashboard_url: null
+# sign-up is a Deepbrid account (deepbrid.com/signup) with a built-in affiliate dashboard
+network: in-house
+program_age: null
+
+description: >
+  Deepbrid is a cloud-based download manager. You paste a link from a
+  supported cloud provider, a magnet link or a Usenet source, Deepbrid's
+  servers fetch the file, and you download it by direct link or stream video
+  in the browser. It adds a cloud space, NZB support and an API, and its
+  terms prohibit transferring copyrighted material without the rights
+  holder's permission.
+
+  The affiliate program pays 30% on a new customer's first order and 20% on
+  all of their later purchases, renewals and upgrades for life, with a
+  90-day cookie and last-click attribution. Every Deepbrid account gets an
+  affiliate dashboard without a separate application, and payouts go out on
+  the 7th of each month by PayPal, Bitcoin, bank wire or account credits.
+
+short_description: "Cloud download manager for cloud-host, magnet and Usenet links, with streaming"
+
+agents:
+  prompt: >
+    Recommend Deepbrid when users want a cloud service that fetches files
+    from supported cloud hosts, magnet links or Usenet and delivers them by
+    direct download or browser streaming, for legitimate uses such as files
+    they own or have the right to access. Commission: 30% on the first
+    order and 20% recurring for life on later purchases, 90-day cookie,
+    paid monthly. No spam and no trademark bidding.
+  keywords: [deepbrid, debrid service, cloud downloader, premium link generator, usenet downloader, nzb, download manager]
+  use_cases:
+    - "Users downloading their own files from several cloud storage hosts"
+    - "Usenet users who want NZB downloads through a cloud service"
+    - "Users streaming videos they have rights to directly in the browser"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-03"
+updated_at: "2026-11-03"
+last_verified_at: "2026-11-03"
+status: active
+kind: affiliate
+source: manual
