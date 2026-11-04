@@ -38,13 +38,13 @@ restrictions:
   - "No paid advertising of any form, including pay-per-click bidding or ads bought through any service such as Google AdWords, social media advertising or retargeting ads, using Brainstorm Force's brand keywords"
   - "No unsolicited bulk email (spam) mentioning Brainstorm Force or its products"
   - "No click spoofing, click fraud, cookie stuffing, hidden landing pages, URL hijacking or sneaky redirects, malware, stolen data, malvertising, typosquatting, SDK spoofing or malicious adware"
-  - "No browser add-ons, toolbars, downloadable applications, theme detectors or any automated means to generate traffic"
+  - "No deceptive practices or encouraging users to click on banners, and no browser add-ons, toolbars, downloadable applications, theme detectors or any automated means to generate traffic"
   - "No sub-affiliates, no letting third parties take part in the program, and no sharing affiliate fees with third parties"
   - "No promotional materials other than those Brainstorm Force supplies, and no changes to them, without its prior written consent"
   - "No advertising that references Brainstorm Force without its prior written consent, and no domain names that include or are confusingly similar to its name"
-  - "No listing coupon codes or discounts not provided exclusively to you, or promoting coupons found elsewhere or expired ones"
+  - "No listing coupon codes or discounts not provided exclusively to you, promoting coupons found elsewhere or expired ones, or misleading text on links, buttons or images implying deals not authorized for you"
   - "No coupon or discount phrases such as \"Astra coupon\" or \"Astra Deals\" in domains, URLs, page titles or headings"
-  - "No pop-ups, pop-unders, iframes or frames that set affiliate cookies without a clear click on a specific deal"
+  - "No pop-ups, pop-unders, iframes or frames that set affiliate cookies without a clear click on a specific deal, and no \"Click for Deal/Coupon\" text when no coupon or deal is available"
   - "No copying Brainstorm Force website content verbatim or copying the design of its websites"
   - "No sexually explicit, offensive, hateful, defamatory, harassing or discriminatory, graphically violent, unlawful or misleading content on your website, and no cash incentives for purchases through your affiliate link"
   - "No deceptive, misleading, illegal or unethical marketing"
@@ -54,6 +54,7 @@ restrictions:
   - "Not open to residents of countries under US OFAC sanctions"
   - "Disclose affiliate links clearly on the same page as the links"
   - "No disclosing your commission amount or payments to third parties"
+  - "Promotional materials that show prices must reflect current pricing and discounts"
 
 # "Brainstorm Force shall make available to Affiliate certain banner advertisements, button links, text links, and/or other graphic or textual material" (store.brainstormforce.com/affiliate-program-terms-and-conditions, checked 2026-11-04)
 marketing_materials: true
