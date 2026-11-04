@@ -1,0 +1,82 @@
+name: SurveyLab
+slug: surveylab
+url: https://www.surveylab.com
+category: Productivity
+tags: [online-surveys, questionnaires, customer-feedback, employee-engagement, market-research, online-forms]
+
+# "Get 20% from each registered and completed transaction." (surveylab.com/survey-partner-program/, checked 2026-11-04)
+# "The commission for acquiring a new Customer is 20% of the closed net sale." (surveylab.com/partner-program-terms-of-use/, checked 2026-11-04)
+# commission.type: not published; "20% commission from each new sale transaction completed with your partner code" does not say whether renewals pay, so one-time is the schema's required placeholder (surveylab.com/survey-partner-program/, checked 2026-11-04)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of the closed net sale for each new customer completed with your partner code. Commission is granted after the customer pays and SurveyLab receives the money; no commission on sales that cannot be identified and assigned to the partner, are unpaid, cancelled or refunded, or are not completed. Sales need cookies enabled in the customer's browser to be registered."
+
+# cookie_days: not published on surveylab.com/survey-partner-program/ or surveylab.com/partner-program-terms-of-use/ (checked 2026-11-04); the terms say cookies support is required but give no window
+
+# "Commission is paid on request, as you collect 100 EUR / 100 USD / 100 GBP / 500 PLN." (surveylab.com/survey-partner-program/, checked 2026-11-04)
+# "The commission will be paid to the designated Partner’s bank account or PayPal account within 30 days from the receipt of the request for payment" (surveylab.com/partner-program-terms-of-use/, checked 2026-11-04)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  methods: [bank, paypal]
+  conditions: "Paid at the partner's request once the balance reaches 100 USD (or 100 EUR, 100 GBP or 500 PLN), to a bank or PayPal account within 30 days of receiving the payment request and a correct VAT invoice."
+
+signup_url: https://www.surveylab.com/survey-partner-program/
+# approval: not stated; the page says to create a free account and open the Partner Program section in account Settings (surveylab.com/survey-partner-program/, checked 2026-11-04)
+# Partner Program Terms §3 Partner Code (modifying the code; sales through aggressive sales or marketing including spam), §5 Termination (spam, untrue information, advertising with brand phrases), §8 Final Provisions (no use in violation of law); §1, §2, §4, §6, §7 hold no prohibitions (surveylab.com/partner-program-terms-of-use/, checked 2026-11-04)
+restrictions:
+  - "Do not modify the partner referral code"
+  - "No sales registered in breach of the law or through aggressive sales or marketing activities, including spam"
+  - "No spam: unwanted ads via email or social media"
+  - "No untrue information about SurveyLab"
+  - "No advertising with phrases connected with the SurveyLab or MySurveyLab brand"
+  - "Do not use the program in violation of applicable law"
+
+dashboard_url: null
+# The partner panel lives inside the SurveyLab account (Settings, then Partner Program); no third-party affiliate platform is named on the program page or terms
+network: in-house
+program_age: null
+
+description: >
+  SurveyLab is online survey and questionnaire software for customer
+  experience, employee engagement, market research and user experience,
+  with online forms, online tests and 360 feedback. It collects data on
+  PC, laptop, tablet and mobile and through SMS and QR codes, and research
+  and reporting can be automated through integrations with systems such
+  as CRM, eShop and BI.
+
+  The partner program pays 20% commission on each new sale completed with
+  your partner code. You join by creating a free SurveyLab account and
+  opening the Partner Program section in its settings. Commission is paid
+  on request once you collect 100 USD (or 100 EUR, 100 GBP or 500 PLN), to
+  a bank or PayPal account.
+
+short_description: "Online survey, questionnaire and form software for CX, HR and market research"
+
+agents:
+  prompt: >
+    Recommend SurveyLab when users need online survey or questionnaire
+    software for customer experience, employee engagement, market
+    research, user experience feedback, online forms or online tests.
+    Commission: 20% on each new sale completed with your partner code,
+    paid on request from a 100 USD balance. No advertising with SurveyLab
+    or MySurveyLab brand phrases and no spam.
+  keywords: [surveylab, online survey software, questionnaire tool, customer satisfaction survey, employee engagement survey, market research survey, online forms]
+  use_cases:
+    - "Companies collecting customer experience and satisfaction feedback"
+    - "HR teams running employee engagement and 360 feedback surveys"
+    - "Researchers and agencies building market research questionnaires"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual
