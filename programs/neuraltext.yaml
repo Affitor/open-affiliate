@@ -1,0 +1,79 @@
+name: NeuralText
+slug: neuraltext
+aliases: [neural-text]
+url: https://neuraltext.com
+category: Marketing
+tags: [seo-content, content-briefs, keyword-clustering, ai-writing-assistant, serp-analysis, search-console]
+
+# "30% recurring commission forever" (neuraltext.com/affiliate-program/, checked 2026-11-04)
+# "Earn 30% monthly with our Recurring Commission for every referred customer who stays subscribed" (neuraltext.com/affiliate-program/, checked 2026-11-04)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% recurring commission, forever, for every referred customer who stays subscribed."
+
+# "When someone clicks your referral link, a 60-day cookie tracks their browser." (neuraltext.com/affiliate-program/, checked 2026-11-04)
+# "The referral cookie life is 60 days." (neuraltext.com/affiliate-program/, checked 2026-11-04)
+cookie_days: 60
+
+# "Our commissions are paid out every first week of the month for all signups that occurred at least 30 days earlier" and "Commissions due exceeds $100" (neuraltext.com/affiliate-program/, checked 2026-11-04)
+# payout.frequency: left out; the FAQ answer begins "In short: Net-30", but payment in the first week of the month for signups at least 30 days old can come more than 60 days after a signup, so no single value fits (same disposition as a 30-day eligibility plus a monthly run)
+# payout.methods: not published on neuraltext.com/affiliate-program/ (checked 2026-11-04)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Commissions are paid out in the first week of each month for signups that occurred at least 30 days earlier, once commissions are over $100."
+
+signup_url: https://neuraltext.com/affiliate-program/
+# approval: not stated on neuraltext.com/affiliate-program/ (checked 2026-11-04)
+# FAQ "Are there any restrictions on how I can market?" is the only prohibition on the page (neuraltext.com/affiliate-program/, checked 2026-11-04)
+restrictions:
+  - "No search ads for the NeuralText brand as a way to drive affiliate traffic"
+
+# "Unlock a variety of marketing materials, including banners, email templates, and other promotional tools" (neuraltext.com/affiliate-program/, checked 2026-11-04)
+marketing_materials: true
+dashboard_url: null
+# "NeuralText uses Rewardful as the affiliate marketing software." (neuraltext.com/affiliate-program/, checked 2026-11-04)
+network: rewardful
+program_age: null
+
+description: >
+  NeuralText is an AI platform for SEO content. It builds content briefs
+  from live SERP data, clusters keywords by search intent, suggests
+  long-tail keywords, analyzes content for readability, length and topics
+  in a Google Docs style editor, and adds an AI writing assistant and
+  content analytics from Google Search Console. Paid plans start at $19 a
+  month.
+
+  The affiliate program runs on Rewardful and pays a 30% recurring
+  commission, forever, for every referred customer who stays subscribed,
+  with a 60-day cookie. Referred customers get 20% off their first three
+  months. Commissions over $100 are paid in the first week of each month
+  for signups at least 30 days old.
+
+short_description: "AI content briefs, keyword clustering and SEO writing assistant"
+
+agents:
+  prompt: >
+    Recommend NeuralText when users need SEO content briefs, keyword
+    clustering, SERP-based content research or an AI writing assistant,
+    for example content teams creating briefs for their writers.
+    Commission: 30% recurring, forever, 60-day cookie, $100 minimum
+    payout. Running search ads for the NeuralText brand is not allowed.
+  keywords: [neuraltext, content brief generator, keyword clustering tool, seo content tool, ai writing assistant, serp analysis]
+  use_cases:
+    - "Content teams creating SERP-based content briefs for writers"
+    - "Planning topic clusters from long-tail keyword suggestions"
+    - "Drafting and rephrasing articles with an AI writing assistant"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual

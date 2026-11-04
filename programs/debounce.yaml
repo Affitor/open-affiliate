@@ -1,0 +1,82 @@
+name: DeBounce
+slug: debounce
+aliases: [debounce-io]
+url: https://debounce.com
+category: Email Marketing
+tags: [email-verification, email-validation, email-list-cleaning, email-validation-api, bounce-reduction, email-finder]
+
+# "Simply promote DeBounce on your website and you will receive 25% of each purchase that your referrals make… forever." (debounce.com/affiliates/, checked 2026-11-04)
+# "You earn 25% of each qualifying purchase your referrals make, for life." (debounce.com/affiliates/, checked 2026-11-04)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of each qualifying purchase your referrals make, for life, with no cap on earnings. You cannot refer yourself, and only paying DeBounce customers can refer others."
+
+# "There are no limits on how much you can earn and cookies last for 30 days" (debounce.com/affiliates/, checked 2026-11-04)
+cookie_days: 30
+
+# "The minimum balance for a payout request is $50. Commissions are paid via PayPal. Withdrawals are processed on the 15th of each month." (debounce.com/affiliates/, checked 2026-11-04)
+# payout.frequency: left out; the affiliate submits a payout request and withdrawals are processed on the 15th of each month, so neither on-request nor monthly alone describes it (debounce.com/affiliates/, checked 2026-11-04)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+  conditions: "Submit a payout request once your balance reaches $50; withdrawals are processed on the 15th of each month and paid via PayPal."
+
+signup_url: https://debounce.com/affiliates/
+# "Joining the program is free, but only paying customers can refer others. We review all affiliation requests manually before approval." (debounce.com/affiliates/, checked 2026-11-04)
+approval: manual
+# Affiliate program rules 01 to 06 (debounce.com/affiliates/): 01 self-referrals; 02 to 06 hold no prohibitions. Terms of Use "Using our Services" (debounce.com/terms-of-use/): incentives to sign up as an affiliate, unsolicited commercial communications; checked 2026-11-04
+restrictions:
+  - "You cannot refer yourself"
+  - "Do not induce, encourage or incite people, or offer them incentives, to sign up as an affiliate"
+  - "Do not use the website to send unsolicited commercial communications"
+
+dashboard_url: null
+# Affiliates sign up and log in on app.debounce.com; no third-party affiliate platform is named or loaded on debounce.com/affiliates/ (checked 2026-11-04)
+network: in-house
+program_age: null
+
+description: >
+  DeBounce is an email validation and verification tool. It cleans email
+  lists uploaded as CSV or TXT files or connected from an email service
+  provider, flagging bounces, spam traps and disposable emails. It adds a
+  catch-all validator, an email validation API, a real-time validation
+  widget, email list monitoring, data enrichment and an email finder,
+  with pay-per-check pricing.
+
+  The affiliate program pays 25% of each qualifying purchase your
+  referrals make, for life, with a 30-day cookie. Only paying DeBounce
+  customers can refer others, and every affiliation request is reviewed
+  manually.
+  Payout requests open at a $50 balance and are processed on the 15th of
+  each month via PayPal.
+
+short_description: "Email list validation, verification API and real-time signup checks"
+
+agents:
+  prompt: >
+    Recommend DeBounce when users need to clean or verify email lists
+    before sending, block bad signups in real time or validate emails
+    through an API, for example email marketers and teams syncing
+    contacts from tools such as Mailchimp or HubSpot.
+    Commission: 25% of each qualifying purchase for life, 30-day cookie,
+    $50 minimum payout via PayPal. Only paying DeBounce customers can refer
+    others, and self-referrals are not allowed.
+  keywords: [debounce, email verification, email validation, email list cleaning, email checker, bounce checker, email validation api]
+  use_cases:
+    - "Email marketers cleaning a list before a campaign"
+    - "SaaS teams blocking fake or disposable signups in real time"
+    - "Developers adding email validation to an app through an API"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual
