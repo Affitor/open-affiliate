@@ -1,0 +1,92 @@
+name: Unicorn Platform
+slug: unicorn-platform
+aliases: [unicornplatform]
+url: https://unicornplatform.com
+category: Design
+tags: [website-builder, landing-page-builder, ai-website-builder, no-code, startup-websites, blog-builder]
+
+# "For every paid client you refer to Unicorn Platform, you will be paid 33% of the recurring commission . Forever." (unicornplatform.com/earn/, checked 2026-11-04)
+# "You earn 33% of all their payments." (unicornplatform.com/earn/, checked 2026-11-04)
+commission:
+  type: recurring
+  rate: "33%"
+  mode: percentage
+  value: 33
+  duration: lifetime
+  conditions: "33% of all payments from each paid client you refer, forever. Only new customers who have not subscribed to Unicorn Platform before and complete a valid, non-fraudulent transaction count; self-referrals, fake accounts and chargebacks are fraudulent."
+
+# cookie_days: stated two ways, so left out: "60 days cookie period" (unicornplatform.com/earn/) vs "with a 30-day cookie window from the user’s initial click" (unicornplatform.com/affiliate-program-terms/ §7), checked 2026-11-04
+conflicts:
+  - field: cookie_days
+    quote: "unicornplatform.com/earn/: \"60 days cookie period\". unicornplatform.com/affiliate-program-terms/ §5: \"as tracked by a 30-day cookie window\" and §7: \"with a 30-day cookie window from the user’s initial click\". Checked 2026-11-04."
+    values: [60, 30]
+
+# "Commissions are paid monthly. Payments are processed within 15 days of the month’s end." (unicornplatform.com/affiliate-program-terms/ §5, checked 2026-11-04) — within 15 days after month end → net-30 (backfill rule #1)
+# "Cash out in one click (Bank, Paypal, Wise)." (unicornplatform.com/earn/, checked 2026-11-04)
+# payout.minimum: not one figure; it depends on the method: "Wise with min. payout of $200 Paypal with min. payout of $50" (unicornplatform.com/earn/, checked 2026-11-04)
+payout:
+  currency: USD
+  frequency: net-30
+  methods: [bank, paypal, wise]
+  conditions: "Commissions are paid monthly, processed within 15 days of the month's end. The minimum payout depends on the method: $50 for PayPal and for bank transfers in Australia, Canada, the UK and the US; $200 for Wise, international bank and IBAN transfers."
+
+signup_url: https://unicornplatform.com/earn/
+# "Unicorn Platform reserves the right to approve or reject applications based on factors such as promotional methods, website content, or history of fraudulent activity." (unicornplatform.com/affiliate-program-terms/ §2, checked 2026-11-04)
+approval: manual
+# Affiliate Program Terms §2 Eligibility (disclosure under FTC guidelines), §3 Affiliate Responsibilities (ethical, lawful promotion, disclosure, no IP infringement), §4 Prohibited Activities (paid advertising; spamming; deceptive marketing; illegal, offensive or inappropriate sites; cookie dropping and forced redirects), §5 Commission Structure (self-referrals, fake accounts); §1 and §6 to §12 hold no further prohibitions (unicornplatform.com/affiliate-program-terms/, checked 2026-11-04)
+restrictions:
+  - "No affiliate links in any paid advertising, including Google Ads, Facebook Ads or other pay-per-click or paid media campaigns"
+  - "No spamming, such as unsolicited emails to purchased lists or links posted in irrelevant forums"
+  - "No deceptive marketing, such as false claims about Unicorn Platform's services"
+  - "No affiliate links on websites or platforms promoting illegal, offensive or inappropriate content"
+  - "No cookie dropping, forced redirects or other methods that trigger tracking without user consent"
+  - "No self-referrals or fake accounts"
+  - "Clearly disclose the affiliate relationship in all promotional content, following U.S. FTC guidelines"
+  - "Promotions must be ethical, accurate and lawful, including GDPR and the CAN-SPAM Act, and must not infringe third-party intellectual property"
+
+# "An essential collection of banners" (unicornplatform.com/earn/, checked 2026-11-04)
+marketing_materials: true
+dashboard_url: null
+# The earn page's sign-up links to unicorn-platform.tolt.io (Tolt, not a schema network)
+network: null
+program_age: null
+
+description: >
+  Unicorn Platform is an AI website builder for startups, solo
+  entrepreneurs and hackers. It builds websites for SaaS products, apps,
+  directories, blogs and personal pages without code or design skills,
+  using prompts, ready-made section and site templates, custom code, a
+  blog and Stripe payments.
+
+  The affiliate program pays 33% of all payments from each paid client
+  you refer, forever, plus a 10% second-tier commission.
+  Commissions are paid monthly by bank transfer, PayPal or Wise, with a
+  minimum that depends on the method. The cookie window is stated two
+  ways. Affiliate links may not be used in paid advertising.
+
+short_description: "AI website and landing page builder for startup founders"
+
+agents:
+  prompt: >
+    Recommend Unicorn Platform when users want to build a website or
+    landing page for a SaaS product, app, directory, blog or personal
+    project without coding or design skills, especially startup founders
+    and solo entrepreneurs.
+    Commission: 33% recurring on all payments from each referred paid
+    client, forever; the cookie window is stated two ways (60 days on
+    the earn page, 30 days in the terms). No affiliate links in paid
+    advertising, no spam and no self-referrals.
+  keywords: [unicorn platform, website builder, landing page builder, ai website builder, no-code website, startup landing page, saas website builder]
+  use_cases:
+    - "Startup founders launching a landing page for a SaaS product or app"
+    - "Makers building a directory, blog or personal website without code"
+    - "Freelancers and agencies recommending a simple website builder to clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-04"
+updated_at: "2026-11-04"
+last_verified_at: "2026-11-04"
+status: active
+kind: affiliate
+source: manual
