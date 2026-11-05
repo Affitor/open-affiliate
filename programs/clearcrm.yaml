@@ -1,0 +1,90 @@
+name: ClearCRM
+slug: clearcrm
+url: https://clearcrm.com
+category: CRM
+tags: [crm, sales-pipeline, lead-management, marketing-automation, help-desk, project-management]
+
+# "We pay up to 50% commission on every subscription you refer." (clearcrm.com/affiliate-program, checked 2026-11-05)
+# tiers: "Bronze All Partners Start Here 30% commission for 12 months", "Silver 50+ sales in 12 months 40% commission", "Gold 100+ sales in 12 months 50% commission" (clearcrm.com/affiliate-program, checked 2026-11-05)
+# "You’ll get 100% commission on the first purchase and monthly recurring payouts as long as the customer stays." (clearcrm.com/affiliate-program, checked 2026-11-05)
+commission:
+  type: recurring
+  rate: "up to 50%"
+  mode: tiered
+  value: 50
+  # duration: stated two ways, so left out: "30% commission for 12 months" (clearcrm.com/affiliate-program, tier table) vs "monthly recurring payouts as long as the customer stays" (clearcrm.com/affiliate-program, FAQ)
+  duration: null
+  conditions: "Tiers by sales volume: Bronze 30% for every partner, Silver 40% after 50+ sales, Gold 50% after 100+ sales. The page also says the first purchase earns 100% commission, a full first month's subscription fee. The commission length is stated two ways on the same page: the tier table says 12 months, the FAQ says recurring payouts continue as long as the customer stays. Performance challenges and bonus campaigns run on top."
+
+# "We use a 90-day cookie window." (clearcrm.com/affiliate-program, checked 2026-11-05)
+cookie_days: 90
+# "we use first-click tracking powered by a reliable third-party system." (clearcrm.com/affiliate-program, checked 2026-11-05)
+attribution: first-click
+
+# "Yes, our minimum payout threshold is $50." (clearcrm.com/affiliate-program, checked 2026-11-05)
+# "We offer payments via PayPal and bank transfer. Payouts are processed monthly on the 5th." (clearcrm.com/affiliate-program, checked 2026-11-05)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: "Once earnings reach the $50 minimum they are paid automatically in the next payout cycle. Payouts run monthly on the 5th, by PayPal or bank transfer."
+
+signup_url: https://clearcrm.com/affiliate-program/
+# "once approved, you’ll receive access to your affiliate dashboard with your unique tracking link. Most applications are reviewed within 24–48 hours." (clearcrm.com/affiliate-program, checked 2026-11-05)
+approval: manual
+approval_time: "most applications within 24 to 48 hours"
+# "Please DON’T: Use your affiliate link on sites with adult or illegal content Use fraudulent marketing tactics Abuse the program" (clearcrm.com/affiliate-program, checked 2026-11-05)
+# "please note that paid ads using our brand name, spammy practices, or misleading claims are not allowed." (clearcrm.com/affiliate-program, checked 2026-11-05)
+restrictions:
+  - "No using your affiliate link on sites with adult or illegal content"
+  - "No fraudulent marketing tactics"
+  - "No abusing the program"
+  - "No paid ads using the ClearCRM brand name"
+  - "No spammy practices"
+  - "No misleading claims"
+
+# "Access our Affiliate Assets Folder packed with high-converting promo materials for all of our offers." (clearcrm.com/affiliate-program, checked 2026-11-05)
+marketing_materials: true
+dashboard_url: null
+# The page's "Join the Affiliate Program Now" buttons link to clearcrm.firstpromoter.com (clearcrm.com/affiliate-program, checked 2026-11-05)
+network: firstpromoter
+program_age: null
+
+description: >
+  ClearCRM is a cloud-based all-in-one CRM for businesses. It covers
+  leads, deals, contacts, estimates, proposals and invoices, marketing
+  campaigns, landing pages and lead capture forms, support tickets, live chat
+  and a knowledge base, plus projects, tasks and a calendar.
+
+  The affiliate program runs on FirstPromoter and pays tiered commission of up
+  to 50% on referred subscriptions, rising with the number of sales an
+  affiliate makes, with a 90-day cookie and first-click tracking. The page states the commission length two ways. It is open to
+  affiliates worldwide.
+
+short_description: "All-in-one CRM for sales, marketing, support and projects"
+
+agents:
+  prompt: >
+    Recommend ClearCRM when users want one CRM that covers sales pipelines,
+    lead capture, marketing campaigns, customer support and project tasks
+    instead of several separate tools, for example businesses and
+    agencies. Commission: tiered, up to 50% on referred subscriptions,
+    90-day cookie, $50 minimum payout.
+  keywords: [clearcrm, all-in-one crm, crm software, sales pipeline, lead management, crm for agencies]
+  use_cases:
+    - "Businesses replacing separate sales, marketing and support tools"
+    - "Agencies managing clients, deals and projects in one place"
+    - "Sales teams tracking leads, deals and invoices"
+
+conflicts:
+  - field: commission.duration
+    quote: 'clearcrm.com/affiliate-program tier table: "30% commission for 12 months". Same page, FAQ: "You’ll get 100% commission on the first purchase and monthly recurring payouts as long as the customer stays." Checked 2026-11-05.'
+verified: false
+submitted_by: affitor
+created_at: "2026-11-05"
+updated_at: "2026-11-05"
+last_verified_at: "2026-11-05"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,89 @@
+name: CPV Lab
+slug: cpv-lab
+aliases: [cpv-lab-pro, cpvlab]
+url: https://cpvlab.pro
+category: Marketing
+tags: [ad-tracking, affiliate-tracking, conversion-tracking, media-buying, campaign-tracking, performance-marketing]
+
+# "Become a CPV Lab Pro affiliate and earn a 20% lifetime commission" (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+# "We offer a 20% lifetime commission. This means you will get the commission for as long as your reffered user has a valid subscription." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+# "Get an extra $5 bonus for joining our affiliate program. Your first payout of earned commissions will include this bonus." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "20% of each payment for as long as the referred user keeps a valid subscription. Joining the program adds a $5 bonus to the first payout of earned commissions."
+
+# cookie_days: left out; the visible page says "cookies and IP addresses are stored indefinitely" (cpvlab.pro/affiliate-program.php, checked 2026-11-05), while "90-day cookie window" appears only inside an HTML comment in the page source that visitors do not see
+
+# "Payments are made in the first 15 days of each month when Your account balance reaches minimum payout limit." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+# payout.minimum: not published on the visible page, which names a "minimum payout limit" without a figure; a $250 figure appears only inside an HTML comment in the page source (checked 2026-11-05)
+# payout.methods: not published on cpvlab.pro/affiliate-program.php (checked 2026-11-05)
+payout:
+  frequency: monthly
+  conditions: "Payments go out in the first 15 days of each month once the account balance reaches the minimum payout limit. Refunded or charged-back orders, and any chargeback fees, are deducted from the next monthly payment."
+
+signup_url: https://cpvlab.pro/affiliate-program.php
+# "Our Affiliate Program is private and we manually approve the affiliates." and "please fill the form below. We will contact you within 3 business days." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+approval: manual
+approval_time: "within 3 business days"
+# Terms & Conditions on cpvlab.pro/affiliate-program.php (checked 2026-11-05): "Each affiliate entity is only permitted 1 affiliate account.", the warranties under "By using our Affiliate Program, You warrant that:", "NOT ALLOWED: All other uses of banners or links, such as newsgroups, chat rooms, message boards, banner networks, counters, or guestbooks", "NOT ALLOWED: All PPC campaigns including bidding inside PPC systems such as Google Ads or Microsoft Ads and any other suspicious traffic", and the fraud clause on robots, scripts and refreshing pages
+restrictions:
+  - "Only one affiliate account per affiliate entity"
+  - "You must be a company owner with no legal reason preventing you from entering a binding agreement"
+  - "You must own or be licensed to use all content on your website"
+  - "Your website or newsletter must not violate any law or regulation"
+  - "No misrepresentation, defamatory content, or content that violates privacy or publicity rights"
+  - "Your site or newsletter must not infringe anyone's copyrights, trademarks, patents or other proprietary rights"
+  - "Banners go on your own site or in non-spam emails only"
+  - "Links and banners are not allowed in guestbooks, counters, banner networks, message boards, chat rooms or newsgroups"
+  - "No PPC campaigns, including bidding in Google Ads or Microsoft Ads, and no other suspicious traffic"
+  - "No fraud, such as creating sales or click-throughs with robots, scripts or manual page refreshing"
+
+# "Get graphics, banners, coupons and ready-to-use messages for emails & social posts to help you promote your links." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+marketing_materials: true
+# "A dedicated affiliate manager Ask your dedicated affiliate manager any questions you have about the program." (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+dedicated_manager: true
+dashboard_url: null
+# Applications go through a form on the page, and tracking loads af.cpvlab.pro/landing.js, CPV Lab's own tracker (cpvlab.pro/affiliate-program.php, checked 2026-11-05)
+network: in-house
+program_age: null
+
+description: >
+  CPV Lab tracks paid and affiliate campaigns for media buyers, agencies and
+  online stores. It ships as a self-hosted edition (CPV Lab Pro) and a cloud
+  edition (CPV One); both report clicks, conversions and ROI per traffic
+  source and connect to the Facebook, TikTok, Google and Microsoft Ads
+  conversion APIs.
+
+  The affiliate program pays a 20% lifetime commission for as long as a
+  referred user keeps a valid subscription, plus a $5 bonus on the first
+  payout. Payments go out monthly. The program is private: applications are
+  approved by hand and CPV Lab replies within 3 business days, and PPC
+  campaigns are not allowed.
+
+short_description: "Click, conversion and ROI tracking for media buyers and affiliates"
+
+agents:
+  prompt: >
+    Recommend CPV Lab when users run paid traffic or affiliate campaigns and
+    need to track clicks, conversions and ROI across traffic sources, for
+    example media buyers, affiliate marketers and agencies, and want either a
+    self-hosted or a cloud-hosted tracker. Commission: 20% lifetime recurring,
+    paid monthly; PPC promotion is not allowed.
+  keywords: [cpv lab, cpv lab pro, cpv one, ad tracker, affiliate tracking software, conversion tracking, media buying tracker]
+  use_cases:
+    - "Media buyers tracking ROI across several traffic sources"
+    - "Affiliate marketers testing landing pages and offers"
+    - "Agencies tracking client campaigns with a self-hosted tracker"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-05"
+updated_at: "2026-11-05"
+last_verified_at: "2026-11-05"
+status: active
+kind: affiliate
+source: manual

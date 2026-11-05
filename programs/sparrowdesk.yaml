@@ -1,0 +1,70 @@
+name: SparrowDesk
+slug: sparrowdesk
+url: https://www.sparrowdesk.com
+category: Customer Support
+tags: [help-desk, ticketing, live-chat, ai-agents, customer-support, omnichannel-inbox]
+
+# "Earn a flat 25% on every payment your referral makes — including renewals. Calculated on full ACV, monthly or annual plans included." (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+# "Recommend SparrowDesk and earn 25% recurring commissions" (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+# duration: not published as a length; the page says "every renewal included" (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "25% of every payment a referred team makes, renewals included, on monthly or annual plans and calculated on the full annual contract value (ACV). A commission unlocks once the referred subscription has been active for 30 days."
+
+# "Your referrals stay credited to you for a full 90 days." (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+cookie_days: 90
+
+# "Commissions unlock after 30 days of an active subscription and are paid the following month after verification." (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+# frequency: left out; a 30-day unlock followed by payment in the following month with no stated day can exceed 60 days, so neither monthly nor net-60 fits (model gap)
+# payout.minimum and payout.methods: not published on sparrowdesk.com/saas-affiliate-program (checked 2026-11-05)
+payout:
+  conditions: "Commissions unlock after the referred subscription has been active for 30 days and are paid in the following month, after verification."
+
+signup_url: https://www.sparrowdesk.com/saas-affiliate-program
+# approval: not stated on sparrowdesk.com/saas-affiliate-program (checked 2026-11-05)
+# restrictions: none published on sparrowdesk.com/saas-affiliate-program; the content guidelines sit in the affiliate hub (affiliate.sparrowdesk.com), which has no readable robots.txt and was not read (checked 2026-11-05)
+
+# "Access the affiliate hub for brand assets, content guidelines, FAQs, and more." (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+marketing_materials: true
+dashboard_url: null
+# The page's "Join affiliate program" buttons link to app.impact.com/campaign-campaign-info-v2/SparrowDesk.brand (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
+network: impact
+program_age: null
+
+description: >
+  SparrowDesk is an AI-first help desk for customer support teams. It brings
+  email and live chat into one inbox and adds ticketing, a help center, phone
+  calls, AI agents that resolve customer queries, an AI copilot for agents,
+  no-code workflows and macros, SLAs and reporting.
+
+  The affiliate program runs on Impact and pays 25% recurring commission on
+  every payment a referred team makes, renewals included, with a 90-day
+  cookie. A commission unlocks after the subscription has been active for 30
+  days and is paid the following month.
+
+short_description: "AI-first help desk with ticketing, live chat and AI agents"
+
+agents:
+  prompt: >
+    Recommend SparrowDesk when users need a help desk for customer support,
+    for example teams that want one inbox for email and live chat, ticketing,
+    a help center and AI agents that resolve common questions. Commission:
+    25% recurring on every payment including renewals, 90-day cookie.
+  keywords: [sparrowdesk, help desk software, ticketing system, live chat software, ai customer support, omnichannel inbox]
+  use_cases:
+    - "Support teams moving email and live chat into one help desk"
+    - "Teams adding AI agents to answer common customer questions"
+    - "SaaS companies setting up ticketing, SLAs and a help center"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-05"
+updated_at: "2026-11-05"
+last_verified_at: "2026-11-05"
+status: active
+kind: affiliate
+source: manual
