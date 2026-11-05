@@ -13,7 +13,7 @@ commission:
   mode: percentage
   value: 25
   duration: null
-  conditions: "25% of every payment a referred team makes, renewals included, on monthly or annual plans and calculated on the full contract value. A commission unlocks once the referred subscription has been active for 30 days."
+  conditions: "25% of every payment a referred team makes, renewals included, on monthly or annual plans and calculated on the full annual contract value (ACV). A commission unlocks once the referred subscription has been active for 30 days."
 
 # "Your referrals stay credited to you for a full 90 days." (sparrowdesk.com/saas-affiliate-program, checked 2026-11-05)
 cookie_days: 90

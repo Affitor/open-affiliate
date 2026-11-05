@@ -36,9 +36,9 @@ restrictions:
   - "You must own or be licensed to use all content on your website"
   - "Your website or newsletter must not violate any law or regulation"
   - "No misrepresentation, defamatory content, or content that violates privacy or publicity rights"
-  - "No infringing any copyright, trademark, patent or other proprietary right"
+  - "Your site or newsletter must not infringe anyone's copyrights, trademarks, patents or other proprietary rights"
   - "Banners go on your own site or in non-spam emails only"
-  - "No links or banners in newsgroups, chat rooms, message boards, banner networks, counters or guestbooks"
+  - "Links and banners are not allowed in guestbooks, counters, banner networks, message boards, chat rooms or newsgroups"
   - "No PPC campaigns, including bidding in Google Ads or Microsoft Ads, and no other suspicious traffic"
   - "No fraud, such as creating sales or click-throughs with robots, scripts or manual page refreshing"
 
@@ -52,11 +52,11 @@ network: in-house
 program_age: null
 
 description: >
-  CPV Lab is a performance marketing tracker for media buyers, agencies and
-  ecommerce brands. It comes as CPV Lab Pro (self-hosted) and CPV One
-  (cloud-hosted), and both track clicks, conversions and ROI across traffic
-  sources, with conversion API integrations for Facebook, TikTok, Google and
-  Microsoft Ads.
+  CPV Lab tracks paid and affiliate campaigns for media buyers, agencies and
+  online stores. It ships as a self-hosted edition (CPV Lab Pro) and a cloud
+  edition (CPV One); both report clicks, conversions and ROI per traffic
+  source and connect to the Facebook, TikTok, Google and Microsoft Ads
+  conversion APIs.
 
   The affiliate program pays a 20% lifetime commission for as long as a
   referred user keeps a valid subscription, plus a $5 bonus on the first
