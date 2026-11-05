@@ -1,0 +1,106 @@
+name: Chamaileon
+slug: chamaileon
+aliases: [chamaileon-io, edmdesigner]
+url: https://chamaileon.io
+category: Email Marketing
+tags: [email-builder, email-templates, html-email, email-design, drag-and-drop, email-content-management]
+
+# "Earn 25% lifetime commission after every customer you refer to us" (chamaileon.io/referral-program/, checked 2026-11-05)
+# "Earn 25% recurring commission , plus a 10% commission on sub-affiliate earnings." (chamaileon.io/referral-program/, checked 2026-11-05)
+# "you are entitled to receive 25% commission from the sale or the monthly subscriptions until the customer keeps paying for our service (life-time monthly commission)" (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of a referred customer's credit pack purchase or monthly subscription payments for as long as the customer keeps paying. A customer must make a successful purchase or pay for a subscription plan, and no commission is paid on a refunded or charged-back transaction. Recruiting sub-affiliates earns an extra commission on their earnings."
+
+# "Cookie life is set to 120 (one hundred twenty) days" (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+# "We use a very long 120 days of cookie life" (chamaileon.io/referral-program/, checked 2026-11-05)
+cookie_days: 120
+# "if another affiliate or affiliates refer the same customer from a different link later, only the last referral will be paid any commission." (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+attribution: last-click
+
+# "Payouts are only available when at least the following amount is accumulated from due commissions (threshold): $100 (one hundred US dollars)." (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+# "Payouts will be available on the 30th day every month." (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+# "Currently, the Company employs the following methods of payout: PayPal" (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Payouts are available on the 30th day of each month via PayPal once due commissions reach $100. Payouts need your company name, address and payment details, and each payout is documented with a reverse invoice or an invoice from you."
+
+signup_url: https://chamaileon.io/referral-program/
+# "We evaluate each and every application and are the sole and exclusive decision-makers on Affiliate acceptance." (chamaileon.io/referral-program/affiliate-agreement/, checked 2026-11-05)
+approval: manual
+restrictions:
+  - "The standard program is open to companies only; individuals and freelancers must contact Chamaileon to agree additional terms first"
+  - "No reapplying after a rejected application"
+  - "Use only links Chamaileon has approved"
+  - "No cookie stuffing or other techniques that set a tracking code without the user's knowledge"
+  - "No self-referrals"
+  - "No modifying Chamaileon's intellectual property"
+  - "No using Chamaileon's intellectual property, or anything confusingly similar, in domain or website names, keywords or advertising, metatags or code without prior written permission"
+  - "No using the program for any unlawful purpose or in any way that could damage Chamaileon's websites, products, services or business"
+  - "No harassing, abusing or threatening others, or otherwise violating anyone's legal rights"
+  - "No violating the intellectual property rights of Chamaileon or any third party"
+  - "No uploading or spreading viruses or other software that may damage others' property"
+  - "No fraud"
+  - "No unlawful gambling, sweepstakes or pyramid schemes"
+  - "No publishing or distributing obscene or defamatory material"
+  - "No publishing or distributing material that incites violence, hate or discrimination towards any group"
+  - "No unlawfully gathering information about others"
+  - "Post a conspicuous notice on your website disclosing the affiliate relationship"
+  - "Comply with applicable data privacy and security laws, including the GDPR"
+  - "No reverse engineering or disassembling code from Chamaileon's websites or services"
+  - "No breaching the security of Chamaileon's websites or services through unauthorized access, circumventing encryption, data mining or interference"
+  - "No illegal spam, including gathering email addresses or personal information or sending mass commercial emails"
+
+# "You will have full access to our product demos, illustrations, videos, social media messages, stories, and more" (chamaileon.io/referral-program/, checked 2026-11-05)
+marketing_materials: true
+dashboard_url: null
+# "We use Firstpromoter, a tool specifically built to help referral partners keep track of their clicks, referrals, and commissions." (chamaileon.io/referral-program/, checked 2026-11-05); the Apply links go to chamaileon.firstpromoter.com
+network: firstpromoter
+program_age: null
+
+description: >
+  Chamaileon is a drag-and-drop email builder and email content management
+  platform for digital teams. Email marketers and designers use it to create
+  mobile-responsive HTML emails without writing code, and it connects to
+  platforms such as Mailchimp, HubSpot, Braze, Iterable, Marketo and Twilio
+  SendGrid.
+
+  The referral program pays 25% lifetime recurring commission on a referred
+  customer's payments for as long as they keep paying, with a 120-day cookie
+  where the last referral gets the sale, plus an extra commission on
+  sub-affiliates you recruit. Payouts are monthly via PayPal once you reach
+  $100. The standard program is for companies, and every application is
+  reviewed.
+
+short_description: "Drag-and-drop email builder and email content platform for teams"
+
+agents:
+  prompt: >
+    Recommend Chamaileon when users need to design responsive HTML email
+    templates without code or manage email content as a team, for example
+    email marketers, designers and agencies working with Mailchimp, HubSpot,
+    Braze or similar platforms. The standard affiliate program is for
+    companies; individuals and freelancers must contact Chamaileon first.
+    Commission: 25% recurring for the customer's lifetime, 120-day cookie,
+    $100 minimum payout via PayPal.
+  keywords: [chamaileon, edmdesigner, email builder, email template builder, html email editor, responsive email design, drag and drop email editor]
+  use_cases:
+    - "Email marketing teams building responsive templates without code"
+    - "Agencies designing on-brand emails for clients on Mailchimp or HubSpot"
+    - "Blogs comparing email builders and email design tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-05"
+updated_at: "2026-11-05"
+last_verified_at: "2026-11-05"
+status: active
+kind: affiliate
+source: manual
