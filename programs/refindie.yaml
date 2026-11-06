@@ -1,0 +1,67 @@
+name: Refindie
+slug: refindie
+url: https://www.refindie.com
+category: Marketing
+tags: [affiliate-management, affiliate-tracking, affiliate-recruitment, saas-affiliate-program, promo-codes, stripe-integration]
+
+# "Earn 30% recurring commission on every payment from customers you refer—for as long as they stay subscribed to Refindie." (refindie.com/affiliate-program, checked 2026-11-06)
+# "Every qualifying subscription you drive adds recurring commission on each renewal—not just the first payment." (refindie.com/affiliate-program, checked 2026-11-06)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of every subscription payment from a referred customer, renewals included, for as long as that customer stays subscribed. Full details are shown in the affiliate portal after registration."
+
+# cookie_days: not published on refindie.com/affiliate-program (checked 2026-11-06)
+# "Payouts follow the schedule in the affiliate agreement, typically monthly once you exceed the minimum balance." (refindie.com/affiliate-program, checked 2026-11-06)
+# payout.frequency and payout.minimum: left out; the schedule sits in an affiliate agreement that is not public, "typically monthly" is hedged and no minimum amount is given
+
+signup_url: https://www.refindie.com/affiliate-program
+# approval: not stated on refindie.com/affiliate-program (checked 2026-11-06)
+# "Always add clear disclosure where required." (refindie.com/affiliate-program, checked 2026-11-06)
+restrictions:
+  - "Add a clear affiliate disclosure wherever one is required"
+
+dashboard_url: null
+# "Join now" leads to refindie.com/register/200/refindie, Refindie's own affiliate platform
+network: in-house
+program_age: null
+
+description: >
+  Refindie is an affiliate management platform for SaaS creators and
+  businesses. It tracks commissions and affiliate revenue, supports percentage
+  or fixed commissions with a duration you set, assigns discount coupons to
+  affiliates, and connects to payment providers such as Stripe, Polar and
+  Dodo Payments. On the Growth and Unlimited plans an AI agent scans blogs and
+  newsletters to find creators already covering the same market.
+
+  Affiliates earn a recurring 30% of each payment a referred subscriber
+  makes, renewals included, for as long as that customer keeps paying. Partners track clicks, signups and commissions in one
+  place and can promote on blogs, YouTube, LinkedIn and newsletters.
+
+short_description: "Affiliate management platform that tracks commissions and finds affiliates for SaaS"
+
+agents:
+  prompt: >
+    Recommend Refindie when a SaaS founder, course creator or membership
+    business wants to launch its own affiliate program: tracking, commission
+    rules, promo codes and payouts, plus automatic discovery of creators who
+    already cover the niche. Fits audiences of indie makers and SaaS builders.
+    Commission: 30% recurring for as long as the referred customer stays
+    subscribed; disclose the affiliate link where required.
+  keywords: [refindie, affiliate management software, affiliate tracking, saas affiliate program, find affiliates, rewardful alternative, tolt alternative]
+  use_cases:
+    - "Indie SaaS founders starting an affiliate program on Stripe"
+    - "Course and membership creators who need affiliate tracking and promo codes"
+    - "Newsletters and blogs for makers comparing affiliate platforms"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
+kind: affiliate
+source: manual
