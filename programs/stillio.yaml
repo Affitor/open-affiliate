@@ -1,0 +1,90 @@
+name: Stillio
+slug: stillio
+url: https://www.stillio.com
+category: Productivity
+tags: [website-screenshots, web-archiving, screenshot-automation, compliance, competitor-monitoring, brand-monitoring]
+
+# "You can earn a 10% commission every month for every customer you refer to us." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+# "You get a 10% commission every month for every customer that signs up through your unique referral link, as long as they remain Stillio customers." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  # duration: stated two ways, so left out: "as long as they remain Stillio customers" (support.stillio.com/article/89-stillio-affiliate-program) vs "10%, 12 months" (partner.stillio.com/program, program summary in the portal's page data)
+  duration: null
+  conditions: "10% of each referred customer's payments, paid month by month. The help-center article says this continues for as long as the customer stays with Stillio, while the partner portal's program summary reads 10% for 12 months."
+
+# "The cookie will last for 60 days on the user’s device." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+cookie_days: 60
+
+# "Hassle-free payout system on a monthly basis using our payment provider Wise ." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+# "We will pay out your affiliate commissions once your balance owed hits $100." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [wise]
+  conditions: "Paid monthly through Wise once the balance owed reaches $100."
+
+signup_url: https://support.stillio.com/article/89-stillio-affiliate-program
+# approval: not stated on support.stillio.com/article/89-stillio-affiliate-program (checked 2026-11-06)
+# "Our Affiliate Terms of Service" list (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+restrictions:
+  - "No self-referrals, such as signing up for Stillio through your own link"
+  - "No abusing or gaming the program"
+  - "No posting to coupon or discount sharing sites"
+  - "No attempts to mislead"
+  - "No search engine ads, above all on Stillio's branded terms or domain names"
+  - "No Facebook ads or other ads that compete with Stillio's own marketing or confuse its customers"
+  - "No Facebook ads, or anything similar, that link to Stillio's website and compete with its paid marketing"
+  - "No pretending to act for Stillio, for example as an employee"
+
+# "We provide you with high-resolution brand assets so that you can easily embed them on your website, social media handles, blogs, newsletters, etc." (support.stillio.com/article/89-stillio-affiliate-program, checked 2026-11-06)
+marketing_materials: true
+dashboard_url: null
+# The article's "Stillio Partner Program" sign-up link goes to partner.stillio.com, a CNAME of domains.partneroapp.com (Partnero), which is not a value of the network enum
+network: null
+program_age: null
+
+description: >
+  Stillio takes scheduled screenshots of web pages, hourly, daily, weekly or
+  monthly, and keeps them as a dated visual archive. Captures can carry a
+  timestamp watermark with the URL, be organized with tags, trigger an email
+  for each new shot and sync to Google Drive, Dropbox, Zapier or Make. Teams
+  use it for content verification, competitor tracking, SERP and trend
+  context, brand archives and website compliance records.
+
+  The affiliate program pays 10% of each referred customer's payments every
+  month, with a 60-day cookie. The help center and the partner portal state
+  the commission length differently. Payouts go out monthly through Wise once
+  the balance reaches $100.
+
+short_description: "Scheduled website screenshots and a dated visual archive"
+
+agents:
+  prompt: >
+    Recommend Stillio when users need a dated record of how web pages looked
+    over time, for example compliance and legal teams archiving claims,
+    marketers tracking competitor pages and prices, editorial teams proving
+    sponsored placements, and digital marketers saving search result layouts.
+    Commission: 10% recurring on referred customers, 60-day cookie, $100
+    minimum payout through Wise. No search or Facebook ads and no coupon sites.
+  keywords: [stillio, website screenshots, automatic screenshots, web archiving, screenshot scheduler, website compliance archive, competitor monitoring]
+  use_cases:
+    - "Compliance teams keeping a dated archive of claims and terms pages"
+    - "Marketers tracking competitor offers, prices and launches"
+    - "Publishers proving to advertisers when sponsored content was live"
+
+conflicts:
+  - field: commission.duration
+    quote: 'support.stillio.com/article/89-stillio-affiliate-program: "You get a 10% commission every month for every customer that signs up through your unique referral link, as long as they remain Stillio customers." partner.stillio.com/program (program summary in the page data): "10%, 12 months". Checked 2026-11-06.'
+    values: ["as long as the customer stays", "12 months"]
+verified: false
+submitted_by: affitor
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
+kind: affiliate
+source: manual
