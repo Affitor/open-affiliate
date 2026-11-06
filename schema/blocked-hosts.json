@@ -62,6 +62,7 @@
     "docsend.com": "Terms restrict automated access to, or collection from, the Service; whether that reaches the public website is a borderline reading, held conservatively (https://www.docsend.com/terms-of-service/; wave 2026-10-20)",
     "dorik.com": "Website terms restrict automated access or collection",
     "dorik.io": "Website terms restrict automated access or collection",
+    "dotartisan.com": "Website terms bar automated systems (bots) scraping content or data from the site (https://www.dotartisan.com/terms-of-use, section 6.2); listing requested in PR #457 is on hold until the owner gives permission (2026-11-05)",
     "dub.co": "Dub network listings are never fetched by our lanes (source policy, 2026-10-19)",
     "dubcdn.com": "Dub's script and asset domain (dubcdn.com/analytics/script.js), held under dub.co: Dub network listings are never fetched by our lanes (source policy, 2026-10-19; added 2026-10-21)",
     "dubsado.com": "Website terms restrict automated access or collection",
