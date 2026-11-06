@@ -919,20 +919,27 @@ async function fetchDetail(fetchJson: FetchJson, slug: string): Promise<AffitorP
   return data as unknown as AffitorProgram
 }
 
+/** True when two JSON values are equal at every level: same keys, same values. */
+function sameJson(a: unknown, b: unknown): boolean {
+  if (isRecord(a) && isRecord(b)) {
+    const keys = Object.keys(b)
+    return Object.keys(a).length === keys.length && keys.every((key) => Object.hasOwn(a, key) && sameJson(a[key], b[key]))
+  }
+  return a === b
+}
+
 /**
- * Affitor's answer for a slug it does not have, and nothing else: measured
- * live on 2026-10-13, HTTP 200 with exactly config.not_found,
- * {"success":false,"data":null,"message":"Program not found"}. Another
- * message, a code or any extra key (an outage reported as success: false)
- * is not proof a program left. The merge lane checks the same shape.
+ * Affitor's answer for a slug it does not have, and nothing else: HTTP 200
+ * with a body that equals one of config.not_found exactly, at every level.
+ * Measured live: {"success":false,"data":null,"message":"Program not found"}
+ * on 2026-10-13, and the same plus an "error" object
+ * {"code":"program_not_found","message":"Program not found"} on 2026-11-06.
+ * Another message, another code, or any extra or missing key (an outage
+ * reported as success: false) is not proof a program left. The merge lane
+ * checks the same shapes.
  */
 export function affitorNotFound(body: unknown): boolean {
-  const want: Record<string, unknown> = config.not_found
-  return (
-    isRecord(body) &&
-    Object.keys(body).length === Object.keys(want).length &&
-    Object.entries(want).every(([key, value]) => Object.hasOwn(body, key) && body[key] === value)
-  )
+  return config.not_found.some((want) => sameJson(body, want))
 }
 
 /**
