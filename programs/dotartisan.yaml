@@ -10,8 +10,7 @@ commission:
   mode: "percentage"
   value: 30
   currency: "USD"
-  conditions:
-    - "Maximum commission of $500 per referred customer"
+  conditions: "Maximum commission of $500 per referred customer"
 
 cookie_days: 90
 payout:
