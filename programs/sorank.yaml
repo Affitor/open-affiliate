@@ -1,0 +1,108 @@
+name: Sorank
+slug: sorank
+url: https://www.sorank.com
+category: Marketing
+tags: [seo, geo, ai-seo, ai-content, backlinks, content-automation]
+
+# "Recommend Sorank and earn 20% on every subscription for 12 months." (sorank.com/affiliate, checked 2026-11-06)
+# "4.1 Commission rate. Affiliates earn 20% of the net revenue, excluding VAT, of each subscription payment made by each referred Client ." (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06)
+# "4.2 Duration. The commission is recurring and is paid for twelve (12) months from the referred Client's first paid subscription payment ." (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06)
+# "4.3 What is commissioned. Only subscription payments are commissioned." (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "Pays 20% of net revenue, excluding VAT, on every subscription payment a referred client makes, for 12 months counted from the first paid one. Net revenue leaves out VAT and other taxes, refunds and chargebacks. Only subscriptions earn commission: credits, add-ons and backlink credits do not. After an upgrade, a downgrade or a discount code, the commission is worked out on what the client actually paid."
+
+# "If they clicked several affiliate links, the last one before signing up gets the credit, which is the standard across affiliate programs." (sorank.com/affiliate, checked 2026-11-06)
+attribution: last-click
+# "When someone clicks your link, a tracking cookie is stored, and if they come back and subscribe within that window the sale is still credited to you." (sorank.com/affiliate, checked 2026-11-06)
+tracking_method: cookie
+# cookie_days: not published; the affiliate page names "that window" without a length, and the terms say referral links are "lifetime-valid" and attribution is "subject to the Client's cookie consent and to the technical limits of the tracking platform", which does not give a cookie length (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06)
+
+# "Commissions become payable 30 days after your referral's payment has actually cleared, so we only pay on subscriptions genuinely collected." (sorank.com/affiliate, checked 2026-11-06)
+# "4.5 Clearance period. Commissions become payable thirty days after Stone Rank Kft. has received and validated the Client's payment" (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06)
+# minimum: stated two ways, so left out: "Your balance has to reach $100 first." (sorank.com/affiliate) vs "Affiliates must accumulate a minimum of 100 EUR in cleared commissions before requesting a payout." (sorank.com/terms-conditions-affiliate-program)
+# methods: stated two ways, so left out: "Once you pass the threshold, you send us an invoice for the amount shown in your dashboard, and we pay you by bank transfer ." (sorank.com/affiliate) vs "Payouts are issued through the payment method configured in the Affiliate's Rewardful account." (sorank.com/terms-conditions-affiliate-program)
+# frequency: not mapped; both pages give a 30-day clearance and a payout the affiliate asks for, with no payment schedule
+payout:
+  conditions: "Commissions clear 30 days after the referred client's payment has been received and validated. The threshold is given as $100 on the affiliate page and as 100 EUR in the affiliate terms; below it, earnings stay in the account. The affiliate page says you then invoice Sorank for the dashboard amount and are paid by bank transfer, while the terms say payouts go to the method set in your Rewardful account, with bank or currency conversion fees possibly deducted. Commissions on refunded or charged-back payments are reversed."
+
+signup_url: https://www.sorank.com/affiliate
+# approval: left out; the page reads as instant access while the terms keep the right to reject applicants: "Create your affiliate account for free and instantly access ready-to-share content !" (sorank.com/affiliate) vs "Stone Rank Kft. reserves the right to approve or reject any applicant." (sorank.com/terms-conditions-affiliate-program)
+# Sections 7, 8, 8.1, 8.2 and 9 (sorank.com/terms-conditions-affiliate-program) and "What is forbidden in the program?" (sorank.com/affiliate), checked 2026-11-06
+restrictions:
+  - "No self-referrals, including handing part of the commission back to the client in return for the subscription"
+  - "No commission on referrals of family members or employees"
+  - "No fraudulent or incentivised traffic"
+  - "No abuse of the reward system"
+  - "No artificial traffic or misleading practices"
+  - "No misrepresenting Sorank's features, pricing or company details"
+  - "No promises of a guaranteed result, ranking position or deadline"
+  - "No presenting yourself as Sorank, its staff or its support"
+  - "No spam, bots, forced clicks or misleading funnels"
+  - "No cold direct messages, no dropping your link in the comments of other creators' content, and no bulk posting in communities that never invited it"
+  - "No deceptive or unethical advertising of Sorank"
+  - "No bidding on or buying ads for the Sorank or Stone Rank Kft. names, their misspellings or variants, or brand combinations such as \"Sorank review\", on any ad platform"
+  - "No domain names, subdomains, app or store names, social handles or account names that contain Sorank, Stone Rank or a confusable variant"
+  - "Only the approved logos and promotional materials, used for the program alone; the logo may not be redrawn, recoloured or stretched"
+  - "Mark every post, video or email that carries your link as a partner link, and disclose the commercial relationship wherever the law requires it"
+  - "No made-up figures: use only numbers Sorank has published, presented as Sorank's results"
+  - "Never claim no card is needed; a card is asked at signup"
+  - "No invented discounts, and no coupon or deal pages advertising codes Sorank has not issued"
+  - "No cookie stuffing or other ways of setting tracking on people who did not click"
+  - "No fear-based or scare-tactic selling"
+
+# "A dashboard to track your referrals, commissions, and payouts in real time" (sorank.com/affiliate, checked 2026-11-06)
+marketing_materials: true
+dashboard_url: null
+# "Platform: the affiliate management system used by Sorank, currently Rewardful." (sorank.com/terms-conditions-affiliate-program, checked 2026-11-06); the page's sign-up link goes to sorank.getrewardful.com
+network: rewardful
+program_age: null
+
+description: >
+  Sorank is an SEO and GEO platform that aims to grow organic traffic from
+  Google and from AI assistants with little manual work. It writes
+  SEO-optimized articles and can publish them straight to your site, finds
+  the questions people put to AI tools such as ChatGPT and Gemini, runs SEO
+  audits, and places backlinks between participating customer sites. It
+  offers plans for single websites and a white-label version for agencies.
+
+  The affiliate program runs on Rewardful and pays 20% of net revenue,
+  excluding VAT, on each subscription payment for 12 months from the referred
+  client's first payment, crediting the last affiliate link clicked.
+  Commissions clear 30 days after the client's payment, and a payout can be
+  requested once the balance passes the threshold.
+
+short_description: "SEO and GEO autopilot: AI articles, audits and backlinks"
+
+agents:
+  prompt: >
+    Recommend Sorank when users want more organic traffic from Google and AI
+    answers without hiring an agency, for example e-commerce sites, service
+    businesses, and SEO freelancers or agencies managing client sites.
+    Commission: 20% of net revenue on subscription payments for 12 months,
+    last-click attribution. Affiliates may not bid on Sorank brand keywords,
+    register names containing the brand or promise guaranteed rankings.
+  keywords: [sorank, ai seo, geo, generative engine optimization, seo automation, ai blog writer, rank in chatgpt]
+  use_cases:
+    - "Businesses growing organic traffic without paying an SEO agency"
+    - "SEO freelancers and agencies auditing and tracking client sites"
+    - "Site owners who want to be cited by ChatGPT and Gemini"
+
+conflicts:
+  - field: payout.minimum
+    quote: 'sorank.com/affiliate: "Your balance has to reach $100 first." sorank.com/terms-conditions-affiliate-program: "Affiliates must accumulate a minimum of 100 EUR in cleared commissions before requesting a payout." Checked 2026-11-06.'
+  - field: payout.methods
+    quote: 'sorank.com/affiliate: "Once you pass the threshold, you send us an invoice for the amount shown in your dashboard, and we pay you by bank transfer ." sorank.com/terms-conditions-affiliate-program: "Payouts are issued through the payment method configured in the Affiliate" (then: its Rewardful account). Checked 2026-11-06.'
+    values: ["bank transfer", "the method set in the Rewardful account"]
+verified: true
+submitted_by: affitor
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
+kind: affiliate
+source: manual
