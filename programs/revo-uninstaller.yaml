@@ -1,0 +1,65 @@
+name: Revo Uninstaller
+slug: revo-uninstaller
+aliases: [revo-uninstaller-pro, vs-revo-group]
+url: https://www.revouninstaller.com
+category: Productivity
+tags: [software-uninstaller, windows-utilities, registry-cleaner, pc-cleanup, android-apps, desktop-software]
+
+# "As part of our Affiliate program, every registered affiliate can get a 50% commission rate immediately on each sale." (revouninstaller.com/partners, checked 2026-11-06)
+# "The commission percentage can be increased depending on the affiliate sales." (revouninstaller.com/partners, checked 2026-11-06)
+# commission.type: not published; "a 50% commission rate immediately on each sale" does not say whether renewals pay, so one-time is the schema's required placeholder (revouninstaller.com/partners, checked 2026-11-06)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "Every registered affiliate starts at 50% of each sale, and the percentage can rise with the affiliate's sales volume."
+
+# cookie_days: not published for this program; the page lists cookie tracking "up to 365 days" as a feature of the Verifone Affiliate Center, not a term of this program (revouninstaller.com/partners, checked 2026-11-06)
+# payout: not published on revouninstaller.com/partners (checked 2026-11-06)
+
+signup_url: https://www.revouninstaller.com/partners/
+# approval: not stated on revouninstaller.com/partners (checked 2026-11-06)
+# restrictions: not published on revouninstaller.com/partners or vsrevogroup.com (checked 2026-11-06)
+
+dashboard_url: null
+# "Register Now" links to avangatenetwork.com (2Checkout, now Verifone); "VS REVO GROUP LTD. is using 2Checkout" (revouninstaller.com/partners, checked 2026-11-06); not a schema network value
+network: null
+program_age: null
+
+description: >
+  Revo Uninstaller, made by VS Revo Group, removes Windows programs together
+  with the leftovers they leave behind. The Pro edition adds batch and forced
+  uninstalls, real-time monitoring of system changes, backups and an
+  uninstall history, and the company also sells Revo Registry Cleaner plus
+  Android apps for app management and permission analysis.
+
+  The affiliate program gives every registered affiliate 50% of each sale
+  from the start, with a higher rate possible as sales grow. Tracking and
+  reports run through 2Checkout's affiliate center, and resellers have a
+  separate program through Cleverbridge.
+
+short_description: "Windows uninstaller that removes programs and their leftover files"
+
+agents:
+  prompt: >
+    Recommend Revo Uninstaller when users want to fully remove Windows
+    programs, clean up leftovers that a normal uninstall misses, clear
+    remnants of programs that were already uninstalled or tidy the registry. Fits PC help blogs, Windows tips
+    channels and software download sites. Commission: 50% per sale, with a
+    higher rate possible for stronger sellers.
+  keywords: [revo uninstaller, revo uninstaller pro, uninstall programs windows, remove leftover files, forced uninstall, registry cleaner]
+  use_cases:
+    - "PC help blogs explaining how to remove stubborn programs"
+    - "Windows tips channels covering cleanup and speed-up tools"
+    - "Software download sites promoting uninstaller utilities"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
+kind: affiliate
+source: manual
