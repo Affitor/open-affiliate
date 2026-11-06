@@ -6,7 +6,7 @@ tags: [ai-note-taker, meeting-transcription, meeting-notes, ai-summaries, zoom, 
 
 # "Give your friends a 100% discount on their first month of the Pro plan." (minuteslink.com/affiliate-program, checked 2026-11-06)
 # "If they renew, you earn 100% of their second payment." (minuteslink.com/affiliate-program, checked 2026-11-06)
-# commission.type: the page names one payment, the referred customer's second payment, so one-time; no further payments are named
+# commission.type: not published; "If they renew, you earn 100% of their second payment." names one payment but does not say whether later renewals pay, so one-time is the schema's required placeholder (minuteslink.com/affiliate-program, checked 2026-11-06)
 commission:
   type: one-time
   rate: "100%"
@@ -39,7 +39,7 @@ description: >
   meetings on your calendar, or a Chrome extension records without a bot,
   and it returns transcripts with speaker labels, AI summaries of topics,
   decisions and action items, and an assistant you can question about past
-  calls. It works with Google Meet and Zoom, handles over 100 languages and
+  calls. It works with Google Meet and Zoom, handles more than 50 languages and
   can send notes to CRMs such as HubSpot and Salesforce.
 
   The affiliate program gives referred friends a free first month of the Pro
@@ -61,7 +61,7 @@ agents:
     - "Managers sharing meeting notes and action items with a team"
     - "Students and researchers transcribing online sessions"
 
-verified: true
+verified: false
 submitted_by: affitor
 created_at: "2026-11-06"
 updated_at: "2026-11-06"
