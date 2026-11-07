@@ -10,6 +10,7 @@ commission:
   rate: "40%, rising to 70% with more subscribed referrals"
   mode: "tiered"
   value: 70
+  currency: "USD"
   duration: "lifetime"
   conditions: "Commissions are calculated on the amount collected excluding taxes"
 
