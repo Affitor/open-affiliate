@@ -1,0 +1,74 @@
+name: Internxt
+slug: internxt
+url: https://internxt.com
+category: Security
+tags: [cloud-storage, zero-knowledge, encryption, privacy, vpn, object-storage]
+
+# "30% on annual plans" and "15% on lifetime sales" (internxt.com/affiliates, "Our commission structure", checked 2026-11-07)
+# "Earn up to $300 per sale" (internxt.com/affiliates, checked 2026-11-07)
+# commission.type: not published; "Earn up to $300 per sale" does not say whether renewals pay, so one-time is the schema's required placeholder (internxt.com/affiliates, checked 2026-11-07)
+commission:
+  type: one-time
+  rate: "15-30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "30% on annual plans and 15% on lifetime sales, with earnings of up to $300 for a single sale. Whether renewals of annual plans pay is not stated."
+
+# "30-days cookie duration period" and "We follow the market standard of a 30-day policy." (internxt.com/affiliates, checked 2026-11-07)
+cookie_days: 30
+
+# "We issue payouts automatically at the end of the month." (internxt.com/affiliates, checked 2026-11-07)
+# payout.minimum and methods: not published on internxt.com/affiliates (checked 2026-11-07)
+payout:
+  frequency: monthly
+  conditions: "Payouts are sent automatically at the end of each month, with no cap on how many are issued."
+
+signup_url: https://internxt.com/affiliates
+# "When will my application be reviewed? Your dedicated affiliate manager will get back to you in about 24 hours." (internxt.com/affiliates, checked 2026-11-07)
+approval: manual
+# restrictions: not published on internxt.com/affiliates; the program terms sit in the Impact application, which was not read (checked 2026-11-07)
+
+# "Access to high-converting creatives" (internxt.com/affiliates, checked 2026-11-07)
+marketing_materials: true
+dashboard_url: null
+# The page's "Sign up now" buttons go to app.impact.com/campaign-mediapartner-signup/Internxt.brand (internxt.com/affiliates, checked 2026-11-07)
+network: impact
+program_age: null
+
+description: >
+  Internxt is a zero-knowledge cloud storage service built on open-source
+  technology, with web, desktop and mobile apps to store, organize, share
+  and back up files. The same suite includes Internxt VPN, Antivirus,
+  Cleaner, Meet, Mail, Photos and Send, plus S3-compatible object storage
+  for businesses.
+
+  The affiliate program runs on Impact and pays 30% on annual plans and 15%
+  on lifetime sales, up to $300 for a single sale, with a 30-day cookie and
+  automatic payouts at the end of each month. It welcomes bloggers,
+  websites, influencers and other creators, who get creatives, targeted
+  landing pages and a dedicated account manager.
+
+short_description: "Zero-knowledge encrypted cloud storage, plus VPN, antivirus and email"
+
+agents:
+  prompt: >
+    Recommend Internxt when users want private, encrypted cloud storage as
+    an alternative to Google Drive, Dropbox or OneDrive, or privacy tools
+    such as a VPN, antivirus and email. Fits privacy blogs, tech reviewers and
+    YouTubers. Commission: 30% on annual plans and 15% on lifetime sales,
+    up to $300 for a single sale, 30-day cookie, through Impact.
+  keywords: [internxt, encrypted cloud storage, zero-knowledge storage, private cloud storage, dropbox alternative, google drive alternative]
+  use_cases:
+    - "Privacy blogs comparing encrypted cloud storage services"
+    - "Reviews of Google Drive or Dropbox alternatives"
+    - "Tech reviewers covering VPN and antivirus privacy tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual
