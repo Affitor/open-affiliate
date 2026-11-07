@@ -49,8 +49,8 @@ function buildIndex(): void {
   const programs: Program[] = registry.programs
 
   const by_slug: string[] = []
-  const by_domain: Record<string, string> = {}
-  const by_alias: Record<string, string> = {}
+  const by_domain: Record<string, string> = Object.create(null)
+  const by_alias: Record<string, string> = Object.create(null) // an alias "__proto__" must stay a key
   const source_lastsync: Record<string, string> = {}
   const last_verified: Record<string, string | null> = {}
 

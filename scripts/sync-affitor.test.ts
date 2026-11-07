@@ -980,8 +980,10 @@ test("an also_on link to a program that left Affitor is removed, on the detail's
 })
 
 test("only Affitor's exact not-found body unlinks or pauses; an outage reported as success: false stops the run (Codex PR206 r1)", async () => {
-  // Measured 2026-10-13: HTTP 200 and exactly this body for a slug Affitor does not have.
+  // Measured 2026-10-13, then 2026-11-06 with an error object: HTTP 200 and
+  // exactly one of these bodies for a slug Affitor does not have.
   const NOT_FOUND = { success: false, data: null, message: "Program not found" }
+  const NOT_FOUND_ERROR = { ...NOT_FOUND, error: { code: "program_not_found", message: "Program not found" } }
   const TIMEOUT = { success: false, data: null, message: "Temporary database timeout", code: "SERVICE_UNAVAILABLE" }
   const others = [row("still-here")]
   const own = dirWith({ "landerlab.yaml": LINKED })
@@ -1002,6 +1004,10 @@ test("only Affitor's exact not-found body unlinks or pauses; an outage reported 
     ["a malformed body", "<html>502 Bad Gateway</html>"],
     ["not-found without its message", { success: false, data: null }],
     ["another message", { success: false, data: null, message: "Program not found in cache" }],
+    ["the error body with another code", { ...NOT_FOUND, error: { code: "service_unavailable", message: "Program not found" } }],
+    ["an extra key inside error", { ...NOT_FOUND, error: { ...NOT_FOUND_ERROR.error, retry: true } }],
+    ["error missing a key", { ...NOT_FOUND, error: { code: "program_not_found" } }],
+    ["a code at the top level", { ...NOT_FOUND, code: "program_not_found" }],
   ] as [string, unknown][]) {
     await assert.rejects(run({ args: [], programsDir: own, today: "2026-11-30", fetchJson: answering(detail) }), /landerlab/, what)
     assert.deepEqual(snapshot(own), linked, what)
@@ -1010,8 +1016,12 @@ test("only Affitor's exact not-found body unlinks or pauses; an outage reported 
     await assert.rejects(run({ args: [], programsDir: paused, today: TODAY, fetchJson: answering(detail) }), /gone/, what)
     assert.equal(readFileSync(join(paused, "gone.yaml"), "utf8"), GONE, what)
   }
-  const { entries } = await run({ args: [], programsDir: own, today: "2026-11-30", fetchJson: answering(NOT_FOUND) })
-  assert.equal(entries.find((e) => e.oa_slug === "landerlab")?.action, "unlink")
+  for (const detail of [NOT_FOUND, NOT_FOUND_ERROR]) {
+    const fresh = dirWith({ "landerlab.yaml": LINKED })
+    await run({ args: [], programsDir: fresh, today: TODAY, fetchJson: api([LANDER]) })
+    const { entries } = await run({ args: [], programsDir: fresh, today: "2026-11-30", fetchJson: answering(detail) })
+    assert.equal(entries.find((e) => e.oa_slug === "landerlab")?.action, "unlink", JSON.stringify(detail))
+  }
 })
 
 test("the sync reads Affitor only on a 200, and the API's not-found body is a 200", async () => {
@@ -1022,6 +1032,9 @@ test("the sync reads Affitor only on a 200, and the API's not-found body is a 20
       await assert.rejects(httpJson(`${LIST}/landerlab`), new RegExp(`answered ${status}`))
     }
     globalThis.fetch = async () => new Response('{"success":false,"data":null,"message":"Program not found"}', { status: 200 })
+    assert.equal(affitorNotFound(await httpJson(`${LIST}/nope`)), true)
+    globalThis.fetch = async () =>
+      new Response('{"success":false,"data":null,"message":"Program not found","error":{"code":"program_not_found","message":"Program not found"}}', { status: 200 })
     assert.equal(affitorNotFound(await httpJson(`${LIST}/nope`)), true)
     globalThis.fetch = async () => new Response("<html>oops</html>", { status: 200 })
     await assert.rejects(httpJson(`${LIST}/nope`))
