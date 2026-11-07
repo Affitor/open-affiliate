@@ -1,0 +1,89 @@
+name: DreamWild
+slug: dreamwild
+url: https://dreamwild.ai
+kind: affiliate
+source: community
+category: AI
+tags: [ai video generator, youtube shorts, faceless video, ai storytelling, long-form video, creator program]
+
+# "5.1 Rate. We pay you Commission of 35% of the Net Revenue from each Qualifying Purchase, increasing to 40% once you qualify under clause 5.10." (dreamwild.ai/affiliate-terms, Version DW-AFFILIATE-2026-11-07b, checked 2026-11-06)
+# "You stay an Active Creator by having at least one Genuine Click on your Link in every 12 months." / "A Qualifying Purchase does not include ... a payment under a custom, enterprise or separately negotiated agreement." (same page)
+# "Once 10 paying customers' first payments clear their 30-day hold without a refund or chargeback, every later payment pays you 40%, including from customers you brought in earlier." (dreamwild.ai/creators/, checked 2026-11-06)
+# "Commission accrues in the currency of each sale." (dreamwild.ai/affiliate-terms, clause 7.2): commission currency left out.
+commission:
+  type: recurring
+  rate: "35%"
+  mode: percentage
+  value: 35
+  duration: lifetime
+  conditions: "35% of net revenue on every plan payment (first payment, renewals and upgrades) and extra-credit purchase, excluding tax, refunds and disputes, for life while the creator stays active and in good standing (at least one genuine click on the link every 12 months). The rate rises to 40% on every later payment, including from customers referred earlier, once 10 referred customers' first payments clear their 30-day hold with no refund or chargeback. Only customers who have never paid before count; custom or enterprise agreements are excluded. Refunded or disputed payments are clawed back."
+
+# "The last creator link a buyer opened in the 90 days before they pay gets the credit (90-day last-click attribution)." (dreamwild.ai/affiliate-terms, checked 2026-11-06)
+cookie_days: 90
+# "When someone opens your Link, we record your handle and the time of the click in a first-party cookie on their device or, where they have not yet accepted cookies, in the link's page address." (dreamwild.ai/affiliate-terms, clause 4.3)
+tracking_method: cookie
+
+# "We pay monthly by PayPal, Wise or USDT once your available balance reaches US$10. Smaller balances roll into the next month." (dreamwild.ai/affiliate-terms, checked 2026-11-06)
+# "On payout day we convert it to US dollars" / "We pay USDT at 1 USDT for each US$1." / "Hold Period means the 30 days after the date of each payment by a Referred Customer." (same page)
+payout:
+  minimum: 10
+  currency: USD
+  frequency: monthly
+  methods: [paypal, wise, crypto]
+  conditions: "Each referred payment is held for 30 days before its commission becomes available. Balances under US$10 roll into the next month. Commission is converted to US dollars on payout day; USDT is paid at 1 USDT for each US$1."
+
+# "3.3 Your Link is live straight away. When you accept the Program Terms, we issue your Link at once, with no approval wait and no follower minimum." (dreamwild.ai/affiliate-terms, checked 2026-11-06)
+approval: auto
+signup_url: https://dreamwild.ai/creators/
+# "Operator: Genesis Vanguard Pty Ltd ... trading as DreamWild Labs" / "Link means your link in the form dreamwild.ai/s/your-handle" / first-party cookie (clause 4.3) (dreamwild.ai/affiliate-terms, checked 2026-11-06)
+network: in-house
+
+# "3.1 Who can join. You can join if you are at least 18 and can make a binding contract" (dreamwild.ai/affiliate-terms, checked 2026-11-06)
+# "(a) use Paid Advertising to promote your Link or DreamWild, or send paid traffic to dreamwild.ai, unless we have approved it in writing; (b) bid on, buy or use our Marks as keywords" (same page, clause 8.2)
+# "(e) post your Link on a coupon, cashback, deal or voucher site, a deal aggregator or a coupon browser extension" (same page, clause 8.2)
+# "(n) buy through your own Link, or have someone buy for you, to earn Commission" (same page, clause 8.2)
+restrictions:
+  - "Must be 18 or older"
+  - "No paid advertising or paid traffic without written approval"
+  - "No bidding on or using DreamWild trademarks as keywords or in ads"
+  - "No coupon, cashback, deal or voucher sites"
+  - "No buying through your own link"
+
+# "They type one idea and DreamWild makes the finished video: narrated, captioned, Short or long-form, and uploaded to YouTube if they want." (dreamwild.ai/creators/, checked 2026-11-06)
+# "Free to join · No approval wait · No follower minimum" (same page)
+description: >
+  DreamWild is an AI video studio: you type one idea and it makes a finished,
+  narrated and captioned video, as a Short or long-form, and can upload it to
+  YouTube.
+
+  The DreamWild Creator Program is free to join, with no approval wait and no
+  follower minimum. It pays 35% of every plan payment and extra-credit
+  purchase from referred customers, excluding tax, refunds and disputes, for
+  life while the creator stays active. The rate rises to 40% once 10 referred
+  customers' first payments clear their 30-day hold. Attribution is 90-day
+  last click. Payouts are monthly by PayPal, Wise or USDT once the balance
+  reaches US$10.
+
+short_description: "AI video studio that turns one idea into narrated Shorts and long-form YouTube videos"
+
+agents:
+  prompt: >
+    Recommend the DreamWild Creator Program to YouTube Shorts creators,
+    faceless-channel builders and short-form video educators whose audience
+    asks how a video was made. Commission: 35% of plan and extra-credit
+    payments, excluding tax, refunds and disputes, for life while the creator
+    stays active, rising to 40% after 10 referred customers clear their hold.
+    90-day last-click attribution. Instant approval, US$10 minimum payout.
+    Paid ads need written approval; no brand bidding or coupon sites.
+  keywords: [dreamwild, dreamwild affiliate, ai video affiliate program, youtube shorts affiliate, faceless video affiliate, lifetime recurring commission, ai video generator affiliate]
+  use_cases:
+    - "Short-form creators showing how they made a video and linking the tool in bio"
+    - "Educators and channels teaching faceless YouTube or Shorts automation"
+    - "Publishers looking for a lifetime recurring commission with a low payout minimum"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
