@@ -8,17 +8,19 @@ tags: [direct mail, postcards, shopify, klaviyo, omnisend, retention, agencies]
 
 # "The standard rate is 15% for 12 months per client." / "From your fifth active client, the rate is 20% across your active clients going forward. Earlier months stay at 15%." (touchdrop.com.au/partners, checked 2026-11-05)
 # "TouchDrop pays commission on an introduced client's platform fee, not on printing or postage." "Commission stops the month they cancel." (same page)
+# "Year 2 rev share available if you continue to manage the account." / "Partners who manage the account get Year 2 rev share instead of the 12-month cap." (same page)
+# "Register deals through your partner portal or email. 45-day attribution window on every intro." (same page)
 commission:
   type: tiered
   rate: "15%, or 20% from your 5th active client"
   mode: tiered
   value: 20
   duration: 12 months
-  conditions: "15% of the TouchDrop platform fee for each introduced client, paid monthly for 12 months. From your fifth active client, 20% across your active clients going forward; earlier months stay at 15%. Commission is on the platform fee only, not on printing or postage, and stops the month a client cancels. Partners who keep managing a client's account can discuss a year-two revenue share."
+  conditions: "15% of the TouchDrop platform fee for each introduced client, paid monthly for 12 months. From your fifth active client, 20% across your active clients going forward; earlier months stay at 15%. Commission is on the platform fee only, not on printing or postage, and stops the month a client cancels. Partners who continue to manage a client's account get a Year 2 revenue share instead of the 12-month cap. Referrals are registered as deals through the partner portal or by email, with a 45-day attribution window from the intro."
 
-# "Register deals through your partner portal or email. 45-day attribution window on every intro." / "Any brand you introduce to TouchDrop that signs up as a paying customer within 45 days of the intro." (touchdrop.com.au/partners, checked 2026-11-05)
+# "Any brand you introduce to TouchDrop that signs up as a paying customer within 45 days of the intro." (touchdrop.com.au/partners, checked 2026-11-06)
+# cookie_days left out: the 45 days are a deal-registration attribution window, not a cookie; the window is in commission.conditions.
 # tracking_method left out: referrals are registered as deals, which none of cookie, server-side or hybrid describes.
-cookie_days: 45
 
 # "Monthly, on the 15th of each month, for the prior month's active subscriptions. Invoiced against the commission report we share with you." / "No minimums, no clawbacks outside of refunds." (touchdrop.com.au/partners, checked 2026-11-05)
 # payout.minimum left out: the page says "No minimums" but names no payout currency.
@@ -71,6 +73,6 @@ not_published:
 verified: true
 submitted_by: "@Reits0"
 created_at: "2026-11-05"
-updated_at: "2026-11-05"
-last_verified_at: "2026-11-05"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
 status: active
