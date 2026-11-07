@@ -19,7 +19,7 @@ payout:
   minimum: 50
   currency: "EUR"
   methods:
-    - "PayPal"
+    - "paypal"
 
 signup_url: "https://www.sendora.fr/en/affiliation"
 
