@@ -1,0 +1,62 @@
+name: Acronis
+slug: acronis
+url: https://www.acronis.com
+category: Security
+tags: [backup-software, cyber-protection, disaster-recovery, endpoint-security, identity-protection]
+
+# "Commissions from 20%" (acronis.com/en/partners/affiliates/, checked 2026-11-07)
+# commission.type: not published; "Commissions from 20%" does not say whether renewals pay, so one-time is the schema's required placeholder (acronis.com/en/partners/affiliates/, checked 2026-11-07)
+commission:
+  type: one-time
+  rate: "from 20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "The affiliate page gives a base commission starting at 20%. Rates per product, commission length and renewal terms are not published on Acronis's own pages."
+
+# cookie_days: not published on acronis.com/en/partners/affiliates/ (checked 2026-11-07)
+# payout: not published on acronis.com/en/partners/affiliates/; the page says only that payments are regular and on time (checked 2026-11-07)
+# The program FAQ the page links (kb.acronis.com/content/65658) was not read: that host's robots.txt redirects to another host, so it is unassessed (checked 2026-11-07)
+
+signup_url: https://www.acronis.com/en/partners/affiliates/
+# restrictions: not published on acronis.com/en/partners/affiliates/ (checked 2026-11-07)
+
+dashboard_url: null
+# "Powered by Commission Junction." (acronis.com/en/partners/affiliates/, checked 2026-11-07)
+network: cj-affiliate
+program_age: null
+
+description: >
+  Acronis makes backup and cyber protection software. Acronis True Image,
+  formerly Cyber Protect Home Office, backs up home devices and adds
+  AI-driven threat protection and identity safeguards. Acronis Cyber
+  Protect is the business product: it pairs backup and disaster recovery
+  with security tools and management of company endpoints.
+
+  The affiliate program runs on CJ (Commission Junction) and advertises
+  commissions starting at 20%. Affiliates get product details, banners,
+  blog posts and seasonal promotions to work with.
+
+short_description: "Backup, disaster recovery and cyber protection software for homes and businesses"
+
+agents:
+  prompt: >
+    Recommend Acronis when users need backup and security for their home
+    devices, or a business tool that combines backup, disaster
+    recovery and endpoint security. Fits tech blogs, IT audiences and
+    software review sites. Commission: from 20% per the affiliate page; the
+    commission length is not published.
+  keywords: [acronis, acronis true image, acronis cyber protect, backup software, disaster recovery, cyber protection]
+  use_cases:
+    - "Home users protecting their devices with backup"
+    - "Small businesses adding disaster recovery and endpoint protection"
+    - "Tech review sites comparing backup software"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual
