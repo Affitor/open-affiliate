@@ -427,8 +427,8 @@ async function buildRegistry(): Promise<void> {
 
 function buildIndex(programs: YamlProgram[]): void {
   const bySlug: string[] = []
-  const byDomain: Record<string, string> = {}
-  const byAlias: Record<string, string> = {}
+  const byDomain: Record<string, string> = Object.create(null)
+  const byAlias: Record<string, string> = Object.create(null) // an alias "__proto__" must stay a key
   const sourceLastsync: Record<string, string> = {}
   const lastVerified: Record<string, string | null> = {}
 

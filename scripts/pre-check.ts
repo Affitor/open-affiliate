@@ -36,8 +36,9 @@
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync } from "fs"
 import { join, resolve } from "path"
 import { execFileSync } from "child_process"
+import { pathToFileURL } from "url"
 
-interface RegistryIndex {
+export interface RegistryIndex {
   generated_at: string
   count: number
   by_slug: string[]
@@ -47,7 +48,7 @@ interface RegistryIndex {
   last_verified: Record<string, string | null>
 }
 
-interface Decision {
+export interface Decision {
   candidate: string
   normalized: string
   tier: "NEW" | "SKIP" | "REFRESH-LIGHT" | "REFRESH-FULL" | "FLAG"
@@ -58,48 +59,30 @@ interface Decision {
   reason: string
 }
 
-const REGISTRY_INDEX = join(process.cwd(), "src", "lib", "registry-index.json")
+export type RefreshMode = "none" | "stale" | "all"
 
-// ── CLI ──
-const args = process.argv.slice(2)
-if (args.length === 0 || args[0].startsWith("--")) {
-  console.error("Usage: npx tsx scripts/pre-check.ts <candidates.txt> [--refresh=none|stale|all] [--stale-days=N] [--out=DIR]")
-  process.exit(1)
+/**
+ * The index as Maps and a Set. A plain object answers `index.by_alias["constructor"]`
+ * with Object.prototype.constructor, so a brand named Constructor (or __proto__)
+ * read as an existing program and was skipped.
+ */
+export interface Lookup {
+  slugs: Set<string>
+  byDomain: Map<string, string>
+  byAlias: Map<string, string>
+  lastVerified: Map<string, string | null>
 }
-const inputFile = args[0]
-const refreshMode = (args.find((a) => a.startsWith("--refresh="))?.split("=")[1] ?? "none") as
-  | "none"
-  | "stale"
-  | "all"
-const staleDays = parseInt(args.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? "30", 10)
-const outDir = resolve(args.find((a) => a.startsWith("--out="))?.split("=")[1] ?? ".")
 
-// Every file scripts/build-registry.ts writes. Snapshot, rebuild, read the
-// fresh index, then restore the snapshot (or remove a file that was absent).
-const GENERATED = ["registry.json", "client-registry.json", "registry-index.json", "logo-files.json"].map((f) =>
-  join(process.cwd(), "src", "lib", f),
-)
-const snapshot = new Map(GENERATED.map((f) => [f, existsSync(f) ? readFileSync(f) : null]))
-let loaded: RegistryIndex | undefined
-let failure = ""
-try {
-  execFileSync(process.execPath, [...process.execArgv, join(process.cwd(), "scripts", "build-registry.ts")], {
-    stdio: ["ignore", "ignore", "pipe"],
-  })
-  loaded = JSON.parse(readFileSync(REGISTRY_INDEX, "utf-8"))
-} catch (err) {
-  failure = (err as { stderr?: Buffer }).stderr?.toString().trim() || (err as Error).message
-} finally {
-  for (const [f, bytes] of snapshot) {
-    if (bytes) writeFileSync(f, bytes)
-    else rmSync(f, { force: true })
+export function toLookup(index: RegistryIndex): Lookup {
+  return {
+    slugs: new Set(index.by_slug),
+    byDomain: new Map(Object.entries(index.by_domain)),
+    byAlias: new Map(Object.entries(index.by_alias)),
+    lastVerified: new Map(Object.entries(index.last_verified)),
   }
 }
-if (!loaded) {
-  console.error(`Registry rebuild failed, so pre-check cannot trust the index.\n${failure}`)
-  process.exit(1)
-}
-const index: RegistryIndex = loaded
+
+const REGISTRY_INDEX = join(process.cwd(), "src", "lib", "registry-index.json")
 
 // ── Normalization ──
 function normalizeCandidate(raw: string): { domain: string; name: string } {
@@ -151,14 +134,14 @@ function levenshtein(a: string, b: string): number {
   return dp[a.length][b.length]
 }
 
-function fuzzyMatch(needle: string): { slug: string; distance: number } | null {
+function fuzzyMatch(needle: string, index: Lookup): { slug: string; distance: number } | null {
   if (needle.length < 3) return null
   let best: { slug: string; distance: number } | null = null
-  const haystack = [...index.by_slug, ...Object.keys(index.by_alias), ...Object.keys(index.by_domain)]
+  const haystack = [...index.slugs, ...index.byAlias.keys(), ...index.byDomain.keys()]
   for (const candidate of haystack) {
     const d = levenshtein(needle, candidate)
     if (d < 3 && (!best || d < best.distance)) {
-      const slug = index.by_domain[candidate] ?? index.by_alias[candidate] ?? candidate
+      const slug = index.byDomain.get(candidate) ?? index.byAlias.get(candidate) ?? candidate
       best = { slug, distance: d }
     }
   }
@@ -166,7 +149,7 @@ function fuzzyMatch(needle: string): { slug: string; distance: number } | null {
 }
 
 // ── Match + decide ──
-function decide(raw: string): Decision {
+export function decide(raw: string, index: Lookup, refreshMode: RefreshMode = "none", staleDays = 30): Decision {
   const { domain, name } = normalizeCandidate(raw)
   const slugCandidate = slugify(name)
 
@@ -174,24 +157,24 @@ function decide(raw: string): Decision {
   let matchType: Decision["match_type"] = null
 
   // 1. Exact domain match
-  if (domain && index.by_domain[domain]) {
-    matched = index.by_domain[domain]
+  if (domain && index.byDomain.has(domain)) {
+    matched = index.byDomain.get(domain)!
     matchType = "domain"
   }
   // 2. Exact slug match
-  else if (index.by_slug.includes(slugCandidate)) {
+  else if (index.slugs.has(slugCandidate)) {
     matched = slugCandidate
     matchType = "slug"
   }
   // 3. Alias match
-  else if (index.by_alias[name]) {
-    matched = index.by_alias[name]
+  else if (index.byAlias.has(name)) {
+    matched = index.byAlias.get(name)!
     matchType = "alias"
   }
 
   if (!matched) {
     // Fuzzy fallback — flag for human
-    const fuzzy = fuzzyMatch(domain || slugCandidate)
+    const fuzzy = fuzzyMatch(domain || slugCandidate, index)
     if (fuzzy) {
       return {
         candidate: raw,
@@ -199,8 +182,8 @@ function decide(raw: string): Decision {
         tier: "FLAG",
         matched_slug: fuzzy.slug,
         match_type: "fuzzy",
-        last_verified_at: index.last_verified[fuzzy.slug] ?? null,
-        age_days: daysSince(index.last_verified[fuzzy.slug] ?? null),
+        last_verified_at: index.lastVerified.get(fuzzy.slug) ?? null,
+        age_days: daysSince(index.lastVerified.get(fuzzy.slug) ?? null),
         reason: `Fuzzy match (distance ${fuzzy.distance}) to ${fuzzy.slug} — human review`,
       }
     }
@@ -217,7 +200,7 @@ function decide(raw: string): Decision {
   }
 
   // Matched — apply refresh policy
-  const lv = index.last_verified[matched] ?? null
+  const lv = index.lastVerified.get(matched) ?? null
   const age = daysSince(lv)
 
   if (refreshMode === "all") {
@@ -285,56 +268,96 @@ function decide(raw: string): Decision {
   }
 }
 
-// ── Run ──
-const raw = readFileSync(inputFile, "utf-8")
-const candidates = raw
-  .split("\n")
-  .map((l) => l.split("#")[0].trim())
-  .filter((l) => l.length > 0)
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  // ── CLI ──
+  const args = process.argv.slice(2)
+  if (args.length === 0 || args[0].startsWith("--")) {
+    console.error("Usage: npx tsx scripts/pre-check.ts <candidates.txt> [--refresh=none|stale|all] [--stale-days=N] [--out=DIR]")
+    process.exit(1)
+  }
+  const inputFile = args[0]
+  const refreshMode = (args.find((a) => a.startsWith("--refresh="))?.split("=")[1] ?? "none") as RefreshMode
+  const staleDays = parseInt(args.find((a) => a.startsWith("--stale-days="))?.split("=")[1] ?? "30", 10)
+  const outDir = resolve(args.find((a) => a.startsWith("--out="))?.split("=")[1] ?? ".")
 
-const decisions = candidates.map(decide)
+  // Every file scripts/build-registry.ts writes. Snapshot, rebuild, read the
+  // fresh index, then restore the snapshot (or remove a file that was absent).
+  const GENERATED = ["registry.json", "client-registry.json", "registry-index.json", "logo-files.json"].map((f) =>
+    join(process.cwd(), "src", "lib", f),
+  )
+  const snapshot = new Map(GENERATED.map((f) => [f, existsSync(f) ? readFileSync(f) : null]))
+  let loaded: RegistryIndex | undefined
+  let failure = ""
+  try {
+    execFileSync(process.execPath, [...process.execArgv, join(process.cwd(), "scripts", "build-registry.ts")], {
+      stdio: ["ignore", "ignore", "pipe"],
+    })
+    loaded = JSON.parse(readFileSync(REGISTRY_INDEX, "utf-8"))
+  } catch (err) {
+    failure = (err as { stderr?: Buffer }).stderr?.toString().trim() || (err as Error).message
+  } finally {
+    for (const [f, bytes] of snapshot) {
+      if (bytes) writeFileSync(f, bytes)
+      else rmSync(f, { force: true })
+    }
+  }
+  if (!loaded) {
+    console.error(`Registry rebuild failed, so pre-check cannot trust the index.\n${failure}`)
+    process.exit(1)
+  }
+  const index = toLookup(loaded)
 
-const buckets: Record<string, string[]> = {
-  NEW: [],
-  "REFRESH-LIGHT": [],
-  "REFRESH-FULL": [],
-  SKIP: [],
-  FLAG: [],
-}
+  // ── Run ──
+  const raw = readFileSync(inputFile, "utf-8")
+  const candidates = raw
+    .split("\n")
+    .map((l) => l.split("#")[0].trim())
+    .filter((l) => l.length > 0)
 
-for (const d of decisions) {
-  buckets[d.tier].push(d.candidate)
-}
+  const decisions = candidates.map((c) => decide(c, index, refreshMode, staleDays))
 
-if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true })
+  const buckets: Record<string, string[]> = {
+    NEW: [],
+    "REFRESH-LIGHT": [],
+    "REFRESH-FULL": [],
+    SKIP: [],
+    FLAG: [],
+  }
 
-writeFileSync(join(outDir, "new.txt"), buckets.NEW.join("\n") + (buckets.NEW.length ? "\n" : ""))
-writeFileSync(join(outDir, "stale.txt"), [...buckets["REFRESH-LIGHT"], ...buckets["REFRESH-FULL"]].join("\n") + "\n")
-writeFileSync(join(outDir, "skip.txt"), buckets.SKIP.join("\n") + (buckets.SKIP.length ? "\n" : ""))
-writeFileSync(join(outDir, "flag.txt"), buckets.FLAG.join("\n") + (buckets.FLAG.length ? "\n" : ""))
-writeFileSync(
-  join(outDir, "pre-check-report.json"),
-  JSON.stringify(
-    {
-      generated_at: new Date().toISOString(),
-      refresh_mode: refreshMode,
-      stale_days: staleDays,
-      input: inputFile,
-      totals: {
-        total: decisions.length,
-        new: buckets.NEW.length,
-        refresh_light: buckets["REFRESH-LIGHT"].length,
-        refresh_full: buckets["REFRESH-FULL"].length,
-        skip: buckets.SKIP.length,
-        flag: buckets.FLAG.length,
+  for (const d of decisions) {
+    buckets[d.tier].push(d.candidate)
+  }
+
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true })
+
+  writeFileSync(join(outDir, "new.txt"), buckets.NEW.join("\n") + (buckets.NEW.length ? "\n" : ""))
+  writeFileSync(join(outDir, "stale.txt"), [...buckets["REFRESH-LIGHT"], ...buckets["REFRESH-FULL"]].join("\n") + "\n")
+  writeFileSync(join(outDir, "skip.txt"), buckets.SKIP.join("\n") + (buckets.SKIP.length ? "\n" : ""))
+  writeFileSync(join(outDir, "flag.txt"), buckets.FLAG.join("\n") + (buckets.FLAG.length ? "\n" : ""))
+  writeFileSync(
+    join(outDir, "pre-check-report.json"),
+    JSON.stringify(
+      {
+        generated_at: new Date().toISOString(),
+        refresh_mode: refreshMode,
+        stale_days: staleDays,
+        input: inputFile,
+        totals: {
+          total: decisions.length,
+          new: buckets.NEW.length,
+          refresh_light: buckets["REFRESH-LIGHT"].length,
+          refresh_full: buckets["REFRESH-FULL"].length,
+          skip: buckets.SKIP.length,
+          flag: buckets.FLAG.length,
+        },
+        decisions,
       },
-      decisions,
-    },
-    null,
-    2
-  ) + "\n"
-)
+      null,
+      2
+    ) + "\n"
+  )
 
-console.log(`Pre-check complete (refresh=${refreshMode}, stale-days=${staleDays}):`)
-console.log(`  ${decisions.length} candidates → ${buckets.NEW.length} NEW, ${buckets["REFRESH-LIGHT"].length} REFRESH-LIGHT, ${buckets["REFRESH-FULL"].length} REFRESH-FULL, ${buckets.SKIP.length} SKIP, ${buckets.FLAG.length} FLAG`)
-console.log(`  Outputs: ${outDir}/{new,stale,skip,flag}.txt + pre-check-report.json`)
+  console.log(`Pre-check complete (refresh=${refreshMode}, stale-days=${staleDays}):`)
+  console.log(`  ${decisions.length} candidates → ${buckets.NEW.length} NEW, ${buckets["REFRESH-LIGHT"].length} REFRESH-LIGHT, ${buckets["REFRESH-FULL"].length} REFRESH-FULL, ${buckets.SKIP.length} SKIP, ${buckets.FLAG.length} FLAG`)
+  console.log(`  Outputs: ${outDir}/{new,stale,skip,flag}.txt + pre-check-report.json`)
+}
