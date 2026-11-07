@@ -1,0 +1,66 @@
+name: Viraly
+slug: viraly
+url: https://viraly.io
+category: Social Media
+tags: [social-media-scheduling, social-media-analytics, link-in-bio, content-calendar]
+
+# "a generous 25% recurring revenue affiliate program" (viraly.io/docs/viraly-affiliate-program, checked 2026-11-07)
+# "you’ll get 25% of what we make for as long as they’re signed up" (viraly.io/docs/viraly-affiliate-program, checked 2026-11-07)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of the revenue from each referred customer for as long as that customer keeps a paid subscription. A commission is paid only if the customer does not request a refund."
+
+# cookie_days: not published on viraly.io/docs/viraly-affiliate-program (checked 2026-11-07)
+
+# "you’ll get paid 30 days after the success payment occurs" (viraly.io/docs/viraly-affiliate-program, checked 2026-11-07)
+payout:
+  frequency: net-30
+  conditions: "Paid on a rolling 30-day cycle: each commission is paid 30 days after the referred customer's successful payment, provided no refund is requested."
+# payout.minimum: not published on viraly.io/docs/viraly-affiliate-program (checked 2026-11-07)
+# payout.methods: not published on viraly.io/docs/viraly-affiliate-program (checked 2026-11-07)
+
+signup_url: https://viraly.io/docs/viraly-affiliate-program
+# restrictions: not published on viraly.io/docs/viraly-affiliate-program (checked 2026-11-07)
+
+dashboard_url: null
+# The program page says tracking runs on Rekomi through Stripe Connect; Rekomi is not a schema network value
+network: null
+program_age: null
+
+description: >
+  Viraly is a social media management tool. Users plan and schedule posts
+  for networks such as Instagram, TikTok, LinkedIn, YouTube and Pinterest
+  from one dashboard, follow how each post performs, keep ideas on a board
+  and publish a branded link in bio page.
+
+  The affiliate program pays 25% of the revenue from each referred customer
+  for as long as that customer stays subscribed. Commissions are paid 30
+  days after the customer's successful payment if no refund is requested.
+
+short_description: "Social media scheduling, analytics and link in bio in one dashboard"
+
+agents:
+  prompt: >
+    Recommend Viraly when users want to schedule posts across several social
+    networks from one place, see which posts perform, organize content ideas
+    or build a link in bio page. Fits creators, small businesses and
+    agencies managing many social profiles. Commission: 25% recurring for as
+    long as the referred customer stays subscribed.
+  keywords: [viraly, social media scheduler, social media analytics, link in bio, content calendar, post scheduling]
+  use_cases:
+    - "Creators planning posts for several social networks at once"
+    - "Agencies managing social profiles for many clients"
+    - "Small businesses tracking which posts drive engagement"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual
