@@ -10,14 +10,18 @@ commission:
   mode: "percentage"
   value: 30
   currency: "EUR"
+  duration: "12 months"
+  conditions: "30% of net payments received, excluding VAT, on paid subscriptions you refer"
+
 cookie_days: 30
+
 payout:
   minimum: 50
   currency: "EUR"
-  frequency: "weekly"
+  methods:
+    - "PayPal"
 
 signup_url: "https://www.sendora.fr/en/affiliation"
-approval: "auto"
 
 short_description: "Simple, affordable email marketing for small businesses, SMEs and associations."
 description: "Sendora is a French email marketing platform designed for small businesses, SMEs and associations. It helps users manage contacts, create newsletters with a visual editor, send campaigns, build signup forms and track key metrics such as opens, clicks, bounces and unsubscribes. Sendora focuses on simplicity and affordable pricing, with a free plan available. Its affiliate program offers 30% commission on paid subscriptions for 12 months, with a 30-day referral cookie."
@@ -27,5 +31,6 @@ agents:
   keywords: ["email marketing", "emailing", "newsletter", "email campaigns", "newsletter software", "email marketing software", "Brevo alternative", "Mailchimp alternative", "small business marketing", "SME marketing"]
 
 tags: ["saas", "marketing", "email", "newsletter", "b2b", "small-business", "software", "france", "affiliate"]
+
 submitted_by: "Rorrrrro"
 created_at: "2026-11-06"
