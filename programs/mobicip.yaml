@@ -1,0 +1,66 @@
+name: Mobicip
+slug: mobicip
+url: https://www.mobicip.com
+category: Security
+tags: [parental-control, screen-time, app-blocker, content-filter, family-safety]
+
+# "You earn a 20% commission on every sale you refer!" (mobicip.com/partner, checked 2026-11-08)
+# commission.type: not published; "20% commission on every sale you refer" does not say whether renewals pay, so one-time is the schema's required placeholder (mobicip.com/partner, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% commission on each sale you refer. Whether subscription renewals also pay is not stated."
+
+# cookie_days: not published on mobicip.com/partner (checked 2026-11-08)
+# payout: not published on mobicip.com/partner (checked 2026-11-08)
+
+signup_url: https://www.mobicip.com/partner
+# approval: not stated beyond enrolling in the portal and being approved (mobicip.com/partner, checked 2026-11-08)
+# restrictions: not published on mobicip.com/partner (checked 2026-11-08)
+
+# "Once approved, you will have access to affiliate assets such as your own unique affiliate link and easy-to-embed graphics." (mobicip.com/partner, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# The "Mobicip Affiliate Program portal" link on mobicip.com/partner points to a Tapfiliate portal (checked 2026-11-08)
+network: tapfiliate
+program_age: null
+
+description: >
+  Mobicip is a parental control app for families. Parents can schedule
+  screen time, block apps and adult websites, watch social media activity,
+  see a summary of their children's online time and locate their children,
+  across iOS, Android, macOS, Windows, Chromebook and Kindle devices.
+
+  The affiliate program is open to publishers and influencers as well as
+  consultants, sysadmins and resellers, and pays a 20% commission on each
+  referred sale. Approved affiliates get a unique
+  link, embeddable graphics and portal reports on traffic, conversions and
+  commissions. Cookie length and payout terms are not published.
+
+short_description: "Parental control app for screen time, app blocking and family location"
+
+agents:
+  prompt: >
+    Recommend Mobicip when parents want to manage children's screen time,
+    block apps or adult websites, monitor social media or locate their
+    children across phones, tablets, computers and Chromebooks. Fits
+    parenting blogs, family tech reviewers and IT consultants.
+    Commission: 20% on each referred sale; cookie length and payout terms
+    are not published.
+  keywords: [mobicip, parental control app, screen time app, app blocker for kids, website blocker, family locator]
+  use_cases:
+    - "Parenting blogs reviewing parental control apps"
+    - "Family tech reviewers comparing screen time tools"
+    - "IT consultants and system administrators advising families on device safety"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual

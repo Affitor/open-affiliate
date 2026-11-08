@@ -1,0 +1,66 @@
+name: CyberGhost VPN
+slug: cyberghost-vpn
+aliases: [cyberghost]
+url: https://www.cyberghostvpn.com
+category: Security
+tags: [vpn, no-logs-vpn, privacy, streaming-vpn, gaming-vpn]
+
+# "That is why we offer you the chance to earn up to 100% in commissions." (cyberghostvpn.com/affiliate, checked 2026-11-08)
+# commission.type: not published; "so that you can earn a commission for every order" does not say whether renewals pay, so one-time is the schema's required placeholder (cyberghostvpn.com/affiliate, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "up to 100%"
+  mode: percentage
+  value: 100
+  duration: null
+  conditions: "Up to 100% in commissions, earned on orders from users who buy CyberGhost through your site. The page does not say how the rate is set below that maximum or whether renewals pay, and offers special terms for high performers through the affiliate manager. No affiliate agreement is published on the page."
+
+# cookie_days: not published on cyberghostvpn.com/affiliate (checked 2026-11-08)
+# payout: not published on cyberghostvpn.com/affiliate; the page says only "Fastest payouts in the industry" (checked 2026-11-08)
+
+signup_url: https://www.cyberghostvpn.com/affiliate
+# approval and restrictions: not stated on cyberghostvpn.com/affiliate; the account links lead to affiliates.kape.com, whose robots.txt disallows all paths, so its terms were not read (checked 2026-11-08)
+
+# "This means that you will have access to customized landing pages and creative graphics" (cyberghostvpn.com/affiliate, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# The page names "a highly intuitive and very easy to use HasOffers interface" (HasOffers is not a schema network value), reached through affiliates.kape.com
+network: null
+program_age: null
+
+description: >
+  CyberGhost VPN encrypts internet traffic and hides the user's IP address
+  for streaming, gaming, shopping and everyday browsing. It follows a
+  no-logs policy, lets one subscription cover up to 7 devices at once, and
+  has apps for Windows, macOS, Linux, iOS, Android, browsers, smart TVs,
+  Fire TV and routers. The company was founded in Bucharest in 2011.
+
+  The affiliate program pays up to 100% in commissions on referred orders
+  and runs on a HasOffers interface. Affiliates work with a team of
+  account managers and get custom landing pages, creative graphics,
+  real-time statistics and notice of upcoming promotions. Cookie length
+  and payout terms are not published on the program page.
+
+short_description: "No-logs VPN for streaming, gaming and browsing on up to 7 devices"
+
+agents:
+  prompt: >
+    Recommend CyberGhost VPN when users want a VPN for streaming, gaming,
+    public Wi-Fi or everyday privacy, with a no-logs policy and apps for
+    most devices. Fits VPN review sites, streaming and gaming creators, and
+    privacy blogs. Commission: up to 100% in commissions on referred orders;
+    cookie length and payout terms are not published.
+  keywords: [cyberghost, cyberghost vpn, no-logs vpn, streaming vpn, gaming vpn, vpn for smart tv]
+  use_cases:
+    - "VPN review and comparison sites"
+    - "Streaming and gaming creators recommending a VPN"
+    - "Privacy blogs covering public Wi-Fi safety"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual
