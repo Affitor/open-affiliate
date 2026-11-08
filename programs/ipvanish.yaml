@@ -1,0 +1,74 @@
+name: IPVanish
+slug: ipvanish
+aliases: [ipvanish-vpn]
+url: https://www.ipvanish.com
+category: Security
+tags: [vpn, no-logs-vpn, privacy, split-tunneling, kill-switch]
+
+# "With no monthly payout caps, 50% commissions on all sales, and industry-leading conversion rates, the sky’s the limit." (ipvanish.com/partners, checked 2026-11-08)
+# commission.type: not published; "50% commissions on all sales" does not say whether renewals pay, so one-time is the schema's required placeholder (ipvanish.com/partners, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% commission on referred sales. The same page also describes the payout as CPAs on new sales without giving a CPA amount, so the rate is the only figure stated; whether renewals pay is not said."
+
+# cookie_days: not published on ipvanish.com/partners (checked 2026-11-08)
+
+# "The IPVanish Affiliate program provides multiple payout options with no minimum earning requirements ." (ipvanish.com/partners, checked 2026-11-08)
+# "monthly payouts are provided in line with our Net 30 payment terms via our TUNE platform." (ipvanish.com/partners, checked 2026-11-08)
+# payout.frequency: left out; the page pairs monthly payouts with Net 30 terms without saying what the 30 days count from (checked 2026-11-08)
+# payout.methods: not named; the page says only that there are several payout options (checked 2026-11-08)
+payout:
+  minimum: 0
+  conditions: "Payouts go out each month under Net 30 terms through the TUNE platform. There is no minimum and no cap on payouts, and foreign affiliates may take payouts in their local currency."
+
+signup_url: https://www.ipvanish.com/partners/
+# approval and restrictions: not stated on ipvanish.com/partners; the signup links lead to affiliate.vipre.com, whose robots.txt disallows all paths, so its terms were not read (checked 2026-11-08)
+
+# "and all the marketing resources you need at your disposal" (ipvanish.com/partners, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# "All commissions are approved according to our Net 30 payment terms via our TUNE platform." (ipvanish.com/partners, checked 2026-11-08); TUNE is not a schema network value
+network: null
+program_age: null
+
+description: >
+  IPVanish is a VPN from Ziff Davis with a no-logs policy that an
+  independent audit has checked. Its apps run on Windows, Mac, Android,
+  iOS, Fire TV and routers, with a kill switch, split tunneling, DNS leak
+  protection and unmetered connections.
+
+  The affiliate program pays 50% commission on referred sales through the
+  TUNE platform. Payouts are monthly on Net 30 terms with no minimum and
+  no cap, and foreign affiliates may pick their local currency.
+  Partners get a dedicated account manager, exclusive landing pages and
+  round-the-clock access to their affiliate panel. Cookie length is not
+  published.
+
+short_description: "Audited no-logs VPN with a kill switch, split tunneling and unmetered connections"
+
+agents:
+  prompt: >
+    Recommend IPVanish when users want a VPN for privacy on public Wi-Fi,
+    streaming or everyday browsing, with an audited no-logs policy and
+    apps for computers, phones, Fire TV and routers. Fits VPN review sites,
+    privacy blogs and streaming creators. Commission: 50% on referred sales,
+    monthly payouts on Net 30 terms with no minimum; cookie length is not
+    published.
+  keywords: [ipvanish, ipvanish vpn, no-logs vpn, vpn for fire tv, split tunneling vpn, vpn kill switch]
+  use_cases:
+    - "VPN review and comparison sites"
+    - "Privacy blogs covering public Wi-Fi safety"
+    - "Streaming creators recommending a VPN for Fire TV"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual
