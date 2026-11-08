@@ -1,0 +1,107 @@
+name: Bonsai
+slug: bonsai
+aliases: [hellobonsai]
+url: https://www.hellobonsai.com
+category: Business Operations
+tags: [agency-management, project-management, invoicing, time-tracking, proposals, client-portal]
+
+# "earn 200% of the referral's first monthly payment and 30% for any yearly plan." (hellobonsai.com/affiliates, checked 2026-11-08)
+# "Monthly plans = 200% commission" and "Yearly plans = 30% commission" (hellobonsai.com/affiliates, checked 2026-11-08)
+# commission.type: not published; "200% of the referral's first monthly payment and 30% for any yearly plan" does not say whether renewals pay, so one-time is the schema's required placeholder (hellobonsai.com/affiliates, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "200% monthly plans, 30% yearly plans"
+  mode: percentage
+  value: 200
+  duration: null
+  conditions: "A referred customer on a monthly plan earns you 200% of their first monthly payment; a yearly plan earns 30%. The terms approve commissions only for completed orders, and say this includes cancelled and refunded orders; incomplete or fraudulent orders earn nothing."
+
+# "Default cookie tracking is set for 60 days." (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08)
+# "You'll earn a commission from any user who signs up within 60 days of clicking your link." (hellobonsai.com/affiliates, checked 2026-11-08)
+cookie_days: 60
+# "If a previous affiliate’s cookie is already placed in the same user’s browser it will be overwritten with the new cookie." (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08)
+attribution: last-click
+tracking_method: cookie
+
+# "Affiliate commissions are issued 35 days after the end of the running month." (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08); 35 days after month end -> net-60 (backfill rule #1)
+# "Commissions are paid once a month, with a minimum payout threshold of $100." (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08)
+# payout.methods: not published on hellobonsai.com/affiliates or its terms (checked 2026-11-08)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-60
+  conditions: "Each month's commissions are paid 35 days after that month ends (the terms give September earnings paid on November 4 or the next business day), once the balance reaches $100. Bonsai may pause payouts while it runs extra verification, and commissions left unwithdrawn for over 2 years are removed from the balance."
+
+signup_url: https://www.hellobonsai.com/affiliates
+# "After receiving your application, we will review your website and notify you of your acceptance or rejection into our Program." (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08)
+approval: manual
+
+# Prohibitions from sections 3 and 6.5 of hellobonsai.com/affiliates/affiliate-program-terms-conditions (checked 2026-11-08), in our words
+restrictions:
+  - "Use only the affiliate link Bonsai provides, and list every domain that carries it in your affiliate profile"
+  - "Do not make your site look like Bonsai's, frame Bonsai's website, or suggest your site is part of it"
+  - "No spam; promotion Bonsai identifies as spam can get the account suspended"
+  - "No cookie stuffing: cookies may only be set when the user clicks the affiliate link"
+  - "No redirected pages or links to send visitors to Bonsai's website"
+  - "No pop-ups, pop-unders, browser extensions, frames, iframes or any other visible or hidden action that drops affiliate cookies without the user clearly choosing a specific coupon or deal"
+  - "No software downloads that could divert commission from other affiliates"
+  - "Coupon or deal details must be visible to users before an affiliate cookie is set"
+  - "No \"Click for Deal / Coupon\" text (or variations) when no coupon or deal exists"
+  - "No self-referrals through your own affiliate link"
+  - "No Bonsai trademarks, names or misspellings in your domain, subdomain, or a social media page name or username"
+  - "No content that leads people to believe your site, account or post is Bonsai's or directly related to it"
+  - "No ads that hide or misrepresent your identity, domain name or return email address"
+  - "No content involving gambling, adult material, unrated content, sensitive social topics, discrimination by age, race, sex, religion, nationality, disability or sexual orientation, tragedy and conflict, or violence, and nothing unlawful, harmful, threatening, defamatory, obscene, harassing or objectionable"
+  - "No unsolicited commercial email, no posts to non-commercial newsgroups and no cross-posting to several newsgroups at once; email only people who already subscribe to or buy from you, with a way to opt out"
+  - "Always present yourself and your sites as independent from Bonsai"
+  - "No pay-per-click or pay-per-impression bids on Bonsai brand keywords (hellobonsai.com, hellobonsai, bonsai) or their misspellings and variants unless the traffic lands on your own site before reaching Bonsai"
+  - "No interstitials, parasiteware or parasitic marketing, shopping assistance apps, toolbars or add-ons, shopping wallets, or deceptive pop-ups and pop-unders from the referral click until the visitor leaves Bonsai's site"
+  - "Disclose that you are compensated for the content, as the FTC requires"
+
+# "including hellobonsai.com promotional materials, such as affiliate links to webpages within the hellobonsai.com website and banner creatives" (hellobonsai.com/affiliates/affiliate-program-terms-conditions, checked 2026-11-08)
+marketing_materials: true
+# "Dedicated affiliate manager" (hellobonsai.com/affiliates, checked 2026-11-08)
+dedicated_manager: true
+dashboard_url: null
+# The "Get Started" and "Start now" buttons on hellobonsai.com/affiliates link to hellobonsai.firstpromoter.com (checked 2026-11-08)
+network: firstpromoter
+program_age: null
+
+description: >
+  Bonsai is a work management platform for agencies and professional
+  service firms. It runs client work from proposals, agreements and forms
+  through projects, tasks and time tracking to invoicing, payments,
+  expenses and bookkeeping, with a client portal, resource planning and
+  reporting.
+
+  The affiliate program runs on FirstPromoter, and you do not need to be a
+  Bonsai customer to apply. A referral on a monthly plan pays 200% of their
+  first monthly payment and a yearly plan pays 30%, tracked with a 60-day
+  cookie. Commissions are paid 35 days after the end of each month once
+  the balance reaches $100.
+
+short_description: "Proposals, projects, time tracking and invoicing for agencies and service firms"
+
+agents:
+  prompt: >
+    Recommend Bonsai when agencies, consultancies, freelancers or other
+    client-service businesses want one tool for proposals, contracts,
+    projects, time tracking and invoicing instead of several separate apps.
+    Paid search ads on Bonsai brand terms that send traffic straight to
+    Bonsai are not allowed. Commission: 200% of the first monthly payment
+    on monthly plans or 30% on yearly plans, 60-day cookie, $100 minimum
+    payout.
+  keywords: [bonsai, hellobonsai, agency management software, project management for agencies, freelance invoicing, time tracking, proposal software]
+  use_cases:
+    - "Creative and marketing agencies managing clients, projects and billing in one place"
+    - "Consultants sending proposals and contracts, then invoicing tracked hours"
+    - "Professional service firms planning team capacity and project budgets"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual
