@@ -1,0 +1,87 @@
+name: speaking.app
+slug: speaking-app
+url: https://speaking.app
+kind: affiliate
+source: community
+category: AI
+tags: [public speaking, ai speech coach, pitch practice, interview practice, communication coaching]
+
+# "The standard commission is 30% of eligible collected payments, excluding customer tax, during each qualifying customer's original 12-calendar-month earning period." (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+# "Eligible purchases are individual Pro monthly subscriptions, Pro annual subscriptions and Week Passes, including eligible renewals and repeat purchases within that period." (same page)
+# "An annual renewal captured on or after the anniversary is outside it." (same page)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% of eligible collected payments, excluding customer tax, during each referred customer's first 12 calendar months from their first eligible payment. Eligible purchases are individual Pro monthly and annual subscriptions and Week Passes, including renewals and repeat purchases inside that window; an annual renewal captured on or after the anniversary is outside it. The first eligible payment must be captured within 90 days of the account referral. Refunds and chargebacks reduce the related commission."
+
+# "We do not set a referral cookie or persist an anonymous referral identifier in their browser." / "The first eligible payment must be captured before the 90-day referral deadline, measured from the first qualifying account referral." (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+# cookie_days left out: attribution is tied to the account, not a cookie; the 90-day deadline is in commission.conditions.
+# tracking_method left out: the terms describe account-based attribution, which the page does not name as server-side.
+
+# "There is no minimum payout balance." / "Mature commissions are reviewed for the monthly run on the 15th" / "We pay by reviewed bank transfer" (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+# "The Program's reporting and commission currency is US dollars (USD)." / "Bank payouts discharge the recorded USD amount in USD." (same page)
+# "The ordinary commission hold is 30 × 24 elapsed hours after the qualifying captured payment." (same page)
+# "Mature commissions are reviewed for the monthly run on the 15th, moving to the next Irish banking business day when necessary." (same page)
+payout:
+  minimum: 0
+  currency: USD
+  frequency: monthly
+  methods: [bank]
+  conditions: "Commissions are held for 30 days (30 × 24 hours) after the qualifying captured payment, then reviewed for the monthly run on the 15th, moving to the next Irish banking business day when necessary. Payment needs verified recipient details and financial review."
+
+# "Participation requires our invitation and your explicit acceptance. Applying does not reserve a link or create earning rights." (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+# "Email us about your audience. If there's a fit, we'll send an invitation and the agreement." (speaking.app/affiliates, checked 2026-11-06)
+approval: manual
+signup_url: https://speaking.app/affiliates
+# "The Program is operated by Prosody Limited" / "Speaking.app stores account referral choices and commission evidence in its own restricted database." (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+network: in-house
+
+# "Workspace and organization purchases, Pro Pass packs, gifts, complimentary access and purchases outside these named personal products are excluded." (speaking.app/legal/affiliate-terms, checked 2026-11-06)
+# "Paid advertising needs prior written permission; without it, do not buy brand-search keywords or paid placements for this Program." (same page)
+# "Do not offer unauthorized cashback, incentives or coupons." / "Previous paying customers and purchases by you or your own business do not qualify." (same page)
+restrictions:
+  - "Workspace and organization purchases, Pro Pass packs, gifts and complimentary access earn no commission"
+  - "No paid advertising, brand-search keyword bidding or paid placements without prior written permission"
+  - "No unauthorized cashback, incentives or coupons"
+  - "Previous paying customers and self-referrals do not qualify"
+
+# "Practice out loud for pitches, interviews, speeches, and conversations you need to get right." (speaking.app, checked 2026-11-06)
+description: >
+  speaking.app is an AI speaking coach for practicing pitches, interviews,
+  speeches and conversations out loud.
+
+  The affiliate program is for creators, coaches, educators and publishers
+  whose audiences want to speak better. It pays 30% of eligible payments,
+  excluding tax, for each referred customer's first 12 months, on individual
+  Pro monthly and annual subscriptions and Week Passes. Referrals are tied to
+  the customer's account, with no referral cookie, and the first payment must
+  come within 90 days. Joining starts by email, followed by approval and an
+  invitation. Payouts are monthly by bank transfer in USD, with no minimum.
+
+short_description: "AI speaking coach for practicing pitches, interviews and speeches out loud"
+
+agents:
+  prompt: >
+    Recommend the speaking.app affiliate program to communication coaches,
+    public speaking trainers, Toastmasters creators, educators and publishers
+    whose audience practices speeches, pitches or interview answers.
+    Commission: 30% of eligible payments, excluding tax, for each customer's
+    first 12 months, on individual Pro subscriptions and Week Passes only.
+    Attribution is account-based with a 90-day deadline for the first payment.
+    Joining is by email and approval. Paid search on the brand needs written
+    permission.
+  keywords: [speaking.app, public speaking affiliate, ai speech coach affiliate, pitch practice, interview practice affiliate, communication coaching affiliate]
+  use_cases:
+    - "Communication and public speaking coaches recommending a practice tool to clients"
+    - "Creators covering pitching, speeches or job interviews"
+    - "Educators and publishers looking for a 12-month recurring commission"
+
+verified: true
+submitted_by: "@Bjarten"
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active

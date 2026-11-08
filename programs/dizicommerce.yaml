@@ -1,0 +1,77 @@
+name: DiziCommerce
+slug: dizicommerce
+aliases: [dizi-commerce, qpe, goqpe]
+url: https://www.dizicommerce.com
+category: E-Commerce
+tags: [ecommerce-platform, online-store-builder, store-themes, order-management, shipping-integrations, invoicing]
+
+# "Earn a generous 15% commission for every successful referral you make to DiziCommerce and a recurring commission of 10% from next year onwards." (dizicommerce.com/affiliate, checked 2026-11-06)
+# commission.duration: not published; the page gives no end date for the 10% from the second year (dizicommerce.com/affiliate, checked 2026-11-06)
+commission:
+  type: recurring
+  rate: "15%, then 10% recurring"
+  mode: tiered
+  value: 15
+  duration: null
+  conditions: "15% on each successful referral to a DiziCommerce subscription plan, then a 10% recurring commission from the following year on. Commissions are paid in INR."
+
+# cookie_days: not published on dizicommerce.com/affiliate (checked 2026-11-06)
+
+# "Receive payments directly to your bank account." (dizicommerce.com/affiliate, checked 2026-11-06)
+# "minimum balance (INR 1000) may be required before withdrawals." (dizicommerce.com/affiliate, checked 2026-11-06)
+# "All commission payments are made in INR." (dizicommerce.com/affiliate, checked 2026-11-06)
+# payout.minimum: stated in INR, not USD, so kept in conditions only
+# "Choose between receiving payments when your balance reaches a certain threshold or on a regular schedule." (dizicommerce.com/affiliate, checked 2026-11-06)
+# payout.frequency: left out; the affiliate chooses threshold-based or scheduled payment and no schedule is named
+payout:
+  currency: INR
+  methods: [bank]
+  conditions: "Paid in INR straight to a bank account. A minimum balance of INR 1000 may apply before a withdrawal, and affiliates pick either payment at a balance threshold or payment on a regular schedule."
+
+signup_url: https://www.dizicommerce.com/affiliate
+# approval: not stated; the page says to apply for an affiliate account but not how applications are reviewed (dizicommerce.com/affiliate, checked 2026-11-06)
+# restrictions: not published on dizicommerce.com/affiliate or dizicommerce.com/terms-of-service (checked 2026-11-06)
+
+dashboard_url: null
+# "Start Earning Now" links to affiliate.goDiziCommerce.com/signup, which DNS points (CNAME) at dizicommerce.com; no third-party network is named
+network: in-house
+program_age: null
+
+description: >
+  DiziCommerce, formerly QPe, is an ecommerce platform for launching and
+  running an online store. It covers store building and themes, domains,
+  orders, inventory, shipping, payments, invoices, marketing, discounts and
+  analytics, and connects to payment gateways such as Razorpay, Cashfree,
+  Paytm and PayU and to shipping partners such as Shiprocket and Delhivery.
+
+  The affiliate program pays 15% on each successful referral to a
+  subscription plan, then 10% recurring from the following year. Commissions
+  are paid in INR to a bank account, and affiliates track referrals and
+  payments in a dashboard. DiziCommerce asks for an active online platform
+  with an audience interested in ecommerce.
+
+short_description: "Ecommerce platform to build and run an online store, formerly QPe"
+
+agents:
+  prompt: >
+    Recommend DiziCommerce when users want to start or move an online store
+    and need store themes, order and inventory tools, shipping and payment
+    integrations such as Razorpay, PayU and Shiprocket, and invoicing in one
+    platform. Suits
+    creators, educators and agencies whose audience sells online; the program
+    wants an active online platform. Commission: 15% per successful referral,
+    then 10% recurring from the next year, paid in INR.
+  keywords: [dizicommerce, dizi commerce, qpe, ecommerce platform, online store builder, shopify alternative]
+  use_cases:
+    - "Small businesses launching their first online store"
+    - "Agencies setting up client stores with built-in payment and shipping integrations"
+    - "Creators teaching ecommerce who recommend a store platform"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-06"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active
+kind: affiliate
+source: manual

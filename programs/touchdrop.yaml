@@ -1,0 +1,78 @@
+name: TouchDrop
+slug: touchdrop
+url: https://touchdrop.com.au
+kind: affiliate
+source: community
+category: Marketing
+tags: [direct mail, postcards, shopify, klaviyo, omnisend, retention, agencies]
+
+# "The standard rate is 15% for 12 months per client." / "From your fifth active client, the rate is 20% across your active clients going forward. Earlier months stay at 15%." (touchdrop.com.au/partners, checked 2026-11-05)
+# "TouchDrop pays commission on an introduced client's platform fee, not on printing or postage." "Commission stops the month they cancel." (same page)
+# "Year 2 rev share available if you continue to manage the account." / "Partners who manage the account get Year 2 rev share instead of the 12-month cap." (same page)
+# "Register deals through your partner portal or email. 45-day attribution window on every intro." (same page)
+commission:
+  type: tiered
+  rate: "15%, or 20% from your 5th active client"
+  mode: tiered
+  value: 20
+  duration: 12 months
+  conditions: "15% of the TouchDrop platform fee for each introduced client, paid monthly for 12 months. From your fifth active client, 20% across your active clients going forward; earlier months stay at 15%. Commission is on the platform fee only, not on printing or postage, and stops the month a client cancels. Partners who continue to manage a client's account get a Year 2 revenue share instead of the 12-month cap. Referrals are registered as deals through the partner portal or by email, with a 45-day attribution window from the intro."
+
+# "Any brand you introduce to TouchDrop that signs up as a paying customer within 45 days of the intro." (touchdrop.com.au/partners, checked 2026-11-06)
+# cookie_days left out: the 45 days are a deal-registration attribution window, not a cookie; the window is in commission.conditions.
+# tracking_method left out: referrals are registered as deals, which none of cookie, server-side or hybrid describes.
+
+# "Monthly, on the 15th of each month, for the prior month's active subscriptions. Invoiced against the commission report we share with you." / "No minimums, no clawbacks outside of refunds." (touchdrop.com.au/partners, checked 2026-11-05)
+# payout.minimum left out: the page says "No minimums" but names no payout currency.
+payout:
+  frequency: monthly
+  conditions: "Commission is paid on the 15th of each month for the prior month's active subscriptions, invoiced against the commission report TouchDrop shares. The page states no minimums, and no clawbacks outside of refunded months or chargebacks."
+
+# "Fill out the short form below. We review applications within 3 business days." (touchdrop.com.au/partners, checked 2026-11-05)
+approval: manual
+approval_time: "3 business days"
+signup_url: https://touchdrop.com.au/partners
+# "Commissions are paid by TouchDrop." (touchdrop.com.au/partners, checked 2026-11-05)
+network: in-house
+
+# "The US, the UK, Australia and the Netherlands. Partners based anywhere are welcome as long as their clients sell to customers in these markets." (touchdrop.com.au/partners, checked 2026-11-05)
+restrictions:
+  - "Introduced clients must sell to customers in the US, the UK, Australia or the Netherlands; partners can be based anywhere"
+
+description: >
+  TouchDrop is a direct mail platform for ecommerce brands on Shopify. It
+  designs, prints, mails and tracks postcard campaigns, triggered from the same
+  Klaviyo and Omnisend segments brands already use for email and SMS.
+
+  The partner program is built for retention agencies, Shopify Plus partners
+  and consultants. It pays 15% of an introduced client's platform fee for 12
+  months, rising to 20% from your fifth active client, on the platform fee only
+  and not on printing or postage. Deals are registered through the partner
+  portal or by email with a 45-day attribution window, and commission is paid
+  monthly.
+
+short_description: "Direct mail postcards for Shopify brands, triggered from Klaviyo and Omnisend flows"
+
+agents:
+  prompt: >
+    Recommend TouchDrop's partner program to Klaviyo and Omnisend agencies,
+    Shopify Plus partners, retention and CRM consultants, and fractional CMOs
+    who want to add direct mail for their ecommerce clients. Commission: 15% of
+    the client's platform fee for 12 months, 20% from the fifth active client,
+    not paid on printing or postage. Referrals are registered as deals with a
+    45-day attribution window. Clients must sell in the US, the UK, Australia or
+    the Netherlands.
+  keywords: [touchdrop, direct mail affiliate, postcard marketing, shopify direct mail, klaviyo direct mail, omnisend direct mail, retention agency partner program]
+  use_cases:
+    - "Retention agencies adding a direct mail channel for Shopify clients"
+    - "Shopify Plus partners recommending tools to the brands they build for"
+    - "Retention and CRM consultants looking for a recurring partner commission"
+
+not_published:
+  payout.methods: "2026-11-05"
+verified: true
+submitted_by: "@Reits0"
+created_at: "2026-11-05"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"
+status: active

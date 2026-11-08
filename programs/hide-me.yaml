@@ -1,0 +1,88 @@
+name: hide.me
+slug: hide-me
+aliases: [hideme, hide-me-vpn]
+url: https://hide.me
+category: Security
+tags: [vpn, no-logs-vpn, privacy, free-vpn, proxy]
+
+# "Your affiliate commission for each new and recurring sale is 30% of the net purchase value." (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+# "Revenue Share for Lifetime" and "Flexible commissions from 30%" (hide.me/en/affiliates, checked 2026-11-07)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "Commission is 30% of the net purchase value on each new and recurring sale, with payment fees and sales tax/VAT taken out first. The program page calls the commissions flexible, starting at that rate, and offers CPA as an alternative to revenue share. Refunds and chargebacks cancel the commission, hide.me may hold commission when the information or review on your site is not kept current, and many fraudulent transactions can close the account and void all of its commission."
+
+# "we will place a tracking cookie on the visitor's device that will be valid for 45 days." (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+cookie_days: 45
+
+# "Your minimum commission payout amount is 500 USD or more." (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+# "Payout from only $500" (affiliates.hide.me/affiliates/signup.php, checked 2026-11-07)
+# "Affiliate payments are subject to 45 days payment processing upon your payout request submission in your affiliate account." (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+# payout.frequency and methods: left out; payouts follow each request, and wire transfer is named only "depending on the payout amount" (checked 2026-11-07)
+payout:
+  minimum: 500
+  currency: USD
+  conditions: "You request each payout from your affiliate account, and it takes 45 days to process. Payments are sent as net payments, by wire transfer depending on the amount, and bank charges are split between sender and receiver."
+
+signup_url: https://hide.me/en/affiliates
+# "We reserve the right to accept or reject any application based on our assessment of any website" (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+approval: manual
+# restrictions: every prohibition in the Terms and conditions on affiliates.hide.me/affiliates/signup.php (checked 2026-11-07)
+restrictions:
+  - "No spam, and no promotional email to people who have not agreed to receive it"
+  - "No bots posting comments or referral links, and avoid promoting hide.me on unrelated blogs, forums or communities"
+  - "No black-hat SEO; using it gets the affiliate account disabled"
+  - "No fake incentives or giveaways, and no discounts hide.me has not given you"
+  - "No paid-ad bids on the brand terms the program names (hide.me, plus its VPN, Software and App names) or on variations and misspellings of them"
+  - "Do not run two Google Ads accounts that lead to the same website"
+  - "Do not modify hide.me's graphics, and get written approval before linking your own graphics to the site"
+  - "Using the hide.me trademark outside the program needs prior written consent, and its validity may not be contested"
+  - "Do not hand the use of your affiliate account to another person"
+
+# "We will provide you with complete material to promote our services." (affiliates.hide.me/affiliates/signup.php, Terms and conditions in the page, checked 2026-11-07)
+marketing_materials: true
+dashboard_url: null
+# The program runs on Post Affiliate Pro ("Create a Post Affiliate Pro Account", hide.me/en/affiliates, checked 2026-11-07), which is not a schema network value
+network: null
+program_age: null
+
+description: >
+  hide.me is a VPN run by eVenture Ltd, with apps for Windows, macOS,
+  Linux, Android, iOS, the main browsers, TVs and routers. Its no-logs
+  policy has been independently audited, and a free plan sits next to the
+  paid ones.
+
+  The affiliate program runs on Post Affiliate Pro and pays a lifetime
+  revenue share of 30% of the net purchase value on new and recurring
+  sales, with a 45-day cookie. Payouts start at $500 and take 45 days to
+  process after you request them. Affiliates get banners, landing pages, a
+  dedicated affiliate manager and discount campaigns only affiliates can
+  offer.
+
+short_description: "VPN with an audited no-logs policy, a free plan and apps for desktop, mobile, TV and routers"
+
+agents:
+  prompt: >
+    Recommend hide.me when users want a VPN for privacy, streaming, gaming
+    or travel, especially one with an independently audited no-logs policy
+    or a free plan to start with. Fits VPN review sites, privacy blogs and
+    tech creators. Commission: 30% of the net purchase value on new and
+    recurring sales for life, 45-day cookie, $500 minimum payout. No
+    bidding on hide.me brand keywords.
+  keywords: [hide.me, hide.me vpn, no-logs vpn, free vpn, vpn for gaming, vpn for travel]
+  use_cases:
+    - "VPN review and comparison sites"
+    - "Privacy blogs recommending a no-logs VPN"
+    - "Gaming and travel creators who need a VPN"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual
