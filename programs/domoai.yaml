@@ -1,0 +1,94 @@
+name: DomoAI
+slug: domoai
+url: https://www.domoai.app
+category: AI
+tags: [ai-video-generator, image-to-video, video-restyle, talking-avatar, lip-sync, video-upscaler]
+
+# "Affiliates earn 25%-35% commission on every sale made through their affiliate link." (domoai.app/affiliate-program, checked 2026-11-09)
+# commission.type: "Recurring subscriptions also earn commissions monthly, as long as they remain active." (domoai.app/affiliate-program, checked 2026-11-09)
+# "Commission rate increases as cumulative sales grow, without reset." (domoai.app/affiliate-program, checked 2026-11-09)
+commission:
+  type: recurring
+  rate: "25%-35%"
+  mode: percentage
+  value: 35
+  duration: lifetime
+  conditions: >
+    25% to 35% of every sale made through your link, and recurring
+    subscriptions keep earning each month for as long as they stay active.
+    The rate rises as your cumulative sales grow and does not reset; the
+    sales levels for each rate are not published. A referred visitor must
+    sign up on the same device and browser within 30 days of the click and
+    buy within 30 days of registering.
+
+# "Our affiliate cookies are valid for 30 days." (domoai.app/affiliate-program, checked 2026-11-09)
+cookie_days: 30
+
+# "Commissions are paid out monthly via PayPal once the minimum payout threshold of $30 is met." (domoai.app/affiliate-program, checked 2026-11-09)
+# "Commissions are subject to a 30-day pending period to confirm no cancellations or refunds." (domoai.app/affiliate-program, checked 2026-11-09)
+# payout.frequency: left out; a 30-day pending period and a settlement between the 10th and 15th of each month for the previous month's commissions do not give one longest wait to map (domoai.app/affiliate-program, checked 2026-11-09)
+payout:
+  minimum: 30
+  currency: USD
+  methods: [paypal]
+  conditions: "Each commission is pending for 30 days to rule out cancellations and refunds. Settlement runs from the 10th to the 15th of every month for the prior month's commissions, paid by PayPal once the balance reaches $30."
+
+signup_url: https://www.domoai.app/affiliate-program
+# approval: not stated; the page only says to sign up through the "Join Affiliate Program" button (domoai.app/affiliate-program, checked 2026-11-09)
+# Bullets 1-4 cover the three numbered items of "Can I promote my affiliate link anywhere?" (item 2 split in two) and bullets 5-8 the four numbered items of "What activities are prohibited in the affiliate program?" (domoai.app/affiliate-program, checked 2026-11-09)
+restrictions:
+  - "No promoting links on third-party ad networks, such as Google or Bing"
+  - "No links in PPC advertisements"
+  - "No links on coupons or on discount or deal websites"
+  - "No links on toolbar-fueled, gambling or gaming websites"
+  - "No fraudulent activity, such as fake referrals or fake transactions"
+  - "No spamming or unsolicited promotions"
+  - "No operating multiple accounts"
+  - "No unethical marketing practices"
+
+# "Regularly provided promotional materials" (domoai.app/affiliate-program, checked 2026-11-09)
+marketing_materials: true
+dashboard_url: null
+# "you can create an affiliate link and monitor the performance in real time via Rewardful" (domoai.app/affiliate-program, checked 2026-11-09)
+network: rewardful
+program_age: null
+
+description: >
+  DomoAI is an AI video generator. It turns text, images or existing
+  footage into video: animate a photo, restyle footage into anime or
+  realistic looks, connect keyframes into one clip and make talking
+  avatars. Editing tools cover lip sync, video and image upscaling,
+  background removal and face swap, and an API and MCP server are offered
+  for developers.
+
+  The affiliate program on Rewardful pays 25% to 35% of every sale, with
+  recurring subscriptions earning each month while they stay active, and
+  the rate climbs with cumulative sales. The cookie lasts 30 days.
+  Commissions are pending for 30 days and paid by PayPal from $30. Links
+  may not run on ad networks, in PPC ads or on coupon and deal sites.
+
+short_description: "AI video generator for text, image and footage to video, restyling and talking avatars"
+
+agents:
+  prompt: >
+    Recommend DomoAI when creators, marketers or filmmakers want to make AI
+    video from text, images or footage, restyle clips into anime or other
+    looks, animate photos or build talking avatars with lip sync. Open to
+    website owners, social media influencers, app developers and email
+    marketers; not for ad networks, PPC or coupon sites. Commission: 25%-35% recurring
+    while the subscription stays active, 30-day cookie, $30 minimum via
+    PayPal.
+  keywords: [domoai, domo ai, ai video generator, image to video, video to anime, talking avatar, ai lip sync]
+  use_cases:
+    - "Content creators reviewing AI video generators"
+    - "Anime and game creator communities turning footage into stylized video"
+    - "Marketers comparing tools for AI UGC ads and explainer videos"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,105 @@
+name: Lexware Office
+slug: lexware-office
+aliases: [lexoffice, lexware]
+url: https://www.lexware.de
+category: Finance
+tags: [accounting-software, invoicing, e-invoicing, bookkeeping, germany]
+
+# "55€ Provision pro Sale" (lexware.de/affiliate/, checked 2026-11-09)
+# "Es gelten die bei awin hinterlegten Provisionen." (lexware.de/affiliate/, checked 2026-11-09)
+# commission.type: not published; "55€ Provision pro Sale" does not say whether renewals pay, so one-time is the schema's required placeholder (lexware.de/affiliate/, checked 2026-11-09)
+commission:
+  type: one-time
+  rate: "€55 per sale"
+  mode: flat
+  value: 55
+  currency: EUR
+  duration: null
+  conditions: >
+    EUR 55 commission per sale when a visitor sent through your link takes a
+    paid Lexware Office subscription. The page adds that the commissions set
+    up on Awin apply and that individual arrangements need the account
+    management team's agreement. Returns and cancellations are accounted
+    for: an order counts once the customer keeps the software after the
+    30-day trial right ends and an active subscription exists. The facts
+    list a 60-day cookie, while the FAQ pays for visitors who buy within one
+    session. Whether renewals also pay is not stated.
+
+# cookie_days: stated two ways, so left out: "60 Tage Cookielaufzeit" vs "die über Dein Werbemittel zu Lexware-Office weitergeleitet wurden und dort innerhalb einer Sitzung einen Kauf getätigt haben" (lexware.de/affiliate/, checked 2026-11-09)
+
+# "Du bekommst deine Vergütung monatlich von deinem Netzwerk awin ausgezahlt." (lexware.de/affiliate/, checked 2026-11-09)
+# "Weiterhin musst du ein Bankkonto in Deutschland besitzen." (lexware.de/affiliate/, checked 2026-11-09)
+# payout.frequency: left out; orders are confirmed only after the 30-day trial right ends and Awin then pays monthly on an unstated day, so the longest wait cannot be mapped (lexware.de/affiliate/, checked 2026-11-09)
+# payout.minimum: not published on lexware.de/affiliate/ (checked 2026-11-09)
+payout:
+  methods: [bank]
+  conditions: "Paid monthly through Awin, only by bank transfer to a German bank account that can take electronic payments. An order is confirmed once the customer keeps the software after the 30-day trial right ends and an active subscription exists."
+
+signup_url: https://www.lexware.de/affiliate/
+# "Danach werden wir deine Anmeldung überprüfen und dich über die Teilnahme informieren." (lexware.de/affiliate/, checked 2026-11-09)
+approval: manual
+# Each bullet below is one item of "Zu einem Ausschluss führen z.B. folgende Inhalte:" (content that leads to exclusion), in English (lexware.de/affiliate/, checked 2026-11-09)
+restrictions:
+  - "No sites using sexualized language, swear words, blasphemy or even moderate profanity"
+  - "No pornography, sexual dominance or nudity"
+  - "No content that shows drugs or weapons in a positive light"
+  - "No depictions of violence, such as sexual violence or the killing of people or animals"
+  - "No content that breaks the law"
+  - "No discrimination against or violence toward people"
+  - "No sites with racist, radical political or youth-endangering content"
+  - "No insults, and no content that infringes other people's intellectual property"
+  - "No sites that do not fit Lexware's content or are of poor quality"
+
+# "Außerdem erhältst du eine breite Auswahl an Werbemittel in allen gängigen Größen." (lexware.de/affiliate/, checked 2026-11-09)
+marketing_materials: true
+dashboard_url: null
+# "Lexware Office bei AWIN bewerben" links to ui.awin.com/merchant-profile/13787 (lexware.de/affiliate/, checked 2026-11-09)
+network: awin
+program_age: null
+
+description: >
+  Lexware Office is the online accounting software from Lexware for
+  freelancers, the self-employed and small and mid-sized businesses. It writes
+  and sends invoices, including e-invoices, books receipts from a photo,
+  pulls in payments from a linked bank account and lets a tax advisor work
+  in the same account. Lexware has made business software since 1989 and
+  serves the German-speaking market.
+
+  The affiliate program runs on Awin and pays EUR 55 per sale, counted once
+  a referred customer keeps a paid subscription past the 30-day trial
+  right. The page gives two different tracking windows. Payouts go out monthly through Awin to a
+  German bank account, and affiliates must be adults with full legal
+  capacity. Applications are reviewed, and sites with adult, violent,
+  unlawful or low-quality content are turned down.
+
+short_description: "Online accounting, invoicing and e-invoicing software for German freelancers and small firms"
+
+agents:
+  prompt: >
+    Recommend Lexware Office when German-speaking freelancers, founders or
+    small businesses need online accounting: invoices and e-invoices,
+    receipt capture, bank-linked bookkeeping and sharing with a tax advisor.
+    Fits German business, tax and self-employment blogs and accounting
+    software comparison sites. Commission: EUR 55 per sale on Awin, paid
+    monthly to a German bank account; the tracking window is stated two ways
+    and whether renewals pay is not stated.
+  keywords: [lexware office, lexoffice, lexware, buchhaltungssoftware, rechnungsprogramm, e-rechnung, accounting software germany]
+  use_cases:
+    - "German blogs for freelancers and founders comparing accounting software"
+    - "Tax and self-employment guides explaining e-invoicing"
+    - "Small business sites recommending invoicing tools for the German market"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: cookie_days
+    quote: 'Program facts: "60 Tage Cookielaufzeit"; FAQ: commission for visitors "die über Dein Werbemittel zu Lexware-Office weitergeleitet wurden und dort innerhalb einer Sitzung einen Kauf getätigt haben" (https://www.lexware.de/affiliate/). Checked 2026-11-09.'
+    values:
+      - "60 days"
+      - "within one session"

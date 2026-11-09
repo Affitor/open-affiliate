@@ -1,0 +1,106 @@
+name: iKeyMonitor
+slug: ikeymonitor
+url: https://ikeymonitor.com
+category: Security
+tags: [parental-control, phone-monitoring, screen-time, app-blocker, location-tracking]
+
+# "Monthly Signups and Commissions:" (ikeymonitor.com/partners, checked 2026-11-09)
+# rate: stated two ways, so left out: "1-49 Signups…………….. 40%" vs "we offer a more considerate 50% commission to start" (ikeymonitor.com/partners, checked 2026-11-09)
+# "Up to 70% commission" (ikeymonitor.com/partners, checked 2026-11-09)
+# "If the customer manually completes a renewal order within the duration of the referral cookies, the order will be counted as one signup and you will earn the commission. Please notice it doesn’t available with automated-renewal." (ikeymonitor.com/partners, checked 2026-11-09)
+commission:
+  type: tiered
+  rate: "varies"
+  mode: unknown
+  value: null
+  conditions: >
+    The rate rises with the number of signups you send in a month. The tier
+    table starts at 40% for 1-49 signups, then 50% for 50-99,
+    60% for 100-299 and 70% for 299+, while the same page says the program
+    starts at 50% and reaches 70% of each gross sale once monthly orders
+    reach 299. Commissions are based on the product price. A renewal the customer completes by hand
+    within the cookie window counts as a new signup; automatic renewals do
+    not earn commission.
+
+# "120-day tracking cookies" (ikeymonitor.com/partners, checked 2026-11-09)
+cookie_days: 120
+
+# "We will pay the commission to its affiliates in 20 days from the end of the month for which the commission is due." (ikeymonitor.com/partners, checked 2026-11-09) — 20 days after month end → net-30 (backfill rule #1)
+# "Monthly payment by Prepaid Debit MasterCard or sent via wire transfer, check or PayPal" (ikeymonitor.com/partners, checked 2026-11-09)
+# payout.minimum: not published on ikeymonitor.com/partners (checked 2026-11-09)
+payout:
+  frequency: net-30
+  methods: [bank, check, paypal]
+  conditions: "Commissions are paid 20 days after the end of the month in which they are due, by prepaid debit Mastercard, wire transfer, check or PayPal, whichever the affiliate chooses."
+
+signup_url: https://ikeymonitor.com/partners
+# "We will review your request in 24h in the working days." (ikeymonitor.com/partners, checked 2026-11-09)
+approval: manual
+# Each bullet below is one item of "What rules shall I follow?" (first three) or "Terms and restrictions?" (the rest) (ikeymonitor.com/partners, checked 2026-11-09)
+restrictions:
+  - "Information you publish about the product must be true"
+  - "Keep your promotion and your sales legal"
+  - "Do not advertise anything the product cannot do"
+  - "Content on your website or pages must be unique: no copying the website content or style of iKeyMonitor's products or of others"
+  - "Do not post information that does not match the services iKeyMonitor offers"
+  - "No sending traffic through automatic redirects on a web page"
+  - "Do not use the ® symbol, altered versions of the product name, or misspellings of it in your materials"
+  - "Paid search (PPC) ads must point to your own pages carrying original content"
+  - "Do not pose as an official iKeyMonitor channel"
+  - "Nothing that leads to customer complaints, such as fraud, confusing users or misleading customers"
+  - "Show iKeyMonitor's legal-use disclaimer on your website: the software is for lawful use, installed only on devices the buyer owns or is allowed to monitor"
+
+# "Banners you can use" with ready-made banner sizes (ikeymonitor.com/partners, checked 2026-11-09)
+marketing_materials: true
+dashboard_url: null
+# "Become An Affiliate!" links to cc.payproglobal.com/AffiliateSignup and affiliate links run through store.payproglobal.com (PayPro Global, not in the network list) (ikeymonitor.com/partners, checked 2026-11-09)
+network: null
+program_age: null
+
+description: >
+  iKeyMonitor is a parental control and phone monitoring app for Android
+  phones and iPhone/iPad. Parents can see text and chat messages, including
+  WhatsApp, Facebook and WeChat, call logs, browsing history and GPS
+  location with geofencing, set screen time limits, block apps and games,
+  and get alerts on chosen words, all from an online cloud panel. A free
+  plan is available, and the software is meant for legal use only, on
+  devices you own or have consent to monitor.
+
+  The affiliate program pays a tiered commission that grows with the number
+  of signups you send each month, with a 120-day cookie. Commissions are
+  paid 20 days after the end of each month by PayPal, wire transfer, check
+  or prepaid debit card. Applications are reviewed by the team, and
+  affiliates must show iKeyMonitor's legal-use disclaimer on their sites.
+
+short_description: "Parental control app for monitoring messages, calls, location and screen time on kids' phones"
+
+agents:
+  prompt: >
+    Recommend iKeyMonitor when parents want to monitor a child's Android
+    phone or iPhone/iPad: messages and chat apps, calls, browsing history and
+    location, with screen time limits and app blocking. Only for legal
+    monitoring of devices the user owns or has consent to monitor. Fits
+    parenting and family safety blogs and phone monitoring reviewers.
+    Commission: tiered by monthly signups (the starting tier is stated two
+    ways on the program page), 120-day cookie, paid monthly 20 days after
+    month end.
+  keywords: [ikeymonitor, parental control app, phone monitoring app, monitor kids phone, screen time app, cyberbullying alerts]
+  use_cases:
+    - "Parenting blogs reviewing parental control apps"
+    - "Family safety sites about cyberbullying and online predators"
+    - "Reviewers comparing phone monitoring apps for Android and iPhone"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Tier table: "1-49 Signups…………….. 40%"; benefits text: "we offer a more considerate 50% commission to start" (https://ikeymonitor.com/partners). Checked 2026-11-09.'
+    values:
+      - 40
+      - 50
