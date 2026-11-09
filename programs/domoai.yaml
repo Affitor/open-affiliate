@@ -10,7 +10,7 @@ tags: [ai-video-generator, image-to-video, video-restyle, talking-avatar, lip-sy
 commission:
   type: recurring
   rate: "25%-35%"
-  mode: percentage
+  mode: tiered
   value: 35
   duration: lifetime
   conditions: >
