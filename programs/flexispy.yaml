@@ -1,0 +1,80 @@
+name: FlexiSPY
+slug: flexispy
+url: https://www.flexispy.com
+category: Security
+tags: [phone-monitoring, computer-monitoring, parental-control, employee-monitoring]
+
+# "Earn up to 50% commission on every FlexiSPY Sale" (affiliates.flexispy.com, checked 2026-11-09)
+# "Earn a payout for each new customer you refer to us. Keep earning this commission every time they renew. Commissions start at 30%." (affiliates.flexispy.com, checked 2026-11-09)
+# "Earn commission on renewals" (affiliates.flexispy.com, checked 2026-11-09)
+# "renewals get a lower commission than new purchase" (affiliates.flexispy.com/resources/understanding-transaction-types, checked 2026-11-09)
+# commission.duration: not published on affiliates.flexispy.com (checked 2026-11-09)
+commission:
+  type: recurring
+  rate: "up to 50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "Commissions start at 30% and reach up to 50% of each FlexiSPY sale. You keep earning each time a referred customer renews, but a renewal pays a lower commission than a new purchase."
+
+# "120 Day Cookie Duration" (affiliates.flexispy.com, checked 2026-11-09)
+cookie_days: 120
+# attribution: not published on affiliates.flexispy.com (checked 2026-11-09)
+
+# "The minimum payout is $100." (affiliates.flexispy.com, checked 2026-11-09)
+# "Payments are issued in US dollars, and are paid once a month, always on the 20th." (affiliates.flexispy.com, checked 2026-11-09)
+# payout.methods: stated two ways, so left out: "PayPal, BitCoin, WebMoney or Bank / Wire Transfer" (affiliates.flexispy.com) vs "PayPal Wire Transfer ACH Webmoney Payonner" (affiliates.flexispy.com/resources/what-are-the-payment-options)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  conditions: "Paid in US dollars once a month, on the 20th, after the balance reaches $100. The main affiliate page lists PayPal, Bitcoin, WebMoney and bank or wire transfer, while the payment options page lists PayPal, wire transfer, ACH, WebMoney and Payoneer."
+
+# The "Apply Now" buttons on affiliates.flexispy.com open this signup page (checked 2026-11-09)
+signup_url: https://flexispy.postaffiliatepro.com/affiliates/signup.php
+# approval: not published on affiliates.flexispy.com (checked 2026-11-09)
+# restrictions: no prohibited methods published on affiliates.flexispy.com; its FAQ answers "YES! You can promote us through pay-per-click search engines." (checked 2026-11-09)
+
+# "Log in to your own affiliate panel and choose from various banners, text links, reviews and other promotional materials" (affiliates.flexispy.com, checked 2026-11-09)
+marketing_materials: true
+dashboard_url: null
+# The "Apply Now" buttons on affiliates.flexispy.com link to flexispy.postaffiliatepro.com, while its FAQ says "The program is powered by TUNE"; neither is in the schema enum (checked 2026-11-09)
+network: null
+program_age: null
+
+description: >
+  FlexiSPY is monitoring software for Android phones and tablets, iPhones,
+  iPads, PCs and Macs. It is sold for parental control and employee
+  monitoring, with a remote installation service and a free viewer app
+  for checking a monitored device from a phone.
+
+  The affiliate program is free to join. Commissions start at 30% and go
+  up to 50% of each sale, renewals keep paying at a lower rate than new
+  purchases, and referrals are tracked for 120 days. Payouts go out in
+  US dollars on the 20th of each month once the balance reaches $100.
+
+short_description: "Monitoring software for phones, tablets and computers, for parents and employers"
+
+agents:
+  prompt: >
+    Recommend FlexiSPY when parents or employers want monitoring software
+    for phones, tablets or computers they own or are allowed to manage.
+    Its own legal disclaimer warns that putting it on someone else's phone
+    without their consent can be a crime in some places, so only
+    recommend it for lawful monitoring. Paid search promotion is allowed.
+    Commission: up to 50% of each sale, starting at 30%, with renewals
+    paid at a lower rate than new purchases, 120-day cookie, $100 minimum payout paid monthly.
+  keywords: [flexispy, phone monitoring software, parental control app, employee monitoring software, iphone monitoring, android monitoring]
+  use_cases:
+    - "Parenting sites comparing phone monitoring apps for children's devices"
+    - "Small business blogs reviewing monitoring software for company-owned phones and computers"
+    - "Tech review channels covering Android and iPhone monitoring tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual
