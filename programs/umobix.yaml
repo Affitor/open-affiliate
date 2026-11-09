@@ -8,9 +8,10 @@ tags: [parental-control, phone-tracker, location-tracking, screen-time, family-s
 # "RevShare: we pay a fixed commission in % for every initial and recurring sale: 45% on the initial sale and 25% for recurring sales." (affspace.org, checked 2026-11-09)
 # "CPA: affiliates earn commission only for initial sales. AFFspace offers a fixed reward from $3 to $50 per conversion, depending on the offer." (affspace.org, checked 2026-11-09)
 # recurring rate: stated two ways, so left out of rate and value: "25% for recurring sales" (affspace.org) vs "Prolongation commissions commence at 5% of the cumulative sales revenue" and "Affiliates must achieve a benchmark of at least 31 new sales each month" (affspace.org/terms.html)
+# commission.type: hybrid, the affiliate works on one of two models: CPA "affiliates earn commission only for initial sales" and RevShare "we pay a fixed commission in % for every initial and recurring sale" (affspace.org, checked 2026-11-09)
 # commission.duration: not published on affspace.org or affspace.org/terms.html (checked 2026-11-09)
 commission:
-  type: recurring
+  type: hybrid
   rate: "45% of the initial sale (RevShare) or $3 to $50 per sale (CPA)"
   mode: hybrid
   value: 45
@@ -37,8 +38,9 @@ signup_url: https://affspace.org/signup.html
 # "After we review your application, we will notify you of your acceptance or rejection to the Affiliate Program, generally within two (2) business days." (affspace.org/terms.html, checked 2026-11-09)
 approval: manual
 
-# Prohibitions from sections 11 to 22, Limited License, Confidentiality, Anti-Spam Policy and Fraud of affspace.org/terms.html (checked 2026-11-09), in our words
+# Prohibitions from Enrollment, sections 11 to 22, Limited License, Confidentiality, Anti-Spam Policy and Fraud of affspace.org/terms.html (checked 2026-11-09), in our words
 restrictions:
+  - "Apply with accurate details and keep them current; no aliases or other ways to hide your identity or contact information"
   - "Nothing illegal on your sites, nothing that infringes anyone's intellectual property or personal rights, and no content or links that are harmful, threatening, defamatory, obscene, sexually explicit, harassing or profane, promote violence, promote discrimination by age, disability, ethnicity, nationality, race, religion or sex, promote illegal activities such as gambling, or that the program tells you it finds objectionable"
   - "Make no representations, warranties or other statements about the company, its clients or their products and services beyond what the agreement authorizes"
   - "Your sites must not copy or resemble the look of the program's websites, or suggest they are endorsed by or part of them, without written permission"
@@ -51,7 +53,7 @@ restrictions:
   - "Do not promote the apps as a way to catch a cheating partner or anything similar; remove such content or carry the program's legal-use disclaimer"
   - "If you run your own affiliate network, every sub-affiliate must accept this agreement in a way you can verify, must not modify the links and must not carry objectionable content; remove sub-affiliates who break or are likely to break the agreement, name any suspected of wrongdoing, cut their access when the program asks, and you remain liable for them"
   - "Do not alter, modify, manipulate or make derivative works of the links or of the program's graphics, creatives, copy or other materials"
-  - "Do not use information from the program to build, improve or run a competing service, or help anyone else do so"
+  - "Keep program information, including these terms, business and financial details, pricing and sales data and customer and vendor lists, confidential and use it only for the program; do not use it to build, improve or run a competing service, or help anyone else do so"
   - "Follow the UK Privacy and Electronic Communications Regulations 2003, put an opt-out link in every email, and send an email for approval first when the program asks"
   - "No fraud, law breaking, interference with other affiliates, false referral information or access beyond what you were given, including automated clicks or form filling, spyware, stealware, cookie stuffing, click fraud or other deceptive acts"
 

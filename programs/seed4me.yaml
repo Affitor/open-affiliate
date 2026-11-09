@@ -36,9 +36,10 @@ signup_url: https://affiliate.seed4.me/affiliates/register
 # "We review each application individually, evaluating whether your traffic source is a suitable fit for the Seed4.Me brand." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
 approval: manual
 
-# Prohibitions and requirements from sections 2, 4 to 9 of affiliate.seed4.me/pages/tos (checked 2026-11-09), in our words
+# Prohibitions and requirements from sections 2 to 9 of affiliate.seed4.me/pages/tos (checked 2026-11-09), in our words
 restrictions:
   - "You must be 18 or older (or of age where you live), able to sign a binding contract, have a blog, website or social channel that is active, not be under U.S. sanctions or similar restrictions, and not work for Seed4.Me as staff or a contractor or be close family of someone who does"
+  - "Keep your registration details accurate and current; false information is grounds for ending your membership at once"
   - "Use only the links the program gives you, and do not change, cloak or hide them in ways that break tracking"
   - "No spam or unsolicited email, no posting on platforms you have no rights to, and no placement that breaks the host platform's rules"
   - "No self-referrals on your own accounts"
