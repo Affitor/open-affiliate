@@ -18,12 +18,13 @@ commission:
 # cookie_days: not published on slidespeak.co/affiliate-program or slidespeak.co/terms-of-service (checked 2026-11-10)
 
 # "We'll send your commission via PayPal at the end of every month. The minimum payout amount is $100." (slidespeak.co/affiliate-program, checked 2026-11-10)
+# "Upon termination, no further or accrued commissions will be paid." (slidespeak.co/terms-of-service, checked 2026-11-10)
 payout:
   minimum: 100
   currency: USD
   frequency: monthly
   methods: [paypal]
-  conditions: "Paid through PayPal at the close of each month once the balance reaches $100."
+  conditions: "Paid through PayPal at the close of each month once the balance reaches $100. SlideSpeak can end an affiliate's participation at any time and for any reason, and commissions already accrued are not paid after that. Hiding or bypassing tracking can also cost earned commissions."
 
 signup_url: https://slidespeak.co/affiliate-program
 # approval: not published on slidespeak.co/affiliate-program or slidespeak.co/terms-of-service (checked 2026-11-10)

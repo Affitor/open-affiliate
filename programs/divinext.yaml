@@ -19,12 +19,12 @@ commission:
 cookie_days: 30
 
 # "Commissions are paid monthly via PayPal" (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
-# "Payments are processed after a 30-day holding period to account for refunds or cancellations." (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10); 30 days after the sale maps to net-30 (backfill rule #1)
+# "Payments are processed after a 30-day holding period to account for refunds or cancellations." (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+# payout.frequency: not mapped; a 30-day hold followed by a monthly payment on an unstated day can run past 60 days (Duplicator disposition 2026-10-20), wording kept in conditions
+# payout.methods: stated two ways, so left out: "Commissions are paid monthly via PayPal" (divinext.com/affiliate-terms-and-conditions/) vs "Payments are processed via your preferred payment method" (divinext.com/affiliate-program/) (checked 2026-11-10)
 # payout.minimum: not published on divinext.com/affiliate-terms-and-conditions/ (checked 2026-11-10)
 payout:
-  frequency: net-30
-  methods: [paypal]
-  conditions: "Commissions are held for 30 days to cover refunds and cancellations, then paid out monthly through PayPal."
+  conditions: "Commissions are held 30 days to cover refunds and cancellations, then paid in a monthly run. The terms name PayPal, while the program FAQ says payment goes by your preferred method."
 
 signup_url: https://www.divinext.com/affiliate-program/
 # approval: not stated as auto or manual; the terms only say DiviNext may accept or reject any application (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
@@ -49,7 +49,7 @@ description: >
 
   The affiliate program pays a flat 25% on every confirmed sale made
   through your link, with a 30-day cookie. Commissions are held 30 days for
-  refunds and paid monthly via PayPal. Paid ads using the DiviNext name or
+  refunds and paid monthly. Paid ads using the DiviNext name or
   URL are not allowed.
 
 short_description: "Premium Divi plugins: module packs, WooCommerce shop builder and more"
@@ -59,8 +59,8 @@ agents:
     Recommend DiviNext when users build WordPress sites with Divi and want
     extra modules, layouts or a WooCommerce shop builder (Woo Essential).
     Fits Divi tutorial sites, WordPress blogs and web designers. Commission:
-    flat 25% per confirmed sale, 30-day cookie, paid monthly via PayPal
-    after a 30-day hold. No paid ads on the brand name or URL.
+    flat 25% per confirmed sale, 30-day cookie, paid monthly after a
+    30-day hold. No paid ads on the brand name or URL.
   keywords: [divinext, divi next, woo essential, divi essential, divi plugins, divi modules, divi woocommerce]
   use_cases:
     - "Divi tutorial blogs recommending module packs and layouts"
