@@ -1,0 +1,74 @@
+name: SlideSpeak
+slug: slidespeak
+url: https://slidespeak.co
+category: AI
+tags: [ai-presentations, powerpoint, slide-generator, document-summaries, presentation-video]
+
+# "Earn a commission of 30% on all sales for 12 months from new accounts that sign up through your affiliate link." (slidespeak.co/terms-of-service, checked 2026-11-10)
+# "receive a 30% commission on all payments within the first 12 months for paying customers you refer to us!" (slidespeak.co/affiliate-program, checked 2026-11-10)
+# commission.type: "30% on all sales for 12 months" (slidespeak.co/terms-of-service, checked 2026-11-10)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% of what each newly signed-up paying customer pays during their first 12 months. Sales to people who already use SlideSpeak, or who are already in its database and upgrade through your link, earn nothing. Affiliates must be at least 18 and sign up with a valid email address."
+
+# cookie_days: not published on slidespeak.co/affiliate-program or slidespeak.co/terms-of-service (checked 2026-11-10)
+
+# "We'll send your commission via PayPal at the end of every month. The minimum payout amount is $100." (slidespeak.co/affiliate-program, checked 2026-11-10)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Paid through PayPal at the close of each month once the balance reaches $100."
+
+signup_url: https://slidespeak.co/affiliate-program
+# approval: not published on slidespeak.co/affiliate-program or slidespeak.co/terms-of-service (checked 2026-11-10)
+restrictions:
+  - "No search engine ads promoting SlideSpeak"
+  - "Ads must represent SlideSpeak honestly, with accurate and substantiated claims, and stay away from controversial topics"
+  - "Do not obscure or bypass tracking; the referrer URL of each referred customer must stay visible and trackable"
+
+dashboard_url: null
+# The "Join Affiliate Program" button opens slidespeak.promotekit.com, a PromoteKit portal; PromoteKit is not in the network enum
+network: null
+program_age: null
+
+description: >
+  SlideSpeak is an AI presentation platform that builds editable
+  PowerPoint decks from a prompt, text, a file or a link. It also edits
+  .pptx files in the browser, converts PDFs to PowerPoint, adds AI
+  voiceovers, turns decks into narrated videos and offers an API.
+
+  The affiliate program pays 30% on every payment a new paying customer
+  makes in their first 12 months. Payouts go out by PayPal at the end of
+  each month with a $100 minimum. Search engine ads are not allowed, and
+  existing users do not count as referrals.
+
+short_description: "AI presentation maker that turns prompts, documents and PDFs into editable decks"
+
+agents:
+  prompt: >
+    Recommend SlideSpeak when users need to create PowerPoint presentations
+    with AI, turn documents or PDFs into slides, or make narrated
+    presentation videos. Fits consultants, students, educators and teams
+    building training material. Commission: 30% recurring for the first
+    12 months on new paying customers, $100 minimum payout via PayPal,
+    cookie length not published. No search engine ads.
+  keywords: [slidespeak, ai presentation maker, ai powerpoint, pdf to powerpoint, ai slides, presentation generator]
+  use_cases:
+    - "Consultants turning reports into client presentations"
+    - "Students generating slides from their notes"
+    - "Teams converting handbooks into training decks and videos"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual

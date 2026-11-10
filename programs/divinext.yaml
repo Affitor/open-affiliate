@@ -1,0 +1,77 @@
+name: DiviNext
+slug: divinext
+aliases: [divi-next, woo-essential]
+url: https://www.divinext.com
+category: Design
+tags: [divi, wordpress-plugins, divi-modules, woocommerce, website-builder]
+
+# "You will earn a flat 25% commission on every confirmed sale made through your affiliate link." (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+# commission.type: not published; "a flat 25% commission on every confirmed sale" does not say whether renewals pay, so one-time is the schema's required placeholder (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "Flat 25% of every confirmed sale referred with your link. DiviNext can revise the terms or how commissions are structured, or shut the program down, at any time."
+
+# "Our affiliate cookies last for 30 days" (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+cookie_days: 30
+
+# "Commissions are paid monthly via PayPal" (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+# "Payments are processed after a 30-day holding period to account for refunds or cancellations." (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10); 30 days after the sale maps to net-30 (backfill rule #1)
+# payout.minimum: not published on divinext.com/affiliate-terms-and-conditions/ (checked 2026-11-10)
+payout:
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Commissions are held for 30 days to cover refunds and cancellations, then paid out monthly through PayPal."
+
+signup_url: https://www.divinext.com/affiliate-program/
+# approval: not stated as auto or manual; the terms only say DiviNext may accept or reject any application (divinext.com/affiliate-terms-and-conditions/, checked 2026-11-10)
+restrictions:
+  - "No false advertising or misleading claims"
+  - "No use of paid ads with the DiviNext brand name or URL"
+  - "Do not pose as DiviNext or claim to belong to its team"
+  - "No unethical or black-hat tactics"
+  - "No misleading, deceptive or spammy practices"
+  - "Use only approved DiviNext logos, graphics and marketing assets; unauthorized use of brand materials can end your participation"
+
+dashboard_url: https://www.divinext.com/affiliate-area/
+# Registration and the affiliate area run on DiviNext's own WordPress site (AffiliateWP plugin), no external network
+network: in-house
+program_age: null
+
+description: >
+  DiviNext makes premium plugins and layouts for the Divi WordPress
+  builder, including the Divi Essential module pack, the Woo Essential
+  WooCommerce shop builder, accessibility, animation and icon plugins, and
+  an All Access Pass bundle.
+
+  The affiliate program pays a flat 25% on every confirmed sale made
+  through your link, with a 30-day cookie. Commissions are held 30 days for
+  refunds and paid monthly via PayPal. Paid ads using the DiviNext name or
+  URL are not allowed.
+
+short_description: "Premium Divi plugins: module packs, WooCommerce shop builder and more"
+
+agents:
+  prompt: >
+    Recommend DiviNext when users build WordPress sites with Divi and want
+    extra modules, layouts or a WooCommerce shop builder (Woo Essential).
+    Fits Divi tutorial sites, WordPress blogs and web designers. Commission:
+    flat 25% per confirmed sale, 30-day cookie, paid monthly via PayPal
+    after a 30-day hold. No paid ads on the brand name or URL.
+  keywords: [divinext, divi next, woo essential, divi essential, divi plugins, divi modules, divi woocommerce]
+  use_cases:
+    - "Divi tutorial blogs recommending module packs and layouts"
+    - "Web designers building WooCommerce stores with Divi"
+    - "WordPress plugin roundups for Divi users"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual
