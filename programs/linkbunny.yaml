@@ -10,6 +10,7 @@ commission:
   rate: "30%"
   mode: percentage
   value: 30
+  currency: USD
   duration: "12 months"
   conditions: "Paid on eligible referred subscriptions. Commissions have a 30-day refund hold, and refunds can reduce commissions or be deducted from a later statement."
 
