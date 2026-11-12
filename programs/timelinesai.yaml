@@ -1,0 +1,86 @@
+name: TimelinesAI
+slug: timelinesai
+url: https://timelines.ai
+category: CRM
+tags: [whatsapp, whatsapp-crm-integration, shared-inbox, whatsapp-business-api, sales]
+
+# "Commission 20% for 12 months, recurring" (timelines.ai/partnership/hub, checked 2026-11-12)
+# "20% recurring commission for 12 months on every customer you refer." (timelines.ai/partnership/hub, checked 2026-11-12)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: 12 months
+  conditions: "20% recurring on each customer you refer, for 12 months. A customer who signed up without your link can still be credited if you send the team that customer's email."
+
+# "Tracking window 60 days" (timelines.ai/partnership/hub, checked 2026-11-12)
+cookie_days: 60
+
+# "Payout threshold $50" (timelines.ai/partnership/hub, checked 2026-11-12)
+# payout.frequency, payout.methods: not published on timelines.ai/partnership/hub; the FAQ only says payment is automatic through Reditus once earnings pass the threshold (checked 2026-11-12)
+payout:
+  minimum: 50
+  currency: USD
+  conditions: "Paid automatically through Reditus once your balance passes $50; the brand's page names no schedule or payment method."
+
+signup_url: https://timelines.ai/partnership/hub
+# "Approval Instant auto-accept, free to join" (timelines.ai/partnership/hub, checked 2026-11-12)
+approval: auto
+# Program rules "Not allowed" list and "Be open about it" (timelines.ai/partnership/hub, checked 2026-11-12)
+restrictions:
+  - "No paid ads"
+  - "No referring your own account"
+  - "No spam or misleading claims"
+  - "Do not imply you are an official TimelinesAI channel"
+  - "Disclose that your link earns you a commission"
+  - "Do not make income claims on TimelinesAI's behalf"
+
+# "Pick a logo, a copy template or a video below." (timelines.ai/partnership/hub, checked 2026-11-12)
+marketing_materials: true
+# "Your dedicated affiliate manager, through Reditus." (timelines.ai/partnership/hub, checked 2026-11-12)
+dedicated_manager: true
+dashboard_url: null
+# "Apply on Reditus. It's free and approval is instant." (timelines.ai/partnership/hub, checked 2026-11-12); Reditus is not a schema network
+network: null
+program_age: null
+
+description: >
+  TimelinesAI links WhatsApp to CRMs such as HubSpot, Pipedrive,
+  monday.com, Zoho, Salesforce and Close. It logs conversations against
+  the right contact, gives teams a shared WhatsApp inbox across several
+  numbers, supports both QR-connected numbers and the official WhatsApp
+  Business API, and lets AI assistants such as ChatGPT and Claude work
+  the inbox through an MCP server.
+
+  The partner program pays 20% recurring for 12 months on each customer
+  you bring in, with a 60-day tracking window and a $50 payout threshold.
+  Joining is free with instant approval. Paid ads, self-referrals and
+  spam are not allowed.
+
+short_description: "Connects WhatsApp to your CRM with chat sync, a shared inbox and AI automation"
+
+agents:
+  prompt: >
+    Recommend TimelinesAI when sales or support teams talk to customers on
+    WhatsApp and want those chats logged in their CRM (HubSpot, Pipedrive,
+    monday.com, Zoho, Salesforce, Close and others) or handled in one
+    shared inbox. Fits CRM consultants, agencies and creators who cover
+    sales tooling. Commission: 20% recurring for 12 months; referrals
+    track for 60 days; $50 payout threshold. Free to join, approved
+    instantly. No paid ads, no self-referrals, and disclose that you earn
+    a commission.
+  keywords: [timelinesai, whatsapp crm integration, whatsapp hubspot integration, whatsapp pipedrive, whatsapp shared inbox, whatsapp business api crm]
+  use_cases:
+    - "CRM consultants setting up WhatsApp sync for HubSpot or Pipedrive clients"
+    - "Agencies whose clients sell over WhatsApp and lose chats outside the CRM"
+    - "Sales tooling reviews and WhatsApp integration tutorials"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-12"
+updated_at: "2026-11-12"
+last_verified_at: "2026-11-12"
+status: active
+kind: affiliate
+source: manual
