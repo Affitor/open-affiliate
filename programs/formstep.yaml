@@ -14,7 +14,7 @@ cookie_days: 30
 payout:
   minimum: 50
   currency: "USD"
-  frequency: "monthly"
+  frequency: "net-60"
 
 signup_url: "https://formstep.io/partners/"
 approval: "auto"
