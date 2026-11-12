@@ -27,7 +27,7 @@ signup_url: https://www.reactin.io/affiliates
 # approval: not stated; the FAQ says "Anyone can join!" but not how applications are reviewed (reactin.io/affiliates, checked 2026-11-12)
 # "No, advertising using ReactIn's brand name (e.g., in paid ads or as a keyword) is prohibited. Violations may result in revocation of your affiliate status." (reactin.io/affiliates, checked 2026-11-12)
 restrictions:
-  - "No ads that use the ReactIn brand name, in paid ads or as a keyword; breaking this can cost you your affiliate status"
+  - "No advertising that uses the ReactIn brand name, for example in paid ads or as a keyword; breaking this can cost you your affiliate status"
 
 dashboard_url: null
 # The program page links its sign-up to app.getreditus.com (Reditus, not in the network list)
@@ -51,7 +51,7 @@ agents:
     from intent signals, enrich them with AI and run automated LinkedIn and
     email outreach from one tool. Fits B2B sales and growth teams doing
     outbound. Commission: 30% recurring for life. Do
-    not advertise on the ReactIn brand name in paid ads or keywords.
+    not advertise using the ReactIn brand name, for example in paid ads or as a keyword.
   keywords: [reactin, linkedin automation, linkedin prospecting, intent signals, lead enrichment, linkedin outreach, b2b lead generation]
   use_cases:
     - "Sales and growth blogs comparing LinkedIn automation tools"
