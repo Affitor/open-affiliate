@@ -102,5 +102,5 @@ conflicts:
   - field: commission.rate
     quote: 'Tier table: "1-49 Signups…………….. 40%"; benefits text: "we offer a more considerate 50% commission to start" (https://ikeymonitor.com/partners). Checked 2026-11-09.'
     values:
-      - 40
-      - 50
+      - "40%"
+      - "50%"

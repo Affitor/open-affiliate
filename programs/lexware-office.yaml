@@ -102,4 +102,4 @@ conflicts:
     quote: 'Program facts: "60 Tage Cookielaufzeit"; FAQ: commission for visitors "die über Dein Werbemittel zu Lexware-Office weitergeleitet wurden und dort innerhalb einer Sitzung einen Kauf getätigt haben" (https://www.lexware.de/affiliate/). Checked 2026-11-09.'
     values:
       - "60 days"
-      - "within one session"
+      - "session"
