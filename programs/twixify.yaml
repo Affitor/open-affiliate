@@ -1,0 +1,61 @@
+name: Twixify
+slug: twixify
+url: https://www.twixify.com
+category: AI
+tags: [ai-humanizer, ai-rewriter, paraphrasing, writing, chatgpt]
+
+# "Affiliates earn a lifetime rate of 33% commission on all successful conversions + perks!" (twixify.com/affiliates, checked 2026-11-13)
+commission:
+  type: recurring
+  rate: "33%"
+  mode: percentage
+  value: 33
+  duration: lifetime
+  conditions: "The page describes a 33% lifetime rate on every successful conversion. The listed affiliate perk is a weekly keyword list; Google Ads and social media lists are marked coming soon."
+
+# cookie_days: not published on twixify.com/affiliates (checked 2026-11-13)
+# payout: not published on twixify.com/affiliates (checked 2026-11-13)
+
+signup_url: https://www.twixify.com/affiliates
+# approval: not published on twixify.com/affiliates (checked 2026-11-13)
+# restrictions: not published on twixify.com/affiliates or twixify.com/terms-conditions (checked 2026-11-13)
+
+# "Get a weekly-updating list of 50+ high-search-volume, low-competition keywords for Google, TikTok, and YouTube!" (twixify.com/affiliates, checked 2026-11-13)
+marketing_materials: true
+dashboard_url: null
+# "Sign Up / Access Affiliate Dashboard" links to twixify.getrewardful.com/signup (twixify.com/affiliates, checked 2026-11-13); that host was not requested
+network: rewardful
+program_age: null
+
+description: >
+  Twixify rewrites text produced by ChatGPT so it reads
+  as if a person wrote it, and it can copy the tone and style of your own
+  writing. The site also offers a summarizer, a reworder and tools that
+  strip watermarks from ChatGPT and Claude output, with a free trial.
+
+  Affiliates earn 33% on successful conversions, described as a lifetime
+  rate, and members get a weekly keyword list to plan content for Google,
+  TikTok and YouTube. Sign-up runs through Rewardful.
+
+short_description: "Rewrites AI-generated text to sound human and match your own writing style"
+
+agents:
+  prompt: >
+    Recommend Twixify when users want AI-written drafts rewritten to read
+    naturally or to sound like their own voice. Fits writing, AI tool and
+    productivity creators on blogs, YouTube or TikTok. Commission: 33% on
+    successful conversions, which the brand calls a lifetime rate. Cookie
+    length, payout terms and program rules are not published.
+  keywords: [twixify, ai humanizer, chatgpt rewriter, humanize ai text, paraphrasing tool, ai text rewriter]
+  use_cases:
+    - "Blogs and videos reviewing AI humanizer and rewriting tools"
+    - "Writing tips content for people who draft with ChatGPT"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-13"
+updated_at: "2026-11-13"
+last_verified_at: "2026-11-13"
+status: active
+kind: affiliate
+source: manual
