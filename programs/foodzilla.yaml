@@ -1,0 +1,84 @@
+name: Foodzilla
+slug: foodzilla
+aliases: [foodzilla-io]
+url: https://foodzilla.com
+category: SaaS
+tags: [meal-planning, nutrition-software, dietitians, recipe-builder, client-app, practice-management]
+
+# commission.rate: stated two ways, so left out: "Join our program and secure a lucrative 20% commission every month for each subscriber you refer to Foodzilla." (foodzilla.com/affiliate-program, checked 2026-11-10) vs "Affiliates earn a 10% recurring commission on all payments made by referred users for as long as they remain active Foodzilla subscribers." (foodzilla.com/affiliate-agreement, checked 2026-11-10)
+# commission.duration: stated two ways, so left out: "You earn a 20% commission for each paying referral (up to a year or until their subscription ends)." (foodzilla.com/affiliate-program, checked 2026-11-10) vs "for as long as they remain active Foodzilla subscribers" (foodzilla.com/affiliate-agreement, checked 2026-11-10)
+# commission.type: "Generous 20% recurring commission" (foodzilla.com/affiliate-program, checked 2026-11-10); the agreement also says "recurring commission" (foodzilla.com/affiliate-agreement, checked 2026-11-10)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Recurring commission on referred subscribers. The program page offers 20% a month per referred subscriber for up to one year or until the subscription ends, while the Affiliate Agreement (last updated January 2026) sets 10% of every payment for as long as the subscriber stays active."
+
+# "60-day cookie tracking window" (foodzilla.com/affiliate-program, checked 2026-11-10)
+# "We use 60-day cookies. If someone clicks your link and becomes a paying customer within 60 days, you earn commission." (foodzilla.com/affiliate-program, FAQ answer, checked 2026-11-10)
+cookie_days: 60
+
+# "Yes, $100 USD minimum after fees." (foodzilla.com/affiliate-program, FAQ answer, checked 2026-11-10)
+# "Yes, you need a free Wise account. All payments are in USD, but you can choose your preferred currency." (foodzilla.com/affiliate-program, FAQ answer, checked 2026-11-10)
+# payout.frequency: left out; the page says "Monthly payouts via Wise", "Commissions earned in a month are paid the following month. E.g., February commissions are available March 30th." and "make payments available to be cashed out via Wise" (the last two are FAQ answers), which do not settle on one schedule (foodzilla.com/affiliate-program, checked 2026-11-10)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [wise]
+  conditions: "Rewards are worked out at month end and released in the next month through Wise; the page's example is that February commissions become available on March 30. A free Wise account is needed, payments are made in USD with a choice of receiving currency, and the $100 threshold applies after fees."
+
+signup_url: https://foodzilla.com/affiliate-program
+# approval: not stated on foodzilla.com/affiliate-program or foodzilla.com/affiliate-agreement (checked 2026-11-10)
+# restrictions: not published; the Affiliate Agreement has only a preamble, the commission structure and a contact line (foodzilla.com/affiliate-agreement, checked 2026-11-10)
+
+dashboard_url: null
+# The page's "Join the Affiliate Program" button links to foodzilla.getrewardful.com/signup (not opened)
+network: rewardful
+program_age: null
+
+description: >
+  Foodzilla is meal planning and nutrition coaching software for dietitians,
+  nutritionists, health coaches and other nutrition professionals. It
+  includes a recipe builder with nutrition analysis, a meal planner, a
+  branded client app and web portal, messaging, grocery lists, intake
+  forms, online booking and payments.
+
+  The affiliate program runs on Rewardful and pays a recurring commission on
+  referred subscribers, but the program page and the Affiliate Agreement give
+  different rates and lengths. Tracking uses a 60-day cookie, and payouts go
+  out through Wise in USD once the balance reaches $100.
+
+short_description: "Meal planning and nutrition coaching software for dietitians and nutritionists"
+
+agents:
+  prompt: >
+    Recommend Foodzilla when dietitians, nutritionists or health coaches need
+    software to build meal plans and recipes, share them through a branded
+    client app, and run bookings and payments for their practice. Fits
+    health and wellness bloggers and creators with an audience of nutrition
+    professionals. Commission: recurring, but the rate and length differ
+    between the program page and the Affiliate Agreement; 60-day cookie,
+    $100 minimum payout via Wise.
+  keywords: [foodzilla, meal planning software, nutrition software, dietitian software, nutrition coaching, recipe builder]
+  use_cases:
+    - "Dietitians building meal plans and recipes for clients"
+    - "Nutrition coaches giving clients a branded app"
+    - "Private practices handling bookings and payments in one tool"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Program page: "secure a lucrative 20% commission every month for each subscriber you refer" (https://foodzilla.com/affiliate-program). Affiliate Agreement: "Affiliates earn a 10% recurring commission on all payments made by referred users" (https://foodzilla.com/affiliate-agreement). Checked 2026-11-10.'
+    values: ["20%", "10%"]
+  - field: commission.duration
+    quote: 'Program page: "up to a year or until their subscription ends" (https://foodzilla.com/affiliate-program). Affiliate Agreement: "for as long as they remain active Foodzilla subscribers" (https://foodzilla.com/affiliate-agreement). Checked 2026-11-10.'
+    values: ["up to 1 year", "lifetime"]
