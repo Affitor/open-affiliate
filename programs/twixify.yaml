@@ -11,7 +11,7 @@ commission:
   mode: percentage
   value: 33
   duration: lifetime
-  conditions: "The page describes a 33% lifetime rate on every successful conversion, plus perks it does not list."
+  conditions: "The page describes a 33% lifetime rate on every successful conversion. The listed affiliate perk is a weekly keyword list; Google Ads and social media lists are marked coming soon."
 
 # cookie_days: not published on twixify.com/affiliates (checked 2026-11-13)
 # payout: not published on twixify.com/affiliates (checked 2026-11-13)
