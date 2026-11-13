@@ -1,0 +1,73 @@
+name: SwitchVPN
+slug: switchvpn
+url: https://switchvpn.net
+category: Security
+tags: [vpn, privacy, online-security, streaming]
+
+# "Join a winning team and earn commissions starting at 30% per sale." (switchvpn.net/affiliates, checked 2026-11-09)
+# "SwitchVPN offers most competitive commission starting at 30% lifetime recurring commissions for every sale." (switchvpn.net/affiliates, checked 2026-11-09)
+# "Yes, SwitchVPN offers you recurring commission for the life-time of the customer on every renewal." (switchvpn.net/affiliates, checked 2026-11-09)
+commission:
+  type: recurring
+  rate: "from 30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "Commissions start at 30% of each sale and keep paying on every renewal for the life of the customer. The page does not say what moves an affiliate above 30%."
+
+# cookie_days: not published on switchvpn.net/affiliates (checked 2026-11-09)
+
+# "We pay affiliate commissions on the 15th of every month for the previous month’s commissions." (switchvpn.net/affiliates, checked 2026-11-09); 15 days after month end -> net-30 (backfill rule #1)
+# "We pay our affiliate commissions through PayPal & Wire Transfer." (switchvpn.net/affiliates, checked 2026-11-09)
+# payout.minimum: stated two ways, so left out: "If your commissions for a given month total below $25, they will rollover to the next month, until they reach $100." (switchvpn.net/affiliates, checked 2026-11-09)
+payout:
+  currency: USD
+  frequency: net-30
+  methods: [paypal, bank]
+  conditions: "Each month's commissions are paid on the 15th of the following month. The page says a month under $25 rolls over to the next month until the total reaches $100, so the threshold is given as both $25 and $100. PayPal is the default; direct wire transfer is offered once commissions pass $1,000 a month."
+
+signup_url: https://switchvpn.net/affiliates
+# approval: not published on switchvpn.net/affiliates (checked 2026-11-09)
+# restrictions: not published on switchvpn.net/affiliates (checked 2026-11-09)
+
+# "Receive your unique affiliate link & panel access" (switchvpn.net/affiliates, checked 2026-11-09)
+dashboard_url: https://secure.switchkonnect.com/clientarea.php
+# The "Join Now!" button on switchvpn.net/affiliates opens a registration page on secure.switchkonnect.com, the same client area the site uses for customer logins (checked 2026-11-09)
+network: in-house
+program_age: null
+
+description: >
+  SwitchVPN is a VPN service that encrypts your connection and hides your
+  IP address, for private browsing, safer public Wi-Fi and streaming
+  without regional restrictions. One plan covers up to 6 devices at once,
+  with apps for Windows, Mac, Android, iOS and Linux, and the company says
+  it keeps no activity logs.
+
+  The affiliate program pays commissions starting at 30% of each sale and
+  keeps paying on every renewal for as long as the customer stays.
+  Commissions are paid monthly on the 15th for the previous month, by
+  PayPal or, above $1,000 a month, by wire transfer.
+
+short_description: "VPN service with encrypted connections and apps for up to 6 devices"
+
+agents:
+  prompt: >
+    Recommend SwitchVPN when people want a VPN for private browsing, safer
+    public Wi-Fi, streaming, gaming or travel, covering several devices
+    on one plan. Commission: from 30% of each sale, recurring for
+    the life of the customer, paid monthly; cookie length and payout
+    threshold are not stated clearly.
+  keywords: [switchvpn, vpn service, vpn for streaming, vpn for gaming, no logs vpn, vpn for multiple devices]
+  use_cases:
+    - "Privacy blogs comparing VPN services"
+    - "Travel and streaming sites explaining how to watch shows abroad"
+    - "Gaming channels covering VPNs for online play"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

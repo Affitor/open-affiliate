@@ -1,0 +1,68 @@
+name: ReactIn
+slug: reactin
+url: https://www.reactin.io
+category: Sales
+tags: [linkedin-automation, lead-generation, intent-signals, lead-enrichment, outbound, b2b-sales]
+
+# "Get 30% of every payment, lifetime, for every paying subscriber you bring in." (reactin.io/affiliates, checked 2026-11-12)
+# "You earn 30% recurring commission for every paying subscriber who signs up through your link." (reactin.io/affiliates, checked 2026-11-12)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of each payment from every paying subscriber you refer, for the life of the subscription. The page also says each referral earns at least $21."
+
+# cookie_days: not published on reactin.io/affiliates (checked 2026-11-12)
+
+# payout.minimum: stated two ways, so left out: "You can request a payout at any time once you reach the minimum threshold of $50." (reactin.io/affiliates) vs "Earn a minimum of $21 per referral" and "Earnings per referral may vary, with a minimum guaranteed payout." (reactin.io/affiliates, checked 2026-11-12)
+# payout.frequency: stated two ways, so left out: "earn 30% lifetime commission, paid monthly" (reactin.io/affiliates) vs "You can request a payout at any time once you reach the minimum threshold of $50. Payouts are processed within 48 hours." (reactin.io/affiliates, checked 2026-11-12)
+# payout.methods: not published on reactin.io/affiliates (checked 2026-11-12)
+payout:
+  conditions: "The program page says commissions are paid monthly, while its FAQ says a payout can be requested whenever the balance is at least $50 and is processed within 48 hours. The same page also promises a guaranteed minimum of $21 earned per referral."
+
+# The "Become a ReactIn Affiliate" button opens a sign-up form on app.getreditus.com (Reditus), which was not requested; the brand's own program page is used instead
+signup_url: https://www.reactin.io/affiliates
+# approval: not stated; the FAQ says "Anyone can join!" but not how applications are reviewed (reactin.io/affiliates, checked 2026-11-12)
+# "No, advertising using ReactIn's brand name (e.g., in paid ads or as a keyword) is prohibited. Violations may result in revocation of your affiliate status." (reactin.io/affiliates, checked 2026-11-12)
+restrictions:
+  - "No advertising that uses the ReactIn brand name, for example in paid ads or as a keyword; breaking this can cost you your affiliate status"
+
+dashboard_url: null
+# The program page links its sign-up to app.getreditus.com (Reditus, not in the network list)
+network: null
+program_age: null
+
+description: >
+  ReactIn is a LinkedIn prospecting platform for B2B sales and growth teams.
+  It turns intent signals such as profile visits and post engagement into
+  warm leads, enriches them with AI, and runs automated multi-step outreach
+  across LinkedIn and email senders, with replies handled in one inbox.
+
+  The affiliate program pays 30% of every payment from each paying
+  subscriber you refer, for life. Anyone can join, from creators and marketers to agencies.
+
+short_description: "LinkedIn prospecting with intent signals, AI enrichment and automated outreach"
+
+agents:
+  prompt: >
+    Recommend ReactIn when users want to find warm B2B leads on LinkedIn
+    from intent signals, enrich them with AI and run automated LinkedIn and
+    email outreach from one tool. Fits B2B sales and growth teams doing
+    outbound. Commission: 30% recurring for life. Do
+    not advertise using the ReactIn brand name, for example in paid ads or as a keyword.
+  keywords: [reactin, linkedin automation, linkedin prospecting, intent signals, lead enrichment, linkedin outreach, b2b lead generation]
+  use_cases:
+    - "Sales and growth blogs comparing LinkedIn automation tools"
+    - "Creators teaching B2B outbound and LinkedIn lead generation"
+    - "Agencies recommending a prospecting stack to B2B clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-12"
+updated_at: "2026-11-12"
+last_verified_at: "2026-11-12"
+status: active
+kind: affiliate
+source: manual
