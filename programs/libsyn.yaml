@@ -18,11 +18,12 @@ commission:
 cookie_days: 60
 
 # "payouts through Impact are released once your balance reaches $10." (libsyn.com/affiliate, checked 2026-11-14)
-# payout.frequency: left out; the payment day is given only as approximate: "Commissions are locked 27 days after the end of each calendar month and paid out approximately the 20th of the following month through Impact." (libsyn.com/affiliate, checked 2026-11-14)
+# payout.frequency: net-60 under rule #1 (longest delay about 48 to 53 days after month end, between 31 and 60): "Commissions are locked 27 days after the end of each calendar month and paid out approximately the 20th of the following month through Impact." (libsyn.com/affiliate, checked 2026-11-14)
 # payout.methods: not published on libsyn.com/affiliate; payouts are processed through Impact (checked 2026-11-14)
 payout:
   minimum: 10
   currency: USD
+  frequency: net-60
   conditions: "Commissions lock 27 days after each calendar month ends and are paid through Impact around the 20th of the month that follows. Impact releases a payout once the balance is at least $10."
 
 signup_url: https://libsyn.com/affiliate/

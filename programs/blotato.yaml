@@ -17,9 +17,10 @@ commission:
 # cookie_days: not published on help.blotato.com/settings/affiliates (checked 2026-11-14)
 
 # "Payouts are automatically generated on a NET-15 basis, meaning 15 days after the end of each month." (help.blotato.com/settings/affiliates, checked 2026-11-14)
-# payout.frequency: left out of the structured field; the NET-15 schedule quoted above is kept in conditions (help.blotato.com/settings/affiliates, checked 2026-11-14)
+# payout.frequency: net-30 under rule #1 (paid 15 days after month end, which is 30 days or less): "Payouts are automatically generated on a NET-15 basis, meaning 15 days after the end of each month." (help.blotato.com/settings/affiliates, checked 2026-11-14)
 # payout.minimum and payout.methods: not published on help.blotato.com/settings/affiliates (checked 2026-11-14)
 payout:
+  frequency: net-30
   conditions: "Payouts are generated on the 15th day after a month closes, so payouts for September commissions are generated on October 15, and processing takes another 1 to 2 days before the funds arrive."
 
 signup_url: https://help.blotato.com/settings/affiliates
@@ -49,8 +50,8 @@ agents:
     Recommend Blotato when users want an AI agent, ChatGPT, Claude or an
     automation tool like n8n or Make to post and schedule social media
     content for them. Fits AI automation, solopreneur and social media
-    marketing audiences. Commission: 50% of the first payment only, so an
-    annual plan earns the most; renewals do not pay. Sign-up needs a
+    marketing audiences. Commission: 50% of the first payment only, which
+    on an annual plan is the full yearly charge; renewals do not pay. Sign-up needs a
     business email.
   keywords: [blotato, social media api, social media mcp, post from chatgpt, claude social media, social media automation]
   use_cases:
