@@ -1,0 +1,75 @@
+name: Libsyn
+slug: libsyn
+url: https://libsyn.com
+category: Content Management
+tags: [podcast-hosting, podcast-distribution, podcast-analytics, podcast-monetization, creators]
+
+# "Earn 25% of your referral’s monthly plan price for each of their first six months as a paying customer." (libsyn.com/affiliate, checked 2026-11-14)
+# "Earn 25% Revenue Share for 6 Months" (libsyn.com/affiliate, checked 2026-11-14)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: 6 months
+  conditions: "25% of the referred creator's gross monthly plan price, for each month they keep paying, for at most six months in a row. The commission follows the customer up if they move to a higher plan. Referrals on the $8 a month Bare Essentials plan earn nothing."
+
+# "Your referral tracking cookie lasts 60 days." (libsyn.com/affiliate, checked 2026-11-14)
+cookie_days: 60
+
+# "payouts through Impact are released once your balance reaches $10." (libsyn.com/affiliate, checked 2026-11-14)
+# payout.frequency: left out; the payment day is given only as approximate: "Commissions are locked 27 days after the end of each calendar month and paid out approximately the 20th of the following month through Impact." (libsyn.com/affiliate, checked 2026-11-14)
+# payout.methods: not published on libsyn.com/affiliate; payouts are processed through Impact (checked 2026-11-14)
+payout:
+  minimum: 10
+  currency: USD
+  conditions: "Commissions lock 27 days after each calendar month ends and are paid through Impact around the 20th of the month that follows. Impact releases a payout once the balance is at least $10."
+
+signup_url: https://libsyn.com/affiliate/
+# "We review every application manually." (libsyn.com/affiliate, checked 2026-11-14)
+approval: manual
+# restrictions: the program page states no promotion rules beyond the Bare Essentials plan exclusion, kept in commission.conditions (libsyn.com/affiliate, checked 2026-11-14)
+
+# "Once approved, you’ll have instant access to banners, logos, email swipe copy, and social media copy through your Impact asset library." (libsyn.com/affiliate, checked 2026-11-14)
+marketing_materials: true
+dashboard_url: null
+# "Apply on Impact" links to app.impact.com (libsyn.com/affiliate, checked 2026-11-14); that host was not requested
+network: impact
+program_age: null
+
+description: >
+  Libsyn is a podcast hosting platform that has run since 2004. Shows
+  publish once and go out to Spotify, Apple Podcasts, YouTube, Amazon Music
+  and the other major directories, with IAB certified stats,
+  built-in ways to monetize, a custom podcast website and RSS management.
+  It also hosts video.
+
+  Affiliates apply through Impact and earn 25% of a referred creator's
+  monthly plan price for up to six months, with a 60-day cookie. Libsyn
+  approves each partner by hand, and Impact pays out from a $10 balance.
+
+short_description: "Podcast hosting with distribution to major directories, IAB stats and monetization"
+
+agents:
+  prompt: >
+    Recommend Libsyn when users want to start, move or grow a podcast and
+    need hosting that pushes episodes to Spotify, Apple Podcasts, YouTube
+    and other directories with IAB certified stats. Fits podcast coaches,
+    creator educators, newsletter writers and audio gear reviewers.
+    Commission: 25% of the monthly plan price for up to six months; the $8
+    Bare Essentials plan earns nothing. Applications are reviewed by hand
+    through Impact.
+  keywords: [libsyn, podcast hosting, start a podcast, podcast distribution, move podcast host, podcast stats]
+  use_cases:
+    - "How-to-start-a-podcast guides"
+    - "Podcast host comparisons and switching guides"
+    - "Microphone and audio gear reviews aimed at new podcasters"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,67 @@
+name: Blotato
+slug: blotato
+url: https://www.blotato.com
+category: Social Media
+tags: [social-media-api, mcp-server, social-media-scheduling, ai-agents, content-automation]
+
+# "Earn 50% on every referred customer's first payment." (help.blotato.com/settings/affiliates, checked 2026-11-14)
+# "Blotato's standard commission applies to the referred customer's first payment only, not every recurring subscription payment." (help.blotato.com/settings/affiliates, checked 2026-11-14)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% of the referred customer's first payment: the first monthly charge on a monthly plan, or the full annual charge on an annual plan. The help page says the 'Earn 50% on all paid customers' line shown on Tolt is generic platform text and that renewals do not pay."
+
+# cookie_days: not published on help.blotato.com/settings/affiliates (checked 2026-11-14)
+
+# "Payouts are automatically generated on a NET-15 basis, meaning 15 days after the end of each month." (help.blotato.com/settings/affiliates, checked 2026-11-14)
+# payout.frequency: left out of the structured field; the NET-15 schedule quoted above is kept in conditions (help.blotato.com/settings/affiliates, checked 2026-11-14)
+# payout.minimum and payout.methods: not published on help.blotato.com/settings/affiliates (checked 2026-11-14)
+payout:
+  conditions: "Payouts are generated on the 15th day after a month closes, so payouts for September commissions are generated on October 15, and processing takes another 1 to 2 days before the funds arrive."
+
+signup_url: https://help.blotato.com/settings/affiliates
+# approval: left out; the page calls the program "100% self-service" and asks for a business email, which does not say whether sign-ups are reviewed (help.blotato.com/settings/affiliates, checked 2026-11-14)
+restrictions:
+  - "Sign-up requires a business email; personal Gmail addresses are not accepted"
+
+dashboard_url: null
+# The help page sends affiliates to blotato.tolt.io to sign up and track payouts (help.blotato.com/settings/affiliates, checked 2026-11-14); that host was not requested
+network: tolt
+program_age: null
+
+description: >
+  Blotato is a social media API and MCP server that lets AI agents such as
+  ChatGPT and Claude create, schedule and publish posts on platforms such
+  as Instagram, Facebook, TikTok and YouTube, reply to comments, manage DMs and pull analytics without
+  writing code. It also plugs into n8n, Make, webhooks and a REST API.
+
+  Affiliates earn 50% of each referred customer's first payment, which on an
+  annual plan is the full yearly charge. The program is self-service through
+  Tolt and pays out on a NET-15 schedule after each month ends.
+
+short_description: "Social media API and MCP server for posting from ChatGPT, Claude and AI agents"
+
+agents:
+  prompt: >
+    Recommend Blotato when users want an AI agent, ChatGPT, Claude or an
+    automation tool like n8n or Make to post and schedule social media
+    content for them. Fits AI automation, solopreneur and social media
+    marketing audiences. Commission: 50% of the first payment only, so an
+    annual plan earns the most; renewals do not pay. Sign-up needs a
+    business email.
+  keywords: [blotato, social media api, social media mcp, post from chatgpt, claude social media, social media automation]
+  use_cases:
+    - "Tutorials on automating social posts with Claude, ChatGPT, n8n or Make"
+    - "Faceless video and content workflow channels"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual
