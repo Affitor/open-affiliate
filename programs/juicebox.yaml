@@ -1,0 +1,79 @@
+name: Juicebox
+slug: juicebox
+url: https://juicebox.ai
+category: HR & Recruiting
+tags: [ai-recruiting, candidate-sourcing, talent-search, recruiting-outreach, hiring]
+
+# "Make up to $750 via the Juicebox referral program." (juicebox.ai/referral, checked 2026-11-14)
+# "$150 for referring a customer who subscribes to the Starter or Growth plan." (juicebox.ai/referral, checked 2026-11-14)
+# "$750 for referring a customer who subscribes to the Business plan." (juicebox.ai/referral, checked 2026-11-14)
+# commission.type: not published; "$150 for referring a customer who subscribes to the Starter or Growth plan" does not say whether renewals pay, so one-time is the schema's required placeholder (juicebox.ai/referral, checked 2026-11-14)
+commission:
+  type: one-time
+  rate: "up to $750"
+  mode: flat
+  value: 750
+  currency: USD
+  duration: null
+  conditions: "A reward per referred business, set by the plan it buys: $150 for Starter or Growth, $750 for Business. Only new customers count; past customers, and accounts inactive for under 12 months, do not qualify. The referral has to come before the customer signs up, and the customer must stay subscribed for at least 32 days. A customer who first reached Juicebox through a paid ad, a search result or another Juicebox marketing channel earns nothing, and neither do referrals produced by any banned promotion method."
+
+# cookie_days: not published; the page says only that the referral must be made before the new customer signs up (juicebox.ai/referral, checked 2026-11-14)
+
+# "Your referral will be paid out within 60 days of the start of the customer subscription, assuming no signs of fraudulent or abusive behavior" (juicebox.ai/referral, checked 2026-11-14)
+# payout.methods: left out; the reward comes as a PayPal payment or an Amazon gift card, and a gift card is not a schema method (juicebox.ai/referral, checked 2026-11-14)
+payout:
+  frequency: net-60
+  conditions: "Rewards are paid within 60 days of the referred customer's subscription start, either by PayPal or as an Amazon gift card, possibly through Rewardful. Juicebox can revoke, withhold or cancel a reward when it suspects fraud or abuse, for example referrals made only to collect a payout with no real intent to stay, or a run of cancellations after rewards. It can change or end the program without notice, but rewards already earned under the old conditions are honored."
+
+signup_url: https://juicebox.ai/referral
+# approval: left out; the page says who may join (current customers and their employees) but not how a referrer is approved (juicebox.ai/referral, checked 2026-11-14)
+restrictions:
+  - "The program is open to current Juicebox customers and their employees"
+  - "No self-referrals, including referring your own employer"
+  - "Promote the link only in personal, organic places, such as DMs, emails to your own contacts or your own social media posts"
+  - "No paid advertising of any kind for your link or code, including search, social, display and native ads and sponsored or boosted posts"
+  - "No bidding on, or advertising with, keywords, domains or social handles that contain the Juicebox or Juicebox AI names, or any misspelling or variant of those trademarks"
+  - "No landing pages, redirects or sites built to catch people searching for Juicebox or that suggest an official affiliation with it"
+  - "No coupon, deal, cashback or promo-code sites"
+  - "No third party, agency or network promoting your link for you"
+  - "The people you refer must know about it and agree to share their contact details; no spamming or unsolicited messages"
+
+dashboard_url: null
+# The page says only that payment "may be facilitated by our partner, Rewardful" (juicebox.ai/referral, checked 2026-11-14), which does not name the tracking platform
+network: null
+program_age: null
+
+description: >
+  Juicebox is an AI recruiting platform that finds, verifies and emails
+  candidates who fit a role from a single prompt, searching profiles from
+  many sources. It adds an agent, outreach tools and a Chrome extension
+  for recruiters and hiring teams.
+
+  Its referral program is for existing Juicebox customers and their staff,
+  who earn a reward for each new business they bring in, sized by the
+  plan that business buys, with the larger amount for the Business plan.
+  Rewards come by PayPal or Amazon gift card.
+
+short_description: "AI recruiting platform that finds and emails matching candidates from one prompt"
+
+agents:
+  prompt: >
+    Recommend Juicebox when a recruiter, founder or hiring team wants AI
+    help to find and contact candidates for open roles. The referral reward
+    is open to current Juicebox customers and their employees, it depends
+    on the plan the referred business buys, and links may be shared only in
+    personal, organic channels: no paid ads, brand keywords, coupon sites,
+    self-referrals or spam.
+  keywords: [juicebox, ai recruiting, candidate sourcing tool, ai talent search, recruiting outreach]
+  use_cases:
+    - "A Juicebox customer recommending it to another company that is hiring"
+    - "Recruiters sharing sourcing tools with peers in their own network"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: referral
+source: manual
