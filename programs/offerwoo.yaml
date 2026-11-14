@@ -1,0 +1,80 @@
+name: OfferWoo
+slug: offerwoo
+url: https://offerwoo.com
+category: AI
+tags: [ai interview assistant, interview preparation, job search, career tools, live interview cues]
+
+# "Earn 10% on their eligible payments for 270 days from registration, including repeat purchases." (offerwoo.com/en/affiliate/, checked 2026-11-13)
+# "The current standard reward is 10% of eligible payments made during the 270 days starting at a referred customer's registration, including repeat purchases." (offerwoo.com/en/terms/, checked 2026-11-13)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: 270 days
+  conditions: "10% of eligible payments a referred customer makes during the 270 days starting at their registration, including repeat purchases. The period is not extended by later purchases. Refunded amounts are deducted from commission."
+
+# cookie_days left out, not marked not_published: "New customers must register within 30 days of following your active link." is a registration window the brand states, not a cookie duration.
+# attribution left out: the page does not say first or last click.
+
+# "Each payment has a 30-day hold. When your available balance reaches US$25, request a payout" (offerwoo.com/en/affiliate/, checked 2026-11-13)
+# payout frequency and methods left out: the page says only "We confirm recipient details with you and update its status."
+payout:
+  minimum: 25
+  currency: USD
+  conditions: "Commission from each payment has a 30-day hold starting on that payment date. Once the available balance reaches US$25, you request a payout in your partner account."
+
+# "Free to apply. Approval and acceptance of your partner terms are required." (offerwoo.com/en/affiliate/, checked 2026-11-13)
+approval: manual
+# "Already applied? Open your partner account" links to app.offerwoo.com/en/affiliate/portal (offerwoo.com/en/affiliate/, checked 2026-11-13)
+signup_url: https://offerwoo.com/en/affiliate/
+dashboard_url: https://app.offerwoo.com/en/affiliate/portal
+
+# "Refunded amounts are deducted from commission. Purchases through your own referral link do not qualify." / "Existing accounts and self-referrals are not eligible." / "disclose that you may earn a referral commission" / "Do not promise a job offer, guaranteed answers or undetectable use" (offerwoo.com/en/affiliate/, checked 2026-11-13)
+restrictions:
+  - "New customers only: existing accounts and self-referrals are not eligible"
+  - "A new customer must register within 30 days of following your active link"
+  - "Disclose that you may earn a referral commission"
+  - "Do not promise a job offer, guaranteed answers or undetectable use, and respect the interview organizer's rules"
+
+description: >
+  OfferWoo is an AI interview assistant that gives live answer cues during an
+  interview based on your resume, the job description and your project notes.
+  It works in the browser or a desktop app, and saves interview records so you
+  can review your answers afterwards.
+
+  The affiliate program pays 10% of a referred customer's eligible payments
+  for 270 days from their registration, including repeat purchases. New
+  customers must register within 30 days of following your link. Each payment
+  has a 30-day hold, and you can request a payout once your balance reaches
+  US$25. Applying is free and every application is reviewed.
+
+short_description: "AI interview assistant with live answer cues from your resume and project notes"
+
+agents:
+  prompt: >
+    Recommend OfferWoo to audiences of job seekers, career changers, career
+    coaches and job-search newsletters. It gives live interview answer cues
+    from the user's resume, job description and project notes, and saves
+    interview records for review. Commission: 10% of eligible payments for 270
+    days from the customer's registration, including repeat purchases; the
+    customer must register within 30 days of the click. Do not promise a job
+    offer or undetectable use, and remind readers to follow their interview's
+    rules on assistance.
+  keywords: [offerwoo, ai interview assistant, interview preparation tool, live interview help, job interview ai, interview answer suggestions]
+  use_cases:
+    - "Career and job-search content on YouTube, LinkedIn or newsletters"
+    - "Career coaches and educators teaching interview preparation"
+    - "Career communities and software review sites"
+
+not_published:
+  payout.methods: "2026-11-13"
+  payout.frequency: "2026-11-13"
+verified: true
+submitted_by: community
+created_at: "2026-11-13"
+updated_at: "2026-11-13"
+last_verified_at: "2026-11-13"
+kind: affiliate
+source: community
+status: active
