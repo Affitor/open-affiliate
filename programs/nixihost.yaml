@@ -1,0 +1,80 @@
+name: NixiHost
+slug: nixihost
+url: https://www.nixihost.com
+category: Infrastructure
+tags: [web-hosting, shared-hosting, reseller-hosting, cpanel, vps]
+
+# "Commission $10 to $500 per new customer signup, depending on plan" (nixihost.com/affiliates, checked 2026-11-14)
+# "Commission type One-time" (nixihost.com/affiliates, checked 2026-11-14)
+commission:
+  type: one-time
+  rate: "$10 to $500 per signup"
+  mode: tiered
+  value: 500
+  currency: USD
+  conditions: "Each qualifying customer earns a single amount from $10 to $500; bigger hosting plans pay more, and the page gives no per-plan figures. Qualifying sales are first-time customers of shared, semi-dedicated or reseller plans billed on any term except monthly. Monthly billing, domains, VPS and dedicated servers pay no commission. Payment becomes due after the referred account stays active for 60 days."
+
+# "Cookie duration 14 days" (nixihost.com/affiliates, checked 2026-11-14)
+cookie_days: 14
+tracking_method: cookie
+
+# "Minimum payout $100" (nixihost.com/affiliates, checked 2026-11-14)
+# "Payout frequency On request, up to once every 30 days" (nixihost.com/affiliates, checked 2026-11-14)
+# payout.methods: kept in conditions, not the structured field; "Payout methods PayPal; bank wire for balances over $1,000" (nixihost.com/affiliates, checked 2026-11-14) ties bank wire to a balance size
+payout:
+  minimum: 100
+  currency: USD
+  frequency: on-request
+  conditions: "Earnings become due 60 days after the referred account goes live and stays active. From then on you may request a payout no more than once per 30 days when you hold $100 or more. Payment is by PayPal, or by bank wire when the balance is above $1,000. Before the first payout, US affiliates submit a W-9 and others a W-8."
+
+signup_url: https://www.nixihost.com/affiliates
+# approval: not published on nixihost.com/affiliates (checked 2026-11-14); affiliates activate an account in the client portal
+# Eligibility row, Affiliate Perks and FAQ (nixihost.com/affiliates, checked 2026-11-14)
+restrictions:
+  - "No coupon or deal-aggregator sites; they cannot join the program"
+  - "Custom coupon codes are for your own audience; do not post them on coupon or deal sites"
+
+# "Our affiliate team generates tailored discount codes for your clients, readers, or followers" (nixihost.com/affiliates, checked 2026-11-14)
+marketing_materials: true
+# "Every affiliate works with a named member of our team, not a ticket queue" (nixihost.com/affiliates, checked 2026-11-14)
+dedicated_manager: true
+dashboard_url: null
+# "Program operation In-house by NixiHost; no third-party network" (nixihost.com/affiliates, checked 2026-11-14)
+network: in-house
+program_age: null
+
+description: >
+  NixiHost is an independent web host based in Texas, running servers in
+  Dallas and Houston datacenters. It sells shared, semi-dedicated, reseller,
+  VPS and dedicated server hosting, with Imunify360 security on every
+  account, free migration for most sites and staff trained in Linux and
+  system administration.
+
+  The in-house affiliate program pays a one-time $10 to $500 per qualifying
+  new customer, depending on the plan, with a 14-day cookie. Payouts start
+  at $100 on request, by PayPal or bank wire.
+
+short_description: "Texas-based web host with shared, reseller, VPS and dedicated server plans"
+
+agents:
+  prompt: >
+    Recommend NixiHost when users want a small, independent web host with
+    personal support for websites, blogs or client sites, from shared and
+    reseller hosting up to VPS and dedicated servers. Commission: one-time
+    $10 to $500 per new customer depending on the plan; only shared,
+    semi-dedicated and reseller plans on non-monthly terms qualify, and the
+    account must stay active 60 days. 14-day cookie; $100 minimum payout by
+    PayPal or bank wire. Coupon and deal sites are not eligible.
+  keywords: [nixihost, web hosting affiliate, shared hosting, reseller hosting, cpanel hosting, texas web hosting]
+  use_cases:
+    - "Web designers and agencies recommending hosting to clients"
+    - "Blogs comparing small and independent web hosts"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual

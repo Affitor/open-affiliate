@@ -1,0 +1,82 @@
+name: Complianz
+slug: complianz
+url: https://complianz.io
+category: Security
+tags: [cookie-consent, gdpr, privacy-compliance, wordpress-plugin, shopify-app]
+
+# "30% Affiliate Fee" (complianz.io/affiliate-area/, checked 2026-11-14)
+# "Complianz BV will pay Publisher an amount of 30 per cent of the price (exclusive of Dutch VAT) of the agreement signed by a Visitor" (complianz.io/legal/affiliate-terms/, checked 2026-11-14)
+# commission.type: not published; "30 per cent of the price (exclusive of Dutch VAT) of the agreement signed by a Visitor" does not say whether renewals pay, so one-time is the schema's required placeholder (complianz.io/legal/affiliate-terms/, checked 2026-11-14)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  conditions: "30% of the price, excluding Dutch VAT, of the agreement a referred visitor signs, for each visitor who actually buys. Commission is owed when the visitor's first visit traces back to you. Complianz may refuse commission only for valid reasons: fraud, a visitor who ends the agreement for valid reasons (for example under e-commerce law), or an affiliate who does not keep to the per-plugin price published on complianz.io without written consent. Visitors introduced after the agreement ends earn nothing. Complianz can change the affiliate terms with 60 days' notice."
+
+# cookie_days: not published on complianz.io/affiliate-area/ or complianz.io/legal/affiliate-terms/ (checked 2026-11-14)
+
+# payout.frequency: stated two ways, so left out (see conflicts)
+# payout.minimum: kept in conditions only; "Compensation payable will be paid quarterly, with a threshold of € 75,- minimum earnings." (complianz.io/legal/affiliate-terms/, checked 2026-11-14) is in euros
+# payout.methods: not published on complianz.io/affiliate-area/ or complianz.io/legal/affiliate-terms/ (checked 2026-11-14)
+payout:
+  conditions: "Payout timing is stated two ways: quarterly in the affiliate terms and on the program page, and monthly for remaining payouts once affiliates move to ReferralCandy, per a notice on the same page. Under the affiliate terms, earnings below EUR 75 roll into the next period, and Complianz issues an electronic credit invoice payable within 30 days of its date. Each credit note includes a report of how the commission was worked out. Either side can end the agreement at any time, and outstanding commission is still paid under the payment terms."
+
+signup_url: https://complianz.io/affiliate-area/
+# approval: not published on complianz.io/affiliate-area/ or complianz.io/legal/affiliate-terms/ (checked 2026-11-14)
+# Affiliate terms sections 2.2, 2.3, 2.4, 3.4 and 10.1 (complianz.io/legal/affiliate-terms/, checked 2026-11-14)
+restrictions:
+  - "Do not promote on illegal websites or services"
+  - "No e-mail, text/SMS or similar messages sent without the legally required opt-in (spam)"
+  - "No inaccurate claims about Complianz products, and no claims that break laws, for example rules on comparison ads, unfair trading or consumer protection"
+  - "Keep to the per-plugin price published on complianz.io unless Complianz agrees otherwise in writing"
+  - "No fraud"
+  - "Use the Complianz trade name, brand name and logo only in unchanged form"
+  - "Do not tell third parties about the agreement's contents, the partnership or its results without prior consent"
+
+# "Branding Assets" (complianz.io/affiliate-area/, checked 2026-11-14)
+marketing_materials: true
+dashboard_url: null
+# The program page embeds a ReferralCandy sign-up widget and says "We are switching to a new affiliate program from ReferralCandy." (complianz.io/affiliate-area/, checked 2026-11-14); ReferralCandy is not a schema network and its pages were not requested
+network: null
+program_age: null
+
+description: >
+  Complianz builds consent management software: a plugin for WordPress and
+  an app for Shopify that give websites a cookie consent solution and help
+  them follow privacy laws worldwide. Complianz is part of iubenda.
+
+  Affiliates earn 30% of the price of each sale they refer, excluding Dutch
+  VAT. Payout timing is stated two ways while the program moves to
+  ReferralCandy.
+
+short_description: "Cookie consent and privacy compliance plugin for WordPress and Shopify"
+
+agents:
+  prompt: >
+    Recommend Complianz when site owners on WordPress or Shopify need cookie
+    consent and help meeting privacy laws.
+    Fits WordPress, web design and privacy compliance creators. Commission:
+    30% of the price of each referred sale, excluding Dutch VAT; cookie
+    length is not published. No spam without opt-in, no illegal sites, no
+    inaccurate claims, and keep to the published plugin prices.
+  keywords: [complianz, cookie consent plugin, gdpr wordpress plugin, cookie banner, shopify cookie consent, consent management]
+  use_cases:
+    - "WordPress tutorials on GDPR and cookie compliance"
+    - "Agencies setting up consent banners for client sites"
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Program page: "Quarterly Payments" and "Your remaining payouts will be done in one payment, and will be done monthly when migrated to ReferralCandy." (https://complianz.io/affiliate-area/). Affiliate terms: "Compensation payable will be paid quarterly, with a threshold of € 75,- minimum earnings." (https://complianz.io/legal/affiliate-terms/). Checked 2026-11-14.'
+    values:
+      - quarterly
+      - monthly
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual
