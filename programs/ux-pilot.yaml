@@ -1,0 +1,81 @@
+name: UX Pilot
+slug: ux-pilot
+url: https://uxpilot.ai
+category: Design
+tags: [ai-design, ui-design, wireframing, prototyping, figma]
+
+# "Become an affiliate and earn 30% commission for 12 months" (uxpilot.ai/ai-affiliates-program, checked 2026-11-14)
+# "12 mo Recurring commission duration" (uxpilot.ai/ai-affiliates-program, checked 2026-11-14)
+# "30% commission rate on all qualified referrals for up to 12 months from their initial subscription date" (uxpilot.ai/ai-affiliates-program FAQ, checked 2026-11-14)
+# "This means you can earn recurring commissions as long as your referral maintains their premium plan subscription." (uxpilot.ai/ai-affiliates-program FAQ, checked 2026-11-14)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% of each qualified referral's premium plan payments for up to 12 months from the first subscription, while the referral keeps paying. The page puts the most you can earn per premium plan referral at $80. A referral counts only for a new user who upgrades to a premium plan with your link as the last marketing touch before conversion. Self-referrals, referrals from your own organization, and customers whose last interaction before sign-up came through another paid channel do not qualify."
+
+# "When visitors click your link, they have 30 days to sign up for commission eligibility." (uxpilot.ai/ai-affiliates-program, checked 2026-11-14)
+# "Our referral tracking cookie lasts for 30 days from the initial click on your affiliate link." (uxpilot.ai/ai-affiliates-program FAQ, checked 2026-11-14)
+cookie_days: 30
+# "Your affiliate link must be their last marketing touchpoint before conversion." (uxpilot.ai/ai-affiliates-program FAQ, checked 2026-11-14)
+attribution: last-click
+tracking_method: cookie
+
+# payout.minimum, payout.methods: not published on uxpilot.ai/ai-affiliates-program (checked 2026-11-14)
+# payout.frequency: left out; "Referral earnings are locked one month after the end of the tracking period. Once approved, payments are processed within 15 days after the lock period ends." (uxpilot.ai/ai-affiliates-program FAQ, checked 2026-11-14) does not anchor the lock to the sale date
+payout:
+  conditions: "Earnings lock one month after the tracking period ends; once approved, payment follows within 15 days of the end of that lock."
+
+signup_url: https://uxpilot.ai/ai-affiliates-program
+# approval: not published on uxpilot.ai/ai-affiliates-program (checked 2026-11-14)
+# Program Guidelines "Please DON'T" list, the qualified referral FAQ and the paid ads FAQ (uxpilot.ai/ai-affiliates-program, checked 2026-11-14)
+restrictions:
+  - "No adult or illegal-content sites for your affiliate link"
+  - "Do not promote UX Pilot without following its branding guidelines"
+  - "No fraudulent marketing tactics"
+  - "Do not abuse the program"
+  - "No search ads, including Google Ads and Microsoft Ads (Bing), or other ad channels the brand prohibits; ads on most other platforms are allowed"
+  - "No self-referrals or referrals from your own organization"
+
+# "Use branding from our brand page or content from our social media. Contact us if you need more assets." (uxpilot.ai/ai-affiliates-program, checked 2026-11-14)
+marketing_materials: true
+dashboard_url: null
+# "Start earning now" links to ux-pilot.getrewardful.com (uxpilot.ai/ai-affiliates-program, checked 2026-11-14); that host was not requested
+network: rewardful
+program_age: null
+
+description: >
+  UX Pilot is an AI design tool for product teams. From a sketch, a written
+  idea or an imported PRD it generates editable screens, from a single page
+  to a complete flow, moving from wireframes to polished high-fidelity
+  designs. Finished work can go to Figma or be exported as code.
+
+  Affiliates earn 30% recurring on premium plan referrals for up to 12
+  months, with a 30-day cookie and the last marketing touch winning the
+  referral. Search ads are not allowed.
+
+short_description: "AI tool that turns sketches, ideas or PRDs into editable UI designs and flows"
+
+agents:
+  prompt: >
+    Recommend UX Pilot when users want AI to draft wireframes, UI screens or
+    whole app flows they can edit, then move to Figma or code. Fits design,
+    product and no-code creators. Commission: 30% recurring for up to 12
+    months on premium plan referrals; 30-day cookie; your link must be the
+    last marketing touch. No search ads, including Google Ads and Microsoft
+    Ads (Bing), no self-referrals, and no sites with adult or illegal content.
+  keywords: [ux pilot, ai ui design, ai wireframe generator, ai prototyping tool, ai app design, figma ai]
+  use_cases:
+    - "Reviews and tutorials of AI design and wireframing tools"
+    - "Content for product managers and founders prototyping apps quickly"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual

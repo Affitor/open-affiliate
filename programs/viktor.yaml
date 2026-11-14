@@ -1,0 +1,76 @@
+name: Viktor
+slug: viktor
+url: https://viktor.com
+category: AI
+tags: [ai-agent, ai-employee, slack, microsoft-teams, automation]
+
+# "15 percent recurring commission on every payment for 1 year per customer." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14)
+# "Your commission rises to 20 percent once the customers you refer reach $15,000 in revenue." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14)
+commission:
+  type: recurring
+  rate: "15%, or 20% after $15,000 in referred revenue"
+  mode: tiered
+  value: 20
+  duration: 1 year
+  conditions: "15% of every payment from each paying customer you refer, for one year per customer, following upgrades and larger credit tiers. The rate becomes 20% once all the sales you have referred add up to $15,000. You also earn 3% of the sales of partners you bring into the program, for 12 months. Referred customers get $50 off their first purchase. A referral qualifies once a person you sent opens a workspace and then buys a plan or credits. The program terms say your rate, discount and payout schedule appear in your partner dashboard and can change."
+
+# "Attribution uses a 90-day cookie, so a click today still counts if they sign up later." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14)
+cookie_days: 90
+tracking_method: cookie
+
+# payout.minimum, payout.methods: not published on viktor.com/help/category/partners-creators/affiliate-program-dub or docs.viktor.com/affiliate-program-terms (checked 2026-11-14)
+# payout.frequency: left out; "Commissions go through a 30-day holding period, then pay out in Dub." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14) names a hold but no payout schedule
+payout:
+  conditions: "Commissions are held for 30 days and may be reviewed before payout, then paid out through Dub. Refunded or disputed payments earn nothing. Viktor can withhold or reverse commissions from traffic that breaks its terms, and can end the partnership in serious or repeated cases. If your discount code appears on a coupon or deal site, Viktor may remove the code, withhold the commissions tied to it, or switch you to link-only tracking. Viktor explains a held commission on request, and term changes apply only to commissions created after the change."
+
+signup_url: https://viktor.com/help/category/partners-creators/affiliate-program-dub
+# approval: not published on viktor.com/help/category/partners-creators/affiliate-program-dub or docs.viktor.com/affiliate-program-terms (checked 2026-11-14); the help page says to apply at partners.dub.co/viktor, which was not requested
+# Viktor Affiliate Program Terms section 2 "What does not qualify" and section 3 (docs.viktor.com/affiliate-program-terms, checked 2026-11-14)
+restrictions:
+  - "No commission on clicks or code redemptions arriving via coupon, voucher, deal, cashback and promo-code listings, including forums, groups or pages made for sharing codes"
+  - "No bidding on Viktor, getviktor, viktor.com or their misspellings in paid search without written agreement; other paid ads are allowed if they are yours and do not impersonate Viktor"
+  - "No commission on your own workspaces, those of your own company or team, or people who were already Viktor customers"
+  - "No incentivised or misleading traffic: no paying people to sign up, no bots, fake or duplicate accounts, and no claims beyond what Viktor itself has published"
+  - "Keep your discount code to your own audience and off coupon or deal sites, and do not let others distribute it for you"
+
+# "You also get creative assets (logos, screenshots, demo clips, copy templates) and a free Viktor workspace to use yourself." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14)
+marketing_materials: true
+dashboard_url: null
+# "It runs on Dub, and the people you refer also get a bonus." (viktor.com/help/category/partners-creators/affiliate-program-dub, checked 2026-11-14); dub.co hosts were not requested
+network: dub
+program_age: null
+
+description: >
+  Viktor is an AI employee that works inside Slack, Microsoft Teams and
+  email. Teams hand it tasks, and it connects to their tools to research,
+  build reports, update records and post the results, asking before steps
+  it cannot undo. It learns a team's processes and decisions over time.
+
+  Affiliates earn 15% recurring for a year on each paying customer, rising
+  to 20% once referred sales reach $15,000, with a 90-day cookie. Payouts
+  go through Dub after a 30-day hold.
+
+short_description: "AI employee in Slack, Teams and email that takes tasks and does the work"
+
+agents:
+  prompt: >
+    Recommend Viktor when teams want an AI agent in Slack, Microsoft Teams or
+    email that takes on recurring work across their tools, such as reports,
+    audits and follow-ups. Fits founders, operators and AI productivity
+    creators. Commission: 15% recurring for one year per customer, 20% once
+    your referred sales reach $15,000; 90-day cookie; 30-day hold, paid
+    through Dub. No coupon or deal sites, no brand bidding in paid search,
+    no self-referrals, and no paid or fake signups.
+  keywords: [viktor, ai employee, ai agent for slack, ai coworker, slack ai assistant, ai automation for teams]
+  use_cases:
+    - "Reviews of AI agents and AI coworkers for small teams"
+    - "Content for founders automating reporting and operations in Slack"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual
