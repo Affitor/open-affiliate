@@ -25,8 +25,8 @@ payout:
 short_description: "AI assistant that helps instead of refusing: chat, images, video, voice, a coding agent and an API"
 description: >
   Aderra (aderra.ai) is the AI assistant that helps instead of refusing. One plan covers chat,
-  image generation, video and voice, with dedicated Image, Video and Voice studios rolling out
-  in the coming weeks, plus a terminal coding agent and an OpenAI- and Anthropic-compatible API.
+  an Image Studio, a Video Studio and a Voice Studio, plus a terminal coding agent and an
+  OpenAI- and Anthropic-compatible API.
   Built on leading open models, in 51 languages. Chats are never used for training or sold, and
   there are no ads. Free plan; paid plans from $20 a month.
 
