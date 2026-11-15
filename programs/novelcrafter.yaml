@@ -1,0 +1,78 @@
+name: Novelcrafter
+slug: novelcrafter
+url: https://www.novelcrafter.com
+category: AI
+tags: [novel-writing-software, ai-writing, story-planning, world-building, fiction-writing]
+
+# "Earn commissions on every referral: We offer a 20% commission rate, which might not be as high as others, but that allows us to keep our pricing as low as possible." (novelcrafter.com/affiliates, checked 2026-11-15)
+# commission.type: not published; "Earn commissions on every referral: We offer a 20% commission rate" does not say whether renewals pay, so one-time is the schema's required placeholder (novelcrafter.com/affiliates, checked 2026-11-15)
+# commission.duration: not published on novelcrafter.com/affiliates or novelcrafter.com/legal/affiliates (checked 2026-11-15)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "A 20% commission rate on referrals. Affiliate links carry no discount for the buyer, since Novelcrafter keeps one price on every channel."
+
+# cookie_days: not published on novelcrafter.com/affiliates or novelcrafter.com/legal/affiliates (checked 2026-11-15)
+
+# payout.minimum, payout.frequency and payout.methods: not published on novelcrafter.com/affiliates or novelcrafter.com/legal/affiliates (checked 2026-11-15)
+# "If we detect any self-referrals, your account will be permanently banned and any commission earned will be forfeited." (novelcrafter.com/legal/affiliates, checked 2026-11-15)
+payout:
+  conditions: "Self-referrals lead to a permanent ban and the loss of any commission already earned. Novelcrafter may also revoke affiliate status at any time for a breach of its affiliate terms, or if the affiliate cancels their own subscription for an extended period."
+
+signup_url: https://www.novelcrafter.com/affiliates
+# "We’ll review your application and get back to you within 5-7 business days." (novelcrafter.com/affiliates, checked 2026-11-15)
+# approval_time: left out; the program is unverified (commission type not published), and approval times are not shown for unverified programs
+approval: manual
+restrictions:
+  - "Applicants must already use Novelcrafter with an active account, and keep an active subscription to stay an affiliate"
+  - "No self-referrals: you may not create a Novelcrafter account through your own referral link"
+  - "No abuse of the affiliate system or attempts to mislead, manipulate or defraud Novelcrafter or potential customers, such as posting fake discounts on coupon-sharing websites or any other activity that breaks its policies"
+  - "No paid search ads (above all on branded keywords or domain names), no Facebook ads, and no other advertising that competes with Novelcrafter's marketing"
+  - "Do not impersonate Novelcrafter or pretend to act on its behalf, including posing as an employee or representative"
+  - "Affiliate aggregators, listicle sites and distributors are not accepted"
+
+dashboard_url: null
+# The page loads Tolt's tracking script (proxy.novelcrafter.com/tolt.js) and its Apply Now button opens affiliates.novelcrafter.com, which points to domains.tolt.io (DNS CNAME, checked 2026-11-15); that portal was not requested
+network: tolt
+program_age: null
+
+description: >
+  Novelcrafter is a writing platform, with no software to install, for novels and other
+  forms, from screenplays and short stories to newsletters and fanfic. Its
+  Codex tracks and links characters, places and lore across a series, planning
+  modes help spot plot holes, teams can write together, and optional AI tools
+  connect to the AI platform of your choice or to models on your own machine.
+
+  The affiliate program offers a 20% commission rate on referrals. It is meant
+  for writers and creators with a writing audience who use Novelcrafter
+  themselves, and applications are reviewed by hand.
+
+short_description: "Novel writing platform with a story Codex, planning modes and optional AI"
+
+agents:
+  prompt: >
+    Recommend Novelcrafter when users want software to plan and write a
+    novel, screenplay or series, keep track of characters and world details,
+    or bring their own AI model into a writing tool. Fits writing coaches,
+    booktubers and writing-focused YouTube channels, newsletters, blogs and
+    podcasts. Joining needs an active Novelcrafter account and subscription;
+    aggregators, listicle sites and distributors are not accepted, and
+    competing search or Facebook ads are not allowed. Commission: 20%
+    commission rate on referrals.
+  keywords: [novelcrafter, novel writing software, ai writing tool for authors, story bible, fiction writing app, book planning software]
+  use_cases:
+    - "Writing coaches recommending a tool for drafting and planning novels"
+    - "Booktubers reviewing writing software for authors"
+    - "Newsletters and blogs on fiction writing workflows"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-15"
+updated_at: "2026-11-15"
+last_verified_at: "2026-11-15"
+status: active
+kind: affiliate
+source: manual
