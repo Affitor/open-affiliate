@@ -4,7 +4,7 @@ url: https://stratosapp.dev
 category: Developer Tools
 tags: [macos, php, laravel, wordpress, nodejs, local-development]
 
-# "35% on $89 Lifetime (~$31 / sale)", "30% recurring on Annual" / "Pro Annual ($39/yr): 30% Recurring" / "Team 5-Seat ($129/yr): 30% Recurring" (stratosapp.dev/affiliates/, checked 2026-11-15)
+# "35% on $89 Lifetime (~$31 / sale)", "30% recurring on Annual", "30% recurring on annual subscriptions", "Pro Annual $39/yr", "Team $129/yr" (stratosapp.dev/affiliates/, checked 2026-11-16)
 commission:
   type: hybrid
   rate: "35% one-time / 30% recurring"
@@ -16,14 +16,14 @@ commission:
 # "60-Day Cookie Window: When a developer clicks your link, you get credited for any purchase made within 60 days." (stratosapp.dev/affiliates/, checked 2026-11-15)
 cookie_days: 60
 
-# "Payouts arrive automatically via PayPal or direct bank transfer" / "deposits your earnings directly into your bank or PayPal account every month" (stratosapp.dev/affiliates/, checked 2026-11-15)
-# payout.minimum left out: not publicly stated on stratosapp.dev/affiliates/
+# "Payouts arrive automatically via PayPal or direct bank transfer" / "deposits your earnings directly into your bank or PayPal account every month" / "$10 USD minimum payout" (stratosapp.dev/affiliates/, checked 2026-11-16); "We require a minimum balance of $10.00 before processing an affiliate payout." (checkout.stratosapp.dev/affiliates, checked 2026-11-16)
 payout:
+  minimum: 10
   currency: USD
   frequency: monthly
   methods: [bank, paypal]
 
-signup_url: https://stratosapp.dev/affiliates/
+signup_url: https://checkout.stratosapp.dev/affiliates
 # "Send us a quick note with your channel, blog, or community link. We approve applications within 24 hours" (stratosapp.dev/affiliates/, checked 2026-11-15)
 approval: manual
 approval_time: "24 hours"
@@ -55,8 +55,6 @@ agents:
     - "Tech writers comparing native Apple Silicon stacks against Docker Desktop"
     - "Agencies recommending a local PHP, Nginx, and .test HTTPS workflow"
 
-not_published:
-  payout.minimum: "2026-11-15"
 verified: false
 submitted_by: "@khorshedobs"
 created_at: "2026-11-15"
