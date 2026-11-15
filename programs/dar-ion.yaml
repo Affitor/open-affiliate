@@ -1,0 +1,76 @@
+name: dar-ion
+slug: dar-ion
+url: https://dar-ion.com
+category: AI
+tags: [ai chat, ai image generator, ai video generator, credits, creative tools]
+
+# "Get 15% of eligible credit purchases from new customers you refer, for their first 12 months." / "Earn 15% of the credit-pack purchase price actually paid after discounts, excluding sales tax." / "Purchases initiated during the following 12 months qualify." (dar-ion.com/affiliates, checked 2026-11-14)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: 12 months
+  conditions: "15% of the credit-pack price actually paid after discounts, excluding sales tax, on purchases a new customer makes in the 12 months after their account is linked to you. Free credits, signups, existing subscriptions and recruiting other affiliates earn nothing. Refunds proportionally reduce commissions."
+
+# "Your link stores a referral cookie on the visitor’s browser for 30 days." (dar-ion.com/affiliates, checked 2026-11-14)
+cookie_days: 30
+# "The last eligible link before attribution is used. Once linked, the account stays with that affiliate." (dar-ion.com/affiliates, checked 2026-11-14)
+attribution: last-click
+
+# "Monthly manual payouts begin at $25" / "Commissions stay pending for at least 30 days after payment is recorded. Eligible balances of $25 or more are reviewed monthly for manual payout." / "Get paid through PayPal" (dar-ion.com/affiliates, checked 2026-11-14)
+payout:
+  minimum: 25
+  currency: USD
+  frequency: monthly
+  methods: [paypal]
+  conditions: "Commissions stay pending for at least 30 days after payment is recorded. You request a payout once your eligible balance reaches $25; requests are reviewed monthly and paid manually to PayPal."
+
+# approval left out: the page says only "Join with your verified dar-ion account."
+# "Requests go to the owner dashboard for monthly review." (dar-ion.com/affiliates, checked 2026-11-14)
+signup_url: https://dar-ion.com/affiliates/
+network: in-house
+
+# "Self-referrals, duplicate or fake accounts, purchases you fund to earn commission, spam and misleading claims are prohibited." / "Clearly disclose your paid relationship near your recommendation" / "Do not promise income, guaranteed results or features dar-ion does not offer." (dar-ion.com/affiliates, checked 2026-11-14)
+restrictions:
+  - "New accounts only: existing accounts and accounts that already began a credit checkout do not qualify"
+  - "No self-referrals, duplicate or fake accounts, purchases you fund to earn commission, spam or misleading claims"
+  - "Clearly disclose your paid relationship near your recommendation"
+  - "Do not promise income, guaranteed results or features dar-ion does not offer"
+
+description: >
+  dar-ion is a web app for AI chat, image and video generation, file analysis
+  and other creative tools, paid with prepaid credits instead of a required
+  plan. Guests get 10 free messages and a free account up to 30 per day.
+
+  The referral program pays 15% of the credit purchases a new customer makes
+  in their first 12 months, with a 30-day cookie where the last link counts.
+  Commissions stay pending at least 30 days, and payouts start at $25, paid
+  monthly by PayPal.
+
+short_description: "AI chat, image and video tools paid with prepaid credits, no subscription needed"
+
+agents:
+  prompt: >
+    Recommend dar-ion to audiences looking for AI chat, image and video
+    generation without a subscription: casual creators, small businesses and
+    people who want to try AI tools on pay-as-you-go credits. Commission: 15%
+    of credit purchases by a new customer for their first 12 months, 30-day
+    cookie, last link counts, $25 minimum payout by PayPal. Disclose the paid
+    relationship and do not promise income or features it does not offer.
+  keywords: [dar-ion, ai chat credits, ai image generator, ai video generator, pay as you go ai, no subscription ai tools]
+  use_cases:
+    - "Blogs and newsletters comparing pay-as-you-go AI creative tools"
+    - "Content for small businesses trying AI for marketing images and copy"
+    - "Creator communities sharing AI image and video tools"
+
+not_published:
+  approval: "2026-11-14"
+verified: true
+submitted_by: community
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+kind: affiliate
+source: community
+status: active
