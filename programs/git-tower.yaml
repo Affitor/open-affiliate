@@ -28,7 +28,7 @@ signup_url: https://www.git-tower.com/help/guides/account/refer-a-friend
 restrictions:
   - "Referral links are only for customers on the Basic plan or on Tower Pro with a single seat; trial accounts cannot take part"
   - "Refer brand new customers only; existing, expired (paid or trial), canceled and former Tower accounts cannot be referred"
-  - "No ads (Google Ads or similar platforms) that bid on branded keywords containing \"Tower\""
+  - "Do not advertise your referral link on Google Ads or similar platforms; bidding on branded keywords that include \"Tower\" is prohibited"
 
 dashboard_url: null
 # The referral link and status sit in the "Refer a Friend" section of the Tower Account Management dashboard (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
@@ -55,7 +55,9 @@ agents:
     account credit: $10 per new customer, usable on renewals, seats or
     upgrades, and the friend gets 10% off the first purchase. Only customers
     on the Basic plan or a 1-seat Tower Pro account can refer, only brand new
-    customers count, and ads bidding on "Tower" keywords are not allowed.
+    customers count. The referral link may not be promoted with Google Ads
+    or similar ad platforms, and brand bidding on "Tower" keywords is
+    prohibited.
   keywords: [tower, git client, git gui, mac git client, windows git client, version control]
   use_cases:
     - "Developers recommending a Git GUI to teammates or friends"
