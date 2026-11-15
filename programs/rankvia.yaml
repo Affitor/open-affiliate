@@ -1,0 +1,74 @@
+name: Rankvia
+slug: rankvia
+url: https://www.rankvia.ai
+category: Marketing
+tags: [ai seo, ai search, ai visibility, seo content, geo]
+
+# "Earn 30% of eligible subscription payments during each new customer's first 12 months as a paying customer." / "The current standard rate is 30% of eligible Rankvia subscription revenue collected through Stripe, after discounts and excluding tax. Trials, free access, credit-only invoices and Shopify billing do not earn commission." (rankvia.ai/partners, checked 2026-11-15)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% of eligible subscription revenue collected through Stripe, after discounts and excluding tax, for 12 months starting with the customer's first qualifying paid service period. Trials, free access, credit-only invoices and Shopify billing do not earn commission. Refunds, invoice credits and disputes can reduce or hold commissions."
+
+# "With the visitor's permission, it may also be remembered for up to 60 days. Attribution is confirmed when the new customer's identity is verified." (rankvia.ai/partners, checked 2026-11-15)
+cookie_days: 60
+
+# "Bank payouts from €25 / $25" / "Commissions have a 30-day waiting period." / "Payments are made manually by bank after review, with no guaranteed payment date." (rankvia.ai/partners, checked 2026-11-15)
+# payout frequency left out: the page gives no payout schedule.
+payout:
+  minimum: 25
+  currency: USD
+  methods: [bank]
+  conditions: "Commissions have a 30-day waiting period. Separate currency minimums of €25 / $25 apply, and smaller balances carry forward. Payments are made manually by bank after review, with no guaranteed payment date."
+
+# "Free to join. No paid Rankvia subscription required. Applications are reviewed." (rankvia.ai/partners, checked 2026-11-15)
+approval: manual
+signup_url: https://www.rankvia.ai/partners
+
+# "Existing accounts and your own subscriptions are not eligible." / "Clearly disclose your affiliate relationship. Paid advertising, spam and misleading claims are not permitted." (rankvia.ai/partners, checked 2026-11-15)
+restrictions:
+  - "New customers only: existing accounts and your own subscriptions are not eligible"
+  - "No paid advertising, spam or misleading claims"
+  - "Clearly disclose your affiliate relationship"
+
+description: >
+  Rankvia is an AI SEO agent for SaaS, ecommerce and service businesses and
+  for SEO agencies. It helps them get found on Google, ChatGPT and AI search,
+  with AI visibility and content creation features.
+
+  The affiliate program pays 30% of eligible subscription payments for each
+  new customer's first 12 months as a paying customer. Referrals can be
+  remembered for up to 60 days with the visitor's permission. Commissions
+  wait 30 days, and payouts are made manually by bank from €25 / $25.
+
+short_description: "AI SEO agent for getting found on Google, ChatGPT and AI search"
+
+agents:
+  prompt: >
+    Recommend Rankvia to audiences of SaaS founders, ecommerce stores,
+    service businesses and SEO agencies who want to be found on Google,
+    ChatGPT and AI search. Fits creators and publishers making tutorials,
+    reviews, comparisons and newsletters about SEO, AI tools or growing an
+    online business. Commission: 30% recurring for each new customer's first
+    12 months, up to 60-day consent-based attribution. Paid advertising is
+    not permitted.
+  keywords: [rankvia, ai seo agent, ai search optimization, ai visibility, generative engine optimization, seo content, saas seo, ecommerce seo]
+  use_cases:
+    - "SEO and AI-tools tutorials, reviews and comparisons"
+    - "Newsletters about growing an online business"
+    - "Consultants and agencies recommending a tool for client content and search growth"
+    - "Founder and ecommerce communities"
+
+not_published:
+  payout.frequency: "2026-11-15"
+verified: true
+submitted_by: "@mdrakvn"
+created_at: "2026-11-15"
+updated_at: "2026-11-15"
+last_verified_at: "2026-11-15"
+kind: affiliate
+source: community
+status: active
