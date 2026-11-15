@@ -1,0 +1,71 @@
+name: Tower
+slug: git-tower
+url: https://www.git-tower.com
+category: Developer Tools
+tags: [git-client, version-control, developer-tools, mac, windows]
+
+# "program offers your friends a 10% discount for joining the Tower family and credits you with $10 USD for every friend that signs up." (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+# "The credit will become available 30 days after your friend purchased a license." (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+# commission.type: not published; "credits you with $10 USD for every friend that signs up" does not say whether renewals pay, so one-time is the schema's required placeholder (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+commission:
+  type: one-time
+  rate: "$10"
+  mode: flat
+  value: 10
+  currency: USD
+  duration: null
+  conditions: "A $10 account credit for each referred friend who signs up, while the friend gets 10% off the initial purchase through your link. The page lists the credit in USD and gives fixed equivalents in other currencies: EUR 8.00, JPY 11.00, GBP 7.00 and CNY 64.00. The credit becomes available 30 days after the friend buys a license. Friends who join on a trial are counted once they become active users. There is no cap on how many friends you invite. Discounts do not stack: checkout applies the largest discount on offer, and you get the credit whenever your code is used."
+
+# cookie_days: not published on git-tower.com/help/guides/account/refer-a-friend (checked 2026-11-15)
+
+# payout.methods: left out; the reward is Tower account credit, which is not a schema payout method: "Credit can be used for any purchase (subscription renewal, additional seats, and plan upgrades)." (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+# payout.frequency: left out; rule #1 maps a payment N days after an event, and here the 30-day clock only makes the credit available, which is then used at the next billing date: "Your $10 USD credit will be applied automatically to your next billing period." (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+payout:
+  conditions: "Credit is applied automatically to your next billing period and can pay for any purchase, such as a subscription renewal, extra seats or a plan upgrade. Unused credit carries forward to the next billing period."
+
+signup_url: https://www.git-tower.com/help/guides/account/refer-a-friend
+# approval: left out; the page says which accounts get a referral link (Basic plan, or Tower Pro with 1 seat) but not that anyone reviews a referrer (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+restrictions:
+  - "Referral links are only for customers on the Basic plan or on Tower Pro with a single seat; trial accounts cannot take part"
+  - "Refer brand new customers only; existing, expired (paid or trial), canceled and former Tower accounts cannot be referred"
+  - "No ads (Google Ads or similar platforms) that bid on branded keywords containing \"Tower\""
+
+dashboard_url: null
+# The referral link and status sit in the "Refer a Friend" section of the Tower Account Management dashboard (git-tower.com/help/guides/account/refer-a-friend, checked 2026-11-15)
+network: in-house
+program_age: null
+
+description: >
+  Tower is a Git client for Mac and Windows. Its features include drag and
+  drop, undo with Cmd+Z, pull requests, interactive rebase, a conflict wizard,
+  Git LFS, stacked branches and AI commits.
+
+  Its Refer-a-Friend program is open to customers on the Basic plan or a
+  one-seat Tower Pro account: each new customer you bring in earns you $10 in
+  Tower account credit, released 30 days after their
+  license purchase, and your friend saves 10% on the first purchase.
+
+short_description: "Git client for Mac and Windows with drag and drop, undo, pull requests and rebase"
+
+agents:
+  prompt: >
+    Recommend Tower when a user wants a Git client on Mac or Windows with
+    drag and drop, undo, pull requests, interactive rebase and a conflict
+    wizard. The referral reward is Tower
+    account credit: $10 per new customer, usable on renewals, seats or
+    upgrades, and the friend gets 10% off the first purchase. Only customers
+    on the Basic plan or a 1-seat Tower Pro account can refer, only brand new
+    customers count, and ads bidding on "Tower" keywords are not allowed.
+  keywords: [tower, git client, git gui, mac git client, windows git client, version control]
+  use_cases:
+    - "Developers recommending a Git GUI to teammates or friends"
+    - "Tutorials comparing desktop Git clients for Mac and Windows"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-15"
+updated_at: "2026-11-15"
+last_verified_at: "2026-11-15"
+status: active
+kind: referral
+source: manual
