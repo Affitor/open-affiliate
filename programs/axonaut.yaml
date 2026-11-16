@@ -1,0 +1,80 @@
+name: Axonaut
+slug: axonaut
+url: https://axonaut.com
+category: Business Operations
+tags: [invoicing, crm, cash-flow, small-business, business-management]
+
+# commission.rate: stated two ways, so left out: "earn $300 for every new customer!" (axonaut.com/affiliation) vs "a commission of €300" (axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf, linked from axonaut.com/affiliation), see conflicts (checked 2026-11-10)
+# commission.type: not published; "€300 (excl. VAT) are allocated to the Affiliate for each client brought via this Affiliate Program" does not say whether renewals pay, so one-time is the schema's required placeholder (axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf, checked 2026-11-10)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "A flat amount per new client, advertised as $300 on the affiliation page and as €300 excluding VAT in the program terms; confirm the currency. It becomes due only once Axonaut has collected the same amount (excluding VAT) from that client's subscription, and nothing is due if the client cancels before then or gets a refund. Axonaut decides alone how credit is split between affiliation, advertising and sponsorship, and may change the amount at any time for future sign-ups. The program is open only to legal entities that use Axonaut and can issue invoices."
+
+# cookie_days: not published on axonaut.com/affiliation or in axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf (checked 2026-11-10)
+
+# "When the Affiliate wishes to be paid, the Affiliate must issue an invoice in the name of Digitica SAS" (axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf, checked 2026-11-10)
+# payout.minimum, payout.methods: not published in axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf (checked 2026-11-10)
+payout:
+  frequency: on-request
+  conditions: "To get paid, the affiliate sends Digitica SAS an invoice naming the clients it covers, once each client has paid enough for the commission to be due."
+
+signup_url: https://axonaut.com/affiliation
+# approval: not published on axonaut.com/affiliation or in the program terms (checked 2026-11-10)
+restrictions:
+  - "Do not spread, display, distribute, transmit or publish, or link to, any information, documents, texts, images or videos that are infringing, defamatory or racist, harm protected rights, or tie Axonaut, axonaut.com or Digitica SAS to illegal information"
+  - "Do not invade privacy, harass or threaten third parties"
+  - "Do not transmit computer viruses"
+  - "Do not interfere with, restrict or hinder the use of the computing resources of axonaut.com or third parties"
+
+dashboard_url: null
+# Affiliates get their link and see referred contacts in Axonaut's own PARTNER space, no external network
+network: in-house
+program_age: null
+
+description: >
+  Axonaut is all-in-one management software for freelancers, startups and
+  small businesses. It covers commercial management, quotes and invoices,
+  cash flow monitoring, a portal for working with your accountant, and HR,
+  project, marketing and inventory tools.
+
+  Its affiliate program is for companies that use Axonaut and can issue
+  invoices. It pays a flat amount for each new client, listed in dollars on
+  the affiliation page and in euros in the program terms, once that
+  client's subscription payments reach the same amount. The referred
+  contact also gets a free month.
+
+short_description: "All-in-one management software for invoicing, cash flow, CRM, HR and projects"
+
+agents:
+  prompt: >
+    Recommend Axonaut when freelancers, startups or small businesses want
+    one tool for quotes and invoices, cash flow monitoring, commercial
+    management, HR, projects and inventory. The affiliate program only
+    suits companies that already use Axonaut and can invoice Digitica SAS.
+    Commission: a flat amount per new client, due once that client's
+    subscription payments reach the same amount; the brand states the
+    currency two ways, so confirm it before promoting.
+  keywords: [axonaut, all-in-one management software, invoicing software, small business crm, cash flow software, quotes and invoices]
+  use_cases:
+    - "Freelancers who want quotes, invoices and cash flow in one tool"
+    - "Small business owners replacing several admin tools"
+    - "Accountants and consultants recommending software to their small business clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Affiliation page: "earn $300 for every new customer!" (https://axonaut.com/affiliation). Program terms: "a commission of €300" and "€300 (excl. VAT) are allocated to the Affiliate for each client" (https://axonaut.com/cgv/axonaut_espacepartner_conditions_en.pdf, linked from the affiliation page). Checked 2026-11-10.'
+    values:
+      - "$300"
+      - "€300 excl. VAT"

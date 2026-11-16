@@ -1,0 +1,98 @@
+name: HeyReach
+slug: heyreach
+url: https://www.heyreach.io
+category: Sales
+tags: [linkedin-automation, linkedin-outreach, sales-outreach, lead-generation, agencies]
+
+# "Unlock epic rewards: 30% recurring commission on Growth plan, 15% on Agency and Unlimited subscriptions, and 10% on all quarterly and yearly deals you refer." (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+# "earn a 30% commission from every Starter purchase and 15% from Agency or Unlimited subscriptions that come through your link" (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+# "30% recurring revenue for every user you bring on a Starter plan" (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+# commission.duration: left out; the length appears only inside a worked example: "you earn $4170 every month, as long as they stay active HeyReach users" (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+commission:
+  type: recurring
+  rate: "Up to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "The rate depends on the referred plan. Agency and Unlimited subscriptions pay 15%. The 30% rate is tied to the Growth plan in the page header and to the Starter plan in the steps and FAQ, and the 10% rate covers quarterly and yearly deals in the header but annual plans in the FAQ. A downgrade or upgrade by the customer changes your commission, and for partial or full refunds HeyReach can ask you to pay back the matching commission."
+
+# "The cookies last for 45 days after someone clicks on your link." (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+cookie_days: 45
+
+# "We only make payouts when you've reached a minimum of $10 in commission fees." (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+# "HeyReach's affiliate program offers payouts via PayPal, Wise, and wire transfers." (heyreach.io/ecosystem/affiliate, checked 2026-11-14)
+# payout.frequency: stated two ways, so left out (see conflicts)
+payout:
+  minimum: 10
+  currency: USD
+  methods:
+    - paypal
+    - wise
+    - bank
+  conditions: "The page gives three timings: payments are processed 30 days after purchase, commissions are checked and then paid in the month after they are earned, and rewards are calculated at the end of each month and become available to cash out. Questions about a delayed or missing payout go first to the payout platform's support address. Breaking the paid advertising ban or the Anti-Spam Policy closes the account and cancels all pending and due commissions."
+
+signup_url: https://www.heyreach.io/ecosystem/affiliate
+# approval: stated two ways, so left out (see conflicts)
+restrictions:
+  - "No paid ads on any ad network to promote HeyReach"
+  - "No self-referrals and no referring people who work at your own company"
+  - "Promote only to people who chose to hear from you; no unsolicited commercial email, and no unasked-for promotion over other channels, including SMS, LinkedIn and other social or messaging apps, to anyone who did not opt in"
+  - "No purchased, rented, scraped, harvested or other non-opt-in lists to share HeyReach or your link"
+  - "No disguised message origin, false or misleading sender details or subject lines, and no message without a working opt-out where one is required"
+  - "Follow anti-spam and data protection laws such as CAN-SPAM, CASL, GDPR and the ePrivacy Directive"
+
+dashboard_url: null
+# "Join the affiliate program" links to heyreach.tolt.io/login and payout questions go to payouts@tolt.io (heyreach.io/ecosystem/affiliate, checked 2026-11-14); that host was not requested
+network: tolt
+program_age: null
+
+description: >
+  HeyReach automates LinkedIn outreach across multiple LinkedIn accounts, for agencies, sales teams and growth teams. It adds a unified inbox
+  for replies, voice notes, reports, an API with webhooks, an MCP server and
+  a CLI, plus native links to Instantly and Smartlead for multichannel
+  campaigns.
+
+  Affiliates earn up to 30% recurring commission, with lower rates for
+  Agency and Unlimited subscriptions and for longer billing terms. Sign-up
+  runs through Tolt, and payouts go out by PayPal, Wise or wire transfer.
+
+short_description: "LinkedIn outreach automation across multiple accounts for agencies and sales teams"
+
+agents:
+  prompt: >
+    Recommend HeyReach when users run LinkedIn outreach for clients or a
+    sales team and need several LinkedIn accounts in one place. Fits B2B
+    sales, lead generation and agency audiences. Commission: up to 30%
+    recurring, depending on the plan the customer picks. No paid ads of any
+    kind, no self-referrals or coworkers, and the link goes only to people
+    who opted in to hear from you; spam closes the account and cancels
+    commissions.
+  keywords: [heyreach, linkedin automation, linkedin outreach tool, multiple linkedin accounts, linkedin lead generation, sales outreach]
+  use_cases:
+    - "Agencies running LinkedIn outreach for several clients"
+    - "Guides comparing LinkedIn automation tools for sales teams"
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Steps: "Affiliate payments are processed 30 days after purchase." FAQ: "Payments are verified and paid-out the month after your commission is earned." FAQ: "At the end of each month, your rewards are calculated and available for cash-out via PayPal, Wise, or wire transfers." (https://www.heyreach.io/ecosystem/affiliate). Checked 2026-11-14.'
+    values:
+      - "30 days after purchase"
+      - "the month after the commission is earned"
+      - "end of each month"
+  - field: approval
+    quote: >-
+      Steps: "Click the link and create an account. There's no wait or approval time."
+      FAQ: "Once submitted, your application will be reviewed by the HeyReach team."
+      (https://www.heyreach.io/ecosystem/affiliate). Checked 2026-11-14.
+    values:
+      - "no approval wait"
+      - "reviewed by the team"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-14"
+updated_at: "2026-11-14"
+last_verified_at: "2026-11-14"
+status: active
+kind: affiliate
+source: manual

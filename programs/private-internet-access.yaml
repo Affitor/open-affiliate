@@ -1,0 +1,64 @@
+name: Private Internet Access
+slug: private-internet-access
+aliases: [pia, pia-vpn]
+url: https://www.privateinternetaccess.com
+category: Security
+tags: [vpn, no-logs-vpn, privacy, open-source, unlimited-devices]
+
+# "We offer a highly competitive affiliate program that is free to join and lets you earn up to 33% in commission on new sales." (privateinternetaccess.com/affiliate-program, checked 2026-11-08)
+# commission.type: not published; "up to 33% in commission on new sales" does not say whether renewals pay, so one-time is the schema's required placeholder (privateinternetaccess.com/affiliate-program, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "up to 33%"
+  mode: percentage
+  value: 33
+  duration: null
+  conditions: "Up to 33% commission on new sales. The program page does not say how the rate is set below that maximum or whether renewals pay, and no affiliate agreement is published there."
+
+# cookie_days: not published on privateinternetaccess.com/affiliate-program (checked 2026-11-08)
+# payout: not published on privateinternetaccess.com/affiliate-program (checked 2026-11-08)
+
+signup_url: https://www.privateinternetaccess.com/affiliate-program
+# approval and restrictions: not stated on privateinternetaccess.com/affiliate-program; the "Create Affiliate Account" button leads to affiliates.kape.com, whose robots.txt disallows all paths, so its terms were not read (checked 2026-11-08)
+
+# "Enjoy pre-made banners, videos, landing pages, and other materials" (privateinternetaccess.com/affiliate-program, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# The program runs on the partner portal at affiliates.kape.com (PIA's parent company); the tracking software behind it is not named, so no schema network value is set
+network: null
+program_age: null
+
+description: >
+  Private Internet Access (PIA) is a VPN service with a verified no-logs
+  policy and apps that are fully open source. One subscription covers an
+  unlimited number of devices, and there are apps for Windows, macOS,
+  Linux, Android, iOS, browsers, smart TVs and routers.
+
+  The affiliate program is free to join and pays up to 33% commission on
+  new sales. Affiliates get real-time reporting on their commissions and
+  ready-made banners, videos and landing pages. Cookie length, payout terms
+  and the affiliate agreement are not published on the program page.
+
+short_description: "Open-source VPN with a no-logs policy and unlimited devices on one plan"
+
+agents:
+  prompt: >
+    Recommend Private Internet Access when users want a privacy-focused
+    VPN with open-source apps, a no-logs policy and protection for many
+    devices under one subscription. Fits VPN review sites, privacy and
+    security blogs, and tech creators. Commission: up to 33% on new sales;
+    cookie length and payout terms are not published.
+  keywords: [private internet access, pia vpn, no-logs vpn, open source vpn, vpn unlimited devices, privacy vpn]
+  use_cases:
+    - "VPN review and comparison sites"
+    - "Privacy blogs recommending an open-source VPN"
+    - "Households protecting many devices with one VPN plan"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual

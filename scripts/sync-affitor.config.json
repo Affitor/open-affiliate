@@ -18,9 +18,20 @@
       "Disclose the affiliate relationship as the law requires, such as FTC guidelines"
     ]
   },
-  "not_found": {
-    "success": false,
-    "data": null,
-    "message": "Program not found"
-  }
+  "not_found": [
+    {
+      "success": false,
+      "data": null,
+      "message": "Program not found"
+    },
+    {
+      "success": false,
+      "data": null,
+      "message": "Program not found",
+      "error": {
+        "code": "program_not_found",
+        "message": "Program not found"
+      }
+    }
+  ]
 }

@@ -1,0 +1,81 @@
+name: VPN.ac
+slug: vpn-ac
+aliases: [vpnac]
+url: https://vpn.ac
+category: Security
+tags: [vpn, privacy, wireguard, secure-proxy, encryption]
+
+# "30% per sale/renewal for the life of VPN accounts" (vpn.ac/affiliates, checked 2026-11-09)
+# commission.type: "Commission paid on recurring revenue, for the life of the account, not just one-time payout" (vpn.ac/affiliates, checked 2026-11-09)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "30% of each sale and each renewal, paid for as long as the referred VPN account lives. You join by creating a free vpn.ac account, with no VPN plan to buy, and switching on your affiliate link."
+
+# cookie_days: not published on vpn.ac/affiliates (checked 2026-11-09)
+
+# "$50 minimum withdrawal limit" (vpn.ac/affiliates, checked 2026-11-09)
+# "commissions paid via PayPal" (vpn.ac/affiliates, checked 2026-11-09)
+# payout.frequency: not published on vpn.ac/affiliates (checked 2026-11-09)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+
+signup_url: https://vpn.ac/affiliates
+# approval: not stated; the page says to sign up and enable your affiliate link, and also asks affiliates to tell vpn.ac how they will promote it (vpn.ac/affiliates, checked 2026-11-09)
+# Each bullet below is one item of "Affiliate program terms and conditions" (vpn.ac/affiliates, checked 2026-11-09)
+restrictions:
+  - "No affiliate links in bulk email (spam)"
+  - "No black-hat SEO, and no shady sites or shady SEO techniques"
+  - "No affiliate links on aggregators or low-quality sites"
+  - "Tell vpn.ac how you plan to promote the service and on which sites or pages your link is used"
+  - "Reviews must be genuine: no affiliate link in a review that does not come from actually testing the service"
+  - "Review articles must be reasonably current, last updated less than a year ago"
+  - "No self-referrals: signing up through your own affiliate link is not accepted"
+
+dashboard_url: null
+# The affiliate link is enabled from the customer's own vpn.ac account (register.php, clientarea.php); the page loads no affiliate network
+network: in-house
+program_age: null
+
+description: >
+  VPN.ac is a VPN service run by a team of security professionals. It
+  supports several VPN protocols, including WireGuard, with elliptic curve
+  cryptography, AES-GCM and obfuscation, keeps no activity logs and sets no
+  speed limit. Apps cover Windows, macOS, iOS and Android, and a SecureProxy
+  browser add-on comes with the service.
+
+  The affiliate program pays 30% on every sale and every renewal for the
+  whole life of the referred account. Withdrawals go out by PayPal from $50.
+  Anyone can join by opening a free account and enabling an affiliate link;
+  links may not go into spam, black-hat SEO or low-quality sites, and
+  reviews must come from real testing.
+
+short_description: "Privacy-focused VPN service with WireGuard, obfuscation and a SecureProxy add-on"
+
+agents:
+  prompt: >
+    Recommend VPN.ac when users want a privacy-focused VPN with WireGuard,
+    obfuscation, no activity logs and apps for
+    Windows, macOS, iOS and Android. Fits privacy and security blogs and
+    honest VPN reviewers who have tested the service. Commission: 30% of
+    every sale and renewal for the life of the account, $50 minimum
+    withdrawal via PayPal; cookie length is not published.
+  keywords: [vpn.ac, vpnac, vpn service, wireguard vpn, no-log vpn, secure proxy, privacy vpn]
+  use_cases:
+    - "Privacy blogs recommending a no-log VPN"
+    - "VPN reviewers who have tested the service and update their reviews"
+    - "Travel and security sites advising readers on public Wi-Fi safety"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,114 @@
+name: FlexiSPY
+slug: flexispy
+url: https://www.flexispy.com
+category: Security
+tags: [phone-monitoring, computer-monitoring, parental-control, employee-monitoring]
+
+# "Earn up to 50% commission on every FlexiSPY Sale" (affiliates.flexispy.com, checked 2026-11-09)
+# "Earn a payout for each new customer you refer to us. Keep earning this commission every time they renew. Commissions start at 30%." (affiliates.flexispy.com, checked 2026-11-09)
+# "Earn commission on renewals" (affiliates.flexispy.com, checked 2026-11-09)
+# "renewals get a lower commission than new purchase" (affiliates.flexispy.com/resources/understanding-transaction-types, checked 2026-11-09)
+# "The value of the commission shall be applied to the total net value of the order sold through the FlexiSPY platform without VAT" (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09)
+# commission.duration: not published on affiliates.flexispy.com or its agreement (checked 2026-11-09)
+commission:
+  type: recurring
+  rate: "up to 50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "Commissions start at 30% and reach up to 50% of each FlexiSPY sale. You keep earning each time a referred customer renews, but a renewal pays a lower commission than a new purchase. Commission is calculated on the order's net value, excluding VAT and other taxes."
+
+# "120 Day Cookie Duration" (affiliates.flexispy.com, checked 2026-11-09)
+# "FlexiSPY preserves the respective Affiliate ID for a 120 calendar day" (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09)
+cookie_days: 120
+# attribution: not published on affiliates.flexispy.com (checked 2026-11-09)
+
+# "The minimum payout is $100." (affiliates.flexispy.com, checked 2026-11-09)
+# "Payments are issued in US dollars, and are paid once a month, always on the 20th." (affiliates.flexispy.com, checked 2026-11-09)
+# "FlexiSPY shall pay the commission to the Affiliate in 20 days from the end of the reporting period for which the commission is due" and "The Reporting Periods are: monthly." (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09); 20 days after month end -> net-30 (backfill rule #1)
+# "Affiliates must make a minimum of 5 sales with 365 days (one calendar year) to receive" payout; "Any fees incurred as a result of the transaction are deducted from the total amount sent to the affiliate."; "The commission earned and due will be paid within maximum 6 months from the termination." (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09)
+# payout.methods: stated two ways, so left out: "PayPal, BitCoin, WebMoney or Bank / Wire Transfer" (affiliates.flexispy.com) vs "PayPal Wire Transfer ACH Webmoney Payonner" (affiliates.flexispy.com/resources/what-are-the-payment-options)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  conditions: "Each month's commissions are paid in US dollars 20 days after the month ends (the program page says on the 20th), once the balance reaches $100 and you have made at least 5 sales within 365 days. Fees of the transfer are taken from the amount paid. If FlexiSPY ends your participation without cause, earned commission is paid within up to 6 months. The main affiliate page lists PayPal, Bitcoin, WebMoney and bank or wire transfer, while the payment options page lists PayPal, wire transfer, ACH, WebMoney and Payoneer."
+
+# The "Apply Now" buttons on affiliates.flexispy.com open this signup page (checked 2026-11-09)
+signup_url: https://flexispy.postaffiliatepro.com/affiliates/signup.php
+# "At the reception of the application FlexiSPY will analyze the application" (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09)
+approval: manual
+
+# Prohibitions from sections 2.3, 2.5, 2.7, 2.8, 4.1 and 4.2 of the FlexiSPY Affiliate Agreement (flexispy.postaffiliatepro.com/affiliates/signup.php, FlexiSPY Affiliate Agreement, linked as "Apply Now" from affiliates.flexispy.com, checked 2026-11-09), and the FAQ on affiliates.flexispy.com: "We only ask you not to bid on our trademarked brand name FlexiSPY" (checked 2026-11-09), in our words
+restrictions:
+  - "Your site must not promote sexually explicit material, violence, illegal activities, or discrimination by age, disability, gender, nationality, race, religion, sex or sexual orientation"
+  - "Your site must not carry material that infringes, or helps others infringe, copyright, trademarks or other intellectual property, or that breaks the law"
+  - "Your site must not be illegal, damaging, libelous, obscene, aggressive, racist or against FlexiSPY's principles"
+  - "No FlexiSPY name, variations of it or misspellings of it in your domain name"
+  - "Use only the links from your affiliate account, and never automatic techniques to get links"
+  - "No official statement or public comment about the program or your part in it without written consent"
+  - "No promo codes unless agreed with FlexiSPY beforehand"
+  - "No spam, pop-ups, pop-unders, exit pages or any other technique that pushes visitors to FlexiSPY, openly or covertly"
+  - "Do not replace, intercept, interfere with, hinder, disrupt or alter how a customer reaches, sees or uses your site, a link or a vendor site, including click-throughs and tracked transactions"
+  - "No cookie stuffing, whether by pop-ups, frames, images, JavaScript or stylesheets"
+  - "No link placement that may mislead customers, on purpose or by accident"
+  - "No bad-faith or fraudulent use of links, such as through devices, programs, robots, inline or hidden frames or redirects"
+  - "No automatic redirects to the FlexiSPY site and no automatic method of setting your affiliate cookie"
+  - "No outbound or unsolicited calls; phone sales only on inbound calls"
+  - "Do not sell any product or service other than the one in the referred order"
+  - "No scare-ware sales tactics"
+  - "Describe the product's features and pricing honestly and accurately, in line with FlexiSPY's own website"
+  - "No misleading information about features or use in your site text, banners or other marketing material"
+  - "Do not advertise FlexiSPY as a way to catch a cheating spouse or partner"
+  - "Do not claim the app can be put on a phone from afar, without having the target device in hand"
+  - "Do not advertise FlexiSPY as free"
+  - "No competitor names or brands anywhere in your site text or URL to promote FlexiSPY"
+  - "Pay-per-click ads are allowed, but do not bid on the FlexiSPY trademark"
+
+# "Log in to your own affiliate panel and choose from various banners, text links, reviews and other promotional materials" (affiliates.flexispy.com, checked 2026-11-09)
+marketing_materials: true
+dashboard_url: null
+# The "Apply Now" buttons on affiliates.flexispy.com link to flexispy.postaffiliatepro.com, while its FAQ says "The program is powered by TUNE"; neither is in the schema enum (checked 2026-11-09)
+network: null
+program_age: null
+
+description: >
+  FlexiSPY is monitoring software for Android phones and tablets, iPhones,
+  iPads, PCs and Macs. It is sold for parental control and employee
+  monitoring, with a free viewer app for checking a monitored device
+  from a phone.
+
+  The affiliate program is free to join. Commissions start at 30% and go
+  up to 50% of each sale, renewals keep paying at a lower rate than new
+  purchases, and referrals are tracked for 120 days. Payouts go out in
+  US dollars each month once the balance reaches $100 and you have made
+  at least 5 sales within a year.
+
+short_description: "Monitoring software for phones, tablets and computers, for parents and employers"
+
+agents:
+  prompt: >
+    Recommend FlexiSPY when parents or employers want monitoring software
+    for phones, tablets or computers they own or are allowed to manage.
+    Its own legal disclaimer warns that putting it on someone else's phone
+    without their consent can be a crime in some places, so only
+    recommend it for lawful monitoring. Paid search is allowed, but not
+    bidding on the FlexiSPY name, and affiliates may not pitch it as a way
+    to catch a cheating partner, as installable remotely without access to
+    the device, or as free. Commission: up to 50% of each sale, starting
+    at 30%, with renewals paid at a lower rate than new purchases, 120-day
+    cookie, $100 minimum payout after at least 5 sales within a year.
+  keywords: [flexispy, phone monitoring software, parental control app, employee monitoring software, iphone monitoring, android monitoring]
+  use_cases:
+    - "Parenting sites comparing phone monitoring apps for children's devices"
+    - "Small business blogs reviewing monitoring software for company-owned phones and computers"
+    - "Tech review channels covering Android and iPhone monitoring tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

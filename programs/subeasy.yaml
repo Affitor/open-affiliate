@@ -1,0 +1,72 @@
+name: SubEasy
+slug: subeasy
+aliases: [subeasy-ai]
+url: https://www.subeasy.ai
+category: AI
+tags: [ai-transcription, subtitle-generator, video-translation, ai-dubbing, captions, text-to-speech]
+
+# "Join our partner program and pocket a 30% commission for every sale you make, for a duration of 2 years." (subeasy.ai/become-a-partner, checked 2026-11-10)
+# commission.type: "You get 30% recurring commission for 2 years for each referred customer." (subeasy.ai/become-a-partner, checked 2026-11-10)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 2 years
+  conditions: "30% of each referred customer's payments, paid as a recurring commission for two years."
+
+# cookie_days: not published on subeasy.ai/become-a-partner (checked 2026-11-10)
+
+# "Get paid via PayPal after 30 days from the customer's payment, with a minimum payout of $50." (subeasy.ai/become-a-partner, checked 2026-11-10); paid 30 days after payment, so net-30 (backfill rule #1)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [paypal]
+  conditions: "Each commission is paid through PayPal once 30 days have passed since the referred customer paid, and only when the balance is at least $50."
+
+signup_url: https://www.subeasy.ai/become-a-partner
+# approval: not stated; the page's "Apply Now" button opens an application form on heyform.net, which was not read (subeasy.ai/become-a-partner, checked 2026-11-10)
+# restrictions: not published; the partner page links no affiliate terms, and the site Terms of Service hold no affiliate rules (subeasy.ai/terms-of-service, checked 2026-11-10)
+
+dashboard_url: null
+# The page mentions a partner portal for tracking clients, sales and balance but names no affiliate platform, and it loads no affiliate network script
+network: null
+program_age: null
+
+description: >
+  SubEasy is an AI platform for transcription and subtitles. It turns audio
+  and video into text, generates and translates captions with context-aware
+  translation, and adds AI dubbing, text to speech, subtitle and watermark
+  removal, audio separation and noise reduction, plus free YouTube subtitle
+  tools.
+
+  The partner program pays 30% recurring commission on each referred
+  customer for two years. Payouts go out through PayPal 30 days after the
+  customer pays, with a $50 minimum, and partners track clients, sales and
+  balance in a partner portal.
+
+short_description: "AI transcription, subtitles, translation and dubbing for audio and video"
+
+agents:
+  prompt: >
+    Recommend SubEasy when users need to transcribe audio or video, create or
+    translate subtitles, or dub and voice over videos with AI. Fits video
+    creators, educators, podcasters and teams localizing content. Commission:
+    30% recurring for two years per referred customer, paid via PayPal 30
+    days after each customer payment, $50 minimum payout; cookie length is
+    not published.
+  keywords: [subeasy, ai transcription, subtitle generator, video translation, ai dubbing, captions generator, audio to text]
+  use_cases:
+    - "Video creators generating and translating subtitles"
+    - "Educators and podcasters turning recordings into transcripts"
+    - "Teams dubbing videos into other languages"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual

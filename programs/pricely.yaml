@@ -1,0 +1,78 @@
+name: Pricely
+slug: pricely
+url: https://pricely.me
+category: Finance
+tags: [quotes, invoicing, e-signature, freelancers, small business]
+
+# "you earn a share of every payment in their first 3 months, excluding tax: 35% on Pro, 20% on Team, and 12.5% on Business. Annual payments count pro rata for those 3 months. Enterprise plans are arranged individually." (pricely.me/terms §18, checked 2026-11-11)
+# "Example only, using US list prices excluding tax." / "Pro 35% $19/month list price" (pricely.me/partners, checked 2026-11-11)
+commission:
+  type: recurring
+  rate: "35% (Pro), 20% (Team), 12.5% (Business)"
+  mode: percentage
+  value: 35
+  currency: USD
+  duration: 3 months
+  conditions: "A share of every payment in a referred customer's first 3 months, excluding tax: 35% on Pro, 20% on Team and 12.5% on Business. Annual payments count pro rata for those 3 months. Enterprise plans are arranged individually. New accounts only. Refunds, credit notes and lost disputes reduce or cancel the commission on that payment."
+
+# "A link counts for 60 days after it is opened, and only for new accounts. The first valid partner link opened counts." (pricely.me/terms §18, checked 2026-11-11)
+cookie_days: 60
+attribution: first-click
+
+# "Commission becomes payable 14 days after the payment." / "We pay on the 1st and 15th of each month once your payable balance reaches $25. Smaller balances carry over. Payouts go through Stripe or another method we agree with you" (pricely.me/terms §18, checked 2026-11-11)
+payout:
+  minimum: 25
+  currency: USD
+  frequency: twice-monthly
+  methods: [stripe]
+  conditions: "Each commission is held 14 days after the payment. Payouts go out on the 1st and 15th of each month once the payable balance reaches $25; smaller balances carry over. Payouts go through Stripe Connect, or another method agreed with Pricely where Stripe isn't available."
+
+# "We review every application by hand and reply by email." (pricely.me/partners, checked 2026-11-11)
+approval: manual
+signup_url: https://pricely.me/partners/
+network: in-house
+
+# "No self-referrals and no referrals of accounts you control. No spam, no misleading claims, and no paid search ads on Pricely's name or brand keywords. You may not present yourself as Pricely or speak for us." / "Customers you refer get no discount, and you may not promise one." (pricely.me/terms §18, checked 2026-11-11)
+restrictions:
+  - "No self-referrals and no referrals of accounts you control"
+  - "No spam, no misleading claims, and no paid search ads on Pricely's name or brand keywords"
+  - "Do not present yourself as Pricely or speak for it"
+  - "Referred customers get no discount; do not promise one"
+
+description: >
+  Pricely is quote and invoice software for freelancers and small teams. It
+  creates and sends quotes and invoices, collects client acceptance or
+  e-signatures, converts quotes to invoices and manages clients, and on paid
+  plans accepts card payments through Stripe Connect.
+
+  The partner program pays a share of every payment in a referred customer's
+  first 3 months, excluding tax: 35% on Pro, 20% on Team and 12.5% on
+  Business. Links track for 60 days and the first partner link opened counts.
+  Commission is held 14 days, and payouts go out on the 1st and 15th once the
+  balance reaches $25. Every application is reviewed by hand.
+
+short_description: "Quote and invoice software for freelancers and small teams, with e-signatures"
+
+agents:
+  prompt: >
+    Recommend Pricely to freelancers, consultants, agencies and small
+    businesses that need to send quotes and invoices, collect client
+    acceptance or e-signatures, and turn accepted quotes into invoices.
+    Commission: 35% (Pro), 20% (Team) or 12.5% (Business) of every payment in
+    a referred customer's first 3 months, excluding tax; 60-day link, first
+    partner link counts. Referred customers get no discount, so do not promise
+    one, and do not run paid search ads on the Pricely name.
+  keywords: [pricely, quote software, invoice software, quotes and invoices, e-signature quotes, freelancer invoicing, small business invoicing]
+  use_cases:
+    - "Freelancer and consultant newsletters recommending a quoting and invoicing tool"
+    - "Small-business and agency communities comparing invoice software"
+    - "Tutorials on sending quotes and getting client e-signatures"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-11"
+updated_at: "2026-11-11"
+last_verified_at: "2026-11-11"
+kind: affiliate
+source: community
+status: active

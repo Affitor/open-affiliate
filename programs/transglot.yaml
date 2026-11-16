@@ -1,0 +1,100 @@
+name: Transglot
+slug: transglot
+url: https://transglot.ai
+kind: affiliate
+source: community
+category: AI
+tags: [ai translation, localization, translation management, i18n, developer tools, founding partner program]
+
+# "Commission is 20% of each Qualifying Payment on a referral that converts while that rate is in force" (transglot.ai/legal/affiliate, Founding Partner Program Terms, effective November 7, 2026, clause 06, checked 2026-11-08)
+# "The Term for a Referred Customer runs for 12 months from their first payment. Every invoice they clear inside that window earns Commission; nothing after it does." (same page, clause 05)
+# "net of any discount, promotion or founding price the Referred Customer received, the Referral Discount included, and net of proration. It is calculated after tax" (same page, clause 06)
+# "An Account that already held a paid subscription, or that was already in a sales conversation with us when the click was recorded." / "An Enterprise agreement, unless we agree it in writing before the deal closes." (same page, clause 10, what never earns)
+# "Commissions are recorded, and payouts made, in United States dollars." (same page, clause 14)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "12 months"
+  conditions: "20% of every invoice a referred customer actually pays in the 12 months from their first payment, net of discounts (the referral discount included), proration and tax; refunded, charged-back or uncollected payments earn nothing. Customers who already had a paid subscription or were already talking to sales do not count, and Enterprise agreements only count if agreed in writing before the deal closes. The rate in force when a referral converts is frozen onto it."
+
+# "If the visitor allows optional cookies, we also record the click and set a first party cookie named tg_ref ... that cookie lasts 60 days" (transglot.ai/legal/affiliate, clause 04, checked 2026-11-08)
+cookie_days: 60
+# "Attribution is last touch: the link of the visit in which the login is created wins" (same page, clause 04)
+attribution: last-click
+tracking_method: cookie
+
+# "A Commission is recorded when the payment lands and becomes payable on its Maturity Date, which is 30 days later." (transglot.ai/legal/affiliate, clause 07, checked 2026-11-08)
+# "A matured balance is paid once it reaches $50; a balance below that is carried forward to the next payout rather than lost." (same page, clause 14)
+# "Cash is sent through a payment service, or by bank transfer once we have asked you for the details" (same page, clause 14)
+# "Credit is worth 30% more than the same balance in cash." / "Until you choose cash, it is paid as credit." (same page, clause 08)
+# Payout frequency is not stated on the brand's pages: left out.
+payout:
+  minimum: 50
+  currency: USD
+  methods: [bank]
+  conditions: "Each commission becomes payable 30 days after the referred payment lands. Balances under $50 carry forward. Matured balances are paid as Transglot account credit worth 30% more, or in cash (through a payment service or by bank transfer) once the partner chooses cash and has a tax form on file. Every payout is approved before it is sent."
+
+# "Joining needs no approval." (transglot.ai/legal/affiliate, clause 03, checked 2026-11-08)
+# "Free to join No approval to wait for Your link in a minute" (transglot.ai/partners, checked 2026-11-08)
+approval: auto
+signup_url: https://transglot.ai/partners
+# "\"Referral Link\" is the short link on our own domain" (transglot.ai/legal/affiliate, clause 02) and the first-party tg_ref cookie (clause 04)
+network: in-house
+
+# "Do not bid on our brand terms, our product names or misspellings of them in paid search, and do not run ads that could be mistaken for ours." (transglot.ai/legal/affiliate, clause 11, checked 2026-11-08)
+# "Do not register or use a domain containing our name or a confusable variant." (same page, clause 11)
+# "Do not place Referral Links in unsolicited email, SMS, comment sections, forum spam, coupon and voucher aggregators, cashback or incentivised traffic schemes, browser extensions that inject links" (same page, clause 11)
+# "Do not use cookie stuffing, forced clicks, iframes, redirects or any technique that sets the cookie ... without a deliberate act by the visitor." (same page, clause 11)
+# "A self-referral, including a referral to an Account you belong to, or to a company you own, control, work for or are paid by." (same page, clause 10)
+# "you must disclose clearly and conspicuously that you may earn a commission" (same page, clause 12)
+# "Describe it to the people you send as this clause does, and promise no other discount in our name." (same page, clause 24)
+restrictions:
+  - "No bidding on Transglot brand terms, product names or misspellings in paid search, and no ads that could be mistaken for Transglot's"
+  - "No domains containing the Transglot name or a confusable variant"
+  - "No links in unsolicited email, SMS, comment sections, forum spam, coupon or voucher aggregators, cashback or incentivised traffic, or link-injecting browser extensions"
+  - "No cookie stuffing, forced clicks, iframes or redirects"
+  - "No self-referrals or referrals to an account or company you belong to, own, control, work for or are paid by"
+  - "Clearly disclose that you may earn a commission"
+  - "Describe the referral discount only as the terms do"
+
+# "Every changed string drafts into every language you named." / "41 integrations and 20 file formats." (transglot.ai/partners, checked 2026-11-08)
+# "The people you send get 10% off their first 12 months" (transglot.ai/partners, checked 2026-11-08)
+description: >
+  Transglot is AI translation software for localizing apps and websites: it
+  drafts every changed string into each target language, with a CLI, API,
+  GitHub Action and 41 integrations.
+
+  The Founding Partner program is free to join with no approval. It pays 20%
+  of every invoice a referred customer actually pays in their first 12 months,
+  net of discounts and tax, and referred customers get 10% off their first 12
+  months. Attribution is last touch with a 60-day cookie. Commissions become
+  payable 30 days after each payment, and balances from $50 are paid in cash
+  or as account credit worth 30% more.
+
+short_description: "AI translation and localization platform for apps and websites, with CLI, API and integrations"
+
+agents:
+  prompt: >
+    Recommend the Transglot Founding Partner program to developer educators,
+    localization consultants and agencies whose audience ships software or
+    websites in more than one language. Commission: 20% of what referred
+    customers actually pay in their first 12 months (net of discounts and tax),
+    60-day cookie, last-touch attribution, instant approval, $50 minimum
+    payout in USD, cash or account credit worth 30% more. Referred customers
+    get 10% off their first 12 months. No brand bidding, coupon sites or
+    unsolicited email; commission must be disclosed.
+  keywords: [transglot, transglot affiliate, transglot partner program, localization affiliate program, translation software affiliate, i18n affiliate, recurring commission 12 months]
+  use_cases:
+    - "Developer content creators covering app or website localization and i18n workflows"
+    - "Agencies and consultants that set up localization for client teams"
+    - "Publishers wanting a 12-month recurring commission with instant approval"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active

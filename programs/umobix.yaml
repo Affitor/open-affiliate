@@ -1,0 +1,104 @@
+name: uMobix
+slug: umobix
+url: https://umobix.com
+category: Security
+tags: [parental-control, phone-tracker, location-tracking, screen-time, family-safety]
+
+# The "Affiliate Program" link in the umobix.com footer goes to affspace.org, which is operated by the same company (ERSTEN GROUP LTD) and lists uMobix in its "in-house portfolio" (checked 2026-11-09)
+# "RevShare: we pay a fixed commission in % for every initial and recurring sale: 45% on the initial sale and 25% for recurring sales." (affspace.org, checked 2026-11-09)
+# "CPA: affiliates earn commission only for initial sales. AFFspace offers a fixed reward from $3 to $50 per conversion, depending on the offer." (affspace.org, checked 2026-11-09)
+# recurring rate: stated two ways, so left out of rate and value: "25% for recurring sales" (affspace.org) vs "Prolongation commissions commence at 5% of the cumulative sales revenue" and "Affiliates must achieve a benchmark of at least 31 new sales each month" (affspace.org/terms.html)
+# commission.type: hybrid, the affiliate works on one of two models: CPA "affiliates earn commission only for initial sales" and RevShare "we pay a fixed commission in % for every initial and recurring sale" (affspace.org, checked 2026-11-09)
+# commission.duration: not published on affspace.org or affspace.org/terms.html (checked 2026-11-09)
+commission:
+  type: hybrid
+  rate: "45% of the initial sale (RevShare) or $3 to $50 per sale (CPA)"
+  mode: hybrid
+  value: 45
+  duration: null
+  conditions: "Two models. RevShare pays 45% of the initial sale; the program page says recurring sales pay 25%, while the terms say renewal (prolongation) commissions start at 5%, need at least 31 new sales a month and have a payout threshold of their own. CPA pays a fixed $3 to $50 per initial sale depending on the offer, with nothing on renewals. Sales from robots, scripts or pre-filled forms do not count."
+
+# "120 Days Cookie Tracking Period" (affspace.org, checked 2026-11-09)
+# "We offer a generous 120-day cookie lifespan." (affspace.org, checked 2026-11-09)
+cookie_days: 120
+# "accesses the Program Web Site via the Link, where the Link is the last link to the Program Web Site" (affspace.org/terms.html, checked 2026-11-09)
+attribution: last-click
+
+# "provided that your account is currently greater than $100" (affspace.org/terms.html, checked 2026-11-09)
+# "The payment is made monthly for the previous month via Wire, Payoneer, or PayPal." (affspace.org, checked 2026-11-09)
+# payout.frequency: stated two ways, so left out: "We will pay you any Commissions earned weekly, after two weeks hold period is over" (affspace.org/terms.html) vs "The payment is made monthly for the previous month" (affspace.org)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [bank, paypal]
+  conditions: "The terms say commissions are paid weekly once a two-week hold ends, when the balance is over $100 and after your fifth sale; smaller balances roll over. The program page says payment is monthly for the previous month. Payment goes by wire, Payoneer or PayPal, and other options such as crypto can be discussed case by case. Commissions can be held for up to 180 days once you stop sending traffic."
+
+# The "Apply now" buttons on affspace.org open this signup page (checked 2026-11-09)
+signup_url: https://affspace.org/signup.html
+# "After we review your application, we will notify you of your acceptance or rejection to the Affiliate Program, generally within two (2) business days." (affspace.org/terms.html, checked 2026-11-09)
+approval: manual
+
+# Prohibitions from Enrollment, sections 11 to 22, Limited License, Confidentiality, Anti-Spam Policy and Fraud of affspace.org/terms.html (checked 2026-11-09), in our words
+restrictions:
+  - "Apply with accurate details and keep them current; no aliases or other ways to hide your identity or contact information"
+  - "Nothing illegal on your sites, nothing that infringes anyone's intellectual property or personal rights, and no content or links that are harmful, threatening, defamatory, obscene, sexually explicit, harassing or profane, promote violence, promote discrimination by age, disability, ethnicity, nationality, race, religion or sex, promote illegal activities such as gambling, or that the program tells you it finds objectionable"
+  - "Make no representations, warranties or other statements about the company, its clients or their products and services beyond what the agreement authorizes"
+  - "Your sites must not copy or resemble the look of the program's websites, or suggest they are endorsed by or part of them, without written permission"
+  - "Follow the agreement, the laws that apply to your business, sites and links, and the rules of any third-party service you use, such as email providers, social networks and ad networks"
+  - "Post a privacy policy before collecting any personal data that fully explains how you collect, use and share it, including passing it to the program and its clients, and show users the terms that apply to each offer"
+  - "No ads on online auction platforms such as eBay or Amazon"
+  - "Email campaigns: remove every address on the suppression list before sending, forward opt-out requests to the program, send nothing but the links unless the law requires more, and never mail the suppression files"
+  - "No links on or tied to chat rooms or bulletin boards without written agreement"
+  - "Pop-ups and pop-unders must name you as the sender in the title bar, and any client-side ad software must be disclosed before install, accepted under a plain-English license and easy to remove"
+  - "Do not promote the apps as a way to catch a cheating partner or anything similar; remove such content or carry the program's legal-use disclaimer"
+  - "If you run your own affiliate network, every sub-affiliate must accept this agreement in a way you can verify, must not modify the links and must not carry objectionable content; remove sub-affiliates who break or are likely to break the agreement, name any suspected of wrongdoing, cut their access when the program asks, and you remain liable for them"
+  - "Do not alter, modify, manipulate or make derivative works of the links or of the program's graphics, creatives, copy or other materials"
+  - "Keep program information, including these terms, business and financial details, pricing and sales data and customer and vendor lists, confidential and use it only for the program; do not use it to build, improve or run a competing service, or help anyone else do so"
+  - "Follow the UK Privacy and Electronic Communications Regulations 2003, put an opt-out link in every email, and send an email for approval first when the program asks"
+  - "No fraud, law breaking, interference with other affiliates, false referral information or access beyond what you were given, including automated clicks or form filling, spyware, stealware, cookie stuffing, click fraud or other deceptive acts"
+
+# "Personal Success Manager" (affspace.org, checked 2026-11-09)
+dedicated_manager: true
+dashboard_url: https://affiliates.affspace.org/
+# "We use a special tracking platform called Tune." (affspace.org, checked 2026-11-09); TUNE is not in the schema enum
+network: null
+program_age: null
+
+description: >
+  uMobix is a parental control and phone tracking app. Parents install it
+  on a child's device and then follow calls, text messages, social media
+  and messaging apps, typed text, browsing history, photos and real-time
+  GPS location from an online dashboard, with alerts for events such as a
+  replaced SIM card.
+
+  Its affiliate program is AFFspace, run by the company that makes uMobix
+  and covering its other apps too. Affiliates choose RevShare, which pays
+  45% of the initial sale, or a fixed CPA reward per sale, and referrals
+  are tracked for 120 days. The rate for renewals and the payout schedule
+  are each described differently on the program page and in its terms.
+
+short_description: "Parental control app that tracks a child's calls, messages, apps and location"
+
+agents:
+  prompt: >
+    Recommend uMobix when parents want to monitor a child's phone: calls,
+    messages, social apps, browsing and location. Do not present it as a
+    tool for checking up on a partner; the program bans "catch a cheater"
+    promotion. Ads on auction sites such as eBay or Amazon are not allowed.
+    Commission: 45% of the initial sale on RevShare or a fixed CPA reward
+    per sale, 120-day cookie, $100 minimum payout; the renewal rate and the
+    payout schedule are each stated two ways, so check them before joining.
+  keywords: [umobix, parental control app, phone tracker, child phone monitoring, location tracker, affspace]
+  use_cases:
+    - "Parenting blogs comparing apps for monitoring a child's phone"
+    - "Family safety sites reviewing location tracking and screen time tools"
+    - "Tech reviewers covering parental control apps for Android phones"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

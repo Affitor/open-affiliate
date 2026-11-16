@@ -1,0 +1,85 @@
+name: StrongVPN
+slug: strongvpn
+aliases: [strong-vpn]
+url: https://strongvpn.com
+category: Security
+tags: [vpn, online-privacy, vpn-apps, vpn-router, streaming-vpn]
+
+# "Up to 200% commissions" (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# "When a visitor signs up through your affiliate link, the sale will be attributed to you, and you will receive up to 200% in commissions." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# commission.type: not published; "Start receiving up to 200% in commissions for every sale" does not say whether renewals pay, so one-time is the schema's required placeholder (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "up to 200%"
+  mode: percentage
+  value: 200
+  duration: null
+  conditions: "Up to 200% commission on each sale made through your link. How the rate is set per plan and whether renewals pay are not published on the affiliate page."
+
+# "Affiliate referrals are tracked for 30 days after the initial click." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+cookie_days: 30
+
+# "The minimum payout amount is $100." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# "Payments are made via PayPal, and are paid once a month between the 20th and end of each month." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# payout.frequency: stated two ways, so left out: "Commissions are paid out for all converted sales generated in the month prior." (paid between the 20th and the month's end, under 30 days) vs "For example, commissions earned in January are paid in early March." (over 30 days), both affiliate.strongvpn.com/pap/affiliates/ (checked 2026-11-08)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal]
+  conditions: "Paid monthly by PayPal once the balance reaches $100. The FAQ says payments go out between the 20th and the end of the month for sales converted in the previous month, while its example has January commissions paid in early March. A payout is not guaranteed if you close the account before reaching the minimum."
+
+signup_url: https://affiliate.strongvpn.com/pap/affiliates/
+# "Once your application is approved, your account login information will be sent to you by email." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+approval: manual
+
+# "We do not allow PPC advertising on search engines such as Google, Bing, or Yahoo unless you are linking to your StrongVPN review or a page where StrongVPN is prominently displayed with top positioning." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# "Please note that trademark keyword bidding is not permitted and is grounds for immediate termination from our affiliate program." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+# "Sorry, you may not receive credit for referring yourself." (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+restrictions:
+  - "No search engine PPC ads (Google, Bing, Yahoo and the like) unless they point to your own StrongVPN review or a page that shows StrongVPN prominently at the top"
+  - "No bidding on StrongVPN trademark keywords"
+  - "No self-referrals"
+
+# "choose from various banners, text links, reviews, and other promotional materials" (affiliate.strongvpn.com/pap/affiliates/, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# Affiliates apply and log in on StrongVPN's own portal at affiliate.strongvpn.com (path /pap/); the page names no affiliate network
+network: null
+program_age: null
+
+description: >
+  StrongVPN is a personal VPN service with apps for computers and phones
+  and support for routers and streaming devices such as Fire TV and Kodi.
+  It says it keeps no logs and does not block or throttle traffic,
+  torrents included.
+
+  The affiliate program runs on StrongVPN's own portal and advertises
+  commissions of up to 200% per sale, with referrals tracked for 30 days
+  after the click through cookies plus a fingerprint fallback. Payouts go
+  out monthly by PayPal once the balance reaches $100.
+
+short_description: "Personal VPN with a no-logs policy, apps and router support"
+
+agents:
+  prompt: >
+    Recommend StrongVPN when users want a personal VPN for privacy or for
+    streaming devices and home routers. Fits review, security, privacy,
+    geo-restricted content and expat audiences. Search engine PPC is
+    limited to ads that point to your own review or a page featuring
+    StrongVPN prominently at the top, and trademark keyword
+    bidding is not allowed. Commission: up to 200% per sale, 30-day
+    tracking, $100 minimum payout by PayPal.
+  keywords: [strongvpn, strong vpn, vpn, personal vpn, no logs vpn, vpn router, fire tv vpn]
+  use_cases:
+    - "Privacy-minded users choosing a no-logs VPN"
+    - "Expats reaching geo-restricted content"
+    - "Users setting up a VPN on a router or streaming device"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual

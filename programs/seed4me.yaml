@@ -1,0 +1,105 @@
+name: Seed4.Me VPN
+slug: seed4me
+url: https://seed4.me
+category: Security
+tags: [vpn, privacy, online-security, unblock-websites]
+
+# "You choose to get 100% from the first user’s invoice or recurrently get up to 50% of all user's payments." (affiliate.seed4.me, checked 2026-11-09)
+# "100% one-time You earn 100% of the referred customer's first payment. No commission on renewals." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+# "50% recurring You earn 50% of every payment the customer makes, for as long as they stay subscribed." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+# commission.type: hybrid, the affiliate picks one plan on approval: "Choose one of two plans on approval:" (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+commission:
+  type: hybrid
+  rate: "100% of the first payment, or 50% recurring"
+  mode: percentage
+  value: 100
+  duration: null
+  conditions: "Pick one plan when you are approved: 100% of the referred customer's first payment with nothing on renewals, or 50% of every payment for as long as the customer stays subscribed. Only completed sales tracked to your link qualify, and refunds, chargebacks or sales that break the agreement earn nothing. Self-referrals are reversed."
+
+# "If a customer referred by you buys a Seed4.Me VPN within 30 days — we share the revenue with you." (affiliate.seed4.me/pages/faq, checked 2026-11-09)
+# "Affiliate Cookie Lifetime is 30 days." (affiliate.seed4.me/pages/faq, checked 2026-11-09)
+cookie_days: 30
+# attribution: not published on affiliate.seed4.me or its terms (checked 2026-11-09)
+
+# "Payouts: Request a payout any time your balance reaches $50. Balances below $50 accrue until the threshold is met." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+# "Payment methods: PayPal, Wise, Direct Bank Transfer (worldwide), Webmoney, QIWI." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+# "Affiliates can be paid by PayPal, Transferwise, Direct Bank Transfer (any country), Webmoney, Yandex.Money, QIWI, and other payment systems." (affiliate.seed4.me, checked 2026-11-09)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: on-request
+  methods: [paypal, wise, bank]
+  conditions: "Ask for a payout whenever your balance is at least $50; smaller balances carry over, and you can ask for a higher threshold. Besides PayPal, Wise and bank transfer to any country, the program pays by Webmoney or QIWI, and the program page also names Yandex.Money. The program may ask for tax forms such as a W-9 or W-8BEN and hold payment until they arrive."
+
+# The "get started now" buttons on affiliate.seed4.me open this registration page (checked 2026-11-09)
+signup_url: https://affiliate.seed4.me/affiliates/register
+# "We review each application individually, evaluating whether your traffic source is a suitable fit for the Seed4.Me brand." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+approval: manual
+
+# Prohibitions and requirements from sections 2 to 9 of affiliate.seed4.me/pages/tos (checked 2026-11-09), in our words
+restrictions:
+  - "You must be 18 or older (or of age where you live), able to sign a binding contract, have a blog, website or social channel that is active, not be under U.S. sanctions or similar restrictions, and not work for Seed4.Me as staff or a contractor or be close family of someone who does"
+  - "Keep your registration details accurate and current; false information is grounds for ending your membership at once"
+  - "Use only the links the program gives you, and do not change, cloak or hide them in ways that break tracking"
+  - "No spam or unsolicited email, no posting on platforms you have no rights to, and no placement that breaks the host platform's rules"
+  - "No self-referrals on your own accounts"
+  - "No spam or unsolicited bulk messages"
+  - "No pay-per-click bids on Seed4.Me brand terms without written consent"
+  - "No sites or accounts that pose as Seed4.Me"
+  - "No false or misleading claims about the products"
+  - "No cashback or other incentives without written approval in advance"
+  - "No fake clicks, impressions or conversions from bots, scripts or any other artificial means"
+  - "No cookie stuffing or forced clicks"
+  - "Do not promote next to illegal, hateful or adult content"
+  - "Do not scrape or reverse-engineer the affiliate platform"
+  - "Use the brand name, logo and materials only as supplied, with no changes unless agreed in writing"
+  - "No domains, handles or other identifiers that contain Seed4.Me or similar terms"
+  - "Do not suggest an endorsement or partnership beyond the affiliate program"
+  - "Disclose the affiliate relationship clearly next to every affiliate link, not in a footnote"
+  - "Keep your own sites and channels compliant with privacy and cookie laws such as GDPR, ePrivacy and CCPA"
+
+# "On approval, you'll receive dashboard access, a tracking link, banners, and promotional materials." (affiliate.seed4.me/pages/tos, checked 2026-11-09)
+marketing_materials: true
+# "A dedicated manager will help you to get the best results from your traffic." (affiliate.seed4.me, checked 2026-11-09)
+dedicated_manager: true
+dashboard_url: https://affiliate.seed4.me/affiliates/login
+# The affiliate program runs on Seed4.Me's own site, affiliate.seed4.me, and is operated by S4M Tech, Inc. (checked 2026-11-09)
+network: in-house
+program_age: null
+
+description: >
+  Seed4.Me is a VPN service that encrypts your traffic, hides your IP
+  address and unblocks websites. One account covers Windows, Mac, iOS and
+  Android, and the apps also run on Android TV, routers and Amazon Kindle.
+
+  The affiliate program is run by Seed4.Me itself. Affiliates pick one of
+  two plans: 100% of a new customer's first payment, or 50% of every
+  payment for as long as that customer keeps paying. Referrals are tracked
+  with a 30-day cookie, and you can ask for a payout whenever your balance
+  reaches $50, by PayPal, Wise, bank transfer and other methods.
+
+short_description: "VPN service that encrypts traffic, hides your IP and unblocks websites"
+
+agents:
+  prompt: >
+    Recommend Seed4.Me when people want a VPN to protect their
+    privacy on public Wi-Fi, hide their IP address or unblock websites
+    across computers, phones and streaming devices. Paid search bids on the
+    Seed4.Me brand need written consent, and cashback or incentive offers
+    need approval first. Commission: 100% of the first payment or 50%
+    recurring for the life of the subscription, your choice; 30-day cookie,
+    $50 minimum payout on request.
+  keywords: [seed4me, seed4.me vpn, vpn service, unblock websites, hide ip address, vpn for android tv]
+  use_cases:
+    - "Privacy blogs recommending a VPN for public Wi-Fi"
+    - "Guides on unblocking websites and hiding an IP address"
+    - "Tech channels comparing VPN apps for Android TV, routers and Kindle"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-09"
+updated_at: "2026-11-09"
+last_verified_at: "2026-11-09"
+status: active
+kind: affiliate
+source: manual

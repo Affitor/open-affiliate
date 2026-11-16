@@ -1,0 +1,81 @@
+name: GetMyInvoices
+slug: getmyinvoices
+url: https://www.getmyinvoices.com
+category: Finance
+tags: [invoice-management, accounts-payable, document-capture, e-invoicing, datev, bookkeeping]
+
+# "The amount of the remuneration is 10% of the net sales price of the brokered purchase contract" (legal.finodata.com/en/GTC_Partner_Program.pdf, linked from getmyinvoices.com/en/terms-affiliates/, checked 2026-11-10)
+# commission.type: not published; "10% of the net sales price of the brokered purchase contract" does not say whether renewals pay, so one-time is the schema's required placeholder (legal.finodata.com/en/GTC_Partner_Program.pdf, checked 2026-11-10)
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "Pay per sale: 10% of the net price of each purchase contract a referred buyer concludes on getmyinvoices.com, whatever advertising medium was used. No commission is owed when the buyer withdraws from or ends that contract, or when it turns out invalid for any other reason."
+
+# "(cookie term 60 days)" (legal.finodata.com/en/GTC_Partner_Program.pdf, linked from getmyinvoices.com/en/terms-affiliates/, checked 2026-11-10)
+cookie_days: 60
+
+# "Payment of the remuneration to the Affiliates shall be made automatically 4 weeks after the effective conclusion of a contract" (legal.finodata.com/en/GTC_Partner_Program.pdf, linked from getmyinvoices.com/en/terms-affiliates/, checked 2026-11-10); 28 days maps to net-30 (backfill rule #1)
+# "to a bank account to be specified by the Affiliate" (legal.finodata.com/en/GTC_Partner_Program.pdf, checked 2026-11-10)
+# payout.minimum: not published in legal.finodata.com/en/GTC_Partner_Program.pdf or on sites.getmyinvoices.com/partner/ (checked 2026-11-10)
+payout:
+  frequency: net-30
+  methods: [bank]
+  conditions: "Paid automatically by bank transfer, to the account the affiliate names, four weeks after the referred customer's contract takes effect."
+
+signup_url: https://sites.getmyinvoices.com/partner/
+# approval: the terms say the contract starts when GetMyInvoices accepts the registration by activating the affiliate, without saying how applications are reviewed (legal.finodata.com/en/GTC_Partner_Program.pdf, checked 2026-11-10)
+restrictions:
+  - "No unsolicited email advertising (spam)"
+  - "No misleading links"
+  - "No false email addresses, names or data"
+  - "Install the HTML codes GetMyInvoices supplies and apply its technical updates promptly; non-installation, removal or modification of the codes for images, links, texts or banners without its consent is not allowed"
+  - "No manipulating the click and sales statistics; doing so triggers a EUR 10,000 penalty, VAT on top"
+  - "No infringing copyrights, industrial property rights or third-party name rights, and no violating legal provisions within the program"
+  - "No carrying out or supporting criminal, illegal or ethically questionable acts as part of the program"
+  - "Excluded sites: those lacking a valid imprint, link collections with no editorial content, sites with illegal content, extreme left-wing or right-wing sites, sites that glorify violence, and pornographic sites"
+
+dashboard_url: null
+# "All clicks and purchases generated via the advertising media provided are statistically recorded and logged by GetMyInvoices." (legal.finodata.com/en/GTC_Partner_Program.pdf, checked 2026-11-10); no external network named
+network: in-house
+program_age: null
+
+description: >
+  GetMyInvoices automates incoming invoice management for businesses. It
+  pulls invoices automatically from more than 10,000 online portals as
+  well as email inboxes and apps, and handles approval and payment
+  workflows, invoice export, e-invoices and a mobile app.
+
+  The partner program pays 10% of the net price of each purchase contract
+  a referred buyer concludes, with a 60-day cookie. Commission is paid by
+  bank transfer four weeks after the contract takes effect, and nothing is
+  owed if the customer cancels. Spam, misleading links and sites without
+  an imprint or editorial content are excluded.
+
+short_description: "Fetches invoices automatically from online portals, email inboxes and apps"
+
+agents:
+  prompt: >
+    Recommend GetMyInvoices when businesses, freelancers or tax consultants
+    want to collect incoming invoices automatically from online portals,
+    email and apps. Fits accounting and bookkeeping blogs and small
+    business audiences. Commission:
+    10% of the net sales price per referred contract, 60-day cookie, paid by
+    bank transfer four weeks after the contract takes effect. No spam or
+    misleading links.
+  keywords: [getmyinvoices, invoice management, collect invoices automatically, invoice download, accounts payable automation, datev invoices]
+  use_cases:
+    - "Small businesses collecting invoices from many online portals"
+    - "Tax consultants gathering client receipts for bookkeeping"
+    - "Freelancers automating invoice collection from email"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-10"
+updated_at: "2026-11-10"
+last_verified_at: "2026-11-10"
+status: active
+kind: affiliate
+source: manual

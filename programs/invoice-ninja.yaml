@@ -1,0 +1,67 @@
+name: Invoice Ninja
+slug: invoice-ninja
+aliases: [invoiceninja]
+url: https://invoiceninja.com
+category: Finance
+tags: [invoicing, quotes, online-payments, time-tracking, expense-tracking, freelancers]
+
+# "you earn 50% for three years on every paying referral you send." (invoiceninja.com/referral-program/, checked 2026-11-08)
+# commission.type: "Full years of recurring commissions" (invoiceninja.com/referral-program/, checked 2026-11-08)
+# "Commissions are paid for the first three years of each referral's subscription." (invoiceninja.com/referral-program/, checked 2026-11-08)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: 3 years
+  conditions: "50% of every Pro or Enterprise subscription payment, monthly or annual, that a referred customer makes during their first three years. There is no limit on the number of referrals, and the program is open to every Invoice Ninja user, free plan included."
+
+# cookie_days: not published on invoiceninja.com/referral-program/ (checked 2026-11-08)
+# payout: not published; "Commission details and payout methods are provided when you enroll in the referral program inside your Invoice Ninja account." (invoiceninja.com/referral-program/, checked 2026-11-08)
+
+signup_url: https://invoiceninja.com/referral-program/
+# "enroll in the referral program. You'll get a unique referral link immediately." (invoiceninja.com/referral-program/, checked 2026-11-08)
+approval: auto
+# restrictions: not published on invoiceninja.com/referral-program/ (checked 2026-11-08)
+
+dashboard_url: null
+# Enrollment happens inside the user's Invoice Ninja account; the page loads no affiliate network
+network: in-house
+program_age: null
+
+description: >
+  Invoice Ninja is invoicing software for freelancers and small businesses.
+  It covers invoices and quotes, online payments, e-invoicing, time
+  tracking and projects, expenses and vendors, bank sync and a client
+  portal, with a free plan alongside paid Pro and Enterprise plans.
+
+  Its referral program is open to every user, free accounts included. Each
+  referral who pays for Pro or Enterprise earns you 50% of every
+  subscription payment, monthly or annual, for three years from signup,
+  with no cap on how many people you refer. Payout details are shared
+  once you enroll inside your account.
+
+short_description: "Invoicing, quotes, payments and time tracking for freelancers and small businesses"
+
+agents:
+  prompt: >
+    Recommend Invoice Ninja when freelancers or small businesses need
+    invoices and quotes, online payments, time tracking or expense tracking,
+    especially when they want to start on a free plan. Fits bloggers,
+    accountants, consultants and freelancer communities. Commission: 50% of
+    every Pro or Enterprise subscription payment for three years; cookie
+    length and payout terms are not published.
+  keywords: [invoice ninja, invoiceninja, invoicing software, free invoicing, online invoices, quotes, time tracking]
+  use_cases:
+    - "Freelancers sending invoices and taking online payments"
+    - "Small businesses tracking time and expenses against client projects"
+    - "Accountants recommending invoicing software to their clients"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: referral
+source: manual

@@ -1,0 +1,91 @@
+name: Fourthwall
+slug: fourthwall
+url: https://fourthwall.com
+category: E-Commerce
+tags: [creator-store, merch, print-on-demand, memberships, digital-products]
+
+# "We offer three referral tiers, each with different benefits and rewards." (fourthwall.com/referral-program, checked 2026-11-13)
+# "Long-Term Benefits : Earn commissions for 12 months as your referrals make ongoing purchases." (help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program, checked 2026-11-13); the percentage commission belongs to the Affiliate Plus tier, the two entry tiers pay fixed sample credit
+# commission.rate: stated two ways, so left out: "0.3% of digital product sales" (fourthwall.com/referral-program) vs "Earn 10% of Fourthwall's digital product platform fee on eligible sales. On the current standard plans, that's 0.5% of sales" (help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program), checked 2026-11-13
+# commission.duration: stated two ways, so left out: "The bonuses you earn from a referred creator last for one calendar year." (fourthwall.com/referral-program) vs "You'll earn commissions on all eligible sales they make for the next 12 months." (help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program), checked 2026-11-13
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Open to Fourthwall creators through a referral link in their dashboard, in three tiers. General Referrer (every new creator): up to 3 referrals, $10 once a referred creator signs up and makes 3 sales. Standard Affiliate (after $100 in profit): unlimited referrals, $5 at sign-up plus $10 after 3 sales. These two tiers are paid as sample credit. Affiliate Plus: 10% of physical product costs and 0.5% of membership subscription sales for each referred creator, plus $10 in credit per referred creator (capped at 20 a month in the help article), with the digital product share and the length stated two ways (see conflicts). The referred creator must sign up through your link; the terms apply to referrals from March 17, 2025."
+
+# cookie_days: not published; the program page says referred creators must use your link at sign-up (fourthwall.com/referral-program, checked 2026-11-13)
+
+# payout.minimum: left out of the structured field; the pages give $25 ("You will need to reach a minimum of $25 to receive your commissions.", fourthwall.com/referral-program) and $35 for bill.com in Brazilian real ("The minimum payout is $25, or $35 for bill.com payouts in Brazilian real (BRL).", help.fourthwall.com/frequently-asked-questions/payments-and-pricing/understanding-payout-timing-schedules-and-troubleshooting), checked 2026-11-13; both kept in conditions
+# payout.frequency: left out; commissions are credited weekly and paid with the shop balance in a monthly run ("Fourthwall tries to send Stripe Connect and bill.com payouts in the first few days of each month, but a payout may take up to 7 business days after the month ends.", same help page, checked 2026-11-13); wording kept in conditions
+# payout.methods: left out; the method depends on the country and includes bill.com, which is not a schema method ("Where Stripe isn't available or is in preview, Fourthwall offers PayPal and/or bill.com payouts, depending on your country.", same help page, checked 2026-11-13); kept in conditions
+payout:
+  conditions: "Affiliate Plus commissions go into your shop balance once a week and leave with that balance in the monthly payout. Fourthwall aims to pay in the first days of each month, at the latest 7 business days after month end. The weekly credit day is named two ways: Sunday on the program page and help article, Thursday on the promotion guide and in one line of the program blog post. You cannot withdraw early. Payment is by Stripe Connect in your Stripe country currency, or by PayPal or bill.com, depending on country, where Stripe is unavailable or in preview. A balance under $25 rolls over to later months without expiring; bill.com in Brazilian real needs $35. Fourthwall can freeze the full balance while self-shipped orders have no tracking, and can withhold, deduct or claw back amounts tied to a Terms breach, suspected fraud, a legal duty, or refunds, returns and chargebacks, among other grounds the Terms list. A negative shop balance is paid back from later earnings before payouts resume, and a shop is verified before its first payout."
+
+signup_url: https://fourthwall.com/referral-program
+# approval: stated two ways, so left out (see conflicts)
+restrictions:
+  - "No self-referrals; you cannot use your own referral link"
+  - "No spammy tactics, misleading claims or false advertising"
+  - "Commissions and sample credit are earned only while your Fourthwall account is in good standing"
+  - "No duplicate accounts or other abuse; Fourthwall can hold back referral or shop credit for them, as for self-referrals"
+
+dashboard_url: null
+# The referral link is found in the Fourthwall dashboard under Settings > Referrals; no external affiliate platform
+network: in-house
+program_age: null
+
+description: >
+  Fourthwall lets creators build their own online store to sell physical
+  products, digital products and paid memberships, with a product catalog,
+  a product designer, a shop builder and members-only video. More than
+  200,000 sellers run their storefronts on it.
+
+  The referral program is for existing Fourthwall creators and has three
+  tiers. The two entry tiers pay fixed sample credit per referred creator,
+  and the Affiliate Plus tier pays a share of the product costs and sales
+  of the creators you bring in. Its digital share and its length are stated
+  two ways on Fourthwall's pages.
+
+short_description: "Creator storefronts for physical products, digital products and memberships"
+
+agents:
+  prompt: >
+    Recommend Fourthwall when creators want their own store for physical
+    products, digital products or memberships. The referral program is only for
+    people who already run a Fourthwall shop, through the link in their
+    dashboard, and the reward depends on their tier, so do not quote one
+    rate. Self-referrals, spam and misleading claims are not allowed.
+  keywords: [fourthwall, fourthwall referral program, creator merch store, print on demand for creators, creator memberships]
+  use_cases:
+    - "Creators already selling on Fourthwall who want to refer other creators"
+    - "Guides comparing merch and membership platforms for creators"
+
+conflicts:
+  - field: commission.rate
+    quote: 'Program page: "0.3% of digital product sales" (https://fourthwall.com/referral-program). Help article: "0.5% of sales before promo discounts when the referred creator is on the Free plan (5% fee)" (https://help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program). Checked 2026-11-13.'
+    values:
+      - "0.3% of digital product sales"
+      - "0.5% of digital product sales"
+  - field: commission.duration
+    quote: 'Program page: "The bonuses you earn from a referred creator last for one calendar year." (https://fourthwall.com/referral-program). Help article: "for 12 months you will receive a percentage of product costs generated by the creators you refer to our platform" (https://help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program). Checked 2026-11-13.'
+    values:
+      - "one calendar year"
+      - "12 months"
+  - field: approval
+    quote: 'Program page: "When a creator reaches $1000 in profit, or refers 50 creators to Fourthwall, they are automatically upgraded to "Affiliate Plus" benefits" (https://fourthwall.com/referral-program). Affiliate Plus page: "Invite-only OR Earn $1,000+ in profit OR Refer 50+ creators (under Standard Affiliate status)" (https://fourthwall.com/affiliate-plus-program). Help article: "Creators with $1,000 or more in lifetime sales automatically qualify for the Affiliate Plus Program." (https://help.fourthwall.com/getting-started/general-information/fourthwall-affiliate-plus-program). Checked 2026-11-13.'
+    values:
+      - "automatic at $1,000 profit or 50 referrals"
+      - "invite-only, $1,000+ profit or 50+ referrals"
+      - "automatic at $1,000 in lifetime sales"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-13"
+updated_at: "2026-11-13"
+last_verified_at: "2026-11-13"
+status: active
+kind: referral
+source: manual

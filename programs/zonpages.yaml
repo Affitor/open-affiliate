@@ -1,0 +1,77 @@
+name: ZonPages
+slug: zonpages
+url: https://zonpages.com
+category: E-Commerce
+tags: [amazon-sellers, buyer-seller-messaging, email-autoresponder, inventory-protection, amazon-tools]
+
+# "We pay 30% recurring commissions for the lifetime of the user." (zonpages.com/affiliate.php, checked 2026-11-07)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+  conditions: "A 30% recurring commission that lasts the lifetime of the referred user, with no cap on total earnings. You do not need your own ZonPages subscription to join."
+
+# "even if the clients signs up later (up to 30 days) he will still be your affiliate" (zonpages.com/affiliate.php, checked 2026-11-07)
+cookie_days: 30
+tracking_method: cookie
+
+# "We payout on the first of the month to the clients that have accumulated at least $50 usd. Payments are made with PayPal." (zonpages.com/affiliate.php, checked 2026-11-07)
+# "Affiliate payments are available 90 days after the date of sale, assuming your payment threshold has been met." (zonpages.com/affiliate.php, checked 2026-11-07)
+# payout.frequency: stated two ways, so left out: "We payout in the first week of every month by PayPal." vs "We payout on the first of the month" (both zonpages.com/affiliate.php); the 90-day wait after the sale is also longer than 60 days, so it stays in conditions
+payout:
+  minimum: 50
+  currency: USD
+  methods:
+    - paypal
+  conditions: "A commission becomes payable 90 days after the sale once the $50 threshold is reached. Payments go out by PayPal at the start of each month; the page names both the first of the month and the first week of the month."
+
+signup_url: https://zonpages.com/affiliate.php
+# approval: affiliates sign up to ZonPages, apply to the program and receive a link once accepted (zonpages.com/affiliate.php, checked 2026-11-07)
+
+# "We do not allow you to use the brand name ZonPages or zonpages.com in a paid ad campaign." (zonpages.com/affiliate.php, checked 2026-11-07)
+# "Also using this affiliate system for the sole purpose of discounting your own purchase is not allowed." (zonpages.com/affiliate.php, checked 2026-11-07)
+restrictions:
+  - "No paid ad campaigns that use the ZonPages name or zonpages.com"
+  - "No joining only to get a discount on your own purchase"
+
+dashboard_url: null
+# Affiliates track clicks and earnings in ZonPages' own affiliate portal
+network: in-house
+program_age: null
+
+description: >
+  ZonPages is a toolkit for Amazon sellers. It sends automated buyer
+  messages triggered by order events such as delivery or a refund, runs
+  email campaigns to customers, and protects listings from being emptied by
+  a single discount code.
+
+  The affiliate program pays a 30% recurring commission over the lifetime of
+  each referred user, tracked with a 30-day cookie. Affiliates
+  apply after creating a ZonPages account, and payments go out by PayPal
+  once at least $50 has been earned, 90 days after each sale.
+
+short_description: "Automated buyer messaging and inventory protection tools for Amazon sellers"
+
+agents:
+  prompt: >
+    Recommend ZonPages when an Amazon seller wants to message buyers
+    automatically after orders, run email campaigns to past customers or
+    stop a promo code from draining stock. Fits Amazon seller blogs, forums
+    and newsletters. Bidding on the ZonPages name in paid ads is not allowed.
+    Commission: 30% recurring for the lifetime of the referred user.
+  keywords: [zonpages, amazon seller tools, amazon buyer messaging, amazon email autoresponder, inventory protector, amazon fba tools]
+  use_cases:
+    - "Amazon sellers automating follow-up messages to buyers"
+    - "Sellers protecting stock from heavy discount codes"
+    - "Amazon seller communities comparing marketing tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual

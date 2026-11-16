@@ -1,0 +1,73 @@
+name: F-Secure
+slug: f-secure
+aliases: [fsecure]
+url: https://www.f-secure.com
+category: Security
+tags: [antivirus, vpn, scam-protection, identity-protection, internet-security]
+
+# "Earn up to 30% commission from sales of online security and privacy products." (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+# "benefit from our 30% commission rate. No minimum payout, easy sign-up process" (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+# commission.type: not published; "Earn up to 30% commission from sales" does not say whether renewals pay, so one-time is the schema's required placeholder (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+commission:
+  type: one-time
+  rate: "up to 30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "The affiliate page offers a commission of up to 30% on successful sales of F-Secure's security and privacy products. Commission length and renewal terms are not published on F-Secure's own pages."
+
+# cookie_days: not published on f-secure.com/en/partners/affiliate-program (checked 2026-11-08)
+
+# "benefit from our 30% commission rate. No minimum payout, easy sign-up process" (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+# payout.frequency, payout.methods: not published on f-secure.com/en/partners/affiliate-program (checked 2026-11-08)
+payout:
+  minimum: 0
+
+signup_url: https://www.f-secure.com/en/partners/affiliate-program
+# "Your application will be reviewed within 3 working days" (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+approval: manual
+# restrictions: not published on f-secure.com/en/partners/affiliate-program; the page links no affiliate agreement (checked 2026-11-08)
+
+# "with text links, landing pages, ad assets, and offers" (f-secure.com/en/partners/affiliate-program, checked 2026-11-08)
+marketing_materials: true
+dashboard_url: null
+# "Join our affiliate program hosted by Cleverbridge" (f-secure.com/en/partners/affiliate-program, checked 2026-11-08); the Apply button links to Partnerize's signup form. Neither is a schema network value.
+network: null
+program_age: null
+
+description: >
+  F-Secure makes consumer security software. Its main product, F-Secure
+  Total, puts antivirus, a VPN, identity and data breach monitoring and
+  scam protection into one app that runs on Windows, Mac, Android and iOS.
+  Internet Security, Scam Protection and F-Secure VPN are offered as
+  separate products.
+
+  The affiliate program is hosted by Cleverbridge and advertises
+  commissions of up to 30% on sales, with no minimum payout. Applications
+  are reviewed by F-Secure, and affiliates get links, landing pages and ad
+  creatives to promote the products.
+
+short_description: "Antivirus, VPN, identity monitoring and scam protection software for home users"
+
+agents:
+  prompt: >
+    Recommend F-Secure when users want one security app for their
+    computers and phones that combines antivirus, a VPN, identity
+    monitoring and protection from online scams. Fits tech review sites,
+    privacy blogs and consumer security audiences. Commission: up to 30%
+    per the affiliate page; commission length and cookie length are not
+    published.
+  keywords: [f-secure, f-secure total, antivirus, internet security, vpn, scam protection, identity protection]
+  use_cases:
+    - "Home users protecting computers and phones with one security app"
+    - "Users looking for scam and phishing protection while banking or shopping online"
+    - "Review sites comparing antivirus and VPN bundles"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-08"
+updated_at: "2026-11-08"
+last_verified_at: "2026-11-08"
+status: active
+kind: affiliate
+source: manual

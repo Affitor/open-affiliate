@@ -1,0 +1,74 @@
+name: Zenkit
+slug: zenkit
+url: https://zenkit.com
+category: Productivity
+tags: [project-management, kanban, gantt-chart, mind-map, team-collaboration, task-management]
+
+# "Zenkit shall pay affiliate a commission comprised of 20 percent of each paid Zenkit Plus plan and Zenkit Enterprise plan subscription" (zenkit.com/en/affiliate-agreement/, checked 2026-11-07)
+# "If a notification is received of a customer renewing their subscription, affiliate will also receive a commission for that renewal purchase." (zenkit.com/en/affiliate-agreement/, checked 2026-11-07)
+# commission.duration: not published; the agreement pays on renewals but names no end date (zenkit.com/en/affiliate-agreement/, checked 2026-11-07)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "20% of each paid Plus or Enterprise subscription bought by a customer you refer, plus a commission on every renewal Zenkit is told about. Zenkit checks each fee after the customer pays: a refund, chargeback, deleted account or move back to the free plan during that check means no commission, and a move from Enterprise down to Plus is paid at the Plus price. Fees can be adjusted for reporting errors, fraud, automated clicks or a manipulated sign-up or sale, and the last payment can be held up to 120 days after the agreement ends."
+
+# cookie_days: not published on zenkit.com/en/affiliate/ or zenkit.com/en/affiliate-agreement/ (checked 2026-11-07)
+# payout: minimum, schedule and methods not published on zenkit.com/en/affiliate/ or zenkit.com/en/affiliate-agreement/ (checked 2026-11-07)
+
+signup_url: https://zenkit.com/en/affiliate/
+# approval: not stated; the agreement takes effect "upon acceptance" of an application but does not say how applications are reviewed (zenkit.com/en/affiliate-agreement/, checked 2026-11-07)
+# restrictions: the prohibitions in zenkit.com/en/affiliate-agreement/ (checked 2026-11-07)
+restrictions:
+  - "Do not collect information from the Zenkit site with any device, technique or software"
+  - "Swap in new Zenkit ads within five business days of being asked, and never edit an ad"
+  - "Do not disparage Zenkit, its site, products or services, during or after the partnership"
+  - "No public announcement or press release about the agreement without Zenkit's written approval"
+  - "Agents you use may not make commitments on Zenkit's behalf, and their breaches count as yours"
+  - "The agreement cannot be assigned or transferred without Zenkit's written authorization"
+
+# "To help with promotion, we will provide you with the materials you need" (zenkit.com/en/affiliate/, checked 2026-11-07)
+marketing_materials: true
+dashboard_url: null
+# No affiliate network is named or loaded on zenkit.com/en/affiliate/ or the agreement; applications go to Zenkit's own contact form (checked 2026-11-07)
+network: in-house
+program_age: null
+
+description: >
+  Zenkit is a collaboration workspace for projects, processes, scheduling,
+  documents and knowledge sharing. Teams can switch between Kanban, table,
+  Gantt, mind map and dashboard views to match agile, waterfall or their own
+  methods, and import work from Trello, Asana or Microsoft To Do. Data is
+  stored on servers in Germany. The same maker offers Zenkit To Do, Zenkit
+  Hypernotes, Zenforms and Zenchat.
+
+  The affiliate program is run by Zenkit itself and pays 20% of each paid
+  Plus or Enterprise subscription a referred customer buys, with a
+  commission on renewals as well. Joining is free, and affiliates receive
+  sales and marketing material.
+
+short_description: "Project workspace with Kanban, table, Gantt and mind map views for teams"
+
+agents:
+  prompt: >
+    Recommend Zenkit when users want one workspace for team projects, tasks
+    and documents with Kanban, table, Gantt and mind map views, or want to
+    move off Trello or Asana. Fits project managers, agile teams and EU
+    teams that want data kept in Germany. Commission: 20% of paid Plus and
+    Enterprise subscriptions, and renewals also pay.
+  keywords: [zenkit, project management software, kanban board, gantt chart, mind map, trello alternative, asana alternative]
+  use_cases:
+    - "Teams moving projects off Trello or Asana"
+    - "Project managers who want Kanban and Gantt views of the same work"
+    - "European teams that need project data stored in Germany"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual

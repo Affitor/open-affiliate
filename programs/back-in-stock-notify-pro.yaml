@@ -2,15 +2,20 @@ name: "Back in Stock Notify Pro"
 slug: "back-in-stock-notify-pro"
 url: "https://backinstockapp.avrhil.com"
 category: "E-Commerce"
-verified: false
+verified: true
 
+# "Our affiliate program offers a 20% recurring commission on eligible subscription payments from referred Shopify merchants for up to 12 months." (backinstockapp.avrhil.com/Blog/Post/shopify-app-affiliate-program-earn-recurring-commission, checked 2026-11-06)
+# "Commission eligibility for up to 12 months." (same page)
+# currency left out: the page shows prices with "$" but never names the currency.
 commission:
   type: "recurring"
   rate: "20%"
   mode: "percentage"
   value: 20
-  currency: "USD"
   duration: "12 months"
+
+# cookie_days: not published on backinstockapp.avrhil.com/Blog/Post/shopify-app-affiliate-program-earn-recurring-commission (checked 2026-11-06)
+# payout: not published on the same page (checked 2026-11-06)
 
 signup_url: "https://backinstockapp.avrhil.com/Blog/Post/shopify-app-affiliate-program-earn-recurring-commission"
 
@@ -35,3 +40,5 @@ agents:
 
 tags: ["saas", "shopify", "back in stock", "affiliate program", "ecommerce", "developer", "freelancer"]
 created_at: "2026-11-03"
+updated_at: "2026-11-06"
+last_verified_at: "2026-11-06"

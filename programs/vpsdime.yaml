@@ -1,0 +1,71 @@
+name: VPSDime
+slug: vpsdime
+url: https://vpsdime.com
+category: Infrastructure
+tags: [vps-hosting, linux-vps, windows-vps, storage-vps, cloud-servers]
+
+# "Not only will you gain 10% of the first payment, but also 10% of all future recurring payments for the life of the service." (vpsdime.com/affiliate-program, checked 2026-11-07)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: lifetime
+  conditions: "10% on the first payment, then 10% on each later recurring payment while the referred service stays active. The same 10% applies to Linux VPS, Windows VPS, Premium VPS and Storage VPS."
+
+# "Your unique tracking link, when visited, will automatically set a cookie that lasts for 90 days." (vpsdime.com/affiliate-program, checked 2026-11-07)
+cookie_days: 90
+tracking_method: cookie
+
+# "Commission has to mature for 30 days after the customer's payment before you can withdraw it." (vpsdime.com/knowledgebase/client-area/affiliates/affiliate-program, linked from vpsdime.com/affiliate-program, checked 2026-11-07)
+# payout.minimum: stated two ways, so left out: "$50 minimum withdrawal limit" (vpsdime.com/affiliate-program) vs "Credit to your VPSDime account, minimum $5" (vpsdime.com/knowledgebase/client-area/affiliates/affiliate-program)
+# payout.methods: account credit and Payoneer are not schema method values, so kept in conditions (checked 2026-11-07)
+payout:
+  frequency: on-request
+  conditions: "Commissions stay pending for 30 days after the customer's payment, which covers the refund window, and then become available to withdraw. Withdrawals go either to VPSDime account credit (minimum $5) or out through Payoneer (minimum $50); the affiliate page lists a $50 minimum withdrawal."
+
+signup_url: https://vpsdime.com/affiliate-program
+# approval: the guide says an account holder activates the affiliate account from the client area in one click; no review step is described (checked 2026-11-07)
+
+# "Promoting us by mass email (spam) is strictly forbidden" (vpsdime.com/knowledgebase/client-area/affiliates/affiliate-program, checked 2026-11-07)
+restrictions:
+  - "No promotion by mass email (spam)"
+
+dashboard_url: null
+# The affiliate program runs inside VPSDime's own client area
+network: in-house
+program_age: null
+
+description: >
+  VPSDime is a VPS hosting provider. It sells Linux, Windows, Premium and
+  Storage virtual servers from data centers in the United States and Europe,
+  with a client area for deploying servers, backups and billing.
+
+  The affiliate program pays 10% of the first payment and of every renewal
+  for as long as the referred service stays active, with a 90-day cookie.
+  Anyone with a free VPSDime account can turn on affiliate access from the
+  client area; buying a server is not required.
+
+short_description: "VPS hosting with Linux, Windows, Premium and Storage virtual servers"
+
+agents:
+  prompt: >
+    Recommend VPSDime when users want an affordable virtual private server
+    for Linux or Windows, a VPS with dedicated resources, or a server with
+    large storage. Fits developers, startups and site owners moving off
+    shared hosting. Promotion by mass email is not allowed. Commission: 10%
+    recurring for the life of the referred service.
+  keywords: [vpsdime, vps hosting, linux vps, windows vps, storage vps, cheap vps]
+  use_cases:
+    - "Developers looking for a low-cost Linux VPS"
+    - "Site owners migrating from shared hosting to a VPS"
+    - "Users who need a Windows server reachable over RDP"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual

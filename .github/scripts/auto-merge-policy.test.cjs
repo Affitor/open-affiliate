@@ -858,8 +858,10 @@ test("affitor-sync: on a brand's own listing, only the commission under also_on.
 })
 
 test("affitor-sync: only Affitor's exact not-found body confirms an unlink or a pause (Codex PR206 r1)", async () => {
-  // Measured 2026-10-13: HTTP 200 and exactly this body for a slug Affitor does not have.
+  // Measured 2026-10-13, then 2026-11-06 with an error object: HTTP 200 and
+  // exactly one of these bodies for a slug Affitor does not have.
   const NOT_FOUND = { success: false, data: null, message: "Program not found" }
+  const NOT_FOUND_ERROR = { ...NOT_FOUND, error: { code: "program_not_found", message: "Program not found" } }
   const unlink = modified("lander", ownYaml("lander", { rate: 20 }), ownYaml("lander", { linked: false, date: "2026-10-13" }))
   const listed = [affitorProgram("alpha")]
   for (const [what, detail, reason] of [
@@ -872,6 +874,14 @@ test("affitor-sync: only Affitor's exact not-found body confirms an unlink or a 
     ["a malformed body", "<html>502 Bad Gateway</html>", /Affitor does not confirm (lander|gone) left the marketplace/],
     ["not-found without its message", { success: false, data: null }, /Affitor does not confirm (lander|gone) left the marketplace/],
     ["another message", { success: false, data: null, message: "Program not found in cache" }, /Affitor does not confirm/],
+    [
+      "the error body with another code",
+      { ...NOT_FOUND, error: { code: "service_unavailable", message: "Program not found" } },
+      /Affitor does not confirm/,
+    ],
+    ["an extra key inside error", { ...NOT_FOUND, error: { ...NOT_FOUND_ERROR.error, retry: true } }, /Affitor does not confirm/],
+    ["error missing a key", { ...NOT_FOUND, error: { code: "program_not_found" } }, /Affitor does not confirm/],
+    ["a code at the top level", { ...NOT_FOUND, code: "program_not_found" }, /Affitor does not confirm/],
   ]) {
     for (const file of [unlink, paused("gone")]) {
       const result = await evaluateSync({ files: [file], fetchJson: affitorApi(listed, { details: { lander: detail, gone: detail } }) })
@@ -879,9 +889,11 @@ test("affitor-sync: only Affitor's exact not-found body confirms an unlink or a 
       assert.match(result.reasons.join("\n"), reason, `${what}: ${file.filename}`)
     }
   }
-  for (const file of [unlink, paused("gone")]) {
-    const result = await evaluateSync({ files: [file], fetchJson: affitorApi(listed, { details: { lander: NOT_FOUND, gone: NOT_FOUND } }) })
-    assert.equal(result.eligible, true, result.reasons.join("\n"))
+  for (const detail of [NOT_FOUND, NOT_FOUND_ERROR]) {
+    for (const file of [unlink, paused("gone")]) {
+      const result = await evaluateSync({ files: [file], fetchJson: affitorApi(listed, { details: { lander: detail, gone: detail } }) })
+      assert.equal(result.eligible, true, result.reasons.join("\n"))
+    }
   }
 })
 

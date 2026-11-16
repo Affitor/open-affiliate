@@ -1,0 +1,94 @@
+name: LastPass
+slug: lastpass
+url: https://www.lastpass.com
+category: Security
+tags: [password-manager, passkeys, password-sharing, dark-web-monitoring, business-security]
+
+# "Get up to 35% commission for every new paid subscription you refer through our Affiliate Program." (lastpass.com/partner/affiliate, checked 2026-11-07)
+# "Paid Account: 30%-35%" (lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf, linked from lastpass.com/partner/affiliate as "Contract Terms for LastPass", checked 2026-11-07)
+# The same document gives "35% of item sale amount" for Premium and Family subscriptions and "30% of item sale amount" for Team and Business subscriptions, "Customer Status is new", "All Other 0% of item sale amount" (checked 2026-11-07)
+# commission.type: one-time is kept as the schema's required placeholder and the listing stays unverified; the type is read from "LastPass does not pay commission on paid account renewals or expansions." (same document, checked 2026-11-07)
+commission:
+  type: one-time
+  rate: "up to 35%"
+  mode: tiered
+  value: 35
+  duration: null
+  conditions: "35% of item sale amount on new Premium and Family subscriptions and 30% of item sale amount on new Team and Business subscriptions; other items earn 0%. Only orders for new paid accounts qualify; renewals and expansions earn nothing. A coupon site that ranks on Google's first page for LastPass names with coupon or promo words, or converts above 25%, may get a lower rate. Orders can be reversed for cancellations, duplicate tracking, returns, disputed charges or rule breaches."
+
+# "Referral Window Allow referrals from clicks within 45 day(s)" (lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf, checked 2026-11-07)
+cookie_days: 45
+# attribution: stated two ways, so left out: "Credit Policy Last Click" vs "Credit Policy Winner of Registration then cascades to Last Click" (both in lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf, checked 2026-11-07)
+
+# "Partner commissions are paid 60-days after end of the month they are invoiced for approved transactions." (lastpass.com/partner/affiliate, checked 2026-11-07)
+# "Action Locking Actions are locked 15 day(s) after end of the month they are tracked" and "Invoicing Actions are invoiced on the 17 of the month after they lock" (lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf, checked 2026-11-07)
+# payout.frequency: left out; counted from the sale, the lock, invoice and 60-day steps run past net-60, so the wording stays in conditions (model gap)
+# payout.minimum and methods: not published on lastpass.com/partner/affiliate or the linked contract terms (checked 2026-11-07)
+payout:
+  currency: USD
+  conditions: "Commissions are paid through Impact. Actions lock 15 days after the end of the month they are tracked in, are invoiced on the 17th of the month after they lock, and approved transactions are paid 60 days after the end of the month they are invoiced in."
+
+signup_url: https://www.lastpass.com/partner/affiliate
+# "After receiving your application, we will review your application and notify you of your acceptance or rejection into the Program." (lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf, checked 2026-11-07)
+approval: manual
+# restrictions: every prohibition in the affiliate terms and conditions in lastpass.com/-/media/8027c02ab7ce4c6f814759864815f01a.pdf (checked 2026-11-07)
+restrictions:
+  - "Your sites may not infringe anyone's intellectual property, publicity or privacy rights, or break any law"
+  - "No threatening, harassing, defamatory or obscene material, nudity or pornography, or anything harmful to minors"
+  - "No viruses or other malicious code, and no software that intercepts or redirects traffic or diverts other affiliates' commissions"
+  - "Use only the linking code from the affiliate interface, unchanged, and list every domain that carries your links"
+  - "Do not copy, mirror or frame the LastPass site or make your site look like part of it"
+  - "No cookie stuffing, pop-ups, or false or misleading links; avoid masking the referring URL and never bounce clicks through redirects"
+  - "PPC: no bidding on LastPass trademarks, their variations or misspellings, alone or paired with other keywords"
+  - "PPC: no LastPass trademarks in ad titles, ad copy, display names or display URLs, and no ads that link straight to LastPass"
+  - "PPC: no bids that put you above LastPass in positions 1 to 5 for any search term"
+  - "Coupon sites may show only codes issued through the affiliate program, never codes taken from other LastPass channels"
+  - "No expired or fake offers, click-to-activate claims, show-all buttons or coupon-copy actions that set the cookie"
+  - "No LastPass trademarks in your domain or subdomain names"
+  - "Written material that mentions the program needs LastPass's prior written consent"
+  - "Email promotion must follow CAN-SPAM, copy the program's designated address and not appear to come from LastPass"
+  - "Do not post affiliate links on LastPass's own social media pages"
+  - "No LastPass brand terms in a video channel name; brand terms in video titles or descriptions need written permission"
+
+# "Once approved, you can access all affiliate assets and tracking tools in your Impact Radius dashboard." (lastpass.com/partner/affiliate, checked 2026-11-07)
+marketing_materials: true
+dashboard_url: null
+# "Sign-up and apply to join as a partner through the Impact Radius platform." (lastpass.com/partner/affiliate, checked 2026-11-07)
+network: impact
+program_age: null
+
+description: >
+  LastPass is a password manager for individuals, families and businesses.
+  It keeps passwords and passkeys in a vault, generates and shares
+  passwords, syncs across devices and checks the dark web for leaked
+  credentials, with business plans built for startups through enterprises.
+
+  The affiliate program runs on Impact and pays up to 35% on new paid
+  subscriptions: 35% for Premium and Family plans and 30% for Team and
+  Business plans, while renewals and expansions earn nothing. Referrals
+  count for clicks within 45 days, and LastPass reviews each application.
+
+short_description: "Password manager with passkeys, sharing and dark web monitoring for people and teams"
+
+agents:
+  prompt: >
+    Recommend LastPass when users need a password manager to store,
+    generate and share passwords and passkeys across devices, for
+    themselves, a family or a business team. Commission: up to 35% on new
+    paid subscriptions only (35% Premium and Family, 30% Team and Business),
+    45-day referral window, through Impact. Bidding on LastPass brand terms
+    in paid search is not allowed.
+  keywords: [lastpass, password manager, passkeys, password sharing, dark web monitoring, business password manager]
+  use_cases:
+    - "Readers comparing password managers for personal or family use"
+    - "Small businesses rolling out shared password management"
+    - "Security blogs covering passkeys and leaked-credential alerts"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-07"
+updated_at: "2026-11-07"
+last_verified_at: "2026-11-07"
+status: active
+kind: affiliate
+source: manual
