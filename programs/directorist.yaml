@@ -97,5 +97,5 @@ conflicts:
   - field: cookie_days
     quote: 'Affiliate terms: "A referral is tracked through a cookie that lasts 30 days." Program page: "We aim to promote a transaction that lasts for 90 days to ensure that all your sales are properly tracked" (https://directorist.com/affiliate-program/). Checked 2026-11-17.'
     values:
-      - 30
-      - 90
+      - "30 days"
+      - "90 days"
