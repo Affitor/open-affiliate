@@ -27,7 +27,7 @@ import { seoTitle, seoDescription, buildFaq, programJsonLd, networkName } from "
 import { programs, getProgram, byOas, IN_HOUSE, categoryToSlug, confirmedTerms, networkHowToJoin, UNCONFIRMED_NOTE } from "@/lib/programs";
 import { alsoOnAffitor, applyButton } from "@/lib/apply-cta";
 import { outboundUrl } from "@/lib/outbound-link";
-import { noProgramHeadline } from "@/lib/no-program";
+import { noProgramHeadline, noProgramNoindex } from "@/lib/no-program";
 import {
   answerParts,
   approvalText,
@@ -75,6 +75,7 @@ export async function generateMetadata({
   return {
     title,
     description,
+    ...(noProgramNoindex(program) ? { robots: { index: false, follow: true } } : {}),
     // Points a machine reader at the markdown twin of this page, which carries
     // the agents: guidance in a form it can lift directly. Preferred over
     // putting .md URLs in the sitemap: those are alternate representations of

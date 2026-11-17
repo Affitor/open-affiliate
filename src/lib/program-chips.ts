@@ -40,6 +40,9 @@ export function commissionDisplay(commission: ChipCommission): string {
   }
 }
 
+/** The chip, list cell and twin text for a program that publishes no rate. */
+export const RATE_NOT_PUBLISHED = "Rate not published"
+
 /** Rate text that says something: not empty, "none", "n/a" or a bare number with no unit. */
 function saysRate(text: string): boolean {
   return Boolean(text) && !/^(none|not published|n\/a|unknown)$/i.test(text) && !/^\d+(\.\d+)?$/.test(text)
@@ -59,7 +62,7 @@ export function commissionChip(c: ChipCommission, short = false): string {
   if (c.mode !== "unknown" && c.value !== null && figure !== "Not published") return varies(figure) ? "Rate varies" : `${figure} ${commissionLabel(c, short)}`
   const rate = String(c.rate ?? "").trim()
   if (varies(rate)) return "Rate varies"
-  return saysRate(rate) ? rate : "Rate not published"
+  return saysRate(rate) ? rate : RATE_NOT_PUBLISHED
 }
 
 /** The cookie as the program page states it; unconfirmed until the terms are checked. */
