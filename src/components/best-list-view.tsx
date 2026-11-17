@@ -220,7 +220,7 @@ export function BestListView({
                     <td className="py-2.5 px-3">
                       {/* Only a verified figure reads as confirmed; an unverified one is the submitter's claim. */}
                       <span className={program.verified ? "font-mono text-meta font-medium" : "font-mono text-meta text-muted-foreground"}>
-                        {listCommissionText(program)}
+                        {listCommissionText(program, list)}
                       </span>
                     </td>
                     <td className="py-2.5 px-3 hidden sm:table-cell whitespace-nowrap text-meta text-muted-foreground">{program.commission.type}</td>

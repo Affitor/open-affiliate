@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, NO_PROGRAM_SECTION, bestPath, buildBestList, categoryList, getBestList, indexable, isAiAgentProgram, noProgramRows, otherLists } from "../src/lib/best-lists"
+import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, NO_PROGRAM_SECTION, listCommissionText, bestPath, buildBestList, categoryList, getBestList, indexable, isAiAgentProgram, noProgramRows, otherLists } from "../src/lib/best-lists"
 import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
@@ -826,5 +826,22 @@ test("AI agent hub: AI category, \"AI agent\" or \"AI assistant\" as whole words
     assert.deepEqual(noProgramRows(getBestList("ai-affiliate-programs")!), [], "other lists have no such section")
   } finally {
     allPrograms.splice(allPrograms.indexOf(fixture), 1)
+  }
+})
+
+test("AI agent hub keeps programs that publish no rate, after every ranked row, as Rate not published; other lists still leave them out", () => {
+  const list = getBestList("ai-agent-affiliate-programs")!
+  const { rows } = buildBestList(list)
+  const symphony = rows.find((p) => p.slug === "symphony-by-wix")
+  assert.ok(symphony, "symphony-by-wix is on the AI agent hub")
+  assert.ok(commissionUnknown(symphony.commission))
+  assert.equal(listCommissionText(symphony, list), "Rate not published")
+  const firstUnknown = rows.findIndex((p) => commissionUnknown(p.commission))
+  assert.ok(firstUnknown > 0 && rows.slice(firstUnknown).every((p) => commissionUnknown(p.commission)), "no-rate rows come after every ranked row")
+  assert.ok(rows.some((p) => p.slug === "viktor"), "viktor is on the AI agent hub")
+  const html = renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "x", href: "/best" } }))
+  assert.ok(html.includes("/programs/symphony-by-wix") && html.includes("Rate not published"))
+  for (const other of BEST_LISTS.filter((l) => l !== list && !l.directory)) {
+    assert.ok(buildBestList(other).rows.every((p) => !commissionUnknown(p.commission)), `${other.slug} shows a program with no rate`)
   }
 })

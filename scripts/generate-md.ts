@@ -37,7 +37,7 @@ import registry from "../src/lib/registry.json"
 import { formatFlat, formatPercentage } from "../src/lib/commission-mode"
 import { docsNav } from "../src/app/docs/_config"
 import { changelog } from "../src/lib/changelog"
-import { compareText } from "../src/lib/commission-order"
+import { commissionUnknown, compareText } from "../src/lib/commission-order"
 import { commissionGroup, compareCommissionFigure, payoutMinText, recurringMonths, recurringText, type CommissionGroup } from "../src/lib/rankings-terms"
 import {
   programs as sitePrograms,
@@ -1238,7 +1238,9 @@ function bestListMd(list: BestList, path: string): string {
       const cookie = termsConfirmed(p) && p.cookieDays != null ? `, ${p.cookieDays}d cookie` : ""
       // A referral reward keeps its published wording, as the page does.
       const terms =
-        p.kind === "referral"
+        list.unpublishedLast && commissionUnknown(p.commission)
+          ? listCommissionText(p, list)
+          : p.kind === "referral"
           ? [listCommissionText(p), p.commission.type, p.commission.duration ? `for ${p.commission.duration}` : null]
               .filter(Boolean)
               .join(" ")
