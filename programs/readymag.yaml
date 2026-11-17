@@ -95,3 +95,10 @@ last_verified_at: "2026-11-17"
 status: active
 kind: affiliate
 source: manual
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Affiliate terms (readymag.com/readymag/affiliate-program-terms/): commissions are reviewed and paid each month. Program page FAQ (readymag.com/affiliate-program): once the balance reaches $100 you withdraw it, each $100 once a month. Checked 2026-11-17.'
+    values:
+      - "monthly"
+      - "on request, once a month"
