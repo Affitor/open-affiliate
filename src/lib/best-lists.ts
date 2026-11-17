@@ -6,6 +6,7 @@ import {
   confirmedTerms,
   commissionRank,
   livePrograms,
+  programs,
   type Program,
 } from "./programs"
 import type { Faq } from "./program-seo"
@@ -79,6 +80,8 @@ export interface BestList {
    * every program tagged saas, in any category, so it is the page for the query.
    */
   answersFor?: string
+  /** Also list the products in scope with no affiliate program yet (status no_program), after the ranking. */
+  noProgramSection?: boolean
 }
 
 export const MAX_ROWS = 50
@@ -455,7 +458,41 @@ const LISTS: BestList[] = [
     criteria: "Programs listed in the AI category.",
     qualifies: (p) => p.category === "AI",
   },
+  {
+    slug: "ai-agent-affiliate-programs",
+    query: "AI Agent Affiliate Programs",
+    h1: "AI Agent Affiliate Programs",
+    description:
+      "Affiliate programs for AI agents and AI assistants, ranked by commission, with verified terms first and the cookie window and duration for each.",
+    summary: "are AI agents or AI assistants, going by their registry category, description and tags",
+    noun: "AI agent affiliate programs",
+    criteria:
+      "Programs in the AI category whose description, short description or tags name an AI agent or an AI assistant.",
+    qualifies: isAiAgentProgram,
+    noProgramSection: true,
+  },
 ]
+
+/**
+ * An AI agent or AI assistant product: the AI category, and "AI agent" or "AI
+ * assistant" (either spelling with a space or a hyphen, singular or plural) as
+ * whole words in its description, short description or tags.
+ */
+export function isAiAgentProgram(p: Pick<Program, "category" | "description" | "shortDescription" | "tags">): boolean {
+  const re = /\bai[\s-]+(?:agents?|assistants?)\b/i
+  return p.category === "AI" && [p.description, p.shortDescription ?? "", ...p.tags].some((t) => re.test(t))
+}
+
+/** Products in a list's scope with no affiliate program yet, A to Z; empty unless the list opts in. */
+export function noProgramRows(list: BestList): Program[] {
+  if (!list.noProgramSection) return []
+  return programs
+    .filter((p) => p.status === "no_program" && list.qualifies(p))
+    .sort((a, b) => a.name.localeCompare(b.name, "en") || a.slug.localeCompare(b.slug))
+}
+
+/** Heading of the noProgramRows section, on the page and its twin. */
+export const NO_PROGRAM_SECTION = "No affiliate program yet — we'll update this page when one launches"
 
 /** Commission types that get a list per category. */
 const CATEGORY_TYPES = [

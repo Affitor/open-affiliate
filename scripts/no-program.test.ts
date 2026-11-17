@@ -17,7 +17,9 @@ import { readFileSync } from "node:fs"
 import { join } from "node:path"
 import { test } from "node:test"
 import { parse } from "yaml"
-import { apiProgram, hasNoProgram, noProgramAlternatives } from "../src/lib/no-program"
+import { apiProgram, hasNoProgram, noProgramAlternatives, noProgramNoindex } from "../src/lib/no-program"
+import sitemap from "../src/app/sitemap"
+import { generateMetadata } from "../src/app/programs/[slug]/page"
 import { oasSummary } from "../src/lib/oas"
 import { machineChecks } from "../src/lib/oas-machine"
 import { buildFaq } from "../src/lib/program-seo"
@@ -217,4 +219,28 @@ test("Content Insights never recommends or counts a program that is not live", (
   assert.equal(ai.programCount, 1)
   assert.equal(insights.programsWithContent, 1)
   assert.equal(insights.categoryInsights.some((c) => c.category === "Other"), false)
+})
+
+test("a no_program listing created on or after 2026-11-17 is noindex and out of the sitemap; jasper and openrouter stay indexed", async () => {
+  const jasper = getProgram("jasper")!
+  assert.equal(jasper.status, "no_program")
+  const fresh = { ...jasper, slug: "test-new-no-program", createdAt: "2026-11-17" }
+  assert.equal(noProgramNoindex(fresh), true)
+  assert.equal(noProgramNoindex({ ...fresh, createdAt: "2026-11-16" }), false)
+  assert.equal(noProgramNoindex({ ...fresh, status: "active" }), false)
+  assert.equal(noProgramNoindex({ ...fresh, status: "discontinued" }), false)
+  const meta = async (slug: string) => generateMetadata({ params: Promise.resolve({ slug }) })
+  programs.push(fresh)
+  try {
+    assert.deepEqual((await meta(fresh.slug)).robots, { index: false, follow: true })
+    const urls = new Set(sitemap().map((e) => e.url))
+    assert.ok(!urls.has(`https://openaffiliate.dev/programs/${fresh.slug}`), "a new no_program is in the sitemap")
+    for (const slug of ["jasper", "openrouter"]) {
+      assert.equal(noProgramNoindex(getProgram(slug)!), false, slug)
+      assert.equal((await meta(slug)).robots, undefined, `${slug} must stay indexed`)
+      assert.ok(urls.has(`https://openaffiliate.dev/programs/${slug}`), `${slug} left the sitemap`)
+    }
+  } finally {
+    programs.splice(programs.indexOf(fresh), 1)
+  }
 })

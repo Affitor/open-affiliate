@@ -66,6 +66,8 @@ import {
   freshnessLine,
   categoryList,
   listCommissionText,
+  NO_PROGRAM_SECTION,
+  noProgramRows,
   type BestList,
 } from "../src/lib/best-lists"
 import { hasNoProgram, noProgramAlternatives, noProgramAnswer } from "../src/lib/no-program"
@@ -1257,6 +1259,9 @@ function bestListMd(list: BestList, path: string): string {
       data.checked ? `Verified ${mdEscape(data.checked)}: ${VERIFIED_NOTE}` : null,
     ].filter(Boolean).join("\n\n"),
     section("Programs", rows),
+    noProgramRows(list).length
+      ? section(NO_PROGRAM_SECTION, noProgramRows(list).map((p) => `- [${mdEscape(p.name)}](${BASE}/programs/${p.slug}.md)`).join("\n"))
+      : null,
     // The hub links every list, one line each, above its end blocks (as the page does).
     list === BEST_INDEX
       ? section("All lists", [...BEST_LISTS.filter((l) => l !== BEST_INDEX).map((l) => `- [${mdEscape(l.h1)}](${BASE}${bestPath(l)}.md)`), `- [${mdEscape(networkPostTitle())}](${BASE}${NETWORKS_POST_PATH}.md)`].join("\n"))

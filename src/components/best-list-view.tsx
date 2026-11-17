@@ -26,6 +26,8 @@ import {
   childLists,
   listCommissionText,
   listPageTitle,
+  NO_PROGRAM_SECTION,
+  noProgramRows,
   nounOf,
   updatedText,
   type BestList,
@@ -73,6 +75,7 @@ export function BestListView({
 }) {
   const data = buildBestList(list);
   const { intro, faq } = bestListCopy(data);
+  const noProgram = noProgramRows(list);
   const url = `${SITE}${path}`;
   // Like the intro, no "top" out of fewer than MIN_SAMPLE verified programs.
   const stats = [
@@ -249,6 +252,25 @@ export function BestListView({
           </div>
         </div>
       </section>
+
+      {noProgram.length > 0 && (
+        <section data-no-program className="oa-band" aria-labelledby="no-program-h">
+          <h2 id="no-program-h" className="oa-label mb-2 border-b border-line-strong pb-2">{NO_PROGRAM_SECTION}</h2>
+          <ul className="grid sm:grid-cols-2 sm:gap-x-8">
+            {noProgram.map((p) => (
+              <li key={p.slug} className="border-b border-border">
+                <Link href={`/programs/${p.slug}`} className="flex items-center gap-3 py-2.5 text-sm hover:bg-sunk transition-colors">
+                  <ProgramLogo slug={p.slug} name={p.name} size={24} className="shrink-0" />
+                  <span className="min-w-0">
+                    <span className="block font-medium">{p.name}</span>
+                    {p.shortDescription && <span className="block truncate text-xs text-muted-foreground">{p.shortDescription}</span>}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <ChildLists list={list} />
 
