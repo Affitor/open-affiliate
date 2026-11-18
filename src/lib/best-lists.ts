@@ -489,7 +489,7 @@ const LISTS: BestList[] = [
  */
 /**
  * Programs whose copy names AI agents or assistants without being one: a course, prompt packs,
- * video generators and editors, an SEO tool, a search API and content suites. Reviewed by hand
+ * video generators and editors, a creative canvas, an SEO tool, a search API, content suites and a writing plugin. Reviewed by hand
  * 2026-11-17; a new false match goes here with its reason.
  */
 export const AI_AGENT_EXCLUDED: Record<string, string> = {
@@ -502,6 +502,8 @@ export const AI_AGENT_EXCLUDED: Record<string, string> = {
   "exa-ai": "search API",
   "easy-peasy-ai": "content generation suite",
   "hix-ai": "writing workspace",
+  writerush: "content writing plugin",
+  "chromatic-ai": "creative canvas for images, ads and video",
 }
 
 export function isAiAgentProgram(p: Pick<Program, "slug" | "category" | "description" | "shortDescription" | "tags">): boolean {
