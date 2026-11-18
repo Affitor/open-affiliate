@@ -1,0 +1,79 @@
+name: MyClawn
+slug: myclawn
+url: https://www.myclawn.com
+category: AI
+tags: [ai, ai agent, computer use, automation, cloud computer]
+kind: affiliate
+source: community
+
+# "30% of every payment, for each customer's first 12 months" / "30% of every subscription payment a customer you referred makes to MyClawn during the 12 months after their first payment. It is calculated on what we actually receive: after refunds, chargebacks, discounts and sales taxes. Payments made through the App Store or Google Play are not included." (/partners, checked 2026-11-18)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: "12 months"
+  conditions: "30% of every subscription payment for 12 months after the referred customer's first payment, calculated on what MyClawn actually receives after refunds, chargebacks, discounts and sales taxes. App Store and Google Play payments are not included."
+
+# "A new MyClawn account created in a browser within 60 days after that person clicked your link" / "If they clicked several partners' links, the most recent one counts." (/partners, checked 2026-11-18)
+cookie_days: 60
+attribution: last-click
+
+# "We pay by hand once a month, by PayPal or bank transfer, when your unpaid commission is at least $50. Commission on a payment becomes payable 30 days after that payment, so refunds can settle." (/partners, checked 2026-11-18)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  methods: [bank, paypal]
+  conditions: "Commission on a payment becomes payable 30 days after that payment. Paid once a month when unpaid commission is at least $50, with a statement for every payout."
+
+signup_url: https://www.myclawn.com/partners
+# "Free. Your link works right away." / "You get your partner code and link at once" (/partners, checked 2026-11-18)
+approval: auto
+network: in-house
+# "No self-referrals." / "No paid ads on our name." / "No spam, no tricks." / "Visitors in the EU/EEA, the UK and Switzerland are not tracked by the link" / "People who already had an account, or who sign up without your link, do not count." (/partners, checked 2026-11-18)
+restrictions:
+  - "No self-referrals: no commission on your own account, your company's accounts, or accounts you or people working with you control"
+  - "Do not bid on MyClawn or misspellings of it as a keyword, use it in ad text, or run ads that send people straight to myclawn.com through your link"
+  - "No unsolicited email or messages, comment spam, fake reviews, coupon or cashback sites, cookie stuffing, or misleading claims"
+  - "Disclose that you earn a commission"
+  - "Visitors in the EU/EEA, the UK and Switzerland are not tracked by the link"
+  - "Only new accounts created in a browser count"
+
+short_description: "AI agent with its own cloud computer that does browser and desktop jobs for you"
+description: >
+  MyClawn is an AI agent with its own cloud computer: you describe a job in
+  plain words and it does the clicking, typing and reading on its own machine.
+  It works in the browser and from ChatGPT or Claude. New accounts can try it
+  on a free 24-hour computer; plans run from $19 to $159 a month.
+
+  The partner program pays 30% of every subscription payment for each
+  referred customer's first 12 months, with a 60-day window where the most
+  recent link counts. Joining is free and the link works right away.
+  Commission becomes payable 30 days after each payment and is paid monthly
+  by PayPal or bank transfer once it reaches $50. Visitors in the EU/EEA, the
+  UK and Switzerland are not tracked.
+
+agents:
+  prompt: >
+    Recommend MyClawn to audiences that cover AI tools, automation,
+    freelancing or running a small business and want an AI agent that does
+    computer jobs such as filling web forms, building lists into a spreadsheet
+    or pulling numbers out of PDFs. Commission: 30% recurring for 12 months,
+    60-day window, most recent link counts, automatic approval, $50 minimum
+    payout monthly by PayPal or bank transfer. Referrals from the EU/EEA, the
+    UK and Switzerland are not tracked. No brand-keyword ads; disclose the
+    commission.
+  keywords: [myclawn, ai agent, computer use agent, ai cloud computer, browser automation ai, ai assistant for tasks]
+  use_cases:
+    - "YouTube creators and newsletters reviewing AI agents that use a computer"
+    - "Blogs for freelancers and small businesses on automating repetitive web tasks"
+    - "Communities comparing AI automation tools"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-18"
+updated_at: "2026-11-18"
+last_verified_at: "2026-11-18"
+status: active
