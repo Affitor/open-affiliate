@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, bestPath, buildBestList, categoryList, getBestList, indexable, otherLists } from "../src/lib/best-lists"
+import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, NO_PROGRAM_SECTION, listCommissionText, bestPath, buildBestList, categoryList, getBestList, indexable, isAiAgentProgram, noProgramRows, otherLists } from "../src/lib/best-lists"
 import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
@@ -793,4 +793,55 @@ test("a ranked list ends like a post: the Affitor line, Read more (5) and the FA
   const category = renderToStaticMarkup(createElement(BestListView, { list: categoryList("AI"), path: "/categories/ai", parent: { name: "Categories", href: "/categories" }, related: { category: "AI", entries: [] } }))
   assert.doesNotMatch(category, /data-affitor-line|data-read-more/)
   assert.match(category, /<details\b/)
+})
+
+test("AI agent hub: AI category, \"AI agent\" or \"AI assistant\" as whole words, no_program products in their own section", () => {
+  const base = { category: "AI", description: "", shortDescription: "", tags: [] as string[] }
+  for (const text of ["An AI agent for sales", "AI agents that browse", "Your AI-assistant", "ai assistants for teams"]) {
+    assert.equal(isAiAgentProgram({ ...base, description: text }), true, text)
+  }
+  assert.equal(isAiAgentProgram({ ...base, tags: ["ai-agents"] }), true)
+  assert.equal(isAiAgentProgram({ ...base, shortDescription: "AI assistant for email" }), true)
+  for (const text of ["Email AI agentic workflows", "A Thai agent", "AI agency software", "Real estate agent CRM", "chai assistant"]) {
+    assert.equal(isAiAgentProgram({ ...base, description: text }), false, text)
+  }
+  assert.equal(isAiAgentProgram({ ...base, category: "Marketing", description: "An AI agent" }), false)
+
+  const list = getBestList("ai-agent-affiliate-programs")!
+  assert.ok(list, "the hub is a /best list")
+  assert.ok(BEST_INDEX !== list && otherLists(BEST_INDEX).includes(list), "linked from /best")
+  const data = buildBestList(list)
+  assert.ok(data.rows.length > 0)
+  assert.ok(data.rows.every((p) => isLive(p) && isAiAgentProgram(p)))
+  // Section only when a no_program product qualifies.
+  const render = () => renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "x", href: "/best" } }))
+  assert.equal(noProgramRows(list).length === 0, !render().includes("data-no-program"))
+  const fixture = { ...getProgram("jasper")!, slug: "test-ai-agent-no-program", name: "Test Agent", category: "AI", description: "An AI agent.", status: "no_program" as const }
+  allPrograms.push(fixture)
+  try {
+    assert.deepEqual(noProgramRows(list).map((p) => p.slug).includes(fixture.slug), true)
+    assert.ok(!data.rows.some((p) => p.slug === fixture.slug), "a no_program product is never ranked")
+    const html = render()
+    assert.ok(html.includes("data-no-program") && html.includes(NO_PROGRAM_SECTION.replace("'", "&#x27;")) && html.includes(`/programs/${fixture.slug}`))
+    assert.deepEqual(noProgramRows(getBestList("ai-affiliate-programs")!), [], "other lists have no such section")
+  } finally {
+    allPrograms.splice(allPrograms.indexOf(fixture), 1)
+  }
+})
+
+test("AI agent hub keeps programs that publish no rate, after every ranked row, as Rate not published; other lists still leave them out", () => {
+  const list = getBestList("ai-agent-affiliate-programs")!
+  const { rows } = buildBestList(list)
+  const symphony = rows.find((p) => p.slug === "symphony-by-wix")
+  assert.ok(symphony, "symphony-by-wix is on the AI agent hub")
+  assert.ok(commissionUnknown(symphony.commission))
+  assert.equal(listCommissionText(symphony, list), "Rate not published")
+  const firstUnknown = rows.findIndex((p) => commissionUnknown(p.commission))
+  assert.ok(firstUnknown > 0 && rows.slice(firstUnknown).every((p) => commissionUnknown(p.commission)), "no-rate rows come after every ranked row")
+  assert.ok(rows.some((p) => p.slug === "viktor"), "viktor is on the AI agent hub")
+  const html = renderToStaticMarkup(createElement(BestListView, { list, path: bestPath(list), parent: { name: "x", href: "/best" } }))
+  assert.ok(html.includes("/programs/symphony-by-wix") && html.includes("Rate not published"))
+  for (const other of BEST_LISTS.filter((l) => l !== list && !l.directory)) {
+    assert.ok(buildBestList(other).rows.every((p) => !commissionUnknown(p.commission)), `${other.slug} shows a program with no rate`)
+  }
 })

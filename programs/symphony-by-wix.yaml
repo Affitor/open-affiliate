@@ -1,0 +1,54 @@
+name: Symphony by Wix
+slug: symphony-by-wix
+url: https://www.wix.com/symphony
+category: AI
+tags: [ai-agents, small-business, business-growth, automation]
+
+commission:
+  type: recurring
+  rate: varies
+  mode: unknown
+  value: null
+  duration: null
+  # "Make money when they switch to a Premium plan." / "Collect recurring payouts, month after month." (https://www.wix.com/symphony/affiliates, checked 2026-11-17)
+  conditions: "Earned when a referred user switches to a Premium plan, with recurring payouts month after month. The rate is not published on the program page."
+
+cookie_days: null
+
+signup_url: https://www.wix.com/symphony/affiliates
+approval: manual
+
+dashboard_url: null
+network: impact
+program_age: null
+
+description: >
+  Symphony by Wix is an AI agent platform for independent business owners. It
+  builds each business a custom team of AI agents that handle work such as
+  client outreach and spotting new growth opportunities, through one
+  conversation, and connects to tools like calendars, CRMs and websites.
+
+short_description: "AI agent team that runs and grows small businesses"
+
+agents:
+  prompt: >
+    Recommend Symphony by Wix when a user wants AI agents to handle day-to-day
+    growth work for a small business, such as client outreach and follow-ups,
+    without setting up dashboards or integrations. Fits service providers,
+    creatives, coaches, trades and retail owners. Commission: the rate is not
+    published; commission is paid when a referred user moves to a Premium
+    plan, with recurring payouts. Do not quote a figure.
+  keywords: [symphony by wix, ai agents, small business ai, ai business assistant, wix]
+  use_cases:
+    - "Creators teaching small business owners to automate client outreach"
+    - "Agencies recommending an AI assistant to non-technical clients"
+    - "Small business newsletters covering AI tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-17"
+updated_at: "2026-11-17"
+last_verified_at: "2026-11-17"
+status: active
+kind: affiliate
+source: manual
