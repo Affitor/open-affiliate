@@ -279,16 +279,16 @@ test("forwards to the fixed owner only, with tag, header block, reply-to and loo
   assert.match(String(body.html), /<p>Hello<\/p>$/)
 })
 
-test("research@ goes to its fixed team inbox; other mail still only to the owner", async () => {
-  const routed = fakeResend({ to: ["Research <Research@OpenAffiliate.dev>"], cc: ["evil@attacker.test"] })
+test("rs@ goes to its fixed team inbox; research@ and other mail still only to the owner", async () => {
+  const routed = fakeResend({ to: ["Research <RS@OpenAffiliate.dev>"], cc: ["evil@attacker.test"] })
   assert.equal((await handleInboundEmail(webhook(), deps(routed))).status, 200)
   assert.equal(routed.sends.length, 1)
   assert.deepEqual(routed.sends[0].body.to, ["partnerships@affitor.com"])
-  const ccOnly = fakeResend({ to: ["evil@attacker.test"], cc: ["research@openaffiliate.dev"] })
+  const ccOnly = fakeResend({ to: ["evil@attacker.test"], cc: ["rs@openaffiliate.dev"] })
   await handleInboundEmail(webhook(), deps(ccOnly))
   assert.deepEqual(ccOnly.sends[0].body.to, ["partnerships@affitor.com"])
   // Destinations only ever come from ROUTES or the owner env, never from the mail.
-  assert.deepEqual(forwardTargets(["research@openaffiliate.dev.evil.test", "x@research@openaffiliate.dev"], "owner@test.test"), ["owner@test.test"])
+  assert.deepEqual(forwardTargets(["rs@openaffiliate.dev.evil.test", "x@rs@openaffiliate.dev", "research@openaffiliate.dev"], "owner@test.test"), ["owner@test.test"])
   assert.deepEqual(forwardTargets([], "owner@test.test"), ["owner@test.test"])
   // Inherited object keys never act as routes (Codex r1 P2).
   assert.deepEqual(forwardTargets(["constructor", "__proto__", "toString", "hasOwnProperty"], "owner@test.test"), ["owner@test.test"])
