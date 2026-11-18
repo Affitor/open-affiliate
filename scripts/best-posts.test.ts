@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { test } from "node:test"
-import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, NO_PROGRAM_SECTION, listCommissionText, bestPath, buildBestList, categoryList, getBestList, indexable, isAiAgentProgram, noProgramRows, otherLists } from "../src/lib/best-lists"
+import { BEST_INDEX, BEST_LISTS, HUB_MIN_INDEXED, NO_PROGRAM_SECTION, listCommissionText, bestPath, buildBestList, categoryList, getBestList, indexable, isAiAgentProgram, AI_AGENT_EXCLUDED, noProgramRows, otherLists } from "../src/lib/best-lists"
 import { commissionUnknown, livePrograms } from "../src/lib/programs"
 import sitemap from "../src/app/sitemap"
 import { blogApplyHref } from "../src/lib/apply-cta"
@@ -796,7 +796,7 @@ test("a ranked list ends like a post: the Affitor line, Read more (5) and the FA
 })
 
 test("AI agent hub: AI category, \"AI agent\" or \"AI assistant\" as whole words, no_program products in their own section", () => {
-  const base = { category: "AI", description: "", shortDescription: "", tags: [] as string[] }
+  const base = { slug: "x", category: "AI", description: "", shortDescription: "", tags: [] as string[] }
   for (const text of ["An AI agent for sales", "AI agents that browse", "Your AI-assistant", "ai assistants for teams"]) {
     assert.equal(isAiAgentProgram({ ...base, description: text }), true, text)
   }
@@ -806,6 +806,11 @@ test("AI agent hub: AI category, \"AI agent\" or \"AI assistant\" as whole words
     assert.equal(isAiAgentProgram({ ...base, description: text }), false, text)
   }
   assert.equal(isAiAgentProgram({ ...base, category: "Marketing", description: "An AI agent" }), false)
+  // Hand-reviewed false matches stay off the hub (Son 17/11: a course replay was listed).
+  for (const slug of Object.keys(AI_AGENT_EXCLUDED)) {
+    assert.equal(isAiAgentProgram({ ...base, slug, description: "An AI agent" }), false, slug)
+  }
+  assert.ok(!buildBestList(getBestList("ai-agent-affiliate-programs")!).rows.some((p) => p.slug === "build-to-own-replay"))
 
   const list = getBestList("ai-agent-affiliate-programs")!
   assert.ok(list, "the hub is a /best list")

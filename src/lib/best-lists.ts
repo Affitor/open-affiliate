@@ -487,9 +487,26 @@ const LISTS: BestList[] = [
  * assistant" (either spelling with a space or a hyphen, singular or plural) as
  * whole words in its description, short description or tags.
  */
-export function isAiAgentProgram(p: Pick<Program, "category" | "description" | "shortDescription" | "tags">): boolean {
+/**
+ * Programs whose copy names AI agents or assistants without being one: a course, prompt packs,
+ * video generators and editors, an SEO tool, a search API and content suites. Reviewed by hand
+ * 2026-11-17; a new false match goes here with its reason.
+ */
+export const AI_AGENT_EXCLUDED: Record<string, string> = {
+  "build-to-own-replay": "a course replay, not a product",
+  buypromptpack: "prompt packs",
+  colossyan: "video generator",
+  revid: "video generator",
+  eziclip: "video editor",
+  seonix: "SEO publishing tool",
+  "exa-ai": "search API",
+  "easy-peasy-ai": "content generation suite",
+  "hix-ai": "writing workspace",
+}
+
+export function isAiAgentProgram(p: Pick<Program, "slug" | "category" | "description" | "shortDescription" | "tags">): boolean {
   const re = /\bai[\s-]+(?:agents?|assistants?)\b/i
-  return p.category === "AI" && [p.description, p.shortDescription ?? "", ...p.tags].some((t) => re.test(t))
+  return p.category === "AI" && !(p.slug in AI_AGENT_EXCLUDED) && [p.description, p.shortDescription ?? "", ...p.tags].some((t) => re.test(t))
 }
 
 /** Products in a list's scope with no affiliate program yet, A to Z; empty unless the list opts in. */
