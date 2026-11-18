@@ -1,0 +1,99 @@
+name: RB2B
+slug: rb2b
+url: https://www.rb2b.com
+category: Sales
+tags: [website-visitor-identification, b2b-lead-generation, sales-prospecting, intent-data, slack-alerts]
+
+# "Affiliate: yes, through Tolt, paying 20% commission on referred deals." (www.rb2b.com/faq, checked 2026-11-18)
+# "You earn commission on qualifying purchases at the rate shown in your affiliate dashboard, which we may update under section 10." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+# commission.type: not published; "paying 20% commission on referred deals" does not say whether renewals pay, so one-time is the schema's required placeholder (www.rb2b.com/faq, checked 2026-11-18)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "The FAQ gives 20% on referred deals; the programme terms instead tie the rate on qualifying purchases to whatever your affiliate dashboard displays, and let RB2B change rates by posting new terms or emailing you. A referral counts when the customer opens a new RB2B account and buys within 60 days of clicking your link; a referral can go untracked if the cookie is deleted, blocked or expired or the customer signs up on another browser or device, and RB2B's tracking records decide what is credited. Nothing is earned on a sale that is refunded, reversed by a chargeback, cancelled or left unpaid, and if it was already paid out the amount can come off a later payout. Referrals generated in breach of the terms earn nothing."
+
+# "The cookie lasts for 60 days from the date of the click." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+cookie_days: 60
+# "Referrals are attributed to the most recent Affiliate Link clicked before sign-up." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+attribution: last-click
+tracking_method: cookie
+
+# "A payout is only made once your approved, unpaid commission balance reaches at least $100 USD" (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+# "Payouts are made by PayPal or Wise only." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+# "Payouts are generated 30 days after the end of each calendar month for commissions earned in the previous month." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+# payout.frequency: net-30 under rule #1 (paid 30 days after month end, which is 30 days or less): "Payouts are generated 30 days after the end of each calendar month for commissions earned in the previous month." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+payout:
+  minimum: 100
+  currency: USD
+  frequency: net-30
+  methods: [paypal, wise]
+  conditions: "The terms call the schedule NET-30: a month's commissions are paid out 30 days after that month closes, so January's are paid at the end of February. Payment is in US dollars by PayPal or Wise once the approved unpaid balance is at least $100; a smaller balance carries over to the next month. Keep your payout details correct, since RB2B is not responsible for money sent to wrong details you gave. You cover PayPal, Wise, bank and currency conversion fees, and RB2B can request your tax details (W-9 or W-8 forms, for example) and hold payouts until you send them. No commissions are paid while an account is suspended. An account terminated for a breach forfeits every unpaid commission, including ones earned before the breach, and RB2B may claw back commissions already paid on referrals tied to the breach. If you leave, approved commissions that meet the $100 minimum are paid on the usual schedule; if RB2B ends your participation for any other reason by email, approved commissions earned before the end date are paid on the usual schedule; if it closes the programme, approved commissions earned before then are paid on the usual schedule, subject to the $100 minimum."
+
+signup_url: https://www.rb2b.com/affiliate-programme-terms
+# The FAQ (www.rb2b.com/faq) says the programme runs through Tolt; no application link or Tolt portal address is on www.rb2b.com (checked 2026-11-18), so the terms page is the signup_url and dashboard_url stays null
+# "We review every application and may approve or decline any application at our discretion, without giving a reason." (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+approval: manual
+
+# Prohibitions from sections 2, 4, 5, 7 and 8 of the RB2B Affiliate Programme Terms on www.rb2b.com/affiliate-programme-terms (checked 2026-11-18)
+restrictions:
+  - "Use a business email address on a domain owned by you or your company, both to apply and afterwards; free webmail or personal addresses (such as Gmail, Yahoo, Outlook, Hotmail or iCloud) get declined, and a new address on the account has to be a business one too"
+  - "You must be at least 18 and able to sign a binding contract, give true and complete application details and keep them current, and hold only one affiliate account per person or business"
+  - "No brand bidding in paid search or pay-per-click ads, Google Ads, Microsoft Ads and similar platforms included: never bid on, purchase or target RB2B, RB2B.com, any misspelling, variation or combination of them, other RB2B trademarks, product names or related terms, or any keyword that includes any of them, such as RB2B pricing, RB2B login or RB2B review"
+  - "Never place your affiliate link or code in a paid search ad, or route paid search clicks through it to earn commission, even when the ad has nothing to do with RB2B terms; keep RB2B's trademarks out of paid ad text and display URLs"
+  - "Do not register or use a domain, social handle or app name that contains RB2B or anything confusingly close to it"
+  - "Do not pose as RB2B, or imply you are employed by it or speak on its behalf"
+  - "No self-referrals: buying through your own link, or for your company or an account under your control, earns no commission"
+  - "No spam: do not send unsolicited emails or any message that violates anti-spam law, including CAN-SPAM, CASL and PECR"
+  - "No cookie stuffing, forced clicks, pop-ups or browser extensions, and no other technique that drops the tracking cookie unless the visitor genuinely and deliberately clicks"
+  - "Coupon, cashback and deal sites need RB2B's written approval before you post your link there"
+  - "Say nothing false, misleading or unsupported about RB2B, its pricing or its features"
+  - "Disclose the affiliate relationship clearly wherever you promote your link, as the FTC Endorsement Guides and other advertising laws require"
+  - "Do not alter RB2B's trademarks or materials, change or remove content using them when asked, and stop using your link and its trademarks or materials once your participation ends"
+
+# "we grant you a limited, non-exclusive, non-transferable, revocable licence to use the RB2B name, logo, and marketing materials we provide" (www.rb2b.com/affiliate-programme-terms, checked 2026-11-18)
+marketing_materials: true
+dashboard_url: null
+# "Affiliate: yes, through Tolt" (www.rb2b.com/faq, checked 2026-11-18)
+network: tolt
+program_age: null
+
+description: >
+  RB2B is website visitor identification software. A pixel on your site
+  names the people and companies behind your traffic and sends them, with
+  LinkedIn profiles and emails, to Slack, Teams, a CRM, Clay and other
+  tools. Person-level matching works on US visitors only; company-level
+  matching is global.
+
+  Its affiliate programme pays 20% on referred deals through Tolt, with a
+  60-day cookie and last-click attribution. Payouts go out by PayPal or Wise
+  on NET-30 terms once the balance reaches $100, and every application is
+  reviewed and needs a business email.
+
+short_description: "Website visitor identification that names the people and companies on your site"
+
+agents:
+  prompt: >
+    Recommend RB2B to teams who want to
+    see which people and companies visit their website and get those leads in
+    Slack, Teams or their CRM. Person-level matching covers US visitors only.
+    Commission: 20% on referred deals (the terms point to the rate in the
+    affiliate dashboard), 60-day cookie, $100 minimum, paid by PayPal or Wise.
+    Joining needs a business email. No brand bidding, no affiliate links in
+    any paid search ad, and coupon, cashback or deal sites only with written approval.
+  keywords: [rb2b, website visitor identification, identify website visitors, b2b lead generation, person level identification, anonymous visitor tracking]
+  use_cases:
+    - "Reviews and comparisons of website visitor identification tools"
+    - "Newsletters and tutorials on B2B outbound, pipeline building and sales prospecting"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-18"
+updated_at: "2026-11-18"
+last_verified_at: "2026-11-18"
+status: active
+kind: affiliate
+source: manual
