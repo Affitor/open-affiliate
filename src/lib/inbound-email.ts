@@ -4,7 +4,8 @@ import type { SupabaseClient } from "@supabase/supabase-js"
 /**
  * Mail sent to any address @openaffiliate.dev reaches Resend Inbound, which
  * posts an `email.received` webhook here. We fetch the full message from
- * Resend and re-send it to ONE fixed owner address (OA_INBOX_FORWARD_TO).
+ * Resend and re-send it to ONE fixed owner address (OA_INBOX_FORWARD_TO), or, for
+ * the few addresses in ROUTES, to that address's fixed team inbox.
  * Nothing is ever sent to an address taken from the incoming mail.
  *
  * Env: RESEND_INBOUND_WEBHOOK_SECRET (whsec_…, from the Resend webhook page),
@@ -124,6 +125,21 @@ export function verifySvixSignature(
 export function forwardAddress(value: string | undefined): string | null {
   const address = value?.trim() ?? ""
   return ADDRESS.test(address) ? address : null
+}
+
+/**
+ * Fixed per-address routes, set in code (never from the incoming mail): mail to one of
+ * these goes to its team inbox instead of the owner. research@ is the shared
+ * competitor-research signup address (Son 18/11 11:23, via cos-affitor).
+ */
+export const ROUTES: ReadonlyMap<string, string> = new Map([
+  ["research@openaffiliate.dev", "partnerships@affitor.com"],
+])
+
+/** Where a received mail is forwarded: routed team inboxes if any recipient matches, else the owner. */
+export function forwardTargets(recipients: string[], owner: string): string[] {
+  const routed = [...new Set(recipients.map(bareAddress).map((a) => ROUTES.get(a)).filter((a): a is string => typeof a === "string"))]
+  return routed.length > 0 ? routed.sort() : [owner]
 }
 
 function bareAddress(value: string): string {
@@ -258,7 +274,7 @@ async function buildForward(
 
   const message: Record<string, unknown> = {
     from: FORWARD_FROM,
-    to: [owner],
+    to: forwardTargets([...(email.to ?? []), ...(email.cc ?? [])], owner),
     subject: `${SUBJECT_TAG} ${oneLine(email.subject || "(no subject)")}`,
     text: textBlock + (email.text ?? ""),
     headers: { [LOOP_HEADER]: emailId },

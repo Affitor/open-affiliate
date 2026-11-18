@@ -12,7 +12,9 @@ import {
   type ForwardLedger,
   type ForwardPatch,
   type ForwardRow,
+  ROUTES,
   forwardAddress,
+  forwardTargets,
   handleInboundEmail,
   isLoop,
   verifySvixSignature,
@@ -275,6 +277,22 @@ test("forwards to the fixed owner only, with tag, header block, reply-to and loo
   assert.match(String(body.text), /^---------- Received at openaffiliate\.dev ----------\nFrom: Alice <alice@sender\.test>\nTo: hello@openaffiliate\.dev, evil@attacker\.test\nCc: bob@sender\.test\nDate: 2026-10-20T00:00:00\.000Z\n\nHello$/)
   assert.match(String(body.html), /From: Alice &#60;alice@sender\.test&#62;/)
   assert.match(String(body.html), /<p>Hello<\/p>$/)
+})
+
+test("research@ goes to its fixed team inbox; other mail still only to the owner", async () => {
+  const routed = fakeResend({ to: ["Research <Research@OpenAffiliate.dev>"], cc: ["evil@attacker.test"] })
+  assert.equal((await handleInboundEmail(webhook(), deps(routed))).status, 200)
+  assert.equal(routed.sends.length, 1)
+  assert.deepEqual(routed.sends[0].body.to, ["partnerships@affitor.com"])
+  const ccOnly = fakeResend({ to: ["evil@attacker.test"], cc: ["research@openaffiliate.dev"] })
+  await handleInboundEmail(webhook(), deps(ccOnly))
+  assert.deepEqual(ccOnly.sends[0].body.to, ["partnerships@affitor.com"])
+  // Destinations only ever come from ROUTES or the owner env, never from the mail.
+  assert.deepEqual(forwardTargets(["research@openaffiliate.dev.evil.test", "x@research@openaffiliate.dev"], "owner@test.test"), ["owner@test.test"])
+  assert.deepEqual(forwardTargets([], "owner@test.test"), ["owner@test.test"])
+  // Inherited object keys never act as routes (Codex r1 P2).
+  assert.deepEqual(forwardTargets(["constructor", "__proto__", "toString", "hasOwnProperty"], "owner@test.test"), ["owner@test.test"])
+  for (const dest of ROUTES.values()) assert.match(dest, /@affitor\.com$/)
 })
 
 test("original Reply-To wins over From; header injection in the subject is flattened", async () => {
