@@ -129,11 +129,11 @@ export function forwardAddress(value: string | undefined): string | null {
 
 /**
  * Fixed per-address routes, set in code (never from the incoming mail): mail to one of
- * these goes to its team inbox instead of the owner. research@ is the shared
- * competitor-research signup address (Son 18/11 11:23, via cos-affitor).
+ * these goes to its team inbox instead of the owner. rs@ is the shared
+ * competitor-research signup address (Son 18/11 11:23; renamed from research@ 12:0x).
  */
 export const ROUTES: ReadonlyMap<string, string> = new Map([
-  ["research@openaffiliate.dev", "partnerships@affitor.com"],
+  ["rs@openaffiliate.dev", "partnerships@affitor.com"],
 ])
 
 /** Where a received mail is forwarded: routed team inboxes if any recipient matches, else the owner. */
