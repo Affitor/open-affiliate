@@ -5,11 +5,12 @@ category: "Productivity"
 verified: false
 
 commission:
-  type: "recurring"
-  rate: "10% / 15% / 20% tiered"
-  mode: "percentage"
-  value: 10
-  currency: "INR"
+  type: tiered
+  rate: "10% to 20%"
+  mode: tiered
+  value: 20
+  duration: "12 months"
+  conditions: "Standard tiers are 10% Partner, 15% Growth Partner and 20% Pro Partner. Commission applies to qualifying referred customers during their first 12 calendar months and becomes available according to completed subscription service months. Strategic Partner terms require separate approval."
 cookie_days: 30
 payout:
   minimum: 1000
