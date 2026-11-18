@@ -290,7 +290,9 @@ test("research@ goes to its fixed team inbox; other mail still only to the owner
   // Destinations only ever come from ROUTES or the owner env, never from the mail.
   assert.deepEqual(forwardTargets(["research@openaffiliate.dev.evil.test", "x@research@openaffiliate.dev"], "owner@test.test"), ["owner@test.test"])
   assert.deepEqual(forwardTargets([], "owner@test.test"), ["owner@test.test"])
-  for (const dest of Object.values(ROUTES)) assert.match(dest, /@affitor\.com$/)
+  // Inherited object keys never act as routes (Codex r1 P2).
+  assert.deepEqual(forwardTargets(["constructor", "__proto__", "toString", "hasOwnProperty"], "owner@test.test"), ["owner@test.test"])
+  for (const dest of ROUTES.values()) assert.match(dest, /@affitor\.com$/)
 })
 
 test("original Reply-To wins over From; header injection in the subject is flattened", async () => {

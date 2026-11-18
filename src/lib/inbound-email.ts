@@ -132,13 +132,13 @@ export function forwardAddress(value: string | undefined): string | null {
  * these goes to its team inbox instead of the owner. research@ is the shared
  * competitor-research signup address (Son 18/11 11:23, via cos-affitor).
  */
-export const ROUTES: Readonly<Record<string, string>> = {
-  "research@openaffiliate.dev": "partnerships@affitor.com",
-}
+export const ROUTES: ReadonlyMap<string, string> = new Map([
+  ["research@openaffiliate.dev", "partnerships@affitor.com"],
+])
 
 /** Where a received mail is forwarded: routed team inboxes if any recipient matches, else the owner. */
 export function forwardTargets(recipients: string[], owner: string): string[] {
-  const routed = [...new Set(recipients.map(bareAddress).map((a) => ROUTES[a]).filter((a): a is string => Boolean(a)))]
+  const routed = [...new Set(recipients.map(bareAddress).map((a) => ROUTES.get(a)).filter((a): a is string => typeof a === "string"))]
   return routed.length > 0 ? routed.sort() : [owner]
 }
 
