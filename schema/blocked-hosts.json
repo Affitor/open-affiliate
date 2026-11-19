@@ -80,6 +80,7 @@
     "firstpromoter.com": "Program portals disallow all crawling in robots.txt (Disallow: /)",
     "flixier.com": "Website terms restrict automated access or collection (https://flixier.com/terms; wave 2026-10-20)",
     "flora.ai": "Website terms restrict automated access or collection (https://flora.ai/legal/terms-of-service; wave 2026-10-20)",
+    "foragent.io": "Terms of service bar scraping the Service, which includes the website at foragent.io (https://foragent.io/terms, last updated 2026-11-10; checked 2026-11-18); listing requested in PR #542 is on hold until the owner gives permission",
     "freeinvoicecreator.com": "Blocked as a precaution while its terms are re-checked",
     "freshbooks.com": "Website terms restrict automated access or collection",
     "geonode.com": "Website terms restrict automated access or collection (https://geonode.com/terms-and-conditions; wave 2026-10-20)",
