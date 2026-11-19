@@ -77,7 +77,7 @@ agents:
 conflicts:
   - field: commission.rate
     quote: 'ewww.io/affiliate-area: "Help us promote EWWW IO and earn 20% on all referrals!" ewww.io/affiliate-terms: "All affiliates start at 10% commission." and "Commission tiers: when you have referred 20 customers, you will earn 15% on new referrals. Once you reach 50 referrals, you will earn 20% on all new referrals." Checked 2026-11-19.'
-    values: [20, 10, 15]
+    values: ["20%", "10%", "15%"]
   - field: payout.methods
     quote: 'ewww.io/affiliate-terms: "Payouts are done via Paypal, so be sure to provide a PayPal email during signup." ewww.io/affiliate-registration: "PayPal Email (optional, we recommend setting up ACH payouts after approval)" Checked 2026-11-19.'
 
