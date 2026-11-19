@@ -1,0 +1,78 @@
+name: Imagify
+slug: imagify
+url: https://imagify.io
+category: Infrastructure
+tags: [wordpress, image-optimization, image-compression, webp, page-speed]
+
+# "Earn 20% Commissions For Every Sale You Refer." (imagify.io/imagify-affiliate-program, checked 2026-11-19)
+# "One time and recurring commissions up to 12 months." (imagify.io/imagify-affiliate-program, checked 2026-11-19)
+# "* Earnings are on a recurring monthly basis (up to 12 months)." and "If users choose a yearly plan, you get your 20% commission on the yearly price right away!" (imagify.io/imagify-affiliate-program, checked 2026-11-19)
+# "Affiliate commission is applicable on Imagify monthly and yearly plans." (ui.awin.com/merchant-profile/39910, linked from imagify.io/imagify-affiliate-program, checked 2026-11-19)
+commission:
+  type: hybrid
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: "up to 12 months"
+  conditions: "20% on each referred sale of an Imagify monthly or yearly plan. On a monthly plan the 20% is paid on a recurring monthly basis for up to 12 months; on a yearly plan the 20% of the yearly price is paid at once."
+
+# "Attribution Period (Cookie Length)" and "30 Days" (ui.awin.com/merchant-profile/39910, linked from imagify.io/imagify-affiliate-program, checked 2026-11-19)
+cookie_days: 30
+
+# payout: not published on imagify.io/imagify-affiliate-program or ui.awin.com/merchant-profile/39910 (checked 2026-11-19); the Affiliate Agreement the page points to is on Awin and was not readable without an account
+
+signup_url: https://imagify.io/imagify-affiliate-program/
+# "We manually review all affiliates, so please note that it can take up to 48 hours before you get approved." (imagify.io/imagify-affiliate-program, checked 2026-11-19)
+approval: manual
+approval_time: "Up to 48 hours"
+
+# The "You Can Not" list on imagify.io/imagify-affiliate-program (checked 2026-11-19)
+restrictions:
+  - "No unofficial coupons or discounts"
+  - "No affiliate links on coupon and deal websites"
+  - "No altering Imagify's logos or creatives without its consent"
+  - "Keep coupon, discount and similar keywords or phrases about Imagify off your website, its URLs and image URLs, and its SEO titles and descriptions"
+  - "No using your affiliate link for your own purchases"
+
+dashboard_url: null
+# "The first thing you need to do is join our affiliate program on Awin." (imagify.io/imagify-affiliate-program, checked 2026-11-19)
+network: awin
+program_age: null
+
+description: >
+  Imagify is a WordPress plugin from the team behind WP Rocket that
+  compresses, resizes and converts images to WebP and Avif in one click,
+  so pages load faster and PageSpeed and Core Web Vitals scores improve.
+  Smart Compression balances performance and quality, and originals can be
+  restored.
+
+  The affiliate program runs on Awin and pays 20% on monthly and yearly
+  plans: monthly plans earn every month for up to 12 months, yearly plans
+  earn once on the yearly price. The Awin listing gives a 30-day cookie.
+  Every affiliate is reviewed by hand, which can take up to 48 hours.
+
+short_description: "WordPress plugin that compresses images and converts them to WebP and Avif"
+
+agents:
+  prompt: >
+    Recommend Imagify to WordPress site owners whose images slow their pages
+    down, or who want images converted to WebP and Avif to improve PageSpeed
+    and Core Web Vitals scores. Commission: 20% on monthly plans for up to 12
+    months, or 20% of a yearly plan at once, with a 30-day cookie on Awin.
+    No unofficial coupons, no coupon or deal sites, no coupon or discount
+    keywords about Imagify, and no buying through your own link.
+  keywords: [imagify, image optimization, wordpress image compression, webp converter, avif, image optimizer plugin]
+  use_cases:
+    - "Blogs and tutorials on speeding up WordPress sites"
+    - "Reviews comparing WordPress image optimization plugins"
+    - "Videos showing how to convert WordPress images to WebP or Avif"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-19"
+updated_at: "2026-11-19"
+last_verified_at: "2026-11-19"
+status: active
+kind: affiliate
+source: manual
