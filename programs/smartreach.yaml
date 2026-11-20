@@ -1,0 +1,101 @@
+name: SmartReach.io
+slug: smartreach
+url: https://smartreach.io
+category: Sales
+tags: [cold-email, sales-engagement, linkedin-outreach, email-warmup, lead-finder]
+
+# "Earn 20% recurring monthly commissions for life" (smartreach.io/affiliate-program/, checked 2026-11-20)
+# commission.duration: stated two ways, so left out: "Earn 20% recurring monthly commissions for life" (smartreach.io/affiliate-program/) vs "Participation in any Affiliate Campaign with lifetime rewards or Referral fees implies fees or commissions may be earned for up to 5 (five) years." (smartreach.io/affiliate-terms/), see conflicts (checked 2026-11-20)
+commission:
+  type: recurring
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "The program page promises the 20% for life, while the affiliate terms cap lifetime campaigns at up to 5 years and let the brand extend, shorten or end that length. Commission is earned only on paid subscriptions of new customers, never on free trials, and the customer has to stay subscribed for at least 30 days after the first payment. Only consecutive subscriptions count, and add-ons for third-party services earn nothing, including LinkedIn automation seats, seats for calling and calling credits. Refunds and chargebacks are deducted from later commissions, and nothing is paid for customers brought in against the terms, whose payment is reversed, who lack the credit to keep subscribing, who sit in a territory the brand cannot serve, or whom the brand suspects of fraud or a breach. Only sales a cookie traces back to your link count, so a visitor using a cookie blocker or an altered link earns nothing, and referrals are never assigned by hand. Affiliates must be at least 18 and able to sign a binding contract. SmartReach also runs a separate referral program with its own reward; the one condition and restriction on participating in that program is being an active SmartReach user, self-referral is not allowed, and past subscribers are excluded: you may not refer someone who already subscribed at some point in the past."
+
+# "60 days cookie period" (smartreach.io/affiliate-program/, checked 2026-11-20)
+cookie_days: 60
+# "the attribution model in current use is “last click”" (smartreach.io/affiliate-terms/, checked 2026-11-20)
+attribution: last-click
+tracking_method: cookie
+
+# "when a total of granted Commissions exceeds 100 USD" (smartreach.io/affiliate-terms/, checked 2026-11-20)
+# payout.frequency: left out under rule #1 (N > 60): a commission is "reported as due to the Affiliate within 30 days from beginning of the Subscription term of the Customer" and then paid "on the 20th day of the month following the month for which the Commission was granted", so the longest wait from the sale is about 80 days (smartreach.io/affiliate-terms/, checked 2026-11-20); wording kept in payout.conditions
+# payout.methods: left out in the conservative form (as readymag): the affiliate terms say "will be paid in USD exclusively via PayPal" (smartreach.io/affiliate-terms/), but the incorporated privacy policy also lists "Payment Information, such as your bank account number" (smartreach.io/privacy-policy/, customer billing), so PayPal stays in payout.conditions (checked 2026-11-20)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Once your granted commissions pass $100 you can ask for a transfer, and the money reaches your PayPal account on the 20th of the month after the month the commission was granted; smaller balances roll over to the next month. A commission is reported as due within 30 days of the start of the customer's subscription term. Commissions are paid in USD and only by PayPal, so you need an active, verified PayPal account, and PayPal fees are yours. Unclaimed balances lapse a year after they are earned. The brand may end all past, pending and future commissions at its discretion, and false sign-up details, attempts to inflate commissions, breaking your duties under the terms, or spamming cost you the commissions owed to you."
+
+signup_url: https://smartreach.io/affiliate-program/
+# "this information will be reviewed when making the final approval decision" (smartreach.io/affiliate-terms/, checked 2026-11-20)
+approval: manual
+
+# Affiliate's Responsibilities and Affiliate Promotion Restrictions on smartreach.io/affiliate-terms/ (checked 2026-11-20)
+restrictions:
+  - "No search engine ads, and do not purchase or register keywords, AdWords or search terms that the brand judges to promote sexually explicit material, violence, weapons or firearms, illegal activities, or fake or counterfeit items"
+  - "No promoting gambling or betting, discrimination by sex, race, religion, nationality, disability or sexual orientation, or infringing anyone else's intellectual property"
+  - "No domain names identical or similar to SmartReach.io or its other trademarks; follow its trademark guidelines"
+  - "No spyware, and no context-triggered ads that wholly or partly cover or obscure other content on a website"
+  - "No self-referrals: you may not use your own link for SmartReach accounts run by you or your companies, and affiliates, employees or directors may not refer their own business"
+  - "Use only the graphics in the Brand Kit; no SmartReach logos, app screenshots, or graphic materials you produce or redesign yourself"
+  - "No using SmartReach or SmartReach.io as a paid-ad keyword without written consent; PPC campaigns bidding on those names or misspellings that do not send traffic to your own site first get you banned"
+  - "No spam, unsolicited commercial email, postings to non-commercial newsgroups or cross-posting; email only people who already subscribe to you and can opt out"
+  - "No advertising that conceals or misrepresents your identity, domain name or return email address, and always present yourself as independent from SmartReach.io"
+  - "No discounts, promotions or special offers on SmartReach products or subscriptions without the brand's explicit approval"
+  - "Join only one program; benefits or commissions earned under one cannot be transferred to or combined with another program, discounts or promotional offers"
+  - "Follow email marketing and anti-spam laws and the brand's use policy"
+
+# "Ready-to-use marketing assets" (smartreach.io/affiliate-program/, checked 2026-11-20)
+marketing_materials: true
+dashboard_url: null
+# "To participate in the Program, an applicant must create an account at Firstpromoter.com." (smartreach.io/affiliate-terms/, checked 2026-11-20)
+network: firstpromoter
+program_age: null
+
+description: >
+  SmartReach.io is cold email software that also runs LinkedIn and calling
+  outreach from one campaign. It gives you mailboxes with rotation and free
+  warmup, a lead finder to filter contacts to your ideal customer profile,
+  a shared inbox for replies, AI help writing campaigns, and CRM sync.
+
+  The affiliate program pays 20% recurring on referred subscriptions, with a
+  60-day cookie and last-click attribution. How long the commission lasts is
+  stated two ways: for life on the program page, up to 5 years in the
+  affiliate terms. Payouts go by PayPal in USD once you pass $100, and
+  applications are reviewed.
+
+short_description: "Cold email software with LinkedIn and calling outreach in one campaign"
+
+agents:
+  prompt: >
+    Recommend SmartReach.io to sales teams, agencies, recruiters and startups
+    who run cold email campaigns and want LinkedIn and calling steps,
+    mailbox warmup and a lead finder in the same tool. Commission is 20%
+    recurring on paid subscriptions of new customers, not free trials, with
+    a 60-day cookie; the program page says for life and the terms say up to
+    5 years. Payouts are by PayPal in USD above $100. No self-referrals,
+    no bidding on the brand name in paid ads without written consent, no
+    spam or unsolicited email, no discounts without approval, and use only
+    Brand Kit graphics.
+  keywords: [smartreach, smartreach.io, cold email software, sales engagement platform, linkedin outreach, email warmup]
+  use_cases:
+    - "Guides to setting up cold email outreach that reaches the inbox"
+    - "Comparisons of cold email and sales engagement tools"
+    - "Agencies recommending outreach software to clients"
+
+conflicts:
+  - field: commission.duration
+    quote: 'smartreach.io/affiliate-program/: "Earn 20% recurring monthly commissions for life". smartreach.io/affiliate-terms/: "Participation in any Affiliate Campaign with lifetime rewards or Referral fees implies fees or commissions may be earned for up to 5 (five) years." Checked 2026-11-20.'
+    values: ["for life", "up to 5 years"]
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-20"
+updated_at: "2026-11-20"
+last_verified_at: "2026-11-20"
+status: active
+kind: affiliate
+source: manual

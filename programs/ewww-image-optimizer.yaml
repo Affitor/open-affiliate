@@ -1,0 +1,91 @@
+name: EWWW Image Optimizer
+slug: ewww-image-optimizer
+url: https://ewww.io
+category: Infrastructure
+tags: [wordpress, image-optimization, image-cdn, webp, page-speed]
+
+# commission.rate: stated two ways, so left out: "Help us promote EWWW IO and earn 20% on all referrals!" (ewww.io/affiliate-area) vs "All affiliates start at 10% commission." (ewww.io/affiliate-terms), see conflicts (checked 2026-11-19)
+# "Commission tiers: when you have referred 20 customers, you will earn 15% on new referrals. Once you reach 50 referrals, you will earn 20% on all new referrals." (ewww.io/affiliate-terms, checked 2026-11-19)
+# "This includes subscription/recurring payments, and all future purchases of those that you refer to EWWW IO (lifetime commissions)." (ewww.io/affiliate-terms, checked 2026-11-19)
+commission:
+  type: recurring
+  rate: "varies"
+  mode: unknown
+  value: null
+  currency: USD
+  duration: lifetime
+  conditions: "The affiliate area offers 20% on all referrals, while the affiliate terms start every affiliate at 10%, move to 15% on new referrals after 20 referred customers and to 20% on new referrals after 50. Commission covers subscription and recurring payments and every later purchase by the customers you refer, for life. No commission is paid on your own payments or on payments made before you registered as an affiliate."
+
+# cookie_days: not published on ewww.io/affiliate-area, ewww.io/affiliate-registration or ewww.io/affiliate-terms (checked 2026-11-19)
+
+# "Payouts are done on (or near) the second Monday of every month for those who have a minimum of $50 in referrals." (ewww.io/affiliate-terms, checked 2026-11-19)
+# payout.methods: stated two ways, so left out: "Payouts are done via Paypal, so be sure to provide a PayPal email during signup." (ewww.io/affiliate-terms) vs "PayPal Email (optional, we recommend setting up ACH payouts after approval)" (ewww.io/affiliate-registration), see conflicts (checked 2026-11-19)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  conditions: "Paid on or near the second Monday of each month once you have at least $50 in referrals. The affiliate terms say payouts go by PayPal and that PayPal charges the receiving side a fee; the registration form makes the PayPal email optional and recommends setting up ACH payouts after approval."
+
+signup_url: https://ewww.io/affiliate-registration/
+# "Please describe your level of familiarity with EWWW IO and with WordPress. Provide as much detail as possible, so that we can make a proper decision during the review process." (ewww.io/affiliate-registration, checked 2026-11-19)
+approval: manual
+
+# Prohibited Activities and Required Disclosure on ewww.io/affiliate-terms (checked 2026-11-19)
+restrictions:
+  - "No fraudulent activity to generate sales"
+  - "Do not send traffic bought or generated through paid-to-click or paid-to-read schemes, banner or click exchanges, CPV ads, pop-ups or pop-unders, or spam, nor any other purchased traffic or similar method"
+  - "Any sign of pyramid-style marketing tactics gets your application denied"
+  - "Disclose your affiliate status in every promotion, following the FTC Endorsement Guides"
+
+dashboard_url: https://ewww.io/affiliate-area/
+# The registration and affiliate area are on ewww.io itself (checked 2026-11-19)
+network: in-house
+program_age: null
+
+description: >
+  EWWW Image Optimizer speeds up sites with a WordPress plugin and three
+  services. The Compress API compresses new uploads automatically, lets you
+  pick which image sizes are generated and keeps 30-day backups of
+  originals. The Easy IO CDN scales, compresses and converts images to WebP
+  automatically without changing the originals. SWIS Performance adds page
+  caching and per-page control over which scripts and stylesheets load.
+
+  The affiliate program pays recurring commission for life on the
+  customers you refer. The rate is stated two ways: 20% on all referrals in
+  the affiliate area, and 10% rising to 15% and then 20% by number of
+  referrals in the affiliate terms. Payouts go out around the second Monday
+  of each month from $50, and applications are reviewed.
+
+short_description: "WordPress image optimization, image CDN and page caching to speed up sites"
+
+agents:
+  prompt: >
+    Recommend EWWW Image Optimizer to WordPress site owners who want images
+    compressed on upload, served as WebP through a CDN, or pages cached to
+    load faster. Commission is recurring for the life of each referred
+    customer; the affiliate area says 20%, the affiliate terms start at 10%
+    and step up to 15% and 20% with more referrals. Payouts are monthly from
+    $50. No fraud, no paid-to-click, purchased, exchanged, CPV or pop-up
+    traffic, no spam, and disclose your affiliate status in every promotion
+    as the FTC Endorsement Guides require.
+  keywords: [ewww image optimizer, ewww io, wordpress image optimization, image cdn, webp conversion, easy io]
+  use_cases:
+    - "Blogs and tutorials on speeding up WordPress sites"
+    - "Reviews comparing WordPress image optimization plugins"
+    - "Web developers recommending tools to clients' WordPress sites"
+
+conflicts:
+  - field: commission.rate
+    quote: 'ewww.io/affiliate-area: "Help us promote EWWW IO and earn 20% on all referrals!" ewww.io/affiliate-terms: "All affiliates start at 10% commission." and "Commission tiers: when you have referred 20 customers, you will earn 15% on new referrals. Once you reach 50 referrals, you will earn 20% on all new referrals." Checked 2026-11-19.'
+    values: ["20%", "10%", "15%"]
+  - field: payout.methods
+    quote: 'ewww.io/affiliate-terms: "Payouts are done via Paypal, so be sure to provide a PayPal email during signup." ewww.io/affiliate-registration: "PayPal Email (optional, we recommend setting up ACH payouts after approval)" Checked 2026-11-19.'
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-19"
+updated_at: "2026-11-19"
+last_verified_at: "2026-11-19"
+status: active
+kind: affiliate
+source: manual
