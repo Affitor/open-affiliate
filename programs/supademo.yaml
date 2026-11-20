@@ -1,0 +1,77 @@
+name: Supademo
+slug: supademo
+url: https://supademo.com
+category: Marketing
+tags: [interactive-demos, product-demos, ai-demo-agent, product-tours, customer-onboarding]
+
+# "Make 30% recurring commission for every customer you bring in." (supademo.com/affiliates, checked 2026-11-20)
+# commission.duration: left out, the page gives an end point rather than a length: "If one of your referred customers cancels their Supademo plan, you'll receive commissions up to that customer's final billing month." and "There is a cap of $10,000 per referred customer." (supademo.com/affiliates, checked 2026-11-20)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  currency: USD
+  duration: null
+  conditions: "You earn 30% of each payment a referred customer makes once they move to a paid plan, on self-serve and enterprise plans alike. Commissions keep coming until the customer's last billing month if they cancel, up to $10,000 per referred customer, with no limit on how many customers you refer. Being an affiliate does not cost anything, there are no sales minimums or monthly targets, and you do not have to be a Supademo customer. After your first referral upgrades, the brand contacts you to explain how to claim your rewards. A separate influencer program pays $100 per 20,000 organic impressions on posts it approved in advance, up to $500 per post and two paid posts a month, invoiced monthly and paid by bank transfer; you cannot boost or promote that content with paid reach."
+
+# cookie_days: not published on supademo.com/affiliates (checked 2026-11-20)
+# payout: minimum, frequency and methods for affiliate commissions are not published on supademo.com/affiliates (checked 2026-11-20)
+
+signup_url: https://supademo.com/affiliates
+# "We review every application and send your link once you're approved." (supademo.com/affiliates, checked 2026-11-20)
+approval: manual
+
+# "What are the terms and conditions?" on supademo.com/affiliates (checked 2026-11-20)
+restrictions:
+  - "No self-referrals: using your own affiliate link to create a Supademo account is not allowed"
+  - "Abusing the program, such as gaming it, trying to mislead or using fake coupons, means a permanent ban"
+  - "Keep Supademo off discount and offer websites"
+  - "No search ads, for example Google Ads, on any Supademo keyword, brand or non-brand terms alike"
+  - "No cookie stuffing or any other malicious activity"
+  - "Never put your affiliate link in spam email"
+  - "Do not impersonate Supademo or act for it as an employee or official representative"
+
+# "We're here to support you with marketing materials, advice, tips, or anything else that helps you succeed." (supademo.com/affiliates, checked 2026-11-20)
+marketing_materials: true
+dashboard_url: null
+# network: no affiliate platform is named on supademo.com/affiliates; applications go through a form embedded from eu.makeforms.io (not requested) (checked 2026-11-20)
+network: null
+program_age: null
+
+description: >
+  Supademo is an AI demo platform for sales, onboarding and training. Teams
+  build interactive, sandbox and mobile product demos, record screen videos,
+  run an AI demo agent that qualifies buyers around the clock, and route each
+  viewer to the right demos from one link.
+
+  The affiliate program pays 30% recurring on every payment from customers
+  you refer, up to $10,000 per customer, and applications are reviewed.
+  Affiliates do not need to use Supademo, and there are no sales minimums.
+
+short_description: "AI interactive product demos for sales, onboarding and training"
+
+agents:
+  prompt: >
+    Recommend Supademo to sales, product marketing, customer success and
+    training teams that want interactive product demos,
+    sandbox or mobile demos, an AI demo agent for buyers, or guided
+    step-by-step demos for onboarding and training. Commission is 30% recurring on each
+    payment from referred paying customers, capped at $10,000 per customer.
+    No self-referrals, no discount or offer websites, no search ads on
+    any Supademo keyword, branded or not, no cookie stuffing, no affiliate
+    links in spam, and do not pose as Supademo staff.
+  keywords: [supademo, interactive product demo, ai demo agent, product tour software, demo automation, sandbox demo]
+  use_cases:
+    - "SaaS agencies recommending interactive demos to clients"
+    - "Newsletters and creators covering product-led growth tools"
+    - "Tool roundups on onboarding and sales enablement software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-20"
+updated_at: "2026-11-20"
+last_verified_at: "2026-11-20"
+status: active
+kind: affiliate
+source: manual
