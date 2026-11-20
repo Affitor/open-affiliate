@@ -12,7 +12,7 @@ commission:
   value: 30
   currency: USD
   duration: "12 months"
-  conditions: "30% recurring commission for the customer's first 12 billing months on paid Pro ($9.99/mo) and Scale ($29.99/mo) plans. Includes custom Stripe discount codes giving buyers 20% off their first 3 months, tracked even without a link click."
+  conditions: "30% recurring commission for the customer's first 12 billing months on paid Pro ($9.99/mo) and Scale ($29.99/mo) plans. Includes custom promo codes giving buyers 20% off their first 3 months, tracked even without a link click."
 
 # "60-day attribution cookie and monthly Net-30 payouts after $50 minimum" (foragent.promotekit.com, checked 2026-11-18)
 cookie_days: 60
@@ -37,7 +37,7 @@ description: >
 
   The affiliate program pays 30% recurring commission for 12 months on Pro
   ($9.99/mo) and Scale ($29.99/mo) plans, with a 60-day cookie window, custom
-  20% off 3-month Stripe discount codes, automatic signup via PromoteKit, and
+  20% off 3-month promo codes, automatic signup via PromoteKit, and
   monthly Net-30 payouts with a $50 minimum.
 
 agents:
