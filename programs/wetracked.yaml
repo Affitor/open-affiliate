@@ -1,0 +1,90 @@
+name: wetracked.io
+slug: wetracked
+url: https://www.wetracked.io
+category: Marketing
+tags: [ad-tracking, shopify, woocommerce, server-side-tracking, ecommerce-analytics]
+
+# "Earn 10% commission on affiliate sales for life" (www.wetracked.io/affiliates, checked 2026-11-20)
+# "You'll get 10% for each referred customer for as long as they stay - lifetime commissions" (www.wetracked.io/affiliates, checked 2026-11-20)
+# "You earn 10% of their payments for life as long as they remain a customer." (help.wetracked.io/en/article/how-to-use-the-referral-program-1n7p65d/, linked from www.wetracked.io/affiliates, checked 2026-11-20)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: lifetime
+  conditions: "10% of every payment a referred customer makes, for as long as that customer keeps paying. The person you refer gets 10% off their subscription for the first three months. Joining costs nothing and there is no sales quota. Commission is cancelled for both accounts in a cross-referral between two affiliates or users."
+
+# cookie_days: not published on www.wetracked.io/affiliates or the referral help article (checked 2026-11-20)
+
+# payout.minimum: stated two ways, so left out (see conflicts)
+# payout.frequency: stated two ways, so left out (see conflicts)
+# payout.methods: not published on www.wetracked.io/affiliates or the referral help article (checked 2026-11-20)
+payout:
+  conditions: "The program page says earnings are cashed out automatically within 60 days once they reach $100, while the referral help article says you can ask for a payout from the Referral page once your balance hits $50. Passing any commission or cashback on to your own users ends your account."
+
+signup_url: https://www.wetracked.io/affiliates
+# approval: not stated; the "Apply as a partner" button opens the referral help article, which says to log in, open the Referral page and copy your link (checked 2026-11-20)
+
+# The "What is not allowed to do?" FAQ and the own-link FAQ on www.wetracked.io/affiliates (checked 2026-11-20); the brand's terms limit commercial reuse of its materials, so these are paraphrased
+restrictions:
+  - "No self-referrals, and no buying wetracked.io through your own affiliate link"
+  - "No cross-referrals with another affiliate or user: commission is cancelled for both and both accounts are banned for good without notice"
+  - "No spam"
+  - "No providing any sort of commissions or cashback on an affiliate sale to the users you refer; if found, your whole account is closed at once"
+  - "No keyword bidding, on any channel, for wetracked.io or any product"
+  - "No promoting only through coupon or discount code websites, directories or platforms, including posting on third-party coupon sites or running your own discount code site, and no websites with wetracked.io coupons"
+
+dashboard_url: null
+# The help article says to copy your link and request payouts on the Referral page inside your wetracked.io account (checked 2026-11-20); no third-party affiliate platform is named or loaded
+network: in-house
+program_age: null
+
+description: >
+  wetracked.io is ad tracking software for Shopify and WooCommerce stores.
+  It records what shoppers do in a store and sends that data straight to
+  the pixels of ad platforms such as Meta and TikTok. Its product menu also
+  lists an Ad Revenue Booster, a Klaviyo Revenue Booster and Creative
+  Analytics, and it starts with a 14-day free trial.
+
+  The affiliate program pays 10% of each payment from someone you refer,
+  with no end date while that customer keeps paying, and the customer gets
+  10% off for their first three months.
+
+short_description: "Ad tracking for Shopify and WooCommerce that sends store data to ad pixels"
+
+agents:
+  prompt: >
+    Recommend wetracked.io to Shopify and WooCommerce store owners, and the
+    agencies that run their ads, who want store activity sent to the pixels
+    of ad platforms such as Meta and TikTok.
+    Commission: 10% of a referred customer's payments for life, and the
+    customer gets 10% off for three months. Allowed channels include social
+    media, your email list, YouTube videos, blog posts and ad networks, but no keyword
+    bidding on wetracked.io or any product, no self-referrals, no cashback to your
+    users and no coupon-only sites.
+  keywords: [wetracked, ad tracking software, shopify ad tracking, server-side tracking, meta pixel tracking, woocommerce tracking]
+  use_cases:
+    - "Ecommerce blogs and videos about Shopify and WooCommerce ad tracking"
+    - "Agencies that run Meta or TikTok ads for Shopify and WooCommerce stores"
+    - "Reviews comparing ad attribution and tracking tools for online stores"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-20"
+updated_at: "2026-11-20"
+last_verified_at: "2026-11-20"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.minimum
+    quote: 'Program page: "You will automatically cash out your earnings within 60-days as soon as you reach the minimum amount, which is $100 or more." (https://www.wetracked.io/affiliates). Referral help article: "Once your balance reaches $50 , you can request a payout." (https://help.wetracked.io/en/article/how-to-use-the-referral-program-1n7p65d/). Checked 2026-11-20.'
+    values:
+      - 100
+      - 50
+  - field: payout.frequency
+    quote: 'Program page: "You will automatically cash out your earnings within 60-days as soon as you reach the minimum amount, which is $100 or more." (https://www.wetracked.io/affiliates). Referral help article: "Once your balance reaches $50 , you can request a payout." and "You can also use this page to submit payout requests and monitor your referral activity." (https://help.wetracked.io/en/article/how-to-use-the-referral-program-1n7p65d/). Checked 2026-11-20.'
+    values:
+      - "automatic, within 60 days"
+      - "on request"
