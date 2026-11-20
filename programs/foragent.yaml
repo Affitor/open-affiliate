@@ -16,7 +16,7 @@ commission:
 
 # "60-day attribution cookie and monthly Net-30 payouts after $50 minimum" (foragent.promotekit.com, checked 2026-11-18)
 cookie_days: 60
-signup_url: https://foragent.promotekit.com
+signup_url: https://foragent.io/affiliates
 approval: auto
 
 payout:
