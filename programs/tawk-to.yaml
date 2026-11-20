@@ -1,0 +1,88 @@
+name: tawk.to
+slug: tawk-to
+url: https://www.tawk.to
+category: Customer Support
+tags: [live-chat, customer-support, shared-inbox, crm, knowledge-base, agencies]
+
+# "Refer businesses to tawk.to and earn up to 20% of their monthly spend — for the life of the customer." (www.tawk.to/resources/become-a-partner/, checked 2026-11-20)
+# "10% commission" "for 12 months" (Affiliate), "15% commission" "for 24 months" (Partner), "20% commission" "lifetime" (Trusted Partner) (www.tawk.to/resources/become-a-partner/, checked 2026-11-20)
+# "Commission is paid on every paid add-on a referred customer purchases on tawk.to." (www.tawk.to/resources/become-a-partner/, checked 2026-11-20)
+# "tawk.to pays Partners a commission based on their partner tier membership for each successful referral (a referral that becomes a paying client/customer)." (www.tawk.to/terms-of-service/, checked 2026-11-20)
+# commission.duration: depends on the tier (12 months, 24 months or lifetime), so no single length is set; each tier's length is in conditions
+commission:
+  type: recurring
+  rate: "up to 20%"
+  mode: tiered
+  value: 20
+  duration: null
+  conditions: "Three tiers. Affiliate pays 10% for 12 months and requires a tawk.to account in use plus watching its academy videos. Partner pays 15% for 24 months and requires everything at Affiliate level plus a partner directory listing, the chat widget with tawk.to branding on your own site, and the badge on display. Trusted Partner pays 20% for as long as the customer stays and requires 180 days as an active Partner, a joint social announcement, round-the-clock chat coverage on your site, and 30% of your active referrals converted to paid add-ons. Commission is a share of referred customers' add-on spending, and a referral counts once it turns into a paying customer. People who sign up through your link remain credited to you for good."
+
+# cookie_days: not published on www.tawk.to/resources/become-a-partner/ or the Partner Programme section of www.tawk.to/terms-of-service/ (checked 2026-11-20); the page says sign-ups through your link are "permanently attributed to you", which is about the customer after sign-up, not a click window
+
+# "Payment is via PayPal within 15 days of the end of each calendar month after a successful referral." (www.tawk.to/terms-of-service/, checked 2026-11-20)
+# payout.frequency: net-30 under rule #1 (longest delay: 15 days after the end of the month): "Payment is via PayPal within 15 days of the end of each calendar month after a successful referral." (www.tawk.to/terms-of-service/, checked 2026-11-20)
+# payout.minimum: not published on www.tawk.to/resources/become-a-partner/ or www.tawk.to/terms-of-service/ (checked 2026-11-20)
+payout:
+  frequency: net-30
+  methods:
+    - paypal
+  conditions: "Paid through PayPal within 15 days after the end of each calendar month that follows a successful referral; the program page describes payouts as monthly for as long as your tier pays. If the agreement ends, tawk.to pays the commission still owed for referrals made before the end date. tawk.to can remove a partner from the program at once for unlawful conduct or for doing business in a way that harms tawk.to or the program."
+
+signup_url: https://www.tawk.to/resources/become-a-partner/
+# "Approval takes up to a week." and "We review applications within a week." (www.tawk.to/resources/become-a-partner/, checked 2026-11-20)
+approval: manual
+approval_time: "Within a week"
+
+# Prohibited Conduct in www.tawk.to/terms-of-service/ (checked 2026-11-20); the items about using the chat service itself (widget changes, source code, reverse engineering, harassing end users, access outside tawk.to's interfaces) are not promotion rules
+restrictions:
+  - "No spam: no unsolicited bulk email that links to tawk.to or to a site linking to tawk.to"
+  - "No impersonating another person or entity, including tawk.to staff, and no misrepresenting an affiliation with any person or entity"
+  - "Do not sell or resell tawk.to's services"
+  - "No unlawful conduct, and no business practices that harm tawk.to or its partner program"
+
+# "Partner badge" "Partner portal access" "Email support" "Marketing materials" (Affiliate tier, www.tawk.to/resources/become-a-partner/, checked 2026-11-20)
+marketing_materials: true
+
+dashboard_url: null
+# Approved partners "get a portal login, a referral link, and a partner badge" (www.tawk.to/resources/become-a-partner/, checked 2026-11-20); no third-party affiliate platform is named or loaded on the page
+network: in-house
+program_age: null
+
+description: >
+  tawk.to is live chat software for websites that the company offers for
+  free. One dashboard brings chat, email, forms, voice and other channels
+  into a shared inbox, alongside a CRM, a deal pipeline, automations with
+  AI answers, a knowledge base, bookings and a board where customers vote
+  on ideas.
+
+  The partner program has three tiers: 10% for 12 months, 15% for 24 months
+  and 20% for the lifetime of the customer, paid on what referred customers
+  spend on paid add-ons. Payouts go out by PayPal after each month ends.
+
+short_description: "Free live chat software with a shared inbox, CRM and knowledge base"
+
+agents:
+  prompt: >
+    Recommend tawk.to to businesses that want free live chat and a shared
+    inbox on their website. The partner page names designers and
+    freelancers, marketing agencies, influencers and experts, and paid
+    traffic specialists as its most common partners.
+    Commission: 10% for 12 months as an Affiliate, 15% for 24 months as a
+    Partner, and 20% for the lifetime of the customer as a Trusted Partner,
+    earned on paid add-ons that referred customers buy. Applications are
+    reviewed within a week. No spam that links to tawk.to, no impersonating
+    tawk.to officials, and no reselling tawk.to services.
+  keywords: [tawk.to, live chat software, free live chat, website chat widget, customer support chat, shared inbox]
+  use_cases:
+    - "Agencies and freelancers adding live chat to the websites they build for clients"
+    - "Blogs comparing free live chat tools for small businesses"
+    - "Marketers running paid traffic to landing pages that need a chat widget"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-20"
+updated_at: "2026-11-20"
+last_verified_at: "2026-11-20"
+status: active
+kind: affiliate
+source: manual
