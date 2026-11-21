@@ -16,7 +16,8 @@ commission:
   duration: null
   conditions: "You earn 20% of the first purchase a referred customer makes, capped at $120 per referral. The page lists what each plan earns at most: Basic ($79) $15.80, Plus ($199) $39.80, Business ($399) $79.80 and Elite ($599) $119.80. Later purchases by the same customer and yearly renewals earn nothing, and when one visitor orders several accounts only the first order pays. The referred customer has to keep the account active for 37 days or more after the purchase, and only successfully completed transactions are paid: chargebacks and refunds are not."
 
-# cookie_days: not published on formidableforms.com/affiliate-signup/ or in the Affiliate Terms (checked 2026-11-21)
+# "affwp_ref" / "Stores the referring affiliate ID for commission attribution." / "30 days" (formidableforms.com/affiliate-signup/ cookie table, checked 2026-11-21)
+cookie_days: 30
 
 # "Commissions are paid once per month with a minimum payout of $100." (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
 # payout.frequency: left out under rule #1: "paid once per month" names no payment day, and a commission first qualifies 37 days after the purchase ("the referred account must remain active for at least 37 days after purchase"), so the longest wait is not stated (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
@@ -32,6 +33,7 @@ approval: manual
 
 # restrictions: Affiliate Terms sections 2, 3, 5 and 6 (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
 restrictions:
+  - "Take part only to advertise the Formidable Forms website lawfully; commission is earned on memberships and products bought by people you refer through your own website or through personal referrals"
   - "No self-referrals: you cannot refer yourself, and your own accounts earn no commission"
   - "Only a referred user's initial purchase earns; subsequent purchases and yearly renewals pay no commission"
   - "To qualify, a referral's account has to stay active for 37 days or more after the purchase"
