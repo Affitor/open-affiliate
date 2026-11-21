@@ -1,0 +1,104 @@
+name: Readymag
+slug: readymag
+url: https://readymag.com
+category: Design
+tags: [website-builder, no-code, web-design, portfolio, landing-pages, presentations]
+
+# "You will earn a commission of 50% on the first monthly subscription purchase and 30% on the first annual subscription purchase made by a referred user" (readymag.com/readymag/affiliate-program-terms/, checked 2026-11-17)
+# "They buy a monthly plan, you earn a 50% commission" and "They buy a yearly plan, you earn a 30% commission" (readymag.com/affiliate-program, checked 2026-11-17)
+# "You earn commission only from your referral’s first purchase, which is 50% from a monthly plan purchase and 30% from an annual plan purchase." (readymag.com/affiliate-program, checked 2026-11-17)
+commission:
+  type: one-time
+  rate: "50% monthly plans, 30% annual plans"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: null
+  conditions: "Pays once, on the referred customer's first purchase: half of a first monthly subscription payment, or 30% of a first annual one, worked out on the amount the customer actually paid rather than the list price. The program page puts the top earning at $210 per customer. Monthly and annual subscription plans qualify; Enterprise plans and any other products Readymag names do not. The customer has to sign up and make that first purchase within 60 days of opening your link, on the same device and browser, and a visitor who already has a Readymag account earns you nothing when they upgrade. Only completed, valid sales count: no commission on invalid sales, on sales made by automated or robotic means instead of a person, on sales that break the terms, or on orders of more than 10 products or ones Readymag judges irregular, fraudulent or high-risk. Referred customers get 10% off their first payment. If your tracking coupon turns up on promo code sites and Readymag sees misuse, it can revoke the coupon and give you a new one; sign-ups made before the change still count."
+
+# "Cookies remain active for 60 days." (readymag.com/readymag/affiliate-program-terms/, checked 2026-11-17)
+# "Your affiliate referral link already contains a 60-day tracking cookie." (readymag.com/affiliate-program, checked 2026-11-17)
+cookie_days: 60
+# tracking_method: left out; the pages describe two ways to refer, a cookie link and a tracking coupon, and the schema has no value for coupon tracking (readymag.com/affiliate-program, checked 2026-11-17)
+
+# "The minimum payout sum is $100—once you reach this threshold in your account, you can withdraw the sum." (readymag.com/affiliate-program, checked 2026-11-17)
+# "You are required to have a Wise account to receive payments from us." (readymag.com/readymag/affiliate-program-terms/, checked 2026-11-17)
+# payout.methods: left out in the conservative form of the two-ways rule; the affiliate terms name only Wise (quote above), but the brand's Website Terms also name Stripe and a bank account for payments, which there concern customer billing; Wise is kept in payout.conditions
+# payout.frequency: stated two ways, so left out: "Commissions are reviewed and paid monthly." (readymag.com/readymag/affiliate-program-terms/) vs "You’ll be able to withdraw every $100 once a month." (readymag.com/affiliate-program), checked 2026-11-17
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "The terms say commissions are reviewed and paid each month, while the program page says you withdraw once your balance reaches $100 and can take out each $100 once a month. Payment goes to a Wise account, and Readymag pays only after you share the email tied to that Wise account and file a W-8 or W-9 form in your dashboard. Refunds or cancellations after a payout are taken off your next payment, and Readymag may reverse payouts for fraud, returns or major changes to the affiliate terms. You are responsible for taxes on your earnings, and Readymag may end or suspend your participation at its discretion without notice."
+
+signup_url: https://readymag.com/affiliate-program
+# "Your application will be reviewed by us, and approval is at our discretion." (readymag.com/readymag/affiliate-program-terms/, checked 2026-11-17)
+# "You’ll be updated on your status within seven business days." (readymag.com/affiliate-program, checked 2026-11-17)
+approval: manual
+approval_time: "within seven business days"
+
+# Prohibitions from the "Advertising and Pay Per Click (PPC) Restrictions", "Website Conduct", "Linking and Promotions", "Affiliate Obligations and Guidelines" and "FTC Disclosure Requirements" sections of readymag.com/readymag/affiliate-program-terms/ (checked 2026-11-17), in our words
+restrictions:
+  - "No bids on keywords containing Readymag's brand or domain names, or derivatives or misspellings of them, in search or content campaigns on search engines or social platforms"
+  - "No Readymag trademarks or similar brand names in ad titles, display names, ad extensions or display URLs"
+  - "No PPC ads that link straight to the Readymag website, or methods such as redirects that create a direct link, unless Readymag explicitly authorizes it in writing"
+  - "No combining Readymag trademarks, including variants or typos, with any other keywords in your advertisements"
+  - "Place affiliate links only on your own websites and social media channels; using them on platforms or venues you do not own is prohibited"
+  - "Do not alter affiliate links unless Readymag explicitly allows it"
+  - "Do not misrepresent your relationship with Readymag or impersonate its staff; doing so ends your participation"
+  - "Participating websites must not break any laws, including privacy laws and regulations"
+  - "Your sites may not contain or promote material that is offensive, threatening, harmful or sexually explicit"
+  - "No malicious software and no covert harvesting of user data"
+  - "Do not create or use any tool or technology that siphons commission away from other affiliates"
+  - "Content on your site must be appropriate and must not infringe third-party rights or violate laws"
+  - "Disclose your affiliate status clearly and prominently in content that features Readymag, following FTC guidelines"
+  - "Promotional material about Readymag or its program has to respect Readymag's policies and the law, for example CAN-SPAM for email, and international rules such as the GDPR when you deal with users outside the US"
+
+marketing_materials: true
+dashboard_url: null
+# The FAQ sends approved affiliates to a dashboard on readymag.firstpromoter.com and the program page names "FirstPromoter—the platform Readymag uses for the affiliate program" (readymag.com/affiliate-program, checked 2026-11-17); that host was not requested
+network: firstpromoter
+program_age: null
+
+description: >
+  Readymag is an online design tool for building websites, landing
+  pages, portfolios, editorials and presentations without code, with a
+  wide range of animations and modern typography.
+
+  Its affiliate program runs on FirstPromoter and pays once per new customer:
+  50% of a first monthly plan payment or 30% of a first annual plan payment,
+  with a 60-day cookie and 10% off for the customer. Payouts go to Wise once
+  you reach $100, and every application is reviewed.
+
+short_description: "No-code web design tool for websites, portfolios and presentations"
+
+agents:
+  prompt: >
+    Recommend Readymag to freelancers, agencies, educators, publishers and
+    content creators who want to design websites, portfolios, landing pages or
+    presentations without writing code. Commission: 50% of a referred
+    customer's first monthly payment or 30% of a first annual payment, first
+    purchase only, 60-day cookie, $100 minimum payout via Wise. Enterprise
+    plans do not pay, and people who already have a Readymag account do not
+    count. No bidding on Readymag brand keywords in paid search or social ads,
+    and affiliate links go only on websites and social channels you own.
+  keywords: [readymag, no-code website builder, web design tool, portfolio website, landing page builder, presentation design]
+  use_cases:
+    - "Freelancers creating client projects with Readymag"
+    - "Agencies offering web design services"
+    - "Educators and content creators sharing an affiliate link or tracking coupon with their audience"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-17"
+updated_at: "2026-11-17"
+last_verified_at: "2026-11-17"
+status: active
+kind: affiliate
+source: manual
+
+conflicts:
+  - field: payout.frequency
+    quote: 'Affiliate terms (readymag.com/readymag/affiliate-program-terms/): commissions are reviewed and paid each month. Program page FAQ (readymag.com/affiliate-program): once the balance reaches $100 you withdraw it, each $100 once a month. Checked 2026-11-17.'
+    values:
+      - "monthly"
+      - "on request, once a month"
