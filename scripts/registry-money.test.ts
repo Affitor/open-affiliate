@@ -171,6 +171,7 @@ const REVIEWED_MULTI_RATE: Record<string, string> = {
   dext: "70% is the annual-plan rate, a plan split, not a step",
   "eleven-labs-inc": "11% is the Business-plan rate, a plan split (also in OPEN_FIELD_CONFLICTS)",
   fastmail: "10% is the customer's discount",
+  foragent: "20% off the first 3 months with a promo code is the customer's discount, not a second commission",
   "hix-ai": "10% is the second-tier share on sub-affiliates",
   "hosting-com": "20% is for other products (reseller, Windows, domains)",
   "julius-ai": "5% is second-tier, 50% off is the customer's discount, 30% is a separate Creator Program",
@@ -428,6 +429,15 @@ test("the checks catch each bug that shipped (fixtures)", () => {
   assert.equal(normalisePercents("twenty-five percent, ten per cent, 7 percent, ninety nine percent"), "25%, 10%, 7%, 99%")
   // One percentage is not a hit (AppQR: a length after the first sale).
   assert.equal(multiRateHits(doc({ commission: { rate: "30%", conditions: "30% recurring commission on eligible payments for 12 months after the first attributed sale." } })).length, 0)
+  // foragent: 20% off the first 3 months is the customer's promo discount, not a second commission.
+  // The detector still flags two percentages; REVIEWED_MULTI_RATE holds the reason and the rate stays 30%.
+  const foragentOff = "30% of every Pro ($9.99/mo) and Scale ($29.99/mo) payment for 12 months. Buyers get 20% off the first 3 months with your own promo code."
+  assert.deepEqual(multiRateHits([["foragent", { commission: { rate: "30%", conditions: foragentOff } }]]), ["foragent"])
+  assert.match(REVIEWED_MULTI_RATE.foragent, /customer's discount/)
+  // A real unreviewed second rate still fails.
+  assert.equal(Object.hasOwn(REVIEWED_MULTI_RATE, "step-down"), false)
+  assert.equal(Object.hasOwn(OPEN_RATE, "step-down"), false)
+  assert.deepEqual(multiRateHits([["step-down", { commission: { rate: "50%", conditions: "50% of the first invoice, then 20% of every invoice after it." } }]]), ["step-down"])
   // #403: minimum in conflicts, conditions still state the Affitor $20.
   const twoWays: Doc = { payout: { currency: "USD" }, commission: { conditions: "At least $20 must be available before a withdrawal request." }, conflicts: [{ field: "payout.minimum" }] }
   assert.equal(conflictStatements(doc(twoWays)).length, 1)
