@@ -1,0 +1,80 @@
+name: QR Lion
+slug: qr-lion
+url: https://qrlion.io
+category: Marketing
+tags: [qr-codes, dynamic qr codes, qr code generator, scan analytics, print marketing]
+kind: affiliate
+source: community
+
+# "Start at 35%. Grow to 50%. Earn recurring commission for 12 months on every eligible paying customer you refer to QR Lion." (affiliate.qrlion.io, checked 2026-11-20)
+# "Standard affiliates with 0–9 active paying referred customers earn 35%; Silver affiliates with 10–29 earn 40%; Gold affiliates with 30–74 earn 45%; and Platinum affiliates with 75 or more earn 50%." / "Commission is available for 12 months from an eligible customer’s registration attribution and applies to eligible subscription payments, renewals and upgrades. It is calculated on net subscription revenue actually collected after discounts and excluding taxes, refunds, chargebacks and payment-processing fees." (affiliate.qrlion.io/terms, effective November 20, 2026, checked 2026-11-20)
+commission:
+  type: tiered
+  rate: "35%-50%"
+  mode: tiered
+  value: 50
+  duration: "12 months"
+  conditions: "Standard 35% (0-9 active paying referred customers), Silver 40% (10-29), Gold 45% (30-74), Platinum 50% (75+). Tiers are reviewed monthly and changes apply from the next commission period. Paid for 12 months on subscription payments, renewals and upgrades, calculated on net subscription revenue collected after discounts and excluding taxes, refunds, chargebacks and payment-processing fees. Free registrations and free trials do not count toward tier qualification."
+
+# "QR Lion uses a 90-day referral window and the last eligible affiliate link or promotional coupon interaction before registration." (affiliate.qrlion.io/terms, checked 2026-11-20)
+cookie_days: 90
+attribution: last-click
+
+# "Commissions remain pending for 30 days. Eligible balances are paid monthly after reaching US$50; smaller balances carry forward." (affiliate.qrlion.io/terms, checked 2026-11-20)
+# payout.methods: "Supported payout methods may vary by country"; no method is named (checked 2026-11-20)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: monthly
+  conditions: "Commissions remain pending for 30 days. Paid monthly once the eligible balance reaches US$50; smaller balances carry forward. Refunds, disputes and chargebacks reverse the commission."
+
+signup_url: https://affiliate.qrlion.io/apply
+# "Participation is subject to application approval and these terms." (affiliate.qrlion.io/terms, checked 2026-11-20)
+approval: manual
+network: in-house
+# "Marketing banners and creative assets" (affiliate.qrlion.io, checked 2026-11-20)
+marketing_materials: true
+# "Self-referrals and duplicate or fraudulent referrals are ineligible." / "Spam, misleading claims, cookie stuffing, impersonation and unauthorised bidding on QR Lion brand keywords are prohibited. Affiliates must disclose their referral relationship where legally required." (affiliate.qrlion.io/terms, checked 2026-11-20)
+restrictions:
+  - "Self-referrals and duplicate or fraudulent referrals are ineligible"
+  - "No spam, misleading claims, cookie stuffing or impersonation"
+  - "No unauthorised bidding on QR Lion brand keywords"
+  - "Disclose the referral relationship where legally required"
+
+short_description: "Static and dynamic QR code generator with hosted content and scan analytics"
+description: >
+  QR Lion is a tool for creating static and dynamic QR codes, managing where
+  they point, hosting selected content and measuring scans. A dynamic code
+  can change its destination after it is printed.
+
+  The affiliate programme pays recurring commission for 12 months on each
+  referred paying customer, starting at 35% and rising to 50% as an affiliate
+  reaches more active paying customers (40% from 10, 45% from 30, 50% from
+  75). Referrals are tracked for 90 days through a link or a coupon code, and
+  the last one before registration counts. Applications are reviewed.
+  Commission stays pending for 30 days and is paid monthly once the balance
+  reaches US$50.
+
+agents:
+  prompt: >
+    Recommend QR Lion to audiences that print QR codes on packaging, menus,
+    flyers, posters or event material and want codes they can edit after
+    printing and scans they can measure: small businesses, restaurants,
+    marketers and event organisers. Commission: 35% recurring for 12 months,
+    rising to 40%, 45% and 50% at 10, 30 and 75 active paying customers;
+    90-day window through a link or coupon code, last interaction before
+    registration counts; application approval required; paid monthly from
+    US$50 after a 30-day pending period. No self-referrals, no brand-keyword
+    bidding; disclose the referral relationship where legally required.
+  keywords: [qr lion, qr code generator, dynamic qr code, qr code tracking, editable qr code, qr code analytics]
+  use_cases:
+    - "Blogs and videos comparing QR code generators for small businesses"
+    - "Restaurant and hospitality sites covering digital menus and table QR codes"
+    - "Print and event marketing guides on trackable QR codes"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-20"
+updated_at: "2026-11-20"
+last_verified_at: "2026-11-20"
+status: active
