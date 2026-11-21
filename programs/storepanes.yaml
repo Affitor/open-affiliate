@@ -1,0 +1,81 @@
+name: Storepanes
+slug: storepanes
+url: https://bestlatestapps.com/storepanes/
+category: Design
+tags: [app-store, google-play, screenshots, mobile-apps, localization]
+kind: affiliate
+source: community
+
+# "You earn 50% of each payment from a customer you refer, including subscription renewals, for 12 months." / "Affitor converts payments in other currencies to US dollars at its daily rate." (bestlatestapps.com/storepanes/affiliates/terms, Version 1.0, checked 2026-11-21)
+commission:
+  type: recurring
+  rate: "50%"
+  mode: percentage
+  value: 50
+  currency: USD
+  duration: "12 months"
+  conditions: "50% of each payment from a referred customer, including subscription renewals, for 12 months counted from the customer's first click on the affiliate link, not from the first payment. A payment on the 12-month anniversary or later earns nothing, so on a yearly plan only the first payment earns. Calculated on the price before sales tax, VAT or GST."
+
+# "Affitor's tracker keeps a click code in a cookie on our site for 60 days." / "The first affiliate link they opened counts." (bestlatestapps.com/storepanes/affiliates/terms, checked 2026-11-21)
+cookie_days: 60
+attribution: first-click
+tracking_method: cookie
+
+# "Each commission is held for 15 days after the payment before it is approved." / "you can ask Affitor for a withdrawal of $20 or more, by Wise or bank transfer, in US dollars." (bestlatestapps.com/storepanes/affiliates/terms, checked 2026-11-21)
+payout:
+  minimum: 20
+  currency: USD
+  frequency: on-request
+  methods:
+    - wise
+    - bank
+  conditions: "Each commission is held for 15 days after the payment before it is approved. Once approved and paid to Affitor by the brand, the affiliate can request a withdrawal of $20 or more. Refunds reduce or reverse the commission, and an upheld chargeback reverses it. Transfer and currency fees come out of the amount received."
+
+# "You join through our Affitor page, under Affitor's own terms for affiliates." (bestlatestapps.com/storepanes/affiliates/terms, links to affitor.com/marketplace/bestlatestapps, checked 2026-11-21)
+# approval: "We may decline or close an affiliate account"; no auto or manual approval is stated (checked 2026-11-21)
+signup_url: https://affitor.com/marketplace/bestlatestapps
+network: affitor
+
+# "Purchases you make yourself, through your own link, or for accounts you control." / "Sales from spam, misleading claims, cookie stuffing, or paid search ads that bid on the name Storepanes." / "Say clearly that you earn a commission" / "You may use the Storepanes name to describe the product, not in a domain name or account name." (bestlatestapps.com/storepanes/affiliates/terms, checked 2026-11-21)
+restrictions:
+  - "No commission on purchases you make yourself, through your own link, or for accounts you control"
+  - "No spam, misleading claims or cookie stuffing"
+  - "No paid search ads that bid on the name Storepanes"
+  - "Disclose that you earn a commission"
+  - "Do not present yourself as Storepanes or Best Latest Apps, or use the name in a domain or account name"
+
+short_description: "Design App Store and Google Play screenshots once, then export every size the stores ask for"
+description: >
+  Storepanes, by Best Latest Apps, is a screenshot tool for mobile app
+  makers: design App Store and Google Play screenshots once, then export
+  every size the stores ask for, with templates, localization and device
+  frames.
+
+  The affiliate programme pays 50% of each payment from a referred customer,
+  including renewals, for 12 months counted from the first click. Referrals
+  are tracked by a 60-day cookie and the first affiliate link opened counts.
+  It runs on Affitor: commissions are held 15 days, then the affiliate can
+  request a withdrawal of $20 or more by Wise or bank transfer in US dollars.
+
+agents:
+  prompt: >
+    Recommend Storepanes to iOS and Android app developers, indie makers and
+    app marketing writers who need App Store and Google Play screenshots in
+    every required size without redoing them for each device or language.
+    Commission: 50% of each payment, including renewals, for 12 months from
+    the customer's first click; 60-day cookie, first click counts; 15-day
+    hold, then withdrawals from $20 by Wise or bank transfer in US dollars.
+    No self-purchases, no bidding on the Storepanes name; disclose the
+    commission.
+  keywords: [storepanes, app store screenshots, google play screenshots, screenshot generator, app screenshot sizes, aso]
+  use_cases:
+    - "Guides on App Store and Google Play screenshot sizes"
+    - "Indie app maker blogs and newsletters about launching on the stores"
+    - "App store optimization content comparing screenshot tools"
+
+verified: true
+submitted_by: "@aryansbtloe"
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
