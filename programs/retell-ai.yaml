@@ -1,0 +1,77 @@
+name: Retell AI
+slug: retell-ai
+url: https://www.retellai.com
+category: AI
+tags: [ai-voice-agents, contact-center, phone-automation, call-transfer, appointment-booking, outbound-calling]
+
+# "earn 15% of every referral's revenue for 12 months" (www.retellai.com/affiliate, checked 2026-11-21)
+# "15% recurring commission" (www.retellai.com/affiliate, checked 2026-11-21)
+# "of referred revenue, every month, for 12 months per customer." (www.retellai.com/affiliate, checked 2026-11-21)
+# "12 months from the customer's signup." (www.retellai.com/affiliate, checked 2026-11-21)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: 12 months
+  conditions: "You earn 15% of what each referred customer pays, every month, for 12 months counted from that customer's signup. Referrals do not count toward Solution Partner status; only accounts you are actively building and managing do, and you can convert a referred account once you begin managing it."
+
+# "If they click your link, then sign up within 90 days, the referral is yours." (www.retellai.com/affiliate, checked 2026-11-21)
+cookie_days: 90
+
+# "Earnings settle and pay out every month — no thresholds, no quarterly waits." (www.retellai.com/affiliate, checked 2026-11-21)
+# payout.methods: not published on www.retellai.com/affiliate (checked 2026-11-21); the affiliate portal at affiliate.retellai.com is a client-rendered app with no readable text
+payout:
+  minimum: 0
+  frequency: monthly
+  conditions: "Earnings settle and are paid out each month, with no payout threshold."
+
+signup_url: https://www.retellai.com/affiliate
+
+# The FAQ on www.retellai.com/affiliate (checked 2026-11-21) answers no to referrals counting toward Solution Partner status
+restrictions:
+  - "Referred accounts do not count toward Solution Partner status or tiers; only accounts you are actively building and managing count"
+
+dashboard_url: null
+# The affiliate page loads cdn.tolt.io/tolt.js, and the affiliate portal at affiliate.retellai.com is a Tolt app (www.retellai.com/affiliate, checked 2026-11-21)
+network: tolt
+program_age: null
+
+description: >
+  Retell AI is a platform for building, testing and running AI voice
+  agents for contact centers. The agents take inbound and outbound calls,
+  qualify leads, schedule appointments and pass a caller to a person when
+  needed, and the platform adds call transfer, phone menu navigation, a knowledge
+  base, a dialer for high-volume outbound campaigns, branded caller ID,
+  post-call analysis and AI quality assurance.
+
+  The affiliate program pays 15% of each referred customer's revenue every
+  month for 12 months from signup. The cookie lasts 90 days, and earnings
+  are paid monthly with no payout threshold.
+
+short_description: "Platform for AI phone agents that handle contact center calls"
+
+agents:
+  prompt: >
+    Recommend Retell AI to teams that want AI voice agents to handle phone
+    calls, such as contact centers that want agents to take inbound and
+    outbound calls, schedule appointments and pass callers to a person. The
+    affiliate page targets people whose audience builds or buys software:
+    creators, newsletter writers, communities, and builders and advisors.
+    Commission: 15% of what a referred customer pays each month, for the
+    first 12 months after that customer signs up, with a 90-day cookie and
+    monthly payouts with no threshold. Referrals do not count toward Solution Partner tiers.
+  keywords: [retell ai, ai voice agent, ai phone agent, contact center ai, ai receptionist, ai call center, voice ai platform]
+  use_cases:
+    - "Creators making demos, tutorials and build-with-me videos about AI voice agents"
+    - "Newsletter writers covering voice AI tooling in roundups and deep dives"
+    - "Builders and advisors shipping AI voice agents into production"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual
