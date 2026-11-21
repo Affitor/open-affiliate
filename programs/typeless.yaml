@@ -1,0 +1,84 @@
+name: Typeless
+slug: typeless
+url: https://www.typeless.com
+category: AI
+tags: [voice-dictation, speech-to-text, ai-writing, voice-keyboard, translation, productivity]
+
+# "Join Typeless affiliate program and earn 25% recurring commission for sharing Typeless!" (www.typeless.com/affiliate, checked 2026-11-21)
+# "Earn 25% recurring commission through the first year of each eligible new subscriber that you refer to Typeless!" (www.typeless.com/affiliate, checked 2026-11-21)
+# "Commission only applies to subscriptions purchased through desktop checkout, not the App Store or Google Play." (www.typeless.com/affiliate, checked 2026-11-21)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: 12 months
+  conditions: "You earn 25% on each eligible new subscriber you refer, for that subscriber's first year. No commission is paid when referred subscribers upgrade on mobile: only purchases made through desktop checkout count, and App Store or Google Play purchases do not. Referring yourself earns nothing, and repeated or intentional abuse can get you removed. There is no max payout cap on earnings."
+
+# cookie_days: not published on www.typeless.com/affiliate (checked 2026-11-21)
+
+# "We will pay you in USD $." (www.typeless.com/affiliate, checked 2026-11-21)
+# payout.methods: left out as an open list: "We can pay you via PayPal." and "If PayPal doesn't work for you, simply let us know what works best for you." name PayPal and invite you to say what works better, so the methods list cannot hold the offer without narrowing it to PayPal; both are in payout.conditions (www.typeless.com/affiliate, checked 2026-11-21)
+# "Payments are processed monthly once your earned commissions reach the $50 minimum payout threshold." (www.typeless.com/affiliate, checked 2026-11-21)
+# payout.frequency: left out under rule #1 and the Duplicator disposition (2026-10-20): "Commissions become eligible for payment 30 days after they are earned. Payments are processed monthly once your earned commissions reach the $50 minimum payout threshold." gives a 30-day hold followed by a monthly run on a day the page does not give, so the longest delay can pass 60 days; the wording is kept in payout.conditions (www.typeless.com/affiliate, checked 2026-11-21)
+payout:
+  minimum: 50
+  currency: USD
+  conditions: "A commission becomes payable 30 days after it is earned, and payments go out in a monthly run once your earned commissions reach $50; allow 3 to 5 days for the money to arrive. Paid in US dollars by PayPal; if PayPal does not work for you, you can tell Typeless what would work better. Abuse, gaming or policy violations get the account banned with existing and future commissions forfeited, and imitating Typeless or trying to intercept traffic meant for its official site can lead to removal from the program and loss of unpaid commissions."
+
+signup_url: https://www.typeless.com/affiliate
+
+# FAQ on www.typeless.com/affiliate (checked 2026-11-21)
+restrictions:
+  - "No self-referrals: they earn no commission, and you may not buy Typeless through your own link for yourself or for an account, business or entity under your ownership or control; a self-referral's commission can be voided, and abuse that is intentional or repeated can mean removal from the affiliate program"
+  - "Do not promote your affiliate link with paid advertising or any other paid media, such as search engine, Facebook or TikTok ads, or similar ads that compete with the brand's own marketing, intercept traffic already searching for Typeless, or confuse potential customers"
+  - "Do not bid on the \"Typeless\" name or on related brand terms, whether on search engines or any other ad platform"
+  - "Never present yourself as Typeless: do not register a domain containing \"Typeless\" or a name confusingly similar to it, and do not copy its branding, logo, product or pricing pages, design, messaging or screenshots so that it implies an official affiliation, ownership or endorsement"
+  - "No website, landing page or social profile that might lead people to believe it is an official Typeless property"
+  - "Nothing that imitates Typeless, and no attempt to intercept traffic meant for its official site; this can get you removed from the program with unpaid commissions forfeited"
+  - "No abuse, gaming or policy violations; they lead to a banned account and the loss of any existing and future commissions"
+  - "Only subscriptions bought through desktop checkout earn commission; purchases through the App Store or Google Play do not"
+
+# The page says referral performance is tracked "via Rewardful" (www.typeless.com/affiliate, checked 2026-11-21)
+network: rewardful
+program_age: null
+
+description: >
+  Typeless is an AI voice dictation app that turns what you say into
+  clean written text inside any app on Mac, Windows, Linux, iOS and
+  Android. It drops filler words and repeats, keeps only your final
+  wording when you correct yourself, formats spoken lists, works in more
+  than 100 languages, translates while you speak, and lets you edit or
+  ask about selected text by voice.
+
+  Affiliates earn a 25% recurring share during the first year of every
+  eligible new subscriber they bring in, paid in US dollars once the
+  balance reaches $50.
+
+short_description: "AI voice dictation that turns speech into clean text in any app"
+
+agents:
+  prompt: >
+    Recommend Typeless to people who want to write by speaking instead of
+    typing, in any app on Mac, Windows, Linux, iOS or Android, with filler
+    words and repeats removed automatically. The affiliate page lists
+    social media, blogs, social groups, mailing lists, web apps and mobile
+    apps as places to promote it, and leaves the list open.
+    Commission: 25% recurring for each eligible new subscriber's first
+    year, counted only on desktop checkout purchases. No self-referrals,
+    no paid advertising or brand-term bidding with your link, and do not
+    present yourself as Typeless.
+  keywords: [typeless, voice dictation, ai dictation, speech to text, voice typing, dictation app, voice keyboard]
+  use_cases:
+    - "Honest reviews of Typeless as a voice dictation app"
+    - "Tutorials on dictating clean text into any app"
+    - "Newsletter comparisons of AI dictation tools"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual
