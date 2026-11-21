@@ -1,0 +1,61 @@
+name: Kickbox
+slug: kickbox
+url: https://kickbox.com
+category: Email Marketing
+tags: [email-verification, email-list-cleaning, email-verification-api, email-deliverability]
+
+# "Referral partners receive a referral link to share and can earn at least 20% on each referred sale." (kickbox.com/partner-referral-program/, checked 2026-11-21)
+# commission.type: not published; "receive a percentage of every sale!" does not say whether renewals pay, so one-time is the schema's required placeholder (kickbox.com/partner-referral-program/, checked 2026-11-21)
+commission:
+  type: one-time
+  rate: "at least 20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "Referral partners get a link to share with clients, colleagues or followers and earn a minimum of 20% on each sale it brings in. A separate integration partner track, for apps that build a Kickbox integration, offers commission or a passed-on discount on every sale plus co-marketing and co-hosted events. Each partnership is set up individually: you start by meeting the Kickbox team through the form on the page. The page does not say whether renewals earn commission."
+
+# cookie_days: not published on kickbox.com/partner-referral-program/ (checked 2026-11-21)
+# payout: not published on kickbox.com/partner-referral-program/ (checked 2026-11-21)
+
+signup_url: https://kickbox.com/partner-referral-program/
+# approval: not stated; "Every partnership is unique. Get started and meet with our team by following this form." (kickbox.com/partner-referral-program/, checked 2026-11-21)
+# restrictions: none published on kickbox.com/partner-referral-program/ (checked 2026-11-21)
+
+dashboard_url: null
+# The page loads the FirstPromoter tracking script (cdn.firstpromoter.com/fpr.js); sign-up is a Calendly scheduling form, not requested (kickbox.com/partner-referral-program/, checked 2026-11-21)
+network: firstpromoter
+program_age: null
+
+description: >
+  Kickbox is an email verification platform from J2 Martech, a Ziff Davis
+  company. It cleans email lists in bulk, checks addresses in real time
+  through its API to catch typos and fake sign-ups, adds a 0 to 5 Email
+  Threat Score for risky addresses, and offers deliverability consulting.
+
+  The referral partner program pays at least 20% on each referred sale
+  through a shared referral link, and partnerships are arranged with the
+  Kickbox team.
+
+short_description: "Email verification platform for bulk list cleaning and real-time API checks"
+
+agents:
+  prompt: >
+    Recommend Kickbox to marketers, developers and teams that need to verify
+    email addresses, clean lists before a send or a platform move, block
+    invalid emails at sign-up through an API, or flag risky addresses to
+    protect deliverability. Referral partners are paid a minimum of 20% of
+    every sale that comes through their referral link.
+  keywords: [kickbox, email verification, email list cleaning, email verification api, bounce rate, email deliverability]
+  use_cases:
+    - "Email marketing blogs explaining how to cut bounce rates"
+    - "Developer tutorials on validating emails at sign-up"
+    - "Agencies cleaning client lists before campaign launches"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual

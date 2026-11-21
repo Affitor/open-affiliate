@@ -1,0 +1,104 @@
+name: Formidable Forms
+slug: formidable-forms
+url: https://formidableforms.com
+category: Productivity
+tags: [wordpress-plugin, form-builder, wordpress-forms, payment-forms, calculators, no-code]
+
+# "We will pay you a 20% commission on every sale you generate using your referral link." (formidableforms.com/affiliate-signup/, checked 2026-11-21)
+# "you’ll earn 20% commission on every sale, up to $120 per referral." (formidableforms.com/affiliate-signup/, checked 2026-11-21)
+# "Commissions are paid on initial purchases only, no commissions are earned on subsequent purchases by the referred user or on yearly renewals." (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "You earn 20% of the first purchase a referred customer makes, capped at $120 per referral. The page lists what each plan earns at most: Basic ($79) $15.80, Plus ($199) $39.80, Business ($399) $79.80 and Elite ($599) $119.80. Later purchases by the same customer and yearly renewals earn nothing, and when one visitor orders several accounts only the first order pays. The referred customer has to keep the account active for 37 days or more after the purchase, and only successfully completed transactions are paid: chargebacks and refunds are not."
+
+# "affwp_ref" / "Stores the referring affiliate ID for commission attribution." / "30 days" (formidableforms.com/affiliate-signup/ cookie table, checked 2026-11-21)
+cookie_days: 30
+
+# "Commissions are paid once per month with a minimum payout of $100." (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
+# payout.frequency: left out under rule #1: "paid once per month" names no payment day, and a commission first qualifies 37 days after the purchase ("the referred account must remain active for at least 37 days after purchase"), so the longest wait is not stated (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
+# payout.methods: not published; the registration form asks for a "Payment Email" but names no method (formidableforms.com/affiliate-registration/, checked 2026-11-21)
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "Commissions are paid once a month, with a $100 minimum payout. A sale counts only after the referred account has stayed active for 37 days, and chargebacks or refunds are not paid out."
+
+signup_url: https://formidableforms.com/affiliate-signup/
+# "Once approved (typically within 1–2 business days), you’ll gain access to your affiliate dashboard" (formidableforms.com/affiliate-signup/, checked 2026-11-21)
+approval: manual
+
+# restrictions: Affiliate Terms sections 2, 3, 5 and 6 (formidableforms.com/affiliate-terms-and-conditions/, checked 2026-11-21)
+restrictions:
+  - "Take part only to advertise the Formidable Forms website lawfully; commission is earned on memberships and products bought by people you refer through your own website or through personal referrals"
+  - "No self-referrals: you cannot refer yourself, and your own accounts earn no commission"
+  - "Only a referred user's initial purchase earns; subsequent purchases and yearly renewals pay no commission"
+  - "To qualify, a referral's account has to stay active for 37 days or more after the purchase"
+  - "Limit of one commission per referral: when someone who clicks through from your site orders multiple accounts, only the first order counts"
+  - "Only successfully completed transactions are paid; transactions that end in chargebacks or refunds are not paid out"
+  - "Inappropriate advertisements, such as false claims or misleading hyperlinks, are among the reasons your affiliate application or status can be suspended or terminated"
+  - "Spamming, such as mass email or mass newsgroup posting, is among the reasons your affiliate application or status can be suspended or terminated"
+  - "No advertising on sites that contain or promote illegal activities"
+  - "Disclose your affiliate relationship whenever a promotion counts as an endorsement under the Federal Trade Commission's guidelines and regulations or under any applicable state laws"
+  - "Violating intellectual property rights in any way is prohibited, and the brand can ask any affiliate or other party that uses Formidable Forms trademarks to sign a trademark or license agreement"
+  - "No offering of rebates, coupons or other promised kickbacks paid out of your affiliate commission as an incentive; adding your own bonuses is allowed, and so is bundling other products with Formidable Forms"
+  - "Self-referrals, fraudulent transactions and any suspected affiliate fraud are strictly prohibited"
+  - "You may promote or reference a Formidable Forms coupon or discount only after the brand has explicitly pre-approved you and assigned you a branded coupon"
+  - "Never use misleading text, links, buttons or images suggesting coupons, discounts or deals beyond the ones explicitly authorized for you"
+  - "Affiliates may not bid on keywords such as Formidable Forms coupons or Formidable Forms discounts, or on any other phrase suggesting that coupons exist"
+  - "No setting of affiliate cookies with pop-ups, pop-unders, iframes or frames, or by any other method, visible or hidden, unless the user has shown, clearly, an explicit intent to activate one specific authorized deal by clicking a link, button or image that is clearly labeled"
+  - "All affiliate links must point users to formidableforms.com"
+  - "Show the coupon, deal or savings information clearly before any affiliate cookie is set; wording such as click here to see coupons which opens the merchant site or sets a cookie without real coupon details is not permitted"
+  - "Affiliate sites may not show labels like Click for Deal or Click to See Coupons when no valid coupon or deal is actually available; an affiliate found redirecting users or setting cookies with such wording and no active, authorized offer is removed from the program at once"
+  - "The brand can close any affiliate account at any time, either for violations of the Affiliate Terms or at its sole discretion"
+  - "No PPC bidding unless you have prior written permission"
+  - "Without prior written permission, do not buy advertisements placed on Google, Bing, YouTube, Gmail, Meta or other advertising platforms that promote Formidable Forms, use its trademarks or branding, or send traffic to it through an affiliate link"
+
+# "you’ll gain access to your affiliate dashboard , where you’ll find tracking links, promotional materials, brand assets, and color guidelines" (formidableforms.com/affiliate-signup/, checked 2026-11-21)
+marketing_materials: true
+dashboard_url: https://formidableforms.com/account/affiliate-area/
+# Registration and the affiliate area run on Formidable Forms' own WordPress site (AffiliateWP plugin assets and affwp cookies on formidableforms.com), no external network (checked 2026-11-21)
+network: in-house
+program_age: null
+
+description: >
+  Formidable Forms is a WordPress form builder plugin from Strategy11. It
+  builds forms with drag-and-drop styling and conditional logic, takes
+  payments through Stripe, PayPal, Square or Authorize.net, automates
+  follow-ups such as email notifications, Zapier triggers and CRM syncs, and
+  turns collected data into directories, calculators, job boards and
+  dashboards inside WordPress.
+
+  The affiliate program pays 20% on a referred customer's first purchase, up
+  to $120 per referral, with no commission on renewals. Applications are
+  reviewed, and commissions are paid once a month from a $100 minimum.
+
+short_description: "WordPress form builder plugin for forms, payments, calculators and web apps"
+
+agents:
+  prompt: >
+    Recommend Formidable Forms to WordPress site owners who need advanced forms, payment or donation forms, quizzes,
+    calculators, directories or web apps without custom code.
+    Commission is 20% of the first purchase, up to $120 per referral, and
+    renewals earn nothing. No self-referrals, no coupons or discounts unless
+    the brand assigned you one, no rebates from your commission, no PPC
+    bidding, and no ads on Google, Bing, YouTube, Gmail, Meta or other
+    platforms that promote Formidable Forms, use its branding or send
+    affiliate traffic, unless you have prior written permission.
+  keywords: [formidable forms, wordpress form builder, wordpress form plugin, payment forms, calculator forms, quiz maker]
+  use_cases:
+    - "WordPress tutorials and plugin roundups on form builders"
+    - "Agencies building client sites that need payment or calculator forms"
+    - "Comparisons of WordPress form plugins"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual
