@@ -14,7 +14,7 @@ commission:
   mode: percentage
   value: 10
   duration: null
-  conditions: "You earn 10% on each qualifying CAPTCHA package bought by a customer you referred. Anyone who registers via your link is linked to you permanently. Each sale turns payable once the customer has kept a successful purchase in place for 30 days or more. Referring yourself, fraudulent promotion, and banned or suspended accounts earn nothing."
+  conditions: "You earn 10% on each qualifying CAPTCHA package bought by a customer you referred. Anyone who registers via your link is linked to you permanently. Each sale turns payable once the customer has kept a successful purchase in place for 30 days or more. Self-referrals are prohibited and fraudulent marketing methods are not allowed; accounts that are banned or suspended are not eligible for commissions."
 
 # "Cookie Duration" "Lifetime" (deathbycaptcha.com/affiliates, comparison table, checked 2026-11-22)
 # "When a visitor signs up using your referral link, they are permanently associated with your affiliate account." (deathbycaptcha.com/affiliates, checked 2026-11-22)
@@ -51,8 +51,8 @@ description: >
   who automate workflows. It pairs AI-assisted OCR with human verification
   and handles several CAPTCHA types, including reCAPTCHA v2 and v3.
 
-  Affiliates earn 10% recurring on every CAPTCHA package their referred
-  customers buy, with a 5 USD minimum payout.
+  Affiliates earn 10% recurring on each qualifying CAPTCHA package their
+  referred customers buy, with a 5 USD minimum payout.
 
 short_description: "CAPTCHA solving API that pairs AI-assisted OCR with human verification"
 
@@ -64,8 +64,8 @@ agents:
     technical tutorials; software developers, automation professionals and
     SaaS companies; and SEO specialists, digital and affiliate marketers and
     website owners.
-    Commission: 10% recurring on each CAPTCHA package a referred customer
-    buys. Referring yourself and fraudulent promotion are not allowed, and
+    Commission: 10% recurring on each qualifying CAPTCHA package a referred
+    customer buys. Referring yourself and fraudulent promotion are not allowed, and
     accounts that are banned or suspended earn no commission.
   keywords: [death by captcha, deathbycaptcha, captcha solver, captcha api, recaptcha solver, captcha solving service]
   use_cases:

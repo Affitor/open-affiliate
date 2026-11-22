@@ -14,7 +14,7 @@ commission:
   mode: unknown
   value: null
   duration: null
-  conditions: "You earn a reward when a Shopify brand you introduce signs with LoyaltyLion, set by the plan the brand takes: $750 for Classic and $1,500 for Advanced. For Plus, the page heading says up to $7,500 while the plan list says $7,500+. Payment comes once the brand has been a customer for a month, under T&Cs the page names. There is no cap on how many brands you can refer."
+  conditions: "You earn a reward when a Shopify brand you introduce signs with LoyaltyLion, set by the plan the brand takes: $750 for Classic and $1,500 for Advanced. For Plus, the page heading says up to $7,500 while the plan list says $7,500+. Payment comes once the brand has been a customer for a month, under LoyaltyLion's T&Cs. There is no cap on how many brands you can refer."
 
 # cookie_days: not published on loyaltylion.com/partnerships/refer-a-brand; referrals are submitted through a form (checked 2026-11-22)
 
@@ -28,7 +28,7 @@ signup_url: https://loyaltylion.com/partnerships/refer-a-brand
 
 # Refer a brand page (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
 restrictions:
-  - "No payment until the brand you referred has stayed a LoyaltyLion customer for one month; you or your agency are then paid under the brand's T&Cs"
+  - "No payment until the brand you referred has stayed a LoyaltyLion customer for one month; you or your agency are then paid under LoyaltyLion's T&Cs"
 
 # Referrals go through a HubSpot form on the brand's own page; no affiliate platform (checked 2026-11-22)
 network: null
