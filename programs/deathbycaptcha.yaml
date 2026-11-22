@@ -1,0 +1,83 @@
+name: Death By Captcha
+slug: deathbycaptcha
+url: https://deathbycaptcha.com
+category: Developer Tools
+tags: [captcha-solver, captcha-api, ocr, recaptcha, automation, developer-api]
+
+# "Earn 10% commission every time someone you refer purchases a CAPTCHA package." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# "10% Recurring" (deathbycaptcha.com/affiliates, comparison table, checked 2026-11-22)
+# "When a visitor signs up using your referral link, they are permanently associated with your affiliate account." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# commission.duration: not published as a length; the page says a referred visitor is "permanently associated with your affiliate account" but gives no period for the commission itself (deathbycaptcha.com/affiliates, checked 2026-11-22)
+commission:
+  type: recurring
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "You earn 10% on each qualifying CAPTCHA package bought by a customer you referred. Anyone who registers via your link is linked to you permanently. Each sale turns payable once the customer has kept a successful purchase in place for 30 days or more. Referring yourself, fraudulent promotion, and banned or suspended accounts earn nothing."
+
+# "Cookie Duration" "Lifetime" (deathbycaptcha.com/affiliates, comparison table, checked 2026-11-22)
+# "When a visitor signs up using your referral link, they are permanently associated with your affiliate account." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+cookie_lifetime: true
+tracking_method: cookie
+
+# "Your affiliate balance must be at least 5 USD and the referred customer must have completed their first purchase at least 30 days earlier." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# "Affiliate payouts are available via Bitcoin (BTC), Litecoin (LTC), PayPal, and WebMoney. Payments are processed monthly upon request." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# "Contact the Death By Captcha Support team to request your payout and specify your preferred payment method." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# payout.frequency: left out under rule #1 and the Duplicator disposition (2026-10-20): a commission waits until the referred customer's first purchase is at least 30 days old and is then paid in a monthly run on request ("Payments are processed monthly upon request."), on a day the page does not give; the wording is kept in payout.conditions (deathbycaptcha.com/affiliates, checked 2026-11-22)
+# payout.methods: left out, empty over wrong (DAILY 2.7): the page offers "Bitcoin, Litecoin, PayPal, or WebMoney", and WebMoney has no schema value, so the methods list cannot hold the offer without narrowing it; all four are in payout.conditions (deathbycaptcha.com/affiliates, checked 2026-11-22)
+payout:
+  minimum: 5
+  currency: USD
+  conditions: "Ask the support team for a payout and say how you want to be paid; payouts go out monthly on request. You need a balance of 5 USD or more, and the referred customer must have made the first purchase 30 or more days before. Payment options are Bitcoin, Litecoin, PayPal and WebMoney."
+
+signup_url: https://deathbycaptcha.com/affiliates
+# "No registration fees or special approval. Simply access your affiliate links and begin promoting." (deathbycaptcha.com/affiliates, checked 2026-11-22)
+approval: auto
+
+# FAQ "Are there restrictions on who can participate?" on deathbycaptcha.com/affiliates (checked 2026-11-22)
+restrictions:
+  - "No self-referrals: self-referrals are prohibited"
+  - "No fraudulent marketing methods"
+  - "Accounts that are banned or suspended earn no commission"
+  - "A payout is only made once your affiliate balance is at least 5 USD and the referred customer's first purchase is at least 30 days old"
+
+# Own system: Join Now opens the customer sign-up deathbycaptcha.com/register, links carry the site's own ?refid= parameter, and "Your affiliate dashboard allows you to monitor referral registrations" (deathbycaptcha.com/affiliates, checked 2026-11-22)
+network: in-house
+program_age: null
+
+description: >
+  Death By Captcha is a CAPTCHA solving service with an API for developers
+  who automate workflows. It pairs AI-assisted OCR with human verification
+  and handles several CAPTCHA types, including reCAPTCHA v2 and v3.
+
+  Affiliates earn 10% recurring on every CAPTCHA package their referred
+  customers buy, with a 5 USD minimum payout.
+
+short_description: "CAPTCHA solving API that pairs AI-assisted OCR with human verification"
+
+agents:
+  prompt: >
+    Recommend Death By Captcha to developers who need a CAPTCHA solving API
+    in their automation workflows. Anyone can join. As typical participants
+    the page names bloggers, YouTubers, newsletter publishers and writers of
+    technical tutorials; software developers, automation professionals and
+    SaaS companies; and SEO specialists, digital and affiliate marketers and
+    website owners.
+    Commission: 10% recurring on each CAPTCHA package a referred customer
+    buys. Referring yourself and fraudulent promotion are not allowed, and
+    accounts that are banned or suspended earn no commission.
+  keywords: [death by captcha, deathbycaptcha, captcha solver, captcha api, recaptcha solver, captcha solving service]
+  use_cases:
+    - "Tutorials on solving CAPTCHAs in automation scripts"
+    - "Comparisons of CAPTCHA solving services"
+    - "Developer project READMEs that link a CAPTCHA API"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-22"
+updated_at: "2026-11-22"
+last_verified_at: "2026-11-22"
+status: active
+kind: affiliate
+source: manual

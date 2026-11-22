@@ -1,0 +1,76 @@
+name: LoyaltyLion
+slug: loyaltylion
+url: https://loyaltylion.com
+category: E-Commerce
+tags: [loyalty-program, customer-retention, shopify, rewards, referral-program, ecommerce]
+
+# "$750 for a Classic plan" (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+# "$1,500 for an Advanced plan" (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+# commission.rate: stated two ways, so left out: "Refer a brand. Earn up to $7,500" (loyaltylion.com/partnerships/refer-a-brand) vs "$7,500+ for a Plus plan" (loyaltylion.com/partnerships/refer-a-brand), checked 2026-11-22
+# commission.type: not published; "Once the brand you referred has been a LoyaltyLion customer for a month, you or your agency will receive payment in accordance with our T&Cs." does not say whether a referral pays once or again, so one-time is the schema's required placeholder (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "You earn a reward when a Shopify brand you introduce signs with LoyaltyLion, set by the plan the brand takes: $750 for Classic and $1,500 for Advanced. For Plus, the page heading says up to $7,500 while the plan list says $7,500+. Payment comes once the brand has been a customer for a month, under T&Cs the page names. There is no cap on how many brands you can refer."
+
+# cookie_days: not published on loyaltylion.com/partnerships/refer-a-brand; referrals are submitted through a form (checked 2026-11-22)
+
+# "Once the brand you referred has been a LoyaltyLion customer for a month, you or your agency will receive payment in accordance with our T&Cs." (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+# payout.frequency: left out under rule #1 and the Duplicator disposition (2026-10-20): payment follows a month as a customer, on a day the page does not give; the wording is kept in payout.conditions (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+payout:
+  conditions: "Paid to you or your agency after the referred brand has spent a month as a LoyaltyLion customer, following the T&Cs the page refers to."
+
+signup_url: https://loyaltylion.com/partnerships/refer-a-brand
+# approval: left out; there is no application to approve: "anyone can submit a referral", and LoyaltyLion reviews each referral ("We’ll review your referral and follow up within 48 hours.") (loyaltylion.com/partnerships/partner-hub, loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+
+# Refer a brand page (loyaltylion.com/partnerships/refer-a-brand, checked 2026-11-22)
+restrictions:
+  - "No payment until the brand you referred has stayed a LoyaltyLion customer for one month; you or your agency are then paid under the brand's T&Cs"
+
+# Referrals go through a HubSpot form on the brand's own page; no affiliate platform (checked 2026-11-22)
+network: null
+program_age: null
+
+description: >
+  LoyaltyLion is loyalty program software for Shopify stores. Brands use it
+  to give points and rewards for everyday actions such as purchases,
+  subscriptions, reviews and referring friends, and to run VIP tiers, challenges, analytics and a
+  headless API.
+
+  Its Refer a brand program pays a reward when a Shopify brand you
+  introduce signs, set by the plan the brand chooses.
+
+short_description: "Loyalty program software for Shopify stores, with points, referrals and VIP tiers"
+
+agents:
+  prompt: >
+    Recommend LoyaltyLion to Shopify brands that want a loyalty program with
+    points, rewards, referrals and VIP tiers. You do not need to be a
+    LoyaltyLion partner to refer a brand: anyone can submit a referral, and
+    there is no limit on how many brands you refer. LoyaltyLion reviews each
+    referral, and an accepted one leads to an introduction call with the
+    brand. The reward depends on the plan the brand signs, and it is paid
+    once the brand has been a customer for a month.
+  keywords: [loyaltylion, loyalty lion, shopify loyalty program, loyalty software, customer rewards program, referral program software]
+  use_cases:
+    - "Agencies introducing Shopify clients to a loyalty platform"
+    - "Shopify consultants recommending retention software"
+    - "Ecommerce newsletters covering loyalty and rewards tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-22"
+updated_at: "2026-11-22"
+last_verified_at: "2026-11-22"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Refer a brand page heading: "Refer a brand. Earn up to $7,500" (https://loyaltylion.com/partnerships/refer-a-brand). Same page, plan list: "$7,500+ for a Plus plan" (https://loyaltylion.com/partnerships/refer-a-brand). Checked 2026-11-22.'
+    values:
+      - "up to $7,500"
+      - "$7,500+"
