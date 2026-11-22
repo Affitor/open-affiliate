@@ -14,7 +14,7 @@ commission:
   value: 50
   currency: USD
   duration: "12 months"
-  conditions: "50% of each payment from a referred customer, including subscription renewals, for 12 months counted from the customer's first click on the affiliate link, not from the first payment. A payment on the 12-month anniversary or later earns nothing, so on a yearly plan only the first payment earns. Calculated on the price before sales tax, VAT or GST."
+  conditions: "Commissions are held 15 days after the sale for refunds and chargebacks. For commissions approved on or after October 9, 2026 at 00:00 Pacific, withdrawals require the brand to have paid the covering invoice; earlier approved commissions became withdrawable on approval. At least $20 must be available before a withdrawal request. Withdrawals undergo team review, and Wise or bank delivery timing varies. A processing fee may apply and is shown before confirmation."
 
 # "Affitor's tracker keeps a click code in a cookie on our site for 60 days." / "The first affiliate link they opened counts." (bestlatestapps.com/storepanes/affiliates/terms, checked 2026-11-21)
 cookie_days: 60
@@ -38,11 +38,17 @@ network: affitor
 
 # "Purchases you make yourself, through your own link, or for accounts you control." / "Sales from spam, misleading claims, cookie stuffing, or paid search ads that bid on the name Storepanes." / "Say clearly that you earn a commission" / "You may use the Storepanes name to describe the product, not in a domain name or account name." (bestlatestapps.com/storepanes/affiliates/terms, checked 2026-11-21)
 restrictions:
-  - "No commission on purchases you make yourself, through your own link, or for accounts you control"
-  - "No spam, misleading claims or cookie stuffing"
-  - "No paid search ads that bid on the name Storepanes"
-  - "Disclose that you earn a commission"
-  - "Do not present yourself as Storepanes or Best Latest Apps, or use the name in a domain or account name"
+  - No commission on purchases you make yourself, through your own link, or for accounts you control
+  - No spam, misleading claims or cookie stuffing
+  - No paid search ads that bid on the name Storepanes
+  - Disclose that you earn a commission
+  - Do not present yourself as Storepanes or Best Latest Apps, or use the name in a domain or account name
+  - "No fraudulent traffic: bots, automated scripts, fake clicks or cookie stuffing"
+  - "No self-referrals: do not refer yourself or your own accounts"
+  - No bidding on the brand's keywords in paid search without its written permission
+  - No misrepresenting your relationship with the brand or making false claims about its products
+  - No attempts to manipulate or circumvent attribution
+  - Disclose the affiliate relationship as the law requires, such as FTC guidelines
 
 short_description: "Design App Store and Google Play screenshots once, then export every size the stores ask for"
 description: >
@@ -76,6 +82,6 @@ agents:
 verified: true
 submitted_by: "@aryansbtloe"
 created_at: "2026-11-21"
-updated_at: "2026-11-21"
-last_verified_at: "2026-11-21"
+updated_at: "2026-11-22"
+last_verified_at: "2026-11-22"
 status: active
