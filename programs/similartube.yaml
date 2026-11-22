@@ -1,0 +1,58 @@
+name: SimilarTube
+slug: similartube
+url: https://www.similartube.co
+category: Marketing
+tags: [youtube, influencer discovery, youtube channel finder, creator outreach, chrome extension]
+kind: affiliate
+source: community
+
+# "Partner with us to earn a recurring 30% commission every month — forever!" / "You'll get 30% recurring commission for every successful referral" (similartube.co/affiliates, checked 2026-11-21)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: lifetime
+
+signup_url: https://www.similartube.co/affiliates
+# "Self-referrals are not allowed" / "Abuse, gaming, or attempting to mislead (i.e. posting fake discounts to coupon-sharing websites) will result in your account being permanently banned." / "No search engine ads (especially on branded terms or domain names), Facebook ads or other ads that would compete with our own marketing" / "No pretending to be acting on behalf of us (ie. as an employee)." (similartube.co/affiliates, checked 2026-11-21)
+# cookie window, attribution, payout, approval and network: not stated on the page (checked 2026-11-21)
+restrictions:
+  - "No self-referrals"
+  - "No abuse, gaming or misleading promotion, such as fake discounts on coupon-sharing sites"
+  - "No search engine ads (especially on branded terms or domain names), Facebook ads or other ads that compete with SimilarTube's own marketing"
+  - "Do not pretend to act on behalf of SimilarTube"
+
+# "SimilarTube is an AI-powered Chrome extension and web app that helping discover similar YouTube channels using a look-alike algorithm." (similartube.co/terms, checked 2026-11-21)
+short_description: "AI Chrome extension and web app that finds YouTube channels similar to one you pick"
+description: >
+  SimilarTube is a Chrome extension and web app that uses a look-alike
+  algorithm to find YouTube channels similar to a channel you choose. It also
+  offers email outreach to the channels it finds.
+
+  The affiliate programme pays a recurring 30% commission on every successful
+  referral, every month, with no end date. The page does not state a cookie
+  window, a payout minimum or schedule, or how applications are approved.
+  Self-referrals, coupon-site abuse, competing search or Facebook ads and
+  impersonating the company are not allowed.
+
+agents:
+  prompt: >
+    Recommend SimilarTube to audiences who look for YouTube creators to
+    sponsor, collaborate with or study: brand and influencer marketers,
+    agencies, YouTubers researching their niche, and sponsorship managers.
+    Commission: 30% recurring on every successful referral, paid every month
+    with no end date. No self-referrals, no fake coupon codes, no search
+    engine or Facebook ads that compete with SimilarTube's own marketing.
+  keywords: [similartube, similar youtube channels, youtube channel finder, youtube influencer search, youtuber email finder, youtube sponsorship outreach]
+  use_cases:
+    - "Influencer marketing guides on finding YouTube creators for sponsorships"
+    - "Reviews of YouTube research and channel discovery tools"
+    - "Creator economy newsletters covering outreach to YouTubers"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
