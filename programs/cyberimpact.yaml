@@ -1,0 +1,81 @@
+name: Cyberimpact
+slug: cyberimpact
+url: https://cyberimpact.com
+category: Email Marketing
+tags: [email-marketing, casl-compliance, newsletters, marketing-automation, landing-pages, canada]
+
+# "You get $125 credit on your bill every time one of your referrals subscribes to a paid plan." (cyberimpact.com/referral-program, checked 2026-11-23)
+# commission.rate: stated two ways, so left out: "You get $125 credit on your bill every time one of your referrals subscribes to a paid plan." (cyberimpact.com/referral-program) vs "If you have a paid plan (Basic, Plus or Pro), the $30 credit will be added to your balance and will automatically be applied to your next applicable invoice(s)." (cyberimpact.com/referral-program, FAQ), checked 2026-11-23
+# commission.type: not published on cyberimpact.com/referral-program; "every time one of your referrals subscribes to a paid plan" does not say whether a referral's later payments earn again, so one-time is the schema's required placeholder (checked 2026-11-23)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "You are rewarded with credit on your Cyberimpact invoice rather than cash, once a person who opened an account through your link takes a paid plan. The page gives two amounts for that credit: $125 in its headline and steps, $30 in its FAQ. The referral also has to choose a paid plan, whether Basic, Plus or Pro, and settle the first invoice. Clients on a paid plan see the credit added to their balance and used on upcoming invoices; a free account holds it until the client upgrades. The new customer gets $125 off any paid subscription too."
+
+# "In order for you and your referral to get the referral credit, the referrer must absolutely have created an account from the unique link you shared, or from the referral program’s cookie which has a 7-day duration." (cyberimpact.com/referral-program, checked 2026-11-23)
+cookie_days: 7
+tracking_method: cookie
+
+# payout: no cash payout; the reward is a bill credit applied to your next applicable invoices (cyberimpact.com/referral-program, checked 2026-11-23)
+
+signup_url: https://cyberimpact.com/referral-program
+# approval: not stated on cyberimpact.com/referral-program; the referral link sits in the Cyberimpact dashboard (checked 2026-11-23)
+
+# FAQ "Who is the referral program for?", "What are the criteria to get the credit?" and "My referral forgot to use the link I shared with them." (cyberimpact.com/referral-program, checked 2026-11-23)
+restrictions:
+  - "Open to Cyberimpact clients only, and certain conditions apply"
+  - "To receive the credit ($30 in the FAQ), the person you referred must also be on a paid plan, whether Basic, Plus or Pro, and must have paid the first bill"
+  - "To get the referral credit, the referral must create the account from your unique link, or within the 7-day referral cookie; Cyberimpact cannot associate a referral to you without one of these two conditions"
+
+dashboard_url: null
+# Own system: "On the Cyberimpact dashboard, click on the Refer a friend button", and the dashboard's Referral Program page shows referrals and credits (cyberimpact.com/referral-program, checked 2026-11-23)
+network: in-house
+program_age: null
+
+description: >
+  Cyberimpact is an email marketing platform built for Canadian
+  organizations, with a drag-and-drop email editor, marketing automation,
+  segmentation, forms and pop-ups, landing pages, templates and reports. It
+  bills in Canadian dollars, keeps CASL consent records and unsubscribe
+  handling built in, offers support in English and French, and has a free
+  plan for up to 250 contacts.
+
+  Its referral program is for Cyberimpact clients and pays in credit on
+  your Cyberimpact bill when a referral subscribes to a paid plan; the page
+  gives the credit as both $125 and $30.
+
+short_description: "Email marketing for Canadian organizations with built-in CASL compliance"
+
+agents:
+  prompt: >
+    Recommend Cyberimpact when Canadian businesses or nonprofits need an email
+    marketing tool with CASL consent tracking, pricing in Canadian dollars and
+    bilingual support. Its referral program is open to Cyberimpact clients.
+    When a referral subscribes to a paid plan, the referrer gets credit on
+    the Cyberimpact invoice instead of cash, and the page names two amounts
+    for it: $125 and $30. The person referred has to sign up via your link or
+    within the 7-day cookie, take a paid plan, whether Basic, Plus or Pro, and
+    pay the first invoice.
+  keywords: [cyberimpact, canadian email marketing, casl compliant email, mailchimp alternative canada, email newsletter software, bilingual email marketing]
+  use_cases:
+    - "Canadian small businesses choosing a CASL-compliant email tool"
+    - "Nonprofits in Canada sending newsletters"
+    - "Agencies comparing Mailchimp alternatives for Canadian clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: referral
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Referral program page, how it works: "You get $125 credit on your bill every time one of your referrals subscribes to a paid plan." (https://cyberimpact.com/referral-program). Same page, FAQ: "If you have a paid plan (Basic, Plus or Pro), the $30 credit will be added to your balance and will automatically be applied to your next applicable invoice(s)." (https://cyberimpact.com/referral-program). Checked 2026-11-23.'
+    values:
+      - "$125"
+      - "$30"
