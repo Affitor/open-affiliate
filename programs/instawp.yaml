@@ -27,7 +27,7 @@ tracking_method: cookie
 # "Once your approved balance reaches $50 USD, it is paid out in the next payment round." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
 # "Payment method Stripe, to the bank account you connect in your InstaWP account." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
 # payout.frequency: left out under rule #1 and the Duplicator disposition (2026-10-20): each commission is held 45 days after the sale and then paid "in the next payment round", on a day the terms do not give; the wording is kept in payout.conditions (instawp.com/legal/affiliate-terms, checked 2026-11-23)
-# payout.methods: left out, empty over wrong (DAILY 2.7): the one payout route, "Stripe, to the bank account you connect", reads as both the stripe and the bank schema values, so a single value would narrow it; the route is in payout.conditions (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# payout.methods: stated two ways: "Affiliate commissions are paid in cash through Stripe only." (https://instawp.com/affiliate/) vs "Payment method Stripe, to the bank account you connect in your InstaWP account." (https://instawp.com/legal/affiliate-terms/), checked 2026-11-23; the page sentences name different method sets, so the field is left out (DAILY §2.7 two-ways)
 payout:
   minimum: 50
   currency: USD
@@ -88,6 +88,9 @@ restrictions:
   - "Once participation ends, stop using your referral links and InstaWP's marks and marketing assets, and remove its assets from your channels within reasonable time; recurring commission stops, and you do not keep earning on customers you referred earlier"
   - "Once participation has ended, approved commission already earned is paid in the normal cycle only if the account was not closed over a breach of the terms and your balance has reached the $50 threshold; if InstaWP closes the account over fraud or a serious breach, the unpaid commission is cancelled and it may reclaim amounts it already paid on affected referrals"
   - "You cannot assign the affiliate terms without InstaWP's written consent"
+  - "Keeping your payout details correct is your responsibility: InstaWP is not liable when a payment fails or goes astray because your payout account details are wrong, incomplete or closed, nor for processing delays, currency conversion, Stripe's fees or your bank's fees; you handle your own taxes on what you earn and any registration your local law requires, must give InstaWP any tax documentation it reasonably needs before it can pay you, and InstaWP withholds where the law requires it"
+  - "If you collect personal data yourself to promote InstaWP (for example email addresses for a list that you use), you are its controller and are responsible for collecting it lawfully, giving proper notice and getting consent"
+  - "Your login credentials, and everything done through your affiliate account, are your responsibility, and you must tell InstaWP promptly if you think someone else has access"
 
 dashboard_url: null
 # network: the affiliate page and the docs page say "Tracking runs inside InstaWP, with no third-party affiliate network in between" and the terms say "Referral tracking runs in our own systems", while the affiliate page code loads a Rewardful snippet (aff.instawp.com/rw.js, data-rewardful) (instawp.com/affiliate, checked 2026-11-23); the two signals differ, so no network is named
@@ -133,3 +136,9 @@ last_verified_at: "2026-11-23"
 status: active
 kind: affiliate
 source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'Affiliate page: "Affiliate commissions are paid in cash through Stripe only." (https://instawp.com/affiliate/). Affiliate terms: "Payment method Stripe, to the bank account you connect in your InstaWP account." (https://instawp.com/legal/affiliate-terms/). Checked 2026-11-23.'
+    values:
+      - "Stripe"
+      - "Stripe to a bank account"
