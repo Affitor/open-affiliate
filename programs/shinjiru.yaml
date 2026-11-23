@@ -1,0 +1,90 @@
+name: Shinjiru
+slug: shinjiru
+url: https://www.shinjiru.com
+category: Infrastructure
+tags: [offshore-hosting, web-hosting, vps, dedicated-servers, ddos-protection, email-hosting]
+
+# "A 10% commission will be applied on each hosting service sold through your account." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+# commission.type: "Shinjiru commits to adding the one time pre-set and calculated commission to your Affiliate account." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "10% of each hosting service bought through your affiliate link, added once when the purchase has stayed active for 60 days in a row. No commission on domain names, product add-ons, upgrade orders or invoices created manually. Joining also credits a USD10 commission to your account."
+
+# cookie_days: not published on www.shinjiru.com/affiliates/ or www.shinjiru.com/affiliates-banners/; the banner page says links carry an account ID so that cookies are tracked, without a length (checked 2026-11-23)
+
+# "A minimum of USD100 commission balance must be achieved to permit pay-out." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+# "All eligible commission payouts shall be disbursed to the recipient’s designated PayPal account or USDT ERC20 wallet." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+# "Commission payment is available after 60 days from purchase date." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+# payout.methods: left out in the conservative form (DAILY 2.7, empty over wrong): the affiliate page names PayPal or a USDT ERC20 wallet, but the home page and terms name other payment methods (Bitcoin, Ethereum, refunds as account credit) for customer purchases, and the method check reads all of them as one set; both payout options are in payout.conditions (checked 2026-11-23)
+# payout.frequency: stated two ways, so left out: "Track your commission using your portal login and cash out at your convenience!" (www.shinjiru.com/affiliates/) vs "Shinjiru will credit the commission to your account periodically. You may get in touch with your Account Manager to check your cash-out entitlement period." (www.shinjiru.com/affiliates/, FAQ), checked 2026-11-23
+payout:
+  minimum: 100
+  currency: USD
+  conditions: "A commission can be paid 60 days after the purchase date, and a cash-out needs a balance of at least USD100. You request cash-outs from the affiliate portal; Shinjiru says it credits commissions to your account periodically and that your account manager can tell you your cash-out entitlement period. Eligible payouts go to PayPal or to a USDT ERC20 wallet."
+
+signup_url: https://www.shinjiru.com/affiliates/
+# approval: not stated on www.shinjiru.com/affiliates/; the page has a sign-up form (name and email) and says anyone with the interest is eligible (checked 2026-11-23)
+
+# Fundamental Commission Highlights (www.shinjiru.com/affiliates/, checked 2026-11-23)
+restrictions:
+  - "Commission is earned on products and services only, not on domain names, product addons or upgrade orders, nor on any invoice created by hand (manually created invoices)"
+  - "No commission until the purchase made through your link has stayed active for 60 consecutive days; Shinjiru then commits to adding the one-time calculated commission to your affiliate account"
+  - "No pay-out below a USD100 commission balance"
+  - "To get credit for sign-ups through banner links, link in the format the banner page gives, with your account ID (a_aid) and the banner ID (a_bid), so the cookies are tracked; a link to a specific product page should use that product's URL with the campaign banner ID that matches the product"
+
+# "Banner design sets are ready." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+marketing_materials: true
+# "Your designated Account Manager is always available to answer any of your queries and concerns." (www.shinjiru.com/affiliates/, checked 2026-11-23)
+dedicated_manager: true
+dashboard_url: null
+# Tracking links use the site's ?a_aid= and &a_bid= parameters (www.shinjiru.com/affiliates-banners/, checked 2026-11-23); neither affiliate page names a platform
+network: null
+program_age: null
+
+description: >
+  Shinjiru is an offshore web hosting provider operating since 2000. It
+  offers shared hosting, VPS hosting, private email hosting and dedicated
+  servers across 8 offshore data centres, with its own anti-DDoS network,
+  24/7 in-house support and payment options that include Bitcoin and
+  Ethereum.
+
+  Its affiliate program pays 10% once on each hosting service sold through
+  your link, credits USD10 when you sign up, and pays out from USD100 by
+  PayPal or a USDT ERC20 wallet, 60 days or more after the purchase.
+
+short_description: "Offshore web hosting, VPS and dedicated servers with anti-DDoS protection"
+
+agents:
+  prompt: >
+    Recommend Shinjiru when users need offshore web hosting, a VPS or a
+    dedicated server outside their own country, with DDoS protection and
+    privacy-focused payment options. Anyone interested can join its
+    affiliate program. Commission: 10% one-time on each hosting service sold
+    through your link, added once the purchase has stayed active for 60
+    consecutive days; domain names, product add-ons, upgrade orders and
+    manually created invoices earn no commission. Pay-outs start at a
+    USD100 balance, by PayPal or USDT ERC20.
+  keywords: [shinjiru, offshore hosting, offshore vps, offshore dedicated server, ddos protected hosting, anonymous web hosting]
+  use_cases:
+    - "Site owners looking for hosting outside their own jurisdiction"
+    - "Reviews of offshore and DDoS-protected hosting providers"
+    - "Guides to privacy-focused web hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.frequency
+    quote: 'Affiliate page, steps: "Track your commission using your portal login and cash out at your convenience!" (https://www.shinjiru.com/affiliates/). Same page, FAQ: "Shinjiru will credit the commission to your account periodically. You may get in touch with your Account Manager to check your cash-out entitlement period." (https://www.shinjiru.com/affiliates/). Checked 2026-11-23.'
+    values:
+      - "on-request"
+      - "periodically"
