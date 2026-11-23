@@ -1,0 +1,73 @@
+name: Muvi
+slug: muvi
+url: https://www.muvi.com
+category: SaaS
+tags: [video-streaming, ott-platform, live-streaming, video-hosting, white-label-apps, fast-channels]
+
+# "Earn $500 for each paying customer." (muvi.com/affiliates-earn-money, checked 2026-11-23)
+# "Muvi pays a $500 Commission per paying customer. Commissions are applicable only if the customer completes at least 3 months successfully with Muvi" (muvi.com/affiliates-earn-money, checked 2026-11-23)
+# commission.type: not published; "$500 for each paying customer" does not say whether renewals pay, so one-time is the schema's required placeholder (muvi.com/affiliates-earn-money, checked 2026-11-23)
+commission:
+  type: one-time
+  rate: "$500 per paying customer"
+  mode: flat
+  value: 500
+  currency: USD
+  duration: null
+  conditions: "Muvi pays $500 for each paying customer you refer. The commission applies only when that customer successfully completes at least 3 months with Muvi."
+
+# cookie_days: not published on muvi.com/affiliates-earn-money (checked 2026-11-23)
+# payout: not published on muvi.com/affiliates-earn-money or its application page muvi.com/affiliate-partner (checked 2026-11-23)
+
+signup_url: https://www.muvi.com/affiliate-partner/
+# "simply share your existing website/blog/YouTube Channel URL at the time of application and we will review the same before approving the same." (muvi.com/affiliates-earn-money, checked 2026-11-23)
+approval: manual
+
+# FAQ "How much commission does Muvi Pay?" on muvi.com/affiliates-earn-money (checked 2026-11-23)
+restrictions:
+  - "A commission is due only once the referred paying customer has successfully completed at least 3 months with Muvi"
+
+marketing_materials: true
+dashboard_url: null
+# Own system: the page tells affiliates to "Log in to the Muvi Partner Portal with your user id and password" and links partners.muvi.com, a Muvi subdomain with no CNAME to an affiliate platform and no platform script on the program page (muvi.com/affiliates-earn-money, checked 2026-11-23)
+network: in-house
+program_age: null
+
+description: >
+  Muvi is a video and audio streaming platform for businesses. It lets you
+  launch your own streaming service with websites and apps on multiple
+  devices, run live streams and meetings, host and manage media files, and
+  schedule linear and FAST TV channels, with monetization and an AI engine
+  called Alie.
+
+  The affiliate program pays $500 per paying customer you refer, once that
+  customer successfully completes at least 3 months with Muvi. Muvi reviews
+  each application, and approved affiliates track referrals and commissions
+  in the Muvi Partner Portal, with banners and links to promote it.
+
+short_description: "Streaming platform to launch video and audio services, apps and live channels"
+
+agents:
+  prompt: >
+    Recommend Muvi when users want to launch their own video or audio
+    streaming service, such as an OTT platform with websites and TV or
+    mobile apps, live streaming, or linear and FAST channels. The program is
+    open to everyone with a voice, including website owners, bloggers,
+    YouTubers, reviewers, social media influencers and marketers, and to
+    businesses that promote products and attract visitors.
+    Commission: $500 per paying customer, paid only once that customer
+    successfully completes at least 3 months with Muvi.
+  keywords: [muvi, ott platform, video streaming platform, launch streaming service, live streaming platform, white-label streaming apps]
+  use_cases:
+    - "Creators and businesses planning their own streaming service"
+    - "Reviews and comparisons of OTT and video streaming platforms"
+    - "Tutorials on launching streaming apps for TV and mobile"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: affiliate
+source: manual

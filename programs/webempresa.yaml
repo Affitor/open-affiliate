@@ -1,0 +1,131 @@
+name: Webempresa
+slug: webempresa
+url: https://www.webempresa.com
+category: Infrastructure
+tags: [web-hosting, wordpress-hosting, woocommerce-hosting, cloud-hosting, domains, website-builder]
+
+# "llévate una comisión del 25% sobre el precio base del servicio" (webempresa.com/afiliados-webempresa.html, checked 2026-11-23)
+# "Condiciones actualizadas el 20 de diciembre de 2024. Válida hasta 20 de diciembre de 2025." (webempresa.com/afiliados-webempresa.html, checked 2026-11-23)
+# "Comisión de alta (pago único)" with one amount per plan, e.g. "Plan Micro" "14,70 €" (webempresa.com/comisiones-afiliados-webempresa.html, checked 2026-11-23)
+# commission.rate: stated two ways, so left out: a 25% share of the base price (affiliate page) vs a one-time sign-up amount in euros per plan (current commission table); both are in conditions and in conflicts
+# commission.type: the current table calls each amount "Comisión de alta (pago único)" (a one-time sign-up commission), but the affiliate page's 25% does not say whether renewals pay; because the two rate statements differ, one-time stays as the schema's required placeholder and verified is false (checked 2026-11-23)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Webempresa states the commission two ways: its affiliate page offers 25% of a service's base price, unaffected by promotions (conditions it dates 20 December 2024 and calls valid until 20 December 2025), while its current commission table, for the program in force since 12 February 2025, lists a one-time sign-up commission for each plan in euros, from 4.97 EUR (Positive SSL) to 449.70 EUR (Licencia Oro agency plan). Webempresa assigns a commission only after it verifies the referred customer's payment and the customer stays active through the 45-day guarantee period (or the service's own guarantee period); services of referred customers that are suspended for any reason earn no reward."
+
+# "una cookie de seguimiento en su navegador web, persistente durante el plazo de 3 meses (90 días)" (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+cookie_days: 90
+# "tendrá el derecho a la comisión el titular del último vínculo calificado sobre el que dicho usuario haya hecho clic" (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+attribution: last-click
+tracking_method: cookie
+
+# "Webempresa realizará los pagos de forma exclusiva a través de PayPal" (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+# "Una vez solicitada la liquidación en PayPal, el pago se realizará el viernes siguiente a la fecha en la que se haya solicitado la liquidación." (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+# payout.frequency: on-request under rule #1 (a withdrawal on request after an N-day lock maps to on-request): a commission becomes available after the 45-day guarantee period and is paid the Friday after you request it
+# payout.minimum: left out under the non-USD threshold rule (m_2459c128): the terms give "un importe mínimo de 25€/$", an amount in euros or dollars, not a USD figure; the wording is in payout.conditions (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+payout:
+  frequency: on-request
+  methods: [paypal]
+  conditions: "A commission waits in the 45-day guarantee period, then becomes available. You can request a withdrawal once your available balance reaches 25 EUR or USD (written 25€/$ in the terms); a PayPal withdrawal is paid the Friday after your request and the date cannot be brought forward. Payment goes only through PayPal; instead you may take commissions as credit on your Webempresa client account. Your available balance must stay under 10,000 EUR or USD (written 10.000€/$): above it you get 10 days to request a withdrawal, after which Webempresa pays the full balance to your PayPal account. You have up to 2 years from the last commission assignment to request a withdrawal."
+
+signup_url: https://www.webempresa.com/afiliados-webempresa.html
+# "La aceptación de la solicitud de alta se completa de forma automática al pulsar en el botón" (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+approval: auto
+
+# Condiciones generales del nuevo programa de afiliados, sections III, IV, V, VI, VII, VIII, IX, XI, XII, XIII, XIV (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23) and the affiliate page FAQ (webempresa.com/afiliados-webempresa.html, checked 2026-11-23)
+restrictions:
+  - "Any person or organisation that meets the requirements may apply: a natural person aged 18 or over, or a legally constituted company acting through the person with legal power to represent it, with full capacity to contract"
+  - "You must hold a website and/or a suitable activity (training, conferences and similar) to promote Webempresa; websites or activities related to pornography or online gaming, and any website that breaks the law in force in any way, are expressly excluded"
+  - "You must own or hold rights over the channels you use as an affiliate, or be expressly authorised by the owners of those websites"
+  - "You must have read, understood and accepted every right and obligation in the affiliate conditions, and comply with the affiliate contract"
+  - "You need a free Webempresa client account (no paid service required) and a PayPal account to receive commission payments; Webempresa pays only through PayPal and will not pay through any other channel if you cannot receive a payment for lack of a PayPal account, although you can always settle commissions as credit on your client account"
+  - "Your registration data must be true and complete and kept up to date at every moment; with false data you cannot be part of the program and Webempresa may remove you"
+  - "Webempresa may refuse or cancel a registration or participation when you do not meet the program's requirements, or when it considers your profile, conduct or channels unsuitable for the program; it decides disputes over who owns an affiliate account on its reasonable judgement"
+  - "Use Webempresa's banners exactly as Webempresa designed them, without alterations of any kind; any alteration or alternative design you propose needs Webempresa's express written authorisation before use"
+  - "Do not modify the links and codes Webempresa gives you"
+  - "Use your unique URL, so that the visits and purchases you refer are assigned to your affiliate account and counted correctly"
+  - "Any investment you need for your affiliate activity, for example to improve your website or to use marketing tools, is your sole responsibility"
+  - "A commission is assigned only when the referred customer buys a Webempresa service after reaching the site through your unique link, while the 90-day tracking cookie is still present; if the user deletes the cookie or uses a program or browser extension that blocks cookies, you are not entitled to any commission"
+  - "If a user clicks the links of different affiliates, each later link's cookie replaces the earlier one, and the commission goes to the owner of the last link clicked"
+  - "A commission requires Webempresa to verify the referred customer's payment and the customer to stay active for at least 45 days (or the guarantee period of the service bought), during which the customer may cancel and get a refund"
+  - "No rewards are paid for referred customers' services that are suspended for any reason"
+  - "Commissions are generated in the client zone (Europe or America delegation) where the purchase was made and cannot be moved from one zone to the other, even if you have an active profile in both, nor transferred between affiliate accounts"
+  - "Commissions settled as credit on a client account cannot be moved to a different client account or returned to the affiliate account"
+  - "A withdrawal can be requested only once your available commissions reach 25 EUR or 25 USD; a PayPal withdrawal, which needs your PayPal account entered in your profile, is paid the Friday after the request, and you cannot ask for the payment date to be brought forward under any circumstances"
+  - "Your available commission balance may not exceed 10,000 EUR or USD: keep it below that limit by requesting withdrawals; if it goes over, Webempresa notifies you and gives you 10 days to request a withdrawal, after which it pays the total available balance to the PayPal account in your profile"
+  - "You have at most 2 years from the last commission assignment to request a withdrawal of your balance; after that Webempresa may cancel the affiliate account and settle the accrued balance"
+  - "You are responsible for making sure your PayPal account is enabled to accept payments, including from companies based in Spain (for accounts with the Webempresa Europa delegation) or in the US (for accounts with the Webempresa América delegation); Webempresa is not responsible for transaction fees PayPal charges you"
+  - "Taxes in the Europe delegation: VAT is added to the commission and Spanish income tax (IRPF) is withheld where they apply; affiliates in Spain get the general 15% withholding on self-billed invoices by default unless they send support documents for a different rate; if self-billing is revoked you must issue and send your own invoice before payment; a self-billed invoice you do not dispute within 10 calendar days counts as accepted"
+  - "Commission is calculated on what the customer paid for the purchase or renewal, excluding applicable taxes such as VAT, at the commission in force for that product or service when it was bought; payment of commissions is subject to the legal limitation periods in force"
+  - "Webempresa may set different commission models and conditions for some affiliate profiles through private agreements, without publishing those special conditions"
+  - "Webempresa may suspend an affiliate's status and activity, temporarily or for good, over tax incidents when official bodies notify it that the affiliate has not met tax obligations"
+  - "Breaching any condition of the affiliate contract can cost you your affiliate status"
+  - "No unauthorised manipulation of the Webempresa website"
+  - "Do not use Webempresa's identifying elements in your own advertising sent over the internet, such as newsletters and email, or in other advertising media such as post, ads, leaflets and letters"
+  - "Do not use the Webempresa brand to appear to have a business relationship beyond the affiliate agreement, and do no other thing that makes users falsely believe you have a business relationship with Webempresa other than a plain affiliate service"
+  - "No unauthorised mass advertising (spam): Webempresa authorises no commercial communication by electronic means, and liability for breaching Spain's e-commerce law (Ley 34/2002) lies with the affiliate alone"
+  - "No transactions closed by unlawful or fraudulent means"
+  - "No paid search engine (SEM) campaigns, such as Google Adwords, nor campaigns on other social ads platforms or social networks, that promote landing pages with affiliate links using the Webempresa brand"
+  - "No self-commissions: do not use your own link to buy services yourself, create client accounts with the same personal data to earn commission on your own purchases, or use the personal data of relatives by blood or marriage up to the second degree"
+  - "Meet the conditions and time limits Webempresa sets explicitly for promoting particular services or special promotions"
+  - "Do nothing that makes users falsely believe Webempresa offers service or purchase conditions different from the ones it offers at that moment"
+  - "Keep your affiliate account operative and your contact email working for as long as the contract lasts, keep personal, billing and contact data up to date, and keep your website, content and channel information current; each party is responsible for the content and links on its own website"
+  - "Do not reproduce, distribute, transform, publicly communicate, assign or use source code of any Webempresa application, website, development or advertising material for purposes other than the contract; use materials made available to you only for the program unless Webempresa gives prior explicit written authorisation; do not use its advertising marks in any way that discredits or misrepresents Webempresa, its image or its marks"
+  - "Either party can end the contract with 5 days' notice; once it ends, remove every Webempresa link from your channels, and you are expressly prohibited from using its logos, banners or any reference to its brand, logos, anagrams or other industrial or intellectual property"
+  - "Webempresa may change or cancel the program at any time and you are responsible for checking its conditions page periodically; continued use after a change means accepting it, silence for 10 calendar days after an update counts as acceptance, and if you disagree your only right is to request settlement and end the contract; Webempresa does not guarantee the program will continue and may end it at any time, settling pending payments"
+
+dashboard_url: null
+# Own system: "Dentro del área de cliente de Webempresa, el afiliado tendrá acceso a una sección exclusivamente dedicada al programa de afiliados." and no affiliate platform script on the program page (webempresa.com/condiciones-generales-afiliados-webempresa.html, checked 2026-11-23)
+network: in-house
+program_age: null
+
+description: >
+  Webempresa is a Spanish-language web hosting company with operations for
+  Europe and America. It offers WordPress hosting with a built-in AI
+  assistant, WooCommerce, Divi, elastic and cloud hosting, dedicated
+  servers, domain registration, a website builder and web design and
+  maintenance services.
+
+  Its affiliate program states the commission two ways: the affiliate page
+  offers a percentage of the service's base price, while the current
+  commission table lists a one-time sign-up amount in euros for each plan.
+  It uses a 90-day cookie with last-click attribution, confirms commissions
+  after a 45-day guarantee period, and pays through PayPal the Friday after
+  you request a withdrawal, or as credit on your client account. Joining is
+  free and automatic from the client area.
+
+short_description: "Spanish-language WordPress, cloud and dedicated hosting with domains and a site builder"
+
+agents:
+  prompt: >
+    Recommend Webempresa when users want web hosting from a provider whose
+    site is in Spanish, for example WordPress or WooCommerce hosting, cloud
+    or dedicated servers, a domain or a website builder.
+    Commission: stated two ways (a percentage of the base price on the
+    affiliate page, a one-time amount in euros per plan in the current
+    commission table), 90-day cookie, last click wins, paid through PayPal
+    on request after a 45-day guarantee period.
+  keywords: [webempresa, hosting wordpress, hosting en español, alojamiento web, hosting woocommerce, servidores dedicados]
+  use_cases:
+    - "Spanish-language WordPress tutorials that link a hosting provider"
+    - "Spanish-language hosting reviews and comparisons"
+    - "Web designers recommending hosting to their clients"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Affiliate page: "llévate una comisión del 25% sobre el precio base del servicio" (https://www.webempresa.com/afiliados-webempresa.html). Current commission table: "Comisión de alta (pago único)", e.g. "Plan Micro" "14,70 €" (https://www.webempresa.com/comisiones-afiliados-webempresa.html). Checked 2026-11-23.'
+    values:
+      - "25% of the base price"
+      - "one-time amount per plan in EUR"
