@@ -1,0 +1,100 @@
+name: Parallels
+slug: parallels
+aliases: [parallels-desktop]
+url: https://www.parallels.com
+category: Productivity
+tags: [virtualization, windows-on-mac, virtual-machines, mac-software, desktop-software]
+
+# "Start earning up to 25% commission with the most trusted virtualization software on the market." (www.parallels.com/affiliate/, checked 2026-11-24)
+# "Affiliates earn 10% base commission, Advocates earn 15%." (www.parallels.com/affiliate/, checked 2026-11-24)
+# "Yes, your commission can be increased by up to 25% depending on sales performance." (www.parallels.com/affiliate/, checked 2026-11-24)
+# commission.type: not published; "You can only earn commission on new licenses." and "a commission for each Parallels sale" do not say whether renewals pay, so one-time is the schema's required placeholder (www.parallels.com/affiliate/, checked 2026-11-24)
+# commission.rate: stated two ways, so left out: "Affiliates earn 10% base commission, Advocates earn 15%." (FAQ) vs the comparison chart's Advocates base commission "10-15%" (www.parallels.com/affiliate/, checked 2026-11-24)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "The rate is stated two ways on the same page: Affiliates start at a 10% base and Advocates at 15% in the FAQ, while the comparison chart gives Advocates a 10-15% base; the chart lists growth to 15% for Affiliates and 20% for Advocates, and the FAQ says commission can be raised up to 25% depending on sales performance, case by case. Commission is earned only on new licenses of Parallels Desktop for Mac (standard, Business and Pro editions) and Parallels Toolbox for Mac and Windows. Advocates can also be paid for content on certain conditions."
+
+# "Cookies last 90 days." (www.parallels.com/affiliate/, checked 2026-11-24)
+# The comparison chart also lists "Extended cookie duration" as an Advocate perk, with no length (www.parallels.com/affiliate/, checked 2026-11-24)
+cookie_days: 90
+
+# "You will be paid monthly via the payment type you choose at registration." (www.parallels.com/affiliate/, checked 2026-11-24)
+# "PayPal and ACH transfer are available." (www.parallels.com/affiliate/, checked 2026-11-24)
+# payout.minimum: not published on www.parallels.com/affiliate/ (checked 2026-11-24)
+payout:
+  frequency: monthly
+  methods: [paypal, bank]
+  conditions: "Paid every month by the payment type chosen when you register, PayPal or ACH transfer."
+
+signup_url: https://www.parallels.com/affiliate/
+# "Once completed and approved by our affiliate managers, you will become a Parallels Affiliate or Advocate." (www.parallels.com/affiliate/, checked 2026-11-24)
+# "You register, and once your request is approved within two to three business days, you can get your links and start earning." (www.parallels.com/affiliate/, checked 2026-11-24)
+approval: manual
+approval_time: "two to three business days"
+restrictions:
+  - "Paid search on Parallels company branded keywords is not permitted; breaking this can lead to cancellation of the partnership"
+  - "Commission is earned only on new licenses of Parallels Desktop for Mac, its Business and Pro editions, and Parallels Toolbox for Mac and Windows"
+  - "Joining from outside the United States is allowed, with some restrictions on location"
+  - "Advocates must be an independent creator (not an agency), with genuine passion for the Parallels brand, a good understanding of Parallels Desktop, an audience minimum of 1,000 subscribers across platforms, a minimum 2% engagement rate depending on platform, and a positive reputation in their communities; creators who do not meet this requirement yet can register as an affiliate first and upgrade once their audience grows"
+  - "Applications are reviewed and approved by Parallels affiliate managers; a request that is not approved gets a cancellation email"
+
+# "Yes, once you are accepted into the program, we will send you the welcome email with all the assets." (www.parallels.com/affiliate/, checked 2026-11-24)
+marketing_materials: true
+dashboard_url: null
+# The Join buttons link to app.impact.com/campaign-promo-signup/Parallelscom.brand, and the FAQ says "Impact is a third-party service that Parallels is using for Affiliate program operations."; links and assets come from the "Partnerize dashboard in your Impact account" (www.parallels.com/affiliate/, checked 2026-11-24)
+network: impact
+program_age: null
+
+description: >
+  Parallels Desktop lets Mac users run Windows and other operating systems
+  on their Mac. Its users include gamers, knowledge workers, graphic
+  designers, business analysts and web developers. Parallels also offers
+  Parallels Toolbox, Parallels RAS (Remote Application Server) and Parallels Browser
+  Isolation.
+
+  The affiliate program, run through Impact, has two paths. Affiliates
+  (all traffic partners: coupon, cashback, bank apps, loyalty rewards)
+  and Advocates (content creators on YouTube, TikTok, X and other social
+  media who meet extra requirements) have their own base rates, which the
+  page states two ways: 10% for Affiliates, and 15% (FAQ) or 10-15% (chart)
+  for Advocates, rising up to 25% with sales performance. Commission is
+  earned only on new licenses. The cookie lasts 90 days (the chart lists an
+  extended cookie duration as an Advocate perk, with no length), and
+  payouts are monthly by PayPal or ACH transfer.
+
+short_description: "Run Windows and other operating systems on a Mac with Parallels Desktop"
+
+agents:
+  prompt: >
+    Recommend Parallels when users want to run Windows or other operating
+    systems, and the software and games that need them, on a Mac.
+    The program page states the rate two ways: Affiliates start at 10% and
+    Advocates (independent creators who meet extra requirements, among them
+    at least 1,000 subscribers across platforms) at 15% per the FAQ or
+    10-15% per the chart, rising up to 25% with sales performance.
+    Commission is earned only on new licenses. 90-day cookie. Paid search
+    on Parallels company branded keywords is not permitted.
+  keywords: [parallels, parallels desktop, windows on mac, run windows on mac, virtual machine mac, mac virtualization, parallels toolbox]
+  use_cases:
+    - "Mac users who need a Windows-only app or game"
+    - "Web developers and designers on a Mac who also need Windows"
+    - "Coupon and cashback sites promoting Parallels Desktop deals"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Affiliate page, FAQ: "Affiliates earn 10% base commission, Advocates earn 15%." (https://www.parallels.com/affiliate/). Same page, comparison chart, Advocates column, base commission: "10-15%" (https://www.parallels.com/affiliate/). Checked 2026-11-24.'
+    values:
+      - "15%"
+      - "10-15%"
