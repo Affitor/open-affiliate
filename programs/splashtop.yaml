@@ -1,0 +1,170 @@
+name: Splashtop
+slug: splashtop
+aliases: [splashtop-referral-program, splashtop-business-access]
+url: https://www.splashtop.com
+category: Productivity
+tags: [remote-access, remote-support, remote-desktop, endpoint-management, it-support, msp]
+
+# commission.rate: stated two ways, so left out: "Online Purchases: Earn 50% of the Annual Contract Value (ACV) in points" and "Non-Online Purchases: Earn 20% of the Annual Contract Value (ACV) in points" (www.splashtop.com/referral) vs "points in an amount equal to fifty percent (50%) of the dollar value of the first online payment" and "twenty percent (20%) of the dollar value of the first invoiced payment" (www.splashtop.com/legal/referral-terms-and-conditions), checked 2026-11-24
+# commission.type: not published; the terms base the award on "the first online payment" but no page says renewals earn nothing, so one-time is the schema's required placeholder (www.splashtop.com/legal/referral-terms-and-conditions, checked 2026-11-24)
+commission:
+  type: one-time
+  rate: "varies"
+  mode: unknown
+  value: null
+  duration: null
+  conditions: "Rewards are points loaded onto your Splashtop Account and redeemed for gift cards, not cash. For a qualifying subscription purchase made online, the program page FAQ gives 50% of ACV (the Annual Contract Value) as points, and 20% of ACV for qualifying purchases made offline; the Referral Terms instead give 50% of the dollar value of the referral's first online payment and 20% of the first invoiced payment. Each successful referral is capped at $2,500 on the program page and at 2,500 points per valid Confirmed Referral in the Referral Terms, and the FAQ sets no cap on how many eligible referrals you can make in a calendar year. When a customer uses a valid referral link to buy a qualifying Splashtop subscription, they get an exclusive 10% discount code by email."
+
+# cookie_days: not published on www.splashtop.com/referral or www.splashtop.com/legal/referral-terms-and-conditions; the terms set a 21-day Qualifying Period from the start of the referral's free trial instead (checked 2026-11-24)
+
+# payout.frequency: absent under rule #1 (longest delay 90 days > 60): "You will receive your award approximately 45 days from the date the referee subscribes using the link you provided. In some cases, it may be up to 90 days." (www.splashtop.com/referral) and "between forty-five (45) and up to ninety (90) days from the date a Confirmed Referral is verified by Splashtop" (www.splashtop.com/legal/referral-terms-and-conditions), checked 2026-11-24
+# payout.methods: gift cards through the Reward Exchange platform; no enum value (checked 2026-11-24)
+# payout.minimum: not published on either page (checked 2026-11-24)
+payout:
+  conditions: "Points reach your Splashtop Account about 45 days after the referred customer subscribes through your link, and in some cases up to 90 days, per the FAQ; the Referral Terms count 45 to 90 days from the date Splashtop verifies the Confirmed Referral. The wait lets Splashtop audit qualifying purchases for fraud and credit card chargebacks. Points are redeemed for gift cards on a third-party platform, Reward Exchange."
+
+signup_url: https://www.splashtop.com/referral
+# "Anyone who is eligible to participate in the program can simply register and get a personalized link to start referring and earning rewards." (www.splashtop.com/referral, checked 2026-11-24)
+approval: auto
+
+# FAQ on www.splashtop.com/referral and Splashtop Referral Program Terms & Conditions, last updated September 11, 2025 (www.splashtop.com/legal/referral-terms-and-conditions), checked 2026-11-24
+restrictions:
+  - "To join you must meet these requirements: be a citizen or a permanent resident of the United States, of Canada (excl. Quebec), of the EU or of the UK"
+  - "You must also be physically located and actively domiciled in one of those regions"
+  - "Residents of Quebec, Canada are not eligible, and anyone located in Quebec may not participate in the Program"
+  - "Minimum age: 18 years old, or older where your jurisdiction's legal age of majority, as specified by applicable law, is higher"
+  - "You must not be classified or considered by Splashtop, as it determines, an Invalid Referrer, and you may not be in breach or violation of any term in the Splashtop Terms or in the Referral Terms; joining requires compliance with Splashtop's Terms and the Referral Program Terms"
+  - "Any decision Splashtop makes about the Program, including on these Referral Terms, shall be final and, in all respects, binding on you; entering the Referral Terms means you agree to be bound by it"
+  - "Invalid Referrers may not participate, including the employees, officers, directors, agents, resellers, affiliates and representatives of Splashtop, and those of Splashtop's business partners; an affiliate here is a person that controls you, is controlled by you, or shares common control with you, whether directly or else indirectly via one or more intermediaries"
+  - "Also ineligible as Invalid Referrers: the parents, subsidiaries, affiliated companies, agents, resellers, wholesalers, channel partners, and promotion and advertising agencies of Splashtop and of Splashtop's business partners; everyone in this bullet and the previous one together are the Splashtop Entities (collectively), and members of the same household as, and immediate family members of, any Splashtop Entity are ineligible too"
+  - "Also ineligible: any organization that has an agreement with Splashtop to promote Splashtop's products and services to its members, franchisees or other participants; government officials; entities owned or controlled by a government, plus their affiliates and employees; political candidates and political parties"
+  - "Also ineligible: any individual or entity Splashtop determines to be in breach of the Referral Terms or otherwise abusing the Program"
+  - "To be a Referrer, register and activate a Splashtop Account, accept the Program's Referral Terms in addition to the Splashtop Terms, and keep the account in good standing; you need not already be a Splashtop customer (an existing Customer) to join the Program as a Referrer"
+  - "EU and UK residents or data subjects must give explicit consent by checking the appropriate checkboxes when registering for the Program"
+  - "Splashtop gives notice of any major material change to the Referral Terms or to how your personal information is processed in the Program; for any such changes, particularly one that affects your privacy rights, you are required to provide renewed consent before it takes effect for your participation to continue, and if you do not give renewed consent, your participation in the Program is discontinued"
+  - "A Referrer sharing a Referral Link represents that it is not actively engaged in negotiations toward a separate agreement with Splashtop covering marketing, promotion or sale of Splashtop products (including Qualifying Products), and must not accept an Award while such active negotiations go on"
+  - "Share your Referral Link online only by copying it from your Splashtop account's referral dashboard and sending it through one of these options: a direct message or direct email to the Referral, a social media post that meets the Section 6(C) requirements, or sharing it directly with a Referral"
+  - "Invalid Referrals are ineligible for earning Awards: any attempt to refer yourself, or to refer an existing Customer"
+  - "Also ineligible: purchases of Qualifying Products a Referral makes once the Qualifying Period has expired, and attempts to refer anyone whose prospective business Splashtop already procured, either directly or by alternative means"
+  - "Also ineligible: any purchase that results from an Invalid Referrer's efforts, or from a Referrer using a macro, script or other automated means to share the Referral Link"
+  - "A valid referral is any customer that had not signed up for a free trial and/or subscribed to Splashtop's products before you made the referral"
+  - "A qualifying purchase must come within 21 days after the Referral starts a trial from your referral link page, inside the Qualifying Period of twenty-one (21) days counted from the free trial start"
+  - "Only a new subscription qualifies: a purchaser who is a current subscriber, had a paid Splashtop subscription during the past year, or is already an existing Customer does not"
+  - "Qualifying Products are listed two ways: the Referral Terms name Splashtop Remote Access (from Business Access Pro up), Splashtop Remote Support (from SOS+10 up), Foxpass and Splashtop Remote Support for MSPs, while the FAQ names new subscriptions to Foxpass, Splashtop Enterprise, Splashtop Remote Support and Splashtop Remote Access in its Pro or Performance plans"
+  - "Non-qualifying products, as listed in the Referral Terms, include Splashtop Classroom, Splashtop Enterprise, Mirroring360, Productivity Pack, Anywhere Access and Enterprise for Remote Support, etc., which do not qualify for this Program; the FAQ lists Splashtop Classroom, Splashtop Remote Access Solo, SRS Premium, Mirroring360, Productivity Pack and Anywhere Access, etc."
+  - "An Award will be disqualified when the Referral buys a Qualifying Product by any method besides converting the free trial (offered once they submit contact information through a Referral link) into a paid, new subscription, including a purchase via a third party reseller"
+  - "The purchase is also disqualified when the Referral, within the Qualifying Period, buys using an email address that is not the one submitted to your Referral link, or has browser settings that corrupt or block Splashtop's purchase tracking"
+  - "The new subscription must start on the web site that the referral link uses: the Referral Terms disqualify an Award bought on any domain other than my.splashtop.com, while the FAQ names my.splashtop.com or my.splashtop.eu"
+  - "A purchase does not qualify in case of fraud or suspected fraud, a refund request or a credit card chargeback; an Award is disqualified when Splashtop has reason to believe the Referral takes part in, or buys in connection with, an act of abuse or fraud, actual or suspected"
+  - "An Award is also disqualified when the first payment on the new subscription gets a chargeback or is otherwise refunded"
+  - "Disqualified Awards are deducted from your balance, and Splashtop reserves the right to disqualify you from participating in the Program if your point balance goes negative"
+  - "The Referral Program offer and rewards can't be applied retroactively: if the people you referred don't sign up through the special page where they were referred, the referral code is not something you can apply later, neither after making a purchase nor after starting a trial; Awards may not be applied retroactively either"
+  - "Awards are non-transferable and carry no cash redemption value; they are subject to the separate terms and conditions of the third-party redemption platform, as well as the terms of any chosen third-party retailer whose gift card you redeem"
+  - "Located in a country where you cannot receive or redeem Awards? Splashtop is not obligated, under any circumstances, to provide an alternative award, and you may be required to forfeit some or all accumulated Awards, and there is no liability or obligation on Splashtop to compensate you otherwise"
+  - "The Referrer alone is responsible for all applicable taxes on any Award and its payment, agrees to cooperate with Splashtop's reasonable requests for its tax law compliance, and additionally is solely responsible for incidental expenses and every other cost or expense the Referrer incurs relating to participation in the Program"
+  - "Representations and warranties: you represent that your Referrals are located in the US (EU/UK terms: in the European Union or United Kingdom), and when submitting a Referral you have all necessary rights, gave all necessary notices and received the Referral's explicit, informed, written consent to be sent a Referral Link; under the EU/UK terms Splashtop is not liable if you fail to get appropriate consent or to comply with applicable data protection laws when you send Referral Links"
+  - "You also represent and warrant that your Referral contacts are at least eighteen (18) years of age or of the legal age of majority (EU/UK: the legal age of data consent, whichever is greater)"
+  - "You will not enter into your Referral Link anyone's personal and/or contact information without the express knowledge and consent of that person or entity (EU/UK: freely given and informed consent, consistent with privacy law requirements); notwithstanding the foregoing, if either you or your Referral are located in Canada (Quebec excluded), you will not submit another person's personal and/or contact information at all, regardless of their consent"
+  - "Unless prohibited by applicable law, Splashtop is authorized to use, analyze, modify and also publish your name plus other information you provide, for example in its website or marketing and promotional materials; in the EU/UK version this needs your separate, prior, explicit consent for limited marketing and promotional purposes, which may be withdrawn"
+  - "Splashtop may contact you and your Referrals about its offerings, products and services (EU/UK: only where you or your Referral consented to marketing communications), and may contact you about the status of your Referrals"
+  - "Your activities and participation in the Program, and your acceptance and use of Awards, must not violate any applicable laws, your employer's policies or other obligations or duties you owe to your employer"
+  - "Use the Program only in good faith and in compliance with the Referral Terms and all applicable laws and regulations, and you must not participate where the Program is prohibited in your jurisdiction of residence (where you reside)"
+  - "Prohibited: creating for yourself, or assisting others in creating, multiple or duplicate or fake and/or fraudulent Splashtop Accounts intended for submitting chargebacks or other attempts at getting a refund from Splashtop once Awards are earned"
+  - "Prohibited: entering another person's or entity's information into your own Referral Link without that party's consent, and in Canada at all, even with consent"
+  - "Prohibited: referring contacts to persons, or sending your Referral Link to persons, you do not personally know in a manner that Splashtop believes constitutes spam, unsolicited communications or otherwise undesirous communications; this may disqualify you from Program participation"
+  - "Prohibited: distributing Referral Link(s) by bulk email to any persons you do not know, including the sharing of Referral Link(s) with recipient(s) you do not know on websites or on social media"
+  - "Prohibited: any other promotion or sharing of a Referral Link in any manner that may, in Splashtop's sole and absolute discretion, constitute spam or unsolicited commercial communications, or appear to constitute them"
+  - "Prohibited: impersonating any person, or misrepresenting in any other way your relationship with or to Splashtop"
+  - "Prohibited: sending Referral Links to persons under eighteen (18) years of age, or under the legal age of majority, for participation in the Program, or attempting yourself to participate while being under that age"
+  - "Prohibited: transmitting any unauthorized or unsolicited advertising or promotional material, or any similar solicitation of another form (e.g. spamming)"
+  - "Prohibited: interfering with or disrupting any networks, servers or systems connected to the Program"
+  - "Prohibited: doing anything that harms or damages the reputation, goodwill or brand of Splashtop or of any service providers that assist Splashtop in providing the Program, or that may harm or damage them"
+  - "Prohibited: transmitting any file containing viruses, worms, Trojan horses or other contaminating or destructive features, and using any automated system, macro or script to participate in the Program"
+  - "Prohibited: infringing the intellectual property rights of Splashtop, of its service providers or of any third parties, and stalking, harassing or harming any other individual"
+  - "Prohibited: referring to yourself, or to any company that you represent, or referring a company which hired you or a company you represent, so as to provide consulting, advice or systems integration about any Qualifying Product or other similar service"
+  - "Prohibited: using the Program in a way that Splashtop, in its absolute discretion, considers to be excessive, unreasonable or in bad faith"
+  - "Prohibited: using the Program in a way that breaches an applicable international, national or local law or regulation, or that is fraudulent, unlawful or wrongful in any way, or has an unlawful, fraudulent or wrongful effect or purpose"
+  - "Social media: you are the one responsible for ensuring that each of your posts on a social network complies with this Program, with that network's terms of use and with other applicable laws, statutes and regulations"
+  - "If you post your Referral Link on a social network (such as Facebook, Instagram, LinkedIn, Pinterest, Tik Tok, Twitter or similar platforms), you must disclose that it is a referral link and that Splashtop does not directly sponsor the post; the recommended wording also states you are NOT an agent or employee of Splashtop"
+  - "Referrers are responsible for keeping their sign-in credentials confidential, are fully responsible for all activities connected with their account or with their Referral Link, and agree to notify Splashtop immediately if they believe the confidentiality of their credentials has been compromised or suspect unauthorized use of their Splashtop Account"
+  - "Regulatory compliance: you represent that you comply with all applicable anti-bribery and anti-corruption laws (Bribery Laws), including the FCPA (the United States Foreign Corrupt Practices Act), and do not engage in any activity, conduct or practice that would be an offense under the FCPA, wherever it has been carried out"
+  - "Notify Splashtop immediately and in writing if you learn or else suspect that any law enforcement agency is investigating you over corrupt practices or a breach of the Bribery Laws connected with your activities, and do not do, or omit to do, an act that will lead or cause Splashtop to breach any Bribery Laws"
+  - "Do not share your Referral Link with any person or entity for whom you were retained to provide consulting, business advice or systems integration to a governmental entity, or to a prime or a subcontractor under a governmental contract"
+  - "Make all required disclosures describing all potential Awards you may claim to any actual or potential consumers or customers, including local government and other government customers, education end users, and customers whose purchase of products or services will be reimbursed through a government program or grant"
+  - "You certify that you are not a government entity, that you have not accepted Awards relating to your performance of a government contract that requires neutral or unbiased advice from you to the government on the types of technology products and solutions Splashtop provides, and that accepting Awards will violate no government rules or regulations, including those on kickbacks or conflicts of interest"
+  - "You further acknowledge that Splashtop may elect to delay or withhold an Award you would otherwise be entitled to if it develops a reasonable suspicion that some part of this certification is or has become inaccurate, if you or Splashtop becomes a target of a government investigation or action relating to the Program, or if it decides to discontinue the Program because of a change in the regulatory environment"
+  - "You agree to release, indemnify and hold Splashtop and all Splashtop affiliated entities harmless from any losses, claims, liabilities, damages and expenses, including court costs, collection fees and reasonable attorneys' fees, if you breach Section 6 or otherwise violate the Referral Terms"
+  - "Splashtop reserves the right to disqualify any individual that it finds tampering with the Program, or that it suspects of abuse, fraud or breach of the Referral Terms (a Disqualifier), and to seek any and all damages, including all attorney's fees, for any Disqualifier you attempt"
+  - "Splashtop may refuse an Award that it reasonably believes violates applicable laws or regulations or the Referral Terms, or that otherwise constitutes an abuse"
+  - "Splashtop reserves the right to terminate your account (Splashtop Account), to deactivate any relevant Referral Link(s) of yours, and to require that you stop the sharing of Referral Link(s) in any manner that applicable law does not permit"
+  - "You agree to provide all reasonable information, assistance and cooperation that Splashtop requests for any assessment or review of your compliance with the Referral Terms"
+  - "Splashtop may terminate its agreement with you, and your right to take part in the Program, at any time and for any reason, with cause or without cause, and without any additional benefit equal to the points value that you have earned or would have earned in Awards"
+  - "Splashtop may also terminate the Program with no obligation to give you notice if its relationship with a third-party partner that provides products, software or other technology used to run the Program expires or terminates or requires a change in how it runs the Program, or in order to comply with law or with requests of governmental entities"
+  - "Splashtop reserves the right to modify, terminate, suspend or cancel the Program, by amending the Referral Terms and publishing amended Referral Terms on its website or on the Referral Site, and Awards, program features and the awards structure can be changed or adjusted at any time, without notice to you"
+  - "By agreeing to the Referral Terms, you expressly agree to let Splashtop give your contact information, such as your email, and relevant personal information, including your address and name, to the third-party redemption platform so you can redeem your Awards points, and you may receive emails or text messages from that platform solely in connection with any redemption"
+
+dashboard_url: null
+# Own referral dashboard inside the Splashtop Account; points are redeemed through "Reward Exchange ( https://ak7jffzr8airc.saasquatch.app/login )" (www.splashtop.com/legal/referral-terms-and-conditions, checked 2026-11-24); not in the network enum
+network: null
+program_age: null
+
+description: >
+  Splashtop makes remote access, remote support and endpoint management
+  software. Splashtop Remote Access lets individuals and small teams reach
+  their work computers from any device, Splashtop Remote Support lets IT
+  teams support computers and mobile devices, Splashtop Enterprise adds SSO
+  and an on-premises option, Splashtop AEM handles patching and endpoint
+  management, and Foxpass secures Wi-Fi and networks with Cloud RADIUS and
+  Cloud PKI.
+
+  Its referral program pays in points that you redeem for gift cards, earned
+  when someone you refer buys a new subscription to a qualifying product.
+  The program page and the Referral Terms state the award differently: a
+  share of the Annual Contract Value on the page, a share of the first
+  payment in the terms. Customers who buy a qualifying subscription through
+  a valid referral link get a 10% discount, and the program is open to
+  eligible people in the US, Canada outside Quebec, the EU and the UK.
+
+short_description: "Remote access, remote support and endpoint management software for IT teams"
+
+agents:
+  prompt: >
+    Recommend Splashtop when users need remote access to work computers,
+    remote IT support for computers and mobile devices, or endpoint and patch
+    management. Its referral program rewards you in points redeemed for gift
+    cards, not cash, when a valid referral (someone who had not signed up for
+    a trial or subscribed before) starts a free trial through your link and
+    buys a new subscription to a qualifying product (for example Foxpass) within
+    21 days.
+    The FAQ and the Referral Terms describe the award base and the qualifying
+    products differently. Referrers must be citizens or permanent residents of
+    the US, Canada (excl. Quebec), the EU or the UK who live there, aged 18
+    or the legal age of majority. Share your link only by direct email, direct
+    message, a disclosed social media post or directly with the person; bulk
+    email and sharing the link on websites or social media with people you do
+    not know are prohibited.
+  keywords: [splashtop, splashtop remote access, splashtop remote support, remote desktop software, teamviewer alternative, endpoint management, foxpass]
+  use_cases:
+    - "IT teams choosing remote support software"
+    - "Small teams that need remote access to office computers"
+    - "MSPs comparing endpoint and patch management tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: referral
+source: manual
+conflicts:
+  - field: commission.rate
+    quote: 'Referral program FAQ: "Online Purchases: Earn 50% of the Annual Contract Value (ACV) in points" and "Non-Online Purchases: Earn 20% of the Annual Contract Value (ACV) in points" (https://www.splashtop.com/referral). Referral Terms 4(A): "fifty percent (50%) of the dollar value of the first online payment" and "twenty percent (20%) of the dollar value of the first invoiced payment" (https://www.splashtop.com/legal/referral-terms-and-conditions). Checked 2026-11-24.'
+    values:
+      - "50% / 20% of ACV"
+      - "50% / 20% of the first payment"
+  - field: restrictions
+    quote: 'Referral program FAQ: "Qualifying products for the referral program are new subscriptions to Splashtop Remote Access (Pro or Performance), Splashtop Remote Support, Splashtop Enterprise, and Foxpass." (https://www.splashtop.com/referral). Referral Terms 4(B)(vi): "such as Splashtop Enterprise, Splashtop Classroom, Mirroring360, Anywhere Access, Productivity Pack, Enterprise for Remote Support, etc. do not qualify for this Program" (https://www.splashtop.com/legal/referral-terms-and-conditions). Checked 2026-11-24.'
+    values:
+      - "Splashtop Enterprise qualifies"
+      - "Splashtop Enterprise does not qualify"
