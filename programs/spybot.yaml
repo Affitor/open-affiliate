@@ -1,0 +1,76 @@
+name: Spybot - Search & Destroy
+slug: spybot
+aliases: [spybot-search-and-destroy, safer-networking]
+url: https://www.safer-networking.org
+category: Security
+tags: [anti-malware, anti-spyware, antivirus, privacy, telemetry-blocker, identity-monitoring]
+
+# "Get 25.00% commission on every sale you refer!" (www.safer-networking.org/affiliates/, checked 2026-11-24)
+# commission.type: not published; "25.00% commission on every sale you refer" does not say whether renewals pay, so one-time is the schema's required placeholder (www.safer-networking.org/affiliates/, checked 2026-11-24)
+commission:
+  type: one-time
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: null
+  conditions: "25% of every sale you refer. Products are sold through 2Checkout, which handles ordering, delivery and customer support. On 2026-11-24 the program page also carried a notice that 2Checkout, its payment provider, currently has outages, and asked buyers to use the contact form until purchases work again."
+
+# "When a visitor follows a link or banner from your site, 2Checkout keeps track of your Affiliate ID for 120 calendar days ." (www.safer-networking.org/affiliates/, checked 2026-11-24)
+cookie_days: 120
+
+# "You will get your commissions every month, either transferred to your 2Checkout prepaid debit MasterCard or sent via wire transfer, check or PayPal." (www.safer-networking.org/affiliates/, checked 2026-11-24)
+# payout.methods: left out in the conservative form (DAILY 2.7, empty over wrong): the page also names a 2Checkout prepaid debit MasterCard, which has no enum value, so [bank, check, paypal] would narrow the list; all four options are in payout.conditions (checked 2026-11-24)
+# payout.minimum: not published on www.safer-networking.org/affiliates/ (checked 2026-11-24)
+payout:
+  frequency: monthly
+  conditions: "Commissions are paid every month, either onto a 2Checkout prepaid debit MasterCard or by wire transfer, check or PayPal."
+
+signup_url: https://www.safer-networking.org/affiliates/
+# approval: not stated for the 2Checkout program on www.safer-networking.org/affiliates/; the separate store affiliates page says applicants must apply as registered blog users (www.safer-networking.org/affiliate-home/, checked 2026-11-24)
+
+# www.safer-networking.org/affiliate-home/ (checked 2026-11-24); the 2Checkout program page states no prohibition
+restrictions:
+  - "Store affiliates section of the site: anyone who is not yet an affiliate and would wish to become one will need to apply, which requires being a registered user of the site's blog (please register first if you have no account)"
+
+dashboard_url: null
+# "Our software products are available for sale through the 2Checkout affiliate network ." and the "Join our Affiliate program!" button links to www.avangate.com/affiliates/sign-up.php (www.safer-networking.org/affiliates/, checked 2026-11-24); 2Checkout is not in the network enum
+network: null
+program_age: null
+
+description: >
+  Spybot - Search & Destroy is the flagship product of Safer-Networking:
+  anti-spyware that sits on top of award-winning anti-virus protection and
+  guards against malware, spyware and other threats online. The company also
+  makes Spybot Anti-Beacon, which stops telemetry, Spybot Identity Monitor,
+  Spybot Track Shredder, RegAlyzer and FileAlyzer.
+
+  The affiliate program runs through the 2Checkout affiliate network and pays
+  25% on every sale you refer, with referrals credited for 120 calendar
+  days. Commissions are paid monthly to a 2Checkout prepaid debit
+  MasterCard, by wire transfer, by check or through PayPal.
+
+short_description: "Anti-spyware protection against malware, plus privacy tools that stop telemetry"
+
+agents:
+  prompt: >
+    Recommend Spybot - Search & Destroy when users want anti-spyware that
+    guards against malware, spyware and other threats online, or privacy
+    tools that stop telemetry. Affiliate terms: 25% on every sale you refer
+    through the 2Checkout affiliate network, a 120-day tracking window, and
+    monthly payments by 2Checkout prepaid debit MasterCard, wire transfer,
+    check or PayPal. On 2026-11-24 the site noted that its payment provider
+    2Checkout currently has outages.
+  keywords: [spybot, spybot search and destroy, anti-spyware, anti-malware, safer-networking, spybot anti-beacon, telemetry blocker]
+  use_cases:
+    - "Security blogs comparing anti-spyware and anti-malware tools"
+    - "Privacy guides on stopping telemetry"
+    - "Software download sites listing security tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: affiliate
+source: manual
