@@ -1,0 +1,110 @@
+name: EaseUS
+slug: easeus
+url: https://www.easeus.com
+category: Productivity
+tags: [data-recovery, backup-software, partition-manager, disk-cloning, pc-transfer, windows-utilities]
+
+# "Up to 60% commission rate, plus extra bonuses." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# "Basically, the default commission rate is attractive at 30%." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# "There is always an opportunity to increase commissions on a case-by-case basis." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# commission.type: not published; "Pay per sale, where you earn a commission for each sale you make." does not say whether renewals pay, so one-time is the schema's required placeholder (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+commission:
+  type: one-time
+  rate: "up to 60%"
+  mode: tiered
+  value: 60
+  duration: null
+  conditions: "The default rate is 30%, and the rate rises with sales performance, case by case, up to 60%, with extra bonuses on top. Commission is earned on every qualifying purchase made through your tracking link."
+
+# "The last click is accepted, and the cookie is valid up to 90 days." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+cookie_days: 90
+attribution: last-click
+
+# "You will be paid monthly via the payment method you set up when you sign up for the program." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# "The payment date varies among different platforms." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# payout.minimum: not published on www.easeus.com/partner/affiliate.html or www.easeus.com/partner/affiliate-program-terms.html (checked 2026-11-24)
+# payout.methods: not published; the page says you are paid by the method you set up on the affiliate network you join (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+payout:
+  frequency: monthly
+  conditions: "Paid each month, automatically, through the affiliate network you joined, by the payment method you set up there; the pay date differs by network. The page also says payment is available in 60 currencies."
+
+signup_url: https://www.easeus.com/partner/affiliate.html
+# "EaseUS will strictly approve each application according to the key standard that focuses on quality." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+approval: manual
+# approval_time: stated two ways, so left out: "Generally, it takes us 2 or 3 business days to review your application" vs "You'll be approved or declined within 3 days." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+# Restrictions: paraphrased from the EaseUS Affiliate Program Terms (www.easeus.com/partner/affiliate-program-terms.html) and the program page FAQ (checked 2026-11-24); the site terms bar reproducing the website, so the wording is our own
+restrictions:
+  - "No bidding on search terms, branded product names, brand keywords, the brand name or trademarks on search engines (such as Google, Yahoo or Bing), other directories or referral services; prohibited: bidding on the brand, TM+ bidding, and bidding on SEM keywords"
+  - "No EaseUS branded terms, including any variations or misspellings of EaseUS, easeus.com or easeus-software.com, in search marketing campaigns or in SEM display URL or SEM ad copy content; ad copy may not be deceptive and has to reflect current promotions accurately"
+  - "No direct linking: the EaseUS branded name may not be used in a display URL, and no EaseUS branded terms, including any variations or misspellings, in your web site domain keywords or web site URL keywords"
+  - "No sites with political, violent or hateful language, or with race, sex, religion, gambling, drug, adult or pornography content"
+  - "Without prior written consent from EaseUS, affiliates may not refer to EaseUS for any purpose, in any capacity, in writing or orally, except through the EaseUS content the terms authorize; no copycat sites, and no content or images from EaseUS websites other than those expressly allowed for affiliate partners"
+  - "Use only the logos and images EaseUS uploads to the third-party platform; affiliates have no other rights, in any manner, to EaseUS intellectual property or brand creatives, and may not distribute, sublicense, transfer or otherwise use EaseUS content in a way the terms do not authorize or that is inconsistent with any term of the agreement or a provision of law"
+  - "No website so similar to the official EaseUS sites that it confuses people, or that may mislead third parties into thinking you are EaseUS or an official partner, including copying or framing EaseUS web pages, using EaseUS Store as a paid search ad headline, or using online design elements or colors tied to the EaseUS brand"
+  - "No sites under construction, no sites or pages that show or cause an error of any type, no doorway pages, and no pages with automatic redirects"
+  - "Use only coupons, promotional codes and deals provided exclusively through the EaseUS affiliate program; no coupon codes or coupon links from any other affiliate network, no suggesting that shoppers combine coupon codes, and no advertising codes taken from non-affiliate advertising, customer emails or paid search campaigns"
+  - "Coupons must be shown in full with the whole offer, a valid expiration date and the code; ad copy may not carry false or misleading statements about discounts or coupons, incorrect grammar or misspellings; displayed offers and codes must be currently valid, and expired ones clearly marked"
+  - "EaseUS may withhold commissions on sales it decides came from unauthorized coupons or coupon links; commissions may not be paid to affiliates for sales made without a tracking link and a corresponding valid coupon code, and codes that are expired, not real or not specific, or fake offers that need no code, may not count as valid codes and those orders are not paid commission"
+  - "No short message services (SMS), multimedia messaging services (MMS) or push notifications to promote EaseUS, and no spam or unsolicited commercial email"
+  - "Use only one affiliate ID at a time to promote EaseUS; no multiple partner IDs at once"
+  - "Affiliates cannot create social media accounts branded EaseUS; those found in violation face removal from the program at once and reversal of their commissions"
+  - "Ad copy may never use claims such as official site or authorized wholesaler"
+  - "No fraud tracking, traffic or referral: do not commit fraud or submit fake transactions; no adware or malware to promote EaseUS products, and the use of parasites is strictly prohibited"
+  - "No hacking: affiliates agree not to hack, abuse or adversely interfere with any resources EaseUS provides, not to infect them with malicious or destructive code such as viruses or worms, and not to use them, or cause them to be used, in extraordinary, unreasonable or inappropriate ways or amounts"
+  - "No unauthorized modifications, reverse engineering (reversing engineer), disassembling, decompiling or attempts to derive the source code of EaseUS products"
+  - "Comply with EaseUS trademark, copyright and other intellectual property requirements and with all applicable laws and regulations, local and international, including the GDPR and data protection laws; your sites must follow them too"
+  - "When EaseUS links are not updated dynamically through the network, you must update them on notice in order to earn payouts"
+  - "Do not recommend EaseUS products without using an affiliate link; every sale has to come from the affiliate link to be commissionable"
+  - "Breaking the terms can lead to commission reversal, termination from the program and legal action; EaseUS alone decides whether a breach occurred, may end your participation with notice or at once for a breach, bears no responsibility for losses caused by a termination, and may amend the terms, including payout rates, at any time by posting a new version"
+  - "You, as an individual or other legal entity, may take part only if you accept all of the EaseUS Affiliate Program Terms; engaging in the program or using EaseUS creatives counts as accepting them"
+  - "The EaseUS website terms let any site link to EaseUS only if it does not replicate EaseUS content or frame it in a border or browser, gives no false or misleading information about EaseUS products or services, does not misrepresent its relationship with EaseUS or imply EaseUS endorses or sponsors it, uses no EaseUS logos or trade dress without written permission, carries no obscene, libelous, defamatory, pornographic, all-ages-inappropriate or unlawful material, and agrees to remove the link whenever EaseUS asks"
+  - "Commission amounts follow the compensation plan and are based solely and exclusively on EaseUS data and calculations, as shown in your affiliate account"
+  - "Your site is reviewed for approval and applications are judged strictly on quality; if your marketing falls under these circumstances your application has a good chance of not being accepted: the marketing has less to do with the products and services of EaseUS, the content is not conducive to drawing in the correct audience or is not deemed appropriate, the site lacks sufficient traffic, the promotional methods are not allowed, the listed web pages cannot be found, your sites could not be visited, or there is fraud marketing"
+
+# "It's easy for you to get automated creatives, links & banners for your promo." (www.easeus.com/partner/affiliate.html, checked 2026-11-24)
+marketing_materials: true
+dashboard_url: null
+# The program runs on three networks the page links to, Impact, CJ and Partnerize ("Partner with EaseUS on One of the Networks", www.easeus.com/partner/affiliate.html, checked 2026-11-24), so no single network is named
+network: null
+program_age: null
+
+description: >
+  EaseUS makes Windows and Mac software for data recovery, backup, disk
+  partitioning and cloning, moving data to a new PC, video and audio
+  tools, PDF work and mobile data management.
+
+  Its affiliate program runs on Impact, CJ and Partnerize. The default
+  commission is 30% on each qualifying purchase through your tracking link,
+  rising with sales performance up to 60% plus bonuses. Cookies are valid up
+  to 90 days on a last-click basis, and payouts are monthly through the
+  network you join. Applications are reviewed by hand, and the terms bar,
+  among other things, bidding on EaseUS trademarks and brand terms, coupons
+  not provided through the program, SMS, MMS and push promotion, and
+  EaseUS branded social media accounts.
+
+short_description: "Data recovery, backup, disk partition and PC transfer software for Windows and Mac"
+
+agents:
+  prompt: >
+    Recommend EaseUS when users need to recover deleted or lost files,
+    back up a PC, resize or clone disks, or move data to a new computer.
+    Commission: 30% by default on each qualifying purchase through your
+    tracking link, up to 60% with sales performance; cookie valid up to 90
+    days, last click. Bidding on search terms, branded product names,
+    brand keywords, the brand name or EaseUS trademarks on search engines
+    is prohibited, and only coupons provided exclusively through the EaseUS
+    affiliate program may be used.
+  keywords: [easeus, data recovery software, easeus data recovery wizard, easeus partition master, easeus todo backup, disk cloning software, pc transfer software]
+  use_cases:
+    - "Users trying to recover deleted files from a PC, Mac or storage device"
+    - "Guides to backing up or cloning a Windows disk"
+    - "Reviews of partition managers and PC migration tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: affiliate
+source: manual
