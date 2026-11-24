@@ -26,11 +26,8 @@ payout:
   conditions: "Commissions are paid every month, either onto a 2Checkout prepaid debit MasterCard or by wire transfer, check or PayPal."
 
 signup_url: https://www.safer-networking.org/affiliates/
-# approval: not stated for the 2Checkout program on www.safer-networking.org/affiliates/; the separate store affiliates page says applicants must apply as registered blog users (www.safer-networking.org/affiliate-home/, checked 2026-11-24)
-
-# www.safer-networking.org/affiliate-home/ (checked 2026-11-24); the 2Checkout program page states no prohibition
-restrictions:
-  - "Store affiliates section of the site: anyone who is not yet an affiliate and would wish to become one will need to apply, which requires being a registered user of the site's blog (please register first if you have no account)"
+# approval: not stated on www.safer-networking.org/affiliates/ (checked 2026-11-24)
+# restrictions: none stated on www.safer-networking.org/affiliates/ (checked 2026-11-24)
 
 dashboard_url: null
 # "Our software products are available for sale through the 2Checkout affiliate network ." and the "Join our Affiliate program!" button links to www.avangate.com/affiliates/sign-up.php (www.safer-networking.org/affiliates/, checked 2026-11-24); 2Checkout is not in the network enum
