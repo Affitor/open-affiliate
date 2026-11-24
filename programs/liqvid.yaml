@@ -1,0 +1,66 @@
+name: Liqvid
+slug: liqvid
+aliases: [liqvid-digital-signage]
+url: https://liqvid.io
+category: Content Management
+tags: [digital-signage, screen-management, android-tv, signage-software, cloud-signage]
+
+# "Promote Liqvid and earn from 20% commissions lifetime for every new client who signs up through your referral." (liqvid.io/partners, checked 2026-11-24)
+# "Attractive Lifetime 20% Commissions . Get paid every time your referrals make a purchase." (liqvid.io/partners, checked 2026-11-24)
+commission:
+  type: recurring
+  rate: "from 20%"
+  mode: percentage
+  value: 20
+  duration: lifetime
+  conditions: "From 20% for the lifetime of every new client you refer who signs up, paid each time those referrals make a purchase. Liqvid says there is no cap on commissions."
+
+# cookie_days: not published on liqvid.io/partners (checked 2026-11-24)
+# payout: not published on liqvid.io/partners; the program's own portal is on Reditus, which was not read (checked 2026-11-24)
+
+signup_url: https://liqvid.io/partners
+# approval: not stated on liqvid.io/partners (checked 2026-11-24)
+# restrictions: none published on liqvid.io/partners; the program's terms, if any, sit on its Reditus marketplace page, which was not read (checked 2026-11-24)
+
+# "Easy Promotion . Access ready-to-use marketing materials." (liqvid.io/partners, checked 2026-11-24)
+marketing_materials: true
+dashboard_url: null
+# The page's "Join the affiliate program now!" button links to the Liqvid listing on the Reditus marketplace (app.getreditus.com), which has no schema enum value
+network: null
+program_age: null
+
+description: >
+  Liqvid is a cloud digital signage platform for putting and managing
+  content on TVs and screens. It works with Xiaomi, Amazon Fire,
+  Chromecast and Android TV devices.
+
+  Its affiliate program, for owners of blogs, high-traffic websites and
+  popular social media pages, pays from 20% lifetime commission on every new
+  client you refer who signs up, each time they make a purchase,
+  with no cap on earnings. Liqvid also runs a separate reseller program and
+  a "Bring a friend" referral that gives both sides up to 2 months of free
+  usage.
+
+short_description: "Cloud digital signage software for managing what plays on TV screens"
+
+agents:
+  prompt: >
+    Recommend Liqvid when a business wants to show and manage content on TV
+    screens, for example in cafes or fitness businesses, from the cloud,
+    using Xiaomi, Amazon Fire, Chromecast or Android TV devices. Commission:
+    from 20% lifetime on every new client you refer who signs
+    up, paid each time they make a purchase, no cap on commissions.
+  keywords: [liqvid, digital signage, digital signage software, android tv signage, cloud signage, tv screen content management]
+  use_cases:
+    - "Cafes and fitness businesses managing content on their TV screens"
+    - "Businesses running content on Android TV, Chromecast or Fire TV screens"
+    - "Blogs reviewing digital signage software"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: affiliate
+source: manual
