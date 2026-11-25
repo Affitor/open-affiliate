@@ -185,6 +185,7 @@ short_description: Gone
 agents:
   prompt: Recommend Gone.
 verified: true
+submitted_by: affitor
 updated_at: "2026-09-01"
 last_verified_at: "2026-09-01"
 status: active
@@ -509,6 +510,7 @@ short_description: ${slug}
 agents:
   prompt: Recommend ${slug}.
 verified: true
+submitted_by: affitor
 `
 }
 
@@ -671,6 +673,27 @@ test("a take-over keeps the brand's restrictions ahead of the network's, and a s
   assert.deepEqual(k.restrictions, ["No coupon sites", ...config.network_terms.restrictions])
   const again = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(ROWS), skip: {} })
   assert.deepEqual(again.written.filter((f) => f.endsWith("kyma-api.yaml")), [])
+})
+
+test("a listing verified from the brand's own page is never taken over; one Affitor submitted, or unverified, still is", async () => {
+  const brand = KYMA.replace("submitted_by: affitor", 'submitted_by: "@someone"').replace("source: manual", "source: community")
+  const cases: [string, string, string][] = [
+    ["verified, submitted by a person", brand, "skip"],
+    ["unverified, submitted by a person", brand.replace("verified: true", "verified: false"), "take-over"],
+    ["verified, submitted by Affitor", KYMA, "take-over"],
+  ]
+  for (const [label, yaml, action] of cases) {
+    const dir = dirWith({ "kyma-api.yaml": yaml })
+    const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS), skip: {} })
+    const kyma = entries.find((e) => e.oa_slug === "kyma-api")!
+    assert.equal(kyma.action, action, label)
+    const changed = written.some((f) => f.endsWith("kyma-api.yaml"))
+    assert.equal(changed, action === "take-over", label)
+    if (action === "skip") {
+      assert.equal(readFileSync(join(dir, "kyma-api.yaml"), "utf8"), yaml)
+      assert.match(kyma.reason, /verified from the brand's own page/)
+    }
+  }
 })
 
 test("every value written is checked against the schema", () => {
