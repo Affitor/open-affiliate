@@ -14,7 +14,7 @@ commission:
   mode: tiered
   value: 35
   duration: null
-  conditions: "30% recurring on every active subscription that comes in through your referral link. Earning does not stop with the first purchase: all renewals and upgrades of that referral keep earning commission. Large resellers get 35% once they have more than 50 active referred accounts. Commission on a transaction the customer gets refunded comes off your affiliate balance."
+  conditions: "30% recurring on every active subscription that comes in through your referral link. Earning does not stop with the first purchase: all renewals and upgrades of that referral keep earning commission. Large resellers get 35% once they have more than 50 active referred accounts. Once a customer asks for a refund of a transaction you earned commission on, that commission is deducted from your affiliate balance."
 
 # "Affiliate cookie remains active for 1 year" (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
 cookie_days: 365
