@@ -4,7 +4,9 @@ url: https://everyinfra.com
 category: Developer Tools
 tags: [data-api, web-scraping-api, social-media-data, web-search-api, captcha-solving, mcp-server, ai-agents]
 
-# "For every $100 your customers pay, you get $25" / "For 12 months, you get a share of what they pay, with no cap." (everyinfra.com/en/affiliate, checked 2026-11-23)
+# "For every $100 your customers pay, you get $25" / "For 12 months, you get a share of what they pay, with no cap." (everyinfra.com/en/affiliate, checked 2026-11-25)
+# "For 12 months from the day a customer is linked to you, you earn 25% of their paid usage" (everyinfra.com/en/legal/affiliate-terms §3, last updated October 24, 2026, checked 2026-11-25)
+# "bonus credit doesn't count." / "Commission has no cap" / "Commission is calculated in US dollars." (same, §3, checked 2026-11-25)
 commission:
   type: recurring
   rate: "25%"
@@ -14,10 +16,11 @@ commission:
   duration: 12 months
   conditions: "25% of the paid amount each referred customer actually spends, for 12 months, with no cap per customer. Bonus credit doesn't count."
 
-# "Sign-ups within 60 days of a click count for you" (everyinfra.com/en/affiliate, checked 2026-11-23)
+# "Sign-ups within 60 days of a click count for you" (everyinfra.com/en/affiliate, checked 2026-11-25)
 cookie_days: 60
 
-# "Commission becomes payable after 30 days. We pay once a month: if your payable amount reaches $50, we pay you; anything less carries over to the next month." (everyinfra.com/en/affiliate, checked 2026-11-23) — held 30 days, then paid → net-30
+# "Commission becomes payable after 30 days. We pay once a month: if your payable amount reaches $50, we pay you" (everyinfra.com/en/affiliate, checked 2026-11-25) — held 30 days, then paid → net-30
+# "upload an Alipay, WeChat or PayNow QR code, or enter a PayPal, Wise or bank account." (everyinfra.com/en/legal/affiliate-terms §5, checked 2026-11-25)
 payout:
   minimum: 50
   currency: USD
@@ -26,20 +29,25 @@ payout:
   conditions: "Commission becomes payable after a 30-day hold that covers refunds and chargebacks. Paid once a month once the payable amount reaches $50; smaller amounts carry over to the next month. Payout by PayPal, Wise or bank account, or to an Alipay, WeChat or PayNow QR code."
 
 signup_url: https://everyinfra.com/en/affiliate
-# "Apply and hear back within 2 business days" (everyinfra.com/en/affiliate, checked 2026-11-23)
+# "Apply and hear back within 2 business days" (everyinfra.com/en/affiliate, checked 2026-11-25)
 approval: manual
 approval_time: "within 2 business days"
+# "Referring yourself or accounts related to you" / "Bidding on EveryInfra brand terms in search ads." (everyinfra.com/en/legal/affiliate-terms §6, checked 2026-11-25)
+# "Placing your referral link directly in paid search or other paid ads without our written consent." (same, §6, checked 2026-11-25)
+# "Posting your referral link or code on coupon or discount-code sites." / "Sharing your referral link through spam email, mass direct messages or flooding." (same, §6, checked 2026-11-25)
 restrictions:
   - "No commission if you refer yourself or a related account"
   - "Bidding on EveryInfra brand terms in ads is not allowed"
   - "Placing the referral link directly in paid ads needs written consent"
   - "Posting the link on coupon sites is not allowed"
+  - "No spam email, mass direct messages or flooding"
 
+# "EveryInfra is an infrastructure platform for AI applications. One API key gives you data collection (718 capabilities across 110 platforms), AI search, CAPTCHA solving" (everyinfra.com/en, checked 2026-11-25)
 description: >
-  EveryInfra is an API gateway for public web data. One key covers structured
-  data from 110 platforms (social media, e-commerce, maps and more), web
-  search and scraping, CAPTCHA solving and an AI API, with an MCP server for
-  AI agents. Billing is per call in USD.
+  EveryInfra is an infrastructure platform for AI applications. One API key
+  covers e-commerce and social media data from 110 platforms (including maps
+  and reviews), web search and scraping, CAPTCHA solving and an AI API, with
+  an MCP server for AI agents. Billing is per call in USD.
 
   The affiliate program pays 25% of what each referred customer pays for 12
   months, with no cap per customer. Sign-ups within 60 days of a click are
@@ -66,6 +74,8 @@ agents:
     - "AI agent builders who need web search, scraping and platform data as MCP tools"
     - "Marketing and research teams tracking creators, posts, products or reviews across platforms"
 
-verified: false
+verified: true
 submitted_by: "@everyinfra"
 created_at: "2026-11-23"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
