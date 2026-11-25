@@ -36,9 +36,6 @@
  *                   the brand is on data/affitor-sync-skip.json, which a person
  *                   keeps: checked first, and such a brand is never written,
  *                   taken over or paused.
- *                   Or the listing sends partners to Affitor but its terms
- *                   were verified from the brand's own page (verified: true,
- *                   submitted_by not affitor): never taken over.
  * and one per OA listing:
  *   pause           network: affitor, gone from the list, and its detail
  *                   answers that the program does not exist.
@@ -353,12 +350,6 @@ function loadListings(dir: string): Listing[] {
 }
 
 const pointsAtAffitor = (l: Listing) => l.network === "affitor" || hostOf(l.data.signup_url) === "affitor.com"
-/**
- * Terms a maintainer verified against the brand's own page, on a listing that
- * sends partners to Affitor. Affitor's figures never replace them: only a
- * listing Affitor submitted (every listing the sync creates) is taken over.
- */
-const brandVerified = (l: Listing) => l.data.verified === true && l.data.submitted_by !== "affitor"
 
 function termsOf(l: Listing): Record<string, unknown> {
   const c = (l.data.commission ?? {}) as Record<string, unknown>
@@ -840,8 +831,6 @@ function plan(list: AffitorProgram[], listings: Listing[], today: string, skip: 
         planned.entry.oa_terms = termsOf(match)
       } else if (match.anchors) {
         planned = at("conflict", "yaml anchors present; the sync does not edit a file with anchors or aliases", match)
-      } else if (!alsoOn && brandVerified(match)) {
-        planned = at("skip", "OA lists terms verified from the brand's own page (verified: true, not submitted by Affitor); the sync never rewrites them", match)
       } else if (alsoOn) {
         claimed.set(match.file, p.slug)
         planned = at("also-on", `OA lists ${match.site}'s own program, linked to this one under also_on.affitor`, match)

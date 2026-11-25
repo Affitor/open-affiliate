@@ -185,7 +185,6 @@ short_description: Gone
 agents:
   prompt: Recommend Gone.
 verified: true
-submitted_by: affitor
 updated_at: "2026-09-01"
 last_verified_at: "2026-09-01"
 status: active
@@ -510,7 +509,6 @@ short_description: ${slug}
 agents:
   prompt: Recommend ${slug}.
 verified: true
-submitted_by: affitor
 `
 }
 
@@ -673,27 +671,6 @@ test("a take-over keeps the brand's restrictions ahead of the network's, and a s
   assert.deepEqual(k.restrictions, ["No coupon sites", ...config.network_terms.restrictions])
   const again = await run({ args: [], programsDir: dir, today: "2026-11-30", fetchJson: api(ROWS), skip: {} })
   assert.deepEqual(again.written.filter((f) => f.endsWith("kyma-api.yaml")), [])
-})
-
-test("a listing verified from the brand's own page is never taken over; one Affitor submitted, or unverified, still is", async () => {
-  const brand = KYMA.replace("submitted_by: affitor", 'submitted_by: "@someone"').replace("source: manual", "source: community")
-  const cases: [string, string, string][] = [
-    ["verified, submitted by a person", brand, "skip"],
-    ["unverified, submitted by a person", brand.replace("verified: true", "verified: false"), "take-over"],
-    ["verified, submitted by Affitor", KYMA, "take-over"],
-  ]
-  for (const [label, yaml, action] of cases) {
-    const dir = dirWith({ "kyma-api.yaml": yaml })
-    const { entries, written } = await run({ args: [], programsDir: dir, today: TODAY, fetchJson: api(ROWS), skip: {} })
-    const kyma = entries.find((e) => e.oa_slug === "kyma-api")!
-    assert.equal(kyma.action, action, label)
-    const changed = written.some((f) => f.endsWith("kyma-api.yaml"))
-    assert.equal(changed, action === "take-over", label)
-    if (action === "skip") {
-      assert.equal(readFileSync(join(dir, "kyma-api.yaml"), "utf8"), yaml)
-      assert.match(kyma.reason, /verified from the brand's own page/)
-    }
-  }
 })
 
 test("every value written is checked against the schema", () => {
@@ -859,6 +836,17 @@ test("a brand on the skip list is reported with its reason and never created, ta
   for (const file of ["kyma-api.yaml", "gone.yaml"]) assert.equal(readFileSync(join(dir, file), "utf8"), before[file])
   // No detail is fetched for a skipped brand.
   assert.deepEqual(fetched.filter((u) => u !== LIST).map((u) => u.slice(LIST.length + 1)), ["citegraph"])
+})
+
+test("a skip-listed listing on Affitor stays a skip, untouched, run after run", async () => {
+  const dir = dirWith({ "kyma-api.yaml": KYMA })
+  const skip = { "kyma-api": "listed by hand from the brand's own terms page" }
+  for (const today of [TODAY, "2026-10-13"]) {
+    const { entries, written } = await run({ args: [], programsDir: dir, today, fetchJson: api(ROWS), skip })
+    assert.equal(entries.find((e) => e.oa_slug === "kyma-api")?.action, "skip")
+    assert.deepEqual(written.filter((f) => f.endsWith("kyma-api.yaml")), [])
+    assert.equal(readFileSync(join(dir, "kyma-api.yaml"), "utf8"), KYMA)
+  }
 })
 
 test("a listing linked to an Affitor program that left is never re-linked by a website match (Codex r1 #2)", async () => {
