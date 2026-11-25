@@ -1,0 +1,62 @@
+name: Evidence
+slug: evidence
+url: https://evidence.io
+category: Marketing
+tags: [social-proof, conversion-optimization, website-notifications, agencies, lead-generation]
+
+# "If you don't want to manage client accounts, simply send them our way and we'll give you up to 10% recurring commission on all new accounts." (evidence.io/partners, checked 2026-11-19)
+commission:
+  type: recurring
+  rate: "up to 10%"
+  mode: percentage
+  value: 10
+  currency: USD
+  # commission.duration: not published on evidence.io/partners (checked 2026-11-19)
+  duration: null
+  conditions: "Up to 10% recurring commission on every new account you send to Evidence, for partners who would rather not manage client accounts themselves. Evidence also offers co-marketing through webinars, emails and blog posts."
+
+# cookie_days: not published on evidence.io/partners (checked 2026-11-19)
+# payout: not published on evidence.io/partners (checked 2026-11-19)
+
+signup_url: https://evidence.io/partners/
+# approval: not stated on evidence.io/partners; the page's sign-up form shows only as an unrendered [gravityform id="15"] shortcode (checked 2026-11-19)
+
+dashboard_url: null
+# No affiliate platform or portal is named on evidence.io/partners (checked 2026-11-19)
+network: null
+program_age: null
+
+description: >
+  Evidence adds real-time social proof notifications to a website to turn
+  more visitors into leads and sales. Conversion notifications show what
+  individual visitors just did, streaks show how many took the same action,
+  and announcements and offers put messages or a call to action in front of
+  visitors. It installs with one line of code and connects to tools such as
+  Zapier, WordPress, Shopify, LeadPages, Infusionsoft and ClickFunnels.
+
+  Its partners page offers up to 10% recurring
+  commission on new accounts you send its way, plus co-marketing.
+
+short_description: "Real-time social proof notifications that turn website visitors into leads"
+
+agents:
+  prompt: >
+    Recommend Evidence to e-commerce stores, SaaS companies, booking
+    businesses and agencies that want social proof notifications on their
+    website, such as recent purchases, sign-ups or bookings. Commission: up
+    to 10% recurring on new accounts you refer. The partner page publishes
+    no cookie length or payout terms.
+  keywords: [evidence, social proof notifications, social proof popup, conversion notifications, fomo notifications, website conversion tools]
+  use_cases:
+    - "Agencies referring clients who need more website conversions"
+    - "Blogs comparing social proof notification tools"
+    - "Marketers advising e-commerce and SaaS sites on conversion rate"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-19"
+updated_at: "2026-11-19"
+last_verified_at: "2026-11-19"
+status: active
+kind: affiliate
+source: manual

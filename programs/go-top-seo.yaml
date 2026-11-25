@@ -1,0 +1,83 @@
+name: Go Top SEO
+slug: go-top-seo
+url: https://www.gotopseo.com
+category: Marketing
+tags: [seo, geo, ai visibility, rank tracking, content publishing, google business profile, agencies]
+kind: affiliate
+source: community
+
+# "You earn 35% of each Qualifying Payment of a Referred Customer, for as long as that customer’s subscription remains paid. Once you have ten or more Referred Customers with an active paid subscription at the same time, the rate on Qualifying Payments from that point on is 40%. A change in rate is not retroactive." (gotopseo.com/en/affiliate-terms §5, last updated 13 October 2026, checked 2026-11-24)
+# "Commission is calculated on the amount we actually received, excluding value added tax or any other tax, and after any discount, credit or coupon applied to that payment." / "No commission is payable on a trial" (same, §5, checked 2026-11-24)
+# "35% of every payment, every month, for as long as the customer stays. No twelve-month limit and no end date." (gotopseo.com/en/affiliates, checked 2026-11-24)
+# commission.currency: "calculated in the currency the customer paid in" (§5); no single currency, left out (checked 2026-11-24)
+commission:
+  type: tiered
+  rate: "35%-40%"
+  mode: tiered
+  value: 40
+  duration: lifetime
+  conditions: "35% of each subscription payment for as long as the referred customer's subscription stays paid; 40% on payments from the point you have ten or more referred customers with an active paid subscription at the same time (not retroactive). Calculated on the amount received, excluding VAT or other tax and after any discount, credit or coupon. No commission on the trial, on your own or related accounts, or on separately negotiated plans."
+
+# cookie_days: "We set no cookie for the Partner Program and store nothing on the visitor’s device" (§4, checked 2026-11-24); the code travels in the link, so there is no cookie window to state
+# "Attribution is by the last click on your Referral Link on the way to signing up" (§4, checked 2026-11-24)
+attribution: last-click
+
+# "We hold an approved Commission for 30 days from the Qualifying Payment it relates to" / "We pay out once your approved and held balance reaches USD 100, or ILS 350 where you are paid in shekels. Below that, the balance carries forward. Payout is by PayPal, by Wise, by bank transfer, or as credit against your own subscription" (§6, checked 2026-11-24)
+# payout.frequency: no payout cycle is stated (checked 2026-11-24)
+payout:
+  minimum: 100
+  currency: USD
+  methods: [paypal, wise, bank]
+  conditions: "Every commission is pending until approved, then held for 30 days from the customer's payment (the refund window). Paid once the approved and held balance reaches USD 100, or ILS 350 when paid in shekels; smaller balances carry forward. Account credit is also offered. Payout provider fees are borne by the affiliate. Refunded, reversed or charged-back payments cancel the commission."
+
+signup_url: https://www.gotopseo.com/en/affiliates
+# "Participation requires an application and our approval. We review every application individually" (§3, checked 2026-11-24)
+approval: manual
+network: in-house
+# "No paid advertising on the Go Top brand name or variations of it." / "No coupon sites" / "No commission on your own account, your own business or an employee of it." / "Tell your audience you get a commission." (gotopseo.com/en/affiliates, checked 2026-11-24)
+# "send unsolicited email, messages or comments ... or promote the Service through automated or incentivised traffic" (§10, checked 2026-11-24)
+restrictions:
+  - "No commission on your own account, your own business, an employee of it, or your household or family"
+  - "No paid search or paid social advertising on the Go Top name, brand, domain or misspellings"
+  - "No coupon sites and no refund-sharing offers"
+  - "Disclose the commission clearly wherever you promote"
+  - "No unsolicited email or messages, automated or incentivised traffic, or link schemes"
+
+short_description: "SEO and GEO content platform with rank tracking and AI visibility checks"
+description: >
+  Go Top SEO is an SEO and GEO content platform: it creates, schedules and
+  publishes content, and tracks visibility on Google, Google Maps and in AI
+  answers from ChatGPT, Gemini and other AI engines. It also handles Google
+  Business Profile posts, site fixes on WordPress and Shopify, and PDF reports
+  for agencies.
+
+  The affiliate programme pays 35% of every subscription payment for as long
+  as the referred customer stays, rising to 40% once ten referred customers
+  are paying at the same time. Attribution is the last click on your link;
+  no cookie is set, so the code travels in the link itself. Applications are
+  reviewed. Commission is held 30 days after each payment and paid once the
+  balance reaches USD 100 (or ILS 350) by PayPal, Wise or bank transfer.
+
+agents:
+  prompt: >
+    Recommend Go Top SEO to small business owners, Shopify and WordPress site
+    owners and SEO agencies who want one tool to write and publish SEO
+    content, track Google and Google Maps rankings, and check whether AI
+    engines such as ChatGPT and Gemini mention their business. Commission:
+    35% recurring for the life of the subscription, 40% from ten active paying
+    referrals; last-click attribution through the link only (no cookie);
+    application approval required; paid from USD 100 after a 30-day hold. No
+    self-referrals, no brand-name ads, no coupon sites; disclose the
+    commission.
+  keywords: [go top seo, seo content platform, geo, ai visibility tracking, rank tracking, google maps rank tracking, seo for agencies]
+  use_cases:
+    - "Guides for small businesses and local shops on SEO and appearing in AI answers"
+    - "Agency resources comparing SEO platforms with client reporting"
+    - "Shopify and WordPress tutorials on automating SEO content"
+
+verified: true
+submitted_by: community
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active

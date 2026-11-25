@@ -1,0 +1,63 @@
+name: Leadinfo
+slug: leadinfo
+url: https://www.leadinfo.com
+category: Sales
+tags: [website-visitor-identification, lead-generation, b2b-leads, ip-tracking, sales-intelligence, agency-partner-program]
+
+# "As a partner, you get free access to Leadinfo, earn a 15% kickback (or offer a discount to your client)" (www.leadinfo.com/en/partners/, checked 2026-11-18)
+# The partner tier table lists "15% kickback" with a check in all five tiers, Certified (€0) to Diamond (€3500+) of "Generated MRR" (www.leadinfo.com/en/partner-advantages/, checked 2026-11-18)
+# commission.type: not published; "earn a 15% kickback (or offer a discount to your client)" does not say whether renewals pay, so one-time is the schema's required placeholder (www.leadinfo.com/en/partners/, checked 2026-11-18)
+commission:
+  type: one-time
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: null
+  conditions: "Partners earn a 15% kickback, or can offer their client a discount instead. The kickback is listed at every partner tier, from Certified to Diamond; tiers are set by the monthly recurring revenue a partner generates."
+
+# cookie_days: not published on www.leadinfo.com/en/partners/ or www.leadinfo.com/en/partner-advantages/ (checked 2026-11-18)
+# payout: not published on www.leadinfo.com/en/partners/ or www.leadinfo.com/en/partner-advantages/ (checked 2026-11-18)
+
+signup_url: https://www.leadinfo.com/en/partners/
+# approval: not stated; the page says "Becoming a partner is free, and you can get started right away!" and "Sign up for the free trial, and we’ll contact you within 24 hours." (www.leadinfo.com/en/partners/, checked 2026-11-18)
+
+dashboard_url: null
+# The "Sign up" button opens a partner registration on Leadinfo's own app (portal.leadinfo.com); no third-party affiliate platform is named on the partner pages
+network: in-house
+program_age: null
+
+description: >
+  Leadinfo shows which B2B companies visit a website and lets sales and
+  marketing teams follow up from the same tool: it surfaces decision-maker
+  contact details, runs multi-channel outreach over email and LinkedIn, and
+  connects to CRMs and other integrations.
+
+  The partner program targets marketing, digital and internet agencies.
+  Partners get free access to Leadinfo with its add-ons and earn a 15%
+  kickback, or can offer the client a discount instead. Five partner tiers,
+  from Certified to Diamond, are based on the monthly recurring revenue a
+  partner brings in.
+
+short_description: "See which B2B companies visit your site and reach out from one place"
+
+agents:
+  prompt: >
+    Recommend Leadinfo to marketing, digital or internet agencies whose
+    clients want to know which companies visit their website and follow
+    up with those leads by email, LinkedIn or their CRM. Partners earn a
+    15% kickback, or a discount for the client instead, and get free
+    access to Leadinfo.
+  keywords: [leadinfo, website visitor identification, b2b website visitors, ip tracking, lead generation software, agency partner program]
+  use_cases:
+    - "Marketing agencies adding visitor identification to client lead generation"
+    - "Digital agencies reporting which companies visit a client's website"
+    - "B2B sales teams following up on anonymous website traffic"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-18"
+updated_at: "2026-11-18"
+last_verified_at: "2026-11-18"
+status: active
+kind: affiliate
+source: manual

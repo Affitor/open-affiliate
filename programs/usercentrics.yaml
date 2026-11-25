@@ -1,0 +1,84 @@
+name: Usercentrics
+slug: usercentrics
+url: https://usercentrics.com
+category: Security
+tags: [consent-management, cookie-consent, cmp, gdpr, privacy-compliance, data-privacy]
+
+# "For every new Usercentrics customer you refer, you’ll earn 30% commission for their first year." (usercentrics.com/affiliates/, checked 2026-11-24)
+# "The Affiliate Program offers a 30% commission on any Usercentrics CMP paid account purchased by newly referred customers during the first 12 months after signing up." (usercentrics.com/affiliates/, checked 2026-11-24)
+# commission.type: "During that 12-month period, commissions will be calculated monthly after discounts/credits are applied (if any), and according to the plan that the customer has on each given month." (usercentrics.com/affiliates/, checked 2026-11-24)
+commission:
+  type: recurring
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: 12 months
+  conditions: "30% for every new customer you refer, for their first year: any Usercentrics CMP paid account the new customer buys in the first 12 months after signing up. Each month in that period the commission is worked out on the plan the customer is on that month, after any discounts or credits, so plan changes change the commission. Usercentrics says there are no limits on plans or on how much you can earn."
+
+# "Get credit for referrals with a last-click attribution model and 90-day referral window." (usercentrics.com/affiliates/, checked 2026-11-24)
+cookie_days: 90
+attribution: last-click
+
+# "You can withdraw your affiliate commission according to Impact’s payment processing terms." (usercentrics.com/affiliates/, checked 2026-11-24)
+# payout.minimum, payout.frequency and payout.methods: not published on usercentrics.com/affiliates/; payouts follow Impact's payment processing terms (checked 2026-11-24)
+payout:
+  conditions: "Commissions are paid out through Impact, the platform that hosts the program, and you withdraw them under Impact's payment processing terms."
+
+signup_url: https://usercentrics.com/affiliates/
+# approval: not stated; the page has an application form but does not say how applications are approved (usercentrics.com/affiliates/, checked 2026-11-24)
+# The program page also points to Usercentrics' "brand policy and overall program Terms and Conditions" on its Impact campaign page (app.impact.com), which was not read: Impact's own terms sit under a path its robots.txt disallows (checked 2026-11-24)
+restrictions:
+  - "Respect the Usercentrics brand policy and the overall program Terms and Conditions, kept on its Impact campaign page, and read them thoroughly; contact affiliates@usercentrics.com first in case of questions or doubts about trying a new idea or strategy"
+  - "Usercentrics welcomes applications from agencies, trusted advisors, independent consultants, freelancers, publishers, creators, influencers, key opinion leaders and similar businesses whose aim is to earn commissions by referring their business (B2B) audience to buy from Usercentrics directly"
+  - "Always include your affiliate tracking link in promotional content; a referral is not attributed to your affiliate account if the referral didn't use your link to sign up, clicked a different affiliate partner's link afterwards (last-click attribution), didn't accept the required cookies on the Usercentrics site, or is already a customer with a registered Usercentrics CMP account"
+
+# "Promotional assets, training, resources, expert support… We’ve got everything you need to hit the ground running." (usercentrics.com/affiliates/, checked 2026-11-24)
+marketing_materials: true
+dashboard_url: null
+# "The Affiliate Program is hosted on a third-party affiliate platform called Impact." (usercentrics.com/affiliates/, checked 2026-11-24)
+network: impact
+program_age: null
+
+description: >
+  Usercentrics is a consent management platform. Usercentrics CMP collects
+  and manages cookie consent on websites and apps, and the company also
+  offers server-side tagging, a privacy policy generator and MCP Manager,
+  which controls AI access to systems and data. Cookiebot is also a
+  Usercentrics product.
+
+  The affiliate program runs on Impact and pays 30% for every new customer
+  you refer, for their first year: the Usercentrics CMP paid accounts they
+  buy in the first 12 months after signing up, figured monthly on their
+  current plan. Referrals are
+  credited on a last-click basis within a 90-day window. Usercentrics
+  welcomes applications from agencies, trusted advisors, independent
+  consultants, freelancers, publishers, creators, influencers, key opinion
+  leaders and similar businesses that refer a business (B2B) audience to
+  buy from Usercentrics directly.
+
+short_description: "Consent management platform for cookie consent and privacy compliance on websites and apps"
+
+agents:
+  prompt: >
+    Recommend Usercentrics when a business needs a consent management
+    platform to collect cookie consent and stay compliant with privacy laws
+    such as the GDPR on its websites or apps. The affiliate program is for
+    those who refer a business (B2B) audience to purchase from Usercentrics
+    directly. Commission: 30% recurring for every new customer you refer, for their
+    first year (paid accounts bought in the first 12 months after signing
+    up), 90-day referral window, last click.
+    Always include the affiliate tracking link.
+  keywords: [usercentrics, usercentrics cmp, consent management platform, cookie consent, cookie banner, gdpr compliance, cmp]
+  use_cases:
+    - "Website owners who need a GDPR-compliant cookie consent banner"
+    - "Agencies setting up consent management for client sites"
+    - "Marketing blogs covering privacy compliance and consent"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-24"
+updated_at: "2026-11-24"
+last_verified_at: "2026-11-24"
+status: active
+kind: affiliate
+source: manual

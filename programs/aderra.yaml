@@ -6,7 +6,7 @@ tags: [ai, ai-assistant, saas, api, recurring, ai-image, ai-video, ai-voice]
 
 commission:
   type: recurring
-  rate: "40%"
+  rate: "40% then 10%"
   mode: percentage
   value: 40
   currency: USD

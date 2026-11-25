@@ -21,6 +21,17 @@ export function hasNoProgram(p: { status?: string | null }): boolean {
   return p.status === "no_program" || p.status === "discontinued"
 }
 
+/**
+ * A no_program listing added on or after this day stays noindex, and out of the
+ * sitemap, until the brand has a program. jasper and openrouter predate it and
+ * stay indexed: they answer "<brand> affiliate program" searches on purpose.
+ */
+export const NO_PROGRAM_NOINDEX_FROM = "2026-11-17"
+
+export function noProgramNoindex(p: { status?: string | null; createdAt?: string | null }): boolean {
+  return p.status === "no_program" && (p.createdAt ?? "").slice(0, 10) >= NO_PROGRAM_NOINDEX_FROM
+}
+
 /** Banner heading, and the sentence after "No" in every answer. */
 export function noProgramHeadline(p: Pick<Program, "name" | "status">): string {
   return p.status === "discontinued"

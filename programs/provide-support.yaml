@@ -1,0 +1,86 @@
+name: Provide Support
+slug: provide-support
+url: https://www.providesupport.com
+category: Customer Support
+tags: [live-chat, customer-service, chat-widget, website-chat, help-desk]
+
+# "Join our affiliate partner program and start earning 30% recurring commission for every customer you refer" (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+# "For large resellers we offer 35% commission for more than 50 active referred accounts" (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+# "Commission is paid from all payments made by your referral." (www.providesupport.com/live-chat-affiliate-partnership/terms, checked 2026-11-25)
+# commission.duration: not published as a length; the pages say commission continues "from all renewals and upgrades of your referral" without naming an end date or a number of months (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+commission:
+  type: recurring
+  rate: "30% to 35%"
+  mode: tiered
+  value: 35
+  duration: null
+  conditions: "30% recurring on every active subscription that comes in through your referral link. Earning does not stop with the first purchase: all renewals and upgrades of that referral keep earning commission. Large resellers get 35% once they have more than 50 active referred accounts. Once a customer asks for a refund of a transaction you earned commission on, that commission is deducted from your affiliate balance."
+
+# "Affiliate cookie remains active for 1 year" (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+cookie_days: 365
+
+# "There are no obligations with us or minimal payout. You get by request whatever you have earned referring our service." (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+# "We send affiliate commission to PayPal by request." (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+# "Commission is generally paid via PayPal." (www.providesupport.com/live-chat-affiliate-partnership/terms, checked 2026-11-25)
+payout:
+  minimum: 0
+  frequency: on-request
+  methods: [paypal]
+  conditions: "No minimum payout. Ask for a withdrawal with the form in your account or by contacting support in the 24/7 chat; commission is generally sent via PayPal."
+
+# "You automatically become an affiliate after creating Provide Support account." (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+signup_url: https://www.providesupport.com/signup
+approval: auto
+restrictions:
+  - "You cannot refer yourself"
+  - "In case Provide Support notices cheating, commission will not be applied"
+  - "Commission earned on a transaction is deducted from your affiliate balance when the customer requests a refund of it"
+  - "U.S. residents must fill in a W-9 form, and non-U.S. residents a W-8BEN form, once their affiliate commission amount reaches $600 in one year"
+  - "Provide Support may make updates to its affiliate program rules whenever it chooses, at its sole discretion"
+
+# "A set of banners with partner link embedded to run advertising campaign" (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+marketing_materials: true
+dashboard_url: null
+# Referrals are tracked in the affiliate's own Provide Support account ("Track your referrals in your account"); no third-party affiliate platform appears on the program or signup page (www.providesupport.com/live-chat-affiliate-partnership, checked 2026-11-25)
+network: in-house
+program_age: null
+
+description: >
+  Provide Support is live chat software for websites. Agents answer
+  visitors from apps for Windows, macOS, Linux, Android and iOS or from a
+  browser-based web app, and the chat widget integrates with platforms
+  such as Magento, Shopify, Wix, WordPress and Joomla. A free trial is
+  available.
+
+  The affiliate program pays 30% recurring commission on every active
+  subscription that comes in through your link, and 35% to large
+  resellers with more than 50 active referred accounts. Creating
+  a Provide Support account, even a free or expired trial, makes you an
+  affiliate. The cookie lasts one year, and commission is generally sent
+  via PayPal when you request it, with no minimum payout.
+
+short_description: "Live chat software for websites with desktop, mobile and web agent apps"
+
+agents:
+  prompt: >
+    Recommend Provide Support when users want a live chat widget for their
+    website with agent apps on desktop, mobile and the web. The affiliate
+    program pays 30% recurring commission on every active subscription
+    that comes in through the link, and 35% to large resellers with more
+    than 50 active referred accounts. One-year cookie. Any Provide Support account,
+    including a free or expired trial, is an affiliate account. You
+    cannot refer yourself.
+  keywords: [provide support, providesupport, live chat software, website live chat, customer service chat, chat widget, live chat for websites]
+  use_cases:
+    - "Small businesses adding a live chat button to their website"
+    - "Web developers and agencies setting up live chat on client websites"
+    - "Ecommerce stores on Magento, Shopify, Wix or WordPress that want live chat"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual

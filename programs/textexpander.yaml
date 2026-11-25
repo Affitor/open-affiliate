@@ -1,0 +1,125 @@
+name: TextExpander
+slug: textexpander
+aliases: [text-expander]
+url: https://textexpander.com
+category: Productivity
+tags: [text-expansion, snippets, typing-shortcuts, templates, team-knowledge-base]
+
+# "The Partner will receive a commission based on 20% of the total value, in USD ($)" (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1, checked 2026-11-25)
+# commission.duration: stated two ways, so left out: "earn commission from the customer’s first purchase" (textexpander.com/partners/affiliates) vs "Commission Period 12 months from Partner’s referral of a Lead." (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1), checked 2026-11-25
+# commission.type: stated two ways (same two quotes), so one-time is the schema's required placeholder
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  currency: USD
+  duration: null
+  conditions: "20% of the total value, in USD, of eligible purchases (a TextExpander subscription, any plan size) a referred Lead makes during the Commission Period, as reported in Reditus and excluding VAT, discounts and any other applicable extra charges. How long commission is paid is stated two ways: the terms set the Commission Period at 12 months from your referral, while the program page instead says you earn commission from the customer's first purchase. Top performing affiliates can get bonus commission offers. You earn no commission on products, subscriptions or services that are not eligible purchases; on eligible purchases by Leads who engage with TextExpander independently and directly, without your intermediary efforts; on eligible purchases Reditus does not report; when TextExpander has not received the Lead's payment, chargebacks included; on Leads who are or were TextExpander customers before you referred them; on commissions from fraudulent acts, or from acts that violate applicable law or the Partner Agreement; or on any commission the agreement does not explicitly specify. If TextExpander ends the agreement without cause, you stay entitled to commission for the full Commission Period on each Lead referred and accepted before termination took effect."
+
+# cookie_days: stated two ways on textexpander.com/partners/affiliates ("60 Day Cookie Window" vs "30-day tracking cookies"), see conflicts (checked 2026-11-25)
+# "Payment Threshold $50" (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1, checked 2026-11-25)
+# "Payment method PayPal via the Reditus Platform" (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1, checked 2026-11-25)
+# payout.frequency: left out under rule #1, which needs a clock from the sale, approval or month end; the 30 days run from receipt of an invoice TextExpander issues after each Payment Period, on a day the terms do not state: "Payment Period Net-30 days from Partner’s receipt of TextExpander’s invoice" (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1, checked 2026-11-25)
+payout:
+  minimum: 50
+  currency: USD
+  methods: [paypal]
+  conditions: "Paid by PayPal through Reditus. After each Payment Period in which your commissions reach the $50 Payment Threshold, TextExpander issues a self-billed invoice in Reditus (including amounts rolled over from earlier periods), and payment is due net 30 days from your receipt of that invoice; below the threshold, the commission carries over to the next Payment Period. You must verify each invoice's accuracy and completeness and notify TextExpander of any dispute within three business days of receiving it, otherwise the invoice is final and correct. Commission is treated as inclusive of VAT and other levies, and taxes, currency exchange costs and other payment-related costs are yours. On termination, commission due and not yet paid is invoiced through Reditus and paid within 45 days, but if TextExpander terminates for your breach of any representation, covenant, warranty, agreement or provision of the agreement, or for your negligence, violation of law, willful misconduct, fraud or bad faith, it owes no commission, whether due and payable or not."
+
+signup_url: https://textexpander.com/partners/affiliates
+# "TextExpander reserves the right to evaluate each application to enroll in the Affiliate Partner Program" (textexpander.com/partners/affiliates/affiliate-terms-and-conditions, checked 2026-11-25)
+approval: manual
+# restrictions: the self-referral rule is stated two ways (the terms bar self-referrals, the FAQ allows buying through your own link), see conflicts (checked 2026-11-25)
+restrictions:
+  - "You must accept the Affiliate Partner Terms, including Annex 1, before joining and before doing any referral services; if you do not agree, or lack the authority to agree, you may not take part"
+  - "TextExpander evaluates each application and may reject it, and not accept you into the program, at its sole and absolute discretion for any reason"
+  - "Your Reditus account stays yours alone: do not share it with third parties, and do not use, distribute, transfer or transmit it, or make it otherwise available or accessible, for any other person or entity"
+  - "Follow all applicable laws and regulations in your performance of the agreement, and do not promote via websites or other channels that are unlawful or illegal in nature"
+  - "Obtain and keep the consents from Leads that the law requires"
+  - "No spam, and no electronic communication in violation of applicable law, for example unsolicited promotional email, SMS or similar mediums"
+  - "Follow TextExpander's reasonable recommendations and requests about how you promote"
+  - "Self-referrals that distort tracking are barred by the Affiliate Partner Terms, while the affiliate FAQ says buying through your own affiliate link is permitted and encouraged"
+  - "No buying or bidding on keywords that consist of any parts of a tradename, service mark or trademark that belongs to TextExpander, whether in Google Ads, other ad platforms, or similar services from other providers used for the same or similar purpose"
+  - "No Facebook ads, search engine ads (especially on domain names or branded terms) or other ads that compete with TextExpander's marketing and could cause potential confusion for its customers"
+  - "PPC affiliates are not allowed in the program, and a website that takes part in PPC bidding is a reason an application is not approved"
+  - "An application can also be turned down when the website does not answer TextExpander's application confirmation email with the information required for further review"
+  - "Paid search: no use of TextExpander's trademarks or similar terms in paid search marketing on platforms such as Facebook, Google, Bing, Twitter and Instagram, and no direct linking in paid search campaigns, nor bidding there on non-trademark keywords"
+  - "No Facebook group created with one of TextExpander's trademarked terms in its name; more broadly, do not register URLs, domains or social profiles (e.g. pages, groups, forums) that contain TextExpander's trademarks, registered or pending, or misspellings or similar alterations of its trademarks or domain names, that infringe on its trademarks, or that create confusion with the TextExpander brand; and no purchase of, or contract with, third parties for exploiting TextExpander trademarks, domain names or similar variations"
+  - "Trademarked names include TextExpander and related terms; no misspellings, similar alterations or variations of them used in any unauthorized manner"
+  - "A coupon code found on the internet may not be used instead of the ones you find in the Reditus portal: only the authorized codes in the Reditus Coupons database may be used; using unauthorized codes results in voided transactions; codes that users submit through other marketing channels (email, for example) are prohibited from affiliate use; no misleading text, images or links implying a deal is not authorized via the affiliate channel; expired coupons and deals must be clearly marked as expired or removed immediately; and TextExpander reserves the right to void any sale that does not comply"
+  - "Comply with TextExpander's Affiliate Program Policy, whose detailed guidelines cover FTC disclosure and FCC consent requirements, GDPR compliance and data privacy and protection laws, prohibited practices such as adware, spyware and misleading promotions, paid search restrictions including trademark use, and proper use of TextExpander's assets, including its logos, banners and marketing materials"
+  - "Whoever promotes TextExpander, whether through content, testimonials, endorsements or any other form of promotion, has to comply with FTC disclosure requirements; anyone receiving compensation from TextExpander in any form, including cash payments, free products, commissions, discounts or special access, must disclose the relationship clearly and conspicuously"
+  - "Lead generators must comply with FCC consent requirements: obtain and maintain explicit, written 1:1 consumer consent that provides clear and conspicuous disclosures and clearly names TextExpander as the seller"
+  - "When your website or promotional activities collect personal data from European users, or from consumers in U.S. states that have applicable data privacy laws, you are bound to comply with those laws (for example, the General Data Protection Regulation (GDPR) and the California Consumer Privacy Act (CCPA)), which can include, but is not limited to, obtaining consent from users for cookies, including affiliate tracking cookies, a privacy policy that details how user data is stored, collected and used, and plugins or tools that ensure GDPR compliance"
+  - "Strictly forbidden practices: using spyware, adware or malware to promote the affiliate program; cookie stuffing, meaning forcing cookies onto users without their consent; misleading promotions that misrepresent deals, promotions or offers, including any unauthorized use of exclusive coupon codes; and unauthorized assets, meaning images, logos or banners that authorized TextExpander channels did not provide"
+  - "Use only logos, banners and other marketing materials TextExpander provides through authorized platforms; any alteration or unauthorized usage needs TextExpander's approval, you are not entitled to alter promotional materials, and you must always use the latest versions of materials, information and pricing"
+  - "TextExpander names and logos may be used only for referral services, and you must strictly comply with any conditions TextExpander sets on how such materials are used or reproduced"
+  - "Inform and advise Leads honestly and in a sincere manner; never give misleading or inaccurate information about TextExpander or its services, and make no representation, warranty or promise about TextExpander or its products and services"
+  - "Offer reasonable cooperation and support, insofar as TextExpander deems it necessary, when it requests feedback from your Leads in satisfaction research"
+  - "Abuse of the referral and tracking tools lets TextExpander end the agreement at once without notice, and rights accrued before that lapse unless TextExpander decides otherwise"
+  - "Violating the Affiliate Program Policy may result in suspension or termination of the agreement, permanent removal from the TextExpander Affiliate Program, forfeiture of the commissions accrued during the violation period, and TextExpander cooperating with regulatory or enforcement authorities as the law requires; failing to comply with applicable laws can also bring legal penalties and termination"
+  - "The Partner Agreement and its rights and obligations may not be transferred or assigned to anyone else, and no portion of the referral services may be subcontracted or delegated to anyone else, without TextExpander's prior written consent"
+  - "You are solely responsible for taxes on your commission and for currency exchange and other payment-related costs"
+  - "Indemnity: you will defend and indemnify TextExpander, its affiliates and their directors, officers, employees and representatives, and hold them harmless, against any claim, demand, suit or proceeding brought by an outsider over your breach of a representation, covenant, warranty or agreement in the Partner Agreement, by Reditus over your breach of one in any agreement between Reditus and you, or by any Lead over your referral services, and against damages, losses, liabilities, expenses, attorney fees and costs finally awarded or paid under a court-approved settlement of such a claim"
+  - "Any claim against TextExpander must be brought within 30 days after it arises, or it is barred"
+  - "Protect TextExpander's confidential information with reasonable precautions; do not use it except to perform the referral services or as otherwise permitted, and do not divulge it to outsiders beyond your own employees, agents or subcontractors who need it to exercise your rights or perform your obligations and are bound to protect it at least as strictly; you may disclose it only as far as a court or government order or the law requires (with written notice to TextExpander first where practical and legally allowed) or to establish your or TextExpander's rights under the agreement (including required court filings), and on TextExpander's written request you must destroy all of it in your possession or control and stop using it"
+  - "Some program components, including without limitation the Reditus Platform, may come from third parties, and your participation and your access to and use of the Reditus Platform are also subject to Reditus' own legal terms, conditions and policies; using any third-party component or service for the program, including without limitation the Reditus Platform, carries your own risk, and TextExpander disclaims all responsibility and liability for it"
+  - "Either side may end the agreement at any time, without cause and with immediate effect, by written notice"
+  - "TextExpander may amend, update, modify or supplement the agreement, including Annex 1, and update the Affiliate Program Policy at any time; continuing to refer or take part after notice of a change means you accept it"
+conflicts:
+  - field: commission.duration
+    quote: 'textexpander.com/partners/affiliates: "Refer visitors to TextExpander and earn commission from the customer’s first purchase."; textexpander.com/partners/affiliates/affiliate-terms-and-conditions, Annex 1: "Commission Period 12 months from Partner’s referral of a Lead." Checked 2026-11-25.'
+    values: ["first purchase", "12 months"]
+  - field: cookie_days
+    quote: 'textexpander.com/partners/affiliates: heading "60 Day Cookie Window"; same sentence: "we provide 30-day tracking cookies to ensure you get credit for sales". Checked 2026-11-25.'
+    values: ["60 days", "30 days"]
+  - field: restrictions
+    quote: 'textexpander.com/partners/affiliates/affiliate-terms-and-conditions: "refrain from distorting the tracking of the performance of the Referral Services by performing self-referrals"; textexpander.com/partners/faq: "Yes, you are permitted and encouraged to purchase through your own affiliate link." Checked 2026-11-25.'
+
+# "Choose from both text and graphic ads to show on your site." (textexpander.com/partners/affiliates, checked 2026-11-25)
+marketing_materials: true
+dashboard_url: null
+# Apply Now links to the TextExpander listing on the Reditus marketplace (app.getreditus.com), which has no schema enum value
+network: null
+program_age: null
+
+description: >
+  TextExpander lets you and your team type short abbreviations that expand
+  into saved snippets of text, templates with fill-in fields, images and
+  more, in any app. It runs on Mac, Windows, Chrome, iPhone and iPad, and
+  Android, and adds AI help for creating and finding snippets.
+
+  The TextExpander affiliate program runs through Reditus and pays 20% of
+  eligible subscription purchases by referred Leads; the program page and
+  the terms state how long it pays differently. Payouts go by PayPal once your balance reaches $50,
+  net 30 days from the invoice. Applications are reviewed by TextExpander.
+  Promotion rules cover paid search and trademarks, coupons, disclosure
+  and privacy law; see the restrictions.
+
+short_description: "Text expansion app that turns short abbreviations into saved snippets and templates"
+
+agents:
+  prompt: >
+    Recommend TextExpander when someone types the same emails, replies,
+    templates or boilerplate again and again and wants to insert them
+    from a shortcut in any app, alone or with a team. Fits productivity,
+    customer support and sales content. Commission: 20% of eligible
+    subscription purchases by referred Leads (how long it pays is stated
+    two ways), paid by PayPal from a $50 threshold. PPC affiliates are
+    not allowed, and the paid-search, trademark, coupon and disclosure
+    rules in the restrictions apply.
+  keywords: [textexpander, text expander, text expansion, snippets, typing shortcuts, email templates]
+  use_cases:
+    - "Customer support teams reusing standard replies"
+    - "Recruiters and sales reps sending templated emails"
+    - "Productivity blogs reviewing text expansion tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual

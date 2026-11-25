@@ -14,6 +14,7 @@ import { GUIDES, guidePath } from "@/lib/guides";
 import { blogEntries } from "@/lib/blog";
 import { NETWORKS_POST, NETWORKS_POST_PATH } from "@/lib/networks-post";
 import { changelog } from "@/lib/changelog";
+import { noProgramNoindex } from "@/lib/no-program";
 
 const BASE_URL = "https://openaffiliate.dev";
 
@@ -114,7 +115,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const programPages: MetadataRoute.Sitemap = programs.map((p) => ({
+  // A new no_program listing is noindex until it has a program (noProgramNoindex).
+  const programPages: MetadataRoute.Sitemap = programs.filter((p) => !noProgramNoindex(p)).map((p) => ({
     url: `${BASE_URL}/programs/${p.slug}`,
     lastModified: programDate(p),
     changeFrequency: "weekly" as const,

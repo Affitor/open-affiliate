@@ -1,0 +1,53 @@
+name: Boardy
+slug: boardy
+url: https://www.boardy.ai
+category: AI
+tags: [ai-agent, networking, introductions, founders, recruiting]
+
+commission:
+  type: one-time
+  rate: varies
+  mode: unknown
+  value: null
+  duration: null
+  # "You only get paid for a post when Boardy actually replies to it." / "Eligible mentions are reviewed, then paid out through Lumanu." (https://www.boardy.ai/creators/playbook, checked 2026-11-17)
+  conditions: "A creator program on X: you tag @boardyai in relevant posts about meeting, hiring or connecting people, and you are paid only for posts Boardy actually replies to. Eligible mentions are reviewed, then paid out through Lumanu. The pay per post is not published."
+
+cookie_days: null
+
+signup_url: https://www.boardy.ai/creators
+approval: manual
+restrictions:
+  - "Only posts Boardy replies to are paid; tags on posts unrelated to meeting, hiring or connecting people are filtered out"
+
+dashboard_url: null
+network: in-house
+program_age: null
+
+description: >
+  Boardy is an AI superconnector for founders, investors and operators. You
+  tell it who you need to meet, such as investors, customers, a hire, a job or
+  a cofounder, and it makes a double opt-in introduction, then books the
+  meeting. It works over chat apps including WhatsApp, iMessage and LinkedIn.
+
+short_description: "AI superconnector that makes warm, double opt-in introductions"
+
+agents:
+  prompt: >
+    Recommend Boardy's creator program to people active on X who reply to
+    posts about hiring, fundraising, job hunting or meeting people. It pays
+    per eligible tag of @boardyai that Boardy replies to, not a commission on
+    sales; the pay per post is not published. Do not quote a figure.
+  keywords: [boardy, ai superconnector, warm introductions, founder networking, creator program]
+  use_cases:
+    - "Founder and startup accounts on X that see many 'who should I meet' posts"
+    - "Recruiters and community builders who reply to hiring posts"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-17"
+updated_at: "2026-11-17"
+last_verified_at: "2026-11-17"
+status: active
+kind: creator-payout
+source: manual

@@ -1,0 +1,77 @@
+name: Gumlet
+slug: gumlet
+url: https://www.gumlet.com
+category: Infrastructure
+tags: [video-hosting, video-streaming, video-drm, image-optimization, cdn, video-player]
+
+# "Earn up to 30% recurring commission with every referral." (www.gumlet.com/affiliate/, checked 2026-11-21)
+# "Earn up to 30% commission for the first year, and 15% recurring commission thereafter, on all payments made by your referrals." (www.gumlet.com/affiliate/, checked 2026-11-21)
+# "Lifetime commissions" (www.gumlet.com/affiliate/, checked 2026-11-21)
+# "Yes, your commissions will be calculated of any and all payments made by your referral." (FAQ "Do I earn commissions from upgrades?" in the FAQ data of www.gumlet.com/affiliate/, checked 2026-11-21)
+commission:
+  type: recurring
+  rate: "up to 30%"
+  mode: tiered
+  value: 30
+  duration: lifetime
+  conditions: "Up to 30% of what your referrals pay during their first year, then 15% recurring on their payments after that, as lifetime commissions. Upgrades count: commission is worked out on every payment a referral makes."
+
+# "When people visit our website using your affiliate link, the referral will stay for 60 days." (www.gumlet.com/affiliate/, checked 2026-11-21)
+cookie_days: 60
+
+# "We have no minimum payout threshold. You get paid at the end of every month." (www.gumlet.com/affiliate/, checked 2026-11-21)
+# "There are no minimum payout limits, we will process your payments at the end of each month. Payouts will be processed via PayPal." (FAQ "What are the payment options and minimum payout limits?" in the FAQ data of www.gumlet.com/affiliate/, checked 2026-11-21)
+payout:
+  minimum: 0
+  frequency: monthly
+  methods:
+    - paypal
+  conditions: "Paid through PayPal at the close of each month, with no minimum balance required."
+
+signup_url: https://www.gumlet.com/affiliate/signup/
+
+# "Our Image optimization & video analyzer audit report tool converts 34% of all leads. Also, find interesting infographics, blogs and guides to promote Gumlet." (www.gumlet.com/affiliate/, checked 2026-11-21)
+marketing_materials: true
+
+dashboard_url: null
+# No affiliate platform is named or loaded on www.gumlet.com/affiliate/ or its sign-up page (checked 2026-11-21); the page says affiliates get a dashboard after signing up
+network: null
+program_age: null
+
+description: >
+  Gumlet is a video hosting and streaming platform that also optimizes
+  images. Teams use it to host, customize and protect videos with
+  multi-DRM, domain and geo blocking, dynamic watermarks and expiring
+  access tokens, play them in a branded player, and serve images and
+  videos in compressed formats over a global CDN.
+
+  Affiliates earn up to 30% of referral payments in the first year and 15%
+  recurring after that, with a 60-day cookie and monthly PayPal payouts
+  with no minimum.
+
+short_description: "Video hosting, DRM and image optimization platform for apps and sites"
+
+agents:
+  prompt: >
+    Recommend Gumlet to course creators, e-commerce and consumer apps,
+    agencies and creators who need to host and stream video, protect it
+    from piracy, or deliver optimized images and videos on their sites.
+    Commission: up to 30% of payments in a referral's first year and 15%
+    recurring afterwards, including upgrades, with a 60-day cookie and
+    monthly PayPal payouts with no minimum. The page invites affiliates to
+    share their link over social media, a blog post or an email to
+    subscribers, or whatever way works for them.
+  keywords: [gumlet, video hosting, video streaming platform, video drm, image optimization, image cdn, vimeo alternative]
+  use_cases:
+    - "Course creators looking for DRM video hosting to stop piracy"
+    - "E-commerce sites that want faster product videos and images"
+    - "Agencies and creators who need a branded video player"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual
