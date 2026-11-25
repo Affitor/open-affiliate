@@ -2,24 +2,50 @@ name: "Rempa AI"
 slug: "rempa-ai"
 url: "https://rempa.ai"
 category: "Marketing"
-verified: false
+verified: true
 
+# "earn 30% of every payment they make for their first 20 months." (rempa.ai/affiliates/, checked 2026-11-25)
+# "You earn 30% of the amount, excluding tax, of each payment … from their first payment until 20 months after it." (rempa.ai/affiliates/terms/ §3, last updated November 24, 2026, checked 2026-11-25)
+# "Free trials earn nothing. Each commission is held for 30 days" (same, §3, checked 2026-11-25)
+# "Prices are in US dollars, excluding taxes." (rempa.ai/terms/, checked 2026-11-25)
 commission:
   type: "recurring"
   rate: "30%"
   mode: "percentage"
   value: 30
   currency: "USD"
+  duration: "20 months"
+  conditions: "30% of each payment, excluding tax, from the referred customer's first payment until 20 months after it, on monthly and yearly plans. Free trials earn nothing. Each commission is held for 30 days, then becomes payable if the payment was not refunded."
+# "your code is also kept in the rempa_src cookie for 60 days" (rempa.ai/affiliates/terms/ §2, checked 2026-11-25)
 cookie_days: 60
+# "Payable commissions are paid once they reach $50 (or the equivalent), by PayPal or bank transfer" / "Rempa pays about once a month." (rempa.ai/affiliates/terms/ §4, checked 2026-11-25)
 payout:
   minimum: 50
   currency: "USD"
   frequency: "monthly"
+  methods: ["paypal", "bank"]
 
 signup_url: "https://rempa.ai/affiliates/"
+# "Free to join. Your link is ready in two minutes." / "Your personal link is ready at once." (rempa.ai/affiliates/, checked 2026-11-25)
 approval: "auto"
+# "Say that your link is an affiliate link, close to the link." (rempa.ai/affiliates/terms/ §5, last updated November 24, 2026, checked 2026-11-25)
+# "Do not promise results: Rempa measures and recommends, and cannot guarantee what an AI assistant says." (same, §5, checked 2026-11-25)
+# "Do not bid on "Rempa" or "rempa.ai" or similar terms in paid search, and do not register look-alike domains or social accounts." (same, §5, checked 2026-11-25)
+# "No unsolicited email, spam, or misleading content; do not present yourself as Rempa." (same, §5, checked 2026-11-25)
+# "Share your promo code with your own audience only: do not post it on coupon, voucher or deal sites." (same, §5, checked 2026-11-25)
+# "Use the logos and banners of the kit without modifying them, only to promote Rempa." (same, §5, checked 2026-11-25)
+# "You cannot be credited for yourself, for your own company or for accounts of the same person" (same, §2, checked 2026-11-25)
+restrictions:
+  - "Say that your link is an affiliate link, close to the link"
+  - "Do not promise results: Rempa cannot guarantee what an AI assistant says"
+  - "No bidding on Rempa, rempa.ai or similar terms in paid search, and no look-alike domains or social accounts"
+  - "No unsolicited email, spam or misleading content, and do not present yourself as Rempa"
+  - "Share your promo code with your own audience only, never on coupon, voucher or deal sites"
+  - "Use the kit's logos and banners without modifying them, only to promote Rempa"
+  - "No commission for yourself, your own company or accounts of the same person"
 
 short_description: "Rempa tracks and optimizes your visibility, position and sentiment across AI platforms"
+# "A free account to try Rempa yourself and show it, with a 14-day trial and no credit card." / "A personal link and a dashboard" / "A marketing kit" (rempa.ai/affiliates/, checked 2026-11-25)
 description: "Rempa shows, analyzes and optimizes what ChatGPT, Gemini and Google AI Mode answer when your customers ask about your market: which brands they cite, whether you appear, and what to change to get mentioned. It is built for marketing teams, SEO consultants and agencies, who can add AI search to the services they sell. Free trial, no card needed.\n\nAffiliate program: 30% of every payment for 20 months, 60-day cookie, $50 minimum payout by PayPal or bank transfer, about once a month. Free to join with automatic approval, a personal link, a dashboard and a ready-made kit."
 
 agents:
@@ -29,3 +55,5 @@ agents:
 tags: ["saas", "ai", "geo", "aeo", "seo", "marketing", "analytics", "agencies"]
 submitted_by: "@rempaai"
 created_at: "2026-11-23"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"

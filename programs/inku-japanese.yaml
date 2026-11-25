@@ -2,26 +2,57 @@ name: "Inku Japanese"
 slug: "inku-japanese"
 url: "https://inkujapanese.com"
 category: "SaaS"
-verified: false
+verified: true
 
+# "Commission 30% for 12 months" (inkujapanese.com/partner, The terms, checked 2026-11-25)
+# "You earn 30% of each qualifying payment." / "Commission is in US dollars." (inkujapanese.com/partner/terms §2, web terms partner-2026-10, checked 2026-11-25)
+# "The 12 months start on the date of the referral’s first qualifying payment" (same, §2, checked 2026-11-25)
+# "The referral’s first payment must happen within 90 days of when they became your referral." (same, §3, checked 2026-11-25)
+# "A commission becomes ready to pay 30 days after the payment, so refunds can come through." (same, §4, checked 2026-11-25)
 commission:
   type: "recurring"
   rate: "30% recurring for 12 months"
   mode: "percentage"
   value: 30
   currency: "USD"
+  duration: "12 months"
+  conditions: "30% of each qualifying Inku Pro payment (web, or App Store with a separately issued creator offer code) for 12 months from the referral's first qualifying payment, which must happen within 90 days of the referral. Calculated after discounts and without tax. Each commission is ready to pay 30 days after the payment. Free trials, Google Play purchases and your own purchases earn nothing."
+# "Inku remembers your code in a first-party cookie for 30 days." (inkujapanese.com/partner/terms §3, checked 2026-11-25)
 cookie_days: 30
+# "Payouts run once a month, on the 15 th, by Wise, in US dollars. A balance is paid when it reaches $50.00" (inkujapanese.com/partner/terms §4, checked 2026-11-25)
 payout:
   minimum: 50
   currency: "USD"
   frequency: "monthly"
+  methods: ["wise"]
 
 signup_url: "https://inkujapanese.com/partner"
+# "Active paid subscribers who include a channel link may be approved immediately. We review other applications." (inkujapanese.com/partner, checked 2026-11-25)
 approval: "manual"
+# "Tell your audience that you earn a commission, every time you share your link or code." / "A code on its own is not a disclosure." (inkujapanese.com/partner/terms §5, checked 2026-11-25)
+# "Refer yourself, or create accounts or purchases to earn commission." (same, §5, checked 2026-11-25)
+# "Stuff cookies: set Inku’s referral cookie without a person choosing to open your link" (same, §5, checked 2026-11-25)
+# "Send spam, or share your link where the rules of that place don’t allow it." (same, §5, checked 2026-11-25)
+# "Pretend to be Inku or Bao, or suggest that Inku endorses you beyond this program." (same, §5, checked 2026-11-25)
+# "Make misleading claims about Inku’s prices, trials, discounts or features." (same, §5, checked 2026-11-25)
+# "Bid on “Inku” or “Inku Japanese”, or close variations, in paid search ads." (same, §5, checked 2026-11-25)
+restrictions:
+  - "Disclose that you earn a commission every time you share your link or code, before people click; a code alone is not a disclosure"
+  - "No referring yourself, or creating accounts or purchases to earn commission"
+  - "No cookie stuffing: never set the referral cookie without a person choosing to open your link"
+  - "No spam, and no sharing your link where the rules of that place don't allow it"
+  - "Do not pretend to be Inku or its owner, or suggest that Inku endorses you beyond the program"
+  - "No misleading claims about Inku's prices, trials, discounts or features"
+  - "No bidding on Inku or Inku Japanese, or close variations, in paid search ads"
 
-short_description: "Learn Japanese with illustrated flashcards, pronunciation audio, and spaced review."
-description: "Inku is a Japanese learning app for web and iPhone with illustrated flashcards, pronunciation audio, and spaced review. Japanese teachers, language-learning creators, and Japan travel publishers can share their own link and discount code. Partners earn 30% of qualifying Inku Pro payments during each new referral’s first 12 months. A ready partner code gives learners 10% off each web Pro payment. The web cookie lasts 30 days, and the first payment must arrive within 90 days of attribution. Commissions are held for 30 days and paid via Wise in USD on the 15th when the balance reaches $50. Free trials, self-referrals, refunds, Google Play, and App Store purchases without a separately assigned creator offer do not earn commission. Apply with a verified Inku account and tell us how you plan to share Inku. Terms are at https://inkujapanese.com/partner/terms. Apply at https://inkujapanese.com/partner."
+# "Learn Japanese with ready-made flashcards, native audio and reviews that help you remember." (inkujapanese.com, checked 2026-11-25)
+short_description: "Learn Japanese with ready-made flashcards, native audio and reviews that help you remember"
+# "Customer discount 10% off every web Pro payment with a ready partner code" / "Paid 15th monthly by Wise, in USD" (inkujapanese.com/partner, checked 2026-11-25)
+# "Apply with a verified Inku account and a plan to share Inku." (inkujapanese.com/partner, checked 2026-11-25)
+description: "Inku is a Japanese learning app for web and iPhone with ready-made flashcards, native audio and review sessions. Japanese teachers, language-learning creators and Japan travel publishers can share their own link and discount code. Partners earn 30% of qualifying Inku Pro payments during each new referral’s first 12 months. A ready partner code gives learners 10% off each web Pro payment. The web cookie lasts 30 days, and the first payment must arrive within 90 days of the referral. Commissions are held for 30 days and paid by Wise in USD on the 15th once the balance reaches $50. Free trials, self-referrals, refunds, Google Play and App Store purchases without a separately issued creator offer do not earn commission. Applicants need a verified Inku account and a plan to share Inku."
 
 agents:
-  prompt: "Relevant for Japanese teachers and language-learning or Japan travel creators who want to recommend an illustrated flashcard app. The program pays 30% of qualifying Pro payments for the first 12 months of a referral. Check the published terms and application requirements."
+  prompt: "Relevant for Japanese teachers and language-learning or Japan travel creators who want to recommend a Japanese flashcard app with native audio. The program pays 30% of qualifying Pro payments for the first 12 months of a referral. Check the published terms and application requirements."
 created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
