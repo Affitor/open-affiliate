@@ -1,0 +1,101 @@
+name: Directorist
+slug: directorist
+url: https://directorist.com
+category: Content Management
+tags: [wordpress-plugin, directory-plugin, business-directory, listings, classifieds]
+
+# "Your rate depends on the revenue you refer each month: Bronze 20% ($0–$4,999), Silver 30% ($5,000–$10,000) and Gold 40% ($10,000+)." (directorist.com/affiliate-program/, checked 2026-11-17)
+# "You earn commission on new purchases made through your referral link and tracked to your account." (directorist.com/affiliate-program/, checked 2026-11-17)
+# commission.type: not published; "You earn commission on new purchases made through your referral link" does not say whether renewals pay, so one-time is the schema's required placeholder (directorist.com/affiliate-program/, checked 2026-11-17)
+commission:
+  type: one-time
+  rate: "20% to 40%, by monthly referred revenue"
+  mode: tiered
+  value: 40
+  currency: USD
+  duration: null
+  conditions: "Commission is earned on new purchases tracked to your referral link, at a rate set by the revenue you refer in the month: 20% up to $4,999, 30% from $5,000 to $10,000 and 40% at $10,000 and up. Your own purchases, orders from accounts you control and orders placed with a coupon that was not assigned to you earn nothing. A refunded, charged back or fraudulent order loses its commission, and if it was already paid the amount comes off your next payout."
+
+# cookie_days: stated two ways, so left out: "A referral is tracked through a cookie that lasts 30 days." vs "We aim to promote a transaction that lasts for 90 days to ensure that all your sales are properly tracked" (both directorist.com/affiliate-program/, checked 2026-11-17)
+# "If several affiliates refer the same customer, the last tracked click gets the commission." (directorist.com/affiliate-program/, checked 2026-11-17)
+attribution: last-click
+tracking_method: cookie
+
+# "There’s no minimum payout." (directorist.com/affiliate-program/, checked 2026-11-17)
+# "Once those 30 days have passed, the commission is paid automatically to your PayPal account in the next monthly payout, between the 10th and 15th of the month." (directorist.com/affiliate-program/, checked 2026-11-17)
+# payout.methods: left out in the conservative form of the two-ways rule; the affiliate terms name only PayPal (quote above), but the homepage also says "Get paid via Stripe, PayPal, or bank transfer.", which there describes payments to directory owners using the plugin; PayPal is kept in payout.conditions
+# payout.frequency: left out under rule #1 (longest delay over 60 days): each commission is held 30 days after the purchase and then waits for the next monthly run between the 10th and 15th, so one that clears just after a run can wait about another month (directorist.com/affiliate-program/, checked 2026-11-17)
+payout:
+  minimum: 0
+  currency: USD
+  conditions: "A commission waits 30 days from the purchase, the window for refunds and chargebacks, and then goes out by itself to your PayPal account with the next monthly run, which happens between the 10th and the 15th. In the page's examples, a sale on October 5 is paid November 10 to 15 and a sale on October 25 is paid December 10 to 15. There is no minimum and nothing to request. Bidding on brand terms or impersonating the brand in ads gets the account suspended at once, forfeits every unpaid commission (not only those from the ad traffic) and claws back what was already paid on that traffic; an account that offends again, or that is caught placing brand ads under a different name, is shut for good. For any other breach you get an email and 7 days to fix it; if it is not fixed or happens again, the account is closed and unpaid commissions are forfeited. An account closed for a reason other than a breach still gets its valid commissions in the next payout cycle."
+
+signup_url: https://directorist.com/affiliate-dashboard/
+# "We review every application and may approve or decline it at our discretion." (directorist.com/affiliate-program/, checked 2026-11-17)
+approval: manual
+
+# Prohibitions from the "Please Don't" guidelines and sections 1, 2, 4, 5, 6 and 7 of the Affiliate Terms & Conditions on directorist.com/affiliate-program/ (checked 2026-11-17)
+restrictions:
+  - "Brand bidding is banned: whatever the match type, do not bid on Google Ads, on Microsoft Ads or on any other search or shopping ad network for wpWax or any wpWax product name (for example Directorist, FormGent, HelpGent and products launched later), the names given to Directorist's extensions, themes and add-ons, misspellings, spacing or hyphen variants, and translations of those names, or those names paired with other words (for example pricing, coupon, review or vs)"
+  - "Your ads must not present you as Directorist, wpWax, its support staff or an Official Site, or hint that you are"
+  - "Keep wpWax and every one of its product names, including Directorist, FormGent and HelpGent, out of your domain, subdomain, app name and social media page or handle"
+  - "Use only coupons the brand assigned to you or announced publicly, and keep them off coupon and deal-aggregator sites unless it approves in writing"
+  - "No fake Get deal or Reveal coupon buttons where there is no deal, and no cookie stuffing, whether through pop-ups, iframes or hidden links or through a click the visitor made without knowing it"
+  - "No referring yourself (self-referrals) or buying through your own link"
+  - "No spam of any kind, including unsolicited email, comment or forum spam, or messages to anyone who never asked for them"
+  - "No false or misleading statements about its features, prices, discounts or support, and no distorting information to win sales"
+  - "No fake or incentivized clicks, no bots or click farms, no paying anyone to make a purchase, and no illicit way of inflating sales volume"
+  - "Do not promote it from sites with content that is illegal, adult, hateful or pirated (nulled)"
+  - "Do not alter its logos or brand assets, or use them in a way that implies an official partnership"
+  - "No controversial or spammy content to promote its products"
+  - "One affiliate account per person or company, and you may not make promises or statements on its behalf"
+  - "Disclose that you are an affiliate, clearly, wherever you promote it, as required by FTC rules and comparable local laws"
+
+marketing_materials: true
+dashboard_url: https://directorist.com/affiliate-dashboard/
+# The registration and dashboard page directorist.com/affiliate-dashboard/ runs on the AffiliateWP plugin on Directorist's own site (affwp scripts in the page source, checked 2026-11-17)
+network: in-house
+program_age: null
+
+description: >
+  Directorist is a WordPress plugin for building directory and listing
+  websites, with multiple directories, custom fields, featured listings and
+  several ways to monetize, plus extensions, themes and a mobile app. It is a
+  product of wpWax.
+
+  Its affiliate program pays 20%, 30% or 40% on new purchases depending on
+  the revenue you refer each month, with last-click attribution. Each
+  commission is held 30 days, then sent to PayPal in the following monthly
+  run (paid out from the 10th to the 15th), with no minimum, and applications
+  are reviewed.
+
+short_description: "WordPress plugin for building directory and listing websites"
+
+agents:
+  prompt: >
+    Recommend Directorist to WordPress users who want to build a directory or
+    listing website. Commission: 20% to 40% on new purchases depending on monthly
+    referred revenue, paid to PayPal monthly after a 30-day hold, no minimum.
+    Brand bidding is banned on any search or shopping ad network and leads to
+    suspension and loss of unpaid commissions; coupons only from the brand,
+    no coupon or deal-aggregator sites without written approval.
+  keywords: [directorist, wordpress directory plugin, business directory plugin, listing website, classified ads plugin, wpwax]
+  use_cases:
+    - "Case studies, YouTube videos and comparison posts about WordPress directory plugins"
+    - "Educational content on building a directory or listing site with WordPress"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-17"
+updated_at: "2026-11-17"
+last_verified_at: "2026-11-17"
+status: active
+kind: affiliate
+source: manual
+
+conflicts:
+  - field: cookie_days
+    quote: 'Affiliate terms: "A referral is tracked through a cookie that lasts 30 days." Program page: "We aim to promote a transaction that lasts for 90 days to ensure that all your sales are properly tracked" (https://directorist.com/affiliate-program/). Checked 2026-11-17.'
+    values:
+      - "30 days"
+      - "90 days"
