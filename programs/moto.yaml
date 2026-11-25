@@ -6,13 +6,15 @@ tags: [productivity, habit-tracker, ios, mac, self-improvement]
 
 # "Share your link and earn €10 for every Moto Pro Lifetime sale it brings." (motohabit.com/partners, checked 2026-11-25)
 # "Moto Pro Lifetime, €29.99 with VAT." / "VAT, fees and the buyer's country never change your €10." (motohabit.com/partners, checked 2026-11-25)
+# "Any Moto Pro Lifetime purchase made on motohabit.com within 160 days of someone tapping your link." (motohabit.com/partners, FAQ, checked 2026-11-25)
+# "Apple doesn't let us tie App Store purchases to your link, so those don't count." (motohabit.com/partners, FAQ, checked 2026-11-25)
 commission:
   type: one-time
   rate: "€10 per sale"
   mode: flat
   value: 10
   currency: EUR
-  conditions: "Flat €10 for every Moto Pro Lifetime sale (€29.99 including VAT, one payment). The amount does not change with VAT, fees or the buyer's country."
+  conditions: "Flat €10 for every Moto Pro Lifetime purchase made on motohabit.com (€29.99 including VAT, one payment) within 160 days of a tap on your link. The amount does not change with VAT, fees or the buyer's country. App Store purchases can't be tied to a link and don't count."
 
 # "Any Moto Pro Lifetime purchase made on motohabit.com within 160 days of someone tapping your link." (motohabit.com/partners, checked 2026-11-25)
 cookie_days: 160
@@ -33,13 +35,12 @@ signup_url: https://motohabit.com/partners
 approval: manual
 network: creem
 # "Buy search ads on the word “Moto”" / "Post your link on coupon or deal sites" / "Buy through your own link, or pay people to buy" (motohabit.com/partners, Don't list, checked 2026-11-25)
-# "Label posts as an ad or paid partnership" (Do list) / "Apple doesn't let us tie App Store purchases to your link, so those don't count." (motohabit.com/partners, checked 2026-11-25)
+# "Label posts as an ad or paid partnership" (motohabit.com/partners, Do list, checked 2026-11-25)
 restrictions:
   - "No search ads on the word \"Moto\""
   - "No posting the link on coupon or deal sites"
   - "No buying through your own link or paying people to buy"
   - "Label posts as an ad or paid partnership"
-  - "App Store in-app purchases are not tracked and earn no commission"
 
 short_description: "Habit tracker for iPhone, iPad and Mac; €10 flat per Lifetime sale"
 # "Moto is free for three habits, forever" / "All 7 schedule types" / "Widgets, menu bar and Shortcuts" (motohabit.com, checked 2026-11-25)

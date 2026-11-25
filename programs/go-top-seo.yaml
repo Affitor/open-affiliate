@@ -35,18 +35,34 @@ signup_url: https://www.gotopseo.com/en/affiliates
 # "Participation requires an application and our approval. We review every application individually" (§3, checked 2026-11-25)
 approval: manual
 network: in-house
-# "No paid advertising on the Go Top brand name or variations of it." / "No coupon sites" / "No commission on your own account, your own business or an employee of it." / "Tell your audience you get a commission." (gotopseo.com/en/affiliates, checked 2026-11-25)
-# "send unsolicited email, messages or comments ... or promote the Service through automated or incentivised traffic" (§10, checked 2026-11-25)
-# "an account of a member of your household or of your family" (§8, checked 2026-11-25)
-# "run paid search or paid social advertising on our name, our brand, our domain or a misspelling of them … without our written permission" (§10, checked 2026-11-25)
-# "place your Referral Link through link schemes, paid links, private blog networks, hidden text" (§10, checked 2026-11-25)
+# "No paid advertising on the Go Top brand name or variations of it." / "No coupon sites" / "Tell your audience you get a commission." (gotopseo.com/en/affiliates, checked 2026-11-25)
 # "And no "sign up through me and I will refund you" offers." (gotopseo.com/en/affiliates, checked 2026-11-25)
+# §8: "your own account, or any project or website in your own account" / "an account you opened in another name, or under another email address, for yourself" (checked 2026-11-25)
+# §8: "an account of a member of your household or of your family" / "an account you control, administer or have access to, whether or not it is in your name" (checked 2026-11-25)
+# §8: "an entity you own, control, direct or are employed by, and an account opened on its behalf." (checked 2026-11-25)
+# §10: "state or imply any result, ranking, position or revenue we do not promise ourselves, or give a guarantee on our behalf" (checked 2026-11-25)
+# §10: "describe the Service inaccurately, use a price, plan, trial or offer that is not ours" / "or present a review, rating or testimonial that is not genuine" (checked 2026-11-25)
+# §10: "advertise a refund window, money-back guarantee, price or currency that applies only to one of the places the Service is sold" (checked 2026-11-25)
+# §10: "run paid search or paid social advertising on our name, our brand, our domain or a misspelling of them … without our written permission" (checked 2026-11-25)
+# §10: "register or use a domain, subdomain, social account, app or page name that contains our name or brand or a misspelling of it" (checked 2026-11-25)
+# §10: "send unsolicited email, messages or comments ... or promote the Service through automated or incentivised traffic" (checked 2026-11-25)
+# §10: "post to forums, comment sections or review sites in a way that breaks their rules" (checked 2026-11-25)
+# §10: "place your Referral Link through link schemes, paid links, private blog networks, hidden text or any other practice that breaches Google’s spam policies" (checked 2026-11-25)
+# §10: "copy our pages, our text or our design, or present our content as your own" (checked 2026-11-25)
+# §10: "promote the Service alongside content that is unlawful, hateful, sexual, violent, or aimed at children" (checked 2026-11-25)
 restrictions:
-  - "No commission on your own account, your own business, an employee of it, or your household or family"
+  - "No commission on your own account, projects or business, an employee of it, an account you opened for yourself under another name or email, an account you control, administer or have access to, or your household or family"
   - "No paid search or paid social advertising on the Go Top name, brand, domain or misspellings without written permission"
+  - "No domain, subdomain, social account, app or page name that contains the Go Top name or brand or a misspelling of it"
   - "No coupon sites and no refund-sharing offers"
   - "Disclose the commission clearly wherever you promote"
-  - "No unsolicited email or messages, automated or incentivised traffic, or link schemes"
+  - "Do not state or imply results, rankings, positions or revenue Go Top does not promise, or give guarantees on its behalf"
+  - "Do not describe Go Top inaccurately, use prices, plans, trials or offers that are not its own, or present reviews, ratings or testimonials that are not genuine"
+  - "Do not advertise a refund window, guarantee, price or currency that applies only to one place Go Top is sold as if it applied generally"
+  - "No unsolicited email, messages or comments, no posts that break a forum's or review site's rules, and no automated or incentivised traffic"
+  - "No link schemes, paid links, private blog networks, hidden text or other practices that breach Google's spam policies"
+  - "Do not copy Go Top's pages, text or design, or present its content as your own"
+  - "Do not promote Go Top alongside content that is unlawful, hateful, sexual, violent or aimed at children"
 
 short_description: "SEO and GEO content platform with rank tracking and AI visibility checks"
 description: >

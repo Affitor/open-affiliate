@@ -33,14 +33,26 @@ signup_url: https://www.waltrack.dev/affiliates
 # "Free to join. Your link is ready as soon as you join." (www.waltrack.dev/affiliates, checked 2026-11-25)
 approval: auto
 network: in-house
-# "Bidding on Waltrack or Walmart in search ads, spam, fake or misleading discount codes, and paying people to sign up." (www.waltrack.dev/affiliates, checked 2026-11-25)
+# "bidding on Waltrack, Walmart, or their variations and misspellings in search engine ads" / "or using them in ad copy, domain names, or account or app names" (www.waltrack.dev/terms §7, last updated November 25, 2026, checked 2026-11-25)
+# "presenting yourself as Waltrack or Walmart, or suggesting that Waltrack is affiliated with or endorsed by Walmart" (same, §7, checked 2026-11-25)
+# "sending spam: unsolicited emails, messages, comments or posts" (same, §7, checked 2026-11-25)
+# "publishing fake, misleading or unauthorized discount codes, or misleading claims about the Service and its prices" (same, §7, checked 2026-11-25)
+# "referring yourself or accounts you control, creating accounts for other people, or paying or rewarding people to sign up" (same, §7, checked 2026-11-25)
 # "Sign-ups from your own account, devices or email addresses don't count and earn no commission." (www.waltrack.dev/affiliates, checked 2026-11-25)
-# "generating clicks or sign-ups artificially: automated traffic, hidden links, or setting our cookie without a real click on your link (cookie stuffing)" (www.waltrack.dev/terms §7, last updated November 25, 2026, checked 2026-11-25)
+# "generating clicks or sign-ups artificially: automated traffic, hidden links, or setting our cookie without a real click on your link (cookie stuffing)" (www.waltrack.dev/terms §7, checked 2026-11-25)
+# "promoting the Service alongside illegal content or content that infringes the rights of others" (same, §7, checked 2026-11-25)
+# "You must disclose your affiliate relationship with us wherever the law or the platform you publish on requires it." (same, §7, checked 2026-11-25)
 restrictions:
-  - "No bidding on Waltrack or Walmart in search ads"
-  - "No spam, fake or misleading discount codes, or paying people to sign up"
-  - "No self-referrals: sign-ups from your own account, devices or email addresses earn no commission"
+  - "No bidding on Waltrack, Walmart, or their variations and misspellings in search engine ads"
+  - "No using Waltrack or Walmart in ad copy, domain names, or account or app names"
+  - "No presenting yourself as Waltrack or Walmart, or suggesting that Waltrack is affiliated with or endorsed by Walmart"
+  - "No spam: unsolicited emails, messages, comments or posts"
+  - "No fake, misleading or unauthorized discount codes, or misleading claims about Waltrack and its prices"
+  - "No referring yourself or accounts you control, creating accounts for other people, or paying or rewarding people to sign up"
+  - "Sign-ups from your own account, devices or email addresses earn no commission"
   - "No automated traffic, hidden links or cookie stuffing"
+  - "No promoting Waltrack alongside illegal content or content that infringes the rights of others"
+  - "Disclose your affiliate relationship wherever the law or the platform you publish on requires it"
 
 short_description: "Walmart price tracker with price history and alerts on drops, target prices and restocks"
 description: >

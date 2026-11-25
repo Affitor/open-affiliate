@@ -28,14 +28,20 @@ payout:
 signup_url: "https://rempa.ai/affiliates/"
 # "Free to join. Your link is ready in two minutes." / "Your personal link is ready at once." (rempa.ai/affiliates/, checked 2026-11-25)
 approval: "auto"
-# "Say that your link is an affiliate link, close to the link." / "Do not bid on "Rempa" or "rempa.ai" or similar terms in paid search" (rempa.ai/affiliates/terms/ §5, checked 2026-11-25)
-# "No unsolicited email, spam, or misleading content" / "do not post it on coupon, voucher or deal sites." (same, §5, checked 2026-11-25)
+# "Say that your link is an affiliate link, close to the link." (rempa.ai/affiliates/terms/ §5, last updated November 24, 2026, checked 2026-11-25)
+# "Do not promise results: Rempa measures and recommends, and cannot guarantee what an AI assistant says." (same, §5, checked 2026-11-25)
+# "Do not bid on "Rempa" or "rempa.ai" or similar terms in paid search, and do not register look-alike domains or social accounts." (same, §5, checked 2026-11-25)
+# "No unsolicited email, spam, or misleading content; do not present yourself as Rempa." (same, §5, checked 2026-11-25)
+# "Share your promo code with your own audience only: do not post it on coupon, voucher or deal sites." (same, §5, checked 2026-11-25)
+# "Use the logos and banners of the kit without modifying them, only to promote Rempa." (same, §5, checked 2026-11-25)
 # "You cannot be credited for yourself, for your own company or for accounts of the same person" (same, §2, checked 2026-11-25)
 restrictions:
   - "Say that your link is an affiliate link, close to the link"
-  - "No bidding on Rempa, rempa.ai or similar terms in paid search"
-  - "No unsolicited email, spam or misleading content"
-  - "No posting promo codes on coupon, voucher or deal sites"
+  - "Do not promise results: Rempa cannot guarantee what an AI assistant says"
+  - "No bidding on Rempa, rempa.ai or similar terms in paid search, and no look-alike domains or social accounts"
+  - "No unsolicited email, spam or misleading content, and do not present yourself as Rempa"
+  - "Share your promo code with your own audience only, never on coupon, voucher or deal sites"
+  - "Use the kit's logos and banners without modifying them, only to promote Rempa"
   - "No commission for yourself, your own company or accounts of the same person"
 
 short_description: "Rempa tracks and optimizes your visibility, position and sentiment across AI platforms"

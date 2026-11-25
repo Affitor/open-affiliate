@@ -29,14 +29,20 @@ payout:
 signup_url: "https://inkujapanese.com/partner"
 # "Active paid subscribers who include a channel link may be approved immediately. We review other applications." (inkujapanese.com/partner, checked 2026-11-25)
 approval: "manual"
-# "Tell your audience that you earn a commission, every time you share your link or code." (inkujapanese.com/partner/terms §5, checked 2026-11-25)
-# "Refer yourself, or create accounts or purchases to earn commission." / "Stuff cookies" / "Send spam" (same, §5, checked 2026-11-25)
+# "Tell your audience that you earn a commission, every time you share your link or code." / "A code on its own is not a disclosure." (inkujapanese.com/partner/terms §5, checked 2026-11-25)
+# "Refer yourself, or create accounts or purchases to earn commission." (same, §5, checked 2026-11-25)
+# "Stuff cookies: set Inku’s referral cookie without a person choosing to open your link" (same, §5, checked 2026-11-25)
+# "Send spam, or share your link where the rules of that place don’t allow it." (same, §5, checked 2026-11-25)
+# "Pretend to be Inku or Bao, or suggest that Inku endorses you beyond this program." (same, §5, checked 2026-11-25)
+# "Make misleading claims about Inku’s prices, trials, discounts or features." (same, §5, checked 2026-11-25)
 # "Bid on “Inku” or “Inku Japanese”, or close variations, in paid search ads." (same, §5, checked 2026-11-25)
 restrictions:
-  - "Disclose that you earn a commission every time you share your link or code"
-  - "No self-referrals or accounts and purchases created to earn commission"
-  - "No cookie stuffing"
-  - "No spam"
+  - "Disclose that you earn a commission every time you share your link or code, before people click; a code alone is not a disclosure"
+  - "No referring yourself, or creating accounts or purchases to earn commission"
+  - "No cookie stuffing: never set the referral cookie without a person choosing to open your link"
+  - "No spam, and no sharing your link where the rules of that place don't allow it"
+  - "Do not pretend to be Inku or its owner, or suggest that Inku endorses you beyond the program"
+  - "No misleading claims about Inku's prices, trials, discounts or features"
   - "No bidding on Inku or Inku Japanese, or close variations, in paid search ads"
 
 # "Learn Japanese with ready-made flashcards, native audio and reviews that help you remember." (inkujapanese.com, checked 2026-11-25)

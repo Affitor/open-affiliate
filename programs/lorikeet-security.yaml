@@ -8,13 +8,14 @@ tags:
   - partner-program
 # "Referral fee 15% of first-year revenue" / "Auditor co-sell 20%" / "MSP margin 30% recurring" / "Reseller margin 35–45% off list, by tier" (lorikeetsecurity.com/partners/, Program terms, checked 2026-11-25)
 # "Commission is earned when the customer pays Lorikeet Security." (lorikeetsecurity.com/partners/, checked 2026-11-25)
+# "You register the account by emailing sales@lorikeetsecurity.com before commercial discussions begin." / "Each deal flows under whichever role fits the motion, not both." (lorikeetsecurity.com/partners/, FAQ, checked 2026-11-25)
 commission:
   type: tiered
   rate: 15% to 45%
   mode: tiered
   value: 45
   duration: null
-  conditions: Up to 15% of first-year revenue on referrals, 20% auditor co-sell, 30% recurring MSP margin, or 35-45% reseller margin off list by tier. Commission is earned when the customer pays Lorikeet Security.
+  conditions: Up to 15% of first-year revenue on referrals, 20% auditor co-sell, 30% recurring MSP margin, or 35-45% reseller margin off list by tier. Commission is earned when the customer pays Lorikeet Security. Register the account by email to the partner team before commercial discussions begin; each deal flows under one partner role, not both.
 # "You invoice us, and we pay within 30 days by ACH or wire." (lorikeetsecurity.com/partners/, checked 2026-11-25)
 payout:
   methods: [bank]
@@ -27,7 +28,7 @@ marketing_materials: true
 network: in-house
 # "The prospect must be aware of the introduction (no cold spray)." / "Existing customers cannot be registered." (lorikeetsecurity.com/partners/, FAQ, checked 2026-11-25)
 restrictions:
-  - "Referrals must be warm introductions the prospect is aware of, no cold outreach"
+  - "The prospect must be aware of the introduction (no cold outreach)"
   - "Existing Lorikeet Security customers cannot be registered"
 # "Ninety days of exclusivity, with one 90-day extension on written request" (lorikeetsecurity.com/partners/, FAQ, checked 2026-11-25)
 description: "The Lorikeet Security Partner Program is built for consultants, auditors, MSPs, and advisors. Earn 15% of first-year revenue on referrals, 20% on auditor co-sell, 30% recurring MSP margins, or 35-45% reseller margins, with 90-day deal registration protection."
