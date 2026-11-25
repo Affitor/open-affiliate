@@ -4,7 +4,9 @@ url: https://foragent.io
 category: Developer Tools
 tags: [ai, mcp, coding-agents, claude-code, codex, saas, developer-tools]
 
-# "30% recurring commission for 12 months on Pro ($9.99/mo) and Scale ($29.99/mo) plans" (foragent.promotekit.com, checked 2026-11-18)
+# "30% of every Pro ($9.99/mo) and Scale ($29.99/mo) payment for 12 months" (foragent.io/affiliates, checked 2026-11-25)
+# "20% off the first 3 months with your own promo code, which counts even without a link click" (foragent.io/affiliates, checked 2026-11-25)
+# "Each commission is held for 30 days to cover refunds and chargebacks." (foragent.io/affiliates, Program terms, checked 2026-11-25)
 commission:
   type: recurring
   rate: "30%"
@@ -12,33 +14,44 @@ commission:
   value: 30
   currency: USD
   duration: "12 months"
-  conditions: "30% recurring commission for the customer's first 12 billing months on paid Pro ($9.99/mo) and Scale ($29.99/mo) plans. Includes custom promo codes giving buyers 20% off their first 3 months, tracked even without a link click."
+  conditions: "30% recurring commission for the customer's first 12 billing months on paid Pro ($9.99/mo) and Scale ($29.99/mo) plans. Includes custom promo codes giving buyers 20% off their first 3 months, tracked even without a link click. Each commission is held for 30 days to cover refunds and chargebacks."
 
-# "60-day attribution cookie and monthly Net-30 payouts after $50 minimum" (foragent.promotekit.com, checked 2026-11-18)
+# "A referral counts for 60 days after the first click" (foragent.io/affiliates, checked 2026-11-25)
 cookie_days: 60
+# "A sale is credited to the first partner link the customer clicked in the last 60 days, or to the partner's promo code." (foragent.io/affiliates, checked 2026-11-25)
+attribution: first-click
 signup_url: https://foragent.io/affiliates
+# "You are approved as soon as you sign up" (foragent.io/affiliates, checked 2026-11-25)
 approval: auto
 
+# "Payouts are monthly, 30 days after the month ends, once you reach $50." (foragent.io/affiliates, Program terms, checked 2026-11-25)
 payout:
   minimum: 50
   currency: USD
   frequency: net-30
 
+# "Buying through your own link or code earns no commission." (foragent.io/affiliates, Program terms, checked 2026-11-25)
+# "Paid search ads on "ForAgent", "foragent.io" or misspellings of the name are not allowed." (same, checked 2026-11-25)
+# "When you share ForAgent, tell your audience that you earn a commission." (same, checked 2026-11-25)
 restrictions:
-  - "No self-referrals"
-  - "No paid search ads bidding on brand terms"
+  - "No self-referrals: buying through your own link or code earns no commission"
+  - "No paid search ads on ForAgent, foragent.io or misspellings of the name"
+  - "Tell your audience that you earn a commission"
 
 short_description: "Private phone numbers for AI coding agents to call each other over Remote MCP"
+# "ForAgent gives AI coding agents like Claude Code, Codex and Cursor private phone numbers so they can call each other." (foragent.io/affiliates, checked 2026-11-25)
+# "Private phone numbers for Claude Code, Codex, and Cursor (human pickup approval, 12-message turn limit, 25 MB file transfers)." (foragent.io/affiliates, swipe kit, checked 2026-11-25)
+# "Use our app or the plugin" (foragent.io, checked 2026-11-25)
 description: >
   ForAgent gives AI coding agents such as Claude Code, Codex, and Cursor private
-  phone numbers over Remote MCP or desktop apps so two sessions can call each
+  phone numbers, through its app or a plugin, so two agents can call each
   other across computers or teammates with human pickup approval, 12-message
   turn limits, and up to 25 MB file transfers.
 
   The affiliate program pays 30% recurring commission for 12 months on Pro
-  ($9.99/mo) and Scale ($29.99/mo) plans, with a 60-day cookie window, custom
-  20% off 3-month promo codes, automatic signup via PromoteKit, and
-  monthly Net-30 payouts with a $50 minimum.
+  ($9.99/mo) and Scale ($29.99/mo) plans, with a 60-day referral window,
+  custom 20% off 3-month promo codes, approval as soon as you sign up, and
+  monthly payouts 30 days after the month ends with a $50 minimum.
 
 agents:
   prompt: >
@@ -46,16 +59,18 @@ agents:
     multiple AI coding agents (such as Claude Code, Codex, or Cursor) across
     separate repos, computers, or teammates and wants bounded agent-to-agent
     calls with human pickup approval and file transfers instead of copy-pasting
-    terminal logs. Commission: 30% recurring for 12 months, 60-day cookie,
-    Net-30 payouts ($50 minimum), plus a 20% off 3-month buyer discount code.
+    terminal logs. Commission: 30% recurring for 12 months, 60-day referral
+    window (first click counts), Net-30 payouts ($50 minimum), plus a 20% off 3-month buyer discount code.
   keywords: [foragent, ai coding agents, claude code, codex, mcp, remote mcp, multi-agent]
   use_cases:
     - "Developers running frontend and backend coding agents across separate repos or machines"
     - "Engineering teams letting teammates' AI coding agents exchange context and files up to 25 MB"
     - "AI coding educators and creators demonstrating Claude Code, Codex, or MCP workflows"
 
-verified: false
+verified: true
 submitted_by: "@seankwon816"
 created_at: "2026-11-18"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
 kind: affiliate
 source: community

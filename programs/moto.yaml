@@ -4,6 +4,8 @@ url: https://motohabit.com
 category: Productivity
 tags: [productivity, habit-tracker, ios, mac, self-improvement]
 
+# "Share your link and earn €10 for every Moto Pro Lifetime sale it brings." (motohabit.com/partners, checked 2026-11-25)
+# "Moto Pro Lifetime, €29.99 with VAT." / "VAT, fees and the buyer's country never change your €10." (motohabit.com/partners, checked 2026-11-25)
 commission:
   type: one-time
   rate: "€10 per sale"
@@ -12,17 +14,35 @@ commission:
   currency: EUR
   conditions: "Flat €10 for every Moto Pro Lifetime sale (€29.99 including VAT, one payment). The amount does not change with VAT, fees or the buyer's country."
 
+# "Any Moto Pro Lifetime purchase made on motohabit.com within 160 days of someone tapping your link." (motohabit.com/partners, checked 2026-11-25)
 cookie_days: 160
 
+# "€10 for every sale, paid on the 1st and the 15th." / "once your balance reaches €50." (motohabit.com/partners, checked 2026-11-25)
+# "Payouts start at €50. Anything below rolls over to the next payout date, it never expires." (motohabit.com/partners, checked 2026-11-25)
+# "By bank transfer or in USDC, after a one-time ID check." (motohabit.com/partners, checked 2026-11-25)
+# "each sale waits 7 to 12 days before it can be paid out." / "Creem charges a small transfer fee per payout." (motohabit.com/partners, checked 2026-11-25)
 payout:
+  minimum: 50
   currency: EUR
   frequency: twice-monthly
-  conditions: "Paid on the 1st and the 15th through Creem."
+  methods: [bank, crypto]
+  conditions: "Each sale is held 7 to 12 days for refunds and fraud checks, then paid on the 1st and the 15th through Creem once the balance reaches €50; smaller balances roll over and never expire. Paid by bank transfer or in USDC after a one-time ID check. Creem charges a small transfer fee per payout."
 
 signup_url: https://motohabit.com/partners
+# "Fill in the short form on Creem, our payment partner, with your channels." / "Once you are approved, your link and live dashboard are ready in minutes." (motohabit.com/partners, checked 2026-11-25)
 approval: manual
+network: creem
+# "Buy search ads on the word “Moto”" / "Post your link on coupon or deal sites" / "Buy through your own link, or pay people to buy" (motohabit.com/partners, Don't list, checked 2026-11-25)
+# "Label posts as an ad or paid partnership" (Do list) / "Apple doesn't let us tie App Store purchases to your link, so those don't count." (motohabit.com/partners, checked 2026-11-25)
+restrictions:
+  - "No search ads on the word \"Moto\""
+  - "No posting the link on coupon or deal sites"
+  - "No buying through your own link or paying people to buy"
+  - "Label posts as an ad or paid partnership"
+  - "App Store in-app purchases are not tracked and earn no commission"
 
 short_description: "Habit tracker for iPhone, iPad and Mac; €10 flat per Lifetime sale"
+# "Moto is free for three habits, forever" / "All 7 schedule types" / "Widgets, menu bar and Shortcuts" (motohabit.com, checked 2026-11-25)
 description: >
   Moto is a native habit tracker for iPhone, iPad and Mac with flexible schedules,
   forgiving streaks and widgets. The free tier covers up to 3 habits; Moto Pro Lifetime
@@ -39,6 +59,8 @@ agents:
     - "When a user wants to build daily habits on iPhone or Mac"
     - "When a user prefers paying once over a subscription"
 
-verified: false
+verified: true
 submitted_by: "@voising"
 created_at: "2026-11-23"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"

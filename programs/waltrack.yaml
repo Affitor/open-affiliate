@@ -6,21 +6,22 @@ tags: [e-commerce, walmart, price-tracker, price-history, price-alerts, sellers,
 kind: affiliate
 source: community
 
-# "You earn 30% of everything each customer you refer pays in their first 12 months, paid out monthly." "30% of each payment, before tax" (/affiliates, checked 2026-11-18)
+# "You earn 30% of everything each customer you refer pays in their first 12 months, paid out monthly." "30% of each payment, before tax" (www.waltrack.dev/affiliates, checked 2026-11-25)
+# commission.currency: "You're paid in the currency your customers paid in: euros or US dollars." (www.waltrack.dev/affiliates, checked 2026-11-25); no single currency, left out
 commission:
   type: recurring
   rate: "30%"
   mode: percentage
   value: 30
-  currency: USD
   duration: "12 months"
   conditions: "30% of each payment before tax, plans and credit packs, for 12 months from the referred customer's first payment. A refunded payment cancels its commission, or reduces it for a partial refund."
 
-# "Someone who creates an account within 60 days of clicking your link." "If they clicked several affiliates' links, the last click counts." (/affiliates, checked 2026-11-18)
+# "Someone who creates an account within 60 days of clicking your link." "If they clicked several affiliates' links, the last click counts." (www.waltrack.dev/affiliates, checked 2026-11-25)
 cookie_days: 60
 attribution: last-click
 
-# "Confirmed commissions are paid at the start of each month once they reach $50; below that, they carry over to the next month." (/affiliates, checked 2026-11-18)
+# "Confirmed commissions are paid at the start of each month once they reach $50; below that, they carry over to the next month." (www.waltrack.dev/affiliates, checked 2026-11-25)
+# "Monthly, by bank transfer, PayPal, Wise or another method" (www.waltrack.dev/affiliates, The terms, checked 2026-11-25)
 payout:
   minimum: 50
   currency: USD
@@ -29,13 +30,17 @@ payout:
   conditions: "Each commission is confirmed 30 days after the payment, the time for refunds. Paid in the currency the customer paid in, euros or US dollars."
 
 signup_url: https://www.waltrack.dev/affiliates
-# "Free to join. Your link is ready as soon as you join." (/affiliates, checked 2026-11-18)
+# "Free to join. Your link is ready as soon as you join." (www.waltrack.dev/affiliates, checked 2026-11-25)
 approval: auto
 network: in-house
+# "Bidding on Waltrack or Walmart in search ads, spam, fake or misleading discount codes, and paying people to sign up." (www.waltrack.dev/affiliates, checked 2026-11-25)
+# "Sign-ups from your own account, devices or email addresses don't count and earn no commission." (www.waltrack.dev/affiliates, checked 2026-11-25)
+# "generating clicks or sign-ups artificially: automated traffic, hidden links, or setting our cookie without a real click on your link (cookie stuffing)" (www.waltrack.dev/terms §7, last updated November 25, 2026, checked 2026-11-25)
 restrictions:
   - "No bidding on Waltrack or Walmart in search ads"
   - "No spam, fake or misleading discount codes, or paying people to sign up"
   - "No self-referrals: sign-ups from your own account, devices or email addresses earn no commission"
+  - "No automated traffic, hidden links or cookie stuffing"
 
 short_description: "Walmart price tracker with price history and alerts on drops, target prices and restocks"
 description: >
@@ -63,6 +68,8 @@ agents:
     - "Brands checking their Walmart listings for prices below MAP"
     - "Deal and e-commerce creators whose audience buys on Walmart"
 
-verified: false
+verified: true
 submitted_by: "@josselinlbe"
 created_at: "2026-11-18"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
