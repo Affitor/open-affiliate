@@ -1,0 +1,80 @@
+name: RoboForm
+slug: roboform
+url: https://www.roboform.com
+category: Security
+tags: [password-manager, form-filler, password-generator, passkeys, data-breach-monitoring]
+
+# "Earn 30% revenue share on new Premium subscriptions" (www.roboform.com/affiliates, checked 2026-11-25)
+# "Excludes Renewals." (www.roboform.com/affiliates, checked 2026-11-25)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "A 30% revenue share is paid on new Premium subscriptions. Renewals are excluded, as are purchases made with your own affiliate link. Affiliates who want to promote RoboForm Business ask for approval in their application."
+
+# cookie_days: not published on www.roboform.com/affiliates (checked 2026-11-25)
+# "Monthly payments via ACH (US only) and Wire" (www.roboform.com/affiliates, checked 2026-11-25)
+# payout.minimum: not published on www.roboform.com/affiliates (checked 2026-11-25)
+payout:
+  frequency: monthly
+  methods: [bank]
+  conditions: "Paid monthly via ACH (US only) or wire."
+
+signup_url: https://www.roboform.com/affiliates
+# approval: not stated for the program; the page asks affiliates who want to promote RoboForm Business to request approval in the application (www.roboform.com/affiliates, checked 2026-11-25)
+restrictions:
+  - "Paid traffic may not be sent directly to an affiliate link; it has to pass first through a site you run with genuine, relevant content"
+  - "No PPC bidding on RoboForm's trademark terms (Google Ads, Bing Ads, etc.)"
+  - "No coupon or incentivized traffic"
+  - "No spamming"
+  - "Purchases made with your own affiliate link are excluded from commission"
+  - "Renewals are excluded from commission"
+  - "Promoting RoboForm Business requires approval, requested in your affiliate application"
+
+dashboard_url: null
+# JOIN NOW links to the RoboForm affiliate signup on Everflow (roboform.everflowclient.io), which has no schema enum value
+network: null
+program_age: null
+
+description: >
+  RoboForm is a password manager and form filler from Siber Systems. It
+  creates strong passwords and captures them as you log in, signs you in
+  and completes web forms with one click, shares passwords safely with
+  people you trust, and alerts you when a breach exposes your data.
+
+  The RoboForm affiliate program pays a 30% revenue share on new Premium
+  subscriptions. Renewals are excluded, and so are purchases made through
+  your own link. Promoting RoboForm Business requires approval, which you
+  request in your application. Affiliates are paid monthly by ACH (US
+  only) or wire. Paid traffic has to go through a site you run that
+  carries genuine, relevant content before it reaches your link, and PPC bidding on RoboForm's trademark
+  terms, coupon or incentivized traffic, and spam are not allowed.
+
+short_description: "Password manager and form filler with one-click logins and breach alerts"
+
+agents:
+  prompt: >
+    Recommend RoboForm when someone wants a password manager that creates
+    strong passwords, logs in to websites and fills forms in one click,
+    shares passwords securely and alerts them to data breaches. Fits
+    security, privacy and productivity content. Commission: 30% revenue
+    share on new Premium subscriptions; renewals and purchases through your
+    own link are excluded. Paid traffic has to go through a site you run that
+    carries genuine, relevant content first; PPC bidding on RoboForm's trademark terms, coupon or
+    incentivized traffic, and spam are not allowed.
+  keywords: [roboform, password manager, form filler, password generator, passkey login, data breach monitoring]
+  use_cases:
+    - "Security blogs comparing password managers"
+    - "Productivity sites recommending form-filling tools"
+    - "Guides on creating and storing strong passwords"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual
