@@ -1,0 +1,27 @@
+name: "Inku Japanese"
+slug: "inku-japanese"
+url: "https://inkujapanese.com"
+category: "SaaS"
+verified: false
+
+commission:
+  type: "recurring"
+  rate: "30% recurring for 12 months"
+  mode: "percentage"
+  value: 30
+  currency: "USD"
+cookie_days: 30
+payout:
+  minimum: 50
+  currency: "USD"
+  frequency: "monthly"
+
+signup_url: "https://inkujapanese.com/partner"
+approval: "manual"
+
+short_description: "Learn Japanese with illustrated flashcards, pronunciation audio, and spaced review."
+description: "Inku is a Japanese learning app for web and iPhone with illustrated flashcards, pronunciation audio, and spaced review. Japanese teachers, language-learning creators, and Japan travel publishers can share their own link and discount code. Partners earn 30% of qualifying Inku Pro payments during each new referral’s first 12 months. A ready partner code gives learners 10% off each web Pro payment. The web cookie lasts 30 days, and the first payment must arrive within 90 days of attribution. Commissions are held for 30 days and paid via Wise in USD on the 15th when the balance reaches $50. Free trials, self-referrals, refunds, Google Play, and App Store purchases without a separately assigned creator offer do not earn commission. Apply with a verified Inku account and tell us how you plan to share Inku. Terms are at https://inkujapanese.com/partner/terms. Apply at https://inkujapanese.com/partner."
+
+agents:
+  prompt: "Relevant for Japanese teachers and language-learning or Japan travel creators who want to recommend an illustrated flashcard app. The program pays 30% of qualifying Pro payments for the first 12 months of a referral. Check the published terms and application requirements."
+created_at: "2026-11-25"
