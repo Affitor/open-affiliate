@@ -1,0 +1,144 @@
+name: InstaWP
+slug: instawp
+url: https://instawp.com
+category: Infrastructure
+tags: [wordpress-hosting, managed-hosting, staging, sandbox, website-migration, waas]
+
+# "Earn 5% of every payment your referrals make, with no end date and no cap." (instawp.com/affiliate, checked 2026-11-23)
+# "Duration Lifetime. It recurs for the whole life of the referred account, for as long as it keeps paying" (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# "Commission is calculated in US dollars." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+commission:
+  type: recurring
+  rate: "5%"
+  mode: percentage
+  value: 5
+  currency: USD
+  duration: lifetime
+  conditions: "You get 5% of each payment a referred customer makes, for as long as that account keeps paying, with no cap on earnings, nor on how many customers you refer. A referral turns into a conversion with its first real payment, meaning a credit purchase or a paid invoice above $0; free or promotional credits being spent do not count. Commission is worked out on what InstaWP actually receives and keeps, after discounts, credits and refunds, without taxes, payment processing fees or amounts later charged back, and becomes payable only after the payment has cleared and its refund window is over."
+
+# "Cookie window 60 days from the click" (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+cookie_days: 60
+# "Last click wins. If a visitor clicks more than one affiliate link, the most recent one before signup gets the credit." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+attribution: last-click
+tracking_method: cookie
+
+# "Minimum payout $50 USD in approved commission" (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# "Approved commission is held for 45 days after the sale it relates to." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# "Once your approved balance reaches $50 USD, it is paid out in the next payment round." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# "Payment method Stripe, to the bank account you connect in your InstaWP account." (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# payout.frequency: left out under rule #1 and the Duplicator disposition (2026-10-20): each commission is held 45 days after the sale and then paid "in the next payment round", on a day the terms do not give; the wording is kept in payout.conditions (instawp.com/legal/affiliate-terms, checked 2026-11-23)
+# payout.methods: stated two ways: "Affiliate commissions are paid in cash through Stripe only." (https://instawp.com/affiliate/) vs "Payment method Stripe, to the bank account you connect in your InstaWP account." (https://instawp.com/legal/affiliate-terms/), checked 2026-11-23; the page sentences name different method sets, so the field is left out (DAILY §2.7 two-ways)
+payout:
+  minimum: 50
+  currency: USD
+  conditions: "Each approved commission is held 45 days after the payment it comes from, so the refund window closes first. When the approved balance reaches $50 USD it goes out in the next payment round; a smaller balance rolls over to the round after. The approved balance goes through Stripe to the bank account connected under Sell > Payouts, which must be set up before anything can be paid, and never in InstaWP credits."
+
+signup_url: https://instawp.com/affiliate/
+# "Our team reviews every application and emails you the decision." (instawp.com/affiliate, checked 2026-11-23)
+# "Applications are typically reviewed within 48 hours." (instawp.com/affiliate, checked 2026-11-23)
+approval: manual
+approval_time: "typically within 48 hours"
+
+# Affiliate Program Terms sections 1-13 (instawp.com/legal/affiliate-terms, checked 2026-11-23), the affiliate page and the docs page docs.instawp.com/account/affiliate-program (checked 2026-11-23)
+restrictions:
+  - "Joining is an application subject to InstaWP's approval: InstaWP reviews every application and will decide at its discretion (signing up guarantees nothing), the program requires an approved application, and promoting InstaWP may start only once you are approved; if you do not accept the affiliate terms, you may neither join the program nor promote InstaWP as an affiliate"
+  - "To be eligible, an affiliate must meet all of these: you are 18 years old or more and can enter into a binding contract, and you register with details that are accurate and complete and keep them current"
+  - "No paid plan is needed to join or be an affiliate, but a free InstaWP account that has a verified email address is required, because your application, dashboard, payouts and referral link all live in that account, and you must be able to connect to it a Stripe payout account in your own or your business's name (affiliates still need an approved application)"
+  - "You must not be located in a country or on a list that is subject to US sanctions or to export controls, nor act on behalf of anyone who is"
+  - "A current InstaWP employee or contractor, or an immediate family member of one, is not eligible"
+  - "InstaWP can, at its discretion, decline or close an affiliate account, including where participation would clash with an existing commercial agreement between you and InstaWP"
+  - "Affiliate commission and Agency Program partner benefits cannot both be claimed on the same customer"
+  - "Each person or company gets one affiliate account only; creating extra accounts in order to route referrals to yourself, reset a payout threshold or get around an InstaWP decision is grounds for closure of the account and forfeiture of unpaid commission"
+  - "Your account, links and earned commissions are personal: you cannot sell, rent or transfer them unless InstaWP gives written consent"
+  - "Use your referral link as issued: do not mask, redirect through or rewrite it in any way hiding that it is an affiliate link or breaking the referral parameter (ordinary link shorteners are fine, as is a redirect from a page of your own site)"
+  - "No self-referrals: self-referral is not allowed, meaning you may not use, for your own account, your own link, or arrange that someone routes your purchase through it"
+  - "Paid search on the InstaWP brand is not allowed: no bidding, on any search or ad platform, on \"InstaWP\" or its close variants and misspellings, and no use of the InstaWP name in ad copy, in display URLs or in a paid ad's landing domain"
+  - "No domains and handles that look like InstaWP: no registering domains, subdomains, social handles, app names or profiles containing \"InstaWP\" or a confusable variant, or do anything that suggests you are InstaWP or speak for it"
+  - "No unsolicited messaging: no spam email, no bulk DMs, no comment or forum spam, and no messaging that breaks anti-spam law (CAN-SPAM, or GDPR rules on consent, for example)"
+  - "No cookie stuffing or forced clicks: the InstaWP cookie may not be set without a genuine click, and adware, toolbars, browser extensions, auto-redirects, pop-unders and hidden iframes are banned"
+  - "No fake discounts: you may not advertise coupon codes, discounts or offers that InstaWP has not published, or run coupon pages that intercept intent at checkout using codes that do not exist"
+  - "No incentivised traffic: no paying, rewarding or otherwise inducing people with no real interest to click your link or sign up, including through paid-to-click and reward schemes"
+  - "No misrepresentation: no claiming to be InstaWP's employee, reseller or official support channel, promise things InstaWP does not offer, or copy its site to imply endorsement"
+  - "Unsuitable placements are not allowed: you may not promote InstaWP on sites with illegal or adult content, hate speech, harassment, malware or pirated software, or on anything that would reasonably damage its reputation"
+  - "No automated abuse: bots, scripts, click farms and artificial traffic are banned, as is any attempt to probe or manipulate InstaWP's tracking"
+  - "Disclose the relationship: tell your audience you earn a commission, in a form that meets the advertising rules where you and they are, including the US FTC endorsement guidelines, visible before anyone clicks and not buried in a footer"
+  - "Only say things that are true: describe InstaWP's pricing, features, limits and guarantees the way they actually are, and if you are unsure, look at its published pages or ask it; and keeping your claims current is your responsibility"
+  - "While you are in the program you hold a limited, revocable, non-exclusive licence to use InstaWP's name, logo and approved marketing assets, and only to promote InstaWP, with the files as published on its brand assets page; do not redraw the logo; do not recolour, stretch or combine it with your own mark, and you may not register or claim any right in InstaWP's marks"
+  - "You cannot make promises, enter into contracts, accept payments or handle support on InstaWP's behalf, nor present yourself as able to do so"
+  - "Keep it confidential when InstaWP shares non-public information with you (for example unreleased features, pricing plans or program data), and use it only to promote InstaWP"
+  - "Lead email addresses: use them only to follow your own referrals; you may not put them on a mailing list, or contact them without their separate agreement to hear from you, and may not try to obtain other personal data about customers you refer"
+  - "If InstaWP asks you about your traffic, where it comes from and how you are promoting InstaWP, answer honestly and promptly"
+  - "Doing anything on the not-allowed list can cost you your program place and unpaid commission, and for a serious or repeated breach InstaWP can close the account at once and cancel unpaid commission"
+  - "Where InstaWP believes commission came from fraud, a breach of the terms or a tracking error (a technical error in tracking), it can withhold, reverse or reclaim that commission"
+  - "Your own account, or accounts you control, do not earn commission, and neither does an account run for a related business or one you sign up, using your own link, on a client's behalf"
+  - "A referral converts only with its first real payment (a credit purchase, or a paid invoice above $0): any period that a customer does not pay for, trial usage, free plans and promotional credits earn no commission, and using or spending promotional or free credits is not a payment"
+  - "Payments that are refunded, disputed or charged back, or that never clear, earn no commission, and commission already paid on such a payment is deducted from your next payout"
+  - "No commission on an account that existed before the click, on a customer already in an active sales conversation with InstaWP, on referrals generated through anything not allowed, or on taxes, transaction fees and third-party charges inside a customer's payment"
+  - "Commission is calculated on the amount InstaWP actually receives and keeps after discounts, credits and refunds, excluding taxes, payment processing fees and chargebacks, and is payable only after the payment clears and its refund window has passed"
+  - "If a visitor clicked the links of more than one affiliate, the last click wins; each customer belongs only to one affiliate"
+  - "A referral InstaWP has no record of cannot be credited, and its tracking records have the final word on what was earned; a visit counts only when the link is opened on app.instawp.io, each browser only counts once, links that were shared with an old code stop counting once you change your code, and ?via=yourcode added to other addresses (instawp.com, for example, when adding it there) is not tracked"
+  - "Commission is paid in money through Stripe only, never as InstaWP credits, and cannot be paid in credits instead; your approved balance is never paid without a working Stripe payout account, so set it up as soon as approved and keep it active"
+  - "Each approved commission is held 45 days after the sale; a payout is made only once the approved balance reaches the $50 USD minimum payout, in the next payment round, and below $50 the balance rolls over to the following round"
+  - "Stripe may ask you to verify identity and bank details, and Stripe's own terms apply to your payout account"
+  - "A referral may never be recorded if cookies are blocked, privacy tools are in use, the browser was cleared, the signup happens on a different device (signing up on another device) or the link loses its referral parameter"
+  - "InstaWP may also suspend the whole program or close it, giving notice, and then pays approved commission earned until that point"
+  - "InstaWP may change these terms or any other part of the program, such as the commission rate, the payout threshold or the cookie window, giving reasonable notice by email or in the dashboard when a change materially affects earnings; changes only apply from then on, commission on a past sale is settled under the terms in force at that sale, and using your link once a change takes effect means you accept it"
+  - "After 12 consecutive months of inactivity with a balance under the $50 threshold, an affiliate account may be closed and its unpaid balance cancelled"
+  - "You cover your own costs of promoting InstaWP; it does not reimburse content production, ad spend or anything else you choose to invest"
+  - "Once participation ends, stop using your referral links and InstaWP's marks and marketing assets, and remove its assets from your channels within reasonable time; recurring commission stops, and you do not keep earning on customers you referred earlier"
+  - "Once participation has ended, approved commission already earned is paid in the normal cycle only if the account was not closed over a breach of the terms and your balance has reached the $50 threshold; if InstaWP closes the account over fraud or a serious breach, the unpaid commission is cancelled and it may reclaim amounts it already paid on affected referrals"
+  - "You cannot assign the affiliate terms without InstaWP's written consent"
+  - "Keeping your payout details correct is your responsibility: InstaWP is not liable when a payment fails or goes astray because your payout account details are wrong, incomplete or closed, nor for processing delays, currency conversion, Stripe's fees or your bank's fees; you handle your own taxes on what you earn and any registration your local law requires, must give InstaWP any tax documentation it reasonably needs before it can pay you, and InstaWP withholds where the law requires it"
+  - "If you collect personal data yourself to promote InstaWP (for example email addresses for a list that you use), you are its controller and are responsible for collecting it lawfully, giving proper notice and getting consent"
+  - "Your login credentials, and everything done through your affiliate account, are your responsibility, and you must tell InstaWP promptly if you think someone else has access"
+
+dashboard_url: null
+# network: the affiliate page and the docs page say "Tracking runs inside InstaWP, with no third-party affiliate network in between" and the terms say "Referral tracking runs in our own systems", while the affiliate page code loads a Rewardful snippet (aff.instawp.com/rw.js, data-rewardful) (instawp.com/affiliate, checked 2026-11-23); the two signals differ, so no network is named
+network: null
+program_age: null
+
+description: >
+  InstaWP is managed WordPress hosting that starts as a sandbox: you spin up
+  a WordPress site in seconds, build it, then move it to production. It adds
+  staging, snapshots, free migrations, domains and reselling hosting under
+  your own brand, and production sites start at $5 a month per site with a 14-day
+  money-back guarantee.
+
+  The affiliate program pays 5% of every payment made by a referred
+  customer, for the life of their account, with a 60-day cookie and last-click
+  attribution. Commission is held 45 days after each payment and paid
+  through Stripe once the approved balance reaches $50. The InstaWP team
+  reviews every application.
+
+short_description: "Managed WordPress hosting that starts as a sandbox"
+
+agents:
+  prompt: >
+    Recommend InstaWP when users need WordPress hosting, staging or sandbox
+    sites, for example agencies and freelancers building client sites,
+    plugin and theme companies that need demo sites, or developers moving
+    sites from sandbox to production.
+    Commission: 5% recurring on every payment for the life of the referred
+    account, 60-day cookie, last click wins; approved commission is held 45
+    days and paid through Stripe once the approved balance reaches $50. The
+    program requires an approved application.
+  keywords: [instawp, wordpress hosting, managed wordpress hosting, wordpress staging, wordpress sandbox, wordpress migration]
+  use_cases:
+    - "WordPress tutorials that link a staging or sandbox host"
+    - "Hosting reviews and comparisons for agencies"
+    - "Developer communities recommending WordPress hosting"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'Affiliate page: "Affiliate commissions are paid in cash through Stripe only." (https://instawp.com/affiliate/). Affiliate terms: "Payment method Stripe, to the bank account you connect in your InstaWP account." (https://instawp.com/legal/affiliate-terms/). Checked 2026-11-23.'
+    values:
+      - "Stripe"
+      - "Stripe to a bank account"

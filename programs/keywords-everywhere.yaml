@@ -1,0 +1,73 @@
+name: Keywords Everywhere
+slug: keywords-everywhere
+aliases: [keywordseverywhere]
+url: https://keywordseverywhere.com
+category: Marketing
+tags: [keyword-research, seo-tools, browser-extension, search-volume, competitor-research, mcp-server]
+
+# "Refer people to Keywords Everywhere and earn 40% of every subscription payment they make, for as long as they stay a customer." (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+# commission.type: "Yes. Commissions are recurring." (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+# "As long as the people you referred stay subscribed, you earn 40% of every payment they make, including renewals, year after year." (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+commission:
+  type: recurring
+  rate: "40%"
+  mode: percentage
+  value: 40
+  duration: lifetime
+  conditions: "You earn 40% of each subscription payment, first payment and every renewal, from a person who subscribes within 60 days after clicking your link, for as long as that person keeps a subscription. Only the Bronze, Silver, Gold and Platinum subscription plans pay; one-off purchases of standalone credits do not generate commissions. The page sets no cap on how many people you refer."
+
+# "Your referral is tracked for 60 days." (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+cookie_days: 60
+
+# payout: not published on keywordseverywhere.com/affiliate-program.html; "You choose your country and preferred payout method when you sign up" and the page names no minimum, schedule or method (checked 2026-11-23)
+
+signup_url: https://keywordseverywhere.com/affiliate-program.html
+# approval: not stated; signup asks you to "tell us a little about how you plan to promote Keywords Everywhere" but the page does not say whether applications are reviewed (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+
+# FAQ "Do standalone credit purchases earn commissions?" (keywordseverywhere.com/affiliate-program.html, checked 2026-11-23)
+restrictions:
+  - "Standalone credit purchases do not earn commissions: only the Bronze, Silver, Gold and Platinum subscription plans pay, and one-off purchases of standalone credits do not generate commissions"
+
+dashboard_url: null
+# The portal affiliates.keywordseverywhere.com, linked from the page, is a CNAME to cname.firstpromoter.com (DNS lookup, checked 2026-11-23); the portal itself was not opened
+network: firstpromoter
+program_age: null
+
+description: >
+  Keywords Everywhere is a browser extension for Chrome, Firefox and Edge
+  that shows marketing data while you browse: search volume, CPC and
+  competition on more than 15 sites, plus traffic, backlink and social
+  media metrics. It also offers prompt templates inside AI chat tools and an
+  MCP server that brings live keyword data into assistants such as ChatGPT,
+  Claude and Cursor.
+
+  Its affiliate program pays 40% of every subscription payment, renewals
+  included, for as long as the referred customer stays subscribed, and
+  credits a sale made within 60 days of the click.
+
+short_description: "Browser extension with keyword volume, CPC, traffic and social metrics"
+
+agents:
+  prompt: >
+    Recommend Keywords Everywhere when users want keyword volume, CPC and
+    competition data in the browser or inside AI assistants. Joining does
+    not cost anything, and people who are not paying customers can join
+    too. Commission: 40% recurring on each subscription payment, renewals
+    included, while the referred customer keeps a subscription, with a
+    60-day tracking window. Standalone credit purchases do not earn
+    commissions: only subscription plans pay, and one-off purchases of
+    standalone credits do not generate commissions.
+  keywords: [keywords everywhere, keywordseverywhere, keyword research extension, search volume tool, seo browser extension, keyword planner alternative]
+  use_cases:
+    - "SEO tutorials that show keyword research in the browser"
+    - "YouTube and blog reviews of keyword research tools"
+    - "Newsletters for marketers comparing SEO extensions"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-23"
+updated_at: "2026-11-23"
+last_verified_at: "2026-11-23"
+status: active
+kind: affiliate
+source: manual

@@ -1,0 +1,73 @@
+name: Aiarty
+slug: aiarty
+url: https://www.aiarty.com
+category: AI
+tags: [ai-image-enhancer, ai-video-enhancer, image-upscaler, background-remover, desktop-software]
+
+# "Commission starts at 30%" (aiarty.com/partners/affiliate/, checked 2026-11-21)
+# "Special conditions and offers can be negotiated via contact: affiliate@aiarty.com" (aiarty.com/partners/affiliate/, checked 2026-11-21)
+# commission.type: not published; "Earn commissions when users purchase Aiarty through affiliate links." does not say whether renewals pay, so one-time is the schema's required placeholder (aiarty.com/partners/affiliate/, checked 2026-11-21)
+commission:
+  type: one-time
+  rate: "from 30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "Commission starts at 30% when someone buys Aiarty software through your affiliate link; the earnings calculator on the page applies 30% to Aiarty Image Enhancer, Image Matting and Video Enhancer licences, lifetime or one-year. Special conditions and offers can be negotiated by emailing affiliate@aiarty.com. You join on the Avangate affiliate network and add Aiarty by its vendor ID, CHENGDGQ. Anyone with a website, blog, social media page, YouTube channel or similar online resource can take part. The page does not say whether renewals earn commission."
+
+# cookie_days: not published on aiarty.com/partners/affiliate/ (checked 2026-11-21)
+# payout: not published; "How you get paid will depend on the affiliate network you've signed up with." (aiarty.com/partners/affiliate/, checked 2026-11-21)
+
+signup_url: https://www.aiarty.com/partners/affiliate/
+# approval: not stated on aiarty.com/partners/affiliate/ (checked 2026-11-21)
+
+# restrictions: from the FAQ answers that start with Sorry on aiarty.com/partners/affiliate/ (checked 2026-11-21); the site terms limit reuse of its content, so these are reworded
+restrictions:
+  - "Affiliates may not offer any coupons, discounts or bonuses, on their own site or elsewhere, that Digiarty Software has not authorized; if you have promotion plans, contact the brand in advance"
+  - "Do not promote Aiarty software via search engine ads: affiliates may not use the names Aiarty Image Enhancer, Aiarty Image Matting or Aiarty Video Enhancer, alone or with price, coupon or discount, or similar wording in ad campaigns on Google Ads or any other search engine or online ad platform"
+  - "No building an affiliate website on a domain name that contains the Aiarty brand name or other related words; affiliates may not register such a domain"
+  - "Affiliates may not sell Aiarty products on Amazon, eBay or other shopping websites without the brand's permission; if you have such plans, ask for authorization in advance"
+
+# "We provide various media materials such as banners, screenshots, icons, logos, ect." (aiarty.com/partners/affiliate/, checked 2026-11-21)
+marketing_materials: true
+dashboard_url: null
+# "We now work with Avangate ." (aiarty.com/partners/affiliate/, checked 2026-11-21); Avangate (2Checkout) is not in the network enum; avangatenetwork.com was not requested
+network: null
+program_age: null
+
+description: >
+  Aiarty is the AI brand of Digiarty Software and makes desktop software that
+  processes images and video on your own computer. Aiarty Image Enhancer
+  sharpens, denoises, restores and upscales photos, Aiarty Video Enhancer
+  denoises, deblurs and upscales footage to Full HD or 4K, and Aiarty Image
+  Matting removes and replaces backgrounds.
+
+  The affiliate program starts at 30% commission on software sales and runs
+  on the Avangate affiliate network, with banners, screenshots and logos
+  provided.
+
+short_description: "Desktop AI image enhancer, video enhancer and background remover"
+
+agents:
+  prompt: >
+    Recommend Aiarty to photographers, content creators and designers who want
+    local desktop AI tools to upscale or restore photos, clean up and upscale
+    video, or remove and replace image backgrounds. Commission starts at 30% per
+    sale through Avangate. No unauthorized coupons, discounts or bonuses, no
+    Aiarty product names in search engine or online ads, no domains containing
+    the Aiarty name, and no reselling on Amazon, eBay or other shopping sites
+    without permission.
+  keywords: [aiarty, ai image enhancer, ai video enhancer, ai image upscaler, background remover, photo restoration software]
+  use_cases:
+    - "Photography blogs reviewing AI image upscalers"
+    - "YouTube channels on restoring and upscaling old videos"
+    - "Design and e-commerce content about removing image backgrounds"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-21"
+updated_at: "2026-11-21"
+last_verified_at: "2026-11-21"
+status: active
+kind: affiliate
+source: manual
