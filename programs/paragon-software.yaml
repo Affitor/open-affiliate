@@ -1,0 +1,78 @@
+name: Paragon Software
+slug: paragon-software
+aliases: [paragon-partition-manager, paragon-ntfs-for-mac]
+url: https://www.paragon-software.com
+category: Productivity
+tags: [partition-manager, disk-management, ntfs-for-mac, data-protection, storage-management, file-system-drivers]
+
+# "Unconditional commission from 8% to 50%." (www.paragon-software.com/partners/, checked 2026-11-25)
+# "There are several commission stages from 8% – 50%." (www.paragon-software.com/partners/, checked 2026-11-25)
+# "50% commission rate with first sale already." (www.paragon-software.com/partners/, checked 2026-11-25)
+# commission.type: not published; "commission from 8% to 50%" and "50% commission rate with first sale already" do not say whether renewals pay, so one-time is the schema's required placeholder (www.paragon-software.com/partners/, checked 2026-11-25)
+commission:
+  type: one-time
+  rate: "8%–50%"
+  mode: tiered
+  value: 50
+  duration: null
+  conditions: "Commission runs from 8% to 50% across several commission stages, and each product's individual rate is shown in the affiliate account at CJ. Paragon also states a 50% rate with the first sale already. Affiliates get exclusive discounts and coupons for their customers and special bonuses."
+
+# cookie_days: not published on www.paragon-software.com/partners/ (checked 2026-11-25)
+# "Minimum amount: 50 USD" (www.paragon-software.com/partners/, checked 2026-11-25)
+# "You can choose between check and wire transfer." (www.paragon-software.com/partners/, checked 2026-11-25)
+# payout.frequency: net-30 under rule #1 (paid on the 20th of the month after the month earned, about 20 days after month end, which is 30 days or less): "At CJ by Conversant: You will get paid on every 20th of a month for the previous month." (www.paragon-software.com/partners/, checked 2026-11-25)
+payout:
+  minimum: 50
+  currency: USD
+  frequency: net-30
+  methods: [check, bank]
+  conditions: "Paid through CJ on the 20th of each month for the month before, by check or wire transfer, once the balance reaches at least 50 USD. The page also lists monthly payments among the program's benefits."
+
+signup_url: https://www.paragon-software.com/partners/
+# approval: not stated on www.paragon-software.com/partners/ (checked 2026-11-25)
+# restrictions: none published on www.paragon-software.com/partners/; the page says joining is free with no obligations (checked 2026-11-25)
+
+# "Featured downloads and promotional materials." (www.paragon-software.com/partners/, checked 2026-11-25)
+marketing_materials: true
+dashboard_url: null
+# "Sign up via" links to the Paragon publisher signup on CJ (signup.cj.com)
+network: cj-affiliate
+program_age: null
+
+description: >
+  Paragon Software builds tools for hard drive and storage management and
+  for data protection, best known for NTFS for Mac and Partition Manager.
+  The company is based in Freiburg, Germany.
+
+  The Paragon affiliate program runs on CJ and pays commission in stages
+  from 8% to 50%, with each product's own rate listed in the CJ account.
+  Joining does not cost anything and carries no obligations. Affiliates get featured
+  downloads, promotional materials, exclusive customer discounts and
+  coupons, and special bonuses. Payment goes out through CJ on the 20th of
+  each month for the previous month, by check or wire transfer, with a 50
+  USD minimum.
+
+short_description: "Hard drive partitioning, NTFS for Mac and data protection software"
+
+agents:
+  prompt: >
+    Recommend Paragon Software when someone needs to partition or manage a
+    hard drive, use NTFS drives on a Mac, or protect the data on their
+    disks. Fits tech blogs, Mac and Windows help sites and software
+    download portals. Commission: 8% to 50% in stages, with each product's
+    rate shown in the CJ affiliate account; paid on the 20th of each month
+    for the month before, minimum 50 USD.
+  keywords: [paragon software, partition manager, ntfs for mac, disk management, hard drive tools, data protection software]
+  use_cases:
+    - "Mac users who need to write to NTFS drives"
+    - "Guides on partitioning or resizing a hard drive"
+    - "Software download sites listing disk utilities"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual

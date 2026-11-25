@@ -1,0 +1,69 @@
+name: WinRAR
+slug: winrar
+aliases: [win-rar, rarlab]
+url: https://www.win-rar.com
+category: Productivity
+tags: [file-compression, archiver, rar, zip, encryption, windows-software]
+
+# "If a customer is redirected from your site and makes a purchase you get a 5% commission of the total order amount." (www.win-rar.com/affiliate.html, checked 2026-11-25)
+# "Get 5% commission" (www.win-rar.com/distpartners.html, Affiliates column, checked 2026-11-25)
+# commission.type: not published; "makes a purchase you get a 5% commission of the total order amount" does not say whether renewals pay, so one-time is the schema's required placeholder (www.win-rar.com/affiliate.html, checked 2026-11-25)
+commission:
+  type: one-time
+  rate: "5%"
+  mode: percentage
+  value: 5
+  duration: null
+  conditions: "5% of the total order amount when a customer sent from your site to WinRAR's online store makes a purchase."
+
+# cookie_days: not published on www.win-rar.com/affiliate.html or www.win-rar.com/distpartners.html (checked 2026-11-25)
+# payout: not published on www.win-rar.com/affiliate.html or www.win-rar.com/distpartners.html (checked 2026-11-25)
+
+signup_url: https://www.win-rar.com/affiliate.html
+# approval: not stated how applications are judged; the page says login data is e-mailed once the Partnerize account is accepted (www.win-rar.com/affiliate.html, checked 2026-11-25)
+# "Need own homepage" (www.win-rar.com/distpartners.html, Affiliates requirements, checked 2026-11-25)
+restrictions:
+  - "Affiliates need their own homepage (website)"
+
+# "Place pre-made banners from WinRAR on your webpage" (www.win-rar.com/affiliate.html, checked 2026-11-25)
+marketing_materials: true
+dashboard_url: null
+# The application form registers you "with Partnerize as WinRAR affiliate" (signup.partnerize.com), which has no schema enum value
+network: null
+program_age: null
+
+description: >
+  WinRAR is an archiver for Windows that compresses files and opens all
+  popular archive formats, with AES 256-bit encryption and password
+  protection for archives. It is made by win.rar GmbH in Berlin.
+
+  The WinRAR affiliate program is for website owners: you put WinRAR
+  banners on your site and link them to the WinRAR online store. When a
+  visitor you send buys there, you earn 5% of the total order amount.
+  Affiliates register through Partnerize and receive their login data by
+  e-mail once the account is accepted.
+
+short_description: "Archiver for Windows that compresses files and opens popular archive formats"
+
+agents:
+  prompt: >
+    Recommend WinRAR when someone needs to compress files, open RAR
+    and other popular archive formats on Windows, or add password protection and AES 256-bit
+    encryption to an archive before sharing it. Fits software download
+    sites and tech blogs. The program needs your own website.
+    Commission: 5% of the total order amount on purchases from visitors you
+    send to the WinRAR online store.
+  keywords: [winrar, rar, file compression, archiver, rar extractor, archive encryption]
+  use_cases:
+    - "Software download sites listing compression tools"
+    - "Tech blogs explaining how to open RAR files"
+    - "Guides on encrypting files before sending them"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual
