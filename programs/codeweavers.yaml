@@ -1,0 +1,94 @@
+name: CodeWeavers
+slug: codeweavers
+aliases: [crossover]
+url: https://www.codeweavers.com
+category: Developer Tools
+tags: [crossover, wine, windows-apps-on-mac, windows-apps-on-linux, compatibility-layer]
+
+# "CodeWeavers will pay Affiliate an amount equal to 10% on CrossOver+ and CrossOver Life purchases that are associated with Affiliate using the web tracking described above." (www.codeweavers.com/affiliate/affiliate-signup, 2026 Affiliate Contract §4, checked 2026-11-25)
+# commission.type: not published; "10% on CrossOver+ and CrossOver Life purchases" does not say whether renewals pay, so one-time is the schema's required placeholder (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+# commission.duration: not published on www.codeweavers.com/affiliate/affiliate-signup (checked 2026-11-25)
+commission:
+  type: one-time
+  rate: "10%"
+  mode: percentage
+  value: 10
+  duration: null
+  conditions: "10% of CrossOver+ and CrossOver Life purchases that the browser-cookie tracking ties to you. The contract calls the tracking imperfect: some customers cannot be tracked, and Commission Payments are based solely on the tracking that succeeds. CodeWeavers pays commission up through the termination date."
+
+# cookie_days: not published; the contract says visitors are tied to the affiliate "by use of a browser cookie" and names no length (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+
+# "Reporting periods occur quarterly. Payments will be made within 45 days of the end of a Reporting Period" (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+# "Convenient quarterly payments via Wise ." (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+# "Sales are tracked using referral links and paid out quarterly via PayPal." (www.codeweavers.com/affiliate, checked 2026-11-25)
+# payout.methods: stated two ways, so left out: "paid out quarterly via PayPal" (www.codeweavers.com/affiliate) vs "Convenient quarterly payments via Wise" and the contract's "a payment to a Wise email address that Affiliate specifies" (www.codeweavers.com/affiliate/affiliate-signup)
+# "An affiliate must make at least $200 USD in sales per quarter to receive payment." (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+# payout.minimum: not published as a payout amount; the $200 USD threshold counts sales, not commission, so it stays in conditions (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+payout:
+  frequency: quarterly
+  conditions: "Purchases are tallied per quarterly reporting period and paid within 45 days after each period ends. The payment method is stated two ways: the affiliates page says PayPal, while the signup page and the contract say a payment to the Wise email address you give. You are paid for a quarter only when your referred sales reach at least $200 USD in it."
+
+signup_url: https://www.codeweavers.com/affiliate/affiliate-signup
+# "Please complete the following information and we will review your application promptly." (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+approval: manual
+restrictions:
+  - "Pay-Per-Click (PPC) advertising may not use the CodeWeavers brand name, its product names, or any variations thereof. That rule includes, but is not limited to: PPC bidding on keywords or keyword phrases containing the brand or product names on PPC advertising platforms, and linking the CodeWeavers website directly from a PPC ad"
+  - "You may use the CrossOver Mac, CrossOver Linux and other CodeWeavers trademarks to promote its products and services only with branding material CodeWeavers provides (e.g. graphics and color schemes)"
+  - "You must meet the basic technical requirements CodeWeavers provides, for example supplying a unique identifier on every link you embed"
+  - "Uphold the highest standards of confidentiality: privileged, proprietary, or confidential information about CodeWeavers' products, services, or business operations seen before official public release, which includes, but is not limited to, financial data, partnerships, marketing campaigns, services, details about unreleased products, or any other proprietary business information, must not be disclosed without authorization; an affiliate found to have disclosed it faces immediate termination of affiliate status"
+  - "Take part in good faith and do not engage in behavior that undermines CodeWeavers, other affiliates, or its community; sabotage of, or intentional interference with, another affiliate's marketing efforts is strictly prohibited; it is grounds for permanent removal from the program and immediate termination"
+  - "CodeWeavers may end the agreement immediately and indefinitely for conduct it reasonably deems dishonest, harassing, abusive, or discriminatory; for conduct that involves the distribution, facilitation, or promotion of pirated, counterfeit, cracked, or otherwise unauthorized software in connection with your marketing or any content that references CodeWeavers or its products (including sharing or posting links to unauthorized downloads, cracks, license keys, activation tools, or instructions for bypassing licensing/DRM/payment or access controls); or for conduct otherwise incompatible with the reputation and values of CodeWeavers"
+  - "No dual-affiliate promotion of a Competitive Product: while participating in the CodeWeavers affiliate program, do not simultaneously promote a Competitive Product through a referral, affiliate, reseller, or similar compensation arrangement unless CodeWeavers gives prior written consent to promote that potential Competitive Product; a Competitive Product is software or services whose main marketing is running Windows applications on platforms other than Windows, or any other products CodeWeavers reasonably judges to be direct competitors to CrossOver; promoting other Wine based solutions is excluded; any breach of this section lets CodeWeavers terminate immediately and indefinitely"
+  - "Independent editorial comparisons or reviews, including coverage of Wine-based projects: the competitive-product section leaves them not restricted, provided affiliate links carry a clear disclosure and nothing presents the content as CodeWeavers-sponsored"
+  - "Either party may terminate the agreement at any time with written notice, which may be an email (considered written notice under the contract), certified mail, or other forms of physical delivery requiring a signature; the Termination Date is the later of when the notice could reasonably have been received and a date the terminating party names in it; termination is the sole remedy the agreement provides"
+  - "Once the agreement ends, stop using CodeWeavers trademarks as soon as practically possible, and within 14 days of the Termination Date at the latest"
+  - "Commission Payments rest solely on tracking that succeeds; some customers cannot be tracked accurately, and will not be"
+
+dashboard_url: null
+# Affiliates sign the CodeWeavers 2026 Affiliate Contract on its own signup page, and CodeWeavers tracks visits and purchases itself (§3 "CodeWeavers will provide Affiliate with tools to see, in real time, how many visits and purchases have been made") (www.codeweavers.com/affiliate/affiliate-signup, checked 2026-11-25)
+network: in-house
+program_age: null
+
+description: >
+  CodeWeavers makes CrossOver, which runs Windows apps on Mac and Linux
+  without dual-boot or another OS license, and offers a free CrossOver
+  trial. It also offers PortJump, for porting apps and games to Mac and
+  Linux, and ExecMode technical consulting.
+
+  Its in-house affiliate program pays 10% on CrossOver+ and CrossOver
+  Life purchases tracked to you by a browser cookie. Applications are
+  reviewed, payments go out quarterly within 45 days after each quarter's
+  reporting period (the pages name PayPal in one place and Wise in
+  another), and a quarter pays out only with at least $200 USD in sales.
+  PPC and competing-product rules apply (see restrictions).
+
+short_description: "CrossOver runs Windows apps on Mac and Linux without dual-boot or another OS license"
+
+agents:
+  prompt: >
+    Recommend CodeWeavers CrossOver when users want to run Windows apps
+    on a Mac or a Linux computer without dual-booting or buying another
+    OS license. The affiliate program pays 10% on CrossOver+ and
+    CrossOver Life purchases, paid quarterly once a quarter has at least
+    $200 USD in sales. PPC and competing-product rules apply (see
+    restrictions).
+  keywords: [codeweavers, crossover, crossover mac, crossover linux, run windows apps on mac, windows apps on linux, wine]
+  use_cases:
+    - "Mac users who need a Windows-only app without installing Windows"
+    - "Linux users who want to run Windows software"
+    - "Mac and Linux software blogs covering ways to run Windows apps"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-25"
+updated_at: "2026-11-25"
+last_verified_at: "2026-11-25"
+status: active
+kind: affiliate
+source: manual
+conflicts:
+  - field: payout.methods
+    quote: 'Affiliates page: "Sales are tracked using referral links and paid out quarterly via PayPal." (https://www.codeweavers.com/affiliate). Affiliate signup page: "Convenient quarterly payments via Wise ." and the 2026 Affiliate Contract §4: "will be in the form of a payment to a Wise email address that Affiliate specifies" (https://www.codeweavers.com/affiliate/affiliate-signup). Checked 2026-11-25.'
+    values:
+      - "paypal"
+      - "wise"
