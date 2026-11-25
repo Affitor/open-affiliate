@@ -838,6 +838,17 @@ test("a brand on the skip list is reported with its reason and never created, ta
   assert.deepEqual(fetched.filter((u) => u !== LIST).map((u) => u.slice(LIST.length + 1)), ["citegraph"])
 })
 
+test("a skip-listed listing on Affitor stays a skip, untouched, run after run", async () => {
+  const dir = dirWith({ "kyma-api.yaml": KYMA })
+  const skip = { "kyma-api": "listed by hand from the brand's own terms page" }
+  for (const today of [TODAY, "2026-10-13"]) {
+    const { entries, written } = await run({ args: [], programsDir: dir, today, fetchJson: api(ROWS), skip })
+    assert.equal(entries.find((e) => e.oa_slug === "kyma-api")?.action, "skip")
+    assert.deepEqual(written.filter((f) => f.endsWith("kyma-api.yaml")), [])
+    assert.equal(readFileSync(join(dir, "kyma-api.yaml"), "utf8"), KYMA)
+  }
+})
+
 test("a listing linked to an Affitor program that left is never re-linked by a website match (Codex r1 #2)", async () => {
   // citegraph left the list; "attacker" now claims citegraph's website, with valid terms.
   const dir = dirWith({ "citegraph.yaml": synced("citegraph", "https://www.citegraph.app") })
