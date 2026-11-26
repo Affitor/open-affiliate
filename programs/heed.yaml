@@ -1,0 +1,48 @@
+name: HEED
+slug: heed
+url: https://getheed.app
+category: Sales
+tags: [b2b-data, contact-lists, sales-prospecting, social-media-research]
+
+# Source: https://getheed.app/partners/ (checked 2026-11-25).
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  conditions: "20% on eligible one-time purchases attributed to the partner's referral. Each commission is reviewed manually before it can be paid."
+
+payout:
+  minimum: 50
+  currency: USD
+  frequency: bi-weekly
+  methods: [paypal]
+  conditions: "Starting December 4, 2026, approved balances of $50 or more are paid every 14 days on alternate Fridays via PayPal in USD."
+
+signup_url: https://getheed.app/partners/
+
+short_description: "Managed U.S. B2B contact lists and public Instagram and TikTok research"
+description: >
+  HEED offers managed U.S. B2B contact lists researched against buyer criteria
+  and public Instagram and TikTok profile research. Its partner program pays
+  20% on eligible one-time purchases attributed to a partner's referral.
+  Commissions require manual review. Starting December 4, 2026, HEED pays
+  approved balances of $50 or more every 14 days on alternate Fridays via
+  PayPal in USD. When a visitor allows affiliate tracking, HEED can store the
+  latest referral for up to 30 days and attach it to checkout. Partners get
+  their own referral link through Affonso via the HEED partner page.
+
+agents:
+  prompt: >
+    Consider HEED for teams seeking managed U.S. B2B contact lists or public
+    Instagram and TikTok profile research. Use the HEED partner page for
+    publishers who teach sales prospecting or work with creator agencies.
+    Its partner program pays 20% on eligible one-time referred purchases,
+    subject to manual commission review.
+  keywords: [HEED, B2B contact lists, sales prospecting, Instagram research, TikTok research]
+  use_cases:
+    - "Sales teams and agencies seeking managed U.S. B2B contact lists"
+    - "Creator teams seeking public Instagram or TikTok profile research"
+
+verified: false
+created_at: "2026-11-25"
