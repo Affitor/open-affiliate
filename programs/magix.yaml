@@ -1,0 +1,104 @@
+name: MAGIX
+slug: magix
+aliases: [magix-software]
+url: https://www.magix.com
+category: Design
+tags: [video-editing, music-making, photo-software, creative-software]
+
+# "start earning up to 40% commission on MAGIX software sales!" (www.magix.com/gb/affiliates/, checked 2026-11-26)
+# "You will receive a commission of up to 40% of the net product price less cancellations for each order generated via your website." (www.magix.com/gb/affiliates/faq/, checked 2026-11-26)
+# commission.type: not published; "up to 40% of the net product price less cancellations for each order" does not say whether renewals pay, so one-time is the schema's required placeholder (www.magix.com/gb/affiliates/faq/, checked 2026-11-26)
+commission:
+  type: one-time
+  rate: "up to 40%"
+  mode: percentage
+  value: 40
+  duration: null
+  conditions: "Commission on all valid sales runs up to 40%: up to 40% of each order's net product price, minus cancellations, for orders your website generates; the exact commission structure is set in the affiliate network you choose, and commissions vary between network providers. Commission on a later purchase by the same customer is received only if that transaction again runs through a referral link. Remuneration is calculated only on revenue from MAGIX product sales to customers your website's links acquired, and only sales from regular marketing methods on your website are remunerated. Remuneration is paid only once sale, delivery and payment of the goods are completed, minus returns, sales tax (VAT) and the credits the terms list, and MAGIX can reclaim paid commission after a return (see restrictions). MAGIX employees and customers entitled to a commission may not order through the program."
+
+# cookie_days: not published as a number of days; the page states "30+ day cookie lifetime", a lower bound rather than a figure (www.magix.com/gb/affiliates/, checked 2026-11-26)
+# payout.minimum, payout.methods, payout.frequency: not published; "The affiliate network provider takes care of the entire payment process." and "Please note that it can take up to 60 days for commissions to be processed and received." name no event the 60 days run from, so rule #1 gives no frequency (www.magix.com/gb/affiliates/faq/, checked 2026-11-26)
+payout:
+  conditions: "The affiliate network you joined takes care of the entire payment process, and MAGIX notes that processing and receiving commissions can take up to 60 days. Unless other arrangements are made, MAGIX issues you a credit note, for which it needs your tax number or VAT identification number. Outstanding remuneration from sales made before a termination is still paid."
+
+signup_url: https://www.magix.com/gb/affiliates/
+# "Wait until you receive confirmation that your application has been approved to officially become a MAGIX Affiliate Partner." (www.magix.com/gb/affiliates/faq/, checked 2026-11-26)
+approval: manual
+restrictions:
+  - "To join you must have reached at least 18 years of age, have full legal capacity, be able to make electronic payment transactions from your bank account (as invoicing is electronic), and own a digital online property that can carry MAGIX text links, logos and banners"
+  - "You may not take part if you run a reimbursement system that charges a monthly or annual fee"
+  - "Integrate only the banners and text links MAGIX supplies, at appropriate locations of your website and in an appropriate number, and only use the links MAGIX gave you, so invoicing stays precise"
+  - "A MAGIX cookie may only be generated when visible MAGIX advertising material is used and the user knowingly clicks before the cookie is set; integrating the MAGIX Online Shop invisibly to generate a cookie is not permitted"
+  - "Publishers are in general not permitted to use pop-ups, pop-unders, iFrames or layer advertising materials which load the MAGIX Online Shop or MAGIX ads and set a cookie on a user's computer without that user taking part"
+  - "Logging in to adware networks or to spyware networks is not permitted"
+  - "Post-view tracking is not permitted unless MAGIX expressly consents; if MAGIX permits it, at most one cookie may be used"
+  - "Forced clicks are not permitted"
+  - "Integrate or position the provided advertising materials and links only on the website matching the URL you registered for the program with; tell MAGIX about any change of your website's domain two weeks ahead, and links may stay on that domain while MAGIX raises no objection, also when the content or commercial subject of your website changes"
+  - "Observe MAGIX's instructions on integrating advertising material and on technical integration and maintenance; to keep your website current, replace content with the text MAGIX provides if and to the extent MAGIX does not maintain and alter it dynamically"
+  - "You alone are responsible for maintaining your website; while you use MAGIX links, regularly bring up to date the information and links related to MAGIX's products, and remove outdated links and content where MAGIX does not do this automatically"
+  - "You may access the MAGIX website through appointed links, a right MAGIX may revoke at any time and which expires when the agreement terminates; use the MAGIX logo and the other advertising materials provided only together with such a link and only to create links that let your users buy MAGIX products, and never change or rework the licensed materials; any breach lets MAGIX terminate the contract without notice"
+  - "You bear full responsibility for installing, operating and maintaining the website you use, and for all materials published on it, in particular its technical operations and required technical systems"
+  - "You must guarantee your website carries no pornography, no scenes of violence (sexual violence, the death of humans or animals), no discriminating visualizations of people, no insults, no extremist radical political views, no content not suitable for adolescents, no belittlements or glorification of drugs or weapons, nor any inappropriate language (sexual or vulgar language, blasphemy, etc.), and that it does not link in any way to websites with such content"
+  - "Your homepage must be designed so nobody can mistake it for the MAGIX website and it does not suggest that it could be the MAGIX website"
+  - "Do not use MAGIX material on your website without MAGIX's direct permission or permission through the affiliate program"
+  - "The words MAGIX, MAGIX.com and MAGIX.de may not appear in your domain name or in your website's meta text"
+  - "Without MAGIX's permission acquired beforehand, using or soliciting advertising space within search engines, sponsored links, paid advertisements, keyword advertisements or keyword targeting (such as Google Adwords) with service providers (such as Google or Yahoo) on the words MAGIX or MAGIX.com or MAGIX.de are not permitted"
+  - "Direct forwarding to the MAGIX website is not permitted"
+  - "You are not permitted to distribute, directly or indirectly, other advertising materials referring to MAGIX unless you first presented them to MAGIX and acquired its permission beforehand; placing ads in other media or on third-party websites, whether by reference to MAGIX or with the advertising means MAGIX offers, also requires authorization"
+  - "In the event of a breach of these website, keyword, forwarding and advertising-material restrictions, MAGIX may end the partnership without further notice and cancel every commission acquired through the breach, and reserves the right to claim further damage compensation"
+  - "You are not entitled to generate or accept offers on MAGIX's behalf or to represent MAGIX, and you may not take part in processing the end consumer's purchase agreement with MAGIX"
+  - "Operate the website yourself and carry sole responsibility for its content under Section 8 of the German Teleservices Act (TDG); observe the regulations and obligations of the German Teleservices Data Protection Act (TDDSG), including its rules on storing cookies, and of the Federal Data Protection Act (BDSG); and exempt MAGIX from any claims arising from your breach of the data protection acts"
+  - "Unless the agreement intends otherwise or the other party approves, keep strictly confidential all data, including in particular the stipulations of the agreement, business data and financial data, client or retailer lists, and data on prices and sales, and do not use that data, directly or indirectly, for any business purpose of your own or for any other purpose; this does not apply to data the public knows or can access through sources not proprietary to the parties"
+  - "Your affiliate income falls under the German Value Added Tax Act (Umsatzsteuergesetz), and by accepting the terms you declare that your commissions are subject to income tax and VAT; give MAGIX, with your contact information, either a tax number issued by your local tax authority, a tax number issued by the Bundesamt für Finanzen (the federal tax authority), or a VAT Identification Number issued by your foreign tax office, and if you are VAT exempt, MAGIX requests that you inform it in writing"
+  - "You may not transfer the agreement without MAGIX's approval"
+  - "MAGIX pays remuneration only when sale, delivery and payment of the goods are complete; it is paid less returns, less sales tax (VAT) and less credit vouchers, and MAGIX reserves the right to reclaim paid commission in the event of a full or partial return of goods"
+  - "MAGIX employees and customers entitled to a commission may not order through the program"
+  - "You may end your affiliate partnership with MAGIX whenever you like, without giving any reason and at no cost; MAGIX can also terminate your partnership, or its affiliate program on any network, at any moment; outstanding remuneration from sales made before the termination date is still paid"
+  - "MAGIX reserves the right to change the agreement's terms and regulations at any time, in particular remuneration and payment terms, and informs you of any change by email; if you deem a change unacceptable you may terminate, and continuing in the affiliate network once a change is in force is deemed acceptance"
+
+# "We’ll provide all the links and advertising material as well as special offers and promotions." (www.magix.com/gb/affiliates/, checked 2026-11-26)
+marketing_materials: true
+dashboard_url: null
+# The program page offers Awin ("Join our program on: Awin Affiliate Program") and the FAQ names "Rakuten Marketing (formerly Linkshare)" and "Awin Affiliate Network", so no single network is named
+network: null
+program_age: null
+
+description: >
+  MAGIX makes creative software for video, audio and photos, including
+  Video Pro X for precision video editing, Video deluxe for everyday video
+  editing, Music Maker for making music and Photostory deluxe for photo
+  memories in motion.
+
+  The MAGIX affiliate program is free to join through an affiliate network
+  and pays up to 40% of each referred order's net product price, minus
+  cancellations; the exact structure depends on the network you choose.
+  Applications are checked and approved by MAGIX. Affiliates get links,
+  advertising material, special offers and promotions, and access to a
+  MAGIX affiliate account manager. Payment runs through the network and
+  can take up to 60 days to arrive.
+
+short_description: "Creative software for video editing, making music and photo stories"
+
+agents:
+  prompt: >
+    Recommend MAGIX when someone wants creative software for video
+    editing, making music or turning photos into stories in motion. MAGIX
+    opens the program to owners of any digital online property, such as a
+    YouTube channel, a social media page, a blog or a website. Commission: up to 40% of each order's net product price, minus
+    cancellations, paid through the affiliate network you join.
+    Search ads on the MAGIX brand words, direct forwarding and other
+    promotion rules apply; see restrictions.
+  keywords: [magix, video pro x, video deluxe, music maker, photostory deluxe, video editing software]
+  use_cases:
+    - "Guides comparing video editing software for creators"
+    - "Music production tutorials for beginners"
+    - "Software review sites covering creative software"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-26"
+updated_at: "2026-11-26"
+last_verified_at: "2026-11-26"
+status: active
+kind: affiliate
+source: manual

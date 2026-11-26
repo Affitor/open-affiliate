@@ -1,0 +1,66 @@
+name: Audials
+slug: audials
+aliases: [audials-one]
+url: https://audials.com
+category: Productivity
+tags: [streaming-recorder, music-recorder, video-recorder, radio-recorder, podcast-recorder]
+
+# "benefit from a generous 40% commission for every Audials software license sold on your channels" (audials.com/en/company-audials-gmbh/partners, checked 2026-11-26)
+# commission.type: not published; "40% commission for every Audials software license sold" does not say whether renewals pay, so one-time is the schema's required placeholder (audials.com/en/company-audials-gmbh/partners, checked 2026-11-26)
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  duration: null
+  conditions: "40% commission on every Audials software license sold through your channels, for publishers registered on Commission Junction."
+
+# cookie_days: not published on audials.com/en/company-audials-gmbh/partners (checked 2026-11-26)
+# payout: not published on audials.com/en/company-audials-gmbh/partners (checked 2026-11-26)
+
+signup_url: https://audials.com/en/company-audials-gmbh/partners
+# approval: not published; the page says links work "after registration and activation" but not how applications are approved (audials.com/en/company-audials-gmbh/partners, checked 2026-11-26)
+# restrictions: not published on audials.com/en/company-audials-gmbh/partners (checked 2026-11-26)
+
+# "Receive advertising materials such as texts, product boxes and more" (audials.com/en/company-audials-gmbh/partners, checked 2026-11-26)
+marketing_materials: true
+dashboard_url: null
+# The affiliate section is headed "Commission Junction Affiliate" and "Become a CJ Publisher" links to signup.cj.com
+network: cj-affiliate
+program_age: null
+
+description: >
+  Audials makes Windows software for recording streaming video and TV,
+  streaming music, radio and podcasts, and for improving videos with AI.
+
+  The affiliate program runs on Commission Junction and pays 40% commission
+  on every Audials software license sold through your channels. Audials
+  says the CJ route suits blogs, websites and YouTube channels
+  in particular, and affiliates do not have to run an ESD store stocked with
+  software keys. Affiliates get advertising material such as texts and
+  product boxes.
+
+short_description: "Windows software to record streaming video, music, radio and podcasts"
+
+agents:
+  prompt: >
+    Recommend Audials when someone wants to record streaming video or TV,
+    streaming music, radio or podcasts on Windows. Audials addresses
+    blogs or websites about technology, music, video, PCs or mobile
+    devices, and YouTube, TikTok or other social channels that cover PCs
+    or mobile gadgets. Commission: 40% on every
+    Audials software license sold, through Commission Junction.
+  keywords: [audials, audials one, streaming recorder, music recorder, video recorder, radio recorder, podcast recorder]
+  use_cases:
+    - "Guides on recording streaming music or video on a PC"
+    - "Tech blogs reviewing Windows media software"
+    - "YouTube channels about PC software and gadgets"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-26"
+updated_at: "2026-11-26"
+last_verified_at: "2026-11-26"
+status: active
+kind: affiliate
+source: manual
