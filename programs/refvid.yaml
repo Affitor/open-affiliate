@@ -7,7 +7,7 @@ tags: [ai-video, image-to-video, product-video, ugc-ads, consistent-character]
 # "30% of credit packs and single videos, for as long as the account you referred uses RefVid" / "30% of monthly plan payments in the account's first 12 months" / "20% of a yearly plan bought in the account's first year" (refvid.com/affiliates, checked 2026-11-26)
 commission:
   type: hybrid
-  rate: "30% of credit packs and single videos; 30% of monthly plans for 12 months; 20% of a yearly plan in the first year"
+  rate: "30%"
   mode: hybrid
   value: 30
   conditions: "30% of credit packs and single videos for as long as the referred account uses RefVid; 30% of monthly plan payments in the account's first 12 months; 20% of a yearly plan bought in the account's first year. Payments in Indian rupees earn no commission, and refunded or charged-back payments reverse theirs."
