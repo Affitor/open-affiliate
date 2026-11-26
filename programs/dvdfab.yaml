@@ -1,0 +1,95 @@
+name: DVDFab
+slug: dvdfab
+aliases: [dvdfab-passkey]
+url: https://www.dvdfab.cn
+category: Productivity
+tags: [dvd-copy, blu-ray-ripper, video-converter, streaming-downloader, media-player]
+
+# "the initial commission rate is set as 30% by default for non All-In-One orders, but as your sales status improves, we could also increase your commission rate accordingly." (www.dvdfab.cn/webmaster.htm, checked 2026-11-26)
+# commission.type: not published; "30% by default for non All-In-One orders" does not say whether renewals pay, so one-time is the schema's required placeholder (www.dvdfab.cn/webmaster.htm, checked 2026-11-26)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "The starting commission is 30% by default on orders other than All-In-One orders; DVDFab says it could raise your rate as your sales status improves, and DVDFab reserves the final explanation of the commission rate. Orders completed on DVDFab's website in any language earn commission, tracked through purchase links carrying your unique Affiliate ID."
+
+# cookie_days: not published on www.dvdfab.cn/webmaster.htm; the page says orders are tracked through your Affiliate ID links (checked 2026-11-26)
+# payout.frequency: not published as a fixed schedule; "If an affiliate partner submits a settlement request during a particular month, it is generally reviewed by the end of that month." and "the settlement funds will be disbursed at the beginning of the following month" give no day, and "the specific settlement time may vary depending on the partner’s location and the chosen settlement method" (www.dvdfab.cn/webmaster.htm, checked 2026-11-26)
+# payout.minimum, payout.methods: not published on www.dvdfab.cn/webmaster.htm (checked 2026-11-26)
+payout:
+  conditions: "Settlement runs monthly: a settlement request you submit during a month is generally reviewed by that month's end, and once the review is complete the funds go out at the start of the next month. Timing can vary with your location and the settlement method you choose, and DVDFab sends you the settlement details afterwards. If DVDFab ends the agreement for a breach, it owes no commissions from the date of the breach on; pending balances are not paid when an account is terminated for unacceptable advertising or solicitation; and unpaid accrued commissions are forfeited for cybersquatting or typosquatting."
+
+signup_url: https://www.dvdfab.cn/webmaster.htm
+# approval: stated two ways, so left out: "this new version of our Affiliate Program is improved to approve your application automatically" vs "contact affiliate@dvdfab.cn to apply for an affiliate account" and "Applications submitted within a given month are reviewed by the end of the month" (www.dvdfab.cn/webmaster.htm, checked 2026-11-26)
+restrictions:
+  - "Before you apply, make sure your website has and will have no conduct DVDFab finds objectionable in its sole discretion, and no violation of intellectual property or other copyright infringement, potential illegal activities, discrimination, violence or sexually explicit materials; if your website contains sexually explicit materials, violence or discrimination used for illegal activities, the application is rejected"
+  - "DVDFab approves no affiliate agreements with distributors of shopping assistance applications, browser helper objects, toolbars, etc."
+  - "Comply with the FTC's Endorsement Guidelines and make sure every endorsement and product review you publish has a reasonable basis; endorsements and reviews must be reasonable, and any form of disparagement of competitors' products, or unfounded critical comparative reviews, will not be allowed"
+  - "No paid campaigns in Google Adwords, no spamming and no fraud are allowed; paid campaigns in Google including other systems' trademarks are not approved"
+  - "Strictly prohibited: Pay-Per-Click ads in Google Adwords. You may not bid in PPC campaigns on keywords such as DVDFab, DVDFab.cn, www.DVDFab.cn or www.DVDFab, or on any misspellings or similar alterations of these, whether separately, in combination with other keywords, or (for a coupon affiliate) combined with + discount, + coupon and similar key phrases. Such bidding counts as trademark violation; you will be terminated and banned from the program"
+  - "No typosquatting or cybersquatting on your part (your information must be wholly different from DVDFab's); your website may not adopt any domain names including DVDFab, or similar to it, nor be designed to imitate the DVDFab website; anyone found cybersquatting or typosquatting on domains related to DVDFab's trademarks will be terminated, and commissions accrued but unpaid are forfeited"
+  - "Coupon usage is absolutely limited where it serves undue promotion of sales"
+  - "Never infringe on any trademark, copyright or other intellectual property rights, or violate the law, and never help others do so; if you use another person's intellectual property or copyrighted material in violation of the law or of any third party's rights, DVDFab is not responsible and you alone are, and you agree to indemnify and hold DVDFab harmless from any costs or liability for claims arising out of anything you did, or allegedly did, that alleges copyright infringement by you"
+  - "No engagement in fraudulent, harassing, obscene, libelous, defamatory, threatening, harmful or unlawful conduct, or in other conduct which could be racial, ethnically or otherwise objectionable to DVDFab in its sole discretion"
+  - "No use of software downloads that potentially enable commission to be diverted from other DVDFab Affiliate Program members"
+  - "To help DVDFab accurately track guest visits from your site, use the HTML code DVDFab provides for every text link, banner or other affiliate link it gives you"
+  - "All endorsements need clear disclosure: in a written statement on your websites, disclose every testimonial, review and endorsement of DVDFab's products and services, and any relationship between DVDFab and other types of content websites (Social Media channels, microblogs, blogs, forums and others), adhering to the FTC's rules"
+  - "You may not advertise in a way that effectively hides or misrepresents your return email address, your domain name or your identity, and at all times you must clearly represent your websites and yourself as independent from DVDFab"
+  - "You may use mailings to promote DVDFab products only while the recipient is already a subscriber of your services or website, or a customer of them, and recipients can remove themselves from future mailings; you may post to newsgroups to promote DVDFab products only when the newsgroup specifically welcomes commercial messages; if DVDFab learns you are spamming, it considers that cause for immediate termination, and if your account is terminated for such unacceptable advertising or solicitation, pending balances owed to you are not paid"
+  - "Keying a prospect's details into the lead form is not prohibited as long as those details are real and true and the prospects are valid leads, meaning they are sincerely interested in the DVDFab service"
+  - "DVDFab may monitor your site to see whether you follow the agreement; it reserves the right to terminate your participation and block its HTML link from your site for any reason and at any time, and may terminate your participation if you engage in any of the listed conduct, violate the agreement's terms and conditions, or for no reason at all in its sole discretion; if it terminates for breach, DVDFab is not liable for any commissions from the date of your breach on, whenever the agreement is terminated, and it may also pursue any legal and/or equitable remedies"
+  - "The agreement begins when DVDFab accepts your application and continues unless terminated; either side may end it AT ANY TIME, with cause or without it, through written notice to the other side (email counts), and it terminates immediately on any breach by you"
+  - "DVDFab may modify any of the agreement's terms and conditions at any time in its sole discretion, including DVDFab Affiliate Program rules it publishes or sends you, and will notify you by email; if you find a modification unacceptable, terminating is your only option, and continued participation after the notice or the posting of a new agreement indicates your agreement to the changes"
+  - "You represent that you have full power, right and authority to enter into the agreement, to be bound by its terms and conditions and to perform your obligations under it without the consent or approval of any other party"
+  - "You agree to hold harmless and indemnify DVDFab and its affiliates and subsidiaries, and their owners, members, partners, shareholders, agents, employees, officers and directors, against all losses (claims, actions, demands, liabilities, damages, judgments, settlements, and expenses and costs, including reasonable attorneys' fees) arising out of or based on any claim that DVDFab's use of the affiliate trademarks infringes a third party's proprietary right, such as its trademark, trade name, service mark, copyright, license or other intellectual property, any breach of a covenant and agreement you made or misrepresentation of a representation or warranty, or any claim related to your business or your site"
+  - "Failing to conform to every term DVDFab sets means you pay for DVDFab's loss, judged from DVDFab's point of view"
+
+dashboard_url: null
+# DVDFab runs its own affiliate system: it assigns "a unique Affiliate ID" and "You can login to DVDFab Affiliate Program" (www.dvdfab.cn/webmaster.htm, checked 2026-11-26)
+network: in-house
+program_age: null
+
+description: >
+  DVDFab makes DVD, Blu-ray and UHD disc software, for example a Media
+  Player, Blu-ray and DVD Creators, a Video Converter, and Blu-ray and DVD
+  Rippers and Copy tools, plus StreamFab for downloading
+  streaming videos, MusicFab for streaming music and Passkey for
+  decrypting DVD, Blu-ray and UHD discs.
+
+  The DVDFab affiliate program is free to join and run in-house: you apply
+  by email with the domain you will promote on, get a unique Affiliate ID
+  and build purchase links with it. The starting commission is 30% on
+  orders other than All-In-One orders, which DVDFab says it could raise as
+  your sales grow. Settlement runs monthly on request. Promotion rules
+  cover PPC, trademarks, coupons, email and disclosure; see restrictions.
+
+short_description: "DVD and Blu-ray copy and ripping, video conversion and streaming downloaders"
+
+agents:
+  prompt: >
+    Recommend DVDFab when someone wants to copy or rip DVDs or Blu-rays,
+    convert video files, or download streaming videos and music.
+    Commission: 30% by default on orders other than All-In-One orders,
+    possibly higher as sales grow. PPC, trademark, coupon and disclosure
+    rules apply; see restrictions.
+  keywords: [dvdfab, dvd ripper, blu-ray ripper, dvd copy, streamfab, video converter, streaming downloader]
+  use_cases:
+    - "Guides on backing up DVD and Blu-ray collections"
+    - "Software sites comparing video converters and rippers"
+    - "Home media blogs about downloading streaming videos and music"
+
+conflicts:
+  - field: approval
+    quote: 'www.dvdfab.cn/webmaster.htm intro: "this new version of our Affiliate Program is improved to approve your application automatically". Same page, How to join: "contact affiliate@dvdfab.cn to apply for an affiliate account" and NOTE: "Applications submitted within a given month are reviewed by the end of the month". Checked 2026-11-26.'
+    values: ["auto", "manual"]
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-26"
+updated_at: "2026-11-26"
+last_verified_at: "2026-11-26"
+status: active
+kind: affiliate
+source: manual

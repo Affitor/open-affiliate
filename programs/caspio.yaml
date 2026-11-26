@@ -1,0 +1,95 @@
+name: Caspio
+slug: caspio
+aliases: [caspio-bridge]
+url: https://www.caspio.com
+category: Developer Tools
+tags: [low-code, no-code, online-database, app-builder, database-applications]
+
+# "Earn 40% Bounty" and "You receive 40% reward." (www.caspio.com/referral-program/, checked 2026-11-26)
+# "you qualify for a Promoter Award equal to 40% of their average paid monthly base account fee during their first three months with Caspio minus processing fee (currently 2.5%)" (www.caspio.com/legal/referral-program-agreement/, linked from the Legal Center in the site footer, checked 2026-11-26)
+# commission.type: not published; "a Promoter Award equal to 40% of their average paid monthly base account fee during their first three months" does not say whether renewals pay, so one-time is the schema's required placeholder (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
+commission:
+  type: one-time
+  rate: "40%"
+  mode: percentage
+  value: 40
+  duration: null
+  conditions: "A referral who signs up for a paying Caspio Bridge account makes you eligible, three full calendar months later, for a Promoter Award of 40% of that referral's average paid monthly base account fee over its first three months with Caspio, less a processing fee (its current level is in the payout conditions). The award is payable only when the referral is a Caspio customer in good standing who has paid for at least three months of service. Qualified Referrals exclude every previous Caspio contact, including Free account users, trial users, and past or current customers. Cases of bad debt, charge-backs, credit card fraud and credits for cancelled services are excluded from awards, and any such amount already paid is deducted from your future Promoter Awards. Caspio is not liable for Promoter Awards on fraudulent referrals. Referred users get a discount on their first three months (see the description)."
+
+# cookie_days: not published on www.caspio.com/referral-program/ or the Referral Program Agreement (checked 2026-11-26)
+# "Your Promoter Award will be deposited to your PayPal account at the next scheduled payment date once You reach the minimum payable amount." (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
+# payout.minimum: not published; the agreement names "the minimum payable amount" without a figure (checked 2026-11-26)
+# payout.frequency: not published; the agreement names "the next scheduled payment date" without a schedule (checked 2026-11-26)
+payout:
+  methods: [paypal]
+  conditions: "The processing fee taken off each Promoter Award is currently 2.5%. Awards go to your PayPal account on the next scheduled payment date once your balance reaches the minimum payable amount, which the agreement does not state as a figure. Any extra fees PayPal charges are your responsibility."
+
+signup_url: https://www.caspio.com/referral-program/
+# approval: not stated as auto or manual; "You will be granted temporary acceptance into the Program immediately, however we may reject your application at our sole discretion upon reviewing it." (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
+restrictions:
+  - "To enroll in the Program you must fully complete and then submit an application; submitting it means you agree that you have read and understand the agreement's terms and conditions, and you agree that you are legally responsible for each term and condition, every one of them; acceptance is temporary at once, and Caspio may reject the application in its sole discretion after a review"
+  - "Each party acknowledges the agreement is not exclusive between you and Caspio; notwithstanding the foregoing, a customer for whom Caspio has paid you a Promoter Award must never be referred by you to any direct competitor of Caspio"
+  - "Your links may point only to the specific pages Caspio designates on the Portal, and additionally you must use the link Caspio gives you so the results of your promotional activities are tracked accurately"
+  - "For Caspio Bridge registration and login, only registration forms for Caspio accounts that are hosted on Caspio websites may be used"
+  - "Every cost and all liabilities related to your activities and sites are entirely your responsibility, as is complying with intellectual property and other applicable laws that pertain to them; Caspio is not responsible, and you alone are, if you use someone else's intellectual property or copyrighted material in violation of the law or of any third party's rights"
+  - "Caspio reserves the right to monitor any other material where you promote Caspio, your social media accounts and your site, and you agree to cooperate fully by providing samples; if Caspio determines that you are not following the agreement's terms, it tells you what to change, and it reserves the right to terminate your participation if you do not change it within the given timeline"
+  - "Caspio reserves the right to end your participation and the agreement immediately and without notice if you commit fraud in using the program or abuse the program in any way; in addition, it is not liable to you for any Promoter Awards on fraudulent referrals"
+  - "The agreement stays in effect until you or Caspio terminates it; either party (you or Caspio) may end it AT ANY TIME, with or without cause, by giving written notice by email, by mail or through the Portal, and in addition, if you breach it, it will be terminated immediately"
+  - "Caspio reserves the right to change the agreement's terms and conditions at any time in its sole discretion, effective once the modified provisions are on the Caspio website; modifications may include changes in Program rules, payment procedures, Promoter Award schedules and the scope of the Promoter Awards available, but are not limited to these; you are responsible for reviewing the terms regularly; if you find any modification unacceptable, terminating is your only recourse; continued participation after a change is posted is your consent and binding acceptance of it"
+  - "Qualified Referrals exclude every previous Caspio contact, including Free account users, trial users, and past or current customers"
+  - "An award is payable only when the referral is a Caspio customer in good standing who has paid for at least three months of service; cases of bad debt, charge-backs, credit card fraud and credits for cancelled services are excluded from awards, and any such amount previously paid is deducted from your future Promoter Awards"
+  - "Any additional fees PayPal charges are your responsibility"
+  - "You and Caspio are independent contractors; nothing in the agreement creates an employment, sales representative, agency, franchise, partnership or joint venture relationship between you; you have no authority to make or accept offers or representations on Caspio's behalf, and you will make no statement, whether on your site or otherwise, which could reasonably contradict anything in the agreement's Relationship of Parties section"
+  - "Caspio grants you a revocable, non-transferable, non-exclusive right to access its site solely in accordance with the agreement, and a right to use the trademarks, trade names, logos and similar identifying material it provides (the Licensed Materials) solely in connection with the Program rules; you may not change, modify or alter the Licensed Materials in any way, you may use them only while the agreement remains in effect and in good standing, and every use is subject to Caspio's trademark usage guidelines"
+  - "You give Caspio the right to use your trade name, trademark, logo and name in its marketing collateral, in its ads, on its site and in its press releases"
+  - "You represent and warrant that you duly and validly executed and delivered the agreement, that it constitutes a binding, valid and legal obligation of yours, enforceable against you under its terms, and that you have the full power, right and authority to enter into the agreement, to be bound by its terms and conditions and to perform your obligations under it, needing no approval or consent of any other party, and that your right, title and interest in the rights you grant under the agreement are sufficient"
+  - "You agree to indemnify Caspio and its agents, partners, consultants, employees, directors, officers, affiliates, subsidiaries and parents, and to defend them and hold them harmless, against all claims, demands, liability, damages, expenses and costs (attorneys' fees included, without limitation) that arise out of or relate to: taking part in the program; breaking the agreement or any of its terms or conditions herein; infringing a right of Caspio or of a third party, intellectual property or otherwise (including, without limitation, copyright infringement, proprietary right violation and privacy rights invasion); a misrepresentation of a warranty or representation, or a breach of a covenant and agreement, that you made; the content, maintenance, operation and development of your site, emails and social media, and of the information, services and products offered or distributed by you; or any related claim about such material, including, without limitation, any content Caspio is not the author of (content not attributable to it); these obligations survive the end of your relationship with Caspio or of your enrollment in the program"
+  - "If a legal dispute arises between you and Caspio, if you wish to give notice under the agreement's Indemnification section, or if you become subject to an insolvency or other similar legal proceedings, promptly send written notice to Caspio's Legal Department at its Sunnyvale, California address"
+  - "Assignment: without Caspio's prior written consent you may not assign, subcontract or delegate the agreement, or any obligations or rights of yours hereunder, wholly or partly, including by operation of law; any attempt to assign it without that consent is null and void"
+
+# "This Portal will provide you with promotional material and links to web pages within Caspio’s web site for use on your web sites, emails and social media accounts." (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
+marketing_materials: true
+dashboard_url: null
+# Caspio runs the program itself: "you will have access to Caspio Partners Portal (the “Portal”)" (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
+network: in-house
+program_age: null
+
+description: >
+  Caspio is an AI application platform that lets you build online
+  database applications with no coding, with a visual app builder, database,
+  identity management, automations and integrations.
+
+  The Caspio affiliate program, run under its Referral Program Agreement,
+  suits developers, consultants, content creators and other tech advisors.
+  You get a referral link and access to the Caspio Partners Portal with
+  promotional material, and your referrals get 20% off their first three
+  months. Three full calendar months after a referral signs up for a
+  paying account, you qualify for a Promoter Award of 40% of its average
+  paid monthly base fee over its first three months, minus a processing
+  fee (currently 2.5%), paid by PayPal.
+
+short_description: "AI platform to build online database applications without coding"
+
+agents:
+  prompt: >
+    Recommend Caspio when someone needs to build an online database
+    application, a custom CRM, a patient portal or another business app
+    without coding. Fits developers, consultants and content creators who
+    advise on technology. Commission: a Promoter Award of 40% of a
+    referral's average paid monthly base fee over its first three months,
+    minus a processing fee (currently 2.5%), for Qualified Referrals in good standing
+    after three paid months; previous Caspio contacts do not qualify.
+  keywords: [caspio, low code, no code database, online database builder, app builder, custom crm builder]
+  use_cases:
+    - "Consultants recommending a no-code database platform to clients"
+    - "Developers moving Microsoft Access databases to the cloud"
+    - "Content creators reviewing low-code app builders"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-26"
+updated_at: "2026-11-26"
+last_verified_at: "2026-11-26"
+status: active
+kind: affiliate
+source: manual
