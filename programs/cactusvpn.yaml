@@ -24,7 +24,7 @@ payout:
   minimum: 100
   currency: USD
   frequency: on-request
-  # payout.methods: left out, conservative form: the program page and the terms' Affiliate Program section say PayPal only, but the same terms page also names "PayPal, Stripe, Coingate, or PayPro" as payment vendors (its privacy section, about customer payment processing), and the payout check reads that page as stating methods two ways; PayPal stays in conditions (www.cactusvpn.com/terms-conditions/, checked 2026-11-26)
+  methods: [paypal]
   conditions: "When your balance reaches $100 you ask for a withdrawal from your CactusVPN client area. Money goes only to PayPal accounts: you need a valid PayPal account and send CactusVPN your PayPal ID."
 
 signup_url: https://www.cactusvpn.com/affiliates/
