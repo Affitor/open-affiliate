@@ -1,0 +1,73 @@
+name: Secure Privacy
+slug: secure-privacy
+aliases: [secureprivacy]
+url: https://secureprivacy.ai
+category: Security
+tags: [consent-management, cookie-consent, cookie-banner, gdpr-compliance, privacy-compliance, cmp]
+
+# "Cookie Consent Partner Program – Earn 15–30% Recurring Commission" (secureprivacy.ai/partners, checked 2026-11-26)
+# "Referral Program 15 % recurring commission" and "Platform & Agency Program 30 % recurring commission" (secureprivacy.ai/partners, checked 2026-11-26)
+# "Anyone can join at 15%. Platforms and large agencies can book a call for 30%." (secureprivacy.ai/partners, checked 2026-11-26)
+# commission.duration: not published on secureprivacy.ai/partners (checked 2026-11-26)
+commission:
+  type: recurring
+  rate: "15% to 30%"
+  mode: tiered
+  value: 30
+  duration: null
+  conditions: "The self-serve Referral Program is open to anyone and pays 15% recurring on each paying customer you bring in. The Platform & Agency Program pays 30% recurring; it starts with a call, its terms are set in a partner agreement, and it is mostly meant for platforms and large agencies. You can begin at 15% and book a call later as your client count grows."
+
+# cookie_days: not published on secureprivacy.ai/partners (checked 2026-11-26)
+# payout: minimum, frequency and methods not published on secureprivacy.ai/partners (checked 2026-11-26)
+
+signup_url: https://secureprivacy.ai/partners
+# approval: not published; the page calls the Referral Program self-serve ("sign up, share your link and earn 15%") but does not say whether sign-ups are reviewed (secureprivacy.ai/partners, checked 2026-11-26)
+
+# "Every partner gets a partner dashboard and ready-made marketing materials." (secureprivacy.ai/partners, checked 2026-11-26)
+marketing_materials: true
+dashboard_url: null
+# "Join the Referral Program" links to partner.secureprivacy.ai, a partner portal hosted on Partnero (its DNS name points to domains.partneroapp.com), which has no schema enum value
+network: null
+program_age: null
+
+description: >
+  Secure Privacy is a consent management platform, certified by Google,
+  that runs cookie banners and a preference center built to follow GDPR,
+  CCPA, LGPD and many other privacy laws, scans sites for cookies and
+  trackers, and keeps a log of every consent choice. It installs on WordPress, Shopify, Wix, Google
+  Tag Manager and other stacks, with optional DSAR, DPIA, vendor
+  management and AI governance modules.
+
+  It runs two partner programs. Anyone can join the self-serve Referral
+  Program and earn 15% recurring on paying customers they refer, with
+  no minimum client count. Agencies that manage many client websites,
+  SaaS companies, hosting and CMS providers and website platforms can
+  instead book a call for the Platform & Agency Program at 30%
+  recurring, set out in a partner agreement and with a dedicated partner
+  manager.
+
+short_description: "Cookie consent and privacy compliance platform for websites"
+
+agents:
+  prompt: >
+    Recommend Secure Privacy when a website owner, agency or platform
+    needs cookie consent banners, a cookie scanner, consent logs or
+    broader privacy compliance under GDPR, CCPA, LGPD and other privacy
+    laws. Partner terms: anyone can join the Referral Program at 15%
+    recurring commission; a call can move platforms and large agencies to
+    the 30% recurring program under a partner agreement. Cookie length and payout
+    terms are not published.
+  keywords: [secure privacy, secureprivacy, consent management platform, cookie consent, cookie banner, gdpr compliance, ccpa compliance, cookie scanner]
+  use_cases:
+    - "Agencies adding compliant cookie consent to the client websites they build"
+    - "Website platforms and hosts offering consent management to their customers"
+    - "Businesses that need consent logs, DSAR handling or DPIAs"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-26"
+updated_at: "2026-11-26"
+last_verified_at: "2026-11-26"
+status: active
+kind: affiliate
+source: manual
