@@ -27,7 +27,7 @@ payout:
 signup_url: https://www.caspio.com/referral-program/
 # approval: not stated as auto or manual; "You will be granted temporary acceptance into the Program immediately, however we may reject your application at our sole discretion upon reviewing it." (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
 restrictions:
-  - "To enroll in the Program you must fully complete and then submit an application; submitting it means you agree that you have read and understand its terms and conditions, and you agree that you are legally responsible for each term and condition, every one of them; acceptance is temporary at once, and Caspio may reject the application in its sole discretion after a review"
+  - "To enroll in the Program you must fully complete and then submit an application; submitting it means you agree that you have read and understand the agreement's terms and conditions, and you agree that you are legally responsible for each term and condition, every one of them; acceptance is temporary at once, and Caspio may reject the application in its sole discretion after a review"
   - "Each party acknowledges the agreement is not exclusive between you and Caspio; notwithstanding the foregoing, a customer for whom Caspio has paid you a Promoter Award must never be referred by you to any direct competitor of Caspio"
   - "Your links may point only to the specific pages Caspio designates on the Portal, and additionally you must use the link Caspio gives you so the results of your promotional activities are tracked accurately"
   - "For Caspio Bridge registration and login, only registration forms for Caspio accounts that are hosted on Caspio websites may be used"
@@ -39,11 +39,12 @@ restrictions:
   - "Qualified Referrals exclude every previous Caspio contact, including Free account users, trial users, and past or current customers"
   - "An award is payable only when the referral is a Caspio customer in good standing who has paid for at least three months of service; cases of bad debt, charge-backs, credit card fraud and credits for cancelled services are excluded from awards, and any such amount previously paid is deducted from your future Promoter Awards"
   - "Any additional fees PayPal charges are your responsibility"
-  - "You and Caspio are independent contractors; you have no authority to make or accept offers or representations on Caspio's behalf, and you will make no statement that could reasonably contradict this, whether on your site or otherwise"
+  - "You and Caspio are independent contractors; nothing in the agreement creates an employment, sales representative, agency, franchise, partnership or joint venture relationship between you; you have no authority to make or accept offers or representations on Caspio's behalf, and you will make no statement, whether on your site or otherwise, which could reasonably contradict anything in the agreement's Relationship of Parties section"
   - "Caspio grants you a revocable, non-transferable, non-exclusive right to access its site solely in accordance with the agreement, and a right to use the trademarks, trade names, logos and similar identifying material it provides (the Licensed Materials) solely in connection with the Program rules; you may not change, modify or alter the Licensed Materials in any way, you may use them only while the agreement remains in effect and in good standing, and every use is subject to Caspio's trademark usage guidelines"
   - "You give Caspio the right to use your trade name, trademark, logo and name in its marketing collateral, in its ads, on its site and in its press releases"
-  - "You represent that you duly and validly executed and delivered the agreement, that it constitutes a binding, valid and legal obligation of yours, enforceable against you under its terms, and that you have the full power, right and authority to enter into the agreement, to be bound by its terms and conditions and to perform your obligations under it, needing no approval or consent of any other party"
+  - "You represent and warrant that you duly and validly executed and delivered the agreement, that it constitutes a binding, valid and legal obligation of yours, enforceable against you under its terms, and that you have the full power, right and authority to enter into the agreement, to be bound by its terms and conditions and to perform your obligations under it, needing no approval or consent of any other party, and that your right, title and interest in the rights you grant under the agreement are sufficient"
   - "You agree to indemnify Caspio and its agents, partners, consultants, employees, directors, officers, affiliates, subsidiaries and parents, and to defend them and hold them harmless, against all claims, demands, liability, damages, expenses and costs (attorneys' fees included, without limitation) that arise out of or relate to: taking part in the program; breaking the agreement or any of its terms or conditions herein; infringing a right of Caspio or of a third party, intellectual property or otherwise (including, without limitation, copyright infringement, proprietary right violation and privacy rights invasion); a misrepresentation of a warranty or representation, or a breach of a covenant and agreement, that you made; the content, maintenance, operation and development of your site, emails and social media, and of the information, services and products offered or distributed by you; or any related claim about such material, including, without limitation, any content Caspio is not the author of (content not attributable to it); these obligations survive the end of your relationship with Caspio or of your enrollment in the program"
+  - "If a legal dispute arises between you and Caspio, if you wish to give notice under the agreement's Indemnification section, or if you become subject to an insolvency or other similar legal proceedings, promptly send written notice to Caspio's Legal Department at its Sunnyvale, California address"
   - "Assignment: without Caspio's prior written consent you may not assign, subcontract or delegate the agreement, or any obligations or rights of yours hereunder, wholly or partly, including by operation of law; any attempt to assign it without that consent is null and void"
 
 # "This Portal will provide you with promotional material and links to web pages within Caspio’s web site for use on your web sites, emails and social media accounts." (www.caspio.com/legal/referral-program-agreement/, checked 2026-11-26)
@@ -62,9 +63,10 @@ description: >
   suits developers, consultants, content creators and other tech advisors.
   You get a referral link and access to the Caspio Partners Portal with
   promotional material, and your referrals get 20% off their first three
-  months. Three full months after a referral signs up for a paying account,
-  you earn a Promoter Award of 40% of its average monthly base fee over
-  those months, minus a processing fee (currently 2.5%), paid by PayPal.
+  months. Three full calendar months after a referral signs up for a
+  paying account, you qualify for a Promoter Award of 40% of its average
+  paid monthly base fee over its first three months, minus a processing
+  fee (currently 2.5%), paid by PayPal.
 
 short_description: "AI platform to build online database applications without coding"
 
