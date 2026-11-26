@@ -227,8 +227,10 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
           `commission.mode must be percentage, flat, tiered, hybrid, or unknown: ${file.filename}`
         )
       }
-      if (typeof commission.currency !== "string" || !commission.currency) {
-        reasons.push(`commission.currency is required: ${file.filename}`)
+      // Same rule as schema/program.schema.json: a currency is required for a
+      // flat amount; a percentage may leave it out (never read as USD).
+      if (commission.mode === "flat" && (typeof commission.currency !== "string" || !commission.currency)) {
+        reasons.push(`commission.currency is required when commission.mode is flat: ${file.filename}`)
       }
     }
     if (/<\/?script\b/i.test(content)) {
