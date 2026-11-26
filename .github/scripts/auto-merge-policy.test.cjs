@@ -1002,4 +1002,15 @@ test("commission.currency is required only for a flat amount, as in the schema",
   assert.equal(result.eligible, false)
   assert.match(result.reasons.join("\n"), /commission\.currency is required when commission\.mode is flat/)
   assert.equal(evaluate({ files: file(flat.replace("  mode: flat\n", "  mode: flat\n  currency: USD\n")) }).eligible, true)
+  assert.equal(evaluate({ files: file(flat.replace("  mode: flat\n", "  mode: flat\n  currency: null\n")) }).eligible, false)
+  assert.equal(evaluate({ files: file(flat.replace("  mode: flat\n", "  mode: flat\n  currency: \"\"\n")) }).eligible, false)
+  assert.equal(evaluate({ files: file(pct.replace("  mode: percentage\n", "  mode: percentage\n  currency: null\n")) }).eligible, true)
+  for (const mode of ["tiered", "hybrid"]) {
+    assert.equal(evaluate({ files: file(pct.replace("mode: percentage", `mode: ${mode}`)) }).eligible, true, mode)
+  }
+  for (const bad of ["42", "false", "{}", "[]", "\"\""]) {
+    const r = evaluate({ files: file(pct.replace("  mode: percentage\n", `  mode: percentage\n  currency: ${bad}\n`)) })
+    assert.equal(r.eligible, false, bad)
+    assert.match(r.reasons.join("\n"), /commission\.currency must be a currency code or null/)
+  }
 })

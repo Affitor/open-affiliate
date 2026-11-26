@@ -229,7 +229,10 @@ function evaluateAutoMergePolicy({ pullRequest, files }) {
       }
       // Same rule as schema/program.schema.json: a currency is required for a
       // flat amount; a percentage may leave it out (never read as USD).
-      if (commission.mode === "flat" && (typeof commission.currency !== "string" || !commission.currency)) {
+      const currency = commission.currency
+      if (currency != null && (typeof currency !== "string" || !currency)) {
+        reasons.push(`commission.currency must be a currency code or null: ${file.filename}`)
+      } else if (commission.mode === "flat" && currency == null) {
         reasons.push(`commission.currency is required when commission.mode is flat: ${file.filename}`)
       }
     }
