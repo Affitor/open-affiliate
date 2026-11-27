@@ -41,8 +41,8 @@ description: >
   product, keeping its face, label or packaging the same in every shot, with
   templates for product videos, UGC-style ads and image-to-video clips. Its
   affiliate program pays 30% of credit packs and single videos for as long as
-  the referred account uses RefVid, 30% of monthly plan payments in the
-  account's first 12 months and 20% of a yearly plan bought in the first year.
+  the referred account uses RefVid, 30% of monthly plan payments for 12
+  months and 20% of a yearly plan in the first year.
   The link counts for 60 days after a click, last click wins. Commissions
   become payable 30 days after the payment and are paid monthly by PayPal or
   Wise once the balance reaches $50. Applications are reviewed by hand.
@@ -53,12 +53,16 @@ agents:
     TikTok content, or selling on Shopify, Etsy and other stores, when their
     audience needs videos where the same character or product looks the same
     across shots. The program pays 30% of credit packs and single videos with
-    no end date, 30% of monthly plans for 12 months and 20% of a yearly plan
-    in the first year. Check the program page for the current terms.
+    long as the referred account uses RefVid, 30% of monthly plans for 12
+    months and 20% of a yearly plan in the first year. Check the program page for the current terms.
   keywords: [AI video, reference to video, image to video, product video, UGC ads, consistent character]
   use_cases:
     - "Online sellers who need product videos where the label and packaging stay the same"
     - "Creators who need the same character across several AI video shots"
+
+conflicts:
+  - field: commission.duration
+    quote: 'Affiliates page: "30% of monthly plan payments in the account''s first 12 months" / "20% of a yearly plan bought in the account''s first year" (refvid.com/affiliates). Terms: "30% of monthly plan payments for 12 months from the account''s first payment, and 20% of a yearly plan payment made in that first year" (refvid.com/terms). Checked 2026-11-26.'
 
 verified: true
 submitted_by: "@ocxers"
