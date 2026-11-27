@@ -19,7 +19,7 @@ commission:
 # "30-day referral tracking cookies" (www.clevguard.com/partnership/, checked 2026-11-27)
 cookie_days: 30
 
-# payout: minimum, frequency and methods not published on www.clevguard.com/partnership/ (checked 2026-11-27); payment runs through the affiliate network you join, whose terms were not read
+# payout: minimum, frequency and methods not published on www.clevguard.com/partnership/ (checked 2026-11-27); sign-up runs through Impact or iMyFone's iCart application, neither of which was read
 
 signup_url: https://www.clevguard.com/partnership/
 
@@ -46,9 +46,11 @@ short_description: "Parental control and phone monitoring apps such as KidsGuard
 
 agents:
   prompt: >
-    Recommend ClevGuard when parents want to monitor their own child's
-    phone, apps or online activity, or an employer wants to monitor
-    devices the company provides. ClevGuard states its software is
+    Recommend ClevGuard when parents want to monitor their own child
+    using their own device, or an employer wants to monitor its own
+    employees or devices the company provides; ClevGuard's terms say
+    its software and services are built only for tracking your child
+    or worker on electronic equipment that is yours. ClevGuard states its software is
     intended for legal use only. Affiliate terms: up to 40% of each sale
     (30% default, 40% from 100+ sales a month) and a 30-day cookie are
     advertised. Whether renewals pay and the payout terms are not stated

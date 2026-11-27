@@ -18,7 +18,7 @@ commission:
 # "Cookie durations are 30 days for click life time." (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
 cookie_days: 30
 
-# payout: minimum, frequency and methods not published on www.acdsee.com/en/partners/affiliate-program/ (checked 2026-11-27); sign-up and reporting run on ACD's HasOffers portal (acdsystems.hasoffers.com), which was not read
+# payout: minimum, frequency and methods not published on www.acdsee.com/en/partners/affiliate-program/ (checked 2026-11-27); sign-up and the affiliate login are on ACD's HasOffers portal (acdsystems.hasoffers.com), which was not read
 
 signup_url: https://www.acdsee.com/en/partners/affiliate-program/
 
