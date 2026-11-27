@@ -10,12 +10,13 @@ commission:
   rate: "30%"
   mode: hybrid
   value: 30
-  conditions: "30% of credit packs and single videos for as long as the referred account uses RefVid; 30% of monthly plan payments in the account's first 12 months; 20% of a yearly plan bought in the account's first year. Payments in Indian rupees earn no commission, and refunded or charged-back payments reverse theirs. Commission is figured on the amount paid in US dollars, excluding tax. An account is attributed once, when it signs up; an account that signs up with an invite from RefVid, or before its referrer was approved, is not an affiliate referral."
+  conditions: "30% of credit packs and single videos for as long as the referred account uses RefVid; 30% of monthly plan payments in the account's first 12 months (the terms count them from the account's first payment); 20% of a yearly plan bought in the account's first year. Payments in Indian rupees earn no commission, and refunded or charged-back payments reverse theirs. Commission is figured on the amount paid in US dollars, excluding tax. An account is attributed once, when it signs up; an account that signs up with an invite from RefVid, or before its referrer was approved, is not an affiliate referral."
 # "60 days: your link counts after a click; the last link clicked before sign-up wins" (refvid.com/affiliates, checked 2026-11-26)
 cookie_days: 60
 attribution: last-click
 # "$50: paid monthly by PayPal or Wise once you reach it; a commission becomes payable 30 days after the payment" (refvid.com/affiliates, checked 2026-11-26)
 # "Commission is figured on the amount paid in US dollars, excluding tax." / "an account that signs up with an invite from RefVid, or before its referrer was approved, is not an affiliate referral." (refvid.com/terms, Affiliate programme, checked 2026-11-26)
+# "30% of monthly plan payments for 12 months from the account's first payment" (refvid.com/terms, Affiliate programme, checked 2026-11-26)
 # "A refunded or disputed payment reverses its commission; if that commission was already paid, the amount comes off the next payout." (refvid.com/terms, Affiliate programme, checked 2026-11-26)
 payout:
   minimum: 50
@@ -52,17 +53,14 @@ agents:
     Relevant for creators and publishers who cover AI video tools, YouTube and
     TikTok content, or selling on Shopify, Etsy and other stores, when their
     audience needs videos where the same character or product looks the same
-    across shots. The program pays 30% of credit packs and single videos with
-    long as the referred account uses RefVid, 30% of monthly plans for 12
-    months and 20% of a yearly plan in the first year. Check the program page for the current terms.
+    across shots. The program pays 30% of credit packs and single videos for
+    as long as the referred account uses RefVid, 30% of monthly plans for 12
+    months and 20% of a yearly plan in the first year. Check the program page
+    for the current terms.
   keywords: [AI video, reference to video, image to video, product video, UGC ads, consistent character]
   use_cases:
     - "Online sellers who need product videos where the label and packaging stay the same"
     - "Creators who need the same character across several AI video shots"
-
-conflicts:
-  - field: commission.duration
-    quote: 'Affiliates page: "30% of monthly plan payments in the account''s first 12 months" / "20% of a yearly plan bought in the account''s first year" (refvid.com/affiliates). Terms: "30% of monthly plan payments for 12 months from the account''s first payment, and 20% of a yearly plan payment made in that first year" (refvid.com/terms). Checked 2026-11-26.'
 
 verified: true
 submitted_by: "@ocxers"
