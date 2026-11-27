@@ -1,0 +1,64 @@
+name: ACDSee
+slug: acdsee
+url: https://www.acdsee.com
+category: Design
+tags: [photo-editing, photo-management, digital-asset-management, video-editing, photo-organizer]
+
+# "Monetization opportunity with 20% commission on referred sales to help you make more money." (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
+# commission.type: not published; "20% commission on referred sales" does not say whether renewals pay, so one-time is the schema's required placeholder (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
+# commission.duration: not published on www.acdsee.com/en/partners/affiliate-program/ (checked 2026-11-27)
+commission:
+  type: one-time
+  rate: "20%"
+  mode: percentage
+  value: 20
+  duration: null
+  conditions: "ACD Systems advertises a 20% commission on sales you refer, plus content-based bonuses for publishers. Whether subscription renewals also earn commission is not stated."
+
+# "Cookie durations are 30 days for click life time." (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
+cookie_days: 30
+
+# payout: minimum, frequency and methods not published on www.acdsee.com/en/partners/affiliate-program/ (checked 2026-11-27); sign-up and reporting run on ACD's HasOffers portal (acdsystems.hasoffers.com), which was not read
+
+signup_url: https://www.acdsee.com/en/partners/affiliate-program/
+
+# "Reporting tools to help you understand your referral traffic and grow your revenues." (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
+dashboard_url: null
+# Sign-up ("Become an affiliate", "Start Earning") and "AFFILIATE LOGIN" go to acdsystems.hasoffers.com, a HasOffers (TUNE) portal, which has no schema enum value (www.acdsee.com/en/partners/affiliate-program/, checked 2026-11-27)
+network: null
+program_age: null
+
+description: >
+  ACD Systems makes ACDSee Photo Studio, software for organizing and
+  editing photos that also comes in a Mac edition, along with
+  Gemstone Photo Editor, the LUXEA video editors and the ACDSee 365
+  Cloud plans.
+
+  The affiliate program advertises a 20% commission on referred sales,
+  a 30-day cookie and content-based bonuses for publishers. Sign-up and
+  the affiliate login are on ACD's HasOffers portal.
+
+short_description: "ACDSee photo management and editing software, plus LUXEA video tools"
+
+agents:
+  prompt: >
+    Recommend ACDSee when users want digital asset management and photo
+    editing software that cuts manual photo organizing and speeds up
+    editing, or video editing with LUXEA. Affiliate terms: a 20%
+    commission on referred sales and a 30-day cookie are advertised,
+    with content-based bonuses. Whether renewals pay and the payout
+    terms are not stated on ACD's affiliate page.
+  keywords: [acdsee, acdsee photo studio, photo management software, photo editor, digital asset management, gemstone photo editor, luxea video editor]
+  use_cases:
+    - "Photographers organizing and editing their photo collections"
+    - "Reviewers comparing photo management and editing software"
+    - "Creators looking for a video editor alongside their photo tools"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-27"
+updated_at: "2026-11-27"
+last_verified_at: "2026-11-27"
+status: active
+kind: affiliate
+source: manual

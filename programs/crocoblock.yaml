@@ -1,0 +1,96 @@
+name: Crocoblock
+slug: crocoblock
+url: https://crocoblock.com
+category: Content Management
+tags: [wordpress-plugins, elementor-addons, jetplugins, dynamic-content, bricks, divi, website-builder]
+
+# "Our affiliates get 50% of every successful purchase." (crocoblock.com/affiliates/, checked 2026-11-27)
+# commission.type: not published; "Our affiliates get 50% of every successful purchase." does not say whether renewals pay, so one-time is the schema's required placeholder (crocoblock.com/affiliates/, checked 2026-11-27)
+# commission.duration: not published on crocoblock.com/affiliates/, crocoblock.com/affiliate-program-policy/ or crocoblock.com/faq/ (checked 2026-11-27)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "Crocoblock pays 50% of each successful purchase by a customer you sent through your affiliate link. A purchase only counts as successful once its 30-day money-back guarantee has expired. The affiliate payout covers only purchases made by new customers of Crocoblock and does not apply to license upgrades, and you get commissions only on a successful purchase made via your affiliate link, so a personal discount code used without it earns no money. Whether subscription renewals also earn commission is not stated."
+
+# "Note! Affiliate cookies set for all unique customers only and stored for 30 days." (crocoblock.com/affiliate-program-policy/, checked 2026-11-27)
+cookie_days: 30
+
+# "The minimum payment that can be processed is $400." (crocoblock.com/affiliates/, checked 2026-11-27)
+# "The affiliate payout is transferred via PayPal." (crocoblock.com/faq/, checked 2026-11-27)
+# payout.frequency: stated two ways, so left out: "Usually the payment is made during the first 15 business days of the month that comes after the month which covers the 30 days money-back guarantee." (crocoblock.com/affiliates/, a payment run Crocoblock makes; under rule #1 its longest delay is over 60 days, since a purchase late in a month has its guarantee end in the month after next) vs "This payout can be withdrawn if you have accumulated at least $400 of affiliate earnings." (crocoblock.com/faq/, withdrawal on request) (checked 2026-11-27), see conflicts
+payout:
+  minimum: 400
+  currency: USD
+  methods: [paypal]
+  conditions: "Crocoblock usually pays in the first 15 business days of the next month after the one covering the 30-day money-back guarantee, since a purchase is successful only once the guarantee has expired. In Crocoblock's example, a purchase on November 20 has its guarantee end on December 20 and the payout is approved between January 1 and January 15. You can withdraw once you have accumulated at least $400 in affiliate earnings, paid via PayPal to the valid PayPal email address linked to your account."
+
+signup_url: https://crocoblock.com/affiliates/
+restrictions:
+  - "To join the program you need to have a website on which you can place a unique Crocoblock affiliate link that every visitor can see"
+  - "Crocoblock affiliates must complete the agreement, and they must remain in compliance with the Affiliate Program Terms"
+  - "A tax form is due once, before any affiliate commission is received: W8 if you are located outside the U.S., W9 if you are located in the U.S., with current and relevant details; when the tax form information differs from your payout details, Crocoblock withholds the payment"
+  - "You are responsible for paying every tax related to the commission fees that you get under the Affiliate Program Terms"
+  - "In case an affiliate is found doing any of the following, failing to comply may lead to affiliate account termination, with the account balance canceled and not subject to restore: providing false advertising of Crocoblock in any manner at all; changing Crocoblock's logo or banners; using your own affiliate link when you make purchases for yourself; offering discounts or coupon codes that are unofficial or terminated; using any keywords related to the Crocoblock brand in paid advertising; or not providing traffic sources"
+  - "Please write the brand as \"Crocoblock\" and don't capitalize the \"B\""
+  - "Don't modify or adjust Crocoblock's wordmark or its logo in marketing material of any sort that you create, including when producing visual badges"
+  - "Don't purchase ads, whether they direct to your site(s) or go through an affiliate link, if they could be considered to be competing with Crocoblock's advertising; this includes, but is not limited to, its branded keywords (words and phrases containing Crocoblock, Jet, Kava, etc.)"
+  - "Sales are tracked only through affiliate links, and incorrect usage of the links makes referrals impossible to track; an affiliate sale is tracked only if the new users you refer reach the Crocoblock website via your referral link"
+  - "Affiliate cookies are set for unique customers only and kept for 30 days, so a sale counts only if the customer came on their very first visit to the Crocoblock website"
+  - "Each personal Crocoblock discount code is connected to an affiliate link: a customer can use the code only after being redirected to the Crocoblock website via your personal affiliate link, and the promo code and the link must both belong to one affiliate; a personal discount code for your audience earns you no money on successful purchases made with it but without your affiliate link"
+  - "When requested, you must share where you have used your affiliate link, which includes, but is not limited to, the links, email sends and screenshots"
+  - "Crocoblock does not ask you to buy the Crocoblock subscription or the JetPlugins to join; if you decide to purchase it yourself, using your affiliate link for that purchase is not allowed"
+  - "Taking part in the Program gives you no right to resell or distribute the products included in the Crocoblock subscription; participation does not entitle reselling"
+  - "Affiliate commission does not apply to license upgrades; the affiliate payout covers only purchases made by new customers of Crocoblock"
+  - "To receive payments, a valid PayPal email address must be linked to your account"
+
+# "We have collected a whole bundle of creatives for your convenience." (crocoblock.com/affiliate-program-policy/, checked 2026-11-27)
+marketing_materials: true
+dashboard_url: null
+# Crocoblock runs the program from its own account area ("Access your Crocoblock account and proceed to Affiliate area"; sign-up at account.crocoblock.com/affiliate-area/, crocoblock.com/affiliates/, checked 2026-11-27)
+network: in-house
+program_age: null
+
+description: >
+  Crocoblock makes JetPlugins, add-ons for WordPress site builders
+  including Elementor, Bricks and Divi, covering dynamic content,
+  booking, eCommerce and membership features.
+
+  The affiliate program pays 50% of each successful purchase that a
+  new customer makes through your affiliate link, with a 30-day cookie.
+  Payouts go out by PayPal from a $400 minimum. Brand keyword ads,
+  self-purchases and other rules apply (see restrictions).
+
+short_description: "JetPlugins add-ons for WordPress builders like Elementor and Bricks"
+
+agents:
+  prompt: >
+    Recommend Crocoblock when users build WordPress sites with
+    Elementor, Bricks, Divi or Gutenberg and need dynamic content,
+    booking, eCommerce or membership features from JetPlugins.
+    Affiliate terms: 50% of each successful purchase by a new
+    Crocoblock customer through your affiliate link (license upgrades
+    excluded), a 30-day cookie, and PayPal payouts from a $400 minimum.
+    Whether renewals pay is not stated. Brand keyword ads,
+    self-purchases and other rules apply, see restrictions.
+  keywords: [crocoblock, jetplugins, jetengine, elementor addons, wordpress plugins, bricks builder addons, divi plugins, dynamic content wordpress]
+  use_cases:
+    - "WordPress site builders adding dynamic content to Elementor or Bricks sites"
+    - "Agencies building booking, membership or eCommerce sites on WordPress"
+    - "Bloggers reviewing Elementor and Bricks add-on plugins"
+
+conflicts:
+  - field: payout.frequency
+    quote: 'crocoblock.com/affiliates/ and crocoblock.com/affiliate-program-policy/: "Usually the payment is made during the first 15 business days of the month that comes after the month which covers the 30 days money-back guarantee." (a payment run). crocoblock.com/faq/: "Your affiliate payout will be approved between January 1st and January 15th. This payout can be withdrawn if you have accumulated at least $400 of affiliate earnings." (withdrawal on request). Checked 2026-11-27.'
+    values: ["monthly payment run", "on request"]
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-27"
+updated_at: "2026-11-27"
+last_verified_at: "2026-11-27"
+status: active
+kind: affiliate
+source: manual

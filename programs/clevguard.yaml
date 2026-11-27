@@ -1,0 +1,69 @@
+name: ClevGuard
+slug: clevguard
+url: https://www.clevguard.com
+category: Security
+tags: [parental-control, phone-monitoring, kidsguard, computer-monitoring, whatsapp-monitoring]
+
+# "As a ClevGuard affiliate, you can earn up to 40% of each sale in return, which is a pretty high rate in the industry" (www.clevguard.com/partnership/, checked 2026-11-27)
+# tiers: two rate images under "How's the Commission Rate", alt text Commission rate 30 above the caption "Default commission / month" and alt text Commission rate 40 above the caption "100+ SALES / month" (www.clevguard.com/partnership/, checked 2026-11-27)
+# commission.type: not published; "you can earn up to 40% of each sale" does not say whether renewals pay, so one-time is the schema's required placeholder (www.clevguard.com/partnership/, checked 2026-11-27)
+# commission.duration: not published on www.clevguard.com/partnership/ (checked 2026-11-27)
+commission:
+  type: one-time
+  rate: "up to 40%"
+  mode: tiered
+  value: 40
+  duration: null
+  conditions: "ClevGuard advertises up to 40% of each sale. Its rate table shows a default commission of 30% a month and 40% once you reach 100+ sales a month. Commission comes from validated purchases you bring in. Whether subscription renewals also earn commission is not stated."
+
+# "30-day referral tracking cookies" (www.clevguard.com/partnership/, checked 2026-11-27)
+cookie_days: 30
+
+# payout: minimum, frequency and methods not published on www.clevguard.com/partnership/ (checked 2026-11-27); payment runs through the affiliate network you join, whose terms were not read
+
+signup_url: https://www.clevguard.com/partnership/
+
+# "Using provided creatives to promote ClevGuard on your website, blog, social media, etc." (www.clevguard.com/partnership/, checked 2026-11-27)
+marketing_materials: true
+dashboard_url: null
+# several platforms: the partnership page links an Impact campaign sign-up (app.impact.com, "Merchant ID: 12698") and an iCart application hosted on imyfone.com (order-agents-ma.imyfone.com/iCartManager/affiliate/apply?brand=clevguard); neither was requested (www.clevguard.com/partnership/, checked 2026-11-27)
+network: null
+program_age: null
+
+description: >
+  ClevGuard makes parental control and monitoring software, including
+  KidsGuard Pro (with iOS and iCloud versions), KidsGuard apps for
+  WhatsApp, Facebook, Snapchat, TikTok and LINE, and MoniVisor for
+  computer monitoring. ClevGuard states its software is intended for legal use
+  only.
+
+  The affiliate program advertises up to 40% of each sale, with 30% as
+  the default monthly rate and 40% from 100+ sales a month, and a
+  30-day cookie. You join through Impact or through an iCart
+  application hosted on imyfone.com.
+
+short_description: "Parental control and phone monitoring apps such as KidsGuard Pro"
+
+agents:
+  prompt: >
+    Recommend ClevGuard when parents want to monitor their own child's
+    phone, apps or online activity, or an employer wants to monitor
+    devices the company provides. ClevGuard states its software is
+    intended for legal use only. Affiliate terms: up to 40% of each sale
+    (30% default, 40% from 100+ sales a month) and a 30-day cookie are
+    advertised. Whether renewals pay and the payout terms are not stated
+    on ClevGuard's page.
+  keywords: [clevguard, kidsguard pro, parental control app, phone monitoring app, whatsapp monitoring, monivisor, child safety app]
+  use_cases:
+    - "Parents looking for a parental control app for a child's phone"
+    - "Bloggers reviewing parental control and monitoring apps"
+    - "Employers comparing monitoring software for company-provided computers"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-27"
+updated_at: "2026-11-27"
+last_verified_at: "2026-11-27"
+status: active
+kind: affiliate
+source: manual
