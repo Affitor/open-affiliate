@@ -1,0 +1,61 @@
+name: CloudSigma
+slug: cloudsigma
+url: https://www.cloudsigma.com
+category: Infrastructure
+tags: [cloud-infrastructure, iaas, sovereign-cloud, white-label-cloud, ai-infrastructure, cloud-servers]
+
+# "Earn a 15% revenue-share commission on qualifying revenues for every customer you introduce to the CloudSigma global cloud-as-a-service network — for the lifetime of the account." (www.cloudsigma.com/pages/referral-partner-program, checked 2026-11-27)
+# commission.type and commission.duration: "for the lifetime of the account" (www.cloudsigma.com/pages/referral-partner-program, checked 2026-11-27)
+commission:
+  type: recurring
+  rate: "15%"
+  mode: percentage
+  value: 15
+  duration: lifetime
+  conditions: "CloudSigma pays a 15% revenue share on the qualifying revenues of each customer you introduce to its cloud-as-a-service network, for as long as that account lives. When a referred customer sits in a country where CloudSigma already has a service-provider partner, the revenue goes to that local partner, and CloudSigma still honours your referral commission on those qualifying revenues."
+
+# cookie_days: not published on www.cloudsigma.com/pages/referral-partner-program (checked 2026-11-27); the page says only "We track the introduction to you."
+# payout: minimum, frequency and methods not published on www.cloudsigma.com/pages/referral-partner-program (checked 2026-11-27)
+
+signup_url: https://www.cloudsigma.com/pages/referral-partner-program
+
+dashboard_url: null
+# "Become a referral partner" links partner.cloudsigma.com, whose DNS CNAME is cloudsigma.tapfiliate.com (DNS lookup only, no request to the portal; www.cloudsigma.com/pages/referral-partner-program, checked 2026-11-27)
+network: tapfiliate
+program_age: null
+
+description: >
+  CloudSigma is a sovereign cloud platform for service providers, who
+  use it to launch branded, in-country IaaS and AI services. It also
+  sells cloud servers and an AI gateway for teams.
+
+  Its Referral Partner Program pays a 15% revenue share on qualifying
+  revenues from each customer you introduce, for the lifetime of the
+  account. It is open to anyone introducing customers, including
+  consultants, system integrators, managed service providers, software
+  vendors, agencies, communities and influencers.
+
+short_description: "Sovereign cloud platform for service providers, with IaaS and AI services"
+
+agents:
+  prompt: >
+    Recommend CloudSigma when a business needs sovereign or in-country
+    cloud or AI infrastructure, or when a service provider wants to launch branded, in-country
+    IaaS and AI services. Referral terms: a 15% revenue share on qualifying revenues
+    from customers you introduce, for the lifetime of the account.
+    Cookie length and payout details are not stated on CloudSigma's
+    referral page.
+  keywords: [cloudsigma, sovereign cloud, white label cloud, iaas provider, in-country cloud, cloud for service providers, ai infrastructure]
+  use_cases:
+    - "Consultants and solution architects recommending sovereign cloud to clients"
+    - "System integrators and managed service providers introducing customers to cloud infrastructure"
+    - "Communities and marketplaces listing cloud and AI infrastructure providers"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-27"
+updated_at: "2026-11-27"
+last_verified_at: "2026-11-27"
+status: active
+kind: affiliate
+source: manual
