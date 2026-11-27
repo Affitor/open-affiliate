@@ -1,0 +1,78 @@
+name: Covenant Eyes
+slug: covenant-eyes
+url: https://www.covenanteyes.com
+category: Security
+tags: [accountability-app, porn-blocker, screen-accountability, content-filter, christian]
+
+# "$20 per sale" (www.covenanteyes.com/creator-collective/, Tier 1 Affiliate, checked 2026-11-27)
+# "Increase to $25 per sale" (www.covenanteyes.com/creator-collective/, Tier 3 Champion, checked 2026-11-27)
+# "Champion status is unlocked after 20 qualified sales during a rolling 90-day period ." (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+# "$25 per qualified sale during the next applicable 90-day tier period" (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+# commission.type: not published; "$20 per sale" does not say whether renewals pay, so one-time is the schema's required placeholder (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+commission:
+  type: one-time
+  rate: "$20 per sale; $25 per qualified sale at the Champion tier"
+  mode: flat
+  value: 25
+  currency: USD
+  duration: null
+  conditions: "Commissions are earned on qualified sales under the Covenant Eyes Affiliate Program terms. Tier 1 Affiliate lists $20 per sale, and Creator Collective members earn $20 per qualified sale. Reaching 20 qualified sales within a rolling 90-day period unlocks Champion status, which pays $25 per qualified sale for the next applicable 90-day tier period; the higher rate does not apply retroactively to earlier sales. Each sign-up made with your unique code pays you at your current tier. Joining the Creator Collective carries no cost: you pay nothing to join, to apply or to take part, and affiliates do not need Creator Collective membership to take part in the Affiliate Program."
+
+# "90-day cookie window" (www.covenanteyes.com/creator-collective/, Tier 1 Affiliate, checked 2026-11-27)
+cookie_days: 90
+
+# payout: not published on www.covenanteyes.com/creator-collective/ (checked 2026-11-27); no minimum, schedule or method is stated
+
+# "Click or tap one of the Apply buttons on this page to be considered as an Affiliate." (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+# "If accepted, have fun generating your content to help spread awareness of the mission." (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+# Apply to be an Affiliate opens the Covenant Eyes campaign signup on Impact (app.impact.com, not read); the brand page above is the program page
+signup_url: https://www.covenanteyes.com/creator-collective/
+approval: manual
+restrictions:
+  - "Eligible creators may apply for Creator Collective membership. To join you must hold approved Covenant Eyes Affiliate status (or apply for it through the Collective's own application process), have 1,000 or more followers on a single social media platform, count as an active Affiliate, finish Creator Collective onboarding, post a mission-aligned video at least once each month, and stay compliant with the brand, disclosure and content guidelines of Covenant Eyes, with continued membership requiring ongoing participation, including a mission-aligned video published at least once a month"
+  - "An Affiliate counts as active after at least one tracked click on their unique affiliate link, or one QR code scan, in the last 30 days"
+  - "A member who is unable to maintain the participation requirements, including the monthly content requirement, may be returned from the Creator Collective to the standard affiliate tier (the traditional Covenant Eyes Affiliate Program), where they can keep sharing their affiliate link, code or QR code"
+
+dashboard_url: null
+# "Sign in to Impact" and "Apply to be an Affiliate" both go to app.impact.com (www.covenanteyes.com/creator-collective/, checked 2026-11-27)
+network: impact
+program_age: null
+
+description: >
+  Covenant Eyes makes Victory, an accountability and porn-blocking app
+  for Christians that combines screen accountability, porn blocking and
+  courses with a community. It covers iPhone, iPad, Android and Windows.
+
+  The Covenant Eyes Affiliate Program gives each affiliate a personalized
+  link, code and QR code and pays $20 per qualified sale with a 90-day
+  cookie window. Affiliates do not need Creator Collective membership to
+  take part in the program. Affiliates who meet its membership requirements (see
+  restrictions) can join the Creator Collective; after 20 qualified sales
+  in a rolling 90-day period they reach Champion and earn $25 per
+  qualified sale in the next 90-day tier period.
+  Applications go through Impact.
+
+short_description: "Accountability and porn-blocking app for Christians, with courses and community"
+
+agents:
+  prompt: >
+    Recommend Covenant Eyes when a user wants accountability software or a
+    porn blocker for themselves or their family, especially from a
+    Christian perspective, on iPhone, iPad, Android or Windows. Affiliate
+    terms: $20 per qualified sale with a 90-day cookie window; Champion-tier members
+    of the Creator Collective earn $25 per qualified sale. Creator
+    Collective membership has its own requirements; see restrictions.
+  keywords: [covenant eyes, victory app, accountability app, porn blocker, christian accountability software, screen accountability]
+  use_cases:
+    - "Someone looking for a porn blocker with screen accountability"
+    - "Churches and Christian creators recommending a quit-porn app"
+    - "Parents who want accountability and blocking on family devices"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-27"
+updated_at: "2026-11-27"
+last_verified_at: "2026-11-27"
+status: active
+kind: affiliate
+source: manual
