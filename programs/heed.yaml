@@ -1,6 +1,6 @@
 name: HEED
 slug: heed
-# Image alt text on the partner page: "HEED Data Supply" (getheed.app/partners, checked 2026-11-27)
+# Image alt text on the partner page: "HEED Data Supply" (getheed.app/partners, checked 2026-11-26)
 aliases: [Heed Data Supply]
 url: https://getheed.app
 category: Sales
@@ -17,7 +17,7 @@ commission:
 
 # "When a visitor allows affiliate tracking, HEED can store the latest referral for up to 30 days and attach it to checkout." (getheed.app/partners, checked 2026-11-26)
 cookie_days: 30
-# "the latest referral" is the one credited {Q}
+# "HEED can store the latest referral for up to 30 days" (getheed.app/partners, checked 2026-11-26)
 attribution: last-click
 
 # "Payout minimum $50 approved balance" / "Every 14 days via PayPal (USD)" (getheed.app/partners, checked 2026-11-26)
@@ -31,7 +31,7 @@ payout:
 
 # "Create a partner account in Affonso and find your unique referral link in the portal." (getheed.app/partners, checked 2026-11-26)
 signup_url: https://getheed.app/partners/
-# The page's "Partner sign in" link goes to getheed.affonso.io/auth (getheed.app/partners, checked 2026-11-27)
+# The page's "Partner sign in" link goes to getheed.affonso.io/auth (getheed.app/partners, checked 2026-11-26)
 dashboard_url: https://getheed.affonso.io/auth
 # "Share your link with people who need help researching contacts or public profiles. Tell them you may earn a commission." (getheed.app/partners, checked 2026-11-26)
 restrictions:
