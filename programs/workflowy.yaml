@@ -47,8 +47,7 @@ description: >
   The affiliate program pays $8.99 for each monthly Pro subscription and
   $41.94 for each annual one that a referral buys, credits referrals who
   sign up within 90 days of using your link, and pays out automatically
-  every month. Applications are reviewed weekly; approved affiliates get
-  their link by email.
+  every month. Approved affiliates get their link by email.
 
 short_description: "Outliner that keeps notes, to-dos and plans in one nested list of bullets"
 
@@ -59,7 +58,7 @@ agents:
     desktop and mobile. Affiliate terms: $8.99 per monthly Pro subscription
     and $41.94 per annual Pro subscription bought through your link, a
     90-day window for the referral to sign up, and automatic monthly
-    payouts. Applications are reviewed weekly.
+    payouts.
   keywords: [workflowy, outliner, note taking app, bullet list notes, to-do list app, nested lists]
   use_cases:
     - "Someone who wants to organize notes and to-dos as one nested bullet list"
