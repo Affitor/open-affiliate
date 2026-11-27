@@ -16,7 +16,7 @@ commission:
   value: 25
   currency: USD
   duration: null
-  conditions: "Commissions are earned on qualified sales under the Covenant Eyes Affiliate Program terms. Tier 1 Affiliate lists $20 per sale, and Creator Collective members earn $20 per qualified sale. Reaching 20 qualified sales within a rolling 90-day period unlocks Champion status, which pays $25 per qualified sale for the next applicable 90-day tier period; the higher rate does not apply retroactively to earlier sales. Each sign-up made with your unique code pays you at your current tier. Joining the Creator Collective carries no cost: you pay nothing to join, to apply or to take part, and affiliates do not need Creator Collective membership to take part in the Affiliate Program."
+  conditions: "Commissions are earned on qualified sales under the Covenant Eyes Affiliate Program terms. Tier 1 Affiliate lists $20 per sale, and Creator Collective members earn $20 per qualified sale. Advancement and certain rewards depend on the qualified sales you make in a rolling 90-day period: reaching 20 qualified sales within one unlocks Champion status, which pays $25 per qualified sale for the next applicable 90-day tier period; the higher rate does not apply retroactively to earlier sales. Each sign-up made with your unique code pays you at your current tier. Joining the Creator Collective carries no cost: you pay nothing to join, to apply or to take part, and affiliates do not need Creator Collective membership to take part in the Affiliate Program."
 
 # "90-day cookie window" (www.covenanteyes.com/creator-collective/, Tier 1 Affiliate, checked 2026-11-27)
 cookie_days: 90
