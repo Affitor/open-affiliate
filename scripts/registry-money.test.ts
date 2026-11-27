@@ -222,6 +222,7 @@ const REVIEWED_MULTI_RATE: Record<string, string> = {
   pixverse: "35% is a volume tier",
   quillbot: "10%/15%/20% by billing period, a plan split; the rate is the lowest",
   "rank-prompt": "the 10% lifetime offer is a second listing offer stated in conditions, not a later step",
+  refvid: "20% is the yearly-plan rate, a plan split, not a step",
   "respond-io": "15%-40% are partner tiers",
   salesforge: "20% is white-label partnerships",
   salesmsg: "20% is certified resellers",
