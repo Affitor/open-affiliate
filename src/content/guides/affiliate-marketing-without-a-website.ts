@@ -12,7 +12,7 @@ export const guide: GuidePost = {
   checked: "2026-10-21",
   title: (year) => `Affiliate Marketing Without a Website (${year})`,
   description:
-    "You can do affiliate marketing without a website, through a newsletter, videos or social posts, if you follow each program's rules on where you promote.",
+    "Yes, you can do affiliate marketing without a website: use a newsletter, video channel or social account. The catch: many programs limit where you promote.",
   answer:
     "Yes, you can do affiliate marketing without a website. A newsletter, a video channel, a social account or an online community can all carry affiliate links. The catch is that every program decides where you may promote it, so the first step is reading its rules: some ban paid ads, some want traffic to go through your own content first, and some ban coupon sites.",
   takeaways: [

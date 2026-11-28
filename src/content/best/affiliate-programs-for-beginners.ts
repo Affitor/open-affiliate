@@ -13,7 +13,7 @@ export const post: BestPost = {
   layout: "standard",
   title: (n, year) => `${n} Affiliate Programs for Beginners in ${year}`,
   description:
-    "Affiliate programs for beginners that approve new affiliates automatically, so you can get your link the day you sign up. Terms checked on each brand page.",
+    "Affiliate programs for beginners that approve you instantly, so you get your link the day you sign up. Low payout minimums, terms checked per brand.",
   intro:
     "When you are new, the first hurdle is often the application. Every program below approves new affiliates automatically on its own terms, so you can start the day you sign up.",
   lookFor: {

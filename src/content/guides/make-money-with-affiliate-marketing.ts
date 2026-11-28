@@ -11,7 +11,7 @@ export const guide: GuidePost = {
   checked: "2026-10-21",
   title: (year) => `Make Money With Affiliate Marketing in ${year}`,
   description:
-    "How to make money with affiliate marketing: the terms that decide what you keep, from cookie windows to payout rules, shown with real programs' terms.",
+    "Anyone can make money with affiliate marketing online. For the same referral, some affiliates get paid once and others every month. Here is why.",
   answer:
     "You make money with affiliate marketing by recommending products to people who are about to buy, and earning the commission each program sets on the sales your links bring. What you keep depends less on the headline rate than on the terms around it: how long a click counts, how long the commission lasts, when it clears and how much you must earn before a payout. This guide shows each of those with real programs' terms, and makes no income promises.",
   takeaways: [

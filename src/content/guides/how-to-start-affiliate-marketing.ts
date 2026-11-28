@@ -10,7 +10,7 @@ export const guide: GuidePost = {
   checked: "2026-10-21",
   title: (year) => `How to Start Affiliate Marketing in ${year}`,
   description:
-    "How to start affiliate marketing step by step: pick a topic, join programs that approve you today, and see how real programs pay, with verified terms.",
+    "Start affiliate marketing step by step: pick a topic, choose where to publish, join programs that approve beginners, and earn your first commission.",
   answer:
     "To start affiliate marketing, pick a topic you know, choose where you will publish, join programs that will approve you now, and write content that helps a reader decide what to buy, with a clear note that you earn a commission. This guide walks through each step and shows how real programs in the OpenAffiliate registry pay, using terms we verified and dated.",
   takeaways: [

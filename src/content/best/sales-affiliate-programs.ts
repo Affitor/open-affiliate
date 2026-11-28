@@ -13,7 +13,7 @@ export const post: BestPost = {
   layout: "standard",
   title: (n, year) => `${n} Best Sales Affiliate Programs in ${year}`,
   description:
-    "The best sales tool affiliate programs for lead research, cold outreach, data enrichment, CRM and AI sales agents, with terms checked on each brand's page.",
+    "Sales tool affiliate programs for lead finding, cold email, CRM and AI sales agents. Most pay recurring commission, terms checked on each brand page.",
   intro:
     "Sales tools suit any site that writes for founders, sales teams or agencies: prospecting, outreach and CRM software sits at the center of how they win customers, and most of it bills every month.",
   lookFor: {

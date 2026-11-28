@@ -13,7 +13,7 @@ export const post: BestPost = {
   layout: "standard",
   title: (n, year) => `${n} Highest-Paying Affiliate Programs in ${year}`,
   description:
-    "The highest-paying affiliate programs we track, from large flat payouts per customer to a share of every payment, with terms checked on each brand's page.",
+    "High paying affiliate programs, from big payouts per customer to recurring commission on every payment. See what each rate means and when you get paid.",
   intro:
     "High-paying programs pay in very different ways: a large flat amount per customer, milestones as a deal moves forward, or a share of every payment. We read each one's own terms for how and when it pays.",
   lookFor: {

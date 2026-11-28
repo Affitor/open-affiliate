@@ -10,7 +10,7 @@ export const guide: GuidePost = {
   checked: "2026-10-21",
   title: (year) => `Affiliate Marketing for Bloggers in ${year}`,
   description:
-    "Affiliate marketing for bloggers: the posts that earn, how to pick programs by cookie window and payout terms, and where to place and disclose links.",
+    "Affiliate marketing for bloggers: the posts that earn commissions, how to pick programs that fit your blog, and where to place and disclose your links.",
   answer:
     "Affiliate marketing suits a blog because a post can keep bringing readers from search long after you publish it. You write reviews, comparisons and how-to posts that link to products you use, and earn a commission when a reader buys. This guide covers the posts that earn, how to choose programs by cookie window and payout terms, and how to place and disclose links, with programs whose terms suit a blog.",
   takeaways: [
