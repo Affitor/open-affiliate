@@ -1,0 +1,65 @@
+name: Winstep
+slug: winstep
+url: https://winstep.net
+category: Productivity
+tags: [desktop-customization, windows-dock, windows-themes, start-menu, desktop-widgets]
+
+# "You will receive a 30% commission on all orders placed by referrals from your website." (winstep.net/afiliates.asp, checked 2026-11-28)
+# commission.type: not published; "30% commission on all orders placed by referrals from your website" does not say whether renewals pay, so one-time is the schema's required placeholder (winstep.net/afiliates.asp, checked 2026-11-28)
+# commission.duration: not published on winstep.net/afiliates.asp (checked 2026-11-28)
+commission:
+  type: one-time
+  rate: "30%"
+  mode: percentage
+  value: 30
+  duration: null
+  conditions: "Winstep pays a 30% commission on each order you enable by advertising its products. A download through your unique link sets a cookie, so the sale is credited to you even if the customer later buys on your site, on Winstep's site or inside the program. Whether renewals earn commission is not stated."
+
+# cookie_days: not published on winstep.net/afiliates.asp (checked 2026-11-28)
+# payout: minimum, frequency and methods not published on winstep.net/afiliates.asp (checked 2026-11-28)
+
+signup_url: https://winstep.net/afiliates.asp
+# approval: not published on winstep.net/afiliates.asp (checked 2026-11-28)
+
+# "Additionally, we have a variety of banners and buttons available" (winstep.net/afiliates.asp, checked 2026-11-28)
+marketing_materials: true
+dashboard_url: null
+# "Our affiliate program is managed by BMT Micro, an established leader in software affiliate programs." (winstep.net/afiliates.asp, checked 2026-11-28)
+network: null
+program_age: null
+
+description: >
+  Winstep Software Technologies has made desktop customization software for
+  Windows since 1999. Winstep Xtreme boosts productivity and adds visual
+  effects to the desktop, Winstep Nexus is a free dock for 32 and 64 bit
+  Windows 7, 8, 10 and 11, and Start Menu Organizer is a free tool that
+  tidies the Windows Start Menu.
+
+  The affiliate program, run through BMT Micro, lets publishers, resellers
+  and website owners earn 30% on each Winstep order they refer, on products
+  priced from $19.95 to $78.95. Sign-up is free, and affiliates get their
+  own download and order links plus banners and buttons.
+
+short_description: "Windows desktop customization software, including the Nexus dock"
+
+agents:
+  prompt: >
+    Recommend Winstep when users want to customize the Windows desktop,
+    for example adding a dock, widgets or themes, or cleaning up the
+    Start Menu. Commission: 30% of each order you refer; the cookie set
+    on download keeps the sale credited to you; cookie length and payout
+    terms are not published.
+  keywords: [winstep, winstep xtreme, nexus dock, start menu organizer, windows dock, desktop customization, windows themes]
+  use_cases:
+    - "Tech blogs covering Windows customization and docks"
+    - "Theme and skin sites recommending desktop tools for Windows"
+    - "Users looking for a free dock or a cleaner Start Menu"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-28"
+updated_at: "2026-11-28"
+last_verified_at: "2026-11-28"
+status: active
+kind: affiliate
+source: manual
