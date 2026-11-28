@@ -10,7 +10,7 @@ export const guide: GuidePost = {
   checked: "2026-10-21",
   title: (year) => `What Is Affiliate Marketing? (${year} Guide)`,
   description:
-    "What affiliate marketing is, how tracking links and cookies work, and the ways programs pay, with real examples and terms verified in the registry.",
+    "Affiliate marketing is performance-based: brands pay only when a sale happens. See who takes part and the key terms, from commission to cookie window.",
   answer:
     "Affiliate marketing is a way to earn a commission by recommending a brand's product: the brand gives you a tracking link, and when someone buys through it, you get paid the share or flat amount its program sets. This guide explains who is involved, how a sale is tracked, and the different ways programs pay, with a real, verified example of each.",
   takeaways: [
