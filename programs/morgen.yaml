@@ -6,10 +6,10 @@ tags: [calendar, daily-planner, task-management, time-blocking, ai-planner]
 
 # "As a Morgen affiliate, you will earn a 15% commission on every transaction from users joining Morgen through your affiliate link." (www.morgen.so/affiliate-program, checked 2026-11-28)
 # "That includes 15% of ongoing subscription fees and upgrades." (www.morgen.so/affiliate-program, checked 2026-11-28)
-# commission.type: not published; "you will earn a 15% commission on every transaction from users joining Morgen through your affiliate link" does not say whether renewals pay, so one-time is the schema's required placeholder (www.morgen.so/affiliate-program, checked 2026-11-28)
+# commission.type: "That includes 15% of ongoing subscription fees and upgrades." (www.morgen.so/affiliate-program, checked 2026-11-28)
 # commission.duration: not published on www.morgen.so/affiliate-program (checked 2026-11-28)
 commission:
-  type: one-time
+  type: recurring
   rate: "15%"
   mode: percentage
   value: 15
@@ -36,7 +36,7 @@ dashboard_url: null
 # "You can login to your account at Tapfiliate any time to see approved commissions and any messages from Morgen." (www.morgen.so/affiliate-program, checked 2026-11-28)
 network: tapfiliate
 restrictions:
-  - "PPC and search ads with your code: Morgen does not allow bidding against its branded keywords in search; to explore a search campaign, email Morgen first to discuss the terms"
+  - "PPC and search ads with your code: Morgen does not allow bidding against its branded keywords in search; to explore a search campaign, email Morgen to discuss the terms"
   - "Who can be a Morgen affiliate: if you are passionate about productivity and better time management, Morgen would love to work with you; the groups it works with are educators, entrepreneurs, bloggers and writers, content creators and influencers, power users who like sharing how they use Morgen, media networks, including podcasts and news sites, and productivity and effectiveness coaches"
 program_age: null
 

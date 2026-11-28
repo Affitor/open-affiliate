@@ -36,12 +36,19 @@ approval: auto
 # "Your link, your referrals and every commission live in your affiliate dashboard." (linktw.in/affiliate, checked 2026-11-28)
 network: in-house
 # "The brand kit gives you the logos, the video and the posts." (linktw.in/affiliate, checked 2026-11-28)
+# "The brand kit has the words we use." (linktw.in/affiliate, checked 2026-11-28)
+# "Please avoid" and "Please don't" (linktw.in/brand-kit, checked 2026-11-28)
 marketing_materials: true
 restrictions:
   - "Planning a paid campaign? Ask LinkTwin first, and it will reply by email: PPC campaigns are allowed only with prior approval, so tell LinkTwin where and how you plan to advertise before the campaign starts and contact it before you launch"
   - "No bidding on \"LinkTwin\" or on competitor keywords: your search ads must not target the LinkTwin brand name, nor the names of other link tools"
   - "No bot, fake, or spam traffic: LinkTwin pays commissions only for real people who themselves choose to sign up"
-  - "No misleading promotions about LinkTwin: describe honestly what it does, using the words LinkTwin uses in its brand kit"
+  - "No misleading promotions about LinkTwin: describe honestly what LinkTwin does; the brand kit has the words LinkTwin uses"
+  - "Please avoid, when talking about LinkTwin: numbers that are made up, such as \"doubles your sales\" or \"+70% clicks\"; naming any app LinkTwin does not list as supported; calling features of paid plans free; speaking as LinkTwin, or as its support team"
+  - "If you are earning a commission, say so close to the link, for example with \"affiliate link\" or #ad, and add \"affiliate link\" or #ad to a Story; LinkTwin notes that many countries, including the US and the UK, require it"
+  - "Logo use: please don't stretch or squash the logo, change its colors or rotate it, and do not put the dark logo on dark colors; use the full logo wherever it fits, and use the icon alone only when space is tight, such as a profile picture or an app grid; leave clear space around the logo that is at least as wide as the bolt, and the full logo must not be used smaller than 120 px wide, nor the icon smaller than 24 px; use dark text on light backgrounds and light text on dark ones, and on busy photos place the logo on a solid panel first; keep the bolt colors to small accents and the phone's own blue in the logo files only"
+  - "Name and wordmark: use the logo files unchanged, as the wordmark is custom lettering, so do not retype it in another font; write the name as LinkTwin, one word with a capital L and a capital T, in sentences, and the website as linktw.in, always lowercase"
+  - "The explainer video: please share it as it is (trimming it to a shorter length is fine), but do not change its words or its claims"
   - "The program rules keep it fair for everyone, and you agree to them by participating; violations may result in account termination"
   - "When a referred payment is refunded, or charged back as a chargeback, the commission for that payment is cancelled; when that commission had already been paid out to you, LinkTwin deducts the amount from your balance"
   - "Creating a LinkTwin account means you agree to LinkTwin's Terms and Privacy Policy; those Terms require users to be aged at least 13, or 16 in some jurisdictions"
