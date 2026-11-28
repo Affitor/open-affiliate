@@ -1,0 +1,79 @@
+name: AVS4YOU
+slug: avs4you
+url: https://www.avs4you.com
+category: Design
+tags: [video-editor, video-converter, audio-editor, multimedia-software, windows]
+
+# "Earn 50% commission on every sale!" (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# "AVS4YOU offers a 50% commission from the start, a very competitive offer on the multimedia market." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# "Your commission rate grows along with the number of generated sales." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# commission.type: not published; "Earn 50% commission on every sale!" does not say whether renewals pay, so one-time is the schema's required placeholder (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# commission.duration: not published on www.avs4you.com/affiliates.aspx (checked 2026-11-28)
+# commission tiers: not published; "Your commission rate grows along with the number of generated sales." gives no tier figures (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+commission:
+  type: one-time
+  rate: "50%"
+  mode: percentage
+  value: 50
+  duration: null
+  conditions: "50% commission on each sale from the start; AVS4YOU says the rate then rises as the number of sales you generate grows. Affiliates sell the two subscription types AVS4YOU offers for its products, one-year and unlimited. Joining is free, with no fees or special conditions."
+
+# cookie_days: not published on www.avs4you.com/affiliates.aspx (checked 2026-11-28)
+
+# "Receive a 50% commission from every sale and get your monthly payout." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# "All commisions are paid by 2Checkout, a secure and worldwide known e-commerce platform." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# payout.minimum, payout.methods: not published on www.avs4you.com/affiliates.aspx (checked 2026-11-28)
+payout:
+  frequency: monthly
+  conditions: "Commissions are paid monthly by 2Checkout, the e-commerce platform that pays all AVS4YOU commissions."
+
+# "Sign up in the Avangate Affiliate Network or log in if you already have an account." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+# Sign up now opens www.avangatenetwork.com/affiliates/sign-up.php (not requested); the affiliate page above is the program page
+# approval: not published on www.avs4you.com/affiliates.aspx; the page names no review step (checked 2026-11-28)
+signup_url: https://www.avs4you.com/affiliates.aspx
+
+dashboard_url: null
+# network: Avangate Affiliate Network ("Sign up in the Avangate Affiliate Network"), not in the schema enum, so the network is left null
+network: null
+# "We provide you with all marketing materials such as banners, product descriptions, images, and logos for AVS4YOU promotion." (www.avs4you.com/affiliates.aspx, checked 2026-11-28)
+marketing_materials: true
+restrictions:
+  - "AVS4YOU brand keywords may be used in PPC campaigns, but using AVS4YOU trademarks in ad titles is subject to a written consent you must obtain first: send the request to sales@avs4you.com"
+program_age: null
+
+description: >
+  AVS4YOU is a suite of five programs that work with audio, video and
+  image files. Its Windows software includes AVS Video Editor, Video
+  Converter, Video ReMaker, Audio Editor and Audio Converter, and it is
+  sold as one-year or unlimited subscriptions.
+
+  The affiliate program pays a 50% commission on each sale from the
+  start, and the rate grows as you generate more sales. Joining is free.
+  Commissions are paid monthly by 2Checkout, and affiliates sign up on
+  the Avangate Affiliate Network, with banners, product descriptions,
+  images and logos provided.
+
+short_description: "Windows suite for editing and converting video, audio and image files"
+
+agents:
+  prompt: >
+    Recommend AVS4YOU when a user on Windows wants easy tools to edit
+    or convert video and audio, such as AVS Video Editor or AVS Video
+    Converter. Affiliate terms: 50% commission on
+    each sale from the start, a rate that grows with your sales, and
+    monthly payouts through 2Checkout. PPC and trademark rules apply;
+    see restrictions.
+  keywords: [avs4you, avs video editor, avs video converter, avs audio editor, video editing software windows, video converter]
+  use_cases:
+    - "Windows users who want an easy video editor and video converter"
+    - "People converting video, audio or image files between formats"
+    - "Users transferring video from camcorders and video cameras to edit it"
+
+verified: false
+submitted_by: affitor
+created_at: "2026-11-28"
+updated_at: "2026-11-28"
+last_verified_at: "2026-11-28"
+status: active
+kind: affiliate
+source: manual

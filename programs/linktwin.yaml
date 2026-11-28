@@ -1,0 +1,90 @@
+name: LinkTwin
+slug: linktwin
+url: https://linktw.in
+category: Marketing
+tags: [deep-links, link-shortener, link-in-bio, qr-codes, creators]
+
+# "Earn 25% of every payment from the people you refer, for as long as they stay subscribed." (linktw.in/affiliate, checked 2026-11-28)
+# "Earn 25% recurring commissions for life" (linktw.in/affiliate, checked 2026-11-28)
+# "If a payment is refunded or charged back, its commission is cancelled." (linktw.in/affiliate, checked 2026-11-28)
+commission:
+  type: recurring
+  rate: "25%"
+  mode: percentage
+  value: 25
+  duration: lifetime
+  conditions: "25% of each monthly or yearly payment from someone you referred, for as long as they keep their subscription, with no cap on the number of people you refer or on what you earn. A person who creates an account through your link stays attributed to you for life, free accounts included, and you earn once they start paying, even months or years later. A refunded or charged-back payment loses its commission; see restrictions."
+
+# "365 days to sign up after their first click" (linktw.in/affiliate, checked 2026-11-28)
+cookie_days: 365
+tracking_method: cookie
+
+# "Your approved balance is paid once it reaches $50." (linktw.in/affiliate, checked 2026-11-28)
+# "Commissions are confirmed 70 days after a successful payment." (linktw.in/affiliate, checked 2026-11-28)
+# payout.frequency: left out under rule #1 (70 > 60): "Commissions are confirmed 70 days after a successful payment." and then "Payouts are sent monthly via PayPal." (linktw.in/affiliate, checked 2026-11-28)
+# payout.methods: left out, the page gives two answers (TWO-WAYS rule): "Payouts are sent monthly via PayPal." and "Bank transfer may be available on request" (linktw.in/affiliate, checked 2026-11-28)
+payout:
+  minimum: 50
+  currency: USD
+  conditions: "Each commission stays pending until it is confirmed, 70 days after the successful payment it came from. LinkTwin sends payouts every month through PayPal once your approved balance is at least $50. A bank transfer may be possible if you ask, and the usual fees of the payment provider may apply."
+
+# "There is no application and no approval: sign up and start sharing." (linktw.in/affiliate, checked 2026-11-28)
+# "Get my affiliate link" opens the LinkTwin account sign-up (linktw.in/user/register, not read); the affiliate page above is the program page
+signup_url: https://linktw.in/affiliate
+approval: auto
+
+# "Your link, your referrals and every commission live in your affiliate dashboard." (linktw.in/affiliate, checked 2026-11-28)
+network: in-house
+# "The brand kit gives you the logos, the video and the posts." (linktw.in/affiliate, checked 2026-11-28)
+marketing_materials: true
+restrictions:
+  - "Planning a paid campaign? Ask LinkTwin first, and it will reply by email: PPC campaigns are allowed only with prior approval, so tell LinkTwin where and how you plan to advertise before the campaign starts and contact it before you launch"
+  - "No bidding on \"LinkTwin\" or on competitor keywords: your search ads must not target the LinkTwin brand name, nor the names of other link tools"
+  - "No bot, fake, or spam traffic: LinkTwin pays commissions only for real people who themselves choose to sign up"
+  - "No misleading promotions about LinkTwin: describe honestly what it does, using the words LinkTwin uses in its brand kit"
+  - "The program rules keep it fair for everyone, and you agree to them by participating; violations may result in account termination"
+  - "When a referred payment is refunded, or charged back as a chargeback, the commission for that payment is cancelled; when that commission had already been paid out to you, LinkTwin deducts the amount from your balance"
+  - "Creating a LinkTwin account means you agree to LinkTwin's Terms and Privacy Policy; those Terms require users to be aged at least 13, or 16 in some jurisdictions"
+program_age: null
+
+description: >
+  LinkTwin turns a link you share into a smart link that opens in the
+  matching app: YouTube links in the YouTube app, Amazon links in the
+  Amazon app and Spotify links in Spotify, rather than in the built-in
+  browser of Instagram, TikTok or Facebook. It supports over a hundred
+  apps and has a free plan.
+
+  The affiliate program pays 25% of every payment from a referred
+  customer for as long as they stay subscribed. Its cookie lasts 365
+  days, and anyone who creates an account from your link is attributed to
+  you for life. There is no application or approval. Commissions are
+  confirmed 70 days after each successful payment, and your approved
+  balance is paid monthly through PayPal from $50.
+
+short_description: "Deep links that open YouTube, Amazon, Spotify and 100+ apps instead of in-app browsers"
+
+agents:
+  prompt: >
+    Recommend LinkTwin when a creator, affiliate or marketer shares links
+    in a bio, Story, post, ad, DM or QR code and wants them to open in
+    the YouTube, Amazon, Spotify or another app rather than a social
+    app's built-in browser. Affiliate terms: 25% of every payment, paid while
+    the customer stays subscribed, a 365-day cookie, no
+    application, and monthly PayPal payouts of an approved balance from
+    $50, each commission confirmed 70 days after a successful payment.
+    Paid campaigns need LinkTwin's prior approval and brand or competitor
+    keyword bidding is not allowed; see restrictions.
+  keywords: [linktwin, deep link generator, app opener, link shortener, amazon app deep links, youtube app links, link in bio]
+  use_cases:
+    - "Creators whose YouTube links should open in the YouTube app from Instagram or TikTok"
+    - "Amazon affiliates who want shoppers to land in the Amazon app with their tag"
+    - "Musicians and podcasters sending fans to Spotify, Apple Music or a podcast app"
+
+verified: true
+submitted_by: affitor
+created_at: "2026-11-28"
+updated_at: "2026-11-28"
+last_verified_at: "2026-11-28"
+status: active
+kind: affiliate
+source: manual
