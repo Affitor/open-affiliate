@@ -8,7 +8,7 @@ import type { GuidePost } from "@/lib/guides"
 export const guide: GuidePost = {
   slug: "what-is-affiliate-marketing",
   checked: "2026-10-21",
-  title: (year) => `What Is Affiliate Marketing? (${year})`,
+  title: (year) => `What Is Affiliate Marketing? (${year} Guide)`,
   description:
     "Affiliate marketing is performance-based: brands pay only when a sale happens. See who takes part and the key terms, from commission to cookie window.",
   answer:
